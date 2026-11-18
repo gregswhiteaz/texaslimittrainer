@@ -4,7 +4,7 @@ title: Prove the engine over 1,000,000 cash hands with every line-up preset
 status: To Do
 assignee: []
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-18T18:15:00Z'
+updated_date: '2026-11-18T19:40:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -48,6 +48,7 @@ Plan key: E06-S11 · Dream: limit-holdem-trainer
 - [ ] #3 Given the CI nightly schedule or a manual dispatch, When the 1,000,000-hand line-up run executes as E01-S17's parallel shards with deterministic per-shard seeds, Then every shard finishes within the 6-hour GitHub job limit, re-running a shard with its seed gives byte-identical output, and the combined report covers all 1,000,000 hands [REQ-056.2, REQ-062.4]
 - [ ] #4 Given E06 bots that use earlier showdowns, When the playtest runner plays a session, Then it passes each seat the earlier showdowns from previous hands instead of an empty list
 - [ ] #5 Given bot style checks, When they run in the playtest, Then they are composed with checkStep through the onAction hook, not a new runner parameter
+- [ ] #6 Given the 6-player playtest seats TAG bots that only check after the flop, When the invariant runs for this story execute, Then at least one 6-player line-up includes betting policies so postflop betting and the postflop cap are exercised
 <!-- AC:END -->
 
 ## Definition of Done
@@ -73,4 +74,6 @@ Plan key: E06-S11 · Dream: limit-holdem-trainer
 AC added from TASK-1.6 follow-up (doc-15).
 
 AC added from TASK-1.8 follow-up (doc-16).
+
+AC added from TASK-6.1 follow-up (doc-18).
 <!-- SECTION:NOTES:END -->

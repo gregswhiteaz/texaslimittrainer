@@ -4,7 +4,7 @@ title: Recommend betting or raising for value
 status: To Do
 assignee: []
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-18T19:10:00Z'
+updated_date: '2026-11-18T19:40:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -50,6 +50,7 @@ Plan key: E07-S10 · Dream: limit-holdem-trainer
 - [ ] #7 Given the same holding on a capped street, When advice is requested, Then it recommends call or fold by the pot-odds rule [REQ-033.1]
 - [ ] #8 Given a value-bet or value-raise recommendation, When it is returned, Then it includes equity against the calling range %, required equity % and the rule id [REQ-033.5]
 - [ ] #9 Given a value-bet spot, When recommendPostflop returns, Then the recommendation includes equityVsCallingRangePct and bet/raise outcomes alongside the existing fields, without breaking existing consumers
+- [ ] #10 Given postflop free-check decisions depend on equity for value bets, When this story lands, Then the TAG bot's FREE_CHECK_EQUITY stand-in is removed or limited to spots where equity cannot change the move, with the playtest still under its time limits
 <!-- AC:END -->
 
 ## Definition of Done
@@ -73,4 +74,6 @@ Plan key: E07-S10 · Dream: limit-holdem-trainer
 
 <!-- SECTION:NOTES:BEGIN -->
 AC added from TASK-7.3 follow-up (doc-17).
+
+AC added from TASK-6.1 follow-up (doc-18).
 <!-- SECTION:NOTES:END -->
