@@ -1,0 +1,64 @@
+{
+  "task": "TASK-1.2",
+  "phase": "build",
+  "run": 1,
+  "result": "PASS",
+  "changed_lines": 797,
+  "changed_files": [
+    "src/engine/cards.ts",
+    "src/engine/hand-evaluator.ts",
+    "tests/engine/cards.test.ts",
+    "tests/engine/hand-evaluator.acceptance.test.ts",
+    "tests/engine/hand-evaluator.perf.test.ts",
+    "tests/engine/hand-evaluator.property.test.ts",
+    "tests/engine/hand-evaluator.test.ts",
+    "tests/engine/reference-ranking.ts"
+  ],
+  "checks": [
+    {
+      "name": "test command",
+      "status": "pass",
+      "detail": "$ npm test\nexit 0\n > hand evaluator acceptance > AC#1 every five-card hand matches the 7,462-class reference ranking 1946ms\n \u2713 tests/toolchain/coverage.test.ts > coverage thresholds via npm test > npm test fails and names the 90% headless threshold when a headless folder is under-covered 2093ms\n \u2713 tests/engine/hand-evaluator.acceptance.test.ts > hand evaluator acceptance > AC#1 worked examples and category boundaries 0ms\n \u2713 tests/engine/hand-evaluator.acceptance.test.ts > hand evaluator acceptance > AC#2 A-2-3-4-5 is the lowest straight 0ms\n \u2713 tests/engine/hand-evaluator.acceptance.test.ts > hand evaluator acceptance > AC#3 seven-card examples equal the best five-card subset 1ms\n \u2713 tests/engine/hand-evaluator.acceptance.test.ts > hand evaluator acceptance > AC#4 a higher kicker breaks the tie 0ms\n \u2713 tests/engine/hand-evaluator.acceptance.test.ts > hand evaluator acceptance > AC#5 hands that differ only in suits tie 0ms\n \u2713 tests/toolchain/lint.test.ts > npm run lint > lint exits non-zero on a Prettier formatting violation 714ms\n \u2713 tests/toolchain/typecheck.test.ts > npm run typecheck > typecheck exits non-zero on a type error and zero when it is fixed 1456ms\n \u2713 tests/toolchain/coverage.test.ts > coverage thresholds via npm test > npm test fails and names the 70% global threshold when overall coverage is low 401ms\n \u2713 tests/toolchain/coverage.test.ts > coverage thresholds via npm test > npm test passes when both coverage thresholds are met 364ms\n \u2713 tests/toolchain/boundary.test.ts > headless boundary via npm run lint > lint reports each forbidden React, DOM, IndexedDB and UI use in every headless folder 3108ms\n \u2713 tests/toolchain/boundary.test.ts > headless boundary via npm run lint > lint allows React in src/ui and Node-safe code in headless folders 720ms\n \u2713 tests/toolchain/boundary.test.ts > headless boundary via npm run lint > lint reports globalThis access, dynamic import and type-only React import in headless folders 550ms\n\n Test Files  14 passed (14)\n      Tests  36 passed (36)\n   Start at  19:52:49\n   Duration  4.51s (tests 95%, import 4%, transform 1%, worker 1%)\n\n\u001b[34m % \u001b[39m\u001b[2mCoverage report from \u001b[22m\u001b[33mv8\u001b[39m\n-------------------|---------|----------|---------|---------|-------------------\nFile               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s \n-------------------|---------|----------|---------|---------|-------------------\nAll files          |     100 |     82.4 |     100 |     100 |                   \n engine            |     100 |     82.4 |     100 |     100 |                   \n  ...-evaluator.ts |     100 |    79.81 |     100 |     100 | ...84-197,211-212 \n-------------------|---------|----------|---------|---------|-------------------\n\n=============================== Coverage summary ===============================\nStatements   : 100% ( 174/174 )\nBranches     : 82.4% ( 103/125 )\nFunctions    : 100% ( 28/28 )\nLines        : 100% ( 136/136 )\n================================================================================\n"
+    },
+    {
+      "name": "lint command",
+      "status": "pass",
+      "detail": "$ npm run lint\nexit 0\n\n> tlh-trainer@0.0.0 lint\n> eslint . --max-warnings 0 && prettier --check .\n\nChecking formatting...\nAll matched files use Prettier code style!\n"
+    },
+    {
+      "name": "typecheck command",
+      "status": "pass",
+      "detail": "$ npm run typecheck\nexit 0\n\n> tlh-trainer@0.0.0 typecheck\n> tsc -p tsconfig.json\n\n"
+    },
+    {
+      "name": "spec unchanged",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "name": "scope budget (lines)",
+      "status": "pass",
+      "detail": "797 changed lines vs budget 1000 (fail above 2000)"
+    },
+    {
+      "name": "scope budget (files)",
+      "status": "pass",
+      "detail": "8 files vs budget 8"
+    },
+    {
+      "name": "files outside spec",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "name": "all changes listed in changes.md",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "name": "tests locked",
+      "status": "pass",
+      "detail": "3 acceptance test file(s) locked; 18 test files snapshotted"
+    }
+  ]
+}
