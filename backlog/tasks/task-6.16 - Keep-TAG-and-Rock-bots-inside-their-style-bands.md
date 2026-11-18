@@ -4,7 +4,7 @@ title: Keep TAG and Rock bots inside their style bands
 status: To Do
 assignee: []
 created_date: '2026-11-17T23:03:00Z'
-updated_date: '2026-11-17T23:22:00Z'
+updated_date: '2026-11-18T16:24:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -42,6 +42,7 @@ Plan key: E06-S16 · Dream: limit-holdem-trainer
 - [ ] #1 Given `npm run playtest -- --hands 100000 --lineup mixed --size 6 --check-styles --seed 42`, When it completes, Then TAG's measured VPIP is 18-26%, PFR 14-22% and aggression 45-65% [REQ-027.1]
 - [ ] #2 Given the same run, When it completes, Then the Rock's measured VPIP is 8-15%, PFR 6-12% and aggression 35-55% [REQ-027.4]
 - [ ] #3 Given the same check-styles run with seeds 7 and 1234, When each completes, Then TAG and Rock are inside their bands for both seeds [REQ-027.5, REQ-027.1, REQ-027.4]
+- [ ] #4 Given TAG's measured VPIP or PFR fall outside REQ-027.1 (VPIP 18-26%, PFR 14-22%), When the style-band check runs, Then the 6-max chart is retuned until both are inside the band
 <!-- AC:END -->
 
 ## Definition of Done
@@ -59,3 +60,9 @@ Plan key: E06-S16 · Dream: limit-holdem-trainer
 - [ ] #11 Story documentation is written and published to Backlog.md
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+AC added from TASK-7.2 follow-up (doc-14).
+<!-- SECTION:NOTES:END -->

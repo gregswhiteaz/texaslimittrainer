@@ -1,11 +1,11 @@
 ---
 id: TASK-7.2
 title: Recommend a preflop action from the 6-max chart
-status: In Progress
+status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-18T15:24:00Z'
+updated_date: '2026-11-18T16:24:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-0
@@ -16,6 +16,7 @@ references:
 documentation:
   - doc-1
   - doc-2
+  - doc-14
 parent_task_id: TASK-7
 priority: high
 type: feature
@@ -44,31 +45,31 @@ Plan key: E07-S01 · Dream: limit-holdem-trainer
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Given the 6-max chart data, When the chart validator runs, Then each of the 26 applicable (position, situation) pairs listed in the context assigns an action to all 169 starting-hand classes, and a missing pair fails validation naming it [REQ-032.2]
-- [ ] #2 Given a chart cell with no action, an action other than fold, call or raise, or more than one acceptable alternative, or a 6-max chart file without a plain-English justification, When the chart validator runs, Then validation fails naming the position, situation and hand class of the bad cell, or the chart missing its justification [REQ-032.3, REQ-032.4]
-- [ ] #3 Given one chart cell is changed in the data file and no code is changed, When advice is requested for that position, situation and hand class, Then the recommendation follows the edited cell [REQ-032.5]
-- [ ] #4 Given a 6-max PlayerView at a preflop decision, When advice is requested, Then it returns the cell's action, its borderline flag, its acceptable alternative (or none) and the position and situation used [REQ-032.3]
-- [ ] #5 Given a fixed preflop decision point, When the other players' hole cards and the undealt cards are changed, Then the recommendation is identical [REQ-025.2]
-- [ ] #6 Given code that passes the full game state instead of a PlayerView to the advice API, When `npm run typecheck` runs, Then it reports a type error [REQ-025.2]
-- [ ] #7 Given a 6-max preflop decision facing a fourth bet (a re-raise of a re-raise), When advice is requested, Then it uses the facing-a-re-raise chart cell for the hand class, and a raise recommendation becomes call because the street is capped [REQ-032.6]
-- [ ] #8 Given a 6-max big blind with no raise in front of it (one or more limpers) holding a hand class whose facing-limpers cell is call, When advice is requested, Then it returns check, because no bet is facing the big blind [REQ-032.3]
+- [x] #1 Given the 6-max chart data, When the chart validator runs, Then each of the 26 applicable (position, situation) pairs listed in the context assigns an action to all 169 starting-hand classes, and a missing pair fails validation naming it [REQ-032.2]
+- [x] #2 Given a chart cell with no action, an action other than fold, call or raise, or more than one acceptable alternative, or a 6-max chart file without a plain-English justification, When the chart validator runs, Then validation fails naming the position, situation and hand class of the bad cell, or the chart missing its justification [REQ-032.3, REQ-032.4]
+- [x] #3 Given one chart cell is changed in the data file and no code is changed, When advice is requested for that position, situation and hand class, Then the recommendation follows the edited cell [REQ-032.5]
+- [x] #4 Given a 6-max PlayerView at a preflop decision, When advice is requested, Then it returns the cell's action, its borderline flag, its acceptable alternative (or none) and the position and situation used [REQ-032.3]
+- [x] #5 Given a fixed preflop decision point, When the other players' hole cards and the undealt cards are changed, Then the recommendation is identical [REQ-025.2]
+- [x] #6 Given code that passes the full game state instead of a PlayerView to the advice API, When `npm run typecheck` runs, Then it reports a type error [REQ-025.2]
+- [x] #7 Given a 6-max preflop decision facing a fourth bet (a re-raise of a re-raise), When advice is requested, Then it uses the facing-a-re-raise chart cell for the hand class, and a raise recommendation becomes call because the street is capped [REQ-032.6]
+- [x] #8 Given a 6-max big blind with no raise in front of it (one or more limpers) holding a hand class whose facing-limpers cell is call, When advice is requested, Then it returns check, because no bet is facing the big blind [REQ-032.3]
 <!-- AC:END -->
 
 ## Definition of Done
 <!-- DOD:BEGIN -->
-- [ ] #1 Chart ranges and justification text are original, written for this project [REQ-061.2]
-- [ ] #2 Every acceptance criterion has at least one automated test (unit, property or Playwright) that passes
-- [ ] #3 `npm run lint`, `npm run typecheck` and `npm test` pass with zero errors [REQ-059.1, REQ-059.4]
-- [ ] #4 The golden-spot suite passes 100% (applies from the story that creates the suite, E07-S14, onward) [REQ-039.4]
-- [ ] #5 Coverage thresholds hold: >= 90% engine/bots/advice/statistics, >= 70% overall [REQ-059.3]
-- [ ] #6 Engine, bots, advice and statistics code imports no UI or browser-only code [REQ-059.2]
-- [ ] #7 Stories that touch the engine, bots or advice: a 10,000-hand playtest reports zero invariant violations (applies once the playtest runner exists, E01-S07, onward) [REQ-056.1]
-- [ ] #8 Stories that add or change a screen: Playwright test of the screen flow in Chromium and WebKit, and axe reports zero serious or critical violations (axe tooling is provisioned in the toolchain story E01-S01) [REQ-057.1]
-- [ ] #9 No new network requests beyond the app's own files [REQ-058.1]
-- [ ] #10 Strategy-content stories: text is original and every chart, range or golden spot carries its justification [REQ-061.2]
-- [ ] #11 CI workflow is green on the story's branch (applies once the CI story E01-S02 is done; E01-S01 instead passes the same checks locally) [REQ-064.2]
-- [ ] #12 Story documentation is written and published to Backlog.md
-- [ ] #13 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
+- [x] #1 Chart ranges and justification text are original, written for this project [REQ-061.2]
+- [x] #2 Every acceptance criterion has at least one automated test (unit, property or Playwright) that passes
+- [x] #3 `npm run lint`, `npm run typecheck` and `npm test` pass with zero errors [REQ-059.1, REQ-059.4]
+- [x] #4 The golden-spot suite passes 100% (applies from the story that creates the suite, E07-S14, onward) [REQ-039.4]
+- [x] #5 Coverage thresholds hold: >= 90% engine/bots/advice/statistics, >= 70% overall [REQ-059.3]
+- [x] #6 Engine, bots, advice and statistics code imports no UI or browser-only code [REQ-059.2]
+- [x] #7 Stories that touch the engine, bots or advice: a 10,000-hand playtest reports zero invariant violations (applies once the playtest runner exists, E01-S07, onward) [REQ-056.1]
+- [x] #8 Stories that add or change a screen: Playwright test of the screen flow in Chromium and WebKit, and axe reports zero serious or critical violations (axe tooling is provisioned in the toolchain story E01-S01) [REQ-057.1]
+- [x] #9 No new network requests beyond the app's own files [REQ-058.1]
+- [x] #10 Strategy-content stories: text is original and every chart, range or golden spot carries its justification [REQ-061.2]
+- [x] #11 CI workflow is green on the story's branch (applies once the CI story E01-S02 is done; E01-S01 instead passes the same checks locally) [REQ-064.2]
+- [x] #12 Story documentation is written and published to Backlog.md
+- [x] #13 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
 
 ## Implementation Plan
@@ -87,4 +88,15 @@ Full spec: doit/TASK-7.2/spec.md
 
 <!-- SECTION:NOTES:BEGIN -->
 Build: hand-class.ts, preflop-chart.ts (tlh-preflop-chart v1 parser/validator), preflop.ts (recommendPreflop with legalisation and move), charts/six-max.json (original TAG chart, 26 spots, all within §5 bands); acceptance/unit/content tests; advice 100% lines; gate PASS.
+
+CI run 44345626992 (head 5f18b57): success. Judge round 1: PASS 17/17; 136,890 engine decisions matched an independent oracle; mutation probes caught. Follow-ups (Step 6a): created TASK-7.19 (user chart review + revisions incl. J-1-01..03, K9o, HJ text, print script), TASK-7.20 (validator edge cases), TASK-7.21 (spike: split spots, Q-4), TASK-8.5 (position/situation labels); ACs added to TASK-6.16 (retune vs REQ-027.1), TASK-1.12 (cap agreement), TASK-7.17 (short-stack preflop). Skipped: start<=0 equivalent mutant (no behaviour change).
 <!-- SECTION:NOTES:END -->
+
+## Final Summary
+
+<!-- SECTION:FINAL_SUMMARY:BEGIN -->
+Added recommendPreflop(view): a legal preflop action (with borderline flag, alternative and exact move) read from an authored, validated 6-max chart (26 spots x 169 hand classes, JSON, static import). It takes only a PlayerView, so hidden cards cannot affect it. Raises on a capped street become call, and call or fold with nothing to call becomes check. Chart is original TAG content by Claude (Q-1), to be reviewed by the user; widths per spot are in the story doc.
+Verification: lint, typecheck and tests pass (110 passed, 1 skipped, advice 100% lines); 2 gate runs PASS. Review r1 had one MAJOR (HJ raise-and-calls justification and grid built on an impossible premise), fixed (width 10.7% -> 14.3%); r2 clean. Judge and final CI pending.
+Review: assumptions A-1..A-12 in the story doc, and the chart grids in src/advice/charts/six-max.json.
+Follow-ups: raiser-position/re-raise split spike (Q-4), chart retune after TASK-6.16, display labels, chart print script, cap-rule check with TASK-1.12, short stacks (TASK-1.9/7.17), plus minor chart/test/wording notes.
+<!-- SECTION:FINAL_SUMMARY:END -->

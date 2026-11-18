@@ -4,7 +4,7 @@ title: Cap each street at one bet plus three raises
 status: To Do
 assignee: []
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-17T23:22:00Z'
+updated_date: '2026-11-18T16:24:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -42,6 +42,7 @@ Plan key: E01-S10 · Dream: limit-holdem-trainer
 - [ ] #2 Given the flop, turn or river, When a bet and three raises have been made, Then the only legal actions for the remaining players are call and fold [REQ-016.3]
 - [ ] #3 Given a heads-up $4/$8 hand where the button posted the $2 small blind and the other player the $4 big blind, When the button raises to $8, the big blind re-raises to $12 and the button raises to $16, Then the big blind's only legal actions are call $4 and fold; Given a heads-up flop where a bet and three raises have been made, Then the only legal actions are call and fold [REQ-016.4]
 - [ ] #4 Given 100,000 random seeded hands with 2 to 10 players, When each is played, Then no street has more than 4 bets [REQ-016.4]
+- [ ] #5 Given a street with 4 bets, When legalActions and recommendPreflop are both consulted, Then neither offers a raise, and the advice's betCount>=4 rule agrees with the engine cap
 <!-- AC:END -->
 
 ## Definition of Done
@@ -59,3 +60,9 @@ Plan key: E01-S10 · Dream: limit-holdem-trainer
 - [ ] #11 Story documentation is written and published to Backlog.md
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+AC added from TASK-7.2 follow-up (doc-14).
+<!-- SECTION:NOTES:END -->

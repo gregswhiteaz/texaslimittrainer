@@ -4,7 +4,7 @@ title: Add a short-stack note to sit-and-go advice
 status: To Do
 assignee: []
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-17T23:22:00Z'
+updated_date: '2026-11-18T16:24:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-2
@@ -49,6 +49,7 @@ Plan key: E07-S17 · Dream: limit-holdem-trainer
 - [ ] #4 Given identical sit-and-go and cash-game PlayerViews apart from game type, When advice is requested, Then the recommended action and numbers are identical [REQ-041.3]
 - [ ] #5 Given a sit-and-go preflop decision with the user's stack at 9 big bets of the current level, When advice is requested, Then the chart recommendation includes exactly one short-stack sentence [REQ-041.2]
 - [ ] #6 Given a sit-and-go decision at 9 big bets of the current level that the user answered, When the grade result for the review entry is produced, Then it carries the same short-stack sentence as the recommendation [REQ-041.2]
+- [ ] #7 Given a preflop decision where the hero cannot afford a full call or raise, When recommendPreflop is asked, Then it returns a legal all-in action and does not throw
 <!-- AC:END -->
 
 ## Definition of Done
@@ -66,3 +67,9 @@ Plan key: E07-S17 · Dream: limit-holdem-trainer
 - [ ] #11 Story documentation is written and published to Backlog.md
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+AC added from TASK-7.2 follow-up (doc-14); depends on short all-ins from TASK-1.9.
+<!-- SECTION:NOTES:END -->
