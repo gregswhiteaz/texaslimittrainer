@@ -4,7 +4,7 @@ title: Run seeded bot-only hands from the command line
 status: To Do
 assignee: []
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-17T23:21:00Z'
+updated_date: '2026-11-18T07:03:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-0
@@ -49,6 +49,7 @@ Plan key: E01-S07 · Dream: limit-holdem-trainer
 - [ ] #4 Given seeds 42 and 43 with otherwise identical options, When both runs complete, Then the dealt replay codes differ [REQ-062.4]
 - [ ] #5 Given a hand recorded by a playtest run (replay code, seats, stacks, button and actions), When the hand is replayed through the engine, Then every seat receives the same hole cards and the board shows the same cards in the same order [REQ-013.3]
 - [ ] #6 Given the M1 seeded random-move seat policy and a street that already has 4 bets (bet plus three raises, the big blind counting as the first bet preflop), When the policy chooses an action, Then it chooses only call or fold and never bet or raise, so `npm run playtest -- --hands 10000 --seed 42` records no street with more than 4 bets [REQ-056.1]
+- [ ] #7 Given --replay-code with a value that is not 32 lowercase hex characters, When the playtest starts, Then it prints a fixed usage message naming the expected format, exits 2, and plays no hands
 <!-- AC:END -->
 
 ## Definition of Done
@@ -66,3 +67,9 @@ Plan key: E01-S07 · Dream: limit-holdem-trainer
 - [ ] #11 Story documentation is written and published to Backlog.md
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+AC#7 added 2026-11-18 from TASK-1.3 follow-up (validate with isReplayCode, fixed message). Note from TASK-1.1: tsx is not installed yet.
+<!-- SECTION:NOTES:END -->
