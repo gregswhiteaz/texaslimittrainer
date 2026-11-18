@@ -41,6 +41,8 @@ export const EXACT_EVALUATION_LIMIT = 200_000;
 export const MAX_OPPONENTS = 9;
 /** @internal Pot-share units per trial: LCM of 1..10, so every split is a whole number of units. */
 export const SHARE_UNITS = 2520;
+/** @internal Node budget for the sampled path's search for one full deal. */
+export const FEASIBILITY_NODE_LIMIT = 100_000;
 
 /** @internal Validated input with sorted cards, live sorted combos and opponents in canonical order. */
 export interface CanonicalInput {
@@ -156,6 +158,9 @@ class Table {
   readonly tie: number[];
   readonly share: number[];
   trials = 0;
+  /** forEachDeal stops (returning true, as if `visit` had) once it has visited this many nodes. */
+  nodeLimit = Infinity;
+  private nodes = 0;
   private readonly ranks: number[];
 
   constructor(readonly c: CanonicalInput) {
@@ -186,6 +191,7 @@ class Table {
 
   /** Backtracks over opponent deals. `visit` returns true to stop. Returns true if stopped. */
   forEachDeal(from: number, visit: () => boolean): boolean {
+    if (++this.nodes > this.nodeLimit) return true;
     if (from === this.c.opponents.length) return visit();
     for (const combo of this.c.opponents[from] ?? []) {
       const [a, b] = combo;
@@ -276,6 +282,10 @@ export function sampledEquity(
   maxRejections = 100 * trials,
 ): EquityResult {
   const table = new Table(c);
+  const cards = new Set(c.opponents.flat(2));
+  if (cards.size < 2 * c.opponents.length) throw cannotDeal();
+  // If the budget runs out the deal is assumed possible; maxRejections then bounds the sampler.
+  table.nodeLimit = FEASIBILITY_NODE_LIMIT;
   if (!table.forEachDeal(0, () => true)) throw cannotDeal();
   const rng = new Xoshiro128(deriveSeed(c));
   const { dealt, need } = table;

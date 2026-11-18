@@ -2,7 +2,7 @@
   "task": "TASK-7.1",
   "phase": "build",
   "run": 1,
-  "result": "FAIL",
+  "result": "PASS",
   "changed_lines": 1379,
   "changed_files": [
     ".prettierignore",
@@ -19,8 +19,8 @@
   "checks": [
     {
       "name": "test command",
-      "status": "fail",
-      "detail": "$ npm test\nexit 1\n\n> tlh-trainer@0.0.0 test\n> vitest run --coverage\n\n\n RUN  v5.1.0 /Users/gregwhite/Documents/claudeworkspaces/limitholdem\n      Coverage enabled with v8\n\n\n\u23af\u23af\u23af\u23af\u23af\u23af Unhandled Error \u23af\u23af\u23af\u23af\u23af\u23af\u23af\nError: The coverage report directory \"/Users/gregwhite/Documents/claudeworkspaces/limitholdem/coverage\" is already in use by another Vitest process (pid 4256). Running coverage for multiple Vitest processes in the same directory at the same time is not supported, because they would delete each other's reports.\nGive each run its own \"coverage.reportsDirectory\" (e.g. --coverage.reportsDirectory=coverage-5077) or run them sequentially.\n \u276f ReportsDirectoryLock.inUseError node_modules/vitest/dist/chunks/cli-api.COfZo8lK.js:7513:26\n \u276f ReportsDirectoryLock.acquire node_modules/vitest/dist/chunks/cli-api.COfZo8lK.js:7482:54\n \u276f V8CoverageProvider.clean node_modules/vitest/dist/chunks/cli-api.COfZo8lK.js:7066:3\n \u276f node_modules/vitest/dist/chunks/cli-api.COfZo8lK.js:13264:6\n \u276f node_modules/vitest/dist/chunks/cli-api.COfZo8lK.js:13262:5\n \u276f startVitest node_modules/vitest/dist/chunks/cli-api.COfZo8lK.js:14572:8\n \u276f start node_modules/vitest/dist/chunks/cac.BYbt0aJp.js:2382:15\n \u276f CAC.run node_modules/vitest/dist/chunks/cac.BYbt0aJp.js:2358:2\n\n\n\n\n"
+      "status": "pass",
+      "detail": "$ npm test\nexit 0\ntest.ts > equity calculator (TASK-7.1) > AC#2 every stored heads-up preflop matchup is within 1.5 points\nAC#2: 120 matchups, largest error 0.957 pp (hu-064)\n\n \u2713 tests/advice/equity.acceptance.test.ts > equity calculator (TASK-7.1) > AC#1 AA vs KK and AKs vs QQ match published values 104ms\n \u2713 tests/toolchain/boundary.test.ts > headless boundary via npm run lint > lint reports globalThis access, dynamic import and type-only React import in headless folders 598ms\n \u2713 tests/advice/equity.acceptance.test.ts > equity calculator (TASK-7.1) > AC#2 every stored heads-up preflop matchup is within 1.5 points 4212ms\n \u2713 tests/advice/equity.acceptance.test.ts > equity calculator (TASK-7.1) > AC#3 AA vs KK vs QQ is within 1.5 points of exhaustive enumeration 45ms\n \u2713 tests/advice/equity.acceptance.test.ts > equity calculator (TASK-7.1) > AC#4 identical results twice in one process and once in a fresh process 453ms\n \u2713 tests/advice/equity.acceptance.test.ts > equity calculator (TASK-7.1) > AC#5 sampler seed depends only on the input 70ms\nstdout | tests/advice/equity.perf.test.ts > equity performance > equity latency within target times slack\nHU preflop hand vs hand: sampled, p95 65.14 ms (target 15 ms x 20 = 300 ms)\nHU flop hand vs hand: exact, p95 9.95 ms (target 2 ms x 20 = 40 ms)\nHU flop vs every unseen combo: sampled, p95 52.02 ms (target 20 ms x 20 = 400 ms)\nHU turn vs every unseen combo: exact, p95 36.44 ms (target 15 ms x 20 = 300 ms)\nThree-way preflop AA vs KK vs QQ: sampled, p95 45.90 ms (target 20 ms x 20 = 400 ms)\n6-max preflop vs 5 ranges: sampled, p95 94.15 ms (target 50 ms x 20 = 1000 ms)\nFull ring flop vs 9 ranges: sampled, p95 355.32 ms (target 80 ms x 20 = 1600 ms)\n\n \u2713 tests/advice/equity.perf.test.ts > equity performance > equity latency within target times slack 12455ms\n\n Test Files  19 passed (19)\n      Tests  49 passed (49)\n   Start at  20:30:17\n   Duration  12.71s (tests 96%, import 3%)\n\n\u001b[34m % \u001b[39m\u001b[2mCoverage report from \u001b[22m\u001b[33mv8\u001b[39m\n-------------------|---------|----------|---------|---------|-------------------\nFile               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s \n-------------------|---------|----------|---------|---------|-------------------\nAll files          |     100 |    83.62 |     100 |     100 |                   \n advice            |     100 |    85.14 |     100 |     100 |                   \n  equity.ts        |     100 |    85.14 |     100 |     100 | ...31,291-298,310 \n engine            |     100 |     82.4 |     100 |     100 |                   \n  ...-evaluator.ts |     100 |    79.81 |     100 |     100 | ...84-197,211-212 \n-------------------|---------|----------|---------|---------|-------------------\n\n=============================== Coverage summary ===============================\nStatements   : 100% ( 420/420 )\nBranches     : 83.62% ( 189/226 )\nFunctions    : 100% ( 72/72 )\nLines        : 100% ( 339/339 )\n================================================================================\n"
     },
     {
       "name": "lint command",
@@ -56,6 +56,11 @@
       "name": "all changes listed in changes.md",
       "status": "pass",
       "detail": ""
+    },
+    {
+      "name": "tests locked",
+      "status": "pass",
+      "detail": "1 acceptance test file(s) locked; 24 test files snapshotted"
     }
   ]
 }

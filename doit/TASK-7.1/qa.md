@@ -16,3 +16,4 @@
 ## Assumptions logged during build (orchestrator-accepted)
 - A-12: SPEC-08 river example arithmetic slip — spec says 1,035×1×2 = 2,070; with 45 unseen cards the live combos are C(45,2) = 990, so 990×1×2 = 1,980 (still exact). Test asserts 1,980.
 - A-13: SPEC-05 input (b) has identical opponent ranges, so swapping is a no-op on canonical input; test asserts reordered result equals original exactly; mapping-back with distinct ranges is covered by the SPEC-09 property test.
+- A-14 (review r1): Security MAJOR — the pre-sampling feasibility search (spec §5 step 5) is unbounded and can run exponentially for infeasible large ranges, contradicting the spec §8 invariant "work per call is bounded". Resolution: cap the feasibility search (e.g. 100,000 visited nodes); on hitting the cap, proceed to rejection sampling, which is already bounded by maxRejections and throws RangeError. The §8 invariant governs; spec text stays locked, deviation recorded here.

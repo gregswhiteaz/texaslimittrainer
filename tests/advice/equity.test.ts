@@ -238,4 +238,26 @@ describe('computeEquity', () => {
     expect(Math.abs((result.opponents[0]?.equity ?? NaN) - queens)).toBeLessThanOrEqual(0.015);
     expect(Math.abs((result.opponents[1]?.equity ?? NaN) - kings)).toBeLessThanOrEqual(0.015);
   });
+
+  it('bounds the work when range sets cannot all be dealt', () => {
+    const known = parseCards('Ah Kh Qh Jh Th');
+    const broadway = everyCombo(known).filter(([a, b]) => a >= 32 && b >= 32);
+    const low = everyCombo(known).filter(([a, b]) => a < 32 && b < 32);
+    expect(broadway).toHaveLength(105);
+    const timed = (opponents: Range[], message: string): void => {
+      const start = performance.now();
+      expectRangeError(
+        () => computeEquity({ hero: hole('Ah Kh'), board: parseCards('Qh Jh Th'), opponents }),
+        message,
+      );
+      expect(performance.now() - start).toBeLessThan(2000);
+    };
+    // 8 opponents need 16 cards from the 15 left in T-A.
+    timed(new Array<Range>(8).fill(broadway), "Opponents' hands cannot all be dealt together");
+    // Enough cards in total, but the 8 broadway ranges still cannot be dealt: the search budget
+    // runs out and the rejection cap ends the call.
+    timed([low, ...new Array<Range>(8).fill(broadway)], 'Sampling rejected too many deals');
+    // 7 opponents can be dealt; the sampler's rejection cap still applies as before.
+    timed(new Array<Range>(7).fill(broadway), 'Sampling rejected too many deals');
+  });
 });

@@ -1,0 +1,66 @@
+{
+  "task": "TASK-7.1",
+  "phase": "fix",
+  "run": 3,
+  "result": "PASS",
+  "changed_lines": 1411,
+  "changed_files": [
+    ".prettierignore",
+    "src/advice/equity.ts",
+    "src/engine/seeded-random.ts",
+    "tests/advice/equity-reference.test.ts",
+    "tests/advice/equity.acceptance.test.ts",
+    "tests/advice/equity.perf.test.ts",
+    "tests/advice/equity.test.ts",
+    "tests/advice/fixtures/equity-reference.json",
+    "tests/engine/seeded-random.test.ts",
+    "tools/equity/generate-reference.js"
+  ],
+  "checks": [
+    {
+      "name": "test command",
+      "status": "pass",
+      "detail": "$ npm test\nexit 0\nst.ts > equity calculator (TASK-7.1) > AC#2 every stored heads-up preflop matchup is within 1.5 points\nAC#2: 120 matchups, largest error 0.957 pp (hu-064)\n\n \u2713 tests/advice/equity.acceptance.test.ts > equity calculator (TASK-7.1) > AC#1 AA vs KK and AKs vs QQ match published values 112ms\n \u2713 tests/toolchain/boundary.test.ts > headless boundary via npm run lint > lint reports globalThis access, dynamic import and type-only React import in headless folders 619ms\n \u2713 tests/advice/equity.acceptance.test.ts > equity calculator (TASK-7.1) > AC#2 every stored heads-up preflop matchup is within 1.5 points 4146ms\n \u2713 tests/advice/equity.acceptance.test.ts > equity calculator (TASK-7.1) > AC#3 AA vs KK vs QQ is within 1.5 points of exhaustive enumeration 47ms\n \u2713 tests/advice/equity.acceptance.test.ts > equity calculator (TASK-7.1) > AC#4 identical results twice in one process and once in a fresh process 464ms\n \u2713 tests/advice/equity.acceptance.test.ts > equity calculator (TASK-7.1) > AC#5 sampler seed depends only on the input 70ms\nstdout | tests/advice/equity.perf.test.ts > equity performance > equity latency within target times slack\nHU preflop hand vs hand: sampled, p95 53.25 ms (target 15 ms x 20 = 300 ms)\nHU flop hand vs hand: exact, p95 0.81 ms (target 2 ms x 20 = 40 ms)\nHU flop vs every unseen combo: sampled, p95 53.05 ms (target 20 ms x 20 = 400 ms)\nHU turn vs every unseen combo: exact, p95 38.16 ms (target 15 ms x 20 = 300 ms)\nThree-way preflop AA vs KK vs QQ: sampled, p95 46.40 ms (target 20 ms x 20 = 400 ms)\n6-max preflop vs 5 ranges: sampled, p95 95.24 ms (target 50 ms x 20 = 1000 ms)\nFull ring flop vs 9 ranges: sampled, p95 357.10 ms (target 80 ms x 20 = 1600 ms)\n\n \u2713 tests/advice/equity.perf.test.ts > equity performance > equity latency within target times slack 12532ms\n\n Test Files  19 passed (19)\n      Tests  50 passed (50)\n   Start at  20:35:12\n   Duration  12.78s (tests 97%, import 3%)\n\n\u001b[34m % \u001b[39m\u001b[2mCoverage report from \u001b[22m\u001b[33mv8\u001b[39m\n-------------------|---------|----------|---------|---------|-------------------\nFile               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s \n-------------------|---------|----------|---------|---------|-------------------\nAll files          |   99.76 |    83.47 |     100 |     100 |                   \n advice            |   99.54 |    84.76 |     100 |     100 |                   \n  equity.ts        |   99.54 |    84.76 |     100 |     100 | ...37,289-308,320 \n engine            |     100 |     82.4 |     100 |     100 |                   \n  ...-evaluator.ts |     100 |    79.81 |     100 |     100 | ...84-197,211-212 \n-------------------|---------|----------|---------|---------|-------------------\n\n=============================== Coverage summary ===============================\nStatements   : 99.76% ( 428/429 )\nBranches     : 83.47% ( 192/230 )\nFunctions    : 100% ( 72/72 )\nLines        : 100% ( 346/346 )\n================================================================================\n"
+    },
+    {
+      "name": "lint command",
+      "status": "pass",
+      "detail": "$ npm run lint\nexit 0\n\n> tlh-trainer@0.0.0 lint\n> eslint . --max-warnings 0 && prettier --check .\n\nChecking formatting...\nAll matched files use Prettier code style!\n"
+    },
+    {
+      "name": "typecheck command",
+      "status": "pass",
+      "detail": "$ npm run typecheck\nexit 0\n\n> tlh-trainer@0.0.0 typecheck\n> tsc -p tsconfig.json\n\n"
+    },
+    {
+      "name": "spec unchanged",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "name": "scope budget (lines)",
+      "status": "warn",
+      "detail": "1411 changed lines vs budget 1400 (fail above 2800)"
+    },
+    {
+      "name": "scope budget (files)",
+      "status": "pass",
+      "detail": "10 files vs budget 10"
+    },
+    {
+      "name": "files outside spec",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "name": "all changes listed in changes.md",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "name": "test integrity",
+      "status": "pass",
+      "detail": ""
+    }
+  ]
+}

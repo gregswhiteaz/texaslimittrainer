@@ -1,0 +1,31 @@
+{"reviewer": "code", "round": 1,
+ "rubric": [
+  {"item": "SPEC-01 correctness", "result": "pass"}, {"item": "SPEC-01 test strength", "result": "pass"},
+  {"item": "SPEC-02 correctness", "result": "pass"}, {"item": "SPEC-02 test strength", "result": "pass"},
+  {"item": "SPEC-03 correctness", "result": "pass"}, {"item": "SPEC-03 test strength", "result": "pass"},
+  {"item": "SPEC-04 correctness", "result": "pass"}, {"item": "SPEC-04 test strength", "result": "pass"},
+  {"item": "SPEC-05 correctness", "result": "pass"}, {"item": "SPEC-05 test strength", "result": "pass"},
+  {"item": "SPEC-06 correctness", "result": "pass"}, {"item": "SPEC-06 test strength", "result": "pass"},
+  {"item": "SPEC-07 correctness", "result": "pass"}, {"item": "SPEC-07 test strength", "result": "pass"},
+  {"item": "SPEC-08 correctness", "result": "pass"}, {"item": "SPEC-08 test strength", "result": "pass"},
+  {"item": "SPEC-09 correctness", "result": "pass"}, {"item": "SPEC-09 test strength", "result": "pass"},
+  {"item": "SPEC-10 correctness", "result": "pass"}, {"item": "SPEC-10 test strength", "result": "pass"},
+  {"item": "SPEC-11 correctness", "result": "pass"}, {"item": "SPEC-11 test strength", "result": "pass"},
+  {"item": "SPEC-12 correctness", "result": "pass"}, {"item": "SPEC-12 test strength", "result": "pass"},
+  {"item": "SPEC-13 correctness", "result": "pass"}, {"item": "SPEC-13 test strength", "result": "pass"},
+  {"item": "SPEC-14 correctness", "result": "pass"}, {"item": "SPEC-14 test strength", "result": "pass"},
+  {"item": "SPEC-15 correctness", "result": "pass", "note": "post-push CI check; not verifiable from the diff"},
+  {"item": "SPEC-16 correctness", "result": "pass", "note": "no src/ui, e2e or index.html changes; story doc is a later stage"},
+  {"item": "scope", "result": "pass"}, {"item": "concision", "result": "pass"}, {"item": "clarity", "result": "pass"}
+ ],
+ "findings": [
+  {"fingerprint": "src/advice/equity.ts:full-ring-perf-headroom-thin", "severity": "MINOR", "file": "src/advice/equity.ts", "line": 259,
+   "issue": "Full-ring flop vs 9 ranges (scenario 7) has only ~12% headroom against its 80 ms reference-machine target, so the SPEC-12 command is close to flaky on a slightly busier or slower machine.",
+   "evidence": "Three runs of `EQUITY_PERF_SCALE=1 npx vitest run tests/advice/equity.perf.test.ts` on Node 22.18.0: p95 70.20, 70.97, 70.53 ms (target 80). The other scenarios have >= 2x headroom. At ~2.8% whole-deal acceptance for 9 random combos on a flop (~35 rejections per accepted trial), most of the time goes to the rejection loop and per-trial work, not the 300k evaluations (~20 ms).",
+   "fix": "No change needed to pass. If the judge's SPEC-12 run is marginal, cut per-trial cost in the sampler loop (e.g. avoid allocating the [a, b] tuple in table.setHole per opponent per trial by writing hands[p+1][0..1] directly, and avoid the `?? 0` reads in the hot loop) rather than changing the spec's trial count or rejection rule."},
+  {"fingerprint": "tests/advice/equity.test.ts:literal-vs-constant-assertion", "severity": "NIT", "file": "tests/advice/equity.test.ts", "line": 125,
+   "issue": "`expect(191_646).toBeLessThanOrEqual(EXACT_EVALUATION_LIMIT)` asserts on a literal; it adds nothing beyond the estimate and method assertions just above it.",
+   "evidence": "The preceding lines already assert the estimate is 191,646 and the method is 'exact', which fails if the limit drops below 191,646.",
+   "fix": "Drop the line, or assert `EXACT_EVALUATION_LIMIT` toBe(200_000) if pinning the constant is the intent."}
+ ],
+ "summary": "All SPEC items implemented and tested. Sampler is statistically sound: per-opponent uniform combo pick with whole-deal rejection gives a uniform distribution over valid deals, and runout drawing by rejection from 52 is uniform over subsets; a scratch comparison against exactEquity on overlapping 60-combo ranges (3-way turn) converged from ~0.4 pp at 30k to <=0.13 pp at 300k trials, and a tie-heavy case matched win/tie/equity. Tie shares use integer 2520 units (exact for any split up to 10). estimateEvaluations matches the rule-3 formula and all SPEC-08 examples including the 191,646/201,600 boundary (A-12 river example accepted). Canonicalisation (sorted hero/board/combos, dead/duplicate combo removal, stable opponent sort) and mapping back via order[i] are correct; the SPEC-09 property test uses distinct ranges and would catch an identity or inverted mapping (covers the gap noted in A-13). Generator is independent of src/advice (only evaluate/parseCards via runnerImport) and is cross-checked against the equity module on a flop case. SPEC-14 greps print nothing. Full-ring perf measured at ~70-71 ms p95 vs 80 ms target: passes, thin margin (MINOR). No BLOCKER or MAJOR findings."}
