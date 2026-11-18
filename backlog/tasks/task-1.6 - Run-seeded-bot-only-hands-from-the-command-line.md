@@ -1,10 +1,11 @@
 ---
 id: TASK-1.6
 title: Run seeded bot-only hands from the command line
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-18T07:03:00Z'
+updated_date: '2026-11-18T17:04:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-0
@@ -67,6 +68,18 @@ Plan key: E01-S07 · Dream: limit-holdem-trainer
 - [ ] #11 Story documentation is written and published to Backlog.md
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. src/playtest/policy.ts: M1 seeded random-move SeatPolicy (uniform over legal actions; no bet/raise at betCount>=4); per-seat Xoshiro128(fnv1a32(code+'/'+seat)).
+2. src/playtest/runner.ts: runPlaytest (hand k code from seed+k, button rotates, stacks reset to $160, minimal violations: rejected action, >4 bets) and replayHand/formatHand.
+3. src/playtest/cli.ts: argument parsing (--hands/--seed/--size/--replay-code/--button/--help), fixed USAGE and error lines, exit 0/1/2, Label: value report.
+4. tools/playtest/main.ts + resolve-ts.js: Node built-in type stripping with extensionless-import hook; npm run playtest; engines.node >=22.18.0.
+5. Tests: acceptance AC#1-7 (incl. byte-identical runs, seed-distinct codes, replay reproduces cards, cap never exceeded, invalid replay code exit 2), unit tests.
+
+Full spec: doit/TASK-1.6/spec.md
+<!-- SECTION:PLAN:END -->
 
 ## Implementation Notes
 

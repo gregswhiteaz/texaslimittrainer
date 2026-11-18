@@ -1,0 +1,92 @@
+[
+  {
+    "id": "SPEC-01",
+    "verifies": "AC#1, DoD#6",
+    "verification": "acceptance `tests/playtest/playtest.acceptance.test.ts::AC#1 plays 10,000 hands at 6-max $4/$8 and reports zero violations`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-02",
+    "verifies": "AC#1",
+    "verification": "acceptance `tests/playtest/runner.acceptance.test.ts::AC#1 hands are real engine hands at $4/$8 with $160 stacks`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-03",
+    "verifies": "AC#2",
+    "verification": "acceptance `tests/playtest/runner.acceptance.test.ts::AC#2 every hand is dealt to exactly n players for n = 3..10`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-04",
+    "verifies": "AC#3",
+    "verification": "acceptance `tests/playtest/playtest.acceptance.test.ts::AC#3 same seed and options give byte-identical output`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-05",
+    "verifies": "AC#4",
+    "verification": "acceptance `tests/playtest/playtest.acceptance.test.ts::AC#4 seeds 42 and 43 deal different replay codes`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-06",
+    "verifies": "AC#5",
+    "verification": "acceptance `tests/playtest/runner.acceptance.test.ts::AC#5 a recorded hand replays with the same hole cards and board`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-07",
+    "verifies": "AC#6",
+    "verification": "unit `tests/playtest/policy.test.ts::never bets or raises once the street has 4 bets`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-08",
+    "verifies": "AC#6, DoD#6",
+    "verification": "acceptance `tests/playtest/runner.acceptance.test.ts::AC#6 10,000 hands record no street with more than 4 bets`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-09",
+    "verifies": "AC#7",
+    "verification": "acceptance `tests/playtest/playtest.acceptance.test.ts::AC#7 invalid replay code prints the fixed usage message and exits 2`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-10",
+    "verifies": "AC#7",
+    "verification": "unit `tests/playtest/cli.test.ts::rejects every invalid argument with its fixed message`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-11",
+    "verifies": "AC#3, AC#4",
+    "verification": "unit `tests/playtest/runner.test.ts::derives codes, buttons and seat generators deterministically`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-12",
+    "verifies": "AC#1, AC#6",
+    "verification": "unit `tests/playtest/runner.test.ts::counts rejected actions and over-cap streets as violations`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-13",
+    "verifies": "AC#1, AC#5",
+    "verification": "unit `tests/playtest/cli.test.ts::formats the report and a hand exactly`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-14",
+    "verifies": "DoD#1, DoD#2, DoD#4, DoD#5, DoD#8",
+    "verification": "command `npm run lint && npm run typecheck && npm test`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-15",
+    "verifies": "DoD#3, DoD#7, DoD#9, DoD#10, DoD#11, DoD#12",
+    "verification": "manual `gh run list --branch doit/TASK-1.6 --limit 1` shows success; `backlog doc list --plain` lists the TASK-1.6 document",
+    "status": "pending"
+  }
+]
