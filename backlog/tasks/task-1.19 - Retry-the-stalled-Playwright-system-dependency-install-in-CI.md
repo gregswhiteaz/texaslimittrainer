@@ -1,16 +1,18 @@
 ---
 id: TASK-1.19
 title: Retry the stalled Playwright system-dependency install in CI
-status: In Progress
+status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-18T04:37:00Z'
-updated_date: '2026-11-18T05:22:00Z'
+updated_date: '2026-11-18T06:12:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-0
 dependencies:
   - TASK-1.7
+documentation:
+  - doc-11
 parent_task_id: TASK-1
 priority: high
 type: chore
@@ -25,11 +27,11 @@ Twice in four CI-backed stories (TASK-1.7 PR run 44220403675 attempt 1, TASK-1.3
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Given the workflow, When the Playwright system-dependency (and browser) install step runs, Then it has a step-level timeout well below the job timeout (e.g. 5 minutes per attempt)
-- [ ] #2 Given the install step fails or times out, When CI continues, Then it retries the install automatically (at least 2 retries) before failing the job
-- [ ] #3 Given all install attempts fail, When the job ends, Then the workflow is reported as failed with a log line naming the install step
-- [ ] #4 Given a normal run, When the install succeeds on the first attempt, Then total job time is not increased by more than 10 seconds
-- [ ] #5 Given the static workflow tests in tests/ci/workflow.test.ts, When they run, Then they assert the timeout and retry are present
+- [x] #1 Given the workflow, When the Playwright system-dependency (and browser) install step runs, Then it has a step-level timeout well below the job timeout (e.g. 5 minutes per attempt)
+- [x] #2 Given the install step fails or times out, When CI continues, Then it retries the install automatically (at least 2 retries) before failing the job
+- [x] #3 Given all install attempts fail, When the job ends, Then the workflow is reported as failed with a log line naming the install step
+- [x] #4 Given a normal run, When the install succeeds on the first attempt, Then total job time is not increased by more than 10 seconds
+- [x] #5 Given the static workflow tests in tests/ci/workflow.test.ts, When they run, Then they assert the timeout and retry are present
 <!-- AC:END -->
 
 ## Implementation Plan
@@ -47,4 +49,12 @@ Full spec: doit/TASK-1.19/spec.md
 
 <!-- SECTION:NOTES:BEGIN -->
 Build: tools/ci/retry.js (3×240 s, process-group kill, ::warning::/::error::), both Playwright install steps wrapped with timeout-minutes 13; retry tests with flaky stub (hang/fail/tree/ignore-TERM); workflow static tests; README; gate PASS.
+
+CI run 44247645009: attempt 1 failed only in pre-existing hand-evaluator throughput floor (935,660/s, TASK-1.20); real-sudo test passed 4.1 s. Attempt 2 success; install-deps 27 s via helper, overhead ~0.04 s. Judge round 1: PASS 12/12 (41/41 holdout checks).
 <!-- SECTION:NOTES:END -->
+
+## Final Summary
+
+<!-- SECTION:FINAL_SUMMARY:BEGIN -->
+Wrapped both Playwright install steps in a new dependency-free Node helper, tools/ci/retry.js: 240 s per attempt, 3 attempts, 10 s delay, process-group kill, plus step timeout-minutes 13 on both steps (worst case about 12.8 min vs the 20-min job timeout). Final failure logs an ::error:: line naming the step. Verified: gates build-1 and fix-2 PASS, 20 helper/workflow tests pass locally (Linux-only real-sudo hang test added after user decision Q-1, runs in CI only); judge and CI results pending. Assumptions to review: A-1..A-6 (timings, both steps wrapped, any non-zero exit retried, AC#4 measured as helper overhead). Risks/follow-ups: if SIGKILL also gets EPERM the attempt waits for the 13-min backstop; sudo test lacks try/finally cleanup; spec section 7 note on apt and process groups is likely wrong. Size 526 lines vs 360 budget (warning only).
+<!-- SECTION:FINAL_SUMMARY:END -->
