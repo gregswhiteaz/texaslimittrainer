@@ -4,10 +4,10 @@
   "branch": "doit/TASK-7.3",
   "base_commit": "936426d8b82482fdad7a1828f97af87faa85d2ef",
   "started": "2026-11-18T11:26:41",
-  "review_round": 0,
+  "review_round": 1,
   "judge_round": 0,
   "sendbacks": 0,
-  "gate_runs": 1,
+  "gate_runs": 2,
   "questions": 2,
   "assumptions": 8,
   "escalations": 0,
@@ -299,5 +299,13 @@
   },
   "history": [],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-7.3",
-  "spec_sha256": "a8b140f81b7ed9129d1431810c56e421202524f6099e7e7c812dca7321e4bc30"
+  "spec_sha256": "a8b140f81b7ed9129d1431810c56e421202524f6099e7e7c812dca7321e4bc30",
+  "review_findings": {
+    "1": 1
+  },
+  "brief_history": {
+    "tests/advice/postflop.test.ts:rounded-comparison-not-pinned": [
+      "review r1"
+    ]
+  }
 }

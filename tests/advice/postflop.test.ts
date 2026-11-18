@@ -105,6 +105,13 @@ describe('rule pot-odds-call', () => {
       });
       expect(result.move).toStrictEqual({ seat: 3, type: 'call', amount: 4 });
     }
+    // 0.1665 is below the unrounded 1/6 but rounds to the same 16.7%, so it must call (Q-2).
+    expect(adviseWith(flop, 0.1665)).toMatchObject({
+      action: 'call',
+      ruleId: 'pot-odds-call',
+      equityPct: 16.7,
+      requiredEquityPct: 16.7,
+    });
     const turn = adviseWith(viewAfter(TURN_BET), 0.25);
     expect(turn).toMatchObject({
       action: 'call',
