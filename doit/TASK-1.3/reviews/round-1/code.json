@@ -1,0 +1,30 @@
+{"reviewer": "code", "round": 1,
+ "rubric": [
+  {"item": "SPEC-01 correctness", "result": "pass"}, {"item": "SPEC-01 test strength", "result": "pass"},
+  {"item": "SPEC-02 correctness", "result": "pass"}, {"item": "SPEC-02 test strength", "result": "pass"},
+  {"item": "SPEC-03 correctness", "result": "pass"}, {"item": "SPEC-03 test strength", "result": "pass"},
+  {"item": "SPEC-04 correctness", "result": "pass"}, {"item": "SPEC-04 test strength", "result": "pass"},
+  {"item": "SPEC-05 correctness", "result": "pass"}, {"item": "SPEC-05 test strength", "result": "pass"},
+  {"item": "SPEC-06 correctness", "result": "pass"}, {"item": "SPEC-06 test strength", "result": "pass"},
+  {"item": "SPEC-07 correctness", "result": "pass"}, {"item": "SPEC-07 test strength", "result": "pass"},
+  {"item": "SPEC-08 correctness", "result": "pass"}, {"item": "SPEC-08 test strength", "result": "pass"},
+  {"item": "SPEC-09 correctness", "result": "pass"}, {"item": "SPEC-09 test strength", "result": "pass"},
+  {"item": "SPEC-13 correctness", "result": "pass"}, {"item": "SPEC-13 test strength", "result": "pass"},
+  {"item": "SPEC-10 correctness", "result": "pass"}, {"item": "SPEC-10 test strength", "result": "pass"},
+  {"item": "SPEC-11 correctness", "result": "pass"}, {"item": "SPEC-11 test strength", "result": "pass"},
+  {"item": "SPEC-12 correctness", "result": "pass"}, {"item": "SPEC-12 test strength", "result": "pass"},
+  {"item": "scope", "result": "pass"}, {"item": "concision", "result": "pass"}, {"item": "clarity", "result": "pass"}
+ ],
+ "findings": [
+  {"fingerprint": "src/engine/seeded-random.ts:nextintunbiased-not-exact-above-2^21",
+   "severity": "MINOR", "file": "src/engine/seeded-random.ts", "line": 87,
+   "issue": "The docstring says nextIntUnbiased is 'exactly uniform' for n in 1..2^31, but `this.nextUint32() * n` is a double product that is only exact while it is below 2^53, i.e. n <= 2^21. For larger non-power-of-two n, `m % 2^32` (the low word used for rejection) is rounded, so the method is no longer exactly uniform. The spec's own rule 3 and interface comment make the same claim, so the builder followed the spec. No current caller is affected (the deck uses n <= 52; the tests use 1326 and 2^31, and 2^31 is a power of two, so it is exact).",
+   "evidence": "node: u=4294967295, n=2147483647 -> BigInt low word 2147483649, double low word 2147483648.",
+   "fix": "Change the docstring range to 'n is 1..2^21' (and note it in the spec's interface), or compute the 64-bit product exactly (split u into 16-bit halves) if larger n will be needed."},
+  {"fingerprint": "tests/engine/deck.acceptance.test.ts:ac3-cache-mutation-only-partly-caught",
+   "severity": "NIT", "file": "tests/engine/deck.acceptance.test.ts", "line": 99,
+   "issue": "The spec's mutation probe 'cache globalThis.crypto at module load' is only caught if the cached thing is the bound getRandomValues function. If the crypto object itself is cached, the spy on webcrypto.getRandomValues still fires, so SPEC-03 still passes. That is fine behaviour (it is the same object), but the Judge's probe may not fail as the spec expects.",
+   "evidence": "vi.spyOn replaces the method on the webcrypto object, and globalThis.crypto === webcrypto.",
+   "fix": "None needed in code; the Judge should run the probe as 'cache crypto.getRandomValues.bind(crypto) at load'."}
+ ],
+ "summary": "The implementation matches the spec. Fisher-Yates (Durstenfeld) runs i = 51..1 with j = nextIntUnbiased(i + 1) in [0, i], which is correct and unbiased. Lemire rejection uses threshold (2^32 - n) % n and only enters the slow path when low < n, and products stay below 2^38 for n <= 52, so the result is exact. mixState128 is bijective: each step xors a bijective function of another word into one word, and the steps compose. Because mix32(0) = 0, only all-zero maps to all-zero. The splitMix32 refactor gives the same outputs (same ops on the same signed state), and the existing vectors plus the splitMix32(0) check still pass. The e2e test is strong: if the seed came from Math.random, the recorded call count would be 0 and the code would not match the recorded words, so it fails. The Node AC#3 test also makes Math.random throw. The RangeError class is checked, because Vitest 5 toThrow(new RangeError(...)) compares classes (verified). All 11 new tests pass, and the SPEC-10 greps print nothing. No BLOCKER or MAJOR findings."}

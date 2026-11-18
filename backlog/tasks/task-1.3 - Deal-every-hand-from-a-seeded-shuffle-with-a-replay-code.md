@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-18T04:09:00Z'
+updated_date: '2026-11-18T04:17:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-0
@@ -16,6 +16,7 @@ references:
 documentation:
   - doc-1
   - doc-2
+  - doc-9
 parent_task_id: TASK-1
 priority: high
 type: feature
@@ -74,3 +75,15 @@ Plan key: E01-S03 · Dream: limit-holdem-trainer
 
 Full spec: doit/TASK-1.3/spec.md
 <!-- SECTION:PLAN:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+Build: src/engine/deck.ts (128-bit replay codes, crypto.getRandomValues, mixState128 + unbiased Fisher–Yates), seeded-random.ts additions; golden decks match spec; chi-square 55.1 / 33.8 (< 77.39); e2e seed-source test Chromium+WebKit; gate PASS.
+<!-- SECTION:NOTES:END -->
+
+## Final Summary
+
+<!-- SECTION:FINAL_SUMMARY:BEGIN -->
+Added src/engine/deck.ts (128-bit crypto seed, 32-hex replay code, Fisher-Yates deck) plus mixState128 and nextIntUnbiased in seeded-random.ts, so the same replay code always gives the same deck in Node and browsers. User decisions: Q-1 32-hex code API; Q-2 mix code via mixState128 before seeding (protects low-entropy playtest seeds). Verification: lint, typecheck, 59 unit tests pass (src/engine 100% lines); chi-square 55.1 and 33.8 vs critical 77.39; 4 golden decks; e2e passes in Chromium and WebKit; gate PASS x2; review round 1 clean (1 MINOR, 2 NIT). Judge result pending. Review assumptions A-1..A-8 in the story doc. Follow-ups (not created): narrow or fix nextIntUnbiased range (exact only to 2^21; no caller affected); TASK-1.6 should validate codes with isReplayCode and print a fixed message.
+<!-- SECTION:FINAL_SUMMARY:END -->
