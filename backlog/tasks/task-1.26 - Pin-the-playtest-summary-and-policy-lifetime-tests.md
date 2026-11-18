@@ -4,6 +4,7 @@ title: Pin the playtest summary and policy-lifetime tests
 status: To Do
 assignee: []
 created_date: '2026-11-18T17:24:00Z'
+updated_date: '2026-11-18T21:33:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -30,4 +31,11 @@ Follow-up from TASK-1.6 (doc-15): the judge's J-1-01 (MEDIUM) and code review fo
 - [ ] #2 Given a real multi-hand run, When the report is built, Then the Largest pot line matches an independent recomputation from the played hands
 - [ ] #3 Given a hand with several decisions per seat, When the runner plays it, Then each seat's policy is created exactly once for that hand
 - [ ] #4 Given src/playtest imports a UI or browser module, When npm run lint runs, Then the headless-boundary rule fails naming the file
+- [ ] #5 Given src/table imports a UI or browser module, When npm run lint runs, Then the headless-boundary rule fails naming the file, and the TASK-3.1 import-scan test (SPEC-10) is removed
 <!-- AC:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+AC added from TASK-3.1 follow-up (doc-21).
+<!-- SECTION:NOTES:END -->

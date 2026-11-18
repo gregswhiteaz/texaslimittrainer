@@ -4,7 +4,7 @@ title: Play at Rapid bot pace
 status: To Do
 assignee: []
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-17T23:22:00Z'
+updated_date: '2026-11-18T21:33:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -42,6 +42,7 @@ Plan key: E03-S13 · Dream: limit-holdem-trainer
 - [ ] #1 Given Rapid speed in a timed 6-max session, When consecutive bot actions are measured, Then each bot action is displayed within 300 ms of the previous action [REQ-011.1]
 - [ ] #2 Given Rapid speed at a 10-player table where the user folds preflop, When the remaining nine players' actions are measured, Then no bot action is displayed later than 300 ms after the previous action [REQ-011.1]
 - [ ] #3 Given Rapid speed, the Hand Review panel not opening and a scripted user folding every hand, When an automated run plays 200 hands, Then they complete in under 60 minutes [REQ-024.6]
+- [ ] #4 Given Rapid pace, When bots act in sequence, Then a test fails if any bot action is delayed by an artificial wait (e.g. 400 ms) rather than acting on the next scheduler tick
 <!-- AC:END -->
 
 ## Definition of Done
@@ -59,3 +60,9 @@ Plan key: E03-S13 · Dream: limit-holdem-trainer
 - [ ] #11 Story documentation is written and published to Backlog.md
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+AC added from TASK-3.1 follow-up (doc-21).
+<!-- SECTION:NOTES:END -->

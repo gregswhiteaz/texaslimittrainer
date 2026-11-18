@@ -4,7 +4,7 @@ title: See every seat, the board, the pot and the button at a glance
 status: To Do
 assignee: []
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-18T20:51:00Z'
+updated_date: '2026-11-18T21:33:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-0
@@ -53,6 +53,7 @@ Plan key: E03-S03 · Dream: limit-holdem-trainer
 - [ ] #7 Given hand 133 of a 6-player $4/$8 cash session, When the table is shown, Then the header reads game type "Cash", "6 players", "$4/$8" and "Hand #133" and offers a Leave table control [REQ-021.8]
 - [ ] #8 Given a hand in progress at every street, When the Table screen's text and accessible names are searched, Then the hand's replay code appears nowhere [REQ-013.4]
 - [ ] #9 Given a bot seat holding face-down cards, When the table renders, Then the seat shows a smaller CardBack marker that still shows the logo and passes axe
+- [ ] #10 Given the full seat and header display, When a player acts or is to act, Then the last action and the player to act are shown as visible text, and the TASK-3.1 data-street/data-to-act/data-action-count test hooks are replaced where visible text covers them
 <!-- AC:END -->
 
 ## Definition of Done
@@ -75,4 +76,6 @@ Plan key: E03-S03 · Dream: limit-holdem-trainer
 
 <!-- SECTION:NOTES:BEGIN -->
 AC added from TASK-3.5 follow-up (doc-20).
+
+AC added from TASK-3.1 follow-up (doc-21).
 <!-- SECTION:NOTES:END -->

@@ -4,7 +4,7 @@ title: Start a game from Home through Game Config
 status: To Do
 assignee: []
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-17T23:22:00Z'
+updated_date: '2026-11-18T21:33:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-0
@@ -49,6 +49,7 @@ Plan key: E02-S01 · Dream: limit-holdem-trainer
 - [ ] #3 Given the Home screen is shown, When its colours are measured, Then the page background is charcoal #0E0F12 and the New game control uses the red primary accent #D7262E [REQ-060.3]
 - [ ] #4 Given the Home screen, When the user chooses New game, Then the Game Config screen opens and no session is started [REQ-002.2]
 - [ ] #5 Given Game Config on first use, When the user chooses Start game, Then the Table opens a cash game with the user and five TAG bots at $4/$8 and the first hand is dealt [REQ-006.1]
+- [ ] #6 Given Game Config starts a session, When the Table receives it, Then SessionConfig carries game type, number of players, line-up, speed, seat and button as well as the stake
 <!-- AC:END -->
 
 ## Definition of Done
@@ -66,3 +67,9 @@ Plan key: E02-S01 · Dream: limit-holdem-trainer
 - [ ] #11 Story documentation is written and published to Backlog.md
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+AC added from TASK-3.1 follow-up (doc-21).
+<!-- SECTION:NOTES:END -->
