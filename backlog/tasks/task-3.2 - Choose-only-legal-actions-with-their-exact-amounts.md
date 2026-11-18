@@ -1,10 +1,11 @@
 ---
 id: TASK-3.2
 title: Choose only legal actions with their exact amounts
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-17T23:22:00Z'
+updated_date: '2026-11-18T22:27:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-0
@@ -64,3 +65,20 @@ Plan key: E03-S02 · Dream: limit-holdem-trainer
 - [ ] #11 Story documentation is written and published to Backlog.md
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. src/table/action-bar.ts (headless): pure function from the user's PlayerView to the bar model — legal actions in engine order with exact labels ('Check', 'Bet $4', 'Fold', 'Call $4', 'Raise to $8'); disabled model of greyed Fold / Call / Raise with no amounts when it isn't the user's turn (Q-1).
+2. src/ui/table/ActionBar.tsx: storyboard button style, at least 44x44 CSS px (52 px tall), disabled state, group named 'Your actions', no key handlers; Table.tsx uses it in place of the plain buttons; bar shown from the deal onward, including after the hand ends.
+3. e2e/table.spec.ts (TASK-3.1 acceptance test): the three planned edits from spec D-4 only, no assertion removed or weakened.
+4. Tests: AC#5 property over 10,000 seeded engine states (bar equals legalActions, other seats disabled); e2e AC#1-4 and 6-8 in Chromium + WebKit (hand-built states for AC#3/AC#4, single-key presses do nothing, button size), axe clean.
+
+Full spec: doit/TASK-3.2/spec.md
+<!-- SECTION:PLAN:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+Cross-story change: e2e/table.spec.ts (TASK-3.1 acceptance test) gets three edits per spec D-4 at the user's Q-1 decision: button names match exact-amount labels, calls clicked by /^Call \$\d+$/, bar present and disabled at hand end. No other TASK-3.1 assertion may be removed or weakened.
+<!-- SECTION:NOTES:END -->

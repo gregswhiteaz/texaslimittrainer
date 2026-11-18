@@ -1,0 +1,612 @@
+{
+  "id": "TASK-3.2",
+  "title": "Choose only legal actions with their exact amounts",
+  "status": "To Do",
+  "archived": false,
+  "type": "feature",
+  "priority": "high",
+  "project": null,
+  "assignees": [],
+  "reporter": null,
+  "labels": [
+    "dream-limit-holdem-trainer"
+  ],
+  "milestone": "m-0",
+  "parentTaskId": "TASK-3",
+  "acceptanceCriteriaCompleted": 0,
+  "acceptanceCriteriaCount": 8,
+  "references": [
+    "dreams/limit-holdem-trainer/requirements.md"
+  ],
+  "modifiedFiles": [],
+  "ordinal": 16000,
+  "createdAt": "2026-11-17T22:46:00Z",
+  "updatedAt": "2026-11-17T23:22:00Z",
+  "dueDate": null,
+  "isReady": true,
+  "path": "backlog/tasks/task-3.2 - Choose-only-legal-actions-with-their-exact-amounts.md",
+  "description": "As a learner, I want an action bar that offers only my legal actions labelled with their exact amounts, so that I learn the fixed-limit betting structure and can never make an illegal move.\n\nWhen no bet faces the user: Check and Bet $<small or big bet>, no Fold (Q-45). Preflop in an unraised pot the big blind is offered Check and \"Raise to $8\" (at $4/$8), no Fold (REQ-017.6). When a bet faces the user: Fold, Call $<amount> and Raise to $<amount>. Bet and raise sizes follow fixed-limit rules ($4 preflop and flop, $8 turn and river at $4/$8). The bar is disabled while it is not the user's turn. Actions are taken by mouse or touch only: no single-key keyboard shortcuts. Each action button is at least 44 x 44 CSS px. The offered set must always equal the engine's legal set. Capped streets and all-in labels (including short all-in bets and raises, REQ-017.7) are E03-S06. Replaces the plain buttons of the tracer E03-S01. The 44 x 44 px check for action buttons lives here; E03-S17 measures the other Table controls.\n\n## Requirements covered\n- REQ-017 (Must): Legal actions only \u2014 The engine shall accept only legal actions for the player to act, and the Table screen shall offer the user only the legal actions with their exact amounts.\n- REQ-022 (Must): Action bar \u2014 When it is the user's turn, the Table screen shall show an action bar of buttons labelled with the action and its exact amount, plus a Hint button, operated by mouse or touch.\n\nCovers: REQ-017, REQ-022\n\nPlan key: E03-S02 \u00b7 Dream: limit-holdem-trainer",
+  "dependencies": [
+    "TASK-3.1"
+  ],
+  "dependencyGraph": {
+    "root": "TASK-3.2",
+    "nodes": [
+      {
+        "id": "TASK-3.2",
+        "title": "Choose only legal actions with their exact amounts",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": 0,
+        "dependentDepth": 0
+      },
+      {
+        "id": "TASK-1.1",
+        "title": "Bootstrap the strict TypeScript project with one-command checks",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 3,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.2",
+        "title": "Rank showdown hands by real poker hand rankings",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 4,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.3",
+        "title": "Deal every hand from a seeded shuffle with a replay code",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 4,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.4",
+        "title": "Play a complete fixed-limit hand from blinds to showdown",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 3,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.5",
+        "title": "Give each deciding seat only its own view of the hand",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 2,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.6",
+        "title": "Run seeded bot-only hands from the command line",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 3,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.7",
+        "title": "Run every check in GitHub Actions on each push and pull request",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 5,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-3",
+        "title": "Play hands at the table",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 1
+      },
+      {
+        "id": "TASK-3.1",
+        "title": "Play a complete hand against TAG bots at a default 6-max table in the browser",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 1,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-3.5",
+        "title": "Read big-index cards drawn in code",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 2,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-3.7",
+        "title": "Act correctly on capped streets and when short of chips",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 1
+      },
+      {
+        "id": "TASK-3.17",
+        "title": "Operate every table control with native buttons and large targets",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 1
+      },
+      {
+        "id": "TASK-5",
+        "title": "Play a sit-and-go",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 3
+      },
+      {
+        "id": "TASK-5.3",
+        "title": "Read every sit-and-go chip amount without a $ sign",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 2
+      },
+      {
+        "id": "TASK-6.1",
+        "title": "Face TAG bots that act from the advice engine",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 2,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-7.1",
+        "title": "Compute a hand's equity against opponent hands",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 4,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-7.2",
+        "title": "Recommend a preflop action from the 6-max chart",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 3,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-7.3",
+        "title": "Recommend call or fold after the flop from equity and pot odds",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 3,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-8",
+        "title": "Ask for a hint",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 2
+      },
+      {
+        "id": "TASK-8.1",
+        "title": "Ask for a hint and see the recommended action with its numbers and reason",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 1
+      },
+      {
+        "id": "TASK-8.2",
+        "title": "Mark a decision as hinted when I open the hint",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 2
+      },
+      {
+        "id": "TASK-8.3",
+        "title": "Get the hint card within one second",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 2
+      },
+      {
+        "id": "TASK-8.4",
+        "title": "See approximate and short-stack labels on the hint card",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 2
+      },
+      {
+        "id": "TASK-13",
+        "title": "Rely on a private offline app",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 3
+      },
+      {
+        "id": "TASK-13.4",
+        "title": "Use every screen offline after the first visit",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 2
+      },
+      {
+        "id": "TASK-13.8",
+        "title": "Get new versions at the next launch, never mid-session",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 3
+      },
+      {
+        "id": "TASK-13.9",
+        "title": "Reach Home within 3 seconds on a repeat launch",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 3
+      },
+      {
+        "id": "TASK-13.10",
+        "title": "Keep every screen within its time limits with 100,000 stored hands",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 3
+      },
+      {
+        "id": "TASK-13.11",
+        "title": "Prove every screen passes automated accessibility checks",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 2
+      }
+    ],
+    "edges": [
+      {
+        "from": "TASK-1.2",
+        "to": "TASK-1.7"
+      },
+      {
+        "from": "TASK-1.3",
+        "to": "TASK-1.7"
+      },
+      {
+        "from": "TASK-1.4",
+        "to": "TASK-1.2"
+      },
+      {
+        "from": "TASK-1.4",
+        "to": "TASK-1.3"
+      },
+      {
+        "from": "TASK-1.5",
+        "to": "TASK-1.4"
+      },
+      {
+        "from": "TASK-1.6",
+        "to": "TASK-1.5"
+      },
+      {
+        "from": "TASK-1.7",
+        "to": "TASK-1.1"
+      },
+      {
+        "from": "TASK-3",
+        "to": "TASK-3.2"
+      },
+      {
+        "from": "TASK-3",
+        "to": "TASK-3.7"
+      },
+      {
+        "from": "TASK-3",
+        "to": "TASK-3.17"
+      },
+      {
+        "from": "TASK-3.1",
+        "to": "TASK-1.5"
+      },
+      {
+        "from": "TASK-3.1",
+        "to": "TASK-3.5"
+      },
+      {
+        "from": "TASK-3.1",
+        "to": "TASK-6.1"
+      },
+      {
+        "from": "TASK-3.2",
+        "to": "TASK-3.1"
+      },
+      {
+        "from": "TASK-3.5",
+        "to": "TASK-1.1"
+      },
+      {
+        "from": "TASK-3.7",
+        "to": "TASK-3.2"
+      },
+      {
+        "from": "TASK-3.17",
+        "to": "TASK-3.2"
+      },
+      {
+        "from": "TASK-5",
+        "to": "TASK-5.3"
+      },
+      {
+        "from": "TASK-5.3",
+        "to": "TASK-8.1"
+      },
+      {
+        "from": "TASK-6.1",
+        "to": "TASK-1.6"
+      },
+      {
+        "from": "TASK-6.1",
+        "to": "TASK-7.2"
+      },
+      {
+        "from": "TASK-6.1",
+        "to": "TASK-7.3"
+      },
+      {
+        "from": "TASK-7.1",
+        "to": "TASK-1.2"
+      },
+      {
+        "from": "TASK-7.2",
+        "to": "TASK-1.5"
+      },
+      {
+        "from": "TASK-7.3",
+        "to": "TASK-7.1"
+      },
+      {
+        "from": "TASK-7.3",
+        "to": "TASK-7.2"
+      },
+      {
+        "from": "TASK-8",
+        "to": "TASK-8.1"
+      },
+      {
+        "from": "TASK-8",
+        "to": "TASK-8.2"
+      },
+      {
+        "from": "TASK-8",
+        "to": "TASK-8.3"
+      },
+      {
+        "from": "TASK-8",
+        "to": "TASK-8.4"
+      },
+      {
+        "from": "TASK-8.1",
+        "to": "TASK-3.2"
+      },
+      {
+        "from": "TASK-8.2",
+        "to": "TASK-8.1"
+      },
+      {
+        "from": "TASK-8.3",
+        "to": "TASK-8.1"
+      },
+      {
+        "from": "TASK-8.4",
+        "to": "TASK-8.1"
+      },
+      {
+        "from": "TASK-13",
+        "to": "TASK-13.4"
+      },
+      {
+        "from": "TASK-13",
+        "to": "TASK-13.8"
+      },
+      {
+        "from": "TASK-13",
+        "to": "TASK-13.9"
+      },
+      {
+        "from": "TASK-13",
+        "to": "TASK-13.10"
+      },
+      {
+        "from": "TASK-13",
+        "to": "TASK-13.11"
+      },
+      {
+        "from": "TASK-13.4",
+        "to": "TASK-8.1"
+      },
+      {
+        "from": "TASK-13.8",
+        "to": "TASK-13.4"
+      },
+      {
+        "from": "TASK-13.9",
+        "to": "TASK-13.4"
+      },
+      {
+        "from": "TASK-13.10",
+        "to": "TASK-8.3"
+      },
+      {
+        "from": "TASK-13.10",
+        "to": "TASK-13.9"
+      },
+      {
+        "from": "TASK-13.11",
+        "to": "TASK-8.1"
+      },
+      {
+        "from": "TASK-13.11",
+        "to": "TASK-13.8"
+      }
+    ]
+  },
+  "readiness": {
+    "isReady": true,
+    "isBlocked": false,
+    "blockingDependencies": [],
+    "missingDependencies": []
+  },
+  "documentation": [
+    "doc-1",
+    "doc-2"
+  ],
+  "subtasks": [],
+  "acceptanceCriteria": [
+    {
+      "index": 1,
+      "text": "Given it is the user's turn on the flop at $4/$8 with no bet facing, When the action bar is shown, Then it offers exactly Check and \"Bet $4\" and no Fold [REQ-017.1, REQ-022.1]",
+      "checked": false
+    },
+    {
+      "index": 2,
+      "text": "Given it is the user's turn preflop at $4/$8 facing the $4 big blind, When the action bar is shown, Then it offers exactly Fold, \"Call $4\" and \"Raise to $8\" [REQ-017.2, REQ-022.1]",
+      "checked": false
+    },
+    {
+      "index": 3,
+      "text": "Given it is the user's turn on the turn at $4/$8 facing a bet of $8, When the action bar is shown, Then it offers Fold, \"Call $8\" and \"Raise to $16\" [REQ-017.2, REQ-022.1]",
+      "checked": false
+    },
+    {
+      "index": 4,
+      "text": "Given the user is the big blind at $4/$8 preflop and every other player has called or folded, When the action bar is shown, Then it offers exactly Check and \"Raise to $8\" and no Fold [REQ-017.6, REQ-022.1]",
+      "checked": false
+    },
+    {
+      "index": 5,
+      "text": "Given 10,000 seeded table states where it is the user's turn, When the action bar is built, Then the offered actions and amounts equal the engine's legal actions for the user in every state [REQ-017.1, REQ-017.2, REQ-017.6]",
+      "checked": false
+    },
+    {
+      "index": 6,
+      "text": "Given it is a bot's turn or the hand has ended, When the user clicks any action button, Then the buttons are disabled and no action is submitted [REQ-017.5]",
+      "checked": false
+    },
+    {
+      "index": 7,
+      "text": "Given it is the user's turn with focus on the page body, When the keys F, C, R, H, K, B and Space are pressed, Then no action is taken [REQ-022.3]",
+      "checked": false
+    },
+    {
+      "index": 8,
+      "text": "Given the action bar at a 1280 x 720 window, When each action button is measured, Then it is at least 44 x 44 CSS px [REQ-022.4]",
+      "checked": false
+    }
+  ],
+  "definitionOfDone": [
+    {
+      "index": 1,
+      "text": "Every acceptance criterion has at least one automated test (unit, property or Playwright) that passes",
+      "checked": false
+    },
+    {
+      "index": 2,
+      "text": "`npm run lint`, `npm run typecheck` and `npm test` pass with zero errors [REQ-059.1, REQ-059.4]",
+      "checked": false
+    },
+    {
+      "index": 3,
+      "text": "The golden-spot suite passes 100% (applies from the story that creates the suite, E07-S14, onward) [REQ-039.4]",
+      "checked": false
+    },
+    {
+      "index": 4,
+      "text": "Coverage thresholds hold: >= 90% engine/bots/advice/statistics, >= 70% overall [REQ-059.3]",
+      "checked": false
+    },
+    {
+      "index": 5,
+      "text": "Engine, bots, advice and statistics code imports no UI or browser-only code [REQ-059.2]",
+      "checked": false
+    },
+    {
+      "index": 6,
+      "text": "Stories that touch the engine, bots or advice: a 10,000-hand playtest reports zero invariant violations (applies once the playtest runner exists, E01-S07, onward) [REQ-056.1]",
+      "checked": false
+    },
+    {
+      "index": 7,
+      "text": "Stories that add or change a screen: Playwright test of the screen flow in Chromium and WebKit, and axe reports zero serious or critical violations (axe tooling is provisioned in the toolchain story E01-S01) [REQ-057.1]",
+      "checked": false
+    },
+    {
+      "index": 8,
+      "text": "No new network requests beyond the app's own files [REQ-058.1]",
+      "checked": false
+    },
+    {
+      "index": 9,
+      "text": "Strategy-content stories: text is original and every chart, range or golden spot carries its justification [REQ-061.2]",
+      "checked": false
+    },
+    {
+      "index": 10,
+      "text": "CI workflow is green on the story's branch (applies once the CI story E01-S02 is done; E01-S01 instead passes the same checks locally) [REQ-064.2]",
+      "checked": false
+    },
+    {
+      "index": 11,
+      "text": "Story documentation is written and published to Backlog.md",
+      "checked": false
+    },
+    {
+      "index": 12,
+      "text": "Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled",
+      "checked": false
+    }
+  ],
+  "implementationPlan": null,
+  "implementationNotes": null,
+  "comments": [],
+  "finalSummary": null
+}
