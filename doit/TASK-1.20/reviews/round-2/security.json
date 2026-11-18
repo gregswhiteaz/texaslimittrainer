@@ -1,0 +1,10 @@
+{"reviewer": "security", "round": 2,
+ "findings": [
+  {"fingerprint": "tests/ci/speed-limits.acceptance.test.ts:timeout-may-orphan-nested-vitest",
+   "severity": "NIT",
+   "file": "tests/ci/speed-limits.acceptance.test.ts", "line": 22,
+   "issue": "Carried over from round 1 and not part of the fix brief. spawnSync's 120 s timeout sends SIGTERM only to npx, so after a hang the grandchild Vitest process could outlive the test. In practice the work is bounded by the inner test timeouts and CI runner teardown.",
+   "evidence": "No untrusted input. The fixed argv goes to spawnSync, and on timeout SIGTERM goes to npx only.",
+   "fix": "Optional: run node_modules/.bin/vitest directly so the timeout reaches the Vitest process. Not required."}
+ ],
+ "summary": "Round 2 covers commit a6768ad, which changes only tests/ci/speed-limits.acceptance.test.ts plus doit/backlog metadata. Round 1 had no BLOCKER or MAJOR from security. The change deletes FORCE_COLOR and sets NO_COLOR='1' with fixed values in the child env. The spawn is unchanged: fixed argv, no shell, fixed cwd. The new ANSI_ESCAPE regex /\\u001b\\[[0-9;]*m/g has a single character class quantifier anchored by a literal terminator, so it runs in linear time and has no ReDoS risk. Its input is the output of our own nested test run, which is not untrusted. Stripping happens after capture and does not weaken failing closed: a failed or timed-out spawn still gives exit -1 and no '2 passed'/'2 failed' summary, so the assertions fail. The assertions are unchanged. No new dependencies, secrets or permission changes. The state.json unlock/relock of the locked test is recorded in history with a reason, and the new hash matches the edited file's snapshot entry. No BLOCKER or MAJOR."}

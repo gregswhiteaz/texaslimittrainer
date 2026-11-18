@@ -1,0 +1,31 @@
+{"reviewer": "code", "round": 2,
+ "rubric": [
+  {"item": "SPEC-01 correctness", "result": "pass"},
+  {"item": "SPEC-01 test strength", "result": "pass"},
+  {"item": "SPEC-02 correctness", "result": "pass"},
+  {"item": "SPEC-02 test strength", "result": "pass"},
+  {"item": "SPEC-03 correctness", "result": "pass"},
+  {"item": "SPEC-03 test strength", "result": "pass"},
+  {"item": "SPEC-04 correctness", "result": "pass"},
+  {"item": "SPEC-04 test strength", "result": "pass"},
+  {"item": "SPEC-05 correctness", "result": "pass"},
+  {"item": "SPEC-05 test strength", "result": "pass"},
+  {"item": "SPEC-06 correctness", "result": "pass"},
+  {"item": "SPEC-06 test strength", "result": "pass"},
+  {"item": "SPEC-07 correctness", "result": "pass"},
+  {"item": "SPEC-07 test strength", "result": "pass"},
+  {"item": "SPEC-08 correctness", "result": "pass"},
+  {"item": "SPEC-08 test strength", "result": "pass"},
+  {"item": "scope", "result": "pass"},
+  {"item": "concision", "result": "pass"},
+  {"item": "clarity", "result": "pass"}
+ ],
+ "findings": [
+  {"fingerprint": "tests/ci/speed-limits.acceptance.test.ts:color-suppression-and-ansi-strip-both-present",
+   "severity": "NIT",
+   "file": "tests/ci/speed-limits.acceptance.test.ts", "line": 21,
+   "issue": "The fix does two things: it suppresses color (delete FORCE_COLOR, NO_COLOR=1) and it also strips ANSI escapes. Either one alone fixes the round-1 problem.",
+   "evidence": "Lines 12-13 and 21-23 both target the same failure.",
+   "fix": "Optional: keep only one approach. Keeping both is harmless as a defensive measure."}
+ ],
+ "summary": "Round-1 MAJOR tests/ci/speed-limits.acceptance.test.ts:summary-regex-breaks-with-forced-color is FIXED. In commit a6768ad, runPerfSuites deletes FORCE_COLOR, sets NO_COLOR=1 and strips /\\u001b\\[[0-9;]*m/g from the combined output. The commit changed only these lines in this test. All five assertions are unchanged: exit code 0 / non-0, the 'speed limits not enforced (CI=true)' marker, 'seven-card evals/s', /Tests\\s+2 passed/, /Tests\\s+2 failed/, and not.toContain on the marker. So nothing was weakened. Verified sequentially with no other Vitest run active: `FORCE_COLOR=1 npx vitest run tests/ci/speed-limits.acceptance.test.ts` gives 2 passed (it failed 2/2 in round 1). Without FORCE_COLOR: 2 passed. With FORCE_COLOR=1 CI=true: 2 passed. The gate fix-3.json shows npm test, lint and typecheck passing. No new BLOCKER or MAJOR."}
