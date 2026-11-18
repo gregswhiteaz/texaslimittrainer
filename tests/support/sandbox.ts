@@ -36,7 +36,7 @@ function writeFile(root: string, relativePath: string, content: string): void {
 }
 
 /** Environment for a nested npm run, without the variables that make Vitest think it is a worker. */
-function sandboxEnv(): NodeJS.ProcessEnv {
+export function sandboxEnv(): NodeJS.ProcessEnv {
   return Object.fromEntries(
     Object.entries(process.env).filter(
       ([key]) => !SCRUBBED_ENV_PREFIXES.some((prefix) => key.startsWith(prefix)),

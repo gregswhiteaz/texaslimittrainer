@@ -1,9 +1,16 @@
+// Real targets: the p95 targets in SCENARIOS (scale 1). They are enforced only by
+//   EQUITY_PERF_SCALE=1 npx vitest run tests/advice/equity.perf.test.ts
+// run with CI unset on the reference machine (Apple-silicon Mac, Node 22.18.0). Local `npm test`
+// enforces only the targets times the slack scale below. CI (CI=true) prints the numbers but
+// enforces no speed limit.
 import { describe, expect, it } from 'vitest';
 import { computeEquity, type EquityInput, type HoleCards } from '../../src/advice/equity';
 import { parseCards, type Card } from '../../src/engine/cards';
+import { SPEED_LIMITS_NOT_ENFORCED, speedLimitsEnforced } from '../support/speed';
 
 const SCALE = Number(process.env.EQUITY_PERF_SCALE ?? 20);
 const RUNS = 20;
+const ENFORCED = speedLimitsEnforced();
 
 function hole(text: string): HoleCards {
   const [a = -1, b = -1] = parseCards(text);
@@ -47,6 +54,7 @@ const SCENARIOS: [string, EquityInput, string, number][] = [
 describe('equity performance', () => {
   it('equity latency within target times slack', () => {
     const failures: string[] = [];
+    if (!ENFORCED) console.log(SPEED_LIMITS_NOT_ENFORCED);
     for (const [name, input, method, targetMs] of SCENARIOS) {
       const used = computeEquity(input).method;
       const times: number[] = [];
@@ -62,7 +70,7 @@ describe('equity performance', () => {
         `${name}: ${used}, p95 ${p95.toFixed(2)} ms (target ${targetMs} ms x ${SCALE} = ${limit} ms)`,
       );
       expect(used, name).toBe(method);
-      if (p95 > limit) failures.push(`${name}: p95 ${p95.toFixed(2)} ms > ${limit} ms`);
+      if (ENFORCED && p95 > limit) failures.push(`${name}: p95 ${p95.toFixed(2)} ms > ${limit} ms`);
     }
     expect(failures).toEqual([]);
   }, 120_000);

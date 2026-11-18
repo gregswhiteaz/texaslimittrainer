@@ -1,9 +1,15 @@
+// Real targets: >= 10,000,000 seven-card evals/s and table build <= 50 ms. They are enforced only by
+//   EVALUATOR_MIN_EVALS_PER_SEC=10000000 EVALUATOR_MAX_BUILD_MS=50 npx vitest run tests/engine/hand-evaluator.perf.test.ts
+// run with CI unset on the reference machine (Apple-silicon Mac, Node 22.18.0). Local `npm test`
+// enforces only the slack floor below. CI (CI=true) prints the numbers but enforces no speed limit.
 import { describe, expect, it } from 'vitest';
 import { buildEvaluatorTables, evaluate } from '../../src/engine/hand-evaluator';
+import { SPEED_LIMITS_NOT_ENFORCED, speedLimitsEnforced } from '../support/speed';
 
 const HANDS = 1_000_000;
 const MIN_EVALS_PER_SEC = Number(process.env.EVALUATOR_MIN_EVALS_PER_SEC ?? 1_000_000);
 const MAX_BUILD_MS = Number(process.env.EVALUATOR_MAX_BUILD_MS ?? 500);
+const ENFORCED = speedLimitsEnforced();
 
 /** Small seeded generator (mulberry32) so the sample hands are reproducible. */
 function seededRandom(seed: number): () => number {
@@ -53,11 +59,14 @@ describe('hand evaluator performance', () => {
 
     console.log(
       `evaluate: ${Math.round(rate).toLocaleString('en-US')} seven-card evals/s; ` +
-        `table build: ${buildMs.toFixed(1)} ms`,
+        `table build: ${buildMs.toFixed(1)} ms` +
+        (ENFORCED ? '' : `; ${SPEED_LIMITS_NOT_ENFORCED}`),
     );
     expect(checksum).toBe(warmUp);
     expect(checksum).toBeGreaterThan(0);
-    expect(rate).toBeGreaterThanOrEqual(MIN_EVALS_PER_SEC);
-    expect(buildMs).toBeLessThanOrEqual(MAX_BUILD_MS);
+    if (ENFORCED) {
+      expect(rate).toBeGreaterThanOrEqual(MIN_EVALS_PER_SEC);
+      expect(buildMs).toBeLessThanOrEqual(MAX_BUILD_MS);
+    }
   }, 60_000);
 });

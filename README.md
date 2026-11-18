@@ -47,6 +47,28 @@ Local equivalent:
 npm audit --omit=dev --audit-level=high && npm audit --audit-level=critical && npm run lint && npm run typecheck && npm run build && npm test && npm run e2e
 ```
 
+## Speed targets
+
+The real speed targets are enforced only by these full-speed commands, run on the reference
+machine (Apple-silicon Mac, Node 22.18.0) with `CI` unset:
+
+- Hand evaluator: at least 10,000,000 seven-card evals/s and table build at most 50 ms.
+
+  ```sh
+  EVALUATOR_MIN_EVALS_PER_SEC=10000000 EVALUATOR_MAX_BUILD_MS=50 npx vitest run tests/engine/hand-evaluator.perf.test.ts
+  ```
+
+- Equity: every scenario's p95 within its target at scale 1 (targets listed in the test file).
+
+  ```sh
+  EQUITY_PERF_SCALE=1 npx vitest run tests/advice/equity.perf.test.ts
+  ```
+
+A local `npm test` keeps only slack checks (at least 1,000,000 evals/s, build at most 500 ms,
+equity targets times 20, 2 s per call for the bounded-work equity test). CI (`CI=true`) prints
+the measurements but enforces no speed limit; the bounded-work equity test uses a 10 s ceiling
+there.
+
 ## Conventions
 
 - Unit and property tests live in `tests/**` or next to the code as `src/**/*.test.{ts,tsx}`.
