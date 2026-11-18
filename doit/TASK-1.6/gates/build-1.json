@@ -1,0 +1,67 @@
+{
+  "task": "TASK-1.6",
+  "phase": "build",
+  "run": 1,
+  "result": "PASS",
+  "changed_lines": 1148,
+  "changed_files": [
+    "package.json",
+    "src/playtest/cli.ts",
+    "src/playtest/policy.ts",
+    "src/playtest/runner.ts",
+    "tests/playtest/cli.test.ts",
+    "tests/playtest/playtest.acceptance.test.ts",
+    "tests/playtest/policy.test.ts",
+    "tests/playtest/runner.acceptance.test.ts",
+    "tests/playtest/runner.test.ts",
+    "tools/playtest/main.ts",
+    "tools/playtest/resolve-ts.js"
+  ],
+  "checks": [
+    {
+      "name": "test command",
+      "status": "pass",
+      "detail": "$ npm test\nexit 0\nance.test.ts > deck acceptance > AC#4 the same replay code gives the same deck order 82ms\n \u2713 tests/playtest/cli.test.ts > playtest CLI > rejects every invalid argument with its fixed message 1074ms\n \u2713 tests/playtest/cli.test.ts > playtest CLI > returns exit code 1 when the run has violations 0ms\n \u2713 tests/playtest/cli.test.ts > playtest CLI > formats the report and a hand exactly 0ms\n \u2713 tests/playtest/runner.acceptance.test.ts > playtest runner > AC#5 a recorded hand replays with the same hole cards and board 52ms\n \u2713 tests/playtest/runner.acceptance.test.ts > playtest runner > AC#6 10,000 hands record no street with more than 4 bets 478ms\n \u2713 tests/toolchain/boundary.test.ts > headless boundary via npm run lint > lint reports globalThis access, dynamic import and type-only React import in headless folders 782ms\n \u2713 tests/ci/speed-limits.acceptance.test.ts > speed limits in CI > without CI the perf limits are enforced 3430ms\nstdout | tests/advice/equity.perf.test.ts > equity performance > equity latency within target times slack\nHU preflop hand vs hand: sampled, p95 79.12 ms (target 15 ms x 20 = 300 ms)\nHU flop hand vs hand: exact, p95 0.85 ms (target 2 ms x 20 = 40 ms)\nHU flop vs every unseen combo: sampled, p95 68.38 ms (target 20 ms x 20 = 400 ms)\nHU turn vs every unseen combo: exact, p95 56.87 ms (target 15 ms x 20 = 300 ms)\nThree-way preflop AA vs KK vs QQ: sampled, p95 57.63 ms (target 20 ms x 20 = 400 ms)\n6-max preflop vs 5 ranges: sampled, p95 146.95 ms (target 50 ms x 20 = 1000 ms)\nFull ring flop vs 9 ranges: sampled, p95 325.02 ms (target 80 ms x 20 = 1600 ms)\n\n \u2713 tests/advice/equity.perf.test.ts > equity performance > equity latency within target times slack 12647ms\n\n Test Files  41 passed (41)\n      Tests  128 passed | 1 skipped (129)\n   Start at  10:11:02\n   Duration  12.93s (tests 95%, import 4%)\n\n\u001b[34m % \u001b[39m\u001b[2mCoverage report from \u001b[22m\u001b[33mv8\u001b[39m\n-------------------|---------|----------|---------|---------|-------------------\nFile               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s \n-------------------|---------|----------|---------|---------|-------------------\nAll files          |   99.89 |    94.97 |     100 |     100 |                   \n advice            |   99.74 |    97.64 |     100 |     100 |                   \n  equity.ts        |   99.55 |    93.97 |     100 |     100 | 114,120,197,290   \n engine            |     100 |    90.94 |     100 |     100 |                   \n  ...-evaluator.ts |     100 |    79.81 |     100 |     100 | ...84-197,211-212 \n  hand.ts          |     100 |    98.27 |     100 |     100 | 231,235           \n-------------------|---------|----------|---------|---------|-------------------\n\n=============================== Coverage summary ===============================\nStatements   : 99.89% ( 989/990 )\nBranches     : 94.97% ( 548/577 )\nFunctions    : 100% ( 204/204 )\nLines        : 100% ( 819/819 )\n================================================================================\n"
+    },
+    {
+      "name": "lint command",
+      "status": "pass",
+      "detail": "$ npm run lint\nexit 0\n\n> tlh-trainer@0.0.0 lint\n> eslint . --max-warnings 0 && prettier --check .\n\nChecking formatting...\nAll matched files use Prettier code style!\n"
+    },
+    {
+      "name": "typecheck command",
+      "status": "pass",
+      "detail": "$ npm run typecheck\nexit 0\n\n> tlh-trainer@0.0.0 typecheck\n> tsc -p tsconfig.json\n\n"
+    },
+    {
+      "name": "spec unchanged",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "name": "scope budget (lines)",
+      "status": "pass",
+      "detail": "1148 changed lines vs budget 1150 (fail above 2300)"
+    },
+    {
+      "name": "scope budget (files)",
+      "status": "pass",
+      "detail": "11 files vs budget 11"
+    },
+    {
+      "name": "files outside spec",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "name": "all changes listed in changes.md",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "name": "tests locked",
+      "status": "pass",
+      "detail": "2 acceptance test file(s) locked; 49 test files snapshotted"
+    }
+  ]
+}
