@@ -4,7 +4,7 @@ title: Pause the session from the Table header Home control
 status: To Do
 assignee: []
 created_date: '2026-11-17T23:03:00Z'
-updated_date: '2026-11-17T23:22:00Z'
+updated_date: '2026-11-18T23:20:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -45,6 +45,7 @@ Plan key: E02-S15 · Dream: limit-holdem-trainer
 - [ ] #3 Given hand 11 is in progress after 10 completed hands, When the user chooses Home in the Table header, Then Home opens with Resume session showing 10 hands and no Session Report is created [REQ-004.9]
 - [ ] #4 Given hand 11 was abandoned with the Home control, When the user resumes, Then a new hand 11 is dealt with every stack equal to its value at the end of hand 10 [REQ-004.9, REQ-004.2]
 - [ ] #5 Given hand 11 was abandoned with the Home control, When stored hand records and the style stats computed from them are read, Then no record of the abandoned hand exists and the stats equal those of hands 1 to 10 [REQ-004.9, REQ-004.6]
+- [ ] #6 Given the Home control on the Table header and paused sessions, When the user presses the browser Back or Forward button on Home, Game Config or the Table, Then the behaviour is decided, documented and covered by a test (e.g. history entries per screen, Back from the Table pauses to Home)
 <!-- AC:END -->
 
 ## Definition of Done
@@ -62,3 +63,9 @@ Plan key: E02-S15 · Dream: limit-holdem-trainer
 - [ ] #11 Story documentation is written and published to Backlog.md
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+AC added from TASK-2.1 follow-up (doc-23).
+<!-- SECTION:NOTES:END -->

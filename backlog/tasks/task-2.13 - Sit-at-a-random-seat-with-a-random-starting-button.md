@@ -4,7 +4,7 @@ title: Sit at a random seat with a random starting button
 status: To Do
 assignee: []
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-17T23:22:00Z'
+updated_date: '2026-11-18T23:20:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-2
@@ -41,6 +41,7 @@ Plan key: E02-S13 · Dream: limit-holdem-trainer
 - [ ] #1 Given 1,000 seeded session starts at each of 2, 6 and 10 players, When the user's seat is tabulated, Then each seat receives the user 1/n of the time within 3 percentage points [REQ-010.1]
 - [ ] #2 Given 1,000 seeded session starts at each of 2, 6 and 10 players, When the starting button seat is tabulated, Then each seat receives the button 1/n of the time within 3 percentage points [REQ-010.2]
 - [ ] #3 Given a 6-player session started with the user drawn at seat 4 and the button at seat 2, When the first hand is dealt, Then the user is drawn at the bottom centre, the button marker is at seat 2 and seats 3 and 4 post the blinds [REQ-010.1, REQ-010.2, REQ-010.3]
+- [ ] #4 Given a session starts, When seats are assigned, Then userSeat and button are drawn for that session and written to SessionConfig, and Game Config's 'You — Seat 5' row is replaced by the storyboard's random-seat text
 <!-- AC:END -->
 
 ## Definition of Done
@@ -58,3 +59,9 @@ Plan key: E02-S13 · Dream: limit-holdem-trainer
 - [ ] #11 Story documentation is written and published to Backlog.md
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+AC added from TASK-2.1 follow-up (doc-23).
+<!-- SECTION:NOTES:END -->

@@ -4,7 +4,7 @@ title: Save the session after every hand so it can be resumed
 status: To Do
 assignee: []
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-17T23:22:00Z'
+updated_date: '2026-11-18T23:20:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -45,6 +45,7 @@ Plan key: E03-S11 · Dream: limit-holdem-trainer
 - [ ] #2 Given the browser process is killed in the middle of hand 11, When the stored session is read, Then it equals the state at the end of hand 10 and no record exists for hand 11 [REQ-052.3]
 - [ ] #3 Given a session started with an edited line-up, When the session record is read, Then its line-up name is Custom and it lists every seat's style [REQ-052.3]
 - [ ] #4 Given a seat whose bot was replaced after hand 5, When the session is read after hand 5, Then that seat holds the new bot's id, name, style and $160 stack [REQ-052.3]
+- [ ] #5 Given a stored SessionConfig is loaded to resume a session, When it is validated, Then assertSessionConfig throws RangeError unless there is exactly one user seat equal to userSeat, players equals seats.length, button is one of the seats and every value is known — so a corrupt config can never show a bot's cards to the user (REQ-025)
 <!-- AC:END -->
 
 ## Definition of Done
@@ -62,3 +63,9 @@ Plan key: E03-S11 · Dream: limit-holdem-trainer
 - [ ] #11 Story documentation is written and published to Backlog.md
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+AC added from TASK-2.1 follow-up (doc-23).
+<!-- SECTION:NOTES:END -->

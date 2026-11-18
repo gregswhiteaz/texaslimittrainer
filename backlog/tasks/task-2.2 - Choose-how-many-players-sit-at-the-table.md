@@ -4,7 +4,7 @@ title: Choose how many players sit at the table
 status: To Do
 assignee: []
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-17T23:22:00Z'
+updated_date: '2026-11-18T23:20:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -47,6 +47,7 @@ Plan key: E02-S02 · Dream: limit-holdem-trainer
 - [ ] #4 Given Game Config, When the user selects 2, 6, 9 or 10 players, Then no approximate-advice notice is shown [REQ-005.3, REQ-005.4]
 - [ ] #5 Given each size from 2 to 10 selected, When the user chooses Start game, Then the table seats the user and exactly size minus 1 bots and the header shows that number of players [REQ-005.2]
 - [ ] #6 Given 2 players selected on Game Config, When the first hand of the started session is dealt, Then the button posts the small blind and the other player the big blind [REQ-015.1]
+- [ ] #7 Given the player-count selector, When the user picks a table size, Then it writes SessionConfig.players and seats, replaces the read-only 'Players at the table' row, and the heads-up and full-ring size labels are either reachable and tested or removed
 <!-- AC:END -->
 
 ## Definition of Done
@@ -64,3 +65,9 @@ Plan key: E02-S02 · Dream: limit-holdem-trainer
 - [ ] #11 Story documentation is written and published to Backlog.md
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+AC added from TASK-2.1 follow-up (doc-23).
+<!-- SECTION:NOTES:END -->
