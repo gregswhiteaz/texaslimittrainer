@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-18T01:11:00Z'
+updated_date: '2026-11-18T01:15:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-0
@@ -75,3 +75,9 @@ Plan key: E01-S02 · Dream: limit-holdem-trainer
 
 Full spec: doit/TASK-1.7/spec.md
 <!-- SECTION:PLAN:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+Build: .github/workflows/ci.yml (push+PR, npm ci, two audit steps, lint, typecheck, build, test, cached Playwright, e2e Chromium+WebKit), .nvmrc 22.18.0, tests/ci/workflow.test.ts (8 static tests), README CI section; all 8 proof cases rehearsed locally; gate PASS.
+<!-- SECTION:NOTES:END -->
