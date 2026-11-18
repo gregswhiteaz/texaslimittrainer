@@ -1,0 +1,104 @@
+{
+ "round": 2,
+ "test_suite": {
+  "command": "npm test",
+  "result": "PASS",
+  "passed": 59,
+  "failed": 0,
+  "notes": "21 test files; AC#2 prints 55.097 / 33.790; lint and typecheck exit 0; coverage 100% lines. Carried forward from round 1 (code unchanged at 7e4b394). CI attempt 3 Test step also success."
+ },
+ "end_to_end": {
+  "command": "npm run e2e",
+  "result": "PASS",
+  "expected": "replay-seed spec passes in Chromium and WebKit: one Uint32Array(4) getRandomValues call per code, code = hex of the words, no Node process, golden deck for 0123456789abcdeffedcba9876543210, same-origin requests only",
+  "actual": "12/12 Playwright tests passed including replay-seed in both projects; Judge's own browser check (304 codes match Node, per-call crypto read, no Math.random) passed in both engines"
+ },
+ "integrity": {
+  "result": "PASS",
+  "notes": "doit.py test-integrity exit 0 with no complaints. Diff against base 130f356 reviewed: no test-input recognition, hard-coded decks, early returns, environment switches, mocks of the unit under test, or overridden equality; deck.ts imports only ./cards (type) and ./seeded-random. Mutation probes in a scratch copy: cached bound getRandomValues \u2192 AC#3 and SPEC-05 fail; Math.random \u2192 AC#3/SPEC-05 fail; naive shuffle \u2192 AC#2/AC#4 fail; loop to i=2 \u2192 AC#2/AC#4 fail; no mixing \u2192 AC#4 fails; no rejection \u2192 SPEC-09 fails. Mutant using the biased nextInt in the shuffle survives all tests (J-1-02)."
+ },
+ "items": [
+  {
+   "spec": "SPEC-01",
+   "result": "PASS",
+   "evidence": "Carried forward from round 1 (local HEAD and remote branch both 7e4b394; git diff HEAD on src/, tests/ and e2e/ is empty, so the product code and tests are unchanged): AC#1 test passes (fast-check 10,000 runs + 3 fixed codes; asserts length 52, integers, sorted copy equals 0..51). Holdout: 20,000 random codes and 2,000 low-entropy codes [0,0,0,k] produce decks identical to an independent BigInt reference Fisher-Yates, all permutations. Mutation probes (naive j over 52, loop stopping at i=2) are caught by AC#2/AC#4."
+  },
+  {
+   "spec": "SPEC-02",
+   "result": "PASS",
+   "evidence": "Carried forward from round 1 (local HEAD and remote branch both 7e4b394; git diff HEAD on src/, tests/ and e2e/ is empty, so the product code and tests are unchanged): AC#2 prints 'position of 2c = 55.097, card on top = 33.790' (both < 77.386, matching the approved prototype values exactly); asserts both bin sums = 100,000. Holdout with an independent 100,000-code set: position of card 51 = 49.08, card at position 51 = 54.17, card at position 25 = 36.77, position of card 0 = 47.49, top card = 49.98; low-entropy codes [0,0,0,k] k=1..100,000: 58.743 (matches spec D-2 value) and 50.00; full 52x52 card-by-position chi-square 2651.8 < 2769.6 (df 2601, p=0.01). Naive-shuffle and stop-at-2 mutants fail AC#2."
+  },
+  {
+   "spec": "SPEC-03",
+   "result": "PASS",
+   "evidence": "Carried forward from round 1 (local HEAD and remote branch both 7e4b394; git diff HEAD on src/, tests/ and e2e/ is empty, so the product code and tests are unchanged): AC#3 passes: asserts globalThis.crypto === webcrypto, one call with Uint32Array(4), code = hex of filled words, [1,2,3,4] \u2192 00000001000000020000000300000004, Math.random throws, two real codes differ. Reviewer probe: caching crypto.getRandomValues.bind(crypto) at module load in a scratch copy makes AC#3 (and the SPEC-05 unit test) fail; a Math.random mutant fails both too. Holdout: 1,000 calls \u2192 1,000 spy calls, each a Uint32Array(4), 1,000 distinct valid codes, Math.random never called; a replacement crypto object stubbed after import is used (read per call); with crypto undefined a TypeError propagates."
+  },
+  {
+   "spec": "SPEC-04",
+   "result": "PASS",
+   "evidence": "Carried forward from round 1 (local HEAD and remote branch both 7e4b394; git diff HEAD on src/, tests/ and e2e/ is empty, so the product code and tests are unchanged): npm run e2e: 'browser seed comes from crypto.getRandomValues and decks match Node' passes in chromium and webkit (12/12 total). Test checks exactly one recorded Uint32Array(4) call, code equals recorded hex, typeof process undefined, golden deck, same-origin requests. Holdout browser check (own Vite IIFE bundle, both engines): 304 codes (4 golden + 300 pseudo-random) give decks identical to Node; a getRandomValues wrapper installed after the bundle loaded records 3 calls of Uint32Array(4) for 3 newReplayCode() calls with matching hex and distinct codes, with Math.random replaced by a throwing function; all-zero code throws RangeError with the spec message."
+  },
+  {
+   "spec": "SPEC-05",
+   "result": "PASS",
+   "evidence": "Carried forward from round 1 (local HEAD and remote branch both 7e4b394; git diff HEAD on src/, tests/ and e2e/ is empty, so the product code and tests are unchanged): Unit test passes (zeros then [1,2,3,4] \u2192 00000001000000020000000300000004, mock called twice). Holdout: three all-zero draws then [0,0,1,0] \u2192 00000000000000000000000100000000 after exactly 4 calls."
+  },
+  {
+   "spec": "SPEC-06",
+   "result": "PASS",
+   "evidence": "Carried forward from round 1 (local HEAD and remote branch both 7e4b394; git diff HEAD on src/, tests/ and e2e/ is empty, so the product code and tests are unchanged): AC#4 passes (1,000 fast-check runs + fixed codes: equal arrays, different objects, mutating one does not affect the next call; four golden strings; \u20260001 vs \u20260002 differ). Holdout: all four \u00a75 golden strings reproduced from my own BigInt implementation of rules 1-5 and by the product; flipping any one of 32 hex digits of 0123\u20263210 changes the deck; fill(0) on a returned deck does not affect the next call. Skip-mixState128 mutant fails AC#4."
+  },
+  {
+   "spec": "SPEC-07",
+   "result": "PASS",
+   "evidence": "Carried forward from round 1 (local HEAD and remote branch both 7e4b394; git diff HEAD on src/, tests/ and e2e/ is empty, so the product code and tests are unchanged): Unit test passes and covers every listed case (3 encodings, 1,000 round trips, '', all-zero, 31/33 chars, upper case, space, 'g' at all 32 positions, golden codes true). Holdout: [0xa,0xb,0xc,0xd] \u2192 0000000a0000000b0000000c0000000d; -0 accepted as 0; leading space, trailing newline, '0x' prefix, '-' separator, one upper-case 'F', non-ASCII \u2192 isReplayCode false; \u20260001 and 1000\u2026 true."
+  },
+  {
+   "spec": "SPEC-08",
+   "result": "PASS",
+   "evidence": "Carried forward from round 1 (local HEAD and remote branch both 7e4b394; git diff HEAD on src/, tests/ and e2e/ is empty, so the product code and tests are unchanged): Unit test passes (all 8 word cases with exact RangeError message; 'ABC', all-zero, upper-case codes with exact message). Holdout: Infinity, -Infinity, 2^32, -0.5, '1' string, null \u2192 RangeError('Invalid replay code words'); 7 malformed codes \u2192 RangeError(`Invalid replay code: \"<code>\"`)."
+  },
+  {
+   "spec": "SPEC-09",
+   "result": "PASS",
+   "evidence": "Carried forward from round 1 (local HEAD and remote branch both 7e4b394; git diff HEAD on src/, tests/ and e2e/ is empty, so the product code and tests are unchanged): Unit test passes: raw outputs 11520,0,5927040,70819200,2031721883,1637235492; nextIntUnbiased(52)\u00d75 = 0,0,0,24,19; stub 0 then 5 with n=3 \u2192 0 after 2 calls; ranges for n \u2208 {1,2,52,1326,2^31}; existing vectors unchanged. Removing the rejection loop makes it fail. Holdout: matches an exact BigInt Lemire reference for n=1..52 across 2,000 random states and at stubbed rejection boundaries for n \u2208 {1,2,3,5,7,52,1326,2^31}; closed-form count of accepted 32-bit inputs per output is identical for every output for n=3, 52, 1326 (exactly uniform). See J-1-01 for n > 2^21."
+  },
+  {
+   "spec": "SPEC-13",
+   "result": "PASS",
+   "evidence": "Carried forward from round 1 (local HEAD and remote branch both 7e4b394; git diff HEAD on src/, tests/ and e2e/ is empty, so the product code and tests are unchanged): Unit test passes (5 reference vectors, 1,000 non-zero tuples, 1,000 distinct pairs, splitMix32(0) first four outputs). Holdout: independent BigInt mix32 gives mix32(1)=1364076727 and mix32(0x9e3779b9)=2462723854; independent mixState128 reproduces all 5 spec vectors and equals the product on 5,000 random tuples; splitMix32(0) outputs unchanged."
+  },
+  {
+   "spec": "SPEC-10",
+   "result": "PASS",
+   "evidence": "Carried forward from round 1 (local HEAD and remote branch both 7e4b394; git diff HEAD on src/, tests/ and e2e/ is empty, so the product code and tests are unchanged): npm run lint exit 0 (eslint + prettier clean); npm run typecheck exit 0; npm test exit 0, 21 files / 59 tests passed, no 'ERROR: Coverage' line, total lines 100% (389/389); deck.ts and seeded-random.ts are left out of the text table only because they are fully covered (skip-full), i.e. 100% lines. Both SPEC-10 greps print nothing (exit 0)."
+  },
+  {
+   "spec": "SPEC-11",
+   "result": "PASS",
+   "evidence": "gh run list -R gregswhiteaz/texaslimittrainer --branch doit/TASK-1.3 --limit 1 --json conclusion \u2192 'success' (run 44236421395). gh run view shows attempt 3 on headSha 7e4b394 (also the remote branch head) concluded success with Lint, Typecheck, Build, Test and E2E all success. E2E runs replay-seed in Chromium and WebKit on Linux. Attempts 1 (cancelled, apt stall) and 2 (two pre-existing timing tests missed their limits) are superseded."
+  },
+  {
+   "spec": "SPEC-12",
+   "result": "PASS",
+   "evidence": "Carried forward from round 1 (local HEAD and remote branch both 7e4b394; git diff HEAD on src/, tests/ and e2e/ is empty, so the product code and tests are unchanged): git diff --stat main shows no change under src/ui/, index.html or src/main.tsx (product changes only in src/engine/deck.ts, src/engine/seeded-random.ts, tests/engine/*, e2e/replay-seed.spec.ts). backlog doc list --plain \u2192 'doc-9 - TASK-1.3: Deal every hand from a seeded shuffle with a replay code'. DoD#3/6/9 N/A per spec reasons (no golden-spot suite, no playtest runner, no strategy content)."
+  }
+ ],
+ "findings": [
+  {
+   "id": "J-1-01",
+   "severity": "MEDIUM",
+   "spec": "SPEC-09",
+   "expected_vs_actual": "Expected: nextIntUnbiased(n) is exactly uniform for every n in 1..2^31, as its doc comment and the spec interface say. Actual: for large non-power-of-two n, the double product u*n goes over 2^53 and the low word is rounded, so the accept/reject decision can be wrong. Example: n = 2^31-1 and a raw draw of 4294967294. The exact low word is above the threshold (3), so the exact result is 2147483646 on the first draw. The method instead rejects that draw, makes a second nextUint32 call and returns a different value. The deck (n <= 52) is unaffected, and the builder followed spec rule 3 literally.",
+   "fix": "Either document and enforce the exact range as n <= 2^21 (the spec interface comment needs updating too), or compute the 64-bit product exactly (e.g. split the 32-bit draw into 16-bit halves) so that every n up to 2^31 is exact."
+  },
+  {
+   "id": "J-1-02",
+   "severity": "LOW",
+   "spec": "SPEC-06",
+   "expected_vs_actual": "Expected: if the shuffle used the biased nextInt instead of nextIntUnbiased, at least one test would fail. Actual: with that change all deck, acceptance and seeded-random tests still pass, because none of the golden or property codes hits a rejection (the chance is about 3e-7 per deck). The production code is correct; this is a test-strength gap.",
+   "fix": "Add a deck golden vector for a replay code whose shuffle hits a rejection in nextIntUnbiased (found by search), or assert that shuffledDeck uses the unbiased draw through a code known to trigger rejection."
+  }
+ ],
+ "summary": "All 13 SPEC items PASS. SPEC-11 is now green: CI run 44236421395 attempt 3 on 7e4b394 concluded success, with Test and E2E success. The other 12 items carry forward from round 1: code unchanged, npm test 59/59, e2e 12/12, holdout and mutation probes pass. Non-blocking findings remain: J-1-01 (MEDIUM, nextIntUnbiased not exact for n > 2^21; no deck impact) and J-1-02 (LOW, a shuffle mutant that uses the biased nextInt survives the tests)."
+}
