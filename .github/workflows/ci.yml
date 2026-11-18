@@ -38,6 +38,8 @@ jobs:
         run: npm run build
       - name: Test
         run: npm test
+      - name: Playtest
+        run: npm run playtest -- --hands 10000 --seed 42
       - name: Read Playwright version
         id: playwright-version
         run: echo "version=$(node -p "require('./package-lock.json').packages['node_modules/@playwright/test'].version")" >> "$GITHUB_OUTPUT"

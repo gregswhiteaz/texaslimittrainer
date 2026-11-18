@@ -41,8 +41,22 @@ describe('CI workflow', () => {
       'npm run typecheck',
       'npm run build',
       'npm test',
+      'npm run playtest -- --hands 10000 --seed 42',
       'npm run e2e',
     ]);
+  });
+
+  it('runs a 10,000-hand playtest step that fails the job on a non-zero exit', () => {
+    const step = /^ {6}- name: Playtest\n((?: {8}.+\n)+)/m.exec(workflow);
+    expect(step).not.toBeNull();
+    expect(step?.[1]).toBe('        run: npm run playtest -- --hands 10000 --seed 42\n');
+    const commands = [...workflow.matchAll(/^\s+run: (npm .+)$/gm)].map((match) => match[1]);
+    const playtest = commands.indexOf('npm run playtest -- --hands 10000 --seed 42');
+    expect(playtest).toBeGreaterThan(commands.indexOf('npm test'));
+    expect(playtest).toBeLessThan(commands.indexOf('npm run e2e'));
+    for (const forbidden of ['if:', 'continue-on-error', '|| true']) {
+      expect(step?.[0]).not.toContain(forbidden);
+    }
   });
 
   it('never ignores a failing check', () => {

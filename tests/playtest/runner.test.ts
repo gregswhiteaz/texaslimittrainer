@@ -59,38 +59,78 @@ describe('playtest runner units', () => {
     expect(draws(code, 2)).not.toEqual(draws(handReplayCode(42, 2), 2));
   });
 
-  it('counts rejected actions and over-cap streets as violations', () => {
+  it('stops a hand at its first violation and counts per invariant', () => {
     const rejected: PolicyFactory = () => (view) => ({
       seat: view.seat,
       type: 'raise',
       amount: 999,
     });
-    const hands: PlayedHand[] = [];
-    const summary = runPlaytest({ hands: 3, seed: 1, size: 3 }, (h) => hands.push(h), rejected);
-    expect(summary.violations).toBe(3);
-    expect(summary.handsPlayed).toBe(3);
-    expect(summary.foldOuts + summary.showdowns).toBe(0);
-    expect(summary.playerActions).toBe(0);
-    expect(summary.largestPot).toBe(0);
-    for (const hand of hands) {
-      const fresh = createHand({
-        stakes: hand.record.stakes,
-        seats: hand.record.seats,
-        button: hand.record.button,
-        deck: hand.final.deck,
+    for (const seams of [{ makePolicy: rejected }, { makePolicy: rejected, onAction: () => [] }]) {
+      const hands: PlayedHand[] = [];
+      const summary = runPlaytest({ hands: 3, seed: 1, size: 3 }, (h) => hands.push(h), seams);
+      expect(summary.violations).toBe(3);
+      expect(summary.violationCounts).toEqual({
+        chips: 0,
+        'legal-action': 3,
+        'bet-cap': 0,
+        'pot-eligibility': 0,
+        cards: 0,
       });
-      expect(hand.final).toEqual(fresh);
-      expect(hand.record.actions).toEqual([]);
-      expect(hand.violations).toBe(1);
+      expect(summary.handsPlayed).toBe(3);
+      expect(summary.foldOuts + summary.showdowns).toBe(0);
+      expect(summary.playerActions).toBe(0);
+      expect(summary.largestPot).toBe(0);
+      expect(summary.firstViolation).toBe(hands[0]);
+      for (const hand of hands) {
+        const fresh = createHand({
+          stakes: hand.record.stakes,
+          seats: hand.record.seats,
+          button: hand.record.button,
+          deck: hand.final.deck,
+        });
+        expect(hand.final).toEqual(fresh);
+        expect(hand.record.actions).toEqual([]);
+        expect(hand.violations).toBe(1);
+        const seat = fresh.toAct;
+        expect(hand.violation).toEqual({
+          actionNumber: 1,
+          action: { seat, type: 'raise', amount: 999 },
+          violations: [
+            {
+              invariant: 'legal-action',
+              message: `engine rejected seat ${seat} raises to $999 (illegal-action)`,
+            },
+          ],
+        });
+      }
     }
 
-    const overCap = runPlaytest({ hands: 3, seed: 1, size: 3 }, undefined, alwaysRaise);
-    expect(overCap.violations).toBeGreaterThanOrEqual(1);
-    expect(overCap.foldOuts + overCap.showdowns).toBe(3);
+    const overCap: PlayedHand[] = [];
+    const summary = runPlaytest({ hands: 3, seed: 1, size: 3 }, (h) => overCap.push(h), {
+      makePolicy: alwaysRaise,
+    });
+    expect(summary.violations).toBe(3);
+    expect(summary.violationCounts['bet-cap']).toBe(3);
+    expect(summary.foldOuts + summary.showdowns).toBeLessThan(3);
+    expect(summary.firstViolation).toBe(overCap[0]);
+    for (const hand of overCap) {
+      expect(hand.final.result).toBeNull();
+      expect(hand.final.betCount).toBe(5);
+      expect(hand.violation?.violations).toEqual([
+        { invariant: 'bet-cap', message: 'preflop has 5 bets (at most 4)' },
+      ]);
+    }
+
+    const late = runPlaytest({ hands: 3, seed: 1, size: 3 }, undefined, {
+      onAction: (step) =>
+        step.before.button === 2 ? [{ invariant: 'custom', message: 'flagged' }] : [],
+    });
+    expect(late.firstViolation?.number).toBe(2);
+    expect(late.violationCounts.custom).toBe(1);
   });
 
   it('records player actions without blinds and counts capped streets', () => {
-    const hand = playHand(handReplayCode(5, 1), 4, 2, 9, raiseToCap);
+    const hand = playHand(handReplayCode(5, 1), 4, 2, 9, { makePolicy: raiseToCap });
     expect(hand.number).toBe(9);
     expect(hand.record.actions).toHaveLength(hand.final.actions.length - 2);
     expect(hand.record.actions[0]).toEqual({ seat: 1, type: 'raise', amount: 8 });

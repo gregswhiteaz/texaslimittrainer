@@ -1,6 +1,7 @@
 import { formatCard } from '../engine/cards';
 import { isReplayCode, type ReplayCode } from '../engine/deck';
 import type { ActionRecord, SeatNumber } from '../engine/hand';
+import { describeAction, INVARIANTS } from '../engine/invariants';
 import {
   CASH_BUY_IN,
   playHand,
@@ -9,8 +10,8 @@ import {
   summarize,
   type PlayedHand,
   type PlaytestOptions,
+  type PlaytestSeams,
   type PlaytestSummary,
-  type PolicyFactory,
 } from './runner';
 
 export interface CliIo {
@@ -103,8 +104,13 @@ export function parseArgs(argv: readonly string[]): ParsedArgs {
   return { kind: 'run', options: { hands, seed, size } };
 }
 
-/** `header` (whole lines) followed by the summary lines. */
-export function formatReport(header: string, summary: PlaytestSummary): string {
+/** `header` (whole lines) followed by the summary lines, then the violation block when there are
+ *  violations. Replay mode has already printed the hand, so its block has no Replay line or hand. */
+export function formatReport(
+  header: string,
+  summary: PlaytestSummary,
+  mode: 'run' | 'replay' = 'run',
+): string {
   return (
     header +
     [
@@ -119,8 +125,30 @@ export function formatReport(header: string, summary: PlaytestSummary): string {
       `Invariant violations: ${summary.violations}`,
     ]
       .map((line) => `${line}\n`)
-      .join('')
+      .join('') +
+    (summary.violations > 0 ? violationBlock(summary, mode) : '')
   );
+}
+
+function violationBlock(summary: PlaytestSummary, mode: 'run' | 'replay'): string {
+  const hand = summary.firstViolation;
+  if (hand === null || hand.violation === null) return '';
+  const { violation, record } = hand;
+  const counts = summary.violationCounts;
+  const ids = [
+    ...INVARIANTS,
+    ...Object.keys(counts).filter((id) => !INVARIANTS.some((i) => i === id)),
+  ];
+  const lines = [
+    `Violations by invariant: ${ids.map((id) => `${id} ${counts[id] ?? 0}`).join(', ')}`,
+    `First violation: hand ${hand.number}, player action ${violation.actionNumber} (${describeAction(violation.action)})`,
+    ...violation.violations.map((v) => `Violation: ${v.invariant}: ${v.message}`),
+  ];
+  if (mode === 'replay') return lines.map((line) => `${line}\n`).join('');
+  lines.push(
+    `Replay: npm run playtest -- --replay-code ${record.replayCode} --size ${record.seats.length} --button ${record.button}`,
+  );
+  return lines.map((line) => `${line}\n`).join('') + formatHand(hand);
 }
 
 const STREETS = ['Preflop', 'Flop', 'Turn', 'River'] as const;
@@ -170,8 +198,8 @@ function tableLine(size: number): string {
 }
 
 /** Returns the exit code: 0 no violations, 1 violations, 2 usage error. Writes everything through io.
- *  makePolicy is a test seam (SPEC-12); the entry never passes it. */
-export function main(argv: readonly string[], io: CliIo, makePolicy?: PolicyFactory): number {
+ *  seams are test seams; the entry never passes them. */
+export function main(argv: readonly string[], io: CliIo, seams: PlaytestSeams = {}): number {
   const parsed = parseArgs(argv);
   if (parsed.kind === 'error') {
     io.err(`${parsed.message}\n${USAGE}`);
@@ -186,14 +214,14 @@ export function main(argv: readonly string[], io: CliIo, makePolicy?: PolicyFact
   if (parsed.kind === 'run') {
     const { hands, seed, size } = parsed.options;
     header += `Options: --hands ${hands} --seed ${seed} --size ${size}\n${tableLine(size)}`;
-    summary = runPlaytest(parsed.options, undefined, makePolicy);
+    summary = runPlaytest(parsed.options, undefined, seams);
   } else {
     const { replayCode, size, button } = parsed;
-    const hand = playHand(replayCode, size, button, 1, makePolicy);
+    const hand = playHand(replayCode, size, button, 1, seams);
     header += `Options: --replay-code ${replayCode} --size ${size} --button ${button}\n`;
     header += tableLine(size) + formatHand(hand);
     summary = summarize([hand]);
   }
-  io.out(formatReport(header, summary));
+  io.out(formatReport(header, summary, parsed.kind));
   return summary.violations > 0 ? 1 : 0;
 }

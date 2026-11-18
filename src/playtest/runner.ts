@@ -4,17 +4,27 @@ import {
   createHand,
   type Action,
   type ActionRecord,
+  type ApplyResult,
+  type HandConfig,
   type HandState,
   type SeatConfig,
   type SeatNumber,
   type Stakes,
 } from '../engine/hand';
-import { actWith, type SeatPolicy } from '../engine/player-view';
+import {
+  checkStep,
+  describeAction,
+  INVARIANTS,
+  MAX_BETS_PER_STREET,
+  type ActionStep,
+  type Violation,
+} from '../engine/invariants';
+import { playerView, type SeatPolicy } from '../engine/player-view';
 import { randomMovePolicy, seatGenerator } from './policy';
 
+export { MAX_BETS_PER_STREET };
 export const PLAYTEST_STAKES: Stakes = { smallBlind: 2, bigBlind: 4, smallBet: 4, bigBet: 8 };
 export const CASH_BUY_IN = 160; // 20 × bigBet (REQ-007.1)
-export const MAX_BETS_PER_STREET = 4;
 
 export interface PlaytestOptions {
   readonly hands: number;
@@ -23,6 +33,29 @@ export interface PlaytestOptions {
 }
 /** Makes the policy for one seat of one hand. Default: randomMovePolicy(seatGenerator(code, seat)). */
 export type PolicyFactory = (code: ReplayCode, seat: SeatNumber) => SeatPolicy;
+/** Called after every applied player action; returns the violations it found ([] when clean). */
+export type ActionHook = (step: ActionStep) => readonly Violation[];
+export interface PlaytestEngine {
+  readonly createHand: (config: HandConfig) => HandState;
+  readonly applyAction: (state: HandState, action: Action) => ApplyResult;
+}
+/** Test seams; the CLI entry passes none. */
+export interface PlaytestSeams {
+  /** Default: randomMovePolicy(seatGenerator(code, seat)). */
+  readonly makePolicy?: PolicyFactory;
+  /** Default: checkStep. A custom hook replaces it (compose with checkStep to keep the built-in checks). */
+  readonly onAction?: ActionHook;
+  /** Default: the real engine. */
+  readonly engine?: PlaytestEngine;
+}
+export interface HandViolation {
+  /** 1-based among player actions (blinds excluded). */
+  readonly actionNumber: number;
+  /** The proposed action. */
+  readonly action: Action;
+  /** Non-empty. */
+  readonly violations: readonly Violation[];
+}
 /** Everything needed to replay a hand (REQ-013.3). Plain data. */
 export interface HandRecord {
   readonly replayCode: ReplayCode;
@@ -37,9 +70,11 @@ export interface PlayedHand {
   /** 1-based in the run. */
   readonly number: number;
   readonly record: HandRecord;
-  /** Last state (complete unless abandoned). */
+  /** Last state (complete unless abandoned); includes the violating action if the engine accepted it. */
   readonly final: HandState;
   readonly violations: number;
+  /** The action that stopped the hand, or null. */
+  readonly violation: HandViolation | null;
 }
 export interface PlaytestSummary {
   readonly handsPlayed: number;
@@ -51,6 +86,10 @@ export interface PlaytestSummary {
   readonly firstReplayCode: ReplayCode;
   readonly lastReplayCode: ReplayCode;
   readonly violations: number;
+  /** Hands violating each id: every INVARIANTS id, then custom ids in first-seen order. */
+  readonly violationCounts: Readonly<Record<string, number>>;
+  /** The earliest violating hand. */
+  readonly firstViolation: PlayedHand | null;
 }
 
 const defaultPolicy: PolicyFactory = (code, seat) => randomMovePolicy(seatGenerator(code, seat));
@@ -69,26 +108,48 @@ function toAction({ seat, type, amount }: ActionRecord): Action {
   return { seat, type: type as 'call' | 'bet' | 'raise', amount };
 }
 
-/** Deals and plays one hand from `code` with every seat at CASH_BUY_IN. */
+const realEngine: PlaytestEngine = { createHand, applyAction };
+
+/** Deals and plays one hand from `code` with every seat at CASH_BUY_IN.
+ *  Stops at the first action with a violation (an engine rejection always is one). */
 export function playHand(
   code: ReplayCode,
   size: number,
   button: SeatNumber,
   number = 1,
-  makePolicy: PolicyFactory = defaultPolicy,
+  seams: PlaytestSeams = {},
 ): PlayedHand {
+  const { makePolicy = defaultPolicy, onAction = checkStep, engine = realEngine } = seams;
   const seats = Array.from({ length: size }, (_, i) => ({ seat: i + 1, stack: CASH_BUY_IN }));
-  let state = createHand({ stakes: PLAYTEST_STAKES, seats, button, deck: shuffledDeck(code) });
+  let state = engine.createHand({
+    stakes: PLAYTEST_STAKES,
+    seats,
+    button,
+    deck: shuffledDeck(code),
+  });
   const policies = new Map(seats.map(({ seat }) => [seat, makePolicy(code, seat)]));
-  let violations = 0;
+  let violation: HandViolation | null = null;
+  let actionNumber = 0;
   while (state.toAct !== null) {
-    const applied = actWith(state, policies.get(state.toAct) as SeatPolicy);
-    if (!applied.ok) {
-      violations++;
+    const policy = policies.get(state.toAct) as SeatPolicy;
+    const action = policy(playerView(state, state.toAct));
+    const result = engine.applyAction(state, action);
+    actionNumber++;
+    let found = onAction({ before: state, action, result });
+    if (found.length > 0 || !result.ok) {
+      if (found.length === 0 && !result.ok) {
+        found = [
+          {
+            invariant: 'legal-action',
+            message: `engine rejected ${describeAction(action)} (${result.error.code})`,
+          },
+        ];
+      }
+      violation = { actionNumber, action, violations: found };
+      if (result.ok) state = result.state;
       break;
     }
-    state = applied.state;
-    if (state.betCount > MAX_BETS_PER_STREET) violations++;
+    state = result.state;
   }
   const actions = state.actions
     .filter((a) => a.type !== 'small-blind' && a.type !== 'big-blind')
@@ -97,7 +158,8 @@ export function playHand(
     number,
     record: { replayCode: code, stakes: PLAYTEST_STAKES, seats, button, actions },
     final: state,
-    violations,
+    violations: violation?.violations.length ?? 0,
+    violation,
   };
 }
 
@@ -121,6 +183,9 @@ export function summarize(hands: Iterable<PlayedHand>): PlaytestSummary {
   let capped = 0;
   let largestPot = 0;
   let violations = 0;
+  const violationCounts: Record<string, number> = {};
+  for (const id of INVARIANTS) violationCounts[id] = 0;
+  let firstViolation: PlayedHand | null = null;
   let firstReplayCode: ReplayCode | undefined;
   let lastReplayCode: ReplayCode | undefined;
   for (const hand of hands) {
@@ -133,6 +198,12 @@ export function summarize(hands: Iterable<PlayedHand>): PlaytestSummary {
     const pot = (final.result?.awards ?? []).reduce((sum, award) => sum + award.amount, 0);
     largestPot = Math.max(largestPot, pot);
     violations += hand.violations;
+    if (hand.violation !== null) {
+      firstViolation ??= hand;
+      for (const id of new Set(hand.violation.violations.map((v) => v.invariant))) {
+        violationCounts[id] = (violationCounts[id] ?? 0) + 1;
+      }
+    }
     firstReplayCode ??= record.replayCode;
     lastReplayCode = record.replayCode;
   }
@@ -149,6 +220,8 @@ export function summarize(hands: Iterable<PlayedHand>): PlaytestSummary {
     firstReplayCode,
     lastReplayCode,
     violations,
+    violationCounts,
+    firstViolation,
   };
 }
 
@@ -156,12 +229,12 @@ export function summarize(hands: Iterable<PlayedHand>): PlaytestSummary {
 export function runPlaytest(
   options: PlaytestOptions,
   onHand?: (hand: PlayedHand) => void,
-  makePolicy: PolicyFactory = defaultPolicy,
+  seams: PlaytestSeams = {},
 ): PlaytestSummary {
   const { hands, seed, size } = options;
   function* play(): Generator<PlayedHand> {
     for (let k = 1; k <= hands; k++) {
-      const hand = playHand(handReplayCode(seed, k), size, ((k - 1) % size) + 1, k, makePolicy);
+      const hand = playHand(handReplayCode(seed, k), size, ((k - 1) % size) + 1, k, seams);
       onHand?.(hand);
       yield hand;
     }

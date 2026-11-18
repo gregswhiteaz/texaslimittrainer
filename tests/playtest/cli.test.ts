@@ -7,13 +7,14 @@ import {
   replayHand,
   type PlayedHand,
   type PlaytestSummary,
+  type PlaytestSeams,
   type PolicyFactory,
 } from '../../src/playtest/runner';
 
-function capture(argv: string[], makePolicy?: PolicyFactory) {
+function capture(argv: string[], seams?: PlaytestSeams) {
   let out = '';
   let err = '';
-  const code = main(argv, { out: (t) => (out += t), err: (t) => (err += t) }, makePolicy);
+  const code = main(argv, { out: (t) => (out += t), err: (t) => (err += t) }, seams);
   return { code, out, err };
 }
 
@@ -87,16 +88,16 @@ describe('playtest CLI', () => {
 
   it('returns exit code 1 when the run has violations', () => {
     const rejected: PolicyFactory = () => (view) => ({ seat: view.seat, type: 'check' });
-    const run = capture(['--hands', '2', '--seed', '1', '--size', '3'], () => (view) => ({
-      seat: view.seat,
-      type: 'raise',
-      amount: 999,
-    }));
+    const run = capture(['--hands', '2', '--seed', '1', '--size', '3'], {
+      makePolicy: () => (view) => ({ seat: view.seat, type: 'raise', amount: 999 }),
+    });
     expect(run.code).toBe(1);
     expect(run.out).toContain('Invariant violations: 2\n');
 
     // The first seat to act owes the big blind, so the engine rejects a check.
-    const replay = capture(['--replay-code', VALID_CODE, '--size', '3', '--button', '3'], rejected);
+    const replay = capture(['--replay-code', VALID_CODE, '--size', '3', '--button', '3'], {
+      makePolicy: rejected,
+    });
     expect(replay.code).toBe(1);
     expect(replay.out).toContain('Result: abandoned (invariant violation)\n');
     expect(replay.out).toContain('Invariant violations: 1\n');
@@ -113,6 +114,14 @@ describe('playtest CLI', () => {
       firstReplayCode: '000000000000002a0000000000000001',
       lastReplayCode: '000000000000002a0000000000002710',
       violations: 0,
+      violationCounts: {
+        chips: 0,
+        'legal-action': 0,
+        'bet-cap': 0,
+        'pot-eligibility': 0,
+        cards: 0,
+      },
+      firstViolation: null,
     };
     expect(formatReport('Header\n', summary)).toBe(
       'Header\n' +
@@ -178,6 +187,82 @@ describe('playtest CLI', () => {
     const illegal = { ...split.record, actions: [{ seat: 1, type: 'check' } as Action] };
     expect(() => replayHand(illegal)).toThrow(new Error('Replay diverged at action 0'));
   });
+
+  it('appends the violation block only when there are violations', () => {
+    const hand = scripted([{ seat: 6, type: 'fold' }]);
+    const firstViolation: PlayedHand = {
+      ...hand,
+      violations: 2,
+      violation: {
+        actionNumber: 2,
+        action: { seat: 1, type: 'check' },
+        violations: [
+          { invariant: 'legal-action', message: 'seat 1 checks is not in the legal set' },
+          { invariant: 'cards', message: 'Ah dealt twice' },
+        ],
+      },
+    };
+    const summary: PlaytestSummary = {
+      handsPlayed: 9,
+      foldOuts: 6,
+      showdowns: 2,
+      playerActions: 120,
+      cappedStreets: 3,
+      largestPot: 96,
+      firstReplayCode: '000000000000002a0000000000000001',
+      lastReplayCode: '000000000000002a0000000000000009',
+      violations: 2,
+      violationCounts: {
+        chips: 0,
+        'legal-action': 1,
+        'bet-cap': 0,
+        'pot-eligibility': 0,
+        cards: 1,
+      },
+      firstViolation,
+    };
+    const report =
+      'Header\n' +
+      'Hands played: 9\n' +
+      'Ended by fold: 6\n' +
+      'Ended at showdown: 2\n' +
+      'Player actions: 120\n' +
+      'Streets capped at 4 bets: 3\n' +
+      'Largest pot: $96\n' +
+      'First replay code: 000000000000002a0000000000000001\n' +
+      'Last replay code: 000000000000002a0000000000000009\n' +
+      'Invariant violations: 2\n' +
+      'Violations by invariant: chips 0, legal-action 1, bet-cap 0, pot-eligibility 0, cards 1\n' +
+      'First violation: hand 7, player action 2 (seat 1 checks)\n' +
+      'Violation: legal-action: seat 1 checks is not in the legal set\n' +
+      'Violation: cards: Ah dealt twice\n';
+    expect(formatReport('Header\n', summary, 'replay')).toBe(report);
+    expect(formatReport('Header\n', summary)).toBe(
+      report +
+        'Replay: npm run playtest -- --replay-code 000000000000002a0000000000000007 --size 6 --button 3\n' +
+        'Hand 7: replay code 000000000000002a0000000000000007, button seat 3\n' +
+        'Seat 1 ($160): 2s 4d\n' +
+        'Seat 2 ($160): 3c 4h\n' +
+        'Seat 3 ($160): 3d 4s\n' +
+        'Seat 4 ($160): 2c 3h\n' +
+        'Seat 5 ($160): 2d 3s\n' +
+        'Seat 6 ($160): 2h 4c\n' +
+        'Board: none\n' +
+        'Preflop: seat 4 posts small blind $2, seat 5 posts big blind $4, seat 6 folds\n' +
+        'Result: abandoned (invariant violation)\n',
+    );
+
+    const custom = { ...summary, violationCounts: { ...summary.violationCounts, 'test-probe': 1 } };
+    expect(formatReport('', custom, 'replay')).toContain(
+      'Violations by invariant: chips 0, legal-action 1, bet-cap 0, pot-eligibility 0, cards 1, test-probe 1\n',
+    );
+    const clean = { ...summary, violations: 0 };
+    expect(formatReport('Header\n', clean)).toBe(
+      report
+        .slice(0, report.indexOf('Violations by'))
+        .replace('Invariant violations: 2\n', 'Invariant violations: 0\n'),
+    );
+  });
 });
 
 /** 2c..5h in order with a royal flush in spades on the board (6 seats, button 3). */
@@ -222,5 +307,6 @@ function scripted(actions: Action[]): PlayedHand {
     },
     final: state,
     violations: 0,
+    violation: null,
   };
 }
