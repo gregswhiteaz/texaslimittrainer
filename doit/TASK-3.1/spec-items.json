@@ -1,0 +1,128 @@
+[
+  {
+    "id": "SPEC-01",
+    "verifies": "AC#1",
+    "verification": "acceptance `tests/table/session.acceptance.test.ts::default session seats the user and five TAG bots at $4/$8 with $160 each`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-02",
+    "verifies": "AC#2",
+    "verification": "acceptance `tests/table/session.acceptance.test.ts::buy-in is 20 big bets of the configured stake`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-03",
+    "verifies": "AC#3, AC#6",
+    "verification": "acceptance `tests/table/session.acceptance.test.ts::check or call at every decision plays to showdown`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-04",
+    "verifies": "AC#4, AC#6",
+    "verification": "acceptance `tests/table/session.acceptance.test.ts::after a preflop fold the bots finish the hand without the user`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-05",
+    "verifies": "AC#5, AC#7",
+    "verification": "acceptance `tests/table/session.acceptance.test.ts::bots never act during the user's turn`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-06",
+    "verifies": "AC#1, AC#6",
+    "verification": "acceptance `tests/table/session.acceptance.test.ts::every bot action is the TAG decision on its own view`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-07",
+    "verifies": "AC#3, AC#4",
+    "verification": "acceptance `tests/table/session.acceptance.test.ts::the completed hand is a plain-data record`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-08",
+    "verifies": "DoD#1",
+    "verification": "unit `tests/table/session.test.ts::wrong-step calls and illegal actions are rejected`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-09",
+    "verifies": "AC#5, AC#7",
+    "verification": "unit `tests/table/session.test.ts::next step follows the hand state`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-10",
+    "verifies": "DoD#5",
+    "verification": "unit `tests/table/session.test.ts::session module imports no UI code`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-11",
+    "verifies": "AC#1, AC#2",
+    "verification": "acceptance `tests/ui/table.acceptance.test.tsx::seated table shows names and buy-in stacks and no buy-in control`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-12",
+    "verifies": "AC#1, DoD#7",
+    "verification": "acceptance `e2e/table.spec.ts::default table seats the user and five bots with $160 each`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-13",
+    "verifies": "AC#2, DoD#7",
+    "verification": "acceptance `e2e/table.spec.ts::stake $10/$20 starts every stack at $400 with no buy-in control`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-14",
+    "verifies": "AC#3, AC#6, DoD#7",
+    "verification": "acceptance `e2e/table.spec.ts::check or call at every decision plays to showdown with my cards face up`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-15",
+    "verifies": "AC#4, DoD#7",
+    "verification": "acceptance `e2e/table.spec.ts::after a preflop fold the bots finish the hand without me`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-16",
+    "verifies": "AC#5, DoD#7",
+    "verification": "acceptance `e2e/table.spec.ts::ten idle minutes on my turn change nothing`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-17",
+    "verifies": "AC#7, DoD#7, DoD#8",
+    "verification": "acceptance `e2e/table.spec.ts::my buttons are enabled within 100 ms of the bot action, axe clean, no outside requests`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-18",
+    "verifies": "DoD#1, DoD#2, DoD#4, DoD#5",
+    "verification": "command `npm run lint && npm run typecheck && npm test && npm run e2e`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-19",
+    "verifies": "DoD#6",
+    "verification": "command `npm run playtest -- --hands 10000 --seed 42`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-20",
+    "verifies": "DoD#10, DoD#11",
+    "verification": "manual CI run on branch `doit/TASK-3.1` and `backlog doc list --plain`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-21",
+    "verifies": "DoD#3, DoD#9, DoD#12",
+    "verification": "manual Judge confirms the diff touches no strategy content and that E07-S14 and E13-S07 are not Done",
+    "status": "pending"
+  }
+]

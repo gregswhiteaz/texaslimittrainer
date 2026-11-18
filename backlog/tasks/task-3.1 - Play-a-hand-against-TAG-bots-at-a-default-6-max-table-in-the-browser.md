@@ -1,10 +1,11 @@
 ---
 id: TASK-3.1
 title: Play a complete hand against TAG bots at a default 6-max table in the browser
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-17T23:22:00Z'
+updated_date: '2026-11-18T21:13:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-0
@@ -69,3 +70,14 @@ Plan key: E03-S01 · Dream: limit-holdem-trainer
 - [ ] #11 Story documentation is written and published to Backlog.md
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. src/table/session.ts (headless): seatSession (user + five TAG bots, buy-in 20 big bets), nextStep (deal/bot/user/done), dealHand (newReplayCode), stepBot (tagPolicy via actWith), applyUserAction, userActions, completedHand (JSON-safe CompletedHand).
+2. src/ui/table/useTableSession.ts: schedules setTimeout(0) for deal and bot steps, nothing on the user's turn (no time limit), StrictMode-safe.
+3. src/ui/table/Table.tsx: minimal table — seat names and stacks, user's hole cards face up (PlayingCard), board, plain legal-action buttons on the user's turn; 'Hand over' status when the hand ends, one hand per load (Q-1). App.tsx renders it and keeps the TLH Trainer heading.
+4. Tests: headless session unit/acceptance tests; e2e in Chromium + WebKit with seeded deal via addInitScript, test-only harness for the $10/$20 config, 10-minute clock test for AC#5, <=100 ms button timing for AC#7, axe clean.
+
+Full spec: doit/TASK-3.1/spec.md
+<!-- SECTION:PLAN:END -->
