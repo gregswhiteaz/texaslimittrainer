@@ -1,10 +1,11 @@
 ---
 id: TASK-1.5
 title: Give each deciding seat only its own view of the hand
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-17T23:21:00Z'
+updated_date: '2026-11-18T06:41:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-0
@@ -61,3 +62,15 @@ Plan key: E01-S06 · Dream: limit-holdem-trainer
 - [ ] #11 Story documentation is written and published to Backlog.md
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. src/engine/player-view.ts: PlayerView/PublicPlayer/ShownHand/EarlierShowdown types, SeatPolicy (sync).
+2. playerView(state, seat, earlierShowdowns=[]): field-by-field copy of public info + own hole cards + legalActions when to act; never other hole cards, burns, deck or replay code.
+3. actWith(state, policy, earlierShowdowns): engine asks the acting seat via its view; typed errors passed through.
+4. showdownOf(completedState): earlier-showdown entry or null.
+5. Tests: acceptance (AC#1-3 incl. sandboxed typecheck that HandState isn't accepted by a policy), 300-hand hidden-card rotation property test, unit tests.
+
+Full spec: doit/TASK-1.5/spec.md
+<!-- SECTION:PLAN:END -->
