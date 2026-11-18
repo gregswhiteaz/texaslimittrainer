@@ -1,0 +1,14 @@
+{"reviewer": "security", "round": 1,
+ "findings": [
+  {"fingerprint": "src/engine/hand-evaluator.ts:length-check-fails-open-on-non-array",
+   "severity": "MINOR", "file": "src/engine/hand-evaluator.ts", "line": 170,
+   "issue": "The size guard `n < 5 || n > 7` is false for NaN/undefined and for fractional lengths. Called with a non-array argument, evaluate does not throw. It returns a valid-looking strong rank. Probed: evaluate({}) -> 7452 (four of a kind), evaluate({length: 5.5, ...6 cards}) -> 7452. The usual failure is to throw a RangeError; here the function fails open instead.",
+   "evidence": "No reachable untrusted path. The parameter is typed `readonly Card[]` and spec section 8 says inputs come only from the engine's own deck and tests. Only untyped JS or an `as any` cast could pass such a value, and that would silently produce a wrong showdown result instead of an error.",
+   "fix": "Guard with `if (!Number.isInteger(n) || n < 5 || n > 7)`, or `!Array.isArray(cards) ||`. This costs one check per call and has no measurable perf impact."},
+  {"fingerprint": "src/engine/cards.ts:error-echoes-unbounded-input",
+   "severity": "NIT", "file": "src/engine/cards.ts", "line": 34,
+   "issue": "parseCard puts the whole input string into the RangeError message. A very long malformed token makes a very long error message. parseCard(undefined) throws a TypeError, not the documented RangeError.",
+   "evidence": "No untrusted source in scope. Hygiene only.",
+   "fix": "Optionally truncate the echoed text (e.g. text.slice(0, 16)) and check `typeof text === 'string'`."}
+ ],
+ "summary": "Pure in-memory engine code: no I/O, no secrets, no dependencies, no randomness, and no regex built from input. The /\\s+/ split is linear, so there is no ReDoS. evaluate validates every card (integer, 0..51, no duplicates) before using it as an index, so array lookups stay in bounds. -0 normalises safely to card 0, and NaN/strings/fractions are rejected per card. Work per call is bounded at 7 cards. The table build is fixed-size at module load and takes no input. The one weakness: the length guard lets NaN/fractional lengths through, so non-array inputs get a plausible rank instead of an error. No reachable path, so MINOR. No BLOCKER or MAJOR findings."}

@@ -1,11 +1,11 @@
 ---
 id: TASK-1.2
 title: Rank showdown hands by real poker hand rankings
-status: In Progress
+status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-18T02:47:00Z'
+updated_date: '2026-11-18T03:03:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-0
@@ -16,6 +16,7 @@ references:
 documentation:
   - doc-1
   - doc-2
+  - doc-7
 parent_task_id: TASK-1
 priority: high
 type: feature
@@ -75,3 +76,15 @@ Plan key: E01-S04 · Dream: limit-holdem-trainer
 
 Full spec: doit/TASK-1.2/spec.md
 <!-- SECTION:PLAN:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+Build: src/engine/cards.ts + hand-evaluator.ts (flush table + quinary rank-count index, ~162 KiB tables built at load); independent oracle; exhaustive 2,598,960-hand check (~0.7 s); ~16M evals/s, ~24.5 ms build on reference machine; gate PASS.
+<!-- SECTION:NOTES:END -->
+
+## Final Summary
+
+<!-- SECTION:FINAL_SUMMARY:BEGIN -->
+Added the first engine code: src/engine/cards.ts (card encoding and text helpers) and src/engine/hand-evaluator.ts (table-driven 5-7 card evaluator returning a dense rank 1..7462, plus compareHands and handCategory). It gives showdown, equity and bots one fast, correct ranking. Verification: exhaustive check of all 2,598,960 five-card hands against an independent oracle; 6/7-card best-of-subset properties; suit-tie and wheel tests. npm run lint, typecheck, test and build pass (36 tests, engine line coverage 100%); CI run 44227089180 is green. Measured about 15.4-16M evals/s, table build about 24-27 ms, cold import about 30 ms, tables about 162 KiB. Review round 1 had 0 blocking findings and the judge passed 15 of 16 items, with SPEC-16 pending only for this document. Assumptions A-1..A-7 (module layout, card notation, RangeError validation, eager table build, random-seed property tests, CI perf floor, exhaustive test in npm test) should be reviewed; user decisions Q-1..Q-3 all took the recommended options. Follow-ups, not created: hand names and best five cards for showdown display (REQ-019.7); harden the evaluate length guard and parseCard error echo; widen the CI perf floor if flaky.
+<!-- SECTION:FINAL_SUMMARY:END -->

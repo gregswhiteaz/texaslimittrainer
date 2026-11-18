@@ -1,0 +1,119 @@
+{
+ "round": 1,
+ "test_suite": {
+  "command": "npm test",
+  "result": "PASS",
+  "passed": 36,
+  "failed": 0,
+  "notes": "14 files, 36 tests, exit 0, no 'ERROR: Coverage' line. AC#1 exhaustive test 1.8 s locally (2.4 s on CI). Coverage (json-summary): cards.ts 100% lines, hand-evaluator.ts 100% lines / 79.8% branches. The text report hides cards.ts because it is fully covered (vitest omits 100% files), so it is not printed by name."
+ },
+ "end_to_end": {
+  "command": "npx vitest run tests/engine (plus npm run lint && npm run typecheck && npm test, SPEC-12 command, spec section 10 mutation probes)",
+  "result": "PASS",
+  "expected": "All engine tests pass; throughput and build time printed; each mutation probe makes the named tests fail",
+  "actual": "13/13 engine tests pass in 0.8 s; prints 15.4M seven-card evals/s, build 26.9 ms. Mutation probes on a scratch copy: wheel-as-ace-high -> AC#1/AC#2/AC#3 and unit tests fail; swapped flush/straight category order -> AC#1/worked examples/AC#2/AC#3/property fail; ignoring the lowest one-pair kicker -> AC#1, worked examples and property fail (AC#4 still passes, because its examples differ at the 1st/2nd kicker, as the spec specifies); dropping the duplicate check -> 'rejects invalid hands and ranks' fails."
+ },
+ "integrity": {
+  "result": "PASS",
+  "notes": "doit.py test-integrity exit 0, no output (locked hashes match). Read the diff against base 58738dd: no special-casing of test inputs, no hard-coded expected ranks (dense ranks come from sorting computed scores), no early returns that skip checks, no mocks, and the oracle imports only cardRank/cardSuit and never hand-evaluator. The only changed product files are src/engine/cards.ts and src/engine/hand-evaluator.ts."
+ },
+ "items": [
+  {
+   "spec": "SPEC-01",
+   "result": "PASS",
+   "evidence": "AC#1 exhaustive test passes (oracle 7,462 classes, per-category class and hand counts, every hand matches). Read the test: it asserts zero mismatches, a total of 2,598,960, every rank from 1 to 7,462 seen, and handCategory against the oracle category; the mutation probes make it fail. Holdout: my own brute-force scorer over all 2,598,960 hands. The evaluate order matches it exactly (a bijection with 7,462 classes in the same order), the hand counts per category are 40/624/3744/5108/10200/54912/123552/1098240/1302540, and the class counts are 10/156/156/1277/10/858/858/2860/1277 -> PASS."
+  },
+  {
+   "spec": "SPEC-02",
+   "result": "PASS",
+   "evidence": "The worked-examples test passes and asserts all 16 ranks, the 18 category boundaries, HAND_RANK_COUNT and HAND_CATEGORIES order. Holdout: handCategory is called for every rank 1..7462 without error, and the categories match my independent scorer for every hand -> PASS."
+  },
+  {
+   "spec": "SPEC-03",
+   "result": "PASS",
+   "evidence": "AC#2 passes: wheel is 5854, below the 6-high straight and above the best trips; steel wheel is 7453; Q-K-A-2-3 is high-card; Ac 2d 3h 4s 5c 6d 9h is 5855. Holdout: Ac 2c 3c 4c 5c 6d 7d gives 7453 (the straight flush beats the 7-high straight), and Qc Kd Ah 2s 3c 4d 9h is high-card -> PASS."
+  },
+  {
+   "spec": "SPEC-04",
+   "result": "PASS",
+   "evidence": "AC#3 passes for cases (a) to (g). Each case is checked against the listed rank/hand, the max evaluate over its 21 subsets, and the oracle best. Holdout: 12 tricky 7-card hands (7-card SF, two trips, three pairs, quads+trips, wheel with pairs, etc.) equal my own best-of-21 -> PASS."
+  },
+  {
+   "spec": "SPEC-05",
+   "result": "PASS",
+   "evidence": "The property test passes (20,000 seven-card and 5,000 six-card runs, oracle and self-subset max, shuffled order). Holdout: 300,000 seeded random hands (two thirds 7-card, one third 6-card) equal my own brute-force best-of-subsets mapped to dense rank, and the reversed card order gives the same rank -> 0 mismatches."
+  },
+  {
+   "spec": "SPEC-06",
+   "result": "PASS",
+   "evidence": "AC#4 passes: K-K-A-9-4 beats K-K-Q-9-4 (1/-1, both one-pair), the 7-card As kicker wins, and the second kicker decides. Holdout: the exhaustive order equivalence covers every kicker comparison. Note: the AC#4 examples do not involve the lowest kicker, so the 'ignore lowest kicker' probe is caught only by AC#1 and the property tests."
+  },
+  {
+   "spec": "SPEC-07",
+   "result": "PASS",
+   "evidence": "AC#5 example test and the suit-relabelling property (5,000 runs for 5 and for 7 cards) pass. Holdout: the exhaustive check confirms that same-class hands of any suits always give the same rank -> PASS."
+  },
+  {
+   "spec": "SPEC-08",
+   "result": "PASS",
+   "evidence": "Unit test passes with exact RangeError messages. Holdout: lengths 4/8/100 give the exact messages; 52, -1, 1.5, NaN, Infinity, the string '5', undefined, 53 and 1e9 in the first and last positions all give 'Invalid card: <v>'; a duplicate 2c in the 7th position gives 'Duplicate card: 2c'; after errors the next call is clean (rank 1); handCategory 0/-1/7463/2.5/NaN/Infinity give exact messages; compareHands -1/0/1 -> PASS."
+  },
+  {
+   "spec": "SPEC-09",
+   "result": "PASS",
+   "evidence": "Unit test passes. Holdout: parseCard rejects 'as','10s','Ax','','AS','A','Asx','1c','tc','Xs',' 2c' with exact messages; parseCards handles newlines/tabs/runs of whitespace and '   ' -> []; Tc=32, Ac=48, formatCard(0)='2c', formatCard 52/-1 and makeCard(13,0)/(0,NaN) error messages exact -> PASS."
+  },
+  {
+   "spec": "SPEC-10",
+   "result": "PASS",
+   "evidence": "Unit test passes (8,192 flush entries, <5 bits -> 0, straight masks -> 7453..7462, bytes <= 512 KiB, deterministic). Holdout: every flush mask with 5-7 bits equals my brute-force best flush/SF rank; total byteLength <= 524,288 -> PASS."
+  },
+  {
+   "spec": "SPEC-11",
+   "result": "PASS",
+   "evidence": "The perf test passes under npm test with coverage: 2.86M evals/s, build 84.9 ms locally; on CI 1.87M evals/s, build 120.5 ms (floors 1M/s, 500 ms). The test generates hands before timing, warms up, and checks the checksum."
+  },
+  {
+   "spec": "SPEC-12",
+   "result": "PASS",
+   "evidence": "The exact SPEC-12 command (10M/s, 50 ms) on arm64 macOS with Node v22.18.0 exits 0 in 5 of 5 runs: 15.4-15.9M evals/s, build 24.3-25.8 ms. Holdout: a cold first import of the module, including the table build, takes 30.5 ms."
+  },
+  {
+   "spec": "SPEC-13",
+   "result": "PASS",
+   "evidence": "npm run lint exit 0 (ESLint + Prettier clean), npm run typecheck exit 0, npm test exit 0 with no coverage error; per-file line coverage is 100% for both engine files (json-summary). npm run build also exits 0."
+  },
+  {
+   "spec": "SPEC-14",
+   "result": "PASS",
+   "evidence": "The SPEC-14 grep prints nothing (exit 0 with the negation). The only import in src/engine is hand-evaluator.ts -> './cards'. The headless-boundary lint is clean."
+  },
+  {
+   "spec": "SPEC-15",
+   "result": "PASS",
+   "evidence": "gh run list ... --limit 1 --json conclusion prints 'success'. Run 44227089180 on head b0a981823d45 (the current HEAD, b0a9818) completed with success; its job 'Lint, typecheck, build, test and e2e' passed in 1m53s."
+  },
+  {
+   "spec": "SPEC-16",
+   "result": "PASS",
+   "evidence": "git diff --stat main -- src/ui e2e index.html is empty, so DoD#7/#12 do not apply; no strategy, golden-spot or playtest content was added (DoD#3/#6/#9 do not apply). DoD#11: backlog doc list --plain lists 'doc-7 - TASK-1.2: Rank showdown hands by real poker hand rankings', and backlog doc view doc-7 shows the TASK-1.2 story document."
+  }
+ ],
+ "findings": [
+  {
+   "id": "J-1-01",
+   "severity": "LOW",
+   "spec": "SPEC-06",
+   "expected_vs_actual": "The spec's mutation probe expects 'ignore the lowest kicker' to fail SPEC-01/06. Only SPEC-01 (and the property tests) fail; the AC#4 examples pass because they differ only in the first and second kickers.",
+   "fix": "Optional: add a non-locked unit example where only the third kicker of a pair differs (e.g. K-K-A-9-4 vs K-K-A-9-3)."
+  },
+  {
+   "id": "J-1-02",
+   "severity": "LOW",
+   "spec": "SPEC-11",
+   "expected_vs_actual": "The CI throughput with coverage is 1.87M/s against a 1M/s floor (about 1.9x headroom), and the table build is 120 ms against 500 ms. This passes today, but a slower runner could make it flaky.",
+   "fix": "None required; watch for flakes."
+  }
+ ],
+ "summary": "All 16 items PASS. My own exhaustive brute-force check over all 2,598,960 five-card hands gives the same ordering and category counts, 300k random 6/7-card hands match the best of their subsets, and the error messages are exact. SPEC-12 holds at about 15.6M evals/s with a 25 ms build, CI is green on b0a9818, the story doc is published as doc-7, and there is no tampering. No blocking findings (two LOW)."
+}
