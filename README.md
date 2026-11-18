@@ -4,7 +4,7 @@ Texas Limit Hold 'Em Trainer: a strict TypeScript + Vite + React app.
 
 ## Setup
 
-Requires Node.js 22.12 or newer.
+Requires Node.js 22.18.0 (pinned in `.nvmrc`; `nvm use` picks it up). Any 22.12+ works.
 
 ```sh
 npm ci
@@ -25,6 +25,25 @@ Every check runs with one command and exits non-zero on failure.
 | `npm run lint`      | ESLint (including the headless-boundary rule) and Prettier check             |
 | `npm run typecheck` | TypeScript strict type check                                                 |
 | `npm run format`    | Format all files with Prettier                                               |
+
+## Continuous integration
+
+`.github/workflows/ci.yml` runs on every push and every pull request, on Ubuntu with the Node
+version from `.nvmrc`:
+
+1. `npm ci`
+2. Audit shipped dependencies: no high or critical advisory (`npm audit --omit=dev --audit-level=high`)
+3. Audit all dependencies: no critical advisory (`npm audit --audit-level=critical`)
+4. Lint, typecheck, build, test, then e2e in Chromium and WebKit with axe
+
+Any failing check fails the run. When e2e fails, the Playwright report is attached to the run as
+the `playwright-report` artifact (kept 7 days).
+
+Local equivalent:
+
+```sh
+npm audit --omit=dev --audit-level=high && npm audit --audit-level=critical && npm run lint && npm run typecheck && npm run build && npm test && npm run e2e
+```
 
 ## Conventions
 
