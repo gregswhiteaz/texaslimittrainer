@@ -1,0 +1,3 @@
+{"reviewer": "security", "round": 2,
+ "findings": [],
+ "summary": "Round 1 had no security findings, so there was nothing to verify as fixed. The latest commit (b4840a5, 'review fixes r1') changes no source code. It adds one test assertion in tests/advice/postflop.test.ts (an injected equity of 0.1665 vs required 4/24 must give pot-odds-call with 16.7/16.7), plus doit workflow artifacts and backlog implementation notes. The new test uses a fixed constant with no input, filesystem, network, env or dependency access. The notes and artifacts contain no secrets. src/ is unchanged, so the round-1 trust-boundary and resource-bound analysis still applies."}

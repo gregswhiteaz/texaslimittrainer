@@ -4,7 +4,7 @@ title: Add a short-stack note to sit-and-go advice
 status: To Do
 assignee: []
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-18T16:24:00Z'
+updated_date: '2026-11-18T19:10:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-2
@@ -50,6 +50,7 @@ Plan key: E07-S17 · Dream: limit-holdem-trainer
 - [ ] #5 Given a sit-and-go preflop decision with the user's stack at 9 big bets of the current level, When advice is requested, Then the chart recommendation includes exactly one short-stack sentence [REQ-041.2]
 - [ ] #6 Given a sit-and-go decision at 9 big bets of the current level that the user answered, When the grade result for the review entry is produced, Then it carries the same short-stack sentence as the recommendation [REQ-041.2]
 - [ ] #7 Given a preflop decision where the hero cannot afford a full call or raise, When recommendPreflop is asked, Then it returns a legal all-in action and does not throw
+- [ ] #8 Given a postflop decision with a short all-in call or side pots, When recommendPostflop computes pot odds, Then the call amount and pot reflect only what the hero can win and must pay
 <!-- AC:END -->
 
 ## Definition of Done
@@ -72,4 +73,6 @@ Plan key: E07-S17 · Dream: limit-holdem-trainer
 
 <!-- SECTION:NOTES:BEGIN -->
 AC added from TASK-7.2 follow-up (doc-14); depends on short all-ins from TASK-1.9.
+
+AC added from TASK-7.3 follow-up (doc-17).
 <!-- SECTION:NOTES:END -->

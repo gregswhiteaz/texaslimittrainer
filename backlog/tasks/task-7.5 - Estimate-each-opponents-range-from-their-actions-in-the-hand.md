@@ -4,7 +4,7 @@ title: Estimate each opponent's range from their actions in the hand
 status: To Do
 assignee: []
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-17T23:22:00Z'
+updated_date: '2026-11-18T19:10:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -50,6 +50,7 @@ Plan key: E07-S07 · Dream: limit-holdem-trainer
 - [ ] #6 Given the same range, When the opponent checks the flop Ks 8d 7c and then calls a bet on the turn 2d, Then the narrowed range is the 5 combos {AhKh, 9h9d, 6h5h, Th9h, Ac2c} (Ac2c now a Pair, QhJh still Air) [REQ-035.1, REQ-035.5]
 - [ ] #7 Given two opponents with identical positions, actions and observed statistics but different bot styles, When their ranges are estimated, Then the ranges are identical [REQ-035.3]
 - [ ] #8 Given code that passes a bot's style label or style parameters into the advice engine, When `npm run typecheck` runs, Then it reports a type error [REQ-035.3]
+- [ ] #9 Given action-based opponent ranges, When postflop advice is computed, Then it uses them in place of every-unseen-combo ranges (via the equity option or a range input) and the rules doc is updated
 <!-- AC:END -->
 
 ## Definition of Done
@@ -68,3 +69,9 @@ Plan key: E07-S07 · Dream: limit-holdem-trainer
 - [ ] #12 Story documentation is written and published to Backlog.md
 - [ ] #13 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+AC added from TASK-7.3 follow-up (doc-17).
+<!-- SECTION:NOTES:END -->

@@ -4,7 +4,7 @@ title: Recommend betting or raising for value
 status: To Do
 assignee: []
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-17T23:22:00Z'
+updated_date: '2026-11-18T19:10:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -49,6 +49,7 @@ Plan key: E07-S10 · Dream: limit-holdem-trainer
 - [ ] #6 Given a postflop decision facing a bet on a street that is not capped, When equity against the range that would call a raise is 50.1%, Then advice recommends raise [REQ-033.2]
 - [ ] #7 Given the same holding on a capped street, When advice is requested, Then it recommends call or fold by the pot-odds rule [REQ-033.1]
 - [ ] #8 Given a value-bet or value-raise recommendation, When it is returned, Then it includes equity against the calling range %, required equity % and the rule id [REQ-033.5]
+- [ ] #9 Given a value-bet spot, When recommendPostflop returns, Then the recommendation includes equityVsCallingRangePct and bet/raise outcomes alongside the existing fields, without breaking existing consumers
 <!-- AC:END -->
 
 ## Definition of Done
@@ -67,3 +68,9 @@ Plan key: E07-S10 · Dream: limit-holdem-trainer
 - [ ] #12 Story documentation is written and published to Backlog.md
 - [ ] #13 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+AC added from TASK-7.3 follow-up (doc-17).
+<!-- SECTION:NOTES:END -->

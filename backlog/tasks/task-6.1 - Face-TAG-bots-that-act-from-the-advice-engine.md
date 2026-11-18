@@ -4,7 +4,7 @@ title: Face TAG bots that act from the advice engine
 status: To Do
 assignee: []
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-17T23:22:00Z'
+updated_date: '2026-11-18T19:10:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-0
@@ -50,6 +50,7 @@ Plan key: E06-S01 · Dream: limit-holdem-trainer
 - [ ] #3 Given a TAG bot at a postflop decision with no bet to face, When the advice engine recommends check, Then the bot checks [REQ-026.1]
 - [ ] #4 Given a fixed TAG decision point, When the other players' hole cards and the undealt cards are changed, Then the TAG bot's action is identical [REQ-025.1]
 - [ ] #5 Given `npm run playtest -- --hands 10000 --seed 42`, When it runs, Then every seat is a TAG bot acting from the advice engine, every bot action is in the legal set, zero invariant violations are reported and it exits 0 [REQ-026.1, REQ-056.1]
+- [ ] #6 Given a TAG bot seat in the playtest, When it decides, Then it acts through recommend(view) on every street and returns the recommendation's move
 <!-- AC:END -->
 
 ## Definition of Done
@@ -67,3 +68,9 @@ Plan key: E06-S01 · Dream: limit-holdem-trainer
 - [ ] #11 Story documentation is written and published to Backlog.md
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+AC added from TASK-7.3 follow-up (doc-17).
+<!-- SECTION:NOTES:END -->
