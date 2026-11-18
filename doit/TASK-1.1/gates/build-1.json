@@ -1,0 +1,82 @@
+{
+  "task": "TASK-1.1",
+  "phase": "build",
+  "run": 1,
+  "result": "PASS",
+  "changed_lines": 4260,
+  "changed_files": [
+    ".prettierignore",
+    ".prettierrc.json",
+    "README.md",
+    "e2e/axe-helper.spec.ts",
+    "e2e/smoke.spec.ts",
+    "e2e/support/axe.ts",
+    "eslint.config.js",
+    "index.html",
+    "package-lock.json",
+    "package.json",
+    "playwright.config.ts",
+    "src/main.tsx",
+    "src/ui/App.tsx",
+    "src/ui/styles.css",
+    "tests/support/sandbox.ts",
+    "tests/toolchain/boundary.property.test.ts",
+    "tests/toolchain/boundary.test.ts",
+    "tests/toolchain/build.test.ts",
+    "tests/toolchain/coverage.test.ts",
+    "tests/toolchain/lint.test.ts",
+    "tests/toolchain/test-command.test.ts",
+    "tests/toolchain/typecheck.test.ts",
+    "tests/unit/app.test.tsx",
+    "tools/lint/headless-boundary.js",
+    "tsconfig.json",
+    "vite.config.ts"
+  ],
+  "checks": [
+    {
+      "name": "test command",
+      "status": "pass",
+      "detail": "$ npm test\nexit 0\n\n> tlh-trainer@0.0.0 test\n> vitest run --coverage\n\n\n RUN  v5.1.0 /Users/gregwhite/Documents/claudeworkspaces/limitholdem\n      Coverage enabled with v8\n\n \u2713 tests/unit/app.test.tsx > App > App renders the TLH Trainer heading inside main 4ms\n \u2713 tests/toolchain/build.test.ts > npm run build > npm run build writes index.html and its script bundle 317ms\n \u2713 tests/toolchain/boundary.property.test.ts > headless boundary globals (property) > BROWSER_ONLY_GLOBALS includes browser-only APIs and excludes Node-safe ones 3ms\n \u2713 tests/toolchain/typecheck.test.ts > npm run typecheck > typecheck rejects implicit any because strict mode is on 721ms\n \u2713 tests/toolchain/test-command.test.ts > npm test > npm test runs test files anywhere under tests/ and src/ and fails when one fails 860ms\n \u2713 tests/toolchain/boundary.property.test.ts > headless boundary globals (property) > every browser-only global is reported in every headless folder and Node-safe globals are not 912ms\n \u2713 tests/toolchain/lint.test.ts > npm run lint > lint exits non-zero on an ESLint rule violation and zero when it is fixed 1318ms\n \u2713 tests/toolchain/coverage.test.ts > coverage thresholds via npm test > npm test fails and names the 90% headless threshold when a headless folder is under-covered 1684ms\n \u2713 tests/toolchain/lint.test.ts > npm run lint > lint exits non-zero on a Prettier formatting violation 689ms\n \u2713 tests/toolchain/typecheck.test.ts > npm run typecheck > typecheck exits non-zero on a type error and zero when it is fixed 1335ms\n \u2713 tests/toolchain/coverage.test.ts > coverage thresholds via npm test > npm test fails and names the 70% global threshold when overall coverage is low 409ms\n \u2713 tests/toolchain/coverage.test.ts > coverage thresholds via npm test > npm test passes when both coverage thresholds are met 378ms\n \u2713 tests/toolchain/boundary.test.ts > headless boundary via npm run lint > lint reports each forbidden React, DOM, IndexedDB and UI use in every headless folder 2791ms\n \u2713 tests/toolchain/boundary.test.ts > headless boundary via npm run lint > lint allows React in src/ui and Node-safe code in headless folders 754ms\n \u2713 tests/toolchain/boundary.test.ts > headless boundary via npm run lint > lint reports globalThis access, dynamic import and type-only React import in headless folders 577ms\n\n Test Files  8 passed (8)\n      Tests  15 passed (15)\n   Start at  17:39:53\n   Duration  4.22s (tests 98%, import 1%)\n\n\u001b[34m % \u001b[39m\u001b[2mCoverage report from \u001b[22m\u001b[33mv8\u001b[39m\nNo files with missing coverage.\n1 file fully covered.\n\n=============================== Coverage summary ===============================\nStatements   : 100% ( 1/1 )\nBranches     : 100% ( 0/0 )\nFunctions    : 100% ( 1/1 )\nLines        : 100% ( 1/1 )\n================================================================================\n"
+    },
+    {
+      "name": "lint command",
+      "status": "pass",
+      "detail": "$ npm run lint\nexit 0\n\n> tlh-trainer@0.0.0 lint\n> eslint . --max-warnings 0 && prettier --check .\n\nChecking formatting...\nAll matched files use Prettier code style!\n"
+    },
+    {
+      "name": "typecheck command",
+      "status": "pass",
+      "detail": "$ npm run typecheck\nexit 0\n\n> tlh-trainer@0.0.0 typecheck\n> tsc -p tsconfig.json\n\n"
+    },
+    {
+      "name": "spec unchanged",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "name": "scope budget (lines)",
+      "status": "pass",
+      "detail": "4260 changed lines vs budget 4300 (fail above 8600)"
+    },
+    {
+      "name": "scope budget (files)",
+      "status": "pass",
+      "detail": "26 files vs budget 26"
+    },
+    {
+      "name": "files outside spec",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "name": "all changes listed in changes.md",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "name": "tests locked",
+      "status": "pass",
+      "detail": "9 acceptance test file(s) locked; 11 test files snapshotted"
+    }
+  ]
+}

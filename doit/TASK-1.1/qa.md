@@ -12,3 +12,6 @@
 - Evidence: no patched picomatch exists (advisory covers <=4.0.7 = latest); Vite itself depends on it; `npm audit fix --force` (Vitest 3.1.4) yields 18 advisories incl. 3 critical.
 - Options: Shipped deps clean + no critical anywhere (recommended) | Shipped deps clean only | Block the story.
 - Answer: **Shipped deps clean + no critical anywhere.** Keep Vitest 5.1.0. Enforce `npm audit --omit=dev --audit-level=high` exits 0 AND all-deps `npm audit --audit-level=critical` exits 0. Dev-only high picomatch advisory tolerated until a fix is published. Supersedes Q-2.
+
+## Assumption A-12 (orchestrator, during build)
+- SPEC-07's "fixed" sample `export const x: number = 1;` violates `@typescript-eslint/no-inferrable-types` from the required stylistic preset. Builder used `export const x = 1;` for the passing half of the test. Accepted: keeps the spec's lint config intact; the test still proves an ESLint violation fails and fixed code passes.

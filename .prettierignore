@@ -1,0 +1,12 @@
+dist
+coverage
+playwright-report
+test-results
+package-lock.json
+backlog
+dreams
+doit
+reports
+research_notes
+.claude
+CLAUDE.md
