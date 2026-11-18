@@ -1,10 +1,11 @@
 ---
 id: TASK-1.4
 title: Play a complete fixed-limit hand from blinds to showdown
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-17T23:21:00Z'
+updated_date: '2026-11-18T04:54:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-0
@@ -69,3 +70,15 @@ Plan key: E01-S05 · Dream: limit-holdem-trainer
 - [ ] #11 Story documentation is written and published to Backlog.md
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. src/engine/hand.ts: types (Stakes, HandConfig, HandState with players[], pots[], betCount, burned[], actions[], result; Action; ApplyResult) and createHand / legalActions / applyAction (pure, immutable, auto street advance).
+2. Sequence: blinds, two-round deal from left of button, preflop from left of BB, postflop from first active left of button; burn before flop/turn/river; fixed bet sizes; round-closing rule; fold-out win without showdown.
+3. Showdown via evaluate/compareHands; splitPot with odd units clockwise from left of button.
+4. Typed error results (hand-complete, out-of-turn, illegal-action); interim stack guard ( at $4/$8).
+5. Tests: acceptance ACs 1–8 (AC#7 at $3/$6), burn positions, 100,000 seeded random hands 3–10 players with cap-respecting policy, unit tests.
+
+Full spec: doit/TASK-1.4/spec.md
+<!-- SECTION:PLAN:END -->
