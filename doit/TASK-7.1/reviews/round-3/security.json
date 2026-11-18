@@ -1,0 +1,18 @@
+{"reviewer": "security", "round": 3,
+ "findings": [
+  {"fingerprint": "src/advice/equity.ts:unbounded-range-length",
+   "severity": "NIT",
+   "file": "src/advice/equity.ts",
+   "line": 99,
+   "issue": "Carried over and unchanged by this commit. Range length is not capped, so canonicalise does O(n) work on a range with many duplicate combos. No untrusted source reaches it.",
+   "evidence": "Only internal callers. No user or network input reaches opponents.",
+   "fix": "Optional: reject ranges with more than 52*51 entries."},
+  {"fingerprint": "doit/TASK-7.1/spec.md:dos-bound-omits-feasibility-budget",
+   "severity": "NIT",
+   "file": "doit/TASK-7.1/spec.md",
+   "line": 357,
+   "issue": "Carried over. Spec sections 5 and 8 still don't mention FEASIBILITY_NODE_LIMIT or the card-union pre-check. This commit didn't touch the spec.",
+   "evidence": "Documentation only.",
+   "fix": "Update sections 5 step 5 and 8 at the docs stage."}
+ ],
+ "summary": "Reviewed only commit 8cda46d (judge fixes j1). The changes are performance work that keeps behaviour the same. (1) In sampledEquity, opponent hole cards are now written straight into table.hands while dealing, and runout cards are written per slot. A rejected trial can leave partial writes in hands, but score() only runs after a full acceptance, which overwrites every opponent's slots, so no stale cards get scored. (2) Replacing `?? 0` with `as number` is safe. pick = 2*nextInt(len/2) is always in bounds. canonicalise rejects empty live ranges (line 109), so nextInt(0) can't happen. Every `marked` index is below markedCount. (3) win/tie/share/ranks are now typed arrays of size players (at most 10), with the same semantics. (4) The inlined xoshiro128** rotations match rotl(x,7) = (x<<7)|(x>>>25) and rotl(s3,11) = (s3<<11)|(s3>>>21). The PRNG stream is unchanged, and seeded determinism is the same. No randomness-quality concern applies (equity estimation, not dealing). (5) The round-2 bounded-work guarantees still hold. FEASIBILITY_NODE_LIMIT = 100,000 is still set before the feasibility search, and the cannotDeal union check, maxRejections = 100*trials, the trial count and MAX_OPPONENTS = 9 are untouched. The runout loop `while (dealt[card])` still ends, because dealt cards are at most 2*9+2+5 < 52. (6) vite.config.ts testTimeout: 30_000 is test-only config with no runtime or security effect. The adversarial regression test keeps its own 2 s ceiling, so the bound is still enforced. Local run: tests/advice and src/engine pass (12 tests). No new dependencies. No BLOCKER or MAJOR findings."}

@@ -87,12 +87,12 @@
     "id": "SPEC-15",
     "verifies": "DoD#10",
     "verification": "command `gh run list -R gregswhiteaz/texaslimittrainer --branch doit/TASK-7.1 --limit 1 --json conclusion -q '.[0].conclusion'` prints `success`",
-    "status": "fail"
+    "status": "pass"
   },
   {
     "id": "SPEC-16",
     "verifies": "DoD#3, DoD#6, DoD#7, DoD#9, DoD#11, DoD#12",
     "verification": "manual check of `git diff --stat main` and `backlog doc list --plain | grep \"TASK-7.1\"`",
-    "status": "fail"
+    "status": "pass"
   }
 ]

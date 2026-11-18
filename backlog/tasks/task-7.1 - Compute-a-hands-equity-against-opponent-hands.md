@@ -1,11 +1,11 @@
 ---
 id: TASK-7.1
 title: Compute a hand's equity against opponent hands
-status: In Progress
+status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-18T03:30:00Z'
+updated_date: '2026-11-18T03:57:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-0
@@ -16,6 +16,7 @@ references:
 documentation:
   - doc-1
   - doc-2
+  - doc-8
 parent_task_id: TASK-7
 priority: high
 type: feature
@@ -42,27 +43,27 @@ Plan key: E07-S02 · Dream: limit-holdem-trainer
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Given AA vs KK and AKs vs QQ preflop, When equity is computed, Then the results are within 1.5 percentage points of 81.9% and 46.2% [REQ-034.1]
-- [ ] #2 Given a stored set of at least 100 heads-up preflop matchups with exact enumeration values, When the equity test suite runs, Then every result is within 1.5 percentage points of its stored value [REQ-034.1]
-- [ ] #3 Given a three-way preflop matchup AA vs KK vs QQ, When equity is computed, Then each hand's equity is within 1.5 percentage points of exhaustive enumeration [REQ-034.2]
-- [ ] #4 Given the same hero hand, board and opponent ranges, When equity is computed twice in one process and once in a fresh process, Then all three results are identical to the last digit [REQ-034.3]
-- [ ] #5 Given an equity input that uses sampling, When the sampler is created, Then its seed is derived only from the input, so no clock or global random source changes the result [REQ-034.3]
+- [x] #1 Given AA vs KK and AKs vs QQ preflop, When equity is computed, Then the results are within 1.5 percentage points of 81.9% and 46.2% [REQ-034.1]
+- [x] #2 Given a stored set of at least 100 heads-up preflop matchups with exact enumeration values, When the equity test suite runs, Then every result is within 1.5 percentage points of its stored value [REQ-034.1]
+- [x] #3 Given a three-way preflop matchup AA vs KK vs QQ, When equity is computed, Then each hand's equity is within 1.5 percentage points of exhaustive enumeration [REQ-034.2]
+- [x] #4 Given the same hero hand, board and opponent ranges, When equity is computed twice in one process and once in a fresh process, Then all three results are identical to the last digit [REQ-034.3]
+- [x] #5 Given an equity input that uses sampling, When the sampler is created, Then its seed is derived only from the input, so no clock or global random source changes the result [REQ-034.3]
 <!-- AC:END -->
 
 ## Definition of Done
 <!-- DOD:BEGIN -->
-- [ ] #1 Every acceptance criterion has at least one automated test (unit, property or Playwright) that passes
-- [ ] #2 `npm run lint`, `npm run typecheck` and `npm test` pass with zero errors [REQ-059.1, REQ-059.4]
-- [ ] #3 The golden-spot suite passes 100% (applies from the story that creates the suite, E07-S14, onward) [REQ-039.4]
-- [ ] #4 Coverage thresholds hold: >= 90% engine/bots/advice/statistics, >= 70% overall [REQ-059.3]
-- [ ] #5 Engine, bots, advice and statistics code imports no UI or browser-only code [REQ-059.2]
-- [ ] #6 Stories that touch the engine, bots or advice: a 10,000-hand playtest reports zero invariant violations (applies once the playtest runner exists, E01-S07, onward) [REQ-056.1]
-- [ ] #7 Stories that add or change a screen: Playwright test of the screen flow in Chromium and WebKit, and axe reports zero serious or critical violations (axe tooling is provisioned in the toolchain story E01-S01) [REQ-057.1]
-- [ ] #8 No new network requests beyond the app's own files [REQ-058.1]
-- [ ] #9 Strategy-content stories: text is original and every chart, range or golden spot carries its justification [REQ-061.2]
-- [ ] #10 CI workflow is green on the story's branch (applies once the CI story E01-S02 is done; E01-S01 instead passes the same checks locally) [REQ-064.2]
-- [ ] #11 Story documentation is written and published to Backlog.md
-- [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
+- [x] #1 Every acceptance criterion has at least one automated test (unit, property or Playwright) that passes
+- [x] #2 `npm run lint`, `npm run typecheck` and `npm test` pass with zero errors [REQ-059.1, REQ-059.4]
+- [x] #3 The golden-spot suite passes 100% (applies from the story that creates the suite, E07-S14, onward) [REQ-039.4]
+- [x] #4 Coverage thresholds hold: >= 90% engine/bots/advice/statistics, >= 70% overall [REQ-059.3]
+- [x] #5 Engine, bots, advice and statistics code imports no UI or browser-only code [REQ-059.2]
+- [x] #6 Stories that touch the engine, bots or advice: a 10,000-hand playtest reports zero invariant violations (applies once the playtest runner exists, E01-S07, onward) [REQ-056.1]
+- [x] #7 Stories that add or change a screen: Playwright test of the screen flow in Chromium and WebKit, and axe reports zero serious or critical violations (axe tooling is provisioned in the toolchain story E01-S01) [REQ-057.1]
+- [x] #8 No new network requests beyond the app's own files [REQ-058.1]
+- [x] #9 Strategy-content stories: text is original and every chart, range or golden spot carries its justification [REQ-061.2]
+- [x] #10 CI workflow is green on the story's branch (applies once the CI story E01-S02 is done; E01-S01 instead passes the same checks locally) [REQ-064.2]
+- [x] #11 Story documentation is written and published to Backlog.md
+- [x] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
 
 ## Implementation Plan
@@ -81,3 +82,9 @@ Full spec: doit/TASK-7.1/spec.md
 <!-- SECTION:NOTES:BEGIN -->
 Build: src/advice/equity.ts (computeEquity; exact ≤200k evals else 30,000 seeded trials), src/engine/seeded-random.ts (FNV-1a + SplitMix32 + xoshiro128**), offline generator + 121-case fixture; max HU error 0.957 pts; p95 5.7/0.19/5.1/6.5/8.3/20.7/69.9 ms; gate PASS. A-12/A-13 in qa.md.
 <!-- SECTION:NOTES:END -->
+
+## Final Summary
+
+<!-- SECTION:FINAL_SUMMARY:BEGIN -->
+Built the equity calculator (src/advice/equity.ts) with a seeded PRNG (src/engine/seeded-random.ts), an offline exhaustive reference generator and a 121-case fixture. It enumerates exactly when work is at most 200,000 evaluations, otherwise samples 30,000 trials seeded from the canonicalised input. Verified: 19 test files / 50 tests pass, 100% line coverage on the new modules, max heads-up error 0.957 pts (limit 1.5), p95 latency within every target (full ring 70.8 ms vs 80 ms), CI run 44233294018 success. Review: one security MAJOR (unbounded feasibility search), fixed with a node cap (A-14); rounds 2 and 3 clean. Judge round 1 failed on a CI timeout for AC#2; fixed by byte-identical speed-ups plus Vitest testTimeout 30 s (user decision Q-5, 11th file vite.config.ts). Please review assumptions A-1..A-15, especially A-11 (PRNG in engine), A-12 (spec arithmetic slip), A-14 (spec deviation) and Q-5. Risks and follow-ups: full-ring headroom is about 12%; the global testTimeout can mask slow tests; update spec sections 5 and 8 for the feasibility budget; consider a no-validation evaluate fast path.
+<!-- SECTION:FINAL_SUMMARY:END -->

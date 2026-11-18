@@ -1,0 +1,22 @@
+{"reviewer": "code", "round": 3,
+ "rubric": [
+  {"item": "SPEC-01..SPEC-14 correctness", "result": "pass", "note": "Scope of this round is commit 8cda46d only. Old (HEAD~1) and new src trees compared directly in a scratch harness: computeEquity JSON output is identical on 7 inputs (6 sampled incl. 6-max preflop vs all combos, full-ring flop vs 8 x all combos, mixed ranges; 1 exact HU turn), and Xoshiro128.nextUint32 matches for 200,000 outputs on each of 5 seeds."},
+  {"item": "SPEC-01..SPEC-14 test strength", "result": "pass", "note": "No test file changed in this commit. Locked tests/advice/equity.acceptance.test.ts sha256 still 7afc27b5...7011. Per-test explicit timeouts in tests are unchanged."},
+  {"item": "SPEC-13 correctness (seeded PRNG)", "result": "pass", "note": "Inlined rotations are exactly rotl(x,7) = (x<<7)|(x>>>25) and rotl(s3,11) = (s3<<11)|(s3>>>21); reference-vector test passes."},
+  {"item": "SPEC-15 correctness", "result": "pass", "note": "Locally AC#2 runs in 634 ms without coverage, 3.8 s with coverage (gate fix-5). testTimeout 30_000 is the user's Q-5 decision. Whether CI passes is a post-push check that cannot be verified here."},
+  {"item": "SPEC-16 correctness", "result": "pass"},
+  {"item": "scope", "result": "pass", "note": "vite.config.ts is outside the spec file list but approved by the user (Q-5) and recorded in changes.md. The other two files are hot-path rewrites with no behaviour change."},
+  {"item": "concision", "result": "pass"},
+  {"item": "clarity", "result": "pass"}
+ ],
+ "findings": [
+  {"fingerprint": "src/advice/equity.ts:runout-write-loop-duplicated", "severity": "NIT", "file": "src/advice/equity.ts", "line": 329,
+   "issue": "The sampler now writes runout cards inline with the same loop as Table.setRunout, which only the exact path still uses. Two copies of the slot arithmetic (7 - need + index) must stay in sync.",
+   "evidence": "setRunout at line 188 computes slot = 7 - this.need + index. The sampler uses firstRunout = 7 - need and loops slot from firstRunout to 6.",
+   "fix": "Optional: leave as is for the hot loop, or have the sampler call table.setRunout(slot - firstRunout, card) if profiling shows no cost."},
+  {"fingerprint": "vite.config.ts:global-timeout-masks-slow-tests", "severity": "NIT", "file": "vite.config.ts", "line": 10,
+   "issue": "testTimeout applies to every test in the project, not only AC#2. A future regression that makes some unrelated test take 5-30 s will no longer fail on time. This was the user's explicit choice (Q-5) and does not weaken any current assertion: every speed-sensitive test asserts its own timing (perf suite, the 2000 ms feasibility-cap check) or sets its own timeout.",
+   "evidence": "Q-5 answer in qa.md. The tests' explicit timeouts (50_000, 60_000, 120_000) are unchanged.",
+   "fix": "None required. Optionally record in the task notes that the global limit is 30 s."}
+ ],
+ "summary": "The judge-fix commit gives the same outputs and weakens no check. Typed arrays: the Float64Array tallies hold the same doubles as the old number[] tallies, and Int32Array ranks are safe because evaluate returns 1..7462. The sampler writes hole cards into hands before a trial is accepted, but score() runs only after every opponent slot has been written in that trial, so a rejected trial's leftover writes are always overwritten. The marked[] layout and the RNG call order are unchanged. The runout loop covers the same slots as setRunout. A direct old-vs-new comparison found identical output on sampled and exact paths, and the PRNG streams match. No test files changed, the locked test hash matches, and all advice and seeded-random tests pass. The global testTimeout is the user-approved Q-5 change. No BLOCKER or MAJOR findings; two NITs."}
