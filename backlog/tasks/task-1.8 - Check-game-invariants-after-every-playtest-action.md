@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-18T17:49:00Z'
+updated_date: '2026-11-18T17:58:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-0
@@ -86,4 +86,6 @@ Full spec: doit/TASK-1.8/spec.md
 AC added from TASK-1.6 follow-up (doc-15): add an onAction hook to runPlaytest.
 
 tests/ci/workflow.test.ts (TASK-1.7 acceptance test) is extended for AC#4 per spec D-5: playtest command added to the ordered list plus a new AC#4 test; no existing assertion removed or weakened.
+
+Build: src/engine/invariants.ts (chips, legal-action, bet-cap, pot-eligibility, cards; 0.38 us/action), runner seams + per-invariant counts, CLI violation block (Q-1), CI Playtest step, faulty-engine test helper; 138 tests pass; ~1,320 lines vs 1,150 budget (warning); gate PASS.
 <!-- SECTION:NOTES:END -->

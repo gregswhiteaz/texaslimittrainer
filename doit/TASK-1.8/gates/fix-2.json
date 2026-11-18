@@ -1,0 +1,67 @@
+{
+  "task": "TASK-1.8",
+  "phase": "fix",
+  "run": 2,
+  "result": "FAIL",
+  "changed_lines": 1384,
+  "changed_files": [
+    ".github/workflows/ci.yml",
+    "src/engine/invariants.ts",
+    "src/playtest/cli.ts",
+    "src/playtest/runner.ts",
+    "tests/ci/workflow.test.ts",
+    "tests/engine/invariants.perf.test.ts",
+    "tests/engine/invariants.test.ts",
+    "tests/playtest/cli.test.ts",
+    "tests/playtest/invariants.acceptance.test.ts",
+    "tests/playtest/runner.test.ts",
+    "tests/support/faulty-engine.ts"
+  ],
+  "checks": [
+    {
+      "name": "test command",
+      "status": "pass",
+      "detail": "$ npm test\nexit 0\nacceptance.test.ts > invariant checks in the playtest > AC#2 each injected engine fault is reported as its invariant 9ms\n \u2713 tests/playtest/invariants.acceptance.test.ts > invariant checks in the playtest > AC#3 a violation prints the replay code and full action history and exits 1 2ms\n \u2713 tests/playtest/invariants.acceptance.test.ts > invariant checks in the playtest > AC#5 the per-action hook reports a violation with formatHand and exit 1 1ms\n \u2713 tests/engine/hand-evaluator.property.test.ts > hand evaluator properties > AC#5 relabelling suits never changes the rank 88ms\n \u2713 tests/ci/speed-limits.acceptance.test.ts > speed limits in CI > without CI the perf limits are enforced 3455ms\nstdout | tests/advice/equity.perf.test.ts > equity performance > equity latency within target times slack\nHU preflop hand vs hand: sampled, p95 87.43 ms (target 15 ms x 20 = 300 ms)\nHU flop hand vs hand: exact, p95 0.88 ms (target 2 ms x 20 = 40 ms)\nHU flop vs every unseen combo: sampled, p95 79.13 ms (target 20 ms x 20 = 400 ms)\nHU turn vs every unseen combo: exact, p95 93.49 ms (target 15 ms x 20 = 300 ms)\nThree-way preflop AA vs KK vs QQ: sampled, p95 82.21 ms (target 20 ms x 20 = 400 ms)\n6-max preflop vs 5 ranges: sampled, p95 137.17 ms (target 50 ms x 20 = 1000 ms)\nFull ring flop vs 9 ranges: sampled, p95 333.06 ms (target 80 ms x 20 = 1600 ms)\n\n \u2713 tests/advice/equity.perf.test.ts > equity performance > equity latency within target times slack 13187ms\n\n Test Files  44 passed (44)\n      Tests  138 passed | 1 skipped (139)\n   Start at  11:03:18\n   Duration  13.48s (tests 96%, import 4%)\n\n\u001b[34m % \u001b[39m\u001b[2mCoverage report from \u001b[22m\u001b[33mv8\u001b[39m\n-------------------|---------|----------|---------|---------|-------------------\nFile               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s \n-------------------|---------|----------|---------|---------|-------------------\nAll files          |   99.83 |    95.19 |     100 |     100 |                   \n advice            |   99.74 |    97.64 |     100 |     100 |                   \n  equity.ts        |   99.55 |    93.97 |     100 |     100 | 114,120,197,290   \n engine            |     100 |    92.92 |     100 |     100 |                   \n  ...-evaluator.ts |     100 |    79.81 |     100 |     100 | ...84-197,211-212 \n  hand.ts          |     100 |    96.55 |     100 |     100 | 231-232,235-238   \n  invariants.ts    |     100 |    97.93 |     100 |     100 | 84,161,234        \n playtest          |   99.53 |    98.42 |     100 |     100 |                   \n  cli.ts           |   99.15 |    97.14 |     100 |     100 | 135-143           \n-------------------|---------|----------|---------|---------|-------------------\n\n=============================== Coverage summary ===============================\nStatements   : 99.83% ( 1191/1193 )\nBranches     : 95.19% ( 713/749 )\nFunctions    : 100% ( 233/233 )\nLines        : 100% ( 987/987 )\n================================================================================\n"
+    },
+    {
+      "name": "lint command",
+      "status": "pass",
+      "detail": "$ npm run lint\nexit 0\n\n> tlh-trainer@0.0.0 lint\n> eslint . --max-warnings 0 && prettier --check .\n\nChecking formatting...\nAll matched files use Prettier code style!\n"
+    },
+    {
+      "name": "typecheck command",
+      "status": "fail",
+      "detail": "$ npm run typecheck\nexit 2\n\n> tlh-trainer@0.0.0 typecheck\n> tsc -p tsconfig.json\n\ntests/engine/invariants.test.ts(211,31): error TS2322: Type '[number]' is not assignable to type 'readonly [number, number]'.\n  Source has 1 element(s) but target requires 2.\n"
+    },
+    {
+      "name": "spec unchanged",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "name": "scope budget (lines)",
+      "status": "warn",
+      "detail": "1384 changed lines vs budget 1150 (fail above 2300)"
+    },
+    {
+      "name": "scope budget (files)",
+      "status": "pass",
+      "detail": "11 files vs budget 11"
+    },
+    {
+      "name": "files outside spec",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "name": "all changes listed in changes.md",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "name": "test integrity",
+      "status": "pass",
+      "detail": ""
+    }
+  ]
+}

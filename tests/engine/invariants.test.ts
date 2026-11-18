@@ -83,6 +83,11 @@ describe('invariant checker', () => {
         one('chips', 'seat 5 has an invalid stack or contribution'),
       ],
       [
+        'C1 street > total',
+        withPlayers(S, { 6: { streetContribution: 1 } }),
+        one('chips', 'seat 6 has an invalid stack or contribution'),
+      ],
+      [
         'C2',
         withPlayers(S, { 2: { stack: 153 } }),
         one('chips', 'table holds $961 but the hand started with $960'),
@@ -103,6 +108,21 @@ describe('invariant checker', () => {
           },
         },
         one('chips', 'awards pay $21 but players put in $20'),
+      ],
+      [
+        'C3 award shares',
+        {
+          ...foldOut,
+          result: {
+            endedBy: 'fold',
+            showdown: [],
+            awards: [
+              { pot: 0, amount: 12, winners: [{ seat: 2, amount: 8 }] },
+              { pot: 0, amount: 8, winners: [{ seat: 2, amount: 12 }] },
+            ],
+          },
+        },
+        one('chips', 'awards pay $20 but players put in $20'),
       ],
       [
         'C4',
@@ -133,6 +153,11 @@ describe('invariant checker', () => {
         one('pot-eligibility', 'main pot has a malformed eligible list'),
       ],
       [
+        'P1 seat not dealt in',
+        withPot(S, 16, [2, 3, 4, 5, 7]),
+        one('pot-eligibility', 'main pot has a malformed eligible list'),
+      ],
+      [
         'P2',
         withPot(S, 16, [2, 3, 4, 5, 6]),
         one('pot-eligibility', 'main pot lists seat 6, which has folded'),
@@ -159,11 +184,33 @@ describe('invariant checker', () => {
         },
         one('pot-eligibility', 'main pot paid seat 1, which is not eligible'),
       ],
+      [
+        'P5 winner contributed nothing',
+        {
+          ...withPot(
+            withPlayers(foldOut, { 6: { folded: false, stack: 180 }, 2: { stack: 152 } }),
+            0,
+            [2, 6],
+          ),
+          result: {
+            endedBy: 'fold',
+            showdown: [],
+            awards: [{ pot: 0, amount: 20, winners: [{ seat: 6, amount: 20 }] }],
+          },
+        },
+        one('pot-eligibility', 'main pot paid seat 6, which is not eligible'),
+      ],
       ['K1', { ...S, board: [52, ...S.board.slice(1)] }, one('cards', '52 is not a card')],
       [
         'K2',
         { ...S, board: S.board.slice(0, 2) },
         one('cards', 'flop has 2 board and 1 burn cards'),
+      ],
+      [
+        'K2 hole cards',
+        // Intentionally malformed: a one-card hand the type system would otherwise forbid.
+        withPlayers(S, { 3: { holeCards: [10] as unknown as PlayerState['holeCards'] } }),
+        one('cards', 'flop has 3 board and 1 burn cards'),
       ],
       ['K3', withPlayers(S, { 2: { holeCards: [5, 6] } }), one('cards', '3d dealt twice')],
     ];
@@ -202,6 +249,22 @@ describe('invariant checker', () => {
           ...cleanStep,
           result: ok({ ...S, actions: [...S.actions.slice(0, -1), { ...lastRecord, added: 5 }] }),
         },
+        one('legal-action', 'history entry for seat 2 bets $4 does not match the action'),
+      ],
+      [
+        'L5 street',
+        {
+          ...cleanStep,
+          result: ok({
+            ...S,
+            actions: [...S.actions.slice(0, -1), { ...lastRecord, street: 'preflop' }],
+          }),
+        },
+        one('legal-action', 'history entry for seat 2 bets $4 does not match the action'),
+      ],
+      [
+        'L5 one record',
+        { ...cleanStep, result: ok({ ...S, actions: [...S.actions, lastRecord] }) },
         one('legal-action', 'history entry for seat 2 bets $4 does not match the action'),
       ],
     ];
