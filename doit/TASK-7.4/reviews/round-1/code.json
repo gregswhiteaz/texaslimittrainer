@@ -1,0 +1,31 @@
+{"reviewer": "code", "round": 1,
+ "rubric": [
+  {"item": "SPEC-01 correctness", "result": "pass"}, {"item": "SPEC-01 test strength", "result": "pass"},
+  {"item": "SPEC-02 correctness", "result": "pass"}, {"item": "SPEC-02 test strength", "result": "pass"},
+  {"item": "SPEC-03 correctness", "result": "pass"}, {"item": "SPEC-03 test strength", "result": "pass"},
+  {"item": "SPEC-04 correctness", "result": "pass"}, {"item": "SPEC-04 test strength", "result": "pass"},
+  {"item": "SPEC-05 correctness", "result": "pass"}, {"item": "SPEC-05 test strength", "result": "pass"},
+  {"item": "SPEC-06 correctness", "result": "pass"}, {"item": "SPEC-06 test strength", "result": "pass"},
+  {"item": "SPEC-07 correctness", "result": "pass"}, {"item": "SPEC-07 test strength", "result": "pass"},
+  {"item": "SPEC-08 correctness", "result": "pass"}, {"item": "SPEC-08 test strength", "result": "pass"},
+  {"item": "SPEC-09 correctness", "result": "pass"}, {"item": "SPEC-09 test strength", "result": "pass"},
+  {"item": "SPEC-10 correctness", "result": "pass"}, {"item": "SPEC-10 test strength", "result": "pass"},
+  {"item": "SPEC-11 correctness", "result": "pass"}, {"item": "SPEC-11 test strength", "result": "pass"},
+  {"item": "SPEC-12 correctness", "result": "pass"}, {"item": "SPEC-12 test strength", "result": "pass"},
+  {"item": "SPEC-13 correctness", "result": "pass"}, {"item": "SPEC-13 test strength", "result": "pass"},
+  {"item": "SPEC-17 correctness", "result": "pass"}, {"item": "SPEC-17 test strength", "result": "pass"},
+  {"item": "scope", "result": "pass"}, {"item": "concision", "result": "pass"}, {"item": "clarity", "result": "pass"}
+ ],
+ "findings": [
+  {"fingerprint": "tests/advice/grade.test.ts:negative-margin-only-probed-at-minus-5", "severity": "MINOR",
+   "file": "tests/advice/grade.test.ts", "line": 133,
+   "issue": "A-4 says a margin pointing the wrong way (negative) is always Minor; only >= 10 points *against* the user's action is Major. The test probes only -5, so an implementation that compares Math.abs(margin) >= 100 passes every test.",
+   "evidence": "Mutant `margin >= CALL_FOLD_MAJOR_TENTHS` -> `Math.abs(margin) >= CALL_FOLD_MAJOR_TENTHS` survived both grade test files (33/33 pass). All other 33 mutants were killed. The spec's SPEC-09 text only asks for -5, so the test matches the spec as written and the code is correct.",
+   "fix": "Add a call to the existing negative case at line 133: `expect(gradeDecision(fixture(-15), user)).toMatchObject({ grade: 'minor', marginPts: -15 })`."},
+  {"fingerprint": "tests/advice/grade.test.ts:float-case-26.7-is-not-a-float-trap", "severity": "NIT",
+   "file": "tests/advice/grade.test.ts", "line": 163,
+   "issue": "The test name says 'despite float subtraction', but its first case (26.7 vs 16.7) subtracts to exactly 10 in IEEE doubles, so it does not exercise the trap. The 16.4/6.4 case in the same test does, and SPEC-17's off-grid cases pin round-versus-truncate, so rounding is still pinned.",
+   "evidence": "node: 26.7-16.7 === 10; 16.4-6.4 === 9.999999999999998. Mutants tenths=trunc/floor/ceil/raw-float are each killed by the SPEC-17 acceptance test.",
+   "fix": "Optional: drop the 26.7/16.7 assertion, or add a comment saying it is kept because the spec names it while 16.4/6.4 is the real float case."}
+ ],
+ "summary": "grade.ts implements the REQ-038 rules exactly as in spec section 5. Match and alternative grade Correct with null margins. Impossible pairs throw RangeError in both orders, before the basis split. Preflop grades follow the borderline flag. Fold-vs-call/raise uses the signed tenths margin (>=100 Major, marginPts = m/10). Aggression uses |t(eqVsCR)-500| >=150. A missing or null calling range gives Minor aggression-no-range (Q-2). gradeView checks legality before its single recommend call, takes only a PlayerView, and returns the recommendation by reference. In a scratch copy outside the repo (now deleted) I ran 34 mutants: thresholds 99/101/149/151, >= vs >, swapped Minor/Major for each rule, alternative ignored, borderline ignored, margin sign flipped, |margin| reported, every Q-2 variant (major, correct, undefined-only, null-only, fall back to equityPct), trunc/floor/ceil/raw-float tenths, directional distance, impossible pairs one-way or removed, legality check removed or moved after recommend, recommend called twice, recommendation copied, marginPts nulled. 33 were killed. Only Math.abs(margin) survived (MINOR, because the spec asks for -5 only). The builder is right that the spec's A-3 example (26.7-16.7) is exact in floats, but the tests still pin rounding: 16.4/6.4 and the SPEC-17 off-grid cases kill every non-round tenths mutant. No BLOCKER or MAJOR findings. The gate warns at 812 lines against an 800-line budget, which is negligible."}

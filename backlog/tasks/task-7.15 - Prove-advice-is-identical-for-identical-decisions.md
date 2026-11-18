@@ -4,7 +4,7 @@ title: Prove advice is identical for identical decisions
 status: To Do
 assignee: []
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-17T23:22:00Z'
+updated_date: '2026-11-18T20:12:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -51,6 +51,7 @@ Plan key: E07-S13 · Dream: limit-holdem-trainer
 - [ ] #3 Given a decision point where a hint was computed during the hand, When the review entry is computed after the hand ends, Then the recommendation, equity %, required equity %, explanation and basis are identical even though the finished hand changed opponents' observed stats [REQ-036.2]
 - [ ] #4 Given a fixed decision point, When the other players' hole cards and the undealt cards are changed in 1,000 seeded variations, Then the hint and the grade of the user's action never change [REQ-025.2, REQ-025.3]
 - [ ] #5 Given the same seed and options including `--check-advice`, When the playtest is run twice, Then the outputs are byte-identical [REQ-062.4]
+- [ ] #6 Given a decision graded when a hint is shown and again in the review, When both grades are computed, Then gradeDecision on the stored recommendation gives a deep-equal GradeResult
 <!-- AC:END -->
 
 ## Definition of Done
@@ -68,3 +69,9 @@ Plan key: E07-S13 · Dream: limit-holdem-trainer
 - [ ] #11 Story documentation is written and published to Backlog.md
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+AC added from TASK-7.4 follow-up (doc-19).
+<!-- SECTION:NOTES:END -->

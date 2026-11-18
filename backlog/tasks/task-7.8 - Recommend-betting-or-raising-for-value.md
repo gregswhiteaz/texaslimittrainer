@@ -4,7 +4,7 @@ title: Recommend betting or raising for value
 status: To Do
 assignee: []
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-18T19:40:00Z'
+updated_date: '2026-11-18T20:12:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -51,6 +51,7 @@ Plan key: E07-S10 · Dream: limit-holdem-trainer
 - [ ] #8 Given a value-bet or value-raise recommendation, When it is returned, Then it includes equity against the calling range %, required equity % and the rule id [REQ-033.5]
 - [ ] #9 Given a value-bet spot, When recommendPostflop returns, Then the recommendation includes equityVsCallingRangePct and bet/raise outcomes alongside the existing fields, without breaking existing consumers
 - [ ] #10 Given postflop free-check decisions depend on equity for value bets, When this story lands, Then the TAG bot's FREE_CHECK_EQUITY stand-in is removed or limited to spots where equity cannot change the move, with the playtest still under its time limits
+- [ ] #11 Given a real postflop recommendation now carries equityVsCallingRangePct, When a user bets or raises against advice to check or call, Then gradeView grades it by aggression-margin and aggression-no-range no longer fires for real recommendations
 <!-- AC:END -->
 
 ## Definition of Done
@@ -76,4 +77,6 @@ Plan key: E07-S10 · Dream: limit-holdem-trainer
 AC added from TASK-7.3 follow-up (doc-17).
 
 AC added from TASK-6.1 follow-up (doc-18).
+
+AC added from TASK-7.4 follow-up (doc-19).
 <!-- SECTION:NOTES:END -->

@@ -4,7 +4,7 @@ title: Record the advice and grade for each of my decisions with the hand
 status: To Do
 assignee: []
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-17T23:22:00Z'
+updated_date: '2026-11-18T20:12:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -47,6 +47,7 @@ Plan key: E03-S10 · Dream: limit-holdem-trainer
 - [ ] #2 Given a decision computed with an opponent's observed stats at 29 hands that reach 30 hands when the hand ends, When the record is read, Then its recommendation and numbers equal the advice computed from the decision-time snapshot [REQ-052.2]
 - [ ] #3 Given a decision made without asking for a hint, When the record is read, Then its hinted flag is false [REQ-052.2]
 - [ ] #4 Given a hand in which the user folded preflop at the first decision, When its record is read, Then it holds exactly 1 decision entry with its grade [REQ-052.2]
+- [ ] #5 Given a graded decision, When the hand record is saved, Then the stored grade data is decided and documented (full GradeResult or grade, ruleId and marginPts plus a recommendation reference) and round-trips through JSON unchanged
 <!-- AC:END -->
 
 ## Definition of Done
@@ -64,3 +65,9 @@ Plan key: E03-S10 · Dream: limit-holdem-trainer
 - [ ] #11 Story documentation is written and published to Backlog.md
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+AC added from TASK-7.4 follow-up (doc-19).
+<!-- SECTION:NOTES:END -->

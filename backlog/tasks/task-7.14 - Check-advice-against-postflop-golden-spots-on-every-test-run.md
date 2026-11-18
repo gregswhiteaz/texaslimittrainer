@@ -4,7 +4,7 @@ title: Check advice against postflop golden spots on every test run
 status: To Do
 assignee: []
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-17T23:22:00Z'
+updated_date: '2026-11-18T20:12:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -50,6 +50,7 @@ Plan key: E07-S15 · Dream: limit-holdem-trainer
 - [ ] #3 Given the graded examples in the suite, When `npm test` runs, Then at least one preflop and one postflop example of each grade (Correct, Minor error, Major error) is graded as recorded [REQ-038.1, REQ-038.2, REQ-038.3, REQ-038.4]
 - [ ] #4 Given every postflop golden spot, When its explanation is checked, Then it quotes the equity % and required equity % the recommendation returns [REQ-037.4]
 - [ ] #5 Given the complete suite, When `npm test` runs, Then 100% of golden spots pass [REQ-039.4]
+- [ ] #6 Given the golden spot suite, When it runs, Then it includes graded examples at Correct, Minor error and Major error, preflop and postflop, each asserting the exact grade, rule id and margin
 <!-- AC:END -->
 
 ## Definition of Done
@@ -68,3 +69,9 @@ Plan key: E07-S15 · Dream: limit-holdem-trainer
 - [ ] #12 Story documentation is written and published to Backlog.md
 - [ ] #13 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+AC added from TASK-7.4 follow-up (doc-19).
+<!-- SECTION:NOTES:END -->

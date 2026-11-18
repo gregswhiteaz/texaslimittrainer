@@ -1,0 +1,109 @@
+{
+ "round": 1,
+ "test_suite": {
+  "command": "npm test",
+  "result": "PASS",
+  "passed": 194,
+  "failed": 0,
+  "notes": "52 files passed, 194 tests passed, 1 skipped (pre-existing sudo-only test). Coverage: lines 100% (1064/1064), branches 95.62%; grade.ts fully covered (hidden as a 100% file). npm run lint exit 0; npm run typecheck exit 0."
+ },
+ "end_to_end": {
+  "command": "npx vitest run tests/advice/grade.acceptance.test.ts tests/advice/grade.test.ts + Judge scratch scenario per spec \u00a710",
+  "result": "PASS",
+  "expected": "Turn view facing a bet, gradeView(view,'call',{equity: stub 0.05}) -> major call-fold-margin; river gives hero the winning hand; re-grading the stored view gives an identical major",
+  "actual": "2 files, 33 tests passed. Independent 3-handed scripted hand: hero Ah5h vs KcKd, turn bet 8 into 16 -> recommendation fold, equityPct 5, requiredEquityPct 33.3, grade major call-fold-margin, marginPts 28.3; river Qh makes hero's flush, showdown awards 24 to seat 3; re-grade deep-equal (major, 28.3)."
+ },
+ "integrity": {
+  "result": "PASS",
+  "notes": "doit.py test-integrity exit 0 (locked acceptance test hash intact). Diff vs base 8a42d74 touches only src/advice/grade.ts and the two new test files under code dirs; no input recognition, hard-coded expected values, early exits, mocks of the unit under test, or equality overrides. Only injection is the documented options.equity seam. 9 hand-made mutants of grade.ts (>= to > for both thresholds, round->trunc, drop abs, swap borderline grades, drop alternative rule, drop impossible-pair check, drop gradeView legality check, abs on call/fold margin) were all killed by the two test files; grade.ts restored, git status clean for src/ and tests/."
+ },
+ "items": [
+  {
+   "spec": "SPEC-01",
+   "result": "PASS",
+   "evidence": "AC#1 test passes; asserts toStrictEqual full result incl. same-reference recommendation for chart and equity fixtures plus real gradeView(UTG AA,'raise') -> correct match. Holdout: over 400 seeded 6-max hands every legal action graded by gradeView matched an independent REQ-038 oracle; 'match' and 'alternative' Correct observed on every street (e.g. preflop raise->call alternative, fold->raise alternative); alternative takes precedence over aggression rule in fixture."
+  },
+  {
+   "spec": "SPEC-02",
+   "result": "PASS",
+   "evidence": "AC#2 test passes (fixtures + real chart: K9s UTG call -> minor preflop-borderline, AA fold -> major, 72o raise -> major). Holdout: 12,453 real preflop decisions x legal actions matched oracle; both preflop-borderline minor and preflop-chart major observed across rec fold/call/raise/check; BB-option check->raise graded by chart rule."
+  },
+  {
+   "spec": "SPEC-03",
+   "result": "PASS",
+   "evidence": "AC#3 test: 16.8/26.6/26.7 vs 16.7 fold -> minor 0.1, minor 9.9, major 10, call-fold-margin. Holdout: 20,000 random fixtures on the integer-tenths grid (with +-0.04 jitter) matched integer-exact margin and >=100-tenths rule; 26.650001 -> major 10, 26.6499 -> minor 9.9."
+  },
+  {
+   "spec": "SPEC-04",
+   "result": "PASS",
+   "evidence": "AC#4 test: 33.2/23.4/23.3 vs 33.3 call -> minor 0.1, minor 9.9, major 10. Holdout boundary rec fold eq 0.7 req 10.7 call -> major 10; random sweep consistent."
+  },
+  {
+   "spec": "SPEC-05",
+   "result": "PASS",
+   "evidence": "AC#5 test: bet->check and raise->call at 64.9/65.0 -> minor 14.9 / major 15, aggression-margin. Holdout: raise->call at 35.0 -> major 15, 35.1 -> minor 14.9; eqVsCR 0 and 100 -> major 50; 50 -> minor 0."
+  },
+  {
+   "spec": "SPEC-06",
+   "result": "PASS",
+   "evidence": "AC#6 test: check->bet and call->raise at 35.1/35.0 -> minor 14.9 / major 15. Holdout: call->raise 65.04 and 64.951 -> major 15; check->bet 64.9 -> minor 14.9 (distance is absolute both sides of 50)."
+  },
+  {
+   "spec": "SPEC-07",
+   "result": "PASS",
+   "evidence": "AC#7 test: scripted turn call graded major (eq 5 vs req 25, margin 20), river Qh gives hero the pot at showdown, re-grade toStrictEqual; @ts-expect-error on HandState arg is checked by typecheck (exit 0); 50 hidden-card permutations with real equity deep-equal. Holdout: independent 3-handed scenario reproduced (major 28.3 before and after hero wins); 336 real-equity grades on turn/river views compared across 4 hidden-card permutations each over 6 deals -> all deep-equal, views identical."
+  },
+  {
+   "spec": "SPEC-08",
+   "result": "PASS",
+   "evidence": "AC#8 test: fold->raise 10.1/10.0 vs 20 -> minor 9.9/major 10; raise->fold 29.9/30.0 -> minor/major, call-fold-margin. Holdout: raise->fold 99.9/100 vs 90 -> minor 9.9/major 10; fold->raise 0.8 vs 10.7 -> minor 9.9; real-engine fold->raise graded call-fold-margin on flop/turn."
+  },
+  {
+   "spec": "SPEC-09",
+   "result": "PASS",
+   "evidence": "grade.test.ts 'margin boundaries' passes: all 4 call/fold pairings at 0/9.9/10/14.9/15 -> m,m,M,M,M with -5 -> minor; all 4 aggression pairings both sides of 50 -> m,m,m,m,M; exhaustive sweep below band never major. Holdout: REQ-038.5 asserted on every one of 20,000 fixtures (no major below 10/15); negative margin rec call eq 10 req 30 fold -> minor -20."
+  },
+  {
+   "spec": "SPEC-10",
+   "result": "PASS",
+   "evidence": "Test passes for absent and null eqVsCR (check->bet, call->raise) and real flop gradeView check->bet -> minor aggression-no-range null. Holdout: every real postflop call->raise and check->bet on flop/turn/river (2,483 cases) graded minor aggression-no-range with marginPts null; fixture sweep with absent/null eqVsCR matched."
+  },
+  {
+   "spec": "SPEC-11",
+   "result": "PASS",
+   "evidence": "Errors tests pass (5 impossible pairs both orders, exact message; illegal bet facing a bet -> RangeError 'bet is not legal for seat 3' with 0 equity calls; recommend's 'Seat 3 is not to act' propagates). Holdout: for every real decision every non-legal action type threw RangeError '<u> is not legal for seat <n>' without calling equity; every impossible pair in the random fixture sweep threw RangeError; oracle never saw an impossible pair among legal actions."
+  },
+  {
+   "spec": "SPEC-12",
+   "result": "PASS",
+   "evidence": "Test passes (frozen fixtures, structuredClone snapshot unchanged, JSON round-trip, one equity call per gradeView, compile-time assignability, GRADE_LABELS, every rule id produced). Holdout: on ~19k real graded decisions, repeat gradeView deep-equal, JSON round-trip deep-equal, recommendation deep-equal to recommend(view), postflop gradeView made exactly 1 equity call (same count as recommend); fixtures were Object.freeze'd and results returned the same reference; GRADE_LABELS deep-equal."
+  },
+  {
+   "spec": "SPEC-13",
+   "result": "PASS",
+   "evidence": "npm run lint exit 0 (eslint + prettier clean), npm run typecheck exit 0, npm test 194 passed / 0 failed, coverage lines 100%. grade.ts imports only type PlayerView from ../engine/player-view and ./recommend; no fetch/network/random/Date."
+  },
+  {
+   "spec": "SPEC-14",
+   "result": "PASS",
+   "evidence": "npm run playtest -- --hands 10000 --seed 42 -> Hands played 10000, Invariant violations: 0."
+  },
+  {
+   "spec": "SPEC-15",
+   "result": "PASS",
+   "evidence": "GitHub Actions run 44387183018 (CI, push) on doit/TASK-7.4 head 98578d648b3940c05e12878f8336028a0ee07db5 completed with conclusion success; backlog doc list --plain shows 'doc-19 - TASK-7.4: Grade a decision as Correct, Minor error or Major error'."
+  },
+  {
+   "spec": "SPEC-16",
+   "result": "PASS",
+   "evidence": "git diff 8a42d74..HEAD --name-only has no files under src/ui/, e2e/ or src/advice/charts/; no golden suite exists; no screen/dialog added."
+  },
+  {
+   "spec": "SPEC-17",
+   "result": "PASS",
+   "evidence": "Acceptance test passes all 16 cases (16.4-6.4 and 23.3-33.3 float-below-10 -> major; 16.6-6.6 float-above-10 -> major, 16.5 -> minor; off-grid 26.66/26.64/6.74/6.76; 64.96/64.94; 35.04/35.06). Round->trunc mutant is killed by it. Holdout: off-grid jitter sweep plus explicit cases in both rounding directions matched integer-tenths expectations."
+  }
+ ],
+ "findings": [],
+ "summary": "All 17 SPEC items PASS. npm test 194 passed/0 failed, lint and typecheck clean, playtest 10,000 hands with 0 invariant violations, CI green on 98578d6, doc-19 published. An independent REQ-038 oracle agreed with gradeView on about 19k real engine decisions (every legal action on every street) and with gradeDecision on 20k random fixtures, including impossible pairs, illegal actions, rounding in both directions, hidden-card invariance with real equity and the AC#7 scenario. All 9 mutants were killed. No findings."
+}

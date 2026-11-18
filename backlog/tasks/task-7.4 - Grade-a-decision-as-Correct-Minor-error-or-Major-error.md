@@ -1,11 +1,11 @@
 ---
 id: TASK-7.4
 title: Grade a decision as Correct, Minor error or Major error
-status: In Progress
+status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-18T19:51:00Z'
+updated_date: '2026-11-18T20:12:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-0
@@ -16,6 +16,7 @@ references:
 documentation:
   - doc-1
   - doc-2
+  - doc-19
 parent_task_id: TASK-7
 priority: high
 type: feature
@@ -43,30 +44,30 @@ Plan key: E07-S04 · Dream: limit-holdem-trainer
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Given a decision whose action equals the recommended action or the listed acceptable alternative, When it is graded, Then the grade is Correct [REQ-038.1]
-- [ ] #2 Given a preflop decision that deviates from the chart, When it is graded, Then it is a Minor error if the cell is flagged borderline and a Major error otherwise [REQ-038.2]
-- [ ] #3 Given an injected recommendation to call, When the user folds with equity above required equity by 0.1, 9.9 and 10.0 points, Then the grades are Minor, Minor and Major [REQ-038.3, REQ-038.5]
-- [ ] #4 Given an injected recommendation to fold, When the user calls with equity below required equity by 0.1, 9.9 and 10.0 points, Then the grades are Minor, Minor and Major [REQ-038.3, REQ-038.5]
-- [ ] #5 Given an injected recommendation to bet or raise, When the user checks or calls with equity against the calling range of 64.9% and of 65.0%, Then the grades are Minor and Major [REQ-038.4, REQ-038.5]
-- [ ] #6 Given an injected recommendation to check or call, When the user bets or raises with equity against the calling range of 35.1% and of 35.0%, Then the grades are Minor and Major [REQ-038.4, REQ-038.5]
-- [ ] #7 Given a call graded Major error, When the next cards give the user the winning hand, Then the grade is still Major error because only the PlayerView at the decision point is used [REQ-025.3]
-- [ ] #8 Given an injected recommendation to fold, When the user raises with equity below required equity by 9.9 and by 10.0 points, Then the grades are Minor and Major; and given an injected recommendation to raise, When the user folds with equity above required equity by 9.9 and by 10.0 points, Then the grades are Minor and Major [REQ-038.6]
+- [x] #1 Given a decision whose action equals the recommended action or the listed acceptable alternative, When it is graded, Then the grade is Correct [REQ-038.1]
+- [x] #2 Given a preflop decision that deviates from the chart, When it is graded, Then it is a Minor error if the cell is flagged borderline and a Major error otherwise [REQ-038.2]
+- [x] #3 Given an injected recommendation to call, When the user folds with equity above required equity by 0.1, 9.9 and 10.0 points, Then the grades are Minor, Minor and Major [REQ-038.3, REQ-038.5]
+- [x] #4 Given an injected recommendation to fold, When the user calls with equity below required equity by 0.1, 9.9 and 10.0 points, Then the grades are Minor, Minor and Major [REQ-038.3, REQ-038.5]
+- [x] #5 Given an injected recommendation to bet or raise, When the user checks or calls with equity against the calling range of 64.9% and of 65.0%, Then the grades are Minor and Major [REQ-038.4, REQ-038.5]
+- [x] #6 Given an injected recommendation to check or call, When the user bets or raises with equity against the calling range of 35.1% and of 35.0%, Then the grades are Minor and Major [REQ-038.4, REQ-038.5]
+- [x] #7 Given a call graded Major error, When the next cards give the user the winning hand, Then the grade is still Major error because only the PlayerView at the decision point is used [REQ-025.3]
+- [x] #8 Given an injected recommendation to fold, When the user raises with equity below required equity by 9.9 and by 10.0 points, Then the grades are Minor and Major; and given an injected recommendation to raise, When the user folds with equity above required equity by 9.9 and by 10.0 points, Then the grades are Minor and Major [REQ-038.6]
 <!-- AC:END -->
 
 ## Definition of Done
 <!-- DOD:BEGIN -->
-- [ ] #1 Every acceptance criterion has at least one automated test (unit, property or Playwright) that passes
-- [ ] #2 `npm run lint`, `npm run typecheck` and `npm test` pass with zero errors [REQ-059.1, REQ-059.4]
-- [ ] #3 The golden-spot suite passes 100% (applies from the story that creates the suite, E07-S14, onward) [REQ-039.4]
-- [ ] #4 Coverage thresholds hold: >= 90% engine/bots/advice/statistics, >= 70% overall [REQ-059.3]
-- [ ] #5 Engine, bots, advice and statistics code imports no UI or browser-only code [REQ-059.2]
-- [ ] #6 Stories that touch the engine, bots or advice: a 10,000-hand playtest reports zero invariant violations (applies once the playtest runner exists, E01-S07, onward) [REQ-056.1]
-- [ ] #7 Stories that add or change a screen: Playwright test of the screen flow in Chromium and WebKit, and axe reports zero serious or critical violations (axe tooling is provisioned in the toolchain story E01-S01) [REQ-057.1]
-- [ ] #8 No new network requests beyond the app's own files [REQ-058.1]
-- [ ] #9 Strategy-content stories: text is original and every chart, range or golden spot carries its justification [REQ-061.2]
-- [ ] #10 CI workflow is green on the story's branch (applies once the CI story E01-S02 is done; E01-S01 instead passes the same checks locally) [REQ-064.2]
-- [ ] #11 Story documentation is written and published to Backlog.md
-- [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
+- [x] #1 Every acceptance criterion has at least one automated test (unit, property or Playwright) that passes
+- [x] #2 `npm run lint`, `npm run typecheck` and `npm test` pass with zero errors [REQ-059.1, REQ-059.4]
+- [x] #3 The golden-spot suite passes 100% (applies from the story that creates the suite, E07-S14, onward) [REQ-039.4]
+- [x] #4 Coverage thresholds hold: >= 90% engine/bots/advice/statistics, >= 70% overall [REQ-059.3]
+- [x] #5 Engine, bots, advice and statistics code imports no UI or browser-only code [REQ-059.2]
+- [x] #6 Stories that touch the engine, bots or advice: a 10,000-hand playtest reports zero invariant violations (applies once the playtest runner exists, E01-S07, onward) [REQ-056.1]
+- [x] #7 Stories that add or change a screen: Playwright test of the screen flow in Chromium and WebKit, and axe reports zero serious or critical violations (axe tooling is provisioned in the toolchain story E01-S01) [REQ-057.1]
+- [x] #8 No new network requests beyond the app's own files [REQ-058.1]
+- [x] #9 Strategy-content stories: text is original and every chart, range or golden spot carries its justification [REQ-061.2]
+- [x] #10 CI workflow is green on the story's branch (applies once the CI story E01-S02 is done; E01-S01 instead passes the same checks locally) [REQ-064.2]
+- [x] #11 Story documentation is written and published to Backlog.md
+- [x] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
 
 ## Implementation Plan
@@ -79,3 +80,17 @@ Plan key: E07-S04 · Dream: limit-holdem-trainer
 
 Full spec: doit/TASK-7.4/spec.md
 <!-- SECTION:PLAN:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+Build: src/advice/grade.ts (GradeResult + GRADE_LABELS; gradeDecision pure, gradeView one recommend call; rules 1-6 in integer tenths; aggression-no-range Minor per Q-2); 33 grade tests incl. exact 10/15-point boundaries; playtest 0 violations. Gate build #1 failed on TASK-7.1's banned-substring test ('Date' in a doc comment), fixed; gate PASS. Spec A-3's example (26.7-16.7 not exactly 10) is wrong as stated — rule unaffected.
+
+CI run 44387183018 (head 98578d6): success. Judge round 1: PASS 17/17, no findings; ~19k real-game grades and 20k random recommendations matched an independent REQ-038 oracle; 336 hidden-card shuffles grade-identical; 2,483 aggression-vs-check/call spots graded Minor (Q-2); 9 mutants caught. Follow-ups (Step 6a): created TASK-7.23 (non-finite equity throws, -15 wrong-way test, test name); ACs added to TASK-7.8 (aggression-margin for real recs), TASK-7.14 (graded golden spots), TASK-7.15 (hint vs review grade equality), TASK-3.12 (stored grade data).
+<!-- SECTION:NOTES:END -->
+
+## Final Summary
+
+<!-- SECTION:FINAL_SUMMARY:BEGIN -->
+Added src/advice/grade.ts: gradeDecision(recommendation, userAction) and gradeView(view, userAction, options?) grade a decision Correct, Minor error or Major error by REQ-038 (matches/alternative Correct; preflop by borderline flag; postflop call/fold 10-point margin and bet/raise 15-point distance from 50%, computed in rounded tenths). Result is plain JSON carrying the recommendation, rule ID and margin; labels in GRADE_LABELS (Q-1 approved). Bet/raise vs check/call grades Minor (aggression-no-range) until TASK-7.8 adds the calling-range number (Q-2 approved). Verified: 33 new tests, 52 files / 194 tests pass, lint and typecheck clean, 100% line coverage, playtest 0 violations, code review r1 clean (33/34 mutants killed). One gate failure (banned substring 'Date' in a comment, TASK-7.1 scan) fixed. Assumptions A-1..A-7 to review (A-3's 26.7-16.7 example in the spec is wrong; rule unaffected). Judge and CI pending. Risks/follow-ups: non-finite equity grades Minor (NaN margin); wrong-way margin tested only at -5; test name at grade.test.ts:163; TASK-7.8, 7.14, 7.15/8.2, 3.12 follow-ups listed in the doc. Size 812 vs 800 (warn).
+<!-- SECTION:FINAL_SUMMARY:END -->
