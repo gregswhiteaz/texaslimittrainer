@@ -15,11 +15,29 @@ export function splitMix32(seed: number): () => number {
   let state = seed | 0;
   return () => {
     state = (state + 0x9e3779b9) | 0;
-    let z = state;
-    z = Math.imul(z ^ (z >>> 16), 0x85ebca6b);
-    z = Math.imul(z ^ (z >>> 13), 0xc2b2ae35);
-    return (z ^ (z >>> 16)) >>> 0;
+    return mix32(state);
   };
+}
+
+/** The SplitMix32 (MurmurHash3) finaliser. A bijection on 32 bits with mix32(0) = 0. */
+function mix32(x: number): number {
+  x = Math.imul(x ^ (x >>> 16), 0x85ebca6b);
+  x = Math.imul(x ^ (x >>> 13), 0xc2b2ae35);
+  return (x ^ (x >>> 16)) >>> 0;
+}
+
+/** Mixes four unsigned 32-bit seed words into a xoshiro128** state. Bijective; only all-zero maps to all-zero. */
+export function mixState128(
+  words: readonly [number, number, number, number],
+): [number, number, number, number] {
+  let [a, b, c, d] = words;
+  for (let pass = 0; pass < 2; pass++) {
+    b = (b ^ mix32(a)) >>> 0;
+    c = (c ^ mix32(b)) >>> 0;
+    d = (d ^ mix32(c)) >>> 0;
+    a = (a ^ mix32(d)) >>> 0;
+  }
+  return [a, b, c, d];
 }
 
 /** xoshiro128** by Blackman and Vigna. */
@@ -64,5 +82,20 @@ export class Xoshiro128 {
   /** Integer in [0, n): Math.floor(nextUint32() * n / 2^32). n is 1..2^31. */
   nextInt(n: number): number {
     return Math.floor((this.nextUint32() * n) / 4294967296);
+  }
+
+  /** Integer in [0, n), exactly uniform (Lemire multiply-shift with rejection). n is 1..2^31. */
+  nextIntUnbiased(n: number): number {
+    let m = this.nextUint32() * n;
+    let low = m % 4294967296;
+    if (low < n) {
+      // Reject the (2^32 mod n) low values that would make some results more likely.
+      const threshold = (4294967296 - n) % n;
+      while (low < threshold) {
+        m = this.nextUint32() * n;
+        low = m % 4294967296;
+      }
+    }
+    return Math.floor(m / 4294967296);
   }
 }
