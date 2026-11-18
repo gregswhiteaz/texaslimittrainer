@@ -1,10 +1,11 @@
 ---
 id: TASK-7.1
 title: Compute a hand's equity against opponent hands
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-17T23:21:00Z'
+updated_date: '2026-11-18T03:19:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-0
@@ -63,3 +64,14 @@ Plan key: E07-S02 · Dream: limit-holdem-trainer
 - [ ] #11 Story documentation is written and published to Backlog.md
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. src/engine/seeded-random.ts: FNV-1a seed from canonical key, SplitMix32 → xoshiro128** PRNG (no clock/Math.random).
+2. src/advice/equity.ts: computeEquity({hero, board 0/3/4/5, opponents as combo lists}); canonicalise; exact enumeration when ≤200k evals, else 30,000 seeded trials with whole-deal rejection; 1/2520 integer pot shares; RangeError validation.
+3. tools/equity/generate-reference.js offline exhaustive generator → committed tests/advice/fixtures/equity-reference.json (121 cases).
+4. Tests: anchors (AA vs KK, AKs vs QQ), 100+ HU cases ±1.5 pts, 3-way AA/KK/QQ, determinism incl. fresh process, seed-from-input, 2 cases re-enumerated; perf suite with 20× CI slack and real-target command.
+
+Full spec: doit/TASK-7.1/spec.md
+<!-- SECTION:PLAN:END -->
