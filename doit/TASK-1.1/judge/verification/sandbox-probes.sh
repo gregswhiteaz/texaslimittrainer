@@ -1,0 +1,16 @@
+#!/bin/bash
+# Judge probe: independent sandbox runs of the real npm scripts. Usage: sandbox-probes.sh <repoRoot>
+ROOT="$1"
+mk() { S=$(mktemp -d "${TMPDIR:-/tmp}/judge-sbx.XXXX"); (cd "$ROOT" && git ls-files | grep -vE '^(doit|backlog|dreams|reports|research_notes)/' | while read f; do mkdir -p "$S/$(dirname "$f")"; cp "$f" "$S/$f"; done); ln -s "$ROOT/node_modules" "$S/node_modules"; echo "$S"; }
+run() { local name="$1"; shift; local S=$(mk); (cd "$S" && eval "$@") > "$S.out" 2>&1; local ec=$?; echo "== $name exit=$ec"; grep -E "$GREP" "$S.out" | head -${N:-8}; rm -rf "$S" "$S.out"; }
+GREP='TS7006|TS2322|error' run "strict: implicit any in tests/ file (typecheck covers tests)" "printf 'export function id(x) {\n  return x;\n}\n' > tests/p.ts; npm run typecheck"
+GREP='TS2322' run "type error in e2e/ file" "printf \"export const n: number = 'x';\n\" > e2e/p.ts; npm run typecheck"
+GREP='TS2322' run "type error in tools/ js (checkJs)" "printf \"/** @type {number} */\nexport const n = 'x';\n\" > tools/p.js; npm run typecheck"
+GREP='TS2532|TS18048|error' run "noUncheckedIndexedAccess" "printf 'const a: number[] = [];\nexport const b: number = a[0];\n' > src/ui/p.ts; npm run typecheck"
+GREP='warning|problems' run "lint warning fails (max-warnings 0)" "printf \"import { useEffect, useState } from 'react';\n\nexport function C({ v }: { v: number }) {\n  const [s, setS] = useState(0);\n  useEffect(() => {\n    setS(v);\n  }, []);\n  return <p>{s}</p>;\n}\n\" > src/ui/w.tsx; npm run lint"
+GREP='Code style|probe' run "prettier violation in tests/" "printf 'export const x = {a:1}\n' > tests/probe.ts; npm run lint"
+GREP='Code style|All matched' run "prettier ignores CLAUDE.md/backlog" "printf 'x  =  {a:1}\n' >> CLAUDE.md; mkdir -p backlog doit; printf 'const   y={b:2}\n' > backlog/z.js; printf 'const   y={b:2}\n' > doit/z.ts; npm run lint"
+GREP='colocated|Test Files|FAIL' N=6 run "src/ colocated failing tsx test fails npm test" "mkdir -p src/advice/deep; printf \"import { expect, it } from 'vitest';\nit('colocated tsx fails', () => expect(1).toBe(2));\n\" > src/advice/deep/q.test.tsx; npx vitest run --coverage tests/unit src/advice"
+GREP='ERROR: Coverage|Test Files' run "headless 89% (8 of 9 lines) fails 90" "mkdir -p src/bots; node -e \"const L=['export function a(n: number): number {']; for(let i=0;i<7;i++) L.push('  n = n + '+i+';'); L.push('  return n;','}','export function b(): number {','  return 0;','}'); require('fs').writeFileSync('src/bots/p.ts', L.join('\n')+'\n')\"; printf \"import { expect, it } from 'vitest';\nimport { a } from '../src/bots/p';\nit('a', () => expect(a(1)).toBeTypeOf('number'));\n\" > tests/p.test.ts; npx vitest run --coverage tests/p.test.ts tests/unit"
+GREP='ERROR: Coverage|Test Files' run "headless fully covered passes" "mkdir -p src/stats; printf 'export const f = (n: number): number => n + 1;\n' > src/stats/p.ts; printf \"import { expect, it } from 'vitest';\nimport { f } from '../src/stats/p';\nit('f', () => expect(f(1)).toBe(2));\n\" > tests/p.test.ts; npx vitest run --coverage tests/p.test.ts tests/unit"
+GREP='ERROR: Coverage|Test Files' run "untested headless file (0%) fails" "mkdir -p src/engine; printf 'export const f = (n: number): number => n + 1;\n' > src/engine/p.ts; npx vitest run --coverage tests/unit"

@@ -1,17 +1,43 @@
 {
  "task": "TASK-1.1",
- "stage": "build",
+ "stage": "done",
  "branch": "doit/TASK-1.1",
  "base_commit": "bf273355f5157043ee4017d5c0140c47449ca928",
  "started": "2026-11-17T17:18:53",
- "review_round": 0,
- "judge_round": 0,
+ "review_round": 1,
+ "judge_round": 1,
  "sendbacks": 0,
  "gate_runs": 1,
  "questions": 3,
  "assumptions": 1,
  "escalations": 0,
- "item_failures": {},
+ "item_failures": {
+  "SPEC-01": 0,
+  "SPEC-02": 0,
+  "SPEC-03": 0,
+  "SPEC-04": 0,
+  "SPEC-05": 0,
+  "SPEC-06": 0,
+  "SPEC-07": 0,
+  "SPEC-08": 0,
+  "SPEC-09": 0,
+  "SPEC-10": 0,
+  "SPEC-11": 0,
+  "SPEC-12": 0,
+  "SPEC-13": 0,
+  "SPEC-14": 0,
+  "SPEC-15": 0,
+  "SPEC-16": 0,
+  "SPEC-17": 0,
+  "SPEC-18": 0,
+  "SPEC-19": 0,
+  "SPEC-20": 0,
+  "SPEC-21": 0,
+  "SPEC-22": 0,
+  "SPEC-23": 0,
+  "SPEC-24": 0,
+  "SPEC-25": 0
+ },
  "locked_tests": {
   "e2e/axe-helper.spec.ts": "fac8886c55d45c226d9dd62c5c6247987fdf4f35edc5f798a6253e62cb77cbf1",
   "e2e/smoke.spec.ts": "052090b55bd1662345a948b679cf410cef655940d1cd5a0afd3313163741fe6b",
@@ -82,5 +108,12 @@
  },
  "history": [],
  "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-1.1",
- "spec_sha256": "975704cc34fa52752f7d637c6030f7f954022157e657dd2a5022740ae2181972"
+ "spec_sha256": "975704cc34fa52752f7d637c6030f7f954022157e657dd2a5022740ae2181972",
+ "review_findings": {
+  "1": 0
+ },
+ "judge_results": {
+  "1": "PASS"
+ },
+ "doc_id": "doc-5"
 }

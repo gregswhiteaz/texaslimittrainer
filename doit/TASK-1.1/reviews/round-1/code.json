@@ -1,0 +1,34 @@
+{
+  "reviewer": "code",
+  "round": 1,
+  "summary": "Clean, spec-faithful bootstrap. All 26 spec paths are present, nothing extra was added, and the pins match the spec. The configs match spec section 5 almost verbatim. The toolchain tests run the real npm scripts in sandboxes, assert both the failing and passing halves, and the build log records mutation checks showing they can fail. I re-ran lint, typecheck and npm test: all exit 0 (15 tests). The SPEC-07 passing-probe deviation is accepted assumption A-12 and is documented inline. The findings below are small robustness and tidiness points. None of them blocks.",
+  "findings": [
+    {
+      "id": "CR-1-01",
+      "severity": "MINOR",
+      "file": "tests/support/sandbox.ts",
+      "line": 72,
+      "issue": "If the child process cannot start (ENOENT) or is killed by the 120 s timeout, the cause is lost. result.error is dropped, status is null so exitCode becomes -1, and stdout/stderr can be null, so the output can read 'nullnull'.",
+      "evidence": "return { exitCode: result.status ?? -1, output: result.stdout + result.stderr };",
+      "fix": "Build the output as `(result.stdout ?? '') + (result.stderr ?? '') + (result.error ? `\\n${String(result.error)}` : '')` so a timeout or spawn failure shows up in assertion messages."
+    },
+    {
+      "id": "CR-1-02",
+      "severity": "MINOR",
+      "file": "tests/toolchain/build.test.ts",
+      "line": 15,
+      "issue": "The build test starts `npm run build` with the Vitest worker's full environment (NODE_ENV=test, VITEST*, NODE_V8_COVERAGE). The sandbox helper deliberately scrubs these variables. Here the build runs under Vitest's NODE_ENV, which Vite respects, and V8 coverage collection is forced on the child. The real script is not run the way a user or CI would run it.",
+      "evidence": "spawnSync('npm', ['run','build',...], { cwd: REPO_ROOT, encoding: 'utf8', timeout }) has no env option. sandbox.ts:39 sandboxEnv() exists for exactly this reason.",
+      "fix": "Export sandboxEnv() (or a `cleanEnv()`) from tests/support/sandbox.ts and pass `env: cleanEnv()` here, removing NODE_ENV as well. Alternatively, add an optional `cwd` override to a shared spawn helper so both tests share one way of starting child processes."
+    },
+    {
+      "id": "CR-1-03",
+      "severity": "NIT",
+      "file": "tests/support/sandbox.ts",
+      "line": 58,
+      "issue": "The config-copy loop repeats the 'create parent directory, then write' logic that the local writeFile helper already contains. The node:fs named imports are also not in alphabetical order (copyFileSync is last).",
+      "evidence": "mkdirSync(dirname(join(dir, file)), { recursive: true }); copyFileSync(...) vs writeFile() at line 32",
+      "fix": "Use `writeFile(dir, file, readFileSync(join(REPO_ROOT, file), 'utf8'))`, or extract an `ensureParent(path)` helper that both use, and sort the import list."
+    }
+  ]
+}
