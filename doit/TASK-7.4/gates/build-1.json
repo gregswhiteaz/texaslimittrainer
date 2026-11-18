@@ -1,0 +1,54 @@
+{
+  "task": "TASK-7.4",
+  "phase": "build",
+  "run": 1,
+  "result": "FAIL",
+  "changed_lines": 812,
+  "changed_files": [
+    "src/advice/grade.ts",
+    "tests/advice/grade.acceptance.test.ts",
+    "tests/advice/grade.test.ts"
+  ],
+  "checks": [
+    {
+      "name": "test command",
+      "status": "fail",
+      "detail": "$ npm test\nexit 1\n tests/bots/tag.acceptance.test.ts > TAG bot acceptance > AC#3 postflop with no bet to face TAG checks 1549ms\n \u2713 tests/engine/invariants.test.ts > invariant checker > each sub-check flags its corrupted state and passes the clean one 3ms\n \u2713 tests/engine/invariants.test.ts > invariant checker > reports several invariants in order and never throws on broken shapes 0ms\n \u2713 tests/engine/invariants.test.ts > invariant checker > describes actions in the CLI wording 0ms\n \u2713 tests/toolchain/boundary.property.test.ts > headless boundary globals (property) > every browser-only global is reported in every headless folder and Node-safe globals are not 1096ms\nstdout | tests/advice/postflop.perf.test.ts > postflop advice performance > postflop advice latency within target times slack\nHU flop facing a bet: 1 opponents, sampled, p95 43.57 ms (target 25 ms x 20 = 500 ms)\n6-max flop vs 3 opponents: 3 opponents, sampled, p95 80.87 ms (target 50 ms x 20 = 1000 ms)\n10-seat flop vs 9 opponents: 9 opponents, sampled, p95 453.23 ms (target 100 ms x 20 = 2000 ms)\n\n \u2713 tests/advice/postflop.perf.test.ts > postflop advice performance > postflop advice latency within target times slack 10062ms\n \u2713 tests/bots/tag.acceptance.test.ts > TAG bot acceptance > AC#4 other players' and undealt cards never change TAG's action 1550ms\nstdout | tests/advice/equity.perf.test.ts > equity performance > equity latency within target times slack\nHU preflop hand vs hand: sampled, p95 55.14 ms (target 15 ms x 20 = 300 ms)\nHU flop hand vs hand: exact, p95 0.90 ms (target 2 ms x 20 = 40 ms)\nHU flop vs every unseen combo: sampled, p95 34.84 ms (target 20 ms x 20 = 400 ms)\nHU turn vs every unseen combo: exact, p95 40.41 ms (target 15 ms x 20 = 300 ms)\nThree-way preflop AA vs KK vs QQ: sampled, p95 51.97 ms (target 20 ms x 20 = 400 ms)\n6-max preflop vs 5 ranges: sampled, p95 132.26 ms (target 50 ms x 20 = 1000 ms)\nFull ring flop vs 9 ranges: sampled, p95 458.84 ms (target 80 ms x 20 = 1600 ms)\n\n \u2713 tests/advice/equity.perf.test.ts > equity performance > equity latency within target times slack 12961ms\n\n Test Files  1 failed | 51 passed (52)\n      Tests  1 failed | 193 passed | 1 skipped (195)\n   Start at  12:55:54\n   Duration  13.25s (tests 96%, import 4%)\n\n\n\u23af\u23af\u23af\u23af\u23af\u23af\u23af Failed Tests 1 \u23af\u23af\u23af\u23af\u23af\u23af\u23af\n\n FAIL  tests/advice/equity.acceptance.test.ts > equity calculator (TASK-7.1) > AC#5 sampler seed depends only on the input\nAssertionError: /Users/gregwhite/Documents/claudeworkspaces/limitholdem/src/advice/grade.ts contains Date: expected true to be false // Object.is equality\n\n- Expected\n+ Received\n\n- false\n+ true\n\n \u276f tests/advice/equity.acceptance.test.ts:207:69\n    205|       const text = readFileSync(file, 'utf8');\n    206|       for (const banned of ['Math.random', 'Date', 'performance', 'cry\u2026\n    207|         expect(text.includes(banned), `${file} contains ${banned}`).to\u2026\n       |                                                                     ^\n    208|       }\n    209|     }\n\n\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af[1/1]\u23af\n\n"
+    },
+    {
+      "name": "lint command",
+      "status": "pass",
+      "detail": "$ npm run lint\nexit 0\n\n> tlh-trainer@0.0.0 lint\n> eslint . --max-warnings 0 && prettier --check .\n\nChecking formatting...\nAll matched files use Prettier code style!\n"
+    },
+    {
+      "name": "typecheck command",
+      "status": "pass",
+      "detail": "$ npm run typecheck\nexit 0\n\n> tlh-trainer@0.0.0 typecheck\n> tsc -p tsconfig.json\n\n"
+    },
+    {
+      "name": "spec unchanged",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "name": "scope budget (lines)",
+      "status": "warn",
+      "detail": "812 changed lines vs budget 800 (fail above 1600)"
+    },
+    {
+      "name": "scope budget (files)",
+      "status": "pass",
+      "detail": "3 files vs budget 3"
+    },
+    {
+      "name": "files outside spec",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "name": "all changes listed in changes.md",
+      "status": "pass",
+      "detail": ""
+    }
+  ]
+}
