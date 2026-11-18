@@ -4,3 +4,6 @@
 - Tests: `tests/engine/hand.acceptance.test.ts` (8 tests: AC#1–AC#7 + burn), `tests/engine/hand.property.test.ts` (2 tests: AC#4 property over 2,000 hands, AC#8 100,000 hands, 300,000 ms timeout, no duration assertion), `tests/engine/hand.test.ts` (5 unit tests).
 - `npm run format`, `npm run lint` (0 problems), `npm run typecheck` (clean), SPEC-15 grep (no matches).
 - `npm test`: 24 files, 74 tests passed; coverage hand.ts 100% lines, no coverage errors.
+
+## FIX round 1
+- Item 1 (stakes-relationships-unvalidated): fixed — validate() now also requires smallBlind <= bigBlind <= smallBet < bigBet, throwing the existing 'Invalid stakes' RangeError; added SPEC-13 cases in tests/engine/hand.test.ts for SB > BB, BB > small bet, small bet >= big bet, plus a valid $1/$3 blinds at $3/$6 config.

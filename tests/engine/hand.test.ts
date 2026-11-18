@@ -155,6 +155,9 @@ describe('hand', () => {
       [{ seats: seats([2, 3, 4]) }, 'Button must be a dealt-in seat: 1'],
       [{ stakes: { ...STAKES, smallBlind: 0 } }, 'Invalid stakes'],
       [{ stakes: { ...STAKES, bigBet: 8.5 } }, 'Invalid stakes'],
+      [{ stakes: { ...STAKES, smallBlind: 5 } }, 'Invalid stakes'],
+      [{ stakes: { ...STAKES, bigBlind: 6 } }, 'Invalid stakes'],
+      [{ stakes: { ...STAKES, bigBet: 4 } }, 'Invalid stakes'],
       [{ deck: DECK.slice(1) }, 'Deck must hold each of the 52 cards exactly once'],
       [{ deck: [0, ...DECK.slice(1, 51), 0] }, 'Deck must hold each of the 52 cards exactly once'],
       [
@@ -166,6 +169,8 @@ describe('hand', () => {
       expect(() => createHand(config(overrides))).toThrow(new RangeError(message));
     }
     const minimum = createHand(config({ seats: seats([1, 2, 3], 96) }));
+    const unevenBlinds = { smallBlind: 1, bigBlind: 3, smallBet: 3, bigBet: 6 };
+    expect(() => createHand(config({ stakes: unevenBlinds }))).not.toThrow();
     expect(minimum.players.map((p) => p.startingStack)).toEqual([96, 96, 96]);
   });
 

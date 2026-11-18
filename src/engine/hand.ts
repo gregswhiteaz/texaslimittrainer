@@ -132,7 +132,14 @@ function validate(config: HandConfig): void {
   }
   if (!seen.has(button)) throw new RangeError(`Button must be a dealt-in seat: ${button}`);
   const amounts = [stakes.smallBlind, stakes.bigBlind, stakes.smallBet, stakes.bigBet];
-  if (!amounts.every(isPositiveInteger)) throw new RangeError('Invalid stakes');
+  if (
+    !amounts.every(isPositiveInteger) ||
+    stakes.smallBlind > stakes.bigBlind ||
+    stakes.bigBlind > stakes.smallBet ||
+    stakes.smallBet >= stakes.bigBet
+  ) {
+    throw new RangeError('Invalid stakes');
+  }
   const cards = new Set(deck);
   if (
     deck.length !== 52 ||

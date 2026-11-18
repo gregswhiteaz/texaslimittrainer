@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-18T04:54:00Z'
+updated_date: '2026-11-18T04:59:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-0
@@ -82,3 +82,9 @@ Plan key: E01-S05 · Dream: limit-holdem-trainer
 
 Full spec: doit/TASK-1.4/spec.md
 <!-- SECTION:PLAN:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+Build: src/engine/hand.ts (createHand/legalActions/applyAction/splitPot; burns; typed errors); acceptance + property (100,000 hands) + unit tests; 74/74 tests, hand.ts 100% lines; gate PASS.
+<!-- SECTION:NOTES:END -->

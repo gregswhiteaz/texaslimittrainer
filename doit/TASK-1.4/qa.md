@@ -8,3 +8,7 @@
 
 ## Q-3 — Burn cards (raised by the orchestrator / Spec Detective; replaces assumption A-3)
 - Answer: **Burn like a casino.** One card is burned (face-down, never shown) before the flop, before the turn and before the river. Hole cards remain deck positions 1..2n in the AC#2 order; then burn = 2n+1, flop = 2n+2..2n+4, burn = 2n+5, turn = 2n+6, burn = 2n+7, river = 2n+8 (1-based). Burned cards are recorded in state (e.g. `burned[]`) but never revealed to players or in results.
+
+## Assumptions logged during build (orchestrator-accepted)
+- A-13: When a hand completes, pots[0].amount is reset to 0 and the payout is recorded in result.awards (required by the invariant that stacks sum to the starting total at completion); SPEC-09's $27 is checked via the award.
+- A-14: SPEC-18's "burned cards never in result" is verified by checking no burned card is on the board or in any shown hole cards and the result has no burn field (cards are plain integers, so a JSON text search is not meaningful).
