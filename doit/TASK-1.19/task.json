@@ -1,0 +1,112 @@
+{
+  "id": "TASK-1.19",
+  "title": "Retry the stalled Playwright system-dependency install in CI",
+  "status": "To Do",
+  "archived": false,
+  "type": "chore",
+  "priority": "high",
+  "project": null,
+  "assignees": [],
+  "reporter": null,
+  "labels": [
+    "dream-limit-holdem-trainer"
+  ],
+  "milestone": "m-0",
+  "parentTaskId": "TASK-1",
+  "acceptanceCriteriaCompleted": 0,
+  "acceptanceCriteriaCount": 5,
+  "references": [],
+  "modifiedFiles": [],
+  "ordinal": 6500,
+  "createdAt": "2026-11-18T04:37:00Z",
+  "updatedAt": null,
+  "dueDate": null,
+  "isReady": true,
+  "path": "backlog/tasks/task-1.19 - Retry-the-stalled-Playwright-system-dependency-install-in-CI.md",
+  "description": "Twice in four CI-backed stories (TASK-1.7 PR run 44220403675 attempt 1, TASK-1.3 run 44236421395 attempt 1) the 'Install Playwright system dependencies' step stalled on the Ubuntu apt mirror for 19+ minutes and hit the 20-minute job timeout, while the same step normally takes ~30-70 s. Each stall costs a manual cancel/re-run and up to 20 billed minutes on this private repo. Follow-up from TASK-1.7 (J-2-01) and TASK-1.3.",
+  "dependencies": [
+    "TASK-1.7"
+  ],
+  "dependencyGraph": {
+    "root": "TASK-1.19",
+    "nodes": [
+      {
+        "id": "TASK-1.19",
+        "title": "Retry the stalled Playwright system-dependency install in CI",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": 0,
+        "dependentDepth": 0
+      },
+      {
+        "id": "TASK-1.1",
+        "title": "Bootstrap the strict TypeScript project with one-command checks",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 2,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.7",
+        "title": "Run every check in GitHub Actions on each push and pull request",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 1,
+        "dependentDepth": null
+      }
+    ],
+    "edges": [
+      {
+        "from": "TASK-1.7",
+        "to": "TASK-1.1"
+      },
+      {
+        "from": "TASK-1.19",
+        "to": "TASK-1.7"
+      }
+    ]
+  },
+  "readiness": {
+    "isReady": true,
+    "isBlocked": false,
+    "blockingDependencies": [],
+    "missingDependencies": []
+  },
+  "documentation": [],
+  "subtasks": [],
+  "acceptanceCriteria": [
+    {
+      "index": 1,
+      "text": "Given the workflow, When the Playwright system-dependency (and browser) install step runs, Then it has a step-level timeout well below the job timeout (e.g. 5 minutes per attempt)",
+      "checked": false
+    },
+    {
+      "index": 2,
+      "text": "Given the install step fails or times out, When CI continues, Then it retries the install automatically (at least 2 retries) before failing the job",
+      "checked": false
+    },
+    {
+      "index": 3,
+      "text": "Given all install attempts fail, When the job ends, Then the workflow is reported as failed with a log line naming the install step",
+      "checked": false
+    },
+    {
+      "index": 4,
+      "text": "Given a normal run, When the install succeeds on the first attempt, Then total job time is not increased by more than 10 seconds",
+      "checked": false
+    },
+    {
+      "index": 5,
+      "text": "Given the static workflow tests in tests/ci/workflow.test.ts, When they run, Then they assert the timeout and retry are present",
+      "checked": false
+    }
+  ],
+  "definitionOfDone": [],
+  "implementationPlan": null,
+  "implementationNotes": null,
+  "comments": [],
+  "finalSummary": null
+}

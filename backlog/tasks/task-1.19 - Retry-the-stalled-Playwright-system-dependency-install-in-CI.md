@@ -1,9 +1,11 @@
 ---
 id: TASK-1.19
 title: Retry the stalled Playwright system-dependency install in CI
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-18T04:37:00Z'
+updated_date: '2026-11-18T05:17:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-0
@@ -29,3 +31,14 @@ Twice in four CI-backed stories (TASK-1.7 PR run 44220403675 attempt 1, TASK-1.3
 - [ ] #4 Given a normal run, When the install succeeds on the first attempt, Then total job time is not increased by more than 10 seconds
 - [ ] #5 Given the static workflow tests in tests/ci/workflow.test.ts, When they run, Then they assert the timeout and retry are present
 <!-- AC:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. tools/ci/retry.js: Node-only retry helper (3 attempts, 240 s per attempt, 10 s delay, 10 s kill grace, process-group kill, ::warning:: on retry, ::error:: '<step> failed after 3 attempts' then exit 1).
+2. ci.yml: wrap both Playwright install steps (install --with-deps / install-deps) with the helper; step timeout-minutes 13.
+3. tests: helper tests against tests/ci/fixtures/flaky-command.js (fail N times, hang, all-fail); update tests/ci/workflow.test.ts for timeout/retry wiring.
+4. README sentence; measure helper overhead on the branch's green CI run (≤ 10 s).
+
+Full spec: doit/TASK-1.19/spec.md
+<!-- SECTION:PLAN:END -->

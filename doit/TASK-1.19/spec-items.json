@@ -1,0 +1,74 @@
+[
+  {
+    "id": "SPEC-01",
+    "verifies": "AC#1, AC#5",
+    "verification": "acceptance `tests/ci/workflow.test.ts::CI workflow > gives each Playwright install attempt a timeout well below the job timeout and retries it`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-02",
+    "verifies": "AC#5",
+    "verification": "acceptance `tests/ci/workflow.test.ts::CI workflow > installs Chromium and WebKit for the Playwright and axe tests`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-03",
+    "verifies": "AC#4",
+    "verification": "acceptance `tests/ci/retry.test.ts::retry helper > runs a succeeding command once without delay`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-04",
+    "verifies": "AC#2",
+    "verification": "acceptance `tests/ci/retry.test.ts::retry helper > retries a failing command until it succeeds`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-05",
+    "verifies": "AC#1, AC#2",
+    "verification": "acceptance `tests/ci/retry.test.ts::retry helper > kills a hanging attempt at its timeout and retries`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-06",
+    "verifies": "AC#3",
+    "verification": "acceptance `tests/ci/retry.test.ts::retry helper > fails with an error naming the step after the last attempt fails`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-07",
+    "verifies": "AC#1",
+    "verification": "unit `tests/ci/retry.test.ts::retry helper > kills the grandchildren of a timed-out attempt`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-08",
+    "verifies": "AC#1",
+    "verification": "unit `tests/ci/retry.test.ts::retry helper > force-kills an attempt that ignores SIGTERM`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-09",
+    "verifies": "AC#1",
+    "verification": "unit `tests/ci/retry.test.ts::retry helper > kills the running attempt when it is cancelled`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-10",
+    "verifies": "AC#3",
+    "verification": "unit `tests/ci/retry.test.ts::retry helper > rejects invalid arguments without running the command`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-11",
+    "verifies": "AC#4",
+    "verification": "command `R=$(gh repo view --json nameWithOwner -q .nameWithOwner); id=$(gh run list -R \"$R\" --branch doit/TASK-1.19 --event push --workflow CI --limit 1 --json databaseId,conclusion -q '.[0].databaseId'); gh run view \"$id\" -R \"$R\" --json conclusion -q .conclusion` \u2192 `success`; `gh api \"repos/$R/actions/runs/$id/jobs\" -q '.jobs[0].steps[] | select(.name | startswith(\"Install Playwright\")) | select(.conclusion == \"success\") | \"\\(.name) \\((.completed_at | fromdate) - (.started_at | fromdate))\"'` \u2192 one line `<step> <D>`; `gh run view \"$id\" -R \"$R\" --log | grep -E 'retry: Install Playwright .*attempt'` \u2192 only `attempt 1 of 3: \u2026` and `attempt 1 of 3 succeeded in <s> s`; check `D \u2212 s \u2264 10`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-12",
+    "verifies": "AC#3",
+    "verification": "manual `grep -n \"retry\\|attempt\" README.md` shows the sentence inside the \"Continuous integration\" section",
+    "status": "pending"
+  }
+]
