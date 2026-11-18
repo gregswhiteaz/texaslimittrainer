@@ -1,9 +1,11 @@
 ---
 id: TASK-1.20
 title: Keep strict wall-clock speed checks out of the CI test run
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-18T04:37:00Z'
+updated_date: '2026-11-18T06:17:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-0
@@ -28,3 +30,15 @@ On TASK-1.3's CI attempt 2 (run 44236421395), two pre-existing wall-clock tests 
 - [ ] #3 Given the bounded-work test for infeasible equity ranges, When it runs in CI, Then it still proves the work is bounded (e.g. by counting operations or a generous CI-only time ceiling) rather than being removed
 - [ ] #4 Given the README or perf test headers, When a developer reads them, Then they state which commands enforce the real speed targets and that CI does not
 <!-- AC:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. tests/support/speed.ts: speedLimitsEnforced(env) (false when CI=true) + note text.
+2. hand-evaluator.perf.test.ts and equity.perf.test.ts: keep running and printing numbers; skip only speed assertions when CI=true; correctness/method assertions always run.
+3. equity.test.ts bounded-work: ceiling 2000 ms locally, 10,000 ms per call when CI=true; error-message assertions unchanged.
+4. tests/ci/speed-limits.acceptance.test.ts: nested vitest runs with impossible limits — CI=true passes with the note, without CI fails.
+5. README 'Speed targets' section + perf test header comments naming the full-speed commands.
+
+Full spec: doit/TASK-1.20/spec.md
+<!-- SECTION:PLAN:END -->

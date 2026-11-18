@@ -1,0 +1,50 @@
+[
+  {
+    "id": "SPEC-01",
+    "verifies": "AC#1, AC#2",
+    "verification": "unit `tests/support/speed.test.ts::speedLimitsEnforced > enforces speed limits unless CI is exactly \"true\"`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-02",
+    "verifies": "AC#1",
+    "verification": "acceptance `tests/ci/speed-limits.acceptance.test.ts::speed limits in CI > CI=true reports but does not enforce the perf limits`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-03",
+    "verifies": "AC#2",
+    "verification": "acceptance `tests/ci/speed-limits.acceptance.test.ts::speed limits in CI > without CI the perf limits are enforced`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-04",
+    "verifies": "AC#1",
+    "verification": "manual mutation probe: edit `EXACT_EVALUATION_LIMIT` to `50_000`, run `CI=true npx vitest run tests/advice/equity.perf.test.ts` (exit \u2260 0, the failure names `HU turn vs every unseen combo`), revert, rerun (exit 0); plus read `tests/engine/hand-evaluator.perf.test.ts` to confirm the two checksum asserts are unconditional",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-05",
+    "verifies": "AC#2",
+    "verification": "command `EVALUATOR_MIN_EVALS_PER_SEC=10000000 EVALUATOR_MAX_BUILD_MS=50 npx vitest run tests/engine/hand-evaluator.perf.test.ts && EQUITY_PERF_SCALE=1 npx vitest run tests/advice/equity.perf.test.ts` exits 0 (with `CI` unset) and `git diff 9c581c5 -- tests/engine/hand-evaluator.perf.test.ts tests/advice/equity.perf.test.ts | grep -E '^[-+].*(EVALUATOR_MIN_EVALS_PER_SEC|EVALUATOR_MAX_BUILD_MS|EQUITY_PERF_SCALE) \\?\\?'` prints nothing",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-06",
+    "verifies": "AC#3",
+    "verification": "command `CI=true npx vitest run tests/advice/equity.test.ts -t \"bounds the work\"` exits 0 and reports `1 passed`; then manual mutation probe as described (exit \u2260 0 under `CI=true`), revert",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-07",
+    "verifies": "AC#4",
+    "verification": "command `grep -n \"## Speed targets\" README.md && grep -c \"EVALUATOR_MIN_EVALS_PER_SEC=10000000 EVALUATOR_MAX_BUILD_MS=50 npx vitest run tests/engine/hand-evaluator.perf.test.ts\\|EQUITY_PERF_SCALE=1 npx vitest run tests/advice/equity.perf.test.ts\" README.md tests/engine/hand-evaluator.perf.test.ts tests/advice/equity.perf.test.ts` \u2192 section found, each file count \u2265 1; then manual read of the section and headers for the CI statement",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-08",
+    "verifies": "AC#1, AC#2, AC#3",
+    "verification": "command `npm run lint && npm run typecheck && npm test` exits 0; after the user pushes: `R=$(gh repo view --json nameWithOwner -q .nameWithOwner); id=$(gh run list -R \"$R\" --branch doit/TASK-1.20 --event push --workflow CI --limit 1 --json databaseId -q '.[0].databaseId'); gh run view \"$id\" -R \"$R\" --json conclusion -q .conclusion` \u2192 `success` and `gh run view \"$id\" -R \"$R\" --log | grep -c \"speed limits not enforced (CI=true)\"` \u2265 1",
+    "status": "pending"
+  }
+]
