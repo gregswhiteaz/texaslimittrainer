@@ -4,7 +4,7 @@ title: See a branded splash while the app loads
 status: To Do
 assignee: []
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-17T23:22:00Z'
+updated_date: '2026-11-18T20:51:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-2
@@ -45,6 +45,7 @@ Plan key: E02-S12 · Dream: limit-holdem-trainer
 - [ ] #3 Given a test build with unloadable strategy data, When the app is launched, Then the splash shows an error message and a Retry button and Home does not open [REQ-001.3]
 - [ ] #4 Given the load error is shown and the strategy data has become loadable, When the user chooses Retry, Then loading restarts and Home opens without further input [REQ-001.3]
 - [ ] #5 Given the load error is shown and the strategy data is still unloadable, When the user chooses Retry, Then loading restarts and the error message and Retry are shown again [REQ-001.3]
+- [ ] #6 Given the splash and Home screens, When they show the logo, Then they reuse src/assets/tlh-logo.jpg and add no other copy of the logo image
 <!-- AC:END -->
 
 ## Definition of Done
@@ -62,3 +63,9 @@ Plan key: E02-S12 · Dream: limit-holdem-trainer
 - [ ] #11 Story documentation is written and published to Backlog.md
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+AC added from TASK-3.5 follow-up (doc-20).
+<!-- SECTION:NOTES:END -->

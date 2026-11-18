@@ -4,7 +4,7 @@ title: Switch to a four-colour deck
 status: To Do
 assignee: []
 created_date: '2026-11-17T22:47:00Z'
-updated_date: '2026-11-17T23:22:00Z'
+updated_date: '2026-11-18T20:51:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-2
@@ -43,6 +43,7 @@ Plan key: E12-S06 · Dream: limit-holdem-trainer
 - [ ] #2 Given the user turned the four-colour deck on, When the table and the Hand Review panel show a club and a diamond, Then the club is green and the diamond is blue [REQ-050.4]
 - [ ] #3 Given the four-colour deck is on, When the app is closed and relaunched, Then the setting is still on and cards are drawn in four colours [REQ-050.4]
 - [ ] #4 Given the four-colour deck is off and the overlay is opened during a hand, When the user turns it on and closes the overlay, Then the user's hole cards and board are redrawn in four colours in the same hand [REQ-050.4, REQ-050.5]
+- [ ] #5 Given the Deck colours setting is changed, When cards render anywhere in the app, Then DeckColoursContext at the app root provides the saved choice to every PlayingCard
 <!-- AC:END -->
 
 ## Definition of Done
@@ -60,3 +61,9 @@ Plan key: E12-S06 · Dream: limit-holdem-trainer
 - [ ] #11 Story documentation is written and published to Backlog.md
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+AC added from TASK-3.5 follow-up (doc-20).
+<!-- SECTION:NOTES:END -->

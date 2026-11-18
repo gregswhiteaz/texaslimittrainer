@@ -3,78 +3,78 @@
     "id": "SPEC-01",
     "verifies": "AC#1",
     "verification": "acceptance `tests/ui/playing-card.acceptance.test.tsx::every face shows its rank and suit and no image`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-02",
     "verifies": "AC#1, AC#2",
     "verification": "acceptance `e2e/cards.spec.ts::rank and suit are at least 24 CSS px tall at 1280x720`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-03",
     "verifies": "AC#3",
     "verification": "acceptance `tests/ui/playing-card.acceptance.test.tsx::two-colour deck colours` and acceptance `e2e/cards.spec.ts::two-colour deck colours in the browser`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-04",
     "verifies": "AC#4",
     "verification": "acceptance `tests/ui/playing-card.acceptance.test.tsx::four-colour deck colours` and acceptance `e2e/cards.spec.ts::four-colour deck colours in the browser`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-05",
     "verifies": "AC#3, AC#4",
     "verification": "unit `tests/ui/card-art.test.ts::deck prop overrides context and default is two-colour`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-06",
     "verifies": "AC#5",
     "verification": "acceptance `tests/ui/playing-card.acceptance.test.tsx::card back shows the TLH logo` and acceptance `e2e/cards.spec.ts::card back shows the decoded TLH logo`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-07",
     "verifies": "DoD#1",
     "verification": "acceptance `e2e/cards.visual.spec.ts::cards match visual snapshots`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-08",
     "verifies": "DoD#2",
     "verification": "unit `tests/ui/card-art.test.ts::invalid cards throw RangeError`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-09",
     "verifies": "AC#5, DoD#9",
     "verification": "unit `tests/ui/card-art.test.ts::logo asset is a 512px JPEG under 64 KB`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-10",
     "verifies": "DoD#8, DoD#9",
     "verification": "acceptance `e2e/cards.spec.ts::gallery has no serious axe violations and no network requests`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-11",
     "verifies": "DoD#2, DoD#3, DoD#5, DoD#6",
     "verification": "command `npm run lint && npm run typecheck && npm test && npm run e2e`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-12",
     "verifies": "DoD#11, DoD#12",
     "verification": "manual CI run on branch `doit/TASK-3.5` and `backlog doc list --plain` shows the TASK-3.5 doc",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-13",
     "verifies": "DoD#4, DoD#7, DoD#10, DoD#13",
     "verification": "manual Judge confirms no files under `src/engine`, `src/bots`, `src/advice`, `src/ui/App.tsx` or `src/main.tsx` changed",
-    "status": "pending"
+    "status": "pass"
   }
 ]

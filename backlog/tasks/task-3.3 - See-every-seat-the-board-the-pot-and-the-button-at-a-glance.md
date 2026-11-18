@@ -4,7 +4,7 @@ title: See every seat, the board, the pot and the button at a glance
 status: To Do
 assignee: []
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-17T23:22:00Z'
+updated_date: '2026-11-18T20:51:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-0
@@ -52,6 +52,7 @@ Plan key: E03-S03 · Dream: limit-holdem-trainer
 - [ ] #6 Given a scripted hand, When each player becomes the player to act, Then exactly that player's seat is highlighted [REQ-021.7]
 - [ ] #7 Given hand 133 of a 6-player $4/$8 cash session, When the table is shown, Then the header reads game type "Cash", "6 players", "$4/$8" and "Hand #133" and offers a Leave table control [REQ-021.8]
 - [ ] #8 Given a hand in progress at every street, When the Table screen's text and accessible names are searched, Then the hand's replay code appears nowhere [REQ-013.4]
+- [ ] #9 Given a bot seat holding face-down cards, When the table renders, Then the seat shows a smaller CardBack marker that still shows the logo and passes axe
 <!-- AC:END -->
 
 ## Definition of Done
@@ -69,3 +70,9 @@ Plan key: E03-S03 · Dream: limit-holdem-trainer
 - [ ] #11 Story documentation is written and published to Backlog.md
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+AC added from TASK-3.5 follow-up (doc-20).
+<!-- SECTION:NOTES:END -->

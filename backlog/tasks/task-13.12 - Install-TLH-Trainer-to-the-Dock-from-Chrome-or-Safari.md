@@ -4,7 +4,7 @@ title: Install TLH Trainer to the Dock from Chrome or Safari
 status: To Do
 assignee: []
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-17T23:22:00Z'
+updated_date: '2026-11-18T20:51:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-2
@@ -50,6 +50,7 @@ Plan key: E13-S06 · Dream: limit-holdem-trainer
 - [ ] #5 Given the app is installed from the latest Chrome on macOS, When it is launched from the Dock, Then it opens in its own window without browser tabs or address bar, named 'TLH Trainer' with the TLH logo icon (recorded manual check) [REQ-060.2, REQ-060.3]
 - [ ] #6 Given the generated icons, When they are compared with brand/tlh-logo.jpg, Then each is derived from the logo (resized and padded only) and the manifest and apple-touch-icon reference them [REQ-060.3, REQ-061.3]
 - [ ] #7 Given `npm run build`, When the image-asset check runs, Then the logo and the generated icons pass and any other image file still fails naming the file [REQ-067.3]
+- [ ] #8 Given the installable app's icons, When they are generated, Then they come from the brand logo (dreams/limit-holdem-trainer/brand/tlh-logo.jpg or src/assets/tlh-logo.jpg) and no other image source
 <!-- AC:END -->
 
 ## Definition of Done
@@ -68,3 +69,9 @@ Plan key: E13-S06 · Dream: limit-holdem-trainer
 - [ ] #12 Story documentation is written and published to Backlog.md
 - [ ] #13 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+AC added from TASK-3.5 follow-up (doc-20).
+<!-- SECTION:NOTES:END -->
