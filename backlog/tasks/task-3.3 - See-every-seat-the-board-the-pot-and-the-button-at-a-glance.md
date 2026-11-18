@@ -1,10 +1,11 @@
 ---
 id: TASK-3.3
 title: See every seat, the board, the pot and the button at a glance
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-18T21:33:00Z'
+updated_date: '2026-11-18T23:52:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-0
@@ -72,10 +73,24 @@ Plan key: E03-S03 · Dream: limit-holdem-trainer
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
 
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. src/table/session.ts: BotStyle 'TAG' | 'Calling station' | 'Maniac' | 'Rock' (Q-1); TableState.handNumber (1, not incremented yet); GameConfig STYLE_LABELS widened.
+2. src/table/table-view.ts (headless view model from the user's PlayerView only): per-seat name, style label, stack, 'This street $X', last action in past tense or 'Waiting' (Q-2), card-back flag; user seat with hole cards and position name; board with placeholders; pot = completed pots + street contributions; dealer seat; seat to act; header 'Cash · 6 players · $4/$8 · Hand #N'.
+3. src/ui/table: seats clockwise from the user with the user at bottom centre (Q-3), red border + 'To act' badge, 'D' dealer disc, small CardBack marker (30x42), Leave table returns Home (Q-4); no replay code anywhere in the DOM.
+4. Cross-story test edits (D-5): the 8 listed in spec §5; data-to-act replaced by visible 'To act'; data-street and data-action-count kept.
+5. Tests: view-model unit and acceptance tests; e2e scene harness for scripted states (storyboard hand, user at seat 1, hand 133) in Chromium + WebKit; replay-code absence; axe; fits 1280x720.
+
+Full spec: doit/TASK-3.3/spec.md
+<!-- SECTION:PLAN:END -->
+
 ## Implementation Notes
 
 <!-- SECTION:NOTES:BEGIN -->
 AC added from TASK-3.5 follow-up (doc-20).
 
 AC added from TASK-3.1 follow-up (doc-21).
+
+Cross-story change (orchestrator D-5 on precedent, AC#10): exactly the 8 test edits listed in spec §5 D-5 across e2e/table.spec.ts, e2e/action-bar.spec.ts, e2e/home.spec.ts and tests/ui/table.acceptance.test.tsx. No other assertion may be removed or weakened.
 <!-- SECTION:NOTES:END -->
