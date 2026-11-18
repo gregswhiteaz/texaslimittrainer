@@ -1,10 +1,11 @@
 ---
 id: TASK-1.8
 title: Check game invariants after every playtest action
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-18T17:24:00Z'
+updated_date: '2026-11-18T17:49:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-0
@@ -67,8 +68,22 @@ Plan key: E01-S08 · Dream: limit-holdem-trainer
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
 
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. src/engine/invariants.ts: checkStep({before, action, result}) and checkState(state) for chips, legal-action, bet-cap, pot-eligibility, cards; fixed messages; shared empty array when clean (<=2 us/action).
+2. src/playtest/runner.ts: PlaytestSeams {makePolicy?, onAction?, engine?}; runner drives playerView+policy+applyAction; default onAction = checkStep; hand stops at first violation, run continues; summary gains violationCounts and firstViolation; interim A-4 checks removed.
+3. src/playtest/cli.ts: violation detail block only when N>0 (Q-1); exit 1.
+4. CI: Playtest step after Test running npm run playtest -- --hands 10000 --seed 42; workflow test extended (TASK-1.7 file, existing assertions kept).
+5. Tests: tests/support/faulty-engine.ts with five faults, each detected by exactly one invariant; acceptance AC#1-5; perf check (CI reports only).
+
+Full spec: doit/TASK-1.8/spec.md
+<!-- SECTION:PLAN:END -->
+
 ## Implementation Notes
 
 <!-- SECTION:NOTES:BEGIN -->
 AC added from TASK-1.6 follow-up (doc-15): add an onAction hook to runPlaytest.
+
+tests/ci/workflow.test.ts (TASK-1.7 acceptance test) is extended for AC#4 per spec D-5: playtest command added to the ordered list plus a new AC#4 test; no existing assertion removed or weakened.
 <!-- SECTION:NOTES:END -->
