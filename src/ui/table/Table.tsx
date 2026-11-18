@@ -1,22 +1,16 @@
-import type { Action } from '../../engine/hand';
-import { USER_SEAT, nextStep, userActions, type SessionSeat } from '../../table/session';
+import { userActionBar } from '../../table/action-bar';
+import { USER_SEAT, nextStep, type SessionSeat } from '../../table/session';
 import { PlayingCard } from '../cards/PlayingCard';
+import { ActionBar } from './ActionBar';
 import { useTableSession, type TableSessionOptions } from './useTableSession';
 
 export type TableProps = TableSessionOptions;
-
-const ACTION_LABELS: Record<Action['type'], string> = {
-  fold: 'Fold',
-  check: 'Check',
-  call: 'Call',
-  bet: 'Bet',
-  raise: 'Raise',
-};
 
 export function Table(props: TableProps): React.JSX.Element {
   const { table, act } = useTableSession(props);
   const { hand } = table;
   const step = nextStep(table);
+  const bar = userActionBar(table);
   const stackOf = (seat: number): number =>
     (hand?.players ?? table.stacks).find((p) => p.seat === seat)?.stack ?? 0;
   const userCards = hand?.players.find((p) => p.seat === USER_SEAT)?.holeCards;
@@ -52,15 +46,7 @@ export function Table(props: TableProps): React.JSX.Element {
           <PlayingCard key={card} card={card} />
         ))}
       </div>
-      {step === 'user' && (
-        <div role="group" aria-label="Your actions" className="table-actions">
-          {userActions(table).map((action) => (
-            <button key={action.type} type="button" onClick={() => act(action)}>
-              {ACTION_LABELS[action.type]}
-            </button>
-          ))}
-        </div>
-      )}
+      {bar !== null && <ActionBar model={bar} onAct={act} />}
       {step === 'done' && <p role="status">Hand over</p>}
     </section>
   );

@@ -43,16 +43,28 @@
   margin-bottom: 16px;
 }
 
-.table-actions {
+.action-bar {
   display: flex;
-  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
 }
 
-.table-actions button {
-  background: #ffffff;
-  color: #1e1f22;
-  border: 1px solid #1e1f22;
-  border-radius: 6px;
-  padding: 6px 16px;
+.action-bar button {
+  min-height: 52px;
+  min-width: 120px;
+  padding: 0 16px;
+  background: #1a1d22;
+  color: #f2f3f5;
+  border: 1px solid #4a515c;
+  border-radius: 10px;
   font: inherit;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.action-bar button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
 }

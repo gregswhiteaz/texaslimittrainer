@@ -1,0 +1,65 @@
+{
+  "task": "TASK-3.2",
+  "phase": "build",
+  "run": 1,
+  "result": "PASS",
+  "changed_lines": 693,
+  "changed_files": [
+    "e2e/action-bar.spec.ts",
+    "e2e/table.spec.ts",
+    "src/table/action-bar.ts",
+    "src/ui/styles.css",
+    "src/ui/table/ActionBar.tsx",
+    "src/ui/table/Table.tsx",
+    "tests/table/action-bar.acceptance.test.ts",
+    "tests/table/action-bar.test.ts",
+    "tests/ui/action-bar.acceptance.test.tsx"
+  ],
+  "checks": [
+    {
+      "name": "test command",
+      "status": "pass",
+      "detail": "$ npm test\nexit 0\ns > bots import only PlayerView-boundary types from the engine 1ms\n \u2713 tests/bots/tag.acceptance.test.ts > TAG bot acceptance > AC#4 other players' and undealt cards never change TAG's action 1555ms\nstdout | tests/advice/equity.perf.test.ts > equity performance > equity latency within target times slack\nHU preflop hand vs hand: sampled, p95 51.48 ms (target 15 ms x 20 = 300 ms)\nHU flop hand vs hand: exact, p95 0.90 ms (target 2 ms x 20 = 40 ms)\nHU flop vs every unseen combo: sampled, p95 28.89 ms (target 20 ms x 20 = 400 ms)\nHU turn vs every unseen combo: exact, p95 44.42 ms (target 15 ms x 20 = 300 ms)\nThree-way preflop AA vs KK vs QQ: sampled, p95 54.98 ms (target 20 ms x 20 = 400 ms)\n6-max preflop vs 5 ranges: sampled, p95 114.04 ms (target 50 ms x 20 = 1000 ms)\nFull ring flop vs 9 ranges: sampled, p95 467.57 ms (target 80 ms x 20 = 1600 ms)\n\n \u2713 tests/advice/equity.perf.test.ts > equity performance > equity latency within target times slack 12901ms\n\n Test Files  60 passed (60)\n      Tests  222 passed | 1 skipped (223)\n   Start at  15:35:41\n   Duration  13.20s (tests 95%, import 4%)\n\n\u001b[34m % \u001b[39m\u001b[2mCoverage report from \u001b[22m\u001b[33mv8\u001b[39m\n-------------------|---------|----------|---------|---------|-------------------\nFile               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s \n-------------------|---------|----------|---------|---------|-------------------\nAll files          |   97.97 |    93.63 |   96.02 |   98.55 |                   \n advice            |   99.79 |    98.18 |     100 |     100 |                   \n  equity.ts        |   99.55 |    93.97 |     100 |     100 | 114,120,199,292   \n engine            |     100 |    92.92 |     100 |     100 |                   \n  ...-evaluator.ts |     100 |    79.81 |     100 |     100 | ...84-197,211-212 \n  hand.ts          |     100 |    96.55 |     100 |     100 | 231-232,235-238   \n  invariants.ts    |     100 |    97.93 |     100 |     100 | 84,161,234        \n playtest          |   99.54 |    98.44 |     100 |     100 |                   \n  cli.ts           |   99.15 |    97.14 |     100 |     100 | 135-143           \n table             |   98.36 |    95.91 |     100 |     100 |                   \n  session.ts       |   97.87 |    94.59 |     100 |     100 | 163-165           \n ui/table          |   44.68 |    45.94 |   45.45 |   52.77 |                   \n  ActionBar.tsx    |      50 |        0 |   66.66 |   66.66 | 19                \n  Table.tsx        |   86.66 |    78.94 |      75 |    92.3 | 46                \n  ...bleSession.ts |   21.42 |    14.28 |   18.18 |      25 | 33-51,55          \n-------------------|---------|----------|---------|---------|-------------------\n\n=============================== Coverage summary ===============================\nStatements   : 97.97% ( 1400/1429 )\nBranches     : 93.63% ( 853/911 )\nFunctions    : 96.02% ( 290/302 )\nLines        : 98.55% ( 1163/1180 )\n================================================================================\n"
+    },
+    {
+      "name": "lint command",
+      "status": "pass",
+      "detail": "$ npm run lint\nexit 0\n\n> tlh-trainer@0.0.0 lint\n> eslint . --max-warnings 0 && prettier --check .\n\nChecking formatting...\nAll matched files use Prettier code style!\n"
+    },
+    {
+      "name": "typecheck command",
+      "status": "pass",
+      "detail": "$ npm run typecheck\nexit 0\n\n> tlh-trainer@0.0.0 typecheck\n> tsc -p tsconfig.json\n\n"
+    },
+    {
+      "name": "spec unchanged",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "name": "scope budget (lines)",
+      "status": "pass",
+      "detail": "693 changed lines vs budget 700 (fail above 1400)"
+    },
+    {
+      "name": "scope budget (files)",
+      "status": "pass",
+      "detail": "9 files vs budget 9"
+    },
+    {
+      "name": "files outside spec",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "name": "all changes listed in changes.md",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "name": "tests locked",
+      "status": "pass",
+      "detail": "3 acceptance test file(s) locked; 73 test files snapshotted"
+    }
+  ]
+}

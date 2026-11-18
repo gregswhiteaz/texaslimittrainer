@@ -10,7 +10,8 @@ const ORIGIN = 'http://localhost:4173';
 /** Pinned replay code words for every test (A-11): 9e3779b9 00000001 00000002 00000003. */
 const WORDS = [0x9e3779b9, 1, 2, 3];
 const NAMES = ['Ava', 'Ben', 'Cal', 'Dee', 'Eli', 'You'];
-const VERBS = ['Fold', 'Check', 'Call', 'Bet', 'Raise'];
+/** The idle (disabled) set plus the exact-amount labels (TASK-3.2 D-4). */
+const BUTTON_NAME = /^(Fold|Check|Call|Raise|Call \$\d+|Bet \$\d+|Raise to \$\d+)$/;
 const BOARD_BY_STREET: Record<string, number> = { preflop: 0, flop: 3, turn: 4, river: 5 };
 
 interface CountChange {
@@ -120,13 +121,22 @@ async function clickAction(page: Page, name: string): Promise<void> {
 
 async function checkOrCall(page: Page): Promise<void> {
   const check = yourActions(page).getByRole('button', { name: 'Check', exact: true });
-  await clickAction(page, (await check.count()) > 0 ? 'Check' : 'Call');
+  const call = yourActions(page).getByRole('button', { name: /^Call \$\d+$/ });
+  await clickAction(page, (await check.count()) > 0 ? 'Check' : ((await call.textContent()) ?? ''));
+}
+
+/** The bar stays on screen with every button disabled (TASK-3.2 D-3/D-4). */
+async function expectDisabledBar(page: Page): Promise<void> {
+  await expect(yourActions(page)).toBeVisible();
+  const buttons = yourActions(page).getByRole('button');
+  expect(await buttons.count()).toBeGreaterThan(0);
+  for (const button of await buttons.all()) await expect(button).toBeDisabled();
 }
 
 async function expectNoBuyInControl(page: Page): Promise<void> {
   await expect(page.locator('input, select, textarea, a')).toHaveCount(0);
   const names = await page.getByRole('button').allTextContents();
-  for (const name of names) expect(VERBS).toContain(name);
+  for (const name of names) expect(name).toMatch(BUTTON_NAME);
 }
 
 test('default table seats the user and five bots with $160 each', async ({ page }) => {
@@ -187,7 +197,7 @@ test('check or call at every decision plays to showdown with my cards face up', 
 
   expect([...streets].sort()).toEqual(['flop', 'preflop', 'river', 'turn']);
   await expect(tableSection(page)).toHaveAttribute('data-street', 'showdown');
-  await expect(yourActions(page)).toHaveCount(0);
+  await expectDisabledBar(page);
   await expect(handOver(page)).toBeVisible();
   expect(await userCards(page)).toEqual(dealt);
   await expect(page.getByRole('group', { name: 'Board' }).locator('svg[data-card]')).toHaveCount(5);
@@ -211,7 +221,7 @@ test('after a preflop fold the bots finish the hand without me', async ({ page }
   await expect(handOver(page)).toBeVisible();
 
   await expect(tableSection(page)).toHaveAttribute('data-to-act', '');
-  await expect(yourActions(page)).toHaveCount(0);
+  await expectDisabledBar(page);
   expect(await userCards(page)).toEqual(dealt);
   const { changes, turns } = await page.evaluate(() => window.__table);
   expect(turns).toHaveLength(1);
