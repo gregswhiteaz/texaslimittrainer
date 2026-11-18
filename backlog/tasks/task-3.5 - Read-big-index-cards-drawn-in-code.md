@@ -1,10 +1,11 @@
 ---
 id: TASK-3.5
 title: Read big-index cards drawn in code
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-17T23:22:00Z'
+updated_date: '2026-11-18T20:21:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-0
@@ -61,3 +62,14 @@ Plan key: E03-S05 · Dream: limit-holdem-trainer
 - [ ] #12 Story documentation is written and published to Backlog.md
 - [ ] #13 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. src/ui/cards/card-art.ts: SVG path data for 13 rank glyphs (ten as '10') and 4 suits, colour tables (two- and four-colour per Q-2), accessible labels.
+2. src/ui/cards/PlayingCard.tsx: PlayingCard({card, deck?}) 60x84 big-index face (rank top-left ~28 px, large suit bottom-right), CardBack() black with red frame and logo (Q-3), DeckColoursContext (two-colour default, prop overrides).
+3. src/assets/tlh-logo.jpg: 512 px, JPEG q80, imported via Vite.
+4. Tests: unit (all 52 faces, colours, labels, invalid card RangeError), e2e test-only gallery (Q-4) in Chromium and WebKit at 1280x720 measuring rank height >= 24 px, colours, logo on back, axe clean; macOS-only pixel baselines.
+
+Full spec: doit/TASK-3.5/spec.md
+<!-- SECTION:PLAN:END -->
