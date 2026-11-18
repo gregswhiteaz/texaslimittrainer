@@ -1,6 +1,6 @@
 import type { Action } from '../engine/hand';
 import type { PlayerView, PublicPlayer } from '../engine/player-view';
-import sixMax from './charts/six-max.json';
+import sixMax from './charts/six-max.json' with { type: 'json' };
 import { handClassOf, type HandClass } from './hand-class';
 import {
   chartCell,

@@ -20,6 +20,7 @@ import {
   type Violation,
 } from '../engine/invariants';
 import { playerView, type SeatPolicy } from '../engine/player-view';
+import { tagPolicy } from '../bots/tag';
 import { randomMovePolicy, seatGenerator } from './policy';
 
 export { MAX_BETS_PER_STREET };
@@ -31,7 +32,7 @@ export interface PlaytestOptions {
   readonly seed: number;
   readonly size: number;
 }
-/** Makes the policy for one seat of one hand. Default: randomMovePolicy(seatGenerator(code, seat)). */
+/** Makes the policy for one seat of one hand. Default: defaultPolicyFactory(size). */
 export type PolicyFactory = (code: ReplayCode, seat: SeatNumber) => SeatPolicy;
 /** Called after every applied player action; returns the violations it found ([] when clean). */
 export type ActionHook = (step: ActionStep) => readonly Violation[];
@@ -41,7 +42,7 @@ export interface PlaytestEngine {
 }
 /** Test seams; the CLI entry passes none. */
 export interface PlaytestSeams {
-  /** Default: randomMovePolicy(seatGenerator(code, seat)). */
+  /** Default: defaultPolicyFactory(size) (TAG at 6 players, random-move elsewhere). */
   readonly makePolicy?: PolicyFactory;
   /** Default: checkStep. A custom hook replaces it (compose with checkStep to keep the built-in checks). */
   readonly onAction?: ActionHook;
@@ -92,7 +93,14 @@ export interface PlaytestSummary {
   readonly firstViolation: PlayedHand | null;
 }
 
-const defaultPolicy: PolicyFactory = (code, seat) => randomMovePolicy(seatGenerator(code, seat));
+const randomPolicy: PolicyFactory = (code, seat) => randomMovePolicy(seatGenerator(code, seat));
+const allTag: PolicyFactory = () => tagPolicy;
+
+/** TAG in every seat at 6 players; randomMovePolicy(seatGenerator(code, seat)) at other sizes,
+ *  where TAG has no preflop chart yet. */
+export function defaultPolicyFactory(size: number): PolicyFactory {
+  return size === 6 ? allTag : randomPolicy;
+}
 
 /** Hand k's code: replayCodeFromWords([floor(seed / 2^32), seed mod 2^32, 0, k]). Throws RangeError on bad input. */
 export function handReplayCode(seed: number, handNumber: number): ReplayCode {
@@ -119,7 +127,11 @@ export function playHand(
   number = 1,
   seams: PlaytestSeams = {},
 ): PlayedHand {
-  const { makePolicy = defaultPolicy, onAction = checkStep, engine = realEngine } = seams;
+  const {
+    makePolicy = defaultPolicyFactory(size),
+    onAction = checkStep,
+    engine = realEngine,
+  } = seams;
   const seats = Array.from({ length: size }, (_, i) => ({ seat: i + 1, stack: CASH_BUY_IN }));
   let state = engine.createHand({
     stakes: PLAYTEST_STAKES,

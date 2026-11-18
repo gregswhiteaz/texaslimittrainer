@@ -1,12 +1,17 @@
 import { describe, expect, it } from 'vitest';
-import { createHand } from '../../src/engine/hand';
-import type { SeatPolicy } from '../../src/engine/player-view';
-import { seatGenerator } from '../../src/playtest/policy';
+import { shuffledDeck } from '../../src/engine/deck';
+import { applyAction, createHand } from '../../src/engine/hand';
+import { tagPolicy } from '../../src/bots/tag';
+import { playerView, type SeatPolicy } from '../../src/engine/player-view';
+import { randomMovePolicy, seatGenerator } from '../../src/playtest/policy';
 import {
+  defaultPolicyFactory,
   handReplayCode,
   playHand,
   runPlaytest,
   summarize,
+  CASH_BUY_IN,
+  PLAYTEST_STAKES,
   type PlayedHand,
   type PolicyFactory,
 } from '../../src/playtest/runner';
@@ -139,5 +144,48 @@ describe('playtest runner units', () => {
     expect(summary.violations).toBe(0);
     expect(summary.showdowns).toBe(1);
     expect(() => summarize([])).toThrow(RangeError);
+  });
+
+  it('default seat policy is TAG at 6 players and random-move elsewhere', () => {
+    const code = handReplayCode(42, 1);
+    for (let seat = 1; seat <= 6; seat++)
+      expect(defaultPolicyFactory(6)(code, seat)).toBe(tagPolicy);
+
+    for (const size of [3, 5, 7, 10]) {
+      const actual = defaultPolicyFactory(size);
+      const policies = new Map<number, [SeatPolicy, SeatPolicy]>();
+      for (let seat = 1; seat <= size; seat++) {
+        policies.set(seat, [actual(code, seat), randomMovePolicy(seatGenerator(code, seat))]);
+      }
+      let state = createHand({
+        stakes: PLAYTEST_STAKES,
+        seats: Array.from({ length: size }, (_, i) => ({ seat: i + 1, stack: CASH_BUY_IN })),
+        button: 1,
+        deck: shuffledDeck(code),
+      });
+      while (state.toAct !== null) {
+        const [mine, expected] = policies.get(state.toAct) as [SeatPolicy, SeatPolicy];
+        const view = playerView(state, state.toAct);
+        const action = mine(view);
+        expect(action).toEqual(expected(view));
+        const result = applyAction(state, action);
+        if (!result.ok) throw new Error(result.error.message);
+        state = result.state;
+      }
+      expect(state.result).not.toBeNull();
+      expect(playHand(code, size, 1).record.actions).toEqual(
+        playHand(code, size, 1, 1, { makePolicy: actual }).record.actions,
+      );
+    }
+
+    const seen: number[] = [];
+    const folder: PolicyFactory = (_, seat) => (view) => {
+      seen.push(seat);
+      return { seat: view.seat, type: 'fold' };
+    };
+    const hand = playHand(code, 6, 1, 1, { makePolicy: folder });
+    expect(hand.record.actions.every((a) => a.type === 'fold')).toBe(true);
+    expect(seen.length).toBe(hand.record.actions.length);
+    expect(seen.length).toBeGreaterThan(0);
   });
 });

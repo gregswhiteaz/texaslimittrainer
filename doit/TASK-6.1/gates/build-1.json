@@ -1,0 +1,64 @@
+{
+  "task": "TASK-6.1",
+  "phase": "build",
+  "run": 1,
+  "result": "PASS",
+  "changed_lines": 647,
+  "changed_files": [
+    "src/advice/equity.ts",
+    "src/advice/preflop.ts",
+    "src/bots/tag.ts",
+    "src/playtest/runner.ts",
+    "tests/bots/tag-playtest.acceptance.test.ts",
+    "tests/bots/tag.acceptance.test.ts",
+    "tests/bots/tag.test.ts",
+    "tests/playtest/runner.test.ts"
+  ],
+  "checks": [
+    {
+      "name": "test command",
+      "status": "pass",
+      "detail": "$ npm test\nexit 0\nto face TAG checks 1463ms\nstdout | tests/advice/postflop.perf.test.ts > postflop advice performance > postflop advice latency within target times slack\nHU flop facing a bet: 1 opponents, sampled, p95 109.25 ms (target 25 ms x 20 = 500 ms)\n6-max flop vs 3 opponents: 3 opponents, sampled, p95 84.75 ms (target 50 ms x 20 = 1000 ms)\n10-seat flop vs 9 opponents: 9 opponents, sampled, p95 464.58 ms (target 100 ms x 20 = 2000 ms)\n\n \u2713 tests/advice/postflop.perf.test.ts > postflop advice performance > postflop advice latency within target times slack 10340ms\n \u2713 tests/bots/tag.acceptance.test.ts > TAG bot acceptance > AC#4 other players' and undealt cards never change TAG's action 1551ms\nstdout | tests/advice/equity.perf.test.ts > equity performance > equity latency within target times slack\nHU preflop hand vs hand: sampled, p95 106.92 ms (target 15 ms x 20 = 300 ms)\nHU flop hand vs hand: exact, p95 0.85 ms (target 2 ms x 20 = 40 ms)\nHU flop vs every unseen combo: sampled, p95 55.15 ms (target 20 ms x 20 = 400 ms)\nHU turn vs every unseen combo: exact, p95 46.73 ms (target 15 ms x 20 = 300 ms)\nThree-way preflop AA vs KK vs QQ: sampled, p95 50.96 ms (target 20 ms x 20 = 400 ms)\n6-max preflop vs 5 ranges: sampled, p95 105.31 ms (target 50 ms x 20 = 1000 ms)\nFull ring flop vs 9 ranges: sampled, p95 468.21 ms (target 80 ms x 20 = 1600 ms)\n\n \u2713 tests/advice/equity.perf.test.ts > equity performance > equity latency within target times slack 13208ms\n\n Test Files  50 passed (50)\n      Tests  161 passed | 1 skipped (162)\n   Start at  12:32:09\n   Duration  13.55s (tests 96%, import 3%)\n\n\u001b[34m % \u001b[39m\u001b[2mCoverage report from \u001b[22m\u001b[33mv8\u001b[39m\n-------------------|---------|----------|---------|---------|-------------------\nFile               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s \n-------------------|---------|----------|---------|---------|-------------------\nAll files          |   99.84 |    95.46 |     100 |     100 |                   \n advice            |   99.77 |    97.95 |     100 |     100 |                   \n  equity.ts        |   99.55 |    93.97 |     100 |     100 | 114,120,199,292   \n engine            |     100 |    92.92 |     100 |     100 |                   \n  ...-evaluator.ts |     100 |    79.81 |     100 |     100 | ...84-197,211-212 \n  hand.ts          |     100 |    96.55 |     100 |     100 | 231-232,235-238   \n  invariants.ts    |     100 |    97.93 |     100 |     100 | 84,161,234        \n playtest          |   99.54 |    98.44 |     100 |     100 |                   \n  cli.ts           |   99.15 |    97.14 |     100 |     100 | 135-143           \n-------------------|---------|----------|---------|---------|-------------------\n\n=============================== Coverage summary ===============================\nStatements   : 99.84% ( 1256/1258 )\nBranches     : 95.46% ( 757/793 )\nFunctions    : 100% ( 251/251 )\nLines        : 100% ( 1036/1036 )\n================================================================================\n"
+    },
+    {
+      "name": "lint command",
+      "status": "pass",
+      "detail": "$ npm run lint\nexit 0\n\n> tlh-trainer@0.0.0 lint\n> eslint . --max-warnings 0 && prettier --check .\n\nChecking formatting...\nAll matched files use Prettier code style!\n"
+    },
+    {
+      "name": "typecheck command",
+      "status": "pass",
+      "detail": "$ npm run typecheck\nexit 0\n\n> tlh-trainer@0.0.0 typecheck\n> tsc -p tsconfig.json\n\n"
+    },
+    {
+      "name": "spec unchanged",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "name": "scope budget (lines)",
+      "status": "warn",
+      "detail": "647 changed lines vs budget 600 (fail above 1200)"
+    },
+    {
+      "name": "scope budget (files)",
+      "status": "pass",
+      "detail": "8 files vs budget 8"
+    },
+    {
+      "name": "files outside spec",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "name": "all changes listed in changes.md",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "name": "tests locked",
+      "status": "pass",
+      "detail": "2 acceptance test file(s) locked; 59 test files snapshotted"
+    }
+  ]
+}

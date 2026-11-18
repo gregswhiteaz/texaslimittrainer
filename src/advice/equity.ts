@@ -162,8 +162,10 @@ class Table {
   nodeLimit = Infinity;
   private nodes = 0;
   private readonly ranks: Int32Array;
+  readonly c: CanonicalInput;
 
-  constructor(readonly c: CanonicalInput) {
+  constructor(c: CanonicalInput) {
+    this.c = c;
     this.players = c.opponents.length + 1;
     this.need = 5 - c.board.length;
     this.hands = Array.from({ length: this.players }, () => {
