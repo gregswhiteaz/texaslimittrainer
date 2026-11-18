@@ -1,10 +1,11 @@
 ---
 id: TASK-7.3
 title: Recommend call or fold after the flop from equity and pot odds
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-17T23:22:00Z'
+updated_date: '2026-11-18T18:53:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-0
@@ -66,3 +67,14 @@ Plan key: E07-S03 · Dream: limit-holdem-trainer
 - [ ] #11 Story documentation is written and published to Backlog.md
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. src/advice/postflop.ts: recommendPostflop(view, {equity?}) — opponents = live unfolded seats with every unseen combo; pot = pots + current-street contributions; required equity = call / (pot + call); rules check-free, pot-odds-call, pot-odds-fold on one-decimal rounded % (ties call); exact legal move.
+2. src/advice/recommend.ts: Recommendation union by basis; recommend(view) dispatches preflop/postflop by street.
+3. docs/advice/postflop-rules.md: one heading per rule id; consistency test checks ids match code and tests.
+4. Tests: acceptance AC#1-6 (incl. hidden-card invariance, determinism), unit tests per rule, latency (perf scale pattern).
+
+Full spec: doit/TASK-7.3/spec.md
+<!-- SECTION:PLAN:END -->
