@@ -3,60 +3,60 @@
     "id": "SPEC-01",
     "verifies": "AC#1, DoD#1",
     "verification": "acceptance `tests/engine/player-view.acceptance.test.ts::player-view acceptance > AC#1 the engine passes the acting seat only its own view`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-02",
     "verifies": "AC#2, DoD#1, DoD#6",
     "verification": "acceptance `tests/engine/player-view.property.test.ts::player-view property > AC#2 hidden cards never change the view or a seeded policy's action`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-03",
     "verifies": "AC#3, DoD#1",
     "verification": "acceptance `tests/engine/player-view.acceptance.test.ts::player-view acceptance > AC#3 decision code typed on PlayerView rejects the full game state`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-04",
     "verifies": "AC#1",
     "verification": "unit `tests/engine/player-view.test.ts::playerView > copies everything and never mutates the state`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-05",
     "verifies": "AC#1",
     "verification": "unit `tests/engine/player-view.test.ts::playerView > seats not to act, folded seats and completed hands`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-06",
     "verifies": "AC#1",
     "verification": "unit `tests/engine/player-view.test.ts::actWith > returns typed errors and skips the policy on a completed hand`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-07",
     "verifies": "AC#1",
     "verification": "unit `tests/engine/player-view.test.ts::showdownOf > lists shown hands and is null otherwise`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-08",
     "verifies": "DoD#2, DoD#4, DoD#5, DoD#8",
     "verification": "command `npm run lint && npm run typecheck && npm test && ! grep -nE \"fetch|XMLHttpRequest|WebSocket|EventSource|import\\(|from '[^.]|node:|Math\\.random|Date|performance|crypto|process\" src/engine/player-view.ts`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-09",
     "verifies": "DoD#10",
     "verification": "command `gh run list -R gregswhiteaz/texaslimittrainer --branch doit/TASK-1.5 --limit 1 --json conclusion -q '.[0].conclusion'` prints `success`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-10",
     "verifies": "DoD#3, DoD#6, DoD#7, DoD#9, DoD#11, DoD#12",
     "verification": "manual `git diff --stat main -- src/ui e2e index.html src/main.tsx` is empty and `backlog doc list --plain` lists the TASK-1.5 story document",
-    "status": "pending"
+    "status": "pass"
   }
 ]
