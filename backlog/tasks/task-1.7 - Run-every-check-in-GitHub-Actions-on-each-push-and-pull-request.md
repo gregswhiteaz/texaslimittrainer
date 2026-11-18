@@ -1,10 +1,11 @@
 ---
 id: TASK-1.7
 title: Run every check in GitHub Actions on each push and pull request
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-17T23:21:00Z'
+updated_date: '2026-11-18T01:11:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-0
@@ -45,6 +46,7 @@ Plan key: E01-S02 · Dream: limit-holdem-trainer
 - [ ] #2 Given a push in which any one of lint, typecheck, tests or build fails, When the workflow finishes, Then the workflow is reported as failed [REQ-064.2]
 - [ ] #3 Given a push in which all checks pass, When the workflow finishes, Then the workflow is reported as successful [REQ-064.2]
 - [ ] #4 Given a push in which a Playwright or axe test fails in Chromium or in WebKit, When the workflow finishes, Then the workflow is reported as failed [REQ-064.4, REQ-064.2]
+- [ ] #5 Given a push to any branch or a pull request on GitHub, When the workflow runs, Then it also runs `npm audit --omit=dev --audit-level=high` and `npm audit --audit-level=critical`, and the workflow is reported as failed if either reports an advisory at that level [TASK-1.1 Q-3]
 <!-- AC:END -->
 
 ## Definition of Done
@@ -62,3 +64,14 @@ Plan key: E01-S02 · Dream: limit-holdem-trainer
 - [ ] #11 Story documentation is written and published to Backlog.md
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. .github/workflows/ci.yml: push + pull_request triggers, one ubuntu-24.04 job, SHA-pinned actions, node from .nvmrc (22.18.0) with npm cache, concurrency cancel-in-progress, contents:read, 20 min timeout.
+2. Steps: npm ci → audit shipped deps (--omit=dev high) → audit all deps (critical) → lint → typecheck → build → test → Playwright browsers (cached) → e2e Chromium+WebKit; report artifact on e2e failure.
+3. tests/ci/workflow.test.ts static checks; README CI section.
+4. Proof: 8 local ci-proof/TASK-1.7/* branches each breaking one check (lint, typecheck, build, test, e2e-chromium, e2e-webkit, audit-shipped, audit-all), rehearsed locally; user pushes once; Claude opens a draft PR to prove pull_request trigger; judge reads run results via gh.
+
+Full spec: doit/TASK-1.7/spec.md
+<!-- SECTION:PLAN:END -->
