@@ -1,0 +1,166 @@
+{
+ "round": 2,
+ "test_suite": {
+  "command": "npm test",
+  "result": "PASS",
+  "passed": 23,
+  "failed": 0,
+  "notes": "9 files, 23 tests incl. the 8 'CI workflow' tests; coverage thresholds met. Lint, typecheck, build and e2e (10 passed, Chromium+WebKit) also exit 0 locally. Re-run in round 2: 23/23 passed; branch tip still 58a5e55 (no code change)."
+ },
+ "end_to_end": {
+  "command": "npm audit --omit=dev --audit-level=high && npm audit --audit-level=critical && npm run lint && npm run typecheck && npm run build && npm test && npm run e2e; plus the real GitHub runs (spec §10 E2E scenario)",
+  "result": "PASS",
+  "expected": "Local mirror exits 0; push run on doit/TASK-1.7 = success with all checks green; each of 8 proof push runs = failure at exactly its intended step; draft PR's pull_request run = success",
+  "actual": "Local mirror: every command exits 0. GitHub: push run 44220396247 success with all 7 check steps success; all 8 proof runs fail at exactly the intended step with earlier steps green and e2e failures only in the targeted browser; pull_request run 44220403675 attempt 2 (re-run, no code change, head 58a5e55) concluded success with every step green incl. E2E (10 passed). Attempt 1 had timed out in apt install of Playwright system deps."
+ },
+ "integrity": {
+  "result": "PASS",
+  "notes": "doit.py test-integrity exit 0. Diff vs base ffaf227 touches only .github/workflows/ci.yml, .nvmrc, README.md, tests/ci/workflow.test.ts (+ doit/backlog). ci.yml is byte-identical to the spec's exact content and to the copy committed to main (ee5e68f). No injection switch, no continue-on-error/|| true/set +e, no conditions on check steps. The 8 re-trigger commits on proof branches are empty (0 files). Round 2: test-integrity exit 0 again; doit/TASK-1.7 tip unchanged (58a5e55 local = origin)."
+ },
+ "items": [
+  {
+   "spec": "SPEC-01",
+   "result": "PASS",
+   "evidence": "Carried forward from round 1 (no code change; tip 58a5e55): vitest tests/ci: test passes; holdout mutations (add branches filter, remove pull_request, add paths-ignore) each make it fail; unmutated control passes."
+  },
+  {
+   "spec": "SPEC-02",
+   "result": "PASS",
+   "evidence": "Carried forward from round 1 (no code change; tip 58a5e55): test passes; mutations (test before build, e2e removed, all-deps audit removed) each make it fail."
+  },
+  {
+   "spec": "SPEC-03",
+   "result": "PASS",
+   "evidence": "Carried forward from round 1 (no code change; tip 58a5e55): test passes; mutation dropping webkit from the install kills it. Real runs: main run used the cache-miss path (install --with-deps), doit push run used the cache-hit path (install-deps) and E2E ran 10 tests in both projects."
+  },
+  {
+   "spec": "SPEC-04",
+   "result": "PASS",
+   "evidence": "Carried forward from round 1 (no code change; tip 58a5e55): test passes; mutations (|| true, continue-on-error, if: always() on Lint, set +e) each make it fail. Real proof runs show failure stops the job."
+  },
+  {
+   "spec": "SPEC-05",
+   "result": "PASS",
+   "evidence": "Carried forward from round 1 (no code change; tip 58a5e55): .nvmrc = '22.18.0\\n'; test passes; mutations (node-version: 22, no npm cache, .nvmrc 23.1.0, 22.11.0, '22') each make it fail."
+  },
+  {
+   "spec": "SPEC-06",
+   "result": "PASS",
+   "evidence": "Carried forward from round 1 (no code change; tip 58a5e55): 4 uses: lines, all 40-hex SHA + # vX.Y.Z; mutations (tag @v7, short SHA) each make the test fail."
+  },
+  {
+   "spec": "SPEC-07",
+   "result": "PASS",
+   "evidence": "Carried forward from round 1 (no code change; tip 58a5e55): test passes; mutations (contents: write, timeout 30, ubuntu-latest, renamed Lint step) each make it fail."
+  },
+  {
+   "spec": "SPEC-08",
+   "result": "PASS",
+   "evidence": "Carried forward from round 1 (no code change; tip 58a5e55): spec run lookup B=doit/TASK-1.7 -> run 44220396247 -> 'success,Audit shipped dependencies=success,Audit all dependencies=success,Lint=success,Typecheck=success,Build=success,Test=success,E2E=success'. Duration 02:03:14->02:07:27 (4m13s, within 6-min target). https://github.com/gregswhiteaz/texaslimittrainer/actions/runs/44220396247"
+  },
+  {
+   "spec": "SPEC-09",
+   "result": "PASS",
+   "evidence": "gh pr view 1 -> 'true,main', head 58a5e55. gh run view 44220403675 --json conclusion,attempt,jobs -> conclusion success, attempt 2, event pull_request, headSha 58a5e55; Audit shipped/all, Lint, Typecheck, Build, Test, Install Playwright system dependencies (69 s), E2E all success; E2E log '10 passed'; no artifacts. Attempt 1 was cancelled by the 20-min timeout during an apt stall (runner/mirror issue, no code change between attempts). https://github.com/gregswhiteaz/texaslimittrainer/actions/runs/44220403675"
+  },
+  {
+   "spec": "SPEC-10",
+   "result": "PASS",
+   "evidence": "Carried forward from round 1 (no code change; tip 58a5e55): lookup -> 44220395401 'failure,Lint'; steps 1-6 success, later skipped; log: \"Unexpected 'debugger' statement  no-debugger\"."
+  },
+  {
+   "spec": "SPEC-11",
+   "result": "PASS",
+   "evidence": "Carried forward from round 1 (no code change; tip 58a5e55): lookup -> 44220396630 'failure,Typecheck'; Lint success before it; log: TS2322 in src/ui/ci-proof-typecheck.ts."
+  },
+  {
+   "spec": "SPEC-12",
+   "result": "PASS",
+   "evidence": "Carried forward from round 1 (no code change; tip 58a5e55): lookup -> 44220395299 'failure,Build'; Lint/Typecheck success; --log-failed contains 'Error: ci-proof: deliberate build failure'."
+  },
+  {
+   "spec": "SPEC-13",
+   "result": "PASS",
+   "evidence": "Carried forward from round 1 (no code change; tip 58a5e55): lookup -> 44220396647 'failure,Test'; Build success; --log-failed contains 'ci proof: a deliberately failing unit test'."
+  },
+  {
+   "spec": "SPEC-14",
+   "result": "PASS",
+   "evidence": "Carried forward from round 1 (no code change; tip 58a5e55): lookup -> 44220396921 'failure,E2E'; Test success; log: '2 failed', '2 skipped', '10 passed'; failures [chromium] › e2e/ci-proof.spec.ts:11 and :16; webkit ci-proof tests listed as skipped; 'image-alt (critical)' present."
+  },
+  {
+   "spec": "SPEC-15",
+   "result": "PASS",
+   "evidence": "Carried forward from round 1 (no code change; tip 58a5e55): lookup -> 44220395878 'failure,E2E'; log: '2 failed', '2 skipped', '10 passed'; failures [webkit] › e2e/ci-proof.spec.ts:11 and :16; chromium ci-proof tests skipped; 'image-alt (critical)' present."
+  },
+  {
+   "spec": "SPEC-16",
+   "result": "PASS",
+   "evidence": "Carried forward from round 1 (no code change; tip 58a5e55): Each proof branch's product diff vs doit/TASK-1.7 is exactly the listed file(s) (lint: src/ui/ci-proof-lint.ts; typecheck: src/ui/ci-proof-typecheck.ts; build: vite.config.ts with the build-only plugin; test: tests/unit/ci-proof.test.ts; e2e-*: e2e/ci-proof.spec.ts with TARGET chromium/webkit; audit-shipped: package.json(+lodash 4.17.20 in dependencies)+lock; audit-all: package.json(+minimist 1.2.5 in devDependencies)+lock). Rehearsal table in changes.md matches; the real GitHub runs confirm first failing step with all earlier steps success for all 8. Note: branches are based on 391a841, so the diff also shows doit/ and backlog/ metadata from the later review commit (LOW)."
+  },
+  {
+   "spec": "SPEC-17",
+   "result": "PASS",
+   "evidence": "Carried forward from round 1 (no code change; tip 58a5e55): artifacts API: e2e-chromium run 44220396921 -> 'playwright-report' (also e2e-webkit run); green run 44220396247 -> empty."
+  },
+  {
+   "spec": "SPEC-21",
+   "result": "PASS",
+   "evidence": "Carried forward from round 1 (no code change; tip 58a5e55): test passes; mutations (merge audit steps, swap audit step names) each make it fail."
+  },
+  {
+   "spec": "SPEC-22",
+   "result": "PASS",
+   "evidence": "Carried forward from round 1 (no code change; tip 58a5e55): lookup -> 44220396018 'failure,Audit shipped dependencies'; log contains 'lodash  <=4.17.23' and 'Severity: high' (GHSA-35jh-r3h4-6jhm)."
+  },
+  {
+   "spec": "SPEC-23",
+   "result": "PASS",
+   "evidence": "Carried forward from round 1 (no code change; tip 58a5e55): lookup -> 44220396132 'failure,Audit all dependencies'; Audit shipped dependencies=success; log contains 'minimist  1.0.0 - 1.2.5' and 'Severity: critical'."
+  },
+  {
+   "spec": "SPEC-24",
+   "result": "PASS",
+   "evidence": "Carried forward from round 1 (no code change; tip 58a5e55): local: npm audit --omit=dev --audit-level=high exit 0 (0 vulns); npm audit --audit-level=critical exit 0 (13 high dev-only, 0 critical)."
+  },
+  {
+   "spec": "SPEC-18",
+   "result": "PASS",
+   "evidence": "Carried forward from round 1 (no code change; tip 58a5e55): npm run lint/typecheck/test/e2e each exit 0; npm test lists 8 passed tests in tests/ci/workflow.test.ts; e2e 10 passed."
+  },
+  {
+   "spec": "SPEC-19",
+   "result": "PASS",
+   "evidence": "Carried forward from round 1 (no code change; tip 58a5e55): git diff --name-only main...doit/TASK-1.7 -- . ':!doit' ':!backlog' -> exactly .github/workflows/ci.yml, .nvmrc, README.md, tests/ci/workflow.test.ts; no ci-proof path. ci.yml/.nvmrc identical to the copies on main (ee5e68f)."
+  },
+  {
+   "spec": "SPEC-20",
+   "result": "PASS",
+   "evidence": "Carried forward from round 1 (no code change; tip 58a5e55): git diff --name-only main...doit/TASK-1.7 -- src e2e is empty. Documentor publication is a later pipeline step (not yet run at judge time)."
+  }
+ ],
+ "findings": [
+  {
+   "id": "J-1-02",
+   "severity": "LOW",
+   "spec": "SPEC-16",
+   "expected_vs_actual": "Proof branches were cut from 391a841 (build commit), not the current doit/TASK-1.7 tip 58a5e55, so 'git diff --name-only doit/TASK-1.7 ci-proof/...' also lists doit/ and backlog/ metadata files. Product-code differences are exactly the listed files.",
+   "fix": "None required; note in changes.md."
+  },
+  {
+   "id": "J-1-03",
+   "severity": "LOW",
+   "spec": "SPEC-08",
+   "expected_vs_actual": "§9 asks for the green-run duration and the run URLs to be recorded in changes.md; changes.md has neither (green push run took 4m13s). Also §5 says a timeout makes the run conclude 'failure', but GitHub reported 'cancelled' for the timed-out PR run.",
+   "fix": "Record run URLs/duration in changes.md; correct the timeout wording if documented."
+  },
+  {
+   "id": "J-2-01",
+   "severity": "LOW",
+   "spec": "SPEC-09",
+   "expected_vs_actual": "The first attempt of the PR run timed out after apt downloads of Playwright system packages stalled for ~19 min; the re-run passed in under 3 min. A recurring mirror stall would burn the full 20-min budget before failing.",
+   "fix": "Optional: put a step-level timeout (with retry) on the Playwright system-dependency install."
+  }
+ ],
+ "summary": "All 23 SPEC items PASS. SPEC-09 now passes: the re-run (attempt 2) of pull_request run 44220403675 for head 58a5e55 concluded success with every step green, so AC#1, AC#3 and AC#5 are proven. Other items carried forward from round 1 (code unchanged, tests 23/23, integrity clean). Only LOW findings remain."
+}
