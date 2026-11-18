@@ -1,0 +1,12 @@
+{"reviewer": "security", "round": 2,
+ "findings": [
+  {"fingerprint": "src/engine/hand.ts:unsafe-integer-amounts", "severity": "MINOR", "file": "src/engine/hand.ts", "line": 117,
+   "issue": "Carried over from round 1 and unchanged. Number.isInteger accepts values above Number.MAX_SAFE_INTEGER, so a stack of 2**60 can post a blind without its value going down, which breaks chip conservation.",
+   "evidence": "config seat stack 2**60 -> createHand 'stack - blind' === stack. Only reachable if a caller or a stored record supplies absurd amounts.",
+   "fix": "Use Number.isSafeInteger for stakes and stacks."},
+  {"fingerprint": "src/engine/hand.ts:stakes-object-aliased", "severity": "MINOR", "file": "src/engine/hand.ts", "line": 185,
+   "issue": "Carried over from round 1 and unchanged. createHand stores the caller's config.stakes object by reference, so if the caller mutates it after validation, the live hand's bet sizes change without being validated again.",
+   "evidence": "Caller sets config.stakes.smallBet = -50 after createHand -> legalActions offers a negative raise. There is no external path; the caller would have to misuse its own object.",
+   "fix": "stakes: { ...config.stakes } (optionally frozen)."}
+ ],
+ "summary": "Round-1 MAJOR src/engine/hand.ts:stakes-relationships-unvalidated is fixed. validate() now rejects stakes unless smallBlind <= bigBlind <= smallBet < bigBet, and NaN is still caught by isPositiveInteger. Since bigBlind <= smallBet, the stack minimum (8*smallBet + 8*bigBet) now covers both blinds, so no stack can go negative. Re-ran the round-1 reproductions with node type-stripping on a scratch copy of the engine (no Vitest run). Stakes {500,1000,1,1} with stacks 16, {500,1000,1,2} with stacks 24, the never-closing case {8,4,4,8}, and bigBlind > smallBet, smallBet == bigBet and NaN configs all throw RangeError 'Invalid stakes'. Also fuzzed the boundary-accepted stakes {1,1,1,2}, {1,1,4,5}, {3,3,3,4} and {2,4,4,8}: 3,000 random-legal hands each, 3-6 seats, stacks at the minimum up to +2. Every hand completed (at most 34 actions), no stack went negative, and chips were conserved. New SPEC-13 cases cover each new rule. Two round-1 MINOR hardening items remain open (safe integers, stakes aliasing); neither has an external reachable path. No BLOCKER or MAJOR findings."}

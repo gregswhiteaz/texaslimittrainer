@@ -1,0 +1,22 @@
+{"reviewer": "code", "round": 2,
+ "rubric": [
+  {"item": "SPEC-13 correctness (stakes relationship fix)", "result": "pass"},
+  {"item": "SPEC-13 test strength (stakes relationship fix)", "result": "pass"},
+  {"item": "SPEC-01..SPEC-18 unchanged since round 1 (only hand.ts validate() and one hand.test.ts case list changed)", "result": "pass"},
+  {"item": "scope", "result": "pass"},
+  {"item": "concision", "result": "pass"},
+  {"item": "clarity", "result": "pass"}
+ ],
+ "findings": [
+  {"fingerprint": "tests/engine/hand.test.ts:sb-equals-bb-boundary-untested", "severity": "MINOR",
+   "file": "tests/engine/hand.test.ts", "line": 172,
+   "issue": "The rule allows smallBlind == bigBlind, but no test accepts that case. If 'stakes.smallBlind > stakes.bigBlind' were changed to '>=', every test would still pass. The other two boundaries are covered: unevenBlinds {1,3,3,6} accepts bigBlind == smallBet, and bigBet: 4 rejects smallBet == bigBet.",
+   "evidence": "Accepted configs in the tests are STAKES {2,4,4,8} and unevenBlinds {1,3,3,6}. Neither has smallBlind == bigBlind.",
+   "fix": "Also assert that createHand(config({ stakes: { smallBlind: 2, bigBlind: 2, smallBet: 4, bigBet: 8 } })) does not throw. Or leave it: no REQ-006.2 stake has equal blinds."},
+  {"fingerprint": "tests/engine/hand.test.ts:uneven-blinds-assert-splits-minimum-check", "severity": "NIT",
+   "file": "tests/engine/hand.test.ts", "line": 172,
+   "issue": "The new unevenBlinds lines sit between where 'minimum' is created and where it is asserted, which splits up the stack-minimum check.",
+   "evidence": "Line 171 creates minimum, lines 172-173 run the unevenBlinds check, and line 174 asserts on minimum.",
+   "fix": "Move the two unevenBlinds lines after the minimum assertion."}
+ ],
+ "summary": "The round-1 MAJOR stakes-relationships-unvalidated (raised by the security review) is fixed. validate() now rejects stakes unless smallBlind <= bigBlind <= smallBet < bigBet, and it reuses the existing 'Invalid stakes' RangeError. Since bigBlind <= smallBet, the A-7 stack minimum (8*smallBet + 8*bigBet) covers both blinds, so neither reported failure can happen any more (negative stacks, a preflop round that never closes). Each new rejection case breaks exactly one rule: smallBlind 5 only breaks SB<=BB, bigBlind 6 only BB<=smallBet, and bigBet 4 only smallBet<bigBet at the equality boundary. Deleting any one condition would therefore fail its test. The unevenBlinds {1,3,3,6} acceptance pins the BB == smallBet boundary. All six REQ-006.2 stakes pass the new rule ($2/$4 1/2, $3/$6 1/3, $4/$8 2/4, $6/$12 3/6, $10/$20 5/10, $20/$40 10/20; checked by script). Outside the doit/ and backlog bookkeeping, the commit changes only src/engine/hand.ts (+8/-1) and tests/engine/hand.test.ts (+5). The locked acceptance and property tests are untouched, the fix-2 gate passes, and hand.test.ts passes locally (5/5). The spec's §5 wording 'Invalid stakes (any amount not a positive integer)' is now narrower than the code, but the spec is locked and the fix brief asked for this change. No BLOCKER or MAJOR."}
