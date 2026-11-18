@@ -1,6 +1,7 @@
 import { renderToString } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
-import App from '../../src/ui/App';
+import { TableScreen } from '../../src/ui/table/TableScreen';
+import { DEFAULT_SESSION_CONFIG } from '../../src/table/session';
 import { Table } from '../../src/ui/table/Table';
 
 interface SeatMarkup {
@@ -38,7 +39,7 @@ describe('Table acceptance', () => {
       renderToString(<Table config={{ stake: { smallBet: 10, bigBet: 20 } }} />),
       '$400',
     );
-    const app = renderToString(<App />);
+    const app = renderToString(<TableScreen config={DEFAULT_SESSION_CONFIG} />);
     expect(app).toContain('<h1>TLH Trainer</h1>');
     expectSeatedTable(app, '$160');
   });

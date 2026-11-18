@@ -1,5 +1,5 @@
 import { userActionBar } from '../../table/action-bar';
-import { USER_SEAT, nextStep, type SessionSeat } from '../../table/session';
+import { nextStep, type SessionSeat } from '../../table/session';
 import { PlayingCard } from '../cards/PlayingCard';
 import { ActionBar } from './ActionBar';
 import { useTableSession, type TableSessionOptions } from './useTableSession';
@@ -13,7 +13,7 @@ export function Table(props: TableProps): React.JSX.Element {
   const bar = userActionBar(table);
   const stackOf = (seat: number): number =>
     (hand?.players ?? table.stacks).find((p) => p.seat === seat)?.stack ?? 0;
-  const userCards = hand?.players.find((p) => p.seat === USER_SEAT)?.holeCards;
+  const userCards = hand?.players.find((p) => p.seat === table.config.userSeat)?.holeCards;
   const ordered: SessionSeat[] = [
     ...table.seats.filter((s) => s.kind === 'bot'),
     ...table.seats.filter((s) => s.kind === 'user'),

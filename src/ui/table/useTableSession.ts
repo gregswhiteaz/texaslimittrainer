@@ -2,7 +2,6 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { newReplayCode, type ReplayCode } from '../../engine/deck';
 import type { Action } from '../../engine/hand';
 import {
-  DEFAULT_SESSION_CONFIG,
   applyUserAction,
   completedHand,
   dealHand,
@@ -15,14 +14,14 @@ import {
 } from '../../table/session';
 
 export interface TableSessionOptions {
-  readonly config?: SessionConfig;
+  readonly config?: Partial<SessionConfig>;
   readonly newCode?: () => ReplayCode;
   readonly onHandComplete?: (hand: CompletedHand) => void;
 }
 
 /** Holds the session and runs deal and bot steps one macrotask each; nothing runs on the user's turn. */
 export function useTableSession({
-  config = DEFAULT_SESSION_CONFIG,
+  config,
   newCode = newReplayCode,
   onHandComplete,
 }: TableSessionOptions): { table: TableState; act: (action: Action) => void } {

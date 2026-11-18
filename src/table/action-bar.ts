@@ -1,6 +1,6 @@
 import type { Action } from '../engine/hand';
 import { playerView, type PlayerView } from '../engine/player-view';
-import { USER_SEAT, type TableState } from './session';
+import type { TableState } from './session';
 
 export interface ActionButton {
   readonly label: string;
@@ -46,5 +46,5 @@ export function actionBar(view: PlayerView | null): ActionBarModel {
 
 /** Null before the first deal (A-1); else the bar for the user's view. */
 export function userActionBar(table: TableState): ActionBarModel | null {
-  return table.hand === null ? null : actionBar(playerView(table.hand, USER_SEAT));
+  return table.hand === null ? null : actionBar(playerView(table.hand, table.config.userSeat));
 }

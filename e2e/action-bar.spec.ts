@@ -10,6 +10,8 @@ const IDLE = ['Fold', 'Call', 'Raise'];
 async function openApp(page: Page): Promise<void> {
   await page.addInitScript(stubReplayWords, WORDS);
   await page.goto('/');
+  await page.getByRole('button', { name: 'New game' }).click();
+  await page.getByRole('button', { name: 'Start game' }).click();
 }
 
 /** Fake timers that only advance through clock.runFor. */

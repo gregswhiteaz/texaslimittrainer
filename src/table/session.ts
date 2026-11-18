@@ -25,12 +25,6 @@ export interface Stake {
   readonly smallBet: number;
   readonly bigBet: number;
 }
-/** Later stories (TASK-2.1+) add fields: game type, players, line-up, speed, seat, button. */
-export interface SessionConfig {
-  readonly stake: Stake;
-}
-export const DEFAULT_SESSION_CONFIG: SessionConfig = { stake: { smallBet: 4, bigBet: 8 } };
-
 /** REQ-006.2: small blind = floor(smallBet / 2), big blind = smallBet. */
 export function stakesFor(stake: Stake): Stakes {
   return {
@@ -63,6 +57,43 @@ export const DEFAULT_SEATS: readonly SessionSeat[] = ['Ava', 'Ben', 'Cal', 'Dee'
   },
 );
 
+/** TASK-2.4 widens: 'sit-and-go' (no stake). */
+export type GameType = 'cash';
+/** REQ-009.1, REQ-009.6: the preset name, or Custom when the bot styles match no preset. */
+export type LineUpName = 'Mixed' | 'Tough' | 'Soft' | 'Custom';
+/** TASK-2.11 / TASK-3.18 widen: 'realistic'. */
+export type Speed = 'rapid';
+
+/** Plain, JSON-serialisable session configuration (D-2). */
+export interface SessionConfig {
+  readonly gameType: GameType;
+  /** 2..10 including the user (REQ-005.2); equals seats.length. */
+  readonly players: number;
+  readonly stake: Stake;
+  readonly lineUp: LineUpName;
+  /** Ascending seat order; one 'user' seat at userSeat; bots carry a style. */
+  readonly seats: readonly SessionSeat[];
+  readonly speed: Speed;
+  readonly userSeat: SeatNumber;
+  /** Starting dealer button. */
+  readonly button: SeatNumber;
+}
+export const DEFAULT_SESSION_CONFIG: SessionConfig = {
+  gameType: 'cash',
+  players: DEFAULT_SEATS.length,
+  stake: { smallBet: 4, bigBet: 8 },
+  lineUp: 'Custom',
+  seats: DEFAULT_SEATS,
+  speed: 'rapid',
+  userSeat: USER_SEAT,
+  button: DEFAULT_BUTTON,
+};
+
+/** `input` merged over the first-use defaults; not validated (A-11). */
+export function resolveSessionConfig(input: Partial<SessionConfig> = {}): SessionConfig {
+  return { ...DEFAULT_SESSION_CONFIG, ...input };
+}
+
 export interface UserDecision {
   readonly view: PlayerView;
   readonly action: Action;
@@ -80,13 +111,14 @@ export interface TableState {
 }
 export type NextStep = 'deal' | 'bot' | 'user' | 'done';
 
-export function seatSession(config: SessionConfig = DEFAULT_SESSION_CONFIG): TableState {
+export function seatSession(input?: Partial<SessionConfig>): TableState {
+  const config = resolveSessionConfig(input);
   const stack = buyIn(config.stake);
   return {
     config,
     stakes: stakesFor(config.stake),
-    seats: DEFAULT_SEATS,
-    stacks: DEFAULT_SEATS.map(({ seat }) => ({ seat, stack })),
+    seats: config.seats,
+    stacks: config.seats.map(({ seat }) => ({ seat, stack })),
     hand: null,
     replayCode: null,
     userDecisions: [],
@@ -97,7 +129,7 @@ export function nextStep(table: TableState): NextStep {
   const { hand } = table;
   if (hand === null) return 'deal';
   if (hand.result !== null) return 'done';
-  return hand.toAct === USER_SEAT ? 'user' : 'bot';
+  return hand.toAct === table.config.userSeat ? 'user' : 'bot';
 }
 
 export function dealHand(table: TableState, code: ReplayCode): TableState {
@@ -105,7 +137,7 @@ export function dealHand(table: TableState, code: ReplayCode): TableState {
   const hand = createHand({
     stakes: table.stakes,
     seats: table.stacks,
-    button: DEFAULT_BUTTON,
+    button: table.config.button,
     deck: shuffledDeck(code),
   });
   return { ...table, hand, replayCode: code };
@@ -123,7 +155,7 @@ export function applyUserAction(table: TableState, action: Action): TableState {
   if (nextStep(table) !== 'user' || table.hand === null) {
     throw new RangeError("Not the user's turn");
   }
-  const view = playerView(table.hand, USER_SEAT);
+  const view = playerView(table.hand, table.config.userSeat);
   const applied = applyAction(table.hand, action);
   if (!applied.ok) throw new RangeError(applied.error.message);
   return {
@@ -161,14 +193,15 @@ export function completedHand(table: TableState): CompletedHand | null {
   if (hand === null || hand.result === null || replayCode === null) return null;
   const startingStack = (seat: SeatNumber): number =>
     hand.players.find((p) => p.seat === seat)?.startingStack ?? 0;
-  const user = hand.players.find((p) => p.seat === USER_SEAT);
+  const { userSeat } = table.config;
+  const user = hand.players.find((p) => p.seat === userSeat);
   if (user === undefined) throw new RangeError('User seat is not dealt in');
   return {
     replayCode,
     stakes: hand.stakes,
     button: hand.button,
     seats: table.seats.map((s) => ({ ...s, startingStack: startingStack(s.seat) })),
-    userSeat: USER_SEAT,
+    userSeat,
     userHoleCards: [user.holeCards[0], user.holeCards[1]],
     actions: hand.actions,
     board: hand.board,

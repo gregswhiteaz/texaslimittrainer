@@ -1,0 +1,74 @@
+{
+  "task": "TASK-2.1",
+  "phase": "build",
+  "run": 1,
+  "result": "PASS",
+  "changed_lines": 956,
+  "changed_files": [
+    "e2e/action-bar.spec.ts",
+    "e2e/home.spec.ts",
+    "e2e/table.spec.ts",
+    "src/table/action-bar.ts",
+    "src/table/session.ts",
+    "src/ui/App.tsx",
+    "src/ui/config/GameConfigScreen.tsx",
+    "src/ui/home/HomeScreen.tsx",
+    "src/ui/styles.css",
+    "src/ui/table/Table.tsx",
+    "src/ui/table/TableScreen.tsx",
+    "src/ui/table/useTableSession.ts",
+    "src/ui/useHeadingFocus.ts",
+    "tests/table/session-config.acceptance.test.ts",
+    "tests/table/session-config.test.ts",
+    "tests/ui/home.acceptance.test.tsx",
+    "tests/ui/table.acceptance.test.tsx",
+    "tests/unit/app.test.tsx"
+  ],
+  "checks": [
+    {
+      "name": "test command",
+      "status": "pass",
+      "detail": "$ npm test\nexit 0\nct, p95 0.90 ms (target 2 ms x 20 = 40 ms)\nHU flop vs every unseen combo: sampled, p95 28.74 ms (target 20 ms x 20 = 400 ms)\nHU turn vs every unseen combo: exact, p95 43.55 ms (target 15 ms x 20 = 300 ms)\nThree-way preflop AA vs KK vs QQ: sampled, p95 48.98 ms (target 20 ms x 20 = 400 ms)\n6-max preflop vs 5 ranges: sampled, p95 111.66 ms (target 50 ms x 20 = 1000 ms)\nFull ring flop vs 9 ranges: sampled, p95 466.20 ms (target 80 ms x 20 = 1600 ms)\n\n \u2713 tests/advice/equity.perf.test.ts > equity performance > equity latency within target times slack 12753ms\n\n Test Files  63 passed (63)\n      Tests  228 passed | 1 skipped (229)\n   Start at  16:06:05\n   Duration  13.06s (tests 94%, import 5%)\n\n\u001b[34m % \u001b[39m\u001b[2mCoverage report from \u001b[22m\u001b[33mv8\u001b[39m\n-------------------|---------|----------|---------|---------|-------------------\nFile               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s \n-------------------|---------|----------|---------|---------|-------------------\nAll files          |   97.27 |    92.95 |   94.62 |   97.77 |                   \n advice            |   99.79 |    98.18 |     100 |     100 |                   \n  equity.ts        |   99.55 |    93.97 |     100 |     100 | 114,120,199,292   \n engine            |     100 |    92.92 |     100 |     100 |                   \n  ...-evaluator.ts |     100 |    79.81 |     100 |     100 | ...84-197,211-212 \n  hand.ts          |     100 |    96.55 |     100 |     100 | 231-232,235-238   \n  invariants.ts    |     100 |    97.93 |     100 |     100 | 84,161,234        \n playtest          |   99.54 |    98.44 |     100 |     100 |                   \n  cli.ts           |   99.15 |    97.14 |     100 |     100 | 135-143           \n table             |   98.43 |    95.91 |     100 |     100 |                   \n  session.ts       |      98 |    94.59 |     100 |     100 | 195-198           \n ui                |    37.5 |    14.28 |   33.33 |      40 |                   \n  App.tsx          |    37.5 |    33.33 |      25 |    37.5 | 20-32             \n  ...adingFocus.ts |    37.5 |        0 |      50 |   42.85 | 10-13             \n ui/config         |   93.75 |       75 |   83.33 |   93.33 |                   \n  ...figScreen.tsx |   93.75 |       75 |   83.33 |   93.33 | 91                \n ui/table          |   46.93 |    44.44 |   47.82 |   55.26 |                   \n  ActionBar.tsx    |      50 |        0 |   66.66 |   66.66 | 19                \n  Table.tsx        |   86.66 |    78.94 |      75 |    92.3 | 46                \n  ...bleSession.ts |   21.42 |     7.69 |   18.18 |      25 | 32-50,54          \n-------------------|---------|----------|---------|---------|-------------------\n\n=============================== Coverage summary ===============================\nStatements   : 97.27% ( 1427/1467 )\nBranches     : 92.95% ( 857/922 )\nFunctions    : 94.62% ( 299/316 )\nLines        : 97.77% ( 1189/1216 )\n================================================================================\n"
+    },
+    {
+      "name": "lint command",
+      "status": "pass",
+      "detail": "$ npm run lint\nexit 0\n\n> tlh-trainer@0.0.0 lint\n> eslint . --max-warnings 0 && prettier --check .\n\nChecking formatting...\nAll matched files use Prettier code style!\n"
+    },
+    {
+      "name": "typecheck command",
+      "status": "pass",
+      "detail": "$ npm run typecheck\nexit 0\n\n> tlh-trainer@0.0.0 typecheck\n> tsc -p tsconfig.json\n\n"
+    },
+    {
+      "name": "spec unchanged",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "name": "scope budget (lines)",
+      "status": "warn",
+      "detail": "956 changed lines vs budget 700 (fail above 1400)"
+    },
+    {
+      "name": "scope budget (files)",
+      "status": "warn",
+      "detail": "18 files vs budget 16"
+    },
+    {
+      "name": "files outside spec",
+      "status": "warn",
+      "detail": "src/ui/useHeadingFocus.ts"
+    },
+    {
+      "name": "all changes listed in changes.md",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "name": "tests locked",
+      "status": "pass",
+      "detail": "3 acceptance test file(s) locked; 77 test files snapshotted"
+    }
+  ]
+}

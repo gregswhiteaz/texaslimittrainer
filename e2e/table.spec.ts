@@ -75,6 +75,8 @@ async function openApp(page: Page): Promise<void> {
   await page.addInitScript(stubReplayWords, WORDS);
   await page.addInitScript(recordTable);
   await page.goto('/');
+  await page.getByRole('button', { name: 'New game' }).click();
+  await page.getByRole('button', { name: 'Start game' }).click();
 }
 
 const tableSection = (page: Page) => page.getByRole('region', { name: 'Table' });
