@@ -9,19 +9,25 @@ const IMPOSSIBLE_LIMITS = {
   EQUITY_PERF_SCALE: '0',
 };
 const TIMEOUT_MS = 120_000;
+// eslint-disable-next-line no-control-regex -- matches ANSI escape sequences
+const ANSI_ESCAPE = /\u001b\[[0-9;]*m/g;
 
 /** Runs the perf suites in a nested Vitest (no coverage) and returns exit code and output. */
 function runPerfSuites(ci: boolean): { exitCode: number; output: string } {
   const env: NodeJS.ProcessEnv = { ...sandboxEnv(), ...IMPOSSIBLE_LIMITS };
   if (ci) env.CI = 'true';
   else delete env.CI;
+  // Forced color wraps the summary counts in ANSI codes, which breaks the summary regexes.
+  delete env.FORCE_COLOR;
+  env.NO_COLOR = '1';
   const result = spawnSync('npx', ['vitest', 'run', ...PERF_FILES], {
     cwd: REPO_ROOT,
     encoding: 'utf8',
     env,
     timeout: TIMEOUT_MS,
   });
-  return { exitCode: result.status ?? -1, output: result.stdout + result.stderr };
+  const output = (result.stdout + result.stderr).replace(ANSI_ESCAPE, '');
+  return { exitCode: result.status ?? -1, output };
 }
 
 describe('speed limits in CI', () => {

@@ -4,20 +4,20 @@
   "branch": "doit/TASK-1.20",
   "base_commit": "9c581c54adb390f6d32d0b20ba16ebe5849fa9f4",
   "started": "2026-11-17T23:13:14",
-  "review_round": 0,
+  "review_round": 1,
   "judge_round": 0,
   "sendbacks": 0,
-  "gate_runs": 2,
+  "gate_runs": 3,
   "questions": 0,
   "assumptions": 0,
   "escalations": 0,
   "item_failures": {},
   "locked_tests": {
-    "tests/ci/speed-limits.acceptance.test.ts": "37f95ec7d93b7f4cafb77a5905cd33bf159d7ba844d19e6b7e0c53b15c5e71bf"
+    "tests/ci/speed-limits.acceptance.test.ts": "cba81619fb7b86e2625773b746f41ec9eb03a9a029df1fbfe5facbfd608ba769"
   },
   "test_snapshot": {
     "tests/ci/speed-limits.acceptance.test.ts": {
-      "sha": "37f95ec7d93b7f4cafb77a5905cd33bf159d7ba844d19e6b7e0c53b15c5e71bf",
+      "sha": "cba81619fb7b86e2625773b746f41ec9eb03a9a029df1fbfe5facbfd608ba769",
       "asserts": 7,
       "skips": 0
     },
@@ -197,7 +197,23 @@
       "skips": 0
     }
   },
-  "history": [],
+  "history": [
+    {
+      "t": "2026-11-17T23:21:12",
+      "event": "unlock",
+      "file": "tests/ci/speed-limits.acceptance.test.ts",
+      "reason": "Code review r1 MAJOR: nested Vitest inherits FORCE_COLOR, ANSI codes break the summary regex so the test fails spuriously; fix = set NO_COLOR/delete FORCE_COLOR in the child env or strip ANSI before matching (strengthens reliability, assertions unchanged)"
+    }
+  ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-1.20",
-  "spec_sha256": "469011911fa27a4d9f6f88c62da3ae332d0056543e178dd72fd9b4162625cc18"
+  "spec_sha256": "469011911fa27a4d9f6f88c62da3ae332d0056543e178dd72fd9b4162625cc18",
+  "review_findings": {
+    "1": 1
+  },
+  "relock_pending": [],
+  "brief_history": {
+    "tests/ci/speed-limits.acceptance.test.ts:summary-regex-breaks-with-forced-color": [
+      "review r1"
+    ]
+  }
 }

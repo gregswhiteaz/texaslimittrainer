@@ -1,0 +1,31 @@
+{"reviewer": "code", "round": 1,
+ "rubric": [
+  {"item": "SPEC-01 correctness", "result": "pass"},
+  {"item": "SPEC-01 test strength", "result": "pass"},
+  {"item": "SPEC-02 correctness", "result": "pass"},
+  {"item": "SPEC-02 test strength", "result": "pass"},
+  {"item": "SPEC-03 correctness", "result": "pass"},
+  {"item": "SPEC-03 test strength", "result": "pass"},
+  {"item": "SPEC-04 correctness", "result": "pass"},
+  {"item": "SPEC-04 test strength", "result": "pass"},
+  {"item": "SPEC-05 correctness", "result": "pass"},
+  {"item": "SPEC-05 test strength", "result": "pass"},
+  {"item": "SPEC-06 correctness", "result": "pass"},
+  {"item": "SPEC-06 test strength", "result": "pass"},
+  {"item": "SPEC-07 correctness", "result": "pass"},
+  {"item": "SPEC-07 test strength", "result": "pass"},
+  {"item": "SPEC-08 correctness", "result": "pass"},
+  {"item": "SPEC-08 test strength", "result": "pass"},
+  {"item": "scope", "result": "pass"},
+  {"item": "concision", "result": "pass"},
+  {"item": "clarity", "result": "pass"}
+ ],
+ "findings": [
+  {"fingerprint": "tests/ci/speed-limits.acceptance.test.ts:summary-regex-breaks-with-forced-color",
+   "severity": "MAJOR",
+   "file": "tests/ci/speed-limits.acceptance.test.ts", "line": 16,
+   "issue": "The nested Vitest inherits FORCE_COLOR (and similar color vars) from the parent environment through sandboxEnv(). When color is forced, Vitest wraps the summary counts in ANSI codes, so /Tests\\s+2 passed/ and /Tests\\s+2 failed/ no longer match and both acceptance tests fail even though the behaviour is correct. This is a false failure that depends on the environment, in a test meant to remove CI flakiness. GitHub Actions does not set FORCE_COLOR by default, so CI passes today. But any developer shell or tool that exports FORCE_COLOR breaks local `npm test`.",
+   "evidence": "`FORCE_COLOR=1 npx vitest run tests/ci/speed-limits.acceptance.test.ts` -> 2 failed: \"AssertionError: expected '\\n\\u001b[1m\\u001b[30m\\u001b[46m RUN \\u2026' to match /Tests\\s+2 passed/\" and the same for /Tests\\s+2 failed/. Without FORCE_COLOR, both pass (2.7 s each).",
+   "fix": "In runPerfSuites, after building env, add `delete env.FORCE_COLOR; env.NO_COLOR = '1';`, or strip ANSI escapes from the output before matching. The file is listed in state.json locked_tests, so the orchestrator must unlock it first."}
+ ],
+ "summary": "The change matches the spec. speedLimitsEnforced is exactly env.CI !== 'true'. With CI=true, only the rate/build asserts and the p95 failure collection are gated. The checksum asserts, the per-scenario method asserts and the bounded-work error-message asserts still always run. Without CI, the threshold env names/defaults (1e6, 500, 20) and the 2000 ms ceiling are unchanged, and the full-speed commands in the README and headers are verbatim. sandboxEnv is exported, not copied, and scrubs VITEST*/NODE_V8_COVERAGE/TEST*. The nested run uses `npx vitest run`, so there is no --coverage and vite.config has no coverage.enabled. CI is deleted for the local case. No locked file, src/** or .github file was touched. The acceptance tests fail if either gate is inverted or removed in either suite. Verified locally: the new tests pass, and `CI=true ... -t \"bounds the work\"` passes with 1 test. One MAJOR: the acceptance test's summary regex fails when FORCE_COLOR is inherited. SPEC-04/06 mutation probes were not run: they edit src, and this review is read-only."}

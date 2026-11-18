@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-18T04:37:00Z'
-updated_date: '2026-11-18T06:17:00Z'
+updated_date: '2026-11-18T06:19:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-0
@@ -42,3 +42,9 @@ On TASK-1.3's CI attempt 2 (run 44236421395), two pre-existing wall-clock tests 
 
 Full spec: doit/TASK-1.20/spec.md
 <!-- SECTION:PLAN:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+Build: tests/support/speed.ts (speedLimitsEnforced: CI=true skips speed asserts only); evaluator/equity perf tests keep correctness asserts; bounded-work ceiling 2 s local / 10 s CI; nested-vitest acceptance test; README 'Speed targets'; no locked files touched; gate PASS.
+<!-- SECTION:NOTES:END -->

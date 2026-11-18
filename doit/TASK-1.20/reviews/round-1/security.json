@@ -1,0 +1,10 @@
+{"reviewer": "security", "round": 1,
+ "findings": [
+  {"fingerprint": "tests/ci/speed-limits.acceptance.test.ts:timeout-may-orphan-nested-vitest",
+   "severity": "NIT",
+   "file": "tests/ci/speed-limits.acceptance.test.ts", "line": 18,
+   "issue": "spawnSync's 120 s timeout sends SIGTERM only to the direct child (npx). If npx does not forward the signal, the grandchild Vitest process could outlive the test after a hang. The work stays bounded in practice: the inner tests have their own 60 s / 120 s timeouts, and CI runners are torn down after the job.",
+   "evidence": "No untrusted input. The fixed argv ['vitest','run',...PERF_FILES] goes to spawnSync, and on timeout SIGTERM is sent to npx only.",
+   "fix": "Optional: use 'killSignal' or call the local node_modules/.bin/vitest directly so the timeout reaches the Vitest process. Not required."}
+ ],
+ "summary": "No BLOCKER or MAJOR. The child process is spawned with spawnSync, a fixed argument array, no shell and a fixed cwd (REPO_ROOT), so no injection path exists. Env is the parent env minus the VITEST/NODE_V8_COVERAGE/TEST prefixes, plus fixed limit values; nothing secret is logged beyond the nested test output, which is the same exposure as the existing sandbox helper. The newly exported sandboxEnv is test-only. The tests fail closed: if the spawn fails or times out, status becomes -1, and the 'without CI' case still requires /Tests\\s+2 failed/ in the output, so a broken spawn cannot pass silently. Correctness guards are kept: the evaluator checksum asserts and the equity method asserts are still unconditional, and only the wall-clock rate/build/p95 limits are gated on CI === 'true' (exact match; '1', 'false' and '' still enforce). The bounded-work equity test keeps its error-message assertions, which prove the rejection cap or feasibility budget ended each call; only its wall-clock ceiling rises to 10 s in CI, which still catches a runaway budget. No new dependencies. The README change is documentation only."}
