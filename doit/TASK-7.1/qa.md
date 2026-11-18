@@ -12,3 +12,7 @@
 
 ## Q-4 — Latency targets (D-4)
 - Answer: **Accept.** p95 on reference machine: HU preflop ≤15 ms; HU flop exact ≤2 ms; HU flop vs all combos ≤20 ms; HU turn vs all combos ≤15 ms; 3-way preflop ≤20 ms; 6-max preflop vs 5 ranges ≤50 ms; full-ring flop vs 9 ranges ≤80 ms. npm test uses EQUITY_PERF_SCALE=20 slack; separate command checks real targets.
+
+## Assumptions logged during build (orchestrator-accepted)
+- A-12: SPEC-08 river example arithmetic slip — spec says 1,035×1×2 = 2,070; with 45 unseen cards the live combos are C(45,2) = 990, so 990×1×2 = 1,980 (still exact). Test asserts 1,980.
+- A-13: SPEC-05 input (b) has identical opponent ranges, so swapping is a no-op on canonical input; test asserts reordered result equals original exactly; mapping-back with distinct ranges is covered by the SPEC-09 property test.
