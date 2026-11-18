@@ -4,7 +4,7 @@ title: Act correctly on capped streets and when short of chips
 status: To Do
 assignee: []
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-17T23:22:00Z'
+updated_date: '2026-11-18T22:48:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -50,6 +50,8 @@ Plan key: E03-S06 · Dream: limit-holdem-trainer
 - [ ] #6 Given the user has $6 with nothing in the pot this street and faces a $4 bet on the flop at $4/$8, When the action bar is shown, Then it offers exactly Fold, "Call $4" and "Raise all-in to $6" [REQ-017.7, REQ-022.1]
 - [ ] #7 Given the user has $3 with no bet facing on the flop at $4/$8, When the action bar is shown, Then it offers exactly Check and "Bet all-in $3" and no Fold [REQ-017.7, REQ-022.1]
 - [ ] #8 Given the user bet $4 on the flop and a bot then raises all-in to $5 (less than half a full raise) and the others call, When the action returns to the user, Then the bar offers Fold and "Call $1" and no Raise [REQ-017.7]
+- [ ] #9 Given capped streets and short stacks, When the action bar is built, Then actionLabel shows 'Call all-in $X', 'Bet all-in $X' and 'Raise all-in to $X' (and chip labels without '$' in sit-and-go), and the TASK-3.2 legalActions property is widened to capped and short-stack states
+- [ ] #10 Given an idle action-bar button whose disabled attribute is removed in the DOM, When it is clicked, Then a test shows the table state is unchanged
 <!-- AC:END -->
 
 ## Definition of Done
@@ -67,3 +69,11 @@ Plan key: E03-S06 · Dream: limit-holdem-trainer
 - [ ] #11 Story documentation is written and published to Backlog.md
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+AC added from TASK-3.2 follow-up (doc-22).
+
+AC added from TASK-3.2 follow-up (doc-22).
+<!-- SECTION:NOTES:END -->

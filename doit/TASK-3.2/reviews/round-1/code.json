@@ -1,0 +1,33 @@
+{"reviewer": "code", "round": 1,
+ "rubric": [
+  {"item": "SPEC-01 correctness", "result": "pass"}, {"item": "SPEC-01 test strength", "result": "pass"},
+  {"item": "SPEC-02 correctness", "result": "pass"}, {"item": "SPEC-02 test strength", "result": "pass"},
+  {"item": "SPEC-03 correctness", "result": "pass"}, {"item": "SPEC-03 test strength", "result": "pass"},
+  {"item": "SPEC-04 correctness", "result": "pass"}, {"item": "SPEC-04 test strength", "result": "pass"},
+  {"item": "SPEC-05 correctness", "result": "pass"}, {"item": "SPEC-05 test strength", "result": "pass"},
+  {"item": "SPEC-06 correctness", "result": "pass"}, {"item": "SPEC-06 test strength", "result": "pass"},
+  {"item": "SPEC-07 correctness", "result": "pass"}, {"item": "SPEC-07 test strength", "result": "pass"},
+  {"item": "SPEC-08 correctness", "result": "pass"}, {"item": "SPEC-08 test strength", "result": "pass"},
+  {"item": "SPEC-09 correctness", "result": "pass"}, {"item": "SPEC-09 test strength", "result": "pass"},
+  {"item": "SPEC-10 correctness", "result": "pass"}, {"item": "SPEC-10 test strength", "result": "pass"},
+  {"item": "SPEC-11 correctness", "result": "pass"}, {"item": "SPEC-11 test strength", "result": "pass"},
+  {"item": "SPEC-12 correctness", "result": "pass"}, {"item": "SPEC-12 test strength", "result": "pass"},
+  {"item": "SPEC-13 correctness", "result": "pass"}, {"item": "SPEC-13 test strength", "result": "pass"},
+  {"item": "SPEC-14 correctness", "result": "pass"}, {"item": "SPEC-14 test strength", "result": "pass"},
+  {"item": "SPEC-15 correctness", "result": "pass"}, {"item": "SPEC-15 test strength", "result": "pass"},
+  {"item": "SPEC-16 correctness", "result": "pass"}, {"item": "SPEC-16 test strength", "result": "pass"},
+  {"item": "SPEC-17 correctness", "result": "pass"}, {"item": "SPEC-17 test strength", "result": "pass"},
+  {"item": "SPEC-18 correctness", "result": "pass"}, {"item": "SPEC-18 test strength", "result": "pass"},
+  {"item": "scope", "result": "pass"}, {"item": "concision", "result": "pass"}, {"item": "clarity", "result": "pass"}
+ ],
+ "findings": [
+  {"fingerprint": "e2e/action-bar.spec.ts:duplicated-e2e-helpers", "severity": "MINOR", "file": "e2e/action-bar.spec.ts", "line": 15,
+   "issue": "installPausedClock, runFor1000, nextTurn, clickAction, actionCount, tableSection/yourActions/handOver are copied from e2e/table.spec.ts (lines 60-120) almost verbatim.",
+   "evidence": "Same bodies and comments in both files; table.spec.ts is locked and D-4 permits only three edits there, so they could not be extracted this story.",
+   "fix": "Leave as is for this story. When table.spec.ts is next unlocked (e.g. TASK-3.16, which already has a follow-up touching both files), move the shared helpers into e2e/support/ and import them from both specs."},
+  {"fingerprint": "e2e/table.spec.ts:checkorcall-null-fallback", "severity": "NIT", "file": "e2e/table.spec.ts", "line": 125,
+   "issue": "`(await call.textContent()) ?? ''` falls back to an empty name that can never match. textContent() waits for the element anyway, so the fallback never runs.",
+   "evidence": "If no Call button exists, textContent() times out before the `?? ''` is reached.",
+   "fix": "Optional: pass the regex straight in, the way e2e/action-bar.spec.ts:105 does. That would mean widening clickAction's signature, which D-4 does not allow, so keeping the current code is fine."}
+ ],
+ "summary": "All 18 SPEC items are implemented as specified. The model is a pure function of PlayerView. Enabled buttons are legalActions in engine order, with the engine's amounts unchanged (Call shows the owed amount, Raise shows the raise-to total). The idle bar is always the frozen Fold/Call/Raise set with null actions, and no bar is shown before the deal. ActionBar uses native buttons with disabled={!enabled}, an onClick guard, and no key handlers (grep of src for keydown|keyup|keypress|onKey|accessKey|tabIndex finds nothing). The e2e/table.spec.ts diff against base e9827ac makes exactly the three D-4 edits: VERBS became the BUTTON_NAME regex in expectNoBuyInControl, checkOrCall now clicks the `Call $<n>` button, and both toHaveCount(0) checks became expectDisabledBar (visible, at least one button, all disabled). No other assertion was removed or weakened; nextTurn and the recorder already used :not(:disabled). Mutants were run in a scratch copy outside the repo, then deleted. Vitest: 9 of 10 killed (call/bet/raise labels, order, dropped fold, wrong action amount, idle labels, never-disabled, bar before deal). The survivor removed the toAct===seat check, which changes nothing because PlayerView.legalActions is already [] off-turn. Playwright (Chromium): a document keydown handler, never-disabled buttons, buttons under 44 px and a call label without an amount were all killed. The axe workaround is sound. Without it, axe under the paused clock hangs and the test times out (confirmed). With it, an idle bar with empty button names fails on button-name (critical) at the bot's turn in both Chromium and WebKit. That shows the scan really looks at the paused DOM, and the follow-up check (count 5, to-act 6) proves the app's pending timer did not fire. The only a11y effect it cannot catch is low contrast on disabled buttons, which axe and WCAG 1.4.3 exempt by design, so it hides no real issue. Screenshots match A-2 and A-3 and D-3: dark neutral 52 px buttons, 'Fold / Call $4 / Raise to $8' on the user's turn, a greyed 'Fold / Call / Raise' while Eli acts, and no red accent. The baseline run of action-bar.spec.ts and table.spec.ts passed in Chromium and WebKit (22/22). No BLOCKER or MAJOR findings."}

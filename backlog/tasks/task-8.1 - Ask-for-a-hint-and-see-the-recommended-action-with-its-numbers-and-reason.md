@@ -4,7 +4,7 @@ title: Ask for a hint and see the recommended action with its numbers and reason
 status: To Do
 assignee: []
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-18T19:10:00Z'
+updated_date: '2026-11-18T22:48:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -55,6 +55,7 @@ Plan key: E08-S01 · Dream: limit-holdem-trainer
 - [ ] #7 Given the hint card is open or a hint is still being computed, When the user folds, checks, calls, bets or raises, Then no card is shown after the action and none is shown at the user's next decision unless Hint is selected again [REQ-042.3]
 - [ ] #8 Given a session in which the user opens Hint at 50 consecutive decisions and opens and hides it 10 times within one decision, When each hint is requested, Then the card is shown every time and no limit, counter or cost is shown [REQ-042.4]
 - [ ] #9 Given a hint request, When advice is computed, Then it runs off the main thread so the table UI stays responsive (REQ-055.6)
+- [ ] #10 Given the action bar, When it is enabled on the user's turn, Then it includes the Hint button, and when it is disabled the Hint button is absent or disabled
 <!-- AC:END -->
 
 ## Definition of Done
@@ -77,4 +78,6 @@ Plan key: E08-S01 · Dream: limit-holdem-trainer
 
 <!-- SECTION:NOTES:BEGIN -->
 AC added from TASK-7.3 follow-up (doc-17).
+
+AC added from TASK-3.2 follow-up (doc-22).
 <!-- SECTION:NOTES:END -->
