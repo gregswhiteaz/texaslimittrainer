@@ -1,10 +1,11 @@
 ---
 id: TASK-1.3
 title: Deal every hand from a seeded shuffle with a replay code
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-17T23:21:00Z'
+updated_date: '2026-11-18T04:09:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-0
@@ -62,3 +63,14 @@ Plan key: E01-S03 · Dream: limit-holdem-trainer
 - [ ] #11 Story documentation is written and published to Backlog.md
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. src/engine/seeded-random.ts: add mixState128 (two SplitMix32-finaliser passes, bijective, non-zero state for valid codes) and Xoshiro128.nextIntUnbiased (Lemire with rejection); keep existing outputs unchanged and forbidden strings out.
+2. src/engine/deck.ts: ReplayCode (32 lowercase hex, 128-bit), newReplayCode() via globalThis.crypto.getRandomValues(Uint32Array(4)) (redraw all-zero), replayCodeFromWords, isReplayCode, shuffledDeck(code) = Durstenfeld Fisher–Yates over [0..51], index 0 dealt first.
+3. Tests: 10,000-seed permutation property, 100,000-shuffle chi-square (two tabulations), golden decks and mix vectors, determinism, Node crypto source.
+4. e2e/replay-seed.spec.ts: in-memory Vite bundle injected into the preview page; recorder on crypto.getRandomValues; Chromium + WebKit.
+
+Full spec: doit/TASK-1.3/spec.md
+<!-- SECTION:PLAN:END -->
