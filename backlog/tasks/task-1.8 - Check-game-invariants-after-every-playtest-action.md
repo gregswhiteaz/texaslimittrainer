@@ -4,7 +4,7 @@ title: Check game invariants after every playtest action
 status: To Do
 assignee: []
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-17T23:22:00Z'
+updated_date: '2026-11-18T17:24:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-0
@@ -48,6 +48,7 @@ Plan key: E01-S08 · Dream: limit-holdem-trainer
 - [ ] #2 Given an injected engine fault for each invariant (chips created, illegal action accepted, fifth bet allowed, ineligible pot winner, duplicate card), When the playtest runs, Then it reports that invariant as violated [REQ-056.1]
 - [ ] #3 Given an invariant violation, When the playtest stops, Then it prints the hand's replay code and full action history and exits non-zero [REQ-062.2]
 - [ ] #4 Given a push to GitHub, When the CI workflow runs, Then it runs a 10,000-hand playtest and the workflow fails if the playtest exits non-zero [REQ-064.2, REQ-056.1]
+- [ ] #5 Given an invariant violation during a playtest, When it is detected through the runner's per-action hook, Then the report prints that hand's replay code and full action history (formatHand) and the run exits 1
 <!-- AC:END -->
 
 ## Definition of Done
@@ -65,3 +66,9 @@ Plan key: E01-S08 · Dream: limit-holdem-trainer
 - [ ] #11 Story documentation is written and published to Backlog.md
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+AC added from TASK-1.6 follow-up (doc-15): add an onAction hook to runPlaytest.
+<!-- SECTION:NOTES:END -->

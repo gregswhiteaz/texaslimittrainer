@@ -4,7 +4,7 @@ title: Play heads-up hands with heads-up blinds and order
 status: To Do
 assignee: []
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-17T23:22:00Z'
+updated_date: '2026-11-18T17:24:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -43,6 +43,7 @@ Plan key: E01-S09 · Dream: limit-holdem-trainer
 - [ ] #2 Given a heads-up hand, When preflop betting begins, Then the button acts first [REQ-015.2]
 - [ ] #3 Given a heads-up hand, When betting begins on the flop, turn and river, Then the non-button player acts first on each street [REQ-015.3]
 - [ ] #4 Given `npm run playtest -- --hands 10000 --size 2 --seed 42`, When it runs, Then every hand is heads-up and the run reports zero invariant violations [REQ-062.1, REQ-015.1]
+- [ ] #5 Given npm run playtest -- --size 2, When it runs, Then it plays heads-up hands with heads-up blinds and order and reports 0 violations
 <!-- AC:END -->
 
 ## Definition of Done
@@ -60,3 +61,9 @@ Plan key: E01-S09 · Dream: limit-holdem-trainer
 - [ ] #11 Story documentation is written and published to Backlog.md
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+AC added from TASK-1.6 follow-up (doc-15): --size is limited to 3..10 until heads-up exists.
+<!-- SECTION:NOTES:END -->

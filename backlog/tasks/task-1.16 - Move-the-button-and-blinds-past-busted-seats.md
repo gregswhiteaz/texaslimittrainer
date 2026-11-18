@@ -4,7 +4,7 @@ title: Move the button and blinds past busted seats
 status: To Do
 assignee: []
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-17T23:22:00Z'
+updated_date: '2026-11-18T17:24:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -55,6 +55,7 @@ Plan key: E01-S16 · Dream: limit-holdem-trainer
 - [ ] #5 Given a player with $1 due to post the $2 small blind, When blinds are posted, Then that player posts $1 and is all-in [REQ-020.4]
 - [ ] #6 Given `npm run playtest -- --hands 10000 --game sng --seed 42`, When it runs, Then every sit-and-go starts each seat with 1,500 chips at 20/40 limits, busted seats are never refilled and are skipped for button and blinds, a new sit-and-go starts when one player holds all chips, and zero invariant violations are reported [REQ-062.1, REQ-020.1]
 - [ ] #7 Given `npm run playtest -- --hands 10000 --seed 42` (cash), When hands are played, Then every seat keeps its real stack between hands, only a busted seat is restored to the $160 buy-in, short-stack all-ins and side pots occur, and zero invariant violations are reported [REQ-056.1, REQ-018.5]
+- [ ] #8 Given --game sng and --game cash with the same --seed, When both runs deal hand k, Then their replay codes differ in word 2 and are otherwise derived from seed and k
 <!-- AC:END -->
 
 ## Definition of Done
@@ -72,3 +73,9 @@ Plan key: E01-S16 · Dream: limit-holdem-trainer
 - [ ] #11 Story documentation is written and published to Backlog.md
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+AC added from TASK-1.6 follow-up (doc-15): replay-code word 2 is reserved (0) for the game type.
+<!-- SECTION:NOTES:END -->

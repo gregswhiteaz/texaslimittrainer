@@ -1,0 +1,78 @@
+{
+  "reviewer": "code",
+  "round": 1,
+  "rubric": [
+    {"item": "SPEC-01 correctness", "result": "pass"},
+    {"item": "SPEC-01 test strength", "result": "pass"},
+    {"item": "SPEC-02 correctness", "result": "pass"},
+    {"item": "SPEC-02 test strength", "result": "pass"},
+    {"item": "SPEC-03 correctness", "result": "pass"},
+    {"item": "SPEC-03 test strength", "result": "pass"},
+    {"item": "SPEC-04 correctness", "result": "pass"},
+    {"item": "SPEC-04 test strength", "result": "pass"},
+    {"item": "SPEC-05 correctness", "result": "pass"},
+    {"item": "SPEC-05 test strength", "result": "pass"},
+    {"item": "SPEC-06 correctness", "result": "pass"},
+    {"item": "SPEC-06 test strength", "result": "pass"},
+    {"item": "SPEC-07 correctness", "result": "pass"},
+    {"item": "SPEC-07 test strength", "result": "pass"},
+    {"item": "SPEC-08 correctness", "result": "pass"},
+    {"item": "SPEC-08 test strength", "result": "pass"},
+    {"item": "SPEC-09 correctness", "result": "pass"},
+    {"item": "SPEC-09 test strength", "result": "pass"},
+    {"item": "SPEC-10 correctness", "result": "pass"},
+    {"item": "SPEC-10 test strength", "result": "pass"},
+    {"item": "SPEC-11 correctness", "result": "pass"},
+    {"item": "SPEC-11 test strength", "result": "pass"},
+    {"item": "SPEC-12 correctness", "result": "pass"},
+    {"item": "SPEC-12 test strength", "result": "pass"},
+    {"item": "SPEC-13 correctness", "result": "pass"},
+    {"item": "SPEC-13 test strength", "result": "pass"},
+    {"item": "SPEC-14 correctness", "result": "pass"},
+    {"item": "SPEC-14 test strength", "result": "pass"},
+    {"item": "SPEC-15 correctness", "result": "pass"},
+    {"item": "SPEC-15 test strength", "result": "pass"},
+    {"item": "scope", "result": "pass"},
+    {"item": "concision", "result": "pass"},
+    {"item": "clarity", "result": "pass"}
+  ],
+  "findings": [
+    {
+      "fingerprint": "src/playtest/runner.ts:largest-pot-untested",
+      "severity": "MINOR",
+      "file": "src/playtest/runner.ts",
+      "line": 133,
+      "issue": "§5 Rules 4 says largestPot = max over hands of the sum of result.awards[*].amount, but no test checks a computed non-zero largestPot. The only assertion on a computed value is largestPot === 0 for abandoned hands (runner.test.ts:74). The SPEC-13 report test uses a hand-built summary.",
+      "evidence": "Reasoned mutants that would survive the playtest suite: `largestPot = pot;` (last hand instead of the max) and `sum + award.pot` (award.pot is the pot index 0, so largestPot is always 0). Neither the acceptance tests nor the unit tests read the 'Largest pot:' line or summary.largestPot from a real run. (I could not run the mutants because the doit hook blocks reviewer writes outside reviews/.)",
+      "fix": "In runner.test.ts 'records player actions without blinds and counts capped streets', assert summary.largestPot equals the sum of hand.final.result.awards amounts. Also add a two-hand summarize([big, small]) case where the larger pot comes first, and assert largestPot equals the larger pot so the max is checked."
+    },
+    {
+      "fingerprint": "src/playtest/runner.ts:summarize-extra-export",
+      "severity": "NIT",
+      "file": "src/playtest/runner.ts",
+      "line": 116,
+      "issue": "`summarize` is exported but is not in the spec's §5 runner interface. I judge it acceptable: it has two real callers (runPlaytest, and main's replay mode at cli.ts:195, which needs a one-hand summary for the report), it adds no new behaviour, and it avoids duplicating the summary rules in cli.ts. Wrapping runPlaytest's loop in a generator to feed it is slightly indirect.",
+      "evidence": "cli.ts:195 `summary = summarize([hand]);` and runner.ts:169 `return summarize(play());`.",
+      "fix": "No change needed. Optionally note in build-log/changes that it is an intentional addition to the interface so TASK-1.8 reviewers know it is public."
+    },
+    {
+      "fingerprint": "tests/playtest/cli.test.ts:misleading-rejected-name",
+      "severity": "NIT",
+      "file": "tests/playtest/cli.test.ts",
+      "line": 89,
+      "issue": "In 'returns exit code 1 when the run has violations', `rejected` names the check-policy used only for the replay case, while the run case uses an inline raise-999 policy. Readers have to work out which policy goes with which case.",
+      "evidence": "Line 89 defines `rejected` (always check). Lines 90-94 pass a separate inline raise-999 factory.",
+      "fix": "Rename it to `alwaysCheck`, or define both policies as named constants."
+    },
+    {
+      "fingerprint": "src/playtest/runner.ts:policy-once-per-hand-untested",
+      "severity": "NIT",
+      "file": "src/playtest/runner.ts",
+      "line": 82,
+      "issue": "§5 Rule 2 says each seat's policy is created once at the start of the hand. No test would fail if a fresh policy (with a restarted generator) were built for every decision: runs and replays would still be deterministic and consistent with each other.",
+      "evidence": "No test pins the action sequence of a run hand to a known sequence, or counts factory calls.",
+      "fix": "Optionally, in runner.test.ts, count makePolicy calls in one playHand and assert the count equals size."
+    }
+  ],
+  "summary": "Clean, spec-faithful implementation. Determinism holds: no Date, Math.random, env or path dependence, and Map iteration is insertion order. Two 10,000-hand runs were byte-identical (cmp). Replay codes match D-2: `seed >>> 0` is exact for safe integers, and the code is checked against the §5 worked examples and the 2^53-1 seed. The policy filters bet/raise at betCount >= 4 and otherwise picks only from view.legalActions with one draw per decision. Replay mode reproduces cards and actions: --replay-code ...0004 --size 6 --button 4 printed the full hand, and AC#5 compares the formatHand blocks. replayHand reproduces the result. Argument parsing matches every fixed message and exit code, never echoes input, and normalises the Options line. The resolve hook is 18 lines and rewrites only extensionless ./ or ../ specifiers, with a fallback. src/engine is unchanged, and the boundary and network greps are empty. Reasoned mutants (policy cap boundary, button rotation, seat-generator key, violation counting, cappedStreets threshold, exit code, '--' value check, --button-without-replay, award order, foldOuts and playerActions counting) are all killed by the tests. The one weak spot is largestPot, which no computed-value test checks (MINOR). The extra `summarize` export is acceptable. No BLOCKER or MAJOR findings."
+}
