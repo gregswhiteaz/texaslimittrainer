@@ -1,0 +1,66 @@
+{
+  "task": "TASK-3.5",
+  "phase": "build",
+  "run": 1,
+  "result": "FAIL",
+  "changed_lines": 2602,
+  "changed_files": [
+    "e2e/cards.spec.ts",
+    "e2e/cards.visual.spec.ts",
+    "e2e/cards.visual.spec.ts-snapshots/card-back-chromium-darwin.png",
+    "e2e/cards.visual.spec.ts-snapshots/card-back-webkit-darwin.png",
+    "e2e/cards.visual.spec.ts-snapshots/faces-four-colour-chromium-darwin.png",
+    "e2e/cards.visual.spec.ts-snapshots/faces-four-colour-webkit-darwin.png",
+    "e2e/cards.visual.spec.ts-snapshots/faces-two-colour-chromium-darwin.png",
+    "e2e/cards.visual.spec.ts-snapshots/faces-two-colour-webkit-darwin.png",
+    "e2e/support/card-gallery-bundle.ts",
+    "e2e/support/card-gallery.tsx",
+    "src/assets/tlh-logo.jpg",
+    "src/ui/cards/PlayingCard.tsx",
+    "src/ui/cards/card-art.ts",
+    "tests/ui/card-art.test.ts",
+    "tests/ui/playing-card.acceptance.test.tsx"
+  ],
+  "checks": [
+    {
+      "name": "test command",
+      "status": "pass",
+      "detail": "$ npm test\nexit 0\n advice latency within target times slack\nHU flop facing a bet: 1 opponents, sampled, p95 74.63 ms (target 25 ms x 20 = 500 ms)\n6-max flop vs 3 opponents: 3 opponents, sampled, p95 96.19 ms (target 50 ms x 20 = 1000 ms)\n10-seat flop vs 9 opponents: 9 opponents, sampled, p95 472.12 ms (target 100 ms x 20 = 2000 ms)\n\n \u2713 tests/advice/postflop.perf.test.ts > postflop advice performance > postflop advice latency within target times slack 10486ms\n \u2713 tests/bots/tag.acceptance.test.ts > TAG bot acceptance > AC#3 postflop with no bet to face TAG checks 1493ms\n \u2713 tests/bots/tag.acceptance.test.ts > TAG bot acceptance > AC#4 other players' and undealt cards never change TAG's action 1542ms\nstdout | tests/advice/equity.perf.test.ts > equity performance > equity latency within target times slack\nHU preflop hand vs hand: sampled, p95 65.47 ms (target 15 ms x 20 = 300 ms)\nHU flop hand vs hand: exact, p95 0.89 ms (target 2 ms x 20 = 40 ms)\nHU flop vs every unseen combo: sampled, p95 56.86 ms (target 20 ms x 20 = 400 ms)\nHU turn vs every unseen combo: exact, p95 43.12 ms (target 15 ms x 20 = 300 ms)\nThree-way preflop AA vs KK vs QQ: sampled, p95 46.92 ms (target 20 ms x 20 = 400 ms)\n6-max preflop vs 5 ranges: sampled, p95 110.02 ms (target 50 ms x 20 = 1000 ms)\nFull ring flop vs 9 ranges: sampled, p95 485.64 ms (target 80 ms x 20 = 1600 ms)\n\n \u2713 tests/advice/equity.perf.test.ts > equity performance > equity latency within target times slack 13318ms\n\n Test Files  54 passed (54)\n      Tests  203 passed | 1 skipped (204)\n   Start at  13:27:12\n   Duration  13.63s (tests 96%, import 4%)\n\n\u001b[34m % \u001b[39m\u001b[2mCoverage report from \u001b[22m\u001b[33mv8\u001b[39m\n-------------------|---------|----------|---------|---------|-------------------\nFile               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s \n-------------------|---------|----------|---------|---------|-------------------\nAll files          |   99.84 |    95.63 |     100 |     100 |                   \n advice            |   99.79 |    98.18 |     100 |     100 |                   \n  equity.ts        |   99.55 |    93.97 |     100 |     100 | 114,120,199,292   \n engine            |     100 |    92.92 |     100 |     100 |                   \n  ...-evaluator.ts |     100 |    79.81 |     100 |     100 | ...84-197,211-212 \n  hand.ts          |     100 |    96.55 |     100 |     100 | 231-232,235-238   \n  invariants.ts    |     100 |    97.93 |     100 |     100 | 84,161,234        \n playtest          |   99.54 |    98.44 |     100 |     100 |                   \n  cli.ts           |   99.15 |    97.14 |     100 |     100 | 135-143           \n-------------------|---------|----------|---------|---------|-------------------\n\n=============================== Coverage summary ===============================\nStatements   : 99.84% ( 1319/1321 )\nBranches     : 95.63% ( 789/825 )\nFunctions    : 100% ( 260/260 )\nLines        : 100% ( 1094/1094 )\n================================================================================\n"
+    },
+    {
+      "name": "lint command",
+      "status": "pass",
+      "detail": "$ npm run lint\nexit 0\n\n> tlh-trainer@0.0.0 lint\n> eslint . --max-warnings 0 && prettier --check .\n\nChecking formatting...\nAll matched files use Prettier code style!\n"
+    },
+    {
+      "name": "typecheck command",
+      "status": "pass",
+      "detail": "$ npm run typecheck\nexit 0\n\n> tlh-trainer@0.0.0 typecheck\n> tsc -p tsconfig.json\n\n"
+    },
+    {
+      "name": "spec unchanged",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "name": "scope budget (lines)",
+      "status": "fail",
+      "detail": "2602 changed lines vs budget 950 (fail above 1900)"
+    },
+    {
+      "name": "scope budget (files)",
+      "status": "pass",
+      "detail": "15 files vs budget 15"
+    },
+    {
+      "name": "files outside spec",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "name": "all changes listed in changes.md",
+      "status": "pass",
+      "detail": ""
+    }
+  ]
+}
