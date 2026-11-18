@@ -2,7 +2,7 @@
 
 - `src/advice/hand-class.ts` — new: `HandClass`, `HAND_CLASSES` (169, 13×13 grid order), `handClassAt`, `handClassOf`, `comboCount`.
 - `src/advice/preflop-chart.ts` — new: chart types, `APPLICABLE_SPOTS` (26 6-max spots), `ChartValidationError`, `parseChart` (collects every problem with the §5 messages), `chartCell`.
-- `src/advice/charts/six-max.json` — new: the authored, original TAG 6-max chart (26 spots × 169 cells, chart and per-spot plain-English justifications).
+- `src/advice/charts/six-max.json` — new: the authored, original TAG 6-max chart (26 spots × 169 cells, chart and per-spot plain-English justifications). Fix round 1: HJ raise-and-calls justification and grid re-authored for the limp-then-later-raise spot.
 - `src/advice/preflop.ts` — new: `SIX_MAX_CHART` (parsed at import), `positionOf`, `situationOf`, `recommendPreflop` with the cap / nothing-to-call legality adjustment and `move`.
 - `tests/advice/preflop.acceptance.test.ts` — new: AC#1–AC#8 (SPEC-01 to SPEC-08).
 - `tests/advice/preflop.test.ts` — new: position/situation rules, legality adjustment, API errors, speed (SPEC-09, SPEC-10).

@@ -4,10 +4,10 @@
   "branch": "doit/TASK-7.2",
   "base_commit": "3e48f3cbdd31d90491d2254135fcf92c8992ee5e",
   "started": "2026-11-18T08:03:13",
-  "review_round": 0,
+  "review_round": 1,
   "judge_round": 0,
   "sendbacks": 0,
-  "gate_runs": 1,
+  "gate_runs": 2,
   "questions": 4,
   "assumptions": 12,
   "escalations": 0,
@@ -239,5 +239,13 @@
   },
   "history": [],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-7.2",
-  "spec_sha256": "933a02c83963cf64b1f70a3edef680f4a6612d24d4ee595c6554f4804302e241"
+  "spec_sha256": "933a02c83963cf64b1f70a3edef680f4a6612d24d4ee595c6554f4804302e241",
+  "review_findings": {
+    "1": 1
+  },
+  "brief_history": {
+    "src/advice/charts/six-max.json:hj-raise-and-calls-wrong-premise": [
+      "review r1"
+    ]
+  }
 }

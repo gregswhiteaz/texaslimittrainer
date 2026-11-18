@@ -5,3 +5,7 @@
 - Widths (raise % / continue %): UTG 16.0, HJ 19.2, CO 27.0, BTN 40.6, SB 30.6/37.3 (completes 6.6%) unopened; limpers HJ 15.5, CO 17.6, BTN 19.2, SB 17.0, BB raise 9.4; raise UTG 6.6, HJ 6.6, CO 8.4, BTN 11.0; raise-and-calls 10.4 / 10.7 / 13.4 / 16.1; re-raise UTG 9.7, HJ 10.4, CO 11.8, BTN 15.8, SB 6.9, BB 10.4; blind-defence SB 10.7, BB 43.6 (re-raise 5.7).
 - Judgment calls: borderline cells always carry an alternative and the sanity test asserts alternatives appear only on borderline cells (stricter than the guide). The hand-class literal scan matches single, double and back quotes.
 - Commands: `npm run format`; `npm run lint` clean; `npm run typecheck` clean; `npm test` → 36 files, 110 passed / 1 skipped, advice 100% lines, no coverage errors. SPEC-14 grep prints nothing.
+
+## FIX round 1
+- Item 1 (HJ raise-and-calls wrong premise): fixed. Rewrote the justification in `src/advice/charts/six-max.json` for the real spot (we limped, a later seat raised, at least one call, one more bet into a multiway pot, usually closing the action; ~72 words, original wording). Re-authored the grid to be at least as wide as CO raise-and-calls: adds A9s, A8s (borderline), KTs, K9s (borderline), QTs, KQo (borderline), 98s, 87s, 76s (borderline); continue 10.7% -> 14.3% (raise 3.3%), within the 6-18% band; AA/KK/QQ raise, 72o folds, non-borderline R and F cells remain.
+- Commands: `npx vitest run tests/advice` -> 9 files, 26 tests passed.

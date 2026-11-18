@@ -1,0 +1,11 @@
+{"reviewer": "security", "round": 1,
+ "findings": [
+  {"fingerprint": "src/advice/preflop-chart.ts:unbounded-token-echo-in-errors",
+   "severity": "NIT",
+   "file": "src/advice/preflop-chart.ts",
+   "line": 98,
+   "issue": "Validation messages copy the raw token, position and situation values into the error text without a length limit (`invalid action \"${token}\"`, `spot ${key} does not apply`). If the chart contained a very large malformed token, the ChartValidationError message would be just as large.",
+   "evidence": "Not reachable: the only input is the bundled src/advice/charts/six-max.json, loaded by a static import (spec section 8). No user, file or network input reaches parseChart, so this is hygiene only.",
+   "fix": "Optional: cut the echoed values short (for example the first 20 characters plus an ellipsis) in the error messages. Leave it as is if the validator stays limited to bundled data."}
+ ],
+ "summary": "No BLOCKER or MAJOR findings. Hidden information (REQ-025): recommendPreflop takes only a PlayerView and an optional chart. src/advice/preflop.ts imports only types from engine/hand and engine/player-view, never HandState, and PlayerView and PublicPlayer carry no opponent hole cards or deck. Chart parser: there is no route to prototype pollution. Spot lookups use a Map and match against the fixed APPLICABLE_SPOTS list, so keys like __proto__/constructor are reported as non-applicable. Cell keys come only from handClassAt (a fixed set of 169), never from the input, and chartCell checks them with Object.hasOwn. No dangerous sinks: no eval, Function, fetch, Math.random or HTML. The regexes (/\\p{L}+/gu, /\\s+/) have no nested quantifiers, so they run in linear time. Every loop is limited by the input size times 26 spots or 169 cells. The chart is bundled, trusted data and is still fully validated at import, which fails closed by throwing. Error messages hold only chart labels, seat numbers and street names. No new dependencies. I could not run a hostile-input probe: neither vite-node nor esbuild is installed, and Node type stripping fails on extensionless imports. These conclusions come from reading the code."}

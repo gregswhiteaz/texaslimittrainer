@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-18T15:13:00Z'
+updated_date: '2026-11-18T15:24:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-0
@@ -82,3 +82,9 @@ Plan key: E07-S01 · Dream: limit-holdem-trainer
 
 Full spec: doit/TASK-7.2/spec.md
 <!-- SECTION:PLAN:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+Build: hand-class.ts, preflop-chart.ts (tlh-preflop-chart v1 parser/validator), preflop.ts (recommendPreflop with legalisation and move), charts/six-max.json (original TAG chart, 26 spots, all within §5 bands); acceptance/unit/content tests; advice 100% lines; gate PASS.
+<!-- SECTION:NOTES:END -->
