@@ -1,0 +1,104 @@
+[
+  {
+    "id": "SPEC-01",
+    "verifies": "AC#1",
+    "verification": "acceptance `tests/advice/preflop.acceptance.test.ts::AC#1 every 6-max spot assigns all 169 hand classes and a missing spot is named`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-02",
+    "verifies": "AC#2",
+    "verification": "acceptance `tests/advice/preflop.acceptance.test.ts::AC#2 invalid cells and a missing justification fail naming the spot and hand class`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-03",
+    "verifies": "AC#3",
+    "verification": "acceptance `tests/advice/preflop.acceptance.test.ts::AC#3 advice follows an edited chart cell without code changes`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-04",
+    "verifies": "AC#4, AC#8",
+    "verification": "acceptance `tests/advice/preflop.acceptance.test.ts::AC#4 returns the chart cell, borderline flag, alternative, position and situation`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-05",
+    "verifies": "AC#5",
+    "verification": "acceptance `tests/advice/preflop.acceptance.test.ts::AC#5 other players' and undealt cards never change the recommendation`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-06",
+    "verifies": "AC#6",
+    "verification": "acceptance `tests/advice/preflop.acceptance.test.ts::AC#6 passing HandState to the advice API fails typecheck` (timeout `TOOLCHAIN_TIMEOUT_MS`)",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-07",
+    "verifies": "AC#7",
+    "verification": "acceptance `tests/advice/preflop.acceptance.test.ts::AC#7 a fourth bet uses the re-raise cell and caps raise to call`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-08",
+    "verifies": "AC#8",
+    "verification": "acceptance `tests/advice/preflop.acceptance.test.ts::AC#8 the big blind facing limpers checks where the chart says call`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-09",
+    "verifies": "AC#4",
+    "verification": "unit `tests/advice/preflop.test.ts::classifies position and situation`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-10",
+    "verifies": "AC#7, AC#8",
+    "verification": "unit `tests/advice/preflop.test.ts::adjusts to legal actions and rejects bad views`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-11",
+    "verifies": "AC#1, AC#2",
+    "verification": "unit `tests/advice/preflop-chart.test.ts::validates charts with exact problems`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-12",
+    "verifies": "DoD#1, DoD#10",
+    "verification": "unit `tests/advice/six-max-chart.test.ts::authored chart follows the TAG authoring guide`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-13",
+    "verifies": "AC#4",
+    "verification": "unit `tests/advice/hand-class.test.ts::names and orders the 169 hand classes`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-14",
+    "verifies": "DoD#2, DoD#3, DoD#5, DoD#6, DoD#9",
+    "verification": "command `npm run lint && npm run typecheck && npm test && ! grep -rnE \"fetch|XMLHttpRequest|WebSocket|EventSource|import\\(|from '[^.]\" src/advice`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-15",
+    "verifies": "DoD#1, DoD#10",
+    "verification": "manual review of `src/advice/charts/six-max.json` justifications and `doit/TASK-7.2/build-log.md`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-16",
+    "verifies": "DoD#11",
+    "verification": "command `gh run list -R gregswhiteaz/texaslimittrainer --branch doit/TASK-7.2 --limit 1 --json conclusion -q '.[0].conclusion'` prints `success`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-17",
+    "verifies": "DoD#4, DoD#7, DoD#8, DoD#12, DoD#13",
+    "verification": "manual check of `git diff --stat main` and `backlog doc list --plain | grep \"TASK-7.2\"`",
+    "status": "pending"
+  }
+]

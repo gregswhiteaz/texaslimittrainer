@@ -1,10 +1,11 @@
 ---
 id: TASK-7.2
 title: Recommend a preflop action from the 6-max chart
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-17T23:21:00Z'
+updated_date: '2026-11-18T15:13:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-0
@@ -69,3 +70,15 @@ Plan key: E07-S01 · Dream: limit-holdem-trainer
 - [ ] #12 Story documentation is written and published to Backlog.md
 - [ ] #13 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. src/advice/hand-class.ts: 169 hand classes (AKs/AKo/22), grid order, combo counts.
+2. src/advice/preflop-chart.ts: parse + validate tlh-preflop-chart v1 (13x13 token grids R/C/F, * borderline, /X alternative); 26 required 6-max spots; justification word counts; ChartValidationError with problems[].
+3. src/advice/charts/six-max.json: original TAG chart per the approved authoring guide; static import, parsed once (SIX_MAX_CHART).
+4. src/advice/preflop.ts: recommendPreflop(view, {chart?}) — position from button rotation, situation from preflop actions, cell lookup, legalisation (call->check when nothing owed, raise->call when capped betCount>=4 or no raise legal), exact move.
+5. Tests: validator cases, edited-cell data test, hidden-card invariance, sandboxed typecheck (HandState rejected), cap and BB-check cases, chart content rules with per-spot percentages.
+
+Full spec: doit/TASK-7.2/spec.md
+<!-- SECTION:PLAN:END -->
