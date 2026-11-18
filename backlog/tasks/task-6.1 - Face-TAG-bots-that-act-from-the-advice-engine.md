@@ -1,10 +1,11 @@
 ---
 id: TASK-6.1
 title: Face TAG bots that act from the advice engine
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-18T19:10:00Z'
+updated_date: '2026-11-18T19:27:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-0
@@ -68,6 +69,17 @@ Plan key: E06-S01 · Dream: limit-holdem-trainer
 - [ ] #11 Story documentation is written and published to Backlog.md
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. src/bots/tag.ts: decideTag(view, options?) and tagPolicy (SeatPolicy) playing recommend(view).move on every street; postflop with nothing owed uses FREE_CHECK_EQUITY stand-in (Q-2); imports only engine/advice types (headless, PlayerView only).
+2. src/playtest/runner.ts: defaultPolicyFactory(size) — TAG in every seat at size 6, seeded random-move elsewhere until TASK-7.6 (Q-1); makePolicy seam still overrides; doc comments updated.
+3. Node type-stripping fixes: src/advice/equity.ts parameter property, src/advice/preflop.ts JSON import attribute (A-4).
+4. Tests: acceptance AC#1-6 (legal moves, determinism, free-check equality vs real equity, default playtest seats are TAG, CLI byte-identical to in-process TAG seam), unit tests, boundary source check.
+
+Full spec: doit/TASK-6.1/spec.md
+<!-- SECTION:PLAN:END -->
 
 ## Implementation Notes
 
