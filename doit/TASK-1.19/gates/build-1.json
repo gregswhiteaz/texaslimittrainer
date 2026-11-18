@@ -1,0 +1,62 @@
+{
+  "task": "TASK-1.19",
+  "phase": "build",
+  "run": 1,
+  "result": "PASS",
+  "changed_lines": 444,
+  "changed_files": [
+    ".github/workflows/ci.yml",
+    "README.md",
+    "tests/ci/fixtures/flaky-command.js",
+    "tests/ci/retry.test.ts",
+    "tests/ci/workflow.test.ts",
+    "tools/ci/retry.js"
+  ],
+  "checks": [
+    {
+      "name": "test command",
+      "status": "pass",
+      "detail": "$ npm test\nexit 0\ntored heads-up preflop matchup is within 1.5 points 3818ms\n \u2713 tests/advice/equity.acceptance.test.ts > equity calculator (TASK-7.1) > AC#3 AA vs KK vs QQ is within 1.5 points of exhaustive enumeration 41ms\n \u2713 tests/advice/equity.acceptance.test.ts > equity calculator (TASK-7.1) > AC#4 identical results twice in one process and once in a fresh process 431ms\n \u2713 tests/advice/equity.acceptance.test.ts > equity calculator (TASK-7.1) > AC#5 sampler seed depends only on the input 65ms\n \u2713 tests/ci/retry.test.ts > retry helper > force-kills an attempt that ignores SIGTERM 1028ms\n \u2713 tests/ci/retry.test.ts > retry helper > kills the running attempt when it is cancelled 54ms\n \u2713 tests/ci/retry.test.ts > retry helper > rejects invalid arguments without running the command 194ms\n \u2713 tests/toolchain/boundary.test.ts > headless boundary via npm run lint > lint reports globalThis access, dynamic import and type-only React import in headless folders 598ms\nstdout | tests/advice/equity.perf.test.ts > equity performance > equity latency within target times slack\nHU preflop hand vs hand: sampled, p95 54.16 ms (target 15 ms x 20 = 300 ms)\nHU flop hand vs hand: exact, p95 0.87 ms (target 2 ms x 20 = 40 ms)\nHU flop vs every unseen combo: sampled, p95 30.97 ms (target 20 ms x 20 = 400 ms)\nHU turn vs every unseen combo: exact, p95 45.53 ms (target 15 ms x 20 = 300 ms)\nThree-way preflop AA vs KK vs QQ: sampled, p95 51.30 ms (target 20 ms x 20 = 400 ms)\n6-max preflop vs 5 ranges: sampled, p95 89.59 ms (target 50 ms x 20 = 1000 ms)\nFull ring flop vs 9 ranges: sampled, p95 321.67 ms (target 80 ms x 20 = 1600 ms)\n\n \u2713 tests/advice/equity.perf.test.ts > equity performance > equity latency within target times slack 11548ms\n\n Test Files  25 passed (25)\n      Tests  83 passed (83)\n   Start at  22:22:25\n   Duration  11.80s (tests 96%, import 3%)\n\n\u001b[34m % \u001b[39m\u001b[2mCoverage report from \u001b[22m\u001b[33mv8\u001b[39m\n-------------------|---------|----------|---------|---------|-------------------\nFile               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s \n-------------------|---------|----------|---------|---------|-------------------\nAll files          |   99.83 |    90.82 |     100 |     100 |                   \n advice            |   99.55 |    93.97 |     100 |     100 |                   \n  equity.ts        |   99.55 |    93.97 |     100 |     100 | 114,120,197,290   \n engine            |     100 |     89.8 |     100 |     100 |                   \n  ...-evaluator.ts |     100 |    79.81 |     100 |     100 | ...84-197,211-212 \n  hand.ts          |     100 |    96.55 |     100 |     100 | 231-232,235-238   \n-------------------|---------|----------|---------|---------|-------------------\n\n=============================== Coverage summary ===============================\nStatements   : 99.83% ( 621/622 )\nBranches     : 90.82% ( 307/338 )\nFunctions    : 100% ( 127/127 )\nLines        : 100% ( 507/507 )\n================================================================================\n"
+    },
+    {
+      "name": "lint command",
+      "status": "pass",
+      "detail": "$ npm run lint\nexit 0\n\n> tlh-trainer@0.0.0 lint\n> eslint . --max-warnings 0 && prettier --check .\n\nChecking formatting...\nAll matched files use Prettier code style!\n"
+    },
+    {
+      "name": "typecheck command",
+      "status": "pass",
+      "detail": "$ npm run typecheck\nexit 0\n\n> tlh-trainer@0.0.0 typecheck\n> tsc -p tsconfig.json\n\n"
+    },
+    {
+      "name": "spec unchanged",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "name": "scope budget (lines)",
+      "status": "warn",
+      "detail": "444 changed lines vs budget 360 (fail above 720)"
+    },
+    {
+      "name": "scope budget (files)",
+      "status": "pass",
+      "detail": "6 files vs budget 6"
+    },
+    {
+      "name": "files outside spec",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "name": "all changes listed in changes.md",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "name": "tests locked",
+      "status": "pass",
+      "detail": "2 acceptance test file(s) locked; 32 test files snapshotted"
+    }
+  ]
+}

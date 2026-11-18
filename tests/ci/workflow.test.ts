@@ -61,8 +61,46 @@ describe('CI workflow', () => {
   });
 
   it('installs Chromium and WebKit for the Playwright and axe tests', () => {
-    expect(workflow).toContain('run: npx playwright install --with-deps chromium webkit');
-    expect(workflow).toContain('run: npx playwright install-deps chromium webkit');
+    for (const command of [
+      'npx playwright install --with-deps chromium webkit',
+      'npx playwright install-deps chromium webkit',
+    ]) {
+      const line = workflow.split('\n').find((text) => text.endsWith(` -- ${command}`));
+      expect(line?.trim().startsWith('run: node tools/ci/retry.js '), command).toBe(true);
+    }
+    expect(workflow).not.toMatch(/^\s+run: npx playwright/m);
+  });
+
+  it('gives each Playwright install attempt a timeout well below the job timeout and retries it', () => {
+    const jobTimeout = Number(/^ {4}timeout-minutes: (\d+)$/m.exec(workflow)?.[1]);
+    expect(jobTimeout).toBe(20);
+    const steps = [
+      ['Install Playwright browsers', 'npx playwright install --with-deps chromium webkit'],
+      ['Install Playwright system dependencies', 'npx playwright install-deps chromium webkit'],
+    ];
+    for (const [name, command] of steps) {
+      const step = new RegExp(
+        `^ {6}- name: ${name}\\n {8}if: .+\\n {8}timeout-minutes: (\\d+)\\n {8}run: (.+)$`,
+        'm',
+      ).exec(workflow);
+      expect(step, name).not.toBeNull();
+      const [, stepTimeout = '', run = ''] = step ?? [];
+      expect(run).toBe(
+        `node tools/ci/retry.js --label "${name}" --attempts 3 --timeout-seconds 240 --delay-seconds 10 -- ${command}`,
+      );
+      const flag = (flagName: string) => Number(new RegExp(`--${flagName} (\\S+)`).exec(run)?.[1]);
+      const [attempts, timeoutSeconds, delaySeconds] = [
+        flag('attempts'),
+        flag('timeout-seconds'),
+        flag('delay-seconds'),
+      ];
+      expect(attempts, name).toBeGreaterThanOrEqual(3);
+      expect(timeoutSeconds, name).toBeLessThanOrEqual(300);
+      // Each attempt may also use the helper's 10 s SIGTERM -> SIGKILL grace.
+      const worstCase = attempts * timeoutSeconds + (attempts - 1) * delaySeconds + attempts * 10;
+      expect(worstCase, name).toBeLessThanOrEqual(Number(stepTimeout) * 60);
+      expect(Number(stepTimeout), name).toBeLessThan(jobTimeout);
+    }
   });
 
   it('uses the Node version pinned in .nvmrc with the npm cache', () => {
