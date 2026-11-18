@@ -1,0 +1,340 @@
+{
+  "scope": "E01",
+  "round": 1,
+  "clauses": [
+    {
+      "clause": "REQ-013.1",
+      "verdict": "covered",
+      "evidence": "E01-S03#AC1,AC2"
+    },
+    {
+      "clause": "REQ-013.2",
+      "verdict": "covered",
+      "evidence": "E01-S03#AC3"
+    },
+    {
+      "clause": "REQ-013.3",
+      "verdict": "covered",
+      "evidence": "E01-S03#AC4,AC5 (AC5 has hidden dependency on E01-S05, see finding)"
+    },
+    {
+      "clause": "REQ-014.1",
+      "verdict": "covered",
+      "evidence": "E01-S05#AC1"
+    },
+    {
+      "clause": "REQ-014.2",
+      "verdict": "covered",
+      "evidence": "E01-S05#AC2 (exact card positions)"
+    },
+    {
+      "clause": "REQ-014.3",
+      "verdict": "covered",
+      "evidence": "E01-S05#AC3"
+    },
+    {
+      "clause": "REQ-014.4",
+      "verdict": "covered",
+      "evidence": "E01-S05#AC5,AC8"
+    },
+    {
+      "clause": "REQ-014.5",
+      "verdict": "covered",
+      "evidence": "E01-S05#AC6,AC8"
+    },
+    {
+      "clause": "REQ-014.6",
+      "verdict": "covered",
+      "evidence": "E01-S12#AC3"
+    },
+    {
+      "clause": "REQ-015.1",
+      "verdict": "covered",
+      "evidence": "E01-S09#AC1,AC4"
+    },
+    {
+      "clause": "REQ-015.2",
+      "verdict": "covered",
+      "evidence": "E01-S09#AC2"
+    },
+    {
+      "clause": "REQ-015.3",
+      "verdict": "covered",
+      "evidence": "E01-S09#AC3"
+    },
+    {
+      "clause": "REQ-016.1",
+      "verdict": "covered",
+      "evidence": "E01-S05#AC4"
+    },
+    {
+      "clause": "REQ-016.2",
+      "verdict": "covered",
+      "evidence": "E01-S10#AC1 (to $16)"
+    },
+    {
+      "clause": "REQ-016.3",
+      "verdict": "covered",
+      "evidence": "E01-S10#AC1,AC2"
+    },
+    {
+      "clause": "REQ-016.4",
+      "verdict": "covered",
+      "evidence": "E01-S10#AC3,AC4 (AC3 vague, AC4 property test)"
+    },
+    {
+      "clause": "REQ-016.5",
+      "verdict": "covered",
+      "evidence": "E01-S14#AC1-AC4 ($5 vs $6 boundary)"
+    },
+    {
+      "clause": "REQ-017.4",
+      "verdict": "covered",
+      "evidence": "E01-S11#AC1-AC5"
+    },
+    {
+      "clause": "REQ-018.1",
+      "verdict": "covered",
+      "evidence": "E01-S12#AC1,AC2"
+    },
+    {
+      "clause": "REQ-018.2",
+      "verdict": "covered",
+      "evidence": "E01-S13#AC1,AC2"
+    },
+    {
+      "clause": "REQ-018.3",
+      "verdict": "covered",
+      "evidence": "E01-S13#AC3,AC4"
+    },
+    {
+      "clause": "REQ-018.4",
+      "verdict": "covered",
+      "evidence": "E01-S12#AC4,AC5"
+    },
+    {
+      "clause": "REQ-018.5",
+      "verdict": "covered",
+      "evidence": "E01-S13#AC5"
+    },
+    {
+      "clause": "REQ-019.1",
+      "verdict": "covered",
+      "evidence": "E01-S04#AC1-AC3"
+    },
+    {
+      "clause": "REQ-019.2",
+      "verdict": "covered",
+      "evidence": "E01-S04#AC4,AC5"
+    },
+    {
+      "clause": "REQ-019.3",
+      "verdict": "covered",
+      "evidence": "E01-S05#AC7 (no concrete odd-chip example, see MEDIUM finding)"
+    },
+    {
+      "clause": "REQ-019.4",
+      "verdict": "covered",
+      "evidence": "E01-S15#AC1,AC2"
+    },
+    {
+      "clause": "REQ-019.5",
+      "verdict": "covered",
+      "evidence": "E01-S15#AC3,AC4"
+    },
+    {
+      "clause": "REQ-020.1",
+      "verdict": "covered",
+      "evidence": "E01-S16#AC1,AC2,AC6"
+    },
+    {
+      "clause": "REQ-020.2",
+      "verdict": "covered",
+      "evidence": "E01-S16#AC3"
+    },
+    {
+      "clause": "REQ-020.3",
+      "verdict": "covered",
+      "evidence": "E01-S16#AC4"
+    },
+    {
+      "clause": "REQ-020.4",
+      "verdict": "covered",
+      "evidence": "E01-S16#AC5"
+    },
+    {
+      "clause": "REQ-025.1",
+      "verdict": "covered",
+      "evidence": "E01-S06#AC1-AC3 (type-level separation), E01-S15#AC4"
+    },
+    {
+      "clause": "REQ-056.1",
+      "verdict": "covered",
+      "evidence": "E01-S08#AC1,AC2 (fault injection per invariant)"
+    },
+    {
+      "clause": "REQ-056.2",
+      "verdict": "covered",
+      "evidence": "E01-S17#AC1,AC2; line-up dimension in E06-S11#AC1"
+    },
+    {
+      "clause": "REQ-059.1",
+      "verdict": "covered",
+      "evidence": "E01-S01#AC2,AC3"
+    },
+    {
+      "clause": "REQ-059.2",
+      "verdict": "covered",
+      "evidence": "E01-S01#AC4"
+    },
+    {
+      "clause": "REQ-059.3",
+      "verdict": "covered",
+      "evidence": "E01-S01#AC5"
+    },
+    {
+      "clause": "REQ-059.4",
+      "verdict": "covered",
+      "evidence": "E01-S01#AC2,AC3"
+    },
+    {
+      "clause": "REQ-062.1",
+      "verdict": "covered",
+      "evidence": "E01-S07#AC1,AC2 (hands, seed, size), E01-S16#AC6 (game); line-up/style/advice options in E06/E07"
+    },
+    {
+      "clause": "REQ-062.2",
+      "verdict": "covered",
+      "evidence": "E01-S08#AC3,E01-S17#AC2"
+    },
+    {
+      "clause": "REQ-062.4",
+      "verdict": "covered",
+      "evidence": "E01-S07#AC3,AC4"
+    },
+    {
+      "clause": "REQ-062.5",
+      "verdict": "covered",
+      "evidence": "E01-S17#AC3"
+    },
+    {
+      "clause": "REQ-063.1",
+      "verdict": "covered",
+      "evidence": "E01-S01#AC1"
+    },
+    {
+      "clause": "REQ-063.2",
+      "verdict": "covered",
+      "evidence": "E01-S01#AC7"
+    },
+    {
+      "clause": "REQ-063.3",
+      "verdict": "covered",
+      "evidence": "E01-S01#AC2"
+    },
+    {
+      "clause": "REQ-063.4",
+      "verdict": "covered",
+      "evidence": "E01-S01#AC6"
+    },
+    {
+      "clause": "REQ-064.1",
+      "verdict": "covered",
+      "evidence": "E01-S02#AC1"
+    },
+    {
+      "clause": "REQ-064.2",
+      "verdict": "covered",
+      "evidence": "E01-S02#AC2,AC3; E01-S08#AC4"
+    },
+    {
+      "clause": "REQ-064.3",
+      "verdict": "covered",
+      "evidence": "E01-S18#AC1-AC3"
+    }
+  ],
+  "findings": [
+    {
+      "id": "J-E01-E01-S01-DoD-hidden-dependency",
+      "severity": "HIGH",
+      "class": "hidden-dependency",
+      "owner": "weaver",
+      "location": "E01-S01 DoD#3,#6,#10 (global DoD on all E01-S01..S06)",
+      "evidence": "Global DoD #10 'CI workflow is green on the story's branch' applies to E01-S01, but the workflow is built by E01-S02, which depends on E01-S01 (cycle). DoD #6 '10,000-hand playtest reports zero invariant violations' applies to E01-S02..S06 (they touch the engine) but the playtest only exists after E01-S07/S08. DoD #3 'golden-spot suite passes 100%' has no suite until E07-S14.",
+      "fix": "Scope the DoD items so they cannot be required before the tool exists (e.g. attach the CI-green and playtest items only to stories ordered after E01-S02 / E01-S08, or make S01 DoD exclude them), or reorder so CI/playtest come before the stories that must satisfy them."
+    },
+    {
+      "id": "J-E01-E01-S03#AC5-hidden-dependency",
+      "severity": "HIGH",
+      "class": "hidden-dependency",
+      "owner": "weaver",
+      "location": "E01-S03#AC5",
+      "evidence": "AC5 replays 'a recorded hand's replay code, seats, stacks, button and actions' and checks hole cards and board; this needs the hand engine of E01-S05, but E01-S03 depends only on E01-S01 and E01-S05 depends on E01-S03.",
+      "fix": "Move the full-hand replay AC to E01-S05 (tagged REQ-013.3) and keep S03 AC4 (same code -> identical deck), or add a dependency on S05 and reorder."
+    },
+    {
+      "id": "J-E01-E01-S05#AC7-exact-values",
+      "severity": "MEDIUM",
+      "class": "ac-no-exact-values",
+      "owner": "weaver",
+      "location": "E01-S05#AC7",
+      "evidence": "AC7 states the odd-dollar rule abstractly with no concrete pot, no seats and no expected payouts, so it would pass with a trivial even split. REQ-019.3 also says 'or chip', i.e. sit-and-go chips, not covered.",
+      "fix": "Add a concrete AC: Given a $27 pot tied by seats 2 and 5 with the button at seat 1, When awarded, Then seat 2 receives $14 and seat 5 receives $13; add the same for a sit-and-go chip pot and for a tied side pot."
+    },
+    {
+      "id": "J-E01-E01-S10#AC3-exact-values",
+      "severity": "MEDIUM",
+      "class": "ac-no-exact-values",
+      "owner": "weaver",
+      "location": "E01-S10#AC3",
+      "evidence": "AC3 says only 'the cap applies exactly as with more players' with no heads-up values. Heads-up preflop (button posts SB, BB counts as first bet) is the case most likely to be wrong, yet no amounts or legal-action set are given.",
+      "fix": "Rewrite: Given a heads-up $4/$8 hand, When the button raises to $8, BB re-raises to $12 and the button raises to $16, Then the BB may only call or fold."
+    },
+    {
+      "id": "J-E01-E01-S16#AC6-underspecified",
+      "severity": "MEDIUM",
+      "class": "underspecified",
+      "owner": "weaver",
+      "location": "E01-S16#AC6",
+      "evidence": "AC6 requires a playtest `--game sng` mode where busted seats stay empty and a new sit-and-go starts, but the story says starting chips (1,500) and the level schedule belong to E05; S16 has no dependency on E05 and gives no starting stacks or limits for this mode, so an implementer must guess. E01-S17#AC1 then runs 'sit-and-go' over sizes 2-10 on the same undefined basis.",
+      "fix": "State the stack and limit assumptions for the interim sng mode (e.g. 1,500 chips at fixed L1 20/40) or add the E05 dependency; note E05 must reuse the same mode."
+    },
+    {
+      "id": "J-E01-E01-S05-legal-actions-no-AC",
+      "severity": "LOW",
+      "class": "behaviour-without-ac",
+      "owner": "weaver",
+      "location": "E01-S05 description vs ACs",
+      "evidence": "Description says 'The engine exposes the legal action set with exact amounts for the player to act' and E01-S06 relies on legal actions in PlayerView, yet no AC in S05 (or S06#AC1) verifies the legal set or amounts.",
+      "fix": "Add an AC to S05: Given a hand at $4/$8 preflop facing the BB, When the engine lists legal actions for the first actor, Then they are fold, call $4 and raise to $8."
+    },
+    {
+      "id": "J-E01-E01-S15-side-pot-muck-no-AC",
+      "severity": "LOW",
+      "class": "behaviour-without-ac",
+      "owner": "weaver",
+      "location": "E01-S15 notes",
+      "evidence": "Notes state 'a mucking player forfeits claim to all pots' with side pots, but no AC exercises it; behaviour is untested.",
+      "fix": "Add an AC with a side-pot hand where a bot mucks and a lower pot is awarded to the next best hand, or drop the note."
+    },
+    {
+      "id": "J-E01-E01-S01-story-form",
+      "severity": "LOW",
+      "class": "wording",
+      "owner": "weaver",
+      "location": "E01-S01, E01-S02 descriptions; actor in S06, S07, S08, S17",
+      "evidence": "S01 and S02 are chores with no 'As a ..., I want ..., so that ...' sentence; S06-S08 and S17 use the actor 'maintainer', which is not a user class in requirements.md (only Learner).",
+      "fix": "Add a so-that benefit to the chores and either use Learner or note the maintainer actor as a project-owner role."
+    },
+    {
+      "id": "J-E01-E01-S17#AC2-runner-limit",
+      "severity": "LOW",
+      "class": "feasibility",
+      "owner": "weaver",
+      "location": "E01-S17#AC2",
+      "evidence": "AC2 runs the 1,000,000-hand job as one CI job; at the permitted worst case of 100,000 hands per 60 minutes this is about 10 hours, over the 6-hour limit of a GitHub-hosted job.",
+      "fix": "Specify sharding of the nightly run into parallel jobs/batches with deterministic per-shard seeds."
+    }
+  ],
+  "summary": "All 50 clauses in scope covered by tagged ACs with real fail conditions. Two HIGH hidden-dependency findings (global DoD items that cannot be met before CI/playtest exist; S03 replay AC needing the S05 engine), three MEDIUM AC-quality issues, four LOW."
+}

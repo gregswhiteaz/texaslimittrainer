@@ -1,0 +1,305 @@
+{
+  "scope": "E03",
+  "round": 4,
+  "clauses": [
+    {
+      "clause": "REQ-007.1",
+      "verdict": "covered",
+      "evidence": "E03-S01#AC1, E03-S01#AC2"
+    },
+    {
+      "clause": "REQ-007.2",
+      "verdict": "covered",
+      "evidence": "E03-S08#AC1, E03-S08#AC4"
+    },
+    {
+      "clause": "REQ-007.3",
+      "verdict": "covered",
+      "evidence": "E03-S08#AC2, E03-S08#AC3"
+    },
+    {
+      "clause": "REQ-007.4",
+      "verdict": "covered",
+      "evidence": "E03-S08#AC5"
+    },
+    {
+      "clause": "REQ-010.3",
+      "verdict": "covered",
+      "evidence": "E03-S03#AC3"
+    },
+    {
+      "clause": "REQ-011.1",
+      "verdict": "covered",
+      "evidence": "E03-S13#AC1, E03-S13#AC2"
+    },
+    {
+      "clause": "REQ-011.2",
+      "verdict": "covered",
+      "evidence": "E03-S18#AC1, E03-S18#AC2"
+    },
+    {
+      "clause": "REQ-011.3",
+      "verdict": "covered",
+      "evidence": "E03-S14#AC1, E03-S14#AC2, E03-S14#AC3"
+    },
+    {
+      "clause": "REQ-013.4",
+      "verdict": "covered",
+      "evidence": "E03-S03#AC8"
+    },
+    {
+      "clause": "REQ-017.1",
+      "verdict": "covered",
+      "evidence": "E03-S02#AC1, E03-S02#AC5"
+    },
+    {
+      "clause": "REQ-017.2",
+      "verdict": "covered",
+      "evidence": "E03-S02#AC2, E03-S02#AC3, E03-S02#AC5, E03-S06#AC1, E03-S06#AC5"
+    },
+    {
+      "clause": "REQ-017.3",
+      "verdict": "covered",
+      "evidence": "E03-S06#AC2, E03-S06#AC3, E03-S06#AC5"
+    },
+    {
+      "clause": "REQ-017.5",
+      "verdict": "covered",
+      "evidence": "E03-S02#AC6"
+    },
+    {
+      "clause": "REQ-017.6",
+      "verdict": "covered",
+      "evidence": "E03-S02#AC4, E03-S02#AC5"
+    },
+    {
+      "clause": "REQ-017.7",
+      "verdict": "covered",
+      "evidence": "E03-S06#AC5, E03-S06#AC6, E03-S06#AC7, E03-S06#AC8"
+    },
+    {
+      "clause": "REQ-019.6",
+      "verdict": "covered",
+      "evidence": "E03-S01#AC3, E03-S01#AC4"
+    },
+    {
+      "clause": "REQ-019.7",
+      "verdict": "covered",
+      "evidence": "E03-S04#AC1, E03-S04#AC3"
+    },
+    {
+      "clause": "REQ-021.1",
+      "verdict": "covered",
+      "evidence": "E03-S03#AC1, E03-S03#AC2"
+    },
+    {
+      "clause": "REQ-021.3",
+      "verdict": "covered",
+      "evidence": "E03-S03#AC3"
+    },
+    {
+      "clause": "REQ-021.4",
+      "verdict": "covered",
+      "evidence": "E03-S03#AC4"
+    },
+    {
+      "clause": "REQ-021.5",
+      "verdict": "covered",
+      "evidence": "E03-S03#AC5, E03-S07#AC1, E03-S07#AC2, E03-S07#AC3"
+    },
+    {
+      "clause": "REQ-021.6",
+      "verdict": "covered",
+      "evidence": "E03-S03#AC5"
+    },
+    {
+      "clause": "REQ-021.7",
+      "verdict": "covered",
+      "evidence": "E03-S03#AC6"
+    },
+    {
+      "clause": "REQ-021.8",
+      "verdict": "covered",
+      "evidence": "E03-S03#AC7"
+    },
+    {
+      "clause": "REQ-022.1",
+      "verdict": "covered",
+      "evidence": "E03-S02#AC1, E03-S02#AC2, E03-S02#AC3, E03-S02#AC4, E03-S06#AC1, E03-S06#AC2"
+    },
+    {
+      "clause": "REQ-022.3",
+      "verdict": "covered",
+      "evidence": "E03-S02#AC7"
+    },
+    {
+      "clause": "REQ-022.4",
+      "verdict": "covered",
+      "evidence": "E03-S02#AC8"
+    },
+    {
+      "clause": "REQ-024.1",
+      "verdict": "covered",
+      "evidence": "E03-S04#AC1, E03-S04#AC2, E03-S04#AC3, E03-S07#AC2"
+    },
+    {
+      "clause": "REQ-024.3",
+      "verdict": "covered",
+      "evidence": "E03-S04#AC4"
+    },
+    {
+      "clause": "REQ-024.4",
+      "verdict": "covered",
+      "evidence": "E03-S01#AC4, E03-S01#AC5, E03-S01#AC6, E03-S01#AC7, E03-S18#AC3, E03-S18#AC4"
+    },
+    {
+      "clause": "REQ-024.5",
+      "verdict": "covered",
+      "evidence": "E03-S01#AC5"
+    },
+    {
+      "clause": "REQ-024.6",
+      "verdict": "covered",
+      "evidence": "E03-S13#AC3"
+    },
+    {
+      "clause": "REQ-031.1",
+      "verdict": "covered",
+      "evidence": "E03-S15#AC1"
+    },
+    {
+      "clause": "REQ-031.2",
+      "verdict": "covered",
+      "evidence": "E03-S15#AC2, E03-S15#AC3"
+    },
+    {
+      "clause": "REQ-031.3",
+      "verdict": "covered",
+      "evidence": "E03-S15#AC4"
+    },
+    {
+      "clause": "REQ-031.4",
+      "verdict": "covered",
+      "evidence": "E03-S15#AC5, E03-S15#AC6"
+    },
+    {
+      "clause": "REQ-052.1",
+      "verdict": "covered",
+      "evidence": "E03-S09#AC1, E03-S09#AC2"
+    },
+    {
+      "clause": "REQ-052.2",
+      "verdict": "covered",
+      "evidence": "E03-S09#AC4, E03-S09#AC5, E03-S09#AC6, E03-S10#AC1, E03-S10#AC2, E03-S10#AC3"
+    },
+    {
+      "clause": "REQ-052.3",
+      "verdict": "covered",
+      "evidence": "E03-S11#AC1, E03-S11#AC2, E03-S11#AC3, E03-S11#AC4"
+    },
+    {
+      "clause": "REQ-052.5",
+      "verdict": "covered",
+      "evidence": "E03-S09#AC7"
+    },
+    {
+      "clause": "REQ-052.6",
+      "verdict": "covered",
+      "evidence": "E03-S09#AC8"
+    },
+    {
+      "clause": "REQ-052.7",
+      "verdict": "covered",
+      "evidence": "E03-S09#AC3"
+    },
+    {
+      "clause": "REQ-055.6",
+      "verdict": "covered",
+      "evidence": "E03-S12#AC1, E03-S12#AC2, E03-S12#AC3, E03-S12#DoD1"
+    },
+    {
+      "clause": "REQ-057.2",
+      "verdict": "covered",
+      "evidence": "E03-S17#AC1, E03-S17#AC2, E03-S17#AC3, E03-S17#AC4"
+    },
+    {
+      "clause": "REQ-057.4",
+      "verdict": "covered",
+      "evidence": "E03-S17#AC5"
+    },
+    {
+      "clause": "REQ-060.1",
+      "verdict": "covered",
+      "evidence": "E03-S16#AC1"
+    },
+    {
+      "clause": "REQ-060.3",
+      "verdict": "covered",
+      "evidence": "E03-S16#AC2"
+    },
+    {
+      "clause": "REQ-060.4",
+      "verdict": "covered",
+      "evidence": "E03-S19#AC1, E03-S19#AC2, E03-S19#AC3"
+    },
+    {
+      "clause": "REQ-066.1",
+      "verdict": "covered",
+      "evidence": "E03-S05#AC1, E03-S05#DoD1"
+    },
+    {
+      "clause": "REQ-066.2",
+      "verdict": "covered",
+      "evidence": "E03-S05#AC2"
+    },
+    {
+      "clause": "REQ-066.3",
+      "verdict": "covered",
+      "evidence": "E03-S05#AC3, E03-S05#AC4, E03-S05#DoD1"
+    },
+    {
+      "clause": "REQ-066.4",
+      "verdict": "covered",
+      "evidence": "E03-S05#AC5, E03-S05#DoD1"
+    }
+  ],
+  "findings": [
+    {
+      "id": "J-E03-E03-S06-stale-engine-reference",
+      "severity": "MEDIUM",
+      "class": "missing-dependency",
+      "owner": "weaver",
+      "location": "E03-S06 (TASK-3.7)",
+      "evidence": "Description says 'REQ-016.5 (engine, E01-S12)' and lists engine support as 'cap E01-S10, all-in E01-S12, sit-and-go E01-S16'; the short all-in half-bet rule and all-in bet/raise offering are E01-S14. AC6-AC8 need E01-S14 but TASK-3.7 deps are 3.2, 1.12, 1.9, 1.16 (no TASK-1.14); satisfied only transitively through E01-S16.",
+      "fix": "Change the reference to E01-S14 and add TASK-1.14 (E01-S14) as an explicit dependency."
+    },
+    {
+      "id": "J-E03-E03-S19#AC3-undefined-copy-list",
+      "severity": "MEDIUM",
+      "class": "not-implementable",
+      "owner": "weaver",
+      "location": "E03-S19#AC3",
+      "evidence": "AC compares every label with 'the English copy list for that screen'; no such list exists in the story, the requirements, storyboards or docs (grep finds the phrase only in the task and plan). An implementer cannot build or pass the check.",
+      "fix": "Name the source (e.g. Table storyboard labels) or state the exact strings, or replace with a check against the story's listed labels."
+    },
+    {
+      "id": "J-E03-E03-S04-m1-button-movement",
+      "severity": "MEDIUM",
+      "class": "hidden-dependency",
+      "owner": "weaver",
+      "location": "E03-S04#AC4 / E03-S01 (M1) vs E01-S16 (M2)",
+      "evidence": "M1 E03-S04 deals the next hand automatically 1.5 s after each result, but button and blind rotation (REQ-020) is E01-S16 in M2 and E01-S05 says 'button movement comes in M2'. M1 text gives no interim rule for where the button goes on hand 2+.",
+      "fix": "State an interim M1 rule in E03-S04 or E01-S05 (e.g. the button advances one seat each hand, no busted seats exist) with an AC, or move basic rotation into an M1 story."
+    },
+    {
+      "id": "J-E03-E03-S01-stale-wave-reference",
+      "severity": "LOW",
+      "class": "wording",
+      "owner": "weaver",
+      "location": "E03-S01 description",
+      "evidence": "Text still reads 'Until Game Config exists (E02, wave 5)'; E02 is wave 6 and supplies Home and Game Config in M1 (same issue as J-GLOBAL-TASK-3.1-stale-wave-reference).",
+      "fix": "Replace with 'until E02-S02 supplies Game Config'."
+    }
+  ],
+  "summary": "Round-3 HIGH verified fixed: E03-S09 (TASK-3.9) now depends on TASK-7.12 (E07-S08) and is ordered after it (ordinal 60000 vs 59000); no cycles. All 52 clauses covered, none partial, false-claim or missing. S19 AC3 now refers to an undefined copy list (was LOW, now MEDIUM). No CRITICAL or HIGH. Three MEDIUM, one LOW."
+}

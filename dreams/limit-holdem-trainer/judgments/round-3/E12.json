@@ -1,0 +1,103 @@
+{
+  "scope": "E12",
+  "round": 3,
+  "clauses": [
+    {
+      "clause": "REQ-002.3",
+      "verdict": "covered",
+      "evidence": "E12-S01#AC1"
+    },
+    {
+      "clause": "REQ-012.3",
+      "verdict": "covered",
+      "evidence": "E12-S04#AC2,5"
+    },
+    {
+      "clause": "REQ-021.2",
+      "verdict": "covered",
+      "evidence": "E12-S02#AC2,4"
+    },
+    {
+      "clause": "REQ-050.1",
+      "verdict": "covered",
+      "evidence": "E12-S04#AC1-5"
+    },
+    {
+      "clause": "REQ-050.2",
+      "verdict": "covered",
+      "evidence": "E12-S05#AC1-4"
+    },
+    {
+      "clause": "REQ-050.3",
+      "verdict": "covered",
+      "evidence": "E12-S02#AC1-4"
+    },
+    {
+      "clause": "REQ-050.4",
+      "verdict": "covered",
+      "evidence": "E12-S06#AC1-4"
+    },
+    {
+      "clause": "REQ-050.5",
+      "verdict": "covered",
+      "evidence": "E12-S01#AC1,3; E12-S03#AC1,4; E12-S04#AC4; E12-S05#AC4; E12-S06#AC4"
+    },
+    {
+      "clause": "REQ-050.6",
+      "verdict": "covered",
+      "evidence": "E12-S01#AC2"
+    },
+    {
+      "clause": "REQ-050.7",
+      "verdict": "covered",
+      "evidence": "E12-S03#AC1-3,5"
+    },
+    {
+      "clause": "REQ-050.8",
+      "verdict": "covered",
+      "evidence": "E12-S03#AC6-8"
+    },
+    {
+      "clause": "REQ-051.1",
+      "verdict": "covered",
+      "evidence": "E12-S08#AC1"
+    },
+    {
+      "clause": "REQ-051.2",
+      "verdict": "covered",
+      "evidence": "E12-S08#AC2-3"
+    },
+    {
+      "clause": "REQ-051.3",
+      "verdict": "covered",
+      "evidence": "E12-S08#AC4-8"
+    },
+    {
+      "clause": "REQ-051.4",
+      "verdict": "covered",
+      "evidence": "E12-S08#AC3"
+    },
+    {
+      "clause": "REQ-053.3",
+      "verdict": "covered",
+      "evidence": "E12-S09#AC1-4"
+    },
+    {
+      "clause": "REQ-057.2",
+      "verdict": "covered",
+      "evidence": "E12-S01#AC4; E12-S03#AC5"
+    },
+    {
+      "clause": "REQ-057.4",
+      "verdict": "covered",
+      "evidence": "E12-S01#AC4"
+    },
+    {
+      "clause": "REQ-071.5",
+      "verdict": "covered",
+      "evidence": "E12-S07#AC1-4"
+    }
+  ],
+  "findings": [],
+  "summary": "All 19 clauses covered. Round-2 hidden dependencies resolved: E12-S01 AC4 is now only the keyboard/44px check; E12-S08 (TASK-12.4) now depends on the toggle stories (12.5-12.8) for the post-reset defaults AC6. No findings."
+}

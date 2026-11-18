@@ -1,0 +1,287 @@
+{
+  "scope": "E03",
+  "round": 3,
+  "clauses": [
+    {
+      "clause": "REQ-007.1",
+      "verdict": "covered",
+      "evidence": "E03-S01#AC1, AC2"
+    },
+    {
+      "clause": "REQ-007.2",
+      "verdict": "covered",
+      "evidence": "E03-S08#AC1, AC4"
+    },
+    {
+      "clause": "REQ-007.3",
+      "verdict": "covered",
+      "evidence": "E03-S08#AC2, AC3; E10-S01#AC3 now tagged REQ-007.3 (round-2 LOW resolved)"
+    },
+    {
+      "clause": "REQ-007.4",
+      "verdict": "covered",
+      "evidence": "E03-S08#AC5"
+    },
+    {
+      "clause": "REQ-010.3",
+      "verdict": "covered",
+      "evidence": "E03-S03#AC3"
+    },
+    {
+      "clause": "REQ-011.1",
+      "verdict": "covered",
+      "evidence": "E03-S13#AC1, AC2"
+    },
+    {
+      "clause": "REQ-011.2",
+      "verdict": "covered",
+      "evidence": "E03-S18#AC1, AC2"
+    },
+    {
+      "clause": "REQ-011.3",
+      "verdict": "covered",
+      "evidence": "E03-S14#AC1-3"
+    },
+    {
+      "clause": "REQ-013.4",
+      "verdict": "covered",
+      "evidence": "E03-S03#AC8"
+    },
+    {
+      "clause": "REQ-017.1",
+      "verdict": "covered",
+      "evidence": "E03-S02#AC1, AC5; S06#AC7"
+    },
+    {
+      "clause": "REQ-017.2",
+      "verdict": "covered",
+      "evidence": "E03-S02#AC2, AC3, AC5; E03-S06#AC1, AC5"
+    },
+    {
+      "clause": "REQ-017.3",
+      "verdict": "covered",
+      "evidence": "E03-S06#AC2, AC3, AC5"
+    },
+    {
+      "clause": "REQ-017.5",
+      "verdict": "covered",
+      "evidence": "E03-S02#AC6"
+    },
+    {
+      "clause": "REQ-017.6",
+      "verdict": "covered",
+      "evidence": "E03-S02#AC4, AC5"
+    },
+    {
+      "clause": "REQ-017.7",
+      "verdict": "covered",
+      "evidence": "E03-S06#AC5-AC8"
+    },
+    {
+      "clause": "REQ-019.6",
+      "verdict": "covered",
+      "evidence": "E03-S01#AC3, AC4"
+    },
+    {
+      "clause": "REQ-019.7",
+      "verdict": "covered",
+      "evidence": "E03-S04#AC1, AC3"
+    },
+    {
+      "clause": "REQ-021.1",
+      "verdict": "covered",
+      "evidence": "E03-S03#AC1, AC2"
+    },
+    {
+      "clause": "REQ-021.3",
+      "verdict": "covered",
+      "evidence": "E03-S03#AC3"
+    },
+    {
+      "clause": "REQ-021.4",
+      "verdict": "covered",
+      "evidence": "E03-S03#AC4"
+    },
+    {
+      "clause": "REQ-021.5",
+      "verdict": "covered",
+      "evidence": "E03-S03#AC5; E03-S07#AC1-3"
+    },
+    {
+      "clause": "REQ-021.6",
+      "verdict": "covered",
+      "evidence": "E03-S03#AC5"
+    },
+    {
+      "clause": "REQ-021.7",
+      "verdict": "covered",
+      "evidence": "E03-S03#AC6"
+    },
+    {
+      "clause": "REQ-021.8",
+      "verdict": "covered",
+      "evidence": "E03-S03#AC7"
+    },
+    {
+      "clause": "REQ-022.1",
+      "verdict": "covered",
+      "evidence": "E03-S02#AC1-4; E03-S06#AC1,2,4,6,7"
+    },
+    {
+      "clause": "REQ-022.3",
+      "verdict": "covered",
+      "evidence": "E03-S02#AC7"
+    },
+    {
+      "clause": "REQ-022.4",
+      "verdict": "covered",
+      "evidence": "E03-S02#AC8"
+    },
+    {
+      "clause": "REQ-024.1",
+      "verdict": "covered",
+      "evidence": "E03-S04#AC1-3; E03-S07#AC2"
+    },
+    {
+      "clause": "REQ-024.3",
+      "verdict": "covered",
+      "evidence": "E03-S04#AC4"
+    },
+    {
+      "clause": "REQ-024.4",
+      "verdict": "covered",
+      "evidence": "E03-S01#AC4-7; E03-S18#AC3, AC4"
+    },
+    {
+      "clause": "REQ-024.5",
+      "verdict": "covered",
+      "evidence": "E03-S01#AC5"
+    },
+    {
+      "clause": "REQ-024.6",
+      "verdict": "covered",
+      "evidence": "E03-S13#AC3"
+    },
+    {
+      "clause": "REQ-031.1",
+      "verdict": "covered",
+      "evidence": "E03-S15#AC1"
+    },
+    {
+      "clause": "REQ-031.2",
+      "verdict": "covered",
+      "evidence": "E03-S15#AC2, AC3"
+    },
+    {
+      "clause": "REQ-031.3",
+      "verdict": "covered",
+      "evidence": "E03-S15#AC4"
+    },
+    {
+      "clause": "REQ-031.4",
+      "verdict": "covered",
+      "evidence": "E03-S15#AC5, AC6"
+    },
+    {
+      "clause": "REQ-052.1",
+      "verdict": "covered",
+      "evidence": "E03-S09#AC1, AC2"
+    },
+    {
+      "clause": "REQ-052.2",
+      "verdict": "covered",
+      "evidence": "E03-S09#AC4-6; E03-S10#AC1-4"
+    },
+    {
+      "clause": "REQ-052.3",
+      "verdict": "covered",
+      "evidence": "E03-S11#AC1-4"
+    },
+    {
+      "clause": "REQ-052.5",
+      "verdict": "covered",
+      "evidence": "E03-S09#AC7"
+    },
+    {
+      "clause": "REQ-052.6",
+      "verdict": "covered",
+      "evidence": "E03-S09#AC8"
+    },
+    {
+      "clause": "REQ-052.7",
+      "verdict": "covered",
+      "evidence": "E03-S09#AC3"
+    },
+    {
+      "clause": "REQ-055.6",
+      "verdict": "covered",
+      "evidence": "E03-S12#AC1-3"
+    },
+    {
+      "clause": "REQ-057.2",
+      "verdict": "covered",
+      "evidence": "E03-S17#AC1-4"
+    },
+    {
+      "clause": "REQ-057.4",
+      "verdict": "covered",
+      "evidence": "E03-S17#AC5"
+    },
+    {
+      "clause": "REQ-060.1",
+      "verdict": "covered",
+      "evidence": "E03-S16#AC1"
+    },
+    {
+      "clause": "REQ-060.3",
+      "verdict": "covered",
+      "evidence": "E03-S16#AC2 (hex values now stated; round-2 LOW resolved)"
+    },
+    {
+      "clause": "REQ-060.4",
+      "verdict": "covered",
+      "evidence": "E03-S19#AC1, AC2"
+    },
+    {
+      "clause": "REQ-066.1",
+      "verdict": "covered",
+      "evidence": "E03-S05#AC1"
+    },
+    {
+      "clause": "REQ-066.2",
+      "verdict": "covered",
+      "evidence": "E03-S05#AC2"
+    },
+    {
+      "clause": "REQ-066.3",
+      "verdict": "covered",
+      "evidence": "E03-S05#AC3, AC4"
+    },
+    {
+      "clause": "REQ-066.4",
+      "verdict": "covered",
+      "evidence": "E03-S05#AC5"
+    }
+  ],
+  "findings": [
+    {
+      "id": "J-E03-E03-S09-hidden-dep-E07-S08",
+      "severity": "HIGH",
+      "class": "hidden-dependency",
+      "owner": "weaver",
+      "location": "E03-S09#AC5 (TASK-3.9)",
+      "evidence": "AC5 requires the E07-S08 style-stat functions (TASK-7.12) to compute values from records, but TASK-3.9 does not depend on TASK-7.12 and is ordered earlier (ordinal 55000 vs 71000, both M2). The story cannot pass AC5 as scheduled.",
+      "fix": "Move the style-stat equality check into E03-S15 or E07-S08 (which already depend on both), or add TASK-7.12 as a dependency of E03-S09. Keep a record-completeness AC in S09 (every action per seat per street in order with amount)."
+    },
+    {
+      "id": "J-E03-E03-S19#AC3-vague",
+      "severity": "LOW",
+      "class": "ac-quality",
+      "owner": "weaver",
+      "location": "E03-S19#AC3",
+      "evidence": "'every label is in English' is not a precise pass/fail check (round-2 LOW only partly fixed: the implementation reference was removed).",
+      "fix": "Name observable labels, e.g. action buttons read Fold, Check, Call, Raise to, Bet and the dialog reads Rebuy, Leave table."
+    }
+  ],
+  "summary": "52 clauses: 52 covered, 0 partial, 0 false-claim, 0 missing. Round-2 LOWs (REQ-007.3 tag, S17 deps, S16 AC2 hex values, S13 AC1 redundancy) resolved; S19 AC3 wording still vague. New: S09 AC5 depends on E07-S08 which is ordered later (HIGH). 0 CRITICAL, 1 HIGH, 0 MEDIUM, 1 LOW."
+}

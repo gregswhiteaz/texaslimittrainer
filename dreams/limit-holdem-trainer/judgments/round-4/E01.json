@@ -1,0 +1,320 @@
+{
+  "scope": "E01",
+  "round": 4,
+  "clauses": [
+    {
+      "clause": "REQ-013.1",
+      "verdict": "covered",
+      "evidence": "E01-S03#AC1, E01-S03#AC2"
+    },
+    {
+      "clause": "REQ-013.2",
+      "verdict": "covered",
+      "evidence": "E01-S03#AC3"
+    },
+    {
+      "clause": "REQ-013.3",
+      "verdict": "covered",
+      "evidence": "E01-S03#AC4, E01-S07#AC5"
+    },
+    {
+      "clause": "REQ-014.1",
+      "verdict": "covered",
+      "evidence": "E01-S05#AC1"
+    },
+    {
+      "clause": "REQ-014.2",
+      "verdict": "covered",
+      "evidence": "E01-S05#AC2"
+    },
+    {
+      "clause": "REQ-014.3",
+      "verdict": "covered",
+      "evidence": "E01-S05#AC3"
+    },
+    {
+      "clause": "REQ-014.4",
+      "verdict": "covered",
+      "evidence": "E01-S05#AC5, E01-S05#AC8"
+    },
+    {
+      "clause": "REQ-014.5",
+      "verdict": "covered",
+      "evidence": "E01-S05#AC6, E01-S05#AC8"
+    },
+    {
+      "clause": "REQ-014.6",
+      "verdict": "covered",
+      "evidence": "E01-S12#AC3"
+    },
+    {
+      "clause": "REQ-015.1",
+      "verdict": "covered",
+      "evidence": "E01-S09#AC1, E01-S09#AC4"
+    },
+    {
+      "clause": "REQ-015.2",
+      "verdict": "covered",
+      "evidence": "E01-S09#AC2"
+    },
+    {
+      "clause": "REQ-015.3",
+      "verdict": "covered",
+      "evidence": "E01-S09#AC3"
+    },
+    {
+      "clause": "REQ-016.1",
+      "verdict": "covered",
+      "evidence": "E01-S05#AC4"
+    },
+    {
+      "clause": "REQ-016.2",
+      "verdict": "covered",
+      "evidence": "E01-S10#AC1"
+    },
+    {
+      "clause": "REQ-016.3",
+      "verdict": "covered",
+      "evidence": "E01-S10#AC1, E01-S10#AC2"
+    },
+    {
+      "clause": "REQ-016.4",
+      "verdict": "covered",
+      "evidence": "E01-S10#AC3, E01-S10#AC4"
+    },
+    {
+      "clause": "REQ-016.5",
+      "verdict": "covered",
+      "evidence": "E01-S14#AC1, E01-S14#AC2, E01-S14#AC3, E01-S14#AC4"
+    },
+    {
+      "clause": "REQ-017.4",
+      "verdict": "covered",
+      "evidence": "E01-S11#AC1, E01-S11#AC2, E01-S11#AC3, E01-S11#AC4, E01-S11#AC5"
+    },
+    {
+      "clause": "REQ-017.7",
+      "verdict": "covered",
+      "evidence": "E01-S14#AC5, E01-S14#AC6, E01-S14#AC7"
+    },
+    {
+      "clause": "REQ-018.1",
+      "verdict": "covered",
+      "evidence": "E01-S12#AC1, E01-S12#AC2"
+    },
+    {
+      "clause": "REQ-018.2",
+      "verdict": "covered",
+      "evidence": "E01-S13#AC1, E01-S13#AC2"
+    },
+    {
+      "clause": "REQ-018.3",
+      "verdict": "covered",
+      "evidence": "E01-S13#AC3, E01-S13#AC4, E01-S13#AC6"
+    },
+    {
+      "clause": "REQ-018.4",
+      "verdict": "covered",
+      "evidence": "E01-S12#AC4, E01-S12#AC5"
+    },
+    {
+      "clause": "REQ-018.5",
+      "verdict": "covered",
+      "evidence": "E01-S13#AC5, E01-S16#AC7"
+    },
+    {
+      "clause": "REQ-019.1",
+      "verdict": "covered",
+      "evidence": "E01-S04#AC1, E01-S04#AC2, E01-S04#AC3"
+    },
+    {
+      "clause": "REQ-019.2",
+      "verdict": "covered",
+      "evidence": "E01-S04#AC4, E01-S04#AC5"
+    },
+    {
+      "clause": "REQ-019.3",
+      "verdict": "covered",
+      "evidence": "E01-S05#AC7, E01-S13#AC6"
+    },
+    {
+      "clause": "REQ-019.4",
+      "verdict": "covered",
+      "evidence": "E01-S15#AC1, E01-S15#AC2"
+    },
+    {
+      "clause": "REQ-019.5",
+      "verdict": "covered",
+      "evidence": "E01-S15#AC3, E01-S15#AC4, E01-S15#AC6"
+    },
+    {
+      "clause": "REQ-019.8",
+      "verdict": "covered",
+      "evidence": "E01-S15#AC5, E01-S15#AC6"
+    },
+    {
+      "clause": "REQ-019.9",
+      "verdict": "covered",
+      "evidence": "E01-S13#AC7"
+    },
+    {
+      "clause": "REQ-020.1",
+      "verdict": "covered",
+      "evidence": "E01-S16#AC1, E01-S16#AC2, E01-S16#AC6"
+    },
+    {
+      "clause": "REQ-020.2",
+      "verdict": "covered",
+      "evidence": "E01-S16#AC3"
+    },
+    {
+      "clause": "REQ-020.3",
+      "verdict": "covered",
+      "evidence": "E01-S16#AC4"
+    },
+    {
+      "clause": "REQ-020.4",
+      "verdict": "covered",
+      "evidence": "E01-S16#AC5"
+    },
+    {
+      "clause": "REQ-025.1",
+      "verdict": "covered",
+      "evidence": "E01-S06#AC1, E01-S06#AC2, E01-S06#AC3, E01-S15#AC4"
+    },
+    {
+      "clause": "REQ-056.1",
+      "verdict": "covered",
+      "evidence": "E01-S07#AC6, E01-S08#AC1, E01-S08#AC2, E01-S08#AC4, E01-S16#AC7"
+    },
+    {
+      "clause": "REQ-056.2",
+      "verdict": "covered",
+      "evidence": "E01-S17#AC1, E01-S17#AC2"
+    },
+    {
+      "clause": "REQ-057.1",
+      "verdict": "covered",
+      "evidence": "E01-S01#AC8"
+    },
+    {
+      "clause": "REQ-059.1",
+      "verdict": "covered",
+      "evidence": "E01-S01#AC2, E01-S01#AC3"
+    },
+    {
+      "clause": "REQ-059.2",
+      "verdict": "covered",
+      "evidence": "E01-S01#AC4"
+    },
+    {
+      "clause": "REQ-059.3",
+      "verdict": "covered",
+      "evidence": "E01-S01#AC5"
+    },
+    {
+      "clause": "REQ-059.4",
+      "verdict": "covered",
+      "evidence": "E01-S01#AC2, E01-S01#AC3"
+    },
+    {
+      "clause": "REQ-062.1",
+      "verdict": "covered",
+      "evidence": "E01-S07#AC1, E01-S07#AC2, E01-S09#AC4, E01-S16#AC6"
+    },
+    {
+      "clause": "REQ-062.2",
+      "verdict": "covered",
+      "evidence": "E01-S08#AC3, E01-S17#AC2"
+    },
+    {
+      "clause": "REQ-062.4",
+      "verdict": "covered",
+      "evidence": "E01-S07#AC3, E01-S07#AC4, E01-S17#AC3"
+    },
+    {
+      "clause": "REQ-062.5",
+      "verdict": "covered",
+      "evidence": "E01-S17#AC4, E01-S17#DoD1"
+    },
+    {
+      "clause": "REQ-063.1",
+      "verdict": "covered",
+      "evidence": "E01-S01#AC1"
+    },
+    {
+      "clause": "REQ-063.2",
+      "verdict": "covered",
+      "evidence": "E01-S01#AC7"
+    },
+    {
+      "clause": "REQ-063.3",
+      "verdict": "covered",
+      "evidence": "E01-S01#AC2"
+    },
+    {
+      "clause": "REQ-063.4",
+      "verdict": "partial",
+      "evidence": "E01-S01#AC6 only proves Vite writes a static app to dist/; the clause requires the deployable PWA and no tagged AC in E01 or E13 checks that the build output contains a manifest and service worker"
+    },
+    {
+      "clause": "REQ-064.1",
+      "verdict": "covered",
+      "evidence": "E01-S02#AC1"
+    },
+    {
+      "clause": "REQ-064.2",
+      "verdict": "covered",
+      "evidence": "E01-S02#AC2, E01-S02#AC3, E01-S02#AC4, E01-S08#AC4"
+    },
+    {
+      "clause": "REQ-064.3",
+      "verdict": "covered",
+      "evidence": "E01-S18#AC1, E01-S18#AC2, E01-S18#AC3"
+    },
+    {
+      "clause": "REQ-064.4",
+      "verdict": "covered",
+      "evidence": "E01-S02#AC1, E01-S02#AC4"
+    }
+  ],
+  "findings": [
+    {
+      "id": "J-E01-REQ-063.4-partial",
+      "severity": "HIGH",
+      "class": "partial-should",
+      "owner": "weaver",
+      "location": "E01-S01#AC6",
+      "evidence": "REQ-063.4 'npm run build produces the deployable PWA' (Should). E01-S01#AC6 says 'deployable static app to dist/'; the story note defers manifest/service worker to E13, but rtm shows E01-S01#AC6 is the only tagged item for REQ-063.4, so the PWA part would pass unimplemented.",
+      "fix": "Tag an E13 PWA story AC (e.g. E13 manifest/service worker) with REQ-063.4: 'Given npm run build, When it finishes, Then dist/ contains the web app manifest and a registered service worker'; or reword S01#AC6 to cover only the static build and tag the PWA AC."
+    },
+    {
+      "id": "J-E01-E01-S07#AC1-placeholder",
+      "severity": "MEDIUM",
+      "class": "hidden-dependency",
+      "owner": "weaver",
+      "location": "E01-S07#AC1 (TASK-1.6) vs E01-S08 (TASK-1.8)",
+      "evidence": "S07#AC1 requires the report to print 'the invariant-violation count', but the invariant checker is built in E01-S08, which depends on S07. S07 can only print a stub 0.",
+      "fix": "Reduce S07#AC1 to hands played and exit 0 (violation count added in S08), or add 'the report prints the invariant-violation count' to S08."
+    },
+    {
+      "id": "J-E01-E01-S16-multiple-capabilities",
+      "severity": "MEDIUM",
+      "class": "story-too-big",
+      "owner": "weaver",
+      "location": "E01-S16 (TASK-1.16)",
+      "evidence": "One story carries button/blind rotation (REQ-020, AC1-5), a new --game sng playtest mode with chips and 20/40 limits (AC6) and the cash real-stack switch with busted-seat restore (AC7). 'I want' states one ask but the work is three capabilities and it has 4 requirements.",
+      "fix": "Split into rotation rules (REQ-020), sng playtest mode, and the cash real-stack playtest switch; keep the S12-S15 dependencies on the real-stack story."
+    },
+    {
+      "id": "J-E01-E01-S07#AC6-weak-tag",
+      "severity": "LOW",
+      "class": "wording",
+      "owner": "weaver",
+      "location": "E01-S07#AC6",
+      "evidence": "AC6 tags REQ-056.1 (invariants checked after every action) but only verifies the seat policy avoids a fifth bet; the checking is E01-S08 (REQ-056.1 is fully covered there).",
+      "fix": "Untag REQ-056.1 here or reword the AC as a policy test."
+    }
+  ],
+  "summary": "Round-3 HIGH/MEDIUM verified fixed: E01-S12 no longer switches to real stacks (its text and S07/S08/S05 interim wording all point to E01-S16), and E01-S16 (TASK-1.16) now depends on S09, S12, S13, S14 and S15. Dependency graph over all 178 tasks has no cycles and no dependency ordered after its dependent in E01/E03. 55 clauses: 54 covered, 1 partial (REQ-063.4 PWA build). No CRITICAL. One HIGH, two MEDIUM, one LOW."
+}

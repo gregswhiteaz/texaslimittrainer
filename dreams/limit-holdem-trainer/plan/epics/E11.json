@@ -1,0 +1,662 @@
+{
+  "epic": "E11",
+  "stories": [
+    {
+      "key": "E11-S01",
+      "title": "See my Major errors per 100 hands trend on the Statistics screen",
+      "type": "feature",
+      "milestone": "M2",
+      "priority": "High",
+      "risk": "high",
+      "skeleton": false,
+      "role": "learner",
+      "want": "to see my Major errors per 100 hands plotted per 500 hands across all my stored hands",
+      "benefit": "I can see whether my mistakes are shrinking (G-2)",
+      "context": "Adds the Statistics entry to Home (E02-S01) and the Statistics screen (Stats storyboard: '← Home' back control, title, totals line, filter row, Major-error chart). All stored hands, of paused and ended sessions, are ordered chronologically (session start, then hand number) and split into consecutive groups of 500 hands; only complete 500-hand groups are plotted (REQ-048.11), the trailing incomplete group forms no point. Group value = the user's unhinted decisions graded Major in the group's hands / hands in the group x 100, read from the stored decision records (E03-S10: grade and hinted flag), never recomputed by the advice engine; the same unhinted rule as the report (E10-S02). The forced fold after Leave table mid-hand (REQ-004.8) has no grade and is never counted. At per-500 grouping with 1 to 499 hands in the filter the chart is replaced by 'Play <n> more hands to see your first trend point.' where n = 500 - hands, singular 'Play 1 more hand ...' when n is 1 (REQ-048.7, REQ-048.14); with zero hands in the filter the screen shows 'Play your first hand to see trends.' instead (REQ-048.10). The totals line reads e.g. '1,840 hands over 9 sessions'. Filters are E11-S03 and E11-S08, other groupings E11-S02, BB/100 E11-S04, target line E11-S06.",
+      "acs": [
+        {
+          "text": "Given the Home screen, When the user chooses Statistics, Then the Statistics screen opens; and When the user chooses Home on it, Then the Home screen opens",
+          "tags": [
+            "REQ-002.3"
+          ]
+        },
+        {
+          "text": "Given a seeded data set of 3,000 stored hands across 9 sessions, When the Statistics screen opens, Then the Major-error chart is grouped per 500 hands and plots 6 points, each equal to the unhinted Major errors per 100 hands recomputed from the stored hand records of that group",
+          "tags": [
+            "REQ-048.1"
+          ]
+        },
+        {
+          "text": "Given a 500-hand group containing 5 unhinted and 5 hinted Major errors, When its point is plotted, Then its value is 1.0",
+          "tags": [
+            "REQ-040.3",
+            "REQ-048.1"
+          ]
+        },
+        {
+          "text": "Given a 500-hand group in which the only non-Correct decision record is a forced fold after Leave table, When its point is plotted, Then its value is 0.0",
+          "tags": [
+            "REQ-004.8",
+            "REQ-048.1"
+          ]
+        },
+        {
+          "text": "Given 1,200 stored hands, When the chart is shown per 500 hands, Then it plots exactly 2 points (hands 1-500 and 501-1,000) and the remaining 200 hands form no point",
+          "tags": [
+            "REQ-048.11",
+            "REQ-048.1"
+          ]
+        },
+        {
+          "text": "Given 320 stored hands, When the Statistics screen opens at per-500 grouping, Then it shows 'Play 180 more hands to see your first trend point.' instead of a chart; and Given 499 stored hands, Then it shows 'Play 1 more hand to see your first trend point.'",
+          "tags": [
+            "REQ-048.7",
+            "REQ-048.14"
+          ]
+        },
+        {
+          "text": "Given no stored hands, When the Statistics screen opens at per-500 grouping, Then it shows 'Play your first hand to see trends.' instead of a chart, no 'Play <n> more hands' message, and totals of 0 hands over 0 sessions",
+          "tags": [
+            "REQ-048.10",
+            "REQ-048.7",
+            "REQ-048.6"
+          ]
+        },
+        {
+          "text": "Given 1,840 stored hands over 9 sessions, When the Statistics screen opens with no filter applied, Then it shows a total of 1,840 hands over 9 sessions",
+          "tags": [
+            "REQ-048.6"
+          ]
+        }
+      ],
+      "dod": [
+        {
+          "text": "axe reports zero serious or critical violations on the Statistics screen with data and in the empty state ('Play your first hand to see trends.'), in Chromium and WebKit",
+          "tags": [
+            "REQ-057.1"
+          ]
+        },
+        {
+          "text": "The Statistics screen offers no deposit, payment, purchase, cash-out, real-money wager or real-money conversion",
+          "tags": [
+            "REQ-061.1"
+          ]
+        }
+      ],
+      "deps": [
+        "E02-S01",
+        "E03-S10",
+        "E10-S02",
+        "E10-S05"
+      ],
+      "notes": "Put trend computation in a pure statistics module (no UI imports, REQ-059.2) that takes hand/decision records and returns points; the screen only renders. Keep per-hand aggregates (Major count, unhinted flags, net won in big bets) cheap to read for E11-S12."
+    },
+    {
+      "key": "E11-S02",
+      "title": "Group my trends per session or per day",
+      "type": "feature",
+      "milestone": "M2",
+      "priority": "High",
+      "risk": "low",
+      "skeleton": false,
+      "role": "learner",
+      "want": "to switch the trend grouping between per 500 hands, per session and per day",
+      "benefit": "I can see progress in the unit that matches how I practise",
+      "context": "Group-by options: per 500 hands (default), per session, per day. Per session: one point for every session in the filter that has at least one stored hand, in session start order. Per day: one point for every local calendar day in the filter on which at least one hand was completed, using each hand record's completion date and time (REQ-052.7, stored by E03-S09). Both plot from the first hand on, with no minimum group size (REQ-048.10); with zero hands in the filter every grouping shows 'Play your first hand to see trends.' (the per-500 zero case is tested in E11-S01) Values use the same formulas as the per-500 grouping. The chosen grouping applies to every trend chart and keeps the current filters.",
+      "acs": [
+        {
+          "text": "Given the Statistics screen, When the grouping options are listed, Then they are exactly per 500 hands, per session and per day, and per 500 hands is selected on opening",
+          "tags": [
+            "REQ-048.1"
+          ]
+        },
+        {
+          "text": "Given a seeded data set of 3,000 hands over 9 sessions, When grouping is set to per session, Then the Major-error chart plots 9 points, each equal to that session's unhinted Major errors per 100 hands recomputed from its stored hand records",
+          "tags": [
+            "REQ-048.1"
+          ]
+        },
+        {
+          "text": "Given seeded hands completed on 4 different local dates, including one session that runs past midnight, When grouping is set to per day, Then the chart plots 4 points and each hand counts in the date it was completed",
+          "tags": [
+            "REQ-048.1"
+          ]
+        },
+        {
+          "text": "Given a table-size filter of 6-max is set, When the grouping is changed to per day, Then the filter stays 6-max and the points use only 6-max hands",
+          "tags": [
+            "REQ-048.1",
+            "REQ-048.2"
+          ]
+        },
+        {
+          "text": "Given 1 stored session of 12 hands, When grouping is per session or per day, Then the Major-error chart plots 1 point computed from those 12 hands and no 'Play ... more hands' message is shown",
+          "tags": [
+            "REQ-048.10"
+          ]
+        },
+        {
+          "text": "Given zero hands in the current filter, When grouping is per session or per day, Then the screen shows 'Play your first hand to see trends.' instead of a chart",
+          "tags": [
+            "REQ-048.10"
+          ]
+        }
+      ],
+      "dod": [],
+      "deps": [
+        "E11-S01",
+        "E11-S03",
+        "E03-S09"
+      ],
+      "notes": ""
+    },
+    {
+      "key": "E11-S03",
+      "title": "Filter my trends by table size and game type",
+      "type": "feature",
+      "milestone": "M2",
+      "priority": "High",
+      "risk": "low",
+      "skeleton": false,
+      "role": "learner",
+      "want": "to filter my trends by table size and game type",
+      "benefit": "I can compare like with like",
+      "context": "Filters: table size All, Heads-up, 6-max, Full ring, by reference size (REQ-005.4: 2 -> Heads-up; 3-7 -> 6-max; 8-10 -> Full ring); game type All, Cash, Sit-and-go. Default All / All. Filters apply to every chart, the totals line and the empty-state messages ('Play <n> more hands...' for 1-499 hands, 'Play your first hand to see trends.' for 0). Line-up filter is E11-S08.",
+      "acs": [
+        {
+          "text": "Given the Statistics screen, When the filter options are listed, Then table size offers exactly All, Heads-up, 6-max and Full ring and game type offers exactly All, Cash and Sit-and-go, each defaulting to All",
+          "tags": [
+            "REQ-048.2"
+          ]
+        },
+        {
+          "text": "Given stored hands at table sizes 2, 4, 6, 8 and 10, When the table size filter is 6-max, Then only hands from 4- and 6-player sessions are counted; and When it is Full ring, Then only hands from 8- and 10-player sessions are counted",
+          "tags": [
+            "REQ-048.2"
+          ]
+        },
+        {
+          "text": "Given 2,000 cash hands and 600 sit-and-go hands, When the game type filter is Sit-and-go, Then the Major-error chart's points equal values recomputed from the 600 sit-and-go hands only",
+          "tags": [
+            "REQ-048.2"
+          ]
+        },
+        {
+          "text": "Given 1,840 hands over 9 sessions of which 700 hands over 3 sessions are heads-up, When the table size filter is Heads-up, Then the totals read 700 hands over 3 sessions",
+          "tags": [
+            "REQ-048.6",
+            "REQ-048.2"
+          ]
+        },
+        {
+          "text": "Given 300 heads-up hands among 3,000 stored hands, When the table size filter is Heads-up, Then the screen shows 'Play 200 more hands to see your first trend point.' instead of a chart",
+          "tags": [
+            "REQ-048.7",
+            "REQ-048.2"
+          ]
+        }
+      ],
+      "dod": [],
+      "deps": [
+        "E11-S01"
+      ],
+      "notes": "Reuse the E07/E10 table-size -> reference-size mapping; do not duplicate it."
+    },
+    {
+      "key": "E11-S04",
+      "title": "See my BB/100 trend from cash hands against a break-even line",
+      "type": "feature",
+      "milestone": "M2",
+      "priority": "High",
+      "risk": "medium",
+      "skeleton": false,
+      "role": "learner",
+      "want": "to see my big bets won per 100 hands over time against break-even",
+      "benefit": "I can see whether my results are improving (G-3)",
+      "context": "Second chart 'Big bets won per 100 hands' (Stats storyboard). Uses cash-game hands only, whatever the game-type filter; sit-and-go hands never enter it. Each hand's net result in big bets = (chips won - chips put in) / big bet of that hand's stake; group value = sum of net big bets / hands in the group x 100, same definition as the report's BB/100 (E10-S01). Per-500 grouping counts cash hands only and plots only complete 500-cash-hand groups (REQ-048.11); with 1 to 499 cash hands in the filter it shows 'Play <n> more cash hands to see your first trend point.' (n = 500 - cash hands; singular 'Play 1 more cash hand ...', REQ-048.13, REQ-048.14). When the filter contains no cash-game hands (e.g. game type Sit-and-go, or only sit-and-go hands stored) the BB/100 chart shows 'No cash-game hands yet.' (REQ-048.12). A dashed line marks 0 (break-even, G-3).",
+      "acs": [
+        {
+          "text": "Given 2,000 seeded cash hands at mixed stakes, When the BB/100 chart is shown per 500 hands, Then it plots 4 points each equal to the BB/100 recomputed from the stored hand records of that group",
+          "tags": [
+            "REQ-048.4"
+          ]
+        },
+        {
+          "text": "Given 1,000 cash hands and 500 sit-and-go hands with game type All, When the BB/100 chart is shown per 500 hands, Then it plots 2 points computed from the cash hands only",
+          "tags": [
+            "REQ-048.4"
+          ]
+        },
+        {
+          "text": "Given the BB/100 chart has points, When it is shown, Then a dashed break-even line is drawn at 0 BB/100",
+          "tags": [
+            "REQ-048.4"
+          ]
+        },
+        {
+          "text": "Given a cash session's stored report, When the per-session BB/100 point for that session is plotted, Then it equals the report's BB/100",
+          "tags": [
+            "REQ-048.4",
+            "REQ-048.1"
+          ]
+        },
+        {
+          "text": "Given 600 stored sit-and-go hands and no cash hands, When the Statistics screen is shown with game type All and with game type Sit-and-go, Then in both cases the BB/100 chart shows 'No cash-game hands yet.' instead of points",
+          "tags": [
+            "REQ-048.12",
+            "REQ-048.4"
+          ]
+        },
+        {
+          "text": "Given 800 hands in the filter of which 300 are cash hands, When the BB/100 chart is shown per 500 hands, Then it plots no point and shows 'Play 200 more cash hands to see your first trend point.' while the Major-error chart plots 1 point",
+          "tags": [
+            "REQ-048.13",
+            "REQ-048.11",
+            "REQ-048.4"
+          ]
+        },
+        {
+          "text": "Given 499 cash hands in the filter, When the BB/100 chart is shown, Then it shows 'Play 1 more cash hand to see your first trend point.'",
+          "tags": [
+            "REQ-048.13",
+            "REQ-048.14"
+          ]
+        }
+      ],
+      "dod": [],
+      "deps": [
+        "E11-S01",
+        "E10-S01"
+      ],
+      "notes": "Rebuys are not results: compute per-hand net, not stack deltas across a rebuy."
+    },
+    {
+      "key": "E11-S05",
+      "title": "See my average sit-and-go finishing position per trend group",
+      "type": "feature",
+      "milestone": "M3",
+      "priority": "High",
+      "risk": "low",
+      "skeleton": false,
+      "role": "learner",
+      "want": "to see my average sit-and-go finishing position and how many sit-and-gos each trend group holds",
+      "benefit": "I can track tournament results alongside cash results",
+      "context": "Sit-and-go play exists from E05 (M3), so this Must clause lands in M3. A sit-and-go result belongs to the trend group that contains its last hand. Per group the screen shows the average finishing position of ended sit-and-gos (one decimal) and their count. Hidden when the game-type filter is Cash; groups with no ended sit-and-go show no average.",
+      "acs": [
+        {
+          "text": "Given seeded ended sit-and-go session records finishing 2nd, 4th and 2nd whose last hands fall in hands 501-1,000, When the per-500 grouping is shown, Then that group shows average finishing position 2.7 and 3 sit-and-gos",
+          "tags": [
+            "REQ-048.5"
+          ]
+        },
+        {
+          "text": "Given grouping per session, When an ended sit-and-go that finished 3rd of 6 is shown, Then its group shows average finishing position 3.0 and 1 sit-and-go",
+          "tags": [
+            "REQ-048.5"
+          ]
+        },
+        {
+          "text": "Given the game type filter is Cash, When the Statistics screen is shown, Then no sit-and-go results are shown",
+          "tags": [
+            "REQ-048.5",
+            "REQ-048.2"
+          ]
+        },
+        {
+          "text": "Given a seeded data set of 3,000 hands with 12 ended sit-and-gos, When each grouping is shown, Then every average finishing position and count equals the value recomputed from the stored session records",
+          "tags": [
+            "REQ-048.5"
+          ]
+        }
+      ],
+      "dod": [],
+      "deps": [
+        "E11-S02",
+        "E11-S03"
+      ],
+      "notes": "Finishing position and starting player count come from the session record stored by E05-S05 (same wave, so no dependency edge); tests seed ended sit-and-go session records as fixtures."
+    },
+    {
+      "key": "E11-S06",
+      "title": "See the G-2 target line on my Major-error trend",
+      "type": "feature",
+      "milestone": "M2",
+      "priority": "High",
+      "risk": "medium",
+      "skeleton": false,
+      "role": "learner",
+      "want": "a dashed target line at half my first-1,000-hand Major-error rate",
+      "benefit": "I can see how far I am from the G-2 goal",
+      "context": "G-2 baseline (REQ-048.9): the unhinted Major errors per 100 hands over the user's first 1,000 hands in chronological order (session start, then hand number), of any game type, table size and line-up, independent of the current filter. Hinted decisions are excluded from the error count (REQ-040.3); the forced fold after Leave table is never counted (REQ-004.8). The target is half the baseline and is drawn as a dashed line on the Major-error chart with the caption 'Dashed line: half your first-1,000 rate (G-2)'. The line appears once 1,000 hands of any kind exist (any game type, table size, line-up; hinted or not, REQ-048.3); before that it is not shown. The threshold counts all stored hands, not hands in the current filter.",
+      "acs": [
+        {
+          "text": "Given 999 stored hands of any game type, When the Major-error chart is shown, Then no target line is drawn",
+          "tags": [
+            "REQ-048.3",
+            "REQ-048.9"
+          ]
+        },
+        {
+          "text": "Given 1,000 stored hands whose decisions include 62 unhinted Major errors, When the Major-error chart is shown, Then a dashed target line is drawn at 3.1",
+          "tags": [
+            "REQ-048.3",
+            "REQ-048.9"
+          ]
+        },
+        {
+          "text": "Given the first 1,000 hands contain 62 unhinted and 20 hinted Major errors, When the target is computed, Then it is 3.1",
+          "tags": [
+            "REQ-040.3",
+            "REQ-048.9"
+          ]
+        },
+        {
+          "text": "Given 1,000 stored hands of which 400 are sit-and-go hands and 60 contain a hinted decision, When the chart is shown with game type filter Cash (600 hands in the filter), Then the target line is drawn",
+          "tags": [
+            "REQ-048.3",
+            "REQ-048.9"
+          ]
+        },
+        {
+          "text": "Given the first 1,000 hands were 600 cash 6-max and 400 sit-and-go heads-up hands with a baseline of 6.2, When the filter is set to any table size, game type or line-up, Then the target line stays at 3.1",
+          "tags": [
+            "REQ-048.9"
+          ]
+        }
+      ],
+      "dod": [],
+      "deps": [
+        "E11-S01"
+      ],
+      "notes": ""
+    },
+    {
+      "key": "E11-S07",
+      "title": "Open Statistics or go Home from the Session Report",
+      "type": "feature",
+      "milestone": "M2",
+      "priority": "High",
+      "risk": "low",
+      "skeleton": false,
+      "role": "learner",
+      "want": "to go from my Session Report to Statistics or back to Home",
+      "benefit": "I can put this session in context or start the next one",
+      "context": "The Session Report (E10-S01, Report storyboard) gets two controls at the bottom: 'View statistics' and 'Back to Home'. The report has already been saved when it is shown; leaving it does not change it.",
+      "acs": [
+        {
+          "text": "Given a Session Report is shown, When its controls are listed, Then they include View statistics and Back to Home",
+          "tags": [
+            "REQ-044.6"
+          ]
+        },
+        {
+          "text": "Given a Session Report is shown, When the user chooses View statistics, Then the Statistics screen opens with its totals including the session just ended",
+          "tags": [
+            "REQ-044.6"
+          ]
+        },
+        {
+          "text": "Given a Session Report is shown after Leave table, When the user chooses Back to Home, Then Home opens without Resume session for that session",
+          "tags": [
+            "REQ-044.6"
+          ]
+        }
+      ],
+      "dod": [],
+      "deps": [
+        "E10-S01",
+        "E11-S01"
+      ],
+      "notes": "E02-S16 (M3) reopens stored reports from the Home snapshot through the same report screen, so both controls appear there too."
+    },
+    {
+      "key": "E11-S08",
+      "title": "Filter my trends by line-up",
+      "type": "feature",
+      "milestone": "M2",
+      "priority": "High",
+      "risk": "low",
+      "skeleton": false,
+      "role": "learner",
+      "want": "to filter my trends by the line-up I played against",
+      "benefit": "I can judge results against the same opponents (G-3)",
+      "context": "Line-up filter: All (default), Mixed, Tough, Soft, Custom, matching the line-up name stored on each session and hand record (preset or Custom, resolved by E06-S07). Applies to every chart, totals and the empty-state message, together with the table-size and game-type filters.",
+      "acs": [
+        {
+          "text": "Given the Statistics screen, When the line-up filter options are listed, Then they are exactly All, Mixed, Tough, Soft and Custom, and All is selected on opening",
+          "tags": [
+            "REQ-048.8"
+          ]
+        },
+        {
+          "text": "Given stored sessions with Mixed, Tough and Custom line-ups, When the line-up filter is Custom, Then only hands from the Custom sessions are counted in the charts and totals",
+          "tags": [
+            "REQ-048.8",
+            "REQ-048.6"
+          ]
+        },
+        {
+          "text": "Given line-up Mixed and table size 6-max filters together, When the charts are shown, Then every point equals the value recomputed from hands that are both Mixed and 6-max",
+          "tags": [
+            "REQ-048.8",
+            "REQ-048.2"
+          ]
+        },
+        {
+          "text": "Given no stored Soft sessions, When the line-up filter is Soft, Then the screen shows 'Play your first hand to see trends.' and totals of 0 hands over 0 sessions",
+          "tags": [
+            "REQ-048.8",
+            "REQ-048.10"
+          ]
+        }
+      ],
+      "dod": [],
+      "deps": [
+        "E11-S03",
+        "E06-S07",
+        "E03-S09"
+      ],
+      "notes": ""
+    },
+    {
+      "key": "E11-S09",
+      "title": "See my style stats over my last 1,000 hands against healthy ranges",
+      "type": "feature",
+      "milestone": "M3",
+      "priority": "Medium",
+      "risk": "medium",
+      "skeleton": false,
+      "role": "learner",
+      "want": "to see my five style stats over my most recent 1,000 hands against the healthy ranges",
+      "benefit": "I can see whether my style is moving toward sound play (G-4)",
+      "context": "Section 'Style stats in healthy range (goal: 4 of 5)' (Stats storyboard). Uses the most recent 1,000 hands in the current filter (all of them when fewer). VPIP, PFR, Aggression, WTSD and W$SD via the E07-S08 functions; healthy ranges and labels as in the report (E10-S04): in range when low <= value <= high, too high above, too low below. With a single reference size in the filter, one block for that size; per-reference-size blocks for All are E11-S10. Then '<k> of 5 in range (goal: 4)'. A stat with a zero denominator shows '—' and does not count as in range.",
+      "acs": [
+        {
+          "text": "Given 1,500 stored 6-max hands and the table size filter 6-max, When the style section is shown, Then VPIP, PFR, Aggression, WTSD and W$SD each show the value computed from the most recent 1,000 hands, the authored 6-max range and the label in range, too high or too low",
+          "tags": [
+            "REQ-049.1"
+          ]
+        },
+        {
+          "text": "Given authored 6-max VPIP range low-high, When the VPIP over the last 1,000 hands equals low, equals high, is above high and is below low, Then the label is 'in range', 'in range', 'too high' and 'too low' respectively",
+          "tags": [
+            "REQ-049.1"
+          ]
+        },
+        {
+          "text": "Given 4 of the 5 stats are in range, When the style section is shown, Then it reads '4 of 5 in range (goal: 4)'",
+          "tags": [
+            "REQ-049.2"
+          ]
+        },
+        {
+          "text": "Given 400 stored 6-max hands in the filter, When the style section is shown, Then the stats are computed over all 400 hands",
+          "tags": [
+            "REQ-049.1"
+          ]
+        },
+        {
+          "text": "Given 6-max hands in which the user never saw the flop, When the style section is shown, Then WTSD and W$SD show '—', are not counted as in range, and the count reads at most '3 of 5 in range (goal: 4)'",
+          "tags": [
+            "REQ-049.2"
+          ]
+        },
+        {
+          "text": "Given a seeded data set and each combination of game type and line-up filter at 6-max, When the style section is shown, Then every value and the in-range count equal values recomputed from the most recent 1,000 matching hand records",
+          "tags": [
+            "REQ-049.1",
+            "REQ-049.2"
+          ]
+        },
+        {
+          "text": "Given zero hands in the current filter, When the style section is shown, Then all five stats show '—' and it reads '0 of 5 in range (goal: 4)'",
+          "tags": [
+            "REQ-049.1",
+            "REQ-049.2"
+          ]
+        }
+      ],
+      "dod": [],
+      "deps": [
+        "E11-S08",
+        "E10-S04",
+        "E07-S08"
+      ],
+      "notes": "Reuse the E10-S04 range data and label function."
+    },
+    {
+      "key": "E11-S10",
+      "title": "See my style stats separately for each table size I played",
+      "type": "feature",
+      "milestone": "M3",
+      "priority": "Medium",
+      "risk": "low",
+      "skeleton": false,
+      "role": "learner",
+      "want": "to see my style stats per reference size when all table sizes are selected",
+      "benefit": "heads-up, 6-max and full-ring play are each judged against the right ranges",
+      "context": "With the table size filter All, the style section shows one block per reference size that has at least one hand in the filter (Heads-up, 6-max, Full ring, in that order), each over that size's most recent 1,000 hands, with its own ranges and its own '<k> of 5 in range (goal: 4)'. Reference sizes with no hands get no block.",
+      "acs": [
+        {
+          "text": "Given stored hands at 6-max and full ring and none heads-up, When the table size filter is All, Then the style section shows a 6-max block and a Full ring block, each with its own ranges and '<k> of 5 in range (goal: 4)', and no Heads-up block",
+          "tags": [
+            "REQ-049.3"
+          ]
+        },
+        {
+          "text": "Given 3,000 6-max hands and 200 full-ring hands, When the table size filter is All, Then the 6-max block uses the most recent 1,000 6-max hands and the Full ring block uses all 200 full-ring hands",
+          "tags": [
+            "REQ-049.3",
+            "REQ-049.1"
+          ]
+        },
+        {
+          "text": "Given hands from 4-player and 6-player sessions, When the table size filter is All, Then both count in the single 6-max block",
+          "tags": [
+            "REQ-049.3"
+          ]
+        }
+      ],
+      "dod": [],
+      "deps": [
+        "E11-S09"
+      ],
+      "notes": ""
+    },
+    {
+      "key": "E11-S11",
+      "title": "See whether I met the G-2 goal after 5,000 hands",
+      "type": "feature",
+      "milestone": "M3",
+      "priority": "Medium",
+      "risk": "low",
+      "skeleton": false,
+      "role": "learner",
+      "want": "to be told whether I met the G-2 mistake-reduction goal once I have played 5,000 hands",
+      "benefit": "I get an honest verdict on whether my mistakes halved",
+      "context": "G-2: the unhinted Major errors per 100 hands in hands 4,001-5,000 are at most half the baseline over the first 1,000 hands (REQ-048.9), both counted over all stored hands in chronological order regardless of filter, hinted decisions excluded from the error counts. The 5,000 threshold counts stored hands of any kind (any game type, table size, line-up; hands with hinted decisions count) independent of the current filter (REQ-049.4). From 5,000 stored hands on, the Statistics screen states 'G-2 goal met' or 'G-2 goal not met' with both rates, whatever filter is set. Before that, no verdict is shown.",
+      "acs": [
+        {
+          "text": "Given 4,999 stored hands of any kind, When the Statistics screen is shown, Then no G-2 verdict is shown",
+          "tags": [
+            "REQ-049.4"
+          ]
+        },
+        {
+          "text": "Given 5,000 stored hands with a first-1,000 rate of 6.2 and a hands 4,001-5,000 rate of 3.1, When the Statistics screen is shown, Then it shows 'G-2 goal met' with the rates 6.2 and 3.1",
+          "tags": [
+            "REQ-049.4"
+          ]
+        },
+        {
+          "text": "Given 5,000 stored hands with a first-1,000 rate of 6.2 and a hands 4,001-5,000 rate of 3.2, When the Statistics screen is shown, Then it shows 'G-2 goal not met' with the rates 6.2 and 3.2",
+          "tags": [
+            "REQ-049.4"
+          ]
+        },
+        {
+          "text": "Given hands 4,001-5,000 contain 30 unhinted and 40 hinted Major errors and the first 1,000 contain 62 unhinted, When the verdict is computed, Then the later rate is 3.0 and the G-2 goal is met",
+          "tags": [
+            "REQ-040.3",
+            "REQ-049.4"
+          ]
+        },
+        {
+          "text": "Given 5,000 stored hands of which 2,000 are sit-and-go hands and 900 contain a hinted decision, When the Statistics screen is shown with game type filter Cash and table size Heads-up, Then the G-2 verdict is shown with the same result as with all filters set to All",
+          "tags": [
+            "REQ-049.4"
+          ]
+        }
+      ],
+      "dod": [],
+      "deps": [
+        "E11-S06"
+      ],
+      "notes": ""
+    },
+    {
+      "key": "E11-S12",
+      "title": "Open Statistics within 2 seconds with 100,000 stored hands",
+      "type": "feature",
+      "milestone": "M3",
+      "priority": "Medium",
+      "risk": "medium",
+      "skeleton": false,
+      "role": "learner",
+      "want": "the Statistics screen to render quickly even after a very large number of hands",
+      "benefit": "checking progress never feels slow, however long I have practised",
+      "context": "REQ-055.5: Statistics rendered <= 2 s (p95) with 100,000 stored hands on the reference machine (Apple-silicon Mac, latest Chrome). Covers every chart, the style section, totals and the G-2 verdict. Likely needs per-hand summary rows or indexed reads rather than scanning full hand records. This story is the single home of the Statistics <= 2 s measurement; E13-S11 covers the other screens.",
+      "acs": [
+        {
+          "text": "Given 100,000 seeded stored hands over 400 sessions, When the Statistics screen is opened 200 times, Then the p95 time from choosing Statistics to all charts, the style section and totals being rendered is 2.0 s or less",
+          "tags": [
+            "REQ-055.5",
+            "REQ-053.1"
+          ]
+        },
+        {
+          "text": "Given 100,000 seeded stored hands, When the plotted values are compared with values recomputed from the full hand records, Then they are equal for every grouping and filter",
+          "tags": [
+            "REQ-055.5"
+          ]
+        }
+      ],
+      "dod": [
+        {
+          "text": "Automated timing test reports the p95 over 200 samples with 100,000 hands and runs in CI as a non-flaky benchmark job",
+          "tags": [
+            "REQ-055.5"
+          ]
+        }
+      ],
+      "deps": [
+        "E11-S04",
+        "E11-S05",
+        "E11-S10",
+        "E11-S11",
+        "E11-S02"
+      ],
+      "notes": "Any summary data added must be written with the hand record (records are immutable) and covered by E13's schema versioning."
+    }
+  ]
+}

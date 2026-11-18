@@ -1,0 +1,244 @@
+{
+  "scope": "E10",
+  "round": 1,
+  "clauses": [
+    {
+      "clause": "REQ-003.1",
+      "verdict": "covered",
+      "evidence": "E10-S08#AC1-3"
+    },
+    {
+      "clause": "REQ-003.2",
+      "verdict": "covered",
+      "evidence": "E10-S08#AC4"
+    },
+    {
+      "clause": "REQ-003.3",
+      "verdict": "covered",
+      "evidence": "E10-S09#AC1-3"
+    },
+    {
+      "clause": "REQ-003.4",
+      "verdict": "covered",
+      "evidence": "E10-S08#AC5"
+    },
+    {
+      "clause": "REQ-004.5",
+      "verdict": "covered",
+      "evidence": "E10-S01#AC1-2, E10-S05#AC4"
+    },
+    {
+      "clause": "REQ-004.7",
+      "verdict": "covered",
+      "evidence": "E10-S05#AC1-6"
+    },
+    {
+      "clause": "REQ-004.8",
+      "verdict": "covered",
+      "evidence": "E10-S05#AC7-8"
+    },
+    {
+      "clause": "REQ-040.4",
+      "verdict": "covered",
+      "evidence": "E10-S03#AC1-3"
+    },
+    {
+      "clause": "REQ-044.1",
+      "verdict": "covered",
+      "evidence": "E10-S01#AC3-4, E10-S11#AC1-2 (values check: +$46, +2.7; -$40, -5.0)"
+    },
+    {
+      "clause": "REQ-044.2",
+      "verdict": "covered",
+      "evidence": "E10-S02#AC1-4"
+    },
+    {
+      "clause": "REQ-044.3",
+      "verdict": "covered",
+      "evidence": "E10-S03#AC1-4"
+    },
+    {
+      "clause": "REQ-044.4",
+      "verdict": "covered",
+      "evidence": "E10-S04#AC3-5 (AC3/AC4 use placeholder values, see finding)"
+    },
+    {
+      "clause": "REQ-044.5",
+      "verdict": "covered",
+      "evidence": "E10-S06#AC7-8, E10-S07#AC3"
+    },
+    {
+      "clause": "REQ-044.7",
+      "verdict": "covered",
+      "evidence": "E10-S01#AC5-6, E10-S08#AC4"
+    },
+    {
+      "clause": "REQ-044.8",
+      "verdict": "covered",
+      "evidence": "E10-S01#AC7"
+    },
+    {
+      "clause": "REQ-044.9",
+      "verdict": "covered",
+      "evidence": "E10-S06#AC8"
+    },
+    {
+      "clause": "REQ-044.10",
+      "verdict": "covered",
+      "evidence": "E10-S04#AC7"
+    },
+    {
+      "clause": "REQ-046.1",
+      "verdict": "covered",
+      "evidence": "E10-S04#AC1,AC2,AC5"
+    },
+    {
+      "clause": "REQ-046.2",
+      "verdict": "covered",
+      "evidence": "E10-S04#AC1"
+    },
+    {
+      "clause": "REQ-046.3",
+      "verdict": "covered",
+      "evidence": "E10-S04#AC6"
+    },
+    {
+      "clause": "REQ-047.1",
+      "verdict": "covered",
+      "evidence": "E10-S06#AC1-2, E10-S12#AC5 (BB-check/limp classification unspecified, see finding)"
+    },
+    {
+      "clause": "REQ-047.2",
+      "verdict": "covered",
+      "evidence": "E10-S06#AC3-6"
+    },
+    {
+      "clause": "REQ-047.3",
+      "verdict": "covered",
+      "evidence": "E10-S07#AC1-3"
+    },
+    {
+      "clause": "REQ-047.4",
+      "verdict": "covered",
+      "evidence": "E10-S06#AC3,AC7"
+    },
+    {
+      "clause": "REQ-047.5",
+      "verdict": "covered",
+      "evidence": "E10-S06#AC2,AC7"
+    },
+    {
+      "clause": "REQ-047.6",
+      "verdict": "covered",
+      "evidence": "E10-S12#AC1-4"
+    },
+    {
+      "clause": "REQ-047.7",
+      "verdict": "covered",
+      "evidence": "E10-S06#AC2, E10-S12#AC5-6"
+    },
+    {
+      "clause": "REQ-047.8",
+      "verdict": "covered",
+      "evidence": "E10-S06#AC6"
+    },
+    {
+      "clause": "REQ-072.3",
+      "verdict": "covered",
+      "evidence": "E10-S10#AC1-3"
+    }
+  ],
+  "findings": [
+    {
+      "id": "J-E10-E10-S10-hidden-dependency",
+      "severity": "HIGH",
+      "class": "hidden-dependency",
+      "owner": "weaver",
+      "location": "E10-S10 (TASK-10.11)",
+      "evidence": "E10-S10 depends only on E10-S01, but its description says playing time is 'as measured for the Table header clock REQ-072.1, E04' and 'must be stored with the session record'. E04-S09 (TASK-4.9) already owns storing elapsed time in session state and says 'the Session Report total is E10 and reads the stored elapsed time'. No dependency edge exists and two stories claim the storage work.",
+      "fix": "Add dependency E10-S10 -> E04-S09; reword E10-S10 to read the elapsed time stored by E04-S09 rather than store it; keep AC2 (pause/resume) as a report-level check."
+    },
+    {
+      "id": "J-E10-E02-S07-hidden-dependency",
+      "severity": "MEDIUM",
+      "class": "hidden-dependency",
+      "owner": "weaver",
+      "location": "E02-S07 (TASK-2.7) / E10-S01",
+      "evidence": "E02-S07#AC2 requires the paused session's Session Report to be saved on confirm and its notes say 'Order this after E10's report-saving story', but TASK-2.7 depends only on TASK-2.6; E10-S01 (the report builder) is not a dependency. Both are M2.",
+      "fix": "Add dependency E02-S07 -> E10-S01 (flag to the E02 judge as well)."
+    },
+    {
+      "id": "J-E10-E10-S04-ac-exact-values",
+      "severity": "MEDIUM",
+      "class": "ac-quality",
+      "owner": "weaver",
+      "location": "E10-S04#AC3, AC4",
+      "evidence": "AC3 says 'VPIP, PFR... values' and AC4 says 'authored 6-max VPIP range low-high' with no concrete numbers; an implementer cannot write the test without inventing values.",
+      "fix": "Use a fixed fixture, e.g. 6-max range 20-28 and VPIP 28.0/20.0/28.1/19.9 -> in range/in range/too high/too low; list the five displayed values."
+    },
+    {
+      "id": "J-E10-E10-S12-not-vertical",
+      "severity": "MEDIUM",
+      "class": "not-vertical",
+      "owner": "weaver",
+      "location": "E10-S12 (TASK-10.6)",
+      "evidence": "E10-S12 delivers only a classification/grouping function; 5 of 6 ACs observe a classifier output, and only AC6 reaches the report. It cannot be demonstrated before E10-S06 and E10-S06 ships 16 preflop categories that nothing populates until S12.",
+      "fix": "Merge preflop classification into E10-S06 (or into a preflop-leaks slice that shows a leak end-to-end) and keep S12's ACs as examples within it."
+    },
+    {
+      "id": "J-E10-E10-S12-classification-gaps",
+      "severity": "MEDIUM",
+      "class": "missing-edge-case",
+      "owner": "weaver",
+      "location": "E10-S12 / E10-S06",
+      "evidence": "REQ-047.1/.7 define preflop actions fold/open/call/raise only. No AC says where a limp (call into unopened pot), a big-blind check, or a call of a capped street fall. E10-S12 description defines open and raise but not these cases, so the categorisation is ambiguous.",
+      "fix": "Add ACs: limp from late position -> late-call; BB checking its option -> not a leak category (or named); decide and state it."
+    },
+    {
+      "id": "J-E10-E10-S06-too-large",
+      "severity": "MEDIUM",
+      "class": "split-story",
+      "owner": "weaver",
+      "location": "E10-S06 (TASK-10.5)",
+      "evidence": "E10-S06 combines authoring 31 titled categories with evidence names and one-sentence fixes (content), classification, threshold detection, hinted exclusion and report rendering across 8 ACs.",
+      "fix": "Split content authoring (31 categories, validation AC2) from detection/rendering, or accept as one slice but document it."
+    },
+    {
+      "id": "J-E10-E10-S05-AC6-tag",
+      "severity": "LOW",
+      "class": "mis-tag",
+      "owner": "weaver",
+      "location": "E10-S05#AC6",
+      "evidence": "AC6 (leave during hand 1 produces a report with 1 hand) is tagged REQ-044.8, but REQ-044.8 concerns 0-hand sessions; the AC would still pass without it. Clause is genuinely confirmed by E10-S01#AC7.",
+      "fix": "Drop the REQ-044.8 tag from E10-S05#AC6."
+    },
+    {
+      "id": "J-E10-E10-S01-review-open-no-ac",
+      "severity": "LOW",
+      "class": "missing-ac",
+      "owner": "weaver",
+      "location": "E10-S01 description",
+      "evidence": "Description says Leave table works 'including while the Hand Review panel is open after a hand', but no AC covers that state.",
+      "fix": "Add AC: Given the Hand Review panel is open after hand 12, When the user chooses Leave table, Then the session ends without a dialog and its report opens."
+    },
+    {
+      "id": "J-E10-E10-S03-S06-REQ-061-untagged",
+      "severity": "LOW",
+      "class": "tagging",
+      "owner": "weaver",
+      "location": "E10-S04, E10-S06",
+      "evidence": "Both stories list REQ-061 in 'Covers' but no AC tags it (only the global DoD does), so the claim is decorative.",
+      "fix": "Remove REQ-061 from Covers, or add a DoD item 'all titles, fixes and justifications are original text' tagged REQ-061.2."
+    },
+    {
+      "id": "J-E10-REQ-044.4-boundary",
+      "severity": "LOW",
+      "class": "requirement-ambiguity",
+      "owner": "user",
+      "location": "REQ-044.4 / E10-S04#AC4",
+      "evidence": "REQ-044.4 does not say whether a value exactly at a range limit is 'in range'. The story chose inclusive on both ends.",
+      "fix": "Confirm inclusive boundaries."
+    }
+  ],
+  "summary": "All 29 E10 clauses are covered by AC evidence. No CRITICAL findings. One HIGH hidden dependency (E10-S10 on E04-S09). Report values and thresholds in S01, S02, S03, S06, S07 recompute correctly."
+}

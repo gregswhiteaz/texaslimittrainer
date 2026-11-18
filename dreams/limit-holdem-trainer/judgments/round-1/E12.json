@@ -1,0 +1,131 @@
+{
+  "scope": "E12",
+  "round": 1,
+  "clauses": [
+    {
+      "clause": "REQ-002.3",
+      "verdict": "covered",
+      "evidence": "E12-S01#AC1 (Settings opens); Statistics half in E11-S01#AC1"
+    },
+    {
+      "clause": "REQ-012.3",
+      "verdict": "covered",
+      "evidence": "E12-S04#AC2 with E02-S11#AC2-3 (E12 AC does not test 'not from last session')"
+    },
+    {
+      "clause": "REQ-021.2",
+      "verdict": "covered",
+      "evidence": "E12-S02#AC2,AC4"
+    },
+    {
+      "clause": "REQ-050.1",
+      "verdict": "covered",
+      "evidence": "E12-S04#AC1-3"
+    },
+    {
+      "clause": "REQ-050.2",
+      "verdict": "covered",
+      "evidence": "E12-S05#AC1-3"
+    },
+    {
+      "clause": "REQ-050.3",
+      "verdict": "covered",
+      "evidence": "E12-S02#AC1-4"
+    },
+    {
+      "clause": "REQ-050.4",
+      "verdict": "covered",
+      "evidence": "E12-S06#AC1-3"
+    },
+    {
+      "clause": "REQ-050.5",
+      "verdict": "covered",
+      "evidence": "E12-S01#AC1, E12-S03#AC1,AC4, E12-S04#AC4, E12-S05#AC4, E12-S06#AC4"
+    },
+    {
+      "clause": "REQ-050.6",
+      "verdict": "covered",
+      "evidence": "E12-S01#AC2"
+    },
+    {
+      "clause": "REQ-050.7",
+      "verdict": "covered",
+      "evidence": "E12-S03#AC1-3,AC5"
+    },
+    {
+      "clause": "REQ-050.8",
+      "verdict": "covered",
+      "evidence": "E12-S03#AC6-8"
+    },
+    {
+      "clause": "REQ-051.1",
+      "verdict": "covered",
+      "evidence": "E12-S08#AC1"
+    },
+    {
+      "clause": "REQ-051.2",
+      "verdict": "covered",
+      "evidence": "E12-S08#AC2-3"
+    },
+    {
+      "clause": "REQ-051.3",
+      "verdict": "covered",
+      "evidence": "E12-S08#AC4-7"
+    },
+    {
+      "clause": "REQ-051.4",
+      "verdict": "covered",
+      "evidence": "E12-S08#AC3"
+    },
+    {
+      "clause": "REQ-053.3",
+      "verdict": "covered",
+      "evidence": "E12-S09#AC1-4"
+    },
+    {
+      "clause": "REQ-057.2",
+      "verdict": "covered",
+      "evidence": "E12-S01#AC5, E12-S03#AC5 (Settings only; global sweep in E13-S12)"
+    },
+    {
+      "clause": "REQ-057.4",
+      "verdict": "covered",
+      "evidence": "E12-S01#AC5 (Settings only)"
+    },
+    {
+      "clause": "REQ-071.5",
+      "verdict": "covered",
+      "evidence": "E12-S07#AC1,AC2,AC4"
+    }
+  ],
+  "findings": [
+    {
+      "id": "J-E12-E12-S01-AC4-ac-style",
+      "severity": "MEDIUM",
+      "class": "ac-style",
+      "owner": "weaver",
+      "location": "E12-S01#AC4",
+      "evidence": "AC4 asserts 'the settings store holds' defaults (implementation detail) and tags REQ-071.5 although E12-S01 adds no Bot banter toggle; the toggle itself is E12-S07#AC1.",
+      "fix": "Reword as observable behaviour (Given a fresh install, When Settings is shown, Then speed Rapid, auto-open on, styles on, four-colour off, banter on) and drop the REQ-071.5 tag here."
+    },
+    {
+      "id": "J-E12-E12-S03-deps-dependency",
+      "severity": "LOW",
+      "class": "dependency",
+      "owner": "weaver",
+      "location": "E12-S03",
+      "evidence": "E12-S03#AC6 requires Realistic bot pacing (E03-S13) and AC7 the auto-deal timer (E03-S04); direct deps are only E03-S11, E04-S09, E12-S02. Ordinals are earlier so no ordering defect, but edges are incomplete.",
+      "fix": "Add E03-S13 and E03-S04 as dependencies."
+    },
+    {
+      "id": "J-E12-E12-S04-AC2-ac-weak",
+      "severity": "LOW",
+      "class": "ac-weak",
+      "owner": "weaver",
+      "location": "E12-S04#AC2",
+      "evidence": "AC2 would pass if Game Config pre-filled speed from the last started session whenever that session also used Realistic; REQ-012.3 'not from the last started session' is only tested in E02-S11.",
+      "fix": "Add Given last session started at Rapid and Default speed Realistic, When Game Config opens, Then Realistic is pre-selected."
+    }
+  ],
+  "summary": "All 19 clauses covered; stories are small vertical slices with exact values. Only minor AC wording and dependency issues."
+}

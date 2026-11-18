@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Settings</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap">
+<style>
+body{margin:0;background:#0E0F12}
+:root{color-scheme:dark}
+input,select,button{color:inherit;font-family:inherit}
+a{color:#FF6B70}a:hover{color:#FF9A9D}
+</style>
+</helmet>
+<div style="min-height: 800px; box-sizing: border-box; background: #0E0F12; color: #F2F3F5; font-family: Inter, system-ui, sans-serif; padding: 32px 16px">
+  <div style="max-width: 720px; margin: 0 auto; display: flex; flex-direction: column; gap: 24px">
+    <header style="display: flex; align-items: center; gap: 16px; flex-wrap: wrap">
+      <a href="Home.dc.html" style="font-size: 14px">← Home</a>
+      <h1 style="margin: 0; font-size: 28px; font-weight: 700">Settings</h1>
+    </header>
+    <section style="background: #1A1D22; border: 1px solid #343A43; border-radius: 10px; padding: 24px; display: flex; flex-direction: column; gap: 20px" aria-labelledby="play">
+      <h2 id="play" style="margin: 0; font-size: 17px; font-weight: 600">Play</h2>
+      <fieldset style="border: 0; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 8px">
+        <legend style="font-size: 14px; font-weight: 600; padding: 0; margin-bottom: 8px">Default speed</legend>
+        <div style="display: flex; gap: 8px; flex-wrap: wrap">
+          <label style="display: flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 16px; border: 2px solid #D7262E; border-radius: 8px; font-size: 15px"><input type="radio" name="spd" checked> Rapid</label>
+          <label style="display: flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 16px; border: 1px solid #343A43; border-radius: 8px; font-size: 15px"><input type="radio" name="spd"> Realistic</label>
+        </div>
+      </fieldset>
+      <label style="display: flex; align-items: center; gap: 12px; min-height: 44px; font-size: 15px"><input type="checkbox" checked style="width: 20px; height: 20px"> Open the hand review panel after every hand</label>
+    </section>
+    <section style="background: #1A1D22; border: 1px solid #343A43; border-radius: 10px; padding: 24px; display: flex; flex-direction: column; gap: 20px" aria-labelledby="disp">
+      <h2 id="disp" style="margin: 0; font-size: 17px; font-weight: 600">Display</h2>
+      <fieldset style="border: 0; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 8px">
+        <legend style="font-size: 14px; font-weight: 600; padding: 0; margin-bottom: 8px">Deck colours</legend>
+        <div style="display: flex; gap: 8px; flex-wrap: wrap">
+          <label style="display: flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 16px; border: 2px solid #D7262E; border-radius: 8px; font-size: 15px"><input type="radio" name="deck" checked> Two-colour</label>
+          <label style="display: flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 16px; border: 1px solid #343A43; border-radius: 8px; font-size: 15px"><input type="radio" name="deck"> Four-colour</label>
+        </div>
+      </fieldset>
+      <fieldset style="border: 0; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 8px">
+        <legend style="font-size: 14px; font-weight: 600; padding: 0; margin-bottom: 8px">Show amounts as</legend>
+        <div style="display: flex; gap: 8px; flex-wrap: wrap">
+          <label style="display: flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 16px; border: 2px solid #D7262E; border-radius: 8px; font-size: 15px"><input type="radio" name="amt" checked> Dollars ($)</label>
+          <label style="display: flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 16px; border: 1px solid #343A43; border-radius: 8px; font-size: 15px"><input type="radio" name="amt"> Big bets</label>
+        </div>
+      </fieldset>
+    </section>
+    <section style="background: #1A1D22; border: 1px solid #6B2A2A; border-radius: 10px; padding: 24px; display: flex; flex-direction: column; gap: 12px" aria-labelledby="data">
+      <h2 id="data" style="margin: 0; font-size: 17px; font-weight: 600">Your data</h2>
+      <p style="margin: 0; font-size: 14px; color: #C9CED6">Hands, sessions and statistics are stored only in this browser. Clearing browser data deletes them, and there is no backup in this version.</p>
+      <button type="button" style="align-self: flex-start; min-height: 44px; padding: 0 18px; font-size: 15px; font-weight: 600; border: 1px solid #FF6B70; background: transparent; color: #FF6B70; border-radius: 8px">Reset all data…</button>
+    </section>
+    <span style="font-size: 13px; color: #A7AEB8">Version [APP VERSION]</span>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":800}}'>
+class Component extends DCLogic {
+renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

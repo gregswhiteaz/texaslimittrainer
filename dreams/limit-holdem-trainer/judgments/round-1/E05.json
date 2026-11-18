@@ -1,0 +1,106 @@
+{
+  "scope": "E05",
+  "round": 1,
+  "clauses": [
+    {
+      "clause": "REQ-008.1",
+      "verdict": "covered",
+      "evidence": "E05-S01#AC1-5"
+    },
+    {
+      "clause": "REQ-008.2",
+      "verdict": "covered",
+      "evidence": "E05-S02#AC1,AC3,AC4,AC6"
+    },
+    {
+      "clause": "REQ-008.3",
+      "verdict": "covered",
+      "evidence": "E05-S02#AC1-2, E05-S03#AC2,AC4,AC5"
+    },
+    {
+      "clause": "REQ-008.4",
+      "verdict": "covered",
+      "evidence": "E05-S04#AC1-6"
+    },
+    {
+      "clause": "REQ-008.5",
+      "verdict": "covered",
+      "evidence": "E05-S05#AC1-3,AC5"
+    },
+    {
+      "clause": "REQ-008.6",
+      "verdict": "covered",
+      "evidence": "E05-S05#AC1,AC3,AC4,AC6"
+    },
+    {
+      "clause": "REQ-008.7",
+      "verdict": "covered",
+      "evidence": "E05-S07#AC1-6"
+    },
+    {
+      "clause": "REQ-008.8",
+      "verdict": "covered",
+      "evidence": "E05-S03#AC1-3"
+    },
+    {
+      "clause": "REQ-008.9",
+      "verdict": "covered",
+      "evidence": "E05-S06#AC1-5"
+    },
+    {
+      "clause": "REQ-002.6",
+      "verdict": "covered",
+      "evidence": "E05-S09#AC1-2"
+    },
+    {
+      "clause": "REQ-003.5",
+      "verdict": "covered",
+      "evidence": "E05-S08#AC1-3"
+    },
+    {
+      "clause": "REQ-008.10",
+      "verdict": "covered",
+      "evidence": "E05-S05#AC7-8"
+    },
+    {
+      "clause": "REQ-008.11",
+      "verdict": "covered",
+      "evidence": "E05-S06#AC6"
+    },
+    {
+      "clause": "REQ-008.12",
+      "verdict": "covered",
+      "evidence": "E05-S03#AC3"
+    }
+  ],
+  "findings": [
+    {
+      "id": "J-E05-E05-S05-split-story",
+      "severity": "MEDIUM",
+      "class": "split-story",
+      "owner": "weaver",
+      "location": "E05-S05 (TASK-5.7)",
+      "evidence": "One story covers user bust, user winning all chips, and Leave table in a sit-and-go (between hands and mid-hand) in 8 ACs and a want that joins asks with 'and'.",
+      "fix": "Split Leave table in a sit-and-go (REQ-008.10, AC7-8) from the bust/win end of the sit-and-go (REQ-008.5/.6)."
+    },
+    {
+      "id": "J-E05-E05-S05-AC-delay",
+      "severity": "LOW",
+      "class": "missing-ac",
+      "owner": "weaver",
+      "location": "E05-S05 description",
+      "evidence": "Description says that without the review panel the session ends after the 1.5 s result delay, but no AC checks the delay or that the result is shown first.",
+      "fix": "Add AC: Given the user busts with the panel closed, When the result is shown, Then the Session Report opens after 1.5 s and not before."
+    },
+    {
+      "id": "J-E05-E05-S06-arbitrary-value",
+      "severity": "LOW",
+      "class": "ac-quality",
+      "owner": "weaver",
+      "location": "E05-S06#AC3",
+      "evidence": "AC3 invents a 10 s wait that no requirement states; it expresses 'next hand waits' but with an unsourced value.",
+      "fix": "Reword: Then no hand is dealt and the Session Report has not opened until See results is chosen."
+    }
+  ],
+  "summary": "All 14 E05 clauses covered with exact values (level schedule, header countdown, finishing positions recomputed correctly). No CRITICAL or HIGH findings; only a split suggestion and minor AC polish. C5-AND warnings on E05 are sit-and-go false positives."
+}

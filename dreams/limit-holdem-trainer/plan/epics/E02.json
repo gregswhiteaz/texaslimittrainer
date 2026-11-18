@@ -1,0 +1,865 @@
+{
+  "epic": "E02",
+  "stories": [
+    {
+      "key": "E02-S01",
+      "title": "Start a game from Home through Game Config",
+      "milestone": "M1",
+      "priority": "High",
+      "risk": "medium",
+      "skeleton": true,
+      "want": "to start a game from the Home screen",
+      "benefit": "every practice session begins from one clear entry point",
+      "context": "Walking-skeleton slice that puts Home and a minimal Game Config in front of the default table opened by E03-S01. When the app has loaded it opens Home, which shows the TLH logo (the user-supplied asset brand/tlh-logo.jpg, bundled unchanged) and the name \"TLH Trainer\". Home offers New game (Statistics and Settings entries are added by E11/E12; Resume session by E02-S08). New game opens the Game Config screen. In this slice Game Config shows the fixed default session (Cash game, 6 players, $4/$8, five TAG bots) with Start game and Cancel/Home; the selectors arrive in E02-S02..S07 and S11. Start game builds the session configuration and hands it to the Table (E03-S01), which deals the first hand. Theme per REQ-060.3: charcoal background, red primary accent.",
+      "acs": [
+        {
+          "text": "Given the app is launched, When loading completes, Then the Home screen opens and shows the TLH logo image and the name \"TLH Trainer\"",
+          "tags": [
+            "REQ-002.1"
+          ]
+        },
+        {
+          "text": "Given the Home screen, When the logo image is loaded, Then its bytes are identical to brand/tlh-logo.jpg",
+          "tags": [
+            "REQ-061.3"
+          ]
+        },
+        {
+          "text": "Given the Home screen is shown, When its colours are measured, Then the page background is charcoal #0E0F12 and the New game control uses the red primary accent #D7262E",
+          "tags": [
+            "REQ-060.3"
+          ]
+        },
+        {
+          "text": "Given the Home screen, When the user chooses New game, Then the Game Config screen opens and no session is started",
+          "tags": [
+            "REQ-002.2"
+          ]
+        },
+        {
+          "text": "Given Game Config on first use, When the user chooses Start game, Then the Table opens a cash game with the user and five TAG bots at $4/$8 and the first hand is dealt",
+          "tags": [
+            "REQ-006.1"
+          ]
+        }
+      ],
+      "deps": [
+        "E03-S01"
+      ],
+      "notes": "Build the session-configuration object here (game type, players, stake, line-up, speed, later user seat and button) so later stories only add fields. E03-S01's direct-to-table start is replaced by this flow. Game Config also offers Cancel (back to Home, nothing stored) per the Config storyboard; it is navigation, not a requirement clause.",
+      "type": "feature",
+      "role": "learner",
+      "dod": []
+    },
+    {
+      "key": "E02-S02",
+      "title": "Choose how many players sit at the table",
+      "milestone": "M2",
+      "priority": "High",
+      "risk": "medium",
+      "want": "to choose a table of 2 to 10 players including me",
+      "benefit": "I can practise heads-up, short-handed and full-ring play",
+      "context": "Game Config offers the players options 2, 3, 4, 5, 6, 7, 8, 9 and 10 (including the user), labelled 2 (heads-up), 6 (6-max) and 10 (full ring) as in the Config storyboard. Mapping to reference sizes: 2 -> heads-up; 3, 4, 5, 6, 7 -> 6-max; 8, 9, 10 -> full ring. Sizes 2, 6, 9, 10 are exact; for 3, 4, 5, 7 and 8 the screen states that advice will be approximate and names the reference size used. Start game seats the user plus (size - 1) bots; heads-up rules come from E01-S09, the heads-up and full-ring charts from E07-S05.",
+      "acs": [
+        {
+          "text": "Given Game Config, When the players options are listed, Then they are exactly the integers 2 to 10",
+          "tags": [
+            "REQ-005.2"
+          ]
+        },
+        {
+          "text": "Given Game Config, When the user selects 3, 4, 5 or 7 players, Then the screen states that advice will be approximate and names 6-max as the reference size",
+          "tags": [
+            "REQ-005.3",
+            "REQ-005.4"
+          ]
+        },
+        {
+          "text": "Given Game Config, When the user selects 8 players, Then the screen states that advice will be approximate and names full ring as the reference size",
+          "tags": [
+            "REQ-005.3",
+            "REQ-005.4"
+          ]
+        },
+        {
+          "text": "Given Game Config, When the user selects 2, 6, 9 or 10 players, Then no approximate-advice notice is shown",
+          "tags": [
+            "REQ-005.3",
+            "REQ-005.4"
+          ]
+        },
+        {
+          "text": "Given each size from 2 to 10 selected, When the user chooses Start game, Then the table seats the user and exactly size minus 1 bots and the header shows that number of players",
+          "tags": [
+            "REQ-005.2"
+          ]
+        },
+        {
+          "text": "Given 2 players selected on Game Config, When the first hand of the started session is dealt, Then the button posts the small blind and the other player the big blind",
+          "tags": [
+            "REQ-015.1"
+          ]
+        }
+      ],
+      "deps": [
+        "E02-S01",
+        "E01-S09",
+        "E07-S05"
+      ],
+      "type": "feature",
+      "skeleton": false,
+      "role": "learner",
+      "dod": [],
+      "notes": ""
+    },
+    {
+      "key": "E02-S03",
+      "title": "Choose the stake for a cash game",
+      "milestone": "M2",
+      "priority": "High",
+      "risk": "low",
+      "want": "to choose the stake for a cash game",
+      "benefit": "I can practise at the limits I expect to play",
+      "context": "Cash games only. The stake list is exactly $2/$4, $3/$6, $4/$8, $6/$12, $10/$20, $20/$40, default $4/$8 on first use. Blinds: small blind = half the small bet rounded down to a whole dollar, big blind = the small bet ($2/$4 -> $1/$2; $3/$6 -> $1/$3; $4/$8 -> $2/$4; $6/$12 -> $3/$6; $10/$20 -> $5/$10; $20/$40 -> $10/$20). The buy-in is shown read-only as 20 x the big bet (E03 applies it, REQ-007.1). All money is play money: the stake selector and buy-in offer no deposit, payment or real-money conversion. The app-wide no-real-money check is E02-S14.",
+      "acs": [
+        {
+          "text": "Given Game Config with Cash game chosen, When the stake options are listed, Then they are exactly $2/$4, $3/$6, $4/$8, $6/$12, $10/$20 and $20/$40, and $4/$8 is selected on first use",
+          "tags": [
+            "REQ-006.1"
+          ]
+        },
+        {
+          "text": "Given each of the six stakes, When the engine posts blinds, Then the small and big blinds are $1/$2, $1/$3, $2/$4, $3/$6, $5/$10 and $10/$20 respectively",
+          "tags": [
+            "REQ-006.2"
+          ]
+        },
+        {
+          "text": "Given $10/$20 chosen, When the user starts the game, Then the header shows $10/$20, the first hand's blinds are $5 and $10 and every starting stack is $400",
+          "tags": [
+            "REQ-006.1",
+            "REQ-006.2"
+          ]
+        },
+        {
+          "text": "Given Game Config with $3/$6 chosen, When the buy-in is shown, Then it reads $120 and offers no control to change it",
+          "tags": [
+            "REQ-007.1"
+          ]
+        },
+        {
+          "text": "Given Game Config with each of the six stakes selected, When its stake and buy-in text and controls are inspected, Then none offers a deposit, payment, purchase, cash-out or real-money conversion",
+          "tags": [
+            "REQ-006.3"
+          ]
+        }
+      ],
+      "deps": [
+        "E02-S01"
+      ],
+      "type": "feature",
+      "skeleton": false,
+      "role": "learner",
+      "dod": [],
+      "notes": ""
+    },
+    {
+      "key": "E02-S04",
+      "title": "Choose Cash game or Sit-and-go",
+      "milestone": "M2",
+      "priority": "High",
+      "risk": "low",
+      "want": "to choose the game type for the session",
+      "benefit": "I can practise the format I am preparing for",
+      "context": "Game type options are exactly Cash game and Sit-and-go. On first use Cash game is selected; pre-selecting the game type of the most recently started session (REQ-005.1 \"default is the last used value\", REQ-012) is delivered with the remembered configuration in E02-S10. When Sit-and-go is chosen the stake selector (and the cash buy-in) is hidden; switching back to Cash game shows it again with the stake that was selected. Start game passes the game type in the session configuration; the sit-and-go structure itself (1,500 chips, level schedule, results) is E05.",
+      "acs": [
+        {
+          "text": "Given Game Config, When the game type options are listed, Then they are exactly Cash game and Sit-and-go",
+          "tags": [
+            "REQ-005.1"
+          ]
+        },
+        {
+          "text": "Given a fresh install, When Game Config opens, Then Cash game is selected",
+          "tags": [
+            "REQ-012.2"
+          ]
+        },
+        {
+          "text": "Given Game Config with $6/$12 selected, When the user chooses Sit-and-go, Then the stake selector is not shown",
+          "tags": [
+            "REQ-006.4"
+          ]
+        },
+        {
+          "text": "Given Sit-and-go was chosen after $6/$12 was selected, When the user chooses Cash game again, Then the stake selector is shown with $6/$12 selected",
+          "tags": [
+            "REQ-006.4"
+          ]
+        },
+        {
+          "text": "Given Sit-and-go chosen, When the user chooses Start game, Then the session configuration has game type Sit-and-go and carries no stake",
+          "tags": [
+            "REQ-005.1",
+            "REQ-006.4"
+          ]
+        }
+      ],
+      "deps": [
+        "E02-S03"
+      ],
+      "notes": "E05 must make Start game with Sit-and-go play the sit-and-go structure.",
+      "type": "feature",
+      "skeleton": false,
+      "role": "learner",
+      "dod": []
+    },
+    {
+      "key": "E02-S05",
+      "title": "Choose a line-up preset for the bots",
+      "milestone": "M2",
+      "priority": "High",
+      "risk": "medium",
+      "want": "to pick the Mixed, Tough or Soft line-up",
+      "benefit": "I face the kind of opponents I want to practise against",
+      "context": "Game Config's Opponents section offers the presets Mixed, Tough and Soft (Mixed on first use) and lists one row per bot seat (players - 1 rows), in clockwise order starting with the first bot seat clockwise from the user, with the bot's display name and style, using the E06-S06 line-up module: Mixed cycles TAG, Calling station, Maniac, Rock over the bot seats; Tough is all TAG except one Maniac in the first bot seat clockwise from the user (heads-up: one TAG); Soft alternates Calling station and Rock (REQ-009.1, REQ-009.8). Names are unique within the table. Rows update when the players count changes. Start game resolves the line-up through E06-S07 and the table seats exactly the listed bots.",
+      "acs": [
+        {
+          "text": "Given a fresh install, When Game Config opens, Then the Mixed preset is selected and the five bot rows, listed clockwise from the user, show TAG, Calling station, Maniac, Rock, TAG",
+          "tags": [
+            "REQ-012.2",
+            "REQ-009.1"
+          ]
+        },
+        {
+          "text": "Given 9 players and the Tough preset, When the bot rows are shown, Then there are 8 rows, the first bot seat clockwise from the user is the only Maniac and every other row is TAG",
+          "tags": [
+            "REQ-009.1",
+            "REQ-009.8"
+          ]
+        },
+        {
+          "text": "Given 6 players, When the user switches from 6 to 4 players with the Soft preset, Then 3 rows are shown styled Calling station, Rock, Calling station",
+          "tags": [
+            "REQ-009.1"
+          ]
+        },
+        {
+          "text": "Given 2 players and the Tough preset, When the bot row is shown, Then the single bot is TAG",
+          "tags": [
+            "REQ-009.7"
+          ]
+        },
+        {
+          "text": "Given any preset at 10 players, When the bot rows are shown, Then no two rows share a display name",
+          "tags": [
+            "REQ-009.4"
+          ]
+        },
+        {
+          "text": "Given the Soft preset at 6 players, When the user chooses Start game, Then the table's bots have the names and styles listed on Game Config and the session's line-up name is Soft",
+          "tags": [
+            "REQ-009.1",
+            "REQ-009.6"
+          ]
+        }
+      ],
+      "deps": [
+        "E02-S02",
+        "E06-S07"
+      ],
+      "type": "feature",
+      "skeleton": false,
+      "role": "learner",
+      "dod": [],
+      "notes": ""
+    },
+    {
+      "key": "E02-S06",
+      "title": "Change the style of one bot seat",
+      "milestone": "M2",
+      "priority": "High",
+      "risk": "low",
+      "want": "to change the style of a single bot seat",
+      "benefit": "I can build exactly the table I want to practise against",
+      "context": "Each bot row on Game Config offers exactly the styles TAG, Calling station, Maniac and Rock (the storyboard's extra \"Random\" option is not in the requirements). Changing one row changes no other row. If any seat differs from the chosen preset's assignment, Start game records the line-up as Custom via E06-S07; if every seat matches, the preset name is kept.",
+      "acs": [
+        {
+          "text": "Given any bot row, When its style options are listed, Then they are exactly TAG, Calling station, Maniac and Rock",
+          "tags": [
+            "REQ-009.2"
+          ]
+        },
+        {
+          "text": "Given the Mixed preset at 6 players, When the user changes seat 3 from Maniac to Rock, Then seat 3 shows Rock and seats 1, 2, 4 and 5 keep TAG, Calling station, Rock and TAG",
+          "tags": [
+            "REQ-009.3"
+          ]
+        },
+        {
+          "text": "Given the Mixed preset at 6 players with seat 3 changed to Rock, When the user chooses Start game, Then that bot plays as a Rock at the table and the session's line-up name is Custom",
+          "tags": [
+            "REQ-009.3",
+            "REQ-009.6"
+          ]
+        },
+        {
+          "text": "Given the Tough preset with one seat changed to Rock and then back to its preset style, When the user chooses Start game, Then the session's line-up name is Tough",
+          "tags": [
+            "REQ-009.6"
+          ]
+        }
+      ],
+      "deps": [
+        "E02-S05"
+      ],
+      "type": "feature",
+      "skeleton": false,
+      "role": "learner",
+      "dod": [],
+      "notes": ""
+    },
+    {
+      "key": "E02-S07",
+      "title": "Randomise the bot line-up",
+      "milestone": "M2",
+      "priority": "High",
+      "risk": "low",
+      "want": "to randomise every bot seat's style",
+      "benefit": "I practise against unpredictable mixes of opponents",
+      "context": "Randomise line-up assigns each bot seat a style drawn at random from TAG, Calling station, Maniac and Rock, independently per seat. The resulting line-up name is resolved by E06-S07 (Custom unless it happens to equal the selected preset's assignment). Use a seeded generator in tests.",
+      "acs": [
+        {
+          "text": "Given 9 players, When the user chooses Randomise line-up, Then every one of the 8 bot rows shows one of TAG, Calling station, Maniac or Rock",
+          "tags": [
+            "REQ-009.5"
+          ]
+        },
+        {
+          "text": "Given 1,000 seeded randomisations at 6 players, When the styles per seat are tabulated, Then every seat received each of the four styles at least once",
+          "tags": [
+            "REQ-009.5"
+          ]
+        },
+        {
+          "text": "Given a randomised line-up that differs from the selected preset, When the user chooses Start game, Then the table's bots have the randomised styles and the session's line-up name is Custom",
+          "tags": [
+            "REQ-009.5",
+            "REQ-009.6"
+          ]
+        }
+      ],
+      "deps": [
+        "E02-S05"
+      ],
+      "type": "feature",
+      "skeleton": false,
+      "role": "learner",
+      "dod": [],
+      "notes": ""
+    },
+    {
+      "key": "E02-S08",
+      "title": "Resume a paused session from Home",
+      "milestone": "M2",
+      "priority": "High",
+      "risk": "high",
+      "want": "to resume the session I left unfinished",
+      "benefit": "short practice sittings add up without losing progress",
+      "context": "A session that has not been ended (via Leave table, E10) is the paused session; closing the app or reloading leaves it paused and does not end it (the Table-header Home control, REQ-004.9, is E02-S15). Session state is saved after every completed hand by E03-S11 and an unfinished hand is never written. Home shows Resume session only while a paused session exists, with its game type, table size, stake and hands played (e.g. \"Cash · 6 players · $4/$8 · 132 hands\"). Resume restores game type, table size, stake, line-up (name and seat styles), seats (bot ids and names), stacks, dealer button position, hand count and speed, and deals the next hand with stacks as they were before the abandoned hand began. SNG level restore (also REQ-004.3) is verified by E05-S03 once sit-and-go exists. The abandoned hand is not counted anywhere: hand count, hand records, stats.",
+      "acs": [
+        {
+          "text": "Given a paused 6-player $4/$8 cash session with 132 completed hands, When Home is shown, Then it shows Resume session with Cash, 6 players, $4/$8 and 132 hands",
+          "tags": [
+            "REQ-002.4"
+          ]
+        },
+        {
+          "text": "Given storage with no session or only ended sessions, When Home is shown, Then Resume session is not shown",
+          "tags": [
+            "REQ-002.5"
+          ]
+        },
+        {
+          "text": "Given 10 completed hands and the app closed in the middle of hand 11, When the app is relaunched and the user chooses Resume session, Then the Table deals a new hand numbered 11 with every stack equal to its value at the end of hand 10",
+          "tags": [
+            "REQ-004.2"
+          ]
+        },
+        {
+          "text": "Given a paused 9-player $10/$20 Custom session with button at seat 7 after hand 25, When it is resumed, Then the table shows the same game type, table size, stake, line-up name, bot names and styles in the same seats, stacks and hand count 25, and the next hand's button is the seat that follows seat 7 under the button rules",
+          "tags": [
+            "REQ-004.3"
+          ]
+        },
+        {
+          "text": "Given the app was closed in the middle of hand 11, When stored hand records and the style stats computed from them are read after resuming, Then no record of the abandoned hand exists and the stats equal those of hands 1 to 10",
+          "tags": [
+            "REQ-004.6"
+          ]
+        },
+        {
+          "text": "Given a resumed session, When further hands complete, Then they are stored under the same session id with hand numbers continuing from 11",
+          "tags": [
+            "REQ-004.2"
+          ]
+        }
+      ],
+      "deps": [
+        "E02-S01",
+        "E03-S11"
+      ],
+      "notes": "E05: the SNG-level resume AC (E05-S03) should also tag REQ-004.3. Leaving the table with Leave table ends the session (E10), after which Resume must not show.",
+      "type": "feature",
+      "skeleton": false,
+      "role": "learner",
+      "dod": []
+    },
+    {
+      "key": "E02-S09",
+      "title": "Confirm ending a paused session before starting a new game",
+      "milestone": "M2",
+      "priority": "High",
+      "risk": "medium",
+      "want": "to be asked before a new game ends my paused session",
+      "benefit": "I never lose a paused session by accident",
+      "context": "At most one paused session exists. When the user chooses Start game on Game Config while a paused session exists, a dialog asks the user to confirm ending the paused session. Confirm ends the paused session through the same session-end operation as Leave table (E10 saves its Session Report; a 0-hand session is discarded, REQ-044.8) and then starts the new session. Cancel closes the dialog and changes nothing: the paused session stays as stored and no new session starts. The confirmation is asked on Start game, not on New game, so cancelling Game Config never ends the paused session.",
+      "acs": [
+        {
+          "text": "Given a paused session exists, When the user chooses Start game on Game Config, Then a dialog asks the user to confirm ending the paused session and no new session has started",
+          "tags": [
+            "REQ-004.4"
+          ]
+        },
+        {
+          "text": "Given the confirmation dialog, When the user confirms, Then the paused session is ended, its Session Report is saved and the new session starts",
+          "tags": [
+            "REQ-004.4"
+          ]
+        },
+        {
+          "text": "Given the confirmation dialog, When the user cancels, Then the paused session is stored unchanged, no new session exists and Game Config still shows the chosen values",
+          "tags": [
+            "REQ-004.4"
+          ]
+        },
+        {
+          "text": "Given a paused session and a confirmed new game, When storage is read after the new game's first hand, Then exactly one session is not ended and it is the new one",
+          "tags": [
+            "REQ-004.1"
+          ]
+        },
+        {
+          "text": "Given no paused session exists, When the user chooses Start game, Then no confirmation dialog is shown and the session starts",
+          "tags": [
+            "REQ-004.4"
+          ]
+        }
+      ],
+      "deps": [
+        "E02-S08",
+        "E10-S01"
+      ],
+      "notes": "Report saving belongs to E10's session-end operation (E10-S01, REQ-044.7); this story calls it.",
+      "type": "feature",
+      "skeleton": false,
+      "role": "learner",
+      "dod": []
+    },
+    {
+      "key": "E02-S10",
+      "title": "Pre-fill Game Config from my last session",
+      "milestone": "M3",
+      "priority": "High",
+      "risk": "low",
+      "want": "Game Config to show the values of my last started session",
+      "benefit": "I can start another session with fewer clicks",
+      "context": "The last configuration is created and updated on each Start game (not on Resume). When Game Config opens, game type, table size, stake, line-up preset and per-seat styles are pre-filled from the most recently started session. Speed is NOT remembered: it is always pre-filled from the Settings default speed (REQ-012.3, E02-S11). On first use (and after Reset all data, E12) the defaults are Cash game, 6 players, $4/$8, Mixed preset, Rapid.",
+      "acs": [
+        {
+          "text": "Given the last started session was Cash, 9 players, $10/$20, Tough with seat 2 changed to Rock, When Game Config opens, Then exactly those values are pre-filled",
+          "tags": [
+            "REQ-012.1"
+          ]
+        },
+        {
+          "text": "Given a fresh install, When Game Config opens, Then it shows Cash game, 6 players, $4/$8, the Mixed preset with its seat styles and Rapid",
+          "tags": [
+            "REQ-012.2"
+          ]
+        },
+        {
+          "text": "Given the user started session A and later resumed an older paused session B, When Game Config opens, Then it shows session A's values",
+          "tags": [
+            "REQ-012.1"
+          ]
+        },
+        {
+          "text": "Given the user changed fields on Game Config and chose Cancel, When Game Config opens again, Then it shows the last started session's values",
+          "tags": [
+            "REQ-012.1"
+          ]
+        },
+        {
+          "text": "Given a stored last configuration fixture whose game type is Sit-and-go, When Game Config opens, Then Sit-and-go is selected as the game type",
+          "tags": [
+            "REQ-012.1",
+            "REQ-005.1"
+          ]
+        }
+      ],
+      "deps": [
+        "E02-S04",
+        "E02-S06"
+      ],
+      "type": "feature",
+      "skeleton": false,
+      "role": "learner",
+      "dod": [],
+      "notes": ""
+    },
+    {
+      "key": "E02-S11",
+      "title": "Choose Rapid or Realistic speed for the session",
+      "milestone": "M3",
+      "priority": "Medium",
+      "risk": "low",
+      "want": "to choose the bot speed before the session starts",
+      "benefit": "I can drill many hands quickly or practise at a live pace",
+      "context": "Game Config offers Rapid and Realistic. The speed field is always pre-filled from the Settings default speed (REQ-050.1, default Rapid), never from the last started session (REQ-012.3). Until E12 adds the Settings screen, the default-speed setting is read from the settings store with its default Rapid; E12 must write the same setting. Rapid: each bot action is displayed within 300 ms of the previous action; Realistic: each bot waits a random 0.8-3.0 s before acting (pacing is implemented and fully tested by E03-S13 (Rapid) and E03-S18 (Realistic); the ACs here only verify that the speed chosen on Game Config reaches the table). The chosen speed is stored with the session (E03-S11/S14 keep it).",
+      "acs": [
+        {
+          "text": "Given Game Config, When the speed options are listed, Then they are exactly Rapid and Realistic, with Rapid selected on first use",
+          "tags": [
+            "REQ-012.2"
+          ]
+        },
+        {
+          "text": "Given the Settings default speed is Realistic and the last started session used Rapid, When Game Config opens, Then Realistic is selected",
+          "tags": [
+            "REQ-012.3"
+          ]
+        },
+        {
+          "text": "Given the Settings default speed is Rapid and the last started session used Realistic, When Game Config opens, Then Rapid is selected",
+          "tags": [
+            "REQ-012.3"
+          ]
+        },
+        {
+          "text": "Given Realistic chosen on Game Config, When the started session plays its first 10 bot actions, Then each bot waits between 0.8 s and 3.0 s before acting, showing the chosen speed reached the table",
+          "tags": [
+            "REQ-011.2"
+          ]
+        },
+        {
+          "text": "Given Rapid chosen on Game Config, When the started session plays its first 10 bot actions, Then each is displayed within 300 ms of the previous action, showing the chosen speed reached the table",
+          "tags": [
+            "REQ-011.1"
+          ]
+        }
+      ],
+      "deps": [
+        "E02-S01",
+        "E03-S13",
+        "E03-S18"
+      ],
+      "type": "feature",
+      "skeleton": false,
+      "role": "learner",
+      "dod": [],
+      "notes": ""
+    },
+    {
+      "key": "E02-S12",
+      "title": "See a branded splash while the app loads",
+      "milestone": "M3",
+      "priority": "Medium",
+      "risk": "low",
+      "want": "to see a branded splash screen while the app loads",
+      "benefit": "I know the app is starting and reach Home without extra clicks",
+      "context": "On launch the splash shows the TLH logo (brand/tlh-logo.jpg) and a loading indicator until the rules engine and strategy data (charts, ranges) have loaded, then opens Home with no click or key press. If loading fails, the splash shows an error message and a Retry button that restarts loading. Test with a test build in which the strategy data is unloadable. Launch-time limit (REQ-055.4) and migration errors (REQ-054.3) are E13.",
+      "acs": [
+        {
+          "text": "Given the app is launched, When the rules engine and strategy data are loading, Then the splash shows the TLH logo image and a loading indicator",
+          "tags": [
+            "REQ-001.1",
+            "REQ-061.3",
+            "REQ-060.3"
+          ]
+        },
+        {
+          "text": "Given the splash, When loading completes, Then the Home screen opens with no click or key press",
+          "tags": [
+            "REQ-001.2"
+          ]
+        },
+        {
+          "text": "Given a test build with unloadable strategy data, When the app is launched, Then the splash shows an error message and a Retry button and Home does not open",
+          "tags": [
+            "REQ-001.3"
+          ]
+        },
+        {
+          "text": "Given the load error is shown and the strategy data has become loadable, When the user chooses Retry, Then loading restarts and Home opens without further input",
+          "tags": [
+            "REQ-001.3"
+          ]
+        },
+        {
+          "text": "Given the load error is shown and the strategy data is still unloadable, When the user chooses Retry, Then loading restarts and the error message and Retry are shown again",
+          "tags": [
+            "REQ-001.3"
+          ]
+        }
+      ],
+      "deps": [
+        "E02-S01"
+      ],
+      "type": "feature",
+      "skeleton": false,
+      "role": "learner",
+      "dod": [],
+      "notes": ""
+    },
+    {
+      "key": "E02-S13",
+      "title": "Sit at a random seat with a random starting button",
+      "milestone": "M3",
+      "priority": "Medium",
+      "risk": "low",
+      "want": "each session to start from a randomly drawn table position",
+      "benefit": "I practise from every position",
+      "context": "When a session starts, the user's seat is drawn uniformly from all seats and the starting dealer button seat is drawn uniformly from all seats, independently. Bots fill the other seats in order (E06-S06). The user is always drawn at the bottom centre of the Table (E03-S01). Game Config shows \"You: seat chosen at random each session\" (storyboard). Use crypto randomness in the app and a seeded generator in tests.",
+      "acs": [
+        {
+          "text": "Given 1,000 seeded session starts at each of 2, 6 and 10 players, When the user's seat is tabulated, Then each seat receives the user 1/n of the time within 3 percentage points",
+          "tags": [
+            "REQ-010.1"
+          ]
+        },
+        {
+          "text": "Given 1,000 seeded session starts at each of 2, 6 and 10 players, When the starting button seat is tabulated, Then each seat receives the button 1/n of the time within 3 percentage points",
+          "tags": [
+            "REQ-010.2"
+          ]
+        },
+        {
+          "text": "Given a 6-player session started with the user drawn at seat 4 and the button at seat 2, When the first hand is dealt, Then the user is drawn at the bottom centre, the button marker is at seat 2 and seats 3 and 4 post the blinds",
+          "tags": [
+            "REQ-010.1",
+            "REQ-010.2",
+            "REQ-010.3"
+          ]
+        }
+      ],
+      "deps": [
+        "E02-S05"
+      ],
+      "type": "feature",
+      "skeleton": false,
+      "role": "learner",
+      "dod": [],
+      "notes": ""
+    },
+    {
+      "key": "E02-S14",
+      "title": "Practise with play money only",
+      "type": "feature",
+      "milestone": "M2",
+      "priority": "High",
+      "risk": "low",
+      "skeleton": false,
+      "role": "learner",
+      "want": "every screen to deal only in play money",
+      "benefit": "I can never be asked to deposit, pay or wager real money while training",
+      "context": "App-wide check, moved out of the stake story. An automated Playwright check visits every screen and dialog registered in the app's screen list (at M2: Home, Game Config, Table, Rebuy / Leave table dialog, Session Report; later epics register Statistics, Settings and their dialogs) and fails if any text or control offers a deposit, payment, purchase, cash-out, real-money wager or real-money conversion. A bundle scan confirms no payment library, Payment Request API use or payment-provider URL ships with the app. The check runs in CI with the rest of the test suite, and fails when any route or dialog in the built app is missing from the screen list, so later screens cannot escape the check.",
+      "acs": [
+        {
+          "text": "Given every screen and dialog registered in the app, When the play-money check visits each one in CI, Then none shows text or a control offering a deposit, payment, purchase, cash-out, real-money wager or real-money conversion",
+          "tags": [
+            "REQ-006.3",
+            "REQ-061.1"
+          ]
+        },
+        {
+          "text": "Given the built app, When the play-money check compares its screen list with every route and dialog component in the app, Then the check fails naming any route or dialog that is not in the list",
+          "tags": [
+            "REQ-006.3",
+            "REQ-061.1"
+          ]
+        },
+        {
+          "text": "Given the built bundle and package.json, When they are scanned, Then they contain no payment library, no use of the Payment Request API and no payment-provider URL",
+          "tags": [
+            "REQ-061.1"
+          ]
+        },
+        {
+          "text": "Given a test fixture screen that shows a \"Deposit\" control, When the play-money check runs against it, Then the check fails and names that screen",
+          "tags": [
+            "REQ-006.3"
+          ]
+        }
+      ],
+      "dod": [],
+      "deps": [
+        "E02-S01",
+        "E10-S01"
+      ],
+      "notes": "E11/E12/E13: register Statistics, Settings and any new dialogs in the screen list the check visits."
+    },
+    {
+      "key": "E02-S15",
+      "title": "Pause the session from the Table header Home control",
+      "type": "feature",
+      "milestone": "M2",
+      "priority": "High",
+      "risk": "medium",
+      "skeleton": false,
+      "role": "learner",
+      "want": "a Home control in the Table header that pauses my session",
+      "benefit": "I can step away to Home without ending the session I want to continue",
+      "context": "Adds a Home control to the Table header built by E03-S03 (next to Settings and Leave table); E03 does not provide it. Choosing Home pauses the session and opens Home with Resume session (E02-S08). Between hands nothing is lost. Used mid-hand, the unfinished hand is abandoned exactly as when the app is closed (REQ-004.2, REQ-004.6): it is never written, not counted in any statistic, and resuming deals a new hand with stacks as they were before it began. Home never ends the session and never creates a Session Report.",
+      "acs": [
+        {
+          "text": "Given the Table between hands after hand 10, When the user chooses Home in the Table header, Then Home opens with Resume session showing 10 hands and the session is not ended",
+          "tags": [
+            "REQ-004.9"
+          ]
+        },
+        {
+          "text": "Given the session was paused with the Home control after hand 10, When the user chooses Resume session, Then the Table deals hand 11 with every stack equal to its value at the end of hand 10",
+          "tags": [
+            "REQ-004.9",
+            "REQ-004.2"
+          ]
+        },
+        {
+          "text": "Given hand 11 is in progress after 10 completed hands, When the user chooses Home in the Table header, Then Home opens with Resume session showing 10 hands and no Session Report is created",
+          "tags": [
+            "REQ-004.9"
+          ]
+        },
+        {
+          "text": "Given hand 11 was abandoned with the Home control, When the user resumes, Then a new hand 11 is dealt with every stack equal to its value at the end of hand 10",
+          "tags": [
+            "REQ-004.9",
+            "REQ-004.2"
+          ]
+        },
+        {
+          "text": "Given hand 11 was abandoned with the Home control, When stored hand records and the style stats computed from them are read, Then no record of the abandoned hand exists and the stats equal those of hands 1 to 10",
+          "tags": [
+            "REQ-004.9",
+            "REQ-004.6"
+          ]
+        }
+      ],
+      "dod": [],
+      "deps": [
+        "E02-S08",
+        "E03-S03"
+      ],
+      "notes": ""
+    },
+    {
+      "key": "E02-S16",
+      "title": "See a snapshot of my last session on Home and reopen its report",
+      "type": "feature",
+      "milestone": "M3",
+      "priority": "High",
+      "risk": "low",
+      "skeleton": false,
+      "role": "learner",
+      "want": "to see my most recent ended session summarised on Home",
+      "benefit": "my progress is visible at a glance every time I open the app",
+      "context": "Moved from E10 (former E10-S08). While at least one session has ended (a stored Session Report exists, E10-S01), Home shows a snapshot of the most recently ended session: game type, table size, stake, hands played, BB/100, Major errors per 100 hands (E10-S02) and the top leak (first-ranked leak title, E10-S07), all read from that session's stored report. A paused session is not an ended session. The snapshot has a link that opens that session's stored Session Report. When that session had no leaks the snapshot shows \"Top leak: none\". The sit-and-go variant (finishing position instead of stake and BB/100, REQ-003.5) is E05.",
+      "acs": [
+        {
+          "text": "Given two ended sessions where the later is a 6-player $4/$8 cash session of 214 hands with BB/100 +2.7, Major errors /100 6.1 and top leak \"Calling too often on the turn\", When Home is shown, Then the snapshot shows \"Cash\", \"6 players\", \"$4/$8\", \"214\", \"+2.7\", \"6.1\" and \"Calling too often on the turn\"",
+          "tags": [
+            "REQ-003.1"
+          ]
+        },
+        {
+          "text": "Given an ended session and a newer paused session, When Home is shown, Then the snapshot shows the ended session's values",
+          "tags": [
+            "REQ-003.1"
+          ]
+        },
+        {
+          "text": "Given an ended session, When Home is shown, Then each snapshot value equals the same value in that session's stored report",
+          "tags": [
+            "REQ-003.1"
+          ]
+        },
+        {
+          "text": "Given the Home snapshot, When the user follows its link, Then that session's stored Session Report opens with its stored values",
+          "tags": [
+            "REQ-003.2",
+            "REQ-044.7"
+          ]
+        },
+        {
+          "text": "Given the app was closed and relaunched after a session ended, When the user follows the snapshot link, Then the reopened report shows the same values as when the session ended",
+          "tags": [
+            "REQ-044.7"
+          ]
+        },
+        {
+          "text": "Given the most recently ended session had no leaks, When Home is shown, Then the snapshot shows \"Top leak: none\"",
+          "tags": [
+            "REQ-003.4"
+          ]
+        }
+      ],
+      "dod": [],
+      "deps": [
+        "E02-S01",
+        "E10-S01",
+        "E10-S02",
+        "E10-S07"
+      ],
+      "notes": "E05: the sit-and-go snapshot story (E05-S08) should depend on this story instead of the retired E10-S08."
+    },
+    {
+      "key": "E02-S17",
+      "title": "See a first-use message on Home before any session has ended",
+      "type": "feature",
+      "milestone": "M3",
+      "priority": "Low",
+      "risk": "low",
+      "skeleton": false,
+      "role": "learner",
+      "want": "to see a first-use message on Home until my first session ends",
+      "benefit": "a fresh install tells me how to begin instead of showing an empty snapshot",
+      "context": "Moved from E10 (former E10-S09). While no session has ended (no stored report), Home shows the text \"No sessions yet — start a new game to begin training.\" and no snapshot. A paused session alone does not remove the message.",
+      "acs": [
+        {
+          "text": "Given a fresh install, When Home is shown, Then it shows \"No sessions yet — start a new game to begin training.\" and no snapshot",
+          "tags": [
+            "REQ-003.3"
+          ]
+        },
+        {
+          "text": "Given a paused session and no ended session, When Home is shown, Then the first-use message is shown and no snapshot",
+          "tags": [
+            "REQ-003.3"
+          ]
+        },
+        {
+          "text": "Given the first session has just ended, When Home is shown, Then the first-use message is gone and the snapshot is shown",
+          "tags": [
+            "REQ-003.3"
+          ]
+        }
+      ],
+      "dod": [],
+      "deps": [
+        "E02-S16"
+      ],
+      "notes": "E12: Reset all data (E12-S08) should depend on this story instead of the retired E10-S09."
+    }
+  ]
+}

@@ -1,0 +1,97 @@
+{
+  "scope": "E08",
+  "round": 1,
+  "clauses": [
+    {
+      "clause": "REQ-022.2",
+      "verdict": "covered",
+      "evidence": "E08-S01#AC1"
+    },
+    {
+      "clause": "REQ-035.4",
+      "verdict": "covered",
+      "evidence": "E08-S01#AC2, #AC3, #AC4 (basis per opponent, 45 vs 12 hands)"
+    },
+    {
+      "clause": "REQ-036.2",
+      "verdict": "covered",
+      "evidence": "E08-S02#AC6 (stored advice equals hint card) with E09-S02#AC4"
+    },
+    {
+      "clause": "REQ-040.1",
+      "verdict": "covered",
+      "evidence": "E08-S02#AC1-#AC5"
+    },
+    {
+      "clause": "REQ-041.1",
+      "verdict": "covered",
+      "evidence": "E08-S04#AC1-#AC3 (sizes 3,4,5,7 and 8; none at 2,6,9,10)"
+    },
+    {
+      "clause": "REQ-041.2",
+      "verdict": "covered",
+      "evidence": "E08-S04#AC4 (9 vs 10 big bets)"
+    },
+    {
+      "clause": "REQ-042.1",
+      "verdict": "covered",
+      "evidence": "E08-S01#AC2, #AC3"
+    },
+    {
+      "clause": "REQ-042.2",
+      "verdict": "covered",
+      "evidence": "E08-S01#AC5"
+    },
+    {
+      "clause": "REQ-042.3",
+      "verdict": "covered",
+      "evidence": "E08-S01#AC6, #AC7"
+    },
+    {
+      "clause": "REQ-042.4",
+      "verdict": "covered",
+      "evidence": "E08-S01#AC8"
+    },
+    {
+      "clause": "REQ-042.5",
+      "verdict": "covered",
+      "evidence": "E08-S02#AC1, #AC2"
+    },
+    {
+      "clause": "REQ-042.6",
+      "verdict": "covered",
+      "evidence": "E08-S01#AC2, #AC3"
+    },
+    {
+      "clause": "REQ-055.1",
+      "verdict": "covered",
+      "evidence": "E08-S03#AC1 (p95 <= 1.0 s over 200 samples)"
+    },
+    {
+      "clause": "REQ-055.6",
+      "verdict": "covered",
+      "evidence": "E08-S03#AC2 (no main-thread task > 100 ms)"
+    }
+  ],
+  "findings": [
+    {
+      "id": "J-E08-E08-S01-size",
+      "severity": "LOW",
+      "class": "story-too-large",
+      "owner": "weaver",
+      "location": "E08-S01",
+      "evidence": "8 ACs spanning button presence, postflop numbers, preflop chart basis, per-opponent basis, layout, hide, auto-hide and unlimited use; description is a dense paragraph. Still one capability (hint card) and independently testable, but at the top of the 1-8 AC limit.",
+      "fix": "Optional: split 'hide/unlimited' (REQ-042.3/.4) from 'show content' if estimates exceed one sitting."
+    },
+    {
+      "id": "J-E08-E08-S04-milestone",
+      "severity": "LOW",
+      "class": "milestone-note",
+      "owner": "weaver",
+      "location": "E08-S04",
+      "evidence": "Approximate label is M3 (Should) while the hint is M2; sizes 3,4,5,7,8 therefore show un-labelled hints in M2. Consistent with priorities, noted for release planning only.",
+      "fix": "None required."
+    }
+  ],
+  "summary": "All hint clauses covered with exact values and unhappy paths."
+}

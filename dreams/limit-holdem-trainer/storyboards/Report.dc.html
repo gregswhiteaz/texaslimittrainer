@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Session Report</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap">
+<style>
+body{margin:0;background:#0E0F12}
+:root{color-scheme:dark}
+input,select,button{color:inherit;font-family:inherit}
+a{color:#FF6B70}a:hover{color:#FF9A9D}
+</style>
+</helmet>
+<div style="min-height: 900px; box-sizing: border-box; background: #0E0F12; color: #F2F3F5; font-family: Inter, system-ui, sans-serif; padding: 32px 16px">
+  <div style="max-width: 1040px; margin: 0 auto; display: flex; flex-direction: column; gap: 24px">
+    <header style="display: flex; flex-direction: column; gap: 6px">
+      <h1 style="margin: 0; font-size: 28px; font-weight: 700">Session report</h1>
+      <span style="font-size: 14px; color: #A7AEB8">Cash · 6 players · $4/$8 · 214 hands · sample data; healthy ranges are placeholders until the strategy content is written</span>
+    </header>
+    <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px">
+      <sc-for list="{{kpis}}" as="k" hint-placeholder-count="4">
+        <div style="background: #1A1D22; border: 1px solid #343A43; border-radius: 10px; padding: 16px; display: flex; flex-direction: column; gap: 4px">
+          <span style="font-size: 13px; color: #A7AEB8">{{k.label}}</span>
+          <span style="font-size: 26px; font-weight: 700">{{k.value}}</span>
+        </div>
+      </sc-for>
+    </div>
+    <div style="display: flex; flex-wrap: wrap; gap: 24px">
+      <section style="flex: 1 1 460px; background: #1A1D22; border: 1px solid #343A43; border-radius: 10px; padding: 20px; display: flex; flex-direction: column; gap: 12px" aria-labelledby="style">
+        <h2 id="style" style="margin: 0; font-size: 17px; font-weight: 600">Your style vs healthy range (6-max)</h2>
+        <sc-for list="{{stats}}" as="s" hint-placeholder-count="5">
+          <div style="display: flex; flex-direction: column; gap: 6px; padding: 6px 0">
+            <div style="display: flex; justify-content: space-between; gap: 8px; font-size: 14px">
+              <span style="font-weight: 600">{{s.name}}</span>
+              <span>You {{s.you}} · healthy {{s.range}} · <strong style="{{s.tagStyle}}">{{s.tag}}</strong></span>
+            </div>
+            <div style="position: relative; height: 10px; background: #2A2F37; border-radius: 5px">
+              <div style="{{s.band}}"></div>
+              <div style="{{s.dot}}"></div>
+            </div>
+          </div>
+        </sc-for>
+      </section>
+      <section style="flex: 1 1 400px; background: #1A1D22; border: 1px solid #343A43; border-radius: 10px; padding: 20px; display: flex; flex-direction: column; gap: 12px" aria-labelledby="leaks">
+        <h2 id="leaks" style="margin: 0; font-size: 17px; font-weight: 600">Biggest leaks this session</h2>
+        <sc-for list="{{leaks}}" as="l" hint-placeholder-count="3">
+          <div style="border-top: 1px solid #2A2F37; padding-top: 10px; display: flex; flex-direction: column; gap: 4px">
+            <span style="font-size: 15px; font-weight: 600">{{l.title}}</span>
+            <span style="font-size: 13px; color: #C9CED6">{{l.evidence}}</span>
+            <span style="font-size: 14px; color: #C9CED6">{{l.fix}}</span>
+          </div>
+        </sc-for>
+      </section>
+    </div>
+    <div style="display: flex; gap: 12px; flex-wrap: wrap; justify-content: flex-end">
+      <a href="Stats.dc.html" style="display: flex; align-items: center; min-height: 44px; padding: 0 20px; border: 1px solid #4A515C; border-radius: 8px; color: #F2F3F5; text-decoration: none; font-size: 15px">View statistics</a>
+      <a href="Home.dc.html" style="display: flex; align-items: center; min-height: 44px; padding: 0 24px; background: #D7262E; color: #FFFFFF; border-radius: 8px; text-decoration: none; font-size: 15px; font-weight: 600">Back to Home</a>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":900}}'>
+class Component extends DCLogic {
+renderVals() {
+const mk = (name, you, lo, hi, v) => {
+const inside = v >= lo && v <= hi;
+return { name, you: you, range: lo + '–' + hi + '%', tag: inside ? 'in range' : (v > hi ? 'too high' : 'too low'),
+tagStyle: inside ? 'color: #6EA8FF' : 'color: #F0A030',
+band: 'position: absolute; top: 0; height: 10px; border-radius: 5px; background: #2B3F6B; left: ' + lo + '%; width: ' + (hi - lo) + '%',
+dot: 'position: absolute; top: -3px; width: 16px; height: 16px; border-radius: 8px; background: ' + (inside ? '#3D7BFF' : '#F0A030') + '; left: calc(' + v + '% - 8px)' };
+};
+return {
+kpis: [
+{ label: 'Result', value: '+$46' },
+{ label: 'BB/100', value: '+2.7' },
+{ label: 'Major errors /100', value: '6.1' },
+{ label: 'Minor errors /100', value: '14.0' }
+],
+stats: [
+mk('VPIP', '34%', 20, 28, 34),
+mk('PFR', '17%', 15, 22, 17),
+mk('Aggression (% of actions that bet or raise)', '38%', 40, 55, 38),
+mk('Went to showdown', '33%', 25, 32, 33),
+mk('Won at showdown', '51%', 48, 58, 51)
+],
+leaks: [
+{ title: 'Calling too often on the turn', evidence: '14 of 19 turn calls graded as errors', fix: 'On the turn the bet doubles. Without a pair or a strong draw, the price is usually too high.' },
+{ title: 'Playing too many hands from early position', evidence: 'VPIP 41% in the first two seats after the blinds', fix: 'Early position acts first on every later street; play only the top of your range there.' },
+{ title: 'Raising the river with hands that only beat bluffs', evidence: '5 river raises, 4 graded Major', fix: 'Raise the river only when worse hands will call.' }
+]
+};
+}
+}
+</script>
+</body>
+</html>

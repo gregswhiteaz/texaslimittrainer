@@ -1,0 +1,224 @@
+{
+  "epic": "E08",
+  "stories": [
+    {
+      "key": "E08-S01",
+      "title": "Ask for a hint and see the recommended action with its numbers and reason",
+      "type": "feature",
+      "milestone": "M2",
+      "priority": "High",
+      "risk": "medium",
+      "skeleton": false,
+      "role": "learner",
+      "want": "to see a hint card on request during my turn with the recommended play explained",
+      "benefit": "I learn the right play at the moment I need it",
+      "context": "Per the Table storyboard the action bar holds the action buttons plus a Hint button; while the card is open the button reads \"Hide hint\". The hint card sits between the board and the action bar and never covers it. The card shows the advice engine result for the user's PlayerView and the observed-stats snapshot at this decision point: recommended action, equity % and required equity % (one decimal), the plain-English explanation (E07-S12, at most three sentences) and the opponent-model basis per opponent ('typical player' or 'based on N hands of this opponent', E07-S09; preflop basis is 'typical player'). Hints are unlimited and free. The hint is requested through the advice worker (E03-S12) so the table stays responsive (REQ-055.6). Clicking Hint again or taking any action hides the card. Preflop decisions show the chart basis (e.g. 'From the 6-max chart: raise A9o from the cutoff') instead of equity and required-equity numbers; flop, turn and river show the numbers (REQ-042.6).",
+      "acs": [
+        {
+          "text": "Given 1,000 seeded table states at preflop, flop, turn and river where the user's action bar is enabled, When the bar is shown, Then a Hint button is present in every state",
+          "tags": [
+            "REQ-022.2"
+          ]
+        },
+        {
+          "text": "Given scripted 6-max flop, turn and river decisions, the flop one where Ben bets $4 into a $26 pot, When the user opens Hint at each, Then the hint card shows the recommended action, equity % and required equity % to one decimal place, the explanation and the basis for Ben, each equal to the advice engine output for the user's PlayerView and observed-stats snapshot at that decision",
+          "tags": [
+            "REQ-042.1",
+            "REQ-042.6",
+            "REQ-035.4"
+          ]
+        },
+        {
+          "text": "Given a 6-max preflop decision holding A9o in the cutoff, When the user opens Hint, Then the card shows the chart basis \"From the 6-max chart: raise A9o from the cutoff\", the explanation and the basis \"typical player\" equal to the advice engine output, and shows no equity % or required equity %",
+          "tags": [
+            "REQ-042.6",
+            "REQ-042.1",
+            "REQ-035.4"
+          ]
+        },
+        {
+          "text": "Given a multiway postflop decision against one opponent observed for 45 hands and one observed for 12, When the user opens Hint, Then the card shows \"based on 45 hands of this opponent\" for the first and \"typical player\" for the second",
+          "tags": [
+            "REQ-035.4"
+          ]
+        },
+        {
+          "text": "Given the hint card is open on a 10-seat table at a 1280 x 720 window, When the layout is measured, Then the card's bounding box does not overlap the action bar and every action button can still be clicked",
+          "tags": [
+            "REQ-042.2"
+          ]
+        },
+        {
+          "text": "Given the hint card is open, When the user selects the Hide hint button, Then the card is hidden and the button reads \"Hint\" again",
+          "tags": [
+            "REQ-042.3"
+          ]
+        },
+        {
+          "text": "Given the hint card is open or a hint is still being computed, When the user folds, checks, calls, bets or raises, Then no card is shown after the action and none is shown at the user's next decision unless Hint is selected again",
+          "tags": [
+            "REQ-042.3"
+          ]
+        },
+        {
+          "text": "Given a session in which the user opens Hint at 50 consecutive decisions and opens and hides it 10 times within one decision, When each hint is requested, Then the card is shown every time and no limit, counter or cost is shown",
+          "tags": [
+            "REQ-042.4"
+          ]
+        }
+      ],
+      "dod": [],
+      "deps": [
+        "E03-S02",
+        "E03-S12",
+        "E07-S12",
+        "E07-S09"
+      ],
+      "notes": "Hint label toggling follows the storyboard (Hint / Hide hint). Approximate and short-stack labels on the card are E08-S03; the hinted flag is E08-S02."
+    },
+    {
+      "key": "E08-S02",
+      "title": "Mark a decision as hinted when I open the hint",
+      "type": "feature",
+      "milestone": "M2",
+      "priority": "High",
+      "risk": "low",
+      "skeleton": false,
+      "role": "learner",
+      "want": "decisions where I looked at the hint to be recorded as hinted",
+      "benefit": "my progress measures count only the decisions I made on my own",
+      "context": "A decision is hinted when the hint card was opened at that decision point before the user acted (REQ-040.1), even if it was hidden again. Opening the hint sets hinted = true on that decision's entry in the hand record (E03-S10 stores the flag, false by default). The grader still grades hinted decisions; E09 shows the 'hinted' tag, E10 reports hint usage and E11 excludes hinted decisions from the G-2 rate. The stored advice for the decision is the same advice the hint card showed (decision-time observed-stats snapshot, REQ-036.2).",
+      "acs": [
+        {
+          "text": "Given the user opens Hint at the flop decision and then calls, When the hand's record is read, Then the flop decision entry has hinted = true",
+          "tags": [
+            "REQ-042.5",
+            "REQ-040.1"
+          ]
+        },
+        {
+          "text": "Given the user opens Hint and hides it again before acting, When the hand's record is read, Then that decision entry has hinted = true",
+          "tags": [
+            "REQ-040.1",
+            "REQ-042.5"
+          ]
+        },
+        {
+          "text": "Given the user opens Hint at the flop decision only, When the hand's record is read, Then the preflop, turn and river decision entries have hinted = false",
+          "tags": [
+            "REQ-040.1"
+          ]
+        },
+        {
+          "text": "Given the user opens Hint three times at one decision, When the hand's record is read, Then that decision has exactly one entry with hinted = true",
+          "tags": [
+            "REQ-040.1"
+          ]
+        },
+        {
+          "text": "Given a hinted decision where the user calls with equity 10 points below required equity, When the hand's record is read, Then the decision is still graded Major error and has hinted = true",
+          "tags": [
+            "REQ-040.1"
+          ]
+        },
+        {
+          "text": "Given a hint card shown at a decision where an opponent's observed hand count goes from 29 to 30 when the hand ends, When the hand's record is read, Then the decision's stored recommended action, equity %, required equity %, explanation and basis equal the values the hint card showed",
+          "tags": [
+            "REQ-036.2"
+          ]
+        }
+      ],
+      "dod": [],
+      "deps": [
+        "E08-S01",
+        "E03-S10"
+      ],
+      "notes": "Together with E09-S02 (review entries equal the stored record) this gives the hint-versus-review equality UI test asked for by E07-S13. Cross-epic integration check (E09 is the same wave, so no dependency edge): whichever of E08-S02 and E09-S05 is finished second adds the end-to-end Playwright flow 'open Hint at the flop, call, hand ends, the review's flop entry shows the \"hinted\" tag and no other entry does'."
+    },
+    {
+      "key": "E08-S03",
+      "title": "See approximate and short-stack labels on the hint card",
+      "type": "feature",
+      "milestone": "M3",
+      "priority": "Medium",
+      "risk": "low",
+      "skeleton": false,
+      "role": "learner",
+      "want": "the hint card to tell me when its advice is approximate or affected by a short stack",
+      "benefit": "I know how far to trust the hint at unusual table sizes and stack depths",
+      "context": "The advice result carries an optional approximate label (E07-S16: table sizes 3, 4, 5, 7 -> 'approximate (based on 6-max)', 8 -> 'approximate (based on full ring)') and an optional short-stack note (E07-S17: sit-and-go with the user's stack under 10 big bets of the current level), both as fields separate from the explanation. The hint card shows each when present. Sit-and-go tables arrive with E05; this story can be tested with a sit-and-go table-state fixture.",
+      "acs": [
+        {
+          "text": "Given a decision at a table of 3, 4, 5 or 7 players, When the user opens Hint, Then the card shows \"approximate (based on 6-max)\"",
+          "tags": [
+            "REQ-041.1"
+          ]
+        },
+        {
+          "text": "Given a decision at a table of 8 players, When the user opens Hint, Then the card shows \"approximate (based on full ring)\"",
+          "tags": [
+            "REQ-041.1"
+          ]
+        },
+        {
+          "text": "Given a decision at a table of 2, 6, 9 or 10 players, When the user opens Hint, Then the card shows no approximate label",
+          "tags": [
+            "REQ-041.1"
+          ]
+        },
+        {
+          "text": "Given a sit-and-go decision with the user's stack at 9 big bets of the current level, When the user opens Hint, Then the card shows exactly one short-stack sentence apart from the explanation; and at 10 big bets no short-stack sentence is shown",
+          "tags": [
+            "REQ-041.2"
+          ]
+        }
+      ],
+      "dod": [],
+      "deps": [
+        "E08-S01",
+        "E07-S16",
+        "E07-S17"
+      ],
+      "notes": ""
+    },
+    {
+      "key": "E08-S04",
+      "title": "Get the hint card within one second",
+      "type": "feature",
+      "milestone": "M3",
+      "priority": "Medium",
+      "risk": "medium",
+      "skeleton": false,
+      "role": "learner",
+      "want": "the hint card to appear within a second of asking",
+      "benefit": "hints never slow my practice down",
+      "context": "REQ-055.1: on the reference machine (Apple-silicon Mac, latest Chrome) the hint card is shown <= 1.0 s (p95) after clicking Hint, measured by an automated timing test over 200 samples. Computation stays in the advice worker (E03-S12) so the table never freezes (REQ-055.6).",
+      "acs": [
+        {
+          "text": "Given the reference machine and 200 scripted Hint clicks over preflop, flop, turn and river decisions at 2, 6 and 10 players, When the timing test runs, Then it reports the p95 time from click to visible card and that p95 is at most 1.0 s",
+          "tags": [
+            "REQ-055.1"
+          ]
+        },
+        {
+          "text": "Given a hint is being computed for a multiway river decision, When a long-task observer runs in Chromium, Then no main-thread task longer than 100 ms is recorded",
+          "tags": [
+            "REQ-055.6"
+          ]
+        }
+      ],
+      "dod": [
+        {
+          "text": "The hint timing test reports p95 over 200 samples in its output",
+          "tags": [
+            "REQ-055.1"
+          ]
+        }
+      ],
+      "deps": [
+        "E08-S01"
+      ],
+      "notes": "Precompute or cache advice for the current decision point if needed; output must stay identical (REQ-036.1)."
+    }
+  ]
+}

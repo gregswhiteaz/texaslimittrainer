@@ -1,0 +1,362 @@
+{
+  "scope": "E03",
+  "round": 1,
+  "clauses": [
+    {
+      "clause": "REQ-007.1",
+      "verdict": "covered",
+      "evidence": "E03-S01#AC1 ($160 at $4/$8, all players), AC2 ($400 at $10/$20, no buy-in control)"
+    },
+    {
+      "clause": "REQ-007.2",
+      "verdict": "covered",
+      "evidence": "E03-S08#AC1 (dialog, no deal even after 1.5 s), AC4; E09-S06#AC2"
+    },
+    {
+      "clause": "REQ-007.3",
+      "verdict": "covered",
+      "evidence": "E03-S08#AC2 (stack $160, count +1); AC3 relies on E10 for 'session ended/result' (see hidden-dependency finding)"
+    },
+    {
+      "clause": "REQ-007.4",
+      "verdict": "covered",
+      "evidence": "E03-S08#AC5"
+    },
+    {
+      "clause": "REQ-010.3",
+      "verdict": "covered",
+      "evidence": "E03-S01#AC3 (seat 1 and 5 both bottom centre)"
+    },
+    {
+      "clause": "REQ-011.1",
+      "verdict": "covered",
+      "evidence": "E03-S13#AC1 (median and per-action 300 ms), AC3"
+    },
+    {
+      "clause": "REQ-011.2",
+      "verdict": "partial",
+      "evidence": "E03-S13#AC2 only checks bounds 0.8-3.0 s; a constant 1 s delay passes, so 'random' is not confirmed"
+    },
+    {
+      "clause": "REQ-011.3",
+      "verdict": "covered",
+      "evidence": "E03-S15#AC1, AC2 (both directions), AC3"
+    },
+    {
+      "clause": "REQ-013.4",
+      "verdict": "covered",
+      "evidence": "E03-S03#AC8"
+    },
+    {
+      "clause": "REQ-017.1",
+      "verdict": "covered",
+      "evidence": "E03-S02#AC1, AC4 (flop; preflop big-blind option not shown, see user finding)"
+    },
+    {
+      "clause": "REQ-017.2",
+      "verdict": "covered",
+      "evidence": "E03-S02#AC2, AC3; E03-S06#AC1 (capped, no Raise), AC5"
+    },
+    {
+      "clause": "REQ-017.3",
+      "verdict": "covered",
+      "evidence": "E03-S06#AC2, AC3, AC5 (short-raise label undefined in requirement, see user finding)"
+    },
+    {
+      "clause": "REQ-017.5",
+      "verdict": "covered",
+      "evidence": "E03-S02#AC5"
+    },
+    {
+      "clause": "REQ-019.6",
+      "verdict": "covered",
+      "evidence": "E03-S01#AC4"
+    },
+    {
+      "clause": "REQ-019.7",
+      "verdict": "covered",
+      "evidence": "E03-S04#AC1, AC3"
+    },
+    {
+      "clause": "REQ-021.1",
+      "verdict": "covered",
+      "evidence": "E03-S03#AC1, AC2"
+    },
+    {
+      "clause": "REQ-021.3",
+      "verdict": "covered",
+      "evidence": "E03-S03#AC3; E03-S01#AC3"
+    },
+    {
+      "clause": "REQ-021.4",
+      "verdict": "covered",
+      "evidence": "E03-S03#AC4"
+    },
+    {
+      "clause": "REQ-021.5",
+      "verdict": "covered",
+      "evidence": "E03-S03#AC5; E03-S07#AC1 (main $60 / side $80), AC3"
+    },
+    {
+      "clause": "REQ-021.6",
+      "verdict": "covered",
+      "evidence": "E03-S03#AC5"
+    },
+    {
+      "clause": "REQ-021.7",
+      "verdict": "covered",
+      "evidence": "E03-S03#AC6"
+    },
+    {
+      "clause": "REQ-021.8",
+      "verdict": "covered",
+      "evidence": "E03-S03#AC7"
+    },
+    {
+      "clause": "REQ-022.1",
+      "verdict": "covered",
+      "evidence": "E03-S02#AC1-3; E03-S06#AC2, AC4 (SNG without $)"
+    },
+    {
+      "clause": "REQ-022.3",
+      "verdict": "covered",
+      "evidence": "E03-S02#AC6"
+    },
+    {
+      "clause": "REQ-022.4",
+      "verdict": "covered",
+      "evidence": "E03-S02#AC7"
+    },
+    {
+      "clause": "REQ-024.1",
+      "verdict": "covered",
+      "evidence": "E03-S04#AC1-3; E03-S07#AC2"
+    },
+    {
+      "clause": "REQ-024.3",
+      "verdict": "covered",
+      "evidence": "E03-S04#AC4 (1.4-1.6 s); AC5 over-tagged but AC4 suffices"
+    },
+    {
+      "clause": "REQ-024.4",
+      "verdict": "partial",
+      "evidence": "E03-S01#AC5-7 cover 'bots never act during the user's turn' and bots acting unprompted; no AC shows the user is never made to wait when no bot is to act (e.g. action bar enabled immediately after the last bot folds, at Realistic speed)"
+    },
+    {
+      "clause": "REQ-024.5",
+      "verdict": "covered",
+      "evidence": "E03-S01#AC5 (10 minutes, still user's turn)"
+    },
+    {
+      "clause": "REQ-031.1",
+      "verdict": "covered",
+      "evidence": "E03-S14#AC1"
+    },
+    {
+      "clause": "REQ-031.2",
+      "verdict": "covered",
+      "evidence": "E03-S14#AC2, AC3 (9 vs 10 hand boundary)"
+    },
+    {
+      "clause": "REQ-031.3",
+      "verdict": "covered",
+      "evidence": "E03-S14#AC4"
+    },
+    {
+      "clause": "REQ-031.4",
+      "verdict": "covered",
+      "evidence": "E03-S14#AC5, AC6"
+    },
+    {
+      "clause": "REQ-052.1",
+      "verdict": "covered",
+      "evidence": "E03-S09#AC1, AC2"
+    },
+    {
+      "clause": "REQ-052.2",
+      "verdict": "covered",
+      "evidence": "E03-S09#AC4-6, E03-S10#AC1-4; hinted=true in E08-S02#AC1-5; level in E05-S04#AC4"
+    },
+    {
+      "clause": "REQ-052.3",
+      "verdict": "covered",
+      "evidence": "E03-S11#AC1-4"
+    },
+    {
+      "clause": "REQ-052.5",
+      "verdict": "covered",
+      "evidence": "E03-S09#AC7 (byte-identical, write rejected)"
+    },
+    {
+      "clause": "REQ-052.6",
+      "verdict": "covered",
+      "evidence": "E03-S09#AC8"
+    },
+    {
+      "clause": "REQ-052.7",
+      "verdict": "covered",
+      "evidence": "E03-S09#AC3"
+    },
+    {
+      "clause": "REQ-055.6",
+      "verdict": "covered",
+      "evidence": "E03-S12#AC1, AC2"
+    },
+    {
+      "clause": "REQ-057.2",
+      "verdict": "covered",
+      "evidence": "E03-S17#AC1-3"
+    },
+    {
+      "clause": "REQ-057.4",
+      "verdict": "covered",
+      "evidence": "E03-S17#AC4"
+    },
+    {
+      "clause": "REQ-060.1",
+      "verdict": "covered",
+      "evidence": "E03-S16#AC1 (10 seats, 1280x720, Chromium and WebKit)"
+    },
+    {
+      "clause": "REQ-060.3",
+      "verdict": "covered",
+      "evidence": "E03-S16#AC2"
+    },
+    {
+      "clause": "REQ-060.4",
+      "verdict": "covered",
+      "evidence": "E03-S16#AC3 ($1,240, $12,500); AC4 weak but sufficient"
+    },
+    {
+      "clause": "REQ-066.1",
+      "verdict": "covered",
+      "evidence": "E03-S05#AC1"
+    },
+    {
+      "clause": "REQ-066.2",
+      "verdict": "covered",
+      "evidence": "E03-S05#AC2"
+    },
+    {
+      "clause": "REQ-066.3",
+      "verdict": "covered",
+      "evidence": "E03-S05#AC3, AC4"
+    },
+    {
+      "clause": "REQ-066.4",
+      "verdict": "covered",
+      "evidence": "E03-S05#AC5"
+    }
+  ],
+  "findings": [
+    {
+      "id": "J-E03-REQ-024.4-partial",
+      "severity": "CRITICAL",
+      "class": "partial-must",
+      "owner": "weaver",
+      "location": "E03-S01#AC5-AC7",
+      "evidence": "REQ-024.4 has two halves; the second ('the user never waits for a bot when no bot is to act') is not asserted by any AC. AC5 covers only 'bots never act during the user's turn', AC6/AC7 cover bots acting unprompted.",
+      "fix": "Add AC: Given Realistic speed and every bot has folded or is all-in so only the user can act, When the previous action completes, Then the action bar is enabled with no bot delay [REQ-024.4]"
+    },
+    {
+      "id": "J-E03-REQ-011.2-partial",
+      "severity": "HIGH",
+      "class": "partial-should",
+      "owner": "weaver",
+      "location": "E03-S13#AC2",
+      "evidence": "AC2 checks only that every gap lies in 0.8-3.0 s; a fixed delay passes, so the 'random delay' part of REQ-011.2 is untested.",
+      "fix": "Add: over 200 bot actions the gaps are not all equal and span at least 0.8-1.2 s to 2.6-3.0 s (min < 1.2 s, max > 2.6 s) [REQ-011.2]"
+    },
+    {
+      "id": "J-E03-E03-S01-S03-needs-S05",
+      "severity": "HIGH",
+      "class": "hidden-dependency",
+      "owner": "weaver",
+      "location": "E03-S01#AC4, E03-S03#AC1-AC3 / E03-S05",
+      "evidence": "S01 and S03 (m-0, ordinals 11000/14000) show face-up hole cards and card-back markers; the SVG card faces and backs are built in S05 (ordinal 20000), which neither S01 nor S03 depends on.",
+      "fix": "Add TASK-3.5 as a dependency of E03-S01 (S05 depends only on E01-S01), or move S05 ahead of S01/S03 in the skeleton order"
+    },
+    {
+      "id": "J-E03-E03-S08#AC3-needs-E10",
+      "severity": "HIGH",
+      "class": "hidden-dependency",
+      "owner": "weaver",
+      "location": "E03-S08#AC3, AC4",
+      "evidence": "AC3 ('session is ended ... stored result records 2 rebuys and $320 bought in') and AC4 ('session is ended') need session end and result storage, which E10-S01 builds and E10-S01 itself depends on E03-S08 (TASK-3.11), a forward reference. '$320 bought in' is also not in REQ-007.3.",
+      "fix": "Reword AC3 to check the stored session record's rebuy count is 2 (E03-S11 stores it) and move the 'counted in the session result' check to E10-S01; reword AC4 to 'no further hand is dealt and the Leave table action is raised' without depending on the report"
+    },
+    {
+      "id": "J-E03-REQ-017.1-requirement-gap",
+      "severity": "MEDIUM",
+      "class": "requirement-ambiguity",
+      "owner": "user",
+      "location": "E03-S02#AC1",
+      "evidence": "REQ-017.1 says 'no bet facing -> Check and Bet', but preflop the big blind counts as the first bet (REQ-016.2), so the BB option in an unraised pot is Check and Raise-to. No requirement defines the label and no AC covers it.",
+      "fix": "User to decide: preflop BB option offers Check and 'Raise to $8' (confirm); then add the AC"
+    },
+    {
+      "id": "J-E03-REQ-017.3-requirement-gap",
+      "severity": "MEDIUM",
+      "class": "requirement-ambiguity",
+      "owner": "user",
+      "location": "E03-S06#AC2-AC3",
+      "evidence": "REQ-016.5 allows short all-in raises/bets, but REQ-017.3/022.1 define only 'Call all-in'. For a stack above the call but below a full raise (e.g. $6 facing $4) or below a full bet, the offered action and label are undefined.",
+      "fix": "User to decide the labels (e.g. 'Raise all-in $6' / 'Bet all-in $3') or that Raise is hidden; then add ACs"
+    },
+    {
+      "id": "J-E03-E03-S01-scope",
+      "severity": "MEDIUM",
+      "class": "too-broad-and-headline-untested",
+      "owner": "weaver",
+      "location": "E03-S01",
+      "evidence": "Story covers 5 requirements (limit 1-3) and none of its 7 ACs asserts the headline outcome: the user plays a hand through all streets to a result.",
+      "fix": "Add an AC for a complete hand (user acts preflop-river, result shown) and trim Covers to the clauses actually tagged"
+    },
+    {
+      "id": "J-E03-E03-S09-S11-S10-horizontal",
+      "severity": "MEDIUM",
+      "class": "not-vertical",
+      "owner": "weaver",
+      "location": "E03-S09, E03-S11, E03-S10",
+      "evidence": "Three persistence stories are tested by reading IndexedDB; user-visible value arrives only through E02/E09/E10 stories. They are typed feature, not enabler.",
+      "fix": "Type as chore/enabler within the epic or add an observable relaunch check; keep dependencies from E02/E10 stories"
+    },
+    {
+      "id": "J-E03-E03-S04#AC5-overtag",
+      "severity": "LOW",
+      "class": "over-tag",
+      "owner": "weaver",
+      "location": "E03-S04#AC5",
+      "evidence": "AC5 (hand number +1, button moved) is tagged REQ-024.3 but the button movement belongs to REQ-020 and would pass without the 1.5 s rule.",
+      "fix": "Drop the button part or tag only what it confirms"
+    },
+    {
+      "id": "J-E03-E03-S16-multi-capability",
+      "severity": "LOW",
+      "class": "too-broad",
+      "owner": "weaver",
+      "location": "E03-S16",
+      "evidence": "Story mixes layout fit, theme colours and money/language formatting; felt art overlaps E04-S04.",
+      "fix": "Consider splitting money formatting from layout/theme"
+    },
+    {
+      "id": "J-E03-E03-S02#AC7-dup-S17#AC4",
+      "severity": "LOW",
+      "class": "duplicate",
+      "owner": "weaver",
+      "location": "E03-S02#AC7 / E03-S17#AC4",
+      "evidence": "Both measure 44 x 44 px targets on the Table.",
+      "fix": "Keep one measurement and cross-reference it"
+    },
+    {
+      "id": "J-E03-E03-S17#AC2-compound",
+      "severity": "LOW",
+      "class": "ac-quality",
+      "owner": "weaver",
+      "location": "E03-S17#AC2",
+      "evidence": "AC2 holds two Given/When/Then statements (Enter on Call, Space on Fold).",
+      "fix": "Split into two ACs"
+    }
+  ],
+  "summary": "49 clauses: 47 covered, 2 partial (REQ-011.2, REQ-024.4), 0 false-claim, 0 missing. 1 CRITICAL, 3 HIGH, 4 MEDIUM, 4 LOW (2 MEDIUM owned by user)."
+}

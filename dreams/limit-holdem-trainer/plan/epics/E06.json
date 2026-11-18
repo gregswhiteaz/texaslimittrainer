@@ -1,0 +1,885 @@
+{
+  "epic": "E06",
+  "stories": [
+    {
+      "key": "E06-S01",
+      "title": "Face TAG bots that act from the advice engine",
+      "type": "feature",
+      "milestone": "M1",
+      "priority": "High",
+      "risk": "high",
+      "skeleton": true,
+      "role": "learner",
+      "want": "TAG opponents that choose their actions from the advice engine's evaluation of their own view",
+      "benefit": "I practise against sound, consistent fixed-limit play from the first hand",
+      "context": "Thinnest bot slice for the walking skeleton. A bot is a decision function: PlayerView (E01-S06) in, one legal action out. The TAG bot asks the advice engine for its recommendation (6-max preflop chart, E07-S01; postflop call/fold from equity and pot odds, E07-S03) and plays it. Advice recommendations are always legal (a raise on a capped street becomes call; a call with nothing to call becomes check). In this slice TAG always plays the main recommendation; the mixing rule (REQ-028) that sometimes picks the chart's acceptable alternative arrives in E06-S02. The playtest CLI (E01-S07) seats TAG bots in every seat instead of the seeded random-legal-move policy, and the Table screen (E03) seats them opposite the user.",
+      "acs": [
+        {
+          "text": "Given a TAG bot at a 6-max preflop decision, When it acts, Then its action is the 6-max chart recommendation for its hand class, position and situation",
+          "tags": [
+            "REQ-026.1"
+          ]
+        },
+        {
+          "text": "Given a TAG bot at a postflop decision facing a bet, When the advice engine recommends call, Then the bot calls, and When it recommends fold, Then the bot folds",
+          "tags": [
+            "REQ-026.1"
+          ]
+        },
+        {
+          "text": "Given a TAG bot at a postflop decision with no bet to face, When the advice engine recommends check, Then the bot checks",
+          "tags": [
+            "REQ-026.1"
+          ]
+        },
+        {
+          "text": "Given a fixed TAG decision point, When the other players' hole cards and the undealt cards are changed, Then the TAG bot's action is identical",
+          "tags": [
+            "REQ-025.1"
+          ]
+        },
+        {
+          "text": "Given `npm run playtest -- --hands 10000 --seed 42`, When it runs, Then every seat is a TAG bot acting from the advice engine, every bot action is in the legal set, zero invariant violations are reported and it exits 0",
+          "tags": [
+            "REQ-026.1",
+            "REQ-056.1"
+          ]
+        }
+      ],
+      "dod": [],
+      "deps": [
+        "E07-S01",
+        "E07-S03",
+        "E01-S07"
+      ],
+      "notes": "Suggested API: decide(view: PlayerView, style: StyleParams, rng: SeededRng) -> Action in src/bots. The bot calls the same advice API as hints, never a separate strategy. E03 seats these bots at the default 6-max $4/$8 table."
+    },
+    {
+      "key": "E06-S18",
+      "title": "Draw bot randomness only from the replay code and seat",
+      "type": "feature",
+      "milestone": "M2",
+      "priority": "High",
+      "risk": "medium",
+      "skeleton": false,
+      "role": "learner",
+      "want": "bot randomness drawn only from the hand's replay code with the bot's seat",
+      "benefit": "any hand I play can be reproduced and the bots never read my statistics",
+      "context": "Each bot gets a generator seeded from the hand's replay code and its seat, independent of the deck shuffle stream and of wall-clock time; it is the only source of bot randomness (REQ-028.1). Bots request advice with the typical-player basis only; observed opponent statistics (REQ-035.2) are never passed into a bot decision (REQ-029.2). Mixing (E06-S02) and style deviations (E06-S03..S05) draw from this generator.",
+      "acs": [
+        {
+          "text": "Given the same replay code, seat and decision point, When TAG decides twice, Then it chooses the same action; Given the same replay code at a different seat, When the generator is created, Then its random sequence differs",
+          "tags": [
+            "REQ-028.1"
+          ]
+        },
+        {
+          "text": "Given a TAG decision point and replay code, When it is evaluated in two runs started at different wall-clock times and after different numbers of other random draws (deck shuffle, other seats), Then TAG chooses the same action in both",
+          "tags": [
+            "REQ-028.1"
+          ]
+        },
+        {
+          "text": "Given two bot decision points identical except for the observed statistics of the opponents (including the user), When the bot decides, Then its advice request uses the typical-player basis with no observed statistics and its action is identical in both",
+          "tags": [
+            "REQ-029.2"
+          ]
+        }
+      ],
+      "dod": [],
+      "deps": [
+        "E06-S01"
+      ],
+      "notes": "Derive the per-seat generator from (replay code, seat) with a documented hash. Suggested guard: a lint rule banning Math.random, Date, crypto and performance.now in bot decision code."
+    },
+    {
+      "key": "E06-S02",
+      "title": "Vary TAG's play in mixed spots from its style data file",
+      "type": "feature",
+      "milestone": "M2",
+      "priority": "High",
+      "risk": "medium",
+      "skeleton": false,
+      "role": "learner",
+      "want": "TAG opponents that mix their actions in borderline spots",
+      "benefit": "they cannot be beaten by one simple trick",
+      "context": "Introduces the style data file format (one file per style, with a plain-English description of the style), its validator and TAG's file. A style file marks spot types as mixed and gives each allowed action a probability; a mixed spot must give at least two actions a non-zero probability. TAG plays the advice recommendation except in mixed spots, where it chooses between the recommendation and the chart cell's acceptable alternative (E07-S01), drawing from the per-seat replay-seeded generator of E06-S18. Full hand replay with every style is E06-S15.",
+      "acs": [
+        {
+          "text": "Given TAG's style data file, When it is loaded, Then it holds TAG's parameters, including its mixed spot types with the probability of each action, and a plain-English description of the style; a style file without a description fails validation naming the file",
+          "tags": [
+            "REQ-026.3"
+          ]
+        },
+        {
+          "text": "Given a style file that marks a spot type as mixed with fewer than two actions of non-zero probability, When the style validator runs, Then validation fails naming the style and the spot type",
+          "tags": [
+            "REQ-028.3"
+          ]
+        },
+        {
+          "text": "Given a preflop chart cell with an acceptable alternative in a spot TAG marks as mixed, When TAG acts there under 1,000 different replay codes, Then it chooses only the recommended action or the alternative, and chooses each at least once",
+          "tags": [
+            "REQ-026.1",
+            "REQ-028.3"
+          ]
+        },
+        {
+          "text": "Given a TAG decision in a spot its file does not mark as mixed, When TAG acts under any replay code, Then it chooses the advice engine's recommended action",
+          "tags": [
+            "REQ-026.1"
+          ]
+        }
+      ],
+      "dod": [],
+      "deps": [
+        "E06-S18"
+      ],
+      "notes": "Store style files as JSON/TS data under src/bots/styles/."
+    },
+    {
+      "key": "E06-S03",
+      "title": "Face a Calling station that calls where TAG would fold or raise",
+      "type": "feature",
+      "milestone": "M2",
+      "priority": "High",
+      "risk": "medium",
+      "skeleton": false,
+      "role": "learner",
+      "want": "Calling station opponents that call far too often",
+      "benefit": "I learn to value-bet against loose-passive players and stop bluffing them",
+      "context": "Calling station (loose-passive) is built on the same advice evaluation as TAG with documented deviations stored in its own style data file: where the advice is fold or raise it calls more often than TAG. Deviation choices use the seeded generator from E06-S02. Target band (proved in E06-S09): VPIP 45-65%, PFR 3-10%, aggression 10-25%.",
+      "acs": [
+        {
+          "text": "Given the Calling station style data file, When it is loaded, Then it holds the style's deviation parameters and a plain-English description of the style",
+          "tags": [
+            "REQ-026.3"
+          ]
+        },
+        {
+          "text": "Given 10,000 seeded decision points facing a bet where the advice is fold, When a Calling station and a TAG each act at the same points, Then the Calling station calls at more of them than TAG",
+          "tags": [
+            "REQ-026.2"
+          ]
+        },
+        {
+          "text": "Given 10,000 seeded decision points where the advice is raise, When a Calling station and a TAG each act at the same points, Then the Calling station calls at more of them than TAG",
+          "tags": [
+            "REQ-026.2"
+          ]
+        },
+        {
+          "text": "Given the Calling station file's call probability is changed and no code is changed, When the same 10,000 seeded decision points are replayed, Then its call rate changes",
+          "tags": [
+            "REQ-026.3"
+          ]
+        },
+        {
+          "text": "Given any Calling station decision with no bet to face, When it acts, Then it checks or bets and never folds",
+          "tags": [
+            "REQ-026.2"
+          ]
+        }
+      ],
+      "dod": [],
+      "deps": [
+        "E06-S02"
+      ],
+      "notes": "Legality matters for the last AC: folding when check is free is illegal in the engine (E01-S11)."
+    },
+    {
+      "key": "E06-S04",
+      "title": "Face a Maniac that bets and raises where TAG would check or call",
+      "type": "feature",
+      "milestone": "M2",
+      "priority": "High",
+      "risk": "medium",
+      "skeleton": false,
+      "role": "learner",
+      "want": "Maniac opponents that play far too aggressively",
+      "benefit": "I learn to call down and re-raise against loose-aggressive players",
+      "context": "Maniac (loose-aggressive) is built on the advice evaluation with documented deviations stored in its own style data file: where the advice is check it bets more often than TAG, and where the advice is call it raises more often than TAG. When the street is capped a raise is impossible and the Maniac calls. Deviation choices use the seeded generator from E06-S02. Target band (proved in E06-S09): VPIP 50-75%, PFR 35-60%, aggression 65-85%.",
+      "acs": [
+        {
+          "text": "Given the Maniac style data file, When it is loaded, Then it holds the style's deviation parameters and a plain-English description of the style",
+          "tags": [
+            "REQ-026.3"
+          ]
+        },
+        {
+          "text": "Given 10,000 seeded decision points with no bet to face where the advice is check, When a Maniac and a TAG each act at the same points, Then the Maniac bets at more of them than TAG",
+          "tags": [
+            "REQ-026.2"
+          ]
+        },
+        {
+          "text": "Given 10,000 seeded decision points where the advice is call, When a Maniac and a TAG each act at the same points, Then the Maniac raises at more of them than TAG",
+          "tags": [
+            "REQ-026.2"
+          ]
+        },
+        {
+          "text": "Given the Maniac file's raise probability is changed and no code is changed, When the same 10,000 seeded decision points are replayed, Then its raise rate changes",
+          "tags": [
+            "REQ-026.3"
+          ]
+        },
+        {
+          "text": "Given a Maniac facing a bet on a capped street (one bet and three raises made), When it chooses to be aggressive, Then it calls and the action is legal",
+          "tags": [
+            "REQ-026.2"
+          ]
+        }
+      ],
+      "dod": [],
+      "deps": [
+        "E06-S02"
+      ],
+      "notes": ""
+    },
+    {
+      "key": "E06-S05",
+      "title": "Face a Rock that folds every hand outside a narrow starting range",
+      "type": "feature",
+      "milestone": "M2",
+      "priority": "High",
+      "risk": "medium",
+      "skeleton": false,
+      "role": "learner",
+      "want": "Rock opponents that play only a narrow set of starting hands",
+      "benefit": "I learn to steal their blinds and respect their bets",
+      "context": "Rock (very tight) stores its narrower preflop starting range per position and situation in its own style data file, with a plain-English description. Every hand class in the Rock range is one the TAG chart plays (does not fold) in the same position and situation, and the Rock range has fewer hand classes. Preflop, the Rock folds every hand outside its range; when no bet is faced (big blind after limps) folding is illegal, so it checks. Inside its range and postflop it follows the advice engine with its documented deviations. Target band (proved in E06-S09): VPIP 8-15%, PFR 6-12%, aggression 35-55%.",
+      "acs": [
+        {
+          "text": "Given the Rock style data file, When it is loaded, Then it holds the Rock starting range for each position and situation and a plain-English description of the style",
+          "tags": [
+            "REQ-026.3"
+          ]
+        },
+        {
+          "text": "Given the Rock and TAG 6-max data, When the style validator runs, Then every hand class in the Rock starting range is a non-fold cell of the TAG chart for the same position and situation, and the Rock range has fewer hand classes in each position",
+          "tags": [
+            "REQ-026.2"
+          ]
+        },
+        {
+          "text": "Given a Rock facing a bet preflop with a hand class outside its starting range, When it acts under any replay code, Then it folds",
+          "tags": [
+            "REQ-026.2"
+          ]
+        },
+        {
+          "text": "Given a Rock in the big blind with a hand outside its starting range and no raise to face, When it acts, Then it checks",
+          "tags": [
+            "REQ-026.2"
+          ]
+        },
+        {
+          "text": "Given one hand class is removed from the Rock file's starting range and no code is changed, When the Rock is dealt that hand class preflop facing a bet, Then it folds",
+          "tags": [
+            "REQ-026.3"
+          ]
+        }
+      ],
+      "dod": [
+        {
+          "text": "The Rock starting range carries its justification and is original, written for this project",
+          "tags": [
+            "REQ-061.2"
+          ]
+        }
+      ],
+      "deps": [
+        "E06-S02"
+      ],
+      "notes": "Heads-up and full-ring Rock ranges follow the same subset rule against E07-S05 charts when those exist."
+    },
+    {
+      "key": "E06-S06",
+      "title": "Seat bots by line-up preset with unique names",
+      "type": "feature",
+      "milestone": "M2",
+      "priority": "High",
+      "risk": "low",
+      "skeleton": false,
+      "role": "learner",
+      "want": "bots seated by the Mixed, Tough or Soft line-up preset, each with its own name",
+      "benefit": "I can choose the kind of table I practise against and tell the opponents apart",
+      "context": "Pure line-up module: given a preset, the table size and the user's seat, assign styles to the bot seats. Seats are numbered clockwise. Cycles run over bot seats only, starting with the first bot seat clockwise from the user (REQ-009.8). Mixed: styles cycle TAG, Calling station, Maniac, Rock. Tough: all TAG except one Maniac, which takes the first bot seat clockwise from the user; at heads-up the single bot is TAG (REQ-009.7). Soft: Calling station and Rock alternating, starting with Calling station. Each bot gets a display name unique within the table, drawn from a name list. Adds `--lineup mixed|tough|soft` to the playtest CLI (REQ-062.1); in the playtest seat 1 takes the user's place (scripted policy) so the first bot seat is seat 2. Game Config (E02) uses this module for the preset picker and per-seat edits.",
+      "acs": [
+        {
+          "text": "Given the Mixed preset at 6 players with the user at seat 4, When styles are assigned, Then seats 5, 6, 1, 2 and 3 are TAG, Calling station, Maniac, Rock and TAG",
+          "tags": [
+            "REQ-009.1",
+            "REQ-009.8"
+          ]
+        },
+        {
+          "text": "Given the Tough preset at 6 players with the user at seat 4, When styles are assigned, Then seat 5 is the only Maniac and seats 6, 1, 2 and 3 are TAG",
+          "tags": [
+            "REQ-009.1",
+            "REQ-009.8"
+          ]
+        },
+        {
+          "text": "Given each preset, every table size from 2 to 10 and every user seat, When styles are assigned, Then the user's seat gets no style, Mixed cycles TAG, Calling station, Maniac, Rock from the first bot seat clockwise from the user, Tough at sizes 3 to 10 has exactly one Maniac in that seat and every other bot TAG, and Soft alternates Calling station and Rock starting there with Calling station",
+          "tags": [
+            "REQ-009.1",
+            "REQ-009.8"
+          ]
+        },
+        {
+          "text": "Given the Tough preset at a heads-up table (one bot seat), When styles are assigned, Then the single bot is a TAG",
+          "tags": [
+            "REQ-009.7"
+          ]
+        },
+        {
+          "text": "Given each preset and every table size from 2 to 10, When bots are seated, Then no two bots share a display name",
+          "tags": [
+            "REQ-009.4"
+          ]
+        },
+        {
+          "text": "Given `npm run playtest -- --hands 10000 --seed 42 --size 9 --lineup tough`, When it runs, Then seat 2 is the Maniac, seats 3 to 9 are TAG, zero invariant violations are reported and it exits 0",
+          "tags": [
+            "REQ-062.1",
+            "REQ-009.1"
+          ]
+        },
+        {
+          "text": "Given `npm run playtest -- --lineup` with a name other than mixed, tough or soft, When it starts, Then it prints the valid line-up names and exits non-zero without playing",
+          "tags": [
+            "REQ-062.1"
+          ]
+        }
+      ],
+      "dod": [],
+      "deps": [
+        "E06-S03",
+        "E06-S04",
+        "E06-S05"
+      ],
+      "notes": ""
+    },
+    {
+      "key": "E06-S07",
+      "title": "Record an edited line-up as Custom",
+      "type": "feature",
+      "milestone": "M2",
+      "priority": "High",
+      "risk": "low",
+      "skeleton": false,
+      "role": "learner",
+      "want": "a session with edited seat styles recorded under the line-up name Custom",
+      "benefit": "my results against a preset are never mixed with results against tables I changed",
+      "context": "The line-up module resolves the session's line-up name: the preset name when every bot seat's style equals the preset's assignment for that table size (REQ-009.1), otherwise Custom. The session configuration handed to the engine carries the line-up name and the actual seat styles; E02 (Game Config) calls this on Start game and E03 stores it with the session and hand records.",
+      "acs": [
+        {
+          "text": "Given the Mixed preset at 6 seats with seat 4 changed from Maniac to Rock, When the session's line-up is resolved, Then its line-up name is Custom and the seat styles are the edited ones",
+          "tags": [
+            "REQ-009.6"
+          ]
+        },
+        {
+          "text": "Given each preset at every table size from 2 to 10 with no seat edited, When the line-up is resolved, Then its line-up name is the preset name",
+          "tags": [
+            "REQ-009.6"
+          ]
+        },
+        {
+          "text": "Given the Soft preset with one seat changed to TAG and then back to its preset style, When the line-up is resolved, Then its line-up name is Soft",
+          "tags": [
+            "REQ-009.6"
+          ]
+        },
+        {
+          "text": "Given a line-up resolved as Custom, When the session configuration is built for Start game, Then it carries the line-up name Custom and every seat's edited style",
+          "tags": [
+            "REQ-009.6"
+          ]
+        }
+      ],
+      "dod": [],
+      "deps": [
+        "E06-S06"
+      ],
+      "notes": "E02/E03: persist the resolved line-up name with the session so Statistics can filter by line-up (E11)."
+    },
+    {
+      "key": "E06-S08",
+      "title": "Replace a busted bot with a new bot from the line-up preset",
+      "type": "feature",
+      "milestone": "M2",
+      "priority": "High",
+      "risk": "medium",
+      "skeleton": false,
+      "role": "learner",
+      "want": "a busted bot replaced by a new bot with a fresh buy-in before the next hand",
+      "benefit": "my cash table stays full and keeps the character of the line-up I chose",
+      "context": "Cash games only (sit-and-go never refills seats, E05). When a bot's stack is $0 at the end of a hand, it leaves and a new bot takes the seat before the next hand with a fresh buy-in of 20 x the big bet ($160 at $4/$8). The new bot's style is drawn at random from the styles the session's preset assigns at the current table size (REQ-007.8): e.g. Mixed at 6 players - TAG, Calling station, Maniac or Rock, Mixed at 3 players - TAG or Calling station; Tough - TAG or Maniac, but TAG only at heads-up; Soft - Calling station or Rock; a session recorded as Custom draws from all four styles (REQ-007.7). The draw uses a seeded generator so playtests stay reproducible. The new bot gets a display name unique within the table. This replaces E01's in-runner stack restore in the playtest.",
+      "acs": [
+        {
+          "text": "Given a $4/$8 cash game where a bot's stack is $0 at the end of a hand, When the next hand is dealt, Then that bot has left and a new bot holds the seat with $160",
+          "tags": [
+            "REQ-007.5"
+          ]
+        },
+        {
+          "text": "Given a bot with $1 left at the end of a hand, When the next hand is dealt, Then the same bot keeps the seat with $1",
+          "tags": [
+            "REQ-007.5"
+          ]
+        },
+        {
+          "text": "Given 10,000 seeded replacements at 6 players for each preset, When the new bots' styles are tallied, Then Mixed yields all four styles, Tough only TAG and Maniac, Soft only Calling station and Rock, and every allowed style appears at least once",
+          "tags": [
+            "REQ-007.5",
+            "REQ-007.8"
+          ]
+        },
+        {
+          "text": "Given two bots bust in the same hand, When the next hand is dealt, Then both seats hold new bots with fresh buy-ins and no two bots at the table share a display name",
+          "tags": [
+            "REQ-007.5",
+            "REQ-009.4"
+          ]
+        },
+        {
+          "text": "Given a cash playtest with the same seed and options, When it is run twice, Then the same bots are replaced after the same hands with the same styles and names",
+          "tags": [
+            "REQ-007.5",
+            "REQ-062.4"
+          ]
+        },
+        {
+          "text": "Given `npm run playtest -- --hands 10000 --seed 42 --lineup mixed`, When bots bust, Then they are replaced by this rule, zero invariant violations are reported and it exits 0",
+          "tags": [
+            "REQ-007.5"
+          ]
+        },
+        {
+          "text": "Given a session recorded as Custom, When 10,000 seeded replacements are tallied, Then the new bots' styles include all four styles (TAG, Calling station, Maniac, Rock) and no other",
+          "tags": [
+            "REQ-007.7"
+          ]
+        },
+        {
+          "text": "Given 10,000 seeded replacements with the Mixed preset at 3 players and with the Tough preset at heads-up, When the new bots' styles are tallied, Then Mixed yields only TAG and Calling station (both at least once) and heads-up Tough yields only TAG",
+          "tags": [
+            "REQ-007.8"
+          ]
+        }
+      ],
+      "dod": [],
+      "deps": [
+        "E06-S07"
+      ],
+      "notes": "E03: a replaced seat's observed stats start from zero (REQ-031.3); give each bot instance a distinct id."
+    },
+    {
+      "key": "E06-S09",
+      "title": "Report each bot style's VPIP, PFR and aggression against its band",
+      "type": "feature",
+      "milestone": "M2",
+      "priority": "High",
+      "risk": "high",
+      "skeleton": false,
+      "role": "learner",
+      "want": "each bot style's measured play checked against its target band",
+      "benefit": "the opponents I practise against stay recognisable as the strategy code changes",
+      "context": "Adds `--check-styles` to the playtest CLI (REQ-062.1). Over the run, each style's VPIP, PFR and aggression are computed with the shared style-stat functions (E07-S08); aggression uses the REQ-045.3 definition, flop, turn and river actions only. Bands (inclusive): TAG VPIP 18-26%, PFR 14-22%, aggression 45-65%; Calling station 45-65%, 3-10%, 10-25%; Maniac 50-75%, 35-60%, 65-85%; Rock 8-15%, 6-12%, 35-55%. This story builds the reporting and the pass/fail check; tuning the style files into the bands is E06-S16 (TAG, Rock) and E06-S17 (Calling station, Maniac). The run also reports action counts for each spot type a style marks as mixed (REQ-028.3).",
+      "acs": [
+        {
+          "text": "Given any playtest run, When it reports, Then it prints each style's VPIP, PFR and aggression to one decimal place, computed with the shared style-stat functions",
+          "tags": [
+            "REQ-062.3",
+            "REQ-027.5"
+          ]
+        },
+        {
+          "text": "Given a test style file that moves one style's stat outside its band, When the playtest runs with `--check-styles`, Then it prints the style, stat, measured value and band and exits non-zero; a value exactly on a band edge passes",
+          "tags": [
+            "REQ-027.5",
+            "REQ-062.1"
+          ]
+        },
+        {
+          "text": "Given a style whose actions in a run are 2 preflop raises, 3 postflop bets, 1 postflop raise and 4 postflop calls, When its aggression is reported, Then it is 50.0% because preflop actions are excluded",
+          "tags": [
+            "REQ-027.6"
+          ]
+        },
+        {
+          "text": "Given a run with `--check-styles`, When it reports, Then it lists the action counts for every spot type each style marks as mixed and exits non-zero if any of those spot types used only one action",
+          "tags": [
+            "REQ-028.3"
+          ]
+        },
+        {
+          "text": "Given a test style file whose measured stats are all inside its bands, When the playtest runs with `--check-styles`, Then it prints each stat with its band and exits 0",
+          "tags": [
+            "REQ-027.5"
+          ]
+        }
+      ],
+      "dod": [],
+      "deps": [
+        "E06-S06",
+        "E07-S08"
+      ],
+      "notes": ""
+    },
+    {
+      "key": "E06-S10",
+      "title": "Report each bot's BB/100 with a 95% confidence interval",
+      "type": "feature",
+      "milestone": "M2",
+      "priority": "High",
+      "risk": "low",
+      "skeleton": false,
+      "role": "learner",
+      "want": "each bot's win rate reported in BB/100 with its 95% confidence interval",
+      "benefit": "claims that a bot is beatable or strong rest on real results, not a lucky run",
+      "context": "BB/100 = big bets won per 100 hands (big bet = 2 x small bet, $8 at $4/$8). 95% confidence interval = mean per-hand result +/- 1.96 x standard error, scaled to BB/100. Each bot is reported separately with its name, style and hands played; a bot that busted and its replacement (E06-S08) are separate bots.",
+      "acs": [
+        {
+          "text": "Given any playtest run, When it reports, Then it prints for each bot its name, style, hands played, BB/100 and the lower and upper bounds of its 95% confidence interval",
+          "tags": [
+            "REQ-062.3",
+            "REQ-030.4"
+          ]
+        },
+        {
+          "text": "Given a bot that won $80 over 100 hands at $4/$8, When its win rate is computed, Then it is 10.00 BB/100",
+          "tags": [
+            "REQ-062.3"
+          ]
+        },
+        {
+          "text": "Given a fixed list of per-hand results, When the 95% confidence interval is computed, Then its bounds equal mean +/- 1.96 x sample standard deviation / sqrt(n), in BB/100, to 0.01",
+          "tags": [
+            "REQ-030.4"
+          ]
+        },
+        {
+          "text": "Given a seat whose bot busted and was replaced during the run, When the report is printed, Then the departed bot and its replacement appear as separate rows with their own hands played",
+          "tags": [
+            "REQ-062.3"
+          ]
+        }
+      ],
+      "dod": [],
+      "deps": [
+        "E06-S08"
+      ],
+      "notes": ""
+    },
+    {
+      "key": "E06-S11",
+      "title": "Prove the engine over 1,000,000 cash hands with every line-up preset",
+      "type": "feature",
+      "milestone": "M2",
+      "priority": "High",
+      "risk": "medium",
+      "skeleton": false,
+      "role": "learner",
+      "want": "the one-million-hand invariant run to play real style bots in every line-up preset",
+      "benefit": "the rules never break against the opponents I actually face",
+      "context": "Extends E01-S17 (which covers table sizes 2-10 and both game types with random-move seats) so that the 1,000,000-hand run uses the style bots and covers the Mixed, Tough and Soft presets at every table size 2-10 in cash games. Sit-and-go line-up coverage needs the sit-and-go structure (E05, M3) and is added by E05. Re-verifies the playtest throughput with real bots (advice is computed for every bot decision): 100,000 6-max hands in at most 60 minutes on the reference machine (Apple-silicon Mac). At the permitted worst case one million hands take about 10 hours, over the 6-hour limit of a GitHub-hosted job, so the run uses the same sharding as E01-S17: parallel shards with deterministic per-shard seeds, combined into one report.",
+      "acs": [
+        {
+          "text": "Given the nightly or on-demand 1,000,000-hand cash run, When it completes, Then it has played Mixed, Tough and Soft line-ups at every table size from 2 to 10, prints the hand count per line-up and size, reports zero invariant violations and exits 0",
+          "tags": [
+            "REQ-056.2"
+          ]
+        },
+        {
+          "text": "Given the reference machine, When `npm run playtest -- --hands 100000 --size 6 --lineup mixed` runs, Then it completes in at most 60 minutes",
+          "tags": [
+            "REQ-062.5"
+          ]
+        },
+        {
+          "text": "Given the CI nightly schedule or a manual dispatch, When the 1,000,000-hand line-up run executes as E01-S17's parallel shards with deterministic per-shard seeds, Then every shard finishes within the 6-hour GitHub job limit, re-running a shard with its seed gives byte-identical output, and the combined report covers all 1,000,000 hands",
+          "tags": [
+            "REQ-056.2",
+            "REQ-062.4"
+          ]
+        }
+      ],
+      "dod": [
+        {
+          "text": "Timing of the 100,000-hand 6-max Mixed run with style bots is recorded in the story notes for the reference machine",
+          "tags": [
+            "REQ-062.5"
+          ]
+        }
+      ],
+      "deps": [
+        "E06-S08",
+        "E01-S17"
+      ],
+      "notes": "E05: add the sit-and-go line-up coverage to the 1,000,000-hand run (REQ-056.2) in M3. If sharding in CI proves impractical, run on the reference machine as E01-S17 allows."
+    },
+    {
+      "key": "E06-S12",
+      "title": "Prove TAG beats tables of each weaker style",
+      "type": "feature",
+      "milestone": "M3",
+      "priority": "High",
+      "risk": "high",
+      "skeleton": false,
+      "role": "learner",
+      "want": "TAG bots proven to win against tables of any single weaker style",
+      "benefit": "beating the bots means something because the TAG strategy behind them is sound",
+      "context": "Three 100,000-hand 6-max harness runs, one TAG against five bots of one weaker style each. These are not presets, so the playtest `--lineup` option also accepts an explicit comma-separated style per seat using the tokens tag, calling-station, maniac and rock (glossary: TAG, Calling station, Maniac, Rock); an unknown token or a seat count that does not match `--size` is rejected. Pass = TAG's lower 95% confidence bound (E06-S10) above 0 BB/100. If a run fails, tune TAG or the advice rules, keeping E06-S16/S17 bands and the golden spots green.",
+      "acs": [
+        {
+          "text": "Given `npm run playtest -- --hands 100000 --size 6 --seed 42 --lineup tag,calling-station,calling-station,calling-station,calling-station,calling-station`, When it completes, Then TAG's BB/100 lower 95% bound is above 0",
+          "tags": [
+            "REQ-030.1"
+          ]
+        },
+        {
+          "text": "Given the same run with five Maniacs (`--lineup tag,maniac,maniac,maniac,maniac,maniac`), When it completes, Then TAG's BB/100 lower 95% bound is above 0",
+          "tags": [
+            "REQ-030.2"
+          ]
+        },
+        {
+          "text": "Given the same run with five Rocks (`--lineup tag,rock,rock,rock,rock,rock`), When it completes, Then TAG's BB/100 lower 95% bound is above 0",
+          "tags": [
+            "REQ-030.3"
+          ]
+        },
+        {
+          "text": "Given `--lineup` with a per-seat list containing a token other than tag, calling-station, maniac or rock, or with a seat count different from `--size`, When the playtest starts, Then it prints the accepted tokens and the expected seat count and exits non-zero without playing",
+          "tags": [
+            "REQ-062.1"
+          ]
+        }
+      ],
+      "dod": [
+        {
+          "text": "The three strength runs are part of the nightly / on-demand CI job and their results are recorded in the story notes",
+          "tags": [
+            "REQ-030.1",
+            "REQ-030.2",
+            "REQ-030.3"
+          ]
+        }
+      ],
+      "deps": [
+        "E06-S10",
+        "E06-S17"
+      ],
+      "notes": ""
+    },
+    {
+      "key": "E06-S13",
+      "title": "Keep each bot's style fixed whatever the user does",
+      "type": "feature",
+      "milestone": "M3",
+      "priority": "Medium",
+      "risk": "low",
+      "skeleton": false,
+      "role": "learner",
+      "want": "bots whose style parameters never change in response to my play",
+      "benefit": "I can practise exploiting a predictable opponent",
+      "context": "Style parameters are loaded from the style data files at session start and are immutable for the session. No bot code path reads the user's actions or statistics to change parameters. Fit: two playtests with different user strategies and the same seeds give each bot identical parameters.",
+      "acs": [
+        {
+          "text": "Given two 6-max Mixed playtests with the same seed where seat 1 always calls in one and always folds or checks in the other, When every hand ends, Then each bot's style parameters are identical in both runs and equal to its style file",
+          "tags": [
+            "REQ-029.1"
+          ]
+        },
+        {
+          "text": "Given a bot decision point (view, replay code and seat) evaluated at hand 1 of a session, When the same decision point is evaluated after 5,000 hands in which the user raised at every opportunity, Then the bot's action is identical",
+          "tags": [
+            "REQ-029.1"
+          ]
+        }
+      ],
+      "dod": [],
+      "deps": [
+        "E06-S06"
+      ],
+      "notes": "Suggested mechanism: freeze style parameters at session start. REQ-029.2 (bots use the typical-player basis only) is enforced from M2 in E06-S02."
+    },
+    {
+      "key": "E06-S14",
+      "title": "Compute every bot decision within 100 ms",
+      "type": "feature",
+      "milestone": "M3",
+      "priority": "Medium",
+      "risk": "medium",
+      "skeleton": false,
+      "role": "learner",
+      "want": "bots that decide within 100 ms",
+      "benefit": "hands keep moving at Rapid speed and I can play 200 or more hands an hour",
+      "context": "REQ-055.3: bot decision computed in at most 100 ms at the 95th percentile on the reference machine (Apple-silicon Mac, latest Chrome). Fit: automated timing test reporting p95 over 200 samples. Postflop multiway equity is the likely bottleneck; sample all streets and table sizes up to 10.",
+      "acs": [
+        {
+          "text": "Given 200 sampled decision points per style spanning preflop, flop, turn and river at table sizes 2, 6 and 10, When each bot decision is timed in latest Chrome on the reference machine, Then the 95th-percentile time for each style is at most 100 ms",
+          "tags": [
+            "REQ-055.3"
+          ]
+        },
+        {
+          "text": "Given the timing test, When a style's 95th-percentile time exceeds 100 ms, Then the test prints the style and its p95 and fails",
+          "tags": [
+            "REQ-055.3"
+          ]
+        }
+      ],
+      "dod": [
+        {
+          "text": "Measured p95 per style on the reference machine is recorded in the story notes",
+          "tags": [
+            "REQ-055.3"
+          ]
+        }
+      ],
+      "deps": [
+        "E06-S06"
+      ],
+      "notes": "In the app, bot decisions run off the main thread with the advice engine (REQ-055.6, E03)."
+    },
+    {
+      "key": "E06-S15",
+      "title": "Replay any hand with every bot acting exactly as before",
+      "type": "feature",
+      "milestone": "M2",
+      "priority": "High",
+      "risk": "medium",
+      "skeleton": false,
+      "role": "learner",
+      "want": "a replayed hand to reproduce every bot action exactly",
+      "benefit": "I can revisit any hand and see the opponents play it the same way",
+      "context": "Replaying a hand with the same replay code and the same user actions reproduces every bot action, for every style, because each bot's randomness comes only from a generator seeded from the replay code and its seat (E06-S02). In the playtest seat 1 follows a scripted user policy and its recorded actions are fed back on replay.",
+      "acs": [
+        {
+          "text": "Given 1,000 recorded hands from a 6-max TAG playtest in which seat 1 follows a scripted user policy, When each hand is replayed with its replay code and seat 1's recorded actions, Then every bot action matches in order and amount",
+          "tags": [
+            "REQ-028.2"
+          ]
+        },
+        {
+          "text": "Given 1,000 recorded hands from a 6-max Mixed playtest in which seat 1 follows a scripted user policy, When each hand is replayed with its replay code and seat 1's recorded actions, Then every bot action of every style matches in order and amount",
+          "tags": [
+            "REQ-028.2"
+          ]
+        },
+        {
+          "text": "Given a recorded hand, When it is replayed with the same replay code but a different user action at the first decision, Then the replay still deals the same cards and every bot decision point reached identically before that action matches the original",
+          "tags": [
+            "REQ-028.1",
+            "REQ-028.2"
+          ]
+        }
+      ],
+      "dod": [],
+      "deps": [
+        "E06-S06"
+      ],
+      "notes": ""
+    },
+    {
+      "key": "E06-S16",
+      "title": "Keep TAG and Rock bots inside their style bands",
+      "type": "feature",
+      "milestone": "M2",
+      "priority": "High",
+      "risk": "high",
+      "skeleton": false,
+      "role": "learner",
+      "want": "the tight bot styles' measured play to fall inside their target bands",
+      "benefit": "the tight opponents I practise against behave like real tight players",
+      "context": "Tune the TAG and Rock style data files (and only them) until the Mixed 6-max check-styles run (E06-S09) measures them inside their bands: TAG VPIP 18-26%, PFR 14-22%, aggression 45-65%; Rock VPIP 8-15%, PFR 6-12%, aggression 35-55% (aggression postflop only, REQ-027.6).",
+      "acs": [
+        {
+          "text": "Given `npm run playtest -- --hands 100000 --lineup mixed --size 6 --check-styles --seed 42`, When it completes, Then TAG's measured VPIP is 18-26%, PFR 14-22% and aggression 45-65%",
+          "tags": [
+            "REQ-027.1"
+          ]
+        },
+        {
+          "text": "Given the same run, When it completes, Then the Rock's measured VPIP is 8-15%, PFR 6-12% and aggression 35-55%",
+          "tags": [
+            "REQ-027.4"
+          ]
+        },
+        {
+          "text": "Given the same check-styles run with seeds 7 and 1234, When each completes, Then TAG and Rock are inside their bands for both seeds",
+          "tags": [
+            "REQ-027.5",
+            "REQ-027.1",
+            "REQ-027.4"
+          ]
+        }
+      ],
+      "dod": [],
+      "deps": [
+        "E06-S09"
+      ],
+      "notes": ""
+    },
+    {
+      "key": "E06-S17",
+      "title": "Keep Calling station and Maniac bots inside their style bands",
+      "type": "feature",
+      "milestone": "M2",
+      "priority": "High",
+      "risk": "high",
+      "skeleton": false,
+      "role": "learner",
+      "want": "the loose bot styles' measured play to fall inside their target bands",
+      "benefit": "the loose opponents I practise against behave like real loose players",
+      "context": "Tune the Calling station and Maniac style data files until the Mixed 6-max check-styles run measures them inside their bands: Calling station VPIP 45-65%, PFR 3-10%, aggression 10-25%; Maniac VPIP 50-75%, PFR 35-60%, aggression 65-85%. This story is the final gate: with TAG and Rock already tuned (E06-S16), the full fit command passes for all four styles.",
+      "acs": [
+        {
+          "text": "Given `npm run playtest -- --hands 100000 --lineup mixed --size 6 --check-styles --seed 42`, When it completes, Then the Calling station's measured VPIP is 45-65%, PFR 3-10% and aggression 10-25%",
+          "tags": [
+            "REQ-027.2"
+          ]
+        },
+        {
+          "text": "Given the same run, When it completes, Then the Maniac's measured VPIP is 50-75%, PFR 35-60% and aggression 65-85%",
+          "tags": [
+            "REQ-027.3"
+          ]
+        },
+        {
+          "text": "Given the same check-styles run with seeds 7 and 1234, When each completes, Then the Calling station and Maniac are inside their bands for both seeds",
+          "tags": [
+            "REQ-027.5",
+            "REQ-027.2",
+            "REQ-027.3"
+          ]
+        },
+        {
+          "text": "Given the same run, When it completes, Then all four styles are inside their bands and the command exits 0",
+          "tags": [
+            "REQ-027.5",
+            "REQ-027.1",
+            "REQ-027.4"
+          ]
+        }
+      ],
+      "dod": [
+        {
+          "text": "The 100,000-hand Mixed check-styles run is added to the nightly / on-demand CI job",
+          "tags": [
+            "REQ-027.5"
+          ]
+        }
+      ],
+      "deps": [
+        "E06-S16"
+      ],
+      "notes": ""
+    }
+  ]
+}

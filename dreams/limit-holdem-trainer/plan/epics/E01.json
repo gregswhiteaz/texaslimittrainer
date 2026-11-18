@@ -1,0 +1,961 @@
+{
+  "epic": "E01",
+  "stories": [
+    {
+      "key": "E01-S01",
+      "title": "Bootstrap the strict TypeScript project with one-command checks",
+      "type": "chore",
+      "milestone": "M1",
+      "priority": "High",
+      "risk": "medium",
+      "skeleton": true,
+      "context": "First story of the project (user asked that language, toolchain and test harness come first). Single language TypeScript (Q-1). Stack per vision: strict TypeScript, Vite, React, Vitest, fast-check, tsx for the Node playtest CLI, Playwright with @axe-core/playwright (axe) for accessibility checks, ESLint + Prettier. Rules engine, bots, advice and statistics live in modules that import no UI or browser-only code and are enforced by a lint rule. Coverage thresholds: line coverage >= 90% for engine/bots/advice/statistics and >= 70% overall. npm scripts: test, e2e, lint, typecheck, build. This story provisions axe so every M1 screen story can meet the global DoD item 'axe reports zero serious or critical violations' [REQ-057.1]. CI is added by E01-S02 immediately after this story; until then the checks are run locally. Actor 'project owner' = the single Learner in the role of the person who builds and maintains the trainer (requirements.md has only the Learner user class).",
+      "acs": [
+        {
+          "text": "Given a clean checkout after `npm ci`, When `npm test` runs, Then Vitest executes the unit tests and the fast-check property tests and exits 0",
+          "tags": [
+            "REQ-063.1"
+          ]
+        },
+        {
+          "text": "Given a clean checkout, When `npm run lint` and `npm run typecheck` run, Then ESLint with Prettier and `tsc` with `strict: true` report zero errors and both exit 0",
+          "tags": [
+            "REQ-063.3",
+            "REQ-059.1",
+            "REQ-059.4"
+          ]
+        },
+        {
+          "text": "Given a source file with a type error, When `npm run typecheck` runs, Then it exits non-zero; Given a file violating an ESLint or Prettier rule, When `npm run lint` runs, Then it exits non-zero",
+          "tags": [
+            "REQ-059.1",
+            "REQ-059.4"
+          ]
+        },
+        {
+          "text": "Given a module under the engine, bots, advice or statistics folders that imports React, a DOM API or IndexedDB, When `npm run lint` runs, Then it reports an error naming the forbidden import and exits non-zero",
+          "tags": [
+            "REQ-059.2"
+          ]
+        },
+        {
+          "text": "Given line coverage below 90% for the engine, bots, advice or statistics modules, or below 70% overall, When `npm test` runs with coverage, Then it exits non-zero naming the threshold that was missed",
+          "tags": [
+            "REQ-059.3"
+          ]
+        },
+        {
+          "text": "Given a clean checkout, When `npm run build` runs, Then Vite writes the deployable static app to `dist/` and exits 0",
+          "tags": [
+            "REQ-063.4"
+          ]
+        },
+        {
+          "text": "Given a clean checkout with Playwright browsers installed, When `npm run e2e` runs, Then a smoke test opens the built app in Chromium and in WebKit and both runs pass",
+          "tags": [
+            "REQ-063.2"
+          ]
+        },
+        {
+          "text": "Given `npm run e2e`, When the smoke test runs in Chromium and WebKit, Then it also runs an axe scan of the app's start page and passes only with zero serious or critical violations; Given a test page with an injected critical violation (an image without alt text), Then the axe check fails and `npm run e2e` exits non-zero",
+          "tags": [
+            "REQ-057.1"
+          ]
+        }
+      ],
+      "dod": [],
+      "deps": [],
+      "notes": "Golden-spot tests (E07) join `npm test` when they exist; PWA manifest/service worker (E13) extend `npm run build`. Suggested folders: src/engine, src/bots, src/advice, src/stats, src/ui, tools/playtest. Export a shared `expectNoSeriousAxeViolations(page)` helper for screen stories.",
+      "role": "project owner",
+      "want": "a strict TypeScript toolchain where every check runs with one command",
+      "benefit": "every later story can be built and verified the same way locally and in CI"
+    },
+    {
+      "key": "E01-S02",
+      "title": "Run every check in GitHub Actions on each push and pull request",
+      "type": "chore",
+      "milestone": "M1",
+      "priority": "High",
+      "risk": "high",
+      "skeleton": true,
+      "context": "Built immediately after the toolchain story E01-S01 so that every later story can meet the global DoD item 'CI workflow is green on the story's branch'. GitHub Actions workflow runs lint, typecheck, tests, the build and `npm run e2e` (Playwright plus axe in Chromium and WebKit, REQ-064.4) on every push and pull request; any failing check fails the workflow. The 10,000-hand playtest step is added by E01-S08, the nightly 1,000,000-hand run by E01-S17 and deployment to GitHub Pages by E01-S18. Actor 'project owner' = the single Learner in the role of the person who builds and maintains the trainer (requirements.md has only the Learner user class).",
+      "acs": [
+        {
+          "text": "Given a push to any branch or a pull request on GitHub, When the workflow triggers, Then it runs `npm run lint`, `npm run typecheck`, `npm test`, `npm run build` and `npm run e2e` (Playwright and axe tests in Chromium and WebKit)",
+          "tags": [
+            "REQ-064.1",
+            "REQ-064.4"
+          ]
+        },
+        {
+          "text": "Given a push in which any one of lint, typecheck, tests or build fails, When the workflow finishes, Then the workflow is reported as failed",
+          "tags": [
+            "REQ-064.2"
+          ]
+        },
+        {
+          "text": "Given a push in which all checks pass, When the workflow finishes, Then the workflow is reported as successful",
+          "tags": [
+            "REQ-064.2"
+          ]
+        },
+        {
+          "text": "Given a push in which a Playwright or axe test fails in Chromium or in WebKit, When the workflow finishes, Then the workflow is reported as failed",
+          "tags": [
+            "REQ-064.4",
+            "REQ-064.2"
+          ]
+        }
+      ],
+      "dod": [],
+      "deps": [
+        "E01-S01"
+      ],
+      "notes": "Cache npm dependencies; pin the Node LTS version used locally.",
+      "role": "project owner",
+      "want": "every push and pull request checked automatically in GitHub Actions",
+      "benefit": "a broken change is caught before it reaches main"
+    },
+    {
+      "key": "E01-S03",
+      "title": "Deal every hand from a seeded shuffle with a replay code",
+      "type": "feature",
+      "milestone": "M1",
+      "priority": "High",
+      "risk": "medium",
+      "skeleton": true,
+      "role": "learner",
+      "want": "every hand dealt from a fairly shuffled deck identified by a replay code",
+      "benefit": "dealing is realistic and any hand can be reproduced exactly",
+      "context": "Standard 52-card deck shuffled with Fisher-Yates driven by a seeded PRNG. The per-hand seed comes from crypto.getRandomValues in the browser and the Node crypto module headlessly; the seed is recorded as the hand's replay code. Same replay code produces the same deck order; full-hand replay (same replay code + seats + stacks + button + actions -> same cards in the same order) is proven in E01-S07 once the hand engine exists. (Hiding the replay code until the hand ends and showing it in Hand Review are E03/E09.)",
+      "acs": [
+        {
+          "text": "Given any of 10,000 seeds, When a deck is shuffled, Then it contains each of the 52 cards exactly once",
+          "tags": [
+            "REQ-013.1"
+          ]
+        },
+        {
+          "text": "Given 100,000 seeded shuffles, When the position of the first card is tabulated, Then a chi-square uniformity test passes at p > 0.01",
+          "tags": [
+            "REQ-013.1"
+          ]
+        },
+        {
+          "text": "Given a new hand in the browser, When its seed is drawn, Then the seed comes from crypto.getRandomValues; Given a new hand in Node, Then the seed comes from the Node crypto module",
+          "tags": [
+            "REQ-013.2"
+          ]
+        },
+        {
+          "text": "Given the same replay code, When the deck is shuffled twice, Then both decks have identical card order",
+          "tags": [
+            "REQ-013.3"
+          ]
+        }
+      ],
+      "dod": [],
+      "deps": [
+        "E01-S02"
+      ],
+      "notes": "Use a small, well-known seedable PRNG (e.g. a 128-bit xoshiro/sfc variant) so replay is stable across browsers and Node."
+    },
+    {
+      "key": "E01-S04",
+      "title": "Rank showdown hands by real poker hand rankings",
+      "type": "feature",
+      "milestone": "M1",
+      "priority": "High",
+      "risk": "high",
+      "skeleton": true,
+      "role": "learner",
+      "want": "showdown hands ranked by standard poker hand rankings",
+      "benefit": "the right player always wins the pot",
+      "context": "Hand evaluator: best five-card hand from two hole cards plus five board cards. Categories high to low: straight flush, four of a kind, full house, flush, straight, three of a kind, two pair, one pair, high card; A-2-3-4-5 is the lowest straight. Kickers break ties within a category; suits never break ties. Must agree with the reference table of all 7,462 distinct five-card ranks. The evaluator is also used by the advice engine's equity calculation (E07), so speed matters.",
+      "acs": [
+        {
+          "text": "Given every distinct five-card hand, When each is evaluated, Then the evaluator produces exactly 7,462 rank classes in the same order as the reference table, with categories ordered straight flush > four of a kind > full house > flush > straight > three of a kind > two pair > one pair > high card",
+          "tags": [
+            "REQ-019.1"
+          ]
+        },
+        {
+          "text": "Given the straights A-2-3-4-5 and 2-3-4-5-6, When compared, Then A-2-3-4-5 ranks as the lowest straight, below 2-3-4-5-6 and above any three of a kind",
+          "tags": [
+            "REQ-019.1"
+          ]
+        },
+        {
+          "text": "Given two hole cards and five board cards, When the hand is evaluated, Then its rank equals the best rank among all 21 five-card combinations of the seven cards",
+          "tags": [
+            "REQ-019.1"
+          ]
+        },
+        {
+          "text": "Given two hands with the same pair and different kickers (K-K-A-9-4 vs K-K-Q-9-4), When compared, Then the hand with the higher kicker wins",
+          "tags": [
+            "REQ-019.2"
+          ]
+        },
+        {
+          "text": "Given two hands that differ only in suits, When compared, Then they tie",
+          "tags": [
+            "REQ-019.2"
+          ]
+        }
+      ],
+      "dod": [],
+      "deps": [
+        "E01-S02"
+      ],
+      "notes": "A lookup-table evaluator (Cactus Kev style or perfect-hash) keeps equity simulation fast enough for REQ-055."
+    },
+    {
+      "key": "E01-S05",
+      "title": "Play a complete fixed-limit hand from blinds to showdown",
+      "type": "feature",
+      "milestone": "M1",
+      "priority": "High",
+      "risk": "high",
+      "skeleton": true,
+      "role": "learner",
+      "want": "each hand to follow the casino fixed-limit sequence from blinds to showdown",
+      "benefit": "my practice matches a real casino table",
+      "context": "Pure, seeded engine for 3-10 players (heads-up is E01-S09). Sequence: post blinds, deal two hole cards each, preflop betting, flop (3 cards) and betting, turn (1) and betting, river (1) and betting, showdown; ends early when all but one fold. Small blind = player left of button, big blind = next player. Preflop action starts left of the big blind; later streets start with the first active player left of the button. Bets/raises are one small bet preflop and flop, one big bet turn and river. At $4/$8 blinds are $2/$4. Pot goes to the best hand; tied pots split equally, an odd dollar to the first tied player left of the button. The engine exposes (and an AC verifies) the legal action set with exact amounts for the player to act. Cap, all-ins, side pots, showdown order and button movement come in M2 stories. Money and chips are integers; the odd-unit rule is the same for sit-and-go chips (tested in E01-S13). Interim M1 behaviour (until E01-S10, and until E01-S16 for stacks, in M2): every seat starts each hand with the $160 cash buy-in (20 big bets at $4/$8, REQ-007.1), which exceeds the $96 the most one player can put into a capped hand ($16 preflop + $16 flop + $32 turn + $32 river), so no all-in can arise; and seat policies never make a fifth bet on a street, so the 4-bet cap invariant holds before the engine enforces it.",
+      "acs": [
+        {
+          "text": "Given 6 players at $4/$8 with the button at seat 1, When a hand starts, Then seat 2 posts the $2 small blind and seat 3 posts the $4 big blind",
+          "tags": [
+            "REQ-014.1"
+          ]
+        },
+        {
+          "text": "Given a scripted deck and 6 players with the button at seat 1, When hole cards are dealt, Then cards go one at a time clockwise from seat 2 for two rounds, so seat 2 receives deck cards 1 and 7 and seat 1 receives cards 6 and 12",
+          "tags": [
+            "REQ-014.2"
+          ]
+        },
+        {
+          "text": "Given blinds are posted with the button at seat 1, When preflop begins, Then seat 4 acts first; Given the flop, turn or river, When betting begins, Then the first active player left of the button acts first",
+          "tags": [
+            "REQ-014.3"
+          ]
+        },
+        {
+          "text": "Given 6 players at $4/$8 with the button at seat 1, When the engine lists legal actions, Then seat 4 preflop gets exactly fold, call $4 and raise to $8, the first player to act on the turn with no bet facing gets exactly check and bet $8, and every bet or raise is exactly $4 preflop and on the flop and exactly $8 on the turn and river",
+          "tags": [
+            "REQ-016.1"
+          ]
+        },
+        {
+          "text": "Given a betting round, When every active player has acted and all have put in the same amount, Then the round ends and the next street deals 3 flop cards, then 1 turn card, then 1 river card",
+          "tags": [
+            "REQ-014.4"
+          ]
+        },
+        {
+          "text": "Given all players but one have folded, When the last fold is applied, Then the remaining player wins the pot without showing cards and no further cards are dealt",
+          "tags": [
+            "REQ-014.5"
+          ]
+        },
+        {
+          "text": "Given river betting has ended with seats 2 and 5 tied for the best hand in a $27 pot with the button at seat 1, When the pot is awarded, Then seat 2 receives $14 and seat 5 receives $13; with the button at seat 3 instead, seat 5 receives $14 and seat 2 receives $13; with one best hand, that player receives the whole $27",
+          "tags": [
+            "REQ-019.3"
+          ]
+        },
+        {
+          "text": "Given 100,000 random seeded hands with 3 to 10 players, every seat starting the hand with the $160 buy-in and random legal actions that never make a fifth bet on a street, When each is played, Then every hand terminates in a legal end state (one player left or a completed showdown)",
+          "tags": [
+            "REQ-014.4",
+            "REQ-014.5"
+          ]
+        }
+      ],
+      "dod": [],
+      "deps": [
+        "E01-S03",
+        "E01-S04"
+      ],
+      "notes": "Model the engine as pure functions: applyAction(state, action) -> state, legalActions(state). Keep money as integer dollars/chips."
+    },
+    {
+      "key": "E01-S06",
+      "title": "Give each deciding seat only its own view of the hand",
+      "type": "feature",
+      "milestone": "M1",
+      "priority": "High",
+      "risk": "medium",
+      "skeleton": true,
+      "role": "learner",
+      "want": "opponents to decide using only what they could see at the table",
+      "benefit": "bots never cheat by seeing my cards or the next card",
+      "context": "The engine passes any deciding code (bots, playtest seat policies, later the advice engine) a PlayerView: own hole cards, the board, all actions and stacks, the legal actions with exact amounts, and cards shown at earlier showdowns; never other players' hole cards or undealt cards. Separation is type-level: decision APIs accept only PlayerView.",
+      "acs": [
+        {
+          "text": "Given a hand in progress, When the engine asks a seat to act, Then it passes a PlayerView with that seat's hole cards, the board, all actions, all stacks and cards shown at earlier showdowns, and no other player's hole cards or undealt cards",
+          "tags": [
+            "REQ-025.1"
+          ]
+        },
+        {
+          "text": "Given a fixed decision point, When the other players' hole cards and the undealt deck are changed, Then the PlayerView is deep-equal to the original and a seeded seat policy returns the same action",
+          "tags": [
+            "REQ-025.1"
+          ]
+        },
+        {
+          "text": "Given decision code that is passed the full game state instead of a PlayerView, When `npm run typecheck` runs, Then it reports a type error",
+          "tags": [
+            "REQ-025.1"
+          ]
+        }
+      ],
+      "dod": [],
+      "deps": [
+        "E01-S05"
+      ],
+      "notes": "Hints and grades using the user's view (REQ-025.2/025.3) are E07."
+    },
+    {
+      "key": "E01-S07",
+      "title": "Run seeded bot-only hands from the command line",
+      "type": "feature",
+      "milestone": "M1",
+      "priority": "High",
+      "risk": "medium",
+      "skeleton": true,
+      "role": "project owner",
+      "want": "to run seeded bot-only hands of the production engine from the command line",
+      "benefit": "I can prove the game works without clicking through hands",
+      "context": "Headless playtest CLI on Node via tsx: `npm run playtest -- --hands <n> --seed <s> --size <players>`; default 6-max $4/$8 cash table. Uses the production engine and PlayerView-based seat policies. The same seed and options must produce identical output. Line-up preset, style checks (REQ-027.5), advice determinism check (REQ-036) and bot BB/100 reporting (REQ-062.3) are added by E06/E07 once bots and advice exist. The runner can replay a recorded hand from its replay code, seats, stacks, button and actions (REQ-013.3). Actor 'project owner' = the single Learner in the role of the person who builds and maintains the trainer (requirements.md has only the Learner user class). Interim M1 behaviour (until E01-S10, and until E01-S16 for stacks, in M2): every seat starts each hand with the $160 cash buy-in (20 big bets at $4/$8, REQ-007.1), which exceeds the $96 the most one player can put into a capped hand ($16 preflop + $16 flop + $32 turn + $32 river), so no all-in can arise; and seat policies never make a fifth bet on a street, so the 4-bet cap invariant holds before the engine enforces it. The runner resets every seat to the $160 buy-in before each hand in M1.",
+      "acs": [
+        {
+          "text": "Given `npm run playtest -- --hands 10000 --seed 42`, When it runs, Then it plays 10,000 hands at a 6-max $4/$8 table with the production engine, prints a report with hands played and the invariant-violation count, and exits 0",
+          "tags": [
+            "REQ-062.1"
+          ]
+        },
+        {
+          "text": "Given `--size n` for each n from 3 to 10, When the playtest runs, Then every hand is dealt to exactly n players",
+          "tags": [
+            "REQ-062.1"
+          ]
+        },
+        {
+          "text": "Given the same seed and options, When the playtest is run twice, Then the two outputs are byte-identical",
+          "tags": [
+            "REQ-062.4"
+          ]
+        },
+        {
+          "text": "Given seeds 42 and 43 with otherwise identical options, When both runs complete, Then the dealt replay codes differ",
+          "tags": [
+            "REQ-062.4"
+          ]
+        },
+        {
+          "text": "Given a hand recorded by a playtest run (replay code, seats, stacks, button and actions), When the hand is replayed through the engine, Then every seat receives the same hole cards and the board shows the same cards in the same order",
+          "tags": [
+            "REQ-013.3"
+          ]
+        },
+        {
+          "text": "Given the M1 seeded random-move seat policy and a street that already has 4 bets (bet plus three raises, the big blind counting as the first bet preflop), When the policy chooses an action, Then it chooses only call or fold and never bet or raise, so `npm run playtest -- --hands 10000 --seed 42` records no street with more than 4 bets",
+          "tags": [
+            "REQ-056.1"
+          ]
+        }
+      ],
+      "dod": [],
+      "deps": [
+        "E01-S06"
+      ],
+      "notes": "Until E06 bots exist, seats use a seeded random-legal-action policy (RNG from replay code + seat) that never makes a fifth bet on a street. Before each hand every seat is reset to the $160 buy-in; from E01-S16 on the runner keeps real stacks and restores only busted cash seats to $160. E06 owns bot replacement for the real app (REQ-007.5)."
+    },
+    {
+      "key": "E01-S08",
+      "title": "Check game invariants after every playtest action",
+      "type": "feature",
+      "milestone": "M1",
+      "priority": "High",
+      "risk": "high",
+      "skeleton": true,
+      "role": "project owner",
+      "want": "every playtest action checked against the game invariants",
+      "benefit": "any rules bug is caught with a replayable hand",
+      "context": "After every action the playtest verifies: chip conservation, legal action, cap respected (at most 4 bets per street), pot eligibility, no card dealt twice. On a violation it prints the replay code and action history and exits non-zero. CI runs a 10,000-hand playtest and fails on a violation. Actor 'project owner' = the single Learner in the role of the person who builds and maintains the trainer (requirements.md has only the Learner user class). In M1 the cap check is satisfiable because seat policies never make a fifth bet and stacks are reset to $160 before each hand (see E01-S07); from E01-S10 the engine itself enforces the cap.",
+      "acs": [
+        {
+          "text": "Given any action applied in a playtest, When it is checked, Then the runner verifies that stacks plus pots equal the table total, the action was in the legal set, no street has more than 4 bets, every pot's eligible players contributed to it and still hold cards, and no card was dealt twice",
+          "tags": [
+            "REQ-056.1"
+          ]
+        },
+        {
+          "text": "Given an injected engine fault for each invariant (chips created, illegal action accepted, fifth bet allowed, ineligible pot winner, duplicate card), When the playtest runs, Then it reports that invariant as violated",
+          "tags": [
+            "REQ-056.1"
+          ]
+        },
+        {
+          "text": "Given an invariant violation, When the playtest stops, Then it prints the hand's replay code and full action history and exits non-zero",
+          "tags": [
+            "REQ-062.2"
+          ]
+        },
+        {
+          "text": "Given a push to GitHub, When the CI workflow runs, Then it runs a 10,000-hand playtest and the workflow fails if the playtest exits non-zero",
+          "tags": [
+            "REQ-064.2",
+            "REQ-056.1"
+          ]
+        }
+      ],
+      "dod": [],
+      "deps": [
+        "E01-S07",
+        "E01-S02"
+      ],
+      "notes": "Fault injection via a test-only engine wrapper; keep the checker in the engine package so unit tests can reuse it."
+    },
+    {
+      "key": "E01-S09",
+      "title": "Play heads-up hands with heads-up blinds and order",
+      "type": "feature",
+      "milestone": "M2",
+      "priority": "High",
+      "risk": "medium",
+      "skeleton": false,
+      "role": "learner",
+      "want": "two-player hands to follow heads-up casino rules",
+      "benefit": "heads-up practice matches real casino rules",
+      "context": "While exactly two players are dealt in: the button posts the small blind and the other player the big blind; the button acts first preflop and last on flop, turn and river.",
+      "acs": [
+        {
+          "text": "Given a heads-up $4/$8 hand, When blinds are posted, Then the button posts the $2 small blind and the other player posts the $4 big blind",
+          "tags": [
+            "REQ-015.1"
+          ]
+        },
+        {
+          "text": "Given a heads-up hand, When preflop betting begins, Then the button acts first",
+          "tags": [
+            "REQ-015.2"
+          ]
+        },
+        {
+          "text": "Given a heads-up hand, When betting begins on the flop, turn and river, Then the non-button player acts first on each street",
+          "tags": [
+            "REQ-015.3"
+          ]
+        },
+        {
+          "text": "Given `npm run playtest -- --hands 10000 --size 2 --seed 42`, When it runs, Then every hand is heads-up and the run reports zero invariant violations",
+          "tags": [
+            "REQ-062.1",
+            "REQ-015.1"
+          ]
+        }
+      ],
+      "dod": [],
+      "deps": [
+        "E01-S08"
+      ],
+      "notes": ""
+    },
+    {
+      "key": "E01-S10",
+      "title": "Cap each street at one bet plus three raises",
+      "type": "feature",
+      "milestone": "M2",
+      "priority": "High",
+      "risk": "medium",
+      "skeleton": false,
+      "role": "learner",
+      "want": "every street capped at one bet plus three raises",
+      "benefit": "betting follows the casino fixed-limit cap",
+      "context": "Cap = 4 bets per street (bet + 3 raises) with any number of players, including heads-up. Preflop the big blind counts as the first bet, so at most three raises follow it. After the fourth bet the only legal actions are call and fold. Once this story is done the playtest seat policy drops its interim 'never make a fifth bet' restriction and relies on the engine's legal set.",
+      "acs": [
+        {
+          "text": "Given preflop at $4/$8 with the $4 big blind posted, When three raises have been made (to $16), Then the next players may only call or fold",
+          "tags": [
+            "REQ-016.2",
+            "REQ-016.3"
+          ]
+        },
+        {
+          "text": "Given the flop, turn or river, When a bet and three raises have been made, Then the only legal actions for the remaining players are call and fold",
+          "tags": [
+            "REQ-016.3"
+          ]
+        },
+        {
+          "text": "Given a heads-up $4/$8 hand where the button posted the $2 small blind and the other player the $4 big blind, When the button raises to $8, the big blind re-raises to $12 and the button raises to $16, Then the big blind's only legal actions are call $4 and fold; Given a heads-up flop where a bet and three raises have been made, Then the only legal actions are call and fold",
+          "tags": [
+            "REQ-016.4"
+          ]
+        },
+        {
+          "text": "Given 100,000 random seeded hands with 2 to 10 players, When each is played, Then no street has more than 4 bets",
+          "tags": [
+            "REQ-016.4"
+          ]
+        }
+      ],
+      "dod": [],
+      "deps": [
+        "E01-S09"
+      ],
+      "notes": ""
+    },
+    {
+      "key": "E01-S11",
+      "title": "Reject illegal actions without changing the game",
+      "type": "feature",
+      "milestone": "M2",
+      "priority": "High",
+      "risk": "medium",
+      "skeleton": false,
+      "role": "learner",
+      "want": "illegal actions refused by the engine",
+      "benefit": "no hand can ever reach an impossible state",
+      "context": "An illegal action submitted to the engine is rejected with an error and leaves the game state unchanged. Illegal includes acting out of turn, a wrong bet amount, raising on a capped street, and folding when no bet is faced (check is free, Q-45).",
+      "acs": [
+        {
+          "text": "Given it is seat 3's turn, When seat 5 submits any action, Then the engine returns an out-of-turn error and the state is byte-identical to before",
+          "tags": [
+            "REQ-017.4"
+          ]
+        },
+        {
+          "text": "Given preflop at $4/$8, When a player submits a bet or raise of any amount other than $4, Then the engine returns an error and the state is unchanged",
+          "tags": [
+            "REQ-017.4"
+          ]
+        },
+        {
+          "text": "Given a capped street, When a player submits a raise, Then the engine returns an error and the state is unchanged",
+          "tags": [
+            "REQ-017.4"
+          ]
+        },
+        {
+          "text": "Given no bet is facing the player to act, When that player submits fold, Then the engine returns an error and the state is unchanged",
+          "tags": [
+            "REQ-017.4"
+          ]
+        },
+        {
+          "text": "Given 100,000 random game states, When an illegal action is injected into each, Then every injection is rejected and the state is byte-identical",
+          "tags": [
+            "REQ-017.4"
+          ]
+        }
+      ],
+      "dod": [],
+      "deps": [
+        "E01-S10"
+      ],
+      "notes": "Return a typed result (ok/error code) rather than throwing so UI and playtest handle it the same way."
+    },
+    {
+      "key": "E01-S12",
+      "title": "Let a short-stacked player call all-in",
+      "type": "feature",
+      "milestone": "M2",
+      "priority": "High",
+      "risk": "high",
+      "skeleton": false,
+      "role": "learner",
+      "want": "a player who cannot match a bet to call all-in for the chips they have",
+      "benefit": "short stacks play out exactly as in a casino",
+      "context": "A player who cannot match a bet calls all-in for their remaining chips, stays in to showdown and makes no further actions. Uncalled bets are returned to the bettor before showdown. When all remaining players but at most one are all-in, the remaining board is dealt without betting. The playtest keeps resetting every seat to $160 before each hand until E01-S16, which switches it to real stacks once side pots, the short all-in rule, pot-by-pot showdown and short-blind all-ins all exist.",
+      "acs": [
+        {
+          "text": "Given a player with $3 facing a $4 bet, When they call, Then they put in $3, are marked all-in and are never asked to act again in the hand",
+          "tags": [
+            "REQ-018.1"
+          ]
+        },
+        {
+          "text": "Given an all-in player who has not folded, When the hand reaches showdown, Then that player's hand is included in the showdown",
+          "tags": [
+            "REQ-018.1"
+          ]
+        },
+        {
+          "text": "Given all remaining players but at most one are all-in, When the betting round ends, Then the remaining board cards are dealt with no further betting",
+          "tags": [
+            "REQ-014.6"
+          ]
+        },
+        {
+          "text": "Given a $8 bet called all-in for $5 and nobody else in, When the hand goes to showdown, Then $3 is returned to the bettor before showdown",
+          "tags": [
+            "REQ-018.4"
+          ]
+        },
+        {
+          "text": "Given a bet that every other player folds to, When the hand ends, Then the bet is returned to the bettor and is not counted as won from opponents",
+          "tags": [
+            "REQ-018.4"
+          ]
+        }
+      ],
+      "dod": [],
+      "deps": [
+        "E01-S08"
+      ],
+      "notes": ""
+    },
+    {
+      "key": "E01-S13",
+      "title": "Split the pot into side pots for unequal all-ins",
+      "type": "feature",
+      "milestone": "M2",
+      "priority": "High",
+      "risk": "high",
+      "skeleton": false,
+      "role": "learner",
+      "want": "side pots created when players are all-in for different amounts",
+      "benefit": "each player can win only the chips they matched",
+      "context": "Each pot records the set of eligible players and is awarded only among them (best hand, ties split per REQ-019.3). Total chips at the table are identical before and after every hand.",
+      "acs": [
+        {
+          "text": "Given three players all-in for $10, $30 and $50 with a fourth covering, When pots are built, Then a main pot and two side pots exist, each recording exactly the players who matched it as eligible",
+          "tags": [
+            "REQ-018.2"
+          ]
+        },
+        {
+          "text": "Given a folded player contributed to a pot, When pots are built, Then that player is not eligible for any pot",
+          "tags": [
+            "REQ-018.2"
+          ]
+        },
+        {
+          "text": "Given the shortest all-in player holds the best hand in a three-way all-in, When pots are awarded, Then that player wins only the main pot and the side pot goes to the best hand among its eligible players",
+          "tags": [
+            "REQ-018.3"
+          ]
+        },
+        {
+          "text": "Given a four-way all-in at four different stack sizes with scripted cards, When pots are awarded, Then each pot's winner equals the expected winner from the scripted hand ranks",
+          "tags": [
+            "REQ-018.3"
+          ]
+        },
+        {
+          "text": "Given 100,000 random seeded hands with random stacks, When each hand ends, Then the total chips at the table equal the total before the hand",
+          "tags": [
+            "REQ-018.5"
+          ]
+        },
+        {
+          "text": "Given a sit-and-go hand where seat 3 wins the main pot and a 1,255-chip side pot is tied by seats 2 and 5 with the button at seat 1, When pots are awarded, Then seat 2 receives 628 chips and seat 5 receives 627 chips from the side pot",
+          "tags": [
+            "REQ-019.3",
+            "REQ-018.3"
+          ]
+        },
+        {
+          "text": "Given a $29 pot tied three ways by seats 3, 5 and 6 with the button at seat 4, When the pot is awarded, Then the two odd dollars go one each clockwise from left of the button: seat 5 receives $10, seat 6 receives $10 and seat 3 receives $9",
+          "tags": [
+            "REQ-019.9"
+          ]
+        }
+      ],
+      "dod": [],
+      "deps": [
+        "E01-S12"
+      ],
+      "notes": ""
+    },
+    {
+      "key": "E01-S14",
+      "title": "Allow short all-in bets and raises under the half-bet reopening rule",
+      "type": "feature",
+      "milestone": "M2",
+      "priority": "High",
+      "risk": "medium",
+      "skeleton": false,
+      "role": "learner",
+      "want": "to bet or raise all-in for less than a full bet under the casino half-bet rule",
+      "benefit": "betting after an all-in follows the common casino rule",
+      "context": "A player whose stack exceeds the call amount but is smaller than a full bet or raise is offered a bet or raise all-in for their whole stack (REQ-017.7); a stack equal to or below the call amount gives only call (all-in) or fold. An all-in raise of less than half a full bet does not reopen betting for players who have already acted (they may only call or fold); an all-in raise of half a full bet or more counts as a full raise, including toward the cap (REQ-016.5). The engine marks these actions as all-in bet/raise with the to-amount; the button labels 'Bet all-in $X' / 'Raise all-in to $X' are rendered by the Table action bar story that owns REQ-017.7's UI.",
+      "acs": [
+        {
+          "text": "Given the flop at $4/$8 where seat 2 bet $4 and seat 4 goes all-in for $5 total (a $1 raise), When action returns to seat 2, Then seat 2 may only call $1 or fold",
+          "tags": [
+            "REQ-016.5"
+          ]
+        },
+        {
+          "text": "Given the flop at $4/$8 where seat 2 bet $4 and seat 4 goes all-in for $6 total (a $2 raise), When action returns to seat 2, Then seat 2 may call, fold or raise to $10",
+          "tags": [
+            "REQ-016.5"
+          ]
+        },
+        {
+          "text": "Given the flop at $4/$8 where seat 2 bets $4, seat 3 raises to $8, seat 4 goes all-in for $10 total (a $2 raise) and seat 5 raises to $14, When action reaches seat 6, Then seat 6 may only call $14 or fold because the fourth bet has been made",
+          "tags": [
+            "REQ-016.5"
+          ]
+        },
+        {
+          "text": "Given the flop at $4/$8 where seat 2 bets $4 and seat 3 goes all-in for $5 total (a $1 raise), When seat 4, who has not yet acted on the street, is to act, Then seat 4 may fold, call $5 or raise to $8",
+          "tags": [
+            "REQ-016.5"
+          ]
+        },
+        {
+          "text": "Given the flop at $4/$8 with no bet facing and seat 4 holding $3, When the engine lists seat 4's legal actions, Then they are exactly check and bet all-in $3",
+          "tags": [
+            "REQ-017.7"
+          ]
+        },
+        {
+          "text": "Given the flop at $4/$8 where seat 2 bet $4 and seat 4 holds $6, When the engine lists seat 4's legal actions, Then they are exactly fold, call $4 and raise all-in to $6, and a raise to $8 is rejected as illegal",
+          "tags": [
+            "REQ-017.7"
+          ]
+        },
+        {
+          "text": "Given the flop at $4/$8 where seat 2 bet $4 and seat 4 holds exactly $4, When the engine lists seat 4's legal actions, Then they are exactly fold and call $4 (all-in) with no raise",
+          "tags": [
+            "REQ-017.7"
+          ]
+        }
+      ],
+      "dod": [],
+      "deps": [
+        "E01-S12",
+        "E01-S10"
+      ],
+      "notes": "Raise-to after a counted half-bet all-in: the next full raise is one full bet above the all-in amount."
+    },
+    {
+      "key": "E01-S15",
+      "title": "Show and muck cards at showdown in casino order",
+      "type": "feature",
+      "milestone": "M2",
+      "priority": "High",
+      "risk": "medium",
+      "skeleton": false,
+      "role": "learner",
+      "want": "showdown hands revealed in casino order with losing bots mucking",
+      "benefit": "I see only the information a real table would show",
+      "context": "The last player to bet or raise on the river shows first; if nobody bet on the river, the first active player left of the button shows first. Each later bot shows only if its hand beats or ties the best hand shown so far; otherwise it mucks and its cards stay hidden (Q-33). Mucked cards never appear in later PlayerViews. With side pots, showdown is resolved pot by pot from the last side pot created to the main pot; for each pot a bot shows if it can win that pot, and mucking in one pot never forfeits another pot it can win (REQ-019.8).",
+      "acs": [
+        {
+          "text": "Given river betting where seat 5 made the last bet or raise, When showdown begins, Then seat 5 shows first",
+          "tags": [
+            "REQ-019.4"
+          ]
+        },
+        {
+          "text": "Given a river checked through by all players, When showdown begins, Then the first active player left of the button shows first",
+          "tags": [
+            "REQ-019.4"
+          ]
+        },
+        {
+          "text": "Given a bot later in showdown order whose hand beats or ties the best hand shown so far, When it is its turn, Then it shows its cards",
+          "tags": [
+            "REQ-019.5"
+          ]
+        },
+        {
+          "text": "Given a bot later in showdown order whose hand loses to the best hand shown so far, When it is its turn, Then it mucks and its hole cards are absent from the hand result and from every later PlayerView",
+          "tags": [
+            "REQ-019.5",
+            "REQ-025.1"
+          ]
+        },
+        {
+          "text": "Given a main pot and one side pot, When showdown is resolved, Then the side pot is resolved and awarded first and the main pot last, each only among its eligible players",
+          "tags": [
+            "REQ-019.8"
+          ]
+        },
+        {
+          "text": "Given seat 3 (all-in, eligible only for the main pot) shows the best hand and seat 5's bot hand loses to seat 3 but beats every other side-pot contender, When showdown is resolved, Then seat 5 shows for and wins the side pot, mucks for the main pot, and seat 3 wins the main pot",
+          "tags": [
+            "REQ-019.8",
+            "REQ-019.5"
+          ]
+        }
+      ],
+      "dod": [],
+      "deps": [
+        "E01-S08",
+        "E01-S13"
+      ],
+      "notes": ""
+    },
+    {
+      "key": "E01-S16",
+      "title": "Move the button and blinds past busted seats",
+      "type": "feature",
+      "milestone": "M2",
+      "priority": "High",
+      "risk": "medium",
+      "skeleton": false,
+      "role": "learner",
+      "want": "positions to rotate after each hand to the next players who have chips",
+      "benefit": "positions rotate correctly as players bust",
+      "context": "After each hand the button moves to the next seated player with chips and the next two such players post the blinds. Seats with no chips (busted in a sit-and-go) are skipped. No missed or dead blinds. When play becomes heads-up, heads-up rules apply from the next hand. A player who cannot cover a blind posts all their chips and is all-in. The playtest gains an interim `--game sng` mode: every seat starts with 1,500 chips (REQ-008.1) at fixed Level 1 limits 20/40 with blinds 10/20, busted seats are not refilled, and a new sit-and-go starts when one player holds all chips. E05 adds the rising level schedule to this same mode (it must not create a second sng mode). This story is the last of the M2 all-in rule stories (S12-S15 are its deps), so it also switches the cash playtest from the interim $160-per-hand reset to real stacks.",
+      "acs": [
+        {
+          "text": "Given a 6-player hand ends with the button at seat 1 and all seats holding chips, When the next hand starts, Then the button is at seat 2 and seats 3 and 4 post the blinds",
+          "tags": [
+            "REQ-020.1"
+          ]
+        },
+        {
+          "text": "Given seat 3 has no chips and the button is at seat 1, When the next hand starts, Then seat 3 is skipped: the button is at seat 2 and seats 4 and 5 post the blinds",
+          "tags": [
+            "REQ-020.1"
+          ]
+        },
+        {
+          "text": "Given a player busted while due to post the big blind next hand, When the next hand starts, Then no player posts a missed or dead blind and only one small blind and one big blind are posted",
+          "tags": [
+            "REQ-020.2"
+          ]
+        },
+        {
+          "text": "Given three players remain and one busts, When the next hand starts, Then the button posts the small blind and acts first preflop",
+          "tags": [
+            "REQ-020.3"
+          ]
+        },
+        {
+          "text": "Given a player with $1 due to post the $2 small blind, When blinds are posted, Then that player posts $1 and is all-in",
+          "tags": [
+            "REQ-020.4"
+          ]
+        },
+        {
+          "text": "Given `npm run playtest -- --hands 10000 --game sng --seed 42`, When it runs, Then every sit-and-go starts each seat with 1,500 chips at 20/40 limits, busted seats are never refilled and are skipped for button and blinds, a new sit-and-go starts when one player holds all chips, and zero invariant violations are reported",
+          "tags": [
+            "REQ-062.1",
+            "REQ-020.1"
+          ]
+        },
+        {
+          "text": "Given `npm run playtest -- --hands 10000 --seed 42` (cash), When hands are played, Then every seat keeps its real stack between hands, only a busted seat is restored to the $160 buy-in, short-stack all-ins and side pots occur, and zero invariant violations are reported",
+          "tags": [
+            "REQ-056.1",
+            "REQ-018.5"
+          ]
+        }
+      ],
+      "dod": [],
+      "deps": [
+        "E01-S09",
+        "E01-S12",
+        "E01-S13",
+        "E01-S14",
+        "E01-S15"
+      ],
+      "notes": "E05 adds the rising level schedule (REQ-008.2/008.3) to this playtest sng mode and owns sit-and-go coverage of the 1,000,000-hand run in M3."
+    },
+    {
+      "key": "E01-S17",
+      "title": "Prove the engine with a 1,000,000-hand invariant run",
+      "type": "feature",
+      "milestone": "M2",
+      "priority": "High",
+      "risk": "high",
+      "skeleton": false,
+      "role": "project owner",
+      "want": "a one-million-hand cash-game playtest covering every table size",
+      "benefit": "I can trust the rules engine before anyone practises on it",
+      "context": "1,000,000 headless cash-game hands spread over all table sizes 2-10 with zero invariant violations, run on demand or nightly. Sit-and-go coverage of the 1,000,000-hand run is added in M3 by E05 (the sng level schedule is built there); bot line-up coverage by E06. At the permitted worst case (100,000 hands per 60 minutes) one million hands take about 10 hours, over the 6-hour limit of a GitHub-hosted job: the nightly run is sharded into parallel jobs (e.g. one per table size or 10 x 100,000-hand shards) each with a deterministic per-shard seed, or is run outside CI on the reference machine. Throughput: 100,000 6-max hands in at most 60 minutes on the reference machine (Apple-silicon Mac). Actor 'project owner' = the single Learner in the role of the person who builds and maintains the trainer (requirements.md has only the Learner user class).",
+      "acs": [
+        {
+          "text": "Given an on-demand run of 1,000,000 cash-game hands spread over table sizes 2 to 10, When it completes, Then it reports zero invariant violations and exits 0",
+          "tags": [
+            "REQ-056.2"
+          ]
+        },
+        {
+          "text": "Given the CI workflow's nightly schedule or a manual dispatch, When the 1,000,000-hand run executes as parallel shards with deterministic per-shard seeds, Then every shard finishes within the 6-hour GitHub job limit, the combined report covers all 1,000,000 hands, and any invariant violation fails the workflow and prints the replay code and action history",
+          "tags": [
+            "REQ-056.2",
+            "REQ-062.2"
+          ]
+        },
+        {
+          "text": "Given the same shard seed and options, When a shard is re-run, Then its output is byte-identical",
+          "tags": [
+            "REQ-062.4"
+          ]
+        },
+        {
+          "text": "Given the reference machine, When `npm run playtest -- --hands 100000 --size 6` runs, Then it completes in at most 60 minutes",
+          "tags": [
+            "REQ-062.5"
+          ]
+        }
+      ],
+      "dod": [
+        {
+          "text": "Timing of the 100,000-hand 6-max run is recorded in the story notes for the reference machine",
+          "tags": [
+            "REQ-062.5"
+          ]
+        }
+      ],
+      "deps": [
+        "E01-S11",
+        "E01-S13",
+        "E01-S14",
+        "E01-S15",
+        "E01-S16"
+      ],
+      "notes": "If sharding in CI proves impractical, run the 1,000,000 hands on the reference machine and attach the report to the story; E05 extends this run with sit-and-go hands in M3."
+    },
+    {
+      "key": "E01-S18",
+      "title": "Deploy the app to GitHub Pages from main when all checks pass",
+      "type": "feature",
+      "milestone": "M3",
+      "priority": "Medium",
+      "risk": "low",
+      "skeleton": false,
+      "role": "learner",
+      "want": "each green build of main published to GitHub Pages",
+      "benefit": "I always open the latest working version of the trainer",
+      "context": "The GitHub Actions workflow deploys the `npm run build` output to GitHub Pages only from the main branch and only when lint, typecheck, tests, the 10,000-hand playtest and the build all pass.",
+      "acs": [
+        {
+          "text": "Given a push to main where lint, typecheck, tests, the 10,000-hand playtest and the build all pass, When the workflow finishes, Then the build is deployed to GitHub Pages",
+          "tags": [
+            "REQ-064.3"
+          ]
+        },
+        {
+          "text": "Given a push to main where any check fails, When the workflow finishes, Then no deployment happens",
+          "tags": [
+            "REQ-064.3"
+          ]
+        },
+        {
+          "text": "Given a push to another branch or a pull request where all checks pass, When the workflow finishes, Then no deployment happens",
+          "tags": [
+            "REQ-064.3"
+          ]
+        }
+      ],
+      "dod": [],
+      "deps": [
+        "E01-S08"
+      ],
+      "notes": "Set Vite `base` to the Pages path; service-worker scope is handled by E13."
+    }
+  ]
+}

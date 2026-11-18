@@ -1,0 +1,289 @@
+{
+  "scope": "E02",
+  "round": 2,
+  "clauses": [
+    {
+      "clause": "REQ-001.1",
+      "verdict": "covered",
+      "evidence": "E02-S12#AC1"
+    },
+    {
+      "clause": "REQ-001.2",
+      "verdict": "covered",
+      "evidence": "E02-S12#AC2"
+    },
+    {
+      "clause": "REQ-001.3",
+      "verdict": "covered",
+      "evidence": "E02-S12#AC3, E02-S12#AC4, E02-S12#AC5"
+    },
+    {
+      "clause": "REQ-002.1",
+      "verdict": "covered",
+      "evidence": "E02-S01#AC1"
+    },
+    {
+      "clause": "REQ-002.2",
+      "verdict": "covered",
+      "evidence": "E02-S01#AC4"
+    },
+    {
+      "clause": "REQ-002.4",
+      "verdict": "covered",
+      "evidence": "E02-S08#AC1"
+    },
+    {
+      "clause": "REQ-002.5",
+      "verdict": "covered",
+      "evidence": "E02-S08#AC2"
+    },
+    {
+      "clause": "REQ-003.1",
+      "verdict": "covered",
+      "evidence": "E02-S16#AC1, E02-S16#AC2, E02-S16#AC3"
+    },
+    {
+      "clause": "REQ-003.2",
+      "verdict": "covered",
+      "evidence": "E02-S16#AC4"
+    },
+    {
+      "clause": "REQ-003.3",
+      "verdict": "covered",
+      "evidence": "E02-S17#AC1, E02-S17#AC2, E02-S17#AC3"
+    },
+    {
+      "clause": "REQ-003.4",
+      "verdict": "covered",
+      "evidence": "E02-S16#AC6"
+    },
+    {
+      "clause": "REQ-004.1",
+      "verdict": "covered",
+      "evidence": "E02-S09#AC4"
+    },
+    {
+      "clause": "REQ-004.2",
+      "verdict": "covered",
+      "evidence": "E02-S08#AC3, E02-S08#AC6, E02-S15#AC2, E02-S15#AC4"
+    },
+    {
+      "clause": "REQ-004.3",
+      "verdict": "covered",
+      "evidence": "E02-S08#AC4; SNG level restore E05-S03#AC4 (now tagged, round-1 finding resolved)"
+    },
+    {
+      "clause": "REQ-004.4",
+      "verdict": "covered",
+      "evidence": "E02-S09#AC1, E02-S09#AC2, E02-S09#AC3, E02-S09#AC5"
+    },
+    {
+      "clause": "REQ-004.6",
+      "verdict": "covered",
+      "evidence": "E02-S08#AC5, E02-S15#AC5"
+    },
+    {
+      "clause": "REQ-004.9",
+      "verdict": "covered",
+      "evidence": "E02-S15#AC1, E02-S15#AC2, E02-S15#AC3, E02-S15#AC4, E02-S15#AC5"
+    },
+    {
+      "clause": "REQ-005.1",
+      "verdict": "covered",
+      "evidence": "E02-S04#AC1, E02-S04#AC5 (options, config carries type); 'default is last used' is actually confirmed by E02-S10#AC5 but that AC is tagged REQ-012.1 only (see finding)"
+    },
+    {
+      "clause": "REQ-005.2",
+      "verdict": "covered",
+      "evidence": "E02-S02#AC1, E02-S02#AC5, E02-S02#AC6"
+    },
+    {
+      "clause": "REQ-005.3",
+      "verdict": "covered",
+      "evidence": "E02-S02#AC2, E02-S02#AC3, E02-S02#AC4"
+    },
+    {
+      "clause": "REQ-005.4",
+      "verdict": "covered",
+      "evidence": "E07-S05#AC4, E02-S02#AC2, E02-S02#AC3, E02-S02#AC4"
+    },
+    {
+      "clause": "REQ-006.1",
+      "verdict": "covered",
+      "evidence": "E02-S01#AC5, E02-S03#AC1, E02-S03#AC3"
+    },
+    {
+      "clause": "REQ-006.2",
+      "verdict": "covered",
+      "evidence": "E02-S03#AC2, E02-S03#AC3"
+    },
+    {
+      "clause": "REQ-006.3",
+      "verdict": "covered",
+      "evidence": "E02-S03#AC5, E02-S14#AC1, E02-S14#AC3"
+    },
+    {
+      "clause": "REQ-006.4",
+      "verdict": "covered",
+      "evidence": "E02-S04#AC3, E02-S04#AC4, E02-S04#AC5"
+    },
+    {
+      "clause": "REQ-007.1",
+      "verdict": "covered",
+      "evidence": "E03-S01#AC1, E03-S01#AC2, E02-S03#AC4"
+    },
+    {
+      "clause": "REQ-009.1",
+      "verdict": "covered",
+      "evidence": "E06-S06#AC1, E06-S06#AC2, E06-S06#AC3, E06-S06#AC6, E02-S05#AC1, E02-S05#AC2, E02-S05#AC3, E02-S05#AC6"
+    },
+    {
+      "clause": "REQ-009.2",
+      "verdict": "covered",
+      "evidence": "E02-S06#AC1"
+    },
+    {
+      "clause": "REQ-009.3",
+      "verdict": "covered",
+      "evidence": "E02-S06#AC2, E02-S06#AC3"
+    },
+    {
+      "clause": "REQ-009.4",
+      "verdict": "covered",
+      "evidence": "E06-S06#AC5, E02-S05#AC5, E06-S08#AC4"
+    },
+    {
+      "clause": "REQ-009.5",
+      "verdict": "covered",
+      "evidence": "E02-S07#AC1, E02-S07#AC2, E02-S07#AC3"
+    },
+    {
+      "clause": "REQ-009.6",
+      "verdict": "covered",
+      "evidence": "E06-S07#AC1, E06-S07#AC2, E06-S07#AC3, E06-S07#AC4, E02-S05#AC6, E02-S06#AC3, E02-S06#AC4, E02-S07#AC3"
+    },
+    {
+      "clause": "REQ-009.7",
+      "verdict": "covered",
+      "evidence": "E06-S06#AC4, E02-S05#AC4"
+    },
+    {
+      "clause": "REQ-009.8",
+      "verdict": "covered",
+      "evidence": "E06-S06#AC1, E06-S06#AC2, E06-S06#AC3, E02-S05#AC2"
+    },
+    {
+      "clause": "REQ-010.1",
+      "verdict": "covered",
+      "evidence": "E02-S13#AC1, E02-S13#AC3"
+    },
+    {
+      "clause": "REQ-010.2",
+      "verdict": "covered",
+      "evidence": "E02-S13#AC2, E02-S13#AC3"
+    },
+    {
+      "clause": "REQ-010.3",
+      "verdict": "covered",
+      "evidence": "E03-S03#AC3, E02-S13#AC3"
+    },
+    {
+      "clause": "REQ-011.1",
+      "verdict": "covered",
+      "evidence": "E03-S13#AC1, E03-S13#AC2, E02-S11#AC5, E04-S05#DoD1"
+    },
+    {
+      "clause": "REQ-011.2",
+      "verdict": "covered",
+      "evidence": "E03-S18#AC1, E03-S18#AC2, E02-S11#AC4"
+    },
+    {
+      "clause": "REQ-012.1",
+      "verdict": "covered",
+      "evidence": "E02-S10#AC1, E02-S10#AC3, E02-S10#AC4, E02-S10#AC5"
+    },
+    {
+      "clause": "REQ-012.2",
+      "verdict": "covered",
+      "evidence": "E02-S04#AC2, E02-S05#AC1, E02-S10#AC2, E02-S11#AC1"
+    },
+    {
+      "clause": "REQ-012.3",
+      "verdict": "covered",
+      "evidence": "E02-S11#AC2, E02-S11#AC3, E12-S04#AC2, E12-S04#AC5"
+    },
+    {
+      "clause": "REQ-015.1",
+      "verdict": "covered",
+      "evidence": "E01-S09#AC1, E01-S09#AC4, E02-S02#AC6"
+    },
+    {
+      "clause": "REQ-044.7",
+      "verdict": "covered",
+      "evidence": "E10-S01#AC5, E10-S01#AC6, E02-S16#AC4, E02-S16#AC5"
+    },
+    {
+      "clause": "REQ-060.3",
+      "verdict": "covered",
+      "evidence": "E02-S01#AC3 (charcoal background, red accent, logo), E02-S12#AC1; app icon E13"
+    },
+    {
+      "clause": "REQ-061.1",
+      "verdict": "covered",
+      "evidence": "E12-S01#DoD2, E02-S14#AC1, E02-S14#AC2, E11-S01#DoD2, E13-S12#AC6"
+    },
+    {
+      "clause": "REQ-061.3",
+      "verdict": "covered",
+      "evidence": "E02-S01#AC2, E02-S12#AC1, E13-S06#AC6"
+    }
+  ],
+  "findings": [
+    {
+      "id": "J-E02-E02-S14-screen-registry",
+      "severity": "MEDIUM",
+      "class": "weak-ac",
+      "owner": "weaver",
+      "location": "E02-S14#AC1",
+      "evidence": "The play-money check (TASK-2.15) only visits screens 'registered in the app's screen list'; later epics are asked to register via Notes. No AC or DoD item fails if a screen or dialog is left unregistered, so REQ-006.3/REQ-061.1 on Statistics, Settings and later dialogs is not enforced by this story.",
+      "fix": "Add an AC that the registry equals the set of routes and dialogs in the built app (an unregistered screen fails the check), or a global DoD item for new screens."
+    },
+    {
+      "id": "J-E02-E02-S10-AC5-missing-tag",
+      "severity": "LOW",
+      "class": "missing-tag",
+      "owner": "weaver",
+      "location": "E02-S10#AC5",
+      "evidence": "REQ-005.1 says the game type default is the last used value; E02-S10#AC5 is the only AC that confirms it but is tagged REQ-012.1 only, so the RTM shows REQ-005.1 (Must) covered by option-list ACs alone.",
+      "fix": "Tag E02-S10#AC5 with REQ-005.1."
+    },
+    {
+      "id": "J-E02-E02-S10-AC5-hidden-dependency",
+      "severity": "LOW",
+      "class": "hidden-dependency",
+      "owner": "weaver",
+      "location": "E02-S10#AC5",
+      "evidence": "AC5 starts from 'the most recently started session was a sit-and-go'; sit-and-go play is E05 (wave 7, m-2/M3) while E02-S10 (wave 6) depends only on TASK-2.4 and TASK-2.8. It passes only with a stored-config fixture.",
+      "fix": "State in the AC that the last configuration is a stored fixture, or add an E05 dependency."
+    },
+    {
+      "id": "J-E02-E02-S02-AC6-false-tag",
+      "severity": "LOW",
+      "class": "false-tag",
+      "owner": "weaver",
+      "location": "E02-S02#AC6",
+      "evidence": "AC6 (heads-up button posts the small blind) tags REQ-005.2 (players options are 2 to 10); it would pass even if the options were wrong. REQ-005.2 is already confirmed by AC1 and AC5.",
+      "fix": "Drop REQ-005.2 from AC6, keep REQ-015.1."
+    },
+    {
+      "id": "J-E02-E02-S01-AC3-implementation-ac",
+      "severity": "LOW",
+      "class": "imperative-ac",
+      "owner": "weaver",
+      "location": "E02-S01#AC3",
+      "evidence": "AC3 'When its rendered styles are read' prescribes an implementation mechanism and gives no exact colour values for 'theme charcoal' / 'red primary accent'.",
+      "fix": "Reference the brand token values and state them observably (background colour hex, accent hex)."
+    }
+  ],
+  "summary": "All 48 clauses covered. Round-1 HIGH (E02-S09 missing dependency on E10-S01) is resolved; S08/S04/S03 findings resolved by moving the Home control, no-real-money audit and last-config work to their own stories; Home snapshot (E02-S16/S17) depends on E10 stories as required and E05/E12 depend on it. Remaining: no registry-completeness AC for the play-money check (MEDIUM) and LOW tag/wording items."
+}

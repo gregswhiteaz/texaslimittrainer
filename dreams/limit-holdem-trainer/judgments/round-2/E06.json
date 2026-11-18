@@ -1,0 +1,224 @@
+{
+  "scope": "E06",
+  "round": 2,
+  "clauses": [
+    {
+      "clause": "REQ-007.5",
+      "verdict": "covered",
+      "evidence": "E06-S08#AC1, E06-S08#AC2, E06-S08#AC3, E06-S08#AC4, E06-S08#AC5, E06-S08#AC6"
+    },
+    {
+      "clause": "REQ-007.7",
+      "verdict": "covered",
+      "evidence": "E06-S08#AC7"
+    },
+    {
+      "clause": "REQ-009.1",
+      "verdict": "covered",
+      "evidence": "E06-S06#AC1, E06-S06#AC2, E06-S06#AC3, E06-S06#AC6, E02-S05#AC1, E02-S05#AC2, E02-S05#AC3, E02-S05#AC6"
+    },
+    {
+      "clause": "REQ-009.4",
+      "verdict": "covered",
+      "evidence": "E06-S06#AC5, E02-S05#AC5, E06-S08#AC4"
+    },
+    {
+      "clause": "REQ-009.6",
+      "verdict": "covered",
+      "evidence": "E06-S07#AC1, E06-S07#AC2, E06-S07#AC3, E06-S07#AC4, E02-S05#AC6, E02-S06#AC3, E02-S06#AC4, E02-S07#AC3"
+    },
+    {
+      "clause": "REQ-009.7",
+      "verdict": "covered",
+      "evidence": "E06-S06#AC4, E02-S05#AC4"
+    },
+    {
+      "clause": "REQ-009.8",
+      "verdict": "covered",
+      "evidence": "E06-S06#AC1, E06-S06#AC2, E06-S06#AC3, E02-S05#AC2"
+    },
+    {
+      "clause": "REQ-025.1",
+      "verdict": "covered",
+      "evidence": "E06-S01#AC4 (hidden cards changed -> same action); view exclusion itself asserted in E01-S06"
+    },
+    {
+      "clause": "REQ-026.1",
+      "verdict": "covered",
+      "evidence": "E06-S01#AC1, E06-S01#AC2, E06-S01#AC3, E06-S01#AC5, E06-S02#AC3, E06-S02#AC4"
+    },
+    {
+      "clause": "REQ-026.2",
+      "verdict": "covered",
+      "evidence": "E06-S03#AC2, E06-S03#AC3, E06-S03#AC5, E06-S04#AC2, E06-S04#AC3, E06-S04#AC5, E06-S05#AC2, E06-S05#AC3, E06-S05#AC4"
+    },
+    {
+      "clause": "REQ-026.3",
+      "verdict": "covered",
+      "evidence": "E06-S02#AC1, E06-S03#AC1, E06-S03#AC4, E06-S04#AC1, E06-S04#AC4, E06-S05#AC1, E06-S05#AC5"
+    },
+    {
+      "clause": "REQ-027.1",
+      "verdict": "covered",
+      "evidence": "E06-S16#AC1, E06-S17#AC3"
+    },
+    {
+      "clause": "REQ-027.2",
+      "verdict": "covered",
+      "evidence": "E06-S17#AC1"
+    },
+    {
+      "clause": "REQ-027.3",
+      "verdict": "covered",
+      "evidence": "E06-S17#AC2"
+    },
+    {
+      "clause": "REQ-027.4",
+      "verdict": "covered",
+      "evidence": "E06-S16#AC2, E06-S17#AC3"
+    },
+    {
+      "clause": "REQ-027.5",
+      "verdict": "covered",
+      "evidence": "E06-S09#AC1, E06-S09#AC2, E06-S09#AC5, E06-S17#AC3, E06-S17#DoD1"
+    },
+    {
+      "clause": "REQ-027.6",
+      "verdict": "covered",
+      "evidence": "E06-S09#AC3"
+    },
+    {
+      "clause": "REQ-028.1",
+      "verdict": "covered",
+      "evidence": "E06-S02#AC5, E06-S02#AC6, E06-S15#AC3"
+    },
+    {
+      "clause": "REQ-028.2",
+      "verdict": "covered",
+      "evidence": "E06-S15#AC1, E06-S15#AC2, E06-S15#AC3"
+    },
+    {
+      "clause": "REQ-028.3",
+      "verdict": "covered",
+      "evidence": "E06-S02#AC2, E06-S02#AC3, E06-S09#AC4"
+    },
+    {
+      "clause": "REQ-029.1",
+      "verdict": "covered",
+      "evidence": "E06-S13#AC1, E06-S13#AC2"
+    },
+    {
+      "clause": "REQ-029.2",
+      "verdict": "covered",
+      "evidence": "E06-S02#AC7"
+    },
+    {
+      "clause": "REQ-030.1",
+      "verdict": "covered",
+      "evidence": "E06-S12#AC1, E06-S12#DoD1"
+    },
+    {
+      "clause": "REQ-030.2",
+      "verdict": "covered",
+      "evidence": "E06-S12#AC2, E06-S12#DoD1"
+    },
+    {
+      "clause": "REQ-030.3",
+      "verdict": "covered",
+      "evidence": "E06-S12#AC3, E06-S12#DoD1"
+    },
+    {
+      "clause": "REQ-030.4",
+      "verdict": "covered",
+      "evidence": "E06-S10#AC1, E06-S10#AC3"
+    },
+    {
+      "clause": "REQ-055.3",
+      "verdict": "covered",
+      "evidence": "E06-S14#AC1, E06-S14#AC2, E06-S14#DoD1, E13-S11#AC3"
+    },
+    {
+      "clause": "REQ-056.1",
+      "verdict": "covered",
+      "evidence": "DoD-global#6, E01-S08#AC1, E01-S08#AC2, E01-S08#AC4, E06-S01#AC5"
+    },
+    {
+      "clause": "REQ-056.2",
+      "verdict": "covered",
+      "evidence": "E06-S11#AC1 (cash, all presets, sizes 2-10); sit-and-go line-ups by E05-S11#AC1-3 (round-1 hidden dependency resolved: S11 is now cash-only and notes E05 adds SNG)"
+    },
+    {
+      "clause": "REQ-061.2",
+      "verdict": "covered",
+      "evidence": "DoD-global#9, E07-S01#DoD1, E07-S07#DoD1, E06-S05#DoD1, E07-S05#DoD1, E07-S12#DoD1, E07-S14#DoD1, E10-S04#DoD1, E07-S15#DoD1, E10-S06#DoD1, E10-S12#DoD1"
+    },
+    {
+      "clause": "REQ-062.1",
+      "verdict": "covered",
+      "evidence": "E01-S07#AC1, E01-S07#AC2, E01-S09#AC4, E01-S16#AC6, E06-S06#AC6, E06-S06#AC7, E06-S09#AC2, E07-S13#AC1, E06-S12#AC4"
+    },
+    {
+      "clause": "REQ-062.3",
+      "verdict": "covered",
+      "evidence": "E06-S10#AC1, E06-S10#AC2, E06-S10#AC4, E06-S09#AC1"
+    },
+    {
+      "clause": "REQ-062.4",
+      "verdict": "covered",
+      "evidence": "E01-S07#AC3, E01-S07#AC4, E01-S17#AC3, E06-S08#AC5, E07-S13#AC5"
+    },
+    {
+      "clause": "REQ-062.5",
+      "verdict": "covered",
+      "evidence": "E01-S17#AC4, E01-S17#DoD1, E06-S11#AC2, E06-S11#DoD1"
+    }
+  ],
+  "findings": [
+    {
+      "id": "J-E06-E06-S02-too-big",
+      "severity": "MEDIUM",
+      "class": "too-big",
+      "owner": "weaver",
+      "location": "E06-S02",
+      "evidence": "E06-S02 (7 ACs, REQ-026/028/029) still bundles style-file format and validation (AC1-2), TAG mixing (AC3-4), replay-seeded generator (AC5-6) and the typical-player advice basis (AC7). Round-1 split recommendation was not applied; S09 and S06 were relieved but S02 was only trimmed by one AC.",
+      "fix": "Split into (a) style file format + validator + TAG mixing and (b) seeded per-seat generator + typical-player basis (REQ-028.1, REQ-029.2)."
+    },
+    {
+      "id": "J-E06-E06-S06-AC6-too-big",
+      "severity": "LOW",
+      "class": "too-big",
+      "owner": "weaver",
+      "location": "E06-S06",
+      "evidence": "E06-S06 (7 ACs) covers preset seating (AC1-4), unique names (AC5) and the --lineup CLI option (AC6-7); three small capabilities, acceptable but near the limit. Round-1 replay AC was moved out (now E06-S15), so the main finding is resolved.",
+      "fix": "Optionally move the CLI option (AC6-7) to its own story."
+    },
+    {
+      "id": "J-E06-REQ-007.5-ambiguous-requirement",
+      "severity": "LOW",
+      "class": "ambiguous-requirement",
+      "owner": "user",
+      "location": "E06-S08#AC3",
+      "evidence": "REQ-007.5 draws a replacement bot's style 'from the session's line-up preset', and REQ-009.7 says Tough at heads-up seats one TAG. E06-S08#AC3 states Tough replacements are TAG or Maniac with no heads-up exception, so a Maniac may join a heads-up Tough table that the requirement says is TAG-only.",
+      "fix": "User to confirm whether the heads-up Tough refill draws from TAG only or from TAG and Maniac."
+    },
+    {
+      "id": "J-E06-E06-S11-AC1-throughput",
+      "severity": "LOW",
+      "class": "feasibility",
+      "owner": "weaver",
+      "location": "E06-S11#AC1",
+      "evidence": "REQ-062.5 allows 100,000 6-max hands in 60 minutes; a 1,000,000-hand run is then up to 10 hours serial. AC1 says 'nightly or on-demand' without a time budget or the parallel-worker mechanism that the Notes only suggest, so CI feasibility is unverified.",
+      "fix": "Add an AC or DoD item that the 1,000,000-hand run completes within a stated wall-clock budget on the CI/reference machine, with deterministic output for the seed."
+    },
+    {
+      "id": "J-E06-E06-S16-seeds-not-in-ac",
+      "severity": "LOW",
+      "class": "missing-ac",
+      "owner": "weaver",
+      "location": "E06-S16, E06-S17",
+      "evidence": "Both Notes say 'confirm the bands with two or three extra seeds' but no AC or DoD item requires it, so a lucky seed 42 passes every AC.",
+      "fix": "Add an AC that the same check passes for at least two further seeds, tagged REQ-027.5."
+    }
+  ],
+  "summary": "All 34 clauses covered by tagged ACs. Round-1 HIGH (E06-S11 needed sit-and-go from M3) is resolved: S11 is cash-only and E05-S11 carries the sit-and-go line-up coverage of REQ-056.2. S09 split into S09/S16/S17, S06 relieved, personas now learner-framed, S12 documents --lineup tokens, REQ-009.8 added. Remaining: S02 still bundles several capabilities (MEDIUM) plus LOW notes."
+}

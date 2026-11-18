@@ -1,0 +1,663 @@
+{
+  "epic": "E13",
+  "stories": [
+    {
+      "key": "E13-S01",
+      "title": "Ask the browser to keep my history on first launch",
+      "type": "feature",
+      "milestone": "M2",
+      "priority": "High",
+      "risk": "medium",
+      "skeleton": false,
+      "role": "learner",
+      "want": "the app to request persistent storage when I first launch it",
+      "benefit": "the browser does not silently clear my training history under storage pressure",
+      "context": "On first launch (no stored record of a previous request) the app calls navigator.storage.persist() once and stores the result (granted true/false) in the local app-meta store. If the API is missing or the call rejects, the result is stored as not granted. E12-S09 shows a Settings warning when the stored result is not granted. Stored in IndexedDB next to the stores created by E03-S09.",
+      "acs": [
+        {
+          "text": "Given a fresh install in Chromium, When the app is launched, Then navigator.storage.persist is called exactly once and its result is stored as the persistent-storage flag",
+          "tags": [
+            "REQ-052.4"
+          ]
+        },
+        {
+          "text": "Given a test browser in which navigator.storage.persist resolves false, When the app is launched the first time, Then the stored flag is not granted",
+          "tags": [
+            "REQ-052.4"
+          ]
+        },
+        {
+          "text": "Given a test browser in which navigator.storage.persist is undefined or rejects, When the app is launched the first time, Then the stored flag is not granted and Home opens",
+          "tags": [
+            "REQ-052.4"
+          ]
+        },
+        {
+          "text": "Given the flag was stored on first launch, When the app is closed and relaunched, Then navigator.storage.persist is not called again and the stored flag is unchanged",
+          "tags": [
+            "REQ-052.4"
+          ]
+        }
+      ],
+      "dod": [],
+      "deps": [
+        "E03-S09"
+      ],
+      "notes": "Reset all data (E12) clears stores; on the next launch the request is made again because no record exists."
+    },
+    {
+      "key": "E13-S02",
+      "title": "Return Home from an unexpected error without losing completed hands",
+      "type": "feature",
+      "milestone": "M2",
+      "priority": "High",
+      "risk": "high",
+      "skeleton": false,
+      "role": "learner",
+      "want": "an error screen with Return Home when something unexpected breaks",
+      "benefit": "I can recover and continue my session from the last completed hand",
+      "context": "A top-level error boundary plus window error / unhandledrejection handlers catch unexpected errors on any screen and show an error screen with a short message and a Return Home button (no stack traces). Completed hands are already stored before the next deal (REQ-052.1, E03-S09) and session state after each hand (E03-S11). Return Home leaves the session paused, so Home shows Resume session; resuming starts the hand after the last completed one with stacks as at its end, exactly like closing the app mid-hand (REQ-004.2). The unfinished hand is not stored. Tests use a test build with an error-injection hook (e.g. throw during a bot action or while rendering the Session Report).",
+      "acs": [
+        {
+          "text": "Given a test build that throws an unexpected error during a bot action in hand 15, When the error occurs, Then an error screen with a message and a Return Home button replaces the table",
+          "tags": [
+            "REQ-056.3"
+          ]
+        },
+        {
+          "text": "Given the error screen after an error in hand 15, When the user chooses Return Home, Then Home opens and shows Resume session with hands played 14",
+          "tags": [
+            "REQ-056.3"
+          ]
+        },
+        {
+          "text": "Given the user returned Home after an error in hand 15, When the user chooses Resume session, Then hand 15 is dealt fresh with every stack as at the end of hand 14 and hand records 1 to 14 are all stored and unchanged",
+          "tags": [
+            "REQ-056.3"
+          ]
+        },
+        {
+          "text": "Given a test build that throws while the Session Report screen renders, When the error occurs, Then the error screen with Return Home is shown and Return Home opens Home",
+          "tags": [
+            "REQ-056.3"
+          ]
+        },
+        {
+          "text": "Given the error screen is shown, When its text is read, Then it contains no stack trace or source file names and Return Home is a native button reachable with Tab",
+          "tags": [
+            "REQ-056.3",
+            "REQ-057.2"
+          ]
+        }
+      ],
+      "dod": [],
+      "deps": [
+        "E02-S08",
+        "E03-S11",
+        "E10-S01"
+      ],
+      "notes": "E10-S01 discards 0-hand sessions: an error during hand 1 leaves no Resume entry."
+    },
+    {
+      "key": "E13-S03",
+      "title": "Stop dealing when the last hand could not be saved",
+      "type": "feature",
+      "milestone": "M3",
+      "priority": "Medium",
+      "risk": "high",
+      "skeleton": false,
+      "role": "learner",
+      "want": "to be told when the last hand could not be saved before any new hand is dealt",
+      "benefit": "I never keep playing while my history is silently lost",
+      "context": "Applies to the hand-record write (E03-S09) and the session-state write after each hand (E03-S11). If either write fails (e.g. QuotaExceededError, transaction abort), no new hand is dealt and a dialog states that the last hand could not be saved, offering Retry and Leave table. Retry repeats the failed write(s); on success the next hand is dealt as usual, on failure the message stays. Leave table ends the session as Leave table does elsewhere (REQ-004.5, E10-S01). Tests use a test build whose storage adapter can be made to fail.",
+      "acs": [
+        {
+          "text": "Given a test build where the write of hand 9's record fails with a quota error, When hand 9 ends, Then hand 10 is not dealt and a message states that the last hand could not be saved, with Retry and Leave table",
+          "tags": [
+            "REQ-053.2"
+          ]
+        },
+        {
+          "text": "Given a test build where the session-state write after hand 9 fails, When hand 9 ends, Then hand 10 is not dealt and the same message with Retry and Leave table is shown",
+          "tags": [
+            "REQ-053.2"
+          ]
+        },
+        {
+          "text": "Given the message is shown and storage writes succeed again, When the user chooses Retry, Then hand 9's record and the session state are stored and hand 10 is dealt",
+          "tags": [
+            "REQ-053.2"
+          ]
+        },
+        {
+          "text": "Given the message is shown and storage still fails, When the user chooses Retry, Then no hand is dealt and the message with Retry and Leave table is shown again",
+          "tags": [
+            "REQ-053.2"
+          ]
+        },
+        {
+          "text": "Given the message is shown, When the user chooses Leave table, Then the session ends, no further hand is dealt and the Leave table flow runs",
+          "tags": [
+            "REQ-053.2"
+          ]
+        },
+        {
+          "text": "Given the message is shown for 60 seconds with no user input, When the table is observed, Then no hand has been dealt and no bot has acted",
+          "tags": [
+            "REQ-053.2"
+          ]
+        }
+      ],
+      "dod": [],
+      "deps": [
+        "E03-S09",
+        "E03-S11",
+        "E10-S01"
+      ],
+      "notes": "Report writes on Leave table may also fail; if so, show the same message rather than a report with missing data."
+    },
+    {
+      "key": "E13-S04",
+      "title": "Migrate my stored data in order when a new version changes the schema",
+      "type": "feature",
+      "milestone": "M3",
+      "priority": "Medium",
+      "risk": "high",
+      "skeleton": false,
+      "role": "learner",
+      "want": "my stored history migrated to each new schema version at launch",
+      "benefit": "app updates never wipe or corrupt my training history",
+      "context": "Every local store records its schema version: settings (E12), last configuration (E02-S10), sessions incl. the paused session (E03-S11), hand records (E03-S09), session reports (E10), UI preferences such as the action-log collapse state (E04-S02) and app meta (persistent-storage flag, last-run app version). At launch, while the splash shows (E02-S12) and before Home, the app compares stored versions with the current ones and runs each registered migration step in order (N to N+1, N+1 to N+2, ...). A store already at the current version runs no migration. Fit: a fixture of version N data migrates to N+1 with record counts and recomputed statistics unchanged.",
+      "acs": [
+        {
+          "text": "Given a fresh install, When the app has launched, Then each store (settings, last configuration, sessions, hand records, session reports, UI preferences, app meta) records a schema version equal to the current version",
+          "tags": [
+            "REQ-054.1"
+          ]
+        },
+        {
+          "text": "Given a fixture of version 1 data with 1,000 hand records, 5 sessions and 4 reports and a test build at version 3 with migrations 1→2 and 2→3, When the app is launched, Then step 1→2 runs before step 2→3, each runs exactly once, and every store records version 3",
+          "tags": [
+            "REQ-054.2",
+            "REQ-054.1"
+          ]
+        },
+        {
+          "text": "Given the migrated fixture, When record counts and the style stats, BB/100 and error rates are recomputed, Then the counts are 1,000, 5 and 4 and every value equals the value computed before migration",
+          "tags": [
+            "REQ-054.2"
+          ]
+        },
+        {
+          "text": "Given stores already at the current version, When the app is launched, Then no migration step runs and Home opens",
+          "tags": [
+            "REQ-054.2"
+          ]
+        },
+        {
+          "text": "Given a test build whose migrations run while the splash is shown, When the app is launched with version 1 data, Then Home opens only after all steps have completed",
+          "tags": [
+            "REQ-054.2"
+          ]
+        }
+      ],
+      "dod": [],
+      "deps": [
+        "E03-S09",
+        "E03-S11",
+        "E10-S01",
+        "E02-S12",
+        "E02-S10",
+        "E04-S02"
+      ],
+      "notes": "IndexedDB's versionchange transaction is atomic: run all steps inside it so a failure rolls everything back (E13-S05). Each new app version that changes a store must add a migration step and a fixture test."
+    },
+    {
+      "key": "E13-S05",
+      "title": "Keep my old data intact when a migration fails",
+      "type": "feature",
+      "milestone": "M3",
+      "priority": "Medium",
+      "risk": "high",
+      "skeleton": false,
+      "role": "learner",
+      "want": "my existing data left untouched when a migration fails",
+      "benefit": "a broken update never destroys my history and can be fixed by the next version",
+      "context": "If any migration step throws, the whole migration is rolled back so stored data stays exactly as it was before the launch, and instead of Home the app shows an error naming the failing version step (e.g. 'Could not update your data from version 2 to 3'). Home is not shown and no session can start, so nothing writes to the old data. A later build with a fixed migration migrates the same data normally.",
+      "acs": [
+        {
+          "text": "Given version 1 data and a test build whose step 2→3 throws, When the app is launched, Then an error stating the failing step from version 2 to version 3 is shown and Home is not shown",
+          "tags": [
+            "REQ-054.3"
+          ]
+        },
+        {
+          "text": "Given that failed launch, When the stored data is read, Then every store is byte-identical to the version 1 data before the launch and records version 1",
+          "tags": [
+            "REQ-054.3"
+          ]
+        },
+        {
+          "text": "Given that failed launch, When the same data is opened by a test build with a working step 2→3, Then migration completes to version 3 and Home opens",
+          "tags": [
+            "REQ-054.3"
+          ]
+        },
+        {
+          "text": "Given the migration error screen, When it is checked, Then it offers no control that starts a session or writes data",
+          "tags": [
+            "REQ-054.3"
+          ]
+        }
+      ],
+      "dod": [],
+      "deps": [
+        "E13-S04"
+      ],
+      "notes": ""
+    },
+    {
+      "key": "E13-S06",
+      "title": "Install TLH Trainer to the Dock from Chrome or Safari",
+      "type": "feature",
+      "milestone": "M3",
+      "priority": "Medium",
+      "risk": "medium",
+      "skeleton": false,
+      "role": "learner",
+      "want": "to install TLH Trainer as an app in my Dock",
+      "benefit": "I can open it in its own window like any other Mac app",
+      "context": "Adds a web app manifest (name 'TLH Trainer', short_name, start_url and scope under the GitHub Pages base path from E01-S18, display standalone, charcoal background_color, theme colour from the brand) and app icons generated at build time from brand/tlh-logo.jpg (e.g. 192, 512 and maskable PNGs plus a 180 px apple-touch-icon). Safari (macOS Sonoma or later) installs via File > Add to Dock, which reads the page title, the apple-touch-icon link and the manifest; the Dock app opens in its own window. Chrome installs from the address-bar install control. The generated icons are added to the image-asset allow-list of E04-S03 so the build check passes and still rejects any other image (kept in this story because generating the icons is what requires the allow-list change). Installing itself cannot be automated in Playwright, so the two install paths are confirmed by a recorded manual check on macOS in addition to the automated manifest and meta-tag checks.",
+      "acs": [
+        {
+          "text": "Given `npm run build`, When the manifest in the output is validated, Then it has name \"TLH Trainer\", start_url and scope under the deployed base path, display standalone and icons of 192 and 512 px",
+          "tags": [
+            "REQ-060.2",
+            "REQ-063.4"
+          ]
+        },
+        {
+          "text": "Given the built app served over HTTPS in Chromium, When it has loaded, Then the browser reports it installable (the beforeinstallprompt event fires)",
+          "tags": [
+            "REQ-060.2"
+          ]
+        },
+        {
+          "text": "Given the built app loaded in WebKit, When its document head is read, Then it has the title \"TLH Trainer\", an apple-touch-icon link to the 180 px icon generated from the logo and a link to the manifest",
+          "tags": [
+            "REQ-060.2",
+            "REQ-060.3",
+            "REQ-063.4"
+          ]
+        },
+        {
+          "text": "Given the app is added to the Dock from Safari on macOS, When it is launched from the Dock, Then it opens in its own window without browser tabs or address bar, named 'TLH Trainer' with the TLH logo icon (recorded manual check)",
+          "tags": [
+            "REQ-060.2",
+            "REQ-060.3"
+          ]
+        },
+        {
+          "text": "Given the app is installed from the latest Chrome on macOS, When it is launched from the Dock, Then it opens in its own window without browser tabs or address bar, named 'TLH Trainer' with the TLH logo icon (recorded manual check)",
+          "tags": [
+            "REQ-060.2",
+            "REQ-060.3"
+          ]
+        },
+        {
+          "text": "Given the generated icons, When they are compared with brand/tlh-logo.jpg, Then each is derived from the logo (resized and padded only) and the manifest and apple-touch-icon reference them",
+          "tags": [
+            "REQ-060.3",
+            "REQ-061.3"
+          ]
+        },
+        {
+          "text": "Given `npm run build`, When the image-asset check runs, Then the logo and the generated icons pass and any other image file still fails naming the file",
+          "tags": [
+            "REQ-067.3"
+          ]
+        }
+      ],
+      "dod": [
+        {
+          "text": "Manual install checks (Safari Add to Dock and Chrome install on macOS) recorded in the story notes with browser versions and a screenshot of each standalone window",
+          "tags": [
+            "REQ-060.2"
+          ]
+        }
+      ],
+      "deps": [
+        "E01-S18",
+        "E04-S03",
+        "E02-S12"
+      ],
+      "notes": ""
+    },
+    {
+      "key": "E13-S07",
+      "title": "Use every screen offline after the first visit",
+      "type": "feature",
+      "milestone": "M3",
+      "priority": "Medium",
+      "risk": "high",
+      "skeleton": false,
+      "role": "learner",
+      "want": "every screen to work with no network after installing",
+      "benefit": "I can train anywhere, including on a plane",
+      "context": "A service worker (scope = the deployed base path) precaches every file in the build output at install: HTML, JS bundles including the advice and bot Web Workers, CSS, strategy data (charts, ranges, golden-spot data if loaded at runtime), banter lines, the logo and icons, and the manifest. The precache list is generated from the build output, so screens added later (Statistics, Settings, sit-and-go) are cached without changing this story; their own offline behaviour is guaranteed by the precache-completeness check (AC4). All app requests are served from the cache when offline. The app makes no other requests (REQ-058). Playwright runs with the network disabled after a first online load.",
+      "acs": [
+        {
+          "text": "Given the app was loaded once online and the service worker is active, When the network is disabled and the app is relaunched, Then the splash loads the rules engine and strategy data and Home opens",
+          "tags": [
+            "REQ-065.1",
+            "REQ-063.4"
+          ]
+        },
+        {
+          "text": "Given the network is disabled, When the user starts a 6-max cash game, plays 20 hands using Hint and the Hand Review panel and leaves the table, Then Game Config, the Table, the hint card, the Hand Review panel and the Session Report all open, hints and reviews show their numbers and the report is saved",
+          "tags": [
+            "REQ-065.1"
+          ]
+        },
+        {
+          "text": "Given the network is disabled, When a session of 20 hands is played, Then the Playwright network log shows zero failed requests and every app request was answered by the service worker cache",
+          "tags": [
+            "REQ-065.1"
+          ]
+        },
+        {
+          "text": "Given `npm run build`, When the generated precache list is compared with the files in the build output, Then every app file (HTML, JS including worker bundles, CSS, strategy and banter data, logo, icons, manifest) is in the list and the check fails naming any file that is missing",
+          "tags": [
+            "REQ-065.1",
+            "REQ-063.4"
+          ]
+        }
+      ],
+      "dod": [],
+      "deps": [
+        "E01-S18",
+        "E08-S01",
+        "E09-S01",
+        "E10-S01"
+      ],
+      "notes": "Statistics (E11), Settings (E12) and sit-and-go (E05) are in the same wave and are not exercised here by name; they are covered because the precache list is generated from the build output (AC4)."
+    },
+    {
+      "key": "E13-S08",
+      "title": "Get new versions at the next launch, never mid-session",
+      "type": "feature",
+      "milestone": "M3",
+      "priority": "Medium",
+      "risk": "high",
+      "skeleton": false,
+      "role": "learner",
+      "want": "new versions applied only when I next launch the app",
+      "benefit": "an update never changes the app in the middle of my session",
+      "context": "When a newer version is deployed, the service worker downloads it in the background while the app runs; the new version waits and is activated only on the next launch (no skipWaiting while a client is open; no forced reload). On the first launch of the new version, migrations run first (E13-S04), then Home shows 'Updated to version <x>' (the version string from E12-S01) once; the last-run version is stored in app meta so the notice is not repeated.",
+      "acs": [
+        {
+          "text": "Given version N is running with a session at the table and version N+1 is deployed, When the service worker detects it, Then N+1 is downloaded in the background and the running app stays on version N with no reload until it is closed",
+          "tags": [
+            "REQ-065.2"
+          ]
+        },
+        {
+          "text": "Given version N+1 was downloaded during a session, When the user plays 10 more hands, Then every hand is played by version N and the session continues without interruption",
+          "tags": [
+            "REQ-065.2"
+          ]
+        },
+        {
+          "text": "Given version N+1 was downloaded, When the app is closed and launched again, Then version N+1 runs and Settings shows its version",
+          "tags": [
+            "REQ-065.2"
+          ]
+        },
+        {
+          "text": "Given the first launch of version N+1 after an update from N, When Home opens, Then it shows \"Updated to version N+1\" with the actual version number",
+          "tags": [
+            "REQ-065.3"
+          ]
+        },
+        {
+          "text": "Given the update notice was shown once, When the app is launched again on the same version, Then Home does not show the notice",
+          "tags": [
+            "REQ-065.3"
+          ]
+        },
+        {
+          "text": "Given a fresh install of version N+1 with no earlier version, When Home opens, Then no update notice is shown",
+          "tags": [
+            "REQ-065.3"
+          ]
+        }
+      ],
+      "dod": [],
+      "deps": [
+        "E13-S07",
+        "E13-S04"
+      ],
+      "notes": "E2E: serve build N, load, deploy build N+1 to the same origin, assert the waiting worker, relaunch."
+    },
+    {
+      "key": "E13-S09",
+      "title": "Keep all my data on this device with no third-party requests",
+      "type": "feature",
+      "milestone": "M3",
+      "priority": "Medium",
+      "risk": "medium",
+      "skeleton": false,
+      "role": "learner",
+      "want": "the app to send nothing about me anywhere",
+      "benefit": "my practice and mistakes stay private on my Mac",
+      "context": "No analytics, telemetry, tracking or third-party requests; no fonts, scripts or styles from CDNs. The app asks for and stores no personal information (no name, email, account, location or contact field). A Content-Security-Policy (as a meta tag in index.html, because GitHub Pages cannot set headers) restricts scripts, styles, connections and workers to the app's own origin. Fit: Playwright network log over a full session shows only same-origin requests for app files.",
+      "acs": [
+        {
+          "text": "Given a full Playwright session (launch, Game Config, 30 hands with hints and reviews, Leave table and the Session Report), When the network log is read, Then every request is same-origin for an app file and none goes to any other host",
+          "tags": [
+            "REQ-058.1"
+          ]
+        },
+        {
+          "text": "Given the built bundle and package.json, When they are scanned, Then they contain no analytics, telemetry or tracking library and no URL of a third-party host loaded at runtime",
+          "tags": [
+            "REQ-058.1"
+          ]
+        },
+        {
+          "text": "Given the app source, When every form field in its UI components and every stored record type is listed by an automated scan, Then none asks for or holds a name, email, account, location or contact detail",
+          "tags": [
+            "REQ-058.2"
+          ]
+        },
+        {
+          "text": "Given the built index.html, When its Content-Security-Policy is read, Then script-src, style-src, connect-src and worker-src allow only 'self'",
+          "tags": [
+            "REQ-058.3"
+          ]
+        },
+        {
+          "text": "Given a test page of the built app that injects a script from another origin and fetches another origin, When it runs, Then both are blocked and a CSP violation is reported",
+          "tags": [
+            "REQ-058.3"
+          ]
+        },
+        {
+          "text": "Given the CSP is in force, When a full session runs in Chromium and WebKit, Then no CSP violation is reported by the app's own files",
+          "tags": [
+            "REQ-058.3"
+          ]
+        }
+      ],
+      "dod": [],
+      "deps": [
+        "E01-S18",
+        "E10-S01"
+      ],
+      "notes": "React style props are applied through the CSSOM and are not blocked by style-src 'self'; avoid inline <style> injection by libraries."
+    },
+    {
+      "key": "E13-S10",
+      "title": "Reach Home within 3 seconds on a repeat launch",
+      "type": "feature",
+      "milestone": "M3",
+      "priority": "Medium",
+      "risk": "medium",
+      "skeleton": false,
+      "role": "learner",
+      "want": "the app to reach Home within 3 seconds when I launch it again",
+      "benefit": "starting a practice session never feels like a chore",
+      "context": "Measured on the reference machine (Apple-silicon Mac, latest Chrome) from launch to Home interactive, on a repeat launch (app files cached by the service worker, no pending migration). Includes splash loading of the rules engine and strategy data (E02-S12). Timing test reports p95 over 200 samples.",
+      "acs": [
+        {
+          "text": "Given the installed app with files cached and no pending migration, When it is launched 200 times, Then the p95 time from launch to Home interactive is at most 3.0 s",
+          "tags": [
+            "REQ-055.4"
+          ]
+        },
+        {
+          "text": "Given storage seeded with 100,000 hand records, When the app is launched 200 times, Then the p95 time to Home interactive is still at most 3.0 s",
+          "tags": [
+            "REQ-055.4",
+            "REQ-053.1"
+          ]
+        }
+      ],
+      "dod": [
+        {
+          "text": "The timing test runs on demand and its p95 result is recorded in the story notes for the reference machine",
+          "tags": [
+            "REQ-055.4"
+          ]
+        }
+      ],
+      "deps": [
+        "E13-S07",
+        "E02-S12"
+      ],
+      "notes": ""
+    },
+    {
+      "key": "E13-S11",
+      "title": "Keep every screen within its time limits with 100,000 stored hands",
+      "type": "feature",
+      "milestone": "M3",
+      "priority": "Medium",
+      "risk": "high",
+      "skeleton": false,
+      "role": "learner",
+      "want": "every screen to stay responsive after 100,000 stored hands",
+      "benefit": "years of practice never make the trainer slow or unusable",
+      "context": "Seed IndexedDB with 100,000 hand records (with sessions and reports) and verify the screens built in earlier waves still open and the REQ-055 limits hold (p95 over 200 samples on the reference machine): hint card <= 1.0 s, Hand Review panel <= 1.0 s, bot decision <= 100 ms, no frame over 100 ms during advice computation; launch to Home <= 3 s is E13-S10. Statistics with 100,000 hands (<= 2 s) is measured only in E11-S12 and Settings with 100,000 hands is checked in E12-S08, so this story does not repeat them. Likely needs indexed queries (by session id) rather than full scans.",
+      "acs": [
+        {
+          "text": "Given storage seeded with 100,000 hand records across 500 sessions, When Splash, Home, Game Config, the Table, the Hand Review panel and the Session Report are each opened, Then each opens without error",
+          "tags": [
+            "REQ-053.1"
+          ]
+        },
+        {
+          "text": "Given the 100,000-hand seed, When 200 hints and 200 hand ends are timed at the table, Then p95 is at most 1.0 s for the hint card and at most 1.0 s for the Hand Review panel",
+          "tags": [
+            "REQ-053.1",
+            "REQ-055.1",
+            "REQ-055.2"
+          ]
+        },
+        {
+          "text": "Given the 100,000-hand seed, When 200 bot decisions are timed and the table is profiled during advice computation, Then bot decision p95 is at most 100 ms and no frame exceeds 100 ms",
+          "tags": [
+            "REQ-053.1",
+            "REQ-055.3",
+            "REQ-055.6"
+          ]
+        },
+        {
+          "text": "Given the 100,000-hand seed, When the user ends a session and opens its Session Report, Then the report opens with values for that session only",
+          "tags": [
+            "REQ-053.1"
+          ]
+        }
+      ],
+      "dod": [],
+      "deps": [
+        "E13-S10",
+        "E08-S04",
+        "E09-S09",
+        "E06-S14",
+        "E03-S12",
+        "E10-S01"
+      ],
+      "notes": ""
+    },
+    {
+      "key": "E13-S12",
+      "title": "Prove every screen passes automated accessibility checks",
+      "type": "feature",
+      "milestone": "M3",
+      "priority": "Medium",
+      "risk": "medium",
+      "skeleton": false,
+      "role": "learner",
+      "want": "every screen to pass automated accessibility checks",
+      "benefit": "I can read and operate the trainer comfortably during long sessions",
+      "context": "A Playwright + axe suite in `npm run e2e` (so CI fails on any violation) runs in Chromium and WebKit over the screens and states built in earlier waves and in this epic, enumerated in AC1-AC3. Statistics (E11-S01), Settings (E12-S01), the Settings overlay (E12-S03), the reset dialog (E12-S08), the storage warning (E12-S09) and sit-and-go screens (E05) are in the same wave: each owning story carries its own axe check (global DoD and story DoD), and once they exist the suite's route list picks them up. The same sweep extends the no-real-money check of E02 to the screens and dialogs it visits.",
+      "acs": [
+        {
+          "text": "Given Splash (loading and load error), Home (first use, with last-session snapshot, with Resume session, with update notice) and Game Config (Cash game and Sit-and-go selected), When axe runs in Chromium and WebKit, Then it reports zero serious or critical violations",
+          "tags": [
+            "REQ-057.1"
+          ]
+        },
+        {
+          "text": "Given the Table on the user's turn, with the hint card open, with the Hand Review panel open, with the rebuy dialog after busting, with the Leave-mid-hand dialog and with the last-hand-not-saved message, When axe runs in Chromium and WebKit, Then it reports zero serious or critical violations",
+          "tags": [
+            "REQ-057.1"
+          ]
+        },
+        {
+          "text": "Given the Session Report, the unexpected-error screen and the migration-error screen, When axe runs in Chromium and WebKit, Then it reports zero serious or critical violations",
+          "tags": [
+            "REQ-057.1"
+          ]
+        },
+        {
+          "text": "Given a screen with a deliberately unlabelled button in a test build, When the accessibility suite runs, Then it fails naming the screen and the rule",
+          "tags": [
+            "REQ-057.1"
+          ]
+        },
+        {
+          "text": "Given the accessibility suite is part of `npm run e2e`, When CI runs on a push, Then a serious or critical violation fails the workflow",
+          "tags": [
+            "REQ-057.1"
+          ]
+        },
+        {
+          "text": "Given every screen and dialog listed in AC1-AC3, When its text and controls are inspected, Then none offers a deposit, payment, purchase, cash-out, wager of real money or real-money conversion",
+          "tags": [
+            "REQ-061.1"
+          ]
+        }
+      ],
+      "dod": [],
+      "deps": [
+        "E02-S12",
+        "E02-S08",
+        "E02-S04",
+        "E02-S16",
+        "E02-S17",
+        "E03-S08",
+        "E10-S05",
+        "E08-S01",
+        "E09-S01",
+        "E10-S01",
+        "E13-S02",
+        "E13-S03",
+        "E13-S05",
+        "E13-S08"
+      ],
+      "notes": "Add each same-wave screen (Statistics, Settings, sit-and-go) to the suite's route list when it lands; their pass/fail is owned by their stories."
+    }
+  ]
+}

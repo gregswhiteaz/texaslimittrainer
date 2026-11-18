@@ -1,0 +1,314 @@
+{
+  "scope": "E03",
+  "round": 2,
+  "clauses": [
+    {
+      "clause": "REQ-007.1",
+      "verdict": "covered",
+      "evidence": "E03-S01#AC1 ($160 at $4/$8), AC2 ($400 at $10/$20, no buy-in control)"
+    },
+    {
+      "clause": "REQ-007.2",
+      "verdict": "covered",
+      "evidence": "E03-S08#AC1 (dialog, no deal even after 1.5 s), AC4; E09-S02#AC2"
+    },
+    {
+      "clause": "REQ-007.3",
+      "verdict": "covered",
+      "evidence": "E03-S08#AC2 (stack $160, rebuy count +1), AC3 (record count 2); session-result display asserted in E10-S01#AC3/AC4 but not tagged REQ-007.3 (LOW finding)"
+    },
+    {
+      "clause": "REQ-007.4",
+      "verdict": "covered",
+      "evidence": "E03-S08#AC5"
+    },
+    {
+      "clause": "REQ-010.3",
+      "verdict": "covered",
+      "evidence": "E03-S03#AC3 (seat 5 and seat 1 both bottom centre)"
+    },
+    {
+      "clause": "REQ-011.1",
+      "verdict": "covered",
+      "evidence": "E03-S13#AC1, AC2 (6-max and 10-player, 300 ms)"
+    },
+    {
+      "clause": "REQ-011.2",
+      "verdict": "covered",
+      "evidence": "E03-S18#AC1 (0.8-3.0 s bounds), AC2 (not all equal, min<1.2, max>2.6) - round-1 partial resolved"
+    },
+    {
+      "clause": "REQ-011.3",
+      "verdict": "covered",
+      "evidence": "E03-S14#AC1, AC2 (both directions), AC3 (stored)"
+    },
+    {
+      "clause": "REQ-013.4",
+      "verdict": "covered",
+      "evidence": "E03-S03#AC8"
+    },
+    {
+      "clause": "REQ-017.1",
+      "verdict": "covered",
+      "evidence": "E03-S02#AC1, AC5"
+    },
+    {
+      "clause": "REQ-017.2",
+      "verdict": "covered",
+      "evidence": "E03-S02#AC2, AC3, AC5; E03-S07#AC1 (capped, no Raise), AC5"
+    },
+    {
+      "clause": "REQ-017.3",
+      "verdict": "covered",
+      "evidence": "E03-S07#AC2, AC3, AC5"
+    },
+    {
+      "clause": "REQ-017.5",
+      "verdict": "covered",
+      "evidence": "E03-S02#AC6"
+    },
+    {
+      "clause": "REQ-017.6",
+      "verdict": "covered",
+      "evidence": "E03-S02#AC4 (BB option Check and Raise to $8, no Fold), AC5"
+    },
+    {
+      "clause": "REQ-017.7",
+      "verdict": "covered",
+      "evidence": "E03-S07#AC6 (Raise all-in to $6), AC7 (Bet all-in $3), AC8 (short raise, no reopen), AC5"
+    },
+    {
+      "clause": "REQ-019.6",
+      "verdict": "covered",
+      "evidence": "E03-S01#AC3, AC4"
+    },
+    {
+      "clause": "REQ-019.7",
+      "verdict": "covered",
+      "evidence": "E03-S04#AC1, AC3"
+    },
+    {
+      "clause": "REQ-021.1",
+      "verdict": "covered",
+      "evidence": "E03-S03#AC1, AC2"
+    },
+    {
+      "clause": "REQ-021.3",
+      "verdict": "covered",
+      "evidence": "E03-S03#AC3"
+    },
+    {
+      "clause": "REQ-021.4",
+      "verdict": "covered",
+      "evidence": "E03-S03#AC4"
+    },
+    {
+      "clause": "REQ-021.5",
+      "verdict": "covered",
+      "evidence": "E03-S03#AC5; E03-S07#AC1 (main $60 / side $80), AC3"
+    },
+    {
+      "clause": "REQ-021.6",
+      "verdict": "covered",
+      "evidence": "E03-S03#AC5"
+    },
+    {
+      "clause": "REQ-021.7",
+      "verdict": "covered",
+      "evidence": "E03-S03#AC6"
+    },
+    {
+      "clause": "REQ-021.8",
+      "verdict": "covered",
+      "evidence": "E03-S03#AC7"
+    },
+    {
+      "clause": "REQ-022.1",
+      "verdict": "covered",
+      "evidence": "E03-S02#AC1-4; E03-S07#AC2, AC4 (SNG without $), AC6, AC7"
+    },
+    {
+      "clause": "REQ-022.3",
+      "verdict": "covered",
+      "evidence": "E03-S02#AC7"
+    },
+    {
+      "clause": "REQ-022.4",
+      "verdict": "covered",
+      "evidence": "E03-S02#AC8"
+    },
+    {
+      "clause": "REQ-024.1",
+      "verdict": "covered",
+      "evidence": "E03-S04#AC1-3; E03-S07#AC2 (each side-pot winner and amount)"
+    },
+    {
+      "clause": "REQ-024.3",
+      "verdict": "covered",
+      "evidence": "E03-S04#AC4 (1.5 s, 1.4-1.6 window)"
+    },
+    {
+      "clause": "REQ-024.4",
+      "verdict": "covered",
+      "evidence": "E03-S01#AC5-AC7 (bots never act in user's turn; user not delayed, enabled within 100 ms), E03-S18#AC3, AC4 at Realistic - round-1 CRITICAL resolved"
+    },
+    {
+      "clause": "REQ-024.5",
+      "verdict": "covered",
+      "evidence": "E03-S01#AC5 (10 minutes)"
+    },
+    {
+      "clause": "REQ-024.6",
+      "verdict": "covered",
+      "evidence": "E03-S13#AC3 (200 hands < 60 min at Rapid, scripted user)"
+    },
+    {
+      "clause": "REQ-031.1",
+      "verdict": "covered",
+      "evidence": "E03-S15#AC1 (TASK-3.14)"
+    },
+    {
+      "clause": "REQ-031.2",
+      "verdict": "covered",
+      "evidence": "E03-S15#AC2, AC3 (9 vs 10 hands)"
+    },
+    {
+      "clause": "REQ-031.3",
+      "verdict": "covered",
+      "evidence": "E03-S15#AC4"
+    },
+    {
+      "clause": "REQ-031.4",
+      "verdict": "covered",
+      "evidence": "E03-S15#AC5, AC6"
+    },
+    {
+      "clause": "REQ-052.1",
+      "verdict": "covered",
+      "evidence": "E03-S09#AC1, AC2 (delayed write blocks next deal)"
+    },
+    {
+      "clause": "REQ-052.2",
+      "verdict": "covered",
+      "evidence": "E03-S09#AC4-6, E03-S10#AC1-4 (decision fields; hinted=false here, true set in E08-S02)"
+    },
+    {
+      "clause": "REQ-052.3",
+      "verdict": "covered",
+      "evidence": "E03-S11#AC1-4"
+    },
+    {
+      "clause": "REQ-052.5",
+      "verdict": "covered",
+      "evidence": "E03-S09#AC7 (byte-identical, write rejected)"
+    },
+    {
+      "clause": "REQ-052.6",
+      "verdict": "covered",
+      "evidence": "E03-S09#AC8"
+    },
+    {
+      "clause": "REQ-052.7",
+      "verdict": "covered",
+      "evidence": "E03-S09#AC3"
+    },
+    {
+      "clause": "REQ-055.6",
+      "verdict": "covered",
+      "evidence": "E03-S12#AC1-3, DoD1"
+    },
+    {
+      "clause": "REQ-057.2",
+      "verdict": "covered",
+      "evidence": "E03-S17#AC1-4"
+    },
+    {
+      "clause": "REQ-057.4",
+      "verdict": "covered",
+      "evidence": "E03-S17#AC5"
+    },
+    {
+      "clause": "REQ-060.1",
+      "verdict": "covered",
+      "evidence": "E03-S16#AC1 (10 seats, 1280x720, Chromium and WebKit)"
+    },
+    {
+      "clause": "REQ-060.3",
+      "verdict": "covered",
+      "evidence": "E03-S16#AC2 (colours named, no exact token values - LOW finding)"
+    },
+    {
+      "clause": "REQ-060.4",
+      "verdict": "covered",
+      "evidence": "E03-S19#AC1 ($1,240, $12,500), AC2 ($999/$1,000), AC3"
+    },
+    {
+      "clause": "REQ-066.1",
+      "verdict": "covered",
+      "evidence": "E03-S05#AC1, DoD1"
+    },
+    {
+      "clause": "REQ-066.2",
+      "verdict": "covered",
+      "evidence": "E03-S05#AC2 (24 CSS px)"
+    },
+    {
+      "clause": "REQ-066.3",
+      "verdict": "covered",
+      "evidence": "E03-S05#AC3, AC4"
+    },
+    {
+      "clause": "REQ-066.4",
+      "verdict": "covered",
+      "evidence": "E03-S05#AC5, DoD1"
+    }
+  ],
+  "findings": [
+    {
+      "id": "J-E03-REQ-007.3-tag-missing",
+      "severity": "LOW",
+      "class": "missing-tag",
+      "owner": "weaver",
+      "location": "E10-S01#AC3-AC4 / E03-S08#AC3",
+      "evidence": "REQ-007.3 says total rebuys are counted in the session result; E03-S08 now checks only the session record and E10-S01#AC3 (rebuys '1') and AC4 ('0') confirm the report but are tagged REQ-044.1 only, so the RTM shows the report half of REQ-007.3 untagged.",
+      "fix": "Add REQ-007.3 to the tags of E10-S01#AC3 (the AC with 1 rebuy)"
+    },
+    {
+      "id": "J-E03-E03-S17-missing-deps",
+      "severity": "LOW",
+      "class": "dependency-incomplete",
+      "owner": "weaver",
+      "location": "E03-S17#AC1-AC3",
+      "evidence": "S17 AC1-AC3 need the action bar (E03-S02) and the Leave table header control (E03-S03), but S17 depends only on S11, S15 and S14 (TASK-3.11/3.14/3.15). Ordinals keep S02 and S03 earlier, so no ordering break, but the dependency edge is missing.",
+      "fix": "Add TASK-3.2 and TASK-3.3 as dependencies of E03-S17"
+    },
+    {
+      "id": "J-E03-E03-S16#AC2-vague",
+      "severity": "LOW",
+      "class": "ac-quality",
+      "owner": "weaver",
+      "location": "E03-S16#AC2",
+      "evidence": "REQ-060.3 AC checks 'charcoal', 'green', 'red', 'navy or silver' with no exact token values, so a reviewer cannot pass/fail it without choosing the colours.",
+      "fix": "State the theme token hex values (from brand/) in the AC"
+    },
+    {
+      "id": "J-E03-E03-S13#AC1-redundant",
+      "severity": "LOW",
+      "class": "ac-quality",
+      "owner": "weaver",
+      "location": "E03-S13#AC1",
+      "evidence": "AC1 asserts both 'median gap at most 300 ms' and 'each action within 300 ms'; the second subsumes the first.",
+      "fix": "Keep only the per-action bound"
+    },
+    {
+      "id": "J-E03-E03-S19#AC3-impl",
+      "severity": "LOW",
+      "class": "ac-quality",
+      "owner": "weaver",
+      "location": "E03-S19#AC3",
+      "evidence": "'checked against the English string table' names an implementation artefact and 'every label is English' is not a precise pass/fail check.",
+      "fix": "Reword to observable text, e.g. 'the action labels read Fold, Check, Call, Raise to, Bet'"
+    }
+  ],
+  "summary": "52 clauses (incl. REQ-017.6, 017.7, 024.6, 052.7 added in v1.7): 52 covered, 0 partial, 0 false-claim, 0 missing. Round-1 CRITICAL (REQ-024.4), HIGH (REQ-011.2, S01/S03 needs S05, S08 needs E10) and user findings (BB option, short all-in labels) are resolved. 0 CRITICAL, 0 HIGH, 0 MEDIUM, 5 LOW."
+}

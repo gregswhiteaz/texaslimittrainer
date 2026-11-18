@@ -1,0 +1,35 @@
+{
+  "scope": "GLOBAL",
+  "round": 2,
+  "clauses": [],
+  "findings": [
+    {
+      "id": "J-GLOBAL-story-map-milestones-stale-terminology",
+      "severity": "MEDIUM",
+      "class": "terminology",
+      "owner": "weaver",
+      "location": "story-map.md (header, backbone wave column, M2/M3 grid); milestones m-1, m-2 descriptions",
+      "evidence": "story-map.md still says 'requirements v1.0 (72 requirements, 315 active clauses)' while the baseline is v1.7 with 365 clauses; its wave column shows E02 wave 5, E05 wave 6, E11/E12/E13 wave 6, whereas the re-sequenced plan has E02 wave 6 and E05/E11/E12/E13 wave 7. Grid says M3 holds 'Speed Rapid/Realistic' although Rapid pacing (TASK-3.13) is now M2. m-2 says 'Everything else in baseline v1.0' and lists 'speed choice and pacing'. m-1 and the M2 release slice say 'every Must requirement' without saying the user decided SNG-specific parts of Must requirements (REQ-002.6, REQ-044.1, REQ-048.5) stay in M3 (TASK-5.6, 10.12, 11.9).",
+      "fix": "Regenerate story-map.md from the live plan (v1.7, 365 clauses, new waves, Rapid in M2). Reword m-1 to 'every Must requirement except the sit-and-go-specific parts, which ship with sit-and-go in M3', and m-2 to baseline v1.7."
+    },
+    {
+      "id": "J-GLOBAL-M3-priority-drift",
+      "severity": "MEDIUM",
+      "class": "priority-milestone",
+      "owner": "weaver",
+      "location": "TASK-5.5, 5.6, 5.10, 6.12, 10.12, 11.9, 2.16, 3.18 (all High, m-2)",
+      "evidence": "Round-1 finding only partly fixed (TASK-3.6 moved to M2 and is High). Eight M3 stories still carry High while the other M3 stories are Medium or Low. The sit-and-go stories 5.5, 5.6, 5.10, 10.12 and 11.9 serve a Should feature the user decided belongs in M3, and 3.18 (Realistic pace) is a Should clause, so High overstates their weight against M2 stories.",
+      "fix": "Set priority from milestone and clause priority (Medium for these M3 stories), or note in each story why it is High."
+    },
+    {
+      "id": "J-GLOBAL-TASK-3.1-stale-wave-reference",
+      "severity": "LOW",
+      "class": "wording",
+      "owner": "weaver",
+      "location": "TASK-3.1 description",
+      "evidence": "TASK-3.1 says 'Until Game Config exists (E02, wave 5)' but E02 is now wave 6 (TASK-5.9 already says wave 6). TASK-2.1 (M1, ordinal 17000) does supply Home and Game Config in M1 right after the tracer.",
+      "fix": "Drop the wave number or change it to wave 6; refer to TASK-2.1 instead."
+    }
+  ],
+  "summary": "Round-1 GLOBAL findings are resolved: CI story TASK-1.7 now sits at ordinal 2000 right after the toolchain; tracer TASK-3.1 depends on TASK-3.5 and 3.3 depends on 3.5, with ordinals consistent (no dependency points at a later ordinal or later milestone, checked over all 164 stories); axe is provisioned in TASK-1.1#AC8; global DoD items are scoped to when tooling exists; TASK-3.6 is M2; the vision uses Correct/Minor error/Major error; Rapid pace is in M2 (TASK-3.13) and verifies G-5 via REQ-024.6; G-3 is covered by the Statistics BB/100 chart (TASK-11.2). M1 (toolchain, CI, engine, advice, TAG bots, tracer, Home/Game Config, table, review) forms an end-to-end path. Mechanical layer: 365/365 clauses covered, 0 errors; the C5-AND warnings (SNG) and C3-NOM1 are accepted as false positives/intended. Remaining: stale story-map and milestone text, priority drift of High on eight M3 stories, one stale wave reference. No CRITICAL or HIGH findings."
+}

@@ -1,0 +1,302 @@
+{
+ "scope": "E07",
+ "round": 3,
+ "clauses": [
+  {
+   "clause": "REQ-005.4",
+   "verdict": "covered",
+   "evidence": "E07-S05#AC4 (chart per size 2-10 maps 2->HU, 3-7->6-max, 8-10->full ring)"
+  },
+  {
+   "clause": "REQ-017.1",
+   "verdict": "covered",
+   "evidence": "E07-S01#AC8, S03#AC4 (advice-side only: check, never fold, when no bet faces; action bar itself is E03)"
+  },
+  {
+   "clause": "REQ-025.2",
+   "verdict": "covered",
+   "evidence": "E07-S01#AC5,AC6; S03#AC6; S13#AC4"
+  },
+  {
+   "clause": "REQ-025.3",
+   "verdict": "covered",
+   "evidence": "E07-S04#AC7; S13#AC4"
+  },
+  {
+   "clause": "REQ-032.1",
+   "verdict": "covered",
+   "evidence": "E07-S05#AC1,AC4,AC5"
+  },
+  {
+   "clause": "REQ-032.2",
+   "verdict": "covered",
+   "evidence": "E07-S01#AC1; S05#AC2"
+  },
+  {
+   "clause": "REQ-032.3",
+   "verdict": "covered",
+   "evidence": "E07-S01#AC2,AC4"
+  },
+  {
+   "clause": "REQ-032.4",
+   "verdict": "covered",
+   "evidence": "E07-S01#AC2; S05#AC3"
+  },
+  {
+   "clause": "REQ-032.5",
+   "verdict": "covered",
+   "evidence": "E07-S01#AC3"
+  },
+  {
+   "clause": "REQ-032.6",
+   "verdict": "covered",
+   "evidence": "E07-S01#AC7 (6-max); S05#AC6 (heads-up), S05#AC7 (full ring)"
+  },
+  {
+   "clause": "REQ-033.1",
+   "verdict": "covered",
+   "evidence": "E07-S03#AC1,AC2; S10#AC7"
+  },
+  {
+   "clause": "REQ-033.2",
+   "verdict": "covered",
+   "evidence": "E07-S10#AC2-6 (50.1/50.0 boundary, raise case)"
+  },
+  {
+   "clause": "REQ-033.3",
+   "verdict": "covered",
+   "evidence": "E07-S11#AC1-5 (worked values 20.5%/22.2%/18.2%, outs listed)"
+  },
+  {
+   "clause": "REQ-033.4",
+   "verdict": "covered",
+   "evidence": "E07-S03#AC5 (doc/test consistency test); S11 DoD#1"
+  },
+  {
+   "clause": "REQ-033.5",
+   "verdict": "covered",
+   "evidence": "E07-S03#AC3,AC4; S10#AC8; S11#AC4"
+  },
+  {
+   "clause": "REQ-033.6",
+   "verdict": "covered",
+   "evidence": "E07-S10#AC1 (calling range = Strong+Pair+Draw, includes raising hands, worked example)"
+  },
+  {
+   "clause": "REQ-033.7",
+   "verdict": "covered",
+   "evidence": "E07-S11#AC1 (8/44 vs 8/36), AC2 (boundary), AC3 (fold), AC4 (two opponents 8/(44+16)=13.3%), AC5 (river, no outs). Arithmetic independently verified."
+  },
+  {
+   "clause": "REQ-034.1",
+   "verdict": "covered",
+   "evidence": "E07-S02#AC1,AC2; S06#AC2"
+  },
+  {
+   "clause": "REQ-034.2",
+   "verdict": "covered",
+   "evidence": "E07-S02#AC3; S06#AC1,AC2"
+  },
+  {
+   "clause": "REQ-034.3",
+   "verdict": "covered",
+   "evidence": "E07-S02#AC4,AC5; S06#AC3"
+  },
+  {
+   "clause": "REQ-035.1",
+   "verdict": "covered",
+   "evidence": "E07-S07#AC1-6"
+  },
+  {
+   "clause": "REQ-035.2",
+   "verdict": "covered",
+   "evidence": "E07-S09#AC1,AC2,AC5"
+  },
+  {
+   "clause": "REQ-035.3",
+   "verdict": "covered",
+   "evidence": "E07-S07#AC7,AC8"
+  },
+  {
+   "clause": "REQ-035.4",
+   "verdict": "covered",
+   "evidence": "E07-S09#AC1,AC3,AC4"
+  },
+  {
+   "clause": "REQ-035.5",
+   "verdict": "covered",
+   "evidence": "E07-S07#AC3-6 (worked fixture independently checked: classes and narrowed sets are correct)"
+  },
+  {
+   "clause": "REQ-035.6",
+   "verdict": "covered",
+   "evidence": "E07-S09#AC2,AC5 (14.0/20.0/44.0/60.0 verified arithmetically)"
+  },
+  {
+   "clause": "REQ-036.1",
+   "verdict": "covered",
+   "evidence": "E07-S12#AC5; S13#AC1,AC2"
+  },
+  {
+   "clause": "REQ-036.2",
+   "verdict": "covered",
+   "evidence": "E07-S13#AC3"
+  },
+  {
+   "clause": "REQ-037.1",
+   "verdict": "covered",
+   "evidence": "E07-S12#AC1; S11#AC6"
+  },
+  {
+   "clause": "REQ-037.2",
+   "verdict": "covered",
+   "evidence": "E07-S12#AC2; S11#AC6"
+  },
+  {
+   "clause": "REQ-037.3",
+   "verdict": "covered",
+   "evidence": "E07-S12#AC3"
+  },
+  {
+   "clause": "REQ-037.4",
+   "verdict": "covered",
+   "evidence": "E07-S12#AC4; S15#AC4"
+  },
+  {
+   "clause": "REQ-038.1",
+   "verdict": "covered",
+   "evidence": "E07-S04#AC1; S15#AC3"
+  },
+  {
+   "clause": "REQ-038.2",
+   "verdict": "covered",
+   "evidence": "E07-S04#AC2"
+  },
+  {
+   "clause": "REQ-038.3",
+   "verdict": "covered",
+   "evidence": "E07-S04#AC3,AC4 (0.1/9.9/10.0)"
+  },
+  {
+   "clause": "REQ-038.4",
+   "verdict": "covered",
+   "evidence": "E07-S04#AC5,AC6 (64.9/65.0, 35.1/35.0)"
+  },
+  {
+   "clause": "REQ-038.5",
+   "verdict": "covered",
+   "evidence": "E07-S04#AC3-AC6"
+  },
+  {
+   "clause": "REQ-038.6",
+   "verdict": "covered",
+   "evidence": "E07-S04#AC8"
+  },
+  {
+   "clause": "REQ-039.1",
+   "verdict": "covered",
+   "evidence": "E07-S11#AC4; S15#AC1"
+  },
+  {
+   "clause": "REQ-039.2",
+   "verdict": "covered",
+   "evidence": "E07-S11#AC1"
+  },
+  {
+   "clause": "REQ-039.3",
+   "verdict": "covered",
+   "evidence": "E07-S11#AC5; S15#AC2"
+  },
+  {
+   "clause": "REQ-039.4",
+   "verdict": "covered",
+   "evidence": "E07-S11#AC2,AC3; S15#AC5"
+  },
+  {
+   "clause": "REQ-041.1",
+   "verdict": "covered",
+   "evidence": "E07-S16#AC1-4; review display E09-S09#AC1,AC2"
+  },
+  {
+   "clause": "REQ-041.2",
+   "verdict": "covered",
+   "evidence": "E07-S17#AC1-3,AC5; review display TASK-9.9#AC3"
+  },
+  {
+   "clause": "REQ-041.3",
+   "verdict": "covered",
+   "evidence": "E07-S17#AC4"
+  },
+  {
+   "clause": "REQ-045.1",
+   "verdict": "covered",
+   "evidence": "E07-S08#AC1,AC6"
+  },
+  {
+   "clause": "REQ-045.2",
+   "verdict": "covered",
+   "evidence": "E07-S08#AC1"
+  },
+  {
+   "clause": "REQ-045.3",
+   "verdict": "covered",
+   "evidence": "E07-S08#AC2"
+  },
+  {
+   "clause": "REQ-045.4",
+   "verdict": "covered",
+   "evidence": "E07-S08#AC3"
+  },
+  {
+   "clause": "REQ-045.5",
+   "verdict": "covered",
+   "evidence": "E07-S08#AC4"
+  },
+  {
+   "clause": "REQ-045.6",
+   "verdict": "covered",
+   "evidence": "E07-S08#AC5"
+  },
+  {
+   "clause": "REQ-061.2",
+   "verdict": "covered",
+   "evidence": "DoD 'text is original' on E07-S01, S05, S07, S12, S14 (TASK-7.11), S15 (TASK-7.14); matches the requirement's own fit criterion"
+  },
+  {
+   "clause": "REQ-062.1",
+   "verdict": "covered",
+   "evidence": "E07-S13#AC1 (--check-advice option; other options are E01)"
+  },
+  {
+   "clause": "REQ-062.4",
+   "verdict": "covered",
+   "evidence": "E07-S13#AC5"
+  },
+  {
+   "clause": "REQ-063.1",
+   "verdict": "covered",
+   "evidence": "E07-S14#AC2 (TASK-7.11 AC2)"
+  }
+ ],
+ "findings": [
+  {
+   "id": "J-E07-E07-S10-multiway-value",
+   "severity": "LOW",
+   "class": "gap",
+   "owner": "weaver",
+   "location": "E07-S10",
+   "evidence": "Description says equity is computed against each opponent's calling range with several opponents, but no AC exercises a multiway value decision (carried from round 2; precedence is now stated in S11 description).",
+   "fix": "Add a two-opponent value-bet AC with exact equity."
+  },
+  {
+   "id": "J-E07-E07-S11-other-draws",
+   "severity": "LOW",
+   "class": "testability",
+   "owner": "weaver",
+   "location": "E07-S11 description",
+   "evidence": "Rule names only flush draw (9 outs) and open-ended straight draw (8 outs); gutshots, combo draws and overcards are neither included nor excluded, and no AC says they get no allowance.",
+   "fix": "State which draws qualify and add an AC for a non-qualifying hand (e.g. gutshot) getting no implied-odds allowance."
+  }
+ ],
+ "summary": "Round-2 MEDIUM (implied-odds worked values) is resolved: S11 AC1-5 give exact numbers that check out (20.5% equity, 22.2% plain, 18.2% implied, 28.6%/40.0% fold case, 13.3% two-opponent) and cover REQ-033.7 fully. Round-2 LOWs for S17 grade note (AC6), S05 position mapping (AC8), S01 applicable pairs (26 listed), S01 tag, S03 pot wording and S09 minimum width (AC6) are resolved. All clauses covered; two LOW items remain. No CRITICAL or HIGH."
+}

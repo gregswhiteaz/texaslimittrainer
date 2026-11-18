@@ -1,0 +1,123 @@
+{
+  "scope": "E11",
+  "round": 3,
+  "clauses": [
+    {
+      "clause": "REQ-002.3",
+      "verdict": "covered",
+      "evidence": "E11-S01#AC1"
+    },
+    {
+      "clause": "REQ-004.8",
+      "verdict": "covered",
+      "evidence": "E11-S01#AC4"
+    },
+    {
+      "clause": "REQ-040.3",
+      "verdict": "covered",
+      "evidence": "E11-S01#AC3; E11-S06#AC3; E11-S11#AC4"
+    },
+    {
+      "clause": "REQ-044.6",
+      "verdict": "covered",
+      "evidence": "E11-S07#AC1-3"
+    },
+    {
+      "clause": "REQ-048.1",
+      "verdict": "covered",
+      "evidence": "E11-S01#AC2-3; E11-S02#AC1-3"
+    },
+    {
+      "clause": "REQ-048.2",
+      "verdict": "covered",
+      "evidence": "E11-S03#AC1-5"
+    },
+    {
+      "clause": "REQ-048.3",
+      "verdict": "covered",
+      "evidence": "E11-S06#AC1,2,4"
+    },
+    {
+      "clause": "REQ-048.4",
+      "verdict": "covered",
+      "evidence": "E11-S04#AC1-4"
+    },
+    {
+      "clause": "REQ-048.5",
+      "verdict": "covered",
+      "evidence": "E11-S05#AC1-4"
+    },
+    {
+      "clause": "REQ-048.6",
+      "verdict": "covered",
+      "evidence": "E11-S01#AC7-8; E11-S03#AC4"
+    },
+    {
+      "clause": "REQ-048.7",
+      "verdict": "covered",
+      "evidence": "E11-S01#AC6; E11-S03#AC5"
+    },
+    {
+      "clause": "REQ-048.8",
+      "verdict": "covered",
+      "evidence": "E11-S08#AC1-4"
+    },
+    {
+      "clause": "REQ-048.9",
+      "verdict": "covered",
+      "evidence": "E11-S06#AC1-5"
+    },
+    {
+      "clause": "REQ-048.10",
+      "verdict": "covered",
+      "evidence": "E11-S01#AC7; E11-S02#AC5-6; E11-S08#AC4"
+    },
+    {
+      "clause": "REQ-048.11",
+      "verdict": "covered",
+      "evidence": "E11-S01#AC5; E11-S04#AC6"
+    },
+    {
+      "clause": "REQ-048.12",
+      "verdict": "covered",
+      "evidence": "E11-S04#AC5"
+    },
+    {
+      "clause": "REQ-048.13",
+      "verdict": "covered",
+      "evidence": "E11-S04#AC6-7"
+    },
+    {
+      "clause": "REQ-048.14",
+      "verdict": "covered",
+      "evidence": "E11-S01#AC6; E11-S04#AC7"
+    },
+    {
+      "clause": "REQ-049.1",
+      "verdict": "covered",
+      "evidence": "E11-S09#AC1-2,4,6,7"
+    },
+    {
+      "clause": "REQ-049.2",
+      "verdict": "covered",
+      "evidence": "E11-S09#AC3,5,7"
+    },
+    {
+      "clause": "REQ-049.3",
+      "verdict": "covered",
+      "evidence": "E11-S10#AC1-3"
+    },
+    {
+      "clause": "REQ-049.4",
+      "verdict": "covered",
+      "evidence": "E11-S11#AC1-5"
+    },
+    {
+      "clause": "REQ-055.5",
+      "verdict": "covered",
+      "evidence": "E11-S12#AC1-2"
+    }
+  ],
+  "findings": [],
+  "summary": "All 23 clauses covered. Round-2 findings resolved: E11-S05 (TASK-11.9) no longer depends on E05; E11-S11 ACs quote 'G-2 goal met/not met' with both rates; E11-S09 AC7 covers zero hands in the style section. No findings."
+}

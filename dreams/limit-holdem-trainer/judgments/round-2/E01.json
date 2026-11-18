@@ -1,0 +1,311 @@
+{
+ "scope": "E01",
+ "round": 2,
+ "clauses": [
+  {
+   "clause": "REQ-013.1",
+   "verdict": "covered",
+   "evidence": "E01-S03#AC1,AC2"
+  },
+  {
+   "clause": "REQ-013.2",
+   "verdict": "covered",
+   "evidence": "E01-S03#AC3"
+  },
+  {
+   "clause": "REQ-013.3",
+   "verdict": "covered",
+   "evidence": "E01-S03#AC4 (deck), E01-S07#AC5 (full-hand replay; hidden dependency resolved)"
+  },
+  {
+   "clause": "REQ-014.1",
+   "verdict": "covered",
+   "evidence": "E01-S05#AC1"
+  },
+  {
+   "clause": "REQ-014.2",
+   "verdict": "covered",
+   "evidence": "E01-S05#AC2 (exact card positions)"
+  },
+  {
+   "clause": "REQ-014.3",
+   "verdict": "covered",
+   "evidence": "E01-S05#AC3"
+  },
+  {
+   "clause": "REQ-014.4",
+   "verdict": "covered",
+   "evidence": "E01-S05#AC5,AC8"
+  },
+  {
+   "clause": "REQ-014.5",
+   "verdict": "covered",
+   "evidence": "E01-S05#AC6,AC8"
+  },
+  {
+   "clause": "REQ-014.6",
+   "verdict": "covered",
+   "evidence": "E01-S12#AC3"
+  },
+  {
+   "clause": "REQ-015.1",
+   "verdict": "covered",
+   "evidence": "E01-S09#AC1,AC4"
+  },
+  {
+   "clause": "REQ-015.2",
+   "verdict": "covered",
+   "evidence": "E01-S09#AC2"
+  },
+  {
+   "clause": "REQ-015.3",
+   "verdict": "covered",
+   "evidence": "E01-S09#AC3"
+  },
+  {
+   "clause": "REQ-016.1",
+   "verdict": "covered",
+   "evidence": "E01-S05#AC4"
+  },
+  {
+   "clause": "REQ-016.2",
+   "verdict": "covered",
+   "evidence": "E01-S10#AC1 (to $16)"
+  },
+  {
+   "clause": "REQ-016.3",
+   "verdict": "covered",
+   "evidence": "E01-S10#AC1,AC2"
+  },
+  {
+   "clause": "REQ-016.4",
+   "verdict": "covered",
+   "evidence": "E01-S10#AC3 (concrete heads-up sequence), AC4"
+  },
+  {
+   "clause": "REQ-016.5",
+   "verdict": "covered",
+   "evidence": "E01-S14#AC1,AC2 (AC3/AC4 weak, see finding)"
+  },
+  {
+   "clause": "REQ-017.4",
+   "verdict": "covered",
+   "evidence": "E01-S11#AC1-AC5"
+  },
+  {
+   "clause": "REQ-017.7",
+   "verdict": "covered",
+   "evidence": "E01-S14#AC5-AC7 (engine legal set; button labels belong to Table story)"
+  },
+  {
+   "clause": "REQ-018.1",
+   "verdict": "covered",
+   "evidence": "E01-S12#AC1,AC2"
+  },
+  {
+   "clause": "REQ-018.2",
+   "verdict": "covered",
+   "evidence": "E01-S13#AC1,AC2"
+  },
+  {
+   "clause": "REQ-018.3",
+   "verdict": "covered",
+   "evidence": "E01-S13#AC3,AC4"
+  },
+  {
+   "clause": "REQ-018.4",
+   "verdict": "covered",
+   "evidence": "E01-S12#AC4,AC5"
+  },
+  {
+   "clause": "REQ-018.5",
+   "verdict": "covered",
+   "evidence": "E01-S13#AC5"
+  },
+  {
+   "clause": "REQ-019.1",
+   "verdict": "covered",
+   "evidence": "E01-S04#AC1-AC3"
+  },
+  {
+   "clause": "REQ-019.2",
+   "verdict": "covered",
+   "evidence": "E01-S04#AC4,AC5"
+  },
+  {
+   "clause": "REQ-019.3",
+   "verdict": "covered",
+   "evidence": "E01-S05#AC7 ($27 odd-dollar), E01-S13#AC6 (sit-and-go chips, tied side pot)"
+  },
+  {
+   "clause": "REQ-019.4",
+   "verdict": "covered",
+   "evidence": "E01-S15#AC1,AC2"
+  },
+  {
+   "clause": "REQ-019.5",
+   "verdict": "covered",
+   "evidence": "E01-S15#AC3,AC4"
+  },
+  {
+   "clause": "REQ-019.8",
+   "verdict": "covered",
+   "evidence": "E01-S15#AC5,AC6"
+  },
+  {
+   "clause": "REQ-019.9",
+   "verdict": "covered",
+   "evidence": "E01-S13#AC7"
+  },
+  {
+   "clause": "REQ-020.1",
+   "verdict": "covered",
+   "evidence": "E01-S16#AC1,AC2,AC6"
+  },
+  {
+   "clause": "REQ-020.2",
+   "verdict": "covered",
+   "evidence": "E01-S16#AC3"
+  },
+  {
+   "clause": "REQ-020.3",
+   "verdict": "covered",
+   "evidence": "E01-S16#AC4"
+  },
+  {
+   "clause": "REQ-020.4",
+   "verdict": "covered",
+   "evidence": "E01-S16#AC5"
+  },
+  {
+   "clause": "REQ-025.1",
+   "verdict": "covered",
+   "evidence": "E01-S06#AC1-AC3 (type-level separation), E01-S15#AC4"
+  },
+  {
+   "clause": "REQ-056.1",
+   "verdict": "covered",
+   "evidence": "E01-S08#AC1,AC2 (fault injection per invariant)"
+  },
+  {
+   "clause": "REQ-056.2",
+   "verdict": "covered",
+   "evidence": "E01-S17#AC1,AC2; line-up dimension in E06-S11#AC1"
+  },
+  {
+   "clause": "REQ-057.1",
+   "verdict": "covered",
+   "evidence": "E01-S01#AC8 (axe provisioned, failing check proven)"
+  },
+  {
+   "clause": "REQ-059.1",
+   "verdict": "covered",
+   "evidence": "E01-S01#AC2,AC3"
+  },
+  {
+   "clause": "REQ-059.2",
+   "verdict": "covered",
+   "evidence": "E01-S01#AC4"
+  },
+  {
+   "clause": "REQ-059.3",
+   "verdict": "covered",
+   "evidence": "E01-S01#AC5"
+  },
+  {
+   "clause": "REQ-059.4",
+   "verdict": "covered",
+   "evidence": "E01-S01#AC2,AC3"
+  },
+  {
+   "clause": "REQ-062.1",
+   "verdict": "covered",
+   "evidence": "E01-S07#AC1,AC2 (hands, seed, size), E01-S16#AC6 (game); line-up/style/advice options in E06/E07"
+  },
+  {
+   "clause": "REQ-062.2",
+   "verdict": "covered",
+   "evidence": "E01-S08#AC3,E01-S17#AC2"
+  },
+  {
+   "clause": "REQ-062.4",
+   "verdict": "covered",
+   "evidence": "E01-S07#AC3,AC4"
+  },
+  {
+   "clause": "REQ-062.5",
+   "verdict": "covered",
+   "evidence": "E01-S17#AC3"
+  },
+  {
+   "clause": "REQ-063.1",
+   "verdict": "covered",
+   "evidence": "E01-S01#AC1"
+  },
+  {
+   "clause": "REQ-063.2",
+   "verdict": "covered",
+   "evidence": "E01-S01#AC7"
+  },
+  {
+   "clause": "REQ-063.3",
+   "verdict": "covered",
+   "evidence": "E01-S01#AC2"
+  },
+  {
+   "clause": "REQ-063.4",
+   "verdict": "covered",
+   "evidence": "E01-S01#AC6"
+  },
+  {
+   "clause": "REQ-064.1",
+   "verdict": "covered",
+   "evidence": "E01-S02#AC1"
+  },
+  {
+   "clause": "REQ-064.2",
+   "verdict": "covered",
+   "evidence": "E01-S02#AC2-AC4, E01-S08#AC4, E01-S18"
+  },
+  {
+   "clause": "REQ-064.3",
+   "verdict": "covered",
+   "evidence": "E01-S18#AC1-AC3"
+  },
+  {
+   "clause": "REQ-064.4",
+   "verdict": "covered",
+   "evidence": "E01-S02#AC1,AC4"
+  }
+ ],
+ "findings": [
+  {
+   "id": "J-E01-E01-S08#AC1-hidden-dependency",
+   "severity": "HIGH",
+   "class": "hidden-dependency",
+   "owner": "weaver",
+   "location": "E01-S07#AC1, E01-S08#AC1/AC4 (M1) vs E01-S10, E01-S12 (M2)",
+   "evidence": "M1 stories S07/S08 run a 10,000-hand random-action playtest that must exit 0 with zero violations, and S08#AC1 checks 'no street has more than 4 bets'. S05 states cap, all-ins and side pots come in M2 stories; the cap (S10, M2, deps S09) and short-stack all-in (S12, M2) are not dependencies of S07/S08. On the S05 engine random raising has no cap and a short stack has no defined behaviour, so the M1 playtest and CI playtest cannot pass as written.",
+   "fix": "Move the cap (S10) and the all-in call (S12) into M1 ahead of S07/S08 (or add them as deps), or define S05's interim behaviour (cap of 4 bets, and stacks/policy guaranteeing no all-in) and state it in S05/S07."
+  },
+  {
+   "id": "J-E01-E01-S14#AC3-exact-values",
+   "severity": "MEDIUM",
+   "class": "ac-no-exact-values",
+   "owner": "weaver",
+   "location": "E01-S14#AC3, AC4",
+   "evidence": "AC3 and AC4 give no amounts: AC3 does not state the cap sequence, AC4 does not say what 'may raise' means in dollars; an implementation that ignored the cap count or half-bet reopening for unacted players could pass.",
+   "fix": "AC3: flop $4/$8, seat 2 bets $4, seat 3 raises to $8, seat 4 all-in to $10 (a $2 raise), seat 5 raises to $14; Then seat 6 may only call or fold (fourth bet reached). AC4: seat 2 bets $4, seat 4 all-in $5, seat 3 yet to act; Then seat 3 may raise to $8."
+  },
+  {
+   "id": "J-E01-E01-S05-short-stack-undefined",
+   "severity": "LOW",
+   "class": "underspecified",
+   "owner": "weaver",
+   "location": "E01-S05 / E01-S07 notes",
+   "evidence": "S07 note restores busted seats in the runner and S05 defers all-ins, but neither states the starting cash stack used by the M1 playtest or what happens when a stack cannot cover a bet before S12.",
+   "fix": "State the playtest buy-in and the interim rule (or resolve via the HIGH finding)."
+  }
+ ],
+ "summary": "All round-1 findings (2 HIGH, 3 MEDIUM, 4 LOW) are resolved in the live backlog: DoD items scoped, CI at ordinal 2000, replay AC moved to S07, concrete odd-dollar/heads-up/sng values, sharded nightly run. All clauses in scope covered. One new HIGH: M1 playtest depends on the M2 cap and all-in stories; one MEDIUM, one LOW."
+}

@@ -1,0 +1,999 @@
+{
+  "epic": "E03",
+  "stories": [
+    {
+      "key": "E03-S01",
+      "title": "Play a complete hand against TAG bots at a default 6-max table in the browser",
+      "type": "feature",
+      "milestone": "M1",
+      "priority": "High",
+      "risk": "high",
+      "skeleton": true,
+      "role": "learner",
+      "want": "to play a complete hand against TAG bots in the browser",
+      "benefit": "I can practise real fixed-limit hands from the first build",
+      "context": "Tracer bullet for the Table screen. Until Game Config exists (E02, wave 5) the app opens straight onto a default session: cash game, 6 players, $4/$8, the user plus five TAG bots (E06-S01) acting from the advice engine on their own PlayerView, driven by the E01 engine. This slice draws a minimal table: each seat's name and stack, the user's two hole cards face up (card faces from E03-S05), the dealt board cards, and plain buttons for the engine's legal actions on the user's turn. E03-S02 turns the buttons into the exact-amount action bar; E03-S03 completes the seat, board, pot and header display (including the bottom-centre user seat); E03-S04 shows the result and auto-deals. Cash buy-in is fixed at 20 x the big bet of the session's stake ($160 at $4/$8) and cannot be changed by the user. The user's hole cards are always face up to the user. Bots never act during the user's turn; when a bot is to act it acts without waiting for user input; when it is the user's turn the user never waits for a bot; the user has no decision time limit.",
+      "acs": [
+        {
+          "text": "Given the app opens the default session, When the table is shown, Then it seats the user and five TAG bots in a $4/$8 cash game and every player's stack is $160",
+          "tags": [
+            "REQ-007.1"
+          ]
+        },
+        {
+          "text": "Given a session configuration with stake $10/$20, When the table starts, Then every player's starting stack is $400 and the Table screen offers no control that changes the buy-in",
+          "tags": [
+            "REQ-007.1"
+          ]
+        },
+        {
+          "text": "Given a seeded deal in the default session, When the user checks or calls at every decision, Then the hand is played through preflop, flop, turn and river to showdown and the user's two hole cards are face up to the user on every street",
+          "tags": [
+            "REQ-019.6"
+          ]
+        },
+        {
+          "text": "Given the user folds preflop, When the remaining bots play on, Then the hand completes to its end with no further user input, the user is never asked to act in it and the user's two hole cards stay face up to the user",
+          "tags": [
+            "REQ-024.4",
+            "REQ-019.6"
+          ]
+        },
+        {
+          "text": "Given it is the user's turn, When 10 minutes pass without input, Then it is still the user's turn, no action is taken for the user and no bot has acted",
+          "tags": [
+            "REQ-024.4",
+            "REQ-024.5"
+          ]
+        },
+        {
+          "text": "Given the user has acted and the next player to act is a bot, When the bot's decision is ready, Then the bot acts without any user input and play continues to the next player",
+          "tags": [
+            "REQ-024.4"
+          ]
+        },
+        {
+          "text": "Given a bot acts and the next player to act is the user, When the bot's action is displayed, Then the user's action buttons are enabled within 100 ms with no bot delay before them",
+          "tags": [
+            "REQ-024.4"
+          ]
+        }
+      ],
+      "dod": [],
+      "deps": [
+        "E06-S01",
+        "E01-S06",
+        "E03-S05"
+      ],
+      "notes": "Expose the completed hand (seats, every action per seat per street, board, shown cards, the user's decision points with their PlayerViews) to later consumers: E09's basic Hand Review in M1 grades from it, E03-S09 persists it in M2. E02 later puts Home and Game Config in front of this table and hands it the session configuration."
+    },
+    {
+      "key": "E03-S02",
+      "title": "Choose only legal actions with their exact amounts",
+      "type": "feature",
+      "milestone": "M1",
+      "priority": "High",
+      "risk": "high",
+      "skeleton": true,
+      "role": "learner",
+      "want": "an action bar that offers only my legal actions labelled with their exact amounts",
+      "benefit": "I learn the fixed-limit betting structure and can never make an illegal move",
+      "context": "When no bet faces the user: Check and Bet $<small or big bet>, no Fold (Q-45). Preflop in an unraised pot the big blind is offered Check and \"Raise to $8\" (at $4/$8), no Fold (REQ-017.6). When a bet faces the user: Fold, Call $<amount> and Raise to $<amount>. Bet and raise sizes follow fixed-limit rules ($4 preflop and flop, $8 turn and river at $4/$8). The bar is disabled while it is not the user's turn. Actions are taken by mouse or touch only: no single-key keyboard shortcuts. Each action button is at least 44 x 44 CSS px. The offered set must always equal the engine's legal set. Capped streets and all-in labels (including short all-in bets and raises, REQ-017.7) are E03-S06. Replaces the plain buttons of the tracer E03-S01. The 44 x 44 px check for action buttons lives here; E03-S17 measures the other Table controls.",
+      "acs": [
+        {
+          "text": "Given it is the user's turn on the flop at $4/$8 with no bet facing, When the action bar is shown, Then it offers exactly Check and \"Bet $4\" and no Fold",
+          "tags": [
+            "REQ-017.1",
+            "REQ-022.1"
+          ]
+        },
+        {
+          "text": "Given it is the user's turn preflop at $4/$8 facing the $4 big blind, When the action bar is shown, Then it offers exactly Fold, \"Call $4\" and \"Raise to $8\"",
+          "tags": [
+            "REQ-017.2",
+            "REQ-022.1"
+          ]
+        },
+        {
+          "text": "Given it is the user's turn on the turn at $4/$8 facing a bet of $8, When the action bar is shown, Then it offers Fold, \"Call $8\" and \"Raise to $16\"",
+          "tags": [
+            "REQ-017.2",
+            "REQ-022.1"
+          ]
+        },
+        {
+          "text": "Given the user is the big blind at $4/$8 preflop and every other player has called or folded, When the action bar is shown, Then it offers exactly Check and \"Raise to $8\" and no Fold",
+          "tags": [
+            "REQ-017.6",
+            "REQ-022.1"
+          ]
+        },
+        {
+          "text": "Given 10,000 seeded table states where it is the user's turn, When the action bar is built, Then the offered actions and amounts equal the engine's legal actions for the user in every state",
+          "tags": [
+            "REQ-017.1",
+            "REQ-017.2",
+            "REQ-017.6"
+          ]
+        },
+        {
+          "text": "Given it is a bot's turn or the hand has ended, When the user clicks any action button, Then the buttons are disabled and no action is submitted",
+          "tags": [
+            "REQ-017.5"
+          ]
+        },
+        {
+          "text": "Given it is the user's turn with focus on the page body, When the keys F, C, R, H, K, B and Space are pressed, Then no action is taken",
+          "tags": [
+            "REQ-022.3"
+          ]
+        },
+        {
+          "text": "Given the action bar at a 1280 x 720 window, When each action button is measured, Then it is at least 44 x 44 CSS px",
+          "tags": [
+            "REQ-022.4"
+          ]
+        }
+      ],
+      "dod": [],
+      "deps": [
+        "E03-S01"
+      ],
+      "notes": ""
+    },
+    {
+      "key": "E03-S03",
+      "title": "See every seat, the board, the pot and the button at a glance",
+      "type": "feature",
+      "milestone": "M1",
+      "priority": "High",
+      "risk": "medium",
+      "skeleton": true,
+      "role": "learner",
+      "want": "to read the whole table state at a glance",
+      "benefit": "I can follow the hand and read the situation before I act",
+      "context": "Each bot seat shows name, style label (hiding labels via Settings is E12, REQ-021.2), stack, chips put in on the current street, last action and a card-back marker while it holds cards. The user's seat (always drawn at the bottom centre whatever its seat number, REQ-010.3) shows both hole cards face up, stack and position name (e.g. Cutoff, Button, Small blind, Big blind, Under the gun, Hijack at 6-max). The board shows dealt cards and empty placeholders for undealt ones. The pot total is shown (separate side pots are E03-S07). The dealer button marker sits at the button seat; the seat to act is highlighted. The header shows game type, players, stake and hand number (e.g. \"Cash · 6 players · $4/$8 · Hand #133\") and a Leave table control. The replay code must not appear anywhere before the hand ends (E09 shows it in the review).",
+      "acs": [
+        {
+          "text": "Given a scripted 6-max $4/$8 hand on the flop where bot Ben (Calling station) has $146 and bet $4, When the table is shown, Then Ben's seat shows \"Ben\", \"Calling station\", \"$146\", \"$4\" put in this street, last action \"Bet $4\" and a card-back marker",
+          "tags": [
+            "REQ-021.1"
+          ]
+        },
+        {
+          "text": "Given a bot that has folded, When the table is shown, Then its seat shows last action \"Folded\" and no card-back marker",
+          "tags": [
+            "REQ-021.1"
+          ]
+        },
+        {
+          "text": "Given the user holds seat 5 of 6 in the cutoff with $184 and, in a second session, seat 1, When each table is drawn, Then the user's seat is at the bottom centre in both and in the first shows both hole cards face up, \"$184\" and the position name \"Cutoff\"",
+          "tags": [
+            "REQ-010.3",
+            "REQ-021.3"
+          ]
+        },
+        {
+          "text": "Given the preflop, flop, turn and river of a scripted hand, When the board is shown, Then it shows 0, 3, 4 and 5 dealt cards respectively and an empty placeholder for each undealt card up to 5",
+          "tags": [
+            "REQ-021.4"
+          ]
+        },
+        {
+          "text": "Given a scripted hand at each street, When the table is shown, Then the pot total equals the chips collected from previous streets plus the current-street amounts and the dealer button marker is at the button seat",
+          "tags": [
+            "REQ-021.5",
+            "REQ-021.6"
+          ]
+        },
+        {
+          "text": "Given a scripted hand, When each player becomes the player to act, Then exactly that player's seat is highlighted",
+          "tags": [
+            "REQ-021.7"
+          ]
+        },
+        {
+          "text": "Given hand 133 of a 6-player $4/$8 cash session, When the table is shown, Then the header reads game type \"Cash\", \"6 players\", \"$4/$8\" and \"Hand #133\" and offers a Leave table control",
+          "tags": [
+            "REQ-021.8"
+          ]
+        },
+        {
+          "text": "Given a hand in progress at every street, When the Table screen's text and accessible names are searched, Then the hand's replay code appears nowhere",
+          "tags": [
+            "REQ-013.4"
+          ]
+        }
+      ],
+      "dod": [],
+      "deps": [
+        "E03-S01",
+        "E03-S05"
+      ],
+      "notes": "E05 adds the SNG level in the header in place of the stake. E04 adds chip art, chips in front of seats, avatars and the action log on top of these seat fields. E10 wires Leave table to end the session and open the Session Report (REQ-004.5)."
+    },
+    {
+      "key": "E03-S04",
+      "title": "See who won each hand and get the next hand dealt automatically",
+      "type": "feature",
+      "milestone": "M1",
+      "priority": "High",
+      "risk": "medium",
+      "skeleton": true,
+      "role": "learner",
+      "want": "to see the result of each hand before the next one is dealt",
+      "benefit": "I know how every hand ended and keep practising without extra clicks",
+      "context": "When a hand ends the table shows each winner with the pot amount won and, when there was a showdown, the winning hand's name (e.g. \"Pair of kings\"). A pot won uncontested shows the winner and amount but no hand name. A split pot shows each winner with their share. While the Hand Review panel is not open (it does not exist until E09; later: the user folded preflop or auto-open is off), the next hand is dealt 1.5 s after the result is shown. E09 adds REQ-024.2 (wait for Deal next hand while the panel is open).",
+      "acs": [
+        {
+          "text": "Given a hand that reaches showdown where Ben wins $122 with a pair of kings, When the hand ends, Then the result shows \"Ben\", \"$122\" and \"Pair of kings\"",
+          "tags": [
+            "REQ-024.1",
+            "REQ-019.7"
+          ]
+        },
+        {
+          "text": "Given a hand in which every other player folds to Ava's bet, When the hand ends, Then the result shows Ava and the amount won, and no hand name and no hole cards of Ava",
+          "tags": [
+            "REQ-024.1"
+          ]
+        },
+        {
+          "text": "Given a showdown where two players tie with a straight for a $60 pot, When the hand ends, Then the result shows both winners with $30 each and \"Straight\"",
+          "tags": [
+            "REQ-024.1",
+            "REQ-019.7"
+          ]
+        },
+        {
+          "text": "Given the Hand Review panel is not open, When the result is shown, Then the next hand is dealt 1.5 s after the result appears (measured within 1.4-1.6 s) with no user input",
+          "tags": [
+            "REQ-024.3"
+          ]
+        }
+      ],
+      "dod": [],
+      "deps": [
+        "E03-S03"
+      ],
+      "notes": "E09 must stop the automatic deal while its panel is open (REQ-024.2) by gating the same next-hand timer."
+    },
+    {
+      "key": "E03-S05",
+      "title": "Read big-index cards drawn in code",
+      "type": "feature",
+      "milestone": "M1",
+      "priority": "High",
+      "risk": "low",
+      "skeleton": true,
+      "role": "learner",
+      "want": "big-index cards drawn in code",
+      "benefit": "I can read every card instantly even at Rapid speed",
+      "context": "All cards are SVG drawn in code in a big-index style: rank plus a large suit symbol, no face-card illustrations. Rank characters at least 24 CSS px tall at 1280 x 720. Two-colour deck: hearts and diamonds red, spades and clubs black. Four-colour deck (the Settings toggle REQ-050.4 is E12): clubs green, diamonds blue, hearts red, spades black. Card backs show the TLH logo (dreams/limit-holdem-trainer/brand/tlh-logo.jpg, the only image asset). Built first in M1 as a standalone card component (no table needed) so the tracer E03-S01 and the seat display E03-S03 can show cards.",
+      "acs": [
+        {
+          "text": "Given all 52 card faces, When each is rendered, Then it shows its rank and a large suit symbol and contains no illustration image",
+          "tags": [
+            "REQ-066.1"
+          ]
+        },
+        {
+          "text": "Given a card rendered at the size used for the user's hole cards and the board at a 1280 x 720 window, When its rank characters are measured, Then each is at least 24 CSS px tall",
+          "tags": [
+            "REQ-066.2"
+          ]
+        },
+        {
+          "text": "Given two-colour deck mode, When all 52 faces are rendered, Then hearts and diamonds are red and spades and clubs are black",
+          "tags": [
+            "REQ-066.3"
+          ]
+        },
+        {
+          "text": "Given four-colour deck mode, When all 52 faces are rendered, Then clubs are green, diamonds blue, hearts red and spades black",
+          "tags": [
+            "REQ-066.3"
+          ]
+        },
+        {
+          "text": "Given a card back is rendered, When it is shown, Then it shows the TLH logo",
+          "tags": [
+            "REQ-066.4"
+          ]
+        }
+      ],
+      "dod": [
+        {
+          "text": "Playwright visual snapshot of all 52 faces in both deck modes and of the card back",
+          "tags": [
+            "REQ-066.1",
+            "REQ-066.3",
+            "REQ-066.4"
+          ]
+        }
+      ],
+      "deps": [
+        "E01-S01"
+      ],
+      "notes": ""
+    },
+    {
+      "key": "E03-S06",
+      "title": "Act correctly on capped streets and when short of chips",
+      "type": "feature",
+      "milestone": "M2",
+      "priority": "High",
+      "risk": "medium",
+      "skeleton": false,
+      "role": "learner",
+      "want": "the action bar to reflect a capped street or a short stack",
+      "benefit": "I always see exactly the options the rules allow",
+      "context": "Extends the action bar (E03-S02). When the street is capped (4 bets), Raise is not offered. When the user's stack is smaller than the call amount, Call is labelled \"Call all-in $<stack>\" and Raise is not offered. When the stack exceeds the call amount but is smaller than a full bet or raise, the bar offers \"Bet all-in $X\" (no bet facing) or \"Raise all-in to $X\" (bet facing) (REQ-017.7); whether a short all-in reopens betting for players who already acted follows REQ-016.5 (engine, E01-S12): under half a full bet does not reopen. In a sit-and-go, amounts are chip numbers without $ (e.g. \"Call 40\"). Engine support: cap E01-S10, all-in E01-S12, sit-and-go game type E01-S16.",
+      "acs": [
+        {
+          "text": "Given the user faces the fourth bet on the flop at $4/$8, When the action bar is shown, Then it offers exactly Fold and \"Call $4\" and no Raise",
+          "tags": [
+            "REQ-017.2",
+            "REQ-022.1"
+          ]
+        },
+        {
+          "text": "Given the user has $3 and faces a $4 bet, When the action bar is shown, Then it offers Fold and \"Call all-in $3\" and no Raise",
+          "tags": [
+            "REQ-017.3",
+            "REQ-022.1"
+          ]
+        },
+        {
+          "text": "Given the user has exactly $4 and faces a $4 bet, When the action bar is shown, Then it offers Fold, \"Call $4\" and no Raise",
+          "tags": [
+            "REQ-017.3"
+          ]
+        },
+        {
+          "text": "Given a sit-and-go hand where the user faces a bet of 40 chips, When the action bar is shown, Then the labels read \"Call 40\" and \"Raise to 80\" with no $ sign",
+          "tags": [
+            "REQ-022.1"
+          ]
+        },
+        {
+          "text": "Given 100,000 seeded states covering capped streets and short stacks at table sizes 2-10, When the action bar is built, Then the offered actions and amounts equal the engine's legal set in every state",
+          "tags": [
+            "REQ-017.2",
+            "REQ-017.3",
+            "REQ-017.7"
+          ]
+        },
+        {
+          "text": "Given the user has $6 with nothing in the pot this street and faces a $4 bet on the flop at $4/$8, When the action bar is shown, Then it offers exactly Fold, \"Call $4\" and \"Raise all-in to $6\"",
+          "tags": [
+            "REQ-017.7",
+            "REQ-022.1"
+          ]
+        },
+        {
+          "text": "Given the user has $3 with no bet facing on the flop at $4/$8, When the action bar is shown, Then it offers exactly Check and \"Bet all-in $3\" and no Fold",
+          "tags": [
+            "REQ-017.7",
+            "REQ-022.1"
+          ]
+        },
+        {
+          "text": "Given the user bet $4 on the flop and a bot then raises all-in to $5 (less than half a full raise) and the others call, When the action returns to the user, Then the bar offers Fold and \"Call $1\" and no Raise",
+          "tags": [
+            "REQ-017.7"
+          ]
+        }
+      ],
+      "dod": [],
+      "deps": [
+        "E03-S02",
+        "E01-S10",
+        "E01-S12",
+        "E01-S16"
+      ],
+      "notes": ""
+    },
+    {
+      "key": "E03-S07",
+      "title": "See each side pot and who wins it",
+      "type": "feature",
+      "milestone": "M2",
+      "priority": "High",
+      "risk": "medium",
+      "skeleton": false,
+      "role": "learner",
+      "want": "to see every side pot with its winner",
+      "benefit": "I understand why a short-stacked all-in wins only part of the pot",
+      "context": "When side pots exist the table shows each pot amount separately (main pot plus side pots) instead of a single total, and the result lists the winner and amount of each pot. Side pot construction and award are engine rules (E01-S13).",
+      "acs": [
+        {
+          "text": "Given a three-way all-in where the stacks put in are $20, $60 and $60, When the betting ends, Then the table shows a main pot of $60 and a side pot of $80 separately",
+          "tags": [
+            "REQ-021.5"
+          ]
+        },
+        {
+          "text": "Given the short stack wins the main pot and another player wins the side pot, When the hand ends, Then the result shows each winner with the pot they won and its amount",
+          "tags": [
+            "REQ-024.1",
+            "REQ-021.5"
+          ]
+        },
+        {
+          "text": "Given a hand with no all-in, When the table is shown, Then a single pot total is shown",
+          "tags": [
+            "REQ-021.5"
+          ]
+        }
+      ],
+      "dod": [],
+      "deps": [
+        "E03-S04",
+        "E01-S13"
+      ],
+      "notes": ""
+    },
+    {
+      "key": "E03-S08",
+      "title": "Rebuy or leave when my stack runs out",
+      "type": "feature",
+      "milestone": "M2",
+      "priority": "High",
+      "risk": "medium",
+      "skeleton": false,
+      "role": "learner",
+      "want": "to be offered Rebuy or Leave table when my stack reaches $0",
+      "benefit": "I can keep practising after a bad run or stop on my own terms",
+      "context": "Cash games only. When the user's stack is $0 at the end of a hand, a dialog offers Rebuy and Leave table and no further hand is dealt until the user chooses. Rebuy sets the stack to the buy-in (20 big bets, $160 at $4/$8) and the session continues; the session record (E03-S11) counts total rebuys; showing them in the session result is E10-S01. The user cannot add chips while the stack is above $0: there is no rebuy or add-chips control at any other time. Leave table from this dialog stops dealing and hands over to the Leave table flow; ending the session and opening the Session Report is E10-S01. When the Hand Review panel is open on a bust, E09 changes Deal next hand to Continue, which opens this dialog (REQ-007.6).",
+      "acs": [
+        {
+          "text": "Given the user's stack is $0 at the end of a $4/$8 cash hand, When the result is shown, Then a dialog offers Rebuy and Leave table and no next hand is dealt while the dialog is open, even after 1.5 s",
+          "tags": [
+            "REQ-007.2"
+          ]
+        },
+        {
+          "text": "Given the bust dialog, When the user chooses Rebuy, Then the user's stack is $160, the next hand is dealt and the session's rebuy count increases by 1",
+          "tags": [
+            "REQ-007.3"
+          ]
+        },
+        {
+          "text": "Given a user who rebought twice in a session, When the session record is read after the next completed hand, Then its rebuy count is 2",
+          "tags": [
+            "REQ-007.3"
+          ]
+        },
+        {
+          "text": "Given the bust dialog, When the user chooses Leave table, Then the dialog closes and no further hand is dealt, even after 1.5 s",
+          "tags": [
+            "REQ-007.2"
+          ]
+        },
+        {
+          "text": "Given the user's stack is $1 or more, When the Table screen is shown at any moment, Then no rebuy or add-chips control is offered",
+          "tags": [
+            "REQ-007.4"
+          ]
+        }
+      ],
+      "dod": [],
+      "deps": [
+        "E03-S04",
+        "E03-S11"
+      ],
+      "notes": "E10-S01: verify the rebuy count from the session record appears in the session result (REQ-007.3), and that Leave table from the bust dialog ends the session and opens the Session Report (REQ-004.5)."
+    },
+    {
+      "key": "E03-S09",
+      "title": "Keep a permanent record of every completed hand",
+      "type": "chore",
+      "milestone": "M2",
+      "priority": "High",
+      "risk": "high",
+      "skeleton": false,
+      "role": "learner",
+      "want": "each completed hand saved on my device before the next hand is dealt",
+      "benefit": "my review, report and progress are built from a complete and lasting history",
+      "context": "Enabler (persistence foundation; user-visible through E09 review, E10 report, E11 statistics). First story to use IndexedDB (folded into this slice; the schema version per store, REQ-054, is E13). A hand record is written when the hand ends and before the next hand is dealt. Record fields: session id, hand number, replay code, game type, stake or level, line-up name (preset or Custom, resolved by E06-S07), seats with bot id, name, style and starting stack, button seat, every action per seat per street with amount (full per-seat per-street history so the E07-S08 style-stat functions can run on records), board, cards shown at showdown, the user's hole cards, and pot awards. A replacement bot (E06-S08) has its own distinct id. User-decision advice fields are E03-S10. Hand records are never modified after they are written and are kept until Reset all data (E12); there is no automatic deletion. Each record also stores the date and time the hand completed (REQ-052.7).",
+      "acs": [
+        {
+          "text": "Given a hand completes, When the next hand is dealt, Then that hand's record is already readable from IndexedDB, and if the browser process is killed right after hand 12 ends, hand 12's record is stored after relaunch",
+          "tags": [
+            "REQ-052.1"
+          ]
+        },
+        {
+          "text": "Given a test build that delays the storage write by 2 s, When a hand completes, Then the next hand is not dealt until the write has completed",
+          "tags": [
+            "REQ-052.1"
+          ]
+        },
+        {
+          "text": "Given a test clock set to 2026-11-17 14:32:05 when a hand completes, When its record is read, Then it stores that completion date and time",
+          "tags": [
+            "REQ-052.7"
+          ]
+        },
+        {
+          "text": "Given a scripted $4/$8 hand that reaches showdown, When its record is read, Then it holds session id, hand number, replay code, game type, stake, line-up name, every seat's bot id, name, style and starting stack, button seat, board, cards shown at showdown, the user's hole cards and pot awards equal to the scripted values",
+          "tags": [
+            "REQ-052.2"
+          ]
+        },
+        {
+          "text": "Given a scripted hand, When its record is read, Then every action of every seat on every street is listed in order with its amount, and the E07-S08 style-stat functions computed from the records equal the values computed from the live hands",
+          "tags": [
+            "REQ-052.2"
+          ]
+        },
+        {
+          "text": "Given a bot busted and was replaced before hand 8, When hands 7 and 8 are read, Then that seat has a different bot id, name and starting stack in hand 8",
+          "tags": [
+            "REQ-052.2"
+          ]
+        },
+        {
+          "text": "Given a stored hand record, When later hands complete or the session ends, Then the stored record is byte-identical and a write to an existing session id and hand number is rejected",
+          "tags": [
+            "REQ-052.5"
+          ]
+        },
+        {
+          "text": "Given 1,000 stored hand records dated 2 years ago, When the app is launched and a session is played, Then all 1,000 records are still stored",
+          "tags": [
+            "REQ-052.6"
+          ]
+        }
+      ],
+      "dod": [],
+      "deps": [
+        "E03-S04",
+        "E01-S15",
+        "E06-S07",
+        "E06-S08",
+        "E07-S08"
+      ],
+      "notes": "E13 adds schema versions and migrations (REQ-054) and the write-failure path (REQ-053.2); E12 Reset all data is the only deletion path; E10 must keep reports immutable too (REQ-052.5)."
+    },
+    {
+      "key": "E03-S10",
+      "title": "Record the advice and grade for each of my decisions with the hand",
+      "type": "chore",
+      "milestone": "M2",
+      "priority": "High",
+      "risk": "medium",
+      "skeleton": false,
+      "role": "learner",
+      "want": "each of my decisions stored with the advice I was given for it",
+      "benefit": "my review and statistics show exactly the advice I would have seen at the moment I acted",
+      "context": "Enabler (user-visible through E08 hints, E09 review and E10/E11). Extends the hand record (E03-S09). For each user decision point the record holds the recommendation (action, rule id), numbers (equity %, required equity %, per-opponent basis), explanation (E07-S12), grade (E07-S04) and a hinted flag. Advice is computed at the decision point with the observed-stats snapshot taken then (E07-S13, REQ-036.2), so the stored values equal what a hint at that moment showed. The hinted flag is false unless a hint was shown for that decision (E08 sets it true).",
+      "acs": [
+        {
+          "text": "Given a scripted hand in which the user made 4 decisions, When its record is read, Then it holds 4 decision entries in order, each with street, the user's action, recommended action, equity %, required equity %, basis, explanation and grade",
+          "tags": [
+            "REQ-052.2"
+          ]
+        },
+        {
+          "text": "Given a decision computed with an opponent's observed stats at 29 hands that reach 30 hands when the hand ends, When the record is read, Then its recommendation and numbers equal the advice computed from the decision-time snapshot",
+          "tags": [
+            "REQ-052.2"
+          ]
+        },
+        {
+          "text": "Given a decision made without asking for a hint, When the record is read, Then its hinted flag is false",
+          "tags": [
+            "REQ-052.2"
+          ]
+        },
+        {
+          "text": "Given a hand in which the user folded preflop at the first decision, When its record is read, Then it holds exactly 1 decision entry with its grade",
+          "tags": [
+            "REQ-052.2"
+          ]
+        }
+      ],
+      "dod": [],
+      "deps": [
+        "E03-S09",
+        "E07-S12",
+        "E07-S13"
+      ],
+      "notes": "E08: set the hinted flag to true for decisions where the hint card was shown and add the AC for it. E09 and E10 read decisions from these records rather than recomputing."
+    },
+    {
+      "key": "E03-S11",
+      "title": "Save the session after every hand so it can be resumed",
+      "type": "chore",
+      "milestone": "M2",
+      "priority": "High",
+      "risk": "medium",
+      "skeleton": false,
+      "role": "learner",
+      "want": "my session state saved after every completed hand",
+      "benefit": "closing the app never costs me more than the hand in progress",
+      "context": "Enabler (user-visible through E02 Resume). Creates the session record when the table starts (session id, game type, table size, stake, line-up name and seat styles from the session configuration, E06-S07; speed) and updates it after every completed hand with seats (bot ids, names, styles), stacks, dealer button position, hand count, rebuy count and SNG level. Resume (REQ-004.2/004.3) and the Home Resume entry are E02; this story guarantees the stored state they read. An unfinished hand is never written.",
+      "acs": [
+        {
+          "text": "Given a session at hand 10, When hand 10 completes, Then the stored session holds hand count 10 and the stacks, seats, styles, line-up name and dealer button exactly as at the end of hand 10",
+          "tags": [
+            "REQ-052.3"
+          ]
+        },
+        {
+          "text": "Given the browser process is killed in the middle of hand 11, When the stored session is read, Then it equals the state at the end of hand 10 and no record exists for hand 11",
+          "tags": [
+            "REQ-052.3"
+          ]
+        },
+        {
+          "text": "Given a session started with an edited line-up, When the session record is read, Then its line-up name is Custom and it lists every seat's style",
+          "tags": [
+            "REQ-052.3"
+          ]
+        },
+        {
+          "text": "Given a seat whose bot was replaced after hand 5, When the session is read after hand 5, Then that seat holds the new bot's id, name, style and $160 stack",
+          "tags": [
+            "REQ-052.3"
+          ]
+        }
+      ],
+      "dod": [],
+      "deps": [
+        "E03-S09"
+      ],
+      "notes": "E02 resumes from this state (REQ-004.2, 004.3) and shows hands played on Home; E05 adds the SNG level and finishing data; E10 discards 0-hand sessions (REQ-044.8)."
+    },
+    {
+      "key": "E03-S12",
+      "title": "Keep the table responsive while bots and advice compute",
+      "type": "feature",
+      "milestone": "M2",
+      "priority": "High",
+      "risk": "high",
+      "skeleton": false,
+      "role": "learner",
+      "want": "the table to stay responsive while advice is being computed",
+      "benefit": "the game never freezes or stutters during play",
+      "context": "Equity and advice computation (bot decisions, and later hints and review grading) run off the main thread in a Web Worker so the table stays responsive: no frame longer than 100 ms during computation. The engine and advice modules stay UI-free (REQ-059.2); the worker is the browser host for them. The same worker API serves E08 hints and E09 review.",
+      "acs": [
+        {
+          "text": "Given a scripted 6-max hand where each bot postflop decision takes at least 300 ms to compute, When the table plays it in Chromium, Then a long-task observer records no main-thread task longer than 100 ms during the computation",
+          "tags": [
+            "REQ-055.6"
+          ]
+        },
+        {
+          "text": "Given a bot decision is being computed, When the user hovers a seat or the window is resized, Then the table repaints within 100 ms",
+          "tags": [
+            "REQ-055.6"
+          ]
+        },
+        {
+          "text": "Given the same seed and user actions, When a hand is played with computation in the worker and headlessly in the playtest, Then every bot action is identical",
+          "tags": [
+            "REQ-055.6"
+          ]
+        }
+      ],
+      "dod": [
+        {
+          "text": "Automated timing test over 200 samples reports p95 main-thread frame time during computation at most 100 ms",
+          "tags": [
+            "REQ-055.6"
+          ]
+        }
+      ],
+      "deps": [
+        "E03-S01"
+      ],
+      "notes": "E08 must request hints through this worker (REQ-055.1); E09 computes or reads review advice without blocking the main thread."
+    },
+    {
+      "key": "E03-S13",
+      "title": "Play at Rapid bot pace",
+      "type": "feature",
+      "milestone": "M2",
+      "priority": "High",
+      "risk": "medium",
+      "skeleton": false,
+      "role": "learner",
+      "want": "bots to act at Rapid pace",
+      "benefit": "I can practise many hands per hour",
+      "context": "Moved to M2 by Q-99 so G-5 is testable early. Rapid: each bot action is displayed within 300 ms of the previous action. In M2 every session plays at Rapid (the speed choice is E02-S11, the Settings default E12, Realistic pace E03-S18, in-session change E03-S14, all M3). G-5 fit (REQ-024 fit criterion): at Rapid with the review panel not opening and the user folding every hand, 200 hands complete in under 60 minutes.",
+      "acs": [
+        {
+          "text": "Given Rapid speed in a timed 6-max session, When consecutive bot actions are measured, Then each bot action is displayed within 300 ms of the previous action",
+          "tags": [
+            "REQ-011.1"
+          ]
+        },
+        {
+          "text": "Given Rapid speed at a 10-player table where the user folds preflop, When the remaining nine players' actions are measured, Then no bot action is displayed later than 300 ms after the previous action",
+          "tags": [
+            "REQ-011.1"
+          ]
+        },
+        {
+          "text": "Given Rapid speed, the Hand Review panel not opening and a scripted user folding every hand, When an automated run plays 200 hands, Then they complete in under 60 minutes",
+          "tags": [
+            "REQ-024.6"
+          ]
+        }
+      ],
+      "dod": [],
+      "deps": [
+        "E03-S04"
+      ],
+      "notes": ""
+    },
+    {
+      "key": "E03-S18",
+      "title": "Play at Realistic bot pace",
+      "type": "feature",
+      "milestone": "M3",
+      "priority": "High",
+      "risk": "low",
+      "skeleton": false,
+      "role": "learner",
+      "want": "bots to pause for a random, human-like time before acting",
+      "benefit": "the table feels like a real game",
+      "context": "Realistic: each bot waits a random delay between 0.8 s and 3.0 s before acting (REQ-011.2); the delay is drawn independently for each bot action. The delay applies only before a bot's action: when the user is to act the action bar is enabled at once (REQ-024.4). Speed comes from the session configuration (choice E02-S11, Settings default E12). Builds on the pace mechanism of E03-S13.",
+      "acs": [
+        {
+          "text": "Given Realistic speed in a timed session of 200 bot actions, When the gaps before each bot action are measured, Then every gap is between 0.8 s and 3.0 s",
+          "tags": [
+            "REQ-011.2"
+          ]
+        },
+        {
+          "text": "Given Realistic speed and 200 measured bot-action gaps, When their distribution is checked, Then the gaps are not all equal, the shortest is under 1.2 s and the longest is over 2.6 s",
+          "tags": [
+            "REQ-011.2"
+          ]
+        },
+        {
+          "text": "Given Realistic speed and a bot acts immediately before the user's turn, When the bot's action is displayed, Then the user's action bar is enabled within 100 ms with no 0.8-3.0 s delay",
+          "tags": [
+            "REQ-024.4"
+          ]
+        },
+        {
+          "text": "Given Realistic speed and every other player still in the hand is all-in so only the user can act, When the previous action completes, Then the user's action bar is enabled within 100 ms with no bot delay",
+          "tags": [
+            "REQ-024.4"
+          ]
+        }
+      ],
+      "dod": [],
+      "deps": [
+        "E03-S13",
+        "E01-S12"
+      ]
+    },
+    {
+      "key": "E03-S14",
+      "title": "Change speed during a session from the table",
+      "type": "feature",
+      "milestone": "M3",
+      "priority": "Medium",
+      "risk": "low",
+      "skeleton": false,
+      "role": "learner",
+      "want": "to switch the bot pace from the Table screen",
+      "benefit": "I can slow down to study a tricky spot or speed up for volume without leaving the session",
+      "context": "The Table screen has a speed control showing the current speed. A change takes effect from the next bot action and is stored with the session state.",
+      "acs": [
+        {
+          "text": "Given a session at Rapid, When the user switches to Realistic from the Table screen during a hand, Then the next bot action waits between 0.8 s and 3.0 s",
+          "tags": [
+            "REQ-011.3"
+          ]
+        },
+        {
+          "text": "Given a session at Realistic, When the user switches to Rapid, Then the next bot action is displayed within 300 ms of the previous action",
+          "tags": [
+            "REQ-011.3"
+          ]
+        },
+        {
+          "text": "Given the user changed the speed during the session, When the session is saved after the hand, Then the stored session holds the new speed",
+          "tags": [
+            "REQ-011.3"
+          ]
+        }
+      ],
+      "dod": [],
+      "deps": [
+        "E03-S18",
+        "E03-S11"
+      ],
+      "notes": ""
+    },
+    {
+      "key": "E03-S15",
+      "title": "See an opponent's observed VPIP, PFR and aggression on hover or tap",
+      "type": "feature",
+      "milestone": "M3",
+      "priority": "Medium",
+      "risk": "medium",
+      "skeleton": false,
+      "role": "learner",
+      "want": "to see a bot's observed style stats by hovering over or tapping its seat",
+      "benefit": "I learn to read opponents from their numbers",
+      "context": "Stats panel per bot seat with VPIP %, PFR % and aggression % observed in the current session and \"over N hands\", computed with the shared style-stat functions (E07-S08) from this session's hand records (aggression is postflop-only, REQ-045.3). Below 10 observed hands each value shows \"—\" with the hand count. A replacement bot (E06-S08) starts from zero: stats are keyed by bot id, not seat. The panel closes when the pointer leaves the seat or the user taps elsewhere.",
+      "acs": [
+        {
+          "text": "Given a scripted 20-hand session, When the user hovers over a bot's seat, Then the panel shows VPIP %, PFR % and aggression % equal to the values recomputed from the session's hand records and \"over 20 hands\"",
+          "tags": [
+            "REQ-031.1"
+          ]
+        },
+        {
+          "text": "Given a bot observed for 9 hands, When the user taps its seat, Then each value shows \"—\" and the panel shows \"over 9 hands\"",
+          "tags": [
+            "REQ-031.2"
+          ]
+        },
+        {
+          "text": "Given a bot observed for exactly 10 hands, When the user hovers over its seat, Then each value is shown as a percentage",
+          "tags": [
+            "REQ-031.2"
+          ]
+        },
+        {
+          "text": "Given seat 3's bot busted after 25 hands and was replaced, When the user hovers over seat 3 in the next hand, Then the seat shows the new bot's name and $160 and the panel shows \"—\" values \"over 0 hands\"",
+          "tags": [
+            "REQ-031.3"
+          ]
+        },
+        {
+          "text": "Given the stats panel is open from hovering, When the pointer leaves the seat, Then the panel closes",
+          "tags": [
+            "REQ-031.4"
+          ]
+        },
+        {
+          "text": "Given the stats panel is open from tapping, When the user taps elsewhere on the screen, Then the panel closes",
+          "tags": [
+            "REQ-031.4"
+          ]
+        }
+      ],
+      "dod": [],
+      "deps": [
+        "E03-S03",
+        "E03-S09",
+        "E07-S08"
+      ],
+      "notes": ""
+    },
+    {
+      "key": "E03-S16",
+      "title": "Play on a branded table that fits a 1280 x 720 window",
+      "type": "feature",
+      "milestone": "M3",
+      "priority": "Medium",
+      "risk": "low",
+      "skeleton": false,
+      "role": "learner",
+      "want": "the Table screen to fit a 1280 x 720 window in the TLH dark theme",
+      "benefit": "the table looks calm and on-brand and I never scroll sideways to see the action",
+      "context": "Table screen layout per the Table storyboard: oval green felt seen from above, seats around the rail, user at bottom centre, board and pot in the middle, action bar along the bottom. Theme: charcoal backgrounds, red primary accent, navy and silver secondary colours, green felt (logo on Splash, Home and app icon is E02/E13). Money and language formatting is E03-S19; felt and chip art is E04.",
+      "acs": [
+        {
+          "text": "Given a 10-seat table at a 1280 x 720 window in Chromium and WebKit, When any street of a hand is shown, Then the page has no horizontal scrolling and every seat, the board, the pot and the action bar are fully visible",
+          "tags": [
+            "REQ-060.1"
+          ]
+        },
+        {
+          "text": "Given the Table screen, When its computed styles are checked, Then the page background is the theme's charcoal, the felt base colour is #2F6B4F, the primary action accent is red #D7262E and secondary elements use navy #1F3A6E or silver #C9CED6",
+          "tags": [
+            "REQ-060.3"
+          ]
+        }
+      ],
+      "dod": [],
+      "deps": [
+        "E03-S03",
+        "E03-S05"
+      ],
+      "notes": ""
+    },
+    {
+      "key": "E03-S19",
+      "title": "Read every amount as US dollars in English",
+      "type": "feature",
+      "milestone": "M3",
+      "priority": "Medium",
+      "risk": "low",
+      "skeleton": false,
+      "role": "learner",
+      "want": "every amount on the table shown as US dollars with thousands separators",
+      "benefit": "I can read stacks and pots at a glance",
+      "context": "English text throughout the Table screen; cash amounts are US dollars with a $ sign and thousands separators (e.g. $1,240, $12,500). Sit-and-go chip amounts have no $ (E03-S06, E05).",
+      "acs": [
+        {
+          "text": "Given a stack of 1240 dollars and a pot of 12500 dollars, When they are shown, Then they read \"$1,240\" and \"$12,500\"",
+          "tags": [
+            "REQ-060.4"
+          ]
+        },
+        {
+          "text": "Given a bet of 999 dollars and a stack of 1000 dollars, When they are shown, Then they read \"$999\" and \"$1,000\"",
+          "tags": [
+            "REQ-060.4"
+          ]
+        },
+        {
+          "text": "Given the Table screen at every street and the bust dialog, When every visible label and accessible name is compared with the English copy list for that screen, Then each matches its English entry and none is missing or in another language",
+          "tags": [
+            "REQ-060.4"
+          ]
+        }
+      ],
+      "dod": [],
+      "deps": [
+        "E03-S03"
+      ]
+    },
+    {
+      "key": "E03-S17",
+      "title": "Operate every table control with native buttons and large targets",
+      "type": "feature",
+      "milestone": "M3",
+      "priority": "Medium",
+      "risk": "low",
+      "skeleton": false,
+      "role": "learner",
+      "want": "every control on the Table screen to be a native, focusable control at least 44 x 44 px",
+      "benefit": "I can play long sessions without misclicks and use the keyboard focus if I want",
+      "context": "Applies to all Table screen controls: action buttons, Leave table, speed control, seat stats targets, dialog buttons. Controls are native buttons, links or form fields reachable with Tab and activated with Enter or Space while focused (this is not a shortcut: REQ-022.3 still forbids single-key shortcuts when nothing is focused). Interactive targets are at least 44 x 44 CSS px. Action buttons' 44 x 44 px size is verified in E03-S02 and not re-measured here.",
+      "acs": [
+        {
+          "text": "Given the Table screen during the user's turn, When the user presses Tab repeatedly, Then focus reaches every action button, Leave table, the speed control and every bot seat's stats target, and each is a native button, link or form field",
+          "tags": [
+            "REQ-057.2"
+          ]
+        },
+        {
+          "text": "Given the Call button has keyboard focus, When the user presses Enter, Then the user calls",
+          "tags": [
+            "REQ-057.2"
+          ]
+        },
+        {
+          "text": "Given the Fold button has keyboard focus, When the user presses Space, Then the user folds",
+          "tags": [
+            "REQ-057.2"
+          ]
+        },
+        {
+          "text": "Given the bust dialog is open, When the user tabs to Rebuy and presses Enter, Then the rebuy happens",
+          "tags": [
+            "REQ-057.2"
+          ]
+        },
+        {
+          "text": "Given the Table screen and the bust dialog at 1280 x 720, When Leave table, the speed control, every seat stats target and the dialog buttons are measured, Then each is at least 44 x 44 CSS px",
+          "tags": [
+            "REQ-057.4"
+          ]
+        }
+      ],
+      "dod": [],
+      "deps": [
+        "E03-S08",
+        "E03-S14",
+        "E03-S15",
+        "E03-S02",
+        "E03-S03"
+      ],
+      "notes": ""
+    }
+  ]
+}

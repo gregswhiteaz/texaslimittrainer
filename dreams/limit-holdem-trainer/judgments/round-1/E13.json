@@ -1,0 +1,206 @@
+{
+  "scope": "E13",
+  "round": 1,
+  "clauses": [
+    {
+      "clause": "REQ-052.4",
+      "verdict": "covered",
+      "evidence": "E13-S01#AC1-4"
+    },
+    {
+      "clause": "REQ-053.1",
+      "verdict": "covered",
+      "evidence": "E13-S11#AC1-5, E13-S10#AC2"
+    },
+    {
+      "clause": "REQ-053.2",
+      "verdict": "covered",
+      "evidence": "E13-S03#AC1-6"
+    },
+    {
+      "clause": "REQ-054.1",
+      "verdict": "covered",
+      "evidence": "E13-S04#AC1-2"
+    },
+    {
+      "clause": "REQ-054.2",
+      "verdict": "covered",
+      "evidence": "E13-S04#AC2-5"
+    },
+    {
+      "clause": "REQ-054.3",
+      "verdict": "covered",
+      "evidence": "E13-S05#AC1-4"
+    },
+    {
+      "clause": "REQ-055.1",
+      "verdict": "covered",
+      "evidence": "E13-S11#AC2"
+    },
+    {
+      "clause": "REQ-055.2",
+      "verdict": "covered",
+      "evidence": "E13-S11#AC2"
+    },
+    {
+      "clause": "REQ-055.3",
+      "verdict": "covered",
+      "evidence": "E13-S11#AC4"
+    },
+    {
+      "clause": "REQ-055.4",
+      "verdict": "covered",
+      "evidence": "E13-S10#AC1-2"
+    },
+    {
+      "clause": "REQ-055.5",
+      "verdict": "covered",
+      "evidence": "E13-S11#AC3 (and E11-S12)"
+    },
+    {
+      "clause": "REQ-055.6",
+      "verdict": "covered",
+      "evidence": "E13-S11#AC4"
+    },
+    {
+      "clause": "REQ-056.3",
+      "verdict": "covered",
+      "evidence": "E13-S02#AC1-5"
+    },
+    {
+      "clause": "REQ-057.1",
+      "verdict": "covered",
+      "evidence": "E13-S12#AC1-4"
+    },
+    {
+      "clause": "REQ-058.1",
+      "verdict": "covered",
+      "evidence": "E13-S09#AC1-2"
+    },
+    {
+      "clause": "REQ-058.2",
+      "verdict": "covered",
+      "evidence": "E13-S09#AC3"
+    },
+    {
+      "clause": "REQ-058.3",
+      "verdict": "covered",
+      "evidence": "E13-S09#AC4-6"
+    },
+    {
+      "clause": "REQ-060.2",
+      "verdict": "partial",
+      "evidence": "E13-S06#AC1-2 cover manifest and Chromium installability only; no AC for Safari Add to Dock"
+    },
+    {
+      "clause": "REQ-060.3",
+      "verdict": "covered",
+      "evidence": "E13-S06#AC3 covers the icon/logo part; theme colours are in E03-S16#AC2, E02-S01#AC1"
+    },
+    {
+      "clause": "REQ-061.1",
+      "verdict": "covered",
+      "evidence": "E13-S12#AC5"
+    },
+    {
+      "clause": "REQ-061.3",
+      "verdict": "covered",
+      "evidence": "E13-S06#AC3"
+    },
+    {
+      "clause": "REQ-065.1",
+      "verdict": "covered",
+      "evidence": "E13-S07#AC1-4"
+    },
+    {
+      "clause": "REQ-065.2",
+      "verdict": "covered",
+      "evidence": "E13-S08#AC1-3"
+    },
+    {
+      "clause": "REQ-065.3",
+      "verdict": "covered",
+      "evidence": "E13-S08#AC4-6"
+    },
+    {
+      "clause": "REQ-067.3",
+      "verdict": "covered",
+      "evidence": "E13-S06#AC4"
+    }
+  ],
+  "findings": [
+    {
+      "id": "J-E13-REQ-060.2-partial-should",
+      "severity": "HIGH",
+      "class": "partial-should",
+      "owner": "weaver",
+      "location": "E13-S06#AC1-2",
+      "evidence": "REQ-060.2 requires installing from Chrome AND from Safari (Add to Dock) and opening in its own window. AC1-2 check the manifest and Chromium beforeinstallprompt only; the Safari path appears only in the description and AC3's apple-touch-icon mention. The AC would pass with a Safari-broken install.",
+      "fix": "Add AC: Given the built app in WebKit, When it is added to the Dock, Then it opens in its own window with the TLH icon and name 'TLH Trainer' (automated meta-tag check plus a recorded manual check); add AC that the installed app opens standalone without browser chrome."
+    },
+    {
+      "id": "J-E13-E13-S12-order-hidden-dependency",
+      "severity": "HIGH",
+      "class": "hidden-dependency",
+      "owner": "weaver",
+      "location": "E13-S12 (TASK-13.11)",
+      "evidence": "E13-S12 (ordinal 115000) sweeps Table Settings overlay, Settings with storage warning and reset dialog, which are built by E12-S03 (128000), E12-S09 (155000) and E12-S08 (141000), and Statistics states; it has no dependency edges to them and its note says 'include them as they land'. Its ACs cannot pass when it is built.",
+      "fix": "Add dependencies on E12-S03, E12-S08, E12-S09, E11-S01 and E05-S01 (or reorder it after them / split the sweep per screen into the owning stories' DoD)."
+    },
+    {
+      "id": "J-E13-E13-S11-order-hidden-dependency",
+      "severity": "HIGH",
+      "class": "hidden-dependency",
+      "owner": "weaver",
+      "location": "E13-S11 (TASK-13.10)",
+      "evidence": "E13-S11 AC3 requires Statistics p95 <= 2.0 s with 100,000 hands, the work of E11-S12 (ordinal 150000); E13-S11 has ordinal 114000, no edge to E11-S12, and its note says 'its own story must be in place before this test runs'.",
+      "fix": "Add dependency on E11-S12 (and ordering after it) or remove AC3 and point to E11-S12#AC1."
+    },
+    {
+      "id": "J-E13-E13-S11-AC3-dup-duplicate",
+      "severity": "MEDIUM",
+      "class": "duplicate",
+      "owner": "weaver",
+      "location": "E13-S11#AC3",
+      "evidence": "E13-S11#AC3 and E11-S12#AC1 both assert Statistics p95 <= 2.0 s with 100,000 hands [REQ-055.5].",
+      "fix": "Keep the measurement in one story; have the other reference it."
+    },
+    {
+      "id": "J-E13-E13-S02-order-hidden-dependency",
+      "severity": "HIGH",
+      "class": "hidden-dependency",
+      "owner": "weaver",
+      "location": "E13-S02 (TASK-13.1)",
+      "evidence": "E13-S02#AC4 injects an error while the Session Report or Statistics screen renders, which need E10-S01 (ordinal 58000) and E11-S01 (76000); E13-S02 has ordinal 55000 and direct deps only E02-S08 and E03-S11.",
+      "fix": "Add dependencies on E10-S01 and E11-S01 or move AC4 to a later story."
+    },
+    {
+      "id": "J-E13-E13-S07-S09-deps-dependency",
+      "severity": "MEDIUM",
+      "class": "dependency",
+      "owner": "weaver",
+      "location": "E13-S07, E13-S09",
+      "evidence": "E13-S07#AC2/AC4 need Statistics (E11-S01), Settings (E12-S01) and sit-and-go (E05-S01); E13-S09#AC1 needs a full session incl. Statistics and Settings. Direct deps list none of these; the notes say they are 'written in parallel'. Ordinals currently satisfy the order but the edges are missing.",
+      "fix": "Add dependency edges to E11-S01, E12-S01 and E05-S01."
+    },
+    {
+      "id": "J-E13-E13-S12-AC1-ac-style",
+      "severity": "MEDIUM",
+      "class": "ac-style",
+      "owner": "weaver",
+      "location": "E13-S12#AC1",
+      "evidence": "AC1 says 'each of the 8 screens in each state listed in the context', so the AC is not self-contained.",
+      "fix": "Enumerate the screens and states in the AC, or one AC per screen group."
+    },
+    {
+      "id": "J-E13-E13-S06-split-oversize",
+      "severity": "LOW",
+      "class": "oversize",
+      "owner": "weaver",
+      "location": "E13-S06",
+      "evidence": "E13-S06 combines PWA install with the image-asset allow-list build check (REQ-067.3); related but two capabilities.",
+      "fix": "Optionally split the asset-allow-list check from the install story."
+    }
+  ],
+  "summary": "25 clauses covered except REQ-060.2 (Safari install partial). Three hidden-dependency ordering defects (E13-S02, E13-S11, E13-S12) and missing edges for E13-S07/S09."
+}

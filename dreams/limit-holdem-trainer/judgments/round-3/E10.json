@@ -1,0 +1,158 @@
+{
+  "scope": "E10",
+  "round": 3,
+  "clauses": [
+    {
+      "clause": "REQ-004.5",
+      "verdict": "covered",
+      "evidence": "E10-S01#AC1,AC2,AC8; E10-S05#AC4"
+    },
+    {
+      "clause": "REQ-004.7",
+      "verdict": "covered",
+      "evidence": "E10-S05#AC1-6"
+    },
+    {
+      "clause": "REQ-004.8",
+      "verdict": "covered",
+      "evidence": "E10-S05#AC7-8"
+    },
+    {
+      "clause": "REQ-040.4",
+      "verdict": "covered",
+      "evidence": "E10-S03#AC1-3"
+    },
+    {
+      "clause": "REQ-044.1",
+      "verdict": "covered",
+      "evidence": "E10-S01#AC3-4 (+46, +2.7, -40, -5.0 recompute correctly); E10-S11#AC1-2"
+    },
+    {
+      "clause": "REQ-044.2",
+      "verdict": "covered",
+      "evidence": "E10-S02#AC1-4"
+    },
+    {
+      "clause": "REQ-044.3",
+      "verdict": "covered",
+      "evidence": "E10-S03#AC1-4"
+    },
+    {
+      "clause": "REQ-044.4",
+      "verdict": "covered",
+      "evidence": "E10-S04#AC3-5 (25.0/18.0/55.0/30.0/50.0 recompute correctly)"
+    },
+    {
+      "clause": "REQ-044.5",
+      "verdict": "covered",
+      "evidence": "E10-S06#AC7-8, E10-S12#AC8, E10-S07#AC3"
+    },
+    {
+      "clause": "REQ-044.7",
+      "verdict": "covered",
+      "evidence": "E10-S01#AC5-6"
+    },
+    {
+      "clause": "REQ-044.8",
+      "verdict": "covered",
+      "evidence": "E10-S01#AC7"
+    },
+    {
+      "clause": "REQ-044.9",
+      "verdict": "covered",
+      "evidence": "E10-S06#AC8"
+    },
+    {
+      "clause": "REQ-044.10",
+      "verdict": "covered",
+      "evidence": "E10-S04#AC7"
+    },
+    {
+      "clause": "REQ-044.11",
+      "verdict": "covered",
+      "evidence": "E10-S04#AC4"
+    },
+    {
+      "clause": "REQ-045.6",
+      "verdict": "covered",
+      "evidence": "E10-S04#AC7"
+    },
+    {
+      "clause": "REQ-046.1",
+      "verdict": "covered",
+      "evidence": "E10-S04#AC1,AC2,AC5"
+    },
+    {
+      "clause": "REQ-046.2",
+      "verdict": "covered",
+      "evidence": "E10-S04#AC1"
+    },
+    {
+      "clause": "REQ-046.3",
+      "verdict": "covered",
+      "evidence": "E10-S04#AC6"
+    },
+    {
+      "clause": "REQ-047.1",
+      "verdict": "covered",
+      "evidence": "E10-S06#AC1-2, E10-S12#AC4-7"
+    },
+    {
+      "clause": "REQ-047.2",
+      "verdict": "covered",
+      "evidence": "E10-S06#AC3-6 (40% and 8 boundaries exercised)"
+    },
+    {
+      "clause": "REQ-047.3",
+      "verdict": "covered",
+      "evidence": "E10-S08#AC1-3"
+    },
+    {
+      "clause": "REQ-047.4",
+      "verdict": "covered",
+      "evidence": "E10-S06#AC3,AC7"
+    },
+    {
+      "clause": "REQ-047.5",
+      "verdict": "covered",
+      "evidence": "E10-S06#AC2,AC7; E10-S12#AC7"
+    },
+    {
+      "clause": "REQ-047.6",
+      "verdict": "covered",
+      "evidence": "E10-S12#AC1-3 (grouping recomputes correctly)"
+    },
+    {
+      "clause": "REQ-047.7",
+      "verdict": "covered",
+      "evidence": "E10-S12#AC4,AC7,AC8"
+    },
+    {
+      "clause": "REQ-047.8",
+      "verdict": "covered",
+      "evidence": "E10-S06#AC6"
+    },
+    {
+      "clause": "REQ-047.9",
+      "verdict": "covered",
+      "evidence": "E10-S12#AC5-6"
+    },
+    {
+      "clause": "REQ-052.5",
+      "verdict": "covered",
+      "evidence": "E10-S01#AC6"
+    },
+    {
+      "clause": "REQ-061.2",
+      "verdict": "covered",
+      "evidence": "DoD#9 on E10-S04/S06/S12 (generic DoD item, adequate)"
+    },
+    {
+      "clause": "REQ-072.3",
+      "verdict": "covered",
+      "evidence": "E10-S10#AC1-3"
+    }
+  ],
+  "findings": [],
+  "summary": "All 30 E10 clauses covered; values recompute correctly (+$46/+2.7, -$40/-5.0, style stats 25/18/55/30/50, position groups, 3-hour pace). Round-2 LOW (stale round-1 notes in S06/S12) resolved. No findings. C3-NOM1 expected (M2/M3 epic)."
+}

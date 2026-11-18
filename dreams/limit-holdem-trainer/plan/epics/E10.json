@@ -1,0 +1,592 @@
+{
+  "epic": "E10",
+  "stories": [
+    {
+      "key": "E10-S01",
+      "title": "End the session with Leave table and see its saved report with my cash result",
+      "type": "feature",
+      "milestone": "M2",
+      "priority": "High",
+      "risk": "high",
+      "skeleton": false,
+      "role": "learner",
+      "want": "to end my session with Leave table so that its Session Report opens with my result",
+      "benefit": "I know how the session went the moment I stop playing",
+      "context": "Leave table exists in the Table header (E03-S03) and in the bust dialog (E03-S08). Between hands (no hand in progress, including while the Hand Review panel is open after a hand), Leave table ends the session immediately and opens the Session Report screen (layout per the Report storyboard: header line with game type, players, stake and hands; KPI tiles; style section; leaks section). This slice creates the report record and shows the cash result: Result in $ = final stack minus everything bought in (initial buy-in of 20 big bets plus every rebuy, from the session's rebuy count, E03-S08/E03-S11), shown with sign (e.g. +$46); BB/100 = (result in big bets of the session's stake) / hands played x 100, one decimal with sign; number of rebuys. The report is built from the stored hand records and session record (E03-S09, E03-S11) and saved to IndexedDB when the session ends; like hand records it is never modified after it is written (REQ-052.5). An ended session is no longer a paused session. A session with 0 completed hands ends without a report and is not stored (whatever path ends it: Leave table, or E02's New game confirm on a paused session). Error rates, hint usage, style stats, leaks and playing time are added by E10-S02..S10; the sit-and-go result is E10-S11; Statistics and Home controls on the report are E11 (REQ-044.6); reopening the stored report from the Home snapshot is E02 (REQ-003.2).",
+      "acs": [
+        {
+          "text": "Given a $4/$8 cash session between hands, When the user chooses Leave table in the header, Then the session ends, no further hand is dealt and the Session Report for that session opens",
+          "tags": [
+            "REQ-004.5"
+          ]
+        },
+        {
+          "text": "Given the bust dialog after the user's stack reached $0, When the user chooses Leave table, Then the Session Report for that session opens",
+          "tags": [
+            "REQ-004.5"
+          ]
+        },
+        {
+          "text": "Given a $4/$8 cash session of 214 hands with 1 rebuy that ends with a final stack of $366, When its report is shown, Then it shows Result \"+$46\", BB/100 \"+2.7\" and rebuys \"1\"",
+          "tags": [
+            "REQ-007.3",
+            "REQ-044.1"
+          ]
+        },
+        {
+          "text": "Given a $4/$8 cash session of 100 hands with no rebuys that ends with a final stack of $120, When its report is shown, Then it shows Result \"-$40\", BB/100 \"-5.0\" and rebuys \"0\"",
+          "tags": [
+            "REQ-044.1"
+          ]
+        },
+        {
+          "text": "Given a session has ended and its report was shown, When the app is closed and relaunched, Then the stored report for that session holds the same values and no paused session exists for it",
+          "tags": [
+            "REQ-044.7"
+          ]
+        },
+        {
+          "text": "Given a stored session report, When later sessions are played and ended, Then the stored report is byte-identical and a second write for the same session id is rejected",
+          "tags": [
+            "REQ-044.7",
+            "REQ-052.5"
+          ]
+        },
+        {
+          "text": "Given a session with 0 completed hands (the app was closed during hand 1), When that session is ended, Then no Session Report opens and neither the session nor a report is stored",
+          "tags": [
+            "REQ-044.8"
+          ]
+        },
+        {
+          "text": "Given the Hand Review panel is open after hand 12 of a cash session, When the user chooses Leave table, Then no dialog is shown, no hand 13 is dealt and the Session Report opens showing hands played \"12\"",
+          "tags": [
+            "REQ-004.5"
+          ]
+        }
+      ],
+      "dod": [],
+      "deps": [
+        "E03-S03",
+        "E03-S08",
+        "E03-S09",
+        "E03-S11"
+      ],
+      "notes": "Expose a report builder (session id -> report values) usable by E02's New game confirm (REQ-004.4 saves the paused session's report), E11 (Statistics) and E05 (sit-and-go result). Mid-hand Leave table (dialog, auto-fold) is E10-S05."
+    },
+    {
+      "key": "E10-S02",
+      "title": "See my hands played and error rates per 100 hands in the report",
+      "type": "feature",
+      "milestone": "M2",
+      "priority": "High",
+      "risk": "medium",
+      "skeleton": false,
+      "role": "learner",
+      "want": "to see my error rates per 100 hands in the report",
+      "benefit": "I can tell whether I am making fewer mistakes (G-2)",
+      "context": "Report KPI tiles: Hands played; Major errors /100 and Minor errors /100, each = count of the user's unhinted decisions graded Major (or Minor) in the session / hands played x 100, one decimal. Hinted decisions (hinted flag on the E03-S10 decision record; E08 sets it) are excluded from both rates. Values are read from the stored decision records (grade and hinted flag), never recomputed by the advice engine.",
+      "acs": [
+        {
+          "text": "Given a 200-hand session with 12 unhinted Major errors and 28 unhinted Minor errors, When its report is shown, Then it shows hands played \"200\", Major errors /100 \"6.0\" and Minor errors /100 \"14.0\"",
+          "tags": [
+            "REQ-044.2"
+          ]
+        },
+        {
+          "text": "Given a 200-hand session with 12 unhinted and 5 hinted Major errors, When its report is shown, Then Major errors /100 is \"6.0\"",
+          "tags": [
+            "REQ-044.2"
+          ]
+        },
+        {
+          "text": "Given a 50-hand session in which every decision was graded Correct, When its report is shown, Then Major errors /100 and Minor errors /100 both show \"0.0\"",
+          "tags": [
+            "REQ-044.2"
+          ]
+        },
+        {
+          "text": "Given a scripted 200-hand session, When its report is shown, Then hands played, Major errors /100 and Minor errors /100 each equal the values recomputed from the session's stored hand records",
+          "tags": [
+            "REQ-044.2"
+          ]
+        }
+      ],
+      "dod": [],
+      "deps": [
+        "E10-S01",
+        "E03-S10"
+      ],
+      "notes": ""
+    },
+    {
+      "key": "E10-S03",
+      "title": "See how many of my decisions used a hint in the report",
+      "type": "feature",
+      "milestone": "M2",
+      "priority": "High",
+      "risk": "low",
+      "skeleton": false,
+      "role": "learner",
+      "want": "to see how many of my decisions were hinted",
+      "benefit": "I know how much I leaned on hints during the session",
+      "context": "Report shows hint usage: number of the user's decisions with the hinted flag set and that number as a percentage of all the user's decisions in the session, one decimal (e.g. \"40 of 320 decisions (12.5%)\"). Read from the hinted flag on E03-S10 decision records (E08 sets it true when the hint card was opened before acting).",
+      "acs": [
+        {
+          "text": "Given a session in which the user made 320 decisions of which 40 were hinted, When its report is shown, Then hint usage shows 40 hinted decisions and \"12.5%\"",
+          "tags": [
+            "REQ-044.3",
+            "REQ-040.4"
+          ]
+        },
+        {
+          "text": "Given a session in which no hint was opened, When its report is shown, Then hint usage shows 0 hinted decisions and \"0.0%\"",
+          "tags": [
+            "REQ-044.3",
+            "REQ-040.4"
+          ]
+        },
+        {
+          "text": "Given a session in which every one of the user's 25 decisions was hinted, When its report is shown, Then hint usage shows 25 hinted decisions and \"100.0%\"",
+          "tags": [
+            "REQ-044.3",
+            "REQ-040.4"
+          ]
+        },
+        {
+          "text": "Given a scripted session, When its report is shown, Then the hinted count equals the number of stored decision records with the hinted flag set",
+          "tags": [
+            "REQ-044.3"
+          ]
+        }
+      ],
+      "dod": [],
+      "deps": [
+        "E10-S01",
+        "E03-S10"
+      ],
+      "notes": ""
+    },
+    {
+      "key": "E10-S04",
+      "title": "See my five style stats against healthy ranges for my table size",
+      "type": "feature",
+      "milestone": "M2",
+      "priority": "High",
+      "risk": "high",
+      "skeleton": false,
+      "role": "learner",
+      "want": "to see my five style stats against healthy ranges",
+      "benefit": "I know which parts of my play style to fix (G-4)",
+      "context": "Strategy content plus report section \"Your style vs healthy range (<reference size>)\". Author healthy ranges (low-high %) for VPIP, PFR, Aggression, WTSD and W$SD at heads-up, 6-max and full ring (15 ranges) as a data file loaded by the app, each with a one-sentence justification in original plain English. Stats are computed over the session's hands with the E07-S08 functions (Aggression is postflop-only per REQ-045.3; a zero denominator shows \"—\"). Each stat row shows the user's value, the range for the session's reference size and a label: \"in range\" when low <= value <= high (both limits inclusive, REQ-044.11), \"too high\" above, \"too low\" below. Table sizes map to reference sizes per REQ-005.4 (2 -> heads-up; 3-7 -> 6-max; 8-10 -> full ring); for 3, 4, 5, 7 and 8 the mapped ranges are used and the section is marked approximate. The ranges must agree with the bot style bands: the TAG bot's harness stats fall inside the 6-max ranges. A stat shown as \"—\" carries the label \"not enough data\" instead of a range label.",
+      "acs": [
+        {
+          "text": "Given the healthy-range data file, When it is validated, Then it holds exactly 15 ranges (VPIP, PFR, Aggression, WTSD, W$SD at heads-up, 6-max and full ring), each with low < high and a non-empty justification sentence",
+          "tags": [
+            "REQ-046.1",
+            "REQ-046.2"
+          ]
+        },
+        {
+          "text": "Given a 100,000-hand 6-max playtest of TAG bots, When its VPIP, PFR, Aggression, WTSD and W$SD are computed, Then each falls inside the authored 6-max healthy range",
+          "tags": [
+            "REQ-046.1"
+          ]
+        },
+        {
+          "text": "Given a 6-max session of 100 hands whose stored hand records hold 25 hands with a voluntary preflop call or raise, 18 with a preflop raise, 11 postflop bets or raises and 9 postflop calls, 20 flops seen, 6 showdowns and 3 showdowns won, When its report is shown, Then the rows show VPIP 25.0%, PFR 18.0%, Aggression 55.0%, WTSD 30.0% and W$SD 50.0%, each next to the authored 6-max range for that stat",
+          "tags": [
+            "REQ-044.4"
+          ]
+        },
+        {
+          "text": "Given a healthy-range fixture whose 6-max VPIP range is 20-28, When sessions with VPIP 28.0, 20.0, 28.1 and 19.9 are reported, Then the VPIP label is \"in range\", \"in range\", \"too high\" and \"too low\" respectively",
+          "tags": [
+            "REQ-044.4",
+            "REQ-044.11"
+          ]
+        },
+        {
+          "text": "Given a 2-player session and a 10-player session, When their reports are shown, Then they use the heads-up and full-ring ranges respectively and are not marked approximate",
+          "tags": [
+            "REQ-044.4",
+            "REQ-046.1"
+          ]
+        },
+        {
+          "text": "Given a session at 4 players and a session at 8 players, When their reports are shown, Then they use the 6-max and full-ring ranges respectively and the style section is marked approximate and names that reference size",
+          "tags": [
+            "REQ-046.3"
+          ]
+        },
+        {
+          "text": "Given a session in which the user never saw the flop, When its report is shown, Then WTSD and W$SD show \"—\" with the label \"not enough data\" and no range label",
+          "tags": [
+            "REQ-045.6",
+            "REQ-044.10"
+          ]
+        }
+      ],
+      "dod": [
+        {
+          "text": "Every healthy range carries its written justification and the text is original",
+          "tags": [
+            "REQ-046.2",
+            "REQ-061.2"
+          ]
+        }
+      ],
+      "deps": [
+        "E10-S01",
+        "E07-S08",
+        "E06-S17"
+      ],
+      "notes": ""
+    },
+    {
+      "key": "E10-S05",
+      "title": "Leave the table in the middle of a hand",
+      "type": "feature",
+      "milestone": "M2",
+      "priority": "High",
+      "risk": "medium",
+      "skeleton": false,
+      "role": "learner",
+      "want": "to leave the table during a hand after confirming that my hand will be folded",
+      "benefit": "I can stop at any moment without corrupting my session record",
+      "context": "Leave table while a hand is in progress (from the hand's deal until its result is shown) opens a dialog with the text \"Leave now? Your hand will be folded.\" and Confirm / Cancel. On cancel play continues exactly as before. On confirm the user's hand is folded immediately, even when another player is to act (if the user still holds cards and is not all-in); this forced fold is not graded and is not counted in error rates or leaks, the remaining players play the hand to completion with no further user input, the hand is recorded like any completed hand (E03-S09/S10, counted in the session's hands and statistics), the session state is saved, and then the session ends and its Session Report opens (E10-S01). No further hand is dealt. Between hands Leave table needs no dialog (E10-S01).",
+      "acs": [
+        {
+          "text": "Given a hand in progress, When the user chooses Leave table, Then a dialog shows \"Leave now? Your hand will be folded.\" and no action is taken for the user while it is open",
+          "tags": [
+            "REQ-004.7"
+          ]
+        },
+        {
+          "text": "Given the leave dialog during hand 25, When the user cancels, Then the dialog closes, the user still holds the same cards and stack and the hand continues with the same player to act",
+          "tags": [
+            "REQ-004.7"
+          ]
+        },
+        {
+          "text": "Given the leave dialog during hand 25 while the user holds cards, When the user confirms, Then the user's hand is folded, the remaining players play hand 25 to completion without user input and no hand 26 is dealt",
+          "tags": [
+            "REQ-004.7"
+          ]
+        },
+        {
+          "text": "Given the user confirmed leaving during hand 25, When hand 25 completes, Then hand 25's record is stored, the session ends and its Session Report opens showing hands played \"25\"",
+          "tags": [
+            "REQ-004.7",
+            "REQ-004.5"
+          ]
+        },
+        {
+          "text": "Given the user confirmed leaving while all-in during hand 25, When the hand completes, Then the user's cards stay in to showdown, any pot the user wins is awarded and included in the report's result",
+          "tags": [
+            "REQ-004.7"
+          ]
+        },
+        {
+          "text": "Given a cash session whose user confirms leaving during hand 1, When hand 1 completes, Then a report with hands played \"1\" is shown and stored",
+          "tags": [
+            "REQ-004.7"
+          ]
+        },
+        {
+          "text": "Given the leave dialog during hand 25 while a bot is to act and the user holds cards, When the user confirms, Then the user's hand is folded at once before that bot acts",
+          "tags": [
+            "REQ-004.8"
+          ]
+        },
+        {
+          "text": "Given the user confirmed leaving during hand 25, When hand 25's record and the session report are read, Then the forced fold has no grade and is not counted in Major errors /100, Minor errors /100, hint usage or any leak category",
+          "tags": [
+            "REQ-004.8"
+          ]
+        }
+      ],
+      "dod": [],
+      "deps": [
+        "E10-S01"
+      ],
+      "notes": ""
+    },
+    {
+      "key": "E10-S06",
+      "title": "See my postflop leaks with evidence and a one-sentence fix",
+      "type": "feature",
+      "milestone": "M2",
+      "priority": "High",
+      "risk": "medium",
+      "skeleton": false,
+      "role": "learner",
+      "want": "to see which postflop decision categories were leaks this session, each with its evidence and fix",
+      "benefit": "I know exactly what to work on next",
+      "context": "Leak detection over the session's stored decision records (grade and hinted flag, E03-S10). This slice delivers the leak rules, the report's leaks section and the 15 postflop categories: street (flop, turn, river) x facing a bet (fold, call, raise) or not facing a bet (check, bet). A call facing a bet is a call even when the betting is capped. The 16 preflop categories (position group x fold/open/call/raise) are added by E10-S12, which reuses these rules. A category is a leak when it has >= 8 unhinted decisions and >= 40% of its unhinted decisions were graded Minor or Major; hinted decisions are ignored for both thresholds. The forced fold after Leave table mid-hand is not a decision (REQ-004.8). Each postflop category has authored content written in original plain English: a leak title (e.g. \"Calling too often on the turn\"), an evidence name (e.g. \"turn calls\") and a one-sentence fix. Evidence reads \"<errors> of <decisions> <category> graded as errors\" over unhinted decisions. Report section \"Biggest leaks this session\" lists each leak's title, evidence and fix; with no leaks it reads \"No leaks found this session (a leak needs 8+ spots with 40%+ errors).\" Ranking and the limit of 3 are E10-S07. In M2 because REQ-044.5 (leaks in the report) is Must.",
+      "acs": [
+        {
+          "text": "Given decisions where the user called a turn bet, called a river bet when the betting was capped, folded to a river bet and bet the flop with no bet to face, When they are classified, Then they fall in turn-facing-a-bet-call, river-facing-a-bet-call, river-facing-a-bet-fold and flop-not-facing-a-bet-bet respectively",
+          "tags": [
+            "REQ-047.1"
+          ]
+        },
+        {
+          "text": "Given the postflop category data, When it is validated, Then all 15 postflop categories (flop, turn and river x fold, call, raise facing a bet and check, bet not facing a bet) exist and each has a title, an evidence name and a fix of exactly one sentence",
+          "tags": [
+            "REQ-047.1",
+            "REQ-047.5"
+          ]
+        },
+        {
+          "text": "Given a session with 10 unhinted turn calls of which 4 were graded Minor or Major, When the report is built, Then turn calls is a leak with evidence \"4 of 10 turn calls graded as errors\"",
+          "tags": [
+            "REQ-047.2",
+            "REQ-047.4"
+          ]
+        },
+        {
+          "text": "Given a session with 7 unhinted river raises all graded Major, When the report is built, Then river raises is not a leak",
+          "tags": [
+            "REQ-047.2"
+          ]
+        },
+        {
+          "text": "Given a session with 10 unhinted flop bets of which 3 were graded errors, When the report is built, Then flop bets is not a leak",
+          "tags": [
+            "REQ-047.2"
+          ]
+        },
+        {
+          "text": "Given a category with 5 hinted decisions all graded Major and 7 unhinted decisions all graded Major, When the report is built, Then the category is not a leak; and with 3 hinted Correct plus 8 unhinted of which 4 are errors it is a leak with evidence \"4 of 8 <category> graded as errors\"",
+          "tags": [
+            "REQ-047.8",
+            "REQ-047.2"
+          ]
+        },
+        {
+          "text": "Given a session with one leak, When its report is shown, Then the leaks section shows that category's title, its evidence and its fix sentence",
+          "tags": [
+            "REQ-044.5",
+            "REQ-047.4",
+            "REQ-047.5"
+          ]
+        },
+        {
+          "text": "Given a session with no category meeting the leak thresholds, When its report is shown, Then the leaks section reads \"No leaks found this session (a leak needs 8+ spots with 40%+ errors).\" and lists no leak",
+          "tags": [
+            "REQ-044.5",
+            "REQ-044.9"
+          ]
+        }
+      ],
+      "dod": [
+        {
+          "text": "Every postflop leak title, evidence name and fix is original text",
+          "tags": [
+            "REQ-047.5",
+            "REQ-061.2"
+          ]
+        }
+      ],
+      "deps": [
+        "E10-S01",
+        "E03-S10"
+      ],
+      "notes": "Keep the category set as data so E10-S12 only adds the preflop entries."
+    },
+    {
+      "key": "E10-S07",
+      "title": "See my three most costly leaks first",
+      "type": "feature",
+      "milestone": "M2",
+      "priority": "High",
+      "risk": "low",
+      "skeleton": false,
+      "role": "learner",
+      "want": "to see at most my three biggest leaks ranked by Major errors",
+      "benefit": "I focus on the mistakes that cost the most",
+      "context": "When more than one category is a leak, leaks are ordered by number of Major errors (unhinted) descending, then by error rate descending; at most 3 are shown in the report.",
+      "acs": [
+        {
+          "text": "Given leaks A with 5 Major errors and B with 3 Major errors, When the report is shown, Then A is listed before B",
+          "tags": [
+            "REQ-047.3"
+          ]
+        },
+        {
+          "text": "Given leaks A and B with 4 Major errors each and error rates 50% and 62.5%, When the report is shown, Then B is listed before A",
+          "tags": [
+            "REQ-047.3"
+          ]
+        },
+        {
+          "text": "Given a session with 5 leaks, When the report is shown, Then exactly the 3 highest-ranked leaks are listed",
+          "tags": [
+            "REQ-047.3",
+            "REQ-044.5"
+          ]
+        }
+      ],
+      "dod": [],
+      "deps": [
+        "E10-S06"
+      ],
+      "notes": ""
+    },
+    {
+      "key": "E10-S10",
+      "title": "See my playing time and hands per hour in the report",
+      "type": "feature",
+      "milestone": "M3",
+      "priority": "Low",
+      "risk": "low",
+      "skeleton": false,
+      "role": "learner",
+      "want": "to see the session's total playing time with its hands-per-hour pace",
+      "benefit": "I can see how much practice I got through (G-5)",
+      "context": "The report shows the session's total playing time and hands per hour = hands completed / playing hours, rounded to a whole number. Playing time is the elapsed playing time that E04-S09 stores with the session state (time at the table only, excluding paused time, REQ-072.1); this story reads that stored value when the session ends and saves it with the report; it does not measure or store elapsed time itself.",
+      "acs": [
+        {
+          "text": "Given a session of 300 hands played over 1 h 30 min at the table with a 20 min pause in between, When its report is shown, Then it shows playing time 1 h 30 min and 200 hands per hour",
+          "tags": [
+            "REQ-072.3"
+          ]
+        },
+        {
+          "text": "Given a session paused by closing the app after 45 min at the table and resumed for 15 min more, When its report is shown, Then it shows playing time 1 h 0 min",
+          "tags": [
+            "REQ-072.3"
+          ]
+        },
+        {
+          "text": "Given a stored report, When it is reopened later, Then playing time and hands per hour equal the values shown when the session ended",
+          "tags": [
+            "REQ-072.3"
+          ]
+        }
+      ],
+      "dod": [],
+      "deps": [
+        "E10-S01",
+        "E04-S09"
+      ],
+      "notes": "One elapsed-time source for header and report: E04-S09."
+    },
+    {
+      "key": "E10-S11",
+      "title": "See my sit-and-go finishing position in the report",
+      "type": "feature",
+      "milestone": "M3",
+      "priority": "High",
+      "risk": "low",
+      "skeleton": false,
+      "role": "learner",
+      "want": "to see my finishing position in the report of a finished sit-and-go",
+      "benefit": "I know how I placed in the tournament",
+      "context": "For a sit-and-go session the report's result is the user's finishing position out of the starting players (e.g. \"3rd of 6\") instead of $ result, BB/100 and rebuys. The finishing position comes from the session record (E05 stores it). Sit-and-go play is M3 (E05), so this slice is M3.",
+      "acs": [
+        {
+          "text": "Given an ended sit-and-go session record in which the user finished 3rd of 6 starting players, When its report is shown, Then the result shows \"3rd of 6\" and shows no $ result, BB/100 or rebuys",
+          "tags": [
+            "REQ-044.1"
+          ]
+        },
+        {
+          "text": "Given an ended sit-and-go session in which the user won all the chips at a 9-player table, When its report is shown, Then the result shows \"1st of 9\"",
+          "tags": [
+            "REQ-044.1"
+          ]
+        }
+      ],
+      "dod": [],
+      "deps": [
+        "E10-S01"
+      ],
+      "notes": "E05 must store finishing position and starting player count on the session record and depend on this story."
+    },
+    {
+      "key": "E10-S12",
+      "title": "See my preflop leaks by position group",
+      "type": "feature",
+      "milestone": "M2",
+      "priority": "High",
+      "risk": "medium",
+      "skeleton": false,
+      "role": "learner",
+      "want": "to see preflop leaks for the position group I acted from",
+      "benefit": "preflop leaks point at the seats where I really go wrong",
+      "context": "Adds the 16 preflop categories to leak detection (rules and report section from E10-S06): position group x action taken (fold, open, call, raise). Position groups count back from the button: button and cutoff are late, the next two seats are middle, all remaining non-blind seats are early, the small and big blinds are blinds. Heads-up the button is late and the other player is blinds. Only seats dealt into the hand count (empty sit-and-go seats are skipped). Action mapping: open = first raise into an unopened or limped pot; raise = raising after someone has raised; call = any preflop call, including a limp (calling the big blind in an unopened pot) and the small blind completing; fold = fold. A big blind checking its option is none of fold, open, call or raise, so it falls in no leak category (it still counts in error rates, REQ-044.2), REQ-047.9. Each preflop category has authored content in original plain English: title, evidence name (e.g. \"early-position folds\") and one-sentence fix.",
+      "acs": [
+        {
+          "text": "Given a 9-player hand, When seats are grouped, Then button and cutoff are late, hijack and lojack are middle, the three seats after the big blind are early and small and big blind are blinds",
+          "tags": [
+            "REQ-047.6"
+          ]
+        },
+        {
+          "text": "Given a 6-player hand, When seats are grouped, Then button and cutoff are late, the two seats after the big blind are middle, no seat is early and small and big blind are blinds",
+          "tags": [
+            "REQ-047.6"
+          ]
+        },
+        {
+          "text": "Given a 4-player hand, a 3-player hand and a heads-up hand, When seats are grouped, Then in the 4- and 3-player hands the non-blind seats are late and no seat is middle or early, and heads-up the button is late and the other player is blinds",
+          "tags": [
+            "REQ-047.6"
+          ]
+        },
+        {
+          "text": "Given preflop decisions where the user open-raised from the button, called a raise from the big blind, re-raised from the hijack at 6-max and folded from under the gun at 9-max, When they are classified, Then they fall in late-open, blinds-call, middle-raise and early-fold respectively",
+          "tags": [
+            "REQ-047.1",
+            "REQ-047.7"
+          ]
+        },
+        {
+          "text": "Given an unopened 6-max pot, When the user calls the big blind from the cutoff, completes from the small blind, or raises from the button after one limper, Then the decisions fall in late-call, blinds-call and late-open respectively",
+          "tags": [
+            "REQ-047.1",
+            "REQ-047.9"
+          ]
+        },
+        {
+          "text": "Given the big blind checks its option after the small blind completes, When the decision is classified, Then it falls in no preflop category and adds to no category's decision or error count",
+          "tags": [
+            "REQ-047.1",
+            "REQ-047.9"
+          ]
+        },
+        {
+          "text": "Given the preflop category data, When it is validated, Then all 16 preflop categories exist (early, middle, late and blinds x fold, open, call, raise) and each has a title, an evidence name and a fix of exactly one sentence",
+          "tags": [
+            "REQ-047.1",
+            "REQ-047.7",
+            "REQ-047.5"
+          ]
+        },
+        {
+          "text": "Given a 9-player session with 10 unhinted early-position folds of which 4 were graded errors, When its report is shown, Then the leaks section lists that category's title, the evidence \"4 of 10 early-position folds graded as errors\" and its fix",
+          "tags": [
+            "REQ-047.7",
+            "REQ-047.2",
+            "REQ-044.5"
+          ]
+        }
+      ],
+      "dod": [
+        {
+          "text": "Every preflop leak title, evidence name and fix is original text",
+          "tags": [
+            "REQ-047.5",
+            "REQ-061.2"
+          ]
+        }
+      ],
+      "deps": [
+        "E10-S06"
+      ],
+      "notes": "Reuses the E10-S06 leak rules and report section; limp/SB-complete/BB-check mapping per REQ-047.9."
+    }
+  ]
+}

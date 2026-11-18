@@ -1,0 +1,122 @@
+{
+  "scope": "E05",
+  "round": 2,
+  "clauses": [
+    {
+      "clause": "REQ-002.6",
+      "verdict": "covered",
+      "evidence": "E05-S09#AC1-2"
+    },
+    {
+      "clause": "REQ-003.5",
+      "verdict": "covered",
+      "evidence": "E05-S08#AC1-3"
+    },
+    {
+      "clause": "REQ-004.3",
+      "verdict": "covered",
+      "evidence": "E05-S03#AC4 (level, hands, stacks)"
+    },
+    {
+      "clause": "REQ-008.1",
+      "verdict": "covered",
+      "evidence": "E05-S01#AC1-5"
+    },
+    {
+      "clause": "REQ-008.2",
+      "verdict": "covered",
+      "evidence": "E05-S02#AC1,AC3,AC4,AC6"
+    },
+    {
+      "clause": "REQ-008.3",
+      "verdict": "covered",
+      "evidence": "E05-S02#AC1-2, E05-S03#AC2,AC4,AC5 (hand 24=7, 30=1, 25=6 recompute correctly)"
+    },
+    {
+      "clause": "REQ-008.4",
+      "verdict": "covered",
+      "evidence": "E05-S04#AC1-6"
+    },
+    {
+      "clause": "REQ-008.5",
+      "verdict": "covered",
+      "evidence": "E05-S05#AC1-3,AC5 (positions recompute correctly)"
+    },
+    {
+      "clause": "REQ-008.6",
+      "verdict": "covered",
+      "evidence": "E05-S05#AC1,AC3,AC4,AC6"
+    },
+    {
+      "clause": "REQ-008.7",
+      "verdict": "covered",
+      "evidence": "E05-S07#AC1-6"
+    },
+    {
+      "clause": "REQ-008.8",
+      "verdict": "covered",
+      "evidence": "E05-S03#AC1-3"
+    },
+    {
+      "clause": "REQ-008.9",
+      "verdict": "covered",
+      "evidence": "E05-S06#AC1-5"
+    },
+    {
+      "clause": "REQ-008.10",
+      "verdict": "covered",
+      "evidence": "E05-S10#AC1-3"
+    },
+    {
+      "clause": "REQ-008.11",
+      "verdict": "covered",
+      "evidence": "E05-S06#AC6"
+    },
+    {
+      "clause": "REQ-008.12",
+      "verdict": "covered",
+      "evidence": "E05-S03#AC3"
+    },
+    {
+      "clause": "REQ-008.13",
+      "verdict": "covered",
+      "evidence": "E05-S05#AC7"
+    },
+    {
+      "clause": "REQ-041.2",
+      "verdict": "covered",
+      "evidence": "E05-S02#AC5 (790 vs 800 / 600 boundary correct)"
+    },
+    {
+      "clause": "REQ-047.6",
+      "verdict": "covered",
+      "evidence": "E05-S04#AC6"
+    },
+    {
+      "clause": "REQ-056.2",
+      "verdict": "covered",
+      "evidence": "E05-S11#AC1-3"
+    }
+  ],
+  "findings": [
+    {
+      "id": "J-E05-E05-S07-hidden-dependency",
+      "severity": "MEDIUM",
+      "class": "hidden-dependency",
+      "owner": "weaver",
+      "location": "E05-S07#AC5 (TASK-5.3)",
+      "evidence": "AC5 collects text of the Session Report of a seeded sit-and-go, but TASK-5.3 depends only on 5.1, 4.1, 4.5, 8.1 and 9.3. A sit-and-go report exists only after E05-S05 / E05-S10 and E10-S11 (finishing-position result), none of which are dependencies.",
+      "fix": "Add dependencies on E05-S05 (TASK-5.7) and E10-S11 (TASK-10.12), or move the Session Report part of AC5 to a story that already depends on them."
+    },
+    {
+      "id": "J-E05-E05-S08-stale-note",
+      "severity": "LOW",
+      "class": "wording",
+      "owner": "weaver",
+      "location": "E05-S08 (TASK-5.9) Notes",
+      "evidence": "Notes say 'Add a dependency on E02's Home snapshot story once its key exists' but the dependency on TASK-2.16 already exists; E05-S06/E05-S10 notes also carry round-1 history.",
+      "fix": "Remove the stale notes."
+    }
+  ],
+  "summary": "All 19 E05 clauses covered with exact values (level schedule, header countdown, finishing positions recompute correctly). Round-1 findings resolved: Leave table split into E05-S10, 1.5 s delay AC added, arbitrary 10 s wait removed. One MEDIUM hidden dependency in E05-S07#AC5. C5-AND and C3-NOM1 warnings are false positives."
+}

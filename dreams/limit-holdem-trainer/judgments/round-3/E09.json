@@ -1,0 +1,133 @@
+{
+  "scope": "E09",
+  "round": 3,
+  "clauses": [
+    {
+      "clause": "REQ-007.2",
+      "verdict": "covered",
+      "evidence": "E09-S06#AC2"
+    },
+    {
+      "clause": "REQ-007.6",
+      "verdict": "covered",
+      "evidence": "E09-S06#AC1-AC5"
+    },
+    {
+      "clause": "REQ-013.5",
+      "verdict": "covered",
+      "evidence": "E09-S03#AC3"
+    },
+    {
+      "clause": "REQ-024.2",
+      "verdict": "covered",
+      "evidence": "E09-S01#AC5-AC7;E09-S07#AC2"
+    },
+    {
+      "clause": "REQ-024.3",
+      "verdict": "covered",
+      "evidence": "E09-S01#AC3,AC4;E09-S07#AC1"
+    },
+    {
+      "clause": "REQ-035.4",
+      "verdict": "covered",
+      "evidence": "E09-S02#AC3"
+    },
+    {
+      "clause": "REQ-036.2",
+      "verdict": "covered",
+      "evidence": "E09-S02#AC4"
+    },
+    {
+      "clause": "REQ-040.2",
+      "verdict": "covered",
+      "evidence": "E09-S05#AC1,AC2"
+    },
+    {
+      "clause": "REQ-041.1",
+      "verdict": "covered",
+      "evidence": "E09-S08#AC1,AC2"
+    },
+    {
+      "clause": "REQ-041.2",
+      "verdict": "covered",
+      "evidence": "E09-S08#AC3"
+    },
+    {
+      "clause": "REQ-043.1",
+      "verdict": "covered",
+      "evidence": "E09-S01#AC1+E09-S02#AC1,AC5"
+    },
+    {
+      "clause": "REQ-043.2",
+      "verdict": "covered",
+      "evidence": "E09-S01#AC1,AC2"
+    },
+    {
+      "clause": "REQ-043.3",
+      "verdict": "covered",
+      "evidence": "E09-S03#AC1,AC2"
+    },
+    {
+      "clause": "REQ-043.4",
+      "verdict": "covered",
+      "evidence": "E09-S03#AC3"
+    },
+    {
+      "clause": "REQ-043.5",
+      "verdict": "covered",
+      "evidence": "E09-S05#AC1,AC3"
+    },
+    {
+      "clause": "REQ-043.6",
+      "verdict": "covered",
+      "evidence": "E09-S04#AC1-AC3"
+    },
+    {
+      "clause": "REQ-043.7",
+      "verdict": "covered",
+      "evidence": "E09-S01#AC6,AC7"
+    },
+    {
+      "clause": "REQ-043.8",
+      "verdict": "covered",
+      "evidence": "E09-S07#AC1-AC3"
+    },
+    {
+      "clause": "REQ-043.9",
+      "verdict": "covered",
+      "evidence": "E09-S02#AC2"
+    },
+    {
+      "clause": "REQ-043.10",
+      "verdict": "covered",
+      "evidence": "E09-S01#AC7"
+    },
+    {
+      "clause": "REQ-043.11",
+      "verdict": "covered",
+      "evidence": "E09-S07#AC4-AC6"
+    },
+    {
+      "clause": "REQ-043.12",
+      "verdict": "covered",
+      "evidence": "E09-S01#AC3,AC8"
+    },
+    {
+      "clause": "REQ-043.13",
+      "verdict": "covered",
+      "evidence": "E09-S07#AC6"
+    },
+    {
+      "clause": "REQ-055.2",
+      "verdict": "covered",
+      "evidence": "E09-S09#AC1"
+    },
+    {
+      "clause": "REQ-057.3",
+      "verdict": "covered",
+      "evidence": "E09-S01#AC2;E09-S07#AC4"
+    }
+  ],
+  "findings": [],
+  "summary": "All 25 clauses covered; round-2 findings remain resolved; no findings."
+}

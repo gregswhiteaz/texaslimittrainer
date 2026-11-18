@@ -1,0 +1,548 @@
+{
+  "epic": "E04",
+  "stories": [
+    {
+      "key": "E04-S01",
+      "title": "Follow every action of the hand in an action log",
+      "type": "feature",
+      "milestone": "M3",
+      "priority": "Medium",
+      "risk": "medium",
+      "skeleton": false,
+      "role": "player",
+      "want": "to read every action of the current hand in order in an action log",
+      "benefit": "I can follow who bet what even when bots act at Rapid speed",
+      "context": "Action log panel on the Table screen (storyboard Table, right-hand panel). Lists every action of the current hand in order: each entry names the player, the action and the amount (e.g. \"Ben bets $4\", \"Ava posts small blind $2\", \"You raise to $8\"; folds and checks have no amount). Street changes appear as their own entries with the new board cards and the pot (e.g. \"Flop: K♠ 9♦ 4♣ (pot $26)\", likewise Turn and River). The log is cleared when a new hand starts. Entries are built from the same engine events that drive the table (E03-S03), so they show only public information. Collapse/expand and its persistence are E04-S02.",
+      "acs": [
+        {
+          "text": "Given the scripted 6-max $4/$8 hand #133 of the Table storyboard up to Ben's flop bet, When the action log is read, Then its entries in order are \"Ava posts small blind $2\", \"Ben posts big blind $4\", \"Cal folds\", \"Dee folds\", \"You raise to $8\", \"Eli calls $8\", \"Ava folds\", \"Ben calls $4\", \"Flop: K♠ 9♦ 4♣ (pot $26)\", \"Ben bets $4\"",
+          "tags": [
+            "REQ-023.1",
+            "REQ-023.2"
+          ]
+        },
+        {
+          "text": "Given a scripted hand containing a check, a bet, a call, a raise, a fold and a call all-in, When each action is taken, Then a log entry naming that player and that action is appended, and every bet, call, raise and all-in entry shows its exact dollar amount",
+          "tags": [
+            "REQ-023.1"
+          ]
+        },
+        {
+          "text": "Given a scripted hand that reaches the river, When the flop, turn and river are dealt, Then the log shows a Flop entry with the 3 flop cards, a Turn entry with the turn card and a River entry with the river card, each with the pot total at that moment, placed between the last action of the previous street and the first action of the new street",
+          "tags": [
+            "REQ-023.2"
+          ]
+        },
+        {
+          "text": "Given 1,000 seeded table hands at Rapid speed, When each hand ends, Then the log entries equal the engine's action history for that hand in order and amount, with one street entry per dealt street",
+          "tags": [
+            "REQ-023.1",
+            "REQ-023.2"
+          ]
+        },
+        {
+          "text": "Given the log holds the entries of hand 133, When hand 134 starts, Then the log holds no entry from hand 133 and its first entries are hand 134's blind posts",
+          "tags": [
+            "REQ-023.3"
+          ]
+        }
+      ],
+      "dod": [],
+      "deps": [
+        "E03-S03"
+      ],
+      "notes": "Keep entry formatting in a pure function over engine events so it can be unit tested headlessly. Money formatting follows E03-S16 ($1,240); in a sit-and-go (E05) amounts are chip numbers without $, like the action bar. No-leak note (not a REQ-023 check): entries are built only from public engine events, so folded or mucked hole cards (REQ-019.5, owned by E01-S15) never appear in the log; keep a regression test for this in the formatter's unit tests."
+    },
+    {
+      "key": "E04-S02",
+      "title": "Keep the action log collapsed or expanded as I left it",
+      "type": "feature",
+      "milestone": "M3",
+      "priority": "Medium",
+      "risk": "low",
+      "skeleton": false,
+      "role": "player",
+      "want": "the action log to stay collapsed or expanded as I last set it",
+      "benefit": "I choose once how much of the table the log takes up",
+      "context": "The action log (E04-S01) has a collapse/expand control on the Table screen. The chosen state is stored locally and kept across hands, sessions and app launches. The control is a native button reachable with Tab and at least 44 x 44 CSS px (table control rules, E03-S17).",
+      "acs": [
+        {
+          "text": "Given the action log is expanded, When the user collapses it, Then the entries are hidden and the control offers Expand; When the user expands it, Then the entries of the current hand are shown again in order",
+          "tags": [
+            "REQ-023.4"
+          ]
+        },
+        {
+          "text": "Given the user collapsed the log during hand 20, When hand 21 is dealt, Then the log is still collapsed",
+          "tags": [
+            "REQ-023.4"
+          ]
+        },
+        {
+          "text": "Given the user collapsed the log, When the session ends and a new session starts, Then the log is collapsed",
+          "tags": [
+            "REQ-023.4"
+          ]
+        },
+        {
+          "text": "Given the user expanded the log, When the app is closed and relaunched and a table is opened, Then the log is expanded",
+          "tags": [
+            "REQ-023.4"
+          ]
+        },
+        {
+          "text": "Given the Table screen at 1280 x 720, When the user tabs to the log's collapse control and presses Enter or Space, Then the log toggles; and the control is a native button at least 44 x 44 CSS px",
+          "tags": [
+            "REQ-057.2",
+            "REQ-057.4"
+          ]
+        }
+      ],
+      "dod": [],
+      "deps": [
+        "E04-S01"
+      ],
+      "notes": "E13 owns schema versioning of local stores (REQ-054); store this UI preference where E13 can version it. Reset all data (E12) clears it."
+    },
+    {
+      "key": "E04-S03",
+      "title": "Play on a table, rail, chips and dealer button drawn in code",
+      "type": "feature",
+      "milestone": "M3",
+      "priority": "Medium",
+      "risk": "low",
+      "skeleton": false,
+      "role": "player",
+      "want": "to play on a table drawn in the TLH brand style",
+      "benefit": "the table looks like a real, on-brand card room without licensed art",
+      "context": "Table felt, rail, chips and dealer button are drawn in code (SVG/CSS). Felt: green with a subtle texture; rail: dark. Chips use the logo colours red, navy and silver. Brand palette (REQ-067.4): felt base #2F6B4F, rail #24543E, chip red #D7262E, chip navy #1F3A6E, chip silver #C9CED6. 'Subtle texture' is measured on a 200 x 100 px felt sample with no cards, chips or text: mean colour within 6 of #2F6B4F per RGB channel, per-channel standard deviation between 1 and 8, and no pixel more than 24 from #2F6B4F in any channel. The only image asset in the app is the TLH logo (brand/tlh-logo.jpg) and icons generated from it (E13 generates app icons). Builds on the branded layout of E03-S16. The approved table snapshot is a deliverable of this story.",
+      "acs": [
+        {
+          "text": "Given the Table screen at 1280 x 720 in Chromium and WebKit, When a 200 x 100 px felt sample with no cards, chips or text is captured, Then its mean colour is within 6 of #2F6B4F on each RGB channel",
+          "tags": [
+            "REQ-067.1",
+            "REQ-067.4"
+          ]
+        },
+        {
+          "text": "Given the same 200 x 100 px felt sample, When its pixels are measured, Then each RGB channel has a standard deviation of at least 1 and at most 8, and no pixel differs from #2F6B4F by more than 24 on any channel",
+          "tags": [
+            "REQ-067.1",
+            "REQ-067.4"
+          ]
+        },
+        {
+          "text": "Given the Table screen, When the rail around the felt is sampled, Then its colour is #24543E, its relative luminance is at most 0.08 and lower than the felt's",
+          "tags": [
+            "REQ-067.1",
+            "REQ-067.4"
+          ]
+        },
+        {
+          "text": "Given every chip denomination drawn at the table, When its fill and edge colours are read, Then each is #D7262E (red), #1F3A6E (navy) or #C9CED6 (silver), and the three colours together appear across the chip set",
+          "tags": [
+            "REQ-067.2",
+            "REQ-067.4"
+          ]
+        },
+        {
+          "text": "Given the Table screen, When the dealer button, chips, felt and rail are inspected, Then each is drawn as SVG or CSS in code and none loads an image file",
+          "tags": [
+            "REQ-067.3"
+          ]
+        },
+        {
+          "text": "Given `npm run build`, When the build output is scanned for image files (png, jpg, jpeg, gif, webp, svg, ico, avif), Then the only ones present are the TLH logo and icons generated from it",
+          "tags": [
+            "REQ-067.3"
+          ]
+        },
+        {
+          "text": "Given an image file other than the logo is added to the source tree, When the image-asset check runs in `npm test`, Then it fails naming the file",
+          "tags": [
+            "REQ-067.3"
+          ]
+        }
+      ],
+      "dod": [
+        {
+          "text": "Approved baseline snapshots of the Table screen at 1280 x 720 (6-max, mid-hand with chips in front of seats and the dealer button) are committed for Chromium and WebKit after the user reviews them, and the visual test compares against them in `npm test`",
+          "tags": [
+            "REQ-067.1",
+            "REQ-067.2",
+            "REQ-067.4"
+          ]
+        }
+      ],
+      "deps": [
+        "E03-S16"
+      ],
+      "notes": "Card faces and backs are already code-drawn (E03-S05); this story covers the remaining table art. Keep the five hex values in the theme tokens (E03-S16) so tests read one source; values are fixed by REQ-067.4."
+    },
+    {
+      "key": "E04-S04",
+      "title": "See each player's bet as chips in front of their seat",
+      "type": "feature",
+      "milestone": "M3",
+      "priority": "Medium",
+      "risk": "medium",
+      "skeleton": false,
+      "role": "player",
+      "want": "to see the chips each player has put in this street in front of their seat",
+      "benefit": "I can follow where the money goes on every street",
+      "context": "While a betting round is in progress, each seat with chips put in on the current street shows a chip stack (chip art from E04-S03) with the amount in front of the seat. When the street ends, those stacks move into the pot and the pot amount updates. When the hand ends, the pot moves to each winner's seat with the amount won (split pots: each winner's share; side pots: each pot to its winner, E03-S07). Timing of the movement is E04-S05; this story makes the state changes correct.",
+      "acs": [
+        {
+          "text": "Given a scripted 6-max $4/$8 hand, When each action is taken, Then the amount shown in front of every seat equals that seat's current-street contribution, and a seat with no chips put in this street shows no chip stack",
+          "tags": [
+            "REQ-068.1"
+          ]
+        },
+        {
+          "text": "Given a new $4/$8 hand after the blinds are posted, When the table is shown, Then the small blind shows a chip stack of $2 and the big blind a chip stack of $4 in front of their seats",
+          "tags": [
+            "REQ-068.1"
+          ]
+        },
+        {
+          "text": "Given preflop ends with three players each having put in $8 and a folded small blind's $2, When the flop is dealt, Then no chip stack remains in front of any seat and the pot shows $26",
+          "tags": [
+            "REQ-068.2"
+          ]
+        },
+        {
+          "text": "Given every other player folds to Ava's $8 turn bet, When the hand ends, Then Ava's bet joins the pot and the pot moves to Ava's seat showing the amount won and her stack increases by that amount",
+          "tags": [
+            "REQ-068.2",
+            "REQ-068.3"
+          ]
+        },
+        {
+          "text": "Given Ben wins a $122 pot at showdown, When the hand ends, Then the pot moves to Ben's seat with \"$122\" shown there and the pot area is empty",
+          "tags": [
+            "REQ-068.3"
+          ]
+        },
+        {
+          "text": "Given two players split a $60 pot, When the hand ends, Then $30 moves to each winner's seat with \"$30\" shown at each",
+          "tags": [
+            "REQ-068.3"
+          ]
+        },
+        {
+          "text": "Given a main pot of $60 won by the short stack and a side pot of $80 won by another player, When the hand ends, Then $60 moves to the short stack's seat and $80 to the other winner's seat, each with its amount",
+          "tags": [
+            "REQ-068.3"
+          ]
+        }
+      ],
+      "dod": [],
+      "deps": [
+        "E04-S03",
+        "E03-S04",
+        "E03-S07"
+      ],
+      "notes": "Drive chip positions from engine state after each action so the shown amounts can never drift from the engine."
+    },
+    {
+      "key": "E04-S05",
+      "title": "Watch deals and chip moves animate without slowing my play",
+      "type": "feature",
+      "milestone": "M3",
+      "priority": "Medium",
+      "risk": "high",
+      "skeleton": false,
+      "role": "player",
+      "want": "to see table changes animate within my speed setting's time limit",
+      "benefit": "the table feels alive while I still play 200+ hands an hour",
+      "context": "Animated events: dealing cards (hole cards and board), bet chips to the pot at street end, pot to the winner at hand end (state changes from E04-S04). Each animation lasts at most 250 ms at Rapid and at most 600 ms at Realistic (speed from the session, E03-S13/E03-S14). With the operating system's reduce-motion setting on, changes appear without animation. Animations never delay the action bar becoming enabled by more than the animation's own duration. Protects G-5.",
+      "acs": [
+        {
+          "text": "Given reduce-motion is off, When cards are dealt, bet chips move to the pot at the end of a street and the pot moves to the winner, Then each of the three events runs an animation",
+          "tags": [
+            "REQ-069.1"
+          ]
+        },
+        {
+          "text": "Given Rapid speed, When each animation of dealing, chips to the pot and pot to the winner is timed in Chromium and WebKit, Then each lasts at most 250 ms",
+          "tags": [
+            "REQ-069.2"
+          ]
+        },
+        {
+          "text": "Given Realistic speed, When each animation of dealing, chips to the pot and pot to the winner is timed in Chromium and WebKit, Then each lasts at most 600 ms",
+          "tags": [
+            "REQ-069.2"
+          ]
+        },
+        {
+          "text": "Given the speed is changed from Rapid to Realistic during a session, When the next deal is animated, Then it uses the Realistic limit of at most 600 ms",
+          "tags": [
+            "REQ-069.2"
+          ]
+        },
+        {
+          "text": "Given the browser emulates prefers-reduced-motion: reduce, When a hand is dealt, a street ends and the hand ends, Then no CSS transition or animation runs and each change is shown in its final state in the next frame",
+          "tags": [
+            "REQ-069.3"
+          ]
+        },
+        {
+          "text": "Given Rapid speed and the user is first to act on the flop, When the flop is dealt, Then the action bar is enabled no more than 250 ms after the flop deal starts; and at Realistic no more than 600 ms after",
+          "tags": [
+            "REQ-069.4"
+          ]
+        },
+        {
+          "text": "Given an animation is running when the user's turn begins, When the bar becomes enabled, Then the delay caused by the animation is at most that animation's measured duration",
+          "tags": [
+            "REQ-069.4"
+          ]
+        }
+      ],
+      "dod": [
+        {
+          "text": "With animations on at Rapid, E03-S13's bot-pacing check still passes: each bot action is displayed within 300 ms of the previous action",
+          "tags": [
+            "REQ-011.1"
+          ]
+        },
+        {
+          "text": "With animations on at Rapid, the Hand Review panel not opening and the user folding every hand, 200 hands complete in under 60 minutes (REQ-024 fit criterion)",
+          "tags": []
+        }
+      ],
+      "deps": [
+        "E04-S04",
+        "E03-S13",
+        "E03-S18"
+      ],
+      "notes": "Use the Web Animations API or CSS transitions with durations taken from a single speed-to-duration map; read prefers-reduced-motion with matchMedia and react to changes."
+    },
+    {
+      "key": "E04-S06",
+      "title": "Recognise each bot by an initials avatar badge",
+      "type": "feature",
+      "milestone": "M3",
+      "priority": "Low",
+      "risk": "low",
+      "skeleton": false,
+      "role": "player",
+      "want": "to see an avatar badge with each bot's initials on a seat colour",
+      "benefit": "I can tell the bots apart at a glance",
+      "context": "Each bot seat shows an avatar badge drawn in code: the first two letters of the bot's display name (unique names from E06-S06) on a colour assigned to its seat. Badge text must meet 4.5:1 contrast against the badge colour. When a busted bot is replaced (E06-S08, REQ-007.5), the seat's badge shows the new bot's initials.",
+      "acs": [
+        {
+          "text": "Given a 6-max table with bots named Ava, Ben, Cal, Dee and Eli, When the table is shown, Then their badges read \"Av\", \"Be\", \"Ca\", \"De\" and \"El\"",
+          "tags": [
+            "REQ-070.1"
+          ]
+        },
+        {
+          "text": "Given every name in the bot name list, When its badge is rendered, Then the badge text equals the first two letters of the name",
+          "tags": [
+            "REQ-070.1"
+          ]
+        },
+        {
+          "text": "Given tables of 2 to 10 seats, When each seat's badge colour and text colour are checked, Then the contrast ratio is at least 4.5:1 for every seat and axe reports no colour-contrast violation",
+          "tags": [
+            "REQ-070.2"
+          ]
+        },
+        {
+          "text": "Given seat 3's bot Cal busts and is replaced by a new bot named Gus, When the next hand is dealt, Then seat 3's badge reads \"Gu\"",
+          "tags": [
+            "REQ-070.3"
+          ]
+        }
+      ],
+      "dod": [],
+      "deps": [
+        "E03-S03",
+        "E06-S08"
+      ],
+      "notes": "Seat colour palette should come from theme tokens; keep it seat-indexed so a replacement bot keeps the seat colour."
+    },
+    {
+      "key": "E04-S07",
+      "title": "See a bot's in-style speech bubble after a table event",
+      "type": "feature",
+      "milestone": "M3",
+      "priority": "Low",
+      "risk": "medium",
+      "skeleton": false,
+      "role": "player",
+      "want": "to see bots occasionally say a short line that fits their style after table events",
+      "benefit": "the table feels like a live game with characters",
+      "context": "Banter is on by default; the Settings toggle \"Bot banter\" (REQ-071.5) is E12. Trigger events: the bot wins a pot of 10 big bets or more ($80 or more at $4/$8), the bot loses at showdown, the bot is raised, a new player sits down; when a new bot sits down, the new bot is the one that speaks (REQ-071.7). Each style (TAG, Calling station, Maniac, Rock) has its own authored set of at least 10 original lines that never insult the user. A bubble shows for 3 seconds at Realistic and 1.5 seconds at Rapid and never covers the action bar or the user's cards. Frequency limit and no-leak rules are E04-S08.",
+      "acs": [
+        {
+          "text": "Given a 1,000-hand seeded 6-max Mixed session with banter on, When every bubble is logged with the event before it, Then each bubble follows one of: the bot won a pot of 10 big bets or more, the bot lost at showdown, the bot was raised, a new player sat down; each of the four events triggers at least one bubble, and every bubble that follows a new player sitting down is spoken by the bot that just sat down",
+          "tags": [
+            "REQ-071.1",
+            "REQ-071.7"
+          ]
+        },
+        {
+          "text": "Given a bot wins an uncontested $72 pot at $4/$8 (9 big bets) and no other trigger event occurs in the hand, When the hand ends, Then that bot shows no bubble",
+          "tags": [
+            "REQ-071.1"
+          ]
+        },
+        {
+          "text": "Given a bot wins an uncontested $80 pot at $4/$8 (exactly 10 big bets), has not spoken in the last 10 hands and the banter generator is seeded to speak on that event, When the hand ends, Then that bot shows a bubble",
+          "tags": [
+            "REQ-071.1"
+          ]
+        },
+        {
+          "text": "Given the banter line files, When they are loaded, Then TAG, Calling station, Maniac and Rock each have at least 10 lines, and a file with fewer than 10 lines fails validation naming the style",
+          "tags": [
+            "REQ-071.2"
+          ]
+        },
+        {
+          "text": "Given a bot of each style speaks, When the bubble text is read, Then it is one of that style's lines",
+          "tags": [
+            "REQ-071.2"
+          ]
+        },
+        {
+          "text": "Given Realistic speed, When a bubble appears, Then it is visible for 3 seconds (2.9-3.1 s); and Given Rapid speed, Then it is visible for 1.5 seconds (1.4-1.6 s)",
+          "tags": [
+            "REQ-071.3"
+          ]
+        },
+        {
+          "text": "Given tables of 2 to 10 seats at 1280 x 720 during the user's turn, When a bubble shows at each bot seat, Then its bounding box does not intersect the action bar or the user's hole cards",
+          "tags": [
+            "REQ-071.3"
+          ]
+        },
+        {
+          "text": "Given seat 3's bot Cal busts, is replaced by a new bot Gus, no bot has spoken in the last 10 hands and the banter generator is seeded to speak on the sit-down event, When the next hand is dealt, Then Gus shows a bubble and no other bot shows a bubble for that event",
+          "tags": [
+            "REQ-071.7"
+          ]
+        }
+      ],
+      "dod": [
+        {
+          "text": "Every banter line is reviewed: original text written for this project, matches its style, and does not insult the user",
+          "tags": [
+            "REQ-071.2"
+          ]
+        }
+      ],
+      "deps": [
+        "E03-S13",
+        "E06-S08",
+        "E03-S18"
+      ],
+      "notes": "Banter choice must use its own seeded generator, never the bots' decision generator, so bot actions stay reproducible (E06-S02). Banter is UI-side: the engine emits events, the table chooses lines."
+    },
+    {
+      "key": "E04-S08",
+      "title": "Keep bot banter rare and free of hidden information",
+      "type": "feature",
+      "milestone": "M3",
+      "priority": "Low",
+      "risk": "low",
+      "skeleton": false,
+      "role": "player",
+      "want": "bot banter that never gives away hidden information",
+      "benefit": "banter adds flavour without distracting me or misleading my reads",
+      "context": "Each bot speaks at most once per 10 hands. Banter never reveals hidden cards or the bot's strategy: lines contain no card names, hand names or strategy statements, and which line is chosen (and whether a bot speaks) never depends on hidden cards. Builds on E04-S07.",
+      "acs": [
+        {
+          "text": "Given a 1,000-hand seeded 6-max session with banter on, When bubbles are counted per bot, Then no bot shows more than one bubble in any 10 consecutive hands",
+          "tags": [
+            "REQ-071.4"
+          ]
+        },
+        {
+          "text": "Given a bot spoke in hand 40 and a trigger event for it occurs in hand 45, When hand 45 ends, Then that bot shows no bubble",
+          "tags": [
+            "REQ-071.4"
+          ]
+        },
+        {
+          "text": "Given the banter line files, When the content check runs, Then no line contains a card rank with suit, a hand name (such as \"pair\", \"flush\", \"straight\") or a statement of what the bot holds or will do, and a violating line fails the check naming the line",
+          "tags": [
+            "REQ-071.6"
+          ]
+        },
+        {
+          "text": "Given the same seed and table events in two runs where only the bots' hidden hole cards differ, When banter is chosen, Then the same bots speak in the same hands with the same lines",
+          "tags": [
+            "REQ-071.6"
+          ]
+        }
+      ],
+      "dod": [],
+      "deps": [
+        "E04-S07"
+      ],
+      "notes": "The hand-name ban is for the line text; a bubble after a showdown loss must not echo the shown hand either."
+    },
+    {
+      "key": "E04-S09",
+      "title": "See my session's playing time and hands-per-hour pace in the header",
+      "type": "feature",
+      "milestone": "M3",
+      "priority": "Low",
+      "risk": "low",
+      "skeleton": false,
+      "role": "player",
+      "want": "to see my session's elapsed playing time with its hands-per-hour pace",
+      "benefit": "I can see my progress toward 200 hands an hour (G-5)",
+      "context": "The Table header (E03-S03) shows the session's elapsed playing time and hands-per-hour pace. Elapsed time counts only time spent at the table, excluding time while the session is paused (app closed or user went Home, REQ-004). Elapsed time is stored with the session state (E03-S11) so a resumed session continues from it (resume flow is E02). Pace = hands completed / elapsed hours, shown once 10 hands are complete. The Session Report total (REQ-072.3) is E10 and reads the stored elapsed time.",
+      "acs": [
+        {
+          "text": "Given a new session, When 5 minutes pass at the table, Then the header shows an elapsed time of 5 minutes",
+          "tags": [
+            "REQ-072.1"
+          ]
+        },
+        {
+          "text": "Given a session with 20 minutes of elapsed playing time at the end of hand 30, When the app is closed for 2 hours and the session is resumed, Then the header shows an elapsed time of 20 minutes, not 2 hours 20 minutes",
+          "tags": [
+            "REQ-072.1"
+          ]
+        },
+        {
+          "text": "Given a session at the end of hand 30, When the stored session is read, Then it holds the elapsed playing time at that moment",
+          "tags": [
+            "REQ-072.1"
+          ]
+        },
+        {
+          "text": "Given 9 hands are complete, When the header is shown, Then no hands-per-hour value is shown",
+          "tags": [
+            "REQ-072.2"
+          ]
+        },
+        {
+          "text": "Given 10 hands completed in an elapsed time of 5 minutes, When the header is shown, Then it shows a pace of 120 hands per hour",
+          "tags": [
+            "REQ-072.2"
+          ]
+        },
+        {
+          "text": "Given 50 hands completed in 15 minutes of play before a 1-hour pause and 15 minutes after it, When the header is shown, Then it shows a pace of 100 hands per hour",
+          "tags": [
+            "REQ-072.1",
+            "REQ-072.2"
+          ]
+        }
+      ],
+      "dod": [],
+      "deps": [
+        "E03-S03",
+        "E03-S11"
+      ],
+      "notes": "Use a monotonic clock while the table is shown; persist elapsed milliseconds after each hand and when the app is hidden/closed."
+    }
+  ]
+}

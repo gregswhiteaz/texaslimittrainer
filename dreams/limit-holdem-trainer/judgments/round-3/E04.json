@@ -1,0 +1,172 @@
+{
+  "scope": "E04",
+  "round": 3,
+  "clauses": [
+    {
+      "clause": "REQ-011.1",
+      "verdict": "covered",
+      "evidence": "E04-S05#DoD1 (primary E03-S13)"
+    },
+    {
+      "clause": "REQ-023.1",
+      "verdict": "covered",
+      "evidence": "E04-S01#AC1,AC2,AC4"
+    },
+    {
+      "clause": "REQ-023.2",
+      "verdict": "covered",
+      "evidence": "E04-S01#AC1,AC3,AC4"
+    },
+    {
+      "clause": "REQ-023.3",
+      "verdict": "covered",
+      "evidence": "E04-S01#AC5"
+    },
+    {
+      "clause": "REQ-023.4",
+      "verdict": "covered",
+      "evidence": "E04-S02#AC1-AC4"
+    },
+    {
+      "clause": "REQ-057.2",
+      "verdict": "covered",
+      "evidence": "E04-S02#AC5"
+    },
+    {
+      "clause": "REQ-057.4",
+      "verdict": "covered",
+      "evidence": "E04-S02#AC5"
+    },
+    {
+      "clause": "REQ-067.1",
+      "verdict": "covered",
+      "evidence": "E04-S03#AC1-AC3"
+    },
+    {
+      "clause": "REQ-067.2",
+      "verdict": "covered",
+      "evidence": "E04-S03#AC4"
+    },
+    {
+      "clause": "REQ-067.3",
+      "verdict": "covered",
+      "evidence": "E04-S03#AC5-AC7"
+    },
+    {
+      "clause": "REQ-067.4",
+      "verdict": "covered",
+      "evidence": "E04-S03#AC1-AC4,DoD1"
+    },
+    {
+      "clause": "REQ-068.1",
+      "verdict": "covered",
+      "evidence": "E04-S04#AC1,AC2"
+    },
+    {
+      "clause": "REQ-068.2",
+      "verdict": "covered",
+      "evidence": "E04-S04#AC3,AC4"
+    },
+    {
+      "clause": "REQ-068.3",
+      "verdict": "covered",
+      "evidence": "E04-S04#AC4-AC7"
+    },
+    {
+      "clause": "REQ-069.1",
+      "verdict": "covered",
+      "evidence": "E04-S05#AC1"
+    },
+    {
+      "clause": "REQ-069.2",
+      "verdict": "covered",
+      "evidence": "E04-S05#AC2-AC4"
+    },
+    {
+      "clause": "REQ-069.3",
+      "verdict": "covered",
+      "evidence": "E04-S05#AC5"
+    },
+    {
+      "clause": "REQ-069.4",
+      "verdict": "covered",
+      "evidence": "E04-S05#AC6,AC7"
+    },
+    {
+      "clause": "REQ-070.1",
+      "verdict": "covered",
+      "evidence": "E04-S06#AC1,AC2"
+    },
+    {
+      "clause": "REQ-070.2",
+      "verdict": "covered",
+      "evidence": "E04-S06#AC3"
+    },
+    {
+      "clause": "REQ-070.3",
+      "verdict": "covered",
+      "evidence": "E04-S06#AC4"
+    },
+    {
+      "clause": "REQ-071.1",
+      "verdict": "covered",
+      "evidence": "E04-S07#AC1-AC3"
+    },
+    {
+      "clause": "REQ-071.2",
+      "verdict": "covered",
+      "evidence": "E04-S07#AC4,AC5 (no-insult by review only)"
+    },
+    {
+      "clause": "REQ-071.3",
+      "verdict": "covered",
+      "evidence": "E04-S07#AC6,AC7"
+    },
+    {
+      "clause": "REQ-071.4",
+      "verdict": "covered",
+      "evidence": "E04-S08#AC1,AC2"
+    },
+    {
+      "clause": "REQ-071.6",
+      "verdict": "covered",
+      "evidence": "E04-S08#AC3,AC4"
+    },
+    {
+      "clause": "REQ-071.7",
+      "verdict": "covered",
+      "evidence": "E04-S07#AC1,AC8"
+    },
+    {
+      "clause": "REQ-072.1",
+      "verdict": "covered",
+      "evidence": "E04-S09#AC1-AC3,AC6"
+    },
+    {
+      "clause": "REQ-072.2",
+      "verdict": "covered",
+      "evidence": "E04-S09#AC4-AC6"
+    }
+  ],
+  "findings": [
+    {
+      "id": "J-E04-E04-S09#AC2-resume-dependency",
+      "severity": "LOW",
+      "class": "hidden-dependency",
+      "owner": "weaver",
+      "location": "E04-S09#AC2",
+      "evidence": "AC2 'session is resumed' needs the E02 resume flow (later wave); carried unchanged from round 2. Story notes state resume is E02.",
+      "fix": "Reword AC2 to a stored-session fixture loaded after a 2-hour gap."
+    },
+    {
+      "id": "J-E04-REQ-071.2-no-insult-manual",
+      "severity": "LOW",
+      "class": "weak-testability",
+      "owner": "weaver",
+      "location": "E04-S07",
+      "evidence": "'never insult the user' (REQ-071.2) has no automated AC; S08#AC3 content check covers REQ-071.6 only.",
+      "fix": "Optional banned-insult word list check."
+    }
+  ],
+  "summary": "All 29 clauses covered; round-2 notes carried as LOW only."
+}

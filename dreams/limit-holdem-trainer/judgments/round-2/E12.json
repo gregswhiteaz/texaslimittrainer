@@ -1,0 +1,131 @@
+{
+  "scope": "E12",
+  "round": 2,
+  "clauses": [
+    {
+      "clause": "REQ-002.3",
+      "verdict": "covered",
+      "evidence": "E12-S01#AC1"
+    },
+    {
+      "clause": "REQ-012.3",
+      "verdict": "covered",
+      "evidence": "E12-S04#AC2,AC5"
+    },
+    {
+      "clause": "REQ-021.2",
+      "verdict": "covered",
+      "evidence": "E12-S02#AC2,AC4"
+    },
+    {
+      "clause": "REQ-050.1",
+      "verdict": "covered",
+      "evidence": "E12-S04#AC1-5"
+    },
+    {
+      "clause": "REQ-050.2",
+      "verdict": "covered",
+      "evidence": "E12-S05#AC1-4"
+    },
+    {
+      "clause": "REQ-050.3",
+      "verdict": "covered",
+      "evidence": "E12-S02#AC1-4"
+    },
+    {
+      "clause": "REQ-050.4",
+      "verdict": "covered",
+      "evidence": "E12-S06#AC1-4"
+    },
+    {
+      "clause": "REQ-050.5",
+      "verdict": "covered",
+      "evidence": "E12-S01#AC1,AC3; E12-S03#AC1,AC4; E12-S04#AC4; E12-S05#AC4; E12-S06#AC4"
+    },
+    {
+      "clause": "REQ-050.6",
+      "verdict": "covered",
+      "evidence": "E12-S01#AC2"
+    },
+    {
+      "clause": "REQ-050.7",
+      "verdict": "covered",
+      "evidence": "E12-S03#AC1-3,AC5"
+    },
+    {
+      "clause": "REQ-050.8",
+      "verdict": "covered",
+      "evidence": "E12-S03#AC6-8"
+    },
+    {
+      "clause": "REQ-051.1",
+      "verdict": "covered",
+      "evidence": "E12-S08#AC1"
+    },
+    {
+      "clause": "REQ-051.2",
+      "verdict": "covered",
+      "evidence": "E12-S08#AC2-3"
+    },
+    {
+      "clause": "REQ-051.3",
+      "verdict": "covered",
+      "evidence": "E12-S08#AC4-8"
+    },
+    {
+      "clause": "REQ-051.4",
+      "verdict": "covered",
+      "evidence": "E12-S08#AC3"
+    },
+    {
+      "clause": "REQ-053.3",
+      "verdict": "covered",
+      "evidence": "E12-S09#AC1-4"
+    },
+    {
+      "clause": "REQ-057.2",
+      "verdict": "covered",
+      "evidence": "E12-S01#AC5; E12-S03#AC5"
+    },
+    {
+      "clause": "REQ-057.4",
+      "verdict": "covered",
+      "evidence": "E12-S01#AC5"
+    },
+    {
+      "clause": "REQ-071.5",
+      "verdict": "covered",
+      "evidence": "E12-S07#AC1-4"
+    }
+  ],
+  "findings": [
+    {
+      "id": "J-E12-E12-S01#AC4-hidden-dependency",
+      "severity": "HIGH",
+      "class": "hidden-dependency",
+      "owner": "weaver",
+      "location": "E12-S01#AC4 (TASK-12.1)",
+      "evidence": "AC4 requires Game Config to pre-select Rapid, which needs the speed field of E02-S11 (TASK-2.11, ordinal 124000); E12-S01 has ordinal 46000 and the sole dependency TASK-2.1. It also needs the Hand Review auto-open (E09-S01), style labels (E03-S03) and card colours (E03-S05), none listed as dependencies.",
+      "fix": "Remove the Game Config clause from AC4 (E12-S04#AC1 already tests the Rapid default) and add dependency edges for the table/review/card features the AC exercises, or split AC4 per setting into the owning toggle stories."
+    },
+    {
+      "id": "J-E12-E12-S08#AC6-hidden-dependency",
+      "severity": "HIGH",
+      "class": "hidden-dependency",
+      "owner": "weaver",
+      "location": "E12-S08#AC6 (TASK-12.4)",
+      "evidence": "AC6 asserts Settings shows auto-open on, four-colour off and banter on after reset, but those toggles are built by E12-S05 (161000), E12-S06 (162000) and E12-S07 (163000), after E12-S08 (138000). The AC cannot pass when this story is built.",
+      "fix": "Move the per-toggle default-after-reset assertions into each toggle story, or reword AC6 to check the stored settings records and add deps on the toggle stories."
+    },
+    {
+      "id": "J-E12-E12-S01-AC4-ac-style",
+      "severity": "LOW",
+      "class": "ac-style",
+      "owner": "weaver",
+      "location": "E12-S01#AC4",
+      "evidence": "One AC bundles four settings defaults over a played hand, which makes failures hard to attribute.",
+      "fix": "Split per setting or keep defaults on the owning toggle stories (already in E12-S02/S05/S06/S07 AC1)."
+    }
+  ],
+  "summary": "All 19 clauses covered; round-1 findings resolved. Two hidden-dependency defects (S01#AC4, S08#AC6)."
+}

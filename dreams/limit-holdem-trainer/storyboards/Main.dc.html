@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Splash</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#2453C7}a:hover{color:#1A3E99}
+</style>
+</helmet>
+<div style="min-height: 800px; box-sizing: border-box; background: #000000; color: #FFFFFF; font-family: Inter, system-ui, sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 24px; padding: 32px 16px; text-align: center">
+  <h1 style="margin: 0; width: 1px; height: 1px; overflow: hidden; position: absolute">TLH Trainer</h1>
+  <img src="/_blob/bafb37d8873eb57e474a139b71ab102d" alt="TLH Trainer — Texas Limit Hold 'Em" style="width: 440px; max-width: 90%; height: auto">
+  <p style="margin: 0; font-size: 18px; color: #D0D4DA; max-width: 520px">Practise fixed-limit Hold'em. Learn from every hand.</p>
+  <div style="width: 280px; max-width: 80%; display: flex; flex-direction: column; gap: 10px; align-items: center">
+    <div style="width: 100%; height: 6px; background: #3A3F46; border-radius: 3px; overflow: hidden">
+      <div style="width: 65%; height: 6px; background: #D7262E"></div>
+    </div>
+    <span style="font-size: 14px; color: #D0D4DA">Loading rules engine and strategy charts…</span>
+  </div>
+  <a href="Home.dc.html" style="color: #FFFFFF; font-size: 14px; text-decoration: underline">Continue to Home (prototype link)</a>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":800}}'>
+class Component extends DCLogic {
+renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,518 @@
+{
+  "epic": "E12",
+  "stories": [
+    {
+      "key": "E12-S01",
+      "title": "Open Settings from Home and see the app version",
+      "type": "feature",
+      "milestone": "M2",
+      "priority": "High",
+      "risk": "medium",
+      "skeleton": false,
+      "role": "learner",
+      "want": "to open the Settings screen from Home",
+      "benefit": "I can find every trainer option and check which version I am running",
+      "context": "Adds the Settings entry to Home (Home = E02-S01; E11 adds Statistics) and the Settings screen (Settings storyboard: '← Home' back control, sections Play, Display, Your data, version line). This slice creates the local settings store (IndexedDB, created with defaults on first launch: default speed Rapid, auto-open Hand Review on, show opponent styles on, four-colour deck off, bot banter on) that every later toggle writes and that E02-S11 already reads for the default speed. The screen shows 'Version <x>' where <x> is the build's app version (package.json version injected at build time); E13 reuses the same string for 'Updated to version <x>'. Toggles are added by E12-S02, S04..S07; Reset all data by E12-S08; the storage warning by E12-S09. All controls are native form fields or buttons, at least 44 x 44 CSS px. Each default is verified by the story that builds its control (E12-S02, S04, S05, S06, S07 AC1).",
+      "acs": [
+        {
+          "text": "Given the Home screen, When it is shown, Then it offers a Settings entry; When the user chooses Settings, Then the Settings screen opens",
+          "tags": [
+            "REQ-002.3",
+            "REQ-050.5"
+          ]
+        },
+        {
+          "text": "Given a build whose app version is 1.2.0, When the Settings screen is shown, Then it shows \"Version 1.2.0\"",
+          "tags": [
+            "REQ-050.6"
+          ]
+        },
+        {
+          "text": "Given the Settings screen opened from Home, When the user chooses the back control, Then the Home screen opens",
+          "tags": [
+            "REQ-050.5"
+          ]
+        },
+        {
+          "text": "Given the Settings screen at 1280 x 720, When the user presses Tab repeatedly, Then focus reaches every Settings control, each is a native button, link or form field, each activates with Enter or Space, and each is at least 44 x 44 CSS px",
+          "tags": [
+            "REQ-057.2",
+            "REQ-057.4"
+          ]
+        }
+      ],
+      "dod": [
+        {
+          "text": "axe reports zero serious or critical violations on the Settings screen in Chromium and WebKit",
+          "tags": [
+            "REQ-057.1"
+          ]
+        },
+        {
+          "text": "The Settings screen offers no deposit, payment, purchase, cash-out, real-money wager or real-money conversion",
+          "tags": [
+            "REQ-061.1"
+          ]
+        }
+      ],
+      "deps": [
+        "E02-S01"
+      ],
+      "notes": "The storyboard's 'Show amounts as Dollars / Big bets' row is NOT a requirement (waiting room, Q-61 not selected): do not build it. Keep the settings store in the place E13 versions (REQ-054)."
+    },
+    {
+      "key": "E12-S02",
+      "title": "Hide opponent style labels at the table",
+      "type": "feature",
+      "milestone": "M2",
+      "priority": "High",
+      "risk": "low",
+      "skeleton": false,
+      "role": "learner",
+      "want": "to turn off the opponent style labels at the table",
+      "benefit": "I can practise reading opponents from their play instead of their label",
+      "context": "Settings toggle 'Show opponent styles at the table', default on. When off, the style label (e.g. 'Calling station') is not shown on any bot seat at the table (seat fields from E03-S03); names, stacks and everything else stay. The value is saved to the settings store at once and kept across launches. A change made mid-session (via the Settings overlay, E12-S03) applies from the next screen update. Style labels outside the table (Game Config line-up, Session Report, Statistics) are not affected by this toggle.",
+      "acs": [
+        {
+          "text": "Given a fresh install, When the Settings screen is shown, Then 'Show opponent styles at the table' is on",
+          "tags": [
+            "REQ-050.3"
+          ]
+        },
+        {
+          "text": "Given 'Show opponent styles' is off and a 6-max table with bots Ben (Calling station) and Ava (TAG), When the table is shown, Then no seat shows a style label and Ben's seat still shows his name and stack",
+          "tags": [
+            "REQ-021.2",
+            "REQ-050.3"
+          ]
+        },
+        {
+          "text": "Given 'Show opponent styles' is on, When the table is shown, Then every bot seat shows its style label",
+          "tags": [
+            "REQ-050.3"
+          ]
+        },
+        {
+          "text": "Given the user turned 'Show opponent styles' off, When the app is closed, relaunched and a table is opened, Then the toggle is still off and no style labels are shown",
+          "tags": [
+            "REQ-050.3",
+            "REQ-021.2"
+          ]
+        }
+      ],
+      "dod": [],
+      "deps": [
+        "E12-S01",
+        "E03-S03"
+      ],
+      "notes": "If the opponent-stats hover panel (E03-S15) shows a style label, it follows this toggle too."
+    },
+    {
+      "key": "E12-S03",
+      "title": "Open Settings over the table without pausing the session",
+      "type": "feature",
+      "milestone": "M3",
+      "priority": "Medium",
+      "risk": "medium",
+      "skeleton": false,
+      "role": "learner",
+      "want": "to open Settings from the Table header as an overlay",
+      "benefit": "I can change an option mid-session without leaving or pausing my game",
+      "context": "The Table header (E03-S03) gets a Settings control. It opens the same Settings content as an overlay above the table; the session is neither paused (no Resume entry is created, unlike the header Home control of REQ-004.9) nor ended (no report). While the overlay is open play is frozen: bots do not act, the auto-deal timer (E03-S04) and the session clock (E04-S09) pause; closing the overlay resumes from the same point, so the table returns to exactly the same state. Changes made in the overlay apply from the next screen update (e.g. hiding style labels takes effect as soon as the overlay closes or immediately behind it). The overlay is a modal dialog: focus moves into it and returns to the Settings control on close.",
+      "acs": [
+        {
+          "text": "Given a session during the user's turn on the turn street, When the user chooses Settings in the Table header, Then Settings is shown as an overlay above the table and the table remains rendered behind it",
+          "tags": [
+            "REQ-050.5",
+            "REQ-050.7"
+          ]
+        },
+        {
+          "text": "Given the overlay was opened during the user's turn on the turn street, When the user closes it, Then the same hand number, street, board, stacks, pot and seat to act are shown, the user is still to act and no action was taken for the user",
+          "tags": [
+            "REQ-050.7"
+          ]
+        },
+        {
+          "text": "Given the Settings overlay is open over a session, When the stored session is read, Then its status is active (not paused, not ended) and no Session Report exists for it",
+          "tags": [
+            "REQ-050.7"
+          ]
+        },
+        {
+          "text": "Given style labels are shown and the overlay is open mid-hand, When the user turns 'Show opponent styles' off and closes the overlay, Then the table shows no style labels without waiting for the next hand",
+          "tags": [
+            "REQ-050.5"
+          ]
+        },
+        {
+          "text": "Given the overlay is open, When the user presses Tab repeatedly, Then focus stays within the overlay; and When the overlay closes, Then focus returns to the Settings control in the Table header",
+          "tags": [
+            "REQ-050.7",
+            "REQ-057.2"
+          ]
+        },
+        {
+          "text": "Given bot Ben is about to act at Realistic speed, When the user opens the Settings overlay and keeps it open for 10 s, Then no bot acts while it is open; When the overlay closes, Then Ben's action follows with the normal pacing from that point",
+          "tags": [
+            "REQ-050.8"
+          ]
+        },
+        {
+          "text": "Given a hand ended with the Hand Review panel closed and 0.5 s of the 1.5 s auto-deal delay elapsed, When the user opens the overlay for 10 s and then closes it, Then no hand is dealt while it is open and the next hand is dealt 1.0 s after closing",
+          "tags": [
+            "REQ-050.8"
+          ]
+        },
+        {
+          "text": "Given the header session clock shows 12:00 of playing time, When the overlay is open for 60 s and then closed, Then the clock still shows 12:00 on closing and the stored elapsed playing time excludes those 60 s",
+          "tags": [
+            "REQ-050.8"
+          ]
+        }
+      ],
+      "dod": [
+        {
+          "text": "axe reports zero serious or critical violations on the table with the Settings overlay open, in Chromium and WebKit",
+          "tags": [
+            "REQ-057.1"
+          ]
+        }
+      ],
+      "deps": [
+        "E12-S02",
+        "E03-S11",
+        "E03-S04",
+        "E04-S09",
+        "E03-S18"
+      ],
+      "notes": ""
+    },
+    {
+      "key": "E12-S04",
+      "title": "Choose the default speed for new sessions in Settings",
+      "type": "feature",
+      "milestone": "M3",
+      "priority": "Medium",
+      "risk": "low",
+      "skeleton": false,
+      "role": "learner",
+      "want": "to set Rapid or Realistic as my default speed",
+      "benefit": "every new game starts at the pace I prefer without changing it each time",
+      "context": "Settings 'Default speed': Rapid or Realistic, default Rapid. Writes the same settings-store value that E02-S11 reads to pre-fill Game Config's speed (REQ-012.3: speed always comes from this setting, never from the last session). The default speed does not change the speed of a session already running (that is the table's speed control, E03-S14); it applies from the next Game Config shown.",
+      "acs": [
+        {
+          "text": "Given a fresh install, When the Settings screen is shown, Then Default speed offers exactly Rapid and Realistic with Rapid selected",
+          "tags": [
+            "REQ-050.1"
+          ]
+        },
+        {
+          "text": "Given the last session was started at Rapid and Default speed is Realistic in Settings, When Game Config opens, Then Realistic is pre-selected",
+          "tags": [
+            "REQ-050.1",
+            "REQ-012.3"
+          ]
+        },
+        {
+          "text": "Given Default speed is Realistic, When the app is closed and relaunched, Then Settings shows Realistic and Game Config pre-selects Realistic",
+          "tags": [
+            "REQ-050.1"
+          ]
+        },
+        {
+          "text": "Given a session running at Rapid, When the user sets Default speed to Realistic in the Settings overlay and closes it, Then the running session stays at Rapid and the next Game Config pre-selects Realistic",
+          "tags": [
+            "REQ-050.1",
+            "REQ-050.5"
+          ]
+        },
+        {
+          "text": "Given the last session was started at Realistic and Default speed is Rapid in Settings, When Game Config opens, Then Rapid is pre-selected",
+          "tags": [
+            "REQ-050.1",
+            "REQ-012.3"
+          ]
+        }
+      ],
+      "dod": [],
+      "deps": [
+        "E12-S01",
+        "E02-S11"
+      ],
+      "notes": ""
+    },
+    {
+      "key": "E12-S05",
+      "title": "Turn off automatic opening of the Hand Review panel",
+      "type": "feature",
+      "milestone": "M3",
+      "priority": "Medium",
+      "risk": "low",
+      "skeleton": false,
+      "role": "learner",
+      "want": "to stop the Hand Review panel opening after every hand",
+      "benefit": "I can play hands back to back and review only when I choose",
+      "context": "Settings toggle 'Open the hand review panel after every hand', default on. Wires the setting that E09-S07 reads: when off, the panel does not open by itself and the grade summary badge appears instead (badge behaviour is E09-S07). Saved at once and kept across launches. A change made mid-session via the overlay applies from the next hand end.",
+      "acs": [
+        {
+          "text": "Given a fresh install, When the Settings screen is shown, Then 'Open the hand review panel after every hand' is on",
+          "tags": [
+            "REQ-050.2"
+          ]
+        },
+        {
+          "text": "Given the user turned auto-open off in Settings, When a hand in which the user made a decision other than folding preflop ends, Then the Hand Review panel does not open and the grade summary badge is shown",
+          "tags": [
+            "REQ-050.2"
+          ]
+        },
+        {
+          "text": "Given auto-open is off, When the app is closed and relaunched, Then the toggle is still off",
+          "tags": [
+            "REQ-050.2"
+          ]
+        },
+        {
+          "text": "Given auto-open is on and the overlay is opened during a hand, When the user turns it off, closes the overlay and the hand ends, Then the panel does not open for that hand",
+          "tags": [
+            "REQ-050.2",
+            "REQ-050.5"
+          ]
+        }
+      ],
+      "dod": [],
+      "deps": [
+        "E12-S03",
+        "E09-S07"
+      ],
+      "notes": ""
+    },
+    {
+      "key": "E12-S06",
+      "title": "Switch to a four-colour deck",
+      "type": "feature",
+      "milestone": "M3",
+      "priority": "Medium",
+      "risk": "low",
+      "skeleton": false,
+      "role": "learner",
+      "want": "to switch the cards to a four-colour deck",
+      "benefit": "I can tell suits apart at a glance when reading flushes",
+      "context": "Settings 'Deck colours': Two-colour (default) or Four-colour (storyboard shows it as a choice between the two). Four-colour: clubs green, diamonds blue, hearts red, spades black; two-colour: hearts and diamonds red, spades and clubs black. E03-S05 already renders both modes; this story wires the setting to every place cards are drawn (table and Hand Review panel). Saved at once, kept across launches; a mid-session change applies from the next screen update.",
+      "acs": [
+        {
+          "text": "Given a fresh install, When the Settings screen is shown, Then the four-colour deck is off (Two-colour selected)",
+          "tags": [
+            "REQ-050.4"
+          ]
+        },
+        {
+          "text": "Given the user turned the four-colour deck on, When the table and the Hand Review panel show a club and a diamond, Then the club is green and the diamond is blue",
+          "tags": [
+            "REQ-050.4"
+          ]
+        },
+        {
+          "text": "Given the four-colour deck is on, When the app is closed and relaunched, Then the setting is still on and cards are drawn in four colours",
+          "tags": [
+            "REQ-050.4"
+          ]
+        },
+        {
+          "text": "Given the four-colour deck is off and the overlay is opened during a hand, When the user turns it on and closes the overlay, Then the user's hole cards and board are redrawn in four colours in the same hand",
+          "tags": [
+            "REQ-050.4",
+            "REQ-050.5"
+          ]
+        }
+      ],
+      "dod": [],
+      "deps": [
+        "E12-S03",
+        "E03-S05"
+      ],
+      "notes": ""
+    },
+    {
+      "key": "E12-S07",
+      "title": "Turn bot banter off",
+      "type": "feature",
+      "milestone": "M3",
+      "priority": "Low",
+      "risk": "low",
+      "skeleton": false,
+      "role": "learner",
+      "want": "to turn bot banter off",
+      "benefit": "I can play without speech bubbles when I want to concentrate",
+      "context": "Settings toggle 'Bot banter', default on. When off, no bot shows a speech bubble (banter from E04-S07/S08). Saved at once, kept across launches; a mid-session change applies from the next table event. Banter choice uses its own seeded generator, so turning banter off never changes bot decisions.",
+      "acs": [
+        {
+          "text": "Given a fresh install, When the Settings screen is shown, Then it has a 'Bot banter' toggle that is on",
+          "tags": [
+            "REQ-071.5"
+          ]
+        },
+        {
+          "text": "Given 'Bot banter' is off, When a 1,000-hand seeded 6-max Mixed session is played, Then zero speech bubbles are shown",
+          "tags": [
+            "REQ-071.5"
+          ]
+        },
+        {
+          "text": "Given the same seed played once with banter on and once with banter off, When the two hand histories are compared, Then every bot action is identical",
+          "tags": [
+            "REQ-071.5"
+          ]
+        },
+        {
+          "text": "Given 'Bot banter' was turned off, When the app is closed and relaunched, Then the toggle is still off",
+          "tags": [
+            "REQ-071.5"
+          ]
+        }
+      ],
+      "dod": [],
+      "deps": [
+        "E12-S01",
+        "E04-S07"
+      ],
+      "notes": ""
+    },
+    {
+      "key": "E12-S08",
+      "title": "Delete all my data after confirming",
+      "type": "feature",
+      "milestone": "M3",
+      "priority": "Medium",
+      "risk": "high",
+      "skeleton": false,
+      "role": "learner",
+      "want": "to delete all stored data after a confirmation",
+      "benefit": "I can start my training fresh, knowing nothing was deleted by accident",
+      "context": "Settings 'Your data' section: the text 'Hands, sessions and statistics are stored only in this browser. Clearing browser data deletes them, and there is no backup in this version.' and a 'Reset all data…' button (storyboard). It opens a confirmation dialog stating that all history will be permanently deleted and there is no backup, with Cancel (default focus) and 'Delete everything'. Delete everything removes every stored session (active and paused), hand record, session report, last configuration (Game Config returns to first-use defaults: Cash, 6 players, $4/$8, Mixed, Rapid; E02-S10), settings (back to defaults), and UI preferences such as the action-log collapse state (E04-S02); statistics are derived from hands and reports so they disappear too. Reset is the only deletion path in the app (REQ-052.6). After deletion the app shows Home in its first-use state (E02-S17 message, no snapshot, no Resume session). If Reset is chosen from the Settings overlay at a table, the active session is deleted too (no report is written) and Home opens.",
+      "acs": [
+        {
+          "text": "Given the Settings screen, When the user chooses 'Reset all data…', Then a dialog opens stating that all history will be permanently deleted and there is no backup",
+          "tags": [
+            "REQ-051.1"
+          ]
+        },
+        {
+          "text": "Given the reset dialog opens, When it is shown, Then it has exactly the buttons Cancel and 'Delete everything' and Cancel has keyboard focus",
+          "tags": [
+            "REQ-051.2"
+          ]
+        },
+        {
+          "text": "Given seeded storage with 3 ended sessions, 500 hands, 3 reports, a paused session and changed settings, When the user chooses Cancel (or presses Enter on the default focus), Then the dialog closes and every stored record is byte-identical to before",
+          "tags": [
+            "REQ-051.4",
+            "REQ-051.2"
+          ]
+        },
+        {
+          "text": "Given the same seeded storage, When the user chooses 'Delete everything', Then IndexedDB holds no session, hand record, session report, paused session, last configuration, settings or action-log preference record",
+          "tags": [
+            "REQ-051.3"
+          ]
+        },
+        {
+          "text": "Given the deletion has completed, When the app shows the next screen, Then Home shows \"No sessions yet — start a new game to begin training.\", no snapshot and no Resume session",
+          "tags": [
+            "REQ-051.3"
+          ]
+        },
+        {
+          "text": "Given the deletion has completed, When Settings and Game Config are opened, Then Settings shows Rapid, auto-open on, opponent styles on, four-colour off and banter on, and Game Config shows Cash game, 6 players, $4/$8, Mixed and Rapid",
+          "tags": [
+            "REQ-051.3"
+          ]
+        },
+        {
+          "text": "Given the Settings overlay is open over an active session at hand 30, When the user confirms 'Delete everything', Then the session and its 29 stored hands are deleted, no report is written and Home opens in its first-use state",
+          "tags": [
+            "REQ-051.3"
+          ]
+        },
+        {
+          "text": "Given storage seeded with 100,000 hand records across 500 sessions, When Settings is opened and 'Delete everything' is confirmed, Then Settings opens without error and afterwards no hand record remains and Home opens in its first-use state",
+          "tags": [
+            "REQ-053.1",
+            "REQ-051.3"
+          ]
+        }
+      ],
+      "dod": [
+        {
+          "text": "axe reports zero serious or critical violations on Settings with the reset confirmation dialog open, in Chromium and WebKit",
+          "tags": [
+            "REQ-057.1"
+          ]
+        }
+      ],
+      "deps": [
+        "E12-S03",
+        "E02-S17",
+        "E02-S10",
+        "E04-S02",
+        "E12-S04",
+        "E12-S05",
+        "E12-S06",
+        "E12-S07"
+      ],
+      "notes": "Delete store contents inside one IndexedDB transaction (or delete the database and recreate it with current schema versions, E13) so a crash mid-reset never leaves half the data."
+    },
+    {
+      "key": "E12-S09",
+      "title": "Warn me in Settings when the browser can clear my history",
+      "type": "feature",
+      "milestone": "M3",
+      "priority": "Medium",
+      "risk": "low",
+      "skeleton": false,
+      "role": "learner",
+      "want": "to see a warning when my history is not protected by persistent storage",
+      "benefit": "I know the browser could clear my training history and can decide how to use the app",
+      "context": "E13 requests persistent storage (navigator.storage.persist) on first launch and records whether it was granted. When the recorded value is 'not granted' (including when the API is unavailable), the 'Your data' section of Settings shows a one-line warning that the browser can clear history under storage pressure. When granted, no warning is shown. Tests set the recorded flag directly.",
+      "acs": [
+        {
+          "text": "Given the recorded persistent-storage result is not granted, When the Settings screen is shown, Then the Your data section shows a single-line warning that the browser can clear history under storage pressure",
+          "tags": [
+            "REQ-053.3"
+          ]
+        },
+        {
+          "text": "Given the recorded persistent-storage result is granted, When the Settings screen is shown, Then no storage warning is shown",
+          "tags": [
+            "REQ-053.3"
+          ]
+        },
+        {
+          "text": "Given the recorded result is not granted, When Settings is opened as the overlay from the table, Then the same one-line warning is shown",
+          "tags": [
+            "REQ-053.3"
+          ]
+        },
+        {
+          "text": "Given the Settings screen at 1280 x 720 with the warning shown, When its layout is measured, Then the warning occupies one line of text",
+          "tags": [
+            "REQ-053.3"
+          ]
+        }
+      ],
+      "dod": [
+        {
+          "text": "axe reports zero serious or critical violations on Settings with the storage warning shown, in Chromium and WebKit",
+          "tags": [
+            "REQ-057.1"
+          ]
+        }
+      ],
+      "deps": [
+        "E12-S03"
+      ],
+      "notes": "Uses the flag written by E13 (same wave, so no dependency edge); read it through one settings/meta accessor."
+    }
+  ]
+}

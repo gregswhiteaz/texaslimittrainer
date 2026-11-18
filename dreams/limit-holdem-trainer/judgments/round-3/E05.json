@@ -1,0 +1,103 @@
+{
+  "scope": "E05",
+  "round": 3,
+  "clauses": [
+    {
+      "clause": "REQ-002.6",
+      "verdict": "covered",
+      "evidence": "E05-S09#AC1-2"
+    },
+    {
+      "clause": "REQ-003.5",
+      "verdict": "covered",
+      "evidence": "E05-S08#AC1-3"
+    },
+    {
+      "clause": "REQ-004.3",
+      "verdict": "covered",
+      "evidence": "E05-S03#AC4 (level, hands, stacks)"
+    },
+    {
+      "clause": "REQ-008.1",
+      "verdict": "covered",
+      "evidence": "E05-S01#AC1-5"
+    },
+    {
+      "clause": "REQ-008.2",
+      "verdict": "covered",
+      "evidence": "E05-S02#AC1,AC3,AC4,AC6"
+    },
+    {
+      "clause": "REQ-008.3",
+      "verdict": "covered",
+      "evidence": "E05-S02#AC1-2, E05-S03#AC2,AC4,AC5 (hand 24=7, 30=1, 25=6 recompute correctly)"
+    },
+    {
+      "clause": "REQ-008.4",
+      "verdict": "covered",
+      "evidence": "E05-S04#AC1-6"
+    },
+    {
+      "clause": "REQ-008.5",
+      "verdict": "covered",
+      "evidence": "E05-S05#AC1-3,AC5 (positions recompute correctly)"
+    },
+    {
+      "clause": "REQ-008.6",
+      "verdict": "covered",
+      "evidence": "E05-S05#AC1,AC3,AC4,AC6"
+    },
+    {
+      "clause": "REQ-008.7",
+      "verdict": "covered",
+      "evidence": "E05-S07#AC1-6"
+    },
+    {
+      "clause": "REQ-008.8",
+      "verdict": "covered",
+      "evidence": "E05-S03#AC1-3"
+    },
+    {
+      "clause": "REQ-008.9",
+      "verdict": "covered",
+      "evidence": "E05-S06#AC1-5"
+    },
+    {
+      "clause": "REQ-008.10",
+      "verdict": "covered",
+      "evidence": "E05-S10#AC1-3"
+    },
+    {
+      "clause": "REQ-008.11",
+      "verdict": "covered",
+      "evidence": "E05-S06#AC6"
+    },
+    {
+      "clause": "REQ-008.12",
+      "verdict": "covered",
+      "evidence": "E05-S03#AC3"
+    },
+    {
+      "clause": "REQ-008.13",
+      "verdict": "covered",
+      "evidence": "E05-S05#AC7"
+    },
+    {
+      "clause": "REQ-041.2",
+      "verdict": "covered",
+      "evidence": "E05-S02#AC5 (790 vs 800 / 600 boundary correct)"
+    },
+    {
+      "clause": "REQ-047.6",
+      "verdict": "covered",
+      "evidence": "E05-S04#AC6"
+    },
+    {
+      "clause": "REQ-056.2",
+      "verdict": "covered",
+      "evidence": "E05-S11#AC1-3"
+    }
+  ],
+  "findings": [],
+  "summary": "All 19 E05 clauses covered; level schedule, header countdown, finishing positions and leak position group recompute correctly. Round-2 MEDIUM (E05-S07 hidden dependency) resolved: TASK-5.3 now depends on TASK-5.7 and TASK-10.12; stale notes removed. No findings. C5-AND and C3-NOM1 warnings are false positives."
+}

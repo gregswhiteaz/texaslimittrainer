@@ -1,0 +1,116 @@
+{
+  "scope": "E13",
+  "round": 2,
+  "clauses": [
+    {
+      "clause": "REQ-052.4",
+      "verdict": "covered",
+      "evidence": "E13-S01#AC1-4"
+    },
+    {
+      "clause": "REQ-053.1",
+      "verdict": "covered",
+      "evidence": "E13-S11#AC1-4; E13-S10#AC2; E11-S12#AC1; E12-S08#AC8"
+    },
+    {
+      "clause": "REQ-053.2",
+      "verdict": "covered",
+      "evidence": "E13-S03#AC1-6"
+    },
+    {
+      "clause": "REQ-054.1",
+      "verdict": "covered",
+      "evidence": "E13-S04#AC1-2"
+    },
+    {
+      "clause": "REQ-054.2",
+      "verdict": "covered",
+      "evidence": "E13-S04#AC2-5"
+    },
+    {
+      "clause": "REQ-054.3",
+      "verdict": "covered",
+      "evidence": "E13-S05#AC1-4"
+    },
+    {
+      "clause": "REQ-055.4",
+      "verdict": "covered",
+      "evidence": "E13-S10#AC1-2"
+    },
+    {
+      "clause": "REQ-056.3",
+      "verdict": "covered",
+      "evidence": "E13-S02#AC1-5"
+    },
+    {
+      "clause": "REQ-057.1",
+      "verdict": "covered",
+      "evidence": "E13-S12#AC1-5"
+    },
+    {
+      "clause": "REQ-058.1",
+      "verdict": "covered",
+      "evidence": "E13-S09#AC1-2"
+    },
+    {
+      "clause": "REQ-058.2",
+      "verdict": "covered",
+      "evidence": "E13-S09#AC3"
+    },
+    {
+      "clause": "REQ-058.3",
+      "verdict": "covered",
+      "evidence": "E13-S09#AC4-6"
+    },
+    {
+      "clause": "REQ-060.2",
+      "verdict": "covered",
+      "evidence": "E13-S06#AC1-5 and DoD manual Safari/Chrome check"
+    },
+    {
+      "clause": "REQ-065.1",
+      "verdict": "covered",
+      "evidence": "E13-S07#AC1-4 (Statistics/Settings/sit-and-go only via AC4 precache check)"
+    },
+    {
+      "clause": "REQ-065.2",
+      "verdict": "covered",
+      "evidence": "E13-S08#AC1-3"
+    },
+    {
+      "clause": "REQ-065.3",
+      "verdict": "covered",
+      "evidence": "E13-S08#AC4-6"
+    }
+  ],
+  "findings": [
+    {
+      "id": "J-E13-E13-S04#AC1-hidden-dependency",
+      "severity": "HIGH",
+      "class": "hidden-dependency",
+      "owner": "weaver",
+      "location": "E13-S04#AC1 (TASK-13.6)",
+      "evidence": "AC1 and the description require a schema version on the UI-preferences store (action-log collapse state, E04-S02 = TASK-4.3, ordinal 129000) and on last configuration (E02-S10 = TASK-2.10); E13-S04 has ordinal 113000 and deps only TASK-3.9, 3.10, 10.1, 2.12. The UI-preferences store does not exist yet when this story is built.",
+      "fix": "Add dependency edges to TASK-2.10 and TASK-4.3 (and order after them), or drop UI preferences from AC1 and add a version-record DoD to E04-S02."
+    },
+    {
+      "id": "J-E13-E13-S07-offline-coverage",
+      "severity": "LOW",
+      "class": "ac-weak",
+      "owner": "weaver",
+      "location": "E13-S07#AC2-3",
+      "evidence": "REQ-065.1 says every screen and feature works offline; the offline play-through covers Home, Game Config, Table, hint, review and report but not Statistics, Settings or sit-and-go (same wave, no edges). Only the precache-completeness check (AC4) guards them.",
+      "fix": "Add to the owning stories' ACs or a global DoD item a check that the screen works with the network disabled."
+    },
+    {
+      "id": "J-E13-E13-S12-AC-axe-scope",
+      "severity": "LOW",
+      "class": "dependency",
+      "owner": "weaver",
+      "location": "E13-S12 (TASK-13.11)",
+      "evidence": "Sweep lists Statistics, Settings, reset dialog and sit-and-go as picked up by the owning stories; this is acceptable under global DoD #9 but those stories' axe DoD must stay; verify E05 stories carry it.",
+      "fix": "No change; keep per-story axe DoD."
+    }
+  ],
+  "summary": "All 16 clauses covered; REQ-060.2 Safari now covered by manual-check AC and DoD; round-1 ordering defects resolved. One new hidden dependency (E13-S04 UI-preferences store)."
+}

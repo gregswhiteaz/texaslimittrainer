@@ -1,0 +1,27 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python3 /Users/gregwhite/.claude/skills/doit/scripts/doit.py *)",
+      "Bash(python3 /Users/gregwhite/.claude/skills/dreamit/scripts/dreamit.py *)",
+      "Bash(backlog task view *)",
+      "Bash(backlog task list *)",
+      "Bash(backlog doc view *)",
+      "Bash(backlog doc list *)",
+      "Bash(backlog milestone list *)",
+      "Bash(backlog instructions *)",
+      "Bash(backlog doctor)",
+      "Bash(git status *)",
+      "Bash(git diff *)",
+      "Bash(git log *)",
+      "Bash(git show *)"
+    ],
+    "deny": [
+      "Edit(./backlog/**)",
+      "Write(./backlog/**)",
+      "Read(./.env)",
+      "Read(./.env.*)",
+      "Bash(git push *)",
+      "Bash(git push)"
+    ]
+  }
+}

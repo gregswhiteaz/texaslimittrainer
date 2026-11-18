@@ -1,0 +1,88 @@
+{
+  "scope": "E08",
+  "round": 3,
+  "clauses": [
+    {
+      "clause": "REQ-022.2",
+      "verdict": "covered",
+      "evidence": "E08-S01#AC1"
+    },
+    {
+      "clause": "REQ-035.4",
+      "verdict": "covered",
+      "evidence": "E08-S01#AC2-AC4"
+    },
+    {
+      "clause": "REQ-036.2",
+      "verdict": "covered",
+      "evidence": "E08-S02#AC6"
+    },
+    {
+      "clause": "REQ-040.1",
+      "verdict": "covered",
+      "evidence": "E08-S02#AC1-AC5"
+    },
+    {
+      "clause": "REQ-041.1",
+      "verdict": "covered",
+      "evidence": "E08-S03#AC1-AC3"
+    },
+    {
+      "clause": "REQ-041.2",
+      "verdict": "covered",
+      "evidence": "E08-S03#AC4"
+    },
+    {
+      "clause": "REQ-042.1",
+      "verdict": "covered",
+      "evidence": "E08-S01#AC2,AC3"
+    },
+    {
+      "clause": "REQ-042.2",
+      "verdict": "covered",
+      "evidence": "E08-S01#AC5"
+    },
+    {
+      "clause": "REQ-042.3",
+      "verdict": "covered",
+      "evidence": "E08-S01#AC6,AC7"
+    },
+    {
+      "clause": "REQ-042.4",
+      "verdict": "covered",
+      "evidence": "E08-S01#AC8"
+    },
+    {
+      "clause": "REQ-042.5",
+      "verdict": "covered",
+      "evidence": "E08-S02#AC1,AC2"
+    },
+    {
+      "clause": "REQ-042.6",
+      "verdict": "covered",
+      "evidence": "E08-S01#AC2,AC3"
+    },
+    {
+      "clause": "REQ-055.1",
+      "verdict": "covered",
+      "evidence": "E08-S04#AC1"
+    },
+    {
+      "clause": "REQ-055.6",
+      "verdict": "covered",
+      "evidence": "E08-S04#AC2"
+    }
+  ],
+  "findings": [
+    {
+      "id": "J-E08-E08-S01-size",
+      "severity": "LOW",
+      "class": "story-too-large",
+      "owner": "weaver",
+      "location": "E08-S01",
+      "evidence": "8 ACs, dense description; one capability.",
+      "fix": "None required."
+    }
+  ],
+  "summary": "All 14 clauses covered; no open issues beyond LOW."
+}

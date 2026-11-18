@@ -1,0 +1,30 @@
+{
+  "v": 3,
+  "createdOnFiles": {"v": 1, "at": "2026-11-17T15:00:00Z"},
+  "title": "Limit Hold'em Trainer Storyboards",
+  "launch": {"view": "canvas"},
+  "pages": [],
+  "boards": {
+    "Main.dc.html": {"x": 0, "y": 0, "w": 1280, "h": 800, "title": "1 · Splash", "expand": "fill", "is_interactive": true},
+    "Home.dc.html": {"x": 1360, "y": 0, "w": 1280, "h": 800, "title": "2 · Home (Game Start)", "expand": "fill", "is_interactive": true},
+    "Config.dc.html": {"x": 2720, "y": 0, "w": 1280, "h": 800, "title": "3 · Game Config", "expand": "fill", "is_interactive": true},
+    "Table.dc.html": {"x": 4080, "y": 0, "w": 1280, "h": 800, "title": "4 · Table (hint open)", "expand": "fill", "is_interactive": true},
+    "Review.dc.html": {"x": 0, "y": 1780, "w": 1280, "h": 800, "title": "5 · Table + Hand Review panel", "expand": "fill", "is_interactive": true},
+    "Report.dc.html": {"x": 1360, "y": 1780, "w": 1280, "h": 900, "title": "6 · Session Report", "expand": "fill", "is_interactive": true},
+    "Stats.dc.html": {"x": 2720, "y": 1780, "w": 1280, "h": 960, "title": "7 · Statistics / Progress", "expand": "fill", "is_interactive": true},
+    "Settings.dc.html": {"x": 4080, "y": 1780, "w": 1280, "h": 800, "title": "8 · Settings", "expand": "fill", "is_interactive": true}
+  },
+  "order": ["Main.dc.html", "Home.dc.html", "Config.dc.html", "Table.dc.html", "Review.dc.html", "Report.dc.html", "Stats.dc.html", "Settings.dc.html"],
+  "notes": {
+    "title": {"x": 0, "y": -320, "text": "Limit Hold'em Trainer — v1 storyboards (low-fidelity, sample data)", "kind": "title1", "maxW": 5360},
+    "q1": {"x": 0, "y": 860, "w": 600, "size": "m", "fill": "orange", "text": "Splash — open questions\n• Show splash on every launch, or only while loading (skip if ready in < 1 s)?\n• App name: keep \"Limit Hold'em Trainer\" or choose another?\n• Auto-continue to Home, or wait for a click?"},
+    "q2": {"x": 1360, "y": 860, "w": 600, "size": "m", "fill": "orange", "text": "Home — open questions\n• Only one paused session at a time, or several?\n• What shows on first launch (no sessions yet)?\n• Is the last-session snapshot wanted here?"},
+    "q3": {"x": 2720, "y": 860, "w": 600, "size": "m", "fill": "orange", "text": "Game Config — open questions\n• Stakes: which limit levels to offer? Play money only (chips shown as $)?\n• Cash buy-in / rebuy rules; SNG starting chips and how fast limits rise.\n• Pick each bot's style per seat, or choose a preset line-up?\n• Remember last config as the default?"},
+    "q4": {"x": 4080, "y": 860, "w": 600, "size": "m", "fill": "orange", "text": "Table — open questions\n• Hint: show the answer straight away, or a nudge first?\n• Show opponents' style labels at the table (helps learning) or hide them (more realistic)?\n• Action log always visible, or collapsible?\n• Keyboard shortcuts for Fold / Call / Raise?"},
+    "q5": {"x": 0, "y": 2640, "w": 600, "size": "m", "fill": "orange", "text": "Hand Review — open questions\n• Open automatically after every hand, only after hands with an error, or only on click?\n• Show opponents' hole cards that were mucked (not shown at showdown)?\n• Grade the bots' decisions too, or only yours?"},
+    "q6": {"x": 1360, "y": 2740, "w": 600, "size": "m", "fill": "orange", "text": "Session Report — open questions\n• Which 5 style stats count for goal G-4?\n• Minimum hands before a leak is reported (avoid noise)?\n• When does a session end: on Leave only, or also after inactivity?"},
+    "q7": {"x": 2720, "y": 2800, "w": 600, "size": "m", "fill": "orange", "text": "Statistics — open questions\n• Group trends by session, by day, or by every 100 hands?\n• Filter by table size / game type?\n• Show goal targets (G-2, G-3, G-4) on the charts?"},
+    "q8": {"x": 4080, "y": 2640, "w": 600, "size": "m", "fill": "orange", "text": "Settings — open questions\n• Two-colour or four-colour deck option?\n• Show amounts in $ or in big bets?\n• Reset all data: confirm with a typed word or a simple dialog?"}
+  },
+  "designSystems": []
+}

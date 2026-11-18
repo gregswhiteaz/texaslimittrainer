@@ -1,0 +1,376 @@
+{
+ "scope": "E07",
+ "round": 1,
+ "clauses": [
+  {
+   "clause": "REQ-005.4",
+   "verdict": "covered",
+   "evidence": "E07-S05#AC4 (chart per table size 2-10) and E07-S16#AC1-3 (exact vs approximate sizes)"
+  },
+  {
+   "clause": "REQ-025.2",
+   "verdict": "covered",
+   "evidence": "E07-S01#AC6,AC7; E07-S03#AC6; E07-S13#AC4"
+  },
+  {
+   "clause": "REQ-025.3",
+   "verdict": "covered",
+   "evidence": "E07-S04#AC7; E07-S13#AC4"
+  },
+  {
+   "clause": "REQ-032.1",
+   "verdict": "covered",
+   "evidence": "E07-S05#AC1,AC4,AC5"
+  },
+  {
+   "clause": "REQ-032.2",
+   "verdict": "covered",
+   "evidence": "E07-S01#AC1; E07-S05#AC2"
+  },
+  {
+   "clause": "REQ-032.3",
+   "verdict": "covered",
+   "evidence": "E07-S01#AC2,AC5"
+  },
+  {
+   "clause": "REQ-032.4",
+   "verdict": "covered",
+   "evidence": "E07-S01#AC3; E07-S05#AC3"
+  },
+  {
+   "clause": "REQ-032.5",
+   "verdict": "covered",
+   "evidence": "E07-S01#AC4"
+  },
+  {
+   "clause": "REQ-032.6",
+   "verdict": "covered",
+   "evidence": "E07-S01#AC8 (6-max only; see finding)"
+  },
+  {
+   "clause": "REQ-033.1",
+   "verdict": "covered",
+   "evidence": "E07-S03#AC1,AC2; E07-S10#AC4"
+  },
+  {
+   "clause": "REQ-033.2",
+   "verdict": "covered",
+   "evidence": "E07-S10#AC1-3 (derivation of the calling range untested; see finding)"
+  },
+  {
+   "clause": "REQ-033.3",
+   "verdict": "covered",
+   "evidence": "E07-S11#AC1-3"
+  },
+  {
+   "clause": "REQ-033.4",
+   "verdict": "covered",
+   "evidence": "E07-S03#AC5 consistency test; E07-S10 and E07-S11 DoD"
+  },
+  {
+   "clause": "REQ-033.5",
+   "verdict": "covered",
+   "evidence": "E07-S03#AC3,AC4; E07-S10#AC5; E07-S11#AC4"
+  },
+  {
+   "clause": "REQ-034.1",
+   "verdict": "covered",
+   "evidence": "E07-S02#AC1,AC2; E07-S06#AC2"
+  },
+  {
+   "clause": "REQ-034.2",
+   "verdict": "covered",
+   "evidence": "E07-S02#AC3; E07-S06#AC1,AC2"
+  },
+  {
+   "clause": "REQ-034.3",
+   "verdict": "covered",
+   "evidence": "E07-S02#AC4,AC5; E07-S06#AC3"
+  },
+  {
+   "clause": "REQ-035.1",
+   "verdict": "covered",
+   "evidence": "E07-S07#AC1,AC2"
+  },
+  {
+   "clause": "REQ-035.2",
+   "verdict": "covered",
+   "evidence": "E07-S09#AC1,AC2,AC5"
+  },
+  {
+   "clause": "REQ-035.3",
+   "verdict": "covered",
+   "evidence": "E07-S07#AC3,AC4"
+  },
+  {
+   "clause": "REQ-035.4",
+   "verdict": "covered",
+   "evidence": "E07-S09#AC1,AC3,AC4"
+  },
+  {
+   "clause": "REQ-036.1",
+   "verdict": "covered",
+   "evidence": "E07-S12#AC5; E07-S13#AC1,AC2"
+  },
+  {
+   "clause": "REQ-036.2",
+   "verdict": "covered",
+   "evidence": "E07-S13#AC3"
+  },
+  {
+   "clause": "REQ-037.1",
+   "verdict": "covered",
+   "evidence": "E07-S12#AC1; E07-S14#AC6"
+  },
+  {
+   "clause": "REQ-037.2",
+   "verdict": "covered",
+   "evidence": "E07-S12#AC2; E07-S14#AC6"
+  },
+  {
+   "clause": "REQ-037.3",
+   "verdict": "covered",
+   "evidence": "E07-S12#AC3"
+  },
+  {
+   "clause": "REQ-037.4",
+   "verdict": "covered",
+   "evidence": "E07-S12#AC4; E07-S15#AC4"
+  },
+  {
+   "clause": "REQ-038.1",
+   "verdict": "covered",
+   "evidence": "E07-S04#AC1; E07-S15#AC3"
+  },
+  {
+   "clause": "REQ-038.2",
+   "verdict": "covered",
+   "evidence": "E07-S04#AC2"
+  },
+  {
+   "clause": "REQ-038.3",
+   "verdict": "covered",
+   "evidence": "E07-S04#AC3,AC4 (boundaries 0/9.9/10)"
+  },
+  {
+   "clause": "REQ-038.4",
+   "verdict": "covered",
+   "evidence": "E07-S04#AC5,AC6 (14.9/15 boundary)"
+  },
+  {
+   "clause": "REQ-038.5",
+   "verdict": "covered",
+   "evidence": "E07-S04#AC3-AC6"
+  },
+  {
+   "clause": "REQ-038.6",
+   "verdict": "covered",
+   "evidence": "E07-S04#AC8"
+  },
+  {
+   "clause": "REQ-039.1",
+   "verdict": "covered",
+   "evidence": "E07-S14#AC4; E07-S15#AC1"
+  },
+  {
+   "clause": "REQ-039.2",
+   "verdict": "covered",
+   "evidence": "E07-S14#AC1"
+  },
+  {
+   "clause": "REQ-039.3",
+   "verdict": "covered",
+   "evidence": "E07-S14#AC5; E07-S15#AC2"
+  },
+  {
+   "clause": "REQ-039.4",
+   "verdict": "covered",
+   "evidence": "E07-S14#AC2,AC3; E07-S15#AC5"
+  },
+  {
+   "clause": "REQ-041.1",
+   "verdict": "covered",
+   "evidence": "E07-S16#AC1-4"
+  },
+  {
+   "clause": "REQ-041.2",
+   "verdict": "covered",
+   "evidence": "E07-S17#AC1-3 (9 vs 10 big bets boundary, cash excluded)"
+  },
+  {
+   "clause": "REQ-041.3",
+   "verdict": "covered",
+   "evidence": "E07-S17#AC4"
+  },
+  {
+   "clause": "REQ-045.1",
+   "verdict": "covered",
+   "evidence": "E07-S08#AC1,AC6"
+  },
+  {
+   "clause": "REQ-045.2",
+   "verdict": "covered",
+   "evidence": "E07-S08#AC1"
+  },
+  {
+   "clause": "REQ-045.3",
+   "verdict": "covered",
+   "evidence": "E07-S08#AC2"
+  },
+  {
+   "clause": "REQ-045.4",
+   "verdict": "covered",
+   "evidence": "E07-S08#AC3"
+  },
+  {
+   "clause": "REQ-045.5",
+   "verdict": "covered",
+   "evidence": "E07-S08#AC4"
+  },
+  {
+   "clause": "REQ-045.6",
+   "verdict": "covered",
+   "evidence": "E07-S08#AC5"
+  },
+  {
+   "clause": "REQ-061.2",
+   "verdict": "covered",
+   "evidence": "DoD item 'text is original' on content stories (E07-S01, S05, S07, S12, S14, S15); matches the requirement's own fit criterion (review checklist in DoD)"
+  },
+  {
+   "clause": "REQ-062.1",
+   "verdict": "covered",
+   "evidence": "E07-S13#AC1 (--check-advice option; other options are E01)"
+  },
+  {
+   "clause": "REQ-062.4",
+   "verdict": "covered",
+   "evidence": "E07-S13#AC5"
+  },
+  {
+   "clause": "REQ-063.1",
+   "verdict": "covered",
+   "evidence": "E07-S14#AC2"
+  }
+ ],
+ "findings": [
+  {
+   "id": "J-E07-E07-S15-missing-dep",
+   "severity": "MEDIUM",
+   "class": "dependency",
+   "owner": "weaver",
+   "location": "E07-S15#AC3",
+   "evidence": "AC3 grades examples of each level, but TASK-7.14 (E07-S15) does not depend on TASK-7.4 (E07-S04 grader), directly or transitively (deps: 7.11, 7.13, 7.8, 7.9).",
+   "fix": "Add TASK-7.4 (E07-S04) to E07-S15 deps."
+  },
+  {
+   "id": "J-E07-E07-S13-missing-dep",
+   "severity": "MEDIUM",
+   "class": "dependency",
+   "owner": "weaver",
+   "location": "E07-S13#AC1,AC4",
+   "evidence": "ACs compare the grade at every decision and check grades under hidden-card variation, but TASK-7.15 (E07-S13) has no dependency on TASK-7.4 (E07-S04).",
+   "fix": "Add E07-S04 to E07-S13 deps."
+  },
+  {
+   "id": "J-E07-E07-S16-missing-dep",
+   "severity": "MEDIUM",
+   "class": "dependency",
+   "owner": "weaver",
+   "location": "E07-S16#AC4",
+   "evidence": "AC4 needs the grade result carrying the label, but TASK-7.16 (E07-S16) depends only on TASK-7.6 (E07-S05) and not the grader (TASK-7.4).",
+   "fix": "Add E07-S04 to E07-S16 deps."
+  },
+  {
+   "id": "J-E07-E07-S04-hidden-dep",
+   "severity": "MEDIUM",
+   "class": "dependency",
+   "owner": "weaver",
+   "location": "E07-S04#AC5,AC6,AC8",
+   "evidence": "ACs start from 'advice to bet or raise' and 'equity against the calling range', which exist only after E07-S10/S07; deps list only TASK-7.3. Description says S03's holdings are used until then, but no bet/raise recommendation can be produced by S03 (S03#AC4 yields only check/call/fold).",
+   "fix": "State these ACs use injected recommendation fixtures, or add the real dependency / move those ACs to S10."
+  },
+  {
+   "id": "J-E07-E07-S10-calling-range-gap",
+   "severity": "MEDIUM",
+   "class": "unimplementable-as-written",
+   "owner": "weaver",
+   "location": "E07-S10#AC1-3",
+   "evidence": "The 'range that would call' is named in REQ-033.2 and used by S04 and S10, but no AC defines or checks how it is derived from the estimated range; S07 notes say it defines it, but S07 has no AC for it. An implementer cannot tell what to build without asking.",
+   "fix": "Add an AC in S07 or S10: given a range and a bet, the calling range equals the documented subset (give one worked example)."
+  },
+  {
+   "id": "J-E07-E07-S07-weak-narrowing-ac",
+   "severity": "MEDIUM",
+   "class": "testability",
+   "owner": "weaver",
+   "location": "E07-S07#AC2",
+   "evidence": "Only one narrowing example, citing an undocumented 'flop-bet rule'; narrowing by later actions (check, call, raise on each street) from the statement is not asserted with exact values.",
+   "fix": "Add exact-value ACs for narrowing by check, call and raise, or state the rule's expected range size."
+  },
+  {
+   "id": "J-E07-E07-S05-REQ-032.6-sizes",
+   "severity": "MEDIUM",
+   "class": "partial-coverage",
+   "owner": "weaver",
+   "location": "E07-S05",
+   "evidence": "REQ-032.6 (fourth-bet re-raise chart and capped raise-to-call) is tested only at 6-max in S01#AC8; heads-up and full-ring charts have no equivalent AC.",
+   "fix": "Add an AC in S05 for a fourth-bet decision at heads-up and full ring [REQ-032.6]."
+  },
+  {
+   "id": "J-E07-E07-S08-not-vertical",
+   "severity": "MEDIUM",
+   "class": "not-vertical",
+   "owner": "weaver",
+   "location": "E07-S08",
+   "evidence": "Pure statistics module with no user-visible outcome; value arrives only via E10/E06/E09. Typed as feature with 'As a learner'.",
+   "fix": "Mark type chore/task as an enabler for E10 and E09 (keep it a dependency of user stories), or fold it into the first story that shows the stats."
+  },
+  {
+   "id": "J-E07-E07-S08-stale-note",
+   "severity": "LOW",
+   "class": "wording",
+   "owner": "weaver",
+   "location": "E07-S08 Notes",
+   "evidence": "Note says aggression bands in REQ-027 lack a street restriction ('see requirement question'); REQ-027.6 in baseline v1.5 already fixes it to flop/turn/river.",
+   "fix": "Remove the stale note and cite REQ-027.6."
+  },
+  {
+   "id": "J-E07-E07-S01-legal-rec-no-ac",
+   "severity": "LOW",
+   "class": "missing-ac",
+   "owner": "weaver",
+   "location": "E07-S01 Notes",
+   "evidence": "'Call cell with nothing to call becomes check' is in Notes only; no AC checks it.",
+   "fix": "Add an AC: big blind facing limpers, call cell, advice returns check."
+  },
+  {
+   "id": "J-E07-E07-S17-preflop",
+   "severity": "LOW",
+   "class": "gap",
+   "owner": "weaver",
+   "location": "E07-S17",
+   "evidence": "Depends only on postflop S03 and no AC shows the note on a preflop decision, though the clause says every hint and review entry.",
+   "fix": "Add an AC for a preflop SNG decision at 9 big bets."
+  },
+  {
+   "id": "J-E07-E07-S09-AC5",
+   "severity": "LOW",
+   "class": "testability",
+   "owner": "weaver",
+   "location": "E07-S09#AC5",
+   "evidence": "The scaling check asserts only that results equal 'the value worked in the design document'; the expected numbers are not stated.",
+   "fix": "Put the worked numbers in the AC."
+  },
+  {
+   "id": "J-E07-E07-S14-two-capabilities",
+   "severity": "LOW",
+   "class": "split",
+   "owner": "weaver",
+   "location": "E07-S14",
+   "evidence": "Combines suite infrastructure (format, validator, npm test wiring) with the 100-spot preflop content and explanation checks.",
+   "fix": "Optional: split the runner from the content, or accept as is."
+  }
+ ],
+ "summary": "All 50 in-scope clauses are covered by AC or DoD items that would fail without them. Problems are incomplete dependencies, an undefined calling range, a non-vertical stats story and minor gaps. No CRITICAL or HIGH findings."
+}

@@ -1,0 +1,211 @@
+{
+ "scope": "E06",
+ "round": 3,
+ "clauses": [
+  {
+   "clause": "REQ-007.5",
+   "verdict": "covered",
+   "evidence": "E06-S08#AC1, E06-S08#AC2, E06-S08#AC3, E06-S08#AC4"
+  },
+  {
+   "clause": "REQ-007.7",
+   "verdict": "covered",
+   "evidence": "E06-S08#AC7"
+  },
+  {
+   "clause": "REQ-007.8",
+   "verdict": "covered",
+   "evidence": "E06-S08#AC3, E06-S08#AC8"
+  },
+  {
+   "clause": "REQ-009.1",
+   "verdict": "covered",
+   "evidence": "E06-S06#AC1, E06-S06#AC2, E06-S06#AC3, E06-S06#AC6"
+  },
+  {
+   "clause": "REQ-009.4",
+   "verdict": "covered",
+   "evidence": "E06-S06#AC5, E02-S05#AC5, E06-S08#AC4"
+  },
+  {
+   "clause": "REQ-009.6",
+   "verdict": "covered",
+   "evidence": "E06-S07#AC1, E06-S07#AC2, E06-S07#AC3, E06-S07#AC4"
+  },
+  {
+   "clause": "REQ-009.7",
+   "verdict": "covered",
+   "evidence": "E06-S06#AC4, E02-S05#AC4"
+  },
+  {
+   "clause": "REQ-009.8",
+   "verdict": "covered",
+   "evidence": "E06-S06#AC1, E06-S06#AC2, E06-S06#AC3, E02-S05#AC2"
+  },
+  {
+   "clause": "REQ-025.1",
+   "verdict": "covered",
+   "evidence": "E01-S06#AC1, E01-S06#AC2, E01-S06#AC3, E06-S01#AC4"
+  },
+  {
+   "clause": "REQ-026.1",
+   "verdict": "covered",
+   "evidence": "E06-S01#AC1, E06-S01#AC2, E06-S01#AC3, E06-S01#AC5"
+  },
+  {
+   "clause": "REQ-026.2",
+   "verdict": "covered",
+   "evidence": "E06-S03#AC2, E06-S03#AC3, E06-S03#AC5, E06-S04#AC2"
+  },
+  {
+   "clause": "REQ-026.3",
+   "verdict": "covered",
+   "evidence": "E06-S02#AC1, E06-S03#AC1, E06-S03#AC4, E06-S04#AC1"
+  },
+  {
+   "clause": "REQ-027.1",
+   "verdict": "covered",
+   "evidence": "E06-S16#AC1, E06-S16#AC3, E06-S17#AC4"
+  },
+  {
+   "clause": "REQ-027.2",
+   "verdict": "covered",
+   "evidence": "E06-S17#AC1, E06-S17#AC3"
+  },
+  {
+   "clause": "REQ-027.3",
+   "verdict": "covered",
+   "evidence": "E06-S17#AC2, E06-S17#AC3"
+  },
+  {
+   "clause": "REQ-027.4",
+   "verdict": "covered",
+   "evidence": "E06-S16#AC2, E06-S16#AC3, E06-S17#AC4"
+  },
+  {
+   "clause": "REQ-027.5",
+   "verdict": "covered",
+   "evidence": "E06-S09#AC1, E06-S09#AC2, E06-S09#AC5, E06-S16#AC3"
+  },
+  {
+   "clause": "REQ-027.6",
+   "verdict": "covered",
+   "evidence": "E06-S09#AC3"
+  },
+  {
+   "clause": "REQ-028.1",
+   "verdict": "covered",
+   "evidence": "E06-S18#AC1, E06-S18#AC2, E06-S15#AC3"
+  },
+  {
+   "clause": "REQ-028.2",
+   "verdict": "covered",
+   "evidence": "E06-S15#AC1, E06-S15#AC2, E06-S15#AC3"
+  },
+  {
+   "clause": "REQ-028.3",
+   "verdict": "covered",
+   "evidence": "E06-S02#AC2, E06-S02#AC3, E06-S09#AC4"
+  },
+  {
+   "clause": "REQ-029.1",
+   "verdict": "covered",
+   "evidence": "E06-S13#AC1, E06-S13#AC2"
+  },
+  {
+   "clause": "REQ-029.2",
+   "verdict": "covered",
+   "evidence": "E06-S18#AC3"
+  },
+  {
+   "clause": "REQ-030.1",
+   "verdict": "covered",
+   "evidence": "E06-S12#AC1, E06-S12#DoD1"
+  },
+  {
+   "clause": "REQ-030.2",
+   "verdict": "covered",
+   "evidence": "E06-S12#AC2, E06-S12#DoD1"
+  },
+  {
+   "clause": "REQ-030.3",
+   "verdict": "covered",
+   "evidence": "E06-S12#AC3, E06-S12#DoD1"
+  },
+  {
+   "clause": "REQ-030.4",
+   "verdict": "covered",
+   "evidence": "E06-S10#AC1, E06-S10#AC3"
+  },
+  {
+   "clause": "REQ-055.3",
+   "verdict": "covered",
+   "evidence": "E06-S14#AC1, E06-S14#AC2, E06-S14#DoD1, E13-S11#AC3"
+  },
+  {
+   "clause": "REQ-056.1",
+   "verdict": "covered",
+   "evidence": "DoD-global#6, E01-S07#AC6, E01-S08#AC1, E01-S08#AC2"
+  },
+  {
+   "clause": "REQ-056.2",
+   "verdict": "covered",
+   "evidence": "E01-S17#AC1, E01-S17#AC2, E06-S11#AC1, E06-S11#AC3"
+  },
+  {
+   "clause": "REQ-061.2",
+   "verdict": "covered",
+   "evidence": "DoD-global#9, E07-S01#DoD1, E07-S07#DoD1, E06-S05#DoD1"
+  },
+  {
+   "clause": "REQ-062.1",
+   "verdict": "covered",
+   "evidence": "E01-S07#AC1, E01-S07#AC2, E01-S09#AC4, E01-S16#AC6"
+  },
+  {
+   "clause": "REQ-062.3",
+   "verdict": "covered",
+   "evidence": "E06-S10#AC1, E06-S10#AC2, E06-S10#AC4, E06-S09#AC1"
+  },
+  {
+   "clause": "REQ-062.4",
+   "verdict": "covered",
+   "evidence": "E01-S07#AC3, E01-S07#AC4, E01-S17#AC3, E06-S08#AC5"
+  },
+  {
+   "clause": "REQ-062.5",
+   "verdict": "covered",
+   "evidence": "E01-S17#AC4, E01-S17#DoD1, E06-S11#AC2, E06-S11#DoD1"
+  }
+ ],
+ "findings": [
+  {
+   "id": "J-E06-E06-S06-AC6-too-big",
+   "severity": "LOW",
+   "class": "story-size",
+   "owner": "weaver",
+   "location": "E06-S06#AC6-AC7",
+   "evidence": "E06-S06 (7 ACs) still bundles preset seating (AC1-4), unique names (AC5) and the --lineup CLI option (AC6-7); carried over from round 2, acceptable but near the limit.",
+   "fix": "Optionally move the CLI option (AC6-7) to its own story."
+  },
+  {
+   "id": "J-E06-E06-S13-stale-note",
+   "severity": "LOW",
+   "class": "wording",
+   "owner": "weaver",
+   "location": "E06-S13#Notes",
+   "evidence": "Notes say REQ-029.2 'is enforced from M2 in E06-S02'; the clause is now carried by E06-S18#AC3 (m-1) and E06-S02 no longer mentions it.",
+   "fix": "Change the note to reference E06-S18."
+  },
+  {
+   "id": "J-E06-E06-S18-AC1-compound",
+   "severity": "LOW",
+   "class": "ac-style",
+   "owner": "weaver",
+   "location": "E06-S18#AC1",
+   "evidence": "AC1 holds two Given/When/Then statements (same action twice; different seat gives different sequence) in one AC, so a failure does not say which half broke.",
+   "fix": "Split AC1 into two ACs, both tagged REQ-028.1."
+  }
+ ],
+ "summary": "All round-2 findings resolved (S02 split with S18 holding the generator, S11 sharding AC, S16/S17 extra-seed ACs, REQ-007.8 resolves the Tough refill ambiguity). Only LOW items remain."
+}

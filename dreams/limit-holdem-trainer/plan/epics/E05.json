@@ -1,0 +1,573 @@
+{
+  "epic": "E05",
+  "stories": [
+    {
+      "key": "E05-S01",
+      "title": "Start a sit-and-go where every player has 1,500 chips",
+      "type": "feature",
+      "milestone": "M3",
+      "priority": "Medium",
+      "risk": "medium",
+      "skeleton": false,
+      "role": "learner",
+      "want": "to start a sit-and-go in which every player begins with 1,500 chips",
+      "benefit": "I can practise tournament-style play where everyone starts equal",
+      "context": "Game Config already passes game type Sit-and-go with no stake (E02-S04). This story makes Start game play the sit-and-go structure: the engine receives a sit-and-go table definition instead of a cash stake; every player (user and bots) starts with 1,500 chips at level 1 (small bet 20, big bet 40, blinds 10/20). There is no buy-in and no rebuy in a sit-and-go. The session record (E03-S11) stores game type sit-and-go and the starting player count. The playtest CLI's `--game sng` option (E01) plays successive sit-and-gos with this structure, each starting fresh, until the requested number of hands is reached. Rising limits are E05-S02, empty seats E05-S04, finishing E05-S05.",
+      "acs": [
+        {
+          "text": "Given Game Config with Sit-and-go and 6 players chosen, When the user chooses Start game, Then the Table opens with the user and 5 bots each holding 1,500 chips and the first hand posts blinds of 10 and 20",
+          "tags": [
+            "REQ-008.1",
+            "REQ-008.2"
+          ]
+        },
+        {
+          "text": "Given each table size from 2 to 10, When a sit-and-go starts, Then every seated player holds exactly 1,500 chips before the first hand",
+          "tags": [
+            "REQ-008.1"
+          ]
+        },
+        {
+          "text": "Given a sit-and-go has started, When the session record is read, Then it holds game type sit-and-go, the starting player count and no stake or buy-in",
+          "tags": [
+            "REQ-008.1",
+            "REQ-008.6"
+          ]
+        },
+        {
+          "text": "Given `npm run playtest -- --game sng --size 6 --hands 10000 --seed 42`, When it runs, Then every sit-and-go it plays starts with 1,500 chips per player, the chips at each table always total 9,000, zero invariant violations are reported and it exits 0",
+          "tags": [
+            "REQ-008.1"
+          ]
+        },
+        {
+          "text": "Given the same sit-and-go playtest seed and options, When it is run twice, Then the two outputs are byte-identical",
+          "tags": [
+            "REQ-008.1"
+          ]
+        }
+      ],
+      "dod": [],
+      "deps": [
+        "E02-S04",
+        "E03-S11",
+        "E01-S16"
+      ],
+      "notes": "Model the sit-and-go as a table definition with a level schedule so E05-S02 only adds levels. PlayerView must expose game type and the current level's big bet (E07-S17 needs both)."
+    },
+    {
+      "key": "E05-S02",
+      "title": "Raise the sit-and-go limits every 10 hands on the published schedule",
+      "type": "feature",
+      "milestone": "M3",
+      "priority": "Medium",
+      "risk": "medium",
+      "skeleton": false,
+      "role": "learner",
+      "want": "the limits to rise every 10 hands on a fixed schedule",
+      "benefit": "the pressure grows as in a real sit-and-go and the game reaches an end",
+      "context": "Schedule (small bet/big bet; blinds = half small bet / small bet): L1 20/40 (10/20), L2 30/60 (15/30), L3 40/80 (20/40), L4 60/120 (30/60), L5 100/200 (50/100), L6 150/300 (75/150), L7 200/400 (100/200), L8 300/600 (150/300), L9 400/800 (200/400), L10 600/1,200 (300/600). Level L covers hands 10L-9 to 10L; from hand 91 onward the limits stay at L10. Only dealt hands that completed count (a hand abandoned by closing the app is not counted, REQ-004.6). The level is part of the PlayerView (bet sizes, short-stack note via E07-S17) and is stored as the 'stake or level' of each hand record (REQ-052.2) and in the session state (E03-S11).",
+      "acs": [
+        {
+          "text": "Given a seeded sit-and-go that lasts 100 hands, When the hands are dealt, Then hands 1-10, 11-20, 21-30, 31-40, 41-50, 51-60, 61-70, 71-80, 81-90 and 91-100 use limits 20/40, 30/60, 40/80, 60/120, 100/200, 150/300, 200/400, 300/600, 400/800 and 600/1,200 respectively with blinds of half the small bet and the small bet",
+          "tags": [
+            "REQ-008.2",
+            "REQ-008.3"
+          ]
+        },
+        {
+          "text": "Given hand 10 at level 1 has completed, When hand 11 is dealt, Then its blinds are 15 and 30 and a bet on the turn is 60",
+          "tags": [
+            "REQ-008.3"
+          ]
+        },
+        {
+          "text": "Given a sit-and-go reaches hands 101 and 150, When they are dealt, Then both use limits 600/1,200 with blinds 300 and 600",
+          "tags": [
+            "REQ-008.2"
+          ]
+        },
+        {
+          "text": "Given a sit-and-go hand at level 3, When its stored hand record is read, Then its stake-or-level field holds level 3 with limits 40/80",
+          "tags": [
+            "REQ-008.2"
+          ]
+        },
+        {
+          "text": "Given a sit-and-go at level 3 where the user has 790 chips (under 10 big bets of 80), When advice is requested for the user's decision, Then it includes the short-stack note; and Given the same stack of 790 at level 2 (big bet 60), Then no short-stack note is included",
+          "tags": [
+            "REQ-041.2"
+          ]
+        },
+        {
+          "text": "Given `npm run playtest -- --game sng --size 9 --hands 10000 --seed 7`, When it runs, Then every hand's blinds and bet sizes match the level for its hand number and zero invariant violations are reported",
+          "tags": [
+            "REQ-008.2",
+            "REQ-008.3"
+          ]
+        }
+      ],
+      "dod": [],
+      "deps": [
+        "E05-S01",
+        "E07-S17"
+      ],
+      "notes": "Keep the schedule as data shipped with the app. Banter (E04-S07) must judge 'pot of 10 big bets or more' with the current level's big bet."
+    },
+    {
+      "key": "E05-S03",
+      "title": "See the current level, its limits and hands to the next level in the header",
+      "type": "feature",
+      "milestone": "M3",
+      "priority": "High",
+      "risk": "low",
+      "skeleton": false,
+      "role": "learner",
+      "want": "to see the current level, its limits and how many hands remain until the limits rise",
+      "benefit": "I can plan for the next increase in limits",
+      "context": "In a sit-and-go the Table header (E03-S03) shows the level, its limits and the hands remaining in place of the stake, e.g. 'Sit-and-go · 6 players · Level 3 · 40/80 · 7 hands to next level · Hand #24'. Hands remaining counts the hands of the current level not yet completed, including the hand in progress (hand 21 shows 10, hand 30 shows 1). From level 10 onward (hand 91 and later) the header reads 'Level 10 (final)' with no countdown. Resume (E02-S08) restores the level and hands remaining from the stored session state (E03-S11).",
+      "acs": [
+        {
+          "text": "Given hand 24 of a 6-player sit-and-go is in progress, When the Table is shown, Then the header reads 'Sit-and-go', '6 players', 'Level 3', '40/80', '7 hands to next level' and 'Hand #24' and shows no stake",
+          "tags": [
+            "REQ-008.8"
+          ]
+        },
+        {
+          "text": "Given hand 30 is in progress, When the header is shown, Then it reads '1 hand to next level'; and When hand 31 is dealt, Then it reads 'Level 4', '60/120' and '10 hands to next level'",
+          "tags": [
+            "REQ-008.8",
+            "REQ-008.3"
+          ]
+        },
+        {
+          "text": "Given hand 91 or any later hand is in progress, When the header is shown, Then it reads 'Level 10 (final)' and '600/1,200' and shows no hands-to-next-level count",
+          "tags": [
+            "REQ-008.12",
+            "REQ-008.8"
+          ]
+        },
+        {
+          "text": "Given a 6-player sit-and-go paused after hand 24 completed, When it is resumed, Then the next hand is #25 at Level 3 with limits 40/80, the header reads '6 hands to next level' and every stack equals its value at the end of hand 24",
+          "tags": [
+            "REQ-008.3",
+            "REQ-004.3"
+          ]
+        },
+        {
+          "text": "Given hand 30 was in progress after 29 completed hands when the app was closed, When the session is resumed, Then the next hand is #30 at Level 3 and hand 31 is the first hand at Level 4",
+          "tags": [
+            "REQ-008.3"
+          ]
+        }
+      ],
+      "dod": [],
+      "deps": [
+        "E05-S02",
+        "E03-S03",
+        "E02-S08"
+      ],
+      "notes": "The header also holds the session clock (E04-S09); keep the level text readable at 1280 x 720."
+    },
+    {
+      "key": "E05-S04",
+      "title": "Leave a busted bot's seat empty for the rest of the sit-and-go",
+      "type": "feature",
+      "milestone": "M3",
+      "priority": "Medium",
+      "risk": "low",
+      "skeleton": false,
+      "role": "learner",
+      "want": "busted bots to leave the sit-and-go without being replaced",
+      "benefit": "the table shrinks as in a real tournament until one player holds all the chips",
+      "context": "Bot replacement (E06-S08) applies to cash games only. In a sit-and-go a bot whose stack is 0 at the end of a hand leaves and its seat stays empty for the rest of the session; the button and blinds move past empty seats with the E01-S16 rules. The empty seat shows no name, style, stack or cards. Bot banter's 'a new player sits down' event therefore never fires in a sit-and-go. Seats left empty are skipped everywhere positions are counted, including the leak position groups (E10-S12).",
+      "acs": [
+        {
+          "text": "Given a 6-player sit-and-go in which a bot's stack is 0 at the end of a hand, When the next hand is dealt, Then that seat is empty, no new bot is seated and the hand is dealt to 5 players",
+          "tags": [
+            "REQ-008.4"
+          ]
+        },
+        {
+          "text": "Given two bots bust in the same hand of a sit-and-go, When the next hand is dealt, Then both seats are empty and no bot has been added",
+          "tags": [
+            "REQ-008.4"
+          ]
+        },
+        {
+          "text": "Given a sit-and-go with an empty seat, When the Table is shown, Then that seat shows no name, style, stack or card-back marker",
+          "tags": [
+            "REQ-008.4"
+          ]
+        },
+        {
+          "text": "Given the empty seat is the seat the button would move to, When the next hand is dealt, Then the button and blinds move past the empty seat to occupied seats",
+          "tags": [
+            "REQ-008.4"
+          ]
+        },
+        {
+          "text": "Given `npm run playtest -- --game sng --size 6 --hands 10000 --seed 42`, When it runs, Then no sit-and-go ever seats a bot after its first hand, each sit-and-go ends when one player holds all 9,000 chips, and zero invariant violations are reported",
+          "tags": [
+            "REQ-008.4"
+          ]
+        },
+        {
+          "text": "Given a 9-seat sit-and-go in which 3 bots have busted and the user is the seat two after the big blind among the 6 players dealt in, When the user's preflop decision is classified for leaks, Then the empty seats are skipped and the decision falls in the middle position group, as at a 6-player table",
+          "tags": [
+            "REQ-047.6",
+            "REQ-008.4"
+          ]
+        }
+      ],
+      "dod": [],
+      "deps": [
+        "E05-S01",
+        "E06-S08",
+        "E10-S12"
+      ],
+      "notes": "Gate the E06-S08 replacement rule on game type rather than duplicating seating logic."
+    },
+    {
+      "key": "E05-S05",
+      "title": "Finish a sit-and-go by busting or winning all the chips and see my finishing position",
+      "type": "feature",
+      "milestone": "M3",
+      "priority": "Medium",
+      "risk": "medium",
+      "skeleton": false,
+      "role": "learner",
+      "want": "the sit-and-go to end with my finishing position when it is decided",
+      "benefit": "I get a clear tournament result without waiting for the bots to play it out",
+      "context": "When the user's stack is 0 at the end of a hand, the sit-and-go ends for the user: no further hand is dealt and the remaining hands are not played out. Finishing position = number of players left including the user = 1 + the number of other players holding chips after that hand (if a bot busts in the same hand it is not counted). When the user holds all chips, the sit-and-go ends with position 1. The session record stores finishing position and starting player count; the session then ends and the Session Report opens (E10-S01) showing e.g. '3rd of 6' (E10-S11). No rebuy is offered and no prize money is shown. With the Hand Review panel open, see E05-S06. Without it, the Session Report opens 1.5 s after the final result is shown (REQ-008.13). Leave table in a sit-and-go is E05-S10.",
+      "acs": [
+        {
+          "text": "Given a 6-player sit-and-go with the user and 2 bots holding chips, When the user's stack is 0 at the end of a hand and the Hand Review panel is not open, Then no further hand is dealt and the Session Report opens with the result '3rd of 6'",
+          "tags": [
+            "REQ-008.5",
+            "REQ-008.6"
+          ]
+        },
+        {
+          "text": "Given 4 players hold chips at the start of a hand, When the user and one bot both reach 0 in that hand, Then the user's finishing position is 3rd (the 2 bots still holding chips plus the user)",
+          "tags": [
+            "REQ-008.5"
+          ]
+        },
+        {
+          "text": "Given a 2-player sit-and-go, When the user's stack reaches 0, Then the result is '2nd of 2'",
+          "tags": [
+            "REQ-008.5",
+            "REQ-008.6"
+          ]
+        },
+        {
+          "text": "Given a 9-player sit-and-go, When the user wins the last chips of the last remaining bot, Then no further hand is dealt and the Session Report opens with the result '1st of 9'",
+          "tags": [
+            "REQ-008.6"
+          ]
+        },
+        {
+          "text": "Given the user busts in a sit-and-go, When the result is shown, Then no Rebuy or add-chips control is offered and no hand record exists for any later hand of that session",
+          "tags": [
+            "REQ-008.5"
+          ]
+        },
+        {
+          "text": "Given an ended sit-and-go, When its session record and Session Report are read, Then the session holds the finishing position and starting player count and no screen shows a prize or money amount for the result",
+          "tags": [
+            "REQ-008.6"
+          ]
+        },
+        {
+          "text": "Given a sit-and-go hand ends with the user's stack at 0 and the Hand Review panel closed, When the final result is shown, Then the Session Report opens 1.5 s after the result is shown and not before",
+          "tags": [
+            "REQ-008.13"
+          ]
+        }
+      ],
+      "dod": [],
+      "deps": [
+        "E05-S04",
+        "E10-S11",
+        "E03-S04"
+      ],
+      "notes": "Use the E10-S01 report builder; the result text comes from E10-S11."
+    },
+    {
+      "key": "E05-S06",
+      "title": "See results when I bust in a sit-and-go with the review open",
+      "type": "feature",
+      "milestone": "M3",
+      "priority": "Medium",
+      "risk": "low",
+      "skeleton": false,
+      "role": "learner",
+      "want": "a See results control on the review panel when my sit-and-go is over",
+      "benefit": "I can study my last hand before going to my tournament result",
+      "context": "Sit-and-go counterpart of E09-S06 (cash Continue). When the user's stack is 0 at the end of a sit-and-go hand and the Hand Review panel is open, the panel's next-hand control reads 'See results'; choosing it ends the session and opens the Session Report with the finishing position (E05-S05). No hand is dealt. Closing the panel keeps the See results control visible on the table, as Deal next hand does (REQ-043.10). The same applies when the user wins all the chips while the panel is open (REQ-008.11).",
+      "acs": [
+        {
+          "text": "Given a sit-and-go hand ends with the user's stack at 0 and the Hand Review panel open, When the panel is shown, Then its next-hand control reads 'See results' and no 'Deal next hand' or 'Continue' control is offered",
+          "tags": [
+            "REQ-008.9"
+          ]
+        },
+        {
+          "text": "Given that panel, When the user selects See results, Then the session ends, no further hand is dealt and the Session Report opens with the user's finishing position",
+          "tags": [
+            "REQ-008.9",
+            "REQ-008.5"
+          ]
+        },
+        {
+          "text": "Given that panel, When no control is chosen, Then no hand is dealt and the Session Report does not open until See results is chosen",
+          "tags": [
+            "REQ-008.9"
+          ]
+        },
+        {
+          "text": "Given that panel, When the user selects Close, Then the See results control stays visible on the table and selecting it opens the Session Report",
+          "tags": [
+            "REQ-008.9"
+          ]
+        },
+        {
+          "text": "Given a sit-and-go hand ends with the user's stack at 1 chip or more and the panel open, When the panel is shown, Then its next-hand control reads 'Deal next hand'",
+          "tags": [
+            "REQ-008.9"
+          ]
+        },
+        {
+          "text": "Given the user wins the last remaining bot's chips and the Hand Review panel is open, When the panel is shown, Then its next-hand control reads 'See results', and selecting it ends the session and opens the Session Report with the result '1st of <starting players>'",
+          "tags": [
+            "REQ-008.11"
+          ]
+        }
+      ],
+      "dod": [],
+      "deps": [
+        "E05-S05",
+        "E09-S06"
+      ],
+      "notes": "Hook into the same next-hand control E09-S06 switches to Continue."
+    },
+    {
+      "key": "E05-S07",
+      "title": "Read every sit-and-go chip amount without a $ sign",
+      "type": "feature",
+      "milestone": "M3",
+      "priority": "Medium",
+      "risk": "low",
+      "skeleton": false,
+      "role": "learner",
+      "want": "sit-and-go chip amounts shown as plain numbers",
+      "benefit": "tournament chips are never mistaken for cash",
+      "context": "In a sit-and-go every chip amount is a plain number with a thousands separator and no $ sign: seat stacks and street amounts, last action, pot and side pots, header limits, action bar (already done in E03-S06), action log (E04-S01), bet chips in front of seats (E04-S04), hint card (E08-S01) and Hand Review entries (E09-S02) including pot-odds wording. Cash games keep the $ formatting. Use one formatter keyed on game type.",
+      "acs": [
+        {
+          "text": "Given a sit-and-go flop where bot Ben has 1,460 chips and bet 40, When the Table is shown, Then Ben's seat shows '1,460', '40' and last action 'Bet 40' and the pot shows a plain number, with no $ sign",
+          "tags": [
+            "REQ-008.7"
+          ]
+        },
+        {
+          "text": "Given a sit-and-go hand, When the action log is read, Then blinds, bets, calls and raises read as plain numbers such as 'posts small blind 10' and 'bets 40' with no $ sign",
+          "tags": [
+            "REQ-008.7"
+          ]
+        },
+        {
+          "text": "Given a sit-and-go hand with bets on the current street, When the bet chips in front of seats are shown, Then their amounts are plain numbers with no $ sign",
+          "tags": [
+            "REQ-008.7"
+          ]
+        },
+        {
+          "text": "Given a sit-and-go decision, When the hint card and the Hand Review entry for it are shown, Then every amount in them, including the pot-odds wording, is a plain number with no $ sign",
+          "tags": [
+            "REQ-008.7"
+          ]
+        },
+        {
+          "text": "Given a seeded 50-hand sit-and-go, When the text of the Table, hint card, Hand Review panel and Session Report is collected after every action, Then no '$' character appears anywhere",
+          "tags": [
+            "REQ-008.7"
+          ]
+        },
+        {
+          "text": "Given a $4/$8 cash game, When the same table elements are shown, Then amounts keep the $ sign, such as '$146' and 'Bet $4'",
+          "tags": [
+            "REQ-008.7"
+          ]
+        }
+      ],
+      "dod": [],
+      "deps": [
+        "E05-S01",
+        "E04-S01",
+        "E04-S04",
+        "E08-S01",
+        "E09-S02",
+        "E05-S05",
+        "E10-S11"
+      ],
+      "notes": "Chip formatting helper from E03-S06 should become the single game-type-aware formatter."
+    },
+    {
+      "key": "E05-S08",
+      "title": "See my last sit-and-go's finishing position in the Home snapshot",
+      "type": "feature",
+      "milestone": "M3",
+      "priority": "Medium",
+      "risk": "low",
+      "skeleton": false,
+      "role": "learner",
+      "want": "the Home snapshot to show my finishing position when my last session was a sit-and-go",
+      "benefit": "I see my tournament result at a glance",
+      "context": "Extends the Home snapshot (E02-S16). When the most recently ended session was a sit-and-go, the snapshot shows the finishing position out of the starting players (e.g. '3rd of 6') instead of stake and BB/100; game type, table size, hands played, Major errors per 100 hands, top leak and the report link stay as for cash.",
+      "acs": [
+        {
+          "text": "Given the most recently ended session is a 6-player sit-and-go of 47 hands in which the user finished 3rd, When Home is shown, Then the snapshot shows 'Sit-and-go', '6 players', '47' and '3rd of 6' and shows no stake and no BB/100",
+          "tags": [
+            "REQ-003.5"
+          ]
+        },
+        {
+          "text": "Given that snapshot, When its values are compared with the session's stored report, Then the finishing position, hands played, Major errors per 100 hands and top leak are equal",
+          "tags": [
+            "REQ-003.5"
+          ]
+        },
+        {
+          "text": "Given a sit-and-go ended and a later cash session ended, When Home is shown, Then the snapshot shows the cash session's stake and BB/100 and no finishing position",
+          "tags": [
+            "REQ-003.5"
+          ]
+        }
+      ],
+      "dod": [],
+      "deps": [
+        "E05-S05",
+        "E02-S16"
+      ],
+      "notes": ""
+    },
+    {
+      "key": "E05-S09",
+      "title": "See the level on Home's Resume entry for a paused sit-and-go",
+      "type": "feature",
+      "milestone": "M3",
+      "priority": "High",
+      "risk": "low",
+      "skeleton": false,
+      "role": "learner",
+      "want": "the Resume session entry to show the current level of my paused sit-and-go",
+      "benefit": "I know where my tournament stands before I resume it",
+      "context": "Extends the Home Resume entry (E02-S08), which shows game type, table size, stake and hands played for a paused cash session. For a paused sit-and-go it shows the current level instead of the stake (REQ-002.6), read from the stored session state, e.g. 'Sit-and-go · 6 players · Level 3 · 24 hands'. Priority High because REQ-002 is Must; milestone M3 because sit-and-go play exists only from M3.",
+      "acs": [
+        {
+          "text": "Given a 6-player sit-and-go paused after hand 24 at Level 3, When Home is shown, Then Resume session shows 'Sit-and-go', '6 players', 'Level 3' and '24 hands' and no stake",
+          "tags": [
+            "REQ-002.6"
+          ]
+        },
+        {
+          "text": "Given a paused 6-player sit-and-go after hand 95, When Home is shown, Then Resume session shows 'Level 10'",
+          "tags": [
+            "REQ-002.6"
+          ]
+        }
+      ],
+      "dod": [],
+      "deps": [
+        "E05-S03"
+      ],
+      "notes": ""
+    },
+    {
+      "key": "E05-S10",
+      "title": "Leave a sit-and-go early and get my finishing position",
+      "type": "feature",
+      "milestone": "M3",
+      "priority": "Medium",
+      "risk": "low",
+      "skeleton": false,
+      "role": "learner",
+      "want": "to leave a sit-and-go while I still hold chips and have my finishing position recorded",
+      "benefit": "I can stop a tournament at any time and still get a fair result",
+      "context": "Leave table in a sit-and-go while the user holds chips (REQ-008.10): the session ends with finishing position = number of players left including the user, and the remaining hands are not played. Between hands this happens at once (E10-S01). Mid-hand, the E10-S05 confirm-and-fold flow completes the hand first and the position is counted after it (bots that bust in that hand are not counted). The session record stores the position and starting player count and the Session Report shows it (E10-S11).",
+      "acs": [
+        {
+          "text": "Given a 6-player sit-and-go between hands with the user and 3 bots holding chips, When the user chooses Leave table, Then the session ends, no further hand is dealt and the Session Report opens with the result '4th of 6'",
+          "tags": [
+            "REQ-008.10"
+          ]
+        },
+        {
+          "text": "Given hand 40 in progress with the user and 2 bots holding chips, When the user confirms Leave table and a bot busts while hand 40 completes, Then no hand 41 is dealt and the result is '2nd of 6'",
+          "tags": [
+            "REQ-008.10"
+          ]
+        },
+        {
+          "text": "Given a sit-and-go the user left with the result '4th of 6', When its session record is read, Then it holds finishing position 4 and starting player count 6 and no hand record exists after the hand in which the user left",
+          "tags": [
+            "REQ-008.10",
+            "REQ-008.6"
+          ]
+        }
+      ],
+      "dod": [],
+      "deps": [
+        "E05-S05",
+        "E10-S05"
+      ],
+      "notes": ""
+    },
+    {
+      "key": "E05-S11",
+      "title": "Prove the sit-and-go structure over the 1,000,000-hand invariant run",
+      "type": "feature",
+      "milestone": "M3",
+      "priority": "High",
+      "risk": "medium",
+      "skeleton": false,
+      "role": "learner",
+      "want": "the 1,000,000-hand invariant run to cover real sit-and-gos with every line-up and table size",
+      "benefit": "I can trust tournament play as much as cash play",
+      "context": "E01-S17 and E06-S11 prove the engine over 1,000,000 hands for cash games at M2. This story extends the same nightly/on-demand run to sit-and-gos with the real structure (1,500 starting chips, the E05-S02 level schedule, empty seats never refilled per E05-S04): Mixed, Tough and Soft line-ups at every table size 2-10. The run prints hand counts per game type, line-up and size; any invariant violation (REQ-056.1) fails it and prints the replay code.",
+      "acs": [
+        {
+          "text": "Given the nightly or on-demand 1,000,000-hand run, When it completes, Then it has played sit-and-go hands with Mixed, Tough and Soft line-ups at every table size from 2 to 10 alongside the cash hands, prints the hand count per game type, line-up and size, reports zero invariant violations and exits 0",
+          "tags": [
+            "REQ-056.2"
+          ]
+        },
+        {
+          "text": "Given the sit-and-go part of that run, When its sit-and-gos are checked, Then each started with 1,500 chips per player, used the level for its hand number, never seated a bot after its first hand and ended when one player held all the chips",
+          "tags": [
+            "REQ-056.2",
+            "REQ-008.1",
+            "REQ-008.3",
+            "REQ-008.4"
+          ]
+        },
+        {
+          "text": "Given an invariant violation is injected into a sit-and-go hand of the run, When the run reaches it, Then the run fails and prints the replay code and action history of that hand",
+          "tags": [
+            "REQ-056.2"
+          ]
+        }
+      ],
+      "dod": [],
+      "deps": [
+        "E05-S02",
+        "E05-S04",
+        "E06-S11",
+        "E01-S17"
+      ],
+      "notes": "Reuse the E01-S17 CI job; only the game-type mix and sng structure change."
+    }
+  ]
+}

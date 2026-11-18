@@ -1,0 +1,189 @@
+{
+  "scope": "E04",
+  "round": 1,
+  "clauses": [
+    {
+      "clause": "REQ-011.1",
+      "verdict": "covered",
+      "evidence": "E03-S13#AC1/#AC3 (confirms the 300 ms clause); E04-S05#DoD1 tag adds nothing, see finding"
+    },
+    {
+      "clause": "REQ-023.1",
+      "verdict": "covered",
+      "evidence": "E04-S01#AC1, #AC2, #AC4"
+    },
+    {
+      "clause": "REQ-023.2",
+      "verdict": "covered",
+      "evidence": "E04-S01#AC1, #AC3"
+    },
+    {
+      "clause": "REQ-023.3",
+      "verdict": "covered",
+      "evidence": "E04-S01#AC5"
+    },
+    {
+      "clause": "REQ-023.4",
+      "verdict": "covered",
+      "evidence": "E04-S03#AC1-#AC4 (expand/collapse, across hands, sessions, relaunch)"
+    },
+    {
+      "clause": "REQ-057.2",
+      "verdict": "covered",
+      "evidence": "E04-S03#AC5"
+    },
+    {
+      "clause": "REQ-057.4",
+      "verdict": "covered",
+      "evidence": "E04-S03#AC5"
+    },
+    {
+      "clause": "REQ-067.1",
+      "verdict": "covered",
+      "evidence": "E04-S04#AC1, #AC2"
+    },
+    {
+      "clause": "REQ-067.2",
+      "verdict": "covered",
+      "evidence": "E04-S04#AC3"
+    },
+    {
+      "clause": "REQ-067.3",
+      "verdict": "covered",
+      "evidence": "E04-S04#AC4, #AC5, #AC6"
+    },
+    {
+      "clause": "REQ-068.1",
+      "verdict": "covered",
+      "evidence": "E04-S05#AC1, #AC2"
+    },
+    {
+      "clause": "REQ-068.2",
+      "verdict": "covered",
+      "evidence": "E04-S05#AC3, #AC4"
+    },
+    {
+      "clause": "REQ-068.3",
+      "verdict": "covered",
+      "evidence": "E04-S05#AC4-#AC7 (winner, split, side pots)"
+    },
+    {
+      "clause": "REQ-069.1",
+      "verdict": "covered",
+      "evidence": "E04-S06#AC1"
+    },
+    {
+      "clause": "REQ-069.2",
+      "verdict": "covered",
+      "evidence": "E04-S06#AC2, #AC3, #AC4"
+    },
+    {
+      "clause": "REQ-069.3",
+      "verdict": "covered",
+      "evidence": "E04-S06#AC5"
+    },
+    {
+      "clause": "REQ-069.4",
+      "verdict": "covered",
+      "evidence": "E04-S06#AC6, #AC7"
+    },
+    {
+      "clause": "REQ-070.1",
+      "verdict": "covered",
+      "evidence": "E04-S07#AC1, #AC2"
+    },
+    {
+      "clause": "REQ-070.2",
+      "verdict": "covered",
+      "evidence": "E04-S07#AC3"
+    },
+    {
+      "clause": "REQ-070.3",
+      "verdict": "covered",
+      "evidence": "E04-S07#AC4"
+    },
+    {
+      "clause": "REQ-071.1",
+      "verdict": "covered",
+      "evidence": "E04-S02#AC1, #AC2 (threshold boundary at exactly 10 big bets not asserted, see LOW finding)"
+    },
+    {
+      "clause": "REQ-071.2",
+      "verdict": "covered",
+      "evidence": "E04-S02#AC3, #AC4 (+DoD1 manual originality/no-insult review)"
+    },
+    {
+      "clause": "REQ-071.3",
+      "verdict": "covered",
+      "evidence": "E04-S02#AC5, #AC6"
+    },
+    {
+      "clause": "REQ-071.4",
+      "verdict": "covered",
+      "evidence": "E04-S08#AC1, #AC2"
+    },
+    {
+      "clause": "REQ-071.6",
+      "verdict": "covered",
+      "evidence": "E04-S08#AC3, #AC4"
+    },
+    {
+      "clause": "REQ-072.1",
+      "verdict": "covered",
+      "evidence": "E04-S09#AC1, #AC2, #AC3, #AC6"
+    },
+    {
+      "clause": "REQ-072.2",
+      "verdict": "covered",
+      "evidence": "E04-S09#AC4, #AC5, #AC6"
+    }
+  ],
+  "findings": [
+    {
+      "id": "J-E04-E04-S05#DoD1-mis-tag",
+      "severity": "MEDIUM",
+      "class": "mis-tag",
+      "owner": "weaver",
+      "location": "E04-S05#DoD1",
+      "evidence": "DoD1 'at Rapid ... 200 hands complete in under 60 minutes' is tagged REQ-011.1 ('each bot action displayed within 300 ms of the previous action'). The 200-hands/60-min check would still pass if the 300 ms gap were not implemented (18 s per hand budget), so the tag confirms nothing. REQ-011.1 is genuinely covered by E03-S13#AC1/#AC3, so coverage is not lost, but the RTM overstates it.",
+      "fix": "Remove REQ-011.1 from E04-S05#DoD1 (tag REQ-024 fit criterion or nothing), or change the DoD to assert the median bot-action gap is still <= 300 ms with animations on."
+    },
+    {
+      "id": "J-E04-E04-S03#AC1-vague-values",
+      "severity": "MEDIUM",
+      "class": "ac-not-exact",
+      "owner": "weaver",
+      "location": "E04-S03#AC1-#AC3",
+      "evidence": "ACs test 'the theme's green felt colour', 'a code-drawn texture', 'the theme's dark rail colour' and 'theme's red, navy or silver tokens'; no concrete values or thresholds are given and AC names implementation tokens. 'Subtle texture' (REQ-067.1) is only checkable by an approved snapshot that does not yet exist.",
+      "fix": "State measurable values (e.g. felt hue range / hex, rail luminance lower than felt by a stated ratio, chip palette hex list) or make the approved snapshot a named deliverable of the story; phrase ACs on observed colours not 'theme tokens'."
+    },
+    {
+      "id": "J-E04-E04-S01#AC6-weak-tag",
+      "severity": "LOW",
+      "class": "weak-tag",
+      "owner": "weaver",
+      "location": "E04-S01#AC6",
+      "evidence": "AC6 (no hidden card in log) is tagged REQ-023.1; the clause (player, action, amount) would not fail if a hole card leaked. It is a valid no-leak check but belongs to REQ-025.",
+      "fix": "Drop REQ-023.1 tag from AC6 or retag to REQ-025 intent."
+    },
+    {
+      "id": "J-E04-E04-S02#AC2-boundary",
+      "severity": "LOW",
+      "class": "missing-boundary",
+      "owner": "weaver",
+      "location": "E04-S02#AC2",
+      "evidence": "REQ-071.1 trigger is 'pot of 10 big bets or more'. AC2 tests 9 big bets ($72, no bubble) but no AC asserts the exact boundary of 10 big bets ($80) does trigger eligibility.",
+      "fix": "Add AC: Given a bot wins an uncontested $80 pot at $4/$8 and is not rate-limited, When the hand ends, Then that bot is eligible to show a bubble [REQ-071.1]."
+    },
+    {
+      "id": "J-E04-REQ-071.1-ambiguity",
+      "severity": "LOW",
+      "class": "ambiguous-requirement",
+      "owner": "user",
+      "location": "REQ-071.1",
+      "evidence": "Trigger 'a new player sitting down' does not say which bot speaks (the newcomer, or any/all existing bots); E04-S02 cannot state who speaks without a decision.",
+      "fix": "Decide: the new bot greets, or one existing bot reacts; then add AC."
+    }
+  ],
+  "summary": "All 27 clauses covered; table art ACs lack exact values; one mis-tagged DoD item."
+}

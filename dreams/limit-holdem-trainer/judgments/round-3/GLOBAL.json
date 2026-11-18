@@ -1,0 +1,44 @@
+{
+  "scope": "GLOBAL",
+  "round": 3,
+  "clauses": [],
+  "findings": [
+    {
+      "id": "J-GLOBAL-story-map-stale-v1.9",
+      "severity": "MEDIUM",
+      "class": "terminology",
+      "owner": "weaver",
+      "location": "story-map.md (header, backbone, M2 count, E06 row, E07 grid cell)",
+      "evidence": "story-map.md says 'requirements v1.8 (72 requirements, 366 active clauses) ... 164 stories'; requirements.md is v1.9 and coverage-3.json reports 165 stories and 367 active clauses. The E06 row shows 17 stories (1/13/3) and omits E06-S18 (TASK-6.18, added with REQ-033.7); M2 is listed as 78 stories while milestone m-1 shows 79. The file (16:11) predates requirements.md (16:12), so it was regenerated before the v1.9 change.",
+      "fix": "Regenerate story-map.md after the final plan: v1.9, 367 clauses, 165 stories, E06 18 stories (1/14/3), M2 79 stories, E06-S18 in the grid; refresh per-epic clause counts."
+    },
+    {
+      "id": "J-GLOBAL-milestone-text-stale",
+      "severity": "MEDIUM",
+      "class": "terminology",
+      "owner": "weaver",
+      "location": "Backlog milestones m-1 and m-2 descriptions (backlog/milestones/m2-mvp.md, m3-release-1.md)",
+      "evidence": "Round-2 finding not fixed in the live backlog. m-1 still says 'every Must requirement' with no carve-out for the sit-and-go parts of Must requirements (REQ-002.6, REQ-044.1 SNG part, REQ-048.5) that the user placed in M3, and omits Rapid pace. m-2 still says 'Everything else in baseline v1.0' and lists 'speed choice and pacing' and 'leaks', which no longer matches M2/M3 content (Rapid pace in M2, postflop leaks in M2). story-map.md has the correct wording, so the two disagree.",
+      "fix": "Update m-1 to 'every Must requirement except the sit-and-go-specific parts, which ship with sit-and-go in M3, plus Rapid bot pace'; update m-2 to 'everything else in baseline v1.9' with Realistic pace and speed choice."
+    },
+    {
+      "id": "J-GLOBAL-M3-priority-drift",
+      "severity": "MEDIUM",
+      "class": "priority-milestone",
+      "owner": "weaver",
+      "location": "TASK-5.5, 5.6, 10.12, 11.9, 2.10, 2.16, 3.18, 5.10, 6.12 (priority high, milestone m-2)",
+      "evidence": "Round-2 finding not fixed: 9 of 66 M3 stories are still High while 50 are Medium and 7 Low. They serve Should or Could clauses or the user-deferred sit-and-go, so High overstates them relative to M2 stories.",
+      "fix": "Set these to Medium, or add a note in each story explaining why it is High."
+    },
+    {
+      "id": "J-GLOBAL-TASK-3.1-stale-wave-reference",
+      "severity": "LOW",
+      "class": "wording",
+      "owner": "weaver",
+      "location": "TASK-3.1 description",
+      "evidence": "Text still reads 'Until Game Config exists (E02, wave 5)'; E02 is wave 6 in story-map.md and TASK-2.1 supplies Home and Game Config in M1.",
+      "fix": "Drop the wave number or refer to TASK-2.1."
+    }
+  ],
+  "summary": "Structure holds: M1 (20 stories: toolchain, CI at ordinal 2000, engine, advice, TAG bots, tracer, Home/Game Config, table, review) is a real end-to-end path; no dependency points to a later ordinal or milestone in the sampled graphs; Rapid pace is in M2 (G-5), G-3 is measured by the Statistics BB/100 chart per the user decision; SNG parts of Must requirements are in M3 by user decision. Mechanical layer: 367/367 clauses covered, 0 errors; the C5-AND (sit-and-go) and C3-NOM1 warnings are accepted. All three round-2 GLOBAL findings persist in the live backlog (milestone text, priority drift, wave reference), and story-map.md is now one version behind (v1.8 vs v1.9, missing E06-S18). All are documentation or priority issues, no CRITICAL or HIGH findings."
+}

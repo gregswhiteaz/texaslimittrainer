@@ -1,0 +1,434 @@
+{
+  "epic": "E09",
+  "stories": [
+    {
+      "key": "E09-S01",
+      "title": "Review each decision of the hand I just played",
+      "type": "feature",
+      "milestone": "M1",
+      "priority": "High",
+      "risk": "high",
+      "skeleton": true,
+      "role": "learner",
+      "want": "a review panel after each hand that grades every decision I made",
+      "benefit": "I see straight away which of my plays were right or wrong",
+      "context": "Walking-skeleton slice of the Hand Review panel (Review storyboard: panel beside the table, result and Deal next hand on the table side, Close button in the panel). When a hand ends in which the user made any decision other than folding preflop, the panel opens; it is skipped only when the user's single action in the hand was a preflop fold, so a hand where the user called or raised preflop and then folded preflop opens it (REQ-043.12). In M1 it reads the completed hand exposed by E03-S01 and grades each user decision with the E07-S04 grader on that decision's PlayerView; each entry shows street, board at that point, the user's action, the recommended action and the grade as text (Correct, Minor error, Major error) with its colour badge. Bot decisions are never graded. Explanations, numbers and basis arrive in M2 (E09-S02) once E07-S12 exists: do not show placeholder text for them. While the panel is open the E03-S04 automatic 1.5 s deal is suspended and the next hand waits for Deal next hand.",
+      "acs": [
+        {
+          "text": "Given a scripted hand in which the user made 4 decisions and the bots made 9, When the hand ends, Then the Hand Review panel opens beside the table with exactly 4 entries in the order made, each showing street, the board at that point, the user's action and the recommended action, and no entry for any bot decision",
+          "tags": [
+            "REQ-043.2"
+          ]
+        },
+        {
+          "text": "Given the same scripted hand, When the panel opens, Then each entry's grade equals the E07-S04 grader output for the user's PlayerView at that decision and is shown as the text label Correct, Minor error or Major error, not by colour alone",
+          "tags": [
+            "REQ-057.3",
+            "REQ-043.2"
+          ]
+        },
+        {
+          "text": "Given a hand in which the user's single action was folding preflop at their first decision, When the hand ends, Then no panel opens and the next hand is dealt 1.5 s after the result is shown",
+          "tags": [
+            "REQ-024.3",
+            "REQ-043.12"
+          ]
+        },
+        {
+          "text": "Given a hand in which the user is the big blind and every other player folds, so the user made no decision, When the hand ends, Then no panel opens and the next hand is dealt 1.5 s after the result is shown",
+          "tags": [
+            "REQ-024.3"
+          ]
+        },
+        {
+          "text": "Given the panel is open, When 10 s pass with no input, Then no next hand has been dealt",
+          "tags": [
+            "REQ-024.2"
+          ]
+        },
+        {
+          "text": "Given the panel is open, When the user selects Deal next hand, Then the panel closes and the next hand is dealt with the hand number increased by 1",
+          "tags": [
+            "REQ-043.7",
+            "REQ-024.2"
+          ]
+        },
+        {
+          "text": "Given the panel is open, When the user selects Close, Then the panel closes, the hand's result and the Deal next hand control stay visible on the table, and after 10 s no next hand has been dealt until the user selects Deal next hand",
+          "tags": [
+            "REQ-043.7",
+            "REQ-043.10"
+          ]
+        },
+        {
+          "text": "Given a hand in which the user called $8 preflop and then folded preflop to a re-raise, When the hand ends, Then the panel opens with exactly 2 entries, the call and the fold, and no next hand is dealt until the user chooses",
+          "tags": [
+            "REQ-043.12"
+          ]
+        }
+      ],
+      "dod": [],
+      "deps": [
+        "E03-S04",
+        "E07-S04"
+      ],
+      "notes": "Gate the same next-hand timer E03-S04 uses; after Close the timer stays suspended until Deal next hand (REQ-043.10)."
+    },
+    {
+      "key": "E09-S02",
+      "title": "See the numbers and reason behind each reviewed decision",
+      "type": "feature",
+      "milestone": "M2",
+      "priority": "High",
+      "risk": "medium",
+      "skeleton": false,
+      "role": "learner",
+      "want": "each review entry to explain the advice with its equity numbers",
+      "benefit": "I understand why a decision was right or wrong, not just that it was",
+      "context": "Completes REQ-043.1. Entries are read from the decision entries stored in the hand record (E03-S10), which were computed at the decision point with the decision-time observed-stats snapshot, not recomputed after the hand. Each entry shows street, board at that point, the user's action, the recommended action, the grade, equity % and required equity % (one decimal), the plain-English explanation (E07-S12) and the basis per opponent ('typical player' or 'based on N hands of this opponent'). The hint card (E08) and the review entry for the same decision must show the same recommendation and numbers (REQ-036.2). Reading or grading must not block the main thread (E03-S12). Preflop entries show the chart basis instead of equity numbers (REQ-043.9).",
+      "acs": [
+        {
+          "text": "Given a scripted hand in which the user made 4 decisions, When the panel opens, Then each entry shows street, board at that point, the user's action, the recommended action, the grade and the explanation, and each flop, turn and river entry shows equity % and required equity %, each equal to the decision entry stored in the hand record",
+          "tags": [
+            "REQ-043.1"
+          ]
+        },
+        {
+          "text": "Given a preflop decision holding A9o in the cutoff at 6-max, When the panel opens, Then its entry shows the chart basis \"From the 6-max chart: raise A9o from the cutoff\" and no equity % or required equity %",
+          "tags": [
+            "REQ-043.9"
+          ]
+        },
+        {
+          "text": "Given a flop decision against an opponent observed for 40 hands, When the panel opens, Then the entry shows the basis \"based on 40 hands of this opponent\"; and a preflop entry shows \"typical player\"",
+          "tags": [
+            "REQ-035.4"
+          ]
+        },
+        {
+          "text": "Given hint advice was requested through the advice worker at the user's flop decision and the opponent's observed hand count goes from 29 to 30 when the hand ends, When the panel opens, Then the flop entry's recommended action, equity %, required equity %, explanation and basis are identical to that hint result",
+          "tags": [
+            "REQ-036.2",
+            "REQ-043.1"
+          ]
+        },
+        {
+          "text": "Given a 4-decision hand at a table of 10 players, When the panel opens at a 1280 x 720 window, Then all 4 entries with their explanations can be read in the panel without horizontal scrolling",
+          "tags": [
+            "REQ-043.1"
+          ]
+        }
+      ],
+      "dod": [],
+      "deps": [
+        "E09-S01",
+        "E03-S10",
+        "E03-S12"
+      ],
+      "notes": "With E08-S02 (stored record equals the hint card) this completes the hint-versus-review equality UI test asked for by E07-S13."
+    },
+    {
+      "key": "E09-S03",
+      "title": "See the hand number, my cards, position, result and replay code in the review",
+      "type": "feature",
+      "milestone": "M2",
+      "priority": "High",
+      "risk": "low",
+      "skeleton": false,
+      "role": "learner",
+      "want": "the review header to summarise the hand with its replay code",
+      "benefit": "I know which hand I am reviewing and can quote it in a bug report",
+      "context": "Per the Review storyboard the panel header reads e.g. \"Hand #133 review\" and \"You lost $48 · A♥ 9♠ in the cutoff\". It shows the hand number, the user's hole cards and position name, and the amount won or lost (net for the hand). The replay code (REQ-013, the hand's seed) is shown in small text in the panel; it was never shown before the hand ended (E03-S03).",
+      "acs": [
+        {
+          "text": "Given hand 133 in which the user held A♥ 9♠ in the cutoff and lost $48, When the panel opens, Then the header shows \"Hand #133\", A♥ 9♠, the position \"Cutoff\" and \"You lost $48\"",
+          "tags": [
+            "REQ-043.3"
+          ]
+        },
+        {
+          "text": "Given a hand in which the user put in $16 and won a $72 pot, When the panel opens, Then the header shows \"You won $56\"",
+          "tags": [
+            "REQ-043.3"
+          ]
+        },
+        {
+          "text": "Given a completed hand, When the panel opens, Then it shows the hand number and the replay code equal to the hand record's replay code, in a smaller font size than the entry text",
+          "tags": [
+            "REQ-043.4",
+            "REQ-013.5"
+          ]
+        }
+      ],
+      "dod": [],
+      "deps": [
+        "E09-S01",
+        "E03-S09"
+      ],
+      "notes": ""
+    },
+    {
+      "key": "E09-S04",
+      "title": "See opponents' cards in the review only when they were shown at showdown",
+      "type": "feature",
+      "milestone": "M2",
+      "priority": "High",
+      "risk": "low",
+      "skeleton": false,
+      "role": "learner",
+      "want": "the review to show an opponent's hole cards only if they were shown at showdown",
+      "benefit": "the review is as fair as a real table and never reveals hidden information",
+      "context": "Opponent hole cards appear in the panel only when that opponent showed them at showdown (casino showdown order and muck rules: E01-S15). Folded hands and mucked hands are never revealed anywhere in the panel, including accessible names and image titles.",
+      "acs": [
+        {
+          "text": "Given a showdown where Ben shows K♦ 7♣, When the panel opens, Then it shows Ben's K♦ 7♣",
+          "tags": [
+            "REQ-043.6"
+          ]
+        },
+        {
+          "text": "Given a showdown where Dee mucks her losing hand, When the panel's text, accessible names and image titles are searched, Then Dee's hole cards appear nowhere",
+          "tags": [
+            "REQ-043.6"
+          ]
+        },
+        {
+          "text": "Given a hand that ends with every opponent folding, When the panel's text, accessible names and image titles are searched, Then no opponent's hole cards appear",
+          "tags": [
+            "REQ-043.6"
+          ]
+        }
+      ],
+      "dod": [],
+      "deps": [
+        "E09-S01",
+        "E01-S15"
+      ],
+      "notes": ""
+    },
+    {
+      "key": "E09-S05",
+      "title": "See which reviewed decisions were hinted",
+      "type": "feature",
+      "milestone": "M2",
+      "priority": "High",
+      "risk": "low",
+      "skeleton": false,
+      "role": "learner",
+      "want": "a hinted tag on review entries where I had opened the hint",
+      "benefit": "I can tell my own decisions apart from ones I made with help",
+      "context": "Reads the hinted flag of each decision entry in the hand record (E03-S10; E08-S02 sets it true when the hint was opened). A hinted decision is still graded and shows its grade plus a \"hinted\" tag. Tests use hand-record fixtures with the flag set. Cross-epic integration check: E08-S02 (same wave, so no dependency edge) sets the flag from the live Hint button; whichever of E08-S02 and E09-S05 is finished second adds the end-to-end Playwright flow 'open Hint at the flop, call, hand ends, the flop review entry shows \"hinted\" and no other entry does'.",
+      "acs": [
+        {
+          "text": "Given a hand record whose flop decision has hinted = true and whose other decisions have hinted = false, When the panel opens, Then the flop entry shows a \"hinted\" tag and no other entry does",
+          "tags": [
+            "REQ-043.5",
+            "REQ-040.2"
+          ]
+        },
+        {
+          "text": "Given a hinted decision graded Major error, When the panel opens, Then its entry shows both \"Major error\" and \"hinted\"",
+          "tags": [
+            "REQ-040.2"
+          ]
+        },
+        {
+          "text": "Given a hand with no hinted decisions, When the panel opens, Then no \"hinted\" tag appears",
+          "tags": [
+            "REQ-043.5"
+          ]
+        }
+      ],
+      "dod": [],
+      "deps": [
+        "E09-S02"
+      ],
+      "notes": "Fixture-based by design; the live end-to-end flow is the cross-epic check named in the context."
+    },
+    {
+      "key": "E09-S06",
+      "title": "Continue to rebuy or leave when I bust with the review open",
+      "type": "feature",
+      "milestone": "M2",
+      "priority": "High",
+      "risk": "medium",
+      "skeleton": false,
+      "role": "learner",
+      "want": "the review's next-hand control to lead me to the rebuy choice when I have busted",
+      "benefit": "I can finish reading the review before deciding to rebuy or leave",
+      "context": "Cash games only. When the user's stack is $0 at the end of a hand and the Hand Review panel is open, the Deal next hand control reads Continue, and Continue opens the Rebuy / Leave table dialog from E03-S08. No hand is dealt until the user chooses in that dialog. The sit-and-go equivalent (See results, REQ-008.9) is E05.",
+      "acs": [
+        {
+          "text": "Given a $4/$8 cash hand ends with the user's stack at $0 and the panel open, When the panel is shown, Then its next-hand control reads \"Continue\" and no \"Deal next hand\" control is offered",
+          "tags": [
+            "REQ-007.6"
+          ]
+        },
+        {
+          "text": "Given that panel, When the user selects Continue, Then the Rebuy / Leave table dialog opens and no next hand is dealt while it is open",
+          "tags": [
+            "REQ-007.6",
+            "REQ-007.2"
+          ]
+        },
+        {
+          "text": "Given the dialog opened from Continue, When the user chooses Rebuy, Then the user's stack is $160 and the next hand is dealt",
+          "tags": [
+            "REQ-007.6"
+          ]
+        },
+        {
+          "text": "Given a cash hand ends with the user's stack at $1 or more and the panel open, When the panel is shown, Then its next-hand control reads \"Deal next hand\"",
+          "tags": [
+            "REQ-007.6"
+          ]
+        },
+        {
+          "text": "Given the Rebuy / Leave table dialog opened from Continue, When the user chooses Leave table, Then no further hand is dealt and the session is ended, the same outcome as Leave table in the E03-S08 bust dialog (E10-S01 opens the Session Report)",
+          "tags": [
+            "REQ-007.6"
+          ]
+        }
+      ],
+      "dod": [],
+      "deps": [
+        "E09-S01",
+        "E03-S08"
+      ],
+      "notes": "E05: in a sit-and-go the same control reads See results (REQ-008.9)."
+    },
+    {
+      "key": "E09-S07",
+      "title": "See a grade summary badge after each hand when auto-open is off",
+      "type": "feature",
+      "milestone": "M2",
+      "priority": "High",
+      "risk": "low",
+      "skeleton": false,
+      "role": "learner",
+      "want": "a grade summary badge I can click to open the review when auto-open is off",
+      "benefit": "I keep a fast pace and still see when I made a mistake",
+      "context": "When the auto-open setting (REQ-050.2, default on; the Settings toggle is E12) is off, the panel does not open by itself. Instead a grade summary badge such as \"1 Major, 1 Minor\" appears after each played hand; clicking it opens the panel for that hand. While the panel is not open the next hand is dealt 1.5 s after the result (REQ-024.3); once opened, the next hand waits for Deal next hand (REQ-024.2). Tests set the setting value directly until E12 exists. The badge reads \"All correct\" when there are no errors, disappears when the next hand is dealt and is not shown after a preflop fold (REQ-043.11). With auto-open off the badge also appears after a hand where the user called or raised preflop and then folded preflop (REQ-043.13).",
+      "acs": [
+        {
+          "text": "Given auto-open is off and a hand in which the user's decisions were graded 1 Major error, 1 Minor error and 2 Correct, When the hand ends, Then the panel does not open, a badge reading \"1 Major, 1 Minor\" appears and the next hand is dealt 1.5 s after the result is shown",
+          "tags": [
+            "REQ-043.8",
+            "REQ-024.3"
+          ]
+        },
+        {
+          "text": "Given the badge is shown and the next hand has not been dealt, When the user clicks the badge, Then the panel opens for that hand and the next hand waits for Deal next hand",
+          "tags": [
+            "REQ-043.8",
+            "REQ-024.2"
+          ]
+        },
+        {
+          "text": "Given auto-open is on, When a hand with user decisions ends, Then the panel opens and no badge is shown",
+          "tags": [
+            "REQ-043.8"
+          ]
+        },
+        {
+          "text": "Given auto-open is off and every decision in the hand was graded Correct, When the hand ends, Then the badge reads \"All correct\"",
+          "tags": [
+            "REQ-043.11",
+            "REQ-057.3"
+          ]
+        },
+        {
+          "text": "Given auto-open is off and a badge is shown, When the next hand is dealt, Then the badge is no longer shown",
+          "tags": [
+            "REQ-043.11"
+          ]
+        },
+        {
+          "text": "Given auto-open is off, When a hand ends in which the user's single action was folding preflop, Then no badge is shown; and When a hand ends in which the user called $8 preflop and then folded preflop to a re-raise, Then a badge is shown for that hand",
+          "tags": [
+            "REQ-043.11",
+            "REQ-043.13"
+          ]
+        }
+      ],
+      "dod": [],
+      "deps": [
+        "E09-S01"
+      ],
+      "notes": "E12 wires the Settings toggle to this setting."
+    },
+    {
+      "key": "E09-S08",
+      "title": "See approximate and short-stack labels in review entries",
+      "type": "feature",
+      "milestone": "M3",
+      "priority": "Medium",
+      "risk": "low",
+      "skeleton": false,
+      "role": "learner",
+      "want": "review entries to show when their advice was approximate or affected by a short stack",
+      "benefit": "I know how far to trust a grade at unusual table sizes and stack depths",
+      "context": "Grade results carry the same optional approximate label (E07-S16) and short-stack note (E07-S17) as the recommendation, as separate fields. Each review entry shows them when present. Sit-and-go tables arrive with E05; use a sit-and-go hand-record fixture.",
+      "acs": [
+        {
+          "text": "Given a hand at a table of 5 players, When the panel opens, Then every entry shows \"approximate (based on 6-max)\"; and at 8 players every entry shows \"approximate (based on full ring)\"",
+          "tags": [
+            "REQ-041.1"
+          ]
+        },
+        {
+          "text": "Given a hand at a table of 2, 6, 9 or 10 players, When the panel opens, Then no entry shows an approximate label",
+          "tags": [
+            "REQ-041.1"
+          ]
+        },
+        {
+          "text": "Given a sit-and-go hand where the user's stack was 9 big bets of the current level at a decision, When the panel opens, Then that entry shows exactly one short-stack sentence apart from the explanation; and an entry made at 10 big bets shows none",
+          "tags": [
+            "REQ-041.2"
+          ]
+        }
+      ],
+      "dod": [],
+      "deps": [
+        "E09-S02",
+        "E07-S16",
+        "E07-S17"
+      ],
+      "notes": ""
+    },
+    {
+      "key": "E09-S09",
+      "title": "Get the review panel within one second of the hand ending",
+      "type": "feature",
+      "milestone": "M3",
+      "priority": "Medium",
+      "risk": "medium",
+      "skeleton": false,
+      "role": "learner",
+      "want": "the review panel to appear within a second of each hand ending",
+      "benefit": "reviewing never slows my practice down",
+      "context": "REQ-055.2: on the reference machine (Apple-silicon Mac, latest Chrome) the Hand Review panel is shown <= 1.0 s (p95) after the hand ends, measured by an automated timing test over 200 samples.",
+      "acs": [
+        {
+          "text": "Given the reference machine and 200 scripted hands with 1 to 8 user decisions at 2, 6 and 10 players, When the timing test runs, Then it reports the p95 time from hand end to visible panel and that p95 is at most 1.0 s",
+          "tags": [
+            "REQ-055.2"
+          ]
+        }
+      ],
+      "dod": [
+        {
+          "text": "The review timing test reports p95 over 200 samples in its output",
+          "tags": [
+            "REQ-055.2"
+          ]
+        }
+      ],
+      "deps": [
+        "E09-S02"
+      ],
+      "notes": ""
+    }
+  ]
+}

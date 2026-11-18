@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Game Config</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap">
+<style>
+body{margin:0;background:#0E0F12}
+:root{color-scheme:dark}
+input,select,button{color:inherit;font-family:inherit}
+a{color:#FF6B70}a:hover{color:#FF9A9D}
+</style>
+</helmet>
+<div style="min-height: 800px; box-sizing: border-box; background: #0E0F12; color: #F2F3F5; font-family: Inter, system-ui, sans-serif; padding: 32px 16px">
+  <form style="max-width: 1040px; margin: 0 auto; display: flex; flex-direction: column; gap: 24px" aria-labelledby="cfg">
+    <header style="display: flex; align-items: center; gap: 16px; flex-wrap: wrap">
+      <a href="Home.dc.html" style="font-size: 14px">← Home</a>
+      <h1 id="cfg" style="margin: 0; font-size: 28px; font-weight: 700">New game</h1>
+    </header>
+    <div style="display: flex; flex-wrap: wrap; gap: 24px">
+      <section style="flex: 1 1 420px; background: #1A1D22; border: 1px solid #343A43; border-radius: 10px; padding: 24px; display: flex; flex-direction: column; gap: 20px">
+        <fieldset style="border: 0; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 8px">
+          <legend style="font-size: 14px; font-weight: 600; padding: 0; margin-bottom: 8px">Game type</legend>
+          <div style="display: flex; gap: 8px; flex-wrap: wrap">
+            <label style="display: flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 16px; border: 2px solid #D7262E; border-radius: 8px; font-size: 15px"><input type="radio" name="type" checked> Cash game</label>
+            <label style="display: flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 16px; border: 1px solid #343A43; border-radius: 8px; font-size: 15px"><input type="radio" name="type"> Sit-and-go</label>
+          </div>
+        </fieldset>
+        <div style="display: flex; flex-direction: column; gap: 6px">
+          <label for="size" style="font-size: 14px; font-weight: 600">Players at the table</label>
+          <select id="size" style="min-height: 44px; font-size: 15px; padding: 0 12px; border: 1px solid #4A515C; border-radius: 8px; background: #1A1D22">
+            <option>2 (heads-up)</option><option>3</option><option>4</option><option>5</option><option selected>6 (6-max)</option><option>7</option><option>8</option><option>9</option><option>10 (full ring)</option>
+          </select>
+          <span style="font-size: 13px; color: #A7AEB8">Advice is tuned for heads-up, 6-max and full ring. Other sizes use the nearest and are marked "approximate".</span>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 6px">
+          <label for="stakes" style="font-size: 14px; font-weight: 600">Stakes (small bet / big bet)</label>
+          <select id="stakes" style="min-height: 44px; font-size: 15px; padding: 0 12px; border: 1px solid #4A515C; border-radius: 8px; background: #1A1D22">
+            <option>$2 / $4</option><option selected>$4 / $8</option><option>$10 / $20</option>
+          </select>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 6px">
+          <label for="buyin" style="font-size: 14px; font-weight: 600">Buy-in</label>
+          <input id="buyin" value="$200 (25 big bets)" style="min-height: 44px; font-size: 15px; padding: 0 12px; border: 1px solid #4A515C; border-radius: 8px">
+        </div>
+        <fieldset style="border: 0; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 8px">
+          <legend style="font-size: 14px; font-weight: 600; padding: 0; margin-bottom: 8px">Speed</legend>
+          <div style="display: flex; gap: 8px; flex-wrap: wrap">
+            <label style="display: flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 16px; border: 2px solid #D7262E; border-radius: 8px; font-size: 15px"><input type="radio" name="speed" checked> Rapid</label>
+            <label style="display: flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 16px; border: 1px solid #343A43; border-radius: 8px; font-size: 15px"><input type="radio" name="speed"> Realistic</label>
+          </div>
+        </fieldset>
+      </section>
+      <section style="flex: 1 1 420px; background: #1A1D22; border: 1px solid #343A43; border-radius: 10px; padding: 24px; display: flex; flex-direction: column; gap: 14px" aria-labelledby="opp">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px">
+          <h2 id="opp" style="margin: 0; font-size: 16px; font-weight: 600">Opponents</h2>
+          <button type="button" style="min-height: 44px; padding: 0 14px; font-size: 14px; border: 1px solid #4A515C; background: #1A1D22; border-radius: 8px; color: #F2F3F5">Randomise line-up</button>
+        </div>
+        <sc-for list="{{seats}}" as="s" hint-placeholder-count="5">
+          <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap; padding: 8px 0; border-bottom: 1px solid #2A2F37">
+            <span style="width: 64px; font-size: 14px; color: #A7AEB8">Seat {{s.seat}}</span>
+            <span style="flex: 1 1 120px; font-size: 15px; font-weight: 500">{{s.name}}</span>
+            <label style="display: flex; align-items: center; gap: 8px; font-size: 13px; color: #A7AEB8">Style
+              <select style="min-height: 40px; font-size: 14px; padding: 0 8px; border: 1px solid #4A515C; border-radius: 8px; background: #1A1D22; color: #F2F3F5">
+                <option>{{s.style}}</option><option>Tight-aggressive</option><option>Calling station</option><option>Maniac</option><option>Rock</option><option>Random</option>
+              </select>
+            </label>
+          </div>
+        </sc-for>
+        <div style="display: flex; align-items: center; gap: 12px; padding-top: 4px">
+          <span style="width: 64px; font-size: 14px; color: #A7AEB8">You</span>
+          <span style="font-size: 15px">Seat chosen at random each session</span>
+        </div>
+      </section>
+    </div>
+    <div style="display: flex; justify-content: flex-end; gap: 12px; flex-wrap: wrap">
+      <a href="Home.dc.html" style="display: flex; align-items: center; min-height: 44px; padding: 0 20px; border: 1px solid #4A515C; border-radius: 8px; color: #F2F3F5; text-decoration: none; font-size: 15px">Cancel</a>
+      <a href="Table.dc.html" style="display: flex; align-items: center; min-height: 44px; padding: 0 28px; background: #D7262E; color: #FFFFFF; border-radius: 8px; text-decoration: none; font-size: 16px; font-weight: 600">Start game</a>
+    </div>
+  </form>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":800}}'>
+class Component extends DCLogic {
+renderVals() {
+return { seats: [
+{ seat: 1, name: 'Bot Ava', style: 'Tight-aggressive' },
+{ seat: 2, name: 'Bot Ben', style: 'Calling station' },
+{ seat: 3, name: 'Bot Cal', style: 'Maniac' },
+{ seat: 4, name: 'Bot Dee', style: 'Rock' },
+{ seat: 5, name: 'Bot Eli', style: 'Tight-aggressive' }
+] };
+}
+}
+</script>
+</body>
+</html>

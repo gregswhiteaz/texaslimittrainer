@@ -1,0 +1,151 @@
+{
+  "scope": "E11",
+  "round": 2,
+  "clauses": [
+    {
+      "clause": "REQ-002.3",
+      "verdict": "covered",
+      "evidence": "E11-S01#AC1"
+    },
+    {
+      "clause": "REQ-004.8",
+      "verdict": "covered",
+      "evidence": "E11-S01#AC4"
+    },
+    {
+      "clause": "REQ-040.3",
+      "verdict": "covered",
+      "evidence": "E11-S01#AC3, E11-S06#AC3, E11-S11#AC4"
+    },
+    {
+      "clause": "REQ-044.6",
+      "verdict": "covered",
+      "evidence": "E11-S07#AC1-3"
+    },
+    {
+      "clause": "REQ-048.1",
+      "verdict": "covered",
+      "evidence": "E11-S01#AC2,AC3; E11-S02#AC1-3"
+    },
+    {
+      "clause": "REQ-048.2",
+      "verdict": "covered",
+      "evidence": "E11-S03#AC1-5"
+    },
+    {
+      "clause": "REQ-048.3",
+      "verdict": "covered",
+      "evidence": "E11-S06#AC1,AC2,AC4"
+    },
+    {
+      "clause": "REQ-048.4",
+      "verdict": "covered",
+      "evidence": "E11-S04#AC1-4"
+    },
+    {
+      "clause": "REQ-048.5",
+      "verdict": "covered",
+      "evidence": "E11-S05#AC1-4"
+    },
+    {
+      "clause": "REQ-048.6",
+      "verdict": "covered",
+      "evidence": "E11-S01#AC7-8; E11-S03#AC4"
+    },
+    {
+      "clause": "REQ-048.7",
+      "verdict": "covered",
+      "evidence": "E11-S01#AC6; E11-S03#AC5"
+    },
+    {
+      "clause": "REQ-048.8",
+      "verdict": "covered",
+      "evidence": "E11-S08#AC1-4"
+    },
+    {
+      "clause": "REQ-048.9",
+      "verdict": "covered",
+      "evidence": "E11-S06#AC2,AC3,AC5"
+    },
+    {
+      "clause": "REQ-048.10",
+      "verdict": "covered",
+      "evidence": "E11-S01#AC7; E11-S02#AC5-6; E11-S08#AC4"
+    },
+    {
+      "clause": "REQ-048.11",
+      "verdict": "covered",
+      "evidence": "E11-S01#AC5; E11-S04#AC6"
+    },
+    {
+      "clause": "REQ-048.12",
+      "verdict": "covered",
+      "evidence": "E11-S04#AC5"
+    },
+    {
+      "clause": "REQ-048.13",
+      "verdict": "covered",
+      "evidence": "E11-S04#AC6-7"
+    },
+    {
+      "clause": "REQ-048.14",
+      "verdict": "covered",
+      "evidence": "E11-S01#AC6; E11-S04#AC7"
+    },
+    {
+      "clause": "REQ-049.1",
+      "verdict": "covered",
+      "evidence": "E11-S09#AC1-2,AC4,AC6"
+    },
+    {
+      "clause": "REQ-049.2",
+      "verdict": "covered",
+      "evidence": "E11-S09#AC3,AC5"
+    },
+    {
+      "clause": "REQ-049.3",
+      "verdict": "covered",
+      "evidence": "E11-S10#AC1-3"
+    },
+    {
+      "clause": "REQ-049.4",
+      "verdict": "covered",
+      "evidence": "E11-S11#AC1-5"
+    },
+    {
+      "clause": "REQ-055.5",
+      "verdict": "covered",
+      "evidence": "E11-S12#AC1-2"
+    }
+  ],
+  "findings": [
+    {
+      "id": "J-E11-E11-S05-same-wave-dependency",
+      "severity": "MEDIUM",
+      "class": "dependency",
+      "owner": "weaver",
+      "location": "E11-S05 (TASK-11.9)",
+      "evidence": "E11-S05 depends on TASK-5.7 (E05-S05, finishing position). E05 and E11 are both wave 7, and same-wave cross-epic dependencies are not allowed. Ordinals happen to satisfy the order (152000 < 156000).",
+      "fix": "Drop the TASK-5.7 edge and rely on 'Given ended sit-and-go session records' fixtures plus the ordinal order, or move E11 to a later wave."
+    },
+    {
+      "id": "J-E11-E11-S11-AC2-exact-text",
+      "severity": "LOW",
+      "class": "ac-weak",
+      "owner": "weaver",
+      "location": "E11-S11#AC2-3",
+      "evidence": "ACs say 'states the G-2 goal is met/not met' but the description's exact strings 'G-2 goal met' / 'G-2 goal not met' and the display of both rates are not in any AC.",
+      "fix": "Quote the strings and the two rates in the Then clause."
+    },
+    {
+      "id": "J-E11-E11-S09-zero-hands-style-empty",
+      "severity": "LOW",
+      "class": "edge-case",
+      "owner": "weaver",
+      "location": "E11-S09 (TASK-11.8)",
+      "evidence": "No AC for the style section when the filter holds zero hands (all stats '\u2014', 0 of 5). AC5 covers only a missing denominator.",
+      "fix": "Add AC for the style section with zero hands in the filter."
+    }
+  ],
+  "summary": "All 23 clauses covered; round-1 ambiguities resolved by new clauses REQ-048.9-.14 and REQ-049.4. One same-wave dependency and two minor AC gaps."
+}

@@ -1,0 +1,1059 @@
+{
+  "epic": "E07",
+  "stories": [
+    {
+      "key": "E07-S01",
+      "title": "Recommend a preflop action from the 6-max chart",
+      "type": "feature",
+      "milestone": "M1",
+      "priority": "High",
+      "risk": "high",
+      "skeleton": true,
+      "role": "learner",
+      "want": "a preflop recommendation for my hand taken from an authored 6-max chart",
+      "benefit": "I learn which starting hands to play from each position",
+      "context": "Every preflop recommendation comes from authored chart data files loaded by the advice engine (not hard-coded logic). A chart gives, per position and preflop situation, the action for each of the 169 starting-hand classes. Situations per position: unopened pot, facing one or more limpers, facing a raise, facing a raise and calls, facing a re-raise, blind defence. Each cell: one action (fold, call, raise), a borderline flag, zero or one acceptable alternative action. Each chart file carries a plain-English justification of its ranges, written for this project. The advice API accepts only a PlayerView (E01-S06), so hints and grades see only the acting player's view. This slice delivers the 6-max chart; heads-up and full ring follow in E07-S05. The TAG bot (E06) is built on this API. Applicable 6-max (position, situation) pairs (26): unopened pot - UTG, HJ, CO, BTN, SB; facing one or more limpers - HJ, CO, BTN, SB, BB; facing a raise - UTG, HJ, CO, BTN; facing a raise and calls - UTG, HJ, CO, BTN; facing a re-raise - all six; blind defence - SB, BB. The blinds facing a raise (with or without callers) use blind defence.",
+      "acs": [
+        {
+          "text": "Given the 6-max chart data, When the chart validator runs, Then each of the 26 applicable (position, situation) pairs listed in the context assigns an action to all 169 starting-hand classes, and a missing pair fails validation naming it",
+          "tags": [
+            "REQ-032.2"
+          ]
+        },
+        {
+          "text": "Given a chart cell with no action, an action other than fold, call or raise, or more than one acceptable alternative, or a 6-max chart file without a plain-English justification, When the chart validator runs, Then validation fails naming the position, situation and hand class of the bad cell, or the chart missing its justification",
+          "tags": [
+            "REQ-032.3",
+            "REQ-032.4"
+          ]
+        },
+        {
+          "text": "Given one chart cell is changed in the data file and no code is changed, When advice is requested for that position, situation and hand class, Then the recommendation follows the edited cell",
+          "tags": [
+            "REQ-032.5"
+          ]
+        },
+        {
+          "text": "Given a 6-max PlayerView at a preflop decision, When advice is requested, Then it returns the cell's action, its borderline flag, its acceptable alternative (or none) and the position and situation used",
+          "tags": [
+            "REQ-032.3"
+          ]
+        },
+        {
+          "text": "Given a fixed preflop decision point, When the other players' hole cards and the undealt cards are changed, Then the recommendation is identical",
+          "tags": [
+            "REQ-025.2"
+          ]
+        },
+        {
+          "text": "Given code that passes the full game state instead of a PlayerView to the advice API, When `npm run typecheck` runs, Then it reports a type error",
+          "tags": [
+            "REQ-025.2"
+          ]
+        },
+        {
+          "text": "Given a 6-max preflop decision facing a fourth bet (a re-raise of a re-raise), When advice is requested, Then it uses the facing-a-re-raise chart cell for the hand class, and a raise recommendation becomes call because the street is capped",
+          "tags": [
+            "REQ-032.6"
+          ]
+        },
+        {
+          "text": "Given a 6-max big blind with no raise in front of it (one or more limpers) holding a hand class whose facing-limpers cell is call, When advice is requested, Then it returns check, because no bet is facing the big blind",
+          "tags": [
+            "REQ-032.3"
+          ]
+        }
+      ],
+      "dod": [
+        {
+          "text": "Chart ranges and justification text are original, written for this project",
+          "tags": [
+            "REQ-061.2"
+          ]
+        }
+      ],
+      "deps": [
+        "E01-S06"
+      ],
+      "notes": "Recommendations are always legal for the view: a 'call' cell with nothing to call becomes check (AC8); facing a fourth bet the street is capped (one bet plus three raises, REQ-016.3), so a raise cell becomes call (AC7, REQ-032.6). Heads-up and full-ring fourth-bet checks are in E07-S05."
+    },
+    {
+      "key": "E07-S02",
+      "title": "Compute a hand's equity against opponent hands",
+      "type": "feature",
+      "milestone": "M1",
+      "priority": "High",
+      "risk": "high",
+      "skeleton": true,
+      "role": "learner",
+      "want": "equity numbers that match exact poker maths",
+      "benefit": "I can trust the numbers behind every recommendation",
+      "context": "Equity calculator on top of the E01 hand evaluator: hero's share of the pot (ties counted as split shares) for a hero hand, a board of 0, 3, 4 or 5 cards and one or more opponent hands or ranges. Must be within 1.5 percentage points of exhaustive enumeration for heads-up preflop matchups (e.g. AA vs KK 81.9%, AKs vs QQ 46.2%). For a given input it returns the same number every time; if sampling is used, the sampler is seeded from the input. Range-versus-range and multiway accuracy against an offline reference set is completed in E07-S06.",
+      "acs": [
+        {
+          "text": "Given AA vs KK and AKs vs QQ preflop, When equity is computed, Then the results are within 1.5 percentage points of 81.9% and 46.2%",
+          "tags": [
+            "REQ-034.1"
+          ]
+        },
+        {
+          "text": "Given a stored set of at least 100 heads-up preflop matchups with exact enumeration values, When the equity test suite runs, Then every result is within 1.5 percentage points of its stored value",
+          "tags": [
+            "REQ-034.1"
+          ]
+        },
+        {
+          "text": "Given a three-way preflop matchup AA vs KK vs QQ, When equity is computed, Then each hand's equity is within 1.5 percentage points of exhaustive enumeration",
+          "tags": [
+            "REQ-034.2"
+          ]
+        },
+        {
+          "text": "Given the same hero hand, board and opponent ranges, When equity is computed twice in one process and once in a fresh process, Then all three results are identical to the last digit",
+          "tags": [
+            "REQ-034.3"
+          ]
+        },
+        {
+          "text": "Given an equity input that uses sampling, When the sampler is created, Then its seed is derived only from the input, so no clock or global random source changes the result",
+          "tags": [
+            "REQ-034.3"
+          ]
+        }
+      ],
+      "dod": [],
+      "deps": [
+        "E01-S04"
+      ],
+      "notes": "Bots (REQ-055.3, bot decision <= 100 ms) and hints (REQ-055.1, <= 1 s) depend on this speed; prefer exact enumeration where cheap and seeded sampling otherwise. Canonicalise inputs (sort cards/combos) before deriving the seed so equal inputs give equal outputs."
+    },
+    {
+      "key": "E07-S03",
+      "title": "Recommend call or fold after the flop from equity and pot odds",
+      "type": "feature",
+      "milestone": "M1",
+      "priority": "High",
+      "risk": "medium",
+      "skeleton": true,
+      "role": "learner",
+      "want": "a call-or-fold recommendation after the flop that compares my equity with the pot odds",
+      "benefit": "I learn when a call is worth its price",
+      "context": "Postflop method: compute hero's equity against the opponents and the required equity = call amount / pot after calling; recommend call over fold when equity >= required equity. Every postflop recommendation returns the action, equity %, required equity % and the id of the rule that fired. All postflop rules are written in one design document and every rule has a unit test. In this slice opponents' holdings are every unseen two-card combination; the action-based range model (E07-S07) and observed-stat scaling (E07-S09) narrow them later without changing this rule. Value bets (E07-S10) and implied odds (E07-S11) are later rules.",
+      "acs": [
+        {
+          "text": "Given a flop decision facing a $4 bet with a pot of $20 including that bet (required equity 4 / 24 = 16.7%), When hero's equity equals the required equity, Then advice recommends call",
+          "tags": [
+            "REQ-033.1"
+          ]
+        },
+        {
+          "text": "Given the same decision, When hero's equity is 0.1 percentage points below the required equity, Then advice recommends fold",
+          "tags": [
+            "REQ-033.1"
+          ]
+        },
+        {
+          "text": "Given any postflop decision, When advice is requested, Then it returns the action, equity % and required equity % to one decimal place and the id of the rule that fired",
+          "tags": [
+            "REQ-033.5"
+          ]
+        },
+        {
+          "text": "Given a postflop decision with no bet to face, When no betting rule fires, Then advice recommends check, required equity is 0% and the rule id is returned",
+          "tags": [
+            "REQ-033.5"
+          ]
+        },
+        {
+          "text": "Given the postflop rules design document, When the test suite runs, Then a consistency test fails if any rule id in the document has no unit test or any rule id returned by the engine is missing from the document",
+          "tags": [
+            "REQ-033.4"
+          ]
+        },
+        {
+          "text": "Given a fixed postflop decision point, When the other players' hole cards and the undealt cards are changed, Then the recommendation and both equity numbers are identical",
+          "tags": [
+            "REQ-025.2"
+          ]
+        }
+      ],
+      "dod": [],
+      "deps": [
+        "E07-S02",
+        "E07-S01"
+      ],
+      "notes": "Depends on E07-S01 only for the shared advice API (PlayerView in, recommendation out). Fold is never recommended when check is free (REQ-017.1)."
+    },
+    {
+      "key": "E07-S04",
+      "title": "Grade a decision as Correct, Minor error or Major error",
+      "type": "feature",
+      "milestone": "M1",
+      "priority": "High",
+      "risk": "medium",
+      "skeleton": true,
+      "role": "learner",
+      "want": "each of my decisions graded Correct, Minor error or Major error",
+      "benefit": "I see which decisions cost me and how badly",
+      "context": "Grader rules: Correct when the action equals the recommended action or the listed acceptable alternative. Preflop: a deviation on a borderline cell is Minor, on any other cell Major. Postflop call/fold: folding when equity exceeds required equity by >= 10 points, or calling when equity is >= 10 points below required equity, is Major; smaller margins Minor. Postflop bet/raise versus check/call: Major only when equity against the calling range is >= 15 points away from 50%; otherwise Minor. Raise-versus-fold deviations use the call/fold margin (REQ-038.6). Close calls (under 10 / under 15 points) are never Major. The grader is a pure function of the user's action and a recommendation result (action, acceptable alternative, borderline flag, equity %, required equity %, equity against the calling range %) computed from the PlayerView at the decision point, never from later cards or the outcome. Its tests use injected recommendation fixtures, so this story does not wait for the value-bet rule (E07-S10) or the range model (E07-S07); in production the recommendation comes from the advice engine.",
+      "acs": [
+        {
+          "text": "Given a decision whose action equals the recommended action or the listed acceptable alternative, When it is graded, Then the grade is Correct",
+          "tags": [
+            "REQ-038.1"
+          ]
+        },
+        {
+          "text": "Given a preflop decision that deviates from the chart, When it is graded, Then it is a Minor error if the cell is flagged borderline and a Major error otherwise",
+          "tags": [
+            "REQ-038.2"
+          ]
+        },
+        {
+          "text": "Given an injected recommendation to call, When the user folds with equity above required equity by 0.1, 9.9 and 10.0 points, Then the grades are Minor, Minor and Major",
+          "tags": [
+            "REQ-038.3",
+            "REQ-038.5"
+          ]
+        },
+        {
+          "text": "Given an injected recommendation to fold, When the user calls with equity below required equity by 0.1, 9.9 and 10.0 points, Then the grades are Minor, Minor and Major",
+          "tags": [
+            "REQ-038.3",
+            "REQ-038.5"
+          ]
+        },
+        {
+          "text": "Given an injected recommendation to bet or raise, When the user checks or calls with equity against the calling range of 64.9% and of 65.0%, Then the grades are Minor and Major",
+          "tags": [
+            "REQ-038.4",
+            "REQ-038.5"
+          ]
+        },
+        {
+          "text": "Given an injected recommendation to check or call, When the user bets or raises with equity against the calling range of 35.1% and of 35.0%, Then the grades are Minor and Major",
+          "tags": [
+            "REQ-038.4",
+            "REQ-038.5"
+          ]
+        },
+        {
+          "text": "Given a call graded Major error, When the next cards give the user the winning hand, Then the grade is still Major error because only the PlayerView at the decision point is used",
+          "tags": [
+            "REQ-025.3"
+          ]
+        },
+        {
+          "text": "Given an injected recommendation to fold, When the user raises with equity below required equity by 9.9 and by 10.0 points, Then the grades are Minor and Major; and given an injected recommendation to raise, When the user folds with equity above required equity by 9.9 and by 10.0 points, Then the grades are Minor and Major",
+          "tags": [
+            "REQ-038.6"
+          ]
+        }
+      ],
+      "dod": [],
+      "deps": [
+        "E07-S03"
+      ],
+      "notes": "The grade result also carries the recommendation it was based on, so Hand Review (E09) can show action, recommendation, numbers and grade from one object."
+    },
+    {
+      "key": "E07-S05",
+      "title": "Recommend preflop actions at heads-up and full-ring tables",
+      "type": "feature",
+      "milestone": "M2",
+      "priority": "High",
+      "risk": "medium",
+      "skeleton": false,
+      "role": "learner",
+      "want": "preflop recommendations tuned to the table size I play, from heads-up to full ring",
+      "benefit": "the advice fits the table size I am practising",
+      "context": "Adds the heads-up (2) and full-ring (9-10) charts with the same situations, cell format and justification rules as the 6-max chart (E07-S01). Table sizes map to reference sizes: 2 -> heads-up; 3, 4, 5, 6, 7 -> 6-max; 8, 9, 10 -> full ring. The approximate label for mapped sizes is E07-S16. Position mapping: a seat uses the reference chart's position that is the same number of seats before the button (BTN, SB and BB keep their names); seats earlier than the reference chart's earliest position use that earliest position (UTG).",
+      "acs": [
+        {
+          "text": "Given the chart data, When the chart validator runs, Then charts exist for heads-up, 6-max and full ring and a missing chart fails validation",
+          "tags": [
+            "REQ-032.1"
+          ]
+        },
+        {
+          "text": "Given the heads-up and full-ring charts, When the chart validator runs, Then every position at those sizes in each situation that applies to it (unopened pot, facing one or more limpers, facing a raise, facing a raise and calls, facing a re-raise, blind defence) assigns an action to all 169 hand classes",
+          "tags": [
+            "REQ-032.2"
+          ]
+        },
+        {
+          "text": "Given the heads-up or full-ring chart file without a plain-English justification, When the chart validator runs, Then validation fails naming the chart",
+          "tags": [
+            "REQ-032.4"
+          ]
+        },
+        {
+          "text": "Given a preflop PlayerView at each table size from 2 to 10, When advice is requested, Then the chart used is heads-up for 2, 6-max for 3 to 7 and full ring for 8 to 10",
+          "tags": [
+            "REQ-005.4",
+            "REQ-032.1"
+          ]
+        },
+        {
+          "text": "Given a heads-up preflop PlayerView on the button, When advice is requested, Then the recommendation comes from the heads-up chart cell for that hand class and situation",
+          "tags": [
+            "REQ-032.1"
+          ]
+        },
+        {
+          "text": "Given a heads-up preflop decision where the big blind faces a fourth bet (button raised, big blind re-raised, button re-raised) with a hand class whose heads-up big-blind facing-a-re-raise cell is raise, When advice is requested, Then it uses that heads-up cell and returns call because the street is capped",
+          "tags": [
+            "REQ-032.6"
+          ]
+        },
+        {
+          "text": "Given a full-ring preflop decision where UTG faces a fourth bet (UTG raised, CO re-raised, BB re-raised), When advice is requested for a hand class whose full-ring UTG facing-a-re-raise cell is raise and for one whose cell is fold, Then it uses those full-ring cells and returns call and fold respectively",
+          "tags": [
+            "REQ-032.6"
+          ]
+        },
+        {
+          "text": "Given preflop decisions at the first seat to act, When advice is requested, Then 4-handed uses the 6-max CO cell, 5-handed the 6-max HJ cell, both of the two earliest 7-handed seats the 6-max UTG cell, and 8-handed the full-ring cell of the position 5 seats before the button",
+          "tags": [
+            "REQ-005.4"
+          ]
+        }
+      ],
+      "dod": [
+        {
+          "text": "Chart ranges and justification text are original, written for this project",
+          "tags": [
+            "REQ-061.2"
+          ]
+        }
+      ],
+      "deps": [
+        "E07-S01"
+      ],
+      "notes": ""
+    },
+    {
+      "key": "E07-S06",
+      "title": "Compute multiway and range-versus-range equity within 1.5 points",
+      "type": "feature",
+      "milestone": "M2",
+      "priority": "High",
+      "risk": "medium",
+      "skeleton": false,
+      "role": "learner",
+      "want": "equity against several opponents' ranges that is as accurate as heads-up equity",
+      "benefit": "postflop advice in multiway pots is trustworthy",
+      "context": "Completes REQ-034: multiway and range-versus-range results within 1.5 percentage points of an exhaustive or high-sample reference computed offline and stored with the method used. Together with the heads-up set from E07-S02 the matchup suite holds at least 200 matchups.",
+      "acs": [
+        {
+          "text": "Given a stored set of at least 100 multiway and range-versus-range cases on boards of 0, 3, 4 and 5 cards with offline reference values, When the equity test suite runs, Then every result is within 1.5 percentage points of its reference",
+          "tags": [
+            "REQ-034.2"
+          ]
+        },
+        {
+          "text": "Given the heads-up and multiway reference sets, When the equity test suite runs, Then it contains at least 200 matchups and each reference value records whether it was exhaustive or high-sample",
+          "tags": [
+            "REQ-034.1",
+            "REQ-034.2"
+          ]
+        },
+        {
+          "text": "Given the same ranges listed in a different order, When equity is computed, Then the result is identical",
+          "tags": [
+            "REQ-034.3"
+          ]
+        }
+      ],
+      "dod": [],
+      "deps": [
+        "E07-S02"
+      ],
+      "notes": "Reference values are generated by an offline script committed with the data so they can be regenerated."
+    },
+    {
+      "key": "E07-S07",
+      "title": "Estimate each opponent's range from their actions in the hand",
+      "type": "feature",
+      "milestone": "M2",
+      "priority": "High",
+      "risk": "high",
+      "skeleton": false,
+      "role": "learner",
+      "want": "postflop advice that weighs my hand against what each opponent's actions suggest they hold",
+      "benefit": "the advice reads opponents the way a real player would",
+      "context": "Range model: each opponent's range starts from authored default ranges per (reference size, position, preflop action sequence) and is narrowed by that opponent's later actions in the hand by the documented narrowing rule. Default ranges are data with a justification. Narrowing rule (range-model design document): on each postflop street every combo in the range is classified on the board at that street as Strong (two pair or better using at least one hole card), Pair (exactly one pair using at least one hole card, including a pocket pair), Draw (no pair, with four cards to a flush or an open-ended straight draw) or Air (anything else). When the opponent bets, keep Strong, Pair and Draw; checks, keep Pair, Draw and Air; calls a bet, keep Pair and Draw; raises, keep Strong and Draw. Narrowing applies street by street to the range left by the previous street. The model never reads a bot's style label or internal parameters: advice inputs are the PlayerView plus observed opponent statistics only. Replaces the 'every unseen combination' holdings used by E07-S03. The range that would call (value-bet rule) is E07-S10; observed-stat scaling is E07-S09. Worked fixture used by the ACs (also in the design document): range {KhKd, 8h7h, AhKh, 9h9d, 6h5h, Th9h, QhJh, Ac2c} on flop Ks 8d 7c classifies as Strong {KhKd, 8h7h}, Pair {AhKh, 9h9d}, Draw {6h5h, Th9h}, Air {QhJh, Ac2c}.",
+      "acs": [
+        {
+          "text": "Given the default range data, When the range validator runs, Then every (reference size, position, preflop action sequence) has a range and a plain-English justification, and a missing range or justification fails validation",
+          "tags": [
+            "REQ-035.1"
+          ]
+        },
+        {
+          "text": "Given a 6-max opponent in the CO who open-raised preflop and has not yet acted on the flop, When postflop advice is computed with fewer than 30 observed hands of that opponent, Then equity is computed against exactly the authored default range for (6-max, CO, open-raise)",
+          "tags": [
+            "REQ-035.1"
+          ]
+        },
+        {
+          "text": "Given an opponent whose range is {KhKd, 8h7h, AhKh, 9h9d, 6h5h, Th9h, QhJh, Ac2c} on flop Ks 8d 7c, When the opponent bets the flop, Then the narrowed range is the 6 combos {KhKd, 8h7h, AhKh, 9h9d, 6h5h, Th9h} (Air removed)",
+          "tags": [
+            "REQ-035.1",
+            "REQ-035.5"
+          ]
+        },
+        {
+          "text": "Given the same range and flop, When the opponent checks the flop, Then the narrowed range is the 6 combos {AhKh, 9h9d, 6h5h, Th9h, QhJh, Ac2c} (Strong removed)",
+          "tags": [
+            "REQ-035.1",
+            "REQ-035.5"
+          ]
+        },
+        {
+          "text": "Given the same range and flop, When the opponent calls a flop bet, Then the narrowed range is the 4 combos {AhKh, 9h9d, 6h5h, Th9h}; and When the opponent instead raises a flop bet, Then it is the 4 combos {KhKd, 8h7h, 6h5h, Th9h}",
+          "tags": [
+            "REQ-035.1",
+            "REQ-035.5"
+          ]
+        },
+        {
+          "text": "Given the same range, When the opponent checks the flop Ks 8d 7c and then calls a bet on the turn 2d, Then the narrowed range is the 5 combos {AhKh, 9h9d, 6h5h, Th9h, Ac2c} (Ac2c now a Pair, QhJh still Air)",
+          "tags": [
+            "REQ-035.1",
+            "REQ-035.5"
+          ]
+        },
+        {
+          "text": "Given two opponents with identical positions, actions and observed statistics but different bot styles, When their ranges are estimated, Then the ranges are identical",
+          "tags": [
+            "REQ-035.3"
+          ]
+        },
+        {
+          "text": "Given code that passes a bot's style label or style parameters into the advice engine, When `npm run typecheck` runs, Then it reports a type error",
+          "tags": [
+            "REQ-035.3"
+          ]
+        }
+      ],
+      "dod": [
+        {
+          "text": "Default ranges and their justification text are original, written for this project",
+          "tags": [
+            "REQ-061.2"
+          ]
+        }
+      ],
+      "deps": [
+        "E07-S03"
+      ],
+      "notes": "Cards are written rank+suit (Kh = king of hearts). Classes and per-action keep-sets are REQ-035.5."
+    },
+    {
+      "key": "E07-S08",
+      "title": "Enabler: shared style-stat functions for VPIP, PFR, Aggression, WTSD and W$SD",
+      "type": "task",
+      "milestone": "M2",
+      "priority": "High",
+      "risk": "low",
+      "skeleton": false,
+      "context": "Enabler (no user-visible outcome on its own): pure statistics module (no UI imports) over completed hand action histories. VPIP = hands where the player voluntarily put chips in preflop (call or raise, not counting blinds) / hands dealt. PFR = hands with a preflop raise / hands dealt. Aggression = (bets + raises) / (bets + raises + calls) over flop, turn and river. WTSD = hands reaching showdown / hands where the player saw the flop. W$SD = showdowns where the player won chips / showdowns reached. A zero denominator shows '—'. Used for the user's Session Report (E10), opponent observed stats (REQ-031, REQ-035.2) and playtest style checks (E06). User stories that show these stats depend on this task: E07-S09 (opponent range scaling), E03 opponent stats panel, E06 style checks and the E10 Session Report.",
+      "acs": [
+        {
+          "text": "Given 10 hand records in which the user called preflop in 3 (one a small-blind completion), raised preflop in 2, checked the big blind in 1 and folded in 4, When stats are computed, Then VPIP is 50% and PFR is 20%",
+          "tags": [
+            "REQ-045.1",
+            "REQ-045.2"
+          ]
+        },
+        {
+          "text": "Given hand records with 3 postflop bets, 1 postflop raise, 4 postflop calls and 2 preflop raises, When Aggression is computed, Then it is 50%",
+          "tags": [
+            "REQ-045.3"
+          ]
+        },
+        {
+          "text": "Given hand records where the user saw the flop in 8 hands and reached showdown in 2, When WTSD is computed, Then it is 25%",
+          "tags": [
+            "REQ-045.4"
+          ]
+        },
+        {
+          "text": "Given 2 showdowns reached of which the user won chips in 1 (a split pot), When W$SD is computed, Then it is 50%",
+          "tags": [
+            "REQ-045.5"
+          ]
+        },
+        {
+          "text": "Given hand records with no hands dealt, no flop seen, no showdown or no postflop bet, raise or call, When the affected stat is computed, Then it shows '—' instead of a number",
+          "tags": [
+            "REQ-045.6"
+          ]
+        },
+        {
+          "text": "Given a player who only posted a blind and then folded, When VPIP is computed, Then that hand does not count as voluntarily putting chips in",
+          "tags": [
+            "REQ-045.1"
+          ]
+        }
+      ],
+      "dod": [],
+      "deps": [
+        "E01-S05"
+      ],
+      "notes": "E03 hand records must keep the full per-street action history per seat so these functions can run on them. Aggression is postflop-only (REQ-045.3); bot style bands use the same definition (REQ-027.6)."
+    },
+    {
+      "key": "E07-S09",
+      "title": "Adjust opponent ranges to their observed play after 30 hands",
+      "type": "feature",
+      "milestone": "M2",
+      "priority": "High",
+      "risk": "medium",
+      "skeleton": false,
+      "role": "learner",
+      "want": "the advice to read each opponent from the hands I have seen them play",
+      "benefit": "I learn to adjust to loose and tight opponents",
+      "context": "From 30 observed hands of an opponent in the session, that opponent's preflop range width is scaled toward their observed stats by the formula in the range-model design document: width = d + (o - d) x min(n, 100) / 100, where d is the default range's width (% of starting hands), o is the observed PFR for raising ranges or the observed VPIP for calling and limping ranges, and n is the number of observed hands; the range is then the strongest width% of starting hands by the documented hand order, never narrower than the single strongest hand class (AA). Below 30 hands the default range is used. Recommendations state the basis per opponent: 'typical player' or 'based on N hands of this opponent'; the hint (E08) and review (E09) display it.",
+      "acs": [
+        {
+          "text": "Given an opponent with 29 observed hands, When their range is estimated, Then it equals the default range and the basis is 'typical player'",
+          "tags": [
+            "REQ-035.2",
+            "REQ-035.4"
+          ]
+        },
+        {
+          "text": "Given two opponents with identical actions and 30 observed hands each, one with VPIP 20% and PFR 15% and one with VPIP 60% and PFR 10%, When their ranges are estimated, Then the preflop ranges differ and each width equals the documented formula's output",
+          "tags": [
+            "REQ-035.2",
+            "REQ-035.6"
+          ]
+        },
+        {
+          "text": "Given an opponent with 40 observed hands, When a postflop recommendation is computed, Then its basis reads 'based on 40 hands of this opponent'",
+          "tags": [
+            "REQ-035.4"
+          ]
+        },
+        {
+          "text": "Given a multiway pot with one opponent observed for 45 hands and one for 12, When a recommendation is computed, Then it returns the basis for each opponent: 'based on 45 hands of this opponent' and 'typical player'",
+          "tags": [
+            "REQ-035.4"
+          ]
+        },
+        {
+          "text": "Given a default raising range of width 20.0% and an opponent with 30 observed hands, When the scaling formula is applied with observed PFR 0%, 20% and 100%, Then the widths are 14.0%, 20.0% and 44.0%; and with 100 observed hands and PFR 60%, Then the width is 60.0%",
+          "tags": [
+            "REQ-035.2",
+            "REQ-035.6"
+          ]
+        },
+        {
+          "text": "Given a default raising range of width 20.0% and an opponent with 100 observed hands and PFR 0%, When the range is scaled, Then the scaled width is 0.0% and the range is the single strongest hand class AA (6 combos), never empty",
+          "tags": [
+            "REQ-035.6"
+          ]
+        }
+      ],
+      "dod": [],
+      "deps": [
+        "E07-S07",
+        "E07-S08"
+      ],
+      "notes": "Observed stats are an explicit advice input (a snapshot per decision point), so hint and review for the same decision use the same snapshot (E07-S13). Preflop chart recommendations do not read opponent ranges; planned basis for preflop is 'typical player'."
+    },
+    {
+      "key": "E07-S10",
+      "title": "Recommend betting or raising for value",
+      "type": "feature",
+      "milestone": "M2",
+      "priority": "High",
+      "risk": "medium",
+      "skeleton": false,
+      "role": "learner",
+      "want": "a recommendation to bet or raise when my hand is ahead of the hands that would call",
+      "benefit": "I learn to win more with strong hands",
+      "context": "Value rule: bet (no bet faced) or raise (facing a bet, street not capped) when equity against the range that would call exceeds 50%. The range that would call is derived from the opponent's current estimated range (E07-S07) with the same narrowing rule: the combos the opponent would continue with against the bet or raise, i.e. those kept by the call or raise rule (Strong, Pair and Draw; Air removed). With several opponents, equity is computed against each opponent's calling range. Returns equity against the calling range and the rule id. The rule and the worked example are added to the postflop design document with a unit test.",
+      "acs": [
+        {
+          "text": "Given an opponent whose estimated range is {KhKd, 8h7h, AhKh, 9h9d, 6h5h, Th9h, QhJh, Ac2c} on flop Ks 8d 7c and hero first to act, When the range that would call a bet is derived, Then it is the 6 combos {KhKd, 8h7h, AhKh, 9h9d, 6h5h, Th9h}",
+          "tags": [
+            "REQ-033.2",
+            "REQ-033.6"
+          ]
+        },
+        {
+          "text": "Given that decision with hero holding 8s8c, When advice is requested, Then equity against the calling range is 72.8% and advice recommends bet with the value-bet rule id",
+          "tags": [
+            "REQ-033.2"
+          ]
+        },
+        {
+          "text": "Given that decision with hero holding AsKc, When advice is requested, Then equity against the calling range is 48.9% (60.7% against the whole range) and advice does not recommend a value bet",
+          "tags": [
+            "REQ-033.2"
+          ]
+        },
+        {
+          "text": "Given a postflop decision with no bet faced, When equity against the range that would call a bet is 50.1%, Then advice recommends bet with the value-bet rule id",
+          "tags": [
+            "REQ-033.2"
+          ]
+        },
+        {
+          "text": "Given the same decision, When equity against the range that would call is exactly 50.0%, Then advice does not recommend a value bet",
+          "tags": [
+            "REQ-033.2"
+          ]
+        },
+        {
+          "text": "Given a postflop decision facing a bet on a street that is not capped, When equity against the range that would call a raise is 50.1%, Then advice recommends raise",
+          "tags": [
+            "REQ-033.2"
+          ]
+        },
+        {
+          "text": "Given the same holding on a capped street, When advice is requested, Then it recommends call or fold by the pot-odds rule",
+          "tags": [
+            "REQ-033.1"
+          ]
+        },
+        {
+          "text": "Given a value-bet or value-raise recommendation, When it is returned, Then it includes equity against the calling range %, required equity % and the rule id",
+          "tags": [
+            "REQ-033.5"
+          ]
+        }
+      ],
+      "dod": [
+        {
+          "text": "The value rule is in the postflop design document and has a unit test",
+          "tags": [
+            "REQ-033.4"
+          ]
+        }
+      ],
+      "deps": [
+        "E07-S07"
+      ],
+      "notes": "Equities in AC2/AC3 are exact flop enumerations, each combo weighted equally. Bluffing is not a recommendation rule in the requirements; 'bluff' appears only as an explanation concept."
+    },
+    {
+      "key": "E07-S11",
+      "title": "Count implied odds for drawing hands",
+      "type": "feature",
+      "milestone": "M2",
+      "priority": "High",
+      "risk": "medium",
+      "skeleton": false,
+      "role": "learner",
+      "want": "drawing hands judged with implied odds that name the outs counted",
+      "benefit": "I learn when chasing a draw pays off later in the hand",
+      "context": "Implied-odds rule (postflop design document): applies only when hero holds a draw (a flush draw counts 9 outs, an open-ended straight draw 8 outs, outs that also improve an opponent's likely better hand are not removed in this rule) and at least one card is still to come. Required equity with implied odds = call amount / (pot after calling + one big bet for each opponent still in the hand), the extra big bet standing for what hero expects to win on a later street when the draw hits. If equity is below the plain required equity (REQ-033.1) but at least the implied required equity, advice recommends call with the implied-odds rule id and lists the outs; otherwise the pot-odds result stands. Rule precedence: value bet/raise (E07-S10), then pot-odds call, then implied-odds call, then fold (or check when free). Worked example at $4/$8 (AC1): hero Ah5h, opponent range {KsQd}, board Kh 8h 7c 2d; 9 heart outs of 44 unseen cards give equity 20.5%.",
+      "acs": [
+        {
+          "text": "Given a $4/$8 turn decision, board Kh 8h 7c 2d, hero Ah5h, one opponent with range {KsQd} betting $8 into a pot of $28 including that bet, When advice is requested, Then equity is 20.5% (9 outs of 44), required equity is 22.2% (8/36), implied required equity is 18.2% (8/44), and advice recommends call with the implied-odds rule id listing the 9 heart outs",
+          "tags": [
+            "REQ-033.3",
+            "REQ-033.7"
+          ]
+        },
+        {
+          "text": "Given the same turn decision with injected equity exactly equal to 8/44 and with equity 0.1 points below 8/44, When advice is requested, Then it recommends call and fold respectively",
+          "tags": [
+            "REQ-033.3",
+            "REQ-033.7"
+          ]
+        },
+        {
+          "text": "Given the same cards but a pot of $12 including the $8 bet (required 40.0%, implied required 8/28 = 28.6%), When advice is requested, Then it recommends fold with equity 20.5% and lists the 9 outs considered",
+          "tags": [
+            "REQ-033.3",
+            "REQ-033.7"
+          ]
+        },
+        {
+          "text": "Given a turn decision with two opponents still in the hand, a call of $8 and a pot of $36 including the bet, When the implied required equity is computed, Then it is 8 / (44 + 16) = 13.3%",
+          "tags": [
+            "REQ-033.3",
+            "REQ-033.7"
+          ]
+        },
+        {
+          "text": "Given a river decision with a missed draw, When advice is requested, Then implied odds are not applied and no outs are listed",
+          "tags": [
+            "REQ-033.3",
+            "REQ-033.7"
+          ]
+        },
+        {
+          "text": "Given an implied-odds recommendation, When it is returned, Then it includes equity %, required equity %, the rule id and the outs",
+          "tags": [
+            "REQ-033.5"
+          ]
+        }
+      ],
+      "dod": [
+        {
+          "text": "The implied-odds rule is in the postflop design document and has a unit test",
+          "tags": [
+            "REQ-033.4"
+          ]
+        }
+      ],
+      "deps": [
+        "E07-S03"
+      ],
+      "notes": "Equity in AC1/AC3 is exact enumeration over the 44 unseen river cards: only the 9 remaining hearts win for hero."
+    },
+    {
+      "key": "E07-S12",
+      "title": "Explain every recommendation in plain English with its numbers",
+      "type": "feature",
+      "milestone": "M2",
+      "priority": "High",
+      "risk": "medium",
+      "skeleton": false,
+      "role": "learner",
+      "want": "a short plain-English reason with every recommendation",
+      "benefit": "I understand the poker concept behind the advice",
+      "context": "Every recommendation includes an explanation of at most three sentences that names at least one concept from the list (pot odds, equity, position, hand strength, outs and draws, implied odds, value bet, bluff, opponent type, initiative) and explains it in the sentence where it is first named, because there is no glossary screen. Postflop explanations quote the equity % and required equity % used. Explanations are templates per rule and chart situation, written for this project.",
+      "acs": [
+        {
+          "text": "Given a seeded sample of 10,000 decision points from the playtest covering every rule id and chart situation, When explanations are generated, Then each has at most three sentences",
+          "tags": [
+            "REQ-037.1"
+          ]
+        },
+        {
+          "text": "Given the same sample, When explanations are checked, Then each names at least one concept from the concept list",
+          "tags": [
+            "REQ-037.2"
+          ]
+        },
+        {
+          "text": "Given the same sample, When explanations are checked, Then the sentence that first names each concept contains that concept's authored one-clause definition",
+          "tags": [
+            "REQ-037.3"
+          ]
+        },
+        {
+          "text": "Given a postflop recommendation that rests on equity, When its explanation is generated, Then it quotes the same equity % and required equity % that the recommendation returns",
+          "tags": [
+            "REQ-037.4"
+          ]
+        },
+        {
+          "text": "Given identical inputs, When the explanation is generated twice, Then the text is identical",
+          "tags": [
+            "REQ-036.1"
+          ]
+        }
+      ],
+      "dod": [
+        {
+          "text": "Explanation templates and concept definitions are original, written for this project",
+          "tags": [
+            "REQ-061.2"
+          ]
+        }
+      ],
+      "deps": [
+        "E07-S05",
+        "E07-S10",
+        "E07-S11"
+      ],
+      "notes": "Short-stack notes (E07-S17) and approximate labels (E07-S16) are separate fields, not part of the three-sentence explanation."
+    },
+    {
+      "key": "E07-S13",
+      "title": "Prove advice is identical for identical decisions",
+      "type": "feature",
+      "milestone": "M2",
+      "priority": "High",
+      "risk": "medium",
+      "skeleton": false,
+      "role": "maintainer",
+      "want": "a playtest option that recomputes the advice at every decision to prove it never changes",
+      "benefit": "the trainer gives the same advice for the same situation every time",
+      "context": "Given the same PlayerView and observed opponent statistics, the advice engine always returns the same recommendation, numbers, explanation and grade. Adds the advice-determinism option to the E01 playtest CLI (REQ-062.1). The hint during a hand and the review entry after it must state the same recommendation and numbers, so review recomputes with the observed-stat snapshot taken at the decision point, not the stats updated by the finished hand.",
+      "acs": [
+        {
+          "text": "Given `npm run playtest -- --hands 10000 --seed 42 --check-advice`, When it runs, Then it recomputes advice and grade at every decision point (at least 10,000), compares action, numbers, explanation, basis and grade with the first result, reports 0 mismatches and exits 0",
+          "tags": [
+            "REQ-036.1",
+            "REQ-062.1"
+          ]
+        },
+        {
+          "text": "Given a test build whose advice output varies between calls, When the playtest runs with `--check-advice`, Then it prints the replay code and decision point of the first mismatch and exits non-zero",
+          "tags": [
+            "REQ-036.1"
+          ]
+        },
+        {
+          "text": "Given a decision point where a hint was computed during the hand, When the review entry is computed after the hand ends, Then the recommendation, equity %, required equity %, explanation and basis are identical even though the finished hand changed opponents' observed stats",
+          "tags": [
+            "REQ-036.2"
+          ]
+        },
+        {
+          "text": "Given a fixed decision point, When the other players' hole cards and the undealt cards are changed in 1,000 seeded variations, Then the hint and the grade of the user's action never change",
+          "tags": [
+            "REQ-025.2",
+            "REQ-025.3"
+          ]
+        },
+        {
+          "text": "Given the same seed and options including `--check-advice`, When the playtest is run twice, Then the outputs are byte-identical",
+          "tags": [
+            "REQ-062.4"
+          ]
+        }
+      ],
+      "dod": [],
+      "deps": [
+        "E07-S12",
+        "E07-S09",
+        "E01-S07",
+        "E07-S04"
+      ],
+      "notes": "Until E06 bots exist, playtest seats use seeded random legal moves; advice is still computed at every seat's decision point. E08/E09 must add a UI test that the hint card and the review entry for the same decision show the same values."
+    },
+    {
+      "key": "E07-S14",
+      "title": "Check advice against preflop golden spots on every test run",
+      "type": "feature",
+      "milestone": "M2",
+      "priority": "High",
+      "risk": "medium",
+      "skeleton": false,
+      "role": "learner",
+      "want": "the preflop advice checked on every test run against curated spots with agreed answers",
+      "benefit": "I can trust that preflop advice never silently changes",
+      "context": "Golden-spot suite, part 1: format, validator, runner wired into `npm test` (REQ-063.1) and at least 100 preflop spots across heads-up, 6-max and full ring. Each spot records the player view, any observed opponent stats, the recommended action, any acceptable alternative and a written justification. Only clear-cut spots that follow from established limit theory are included; mechanically, preflop spots must sit on chart cells not flagged borderline. Spots and justifications are written for this project.",
+      "acs": [
+        {
+          "text": "Given a golden-spot file, When the spot validator runs, Then each spot has a PlayerView, the recommended action, zero or one acceptable alternative and a written justification, and a spot missing any of them fails validation naming the spot",
+          "tags": [
+            "REQ-039.2"
+          ]
+        },
+        {
+          "text": "Given a clean checkout, When `npm test` runs, Then it runs the golden-spot suite together with the Vitest unit and fast-check property tests",
+          "tags": [
+            "REQ-063.1",
+            "REQ-039.4"
+          ]
+        },
+        {
+          "text": "Given a spot where the advice engine's action differs from the recorded action and its acceptable alternative, When `npm test` runs, Then the run fails naming the spot, the expected action and the actual action",
+          "tags": [
+            "REQ-039.4"
+          ]
+        },
+        {
+          "text": "Given the preflop spots, When they are counted, Then there are at least 100 and every reference size (heads-up, 6-max, full ring) and every chart situation is represented",
+          "tags": [
+            "REQ-039.1"
+          ]
+        },
+        {
+          "text": "Given a preflop spot on a chart cell flagged borderline, When the spot validator runs, Then it rejects the spot as not clear-cut",
+          "tags": [
+            "REQ-039.3"
+          ]
+        },
+        {
+          "text": "Given every golden spot, When its explanation is checked, Then it has at most three sentences and names at least one listed concept",
+          "tags": [
+            "REQ-037.1",
+            "REQ-037.2"
+          ]
+        }
+      ],
+      "dod": [
+        {
+          "text": "Golden spots and their justifications are original, written for this project",
+          "tags": [
+            "REQ-061.2"
+          ]
+        }
+      ],
+      "deps": [
+        "E07-S05",
+        "E07-S12"
+      ],
+      "notes": ""
+    },
+    {
+      "key": "E07-S15",
+      "title": "Check advice against postflop golden spots on every test run",
+      "type": "feature",
+      "milestone": "M2",
+      "priority": "High",
+      "risk": "high",
+      "skeleton": false,
+      "role": "learner",
+      "want": "the postflop advice checked on every test run against curated spots with agreed answers",
+      "benefit": "I can trust the postflop advice and its grades",
+      "context": "Golden-spot suite, part 2: at least 100 postflop spots across flop, turn and river, bringing the suite to at least 200, plus graded examples of each grade level. Clear-cut mechanically means call/fold spots at least 10 points from required equity and bet/check spots at least 15 points from 50% against the calling range. The suite runs in `npm test` and must pass 100%.",
+      "acs": [
+        {
+          "text": "Given the golden-spot suite, When spots are counted, Then there are at least 100 postflop spots covering flop, turn and river and at least 200 spots in total",
+          "tags": [
+            "REQ-039.1"
+          ]
+        },
+        {
+          "text": "Given a postflop call/fold spot within 10 points of required equity, or a bet/check spot within 15 points of 50% against the calling range, When the spot validator runs, Then it rejects the spot as not clear-cut",
+          "tags": [
+            "REQ-039.3"
+          ]
+        },
+        {
+          "text": "Given the graded examples in the suite, When `npm test` runs, Then at least one preflop and one postflop example of each grade (Correct, Minor error, Major error) is graded as recorded",
+          "tags": [
+            "REQ-038.1",
+            "REQ-038.2",
+            "REQ-038.3",
+            "REQ-038.4"
+          ]
+        },
+        {
+          "text": "Given every postflop golden spot, When its explanation is checked, Then it quotes the equity % and required equity % the recommendation returns",
+          "tags": [
+            "REQ-037.4"
+          ]
+        },
+        {
+          "text": "Given the complete suite, When `npm test` runs, Then 100% of golden spots pass",
+          "tags": [
+            "REQ-039.4"
+          ]
+        }
+      ],
+      "dod": [
+        {
+          "text": "Golden spots and their justifications are original, written for this project",
+          "tags": [
+            "REQ-061.2"
+          ]
+        }
+      ],
+      "deps": [
+        "E07-S14",
+        "E07-S09",
+        "E07-S10",
+        "E07-S11",
+        "E07-S04"
+      ],
+      "notes": ""
+    },
+    {
+      "key": "E07-S16",
+      "title": "Label advice as approximate at non-reference table sizes",
+      "type": "feature",
+      "milestone": "M3",
+      "priority": "Medium",
+      "risk": "low",
+      "skeleton": false,
+      "role": "learner",
+      "want": "advice at 3, 4, 5, 7 or 8 players to say it is approximate",
+      "benefit": "I know how far to trust advice at those table sizes",
+      "context": "Every recommendation and grade at table sizes 3, 4, 5, 7 and 8 carries the label 'approximate (based on <reference size>)' using the mapping 3-7 -> 6-max and 8 -> full ring. Hint (E08) and Hand Review (E09) display the label.",
+      "acs": [
+        {
+          "text": "Given a decision at table size 3, 4, 5 or 7, When advice is requested, Then the result carries the label 'approximate (based on 6-max)'",
+          "tags": [
+            "REQ-041.1"
+          ]
+        },
+        {
+          "text": "Given a decision at table size 8, When advice is requested, Then the result carries the label 'approximate (based on full ring)'",
+          "tags": [
+            "REQ-041.1"
+          ]
+        },
+        {
+          "text": "Given a decision at table size 2, 6, 9 or 10, When advice is requested, Then the result carries no approximate label",
+          "tags": [
+            "REQ-041.1"
+          ]
+        },
+        {
+          "text": "Given a graded decision at table size 5, When the grade result for the review entry is produced, Then it carries the same approximate label as the recommendation",
+          "tags": [
+            "REQ-041.1"
+          ]
+        }
+      ],
+      "dod": [],
+      "deps": [
+        "E07-S05",
+        "E07-S04"
+      ],
+      "notes": ""
+    },
+    {
+      "key": "E07-S17",
+      "title": "Add a short-stack note to sit-and-go advice",
+      "type": "feature",
+      "milestone": "M3",
+      "priority": "Medium",
+      "risk": "low",
+      "skeleton": false,
+      "role": "learner",
+      "want": "a one-sentence short-stack note when my tournament stack is under 10 big bets",
+      "benefit": "I remember that a short stack changes how many bets I can still make",
+      "context": "In a sit-and-go, when the user's stack is under 10 big bets of the current level, every hint and review entry adds one short-stack sentence (a field separate from the three-sentence explanation). Tournament-specific strategy (ICM, bubble play) is not applied: the recommendation itself is the cash-style one.",
+      "acs": [
+        {
+          "text": "Given a sit-and-go decision with the user's stack at 9 big bets of the current level, When advice is requested, Then the result includes exactly one short-stack sentence",
+          "tags": [
+            "REQ-041.2"
+          ]
+        },
+        {
+          "text": "Given a sit-and-go decision with the user's stack at 10 big bets of the current level, When advice is requested, Then no short-stack note is included",
+          "tags": [
+            "REQ-041.2"
+          ]
+        },
+        {
+          "text": "Given a cash-game decision with the user's stack at 5 big bets, When advice is requested, Then no short-stack note is included",
+          "tags": [
+            "REQ-041.2"
+          ]
+        },
+        {
+          "text": "Given identical sit-and-go and cash-game PlayerViews apart from game type, When advice is requested, Then the recommended action and numbers are identical",
+          "tags": [
+            "REQ-041.3"
+          ]
+        },
+        {
+          "text": "Given a sit-and-go preflop decision with the user's stack at 9 big bets of the current level, When advice is requested, Then the chart recommendation includes exactly one short-stack sentence",
+          "tags": [
+            "REQ-041.2"
+          ]
+        },
+        {
+          "text": "Given a sit-and-go decision at 9 big bets of the current level that the user answered, When the grade result for the review entry is produced, Then it carries the same short-stack sentence as the recommendation",
+          "tags": [
+            "REQ-041.2"
+          ]
+        }
+      ],
+      "dod": [],
+      "deps": [
+        "E07-S03",
+        "E07-S01",
+        "E07-S04"
+      ],
+      "notes": "PlayerView must expose game type and the current level's big bet; E05 provides the SNG level schedule."
+    }
+  ]
+}

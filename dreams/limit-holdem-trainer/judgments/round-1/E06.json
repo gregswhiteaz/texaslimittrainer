@@ -1,0 +1,246 @@
+{
+  "scope": "E06",
+  "round": 1,
+  "clauses": [
+    {
+      "clause": "REQ-007.5",
+      "verdict": "covered",
+      "evidence": "E06-S08#AC1, E06-S08#AC2, E06-S08#AC3, E06-S08#AC4, E06-S08#AC5, E06-S08#AC6"
+    },
+    {
+      "clause": "REQ-007.7",
+      "verdict": "covered",
+      "evidence": "E06-S08#AC7"
+    },
+    {
+      "clause": "REQ-009.1",
+      "verdict": "covered",
+      "evidence": "E06-S06#AC1, E06-S06#AC2, E06-S06#AC4"
+    },
+    {
+      "clause": "REQ-009.4",
+      "verdict": "covered",
+      "evidence": "E06-S06#AC3, E06-S08#AC4"
+    },
+    {
+      "clause": "REQ-009.6",
+      "verdict": "covered",
+      "evidence": "E06-S07#AC1, E06-S07#AC2, E06-S07#AC3, E06-S07#AC4"
+    },
+    {
+      "clause": "REQ-009.7",
+      "verdict": "covered",
+      "evidence": "E06-S06#AC7"
+    },
+    {
+      "clause": "REQ-025.1",
+      "verdict": "covered",
+      "evidence": "E06-S01#AC4 (altering hidden cards never changes TAG action)"
+    },
+    {
+      "clause": "REQ-026.1",
+      "verdict": "covered",
+      "evidence": "E06-S01#AC1, E06-S01#AC2, E06-S01#AC3, E06-S01#AC5, E06-S02#AC3, E06-S02#AC4"
+    },
+    {
+      "clause": "REQ-026.2",
+      "verdict": "covered",
+      "evidence": "E06-S03#AC2, E06-S03#AC3, E06-S03#AC5, E06-S04#AC2, E06-S04#AC3, E06-S04#AC5, E06-S05#AC2, E06-S05#AC3, E06-S05#AC4"
+    },
+    {
+      "clause": "REQ-026.3",
+      "verdict": "covered",
+      "evidence": "E06-S02#AC1, E06-S03#AC1, E06-S03#AC4, E06-S04#AC1, E06-S04#AC4, E06-S05#AC1, E06-S05#AC5"
+    },
+    {
+      "clause": "REQ-027.1",
+      "verdict": "covered",
+      "evidence": "E06-S09#AC1"
+    },
+    {
+      "clause": "REQ-027.2",
+      "verdict": "covered",
+      "evidence": "E06-S09#AC2"
+    },
+    {
+      "clause": "REQ-027.3",
+      "verdict": "covered",
+      "evidence": "E06-S09#AC3"
+    },
+    {
+      "clause": "REQ-027.4",
+      "verdict": "covered",
+      "evidence": "E06-S09#AC4"
+    },
+    {
+      "clause": "REQ-027.5",
+      "verdict": "covered",
+      "evidence": "E06-S09#AC4, E06-S09#AC5, E06-S09#AC6, E06-S09#DoD1"
+    },
+    {
+      "clause": "REQ-027.6",
+      "verdict": "covered",
+      "evidence": "E06-S09#AC7"
+    },
+    {
+      "clause": "REQ-028.1",
+      "verdict": "covered",
+      "evidence": "E06-S02#AC5, E06-S02#AC6"
+    },
+    {
+      "clause": "REQ-028.2",
+      "verdict": "covered",
+      "evidence": "E06-S02#AC7, E06-S06#AC6"
+    },
+    {
+      "clause": "REQ-028.3",
+      "verdict": "covered",
+      "evidence": "E06-S02#AC2, E06-S02#AC3, E06-S09#AC8"
+    },
+    {
+      "clause": "REQ-029.1",
+      "verdict": "covered",
+      "evidence": "E06-S13#AC1, E06-S13#AC2"
+    },
+    {
+      "clause": "REQ-029.2",
+      "verdict": "covered",
+      "evidence": "E06-S02#AC8"
+    },
+    {
+      "clause": "REQ-030.1",
+      "verdict": "covered",
+      "evidence": "E06-S12#AC1, E06-S12#DoD1"
+    },
+    {
+      "clause": "REQ-030.2",
+      "verdict": "covered",
+      "evidence": "E06-S12#AC2, E06-S12#DoD1"
+    },
+    {
+      "clause": "REQ-030.3",
+      "verdict": "covered",
+      "evidence": "E06-S12#AC3, E06-S12#DoD1"
+    },
+    {
+      "clause": "REQ-030.4",
+      "verdict": "covered",
+      "evidence": "E06-S10#AC1, E06-S10#AC3"
+    },
+    {
+      "clause": "REQ-055.3",
+      "verdict": "covered",
+      "evidence": "E06-S14#AC1, E06-S14#AC2, E06-S14#DoD1"
+    },
+    {
+      "clause": "REQ-056.1",
+      "verdict": "covered",
+      "evidence": "E06-S01#AC5 (zero invariant violations); the five invariants themselves are asserted in E01-S08#AC1-4"
+    },
+    {
+      "clause": "REQ-056.2",
+      "verdict": "covered",
+      "evidence": "E06-S11#AC1 covers the clause but see hidden-dependency finding on sit-and-go coverage"
+    },
+    {
+      "clause": "REQ-061.2",
+      "verdict": "covered",
+      "evidence": "E06-S05#DoD1 (Rock range original with justification); DoD-global#9 for other style files"
+    },
+    {
+      "clause": "REQ-062.1",
+      "verdict": "covered",
+      "evidence": "E06-S06#AC4/AC5, E06-S09#AC6 (--lineup, --check-styles); remaining options in E01-S07"
+    },
+    {
+      "clause": "REQ-062.3",
+      "verdict": "covered",
+      "evidence": "E06-S10#AC1/AC2/AC4, E06-S09#AC5"
+    },
+    {
+      "clause": "REQ-062.4",
+      "verdict": "covered",
+      "evidence": "E06-S08#AC5"
+    },
+    {
+      "clause": "REQ-062.5",
+      "verdict": "covered",
+      "evidence": "E06-S11#AC2, E06-S11#DoD1"
+    }
+  ],
+  "findings": [
+    {
+      "id": "J-E06-E06-S11-AC1-hidden-dependency",
+      "severity": "HIGH",
+      "class": "hidden-dependency",
+      "owner": "weaver",
+      "location": "E06-S11#AC1",
+      "evidence": "E06-S11 (TASK-6.9, M2/m-1, deps only TASK-1.17 and TASK-6.8) requires the 1,000,000-hand run to play Mixed/Tough/Soft at sizes 2-10 'in both cash and sit-and-go' with real style bots. The sit-and-go structure that the playtest's --game sng plays (1,500 chips, level schedule, empty seats) is only built by E05-S01/S02/S04 (TASK-5.1, 5.4, 5.2), all milestone m-2 (M3). The AC cannot pass at M2.",
+      "fix": "Either add deps on E05-S01/S02/S04 and move E06-S11 to M3, or restrict E06-S11#AC1 to cash at M2 and add a sit-and-go line-up coverage AC to an M3 story (E05) that carries REQ-056.2. Same issue applies to E01-S17#AC1 (outside this scope)."
+    },
+    {
+      "id": "J-E06-E06-S02-too-big",
+      "severity": "MEDIUM",
+      "class": "too-big",
+      "owner": "weaver",
+      "location": "E06-S02",
+      "evidence": "E06-S02 (8 ACs, REQ-026/028/029) bundles four capabilities: style data-file format and validator (AC1-2), TAG mixing (AC3-4), replay-seeded generator incl. lint ban (AC5-6), replay reproduction (AC7) and the typical-player-only advice basis (AC8).",
+      "fix": "Split into (a) style file format + TAG mixing and (b) replay-seeded randomness and replay reproduction; keep AC8 (REQ-029.2) with (a) or with E06-S13."
+    },
+    {
+      "id": "J-E06-E06-S06-too-big",
+      "severity": "MEDIUM",
+      "class": "too-big",
+      "owner": "weaver",
+      "location": "E06-S06",
+      "evidence": "E06-S06 (7 ACs) mixes preset seating (AC1,2,7), unique names (AC3), two CLI option behaviours (AC4,5) and a 1,000-hand replay of every bot style (AC6, REQ-028.2). The replay AC is unrelated to line-up seating and only tags REQ-028 and REQ-062 as extras.",
+      "fix": "Move AC6 to E06-S02 or a replay-focused story; keep E06-S06 to preset seating, names and the --lineup option."
+    },
+    {
+      "id": "J-E06-E06-S09-too-big",
+      "severity": "MEDIUM",
+      "class": "too-big",
+      "owner": "weaver",
+      "location": "E06-S09",
+      "evidence": "E06-S09 (TASK-6.11) has 8 ACs plus an explicit tuning job ('Tuning of the style data files to meet the bands happens in this story') across four styles with 100,000-hand runs; not estimable or small. Reporting/CLI (AC5,6,7,8) and band proof/tuning (AC1-4) are separate capabilities.",
+      "fix": "Split into the --check-styles reporting/exit-code story and per-style band-tuning stories (or one tuning story per style pair), keeping the Mixed 6-max fit command as the final gate."
+    },
+    {
+      "id": "J-E06-personas-not-valuable",
+      "severity": "LOW",
+      "class": "not-valuable",
+      "owner": "weaver",
+      "location": "E06-S10",
+      "evidence": "E06-S10, E06-S11, E06-S12 and E06-S14 use a 'maintainer' persona (or a contrived 'learner wants bots proven') although requirements.md defines only the Learner user class; value is verification of REQ-027/030/055/062, not user-observable behaviour.",
+      "fix": "State the benefit in learner terms (e.g. 'so that the opponents I practise against are recognisable and beatable') or add a maintainer class to the requirements via the user."
+    },
+    {
+      "id": "J-E06-E06-S13-AC2-imperative-ac",
+      "severity": "LOW",
+      "class": "imperative-ac",
+      "owner": "weaver",
+      "location": "E06-S13#AC2",
+      "evidence": "E06-S13#AC2 ('test code tries to modify a seated bot's style parameters, Then the attempt throws') and E06-S02#AC6 (lint reports Math.random/Date/crypto/performance.now) prescribe implementation mechanisms; the requirement only asks that parameters do not change and randomness derives from the replay code.",
+      "fix": "Restate as observable outcomes (parameters equal the style file after play; bot output depends only on view, replay code and seat) and keep the mechanism in Notes."
+    },
+    {
+      "id": "J-E06-E06-S12-AC1-terminology-drift",
+      "severity": "LOW",
+      "class": "terminology-drift",
+      "owner": "weaver",
+      "location": "E06-S12#AC1",
+      "evidence": "E06-S12 invents CLI style tokens 'station', 'tag', 'maniac', 'rock' for --lineup while the glossary term is 'Calling station'; the token set is not documented in any AC.",
+      "fix": "Document the accepted style tokens in an AC of E06-S12 (and reject unknown ones) using glossary names."
+    },
+    {
+      "id": "J-E06-REQ-009.1-ambiguous-requirement",
+      "severity": "LOW",
+      "class": "ambiguous-requirement",
+      "owner": "user",
+      "location": "REQ-009.1",
+      "evidence": "REQ-009.1 says Mixed styles 'cycle ... in seat order' and Tough has 'one Maniac' without saying whether the user's (randomly drawn) seat consumes a slot in the cycle or which seat gets the Tough Maniac. E06-S06 notes and E02-S05 assume cycling over bot seats only and leave the Maniac seat to a documented design choice.",
+      "fix": "User to confirm: cycle over bot seats only (current assumption) and that the Maniac seat in Tough is an implementation choice."
+    }
+  ],
+  "summary": "All 33 clauses substantively covered by tagged ACs in E06 (or its tagged cross-epic stories). One HIGH hidden dependency: E06-S11 (M2) demands sit-and-go line-up coverage that needs E05 (M3). Several oversized stories (E06-S02, S06, S09) and weak personas on verification stories; no false claims found."
+}

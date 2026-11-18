@@ -1,0 +1,151 @@
+{
+  "scope": "E09",
+  "round": 1,
+  "clauses": [
+    {
+      "clause": "REQ-007.2",
+      "verdict": "covered",
+      "evidence": "E09-S06#AC2 (no hand dealt until user chooses); owned by E03-S08"
+    },
+    {
+      "clause": "REQ-007.6",
+      "verdict": "covered",
+      "evidence": "E09-S06#AC1-#AC4"
+    },
+    {
+      "clause": "REQ-013.5",
+      "verdict": "covered",
+      "evidence": "E09-S04#AC3"
+    },
+    {
+      "clause": "REQ-024.2",
+      "verdict": "covered",
+      "evidence": "E09-S01#AC5, #AC6; E09-S07#AC2"
+    },
+    {
+      "clause": "REQ-024.3",
+      "verdict": "covered",
+      "evidence": "E09-S01#AC3, #AC4; E09-S07#AC1"
+    },
+    {
+      "clause": "REQ-035.4",
+      "verdict": "covered",
+      "evidence": "E09-S03#AC3"
+    },
+    {
+      "clause": "REQ-036.2",
+      "verdict": "covered",
+      "evidence": "E09-S03#AC4"
+    },
+    {
+      "clause": "REQ-040.2",
+      "verdict": "covered",
+      "evidence": "E09-S05#AC1, #AC2"
+    },
+    {
+      "clause": "REQ-041.1",
+      "verdict": "covered",
+      "evidence": "E09-S08#AC1, #AC2 (sizes 5 and 8 representative; 3,4,7 covered by E08-S04 and engine E07-S16)"
+    },
+    {
+      "clause": "REQ-041.2",
+      "verdict": "covered",
+      "evidence": "E09-S08#AC3"
+    },
+    {
+      "clause": "REQ-043.1",
+      "verdict": "covered",
+      "evidence": "E09-S01#AC1 (street, board, action, rec., grade) + E09-S02#AC1, #AC5 (numbers, explanation)"
+    },
+    {
+      "clause": "REQ-043.2",
+      "verdict": "covered",
+      "evidence": "E09-S01#AC1, #AC2"
+    },
+    {
+      "clause": "REQ-043.3",
+      "verdict": "covered",
+      "evidence": "E09-S04#AC1, #AC2"
+    },
+    {
+      "clause": "REQ-043.4",
+      "verdict": "covered",
+      "evidence": "E09-S04#AC3"
+    },
+    {
+      "clause": "REQ-043.5",
+      "verdict": "covered",
+      "evidence": "E09-S05#AC1, #AC3"
+    },
+    {
+      "clause": "REQ-043.6",
+      "verdict": "covered",
+      "evidence": "E09-S04#AC1-#AC3 (shown, mucked, all-fold)"
+    },
+    {
+      "clause": "REQ-043.7",
+      "verdict": "covered",
+      "evidence": "E09-S01#AC6, #AC7"
+    },
+    {
+      "clause": "REQ-043.8",
+      "verdict": "covered",
+      "evidence": "E09-S07#AC1-#AC3"
+    },
+    {
+      "clause": "REQ-043.9",
+      "verdict": "covered",
+      "evidence": "E09-S02#AC2"
+    },
+    {
+      "clause": "REQ-043.10",
+      "verdict": "covered",
+      "evidence": "E09-S01#AC7"
+    },
+    {
+      "clause": "REQ-043.11",
+      "verdict": "covered",
+      "evidence": "E09-S07#AC4, #AC5, #AC6"
+    },
+    {
+      "clause": "REQ-055.2",
+      "verdict": "covered",
+      "evidence": "E09-S09#AC1"
+    },
+    {
+      "clause": "REQ-057.3",
+      "verdict": "covered",
+      "evidence": "E09-S01#AC2, E09-S07#AC4"
+    }
+  ],
+  "findings": [
+    {
+      "id": "J-E09-REQ-043-preflop-fold-ambiguity",
+      "severity": "MEDIUM",
+      "class": "ambiguous-requirement",
+      "owner": "user",
+      "location": "REQ-043 / REQ-043.11",
+      "evidence": "REQ-043 opens the panel when the user made 'any decision other than folding preflop'; REQ-043.11 and REQ-024.3 speak of 'a hand where the user folded preflop'. A user who limps/calls and then folds to a raise made a non-fold decision AND folded preflop. E09-S01#AC3 and E09-S07#AC6 resolve it only for 'folded preflop at their first decision'; the call-then-fold case is untested and unspecified.",
+      "fix": "Decide whether call-then-fold preflop opens the panel / shows the badge; then add an AC to E09-S01 and E09-S07."
+    },
+    {
+      "id": "J-E09-E09-S06#AC-leave-path",
+      "severity": "LOW",
+      "class": "missing-edge",
+      "owner": "weaver",
+      "location": "E09-S06",
+      "evidence": "REQ-007.6 says Continue opens the Rebuy / Leave table dialog; ACs only exercise Rebuy (#AC3). Leave table from that dialog is not checked (likely E03-S08, but not stated in this story).",
+      "fix": "Add AC: Given the dialog opened from Continue, When the user chooses Leave table, Then the session ends and the Session Report opens, no hand is dealt [REQ-007.6]."
+    },
+    {
+      "id": "J-E09-E09-S06-priority-note",
+      "severity": "LOW",
+      "class": "wording",
+      "owner": "weaver",
+      "location": "E09-S02/E09-S05",
+      "evidence": "E09-S05 (hinted tag) depends only on E09-S02 and uses fixtures; E08-S02 is not a declared dependency, so the hinted flag could be unproducible until M2 ordering resolves. Acceptable by design (fixtures) but should be stated as a cross-epic integration check.",
+      "fix": "Add a DoD note or Playwright flow in E08-S02/E09-S05 that opens Hint then sees the tag end-to-end."
+    }
+  ],
+  "summary": "All review clauses covered; one user-owned ambiguity on call-then-fold preflop."
+}

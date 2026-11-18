@@ -1,0 +1,158 @@
+{
+  "scope": "E11",
+  "round": 1,
+  "clauses": [
+    {
+      "clause": "REQ-002.3",
+      "verdict": "covered",
+      "evidence": "E11-S01#AC1 (Statistics opens); Settings half in E12-S01#AC1"
+    },
+    {
+      "clause": "REQ-004.8",
+      "verdict": "covered",
+      "evidence": "E11-S01#AC4 (forced fold excluded from point); core in E10-S05#AC7-8"
+    },
+    {
+      "clause": "REQ-040.3",
+      "verdict": "covered",
+      "evidence": "E11-S01#AC3, E11-S06#AC3, E11-S11#AC4"
+    },
+    {
+      "clause": "REQ-044.6",
+      "verdict": "covered",
+      "evidence": "E11-S07#AC1-3"
+    },
+    {
+      "clause": "REQ-048.1",
+      "verdict": "covered",
+      "evidence": "E11-S01#AC2,AC5; E11-S02#AC1-3"
+    },
+    {
+      "clause": "REQ-048.2",
+      "verdict": "covered",
+      "evidence": "E11-S03#AC1-3"
+    },
+    {
+      "clause": "REQ-048.3",
+      "verdict": "covered",
+      "evidence": "E11-S06#AC1-2 (but see ambiguity finding)"
+    },
+    {
+      "clause": "REQ-048.4",
+      "verdict": "covered",
+      "evidence": "E11-S04#AC2-3"
+    },
+    {
+      "clause": "REQ-048.5",
+      "verdict": "covered",
+      "evidence": "E11-S05#AC1-3"
+    },
+    {
+      "clause": "REQ-048.6",
+      "verdict": "covered",
+      "evidence": "E11-S01#AC7-8; E11-S03#AC4"
+    },
+    {
+      "clause": "REQ-048.7",
+      "verdict": "covered",
+      "evidence": "E11-S01#AC6-7; E11-S03#AC5; E11-S08#AC4"
+    },
+    {
+      "clause": "REQ-048.8",
+      "verdict": "covered",
+      "evidence": "E11-S08#AC1-4"
+    },
+    {
+      "clause": "REQ-048.9",
+      "verdict": "covered",
+      "evidence": "E11-S06#AC3-5"
+    },
+    {
+      "clause": "REQ-048.10",
+      "verdict": "covered",
+      "evidence": "E11-S02#AC5-6"
+    },
+    {
+      "clause": "REQ-049.1",
+      "verdict": "covered",
+      "evidence": "E11-S09#AC1-2,AC6"
+    },
+    {
+      "clause": "REQ-049.2",
+      "verdict": "covered",
+      "evidence": "E11-S09#AC3,AC5"
+    },
+    {
+      "clause": "REQ-049.3",
+      "verdict": "covered",
+      "evidence": "E11-S10#AC1-3"
+    },
+    {
+      "clause": "REQ-049.4",
+      "verdict": "covered",
+      "evidence": "E11-S11#AC1-4 (but see ambiguity finding)"
+    },
+    {
+      "clause": "REQ-055.5",
+      "verdict": "covered",
+      "evidence": "E11-S12#AC1-2"
+    }
+  ],
+  "findings": [
+    {
+      "id": "J-E11-REQ-048.3-vs-048.9-ambiguity",
+      "severity": "MEDIUM",
+      "class": "ambiguity",
+      "owner": "user",
+      "location": "REQ-048.3",
+      "evidence": "REQ-048.3 says the target line appears 'once 1,000 unhinted hands exist'; REQ-048.9 says 'once 1,000 hands exist'. E11-S06#AC4 (1,050 hands, 60 containing a hinted decision -> line drawn) picks the 048.9 reading; under 048.3 a hinted hand might not count.",
+      "fix": "Decide whether the 1,000-hand threshold counts all hands or only hands without a hinted decision; align 048.3 and 048.9, then adjust E11-S06#AC1/AC4."
+    },
+    {
+      "id": "J-E11-REQ-049.4-ambiguity",
+      "severity": "MEDIUM",
+      "class": "ambiguity",
+      "owner": "user",
+      "location": "REQ-049.4",
+      "evidence": "REQ-049.4 says 'After 5,000 unhinted hands' and sits under the 'current filter' screen. E11-S11 interprets it as 5,000 stored hands regardless of filter (AC1 uses 4,999 stored hands, AC2 '5,000 unhinted hands'); the requirement does not say whether hinted hands count toward 5,000 or whether the filter applies.",
+      "fix": "Clarify the 5,000 threshold (hands vs unhinted decisions) and whether the G-2 verdict ignores filters; then make E11-S11 ACs unambiguous."
+    },
+    {
+      "id": "J-E11-REQ-048.7-vs-048.10-ambiguity",
+      "severity": "MEDIUM",
+      "class": "ambiguity",
+      "owner": "user",
+      "location": "REQ-048.7",
+      "evidence": "REQ-048.7 (fewer hands than one group -> 'Play <n> more hands') and REQ-048.10 (zero hands in filter -> 'Play your first hand to see trends.') both apply with zero hands on the default per-500 grouping. E11-S01#AC7 and E11-S08#AC4 show the 'Play 500 more hands' text; E11-S02#AC6 shows 'Play your first hand' only for per-session/per-day.",
+      "fix": "Confirm which message the default grouping shows with zero hands in the filter."
+    },
+    {
+      "id": "J-E11-E11-S01-partial-tail-ambiguity",
+      "severity": "MEDIUM",
+      "class": "ambiguity",
+      "owner": "user",
+      "location": "E11-S01#AC5",
+      "evidence": "REQ-048 charts 'all stored hands' but E11-S01#AC5 and its description invent a rule that the trailing incomplete 500-hand group (200 of 1,200 hands) is not plotted; no clause states this.",
+      "fix": "Confirm that only complete 500-hand groups are plotted (or that the partial tail is shown); add as a clause."
+    },
+    {
+      "id": "J-E11-E11-S04-empty-bb-edge-case",
+      "severity": "LOW",
+      "class": "edge-case",
+      "owner": "weaver",
+      "location": "E11-S04",
+      "evidence": "E11-S04 description says BB/100 uses cash hands only and per-500 counts cash hands only, but no AC covers the game-type filter Sit-and-go (no cash hands) or the 'Play n more hands' message for the BB/100 chart when total hands >= 500 but cash hands < 500.",
+      "fix": "Add ACs for the BB/100 chart with zero cash hands and with fewer than 500 cash hands."
+    },
+    {
+      "id": "J-E11-C5-AND-oversize",
+      "severity": "LOW",
+      "class": "oversize",
+      "owner": "weaver",
+      "location": "E11-S03,E11-S02,E11-S05",
+      "evidence": "Mechanical C5-AND warnings: E11-S03 (two filters), E11-S02 (three groupings), E11-S05 (average plus count). Each is one capability with tightly related ACs, so splitting is optional.",
+      "fix": "No change required; optionally split E11-S03 into table-size and game-type filter stories."
+    }
+  ],
+  "summary": "All 19 clauses covered. Four user-owned ambiguities in REQ-048/049 thresholds and messages; ACs have exact values and are testable."
+}

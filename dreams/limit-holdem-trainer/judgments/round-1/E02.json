@@ -1,0 +1,272 @@
+{
+  "scope": "E02",
+  "round": 1,
+  "clauses": [
+    {
+      "clause": "REQ-001.1",
+      "verdict": "covered",
+      "evidence": "E02-S12#AC1"
+    },
+    {
+      "clause": "REQ-001.2",
+      "verdict": "covered",
+      "evidence": "E02-S12#AC2"
+    },
+    {
+      "clause": "REQ-001.3",
+      "verdict": "covered",
+      "evidence": "E02-S12#AC3, E02-S12#AC4, E02-S12#AC5"
+    },
+    {
+      "clause": "REQ-002.1",
+      "verdict": "covered",
+      "evidence": "E02-S01#AC1"
+    },
+    {
+      "clause": "REQ-002.2",
+      "verdict": "covered",
+      "evidence": "E02-S01#AC3, E02-S01#AC5"
+    },
+    {
+      "clause": "REQ-002.4",
+      "verdict": "covered",
+      "evidence": "E02-S08#AC1"
+    },
+    {
+      "clause": "REQ-002.5",
+      "verdict": "covered",
+      "evidence": "E02-S08#AC2"
+    },
+    {
+      "clause": "REQ-004.1",
+      "verdict": "covered",
+      "evidence": "E02-S09#AC4"
+    },
+    {
+      "clause": "REQ-004.2",
+      "verdict": "covered",
+      "evidence": "E02-S08#AC3, E02-S08#AC6, E02-S08#AC7"
+    },
+    {
+      "clause": "REQ-004.3",
+      "verdict": "covered",
+      "evidence": "E02-S08#AC4 (all fields except SNG level); SNG level restore is checked by E05-S03#AC4 (tagged REQ-008.3, not REQ-004.3)"
+    },
+    {
+      "clause": "REQ-004.4",
+      "verdict": "covered",
+      "evidence": "E02-S09#AC1, E02-S09#AC2, E02-S09#AC3, E02-S09#AC5"
+    },
+    {
+      "clause": "REQ-004.6",
+      "verdict": "covered",
+      "evidence": "E02-S08#AC5, E02-S08#AC7"
+    },
+    {
+      "clause": "REQ-004.9",
+      "verdict": "covered",
+      "evidence": "E02-S08#AC7, E02-S08#AC8"
+    },
+    {
+      "clause": "REQ-005.1",
+      "verdict": "covered",
+      "evidence": "E02-S04#AC1, E02-S04#AC3, E02-S04#AC6"
+    },
+    {
+      "clause": "REQ-005.2",
+      "verdict": "covered",
+      "evidence": "E02-S02#AC1, E02-S02#AC5, E02-S02#AC6"
+    },
+    {
+      "clause": "REQ-005.3",
+      "verdict": "covered",
+      "evidence": "E02-S02#AC2, E02-S02#AC3, E02-S02#AC4"
+    },
+    {
+      "clause": "REQ-005.4",
+      "verdict": "covered",
+      "evidence": "E02-S02#AC2, E02-S02#AC3, E02-S02#AC4"
+    },
+    {
+      "clause": "REQ-006.1",
+      "verdict": "covered",
+      "evidence": "E02-S01#AC4, E02-S03#AC1, E02-S03#AC3"
+    },
+    {
+      "clause": "REQ-006.2",
+      "verdict": "covered",
+      "evidence": "E02-S03#AC2, E02-S03#AC3"
+    },
+    {
+      "clause": "REQ-006.3",
+      "verdict": "covered",
+      "evidence": "E02-S03#AC5"
+    },
+    {
+      "clause": "REQ-006.4",
+      "verdict": "covered",
+      "evidence": "E02-S04#AC4, E02-S04#AC5, E02-S04#AC6"
+    },
+    {
+      "clause": "REQ-007.1",
+      "verdict": "covered",
+      "evidence": "E02-S03#AC4"
+    },
+    {
+      "clause": "REQ-009.1",
+      "verdict": "covered",
+      "evidence": "E02-S05#AC1, E02-S05#AC2, E02-S05#AC3, E02-S05#AC6"
+    },
+    {
+      "clause": "REQ-009.2",
+      "verdict": "covered",
+      "evidence": "E02-S06#AC1"
+    },
+    {
+      "clause": "REQ-009.3",
+      "verdict": "covered",
+      "evidence": "E02-S06#AC2, E02-S06#AC3"
+    },
+    {
+      "clause": "REQ-009.4",
+      "verdict": "covered",
+      "evidence": "E02-S05#AC5"
+    },
+    {
+      "clause": "REQ-009.5",
+      "verdict": "covered",
+      "evidence": "E02-S07#AC1, E02-S07#AC2, E02-S07#AC3"
+    },
+    {
+      "clause": "REQ-009.6",
+      "verdict": "covered",
+      "evidence": "E02-S05#AC6, E02-S06#AC3, E02-S06#AC4, E02-S07#AC3"
+    },
+    {
+      "clause": "REQ-009.7",
+      "verdict": "covered",
+      "evidence": "E02-S05#AC4"
+    },
+    {
+      "clause": "REQ-010.1",
+      "verdict": "covered",
+      "evidence": "E02-S13#AC1, E02-S13#AC3"
+    },
+    {
+      "clause": "REQ-010.2",
+      "verdict": "covered",
+      "evidence": "E02-S13#AC2, E02-S13#AC3"
+    },
+    {
+      "clause": "REQ-010.3",
+      "verdict": "covered",
+      "evidence": "E02-S13#AC3"
+    },
+    {
+      "clause": "REQ-011.1",
+      "verdict": "covered",
+      "evidence": "E02-S11#AC5"
+    },
+    {
+      "clause": "REQ-011.2",
+      "verdict": "covered",
+      "evidence": "E02-S11#AC4"
+    },
+    {
+      "clause": "REQ-012.1",
+      "verdict": "covered",
+      "evidence": "E02-S10#AC1, E02-S10#AC3, E02-S10#AC4"
+    },
+    {
+      "clause": "REQ-012.2",
+      "verdict": "covered",
+      "evidence": "E02-S04#AC2, E02-S05#AC1, E02-S10#AC2, E02-S11#AC1"
+    },
+    {
+      "clause": "REQ-012.3",
+      "verdict": "covered",
+      "evidence": "E02-S11#AC2, E02-S11#AC3"
+    },
+    {
+      "clause": "REQ-060.3",
+      "verdict": "covered",
+      "evidence": "E02-S01#AC1 and E02-S12#AC1 (logo on Home/Splash); colours by E03-S16#AC2; app icon by E13-S06#AC3"
+    },
+    {
+      "clause": "REQ-061.1",
+      "verdict": "covered",
+      "evidence": "E02-S03#AC5"
+    },
+    {
+      "clause": "REQ-061.3",
+      "verdict": "covered",
+      "evidence": "E02-S01#AC2, E02-S12#AC1"
+    }
+  ],
+  "findings": [
+    {
+      "id": "J-E02-E02-S09-AC2-hidden-dependency",
+      "severity": "HIGH",
+      "class": "hidden-dependency",
+      "owner": "weaver",
+      "location": "E02-S09#AC2",
+      "evidence": "E02-S09 (TASK-2.7, m-1, ordinal 56000) AC2 requires 'its Session Report is saved' on confirm. Report saving is E10-S01 (TASK-10.1, m-1, ordinal 58000, built later). The story's own Notes say 'Order this after E10's report-saving story', but its only dependency is TASK-2.6; TASK-10.1 is not listed.",
+      "fix": "Add TASK-10.1 (E10-S01) as a dependency of E02-S09 so it is ordered after the report-saving story, or move the 'report saved' part into an E10 AC."
+    },
+    {
+      "id": "J-E02-E02-S08-too-big",
+      "severity": "MEDIUM",
+      "class": "too-big",
+      "owner": "weaver",
+      "location": "E02-S08",
+      "evidence": "E02-S08 (TASK-2.6, 8 ACs) combines Resume entry on Home (AC1-2), mid-hand abandonment and restore (AC3-6) and the new Table-header Home control (AC7-8, REQ-004.9) which also edits the Table screen owned by E03.",
+      "fix": "Split the Home control (REQ-004.9) into its own story; keep resume and restore here."
+    },
+    {
+      "id": "J-E02-E02-S04-overlap",
+      "severity": "MEDIUM",
+      "class": "overlap",
+      "owner": "weaver",
+      "location": "E02-S04",
+      "evidence": "E02-S04#AC3 (pre-select the last started game type) implements part of REQ-012.1 'remember last configuration' that E02-S10 (m-2, Low) owns; it needs a last-session store that S10 is meant to create, and S04 (High, m-1) would otherwise have to build it. The two stories overlap and S04's priority hinges on a Could clause.",
+      "fix": "Move AC3 into E02-S10 (and keep REQ-005.1 'default is last used' there) or create the last-configuration store explicitly in an earlier story that both depend on."
+    },
+    {
+      "id": "J-E02-E02-S03-AC5-too-big",
+      "severity": "MEDIUM",
+      "class": "too-big",
+      "owner": "weaver",
+      "location": "E02-S03#AC5",
+      "evidence": "E02-S03#AC5 ('every screen and dialog of the app is inspected ... bundle uses no payment API') is an app-wide audit placed in a stake-selection story; it is not testable as a single pass/fail within this slice and makes the story cover two capabilities (stake choice, no real-money features).",
+      "fix": "Move REQ-006.3/REQ-061.1 into a global DoD item or a checklist AC on a cross-cutting story, with concrete assertions (no payment/deposit text or API in the bundle)."
+    },
+    {
+      "id": "J-E02-E02-S01-false-tag",
+      "severity": "LOW",
+      "class": "false-tag",
+      "owner": "weaver",
+      "location": "E02-S01#AC1",
+      "evidence": "E02-S01#AC1 tags REQ-060.3 but asserts only the logo and name (theme colours are in the description, not an AC); AC5 (Cancel returns Home, no session) tags REQ-002.2, which is about New game opening Game Config; E02-S02#AC6 tags REQ-005.2 for a heads-up blind rule.",
+      "fix": "Remove the tags that the ACs do not confirm or add an AC with the charcoal background and red accent values for Home."
+    },
+    {
+      "id": "J-E02-E02-S08-AC4-missing-tag",
+      "severity": "LOW",
+      "class": "missing-tag",
+      "owner": "weaver",
+      "location": "E02-S08#AC4",
+      "evidence": "REQ-004.3 lists SNG level among restored items. E02-S08#AC4 covers the rest; the SNG level restore is checked by E05-S03#AC4 and #AC5 but those ACs are tagged REQ-008.3 only, so the RTM shows REQ-004.3 covered by one cash-only AC.",
+      "fix": "Tag E05-S03#AC4 with REQ-004.3 (or add an SNG resume AC tagged REQ-004.3)."
+    },
+    {
+      "id": "J-E02-E02-S11-AC4-overlap",
+      "severity": "LOW",
+      "class": "overlap",
+      "owner": "weaver",
+      "location": "E02-S11#AC4",
+      "evidence": "E02-S11#AC4/AC5 (50 bot actions at Realistic 0.8-3.0 s, Rapid 300 ms) duplicate the pacing ACs E03-S13#AC1-3 for REQ-011.1/.2 while the description says pacing is implemented by E03-S13.",
+      "fix": "Keep one owner of REQ-011.1/.2 (E03-S13) and limit E02-S11 to choosing and pre-filling the speed, or state that the ACs here verify the chosen value reaches the table."
+    }
+  ],
+  "summary": "All 40 clauses substantively covered. One HIGH hidden dependency (E02-S09 needs the E10 report-saving story but does not depend on it). Oversized E02-S08, overlap between E02-S04 and E02-S10, and a few weak tags; no false claims on Must clauses."
+}

@@ -1,0 +1,831 @@
+{
+  "dream": "limit-holdem-trainer",
+  "title": "TLH Trainer (Texas Limit Hold 'Em Trainer)",
+  "dod_global": [
+    {
+      "text": "Every acceptance criterion has at least one automated test (unit, property or Playwright) that passes",
+      "tags": []
+    },
+    {
+      "text": "`npm run lint`, `npm run typecheck` and `npm test` pass with zero errors",
+      "tags": [
+        "REQ-059.1",
+        "REQ-059.4"
+      ]
+    },
+    {
+      "text": "The golden-spot suite passes 100% (applies from the story that creates the suite, E07-S14, onward)",
+      "tags": [
+        "REQ-039.4"
+      ]
+    },
+    {
+      "text": "Coverage thresholds hold: >= 90% engine/bots/advice/statistics, >= 70% overall",
+      "tags": [
+        "REQ-059.3"
+      ]
+    },
+    {
+      "text": "Engine, bots, advice and statistics code imports no UI or browser-only code",
+      "tags": [
+        "REQ-059.2"
+      ]
+    },
+    {
+      "text": "Stories that touch the engine, bots or advice: a 10,000-hand playtest reports zero invariant violations (applies once the playtest runner exists, E01-S07, onward)",
+      "tags": [
+        "REQ-056.1"
+      ]
+    },
+    {
+      "text": "Stories that add or change a screen: Playwright test of the screen flow in Chromium and WebKit, and axe reports zero serious or critical violations (axe tooling is provisioned in the toolchain story E01-S01)",
+      "tags": [
+        "REQ-057.1"
+      ]
+    },
+    {
+      "text": "No new network requests beyond the app's own files",
+      "tags": [
+        "REQ-058.1"
+      ]
+    },
+    {
+      "text": "Strategy-content stories: text is original and every chart, range or golden spot carries its justification",
+      "tags": [
+        "REQ-061.2"
+      ]
+    },
+    {
+      "text": "CI workflow is green on the story's branch (applies once the CI story E01-S02 is done; E01-S01 instead passes the same checks locally)",
+      "tags": [
+        "REQ-064.2"
+      ]
+    },
+    {
+      "text": "Story documentation is written and published to Backlog.md",
+      "tags": []
+    },
+    {
+      "text": "Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled",
+      "tags": []
+    }
+  ],
+  "milestones": [
+    {
+      "key": "M1",
+      "title": "M1 Walking skeleton",
+      "description": "Thinnest end-to-end path: toolchain + CI; seeded rules engine and headless playtest runner with invariant checks; 6-max preflop chart, equity calculator, basic postflop call/fold advice and grading; TAG bots built on the advice engine; Home -> Game Config -> a default 6-max $4/$8 cash table vs TAG bots in the browser; play a hand with legal actions, see the result; a basic Hand Review panel lists the user's decisions with recommendation and grade."
+    },
+    {
+      "key": "M2",
+      "title": "M2 MVP",
+      "description": "MVP: every Must requirement except its sit-and-go-specific parts (REQ-002.6, the sit-and-go part of REQ-044.1, REQ-048.5 stay in M3 with sit-and-go), plus Rapid bot pace. Full casino fixed-limit rules (heads-up, cap, all-ins, side pots, showdown order, button movement) proven by a 1,000,000-hand invariant run; Game Config (2-10 players, stakes, game type, line-up presets and per-seat styles); buy-in/rebuy; pause/resume/leave; four bot styles inside their bands with reproducible decisions; complete advice engine (charts for 3 reference sizes, equity, range model, value and implied-odds rules, explanations, grading, golden spots, determinism); hint; full Hand Review; cash Session Report with style stats, healthy ranges and leaks; Statistics trends with filters and target lines; local persistence; Settings basics."
+    },
+    {
+      "key": "M3",
+      "title": "M3 Release 1",
+      "description": "Release 1: everything else in baseline v1.9 (Should/Could and all sit-and-go play): sit-and-go structure, levels, results and its parts of Home, Report and Statistics; splash; Home snapshot and first-use message; random seat/button; Realistic pace and speed choice/change; remembered config; action log, table art, chips, animation, avatars, banter, session clock; opponent stats on hover; TAG strength proof; approximate/short-stack labels; style goal status; remaining Settings and reset; storage failure and migration; install/offline/updates; privacy/CSP; performance limits; accessibility audit; compatibility; CI deploy to GitHub Pages."
+    }
+  ],
+  "epics": [
+    {
+      "key": "E01",
+      "title": "Prove the game headlessly",
+      "wave": 1,
+      "goal": "A seeded, pure fixed-limit Hold'em rules engine plays complete hands headlessly and a playtest runner proves it, on a strict TypeScript toolchain with one-command checks and CI.",
+      "outcomes": [
+        {
+          "text": "Toolchain, npm check scripts and CI run on every push from the first story",
+          "tags": [
+            "REQ-063.1",
+            "REQ-064.1"
+          ]
+        },
+        {
+          "text": "Every hand follows casino fixed-limit rules: blinds, order of action, bet + 3 raises cap, all-ins, side pots, showdown, button movement",
+          "tags": [
+            "REQ-014.4",
+            "REQ-016.3",
+            "REQ-018.3",
+            "REQ-019.1"
+          ]
+        },
+        {
+          "text": "Seeded playtest runs report zero invariant violations over 1,000,000 hands and are reproducible",
+          "tags": [
+            "REQ-056.2",
+            "REQ-062.4"
+          ]
+        }
+      ],
+      "clauses": [
+        "REQ-013.1",
+        "REQ-013.2",
+        "REQ-013.3",
+        "REQ-014.1",
+        "REQ-014.2",
+        "REQ-014.3",
+        "REQ-014.4",
+        "REQ-014.5",
+        "REQ-014.6",
+        "REQ-015.1",
+        "REQ-015.2",
+        "REQ-015.3",
+        "REQ-016.1",
+        "REQ-016.2",
+        "REQ-016.3",
+        "REQ-016.4",
+        "REQ-016.5",
+        "REQ-017.4",
+        "REQ-018.1",
+        "REQ-018.2",
+        "REQ-018.3",
+        "REQ-018.4",
+        "REQ-018.5",
+        "REQ-019.1",
+        "REQ-019.2",
+        "REQ-019.3",
+        "REQ-019.4",
+        "REQ-019.5",
+        "REQ-020.1",
+        "REQ-020.2",
+        "REQ-020.3",
+        "REQ-020.4",
+        "REQ-025.1",
+        "REQ-056.1",
+        "REQ-056.2",
+        "REQ-059.1",
+        "REQ-059.2",
+        "REQ-059.3",
+        "REQ-059.4",
+        "REQ-062.1",
+        "REQ-062.2",
+        "REQ-062.4",
+        "REQ-062.5",
+        "REQ-063.1",
+        "REQ-063.2",
+        "REQ-063.3",
+        "REQ-063.4",
+        "REQ-064.1",
+        "REQ-064.2",
+        "REQ-064.3",
+        "REQ-017.7",
+        "REQ-019.8",
+        "REQ-019.9",
+        "REQ-064.4"
+      ]
+    },
+    {
+      "key": "E02",
+      "title": "Launch and set up a session",
+      "wave": 6,
+      "goal": "The user launches TLH Trainer, lands on Home and configures a session (game type, table size, stakes, line-up, speed) or resumes a paused one.",
+      "outcomes": [
+        {
+          "text": "Splash opens Home automatically; Home offers New game and Resume session when a paused session exists",
+          "tags": [
+            "REQ-001.2",
+            "REQ-002.4"
+          ]
+        },
+        {
+          "text": "Game Config offers 2-10 players, cash or sit-and-go, the six stakes and line-up presets, pre-filled from the last session",
+          "tags": [
+            "REQ-005.2",
+            "REQ-006.1",
+            "REQ-012.1"
+          ]
+        },
+        {
+          "text": "A session interrupted by going Home or closing the app resumes at the start of the next hand",
+          "tags": [
+            "REQ-004.2",
+            "REQ-004.3"
+          ]
+        }
+      ],
+      "clauses": [
+        "REQ-001.1",
+        "REQ-001.2",
+        "REQ-001.3",
+        "REQ-002.1",
+        "REQ-002.2",
+        "REQ-002.4",
+        "REQ-002.5",
+        "REQ-004.1",
+        "REQ-004.2",
+        "REQ-004.3",
+        "REQ-004.4",
+        "REQ-004.6",
+        "REQ-005.1",
+        "REQ-005.2",
+        "REQ-005.3",
+        "REQ-005.4",
+        "REQ-006.1",
+        "REQ-006.2",
+        "REQ-006.3",
+        "REQ-006.4",
+        "REQ-009.2",
+        "REQ-009.3",
+        "REQ-009.5",
+        "REQ-010.1",
+        "REQ-010.2",
+        "REQ-012.1",
+        "REQ-012.2",
+        "REQ-061.1",
+        "REQ-061.3",
+        "REQ-004.9",
+        "REQ-012.3",
+        "REQ-003.1",
+        "REQ-003.2",
+        "REQ-003.3",
+        "REQ-003.4",
+        "REQ-044.7"
+      ]
+    },
+    {
+      "key": "E03",
+      "title": "Play hands at the table",
+      "wave": 4,
+      "goal": "The user plays fixed-limit cash hands against bots on a clear, readable, responsive Table screen at Rapid or Realistic speed, with every hand recorded.",
+      "outcomes": [
+        {
+          "text": "The action bar offers only legal actions with exact amounts and the table shows every seat, the board, pots and the button",
+          "tags": [
+            "REQ-017.1",
+            "REQ-021.1",
+            "REQ-022.1"
+          ]
+        },
+        {
+          "text": "At Rapid speed 200 hands per hour are playable",
+          "tags": [
+            "REQ-011.1",
+            "REQ-024.3"
+          ]
+        },
+        {
+          "text": "Every completed hand is stored before the next is dealt",
+          "tags": [
+            "REQ-052.1"
+          ]
+        }
+      ],
+      "clauses": [
+        "REQ-007.1",
+        "REQ-007.2",
+        "REQ-007.3",
+        "REQ-007.4",
+        "REQ-010.3",
+        "REQ-011.1",
+        "REQ-011.2",
+        "REQ-011.3",
+        "REQ-013.4",
+        "REQ-017.1",
+        "REQ-017.2",
+        "REQ-017.3",
+        "REQ-017.5",
+        "REQ-019.6",
+        "REQ-019.7",
+        "REQ-021.1",
+        "REQ-021.3",
+        "REQ-021.4",
+        "REQ-021.5",
+        "REQ-021.6",
+        "REQ-021.7",
+        "REQ-021.8",
+        "REQ-022.1",
+        "REQ-022.3",
+        "REQ-022.4",
+        "REQ-024.1",
+        "REQ-024.3",
+        "REQ-024.4",
+        "REQ-024.5",
+        "REQ-031.1",
+        "REQ-031.2",
+        "REQ-031.3",
+        "REQ-031.4",
+        "REQ-052.1",
+        "REQ-052.2",
+        "REQ-052.3",
+        "REQ-052.5",
+        "REQ-052.6",
+        "REQ-055.6",
+        "REQ-057.2",
+        "REQ-057.4",
+        "REQ-060.1",
+        "REQ-060.3",
+        "REQ-060.4",
+        "REQ-066.1",
+        "REQ-066.2",
+        "REQ-066.3",
+        "REQ-066.4",
+        "REQ-052.7",
+        "REQ-017.6",
+        "REQ-017.7",
+        "REQ-024.6"
+      ]
+    },
+    {
+      "key": "E04",
+      "title": "Follow the action at a glance",
+      "wave": 5,
+      "goal": "The user follows every bet and pot at Rapid speed through an action log, chips in front of seats, speed-aware animation, bot avatars and banter, and a session clock showing their pace.",
+      "outcomes": [
+        {
+          "text": "An action log and chip stacks in front of seats show where the money went",
+          "tags": [
+            "REQ-023.1",
+            "REQ-068.1"
+          ]
+        },
+        {
+          "text": "Animations never slow practice: at most 250 ms at Rapid, none with reduce-motion",
+          "tags": [
+            "REQ-069.2",
+            "REQ-069.3"
+          ]
+        },
+        {
+          "text": "The header shows elapsed playing time and hands-per-hour pace",
+          "tags": [
+            "REQ-072.2"
+          ]
+        }
+      ],
+      "clauses": [
+        "REQ-023.1",
+        "REQ-023.2",
+        "REQ-023.3",
+        "REQ-023.4",
+        "REQ-067.1",
+        "REQ-067.2",
+        "REQ-067.3",
+        "REQ-068.1",
+        "REQ-068.2",
+        "REQ-068.3",
+        "REQ-069.1",
+        "REQ-069.2",
+        "REQ-069.3",
+        "REQ-069.4",
+        "REQ-070.1",
+        "REQ-070.2",
+        "REQ-070.3",
+        "REQ-071.1",
+        "REQ-071.2",
+        "REQ-071.3",
+        "REQ-071.4",
+        "REQ-071.6",
+        "REQ-072.1",
+        "REQ-072.2",
+        "REQ-071.7",
+        "REQ-067.4"
+      ]
+    },
+    {
+      "key": "E05",
+      "title": "Play a sit-and-go",
+      "wave": 7,
+      "goal": "The user plays a single-table sit-and-go with rising limits until they bust or win, and gets a finishing position.",
+      "outcomes": [
+        {
+          "text": "Levels rise every 10 hands on the published schedule and busted bots are not replaced",
+          "tags": [
+            "REQ-008.2",
+            "REQ-008.3",
+            "REQ-008.4"
+          ]
+        },
+        {
+          "text": "The sit-and-go ends with the user's finishing position out of the starting players",
+          "tags": [
+            "REQ-008.5",
+            "REQ-008.6"
+          ]
+        }
+      ],
+      "clauses": [
+        "REQ-008.1",
+        "REQ-008.2",
+        "REQ-008.3",
+        "REQ-008.4",
+        "REQ-008.5",
+        "REQ-008.6",
+        "REQ-008.7",
+        "REQ-008.8",
+        "REQ-008.9",
+        "REQ-002.6",
+        "REQ-003.5",
+        "REQ-008.10",
+        "REQ-008.11",
+        "REQ-008.12",
+        "REQ-008.13"
+      ]
+    },
+    {
+      "key": "E06",
+      "title": "Face distinct opponents",
+      "wave": 3,
+      "goal": "The user faces recognisable, reproducible bot styles (TAG, Calling station, Maniac, Rock) built on the advice engine, whose measured profiles and strength are proven headlessly.",
+      "outcomes": [
+        {
+          "text": "Each style's measured VPIP, PFR and aggression fall inside its target band in 100,000-hand playtests",
+          "tags": [
+            "REQ-027.5"
+          ]
+        },
+        {
+          "text": "A TAG bot beats five bots of any weaker style with 95% confidence",
+          "tags": [
+            "REQ-030.1",
+            "REQ-030.2",
+            "REQ-030.3"
+          ]
+        },
+        {
+          "text": "Replaying a hand reproduces every bot decision",
+          "tags": [
+            "REQ-028.2"
+          ]
+        }
+      ],
+      "clauses": [
+        "REQ-007.5",
+        "REQ-009.1",
+        "REQ-009.4",
+        "REQ-009.6",
+        "REQ-026.1",
+        "REQ-026.2",
+        "REQ-026.3",
+        "REQ-027.1",
+        "REQ-027.2",
+        "REQ-027.3",
+        "REQ-027.4",
+        "REQ-027.5",
+        "REQ-028.1",
+        "REQ-028.2",
+        "REQ-028.3",
+        "REQ-029.1",
+        "REQ-030.1",
+        "REQ-030.2",
+        "REQ-030.3",
+        "REQ-030.4",
+        "REQ-055.3",
+        "REQ-062.3",
+        "REQ-027.6",
+        "REQ-007.7",
+        "REQ-009.7",
+        "REQ-029.2",
+        "REQ-009.8",
+        "REQ-007.8"
+      ]
+    },
+    {
+      "key": "E07",
+      "title": "Get trustworthy advice",
+      "wave": 2,
+      "goal": "For any decision, the advice engine returns a deterministic, explainable recommendation with its numbers and grades the user's actual decision fairly, proven by a golden-spot suite.",
+      "outcomes": [
+        {
+          "text": "100% of at least 200 golden spots pass in npm test",
+          "tags": [
+            "REQ-039.1",
+            "REQ-039.4"
+          ]
+        },
+        {
+          "text": "The same view and observed stats always produce the same recommendation, numbers, explanation and grade",
+          "tags": [
+            "REQ-036.1"
+          ]
+        },
+        {
+          "text": "Every recommendation explains its concept in at most three plain-English sentences with the numbers",
+          "tags": [
+            "REQ-037.1",
+            "REQ-037.4"
+          ]
+        }
+      ],
+      "clauses": [
+        "REQ-025.2",
+        "REQ-025.3",
+        "REQ-032.1",
+        "REQ-032.2",
+        "REQ-032.3",
+        "REQ-032.4",
+        "REQ-032.5",
+        "REQ-033.1",
+        "REQ-033.2",
+        "REQ-033.3",
+        "REQ-033.4",
+        "REQ-033.5",
+        "REQ-034.1",
+        "REQ-034.2",
+        "REQ-034.3",
+        "REQ-035.1",
+        "REQ-035.2",
+        "REQ-035.3",
+        "REQ-035.4",
+        "REQ-036.1",
+        "REQ-036.2",
+        "REQ-037.1",
+        "REQ-037.2",
+        "REQ-037.3",
+        "REQ-037.4",
+        "REQ-038.1",
+        "REQ-038.2",
+        "REQ-038.3",
+        "REQ-038.4",
+        "REQ-038.5",
+        "REQ-039.1",
+        "REQ-039.2",
+        "REQ-039.3",
+        "REQ-039.4",
+        "REQ-041.1",
+        "REQ-041.2",
+        "REQ-041.3",
+        "REQ-045.1",
+        "REQ-045.2",
+        "REQ-045.3",
+        "REQ-045.4",
+        "REQ-045.5",
+        "REQ-045.6",
+        "REQ-061.2",
+        "REQ-032.6",
+        "REQ-038.6",
+        "REQ-033.6",
+        "REQ-035.5",
+        "REQ-035.6",
+        "REQ-033.7"
+      ]
+    },
+    {
+      "key": "E08",
+      "title": "Ask for a hint",
+      "wave": 5,
+      "goal": "During their turn the user can ask what to do and immediately sees the recommendation, its numbers and the reason.",
+      "outcomes": [
+        {
+          "text": "A hint card with action, equity, required equity, explanation and basis appears within 1 s",
+          "tags": [
+            "REQ-042.1",
+            "REQ-055.1"
+          ]
+        },
+        {
+          "text": "Hinted decisions are marked so goal measures stay honest",
+          "tags": [
+            "REQ-040.1",
+            "REQ-042.5"
+          ]
+        }
+      ],
+      "clauses": [
+        "REQ-022.2",
+        "REQ-040.1",
+        "REQ-042.1",
+        "REQ-042.2",
+        "REQ-042.3",
+        "REQ-042.4",
+        "REQ-042.5",
+        "REQ-055.1",
+        "REQ-042.6"
+      ]
+    },
+    {
+      "key": "E09",
+      "title": "Review the hand just played",
+      "wave": 5,
+      "goal": "After each hand the user sees every decision they made graded Correct / Minor / Major with the recommended action, the numbers and the reason.",
+      "outcomes": [
+        {
+          "text": "The Hand Review panel opens within 1 s of a hand ending, listing each user decision with grade and numbers",
+          "tags": [
+            "REQ-043.1",
+            "REQ-055.2"
+          ]
+        },
+        {
+          "text": "Feedback never blocks practice: the next hand waits only while the panel is open",
+          "tags": [
+            "REQ-024.2",
+            "REQ-043.7"
+          ]
+        }
+      ],
+      "clauses": [
+        "REQ-007.6",
+        "REQ-013.5",
+        "REQ-024.2",
+        "REQ-040.2",
+        "REQ-043.1",
+        "REQ-043.2",
+        "REQ-043.3",
+        "REQ-043.4",
+        "REQ-043.5",
+        "REQ-043.6",
+        "REQ-043.7",
+        "REQ-043.8",
+        "REQ-055.2",
+        "REQ-057.3",
+        "REQ-043.9",
+        "REQ-043.10",
+        "REQ-043.11",
+        "REQ-043.12",
+        "REQ-043.13"
+      ]
+    },
+    {
+      "key": "E10",
+      "title": "Read the session report",
+      "wave": 5,
+      "goal": "When a session ends the user sees and keeps a play-style report: result, error rates, hint usage, style stats against healthy ranges and the top leaks.",
+      "outcomes": [
+        {
+          "text": "Every report value equals a value recomputed from the stored hand records",
+          "tags": [
+            "REQ-044.2",
+            "REQ-044.4"
+          ]
+        },
+        {
+          "text": "Up to three leaks are shown with evidence and a one-sentence fix",
+          "tags": [
+            "REQ-044.5",
+            "REQ-047.2"
+          ]
+        },
+        {
+          "text": "Home shows the latest session snapshot linking to its report",
+          "tags": [
+            "REQ-003.1",
+            "REQ-003.2"
+          ]
+        }
+      ],
+      "clauses": [
+        "REQ-004.5",
+        "REQ-040.4",
+        "REQ-044.1",
+        "REQ-044.2",
+        "REQ-044.3",
+        "REQ-044.4",
+        "REQ-044.5",
+        "REQ-044.7",
+        "REQ-044.8",
+        "REQ-046.1",
+        "REQ-046.2",
+        "REQ-046.3",
+        "REQ-047.1",
+        "REQ-047.2",
+        "REQ-047.3",
+        "REQ-047.4",
+        "REQ-047.5",
+        "REQ-072.3",
+        "REQ-004.7",
+        "REQ-004.8",
+        "REQ-044.9",
+        "REQ-044.10",
+        "REQ-047.6",
+        "REQ-047.7",
+        "REQ-047.8",
+        "REQ-044.11",
+        "REQ-047.9"
+      ]
+    },
+    {
+      "key": "E11",
+      "title": "Track progress over time",
+      "wave": 7,
+      "goal": "The user sees whether mistakes are shrinking, results improving and style moving into healthy ranges across sessions, measured against goals G-2..G-4.",
+      "outcomes": [
+        {
+          "text": "Major errors/100 and BB/100 trend charts with target and break-even lines",
+          "tags": [
+            "REQ-048.3",
+            "REQ-048.4"
+          ]
+        },
+        {
+          "text": "Style stats over the last 1,000 hands show how many of 5 are in range",
+          "tags": [
+            "REQ-049.2"
+          ]
+        }
+      ],
+      "clauses": [
+        "REQ-002.3",
+        "REQ-040.3",
+        "REQ-044.6",
+        "REQ-048.1",
+        "REQ-048.2",
+        "REQ-048.3",
+        "REQ-048.4",
+        "REQ-048.5",
+        "REQ-048.6",
+        "REQ-048.7",
+        "REQ-048.8",
+        "REQ-049.1",
+        "REQ-049.2",
+        "REQ-049.3",
+        "REQ-049.4",
+        "REQ-055.5",
+        "REQ-048.9",
+        "REQ-048.10",
+        "REQ-048.11",
+        "REQ-048.12",
+        "REQ-048.13",
+        "REQ-048.14"
+      ]
+    },
+    {
+      "key": "E12",
+      "title": "Tune the trainer",
+      "wave": 7,
+      "goal": "The user adjusts speed, review auto-open, style labels, deck colours and banter, and can reset all data, with changes taking effect immediately and persisting.",
+      "outcomes": [
+        {
+          "text": "Each setting persists across launches and takes visible effect",
+          "tags": [
+            "REQ-050.1",
+            "REQ-050.5"
+          ]
+        },
+        {
+          "text": "Reset all data deletes everything only after confirmation",
+          "tags": [
+            "REQ-051.2",
+            "REQ-051.4"
+          ]
+        }
+      ],
+      "clauses": [
+        "REQ-002.3",
+        "REQ-021.2",
+        "REQ-050.1",
+        "REQ-050.2",
+        "REQ-050.3",
+        "REQ-050.4",
+        "REQ-050.5",
+        "REQ-050.6",
+        "REQ-050.7",
+        "REQ-051.1",
+        "REQ-051.2",
+        "REQ-051.3",
+        "REQ-051.4",
+        "REQ-053.3",
+        "REQ-071.5",
+        "REQ-050.8"
+      ]
+    },
+    {
+      "key": "E13",
+      "title": "Rely on a private offline app",
+      "wave": 7,
+      "goal": "The user installs TLH Trainer to the Dock, uses it offline with no data leaving the machine, gets updates safely and never silently loses history.",
+      "outcomes": [
+        {
+          "text": "Installs from Chrome and Safari and works fully offline after first visit",
+          "tags": [
+            "REQ-060.2",
+            "REQ-065.1"
+          ]
+        },
+        {
+          "text": "No requests other than the app's own files; CSP restricts to own origin",
+          "tags": [
+            "REQ-058.1",
+            "REQ-058.3"
+          ]
+        },
+        {
+          "text": "Storage failures, migrations and unexpected errors never lose completed hands",
+          "tags": [
+            "REQ-053.2",
+            "REQ-054.3",
+            "REQ-056.3"
+          ]
+        }
+      ],
+      "clauses": [
+        "REQ-052.4",
+        "REQ-053.1",
+        "REQ-053.2",
+        "REQ-054.1",
+        "REQ-054.2",
+        "REQ-054.3",
+        "REQ-055.4",
+        "REQ-056.3",
+        "REQ-057.1",
+        "REQ-058.1",
+        "REQ-058.2",
+        "REQ-058.3",
+        "REQ-060.2",
+        "REQ-065.1",
+        "REQ-065.2",
+        "REQ-065.3"
+      ]
+    }
+  ]
+}
