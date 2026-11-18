@@ -1,10 +1,11 @@
 ---
 id: TASK-2.1
 title: Start a game from Home through Game Config
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-18T21:33:00Z'
+updated_date: '2026-11-18T22:59:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-0
@@ -45,7 +46,7 @@ Plan key: E02-S01 · Dream: limit-holdem-trainer
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
 - [ ] #1 Given the app is launched, When loading completes, Then the Home screen opens and shows the TLH logo image and the name "TLH Trainer" [REQ-002.1]
-- [ ] #2 Given the Home screen, When the logo image is loaded, Then its bytes are identical to brand/tlh-logo.jpg [REQ-061.3]
+- [ ] #2 Given the Home screen, When the logo image is loaded, Then it is the bundled logo derived only by resizing from brand/tlh-logo.jpg (the same file the card back uses), and drawn at 64x64 it matches brand/tlh-logo.jpg within an average of 4 per colour channel [REQ-061.3]
 - [ ] #3 Given the Home screen is shown, When its colours are measured, Then the page background is charcoal #0E0F12 and the New game control uses the red primary accent #D7262E [REQ-060.3]
 - [ ] #4 Given the Home screen, When the user chooses New game, Then the Game Config screen opens and no session is started [REQ-002.2]
 - [ ] #5 Given Game Config on first use, When the user chooses Start game, Then the Table opens a cash game with the user and five TAG bots at $4/$8 and the first hand is dealt [REQ-006.1]
@@ -68,8 +69,25 @@ Plan key: E02-S01 · Dream: limit-holdem-trainer
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
 
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. src/table/session.ts: full SessionConfig (gameType, players, stake, lineUp 'Custom', seats, speed, userSeat, button) with DEFAULT_SESSION_CONFIG; seatSession, Table and useTableSession take Partial<SessionConfig> over the defaults; user seat and button routed through the config.
+2. src/ui/App.tsx: three in-app screens (Home, Game Config, Table) in state, page load opens Home, no router or history entries; focus moves to each new screen's h1.
+3. src/ui/home/Home.tsx: logo (src/assets/tlh-logo.jpg, the card-back file) and 'TLH Trainer', red New game; src/ui/config/GameConfig.tsx: read-only Session and Opponents panels, Cancel and red Start game (Q-4); src/ui/table/TableScreen.tsx wraps the table.
+4. Theme: charcoal #0E0F12, text #F2F3F5, accent #D7262E with white text; system-ui font (no web font).
+5. Cross-story test edits (Q-3): New game then Start game clicks in e2e/table.spec.ts and e2e/action-bar.spec.ts; tests/ui/table.acceptance.test.tsx renders TableScreen; tests/unit/app.test.tsx expects Home.
+6. Tests: e2e/home.spec.ts (logo hash and 64x64 match, colours, navigation, no session before Start game, first hand dealt, axe) in Chromium + WebKit; SessionConfig unit tests.
+
+Full spec: doit/TASK-2.1/spec.md
+<!-- SECTION:PLAN:END -->
+
 ## Implementation Notes
 
 <!-- SECTION:NOTES:BEGIN -->
 AC added from TASK-3.1 follow-up (doc-21).
+
+AC#2 reworded 2026-11-18 by user decision (TASK-2.1 Q-1): the logo may be a resized-only derivative of brand/tlh-logo.jpg (src/assets/tlh-logo.jpg, 512 px, shared with the card back) instead of byte-identical.
+
+Cross-story change (user Q-3): exactly four test edits listed in spec §4 — e2e/table.spec.ts and e2e/action-bar.spec.ts add New game then Start game in openApp; tests/ui/table.acceptance.test.tsx renders TableScreen with DEFAULT_SESSION_CONFIG instead of App; tests/unit/app.test.tsx rewritten for Home. No other assertion in those files may be removed or weakened.
 <!-- SECTION:NOTES:END -->

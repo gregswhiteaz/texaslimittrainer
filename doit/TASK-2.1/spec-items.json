@@ -1,0 +1,104 @@
+[
+  {
+    "id": "SPEC-01",
+    "verifies": "AC#1, DoD#1, DoD#7",
+    "verification": "acceptance `e2e/home.spec.ts::launch opens Home with the TLH logo and the name TLH Trainer`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-02",
+    "verifies": "AC#2, DoD#1",
+    "verification": "acceptance `e2e/home.spec.ts::home logo is the resized brand logo shared with the card back`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-03",
+    "verifies": "AC#3, DoD#1",
+    "verification": "acceptance `e2e/home.spec.ts::home uses the charcoal background and a red New game control`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-04",
+    "verifies": "AC#4, DoD#1, DoD#7",
+    "verification": "acceptance `e2e/home.spec.ts::new game opens game config without starting a session`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-05",
+    "verifies": "AC#4, DoD#1, DoD#7",
+    "verification": "acceptance `e2e/home.spec.ts::cancel and home return to Home with nothing stored`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-06",
+    "verifies": "AC#5, AC#6, DoD#1, DoD#7",
+    "verification": "acceptance `e2e/home.spec.ts::start game deals the first hand at the default table`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-07",
+    "verifies": "AC#5, DoD#1",
+    "verification": "acceptance `tests/ui/home.acceptance.test.tsx::game config shows the first-use cash session with five TAG bots`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-08",
+    "verifies": "AC#1, AC#3, DoD#1",
+    "verification": "acceptance `tests/ui/home.acceptance.test.tsx::home shows the logo, the name and only New game`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-09",
+    "verifies": "AC#5, AC#6, DoD#1",
+    "verification": "acceptance `tests/table/session-config.acceptance.test.ts::first-use session config carries game type, players, stake, line-up, speed, seat and button`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-10",
+    "verifies": "AC#6, DoD#1",
+    "verification": "unit `tests/table/session-config.test.ts::the table honours the configured user seat, button and seats`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-11",
+    "verifies": "AC#1, AC#5, DoD#1",
+    "verification": "unit `tests/unit/app.test.tsx::App opens on the Home screen` and `tests/ui/table.acceptance.test.tsx::seated table shows names and buy-in stacks and no buy-in control`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-12",
+    "verifies": "DoD#7, DoD#8",
+    "verification": "acceptance `e2e/home.spec.ts::home and game config are axe clean, fit 1280x720 and make only same-origin requests`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-13",
+    "verifies": "DoD#7",
+    "verification": "integration `npm run e2e`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-14",
+    "verifies": "DoD#1, DoD#2, DoD#4",
+    "verification": "command `npm run lint && npm run typecheck && npm test`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-15",
+    "verifies": "DoD#5, DoD#6",
+    "verification": "unit `tests/table/session.test.ts::session module imports no UI code` and command `npm run playtest -- --hands 10000 --seed 42`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-16",
+    "verifies": "DoD#10, DoD#11",
+    "verification": "manual CI run on branch `doit/TASK-2.1` and `backlog doc list --plain`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-17",
+    "verifies": "DoD#3, DoD#9, DoD#12",
+    "verification": "manual Judge confirms the diff adds no strategy text and that E07-S14 and E13-S07 are not Done",
+    "status": "pending"
+  }
+]
