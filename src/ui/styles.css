@@ -4,3 +4,55 @@
   color: #f2f2f2;
   font-family: system-ui, sans-serif;
 }
+
+.table-felt {
+  background: #2f6b4f;
+  color: #ffffff;
+  border-radius: 16px;
+  padding: 16px 24px;
+  max-width: 960px;
+}
+
+.table-seats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin: 0 0 16px;
+  padding: 0;
+  list-style: none;
+}
+
+.table-seats li {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 120px;
+}
+
+.table-seats [data-part='name'] {
+  font-weight: 600;
+}
+
+.table-cards {
+  display: flex;
+  gap: 8px;
+}
+
+.table-board {
+  min-height: 84px;
+  margin-bottom: 16px;
+}
+
+.table-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.table-actions button {
+  background: #ffffff;
+  color: #1e1f22;
+  border: 1px solid #1e1f22;
+  border-radius: 6px;
+  padding: 6px 16px;
+  font: inherit;
+}
