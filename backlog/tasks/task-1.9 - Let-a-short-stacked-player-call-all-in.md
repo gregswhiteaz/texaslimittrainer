@@ -4,7 +4,7 @@ title: Let a short-stacked player call all-in
 status: To Do
 assignee: []
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-17T23:22:00Z'
+updated_date: '2026-11-18T18:15:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -44,6 +44,7 @@ Plan key: E01-S12 · Dream: limit-holdem-trainer
 - [ ] #3 Given all remaining players but at most one are all-in, When the betting round ends, Then the remaining board cards are dealt with no further betting [REQ-014.6]
 - [ ] #4 Given a $8 bet called all-in for $5 and nobody else in, When the hand goes to showdown, Then $3 is returned to the bettor before showdown [REQ-018.4]
 - [ ] #5 Given a bet that every other player folds to, When the hand ends, Then the bet is returned to the bettor and is not counted as won from opponents [REQ-018.4]
+- [ ] #6 Given an all-in call for less than the full bet or an uncalled bet returned, When the invariant checker runs after that action, Then legal-action and chips checks accept it and still catch a wrong amount
 <!-- AC:END -->
 
 ## Definition of Done
@@ -61,3 +62,9 @@ Plan key: E01-S12 · Dream: limit-holdem-trainer
 - [ ] #11 Story documentation is written and published to Backlog.md
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+AC added from TASK-1.8 follow-up (doc-16).
+<!-- SECTION:NOTES:END -->

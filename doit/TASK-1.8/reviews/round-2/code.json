@@ -1,0 +1,163 @@
+{
+ "reviewer": "code",
+ "round": 2,
+ "rubric": [
+  {
+   "item": "SPEC-01 correctness",
+   "result": "pass"
+  },
+  {
+   "item": "SPEC-01 test strength",
+   "result": "pass"
+  },
+  {
+   "item": "SPEC-02 correctness",
+   "result": "pass"
+  },
+  {
+   "item": "SPEC-02 test strength",
+   "result": "pass"
+  },
+  {
+   "item": "SPEC-03 correctness",
+   "result": "pass"
+  },
+  {
+   "item": "SPEC-03 test strength",
+   "result": "pass"
+  },
+  {
+   "item": "SPEC-04 correctness",
+   "result": "pass"
+  },
+  {
+   "item": "SPEC-04 test strength",
+   "result": "pass"
+  },
+  {
+   "item": "SPEC-05 correctness",
+   "result": "pass"
+  },
+  {
+   "item": "SPEC-05 test strength",
+   "result": "pass"
+  },
+  {
+   "item": "SPEC-06 correctness",
+   "result": "pass"
+  },
+  {
+   "item": "SPEC-06 test strength",
+   "result": "pass"
+  },
+  {
+   "item": "SPEC-07 correctness",
+   "result": "pass"
+  },
+  {
+   "item": "SPEC-07 test strength",
+   "result": "pass"
+  },
+  {
+   "item": "SPEC-08 correctness",
+   "result": "pass"
+  },
+  {
+   "item": "SPEC-08 test strength",
+   "result": "pass"
+  },
+  {
+   "item": "SPEC-09 correctness",
+   "result": "pass"
+  },
+  {
+   "item": "SPEC-09 test strength",
+   "result": "pass"
+  },
+  {
+   "item": "SPEC-10 correctness",
+   "result": "pass"
+  },
+  {
+   "item": "SPEC-10 test strength",
+   "result": "pass"
+  },
+  {
+   "item": "SPEC-11 correctness",
+   "result": "pass"
+  },
+  {
+   "item": "SPEC-11 test strength",
+   "result": "pass"
+  },
+  {
+   "item": "scope",
+   "result": "pass"
+  },
+  {
+   "item": "concision",
+   "result": "pass"
+  },
+  {
+   "item": "clarity",
+   "result": "pass"
+  }
+ ],
+ "findings": [
+  {
+   "fingerprint": "src/engine/invariants.ts:l4-raise-clause-unreachable",
+   "severity": "MINOR",
+   "file": "src/engine/invariants.ts",
+   "line": 76,
+   "issue": "(Carried over from round 1, unchanged because src/engine/invariants.ts and src/playtest/cli.ts were not modified.) The raise half of L4 (`amount !== before.currentBet + unit`) can never fire after L3 passes. legalActions computes raiseTo with the same formula (`hand.ts:226`), so any raise in the legal set already matches. No test covers it, and the mutant that removes it survives. Only the bet half is exercised, through the artificial `currentBet: -1` before-state, which pushes legalActions into its bet branch. That test is valid but checks a state the engine can't produce.",
+   "evidence": "Mutation L4raise SURVIVED. Coverage reports the line-84 branch as partly uncovered. legalActions: `const raiseTo = state.currentBet + unit`.",
+   "fix": "Keep it as the A-4 guard, but add a comment saying it only guards against a future legalActions change. Alternatively, test it through a step whose `before.stakes` differs from the stakes legalActions used, which isn't possible. If neither is acceptable, record it as accepted untested defensive code."
+  },
+  {
+   "fingerprint": "src/engine/invariants.ts:k2-message-misleading-for-hole-cards",
+   "severity": "MINOR",
+   "file": "src/engine/invariants.ts",
+   "line": 240,
+   "issue": "(Carried over from round 1, unchanged because src/engine/invariants.ts and src/playtest/cli.ts were not modified.) A wrong hole-card count is reported with the board/burn template, e.g. `flop has 3 board and 1 burn cards`. Those numbers are correct for the flop, so the message hides the real fault (a seat holding 1 or 3 cards). The spec's single K2 template forces this.",
+   "evidence": "cardsMessage folds `players.some(p => p.holeCards.length !== 2)` into the same `if` as the board/burn length check and returns the street template.",
+   "fix": "Propose a spec amendment (the D-2 template was user-approved) to add `seat <s> has <n> hole cards`, and return that message from the hole-card clause. Until then, leave it."
+  },
+  {
+   "fingerprint": "src/engine/invariants.ts:c3-award-message-can-self-contradict",
+   "severity": "MINOR",
+   "file": "src/engine/invariants.ts",
+   "line": 139,
+   "issue": "(Carried over from round 1, unchanged because src/engine/invariants.ts and src/playtest/cli.ts were not modified.) When award totals match contributions but one award's winner shares don't sum to its amount, and the shares still total the same overall, the message reads `awards pay $20 but players put in $20`, which names no fault.",
+   "evidence": "`awarded !== total ? awarded : paid`. With paid === total and only `balanced` false, both numbers are equal.",
+   "fix": "For the per-award case, report the award itself, e.g. `<pot> awards $<amount> but winners get $<shares>`. This needs a template amendment. Otherwise put the pot name in the existing wording."
+  },
+  {
+   "fingerprint": "src/playtest/cli.ts:violation-block-defensive-null",
+   "severity": "NIT",
+   "file": "src/playtest/cli.ts",
+   "line": 135,
+   "issue": "(Carried over from round 1, unchanged because src/engine/invariants.ts and src/playtest/cli.ts were not modified.) `if (hand === null || hand.violation === null) return ''` guards a state that summarize can't produce: violations > 0 implies a hand with a non-null violation. It is also the only uncovered line range in cli.ts (135-143 branch).",
+   "evidence": "Coverage: cli.ts uncovered branch 135-143. summarize sets firstViolation whenever any hand.violation !== null.",
+   "fix": "Keep it only if the type narrowing needs it. Otherwise narrow with a non-null assertion, or pass firstViolation from formatReport's condition (`summary.firstViolation?.violation`)."
+  },
+  {
+   "fingerprint": "src/playtest/cli.ts:actiontext-duplicates-describeaction",
+   "severity": "NIT",
+   "file": "src/playtest/cli.ts",
+   "line": 156,
+   "issue": "(Carried over from round 1, unchanged because src/engine/invariants.ts and src/playtest/cli.ts were not modified.) actionText repeats describeAction's wording for the five player action types. The spec allowed delegating (optional), so the two copies can now drift apart.",
+   "evidence": "cli.ts:156-167 and invariants.ts:38-51 contain the same strings.",
+   "fix": "Optional: in actionText, handle only the two blind types and delegate the rest to describeAction(toAction(record))."
+  },
+  {
+   "fingerprint": "tests/engine/invariants.test.ts:p1-row-killed-by-throw",
+   "severity": "NIT",
+   "file": "tests/engine/invariants.test.ts",
+   "line": 156,
+   "issue": "When the P1 'seat not dealt in' clause is removed, the row fails with a TypeError from P3's `as PlayerState` cast, not with an assertion mismatch. The mutant is still caught, but the failure points at P3 instead of P1.",
+   "evidence": "Mutant P1 (dropping `playerAt(state, seat) !== undefined &&`) gives 'TypeError: Cannot read properties of undefined (reading totalContribution)'.",
+   "fix": "No change needed. Optionally add a comment on the row explaining that P1 also guards P3's cast, which keeps checkState from throwing."
+  }
+ ],
+ "summary": "Round 2 reviews only commit c2295da ('review fixes r1'). It adds 7 rows to tests/engine/invariants.test.ts, and src/engine/invariants.ts is unchanged. The round-1 MAJOR tests/engine/invariants.test.ts:sub-check-clauses-unverified is FIXED. I re-ran each of the 7 clause removals on a scratch copy outside the repo, against invariants.test.ts, invariants.acceptance.test.ts and runner.test.ts. All 7 are now killed. C1: the 'C1 street > total' row receives the C2 table message instead. C3: the 'C3 award shares' row gets []. K2: the 'K2 hole cards' row fails. P1: the 'P1 seat not dealt in' row throws a TypeError at P3's cast. P5: the 'P5 winner contributed nothing' row gets []. L5-street: the 'L5 street' row gets []. L5-length: the 'L5 one record' row gets []. After restoring the original source, all suites pass. Each row isolates one clause, because every row asserts toEqual(one(...)), a single exact violation. I also checked them by hand. C1 uses seat 6, which folded preflop and is not in the eligible list, so P3 stays silent. P5's patched stacks keep C2, C3 and C4 balanced, and its pot amount of 0 skips P3. The K2 hole-card row's expected message also confirms that the round-1 MINOR about the misleading K2 message still applies. No new BLOCKER or MAJOR findings. The MINOR and NIT findings from round 1 are carried over unchanged."
+}

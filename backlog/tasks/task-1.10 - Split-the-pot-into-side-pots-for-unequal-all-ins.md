@@ -4,7 +4,7 @@ title: Split the pot into side pots for unequal all-ins
 status: To Do
 assignee: []
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-17T23:22:00Z'
+updated_date: '2026-11-18T18:15:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -46,6 +46,7 @@ Plan key: E01-S13 · Dream: limit-holdem-trainer
 - [ ] #5 Given 100,000 random seeded hands with random stacks, When each hand ends, Then the total chips at the table equal the total before the hand [REQ-018.5]
 - [ ] #6 Given a sit-and-go hand where seat 3 wins the main pot and a 1,255-chip side pot is tied by seats 2 and 5 with the button at seat 1, When pots are awarded, Then seat 2 receives 628 chips and seat 5 receives 627 chips from the side pot [REQ-019.3, REQ-018.3]
 - [ ] #7 Given a $29 pot tied three ways by seats 3, 5 and 6 with the button at seat 4, When the pot is awarded, Then the two odd dollars go one each clockwise from left of the button: seat 5 receives $10, seat 6 receives $10 and seat 3 receives $9 [REQ-019.9]
+- [ ] #8 Given side pots, When the invariant checker runs, Then each eligible seat has contributed at least that pot's level and each pot's amount equals its contribution layer
 <!-- AC:END -->
 
 ## Definition of Done
@@ -63,3 +64,9 @@ Plan key: E01-S13 · Dream: limit-holdem-trainer
 - [ ] #11 Story documentation is written and published to Backlog.md
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+AC added from TASK-1.8 follow-up (doc-16).
+<!-- SECTION:NOTES:END -->

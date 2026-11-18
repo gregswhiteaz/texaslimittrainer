@@ -4,7 +4,7 @@ title: Prove the engine with a 1,000,000-hand invariant run
 status: To Do
 assignee: []
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-17T23:22:00Z'
+updated_date: '2026-11-18T18:15:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -50,6 +50,7 @@ Plan key: E01-S17 · Dream: limit-holdem-trainer
 - [ ] #2 Given the CI workflow's nightly schedule or a manual dispatch, When the 1,000,000-hand run executes as parallel shards with deterministic per-shard seeds, Then every shard finishes within the 6-hour GitHub job limit, the combined report covers all 1,000,000 hands, and any invariant violation fails the workflow and prints the replay code and action history [REQ-056.2, REQ-062.2]
 - [ ] #3 Given the same shard seed and options, When a shard is re-run, Then its output is byte-identical [REQ-062.4]
 - [ ] #4 Given the reference machine, When `npm run playtest -- --hands 100000 --size 6` runs, Then it completes in at most 60 minutes [REQ-062.5]
+- [ ] #5 Given a run split into shards, When results are combined, Then violationCounts are summed per invariant across shards and every shard uses the default checker
 <!-- AC:END -->
 
 ## Definition of Done
@@ -68,3 +69,9 @@ Plan key: E01-S17 · Dream: limit-holdem-trainer
 - [ ] #12 Story documentation is written and published to Backlog.md
 - [ ] #13 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+AC added from TASK-1.8 follow-up (doc-16).
+<!-- SECTION:NOTES:END -->
