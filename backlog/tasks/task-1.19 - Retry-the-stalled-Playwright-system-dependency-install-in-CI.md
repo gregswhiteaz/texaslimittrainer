@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-18T04:37:00Z'
-updated_date: '2026-11-18T05:17:00Z'
+updated_date: '2026-11-18T05:22:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-0
@@ -42,3 +42,9 @@ Twice in four CI-backed stories (TASK-1.7 PR run 44220403675 attempt 1, TASK-1.3
 
 Full spec: doit/TASK-1.19/spec.md
 <!-- SECTION:PLAN:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+Build: tools/ci/retry.js (3×240 s, process-group kill, ::warning::/::error::), both Playwright install steps wrapped with timeout-minutes 13; retry tests with flaky stub (hang/fail/tree/ignore-TERM); workflow static tests; README; gate PASS.
+<!-- SECTION:NOTES:END -->

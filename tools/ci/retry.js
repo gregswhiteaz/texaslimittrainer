@@ -19,16 +19,19 @@ class UsageError extends Error {}
 const log = (line) => process.stdout.write(`${line}\n`);
 
 /**
- * Signals the process group led by `pid`, ignoring a group that is already gone.
+ * Signals the process group led by `pid`. A group that is already gone (ESRCH) or whose remaining
+ * members we may not signal (EPERM, e.g. root-owned under sudo) must not stop the retry loop.
  * @param {number | undefined} pid
  * @param {NodeJS.Signals} signal
  */
-function killGroup(pid, signal) {
+export function killGroup(pid, signal) {
   if (pid === undefined) return;
   try {
     process.kill(-pid, signal);
   } catch (error) {
-    if (/** @type {NodeJS.ErrnoException} */ (error).code !== 'ESRCH') throw error;
+    const code = /** @type {NodeJS.ErrnoException} */ (error).code;
+    if (code === 'EPERM') log(`retry: could not send ${signal} to process group ${pid} (EPERM)`);
+    else if (code !== 'ESRCH') throw error;
   }
 }
 
