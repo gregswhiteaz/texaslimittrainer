@@ -1,7 +1,7 @@
 # Changes — TASK-7.1
 
-- `src/advice/equity.ts` — new: equity calculator (`computeEquity`, types, validation, canonicalisation, method rule, exact enumeration, seeded whole-deal sampler; fix round 1: card-union check and FEASIBILITY_NODE_LIMIT budget on the sampled path's feasibility search).
-- `src/engine/seeded-random.ts` — new (A-11): `fnv1a32`, `splitMix32`, `Xoshiro128` (xoshiro128**) seeded PRNG.
+- `src/advice/equity.ts` — new: equity calculator (`computeEquity`, types, validation, canonicalisation, method rule, exact enumeration, seeded whole-deal sampler; fix round 1: card-union check and FEASIBILITY_NODE_LIMIT budget on the sampled path's feasibility search; judge round 1 (J-1-01): typed-array tallies in `Table`, no per-trial tuple allocation or `?? 0` reads in the sampler's hot loop, hole/runout cards written straight into the hands. Output is byte-identical).
+- `src/engine/seeded-random.ts` — new (A-11): `fnv1a32`, `splitMix32`, `Xoshiro128` (xoshiro128**) seeded PRNG; judge round 1: rotations inlined in `nextUint32` (same outputs).
 - `tools/equity/generate-reference.js` — new: offline exhaustive generator (`enumerateExact`, `REFERENCE_MATCHUPS`, CLI writes the fixture). Uses only `evaluate`/`parseCards` from `src/engine`, nothing from `src/advice`.
 - `tests/advice/fixtures/equity-reference.json` — new: generated reference set (120 heads-up preflop + mw-001), one case per line.
 - `.prettierignore` — modified: ignore `tests/advice/fixtures` (A-7).
@@ -10,5 +10,7 @@
 - `tests/advice/equity.test.ts` — new: unit tests (SPEC-07, 08, 09, 10), plus the bounded-infeasible-ranges regression test (fix round 1).
 - `tests/advice/equity.perf.test.ts` — new: latency suite with `EQUITY_PERF_SCALE` (SPEC-11, 12).
 - `tests/engine/seeded-random.test.ts` — new: hash and PRNG test vectors (SPEC-13).
+
+- `vite.config.ts` — `testTimeout: 30_000` (judge round 1 fix; user decision Q-5: AC#2's 7.2M evaluations exceed the 5 s default per-test timeout on CI). Edit made by the orchestrator at the user's explicit instruction after the builder's attempt was blocked by the permission check.
 
 No new dependencies.

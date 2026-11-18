@@ -22,10 +22,6 @@ export function splitMix32(seed: number): () => number {
   };
 }
 
-function rotl(x: number, k: number): number {
-  return (x << k) | (x >>> (32 - k));
-}
-
 /** xoshiro128** by Blackman and Vigna. */
 export class Xoshiro128 {
   private s0: number;
@@ -52,14 +48,16 @@ export class Xoshiro128 {
   }
 
   nextUint32(): number {
-    const result = Math.imul(rotl(Math.imul(this.s1, 5), 7), 9) >>> 0;
+    // Rotations are inlined: this runs several times per sampled trial.
+    const x = Math.imul(this.s1, 5);
+    const result = Math.imul((x << 7) | (x >>> 25), 9) >>> 0;
     const t = this.s1 << 9;
     this.s2 ^= this.s0;
     this.s3 ^= this.s1;
     this.s1 ^= this.s2;
     this.s0 ^= this.s3;
     this.s2 ^= t;
-    this.s3 = rotl(this.s3, 11);
+    this.s3 = (this.s3 << 11) | (this.s3 >>> 21);
     return result;
   }
 

@@ -17,3 +17,10 @@
 - A-12: SPEC-08 river example arithmetic slip — spec says 1,035×1×2 = 2,070; with 45 unseen cards the live combos are C(45,2) = 990, so 990×1×2 = 1,980 (still exact). Test asserts 1,980.
 - A-13: SPEC-05 input (b) has identical opponent ranges, so swapping is a no-op on canonical input; test asserts reordered result equals original exactly; mapping-back with distinct ranges is covered by the SPEC-09 property test.
 - A-14 (review r1): Security MAJOR — the pre-sampling feasibility search (spec §5 step 5) is unbounded and can run exponentially for infeasible large ranges, contradicting the spec §8 invariant "work per call is bounded". Resolution: cap the feasibility search (e.g. 100,000 visited nodes); on hitting the cap, proceed to rejection sampling, which is already bounded by maxRejections and throws RangeError. The §8 invariant governs; spec text stays locked, deviation recorded here.
+- A-15 (judge r1): SPEC-15 FAIL — CI run 44231570428 timed out AC#2 (locked test, default 5 s per-test timeout; ~4.1 s locally with coverage, slower on CI). Resolution: speed up the sampled path (remove per-trial allocations / optional-chaining reads in the hot loop, as the round-1 code reviewer suggested) so AC#2 runs in ≤ 2.0 s locally under `npm test` coverage, with byte-identical results; do not raise timeouts or edit the locked test.
+
+## Q-5 — Escalation (judge r1 / builder blocked): AC#2 exceeds the 5 s default per-test timeout on CI
+- Evidence: 7.2M evaluate() calls; profiled ~2.0 s in evaluate alone under coverage; builder speed-ups (byte-identical) took AC#2 from 4.17 s to ~3.9 s locally.
+- Options: raise per-test timeout (recommended) | speed up evaluator (touch TASK-1.2 file) | fewer matchups (story change).
+- Answer: **Raise the per-test time limit** — set Vitest `testTimeout: 30_000` in vite.config.ts (approved 11th file outside the spec's file list). Keep the builder's byte-identical speed-ups.
+- Q-5 applied by orchestrator at the user's explicit instruction (builder's edit was denied by the auto-mode permission check).

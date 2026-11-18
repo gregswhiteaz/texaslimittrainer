@@ -1,0 +1,18 @@
+{"reviewer": "security", "round": 2,
+ "findings": [
+  {"fingerprint": "src/advice/equity.ts:unbounded-range-length",
+   "severity": "NIT",
+   "file": "src/advice/equity.ts",
+   "line": 99,
+   "issue": "Carried over from round 1 and unchanged. Range length is not capped, so a caller can pass millions of duplicate combos and canonicalise deduplicates them in O(n) time and memory. No untrusted source can reach this, so it is hygiene only.",
+   "evidence": "Only internal callers. No user or network input reaches opponents.",
+   "fix": "Optional: reject ranges with more than 52*51 entries, or leave as is."},
+  {"fingerprint": "doit/TASK-7.1/spec.md:dos-bound-omits-feasibility-budget",
+   "severity": "NIT",
+   "file": "doit/TASK-7.1/spec.md",
+   "line": 357,
+   "issue": "Spec section 8 still lists the work bounds as the opponent limit, the exact limit, the trial count and the rejection cap. It does not mention FEASIBILITY_NODE_LIMIT, which is now what bounds the pre-sampling search. Section 5 step 5 also still describes an unbounded search. The spec is locked during the fix round, so this is documentation drift only. The code is correct.",
+   "evidence": "Documentation only, no reachable path.",
+   "fix": "When the spec is next unlocked (judge/docs stage), add the 100,000-node feasibility budget and the card-union pre-check to section 5 step 5 and section 8."}
+ ],
+ "summary": "The round-1 MAJOR (src/advice/equity.ts:unbounded-feasibility-backtrack) is fixed. forEachDeal now counts every node it enters against nodeLimit. On the sampled path this is set to FEASIBILITY_NODE_LIMIT = 100,000, and a search that runs out of budget counts as 'possible', so the rejection cap (100 x 30,000) then bounds the sampler. The new card-union check (fewer than 2k distinct cards means throw cannotDeal) is correct and runs in O(total combos). Per call, the work is bounded: at most 100k search nodes, each looping over at most one range (no more than about 616 combos can all conflict once 16 cards are dealt), plus at most 3M rejected samples and 30k scored trials. The exact path keeps nodeLimit = Infinity, but there the number of search nodes is already capped by the range-size product, and estimateEvaluations keeps that product at or below 200,000/(k+1). I ran adversarial tests against a rolldown bundle of the module (Node 22.18, Apple silicon). (1) The round-1 case, 8 broadway-only opponents, now throws at once through the union check (0 ms). (2) A low range plus 8 broadway ranges runs out the node budget and then hits the rejection cap: 150 ms. (3) The worst case I built: 8 opponents restricted to pairs within 16 low cards, plus a 9th range of 570 combos that each touch those cards. That makes the deepest level loop over 570 combos that all conflict, at every leaf. The search alone took 90 ms and the whole call 200 ms, ending in 'Sampling rejected too many deals'. (4) Variants with 10, 12 and 14 pinch cards took 153-180 ms, and 9 full ranges (valid input) took 68 ms. Worst-case wall time for bad input is about 200 ms on the reference machine. That is bounded, and only reached by ranges that can't be dealt or rarely can, which end in a RangeError, so failing closed holds. The regression test in tests/advice/equity.test.ts covers the union-check, budget-exhaustion and rejection-cap paths with a 2 s ceiling. No new dependencies. Remaining items are NITs only."}

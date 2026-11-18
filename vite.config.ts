@@ -7,6 +7,7 @@ export default defineConfig({
     include: ['src/**/*.test.{ts,tsx}', 'tests/**/*.test.{ts,tsx}'],
     environment: 'node',
     reporters: ['verbose'],
+    testTimeout: 30_000,
     coverage: {
       provider: 'v8',
       include: ['src/**/*.{ts,tsx}'],

@@ -154,14 +154,14 @@ class Table {
   readonly hands: Card[][];
   readonly dealt = new Uint8Array(52);
   readonly need: number;
-  readonly win: number[];
-  readonly tie: number[];
-  readonly share: number[];
+  readonly win: Float64Array;
+  readonly tie: Float64Array;
+  readonly share: Float64Array;
   trials = 0;
   /** forEachDeal stops (returning true, as if `visit` had) once it has visited this many nodes. */
   nodeLimit = Infinity;
   private nodes = 0;
-  private readonly ranks: number[];
+  private readonly ranks: Int32Array;
 
   constructor(readonly c: CanonicalInput) {
     this.players = c.opponents.length + 1;
@@ -171,22 +171,23 @@ class Table {
       c.board.forEach((card, i) => (hand[2 + i] = card));
       return hand;
     });
-    this.setHole(0, c.hero);
+    this.setHole(0, c.hero[0], c.hero[1]);
     for (const card of [...c.hero, ...c.board]) this.dealt[card] = 1;
-    this.win = new Array<number>(this.players).fill(0);
-    this.tie = new Array<number>(this.players).fill(0);
-    this.share = new Array<number>(this.players).fill(0);
-    this.ranks = new Array<number>(this.players).fill(0);
+    this.win = new Float64Array(this.players);
+    this.tie = new Float64Array(this.players);
+    this.share = new Float64Array(this.players);
+    this.ranks = new Int32Array(this.players);
   }
 
-  setHole(player: number, combo: HoleCards): void {
+  setHole(player: number, low: Card, high: Card): void {
     const hand = this.hands[player] as Card[];
-    hand[0] = combo[0];
-    hand[1] = combo[1];
+    hand[0] = low;
+    hand[1] = high;
   }
 
   setRunout(index: number, card: Card): void {
-    for (const hand of this.hands) hand[7 - this.need + index] = card;
+    const slot = 7 - this.need + index;
+    for (let p = 0; p < this.players; p++) (this.hands[p] as Card[])[slot] = card;
   }
 
   /** Backtracks over opponent deals. `visit` returns true to stop. Returns true if stopped. */
@@ -198,7 +199,7 @@ class Table {
       if (this.dealt[a] || this.dealt[b]) continue;
       this.dealt[a] = 1;
       this.dealt[b] = 1;
-      this.setHole(from + 1, combo);
+      this.setHole(from + 1, a, b);
       const stop = this.forEachDeal(from + 1, visit);
       this.dealt[a] = 0;
       this.dealt[b] = 0;
@@ -221,20 +222,20 @@ class Table {
       }
     }
     const units = SHARE_UNITS / count;
+    const counts = count === 1 ? this.win : this.tie;
     for (let p = 0; p < this.players; p++) {
       if (this.ranks[p] !== best) continue;
-      if (count === 1) this.win[p] = (this.win[p] ?? 0) + 1;
-      else this.tie[p] = (this.tie[p] ?? 0) + 1;
-      this.share[p] = (this.share[p] ?? 0) + units;
+      counts[p] = (counts[p] as number) + 1;
+      this.share[p] = (this.share[p] as number) + units;
     }
     this.trials++;
   }
 
   result(method: EquityResult['method']): EquityResult {
     const player = (p: number): PlayerEquity => ({
-      win: (this.win[p] ?? 0) / this.trials,
-      tie: (this.tie[p] ?? 0) / this.trials,
-      equity: (this.share[p] ?? 0) / (SHARE_UNITS * this.trials),
+      win: (this.win[p] as number) / this.trials,
+      tie: (this.tie[p] as number) / this.trials,
+      equity: (this.share[p] as number) / (SHARE_UNITS * this.trials),
     });
     return {
       hero: player(0),
@@ -288,43 +289,44 @@ export function sampledEquity(
   table.nodeLimit = FEASIBILITY_NODE_LIMIT;
   if (!table.forEachDeal(0, () => true)) throw cannotDeal();
   const rng = new Xoshiro128(deriveSeed(c));
-  const { dealt, need } = table;
+  const { dealt, need, hands, players } = table;
   const opponents = c.opponents.length;
+  const firstRunout = 7 - need;
   // Each range as flat (low, high) card pairs, for a fast inner loop.
   const flat = c.opponents.map((range) => Uint8Array.from(range.flat()));
   // Cards dealt in the current trial, so they can be returned to the deck before the next one.
-  // Opponent i's cards are at 2i and 2i + 1.
   const marked = new Uint8Array(52);
   let markedCount = 0;
   let rejections = 0;
   while (table.trials < trials) {
-    for (let m = 0; m < markedCount; m++) dealt[marked[m] ?? 0] = 0;
+    for (let m = 0; m < markedCount; m++) dealt[marked[m] as number] = 0;
     markedCount = 0;
     let i = 0;
     for (; i < opponents; i++) {
       const range = flat[i] as Uint8Array;
       const pick = 2 * rng.nextInt(range.length / 2);
-      const a = range[pick] ?? 0;
-      const b = range[pick + 1] ?? 0;
+      const a = range[pick] as number;
+      const b = range[pick + 1] as number;
       if (dealt[a] || dealt[b]) break;
       dealt[a] = 1;
       dealt[b] = 1;
       marked[markedCount++] = a;
       marked[markedCount++] = b;
+      // Read only once the whole deal is accepted; a rejected trial's writes are overwritten.
+      const hand = hands[i + 1] as Card[];
+      hand[0] = a;
+      hand[1] = b;
     }
     if (i < opponents) {
       if (++rejections > maxRejections) throw new RangeError('Sampling rejected too many deals');
       continue;
     }
-    for (let p = 0; p < opponents; p++) {
-      table.setHole(p + 1, [marked[2 * p] ?? 0, marked[2 * p + 1] ?? 0]);
-    }
-    for (let j = 0; j < need; j++) {
+    for (let slot = firstRunout; slot < 7; slot++) {
       let card = rng.nextInt(52);
       while (dealt[card]) card = rng.nextInt(52);
       dealt[card] = 1;
       marked[markedCount++] = card;
-      table.setRunout(j, card);
+      for (let p = 0; p < players; p++) (hands[p] as Card[])[slot] = card;
     }
     table.score();
   }

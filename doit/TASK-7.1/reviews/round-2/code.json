@@ -1,0 +1,27 @@
+{"reviewer": "code", "round": 2,
+ "rubric": [
+  {"item": "SPEC-01..SPEC-09 correctness", "result": "pass", "note": "unchanged since r1; feasible inputs give byte-identical results to the r1 build (scratch comparison of computeEquity output, old vs new, on 5 exact and sampled cases incl. full-ring flop)"},
+  {"item": "SPEC-01..SPEC-09 test strength", "result": "pass", "note": "unchanged since r1"},
+  {"item": "SPEC-10 correctness", "result": "pass", "note": "all listed messages unchanged; two-opponent [[Kd,Kc]] sampled case still throws 'cannot all be dealt' (search finishes well inside the budget). Infeasible inputs that exhaust the 100,000-node budget now throw the rejection-cap message, a deviation recorded in A-14"},
+  {"item": "SPEC-10 test strength", "result": "pass", "note": "new test 'bounds the work when range sets cannot all be dealt' catches: removing the card-count check (case 1 gets the rejection message), treating budget exhaustion as infeasible (case 2 gets the wrong message), and removing the cap (case 2 hangs: confirmed with a scratch copy using FEASIBILITY_NODE_LIMIT = Infinity, killed after 15 s)"},
+  {"item": "SPEC-11 correctness", "result": "pass"}, {"item": "SPEC-11 test strength", "result": "pass"},
+  {"item": "SPEC-12 correctness", "result": "pass", "note": "EQUITY_PERF_SCALE=1, two runs: full ring p95 69.78 / 69.70 ms (target 80), 6-max 21.2 ms (50), others well under; same as r1"},
+  {"item": "SPEC-12 test strength", "result": "pass"},
+  {"item": "SPEC-13 correctness", "result": "pass"}, {"item": "SPEC-13 test strength", "result": "pass"},
+  {"item": "SPEC-14 correctness", "result": "pass"}, {"item": "SPEC-14 test strength", "result": "pass"},
+  {"item": "SPEC-15 correctness", "result": "pass", "note": "post-push CI check"},
+  {"item": "SPEC-16 correctness", "result": "pass"},
+  {"item": "scope", "result": "pass", "note": "fix touches only src/advice/equity.ts (+10 lines) and one test; no MINOR/NIT changes mixed in"},
+  {"item": "concision", "result": "pass"}, {"item": "clarity", "result": "pass"}
+ ],
+ "findings": [
+  {"fingerprint": "tests/advice/equity.test.ts:cap-regression-hangs-instead-of-failing", "severity": "MINOR", "file": "tests/advice/equity.test.ts", "line": 259,
+   "issue": "If the node cap regresses, the second case blocks forever (synchronous search) rather than failing: vitest's test timeout cannot interrupt synchronous code, so the 2000 ms assertion never runs and the suite hangs until CI kills it.",
+   "evidence": "Scratch copy of equity.ts with FEASIBILITY_NODE_LIMIT = Infinity on [low, 8 x broadway]: still running at 15 s, killed. With the cap: RangeError 'Sampling rejected too many deals' in 144 ms.",
+   "fix": "Acceptable as is (the regression is still detected). Optionally add a direct assertion that is cheap to fail, e.g. expect(FEASIBILITY_NODE_LIMIT).toBeLessThanOrEqual(100_000), or run that case in a worker with a timeout."},
+  {"fingerprint": "src/advice/equity.ts:budget-exhaustion-error-message", "severity": "NIT", "file": "src/advice/equity.ts", "line": 287,
+   "issue": "Infeasible range sets that pass the card-count check but exhaust the search budget report 'Sampling rejected too many deals' instead of spec §5 step 5's 'cannot all be dealt' error. This is the intended trade-off from A-14 and still fails closed with a RangeError; noting it so the judge sees the spec §5 deviation.",
+   "evidence": "Test case 2 asserts the rejection message for an infeasible input; spec §5 step 5 says 'else the same error'.",
+   "fix": "None needed; keep A-14 as the record. Update spec §5/§8 text when the spec is next unlocked."}
+ ],
+ "summary": "The r1 fix is correct and minimal. The search budget only changes the outcome when it runs out. For feasible inputs, forEachDeal returns true whether or not the budget runs out, the RNG is untouched and the sampler is unchanged, so results are identical (old and new builds compared directly on 5 cases). The search undoes its card marks on the way out, so dealt[] is clean when the sampler starts. The card-count check (fewer than 2k distinct live cards means cannotDeal) is a correct necessary condition and keeps the exact error message for the reported 8-opponent broadway case. An infeasible input that exhausts the budget can never have a trial accepted, so it always hits maxRejections and throws (144 ms measured). nodeLimit stays at Infinity on the exact path, which the 200,000-evaluation estimate already bounds. The regression test is strong against the obvious mutations, but if the cap regresses it hangs instead of failing (MINOR). Perf at scale 1 is the same as in r1 (full ring about 70 ms against 80 ms). All advice tests pass. No BLOCKER or MAJOR findings; the r1 MAJOR src/advice/equity.ts:unbounded-feasibility-backtrack is fixed."}
