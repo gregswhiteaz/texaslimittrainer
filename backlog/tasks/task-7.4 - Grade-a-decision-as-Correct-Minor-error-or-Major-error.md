@@ -1,10 +1,11 @@
 ---
 id: TASK-7.4
 title: Grade a decision as Correct, Minor error or Major error
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-17T23:22:00Z'
+updated_date: '2026-11-18T19:51:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-0
@@ -67,3 +68,14 @@ Plan key: E07-S04 · Dream: limit-holdem-trainer
 - [ ] #11 Story documentation is written and published to Backlog.md
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. src/advice/grade.ts: GradeResult (stable codes + GRADE_LABELS), gradeDecision(rec, actionType) pure, gradeView(view, actionType, options?) — legality check, one recommend() call.
+2. Rules: match / alternative -> Correct; preflop borderline -> Minor, other chart deviation -> Major (REQ-038.1/2); postflop call/fold margin in integer tenths (>=10 pts Major); aggression vs calling-range distance from 50% (>=15 pts Major); aggression without calling-range number -> Minor (aggression-no-range, Q-2).
+3. Impossible action pairs throw RangeError; illegal action throws.
+4. Tests: acceptance AC#1-8 plus exact 10/15-point boundaries in both rounding directions (SPEC-17), hidden-card invariance, determinism; unit tests.
+
+Full spec: doit/TASK-7.4/spec.md
+<!-- SECTION:PLAN:END -->
