@@ -1,10 +1,11 @@
 ---
 id: TASK-1.2
 title: Rank showdown hands by real poker hand rankings
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-17T23:21:00Z'
+updated_date: '2026-11-18T02:47:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-0
@@ -63,3 +64,14 @@ Plan key: E01-S04 · Dream: limit-holdem-trainer
 - [ ] #11 Story documentation is written and published to Backlog.md
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. src/engine/cards.ts: Card = 0–51 (rank*4+suit), makeCard/cardRank/cardSuit/parseCard/parseCards/formatCard with strict validation.
+2. src/engine/hand-evaluator.ts: table-driven 7-card evaluator (13-bit flush table + collision-free rank-count index) built at module load; evaluate(5–7 cards) -> HandRank 1–7462 (higher = stronger); compareHands; handCategory; HAND_CATEGORIES; HAND_RANK_COUNT.
+3. tests/engine: independent reference oracle; exhaustive 2,598,960-hand check; category counts; wheel/kicker/suit ACs; fast-check 6/7-card best-of-subsets properties.
+4. Performance: CI floor ≥1M evals/s and build ≤500 ms in npm test; reference command for ≥10M/s and ≤50 ms.
+
+Full spec: doit/TASK-1.2/spec.md
+<!-- SECTION:PLAN:END -->
