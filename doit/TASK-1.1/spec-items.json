@@ -1,0 +1,152 @@
+[
+  {
+    "id": "SPEC-01",
+    "verifies": "AC#1, DoD#1, DoD#2",
+    "verification": "command `npm test` \u2192 exit 0; output contains `app.test.tsx` and `boundary.property.test.ts`, and does not contain `failed` in the Test Files summary or `ERROR: Coverage`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-02",
+    "verifies": "AC#1, DoD#1",
+    "verification": "unit `tests/unit/app.test.tsx::App renders the TLH Trainer heading inside main`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-03",
+    "verifies": "AC#1, DoD#3, DoD#1",
+    "verification": "acceptance `tests/toolchain/test-command.test.ts::npm test runs test files anywhere under tests/ and src/ and fails when one fails`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-04",
+    "verifies": "AC#2, DoD#2, DoD#1",
+    "verification": "command `npm run lint && npm run typecheck` \u2192 exit 0",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-05",
+    "verifies": "AC#2, AC#3, DoD#1",
+    "verification": "acceptance `tests/toolchain/typecheck.test.ts::typecheck rejects implicit any because strict mode is on`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-06",
+    "verifies": "AC#3, DoD#1",
+    "verification": "acceptance `tests/toolchain/typecheck.test.ts::typecheck exits non-zero on a type error and zero when it is fixed`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-07",
+    "verifies": "AC#3, DoD#1",
+    "verification": "acceptance `tests/toolchain/lint.test.ts::lint exits non-zero on an ESLint rule violation and zero when it is fixed`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-08",
+    "verifies": "AC#3, DoD#1",
+    "verification": "acceptance `tests/toolchain/lint.test.ts::lint exits non-zero on a Prettier formatting violation`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-09",
+    "verifies": "AC#4, DoD#5, DoD#1",
+    "verification": "acceptance `tests/toolchain/boundary.test.ts::lint reports each forbidden React, DOM, IndexedDB and UI use in every headless folder`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-10",
+    "verifies": "AC#4, AC#1, DoD#5, DoD#1",
+    "verification": "acceptance `tests/toolchain/boundary.property.test.ts::every browser-only global is reported in every headless folder and Node-safe globals are not`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-11",
+    "verifies": "AC#4, DoD#1",
+    "verification": "acceptance `tests/toolchain/boundary.test.ts::lint allows React in src/ui and Node-safe code in headless folders`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-12",
+    "verifies": "AC#4, DoD#5",
+    "verification": "acceptance `tests/toolchain/boundary.test.ts::lint reports globalThis access, dynamic import and type-only React import in headless folders`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-13",
+    "verifies": "AC#5, DoD#4, DoD#1",
+    "verification": "acceptance `tests/toolchain/coverage.test.ts::npm test fails and names the 90% headless threshold when a headless folder is under-covered`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-14",
+    "verifies": "AC#5, DoD#4, DoD#1",
+    "verification": "acceptance `tests/toolchain/coverage.test.ts::npm test fails and names the 70% global threshold when overall coverage is low`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-15",
+    "verifies": "AC#5, DoD#4",
+    "verification": "acceptance `tests/toolchain/coverage.test.ts::npm test passes when both coverage thresholds are met`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-16",
+    "verifies": "AC#6, DoD#1",
+    "verification": "acceptance `tests/toolchain/build.test.ts::npm run build writes index.html and its script bundle`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-17",
+    "verifies": "AC#7, DoD#7, DoD#1",
+    "verification": "acceptance `e2e/smoke.spec.ts::start page loads in the built app`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-18",
+    "verifies": "AC#8, DoD#7, DoD#1",
+    "verification": "acceptance `e2e/smoke.spec.ts::start page has no serious or critical axe violations`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-19",
+    "verifies": "AC#8, DoD#1",
+    "verification": "acceptance `e2e/axe-helper.spec.ts::fails on an image without alt text`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-20",
+    "verifies": "AC#8",
+    "verification": "command `E2E_INJECT_A11Y_VIOLATION=1 npm run e2e` \u2192 exit code \u2260 0; output contains `image-alt (critical)` and `2 failed`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-21",
+    "verifies": "DoD#8",
+    "verification": "acceptance `e2e/smoke.spec.ts::start page makes only same-origin requests`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-22",
+    "verifies": "AC#1, AC#2, AC#6, AC#7, DoD#10, DoD#2",
+    "verification": "command `D=$(mktemp -d) && git clone -q --branch doit/TASK-1.1 . \"$D\" && cd \"$D\" && npm ci && npm run lint && npm run typecheck && npm test && npm run build && npm run e2e && test -f dist/index.html`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-23",
+    "verifies": "DoD#6, DoD#9, DoD#11, DoD#12",
+    "verification": "manual \u2014 reviewer confirms no `src/engine|bots|advice|stats` code, no strategy content and no service worker were added (`git diff --stat <base>`), and that a Backlog doc for TASK-1.1 exists after the documentation step (`backlog doc list --plain`)",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-24",
+    "verifies": "DoD#8",
+    "verification": "command `npm audit --omit=dev --audit-level=high` \u2192 exit 0, output contains `found 0 vulnerabilities`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-25",
+    "verifies": "DoD#8",
+    "verification": "command `npm audit --audit-level=critical` \u2192 exit 0",
+    "status": "pending"
+  }
+]

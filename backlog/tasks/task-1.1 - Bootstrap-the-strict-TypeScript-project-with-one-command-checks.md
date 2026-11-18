@@ -1,10 +1,11 @@
 ---
 id: TASK-1.1
 title: Bootstrap the strict TypeScript project with one-command checks
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-17T23:21:00Z'
+updated_date: '2026-11-18T00:35:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-0
@@ -67,3 +68,17 @@ Plan key: E01-S01 · Dream: limit-holdem-trainer
 - [ ] #11 Story documentation is written and published to Backlog.md
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. Scaffold strict TypeScript + Vite + React project with exact-pinned deps and committed lockfile (Node >=22.12).
+2. Vitest unit + fast-check property tests with coverage thresholds (>=90% headless folders, >=70% overall).
+3. ESLint (typescript-eslint strict+stylistic) + Prettier check; headless-boundary rule forbidding React/DOM/IndexedDB/browser-only globals in src/engine, bots, advice, stats.
+4. Placeholder start page; npm run build produces static dist/.
+5. Playwright smoke + axe scan in Chromium and WebKit via vite preview; injected-violation check.
+6. Audit gates: shipped deps no high/critical; all deps no critical.
+7. Clean-checkout run of all scripts.
+
+Full spec: doit/TASK-1.1/spec.md
+<!-- SECTION:PLAN:END -->

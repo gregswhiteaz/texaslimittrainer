@@ -1,0 +1,3830 @@
+{
+  "id": "TASK-1.1",
+  "title": "Bootstrap the strict TypeScript project with one-command checks",
+  "status": "To Do",
+  "archived": false,
+  "type": "chore",
+  "priority": "high",
+  "project": null,
+  "assignees": [],
+  "reporter": null,
+  "labels": [
+    "dream-limit-holdem-trainer"
+  ],
+  "milestone": "m-0",
+  "parentTaskId": "TASK-1",
+  "acceptanceCriteriaCompleted": 0,
+  "acceptanceCriteriaCount": 8,
+  "references": [
+    "dreams/limit-holdem-trainer/requirements.md"
+  ],
+  "modifiedFiles": [],
+  "ordinal": 1000,
+  "createdAt": "2026-11-17T22:46:00Z",
+  "updatedAt": "2026-11-17T23:21:00Z",
+  "dueDate": null,
+  "isReady": true,
+  "path": "backlog/tasks/task-1.1 - Bootstrap-the-strict-TypeScript-project-with-one-command-checks.md",
+  "description": "As a project owner, I want a strict TypeScript toolchain where every check runs with one command, so that every later story can be built and verified the same way locally and in CI.\n\nFirst story of the project (user asked that language, toolchain and test harness come first). Single language TypeScript (Q-1). Stack per vision: strict TypeScript, Vite, React, Vitest, fast-check, tsx for the Node playtest CLI, Playwright with @axe-core/playwright (axe) for accessibility checks, ESLint + Prettier. Rules engine, bots, advice and statistics live in modules that import no UI or browser-only code and are enforced by a lint rule. Coverage thresholds: line coverage >= 90% for engine/bots/advice/statistics and >= 70% overall. npm scripts: test, e2e, lint, typecheck, build. This story provisions axe so every M1 screen story can meet the global DoD item 'axe reports zero serious or critical violations' [REQ-057.1]. CI is added by E01-S02 immediately after this story; until then the checks are run locally. Actor 'project owner' = the single Learner in the role of the person who builds and maintains the trainer (requirements.md has only the Learner user class).\n\n## Requirements covered\n- REQ-057 (Should): Accessibility and usability \u2014 Every screen shall meet WCAG 2.1 AA contrast and control-labelling rules, and every grade or status shown in colour shall also be shown as text.\n- REQ-059 (Must): Maintainability and testability \u2014 The codebase shall be strict TypeScript with the rules engine, bots, advice engine and statistics in modules that import no UI or browser-only code, and shall meet the coverage thresholds below.\n- REQ-063 (Should): Test commands \u2014 The project shall provide npm scripts that run each check with one command.\n\nCovers: REQ-057, REQ-059, REQ-063\n\n## Notes\nGolden-spot tests (E07) join `npm test` when they exist; PWA manifest/service worker (E13) extend `npm run build`. Suggested folders: src/engine, src/bots, src/advice, src/stats, src/ui, tools/playtest. Export a shared `expectNoSeriousAxeViolations(page)` helper for screen stories.\n\nPlan key: E01-S01 \u00b7 Dream: limit-holdem-trainer",
+  "dependencies": [],
+  "dependencyGraph": {
+    "root": "TASK-1.1",
+    "nodes": [
+      {
+        "id": "TASK-1.1",
+        "title": "Bootstrap the strict TypeScript project with one-command checks",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": 0,
+        "dependentDepth": 0
+      },
+      {
+        "id": "TASK-1",
+        "title": "Prove the game headlessly",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 1
+      },
+      {
+        "id": "TASK-1.2",
+        "title": "Rank showdown hands by real poker hand rankings",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 2
+      },
+      {
+        "id": "TASK-1.3",
+        "title": "Deal every hand from a seeded shuffle with a replay code",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 2
+      },
+      {
+        "id": "TASK-1.4",
+        "title": "Play a complete fixed-limit hand from blinds to showdown",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 3
+      },
+      {
+        "id": "TASK-1.5",
+        "title": "Give each deciding seat only its own view of the hand",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 4
+      },
+      {
+        "id": "TASK-1.6",
+        "title": "Run seeded bot-only hands from the command line",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 5
+      },
+      {
+        "id": "TASK-1.7",
+        "title": "Run every check in GitHub Actions on each push and pull request",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 1
+      },
+      {
+        "id": "TASK-1.8",
+        "title": "Check game invariants after every playtest action",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 2
+      },
+      {
+        "id": "TASK-1.9",
+        "title": "Let a short-stacked player call all-in",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 3
+      },
+      {
+        "id": "TASK-1.10",
+        "title": "Split the pot into side pots for unequal all-ins",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 4
+      },
+      {
+        "id": "TASK-1.11",
+        "title": "Play heads-up hands with heads-up blinds and order",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 3
+      },
+      {
+        "id": "TASK-1.12",
+        "title": "Cap each street at one bet plus three raises",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 4
+      },
+      {
+        "id": "TASK-1.13",
+        "title": "Reject illegal actions without changing the game",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 5
+      },
+      {
+        "id": "TASK-1.14",
+        "title": "Allow short all-in bets and raises under the half-bet reopening rule",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 4
+      },
+      {
+        "id": "TASK-1.15",
+        "title": "Show and muck cards at showdown in casino order",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 3
+      },
+      {
+        "id": "TASK-1.16",
+        "title": "Move the button and blinds past busted seats",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 4
+      },
+      {
+        "id": "TASK-1.17",
+        "title": "Prove the engine with a 1,000,000-hand invariant run",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 4
+      },
+      {
+        "id": "TASK-1.18",
+        "title": "Deploy the app to GitHub Pages from main when all checks pass",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 3
+      },
+      {
+        "id": "TASK-2",
+        "title": "Launch and set up a session",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 4
+      },
+      {
+        "id": "TASK-2.1",
+        "title": "Start a game from Home through Game Config",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 3
+      },
+      {
+        "id": "TASK-2.2",
+        "title": "Choose how many players sit at the table",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 4
+      },
+      {
+        "id": "TASK-2.3",
+        "title": "Choose the stake for a cash game",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 4
+      },
+      {
+        "id": "TASK-2.4",
+        "title": "Choose Cash game or Sit-and-go",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 5
+      },
+      {
+        "id": "TASK-2.5",
+        "title": "Choose a line-up preset for the bots",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 5
+      },
+      {
+        "id": "TASK-2.6",
+        "title": "Resume a paused session from Home",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 4
+      },
+      {
+        "id": "TASK-2.7",
+        "title": "Confirm ending a paused session before starting a new game",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 4
+      },
+      {
+        "id": "TASK-2.8",
+        "title": "Change the style of one bot seat",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 6
+      },
+      {
+        "id": "TASK-2.9",
+        "title": "Randomise the bot line-up",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 6
+      },
+      {
+        "id": "TASK-2.10",
+        "title": "Pre-fill Game Config from my last session",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 6
+      },
+      {
+        "id": "TASK-2.11",
+        "title": "Choose Rapid or Realistic speed for the session",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 4
+      },
+      {
+        "id": "TASK-2.12",
+        "title": "See a branded splash while the app loads",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 4
+      },
+      {
+        "id": "TASK-2.13",
+        "title": "Sit at a random seat with a random starting button",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 6
+      },
+      {
+        "id": "TASK-2.14",
+        "title": "Pause the session from the Table header Home control",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 3
+      },
+      {
+        "id": "TASK-2.15",
+        "title": "Practise with play money only",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 4
+      },
+      {
+        "id": "TASK-2.16",
+        "title": "See a snapshot of my last session on Home and reopen its report",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 4
+      },
+      {
+        "id": "TASK-2.17",
+        "title": "See a first-use message on Home before any session has ended",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 5
+      },
+      {
+        "id": "TASK-3",
+        "title": "Play hands at the table",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 2
+      },
+      {
+        "id": "TASK-3.1",
+        "title": "Play a complete hand against TAG bots at a default 6-max table in the browser",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 2
+      },
+      {
+        "id": "TASK-3.2",
+        "title": "Choose only legal actions with their exact amounts",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 3
+      },
+      {
+        "id": "TASK-3.3",
+        "title": "See every seat, the board, the pot and the button at a glance",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 2
+      },
+      {
+        "id": "TASK-3.4",
+        "title": "See who won each hand and get the next hand dealt automatically",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 3
+      },
+      {
+        "id": "TASK-3.5",
+        "title": "Read big-index cards drawn in code",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 1
+      },
+      {
+        "id": "TASK-3.6",
+        "title": "Keep the table responsive while bots and advice compute",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 3
+      },
+      {
+        "id": "TASK-3.7",
+        "title": "Act correctly on capped streets and when short of chips",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 4
+      },
+      {
+        "id": "TASK-3.8",
+        "title": "See each side pot and who wins it",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 4
+      },
+      {
+        "id": "TASK-3.9",
+        "title": "Keep a permanent record of every completed hand",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 4
+      },
+      {
+        "id": "TASK-3.10",
+        "title": "Save the session after every hand so it can be resumed",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 5
+      },
+      {
+        "id": "TASK-3.11",
+        "title": "Rebuy or leave when my stack runs out",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 4
+      },
+      {
+        "id": "TASK-3.12",
+        "title": "Record the advice and grade for each of my decisions with the hand",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 5
+      },
+      {
+        "id": "TASK-3.13",
+        "title": "Play at Rapid bot pace",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 4
+      },
+      {
+        "id": "TASK-3.14",
+        "title": "See an opponent's observed VPIP, PFR and aggression on hover or tap",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 3
+      },
+      {
+        "id": "TASK-3.15",
+        "title": "Change speed during a session from the table",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 5
+      },
+      {
+        "id": "TASK-3.16",
+        "title": "Play on a branded table that fits a 1280 x 720 window",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 2
+      },
+      {
+        "id": "TASK-3.17",
+        "title": "Operate every table control with native buttons and large targets",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 3
+      },
+      {
+        "id": "TASK-3.18",
+        "title": "Play at Realistic bot pace",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 4
+      },
+      {
+        "id": "TASK-3.19",
+        "title": "Read every amount as US dollars in English",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 3
+      },
+      {
+        "id": "TASK-4",
+        "title": "Follow the action at a glance",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 4
+      },
+      {
+        "id": "TASK-4.1",
+        "title": "Follow every action of the hand in an action log",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 3
+      },
+      {
+        "id": "TASK-4.2",
+        "title": "See a bot's in-style speech bubble after a table event",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 5
+      },
+      {
+        "id": "TASK-4.3",
+        "title": "Keep the action log collapsed or expanded as I left it",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 4
+      },
+      {
+        "id": "TASK-4.4",
+        "title": "Play on a table, rail, chips and dealer button drawn in code",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 3
+      },
+      {
+        "id": "TASK-4.5",
+        "title": "See each player's bet as chips in front of their seat",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 4
+      },
+      {
+        "id": "TASK-4.6",
+        "title": "Watch deals and chip moves animate without slowing my play",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 5
+      },
+      {
+        "id": "TASK-4.7",
+        "title": "Recognise each bot by an initials avatar badge",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 3
+      },
+      {
+        "id": "TASK-4.8",
+        "title": "Keep bot banter rare and free of hidden information",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 6
+      },
+      {
+        "id": "TASK-4.9",
+        "title": "See my session's playing time and hands-per-hour pace in the header",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 3
+      },
+      {
+        "id": "TASK-5",
+        "title": "Play a sit-and-go",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 4
+      },
+      {
+        "id": "TASK-5.1",
+        "title": "Start a sit-and-go where every player has 1,500 chips",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 5
+      },
+      {
+        "id": "TASK-5.2",
+        "title": "Leave a busted bot's seat empty for the rest of the sit-and-go",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 6
+      },
+      {
+        "id": "TASK-5.3",
+        "title": "Read every sit-and-go chip amount without a $ sign",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 4
+      },
+      {
+        "id": "TASK-5.4",
+        "title": "Raise the sit-and-go limits every 10 hands on the published schedule",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 6
+      },
+      {
+        "id": "TASK-5.5",
+        "title": "See the current level, its limits and hands to the next level in the header",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 3
+      },
+      {
+        "id": "TASK-5.6",
+        "title": "See the level on Home's Resume entry for a paused sit-and-go",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 4
+      },
+      {
+        "id": "TASK-5.7",
+        "title": "Finish a sit-and-go by busting or winning all the chips and see my finishing position",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 4
+      },
+      {
+        "id": "TASK-5.8",
+        "title": "See results when I bust in a sit-and-go with the review open",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 5
+      },
+      {
+        "id": "TASK-5.9",
+        "title": "See my last sit-and-go's finishing position in the Home snapshot",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 5
+      },
+      {
+        "id": "TASK-5.10",
+        "title": "Prove the sit-and-go structure over the 1,000,000-hand invariant run",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 5
+      },
+      {
+        "id": "TASK-5.11",
+        "title": "Leave a sit-and-go early and get my finishing position",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 5
+      },
+      {
+        "id": "TASK-6",
+        "title": "Face distinct opponents",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 6
+      },
+      {
+        "id": "TASK-6.1",
+        "title": "Face TAG bots that act from the advice engine",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 5
+      },
+      {
+        "id": "TASK-6.2",
+        "title": "Vary TAG's play in mixed spots from its style data file",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 7
+      },
+      {
+        "id": "TASK-6.3",
+        "title": "Face a Calling station that calls where TAG would fold or raise",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 8
+      },
+      {
+        "id": "TASK-6.4",
+        "title": "Face a Maniac that bets and raises where TAG would check or call",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 8
+      },
+      {
+        "id": "TASK-6.5",
+        "title": "Face a Rock that folds every hand outside a narrow starting range",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 8
+      },
+      {
+        "id": "TASK-6.6",
+        "title": "Seat bots by line-up preset with unique names",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 9
+      },
+      {
+        "id": "TASK-6.7",
+        "title": "Record an edited line-up as Custom",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 10
+      },
+      {
+        "id": "TASK-6.8",
+        "title": "Replace a busted bot with a new bot from the line-up preset",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 11
+      },
+      {
+        "id": "TASK-6.9",
+        "title": "Prove the engine over 1,000,000 cash hands with every line-up preset",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 5
+      },
+      {
+        "id": "TASK-6.10",
+        "title": "Report each bot's BB/100 with a 95% confidence interval",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 12
+      },
+      {
+        "id": "TASK-6.11",
+        "title": "Report each bot style's VPIP, PFR and aggression against its band",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 5
+      },
+      {
+        "id": "TASK-6.12",
+        "title": "Prove TAG beats tables of each weaker style",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 8
+      },
+      {
+        "id": "TASK-6.13",
+        "title": "Compute every bot decision within 100 ms",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 10
+      },
+      {
+        "id": "TASK-6.14",
+        "title": "Keep each bot's style fixed whatever the user does",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 10
+      },
+      {
+        "id": "TASK-6.15",
+        "title": "Replay any hand with every bot acting exactly as before",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 10
+      },
+      {
+        "id": "TASK-6.16",
+        "title": "Keep TAG and Rock bots inside their style bands",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 6
+      },
+      {
+        "id": "TASK-6.17",
+        "title": "Keep Calling station and Maniac bots inside their style bands",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 7
+      },
+      {
+        "id": "TASK-6.18",
+        "title": "Draw bot randomness only from the replay code and seat",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 6
+      },
+      {
+        "id": "TASK-7",
+        "title": "Get trustworthy advice",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 4
+      },
+      {
+        "id": "TASK-7.1",
+        "title": "Compute a hand's equity against opponent hands",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 3
+      },
+      {
+        "id": "TASK-7.2",
+        "title": "Recommend a preflop action from the 6-max chart",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 5
+      },
+      {
+        "id": "TASK-7.3",
+        "title": "Recommend call or fold after the flop from equity and pot odds",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 4
+      },
+      {
+        "id": "TASK-7.4",
+        "title": "Grade a decision as Correct, Minor error or Major error",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 5
+      },
+      {
+        "id": "TASK-7.5",
+        "title": "Estimate each opponent's range from their actions in the hand",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 5
+      },
+      {
+        "id": "TASK-7.6",
+        "title": "Recommend preflop actions at heads-up and full-ring tables",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 6
+      },
+      {
+        "id": "TASK-7.7",
+        "title": "Compute multiway and range-versus-range equity within 1.5 points",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 4
+      },
+      {
+        "id": "TASK-7.8",
+        "title": "Recommend betting or raising for value",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 6
+      },
+      {
+        "id": "TASK-7.9",
+        "title": "Count implied odds for drawing hands",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 5
+      },
+      {
+        "id": "TASK-7.10",
+        "title": "Explain every recommendation in plain English with its numbers",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 6
+      },
+      {
+        "id": "TASK-7.11",
+        "title": "Check advice against preflop golden spots on every test run",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 7
+      },
+      {
+        "id": "TASK-7.12",
+        "title": "Enabler: shared style-stat functions for VPIP, PFR, Aggression, WTSD and W$SD",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 4
+      },
+      {
+        "id": "TASK-7.13",
+        "title": "Adjust opponent ranges to their observed play after 30 hands",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 5
+      },
+      {
+        "id": "TASK-7.14",
+        "title": "Check advice against postflop golden spots on every test run",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 6
+      },
+      {
+        "id": "TASK-7.15",
+        "title": "Prove advice is identical for identical decisions",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 6
+      },
+      {
+        "id": "TASK-7.16",
+        "title": "Label advice as approximate at non-reference table sizes",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 6
+      },
+      {
+        "id": "TASK-7.17",
+        "title": "Add a short-stack note to sit-and-go advice",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 5
+      },
+      {
+        "id": "TASK-8",
+        "title": "Ask for a hint",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 5
+      },
+      {
+        "id": "TASK-8.1",
+        "title": "Ask for a hint and see the recommended action with its numbers and reason",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 4
+      },
+      {
+        "id": "TASK-8.2",
+        "title": "Mark a decision as hinted when I open the hint",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 5
+      },
+      {
+        "id": "TASK-8.3",
+        "title": "Get the hint card within one second",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 5
+      },
+      {
+        "id": "TASK-8.4",
+        "title": "See approximate and short-stack labels on the hint card",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 5
+      },
+      {
+        "id": "TASK-9",
+        "title": "Review the hand just played",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 5
+      },
+      {
+        "id": "TASK-9.1",
+        "title": "Review each decision of the hand I just played",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 4
+      },
+      {
+        "id": "TASK-9.2",
+        "title": "Continue to rebuy or leave when I bust with the review open",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 5
+      },
+      {
+        "id": "TASK-9.3",
+        "title": "See the numbers and reason behind each reviewed decision",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 4
+      },
+      {
+        "id": "TASK-9.4",
+        "title": "See the hand number, my cards, position, result and replay code in the review",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 5
+      },
+      {
+        "id": "TASK-9.5",
+        "title": "See opponents' cards in the review only when they were shown at showdown",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 4
+      },
+      {
+        "id": "TASK-9.6",
+        "title": "See which reviewed decisions were hinted",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 5
+      },
+      {
+        "id": "TASK-9.7",
+        "title": "See a grade summary badge after each hand when auto-open is off",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 5
+      },
+      {
+        "id": "TASK-9.8",
+        "title": "Get the review panel within one second of the hand ending",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 5
+      },
+      {
+        "id": "TASK-9.9",
+        "title": "See approximate and short-stack labels in review entries",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 5
+      },
+      {
+        "id": "TASK-10",
+        "title": "Read the session report",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 4
+      },
+      {
+        "id": "TASK-10.1",
+        "title": "End the session with Leave table and see its saved report with my cash result",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 3
+      },
+      {
+        "id": "TASK-10.2",
+        "title": "Leave the table in the middle of a hand",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 4
+      },
+      {
+        "id": "TASK-10.3",
+        "title": "See my five style stats against healthy ranges for my table size",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 4
+      },
+      {
+        "id": "TASK-10.4",
+        "title": "See my hands played and error rates per 100 hands in the report",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 4
+      },
+      {
+        "id": "TASK-10.5",
+        "title": "See my postflop leaks with evidence and a one-sentence fix",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 4
+      },
+      {
+        "id": "TASK-10.6",
+        "title": "See my preflop leaks by position group",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 5
+      },
+      {
+        "id": "TASK-10.7",
+        "title": "See how many of my decisions used a hint in the report",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 4
+      },
+      {
+        "id": "TASK-10.8",
+        "title": "See my three most costly leaks first",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 5
+      },
+      {
+        "id": "TASK-10.11",
+        "title": "See my playing time and hands per hour in the report",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 4
+      },
+      {
+        "id": "TASK-10.12",
+        "title": "See my sit-and-go finishing position in the report",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 4
+      },
+      {
+        "id": "TASK-11",
+        "title": "Track progress over time",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 5
+      },
+      {
+        "id": "TASK-11.1",
+        "title": "See my Major errors per 100 hands trend on the Statistics screen",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 4
+      },
+      {
+        "id": "TASK-11.2",
+        "title": "See my BB/100 trend from cash hands against a break-even line",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 4
+      },
+      {
+        "id": "TASK-11.3",
+        "title": "See the G-2 target line on my Major-error trend",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 5
+      },
+      {
+        "id": "TASK-11.4",
+        "title": "Filter my trends by table size and game type",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 5
+      },
+      {
+        "id": "TASK-11.5",
+        "title": "Group my trends per session or per day",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 5
+      },
+      {
+        "id": "TASK-11.6",
+        "title": "Open Statistics or go Home from the Session Report",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 4
+      },
+      {
+        "id": "TASK-11.7",
+        "title": "Filter my trends by line-up",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 5
+      },
+      {
+        "id": "TASK-11.8",
+        "title": "See my style stats over my last 1,000 hands against healthy ranges",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 5
+      },
+      {
+        "id": "TASK-11.9",
+        "title": "See my average sit-and-go finishing position per trend group",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 6
+      },
+      {
+        "id": "TASK-11.10",
+        "title": "See my style stats separately for each table size I played",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 6
+      },
+      {
+        "id": "TASK-11.11",
+        "title": "See whether I met the G-2 goal after 5,000 hands",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 6
+      },
+      {
+        "id": "TASK-11.12",
+        "title": "Open Statistics within 2 seconds with 100,000 stored hands",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 5
+      },
+      {
+        "id": "TASK-12",
+        "title": "Tune the trainer",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 3
+      },
+      {
+        "id": "TASK-12.1",
+        "title": "Open Settings from Home and see the app version",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 4
+      },
+      {
+        "id": "TASK-12.2",
+        "title": "Hide opponent style labels at the table",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 3
+      },
+      {
+        "id": "TASK-12.3",
+        "title": "Open Settings over the table without pausing the session",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 4
+      },
+      {
+        "id": "TASK-12.4",
+        "title": "Delete all my data after confirming",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 3
+      },
+      {
+        "id": "TASK-12.5",
+        "title": "Choose the default speed for new sessions in Settings",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 5
+      },
+      {
+        "id": "TASK-12.6",
+        "title": "Turn off automatic opening of the Hand Review panel",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 5
+      },
+      {
+        "id": "TASK-12.7",
+        "title": "Switch to a four-colour deck",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 2
+      },
+      {
+        "id": "TASK-12.8",
+        "title": "Turn bot banter off",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 5
+      },
+      {
+        "id": "TASK-12.9",
+        "title": "Warn me in Settings when the browser can clear my history",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 5
+      },
+      {
+        "id": "TASK-13",
+        "title": "Rely on a private offline app",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 5
+      },
+      {
+        "id": "TASK-13.1",
+        "title": "Return Home from an unexpected error without losing completed hands",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 4
+      },
+      {
+        "id": "TASK-13.2",
+        "title": "Ask the browser to keep my history on first launch",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 5
+      },
+      {
+        "id": "TASK-13.3",
+        "title": "Stop dealing when the last hand could not be saved",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 4
+      },
+      {
+        "id": "TASK-13.4",
+        "title": "Use every screen offline after the first visit",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 4
+      },
+      {
+        "id": "TASK-13.5",
+        "title": "Keep all my data on this device with no third-party requests",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 4
+      },
+      {
+        "id": "TASK-13.6",
+        "title": "Migrate my stored data in order when a new version changes the schema",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 4
+      },
+      {
+        "id": "TASK-13.7",
+        "title": "Keep my old data intact when a migration fails",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 5
+      },
+      {
+        "id": "TASK-13.8",
+        "title": "Get new versions at the next launch, never mid-session",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 5
+      },
+      {
+        "id": "TASK-13.9",
+        "title": "Reach Home within 3 seconds on a repeat launch",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 5
+      },
+      {
+        "id": "TASK-13.10",
+        "title": "Keep every screen within its time limits with 100,000 stored hands",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 4
+      },
+      {
+        "id": "TASK-13.11",
+        "title": "Prove every screen passes automated accessibility checks",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 4
+      },
+      {
+        "id": "TASK-13.12",
+        "title": "Install TLH Trainer to the Dock from Chrome or Safari",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 4
+      }
+    ],
+    "edges": [
+      {
+        "from": "TASK-1",
+        "to": "TASK-1.1"
+      },
+      {
+        "from": "TASK-1",
+        "to": "TASK-1.2"
+      },
+      {
+        "from": "TASK-1",
+        "to": "TASK-1.3"
+      },
+      {
+        "from": "TASK-1",
+        "to": "TASK-1.4"
+      },
+      {
+        "from": "TASK-1",
+        "to": "TASK-1.5"
+      },
+      {
+        "from": "TASK-1",
+        "to": "TASK-1.6"
+      },
+      {
+        "from": "TASK-1",
+        "to": "TASK-1.7"
+      },
+      {
+        "from": "TASK-1",
+        "to": "TASK-1.8"
+      },
+      {
+        "from": "TASK-1",
+        "to": "TASK-1.9"
+      },
+      {
+        "from": "TASK-1",
+        "to": "TASK-1.10"
+      },
+      {
+        "from": "TASK-1",
+        "to": "TASK-1.11"
+      },
+      {
+        "from": "TASK-1",
+        "to": "TASK-1.12"
+      },
+      {
+        "from": "TASK-1",
+        "to": "TASK-1.13"
+      },
+      {
+        "from": "TASK-1",
+        "to": "TASK-1.14"
+      },
+      {
+        "from": "TASK-1",
+        "to": "TASK-1.15"
+      },
+      {
+        "from": "TASK-1",
+        "to": "TASK-1.16"
+      },
+      {
+        "from": "TASK-1",
+        "to": "TASK-1.17"
+      },
+      {
+        "from": "TASK-1",
+        "to": "TASK-1.18"
+      },
+      {
+        "from": "TASK-1.2",
+        "to": "TASK-1.7"
+      },
+      {
+        "from": "TASK-1.3",
+        "to": "TASK-1.7"
+      },
+      {
+        "from": "TASK-1.4",
+        "to": "TASK-1.2"
+      },
+      {
+        "from": "TASK-1.4",
+        "to": "TASK-1.3"
+      },
+      {
+        "from": "TASK-1.5",
+        "to": "TASK-1.4"
+      },
+      {
+        "from": "TASK-1.6",
+        "to": "TASK-1.5"
+      },
+      {
+        "from": "TASK-1.7",
+        "to": "TASK-1.1"
+      },
+      {
+        "from": "TASK-1.8",
+        "to": "TASK-1.6"
+      },
+      {
+        "from": "TASK-1.8",
+        "to": "TASK-1.7"
+      },
+      {
+        "from": "TASK-1.9",
+        "to": "TASK-1.8"
+      },
+      {
+        "from": "TASK-1.10",
+        "to": "TASK-1.9"
+      },
+      {
+        "from": "TASK-1.11",
+        "to": "TASK-1.8"
+      },
+      {
+        "from": "TASK-1.12",
+        "to": "TASK-1.11"
+      },
+      {
+        "from": "TASK-1.13",
+        "to": "TASK-1.12"
+      },
+      {
+        "from": "TASK-1.14",
+        "to": "TASK-1.9"
+      },
+      {
+        "from": "TASK-1.14",
+        "to": "TASK-1.12"
+      },
+      {
+        "from": "TASK-1.15",
+        "to": "TASK-1.8"
+      },
+      {
+        "from": "TASK-1.15",
+        "to": "TASK-1.10"
+      },
+      {
+        "from": "TASK-1.16",
+        "to": "TASK-1.9"
+      },
+      {
+        "from": "TASK-1.16",
+        "to": "TASK-1.10"
+      },
+      {
+        "from": "TASK-1.16",
+        "to": "TASK-1.11"
+      },
+      {
+        "from": "TASK-1.16",
+        "to": "TASK-1.14"
+      },
+      {
+        "from": "TASK-1.16",
+        "to": "TASK-1.15"
+      },
+      {
+        "from": "TASK-1.17",
+        "to": "TASK-1.10"
+      },
+      {
+        "from": "TASK-1.17",
+        "to": "TASK-1.13"
+      },
+      {
+        "from": "TASK-1.17",
+        "to": "TASK-1.14"
+      },
+      {
+        "from": "TASK-1.17",
+        "to": "TASK-1.15"
+      },
+      {
+        "from": "TASK-1.17",
+        "to": "TASK-1.16"
+      },
+      {
+        "from": "TASK-1.18",
+        "to": "TASK-1.8"
+      },
+      {
+        "from": "TASK-2",
+        "to": "TASK-2.1"
+      },
+      {
+        "from": "TASK-2",
+        "to": "TASK-2.2"
+      },
+      {
+        "from": "TASK-2",
+        "to": "TASK-2.3"
+      },
+      {
+        "from": "TASK-2",
+        "to": "TASK-2.4"
+      },
+      {
+        "from": "TASK-2",
+        "to": "TASK-2.5"
+      },
+      {
+        "from": "TASK-2",
+        "to": "TASK-2.6"
+      },
+      {
+        "from": "TASK-2",
+        "to": "TASK-2.7"
+      },
+      {
+        "from": "TASK-2",
+        "to": "TASK-2.8"
+      },
+      {
+        "from": "TASK-2",
+        "to": "TASK-2.9"
+      },
+      {
+        "from": "TASK-2",
+        "to": "TASK-2.10"
+      },
+      {
+        "from": "TASK-2",
+        "to": "TASK-2.11"
+      },
+      {
+        "from": "TASK-2",
+        "to": "TASK-2.12"
+      },
+      {
+        "from": "TASK-2",
+        "to": "TASK-2.13"
+      },
+      {
+        "from": "TASK-2",
+        "to": "TASK-2.14"
+      },
+      {
+        "from": "TASK-2",
+        "to": "TASK-2.15"
+      },
+      {
+        "from": "TASK-2",
+        "to": "TASK-2.16"
+      },
+      {
+        "from": "TASK-2",
+        "to": "TASK-2.17"
+      },
+      {
+        "from": "TASK-2.1",
+        "to": "TASK-3.1"
+      },
+      {
+        "from": "TASK-2.2",
+        "to": "TASK-1.11"
+      },
+      {
+        "from": "TASK-2.2",
+        "to": "TASK-2.1"
+      },
+      {
+        "from": "TASK-2.2",
+        "to": "TASK-7.6"
+      },
+      {
+        "from": "TASK-2.3",
+        "to": "TASK-2.1"
+      },
+      {
+        "from": "TASK-2.4",
+        "to": "TASK-2.3"
+      },
+      {
+        "from": "TASK-2.5",
+        "to": "TASK-2.2"
+      },
+      {
+        "from": "TASK-2.5",
+        "to": "TASK-6.7"
+      },
+      {
+        "from": "TASK-2.6",
+        "to": "TASK-2.1"
+      },
+      {
+        "from": "TASK-2.6",
+        "to": "TASK-3.10"
+      },
+      {
+        "from": "TASK-2.7",
+        "to": "TASK-2.6"
+      },
+      {
+        "from": "TASK-2.7",
+        "to": "TASK-10.1"
+      },
+      {
+        "from": "TASK-2.8",
+        "to": "TASK-2.5"
+      },
+      {
+        "from": "TASK-2.9",
+        "to": "TASK-2.5"
+      },
+      {
+        "from": "TASK-2.10",
+        "to": "TASK-2.4"
+      },
+      {
+        "from": "TASK-2.10",
+        "to": "TASK-2.8"
+      },
+      {
+        "from": "TASK-2.11",
+        "to": "TASK-2.1"
+      },
+      {
+        "from": "TASK-2.11",
+        "to": "TASK-3.13"
+      },
+      {
+        "from": "TASK-2.11",
+        "to": "TASK-3.18"
+      },
+      {
+        "from": "TASK-2.12",
+        "to": "TASK-2.1"
+      },
+      {
+        "from": "TASK-2.13",
+        "to": "TASK-2.5"
+      },
+      {
+        "from": "TASK-2.14",
+        "to": "TASK-2.6"
+      },
+      {
+        "from": "TASK-2.14",
+        "to": "TASK-3.3"
+      },
+      {
+        "from": "TASK-2.15",
+        "to": "TASK-2.1"
+      },
+      {
+        "from": "TASK-2.15",
+        "to": "TASK-10.1"
+      },
+      {
+        "from": "TASK-2.16",
+        "to": "TASK-2.1"
+      },
+      {
+        "from": "TASK-2.16",
+        "to": "TASK-10.1"
+      },
+      {
+        "from": "TASK-2.16",
+        "to": "TASK-10.4"
+      },
+      {
+        "from": "TASK-2.16",
+        "to": "TASK-10.8"
+      },
+      {
+        "from": "TASK-2.17",
+        "to": "TASK-2.16"
+      },
+      {
+        "from": "TASK-3",
+        "to": "TASK-3.1"
+      },
+      {
+        "from": "TASK-3",
+        "to": "TASK-3.2"
+      },
+      {
+        "from": "TASK-3",
+        "to": "TASK-3.3"
+      },
+      {
+        "from": "TASK-3",
+        "to": "TASK-3.4"
+      },
+      {
+        "from": "TASK-3",
+        "to": "TASK-3.5"
+      },
+      {
+        "from": "TASK-3",
+        "to": "TASK-3.6"
+      },
+      {
+        "from": "TASK-3",
+        "to": "TASK-3.7"
+      },
+      {
+        "from": "TASK-3",
+        "to": "TASK-3.8"
+      },
+      {
+        "from": "TASK-3",
+        "to": "TASK-3.9"
+      },
+      {
+        "from": "TASK-3",
+        "to": "TASK-3.10"
+      },
+      {
+        "from": "TASK-3",
+        "to": "TASK-3.11"
+      },
+      {
+        "from": "TASK-3",
+        "to": "TASK-3.12"
+      },
+      {
+        "from": "TASK-3",
+        "to": "TASK-3.13"
+      },
+      {
+        "from": "TASK-3",
+        "to": "TASK-3.14"
+      },
+      {
+        "from": "TASK-3",
+        "to": "TASK-3.15"
+      },
+      {
+        "from": "TASK-3",
+        "to": "TASK-3.16"
+      },
+      {
+        "from": "TASK-3",
+        "to": "TASK-3.17"
+      },
+      {
+        "from": "TASK-3",
+        "to": "TASK-3.18"
+      },
+      {
+        "from": "TASK-3",
+        "to": "TASK-3.19"
+      },
+      {
+        "from": "TASK-3.1",
+        "to": "TASK-1.5"
+      },
+      {
+        "from": "TASK-3.1",
+        "to": "TASK-3.5"
+      },
+      {
+        "from": "TASK-3.1",
+        "to": "TASK-6.1"
+      },
+      {
+        "from": "TASK-3.2",
+        "to": "TASK-3.1"
+      },
+      {
+        "from": "TASK-3.3",
+        "to": "TASK-3.1"
+      },
+      {
+        "from": "TASK-3.3",
+        "to": "TASK-3.5"
+      },
+      {
+        "from": "TASK-3.4",
+        "to": "TASK-3.3"
+      },
+      {
+        "from": "TASK-3.5",
+        "to": "TASK-1.1"
+      },
+      {
+        "from": "TASK-3.6",
+        "to": "TASK-3.1"
+      },
+      {
+        "from": "TASK-3.7",
+        "to": "TASK-1.9"
+      },
+      {
+        "from": "TASK-3.7",
+        "to": "TASK-1.12"
+      },
+      {
+        "from": "TASK-3.7",
+        "to": "TASK-1.16"
+      },
+      {
+        "from": "TASK-3.7",
+        "to": "TASK-3.2"
+      },
+      {
+        "from": "TASK-3.8",
+        "to": "TASK-1.10"
+      },
+      {
+        "from": "TASK-3.8",
+        "to": "TASK-3.4"
+      },
+      {
+        "from": "TASK-3.9",
+        "to": "TASK-1.15"
+      },
+      {
+        "from": "TASK-3.9",
+        "to": "TASK-3.4"
+      },
+      {
+        "from": "TASK-3.9",
+        "to": "TASK-6.7"
+      },
+      {
+        "from": "TASK-3.9",
+        "to": "TASK-6.8"
+      },
+      {
+        "from": "TASK-3.9",
+        "to": "TASK-7.12"
+      },
+      {
+        "from": "TASK-3.10",
+        "to": "TASK-3.9"
+      },
+      {
+        "from": "TASK-3.11",
+        "to": "TASK-3.4"
+      },
+      {
+        "from": "TASK-3.11",
+        "to": "TASK-3.10"
+      },
+      {
+        "from": "TASK-3.12",
+        "to": "TASK-3.9"
+      },
+      {
+        "from": "TASK-3.12",
+        "to": "TASK-7.10"
+      },
+      {
+        "from": "TASK-3.12",
+        "to": "TASK-7.15"
+      },
+      {
+        "from": "TASK-3.13",
+        "to": "TASK-3.4"
+      },
+      {
+        "from": "TASK-3.14",
+        "to": "TASK-3.3"
+      },
+      {
+        "from": "TASK-3.14",
+        "to": "TASK-3.9"
+      },
+      {
+        "from": "TASK-3.14",
+        "to": "TASK-7.12"
+      },
+      {
+        "from": "TASK-3.15",
+        "to": "TASK-3.10"
+      },
+      {
+        "from": "TASK-3.15",
+        "to": "TASK-3.18"
+      },
+      {
+        "from": "TASK-3.16",
+        "to": "TASK-3.3"
+      },
+      {
+        "from": "TASK-3.16",
+        "to": "TASK-3.5"
+      },
+      {
+        "from": "TASK-3.17",
+        "to": "TASK-3.2"
+      },
+      {
+        "from": "TASK-3.17",
+        "to": "TASK-3.3"
+      },
+      {
+        "from": "TASK-3.17",
+        "to": "TASK-3.11"
+      },
+      {
+        "from": "TASK-3.17",
+        "to": "TASK-3.14"
+      },
+      {
+        "from": "TASK-3.17",
+        "to": "TASK-3.15"
+      },
+      {
+        "from": "TASK-3.18",
+        "to": "TASK-1.9"
+      },
+      {
+        "from": "TASK-3.18",
+        "to": "TASK-3.13"
+      },
+      {
+        "from": "TASK-3.19",
+        "to": "TASK-3.3"
+      },
+      {
+        "from": "TASK-4",
+        "to": "TASK-4.1"
+      },
+      {
+        "from": "TASK-4",
+        "to": "TASK-4.2"
+      },
+      {
+        "from": "TASK-4",
+        "to": "TASK-4.3"
+      },
+      {
+        "from": "TASK-4",
+        "to": "TASK-4.4"
+      },
+      {
+        "from": "TASK-4",
+        "to": "TASK-4.5"
+      },
+      {
+        "from": "TASK-4",
+        "to": "TASK-4.6"
+      },
+      {
+        "from": "TASK-4",
+        "to": "TASK-4.7"
+      },
+      {
+        "from": "TASK-4",
+        "to": "TASK-4.8"
+      },
+      {
+        "from": "TASK-4",
+        "to": "TASK-4.9"
+      },
+      {
+        "from": "TASK-4.1",
+        "to": "TASK-3.3"
+      },
+      {
+        "from": "TASK-4.2",
+        "to": "TASK-3.13"
+      },
+      {
+        "from": "TASK-4.2",
+        "to": "TASK-3.18"
+      },
+      {
+        "from": "TASK-4.2",
+        "to": "TASK-6.8"
+      },
+      {
+        "from": "TASK-4.3",
+        "to": "TASK-4.1"
+      },
+      {
+        "from": "TASK-4.4",
+        "to": "TASK-3.16"
+      },
+      {
+        "from": "TASK-4.5",
+        "to": "TASK-3.4"
+      },
+      {
+        "from": "TASK-4.5",
+        "to": "TASK-3.8"
+      },
+      {
+        "from": "TASK-4.5",
+        "to": "TASK-4.4"
+      },
+      {
+        "from": "TASK-4.6",
+        "to": "TASK-3.13"
+      },
+      {
+        "from": "TASK-4.6",
+        "to": "TASK-3.18"
+      },
+      {
+        "from": "TASK-4.6",
+        "to": "TASK-4.5"
+      },
+      {
+        "from": "TASK-4.7",
+        "to": "TASK-3.3"
+      },
+      {
+        "from": "TASK-4.7",
+        "to": "TASK-6.8"
+      },
+      {
+        "from": "TASK-4.8",
+        "to": "TASK-4.2"
+      },
+      {
+        "from": "TASK-4.9",
+        "to": "TASK-3.3"
+      },
+      {
+        "from": "TASK-4.9",
+        "to": "TASK-3.10"
+      },
+      {
+        "from": "TASK-5",
+        "to": "TASK-5.1"
+      },
+      {
+        "from": "TASK-5",
+        "to": "TASK-5.2"
+      },
+      {
+        "from": "TASK-5",
+        "to": "TASK-5.3"
+      },
+      {
+        "from": "TASK-5",
+        "to": "TASK-5.4"
+      },
+      {
+        "from": "TASK-5",
+        "to": "TASK-5.5"
+      },
+      {
+        "from": "TASK-5",
+        "to": "TASK-5.6"
+      },
+      {
+        "from": "TASK-5",
+        "to": "TASK-5.7"
+      },
+      {
+        "from": "TASK-5",
+        "to": "TASK-5.8"
+      },
+      {
+        "from": "TASK-5",
+        "to": "TASK-5.9"
+      },
+      {
+        "from": "TASK-5",
+        "to": "TASK-5.10"
+      },
+      {
+        "from": "TASK-5",
+        "to": "TASK-5.11"
+      },
+      {
+        "from": "TASK-5.1",
+        "to": "TASK-1.16"
+      },
+      {
+        "from": "TASK-5.1",
+        "to": "TASK-2.4"
+      },
+      {
+        "from": "TASK-5.1",
+        "to": "TASK-3.10"
+      },
+      {
+        "from": "TASK-5.2",
+        "to": "TASK-5.1"
+      },
+      {
+        "from": "TASK-5.2",
+        "to": "TASK-6.8"
+      },
+      {
+        "from": "TASK-5.2",
+        "to": "TASK-10.6"
+      },
+      {
+        "from": "TASK-5.3",
+        "to": "TASK-4.1"
+      },
+      {
+        "from": "TASK-5.3",
+        "to": "TASK-4.5"
+      },
+      {
+        "from": "TASK-5.3",
+        "to": "TASK-5.1"
+      },
+      {
+        "from": "TASK-5.3",
+        "to": "TASK-5.7"
+      },
+      {
+        "from": "TASK-5.3",
+        "to": "TASK-8.1"
+      },
+      {
+        "from": "TASK-5.3",
+        "to": "TASK-9.3"
+      },
+      {
+        "from": "TASK-5.3",
+        "to": "TASK-10.12"
+      },
+      {
+        "from": "TASK-5.4",
+        "to": "TASK-5.1"
+      },
+      {
+        "from": "TASK-5.4",
+        "to": "TASK-7.17"
+      },
+      {
+        "from": "TASK-5.5",
+        "to": "TASK-2.6"
+      },
+      {
+        "from": "TASK-5.5",
+        "to": "TASK-3.3"
+      },
+      {
+        "from": "TASK-5.5",
+        "to": "TASK-5.4"
+      },
+      {
+        "from": "TASK-5.6",
+        "to": "TASK-5.5"
+      },
+      {
+        "from": "TASK-5.7",
+        "to": "TASK-3.4"
+      },
+      {
+        "from": "TASK-5.7",
+        "to": "TASK-5.2"
+      },
+      {
+        "from": "TASK-5.7",
+        "to": "TASK-10.12"
+      },
+      {
+        "from": "TASK-5.8",
+        "to": "TASK-5.7"
+      },
+      {
+        "from": "TASK-5.8",
+        "to": "TASK-9.2"
+      },
+      {
+        "from": "TASK-5.9",
+        "to": "TASK-2.16"
+      },
+      {
+        "from": "TASK-5.9",
+        "to": "TASK-5.7"
+      },
+      {
+        "from": "TASK-5.10",
+        "to": "TASK-1.17"
+      },
+      {
+        "from": "TASK-5.10",
+        "to": "TASK-5.2"
+      },
+      {
+        "from": "TASK-5.10",
+        "to": "TASK-5.4"
+      },
+      {
+        "from": "TASK-5.10",
+        "to": "TASK-6.9"
+      },
+      {
+        "from": "TASK-5.11",
+        "to": "TASK-5.7"
+      },
+      {
+        "from": "TASK-5.11",
+        "to": "TASK-10.2"
+      },
+      {
+        "from": "TASK-6",
+        "to": "TASK-6.1"
+      },
+      {
+        "from": "TASK-6",
+        "to": "TASK-6.2"
+      },
+      {
+        "from": "TASK-6",
+        "to": "TASK-6.3"
+      },
+      {
+        "from": "TASK-6",
+        "to": "TASK-6.4"
+      },
+      {
+        "from": "TASK-6",
+        "to": "TASK-6.5"
+      },
+      {
+        "from": "TASK-6",
+        "to": "TASK-6.6"
+      },
+      {
+        "from": "TASK-6",
+        "to": "TASK-6.7"
+      },
+      {
+        "from": "TASK-6",
+        "to": "TASK-6.8"
+      },
+      {
+        "from": "TASK-6",
+        "to": "TASK-6.9"
+      },
+      {
+        "from": "TASK-6",
+        "to": "TASK-6.10"
+      },
+      {
+        "from": "TASK-6",
+        "to": "TASK-6.11"
+      },
+      {
+        "from": "TASK-6",
+        "to": "TASK-6.12"
+      },
+      {
+        "from": "TASK-6",
+        "to": "TASK-6.13"
+      },
+      {
+        "from": "TASK-6",
+        "to": "TASK-6.14"
+      },
+      {
+        "from": "TASK-6",
+        "to": "TASK-6.15"
+      },
+      {
+        "from": "TASK-6",
+        "to": "TASK-6.16"
+      },
+      {
+        "from": "TASK-6",
+        "to": "TASK-6.17"
+      },
+      {
+        "from": "TASK-6",
+        "to": "TASK-6.18"
+      },
+      {
+        "from": "TASK-6.1",
+        "to": "TASK-1.6"
+      },
+      {
+        "from": "TASK-6.1",
+        "to": "TASK-7.2"
+      },
+      {
+        "from": "TASK-6.1",
+        "to": "TASK-7.3"
+      },
+      {
+        "from": "TASK-6.2",
+        "to": "TASK-6.18"
+      },
+      {
+        "from": "TASK-6.3",
+        "to": "TASK-6.2"
+      },
+      {
+        "from": "TASK-6.4",
+        "to": "TASK-6.2"
+      },
+      {
+        "from": "TASK-6.5",
+        "to": "TASK-6.2"
+      },
+      {
+        "from": "TASK-6.6",
+        "to": "TASK-6.3"
+      },
+      {
+        "from": "TASK-6.6",
+        "to": "TASK-6.4"
+      },
+      {
+        "from": "TASK-6.6",
+        "to": "TASK-6.5"
+      },
+      {
+        "from": "TASK-6.7",
+        "to": "TASK-6.6"
+      },
+      {
+        "from": "TASK-6.8",
+        "to": "TASK-6.7"
+      },
+      {
+        "from": "TASK-6.9",
+        "to": "TASK-1.17"
+      },
+      {
+        "from": "TASK-6.9",
+        "to": "TASK-6.8"
+      },
+      {
+        "from": "TASK-6.10",
+        "to": "TASK-6.8"
+      },
+      {
+        "from": "TASK-6.11",
+        "to": "TASK-6.6"
+      },
+      {
+        "from": "TASK-6.11",
+        "to": "TASK-7.12"
+      },
+      {
+        "from": "TASK-6.12",
+        "to": "TASK-6.10"
+      },
+      {
+        "from": "TASK-6.12",
+        "to": "TASK-6.17"
+      },
+      {
+        "from": "TASK-6.13",
+        "to": "TASK-6.6"
+      },
+      {
+        "from": "TASK-6.14",
+        "to": "TASK-6.6"
+      },
+      {
+        "from": "TASK-6.15",
+        "to": "TASK-6.6"
+      },
+      {
+        "from": "TASK-6.16",
+        "to": "TASK-6.11"
+      },
+      {
+        "from": "TASK-6.17",
+        "to": "TASK-6.16"
+      },
+      {
+        "from": "TASK-6.18",
+        "to": "TASK-6.1"
+      },
+      {
+        "from": "TASK-7",
+        "to": "TASK-7.1"
+      },
+      {
+        "from": "TASK-7",
+        "to": "TASK-7.2"
+      },
+      {
+        "from": "TASK-7",
+        "to": "TASK-7.3"
+      },
+      {
+        "from": "TASK-7",
+        "to": "TASK-7.4"
+      },
+      {
+        "from": "TASK-7",
+        "to": "TASK-7.5"
+      },
+      {
+        "from": "TASK-7",
+        "to": "TASK-7.6"
+      },
+      {
+        "from": "TASK-7",
+        "to": "TASK-7.7"
+      },
+      {
+        "from": "TASK-7",
+        "to": "TASK-7.8"
+      },
+      {
+        "from": "TASK-7",
+        "to": "TASK-7.9"
+      },
+      {
+        "from": "TASK-7",
+        "to": "TASK-7.10"
+      },
+      {
+        "from": "TASK-7",
+        "to": "TASK-7.11"
+      },
+      {
+        "from": "TASK-7",
+        "to": "TASK-7.12"
+      },
+      {
+        "from": "TASK-7",
+        "to": "TASK-7.13"
+      },
+      {
+        "from": "TASK-7",
+        "to": "TASK-7.14"
+      },
+      {
+        "from": "TASK-7",
+        "to": "TASK-7.15"
+      },
+      {
+        "from": "TASK-7",
+        "to": "TASK-7.16"
+      },
+      {
+        "from": "TASK-7",
+        "to": "TASK-7.17"
+      },
+      {
+        "from": "TASK-7.1",
+        "to": "TASK-1.2"
+      },
+      {
+        "from": "TASK-7.2",
+        "to": "TASK-1.5"
+      },
+      {
+        "from": "TASK-7.3",
+        "to": "TASK-7.1"
+      },
+      {
+        "from": "TASK-7.3",
+        "to": "TASK-7.2"
+      },
+      {
+        "from": "TASK-7.4",
+        "to": "TASK-7.3"
+      },
+      {
+        "from": "TASK-7.5",
+        "to": "TASK-7.3"
+      },
+      {
+        "from": "TASK-7.6",
+        "to": "TASK-7.2"
+      },
+      {
+        "from": "TASK-7.7",
+        "to": "TASK-7.1"
+      },
+      {
+        "from": "TASK-7.8",
+        "to": "TASK-7.5"
+      },
+      {
+        "from": "TASK-7.9",
+        "to": "TASK-7.3"
+      },
+      {
+        "from": "TASK-7.10",
+        "to": "TASK-7.6"
+      },
+      {
+        "from": "TASK-7.10",
+        "to": "TASK-7.8"
+      },
+      {
+        "from": "TASK-7.10",
+        "to": "TASK-7.9"
+      },
+      {
+        "from": "TASK-7.11",
+        "to": "TASK-7.6"
+      },
+      {
+        "from": "TASK-7.11",
+        "to": "TASK-7.10"
+      },
+      {
+        "from": "TASK-7.12",
+        "to": "TASK-1.4"
+      },
+      {
+        "from": "TASK-7.13",
+        "to": "TASK-7.5"
+      },
+      {
+        "from": "TASK-7.13",
+        "to": "TASK-7.12"
+      },
+      {
+        "from": "TASK-7.14",
+        "to": "TASK-7.4"
+      },
+      {
+        "from": "TASK-7.14",
+        "to": "TASK-7.8"
+      },
+      {
+        "from": "TASK-7.14",
+        "to": "TASK-7.9"
+      },
+      {
+        "from": "TASK-7.14",
+        "to": "TASK-7.11"
+      },
+      {
+        "from": "TASK-7.14",
+        "to": "TASK-7.13"
+      },
+      {
+        "from": "TASK-7.15",
+        "to": "TASK-1.6"
+      },
+      {
+        "from": "TASK-7.15",
+        "to": "TASK-7.4"
+      },
+      {
+        "from": "TASK-7.15",
+        "to": "TASK-7.10"
+      },
+      {
+        "from": "TASK-7.15",
+        "to": "TASK-7.13"
+      },
+      {
+        "from": "TASK-7.16",
+        "to": "TASK-7.4"
+      },
+      {
+        "from": "TASK-7.16",
+        "to": "TASK-7.6"
+      },
+      {
+        "from": "TASK-7.17",
+        "to": "TASK-7.2"
+      },
+      {
+        "from": "TASK-7.17",
+        "to": "TASK-7.3"
+      },
+      {
+        "from": "TASK-7.17",
+        "to": "TASK-7.4"
+      },
+      {
+        "from": "TASK-8",
+        "to": "TASK-8.1"
+      },
+      {
+        "from": "TASK-8",
+        "to": "TASK-8.2"
+      },
+      {
+        "from": "TASK-8",
+        "to": "TASK-8.3"
+      },
+      {
+        "from": "TASK-8",
+        "to": "TASK-8.4"
+      },
+      {
+        "from": "TASK-8.1",
+        "to": "TASK-3.2"
+      },
+      {
+        "from": "TASK-8.1",
+        "to": "TASK-3.6"
+      },
+      {
+        "from": "TASK-8.1",
+        "to": "TASK-7.10"
+      },
+      {
+        "from": "TASK-8.1",
+        "to": "TASK-7.13"
+      },
+      {
+        "from": "TASK-8.2",
+        "to": "TASK-3.12"
+      },
+      {
+        "from": "TASK-8.2",
+        "to": "TASK-8.1"
+      },
+      {
+        "from": "TASK-8.3",
+        "to": "TASK-8.1"
+      },
+      {
+        "from": "TASK-8.4",
+        "to": "TASK-7.16"
+      },
+      {
+        "from": "TASK-8.4",
+        "to": "TASK-7.17"
+      },
+      {
+        "from": "TASK-8.4",
+        "to": "TASK-8.1"
+      },
+      {
+        "from": "TASK-9",
+        "to": "TASK-9.1"
+      },
+      {
+        "from": "TASK-9",
+        "to": "TASK-9.2"
+      },
+      {
+        "from": "TASK-9",
+        "to": "TASK-9.3"
+      },
+      {
+        "from": "TASK-9",
+        "to": "TASK-9.4"
+      },
+      {
+        "from": "TASK-9",
+        "to": "TASK-9.5"
+      },
+      {
+        "from": "TASK-9",
+        "to": "TASK-9.6"
+      },
+      {
+        "from": "TASK-9",
+        "to": "TASK-9.7"
+      },
+      {
+        "from": "TASK-9",
+        "to": "TASK-9.8"
+      },
+      {
+        "from": "TASK-9",
+        "to": "TASK-9.9"
+      },
+      {
+        "from": "TASK-9.1",
+        "to": "TASK-3.4"
+      },
+      {
+        "from": "TASK-9.1",
+        "to": "TASK-7.4"
+      },
+      {
+        "from": "TASK-9.2",
+        "to": "TASK-3.11"
+      },
+      {
+        "from": "TASK-9.2",
+        "to": "TASK-9.1"
+      },
+      {
+        "from": "TASK-9.3",
+        "to": "TASK-3.6"
+      },
+      {
+        "from": "TASK-9.3",
+        "to": "TASK-3.12"
+      },
+      {
+        "from": "TASK-9.3",
+        "to": "TASK-9.1"
+      },
+      {
+        "from": "TASK-9.4",
+        "to": "TASK-3.9"
+      },
+      {
+        "from": "TASK-9.4",
+        "to": "TASK-9.1"
+      },
+      {
+        "from": "TASK-9.5",
+        "to": "TASK-1.15"
+      },
+      {
+        "from": "TASK-9.5",
+        "to": "TASK-9.1"
+      },
+      {
+        "from": "TASK-9.6",
+        "to": "TASK-9.3"
+      },
+      {
+        "from": "TASK-9.7",
+        "to": "TASK-9.1"
+      },
+      {
+        "from": "TASK-9.8",
+        "to": "TASK-9.3"
+      },
+      {
+        "from": "TASK-9.9",
+        "to": "TASK-7.16"
+      },
+      {
+        "from": "TASK-9.9",
+        "to": "TASK-7.17"
+      },
+      {
+        "from": "TASK-9.9",
+        "to": "TASK-9.3"
+      },
+      {
+        "from": "TASK-10",
+        "to": "TASK-10.1"
+      },
+      {
+        "from": "TASK-10",
+        "to": "TASK-10.2"
+      },
+      {
+        "from": "TASK-10",
+        "to": "TASK-10.3"
+      },
+      {
+        "from": "TASK-10",
+        "to": "TASK-10.4"
+      },
+      {
+        "from": "TASK-10",
+        "to": "TASK-10.5"
+      },
+      {
+        "from": "TASK-10",
+        "to": "TASK-10.6"
+      },
+      {
+        "from": "TASK-10",
+        "to": "TASK-10.7"
+      },
+      {
+        "from": "TASK-10",
+        "to": "TASK-10.8"
+      },
+      {
+        "from": "TASK-10",
+        "to": "TASK-10.11"
+      },
+      {
+        "from": "TASK-10",
+        "to": "TASK-10.12"
+      },
+      {
+        "from": "TASK-10.1",
+        "to": "TASK-3.3"
+      },
+      {
+        "from": "TASK-10.1",
+        "to": "TASK-3.9"
+      },
+      {
+        "from": "TASK-10.1",
+        "to": "TASK-3.10"
+      },
+      {
+        "from": "TASK-10.1",
+        "to": "TASK-3.11"
+      },
+      {
+        "from": "TASK-10.2",
+        "to": "TASK-10.1"
+      },
+      {
+        "from": "TASK-10.3",
+        "to": "TASK-6.17"
+      },
+      {
+        "from": "TASK-10.3",
+        "to": "TASK-7.12"
+      },
+      {
+        "from": "TASK-10.3",
+        "to": "TASK-10.1"
+      },
+      {
+        "from": "TASK-10.4",
+        "to": "TASK-3.12"
+      },
+      {
+        "from": "TASK-10.4",
+        "to": "TASK-10.1"
+      },
+      {
+        "from": "TASK-10.5",
+        "to": "TASK-3.12"
+      },
+      {
+        "from": "TASK-10.5",
+        "to": "TASK-10.1"
+      },
+      {
+        "from": "TASK-10.6",
+        "to": "TASK-10.5"
+      },
+      {
+        "from": "TASK-10.7",
+        "to": "TASK-3.12"
+      },
+      {
+        "from": "TASK-10.7",
+        "to": "TASK-10.1"
+      },
+      {
+        "from": "TASK-10.8",
+        "to": "TASK-10.5"
+      },
+      {
+        "from": "TASK-10.11",
+        "to": "TASK-4.9"
+      },
+      {
+        "from": "TASK-10.11",
+        "to": "TASK-10.1"
+      },
+      {
+        "from": "TASK-10.12",
+        "to": "TASK-10.1"
+      },
+      {
+        "from": "TASK-11",
+        "to": "TASK-11.1"
+      },
+      {
+        "from": "TASK-11",
+        "to": "TASK-11.2"
+      },
+      {
+        "from": "TASK-11",
+        "to": "TASK-11.3"
+      },
+      {
+        "from": "TASK-11",
+        "to": "TASK-11.4"
+      },
+      {
+        "from": "TASK-11",
+        "to": "TASK-11.5"
+      },
+      {
+        "from": "TASK-11",
+        "to": "TASK-11.6"
+      },
+      {
+        "from": "TASK-11",
+        "to": "TASK-11.7"
+      },
+      {
+        "from": "TASK-11",
+        "to": "TASK-11.8"
+      },
+      {
+        "from": "TASK-11",
+        "to": "TASK-11.9"
+      },
+      {
+        "from": "TASK-11",
+        "to": "TASK-11.10"
+      },
+      {
+        "from": "TASK-11",
+        "to": "TASK-11.11"
+      },
+      {
+        "from": "TASK-11",
+        "to": "TASK-11.12"
+      },
+      {
+        "from": "TASK-11.1",
+        "to": "TASK-2.1"
+      },
+      {
+        "from": "TASK-11.1",
+        "to": "TASK-3.12"
+      },
+      {
+        "from": "TASK-11.1",
+        "to": "TASK-10.2"
+      },
+      {
+        "from": "TASK-11.1",
+        "to": "TASK-10.4"
+      },
+      {
+        "from": "TASK-11.2",
+        "to": "TASK-10.1"
+      },
+      {
+        "from": "TASK-11.2",
+        "to": "TASK-11.1"
+      },
+      {
+        "from": "TASK-11.3",
+        "to": "TASK-11.1"
+      },
+      {
+        "from": "TASK-11.4",
+        "to": "TASK-11.1"
+      },
+      {
+        "from": "TASK-11.5",
+        "to": "TASK-3.9"
+      },
+      {
+        "from": "TASK-11.5",
+        "to": "TASK-11.1"
+      },
+      {
+        "from": "TASK-11.5",
+        "to": "TASK-11.4"
+      },
+      {
+        "from": "TASK-11.6",
+        "to": "TASK-10.1"
+      },
+      {
+        "from": "TASK-11.6",
+        "to": "TASK-11.1"
+      },
+      {
+        "from": "TASK-11.7",
+        "to": "TASK-3.9"
+      },
+      {
+        "from": "TASK-11.7",
+        "to": "TASK-6.7"
+      },
+      {
+        "from": "TASK-11.7",
+        "to": "TASK-11.4"
+      },
+      {
+        "from": "TASK-11.8",
+        "to": "TASK-7.12"
+      },
+      {
+        "from": "TASK-11.8",
+        "to": "TASK-10.3"
+      },
+      {
+        "from": "TASK-11.8",
+        "to": "TASK-11.7"
+      },
+      {
+        "from": "TASK-11.9",
+        "to": "TASK-11.4"
+      },
+      {
+        "from": "TASK-11.9",
+        "to": "TASK-11.5"
+      },
+      {
+        "from": "TASK-11.10",
+        "to": "TASK-11.8"
+      },
+      {
+        "from": "TASK-11.11",
+        "to": "TASK-11.3"
+      },
+      {
+        "from": "TASK-11.12",
+        "to": "TASK-11.2"
+      },
+      {
+        "from": "TASK-11.12",
+        "to": "TASK-11.5"
+      },
+      {
+        "from": "TASK-11.12",
+        "to": "TASK-11.9"
+      },
+      {
+        "from": "TASK-11.12",
+        "to": "TASK-11.10"
+      },
+      {
+        "from": "TASK-11.12",
+        "to": "TASK-11.11"
+      },
+      {
+        "from": "TASK-12",
+        "to": "TASK-12.1"
+      },
+      {
+        "from": "TASK-12",
+        "to": "TASK-12.2"
+      },
+      {
+        "from": "TASK-12",
+        "to": "TASK-12.3"
+      },
+      {
+        "from": "TASK-12",
+        "to": "TASK-12.4"
+      },
+      {
+        "from": "TASK-12",
+        "to": "TASK-12.5"
+      },
+      {
+        "from": "TASK-12",
+        "to": "TASK-12.6"
+      },
+      {
+        "from": "TASK-12",
+        "to": "TASK-12.7"
+      },
+      {
+        "from": "TASK-12",
+        "to": "TASK-12.8"
+      },
+      {
+        "from": "TASK-12",
+        "to": "TASK-12.9"
+      },
+      {
+        "from": "TASK-12.1",
+        "to": "TASK-2.1"
+      },
+      {
+        "from": "TASK-12.2",
+        "to": "TASK-3.3"
+      },
+      {
+        "from": "TASK-12.2",
+        "to": "TASK-12.1"
+      },
+      {
+        "from": "TASK-12.3",
+        "to": "TASK-3.4"
+      },
+      {
+        "from": "TASK-12.3",
+        "to": "TASK-3.10"
+      },
+      {
+        "from": "TASK-12.3",
+        "to": "TASK-3.18"
+      },
+      {
+        "from": "TASK-12.3",
+        "to": "TASK-4.9"
+      },
+      {
+        "from": "TASK-12.3",
+        "to": "TASK-12.2"
+      },
+      {
+        "from": "TASK-12.4",
+        "to": "TASK-2.10"
+      },
+      {
+        "from": "TASK-12.4",
+        "to": "TASK-2.17"
+      },
+      {
+        "from": "TASK-12.4",
+        "to": "TASK-4.3"
+      },
+      {
+        "from": "TASK-12.4",
+        "to": "TASK-12.3"
+      },
+      {
+        "from": "TASK-12.4",
+        "to": "TASK-12.5"
+      },
+      {
+        "from": "TASK-12.4",
+        "to": "TASK-12.6"
+      },
+      {
+        "from": "TASK-12.4",
+        "to": "TASK-12.7"
+      },
+      {
+        "from": "TASK-12.4",
+        "to": "TASK-12.8"
+      },
+      {
+        "from": "TASK-12.5",
+        "to": "TASK-2.11"
+      },
+      {
+        "from": "TASK-12.5",
+        "to": "TASK-12.1"
+      },
+      {
+        "from": "TASK-12.6",
+        "to": "TASK-9.7"
+      },
+      {
+        "from": "TASK-12.6",
+        "to": "TASK-12.3"
+      },
+      {
+        "from": "TASK-12.7",
+        "to": "TASK-3.5"
+      },
+      {
+        "from": "TASK-12.7",
+        "to": "TASK-12.3"
+      },
+      {
+        "from": "TASK-12.8",
+        "to": "TASK-4.2"
+      },
+      {
+        "from": "TASK-12.8",
+        "to": "TASK-12.1"
+      },
+      {
+        "from": "TASK-12.9",
+        "to": "TASK-12.3"
+      },
+      {
+        "from": "TASK-13",
+        "to": "TASK-13.1"
+      },
+      {
+        "from": "TASK-13",
+        "to": "TASK-13.2"
+      },
+      {
+        "from": "TASK-13",
+        "to": "TASK-13.3"
+      },
+      {
+        "from": "TASK-13",
+        "to": "TASK-13.4"
+      },
+      {
+        "from": "TASK-13",
+        "to": "TASK-13.5"
+      },
+      {
+        "from": "TASK-13",
+        "to": "TASK-13.6"
+      },
+      {
+        "from": "TASK-13",
+        "to": "TASK-13.7"
+      },
+      {
+        "from": "TASK-13",
+        "to": "TASK-13.8"
+      },
+      {
+        "from": "TASK-13",
+        "to": "TASK-13.9"
+      },
+      {
+        "from": "TASK-13",
+        "to": "TASK-13.10"
+      },
+      {
+        "from": "TASK-13",
+        "to": "TASK-13.11"
+      },
+      {
+        "from": "TASK-13",
+        "to": "TASK-13.12"
+      },
+      {
+        "from": "TASK-13.1",
+        "to": "TASK-2.6"
+      },
+      {
+        "from": "TASK-13.1",
+        "to": "TASK-3.10"
+      },
+      {
+        "from": "TASK-13.1",
+        "to": "TASK-10.1"
+      },
+      {
+        "from": "TASK-13.2",
+        "to": "TASK-3.9"
+      },
+      {
+        "from": "TASK-13.3",
+        "to": "TASK-3.9"
+      },
+      {
+        "from": "TASK-13.3",
+        "to": "TASK-3.10"
+      },
+      {
+        "from": "TASK-13.3",
+        "to": "TASK-10.1"
+      },
+      {
+        "from": "TASK-13.4",
+        "to": "TASK-1.18"
+      },
+      {
+        "from": "TASK-13.4",
+        "to": "TASK-8.1"
+      },
+      {
+        "from": "TASK-13.4",
+        "to": "TASK-9.1"
+      },
+      {
+        "from": "TASK-13.4",
+        "to": "TASK-10.1"
+      },
+      {
+        "from": "TASK-13.5",
+        "to": "TASK-1.18"
+      },
+      {
+        "from": "TASK-13.5",
+        "to": "TASK-10.1"
+      },
+      {
+        "from": "TASK-13.6",
+        "to": "TASK-2.10"
+      },
+      {
+        "from": "TASK-13.6",
+        "to": "TASK-2.12"
+      },
+      {
+        "from": "TASK-13.6",
+        "to": "TASK-3.9"
+      },
+      {
+        "from": "TASK-13.6",
+        "to": "TASK-3.10"
+      },
+      {
+        "from": "TASK-13.6",
+        "to": "TASK-4.3"
+      },
+      {
+        "from": "TASK-13.6",
+        "to": "TASK-10.1"
+      },
+      {
+        "from": "TASK-13.7",
+        "to": "TASK-13.6"
+      },
+      {
+        "from": "TASK-13.8",
+        "to": "TASK-13.4"
+      },
+      {
+        "from": "TASK-13.8",
+        "to": "TASK-13.6"
+      },
+      {
+        "from": "TASK-13.9",
+        "to": "TASK-2.12"
+      },
+      {
+        "from": "TASK-13.9",
+        "to": "TASK-13.4"
+      },
+      {
+        "from": "TASK-13.10",
+        "to": "TASK-3.6"
+      },
+      {
+        "from": "TASK-13.10",
+        "to": "TASK-6.13"
+      },
+      {
+        "from": "TASK-13.10",
+        "to": "TASK-8.3"
+      },
+      {
+        "from": "TASK-13.10",
+        "to": "TASK-9.8"
+      },
+      {
+        "from": "TASK-13.10",
+        "to": "TASK-10.1"
+      },
+      {
+        "from": "TASK-13.10",
+        "to": "TASK-13.9"
+      },
+      {
+        "from": "TASK-13.11",
+        "to": "TASK-2.4"
+      },
+      {
+        "from": "TASK-13.11",
+        "to": "TASK-2.6"
+      },
+      {
+        "from": "TASK-13.11",
+        "to": "TASK-2.12"
+      },
+      {
+        "from": "TASK-13.11",
+        "to": "TASK-2.16"
+      },
+      {
+        "from": "TASK-13.11",
+        "to": "TASK-2.17"
+      },
+      {
+        "from": "TASK-13.11",
+        "to": "TASK-3.11"
+      },
+      {
+        "from": "TASK-13.11",
+        "to": "TASK-8.1"
+      },
+      {
+        "from": "TASK-13.11",
+        "to": "TASK-9.1"
+      },
+      {
+        "from": "TASK-13.11",
+        "to": "TASK-10.1"
+      },
+      {
+        "from": "TASK-13.11",
+        "to": "TASK-10.2"
+      },
+      {
+        "from": "TASK-13.11",
+        "to": "TASK-13.1"
+      },
+      {
+        "from": "TASK-13.11",
+        "to": "TASK-13.3"
+      },
+      {
+        "from": "TASK-13.11",
+        "to": "TASK-13.7"
+      },
+      {
+        "from": "TASK-13.11",
+        "to": "TASK-13.8"
+      },
+      {
+        "from": "TASK-13.12",
+        "to": "TASK-1.18"
+      },
+      {
+        "from": "TASK-13.12",
+        "to": "TASK-2.12"
+      },
+      {
+        "from": "TASK-13.12",
+        "to": "TASK-4.4"
+      }
+    ]
+  },
+  "readiness": {
+    "isReady": true,
+    "isBlocked": false,
+    "blockingDependencies": [],
+    "missingDependencies": []
+  },
+  "documentation": [
+    "doc-1",
+    "doc-2"
+  ],
+  "subtasks": [],
+  "acceptanceCriteria": [
+    {
+      "index": 1,
+      "text": "Given a clean checkout after `npm ci`, When `npm test` runs, Then Vitest executes the unit tests and the fast-check property tests and exits 0 [REQ-063.1]",
+      "checked": false
+    },
+    {
+      "index": 2,
+      "text": "Given a clean checkout, When `npm run lint` and `npm run typecheck` run, Then ESLint with Prettier and `tsc` with `strict: true` report zero errors and both exit 0 [REQ-063.3, REQ-059.1, REQ-059.4]",
+      "checked": false
+    },
+    {
+      "index": 3,
+      "text": "Given a source file with a type error, When `npm run typecheck` runs, Then it exits non-zero; Given a file violating an ESLint or Prettier rule, When `npm run lint` runs, Then it exits non-zero [REQ-059.1, REQ-059.4]",
+      "checked": false
+    },
+    {
+      "index": 4,
+      "text": "Given a module under the engine, bots, advice or statistics folders that imports React, a DOM API or IndexedDB, When `npm run lint` runs, Then it reports an error naming the forbidden import and exits non-zero [REQ-059.2]",
+      "checked": false
+    },
+    {
+      "index": 5,
+      "text": "Given line coverage below 90% for the engine, bots, advice or statistics modules, or below 70% overall, When `npm test` runs with coverage, Then it exits non-zero naming the threshold that was missed [REQ-059.3]",
+      "checked": false
+    },
+    {
+      "index": 6,
+      "text": "Given a clean checkout, When `npm run build` runs, Then Vite writes the deployable static app to `dist/` and exits 0 [REQ-063.4]",
+      "checked": false
+    },
+    {
+      "index": 7,
+      "text": "Given a clean checkout with Playwright browsers installed, When `npm run e2e` runs, Then a smoke test opens the built app in Chromium and in WebKit and both runs pass [REQ-063.2]",
+      "checked": false
+    },
+    {
+      "index": 8,
+      "text": "Given `npm run e2e`, When the smoke test runs in Chromium and WebKit, Then it also runs an axe scan of the app's start page and passes only with zero serious or critical violations; Given a test page with an injected critical violation (an image without alt text), Then the axe check fails and `npm run e2e` exits non-zero [REQ-057.1]",
+      "checked": false
+    }
+  ],
+  "definitionOfDone": [
+    {
+      "index": 1,
+      "text": "Every acceptance criterion has at least one automated test (unit, property or Playwright) that passes",
+      "checked": false
+    },
+    {
+      "index": 2,
+      "text": "`npm run lint`, `npm run typecheck` and `npm test` pass with zero errors [REQ-059.1, REQ-059.4]",
+      "checked": false
+    },
+    {
+      "index": 3,
+      "text": "The golden-spot suite passes 100% (applies from the story that creates the suite, E07-S14, onward) [REQ-039.4]",
+      "checked": false
+    },
+    {
+      "index": 4,
+      "text": "Coverage thresholds hold: >= 90% engine/bots/advice/statistics, >= 70% overall [REQ-059.3]",
+      "checked": false
+    },
+    {
+      "index": 5,
+      "text": "Engine, bots, advice and statistics code imports no UI or browser-only code [REQ-059.2]",
+      "checked": false
+    },
+    {
+      "index": 6,
+      "text": "Stories that touch the engine, bots or advice: a 10,000-hand playtest reports zero invariant violations (applies once the playtest runner exists, E01-S07, onward) [REQ-056.1]",
+      "checked": false
+    },
+    {
+      "index": 7,
+      "text": "Stories that add or change a screen: Playwright test of the screen flow in Chromium and WebKit, and axe reports zero serious or critical violations (axe tooling is provisioned in the toolchain story E01-S01) [REQ-057.1]",
+      "checked": false
+    },
+    {
+      "index": 8,
+      "text": "No new network requests beyond the app's own files [REQ-058.1]",
+      "checked": false
+    },
+    {
+      "index": 9,
+      "text": "Strategy-content stories: text is original and every chart, range or golden spot carries its justification [REQ-061.2]",
+      "checked": false
+    },
+    {
+      "index": 10,
+      "text": "CI workflow is green on the story's branch (applies once the CI story E01-S02 is done; E01-S01 instead passes the same checks locally) [REQ-064.2]",
+      "checked": false
+    },
+    {
+      "index": 11,
+      "text": "Story documentation is written and published to Backlog.md",
+      "checked": false
+    },
+    {
+      "index": 12,
+      "text": "Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled",
+      "checked": false
+    }
+  ],
+  "implementationPlan": null,
+  "implementationNotes": null,
+  "comments": [],
+  "finalSummary": null
+}
