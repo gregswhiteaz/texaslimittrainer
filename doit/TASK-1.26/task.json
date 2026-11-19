@@ -1,0 +1,184 @@
+{
+  "id": "TASK-1.26",
+  "title": "Pin the playtest summary and policy-lifetime tests",
+  "status": "To Do",
+  "archived": false,
+  "type": "chore",
+  "priority": "medium",
+  "project": null,
+  "assignees": [],
+  "reporter": null,
+  "labels": [
+    "dream-limit-holdem-trainer",
+    "follow-up"
+  ],
+  "milestone": "m-0",
+  "parentTaskId": "TASK-1",
+  "acceptanceCriteriaCompleted": 0,
+  "acceptanceCriteriaCount": 5,
+  "references": [
+    "doc-15"
+  ],
+  "modifiedFiles": [],
+  "ordinal": 179000,
+  "createdAt": "2026-11-18T17:24:00Z",
+  "updatedAt": "2026-11-18T21:33:00Z",
+  "dueDate": null,
+  "isReady": true,
+  "path": "backlog/tasks/task-1.26 - Pin-the-playtest-summary-and-policy-lifetime-tests.md",
+  "description": "Follow-up from TASK-1.6 (doc-15): the judge's J-1-01 (MEDIUM) and code review found that no test checks a real 'Largest pot' value \u2014 two mutants survive (last hand's pot instead of the max; summing the pot index instead of the amount). Also untested: each seat's policy is created once per hand. src/playtest is not covered by the headless-boundary lint.",
+  "dependencies": [
+    "TASK-1.6"
+  ],
+  "dependencyGraph": {
+    "root": "TASK-1.26",
+    "nodes": [
+      {
+        "id": "TASK-1.26",
+        "title": "Pin the playtest summary and policy-lifetime tests",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": 0,
+        "dependentDepth": 0
+      },
+      {
+        "id": "TASK-1.1",
+        "title": "Bootstrap the strict TypeScript project with one-command checks",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 6,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.2",
+        "title": "Rank showdown hands by real poker hand rankings",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 4,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.3",
+        "title": "Deal every hand from a seeded shuffle with a replay code",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 4,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.4",
+        "title": "Play a complete fixed-limit hand from blinds to showdown",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 3,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.5",
+        "title": "Give each deciding seat only its own view of the hand",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 2,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.6",
+        "title": "Run seeded bot-only hands from the command line",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 1,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.7",
+        "title": "Run every check in GitHub Actions on each push and pull request",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 5,
+        "dependentDepth": null
+      }
+    ],
+    "edges": [
+      {
+        "from": "TASK-1.2",
+        "to": "TASK-1.7"
+      },
+      {
+        "from": "TASK-1.3",
+        "to": "TASK-1.7"
+      },
+      {
+        "from": "TASK-1.4",
+        "to": "TASK-1.2"
+      },
+      {
+        "from": "TASK-1.4",
+        "to": "TASK-1.3"
+      },
+      {
+        "from": "TASK-1.5",
+        "to": "TASK-1.4"
+      },
+      {
+        "from": "TASK-1.6",
+        "to": "TASK-1.5"
+      },
+      {
+        "from": "TASK-1.7",
+        "to": "TASK-1.1"
+      },
+      {
+        "from": "TASK-1.26",
+        "to": "TASK-1.6"
+      }
+    ]
+  },
+  "readiness": {
+    "isReady": true,
+    "isBlocked": false,
+    "blockingDependencies": [],
+    "missingDependencies": []
+  },
+  "documentation": [],
+  "subtasks": [],
+  "acceptanceCriteria": [
+    {
+      "index": 1,
+      "text": "Given a playtest summary over at least two hands where the larger pot comes first, When summarize runs, Then Largest pot equals the largest per-hand sum of award amounts",
+      "checked": false
+    },
+    {
+      "index": 2,
+      "text": "Given a real multi-hand run, When the report is built, Then the Largest pot line matches an independent recomputation from the played hands",
+      "checked": false
+    },
+    {
+      "index": 3,
+      "text": "Given a hand with several decisions per seat, When the runner plays it, Then each seat's policy is created exactly once for that hand",
+      "checked": false
+    },
+    {
+      "index": 4,
+      "text": "Given src/playtest imports a UI or browser module, When npm run lint runs, Then the headless-boundary rule fails naming the file",
+      "checked": false
+    },
+    {
+      "index": 5,
+      "text": "Given src/table imports a UI or browser module, When npm run lint runs, Then the headless-boundary rule fails naming the file, and the TASK-3.1 import-scan test (SPEC-10) is removed",
+      "checked": false
+    }
+  ],
+  "definitionOfDone": [],
+  "implementationPlan": null,
+  "implementationNotes": "AC added from TASK-3.1 follow-up (doc-21).",
+  "comments": [],
+  "finalSummary": null
+}

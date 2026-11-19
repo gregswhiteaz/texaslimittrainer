@@ -1,10 +1,11 @@
 ---
 id: TASK-1.26
 title: Pin the playtest summary and policy-lifetime tests
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-18T17:24:00Z'
-updated_date: '2026-11-18T21:33:00Z'
+updated_date: '2026-11-19T20:39:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -34,8 +35,22 @@ Follow-up from TASK-1.6 (doc-15): the judge's J-1-01 (MEDIUM) and code review fo
 - [ ] #5 Given src/table imports a UI or browser module, When npm run lint runs, Then the headless-boundary rule fails naming the file, and the TASK-3.1 import-scan test (SPEC-10) is removed
 <!-- AC:END -->
 
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. tools/lint/headless-boundary.js: add LINT_ONLY_HEADLESS_DIRS = [playtest, table] to the boundary rule (coverage glob unchanged).
+2. tests/playtest/summary.acceptance.test.ts: hand-built awards kill the last-hand / pot-index / single-award mutants; a seeded 20-hand run matches an independent recomputation from totalContribution.
+3. runner.test.ts: each seat's policy created exactly once per hand.
+4. tests/toolchain/headless-lint-dirs.acceptance.test.ts: probe imports in src/playtest and src/table fail lint naming the file.
+5. Remove TASK-3.1 SPEC-10 import-scan test from tests/table/session.test.ts; README names the new folders.
+
+Full spec: doit/TASK-1.26/spec.md
+<!-- SECTION:PLAN:END -->
+
 ## Implementation Notes
 
 <!-- SECTION:NOTES:BEGIN -->
 AC added from TASK-3.1 follow-up (doc-21).
+
+Cross-story test edit (AC#5): removes TASK-3.1 SPEC-10 'session module imports no UI code' in tests/table/session.test.ts (not locked), replaced by the lint rule as TASK-3.1's spec planned (doit/TASK-3.1/spec.md:449).
 <!-- SECTION:NOTES:END -->

@@ -1,0 +1,44 @@
+[
+  {
+    "id": "SPEC-01",
+    "verifies": "AC#1",
+    "verification": "acceptance `tests/playtest/summary.acceptance.test.ts::Largest pot is the largest per-hand sum of award amounts`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-02",
+    "verifies": "AC#2",
+    "verification": "acceptance `tests/playtest/summary.acceptance.test.ts::the report's Largest pot matches the played hands`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-03",
+    "verifies": "AC#3",
+    "verification": "unit `tests/playtest/runner.test.ts::creates each seat's policy once per hand`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-04",
+    "verifies": "AC#4",
+    "verification": "acceptance `tests/toolchain/headless-lint-dirs.acceptance.test.ts::lint rejects UI and browser imports in src/playtest and src/table, naming each file`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-05",
+    "verifies": "AC#5",
+    "verification": "acceptance `tests/toolchain/headless-lint-dirs.acceptance.test.ts::lint rejects UI and browser imports in src/playtest and src/table, naming each file` (the list checks are in the same file, in `it('the lint-only headless folders are playtest and table')`)",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-06",
+    "verifies": "AC#5",
+    "verification": "command `! grep -n \"session module imports no UI code\\|readFileSync\" tests/table/session.test.ts && npm run lint` \u2192 exit 0",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-07",
+    "verifies": "AC#1, AC#2, AC#3, AC#4, AC#5",
+    "verification": "command `npm test && npm run lint && npm run typecheck` \u2192 exit 0",
+    "status": "pending"
+  }
+]
