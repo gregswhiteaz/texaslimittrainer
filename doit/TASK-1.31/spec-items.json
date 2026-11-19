@@ -1,0 +1,44 @@
+[
+  {
+    "id": "SPEC-01",
+    "verifies": "AC#1",
+    "verification": "acceptance `tests/engine/chip-safety.acceptance.test.ts::AC#1 the worst legal hand at the stack bound keeps every chip amount a safe integer`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-02",
+    "verifies": "AC#1",
+    "verification": "acceptance `tests/engine/chip-safety.acceptance.test.ts::AC#1 random legal play from any accepted config keeps chip amounts safe`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-03",
+    "verifies": "AC#1",
+    "verification": "acceptance `tests/engine/chip-safety.acceptance.test.ts::AC#1 createHand rejects stacks that total more than MAX_SAFE_INTEGER`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-04",
+    "verifies": "AC#2",
+    "verification": "acceptance `tests/engine/chip-safety.acceptance.test.ts::AC#2 the A-4 stakes bound pins the factor 10`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-05",
+    "verifies": "AC#3",
+    "verification": "acceptance `tests/engine/chip-safety.acceptance.test.ts::AC#3 createHand reads each config field exactly once`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-06",
+    "verifies": "AC#4",
+    "verification": "command `grep -niE \"cap|at most 10 seats\" src/engine/hand.ts` (expect no output, exit 1)",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-07",
+    "verifies": "AC#1, AC#2",
+    "verification": "command `npm test && npm run lint && npm run typecheck && npm run playtest`",
+    "status": "pending"
+  }
+]

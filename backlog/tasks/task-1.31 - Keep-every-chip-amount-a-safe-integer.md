@@ -1,9 +1,11 @@
 ---
 id: TASK-1.31
 title: Keep every chip amount a safe integer
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-19T04:25:00Z'
+updated_date: '2026-11-19T23:24:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -31,3 +33,20 @@ Follow-up from TASK-1.21 (doc-29) judge J-1-01 and code review. The A-4 bound as
 - [ ] #3 Given a config built from one-shot getters or a counting Proxy, When createHand runs, Then each field is read exactly once (test)
 - [ ] #4 Given minimumStack's doc comment, When read, Then it does not claim a cap the engine doesn't enforce
 <!-- AC:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. hand.ts validate: after per-seat checks, reject stacks totalling more than MAX_SAFE_INTEGER (Q-1 message); chip conservation keeps every amount safe without the 4-bet cap.
+2. Rewrite minimumStack / A-4 comments with no cap claim.
+3. chip-safety acceptance test: worst-case 10-seat always-raise hand at the limit stays all safe integers; A-4 factor-10 boundary both sides; each config field read exactly once (counting Proxy).
+4. Adjust TASK-1.21's locked assertion per Q-2.
+
+Full spec: doit/TASK-1.31/spec.md
+<!-- SECTION:PLAN:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+Q-1 (user): total-stacks error 'Stacks must total at most 9007199254740991'. Q-2 (user): approved adjusting TASK-1.21's locked assertion in tests/engine/input-hardening.acceptance.test.ts:92-93 (MAX_SAFE-800 accepted, MAX_SAFE throws the new error).
+<!-- SECTION:NOTES:END -->

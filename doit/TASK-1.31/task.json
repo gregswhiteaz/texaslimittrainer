@@ -1,0 +1,166 @@
+{
+  "id": "TASK-1.31",
+  "title": "Keep every chip amount a safe integer",
+  "status": "To Do",
+  "archived": false,
+  "type": "chore",
+  "priority": "medium",
+  "project": null,
+  "assignees": [],
+  "reporter": null,
+  "labels": [
+    "dream-limit-holdem-trainer",
+    "follow-up"
+  ],
+  "milestone": "m-0",
+  "parentTaskId": "TASK-1",
+  "acceptanceCriteriaCompleted": 0,
+  "acceptanceCriteriaCount": 4,
+  "references": [
+    "doc-29"
+  ],
+  "modifiedFiles": [],
+  "ordinal": 191000,
+  "createdAt": "2026-11-19T04:25:00Z",
+  "updatedAt": null,
+  "dueDate": null,
+  "isReady": true,
+  "path": "backlog/tasks/task-1.31 - Keep-every-chip-amount-a-safe-integer.md",
+  "description": "Follow-up from TASK-1.21 (doc-29) judge J-1-01 and code review. The A-4 bound assumes a 4-bet cap that the engine does not enforce yet (TASK-1.12), and stacks up to MAX_SAFE_INTEGER are accepted. The judge played a legal 10-seat hand at the A-4 bound that produced 11 unsafe numbers (largest 90071992547408820). minimumStack's doc comment also claims the cap. No test pins the factor 10 in A-4 or that createHand reads each field once.",
+  "dependencies": [
+    "TASK-1.21"
+  ],
+  "dependencyGraph": {
+    "root": "TASK-1.31",
+    "nodes": [
+      {
+        "id": "TASK-1.31",
+        "title": "Keep every chip amount a safe integer",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": 0,
+        "dependentDepth": 0
+      },
+      {
+        "id": "TASK-1.1",
+        "title": "Bootstrap the strict TypeScript project with one-command checks",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 5,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.2",
+        "title": "Rank showdown hands by real poker hand rankings",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 3,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.3",
+        "title": "Deal every hand from a seeded shuffle with a replay code",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 3,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.4",
+        "title": "Play a complete fixed-limit hand from blinds to showdown",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 2,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.7",
+        "title": "Run every check in GitHub Actions on each push and pull request",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 4,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.21",
+        "title": "Harden engine input validation found in review",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 1,
+        "dependentDepth": null
+      }
+    ],
+    "edges": [
+      {
+        "from": "TASK-1.2",
+        "to": "TASK-1.7"
+      },
+      {
+        "from": "TASK-1.3",
+        "to": "TASK-1.7"
+      },
+      {
+        "from": "TASK-1.4",
+        "to": "TASK-1.2"
+      },
+      {
+        "from": "TASK-1.4",
+        "to": "TASK-1.3"
+      },
+      {
+        "from": "TASK-1.7",
+        "to": "TASK-1.1"
+      },
+      {
+        "from": "TASK-1.21",
+        "to": "TASK-1.4"
+      },
+      {
+        "from": "TASK-1.31",
+        "to": "TASK-1.21"
+      }
+    ]
+  },
+  "readiness": {
+    "isReady": true,
+    "isBlocked": false,
+    "blockingDependencies": [],
+    "missingDependencies": []
+  },
+  "documentation": [],
+  "subtasks": [],
+  "acceptanceCriteria": [
+    {
+      "index": 1,
+      "text": "Given any config createHand accepts, When the hand is played legally to the end, Then every stack, contribution, pot and award stays a safe integer (stacks bounded in createHand, or proven via the TASK-1.12 cap), and a test plays the worst case",
+      "checked": false
+    },
+    {
+      "index": 2,
+      "text": "Given stakes with bigBet 2^49 and stacks 2^52, When createHand validates them, Then it rejects them with 'Invalid stakes' (pins the factor 10 in the A-4 bound)",
+      "checked": false
+    },
+    {
+      "index": 3,
+      "text": "Given a config built from one-shot getters or a counting Proxy, When createHand runs, Then each field is read exactly once (test)",
+      "checked": false
+    },
+    {
+      "index": 4,
+      "text": "Given minimumStack's doc comment, When read, Then it does not claim a cap the engine doesn't enforce",
+      "checked": false
+    }
+  ],
+  "definitionOfDone": [],
+  "implementationPlan": null,
+  "implementationNotes": null,
+  "comments": [],
+  "finalSummary": null
+}
