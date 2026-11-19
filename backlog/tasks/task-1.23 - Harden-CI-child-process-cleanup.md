@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-18T07:03:00Z'
-updated_date: '2026-11-19T19:22:00Z'
+updated_date: '2026-11-19T19:26:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -54,4 +54,6 @@ Full spec: doit/TASK-1.23/spec.md
 AC added from TASK-1.29 follow-up (doc-27): the orphaned sudo'd apt-get (EPERM on kill) was the real cause of the CI lock failures.
 
 2026-11-19: raised to High by the user after CI run #68 (main, 9ba77c8) failed: attempt 1's sudo apt-get (pid 5507) outlived its 240 s timeout and held the dpkg lock through attempts 2 and 3 (AC#4). Second CI failure from this cause.
+
+Build: retry.js sudo escalation on EPERM + 2 s reap wait + fail-fast stuck attempts; process-group helper for speed-limits test; sudo tests cleanup in finally; Linux-only real-sudo flock test (SPEC-02) pending branch CI; gate PASS
 <!-- SECTION:NOTES:END -->

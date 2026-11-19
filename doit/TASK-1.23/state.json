@@ -7,13 +7,13 @@
   "review_round": 0,
   "judge_round": 0,
   "sendbacks": 0,
-  "gate_runs": 1,
+  "gate_runs": 2,
   "questions": 0,
   "assumptions": 0,
   "escalations": 0,
   "item_failures": {},
   "locked_tests": {
-    "tests/ci/retry.sudo.test.ts": "dda1e6a04b4d48d40400a608a8896252fa1130e3a630dcaa6041b82aecfb7956",
+    "tests/ci/retry.sudo.test.ts": "ad19bde7979ec5e93b542959066cd4fd619773ee82547fd9ae7da1d46a09a81b",
     "tests/ci/speed-limits.acceptance.test.ts": "21ef88e374e0b48c18bca5f10089c00bbb135b4de7646c123b2de720d010e66c"
   },
   "test_snapshot": {
@@ -203,8 +203,8 @@
       "skips": 0
     },
     "tests/ci/retry.sudo.test.ts": {
-      "sha": "dda1e6a04b4d48d40400a608a8896252fa1130e3a630dcaa6041b82aecfb7956",
-      "asserts": 33,
+      "sha": "ad19bde7979ec5e93b542959066cd4fd619773ee82547fd9ae7da1d46a09a81b",
+      "asserts": 35,
       "skips": 0
     },
     "tests/ci/retry.test.ts": {
@@ -518,7 +518,20 @@
       "skips": 0
     }
   },
-  "history": [],
+  "history": [
+    {
+      "t": "2026-11-19T12:29:55",
+      "event": "unlock",
+      "file": "tests/ci/retry.sudo.test.ts",
+      "reason": "Code review R1 MAJOR: SPEC-02 real-sudo test can pass without the sudo fallback (use_pty); strengthen by asserting the EPERM and sudo-kill log lines, and print the process layout on failure"
+    }
+  ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-1.23",
-  "spec_sha256": "ecd91050d374b9270c0110fe768b2a0966bdb00570cb92233ba2513c95ee78fc"
+  "spec_sha256": "ecd91050d374b9270c0110fe768b2a0966bdb00570cb92233ba2513c95ee78fc",
+  "relock_pending": [],
+  "brief_history": {
+    "tests/ci/retry.sudo.test.ts:spec02-does-not-prove-sudo-fallback-ran": [
+      "review r1"
+    ]
+  }
 }

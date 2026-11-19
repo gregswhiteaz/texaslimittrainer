@@ -164,11 +164,20 @@ function startHelper(args: string[]) {
   return { child, done };
 }
 
-async function expectNoLeftovers(marker: string): Promise<void> {
+async function expectNoLeftovers(marker: string, message?: string): Promise<void> {
   const leftovers = () => spawnSync('pgrep', ['-f', marker], { encoding: 'utf8' }).stdout.trim();
   const deadline = Date.now() + 2000;
   while (leftovers() !== '' && Date.now() < deadline) await sleep(100);
-  expect(leftovers()).toBe('');
+  expect(leftovers(), message).toBe('');
+}
+
+/** The `ps` lines for this test's marker and for sudo, so a failing CI log shows the group layout. */
+function processLayout(marker: string): string {
+  const ps = spawnSync('ps', ['-eo', 'pid,ppid,pgid,sid,user,args'], { encoding: 'utf8' }).stdout;
+  const [header = '', ...lines] = ps.split('\n');
+  return [header, ...lines.filter((line) => line.includes(marker) || line.includes('sudo'))].join(
+    '\n',
+  );
 }
 
 /** Kills whatever a sudo test started, even when it failed partway. */
@@ -207,13 +216,24 @@ describe.skipIf(!onLinuxCi)('retry helper around a hanging sudo command (Linux C
     const command = ['sudo', '-n', 'sh', '-c', script, 'sh', join(dir, 'lock'), marker];
     const { child, done } = startHelper(['--label', LABEL, ...flags, '--', ...command]);
     try {
+      // Taken while the first attempt runs, before its 2 s timeout.
+      await sleep(1000);
+      const during = processLayout(marker);
       const { code, stdout, ms } = await done;
-      expect(stdout.match(/::warning::.*timed out after 2 s/g)).toHaveLength(2);
-      expect(stdout).not.toContain('failed with exit code');
-      expect(code).toBe(1);
-      expect(stdout.trimEnd().split('\n').at(-1)).toBe(`::error::${LABEL} failed after 2 attempts`);
-      expect(ms).toBeLessThan(20_000);
-      await expectNoLeftovers(marker);
+      const why = `process layout during attempt 1:\n${during}\n\nafter the helper exited:\n${processLayout(marker)}`;
+      expect(stdout.match(/::warning::.*timed out after 2 s/g), why).toHaveLength(2);
+      expect(stdout, why).not.toContain('succeeded');
+      // The root orphan must stay in the attempt's group and be stopped by the sudo fallback.
+      expect(stdout, why).toMatch(
+        /retry: could not send SIG(TERM|KILL) to process group \d+ \(EPERM\)/,
+      );
+      expect(stdout, why).toMatch(/retry: sent SIGKILL to process group \d+ with sudo/);
+      expect(code, why).toBe(1);
+      expect(stdout.trimEnd().split('\n').at(-1), why).toBe(
+        `::error::${LABEL} failed after 2 attempts`,
+      );
+      expect(ms, why).toBeLessThan(20_000);
+      await expectNoLeftovers(marker, why);
     } finally {
       cleanUp(child, marker, dir);
     }
