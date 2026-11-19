@@ -1,0 +1,22 @@
+{"reviewer": "code", "round": 1,
+ "rubric": [
+  {"item": "SPEC-01 correctness", "result": "pass"},
+  {"item": "SPEC-01 test strength", "result": "pass"},
+  {"item": "SPEC-02 correctness", "result": "pass"},
+  {"item": "SPEC-02 test strength", "result": "pass"},
+  {"item": "SPEC-03 correctness", "result": "pass"},
+  {"item": "SPEC-03 test strength", "result": "pass"},
+  {"item": "SPEC-04 correctness", "result": "pass"},
+  {"item": "SPEC-04 test strength", "result": "pass"},
+  {"item": "SPEC-05 correctness", "result": "pass"},
+  {"item": "SPEC-05 test strength", "result": "pass"},
+  {"item": "SPEC-06 correctness", "result": "pass"},
+  {"item": "SPEC-06 test strength", "result": "pass"},
+  {"item": "SPEC-07 correctness", "result": "pass"},
+  {"item": "SPEC-07 test strength", "result": "pass"},
+  {"item": "scope", "result": "pass"},
+  {"item": "concision", "result": "pass"},
+  {"item": "clarity", "result": "pass"}
+ ],
+ "findings": [],
+ "summary": "The diff matches the spec in all 6 files and makes no src/** change. The lint config adds LINT_ONLY_HEADLESS_DIRS exactly as designed, and HEADLESS_DIRS is unchanged, so the locked coverage test is untouched. SPEC-01 uses awards with pot index 1 and orders [A,B] and [B,A,C], so the last-hand, first-hand, pot-index-sum and single-largest-award mutants all fail. SPEC-02 recomputes from totalContribution and asserts that expected > 0 and that the last hand's pot is below expected, so it cannot pass vacuously. SPEC-03 checks the exact sorted per-seat factory calls and decisions >= 2 per hand, and 12 distinct calls across 3 hands, so it catches both per-decision and per-run policy creation. SPEC-04/05 run one sandbox lint and check, under each file's stylish header block, all three restricted-import lines with REQ-059.2. NEW_DIRS is written out on purpose instead of importing LINT_ONLY_HEADLESS_DIRS, so it is not a tautology. SPEC-06: the grep finds nothing and lint exits 0. I re-ran the 4 affected test files (11 tests passed) and npm run lint (exit 0). The gate build-1 passed. No findings."}

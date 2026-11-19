@@ -1,0 +1,3 @@
+{"reviewer": "security", "round": 1,
+ "findings": [],
+ "summary": "Change is test-only plus a lint-config widening (tools/lint/headless-boundary.js adds src/playtest and src/table to the headless file globs) and a README line. No runtime code, no new dependencies, no untrusted input crosses a trust boundary. The new sandbox lint test reuses tests/support/sandbox.ts (mkdtempSync in tmpdir, spawnSync with an argv array and fixed script names, rmSync in finally) and writes only fixed probe contents, so no shell or path injection path exists. The removed session.test.ts import check is superseded by the stricter lint rule now covering src/table, so the UI-boundary guarantee is not weakened. No findings."}
