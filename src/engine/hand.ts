@@ -117,6 +117,11 @@ function isPositiveInteger(value: number): boolean {
   return Number.isInteger(value) && value > 0;
 }
 
+/** Least stack createHand accepts: the most one seat can put in under the 4-bet cap. $96 at $4/$8. */
+export function minimumStack(stakes: Stakes): number {
+  return 8 * stakes.smallBet + 8 * stakes.bigBet;
+}
+
 function validate(config: HandConfig): void {
   const { seats, stakes, deck, button } = config;
   if (seats.length < 3 || seats.length > 10) {
@@ -148,7 +153,7 @@ function validate(config: HandConfig): void {
   ) {
     throw new RangeError('Deck must hold each of the 52 cards exactly once');
   }
-  const min = 8 * stakes.smallBet + 8 * stakes.bigBet;
+  const min = minimumStack(stakes);
   for (const { seat, stack } of seats) {
     if (!Number.isInteger(stack) || stack < min) {
       throw new RangeError(`Stack at seat ${seat} must be an integer of at least ${min}`);

@@ -4,10 +4,12 @@ import {
   applyAction,
   createHand,
   legalActions,
+  minimumStack,
   type Action,
   type ActionRecord,
   type HandResult,
   type HandState,
+  type PlayerState,
   type SeatNumber,
   type Stakes,
 } from '../engine/hand';
@@ -112,6 +114,8 @@ export interface TableState {
   readonly userDecisions: readonly UserDecision[];
   /** 1-based number of the current hand (the next hand before the deal). */
   readonly handNumber: number;
+  /** Button of the current hand (the next hand before the deal). */
+  readonly button: SeatNumber;
 }
 export type NextStep = 'deal' | 'bot' | 'user' | 'done';
 
@@ -127,6 +131,7 @@ export function seatSession(input?: Partial<SessionConfig>): TableState {
     replayCode: null,
     userDecisions: [],
     handNumber: 1,
+    button: config.button,
   };
 }
 
@@ -142,10 +147,42 @@ export function dealHand(table: TableState, code: ReplayCode): TableState {
   const hand = createHand({
     stakes: table.stakes,
     seats: table.stacks,
-    button: table.config.button,
+    button: table.button,
     deck: shuffledDeck(code),
   });
   return { ...table, hand, replayCode: code };
+}
+
+/** REQ-024.3: the pause between a hand's result and the next deal. */
+export const NEXT_HAND_DELAY_MS = 1500;
+
+/** ms until the next hand is dealt: NEXT_HAND_DELAY_MS when the hand is done and not held; else null. */
+export function nextHandDelay(table: TableState, hold = false): number | null {
+  return nextStep(table) === 'done' && !hold ? NEXT_HAND_DELAY_MS : null;
+}
+
+/** The session ready for the next deal: final stacks carried, button one seat on, hand number + 1. */
+export function nextHand(table: TableState): TableState {
+  const { hand } = table;
+  if (nextStep(table) !== 'done' || hand === null) throw new RangeError('Not a next-hand step');
+  const minimum = minimumStack(table.stakes);
+  const stacks = hand.players.map(({ seat, stack }) => ({
+    seat,
+    // TEMPORARY (TASK-3.4 Q-4): tops seats below minimumStack back to the buy-in because the engine has no
+    // all-in yet. Removal is an acceptance criterion on TASK-1.16 / TASK-3.11 (whichever lands last).
+    stack: stack < minimum ? buyIn(table.config.stake) : stack,
+  }));
+  const seats = table.seats.map((s) => s.seat);
+  const button = seats[(seats.indexOf(hand.button) + 1) % seats.length] as SeatNumber;
+  return {
+    ...table,
+    stacks,
+    button,
+    handNumber: table.handNumber + 1,
+    hand: null,
+    replayCode: null,
+    userDecisions: [],
+  };
 }
 
 /** One bot action through `policy` on the bot's own view. */
@@ -196,16 +233,18 @@ export interface CompletedHand {
 export function completedHand(table: TableState): CompletedHand | null {
   const { hand, replayCode } = table;
   if (hand === null || hand.result === null || replayCode === null) return null;
-  const startingStack = (seat: SeatNumber): number =>
-    hand.players.find((p) => p.seat === seat)?.startingStack ?? 0;
+  const dealtIn = (seat: SeatNumber): PlayerState => {
+    const player = hand.players.find((p) => p.seat === seat);
+    if (player === undefined) throw new RangeError(`Seat ${seat} is not dealt in`);
+    return player;
+  };
   const { userSeat } = table.config;
-  const user = hand.players.find((p) => p.seat === userSeat);
-  if (user === undefined) throw new RangeError('User seat is not dealt in');
+  const user = dealtIn(userSeat);
   return {
     replayCode,
     stakes: hand.stakes,
     button: hand.button,
-    seats: table.seats.map((s) => ({ ...s, startingStack: startingStack(s.seat) })),
+    seats: table.seats.map((s) => ({ ...s, startingStack: dealtIn(s.seat).startingStack })),
     userSeat,
     userHoleCards: [user.holeCards[0], user.holeCards[1]],
     actions: hand.actions,

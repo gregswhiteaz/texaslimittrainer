@@ -167,15 +167,20 @@ test('the bar is disabled and submits nothing off-turn or after the hand', async
   await expectToAct(page, '6');
   expect(await buttonTexts(page)).toEqual(IDLE);
 
-  // Real timers for the finished hand: a fresh context has no fake clock.
+  // Second context on its own paused clock.
   const context = await browser.newContext({
     baseURL: ORIGIN,
     viewport: { width: 1280, height: 720 },
   });
   const real = await context.newPage();
+  await installPausedClock(real);
   await openApp(real);
-  expect(await nextTurn(real)).toBe('user');
+  await runFor1000(real);
+  await expectToAct(real, '5');
   await clickAction(real, 'Fold');
+  for (let slice = 0; slice < 400 && (await handOver(real).count()) === 0; slice++) {
+    await real.clock.runFor(50);
+  }
   await expect(handOver(real)).toBeVisible();
   const finalCount = await actionCount(real);
   expect(await buttonTexts(real)).toEqual(IDLE);

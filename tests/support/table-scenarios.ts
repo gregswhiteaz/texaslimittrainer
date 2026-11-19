@@ -74,6 +74,7 @@ function tableAt(hand: HandState): TableState {
     replayCode: SCENARIO_CODE,
     userDecisions: [],
     handNumber: 133,
+    button: 6,
   };
 }
 
@@ -120,3 +121,43 @@ export const SEAT_1_CONFIG: SessionConfig = resolveSessionConfig({
 
 /** The seat-1 session just after the deal (seat 3 to act). */
 export const SEAT_1_DEALT: TableState = dealHand(seatSession(SEAT_1_CONFIG), SCENARIO_CODE);
+
+/** The given deck indexes hold the given cards; every other index gets the rest in ascending card order. */
+export function fixedDeck(fixed: Readonly<Record<number, string>>): Card[] {
+  const placed = new Map(
+    Object.entries(fixed).map(([index, text]) => [Number(index), parseCard(text)]),
+  );
+  const taken = new Set(placed.values());
+  const rest = Array.from({ length: 52 }, (_, card) => card).filter((card) => !taken.has(card));
+  return Array.from({ length: 52 }, (_, index) => placed.get(index) ?? (rest.shift() as Card));
+}
+
+/** Default six seats at $160, button 6, hand 1, dealt from fixedDeck(fixed) and played through `moves`. */
+function defaultTableAfter(fixed: Readonly<Record<number, string>>, moves: string): TableState {
+  const table = seatSession();
+  const hand = createHand({
+    stakes: table.stakes,
+    seats: table.stacks,
+    button: 6,
+    deck: fixedDeck(fixed),
+  });
+  return { ...table, hand: play(hand, moves), replayCode: SCENARIO_CODE };
+}
+
+/** Ben (seat 2, Kd 7c) wins the $122 pot at showdown with a pair of kings over You (Ah 9s). */
+export const KINGS_SHOWDOWN: TableState = defaultTableAfter(
+  { 1: 'Kd', 7: '7c', 4: 'Ah', 10: '9s', 13: 'Ks', 14: '9d', 15: '4c', 17: '2h', 19: '6s' },
+  '3:fold 4:fold 5:raise 6:fold 1:fold 2:raise 5:call 2:bet 5:raise 2:call 2:bet 5:raise 2:call 2:bet 5:raise 2:raise 5:call',
+);
+
+/** Everyone folds to Ava's (seat 1, 2c 3h) $4 flop bet: she wins $16 uncontested. */
+export const AVA_UNCONTESTED: TableState = defaultTableAfter(
+  {},
+  '3:fold 4:fold 5:call 6:fold 1:call 2:check 1:bet 2:fold 5:fold',
+);
+
+/** Ava (Kc Kd) and Ben (Qc Qd) both play the 5c-9c board straight and split the $60 pot. */
+export const SPLIT_STRAIGHT: TableState = defaultTableAfter(
+  { 0: 'Kc', 6: 'Kd', 1: 'Qc', 7: 'Qd', 13: '5c', 14: '6d', 15: '7h', 17: '8s', 19: '9c' },
+  '3:call 4:fold 5:fold 6:fold 1:raise 2:call 3:fold 1:bet 2:call 1:bet 2:call 1:bet 2:call',
+);

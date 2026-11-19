@@ -142,12 +142,17 @@ export function tableView(table: TableState): TableViewModel {
   const { config } = table;
   const view = table.hand === null ? null : playerView(table.hand, config.userSeat);
   const handOver = view !== null && view.toAct === null;
-  const button = view?.button ?? config.button;
+  const button = view?.button ?? table.button;
   const seatNumbers = (view?.players ?? config.seats).map((p) => p.seat);
   const ordered = [
     ...table.seats.filter((s) => s.kind === 'bot'),
     ...table.seats.filter((s) => s.kind === 'user'),
   ];
+  const stackBefore = (seat: SeatNumber): number => {
+    const entry = table.stacks.find((p) => p.seat === seat);
+    if (entry === undefined) throw new RangeError(`Seat ${seat} has no stack`);
+    return entry.stack;
+  };
 
   const seats = ordered.map((s): SeatView => {
     const isUser = s.kind === 'user';
@@ -157,7 +162,7 @@ export function tableView(table: TableState): TableViewModel {
       name: s.name,
       isUser,
       style: isUser ? null : s.style,
-      stack: player?.stack ?? table.stacks.find((p) => p.seat === s.seat)?.stack ?? 0,
+      stack: player === undefined ? stackBefore(s.seat) : player.stack,
       streetAmount: player?.streetContribution ?? 0,
       action: view === null ? null : actionLine(view, s.seat, handOver),
       holdsCards: !isUser && player !== undefined && !player.folded,

@@ -1,5 +1,6 @@
 import type { Action } from '../../engine/hand';
 import { userActionBar } from '../../table/action-bar';
+import { handResultView, type HandResultView } from '../../table/hand-result';
 import type { TableState } from '../../table/session';
 import { tableView, type SeatView } from '../../table/table-view';
 import { CardBack, PlayingCard } from '../cards/PlayingCard';
@@ -67,10 +68,42 @@ function Seat({ seat }: { readonly seat: SeatView }): React.JSX.Element {
   );
 }
 
+function HandResult({ result }: { readonly result: HandResultView }): React.JSX.Element {
+  return (
+    <div role="status" className="hand-result">
+      <p className="hand-result-title">Hand over</p>
+      <ul aria-label="Winners">
+        {result.winners.map((winner) => (
+          <li key={winner.seat} data-seat={winner.seat}>
+            <span data-part="winner">{winner.text}</span>
+            {winner.handName !== null && (
+              <>
+                <span aria-hidden="true"> · </span>
+                <span data-part="hand-name">{winner.handName}</span>
+              </>
+            )}
+            {winner.holeCards !== null && (
+              <div
+                role="group"
+                aria-label={winner.isUser ? 'Your shown cards' : `${winner.name}'s cards`}
+                className="table-cards"
+              >
+                <PlayingCard card={winner.holeCards[0]} />
+                <PlayingCard card={winner.holeCards[1]} />
+              </div>
+            )}
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
 /** Presentational table (D-7): everything shown comes from tableView. */
 export function TableView({ table, onAct, onLeave }: TableViewProps): React.JSX.Element {
   const model = tableView(table);
   const bar = userActionBar(table);
+  const result = handResultView(table);
   return (
     <>
       <header className="table-header">
@@ -104,7 +137,7 @@ export function TableView({ table, onAct, onLeave }: TableViewProps): React.JSX.
           </ul>
         </div>
         {bar !== null && <ActionBar model={bar} onAct={onAct} />}
-        {model.handOver && <p role="status">Hand over</p>}
+        {result !== null && <HandResult result={result} />}
       </section>
     </>
   );

@@ -118,6 +118,17 @@ async function nextTurn(page: Page): Promise<'user' | 'done'> {
   return (await handOver(page).count()) > 0 ? 'done' : 'user';
 }
 
+/** Under the paused clock: runs 50 ms slices until the user's turn (enabled buttons) or the end of the hand. */
+async function nextTurnPaused(page: Page): Promise<'user' | 'done' | 'timeout'> {
+  const enabled = page.locator('[aria-label="Your actions"] button:not(:disabled)');
+  for (let slice = 0; slice < 400; slice++) {
+    if ((await enabled.count()) > 0) return 'user';
+    if ((await handOver(page).count()) > 0) return 'done';
+    await page.clock.runFor(50);
+  }
+  return 'timeout';
+}
+
 /** Clicks `name` and waits until the click has been applied. */
 async function clickAction(page: Page, name: string): Promise<void> {
   const before = await actionCount(page);
@@ -178,11 +189,12 @@ test('stake $10/$20 starts every stack at $400 with no buy-in control', async ({
 test('check or call at every decision plays to showdown with my cards face up', async ({
   page,
 }) => {
+  await installPausedClock(page);
   await openApp(page);
   const streets = new Set<string>();
   let dealt: string[] | null = null;
 
-  while ((await nextTurn(page)) === 'user') {
+  while ((await nextTurnPaused(page)) === 'user') {
     const street = (await tableSection(page).getAttribute('data-street')) ?? '';
     const board = await page
       .getByRole('group', { name: 'Board' })
@@ -209,23 +221,30 @@ test('check or call at every decision plays to showdown with my cards face up', 
   await expect(handOver(page)).toBeVisible();
   expect(await userCards(page)).toEqual(dealt);
   await expect(page.getByRole('group', { name: 'Board' }).locator('svg[data-card]')).toHaveCount(5);
-  await expect(tableSection(page).locator('svg[data-card]:not([data-card="back"])')).toHaveCount(7);
+  expect(
+    await tableSection(page)
+      .locator('svg[data-card]:not([data-card="back"])')
+      .evaluateAll((svgs) => svgs.filter((s) => s.closest('[role="status"]') === null).length),
+  ).toBe(7);
 
   const finalCount = await actionCount(page);
-  await page.waitForTimeout(3000);
+  for (let slice = 0; slice < 28; slice++) await page.clock.runFor(50);
   expect(await actionCount(page)).toBe(finalCount);
   await expect(handOver(page)).toBeVisible();
   expect(await userCards(page)).toEqual(dealt);
+  await expect(page.locator('.table-header-line')).toHaveText(/Hand #1$/);
   expect(await page.evaluate(() => window.__table.turns.length)).toBeGreaterThanOrEqual(4);
 });
 
 test('after a preflop fold the bots finish the hand without me', async ({ page }) => {
+  await installPausedClock(page);
   await openApp(page);
-  expect(await nextTurn(page)).toBe('user');
+  expect(await nextTurnPaused(page)).toBe('user');
   const dealt = await userCards(page);
   expect(dealt).toHaveLength(2);
 
   await clickAction(page, 'Fold');
+  expect(await nextTurnPaused(page)).toBe('done');
   await expect(handOver(page)).toBeVisible();
 
   await expectToAct(page, '');

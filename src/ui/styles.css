@@ -427,3 +427,53 @@ h1[tabindex='-1']:focus {
   opacity: 0.45;
   cursor: not-allowed;
 }
+
+.hand-result {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 12px;
+  padding: 6px 16px;
+  background: #1a1d22;
+  color: #f2f3f5;
+  border: 1px solid #343a43;
+  border-radius: 10px;
+}
+
+.hand-result-title {
+  margin: 0;
+  color: #a7aeb8;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.hand-result ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 24px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.hand-result li {
+  display: flex;
+  align-items: center;
+  min-height: 42px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.hand-result li > [aria-hidden='true'] {
+  white-space: pre;
+}
+
+.hand-result .table-cards {
+  gap: 4px;
+  margin-left: 12px;
+}
+
+.hand-result svg[data-card] {
+  width: 30px;
+  height: 42px;
+}
