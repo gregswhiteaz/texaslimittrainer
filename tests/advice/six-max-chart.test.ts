@@ -26,7 +26,8 @@ const BANDS: Record<string, [number, number]> = {
   'UTG re-raise': [6, 30],
   'HJ re-raise': [6, 30],
   'CO re-raise': [6, 30],
-  'BTN re-raise': [6, 30],
+  // TASK-7.19 Q-1: BTN keeps 80–90% of its 33–45% opening band against a re-raise
+  'BTN re-raise': [6, 41],
   'SB re-raise': [6, 30],
   'BB re-raise': [6, 30],
   'SB blind-defence': [10, 25],

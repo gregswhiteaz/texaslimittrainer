@@ -1,0 +1,415 @@
+UTG unopened: raise 16.0%, continue 16.0%
+     A    K    Q    J    T    9    8    7    6    5    4    3    2
+A    R    R    R    R    R    R    R    R    R    R    R    R    R
+K    R    R    R    R    R    R*/F F    F    F    F    F    F    F
+Q    R    R    R    R    R    F    F    F    F    F    F    F    F
+J    R    R*/F F*/R R    R    F    F    F    F    F    F    F    F
+T    R    F    F    F    R    R*/F F    F    F    F    F    F    F
+9    F*/R F    F    F    F    R    F    F    F    F    F    F    F
+8    F    F    F    F    F    F    R    F    F    F    F    F    F
+7    F    F    F    F    F    F    F    R    F    F    F    F    F
+6    F    F    F    F    F    F    F    F    R    F    F    F    F
+5    F    F    F    F    F    F    F    F    F    R*/F F    F    F
+4    F    F    F    F    F    F    F    F    F    F    F*/R F    F
+3    F    F    F    F    F    F    F    F    F    F    F    F    F
+2    F    F    F    F    F    F    F    F    F    F    F    F    F
+
+HJ unopened: raise 19.2%, continue 19.2%
+     A    K    Q    J    T    9    8    7    6    5    4    3    2
+A    R    R    R    R    R    R    R    R    R    R    R    R    R
+K    R    R    R    R    R    R    F    F    F    F    F    F    F
+Q    R    R    R    R    R    R    F    F    F    F    F    F    F
+J    R    R    R    R    R    R    F    F    F    F    F    F    F
+T    R    F*/R F    F    R    R    F    F    F    F    F    F    F
+9    R*/F F    F    F    F    R    R*/F F    F    F    F    F    F
+8    F    F    F    F    F    F    R    F*/R F    F    F    F    F
+7    F    F    F    F    F    F    F    R    F    F    F    F    F
+6    F    F    F    F    F    F    F    F    R    F    F    F    F
+5    F    F    F    F    F    F    F    F    F    R    F    F    F
+4    F    F    F    F    F    F    F    F    F    F    R*/F F    F
+3    F    F    F    F    F    F    F    F    F    F    F    F*/R F
+2    F    F    F    F    F    F    F    F    F    F    F    F    F
+
+CO unopened: raise 27.0%, continue 27.0%
+     A    K    Q    J    T    9    8    7    6    5    4    3    2
+A    R    R    R    R    R    R    R    R    R    R    R    R    R
+K    R    R    R    R    R    R    R    R*/F F    F    F    F    F
+Q    R    R    R    R    R    R    R    F    F    F    F    F    F
+J    R    R    R    R    R    R    R    F    F    F    F    F    F
+T    R    R    R    R    R    R    R    F    F    F    F    F    F
+9    R    F*/R F    F    F    R    R    R    F    F    F    F    F
+8    R    F    F    F    F    F    R    R    F    F    F    F    F
+7    R*/F F    F    F    F    F    F    R    R*/F F    F    F    F
+6    F*/R F    F    F    F    F    F    F    R    F*/R F    F    F
+5    F    F    F    F    F    F    F    F    F    R    F    F    F
+4    F    F    F    F    F    F    F    F    F    F    R    F    F
+3    F    F    F    F    F    F    F    F    F    F    F    R    F
+2    F    F    F    F    F    F    F    F    F    F    F    F    R*/F
+
+BTN unopened: raise 40.6%, continue 40.6%
+     A    K    Q    J    T    9    8    7    6    5    4    3    2
+A    R    R    R    R    R    R    R    R    R    R    R    R    R
+K    R    R    R    R    R    R    R    R    R    R    R    R    R
+Q    R    R    R    R    R    R    R    R    R    R*/F F    F    F
+J    R    R    R    R    R    R    R    R    F    F    F    F    F
+T    R    R    R    R    R    R    R    R    F    F    F    F    F
+9    R    R    R    R    R    R    R    R    R    F    F    F    F
+8    R    R*/F F    F    F    F    R    R    R    F    F    F    F
+7    R    F*/R F    F    F    F    F    R    R    R    F    F    F
+6    R    F    F    F    F    F    F    F    R    R    F*/R F    F
+5    R    F    F    F    F    F    F    F    F    R    R*/F F    F
+4    R    F    F    F    F    F    F    F    F    F    R    F    F
+3    R    F    F    F    F    F    F    F    F    F    F    R    F
+2    R    F    F    F    F    F    F    F    F    F    F    F    R
+
+SB unopened: raise 30.6%, continue 37.3%
+     A    K    Q    J    T    9    8    7    6    5    4    3    2
+A    R    R    R    R    R    R    R    R    R    R    R    R    R
+K    R    R    R    R    R    R    R    R    R    R    R    R    R
+Q    R    R    R    R    R    R    R    C    C    C    F*/C F    F
+J    R    R    R    R    R    R    R    C    F    F    F    F    F
+T    R    R    R    R    R    R    R    C    F    F    F    F    F
+9    R    R    C    C    C*/R R    R    C    C    F    F    F    F
+8    R    F    F    F    F    F    R    R    C    F    F    F    F
+7    R    F    F    F    F    F    F    R    C    C    F    F    F
+6    R    F    F    F    F    F    F    F    R    C    C*/F F    F
+5    R*/F F    F    F    F    F    F    F    F    R    C    F    F
+4    F    F    F    F    F    F    F    F    F    F    R    F    F
+3    F    F    F    F    F    F    F    F    F    F    F    R    F
+2    F    F    F    F    F    F    F    F    F    F    F    F    R*/C
+
+HJ limpers: raise 9.4%, continue 15.5%
+     A    K    Q    J    T    9    8    7    6    5    4    3    2
+A    R    R    R    R    R    C    C    C    C    C    C    C    C
+K    R    R    R    R    C    F    F    F    F    F    F    F    F
+Q    R    R*/F R    R    C    F    F    F    F    F    F    F    F
+J    R*/F F    F    R    C    F    F    F    F    F    F    F    F
+T    F*/R F    F    F    R    C    F    F    F    F    F    F    F
+9    F    F    F    F    F    R    C*/F F    F    F    F    F    F
+8    F    F    F    F    F    F    R    F    F    F    F    F    F
+7    F    F    F    F    F    F    F    R*/C F    F    F    F    F
+6    F    F    F    F    F    F    F    F    C    F    F    F    F
+5    F    F    F    F    F    F    F    F    F    C    F    F    F
+4    F    F    F    F    F    F    F    F    F    F    C    F    F
+3    F    F    F    F    F    F    F    F    F    F    F    C    F
+2    F    F    F    F    F    F    F    F    F    F    F    F    C*/F
+
+CO limpers: raise 10.9%, continue 17.6%
+     A    K    Q    J    T    9    8    7    6    5    4    3    2
+A    R    R    R    R    R    C    C    C    C    C    C    C    C
+K    R    R    R    R    R*/C C    F    F    F    F    F    F    F
+Q    R    R    R    R    C    F    F    F    F    F    F    F    F
+J    R    F*/R F    R    R    C    F    F    F    F    F    F    F
+T    R*/F F    F    F    R    C    F    F    F    F    F    F    F
+9    F    F    F    F    F    R    C    F    F    F    F    F    F
+8    F    F    F    F    F    F    R    C    F    F    F    F    F
+7    F    F    F    F    F    F    F    R*/C C*/F F    F    F    F
+6    F    F    F    F    F    F    F    F    C    F    F    F    F
+5    F    F    F    F    F    F    F    F    F    C    F    F    F
+4    F    F    F    F    F    F    F    F    F    F    C    F    F
+3    F    F    F    F    F    F    F    F    F    F    F    C    F
+2    F    F    F    F    F    F    F    F    F    F    F    F    C
+
+BTN limpers: raise 12.8%, continue 19.2%
+     A    K    Q    J    T    9    8    7    6    5    4    3    2
+A    R    R    R    R    R    R*/C C    C    C    C    C    C    C
+K    R    R    R    R    R    C    F    F    F    F    F    F    F
+Q    R    R    R    R    R    C    F    F    F    F    F    F    F
+J    R    R*/F F*/R R    R    C    F    F    F    F    F    F    F
+T    R    F    F    F    R    C    F    F    F    F    F    F    F
+9    F    F    F    F    F    R    C    F    F    F    F    F    F
+8    F    F    F    F    F    F    R    C    F    F    F    F    F
+7    F    F    F    F    F    F    F    R    C    F    F    F    F
+6    F    F    F    F    F    F    F    F    R*/C C*/F F    F    F
+5    F    F    F    F    F    F    F    F    F    C    F    F    F
+4    F    F    F    F    F    F    F    F    F    F    C    F    F
+3    F    F    F    F    F    F    F    F    F    F    F    C    F
+2    F    F    F    F    F    F    F    F    F    F    F    F    C
+
+SB limpers: raise 6.2%, continue 17.0%
+     A    K    Q    J    T    9    8    7    6    5    4    3    2
+A    R    R    R    R*/C C    C    C    C    C    C    C    C    C
+K    R    R    R    C    C    C    F    F    F    F    F    F    F
+Q    R    C*/R R    C    C    F*/C F    F    F    F    F    F    F
+J    C*/R F    F    R    C    F    F    F    F    F    F    F    F
+T    F    F    F    F    R    C    F    F    F    F    F    F    F
+9    F    F    F    F    F    R    C    F    F    F    F    F    F
+8    F    F    F    F    F    F    R*/C C    F    F    F    F    F
+7    F    F    F    F    F    F    F    C    C    F    F    F    F
+6    F    F    F    F    F    F    F    F    C    C    F    F    F
+5    F    F    F    F    F    F    F    F    F    C    C*/F F    F
+4    F    F    F    F    F    F    F    F    F    F    C    F    F
+3    F    F    F    F    F    F    F    F    F    F    F    C    F
+2    F    F    F    F    F    F    F    F    F    F    F    F    C
+
+BB limpers: raise 9.4%, continue 100.0%
+     A    K    Q    J    T    9    8    7    6    5    4    3    2
+A    R    R    R    R    R    C    C    C    C    C    C    C    C
+K    R    R    R    R    C*/R C    C    C    C    C    C    C    C
+Q    R    R*/C R    R*/C C    C    C    C    C    C    C    C    C
+J    R    C    C    R    C    C    C    C    C    C    C    C    C
+T    C*/R C    C    C    R    C    C    C    C    C    C    C    C
+9    C    C    C    C    C    R    C    C    C    C    C    C    C
+8    C    C    C    C    C    C    R    C    C    C    C    C    C
+7    C    C    C    C    C    C    C    R*/C C    C    C    C    C
+6    C    C    C    C    C    C    C    C    C*/R C    C    C    C
+5    C    C    C    C    C    C    C    C    C    C    C    C    C
+4    C    C    C    C    C    C    C    C    C    C    C    C    C
+3    C    C    C    C    C    C    C    C    C    C    C    C    C
+2    C    C    C    C    C    C    C    C    C    C    C    C    C
+
+UTG raise: raise 3.3%, continue 6.6%
+     A    K    Q    J    T    9    8    7    6    5    4    3    2
+A    R    R    R    C    F    F    F    F    F    F    F    F    F
+K    R    R    C    F    F    F    F    F    F    F    F    F    F
+Q    C*/R F    R    F    F    F    F    F    F    F    F    F    F
+J    F    F    F    R*/C F    F    F    F    F    F    F    F    F
+T    F    F    F    F    C    F    F    F    F    F    F    F    F
+9    F    F    F    F    F    C    F    F    F    F    F    F    F
+8    F    F    F    F    F    F    C    F    F    F    F    F    F
+7    F    F    F    F    F    F    F    C*/F F    F    F    F    F
+6    F    F    F    F    F    F    F    F    F*/C F    F    F    F
+5    F    F    F    F    F    F    F    F    F    F    F    F    F
+4    F    F    F    F    F    F    F    F    F    F    F    F    F
+3    F    F    F    F    F    F    F    F    F    F    F    F    F
+2    F    F    F    F    F    F    F    F    F    F    F    F    F
+
+HJ raise: raise 5.3%, continue 6.6%
+     A    K    Q    J    T    9    8    7    6    5    4    3    2
+A    R    R    R    R    F    F    F    F    F    F    F    F    F
+K    R    R    R    F    F    F    F    F    F    F    F    F    F
+Q    R*/F F    R    F    F    F    F    F    F    F    F    F    F
+J    F*/R F    F    R    F    F    F    F    F    F    F    F    F
+T    F    F    F    F    R*/C F    F    F    F    F    F    F    F
+9    F    F    F    F    F    C    F    F    F    F    F    F    F
+8    F    F    F    F    F    F    C    F    F    F    F    F    F
+7    F    F    F    F    F    F    F    C*/F F    F    F    F    F
+6    F    F    F    F    F    F    F    F    F    F    F    F    F
+5    F    F    F    F    F    F    F    F    F    F    F    F    F
+4    F    F    F    F    F    F    F    F    F    F    F    F    F
+3    F    F    F    F    F    F    F    F    F    F    F    F    F
+2    F    F    F    F    F    F    F    F    F    F    F    F    F
+
+CO raise: raise 6.6%, continue 8.4%
+     A    K    Q    J    T    9    8    7    6    5    4    3    2
+A    R    R    R    R    C    F    F    F    F    F    F    F    F
+K    R    R    R    C    F    F    F    F    F    F    F    F    F
+Q    R    F*/R R    C*/F F    F    F    F    F    F    F    F    F
+J    R*/F F    F    R    F    F    F    F    F    F    F    F    F
+T    F    F    F    F    R    F    F    F    F    F    F    F    F
+9    F    F    F    F    F    R*/C F    F    F    F    F    F    F
+8    F    F    F    F    F    F    C    F    F    F    F    F    F
+7    F    F    F    F    F    F    F    C    F    F    F    F    F
+6    F    F    F    F    F    F    F    F    F    F    F    F    F
+5    F    F    F    F    F    F    F    F    F    F    F    F    F
+4    F    F    F    F    F    F    F    F    F    F    F    F    F
+3    F    F    F    F    F    F    F    F    F    F    F    F    F
+2    F    F    F    F    F    F    F    F    F    F    F    F    F
+
+BTN raise: raise 8.9%, continue 11.0%
+     A    K    Q    J    T    9    8    7    6    5    4    3    2
+A    R    R    R    R    R    F    F    F    F    F    F    F    F
+K    R    R    R    R    C    F    F    F    F    F    F    F    F
+Q    R    R*/F R    R    C    F    F    F    F    F    F    F    F
+J    R    F    F    R    C    F    F    F    F    F    F    F    F
+T    F*/R F    F    F    R    C*/F F    F    F    F    F    F    F
+9    F    F    F    F    F    R    F    F    F    F    F    F    F
+8    F    F    F    F    F    F    R*/C F    F    F    F    F    F
+7    F    F    F    F    F    F    F    C    F    F    F    F    F
+6    F    F    F    F    F    F    F    F    C    F    F    F    F
+5    F    F    F    F    F    F    F    F    F    F*/C F    F    F
+4    F    F    F    F    F    F    F    F    F    F    F    F    F
+3    F    F    F    F    F    F    F    F    F    F    F    F    F
+2    F    F    F    F    F    F    F    F    F    F    F    F    F
+
+UTG raise-and-calls: raise 2.6%, continue 10.4%
+     A    K    Q    J    T    9    8    7    6    5    4    3    2
+A    R    R    C    C    C    F    F    F    F    F    F    F    F
+K    R    R    C    C    F    F    F    F    F    F    F    F    F
+Q    C*/F F    R    C    F    F    F    F    F    F    F    F    F
+J    F*/C F    F    C    C    F    F    F    F    F    F    F    F
+T    F    F    F    F    C    C*/F F    F    F    F    F    F    F
+9    F    F    F    F    F    C    F*/C F    F    F    F    F    F
+8    F    F    F    F    F    F    C    F    F    F    F    F    F
+7    F    F    F    F    F    F    F    C    F    F    F    F    F
+6    F    F    F    F    F    F    F    F    C    F    F    F    F
+5    F    F    F    F    F    F    F    F    F    C    F    F    F
+4    F    F    F    F    F    F    F    F    F    F    C    F    F
+3    F    F    F    F    F    F    F    F    F    F    F    C    F
+2    F    F    F    F    F    F    F    F    F    F    F    F    C*/F
+
+HJ raise-and-calls: raise 3.3%, continue 14.3%
+     A    K    Q    J    T    9    8    7    6    5    4    3    2
+A    R    R    R    C    C    C    C*/F F    F    C    C    F    F
+K    R    R    C    C    C    C*/F F    F    F    F    F    F    F
+Q    C*/R C*/F R    C    C    F    F    F    F    F    F    F    F
+J    F*/C F    F    R*/C C    F    F    F    F    F    F    F    F
+T    F    F    F    F    C    C    F    F    F    F    F    F    F
+9    F    F    F    F    F    C    C    F    F    F    F    F    F
+8    F    F    F    F    F    F    C    C    F    F    F    F    F
+7    F    F    F    F    F    F    F    C    C*/F F    F    F    F
+6    F    F    F    F    F    F    F    F    C    F    F    F    F
+5    F    F    F    F    F    F    F    F    F    C    F    F    F
+4    F    F    F    F    F    F    F    F    F    F    C    F    F
+3    F    F    F    F    F    F    F    F    F    F    F    C    F
+2    F    F    F    F    F    F    F    F    F    F    F    F    C
+
+CO raise-and-calls: raise 3.3%, continue 13.4%
+     A    K    Q    J    T    9    8    7    6    5    4    3    2
+A    R    R    R    C    C    C*/F F    F    F    C    C    F    F
+K    R    R    C    C    C    F    F    F    F    F    F    F    F
+Q    C*/R C*/F R    C    C    F    F    F    F    F    F    F    F
+J    F*/C F    F    R    C    F    F    F    F    F    F    F    F
+T    F    F    F    F    C    C    F    F    F    F    F    F    F
+9    F    F    F    F    F    C    C    F    F    F    F    F    F
+8    F    F    F    F    F    F    C    C*/F F    F    F    F    F
+7    F    F    F    F    F    F    F    C    F    F    F    F    F
+6    F    F    F    F    F    F    F    F    C    F    F    F    F
+5    F    F    F    F    F    F    F    F    F    C    F    F    F
+4    F    F    F    F    F    F    F    F    F    F    C    F    F
+3    F    F    F    F    F    F    F    F    F    F    F    C    F
+2    F    F    F    F    F    F    F    F    F    F    F    F    C
+
+BTN raise-and-calls: raise 4.5%, continue 16.1%
+     A    K    Q    J    T    9    8    7    6    5    4    3    2
+A    R    R    R    R*/C C    C    C    C    C    C    C    C    C
+K    R    R    C    C    C    F    F    F    F    F    F    F    F
+Q    R*/C C    R    C    C    F    F    F    F    F    F    F    F
+J    C*/F F*/C F    R    C    F    F    F    F    F    F    F    F
+T    F    F    F    F    C    C    F    F    F    F    F    F    F
+9    F    F    F    F    F    C    C    F    F    F    F    F    F
+8    F    F    F    F    F    F    C    C    F    F    F    F    F
+7    F    F    F    F    F    F    F    C    C*/F F    F    F    F
+6    F    F    F    F    F    F    F    F    C    F*/C F    F    F
+5    F    F    F    F    F    F    F    F    F    C    F    F    F
+4    F    F    F    F    F    F    F    F    F    F    C    F    F
+3    F    F    F    F    F    F    F    F    F    F    F    C    F
+2    F    F    F    F    F    F    F    F    F    F    F    F    C
+
+UTG re-raise: raise 2.6%, continue 14.2%
+     A    K    Q    J    T    9    8    7    6    5    4    3    2
+A    R    R    C    C    C    C    C    C    C    C    C    C    C
+K    R    R    C    C    C    C*/F F    F    F    F    F    F    F
+Q    C    C*/F R    C    C    F    F    F    F    F    F    F    F
+J    C*/F F*/C F    C*/R C    F    F    F    F    F    F    F    F
+T    F*/C F    F    F    C    C    F    F    F    F    F    F    F
+9    F    F    F    F    F    C    F    F    F    F    F    F    F
+8    F    F    F    F    F    F    C    F    F    F    F    F    F
+7    F    F    F    F    F    F    F    C    F    F    F    F    F
+6    F    F    F    F    F    F    F    F    C*/F F    F    F    F
+5    F    F    F    F    F    F    F    F    F    C*/F F    F    F
+4    F    F    F    F    F    F    F    F    F    F    F    F    F
+3    F    F    F    F    F    F    F    F    F    F    F    F    F
+2    F    F    F    F    F    F    F    F    F    F    F    F    F
+
+HJ re-raise: raise 2.6%, continue 16.4%
+     A    K    Q    J    T    9    8    7    6    5    4    3    2
+A    R    R    C    C    C    C    C    C    C    C    C    C    C
+K    R    R    C    C    C    C*/F F    F    F    F    F    F    F
+Q    C    C    R    C    C    C*/F F    F    F    F    F    F    F
+J    C    F*/C F    C*/R C    C*/F F    F    F    F    F    F    F
+T    C*/F F    F    F    C    C    F    F    F    F    F    F    F
+9    F    F    F    F    F    C    C*/F F    F    F    F    F    F
+8    F    F    F    F    F    F    C    F    F    F    F    F    F
+7    F    F    F    F    F    F    F    C    F    F    F    F    F
+6    F    F    F    F    F    F    F    F    C    F    F    F    F
+5    F    F    F    F    F    F    F    F    F    C*/F F    F    F
+4    F    F    F    F    F    F    F    F    F    F    C*/F F    F
+3    F    F    F    F    F    F    F    F    F    F    F    F    F
+2    F    F    F    F    F    F    F    F    F    F    F    F    F
+
+CO re-raise: raise 2.6%, continue 22.5%
+     A    K    Q    J    T    9    8    7    6    5    4    3    2
+A    R    R    C*/R C    C    C    C    C    C    C    C    C    C
+K    R    R    C    C    C    C    C*/F C*/F F    F    F    F    F
+Q    C    C    R    C    C    C    C*/F F    F    F    F    F    F
+J    C    C    C*/F C*/R C    C    C*/F F    F    F    F    F    F
+T    C    C*/F F*/C F    C    C    C*/F F    F    F    F    F    F
+9    F    F    F    F    F    C    C    C*/F F    F    F    F    F
+8    F    F    F    F    F    F    C    C    F    F    F    F    F
+7    F    F    F    F    F    F    F    C    C*/F F    F    F    F
+6    F    F    F    F    F    F    F    F    C    F    F    F    F
+5    F    F    F    F    F    F    F    F    F    C    F    F    F
+4    F    F    F    F    F    F    F    F    F    F    C*/F F    F
+3    F    F    F    F    F    F    F    F    F    F    F    C*/F F
+2    F    F    F    F    F    F    F    F    F    F    F    F    C*/F
+
+BTN re-raise: raise 3.3%, continue 34.2%
+     A    K    Q    J    T    9    8    7    6    5    4    3    2
+A    R    R    R*/C C    C    C    C    C    C    C    C    C    C
+K    R    R    C    C    C    C    C    C    C    C*/F C*/F C*/F C*/F
+Q    C    C    R    C    C    C    C    C    C*/F C*/F F    F    F
+J    C    C    C    R*/C C    C    C    C*/F F    F    F    F    F
+T    C    C    C    C    C    C    C    C*/F F    F    F    F    F
+9    C    C*/F F    F    F    C    C    C    C*/F F    F    F    F
+8    C    F*/C F    F    F    F    C    C    C    F    F    F    F
+7    C    F    F    F    F    F    F    C    C    C*/F F    F    F
+6    C    F    F    F    F    F    F    F    C    C    F    F    F
+5    C*/F F    F    F    F    F    F    F    F    C    C*/F F    F
+4    F*/C F    F    F    F    F    F    F    F    F    C    F    F
+3    F    F    F    F    F    F    F    F    F    F    F    C    F
+2    F    F    F    F    F    F    F    F    F    F    F    F    C*/F
+
+SB re-raise: raise 2.6%, continue 27.0%
+     A    K    Q    J    T    9    8    7    6    5    4    3    2
+A    R    R    C    C    C    C    C    C    C    C    C    C    C
+K    R    R    C    C    C    C    C    C*/F C*/F C*/F C*/F C*/F C*/F
+Q    C    C    R    C    C    C    C*/F F    F    F    F    F    F
+J    C    C    C*/F C*/R C    C    C*/F F    F    F    F    F    F
+T    C    C    C*/F C*/F C    C    C*/F F    F    F    F    F    F
+9    C    F*/C F    F    F    C    C*/F F    F    F    F    F    F
+8    C*/F F    F    F    F    F    C    C*/F F    F    F    F    F
+7    F*/C F    F    F    F    F    F    C    F    F    F    F    F
+6    F    F    F    F    F    F    F    F    C    F    F    F    F
+5    F    F    F    F    F    F    F    F    F    C    F    F    F
+4    F    F    F    F    F    F    F    F    F    F    C*/F F    F
+3    F    F    F    F    F    F    F    F    F    F    F    C*/F F
+2    F    F    F    F    F    F    F    F    F    F    F    F    C*/F
+
+BB re-raise: raise 2.6%, continue 10.4%
+     A    K    Q    J    T    9    8    7    6    5    4    3    2
+A    R    R    C    C    C    F    F    F    F    F    F    F    F
+K    R    R    C    C    F    F    F    F    F    F    F    F    F
+Q    C    C*/F R    C    F    F    F    F    F    F    F    F    F
+J    C*/F F    F    C*/R C    F    F    F    F    F    F    F    F
+T    F    F    F    F    C    C*/F F    F    F    F    F    F    F
+9    F    F    F    F    F    C    F    F    F    F    F    F    F
+8    F    F    F    F    F    F    C    F    F    F    F    F    F
+7    F    F    F    F    F    F    F    C    F    F    F    F    F
+6    F    F    F    F    F    F    F    F    C*/F F    F    F    F
+5    F    F    F    F    F    F    F    F    F    F*/C F    F    F
+4    F    F    F    F    F    F    F    F    F    F    F    F    F
+3    F    F    F    F    F    F    F    F    F    F    F    F    F
+2    F    F    F    F    F    F    F    F    F    F    F    F    F
+
+SB blind-defence: raise 9.5%, continue 10.7%
+     A    K    Q    J    T    9    8    7    6    5    4    3    2
+A    R    R    R    R    R    R*/F F    F    F    F    F    F    F
+K    R    R    R    R    R*/F F    F    F    F    F    F    F    F
+Q    R    R*/F R    R    F    F    F    F    F    F    F    F    F
+J    R    F    F    R    C    F    F    F    F    F    F    F    F
+T    F*/R F    F    F    R    F    F    F    F    F    F    F    F
+9    F    F    F    F    F    R    F    F    F    F    F    F    F
+8    F    F    F    F    F    F    R*/C F    F    F    F    F    F
+7    F    F    F    F    F    F    F    C    F    F    F    F    F
+6    F    F    F    F    F    F    F    F    C*/F F    F    F    F
+5    F    F    F    F    F    F    F    F    F    F*/C F    F    F
+4    F    F    F    F    F    F    F    F    F    F    F    F    F
+3    F    F    F    F    F    F    F    F    F    F    F    F    F
+2    F    F    F    F    F    F    F    F    F    F    F    F    F
+
+BB blind-defence: raise 5.7%, continue 46.3%
+     A    K    Q    J    T    9    8    7    6    5    4    3    2
+A    R    R    R    R    C    C    C    C    C    C    C    C    C
+K    R    R    R*/C C    C    C    C    C    C    C    C    C    C
+Q    R*/C C    R    C    C    C    C    C    C    C    F    F    F
+J    C*/R C    C    R    C    C    C    C    F*/C F    F    F    F
+T    C    C    C    C    R    C    C    C    F    F    F    F    F
+9    C    C    C    C    C    R*/C C    C    C    F    F    F    F
+8    C    C    C    C    C    C    C*/R C    C    C    F    F    F
+7    C    C*/F F*/C F*/C F*/C F*/C F*/C C    C    C    F    F    F
+6    C    F    F    F    F    F    F    F    C    C    C    F    F
+5    C    F    F    F    F    F    F    F    F    C    C    C    F
+4    C    F    F    F    F    F    F    F    F    F    C    C*/F F
+3    C    F    F    F    F    F    F    F    F    F    F    C    F
+2    C*/F F    F    F    F    F    F    F    F    F    F    F    C

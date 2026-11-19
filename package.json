@@ -15,7 +15,8 @@
     "lint": "eslint . --max-warnings 0 && prettier --check .",
     "typecheck": "tsc -p tsconfig.json",
     "format": "prettier --write .",
-    "playtest": "node --import ./tools/playtest/resolve-ts.js tools/playtest/main.ts"
+    "playtest": "node --import ./tools/playtest/resolve-ts.js tools/playtest/main.ts",
+    "chart:print": "node --import ./tools/playtest/resolve-ts.js tools/chart-print/main.ts"
   },
   "dependencies": {
     "react": "19.3.1",

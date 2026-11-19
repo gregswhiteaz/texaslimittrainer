@@ -2,7 +2,7 @@
   "format": "tlh-preflop-chart",
   "version": 1,
   "referenceSize": "6-max",
-  "justification": "A tight-aggressive baseline for six-handed fixed-limit hold'em. When nobody has put money in yet we raise or fold; only the small blind sometimes completes, because it is already half in and only the big blind is left. Raising beats limping in limit: a raise sometimes wins the blinds at once, thins the field, and puts more money in while our hand is most likely ahead, and the raiser keeps the lead into the flop. Ranges widen as position improves, because fewer players behind us means fewer chances that someone holds a better hand, and acting last on every later street is worth extra hands. Facing a raise we mostly re-raise or fold; we call only when the price is good or our hand plays well in a bigger field. Played over many hands, the chart aims to put money in voluntarily with about 18 to 26 percent of hands and to raise first with about 14 to 22 percent.",
+  "justification": "A tight-aggressive baseline for six-handed fixed-limit hold'em. When nobody has put money in yet we raise or fold; only the small blind sometimes completes, because it is already half in and only the big blind is left. Raising beats limping in limit: a raise sometimes wins the blinds at once, thins the field, and puts more money in while our hand is most likely ahead, and the raiser keeps the lead into the flop. Ranges widen as position improves, because fewer players behind us means fewer chances that someone holds a better hand, and acting last on every later street is worth extra hands. Facing one raise and no callers we mostly re-raise or fold; we call more often when callers or our own blind improve the price, and most of all in the big blind. Once two raises are in, the pot is large: when our own raise is re-raised we usually call with most of the hands we raised with, and only premium hands raise again. Played over many hands, the chart aims to put money in voluntarily with about 18 to 26 percent of hands and to raise first with about 14 to 22 percent.",
   "spots": [
     {
       "position": "UTG",
@@ -27,7 +27,7 @@
     {
       "position": "HJ",
       "situation": "unopened",
-      "justification": "With four players left to act, the field behind us is a little smaller than under the gun, so the range grows by one step. We add the smaller middle pairs, a few more suited connectors and one-gappers, and the next layer of offsuit broadways such as king-jack and queen-jack. Everything we would open from the earlier seat is still a raise here.",
+      "justification": "With four players left to act, the field behind us is a little smaller than under the gun, so the range grows by one step. We add pocket fours, a few more suited hands such as queen-nine, jack-nine and nine-eight, and more offsuit hands such as queen-jack and ace-nine. Everything we would open from the earlier seat is still a raise here.",
       "grid": [
         "R    R    R    R    R    R    R    R    R    R    R    R    R",
         "R    R    R    R    R    R    F    F    F    F    F    F    F",
@@ -67,7 +67,7 @@
     {
       "position": "BTN",
       "situation": "unopened",
-      "justification": "Only the blinds can stop us, and we will act last on every later street. Stealing the blinds is now a big part of the profit, so we raise any ace, most kings, connected suited hands and offsuit broadways. We still fold the weakest unconnected offsuit hands, which win too rarely when a blind calls and checks to us.",
+      "justification": "Only the blinds can stop us, and we will act last on every later street. Stealing the blinds is now a big part of the profit, so we raise any ace, every suited king, offsuit kings down to about king-eight, connected suited hands and offsuit broadways. We still fold the weakest unconnected offsuit hands, which win too rarely when a blind calls and checks to us.",
       "grid": [
         "R    R    R    R    R    R    R    R    R    R    R    R    R",
         "R    R    R    R    R    R    R    R    R    R    R    R    R",
@@ -75,7 +75,7 @@
         "R    R    R    R    R    R    R    R    F    F    F    F    F",
         "R    R    R    R    R    R    R    R    F    F    F    F    F",
         "R    R    R    R    R    R    R    R    R    F    F    F    F",
-        "R    R*/F F    F    F    F*/R R    R    R    F    F    F    F",
+        "R    R*/F F    F    F    F    R    R    R    F    F    F    F",
         "R    F*/R F    F    F    F    F    R    R    R    F    F    F",
         "R    F    F    F    F    F    F    F    R    R    F*/R F    F",
         "R    F    F    F    F    F    F    F    F    R    R*/F F    F",
@@ -87,15 +87,15 @@
     {
       "position": "SB",
       "situation": "unopened",
-      "justification": "Only the big blind is left, but we will be out of position for the rest of the hand. We raise a wide range of high-card hands to take the initiative and often win the blinds at once. Because we already have half a bet in, a few suited and connected hands complete instead: they are too weak to raise but cheap enough to see a flop.",
+      "justification": "Only the big blind is left, but we will be out of position for the rest of the hand. We raise a wide range of high-card hands to take the initiative and often win the blinds at once. Because we already have half a bet in, some weaker suited hands and suited connectors, plus queen-nine, jack-nine and ten-nine offsuit, complete instead: they are too weak to raise but cheap enough to see a flop.",
       "grid": [
         "R    R    R    R    R    R    R    R    R    R    R    R    R",
         "R    R    R    R    R    R    R    R    R    R    R    R    R",
         "R    R    R    R    R    R    R    C    C    C    F*/C F    F",
         "R    R    R    R    R    R    R    C    F    F    F    F    F",
         "R    R    R    R    R    R    R    C    F    F    F    F    F",
-        "R    R*/F C    C    C*/R R    R    C    C    F    F    F    F",
-        "R    F    F    F    F    F*/C R    R    C    F    F    F    F",
+        "R    R    C    C    C*/R R    R    C    C    F    F    F    F",
+        "R    F    F    F    F    F    R    R    C    F    F    F    F",
         "R    F    F    F    F    F    F    R    C    C    F    F    F",
         "R    F    F    F    F    F    F    F    R    C    C*/F F    F",
         "R*/F F    F    F    F    F    F    F    F    R    C    F    F",
@@ -107,7 +107,7 @@
     {
       "position": "HJ",
       "situation": "limpers",
-      "justification": "A player in front of us has limped, which usually means a medium hand, and four players still act behind. We raise to isolate the limper with hands that play well heads-up: big pairs, strong aces and suited broadways. Small pairs and suited aces prefer a cheap multiway flop, so they limp along hoping to hit a set or a flush.",
+      "justification": "A player in front of us has limped, which usually means a medium hand, and four players still act behind. We raise to isolate the limper with hands that play well heads-up: big pairs, strong aces and the best suited broadways. Small pairs, the smaller suited aces and the ten-high suited broadways prefer a cheap multiway flop, so they limp along hoping to hit a set, a flush or a straight.",
       "grid": [
         "R    R    R    R    R    C    C    C    C    C    C    C    C",
         "R    R    R    R    C    F    F    F    F    F    F    F    F",
@@ -127,7 +127,7 @@
     {
       "position": "CO",
       "situation": "limpers",
-      "justification": "With limpers in front and three players behind, we raise our stronger hands to punish the limps and to try for position against a single opponent. The limped pot gives good odds, so small pairs, suited aces and suited connectors over-limp: they win big when they connect and fold cheaply when they miss. Weak offsuit hands still fold.",
+      "justification": "With limpers in front and three players behind, we raise our stronger hands to punish the limps and to try for position against a single opponent. The limped pot gives good odds, so small pairs, the smaller suited aces and suited connectors from ten-nine down to seven-six over-limp: they win big when they connect and fold cheaply when they miss. Weak offsuit hands still fold.",
       "grid": [
         "R    R    R    R    R    C    C    C    C    C    C    C    C",
         "R    R    R    R    R*/C C    F    F    F    F    F    F    F",
@@ -147,7 +147,7 @@
     {
       "position": "BTN",
       "situation": "limpers",
-      "justification": "We will have position on every limper for the whole hand, so we raise a little wider than in earlier seats and often take the lead into a heads-up or three-way pot. Speculative hands such as small pairs and suited connectors call instead, since only the blinds can raise behind us and the extra limpers make the price attractive.",
+      "justification": "We will have position on every limper for the whole hand, so we raise a little wider than in earlier seats and often take the lead into a heads-up or three-way pot. Speculative hands such as small pairs, the smaller suited aces and suited connectors down to about six-five call instead, since only the blinds can raise behind us and the extra limpers make the price attractive.",
       "grid": [
         "R    R    R    R    R    R*/C C    C    C    C    C    C    C",
         "R    R    R    R    R    C    F    F    F    F    F    F    F",
@@ -167,7 +167,7 @@
     {
       "position": "SB",
       "situation": "limpers",
-      "justification": "Completing costs only half a bet with several players already in, so the price is excellent, but we will be first to act on every later street. We raise only strong hands that want a bigger pot, and complete with pairs, suited aces, suited broadways and connectors that can make strong hands. Weak offsuit hands still fold because position punishes them.",
+      "justification": "Completing costs only half a bet with at least one player already in, so the price is excellent, but we will be first to act on every later street. We raise only strong hands that want a bigger pot, and complete with most other pairs, suited aces, suited broadways and suited connectors that can make strong hands. Weak offsuit hands still fold because position punishes them.",
       "grid": [
         "R    R    R    R*/C C    C    C    C    C    C    C    C    C",
         "R    R    R    C    C    C    F    F    F    F    F    F    F",
@@ -187,7 +187,7 @@
     {
       "position": "BB",
       "situation": "limpers",
-      "justification": "Everyone has only limped, so we can see the flop for free and never fold. We raise hands that are probably ahead of the limpers to build a pot we are favoured to win, even though we will act early after the flop. Everything else checks: a free flop costs nothing, and a weak hand can simply let the pot go later.",
+      "justification": "Nobody has raised: the other players only limped, or the small blind completed, so we can see the flop for free and never fold. We raise hands that are probably ahead of the limpers to build a pot we are favoured to win, even though we will act early after the flop. Everything else checks: a free flop costs nothing, and a weak hand can simply let the pot go later.",
       "grid": [
         "R    R    R    R    R    C    C    C    C    C    C    C    C",
         "R    R    R    R    C*/R C    C    C    C    C    C    C    C",
@@ -207,7 +207,7 @@
     {
       "position": "UTG",
       "situation": "raise",
-      "justification": "We limped first and someone behind us raised, so we face a range that wants a bigger pot and will have position on us. We re-raise only the hands that dominate a raising range. Medium pairs and the best ace and king hands call one more bet because we already put a bet in; everything else folds rather than playing a large pot out of position.",
+      "justification": "We limped, and a player behind us raised with nobody calling yet. A raise over our limp usually means a real hand, and anyone who limped after us still acts behind us. We re-raise only hands that do well against a raising range: jacks or better, ace-king and ace-queen suited, with jacks close to a call. Tens down to sevens, ace-queen offsuit, ace-jack suited and king-queen suited call one more bet because our limp is already in; everything else folds rather than playing a big pot without the lead.",
       "grid": [
         "R    R    R    C    F    F    F    F    F    F    F    F    F",
         "R    R    C    F    F    F    F    F    F    F    F    F    F",
@@ -227,7 +227,7 @@
     {
       "position": "HJ",
       "situation": "raise",
-      "justification": "The under-the-gun player opened, so their range is tight, and four players are still to act behind us. We re-raise to play heads-up with the initiative, using big pairs and the best suited and offsuit aces. A few medium pairs call to try to hit a set; everything else folds because cold-calling invites squeezes and multiway pots.",
+      "justification": "Either the under-the-gun player opened and the rest folded to us, or we limped and a later player raised with nobody calling yet. Either way the raiser has shown strength. We re-raise to play heads-up with the initiative, using jacks or better, ace-king, ace-queen, ace-jack suited and king-queen suited; tens re-raise too but can also just call. A few middle pairs call to try to hit a set, and everything else folds, because those hands do poorly against a strong raising range and may face more raises.",
       "grid": [
         "R    R    R    R    F    F    F    F    F    F    F    F    F",
         "R    R    R    F    F    F    F    F    F    F    F    F    F",
@@ -247,7 +247,7 @@
     {
       "position": "CO",
       "situation": "raise",
-      "justification": "One earlier player opened and three players remain, two of them the blinds. A re-raise often isolates the opener and gives us position after the flop. We re-raise strong pairs and high aces, flat-call a few medium pairs and suited broadways that play well in position, and fold the rest because the opener's range is still fairly strong.",
+      "justification": "Either one earlier player opened and the rest folded to us, or we limped and a later player raised with nobody calling yet. We re-raise strong pairs and high aces to play heads-up with the initiative, often with position against an earlier opener. We flat-call a few middle pairs and suited hands such as ace-ten, king-jack and queen-jack suited, and fold the rest because the raiser's range is still fairly strong.",
       "grid": [
         "R    R    R    R    C    F    F    F    F    F    F    F    F",
         "R    R    R    C    F    F    F    F    F    F    F    F    F",
@@ -267,7 +267,7 @@
     {
       "position": "BTN",
       "situation": "raise",
-      "justification": "We hold the best seat at the table, so we re-raise a little wider to knock out the blinds and play heads-up in position against the opener. Strong pairs, high aces and suited broadways re-raise. Some small pairs and suited connectors call, since position helps them win more when they hit. Weak and dominated hands fold.",
+      "justification": "Either one earlier player opened and the rest folded to us, or we limped and a blind raised with nobody calling yet. We act last on every later street, so we re-raise a little wider to play heads-up with the initiative: strong pairs, high aces and the best suited broadways. The ten-high suited broadways, ten-nine suited and a few middle pairs call, since position helps them win more when they hit. Weak and dominated hands fold.",
       "grid": [
         "R    R    R    R    R    F    F    F    F    F    F    F    F",
         "R    R    R    R    C    F    F    F    F    F    F    F    F",
@@ -307,7 +307,7 @@
     {
       "position": "HJ",
       "situation": "raise-and-calls",
-      "justification": "We limped, then a later seat raised and at least one player called, so we owe one more bet into a multiway pot and usually close the action. A late raiser can be fairly wide, and when we close the betting nobody can re-raise behind us. We re-raise premium pairs and big aces, and call with every pair, suited aces, suited broadways and connectors that can flop a set, a flush or a straight.",
+      "justification": "We limped, then a later seat raised and at least one player called, so we owe one more bet into a multiway pot. We close the action unless a player who limped after us is still to act, and when we close it nobody can re-raise behind us. A late raiser can be fairly wide. We re-raise jacks or better, ace-king and ace-queen suited, and call with every smaller pair, the suited aces AJs, ATs, A9s, A8s, A5s and A4s, suited broadways and suited connectors down to about seven-six, which can flop a set, a flush or a straight.",
       "grid": [
         "R    R    R    C    C    C    C*/F F    F    C    C    F    F",
         "R    R    C    C    C    C*/F F    F    F    F    F    F    F",
@@ -327,7 +327,7 @@
     {
       "position": "CO",
       "situation": "raise-and-calls",
-      "justification": "With a raise and at least one caller ahead and only three players behind, the pot odds are good and we may keep position after the flop. We re-raise premium hands for value and call with every pair and a wide set of suited aces, suited broadways and connectors that can make strong hands in a multiway pot.",
+      "justification": "Either an earlier player opened and at least one player called before us, or we limped and then a raise and a call followed. The pot already holds several bets, so the price is good, and we often keep position after the flop. We re-raise premium hands for value and call with every pair below jacks, the bigger suited aces plus ace-five and ace-four suited, suited broadways and suited connectors down to about eight-seven, all of which can make strong hands in a multiway pot.",
       "grid": [
         "R    R    R    C    C    C*/F F    F    F    C    C    F    F",
         "R    R    C    C    C    F    F    F    F    F    F    F    F",
@@ -347,7 +347,7 @@
     {
       "position": "BTN",
       "situation": "raise-and-calls",
-      "justification": "Several players are already in and we will act last on every street, so this is the best seat to call with drawing hands. We re-raise strong pairs and big aces to build the pot, and call with all pairs, suited aces and suited connectors. The price is good and position makes those hands easy to play when they hit or miss.",
+      "justification": "Several players are already in, either after an open and a call in front of us or after we limped and a raise and a call followed, and we will act last on every later street. That makes this the best seat to call with drawing hands. We re-raise strong pairs and big aces to build the pot, and call with all other pairs, the other suited aces, suited broadways and suited connectors down to about seven-six. The price is good and position makes those hands easy to play when they hit or miss.",
       "grid": [
         "R    R    R    R*/C C    C    C    C    C    C    C    C    C",
         "R    R    C    C    C    F    F    F    F    F    F    F    F",
@@ -367,18 +367,18 @@
     {
       "position": "UTG",
       "situation": "re-raise",
-      "justification": "At least two raises are in, so someone is showing a strong hand. If we opened, we usually call one more bet with the hands we opened that are not dominated, because the pot is large. We cap with queens or better and ace-king. Hands that only make one pair of a weaker kind fold, since they rarely win against this much strength.",
+      "justification": "Our open has been re-raised, so the pot is already large and we need to call only one more bet. We therefore keep most of the hands we opened: every pair down to fives, every suited ace, the suited kings and queens we opened, jack-ten and ten-nine suited, ace-king to ace-jack offsuit and king-queen offsuit. Only premium hands raise again: aces, kings, queens and ace-king, with jacks close to a raise. Ace-ten and king-jack offsuit fold because a re-raiser often dominates them. The same advice applies when we limped and two raises followed, and when a fourth bet comes after our own re-raise; the betting is then capped, so a raise becomes a call.",
       "grid": [
-        "R    R    C    C    C    F    F    F    F    F    F    F    F",
-        "R    R    C    C    F    F    F    F    F    F    F    F    F",
-        "C    C*/F R    C    F    F    F    F    F    F    F    F    F",
-        "C*/F F    F    C*/R C    F    F    F    F    F    F    F    F",
-        "F    F    F    F    C    F    F    F    F    F    F    F    F",
+        "R    R    C    C    C    C    C    C    C    C    C    C    C",
+        "R    R    C    C    C    C*/F F    F    F    F    F    F    F",
+        "C    C*/F R    C    C    F    F    F    F    F    F    F    F",
+        "C*/F F*/C F    C*/R C    F    F    F    F    F    F    F    F",
+        "F*/C F    F    F    C    C    F    F    F    F    F    F    F",
         "F    F    F    F    F    C    F    F    F    F    F    F    F",
         "F    F    F    F    F    F    C    F    F    F    F    F    F",
-        "F    F    F    F    F    F    F    C*/F F    F    F    F    F",
-        "F    F    F    F    F    F    F    F    F*/C F    F    F    F",
-        "F    F    F    F    F    F    F    F    F    F    F    F    F",
+        "F    F    F    F    F    F    F    C    F    F    F    F    F",
+        "F    F    F    F    F    F    F    F    C*/F F    F    F    F",
+        "F    F    F    F    F    F    F    F    F    C*/F F    F    F",
         "F    F    F    F    F    F    F    F    F    F    F    F    F",
         "F    F    F    F    F    F    F    F    F    F    F    F    F",
         "F    F    F    F    F    F    F    F    F    F    F    F    F"
@@ -387,19 +387,19 @@
     {
       "position": "HJ",
       "situation": "re-raise",
-      "justification": "Facing a re-raise, the pot is already big, so hands we opened with can usually call one more bet. We cap with the very best hands, queens or better and ace-king, and call with pairs and strong suited hands that can win a large pot. Weaker offsuit hands fold because they are often dominated by a re-raising range.",
+      "justification": "Our open has been re-raised, so the pot is already large and we need to call only one more bet. We therefore keep most of the hands we opened: every pair down to fours, every suited hand we opened, ace-king to ace-ten offsuit and king-queen offsuit. Only premium hands raise again: aces, kings, queens and ace-king, with jacks close to a raise. King-jack, queen-jack and ace-nine offsuit fold because a re-raiser often dominates them. The same advice applies when we limped or called a raise and a re-raise followed, and when a fourth bet comes after our own re-raise; the betting is then capped, so a raise becomes a call.",
       "grid": [
-        "R    R    C    C    C    F    F    F    F    F    F    F    F",
-        "R    R    C    C    F    F    F    F    F    F    F    F    F",
-        "C    C*/F R    C    F    F    F    F    F    F    F    F    F",
-        "C    F    F    C*/R C    F    F    F    F    F    F    F    F",
-        "F*/C F    F    F    C    C*/F F    F    F    F    F    F    F",
-        "F    F    F    F    F    C    F    F    F    F    F    F    F",
+        "R    R    C    C    C    C    C    C    C    C    C    C    C",
+        "R    R    C    C    C    C*/F F    F    F    F    F    F    F",
+        "C    C    R    C    C    C*/F F    F    F    F    F    F    F",
+        "C    F*/C F    C*/R C    C*/F F    F    F    F    F    F    F",
+        "C*/F F    F    F    C    C    F    F    F    F    F    F    F",
+        "F    F    F    F    F    C    C*/F F    F    F    F    F    F",
         "F    F    F    F    F    F    C    F    F    F    F    F    F",
         "F    F    F    F    F    F    F    C    F    F    F    F    F",
-        "F    F    F    F    F    F    F    F    C*/F F    F    F    F",
-        "F    F    F    F    F    F    F    F    F    F    F    F    F",
-        "F    F    F    F    F    F    F    F    F    F    F    F    F",
+        "F    F    F    F    F    F    F    F    C    F    F    F    F",
+        "F    F    F    F    F    F    F    F    F    C*/F F    F    F",
+        "F    F    F    F    F    F    F    F    F    F    C*/F F    F",
         "F    F    F    F    F    F    F    F    F    F    F    F    F",
         "F    F    F    F    F    F    F    F    F    F    F    F    F"
       ]
@@ -407,39 +407,39 @@
     {
       "position": "CO",
       "situation": "re-raise",
-      "justification": "Opens from this seat are wider, so a re-raise is often aimed at a steal and our range can continue a bit wider too. We cap with queens or better and ace-king. Pairs, suited aces and suited broadways call because the pot odds are good. Offsuit hands below the top few fold since they are frequently dominated.",
+      "justification": "Our open has been re-raised, so the pot is already large and we need to call only one more bet, and a re-raise against a cut-off open is often aimed at a steal. We therefore keep most of the hands we opened: every pair, every suited hand we opened, ace-king to ace-ten offsuit and king-queen, king-jack, king-ten and queen-jack offsuit. Only premium hands raise again: aces, kings, queens and ace-king, with jacks and ace-queen suited close to a raise. Queen-ten, jack-ten and ace-nine or worse offsuit fold. The same advice applies when two raises come before we act, when we limped or called and a re-raise followed, and when a fourth bet comes after our own re-raise; the betting is then capped, so a raise becomes a call.",
       "grid": [
-        "R    R    C*/R C    C    C*/F F    F    F    F    F    F    F",
-        "R    R    C    C    C    F    F    F    F    F    F    F    F",
-        "C    C    R    C    C    F    F    F    F    F    F    F    F",
-        "C    F*/C F    C*/R C    F    F    F    F    F    F    F    F",
-        "F*/C F    F    F    C    C    F    F    F    F    F    F    F",
-        "F    F    F    F    F    C    F    F    F    F    F    F    F",
-        "F    F    F    F    F    F    C    F    F    F    F    F    F",
-        "F    F    F    F    F    F    F    C    F    F    F    F    F",
+        "R    R    C*/R C    C    C    C    C    C    C    C    C    C",
+        "R    R    C    C    C    C    C*/F C*/F F    F    F    F    F",
+        "C    C    R    C    C    C    C*/F F    F    F    F    F    F",
+        "C    C    C*/F C*/R C    C    C*/F F    F    F    F    F    F",
+        "C    C*/F F*/C F    C    C    C*/F F    F    F    F    F    F",
+        "F    F    F    F    F    C    C    C*/F F    F    F    F    F",
+        "F    F    F    F    F    F    C    C    F    F    F    F    F",
+        "F    F    F    F    F    F    F    C    C*/F F    F    F    F",
         "F    F    F    F    F    F    F    F    C    F    F    F    F",
-        "F    F    F    F    F    F    F    F    F    C*/F F    F    F",
-        "F    F    F    F    F    F    F    F    F    F    F    F    F",
-        "F    F    F    F    F    F    F    F    F    F    F    F    F",
-        "F    F    F    F    F    F    F    F    F    F    F    F    F"
+        "F    F    F    F    F    F    F    F    F    C    F    F    F",
+        "F    F    F    F    F    F    F    F    F    F    C*/F F    F",
+        "F    F    F    F    F    F    F    F    F    F    F    C*/F F",
+        "F    F    F    F    F    F    F    F    F    F    F    F    C*/F"
       ]
     },
     {
       "position": "BTN",
       "situation": "re-raise",
-      "justification": "The button opens the widest range, and blinds re-raise it wider, so we defend more here than anywhere else. We cap with jacks or better and the best aces, and call one more bet with pairs, suited hands and the stronger offsuit broadways, because we will have position for the rest of the hand. The weakest steals fold.",
+      "justification": "Our open has been re-raised, usually by a blind fighting our steal, so the pot is already large, we need to call only one more bet and we will have position for the rest of the hand. We therefore keep most of the hands we opened: every pair, every suited hand we opened, every offsuit broadway, ace-five offsuit or better and king-nine offsuit. Only premium hands raise again: aces, kings, queens and ace-king, plus jacks and ace-queen suited, which may also just call. The weakest offsuit steals fold: ace-four or worse, king-eight, queen-nine, jack-nine and ten-nine. The same advice applies when two raises come before we act, when we limped or called and a re-raise followed, and when a fourth bet comes after our own re-raise; the betting is then capped, so a raise becomes a call.",
       "grid": [
-        "R    R    R*/C C    C    C    C    F    F    C*/F F    F    F",
-        "R    R    C    C    C    F    F    F    F    F    F    F    F",
-        "C    C    R    C    C    F    F    F    F    F    F    F    F",
-        "C    C*/F F    R*/C C    F    F    F    F    F    F    F    F",
-        "C*/F F    F    F    C    C    F    F    F    F    F    F    F",
-        "F    F    F    F    F    C    C    F    F    F    F    F    F",
-        "F    F    F    F    F    F    C    F*/C F    F    F    F    F",
-        "F    F    F    F    F    F    F    C    F    F    F    F    F",
-        "F    F    F    F    F    F    F    F    C    F    F    F    F",
-        "F    F    F    F    F    F    F    F    F    C    F    F    F",
-        "F    F    F    F    F    F    F    F    F    F    C    F    F",
+        "R    R    R*/C C    C    C    C    C    C    C    C    C    C",
+        "R    R    C    C    C    C    C    C    C    C*/F C*/F C*/F C*/F",
+        "C    C    R    C    C    C    C    C    C*/F C*/F F    F    F",
+        "C    C    C    R*/C C    C    C    C*/F F    F    F    F    F",
+        "C    C    C    C    C    C    C    C*/F F    F    F    F    F",
+        "C    C*/F F    F    F    C    C    C    C*/F F    F    F    F",
+        "C    F*/C F    F    F    F    C    C    C    F    F    F    F",
+        "C    F    F    F    F    F    F    C    C    C*/F F    F    F",
+        "C    F    F    F    F    F    F    F    C    C    F    F    F",
+        "C*/F F    F    F    F    F    F    F    F    C    C*/F F    F",
+        "F*/C F    F    F    F    F    F    F    F    F    C    F    F",
         "F    F    F    F    F    F    F    F    F    F    F    C    F",
         "F    F    F    F    F    F    F    F    F    F    F    F    C*/F"
       ]
@@ -447,27 +447,27 @@
     {
       "position": "SB",
       "situation": "re-raise",
-      "justification": "Two raises are in and we will be out of position against the whole field after the flop. We cap with queens or better and ace-king, and call only with strong pairs and the best suited aces and kings. Everything else folds: out of position, marginal hands lose more than the pot odds give back.",
+      "justification": "Usually we raised, first in or over limpers, and the big blind or a limper re-raised, so the pot is large and we need only one more bet, though we will be out of position for the rest of the hand. We still keep most of the hands we raised with: every pair, every suited hand we raised with, ace-king down to ace-eight offsuit and the offsuit broadways. Only premium hands raise again: aces, kings, queens and ace-king, with jacks close to a raise. Ace-seven to ace-five and king-nine offsuit fold, as does any hand we would only complete with. The same advice applies when two raises come before we act, when we completed or called and two raises followed, and when a fourth bet comes after our own re-raise; the betting is then capped, so a raise becomes a call.",
       "grid": [
-        "R    R    C    C    C*/F F    F    F    F    F    F    F    F",
-        "R    R    C    F*/C F    F    F    F    F    F    F    F    F",
-        "C    F    R    F    F    F    F    F    F    F    F    F    F",
-        "F*/C F    F    C*/R F    F    F    F    F    F    F    F    F",
-        "F    F    F    F    C    F    F    F    F    F    F    F    F",
-        "F    F    F    F    F    C    F    F    F    F    F    F    F",
-        "F    F    F    F    F    F    C    F    F    F    F    F    F",
-        "F    F    F    F    F    F    F    C*/F F    F    F    F    F",
-        "F    F    F    F    F    F    F    F    F    F    F    F    F",
-        "F    F    F    F    F    F    F    F    F    F    F    F    F",
-        "F    F    F    F    F    F    F    F    F    F    F    F    F",
-        "F    F    F    F    F    F    F    F    F    F    F    F    F",
-        "F    F    F    F    F    F    F    F    F    F    F    F    F"
+        "R    R    C    C    C    C    C    C    C    C    C    C    C",
+        "R    R    C    C    C    C    C    C*/F C*/F C*/F C*/F C*/F C*/F",
+        "C    C    R    C    C    C    C*/F F    F    F    F    F    F",
+        "C    C    C*/F C*/R C    C    C*/F F    F    F    F    F    F",
+        "C    C    C*/F C*/F C    C    C*/F F    F    F    F    F    F",
+        "C    F*/C F    F    F    C    C*/F F    F    F    F    F    F",
+        "C*/F F    F    F    F    F    C    C*/F F    F    F    F    F",
+        "F*/C F    F    F    F    F    F    C    F    F    F    F    F",
+        "F    F    F    F    F    F    F    F    C    F    F    F    F",
+        "F    F    F    F    F    F    F    F    F    C    F    F    F",
+        "F    F    F    F    F    F    F    F    F    F    C*/F F    F",
+        "F    F    F    F    F    F    F    F    F    F    F    C*/F F",
+        "F    F    F    F    F    F    F    F    F    F    F    F    C*/F"
       ]
     },
     {
       "position": "BB",
       "situation": "re-raise",
-      "justification": "Our big blind is already in the pot, so the price to continue is better than in any other seat, but we act first after the flop. We cap with queens or better and ace-king, and call with pairs and suited hands that can make strong hands. Weak offsuit hands fold because they are dominated and hard to play out of position.",
+      "justification": "Usually we raised the limpers, or re-raised a single raiser, and someone raised again. Our blind and our raise are already in, so the price for one more bet is good, but we will act first or second on every later street. We keep every hand we raised with and add a few that play well in a big pot: sixes, jack-ten suited and ten-nine suited. Only premium hands raise again: aces, kings, queens and ace-king, with jacks close to a raise. Everything else folds, mainly offsuit hands that are dominated and hard to play out of position. The same advice applies when an open and a re-raise come before we act, and when a fourth bet comes after our own re-raise; the betting is then capped, so a raise becomes a call.",
       "grid": [
         "R    R    C    C    C    F    F    F    F    F    F    F    F",
         "R    R    C    C    F    F    F    F    F    F    F    F    F",
@@ -487,7 +487,7 @@
     {
       "position": "SB",
       "situation": "blind-defence",
-      "justification": "One player raised and the big blind is still behind us, so calling invites the big blind in and leaves us out of position against two players. We mostly re-raise to play heads-up against the raiser, with pairs, strong aces and suited broadways. A couple of medium pairs call; everything else folds.",
+      "justification": "One player has raised. Usually the big blind is still behind us, so calling invites the big blind in and leaves us out of position against two players; we mostly re-raise to play heads-up against the raiser, with big and middle pairs, strong aces and the best suited broadways. Sevens, sixes and jack-ten suited call, and everything else folds. If we completed and the big blind raised, nobody is left to act behind us, but we are still out of position, so the same hands re-raise, call or fold.",
       "grid": [
         "R    R    R    R    R    R*/F F    F    F    F    F    F    F",
         "R    R    R    R    R*/F F    F    F    F    F    F    F    F",
@@ -507,17 +507,17 @@
     {
       "position": "BB",
       "situation": "blind-defence",
-      "justification": "Our blind is already in, so against a single raise we need to call only one more bet into a pot that offers at least three to one. That price makes it right to defend wide: any ace, most suited hands, connected offsuit hands and every pair. We re-raise our strongest hands for value and fold only weak unconnected offsuit hands.",
+      "justification": "One player has raised and our full bet is already in, so we need to call only one more bet into a pot that offers at least three to one: three and a half to one against a lone open, more with callers, and three to one when the small blind raises. That price makes it right to defend wide: any ace, most suited hands, every pair, and offsuit kings, queens, jacks, tens and nines down to about the eight. We re-raise our strongest hands for value and fold weaker offsuit hands, including offsuit connectors below nine-eight, which win too rarely to call even at this price.",
       "grid": [
         "R    R    R    R    C    C    C    C    C    C    C    C    C",
         "R    R    R*/C C    C    C    C    C    C    C    C    C    C",
         "R*/C C    R    C    C    C    C    C    C    C    F    F    F",
         "C*/R C    C    R    C    C    C    C    F*/C F    F    F    F",
         "C    C    C    C    R    C    C    C    F    F    F    F    F",
-        "C    C*/F C    C    C    R*/C C    C    C    F    F    F    F",
-        "C    F*/C F*/C F    C    C    C*/R C    C    C    F    F    F",
-        "C    F    F    F    F    F    C*/F C    C    C    F    F    F",
-        "C    F    F    F    F    F    F    F*/C C    C    C    F    F",
+        "C    C    C    C    C    R*/C C    C    C    F    F    F    F",
+        "C    C    C    C    C    C    C*/R C    C    C    F    F    F",
+        "C    C*/F F*/C F*/C F*/C F*/C F*/C C    C    C    F    F    F",
+        "C    F    F    F    F    F    F    F    C    C    C    F    F",
         "C    F    F    F    F    F    F    F    F    C    C    C    F",
         "C    F    F    F    F    F    F    F    F    F    C    C*/F F",
         "C    F    F    F    F    F    F    F    F    F    F    C    F",
