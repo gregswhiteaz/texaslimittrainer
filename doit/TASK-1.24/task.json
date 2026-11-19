@@ -1,0 +1,105 @@
+{
+  "id": "TASK-1.24",
+  "title": "Protect main and keep CI action pins current",
+  "status": "To Do",
+  "archived": false,
+  "type": "chore",
+  "priority": "medium",
+  "project": null,
+  "assignees": [],
+  "reporter": null,
+  "labels": [
+    "dream-limit-holdem-trainer",
+    "follow-up"
+  ],
+  "milestone": "m-0",
+  "parentTaskId": "TASK-1",
+  "acceptanceCriteriaCompleted": 0,
+  "acceptanceCriteriaCount": 3,
+  "references": [
+    "doc-6"
+  ],
+  "modifiedFiles": [],
+  "ordinal": 169000,
+  "createdAt": "2026-11-18T07:03:00Z",
+  "updatedAt": null,
+  "dueDate": null,
+  "isReady": true,
+  "path": "backlog/tasks/task-1.24 - Protect-main-and-keep-CI-action-pins-current.md",
+  "description": "Follow-up from TASK-1.7. Pushes to main are not gated on CI, the SHA-pinned actions will silently age, and merged doit/* branches pile up on the remote. Branch protection is a GitHub repo setting the user applies; the task documents and verifies it.",
+  "dependencies": [
+    "TASK-1.7"
+  ],
+  "dependencyGraph": {
+    "root": "TASK-1.24",
+    "nodes": [
+      {
+        "id": "TASK-1.24",
+        "title": "Protect main and keep CI action pins current",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": 0,
+        "dependentDepth": 0
+      },
+      {
+        "id": "TASK-1.1",
+        "title": "Bootstrap the strict TypeScript project with one-command checks",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 2,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.7",
+        "title": "Run every check in GitHub Actions on each push and pull request",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 1,
+        "dependentDepth": null
+      }
+    ],
+    "edges": [
+      {
+        "from": "TASK-1.7",
+        "to": "TASK-1.1"
+      },
+      {
+        "from": "TASK-1.24",
+        "to": "TASK-1.7"
+      }
+    ]
+  },
+  "readiness": {
+    "isReady": true,
+    "isBlocked": false,
+    "blockingDependencies": [],
+    "missingDependencies": []
+  },
+  "documentation": [],
+  "subtasks": [],
+  "acceptanceCriteria": [
+    {
+      "index": 1,
+      "text": "Given .github/dependabot.yml, When Dependabot runs, Then it opens weekly update PRs for github-actions and npm",
+      "checked": false
+    },
+    {
+      "index": 2,
+      "text": "Given branch protection on main, When a pull request's CI check has not passed, Then GitHub blocks merging it (setting applied by the user; steps in README)",
+      "checked": false
+    },
+    {
+      "index": 3,
+      "text": "Given doit branches that are already merged into main, When the cleanup step in README is followed, Then they are deleted locally and on origin",
+      "checked": false
+    }
+  ],
+  "definitionOfDone": [],
+  "implementationPlan": null,
+  "implementationNotes": null,
+  "comments": [],
+  "finalSummary": null
+}
