@@ -1,0 +1,38 @@
+{
+ "round": 2,
+ "test_suite": {
+  "command": "npm test",
+  "result": "PASS",
+  "passed": 276,
+  "failed": 0,
+  "notes": "Ran at HEAD 4a09d57 with no other Vitest run active: 75 files, 276 passed, 2 skipped, exit 0, no 'ERROR: Coverage' line. advice/ has 100% lines; chart-print.ts is not listed in the table, which lists only files below 100%. npm run lint (eslint + prettier --check, so the edited JSON is accepted) and npm run typecheck both exit 0. The locked grade, preflop and tag acceptance tests pass unchanged. CI: the latest completed run is 44452256365 on head 003cca5 (success). Run 44454196094 on the current head 4a09d57 was still in_progress when judged, so the orchestrator must confirm it before merge."
+ },
+ "end_to_end": {
+  "command": "npm run chart:print extra arg",
+  "result": "PASS",
+  "expected": "exit 0, no stderr, extra arguments ignored, 26 blocks with raise/continue percentages; re-raise widths 80-90% of unopened; only premium R in re-raise spots; BB blind-defence K9o at least as firm as Q9o/J9o/T8o",
+  "actual": "exit 0 in 0.15 s with empty stderr. 26 headers. 'UTG unopened: raise 16.0%, continue 16.0%' and 'BB limpers: raise 9.4%, continue 100.0%' present. Re-raise continue: UTG 14.2, HJ 16.4, CO 22.5, BTN 34.2, SB 27.0, BB 10.4. BB blind-defence raise 5.7, continue 46.3. The output is byte-identical to doit/TASK-7.19/chart-print.txt (the file the user reviewed) and to an independent rendering of the raw JSON."
+ },
+ "integrity": {
+  "result": "PASS",
+  "notes": "doit.py test-integrity TASK-7.19 exit 0. Commit 4a09d57 changes only six-max.json in src/tests/tools/e2e/package.json (2 lines), and both lines are justification strings. A structural diff of 003cca5 vs HEAD chart JSON shows all 26 grids identical, chart-level metadata and text identical, spot order identical, and justification changes only in BB re-raise and SB blind-defence. The base..HEAD scope is unchanged from round 1: 6 code/test files plus package.json, which gains only the chart:print script; tests/advice/six-max-chart.test.ts has only the D-3 line and comment. No special-casing."
+ },
+ "items": [
+  {"spec": "SPEC-01", "result": "PASS", "evidence": "The locked chart-print acceptance test passes. Holdout: an independent renderer of the raw JSON matches the spawned stdout byte for byte. The UTG unopened and BB limpers lines are exact. Grids did not change after round 1, so round-1 formatter mutants still apply to this byte-identical locked test."},
+  {"spec": "SPEC-02", "result": "PASS", "evidence": "Holdout recompute: UTG 188/212=0.887, HJ 218/254=0.858, CO 298/358=0.832, BTN 454/538=0.844, and no continued class lies outside the open set. Re-run probes: dropping UTG A9s/KTs/QTs/AJo makes the test fail (2 failed); UTG ATo->C (over 0.90) fails; the 0.80-boundary variant passes, so the test is not over-strict. Restored chart verified clean against HEAD."},
+  {"spec": "SPEC-03", "result": "PASS", "evidence": "Raise cells in the re-raise spots are UTG/HJ/CO/SB/BB {AA,KK,QQ,AKs,AKo}, and BTN adds JJ and AQs; all are in the premium set. SB 358/406=0.882, a subset of its open set. BB keeps 124/124 of U, and its extras continue in blind-defence. BTN 34.2<=41, the others <=30. Re-run probe: CO AJs -> R makes the test fail."},
+  {"spec": "SPEC-04", "result": "PASS", "evidence": "Holdout A-4 check: BB blind-defence has 0 offsuit violations; K9o/Q9o/J9o/T8o are all C; width 46.3 (band 35-60), raise 5.7 (5-15). Re-run probe: K9o -> C*/F fails SPEC-04 and SPEC-05."},
+  {"spec": "SPEC-05", "result": "PASS", "evidence": "Holdout A-4 (offsuit + suited kicker>=6) over all 26 spots: 0 violations. Grids are identical to round 1, where mutants (BTN 98o F*/R, CO A9s F) failed the test."},
+  {"spec": "SPEC-06", "result": "PASS", "evidence": "Round-1 review of 24 unchanged texts and the unchanged chart-level text still holds, since texts and grids are identical. Re-read the 2 edited texts against the section 5 routes and grids. BB re-raise: 'When we raised, our blind and our raise are already in' is now conditional, so it is true for routes (b) and (c) and makes no claim on cold route (a), which the closing sentence covers. 'Act first or second on every later street' holds, because only SB can act before BB. Named hands match the grid (66, JTs, T9s continue; AA/KK/QQ/AKs/AKo R; JJ C*/R = 'close to a raise'). It keeps the A-8 elements and has 136 words. SB blind-defence: 'out of position against at least two players' is now true with callers on route (a) and resolves round-1 LOW J-1-01. Route (b) still says nobody is behind. Named hands match (77 C, 66 C*/F, JTs C). 91 words. Both texts are original wording, and the authored-chart word-minimum test passes."},
+  {"spec": "SPEC-07", "result": "PASS", "evidence": "The text contains 'We close the action unless a player who limped after us is still to act' and no 'usually close'. The named suited aces {AJs,ATs,A9s,A8s,A5s,A4s} equal the suited-ace calls. Re-run probe: inserting 'usually close' makes the HJ raise-and-calls test fail."},
+  {"spec": "SPEC-08", "result": "PASS", "evidence": "npm test exit 0, no coverage error. The six-max-chart.test.ts authored-chart test passes. git diff --stat 2d81d06 over six-max-chart.test.ts, preflop/grade acceptance and tests/bots shows only six-max-chart.test.ts | 3 (2+/1-)."},
+  {"spec": "SPEC-09", "result": "PASS", "evidence": "lint, typecheck and test all exit 0. chart-print.ts has 100% lines and imports only './hand-class' and './preflop-chart' (type). The package.json diff vs base adds only the chart:print script."},
+  {"spec": "SPEC-10", "result": "PASS", "evidence": "backlog task view TASK-7.19 --plain shows the notes entry 'USER SIGN-OFF (2026-11-19, qa.md Q-4)'. It records approval on condition of the BB re-raise and SB blind-defence wording fixes, both applied in 4a09d57, with no grid change after sign-off. qa.md Q-4 (answer: 'Sign off + fix the 2 wordings', naming the same two texts) matches the note. Both fixes are in HEAD's JSON and grids are unchanged, which I verified. Note: the task-notes edit is in the working tree and not yet committed (see J-2-01)."}
+ ],
+ "findings": [
+  {"id": "J-2-01", "severity": "LOW", "spec": "SPEC-10", "expected_vs_actual": "Expected the sign-off note to be committed with the task. Actual: it exists only as an uncommitted working-tree change to the TASK-7.19 backlog file. HEAD's copy has no 'USER SIGN-OFF' entry.", "fix": "Commit the backlog task file with the finalisation commit."},
+  {"id": "J-2-02", "severity": "LOW", "spec": "SPEC-10", "expected_vs_actual": "Expected the Final Summary to reflect the current state. Actual: it still says 'Judge, CI and user sign-off are pending' and lists the BB re-raise wording as a follow-up risk, though both were resolved in 4a09d57.", "fix": "Update the Final Summary at finalisation."},
+  {"id": "J-2-03", "severity": "LOW", "spec": "SPEC-09", "expected_vs_actual": "Expected green CI on head 4a09d57. Actual: run 44454196094 for that head was in_progress when judged. The last completed run (44452256365, head 003cca5) succeeded.", "fix": "Orchestrator confirms run 44454196094 succeeds before merge."}
+ ],
+ "summary": "All 10 SPEC items PASS. Commit 4a09d57 changed only the BB re-raise and SB blind-defence justifications. All grids are identical to 003cca5. Both edited texts are accurate on every route and keep the word rules. Suite 276 passed / 2 skipped, lint, typecheck and test-integrity all green. Spec mutation probes still fail the locked tests. The user's sign-off is in the task notes and matches qa.md Q-4. Three LOW, non-blocking findings: the sign-off note is uncommitted, the Final Summary is stale, and CI on the new head is pending."
+}

@@ -4,7 +4,7 @@ title: Keep TAG and Rock bots inside their style bands
 status: To Do
 assignee: []
 created_date: '2026-11-17T23:03:00Z'
-updated_date: '2026-11-18T16:24:00Z'
+updated_date: '2026-11-19T03:52:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -43,6 +43,7 @@ Plan key: E06-S16 · Dream: limit-holdem-trainer
 - [ ] #2 Given the same run, When it completes, Then the Rock's measured VPIP is 8-15%, PFR 6-12% and aggression 35-55% [REQ-027.4]
 - [ ] #3 Given the same check-styles run with seeds 7 and 1234, When each completes, Then TAG and Rock are inside their bands for both seeds [REQ-027.5, REQ-027.1, REQ-027.4]
 - [ ] #4 Given TAG's measured VPIP or PFR fall outside REQ-027.1 (VPIP 18-26%, PFR 14-22%), When the style-band check runs, Then the 6-max chart is retuned until both are inside the band
+- [ ] #5 Given the TASK-7.19 re-raise widening (openers keep 80-90% vs a single 3-bet), When TAG's style band is measured, Then its aggression stays within 45-65% or the chart is retuned
 <!-- AC:END -->
 
 ## Definition of Done
@@ -65,4 +66,6 @@ Plan key: E06-S16 · Dream: limit-holdem-trainer
 
 <!-- SECTION:NOTES:BEGIN -->
 AC added from TASK-7.2 follow-up (doc-14).
+
+AC added from TASK-7.19 follow-up (doc-28).
 <!-- SECTION:NOTES:END -->

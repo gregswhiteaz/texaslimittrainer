@@ -1,11 +1,11 @@
 ---
 id: TASK-7.19
 title: Review and revise the 6-max preflop chart with the user
-status: In Progress
+status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-18T16:24:00Z'
-updated_date: '2026-11-19T03:25:00Z'
+updated_date: '2026-11-19T03:52:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -31,12 +31,12 @@ Follow-up from TASK-7.2 (doc-14). The chart was authored by Claude (Q-1) and the
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Given npm run chart:print, When it runs, Then it prints every spot as a 13x13 grid with its raise and continue percentages
-- [ ] #2 Given the facing-a-re-raise spots for UTG, HJ, CO and BTN, When the chart is revised, Then each continues with a share of its own unopened range that the user approves, and each justification agrees with its grid
-- [ ] #3 Given every spot's justification, When reviewed against the routes into that spot (e.g. SB blind defence after an SB complete and BB raise; HJ facing a raise after limping), Then it is accurate for every route
-- [ ] #4 Given BB blind defence, When the chart is revised, Then no offsuit hand is a firmer call than a strictly stronger hand of the same high card (K9o vs Q9o/J9o/T8o fixed)
-- [ ] #5 Given the HJ raise-and-calls text, When revised, Then it says we close the action and names only the suited aces the grid calls with
-- [ ] #6 Given the revised chart, When npm test runs, Then every spot is still inside its spec band and the user has signed off the chart in the task notes
+- [x] #1 Given npm run chart:print, When it runs, Then it prints every spot as a 13x13 grid with its raise and continue percentages
+- [x] #2 Given the facing-a-re-raise spots for UTG, HJ, CO and BTN, When the chart is revised, Then each continues with a share of its own unopened range that the user approves, and each justification agrees with its grid
+- [x] #3 Given every spot's justification, When reviewed against the routes into that spot (e.g. SB blind defence after an SB complete and BB raise; HJ facing a raise after limping), Then it is accurate for every route
+- [x] #4 Given BB blind defence, When the chart is revised, Then no offsuit hand is a firmer call than a strictly stronger hand of the same high card (K9o vs Q9o/J9o/T8o fixed)
+- [x] #5 Given the HJ raise-and-calls text, When revised, Then it says we close the action and names only the suited aces the grid calls with
+- [x] #6 Given the revised chart, When npm test runs, Then every spot is still inside its spec band and the user has signed off the chart in the task notes
 <!-- AC:END -->
 
 ## Implementation Plan
@@ -57,13 +57,23 @@ Full spec: doit/TASK-7.19/spec.md
 
 <!-- SECTION:NOTES:BEGIN -->
 Build: npm run chart:print (src/advice/chart-print.ts + tools/chart-print/main.ts); re-raise spots keep UTG 0.887, HJ 0.858, CO 0.832, BTN 0.844, SB 0.882 of opening range (Q-1); BB blind defence widened 43.6%→46.3% with no offsuit inversions; BTN/SB unopened flags fixed; 23 justifications rewritten; CO re-raise folds A9o/A8o to keep TASK-9.1's locked review test valid; BTN re-raise band [6,41] (D-3); playtest 0 violations; gate PASS. User review files: doit/TASK-7.19/chart-print.txt, chart-changes.md.
+
+USER SIGN-OFF (2026-11-19, qa.md Q-4): the user approved the revised 6-max chart (re-raise shares UTG 0.887, HJ 0.858, CO 0.832, BTN 0.844, SB 0.882; BB blind defence 46.3%) on condition of two wording fixes. Both were applied in commit 4a09d57: BB re-raise 'When we raised, our blind and our raise are already in…', and SB blind defence 'against at least two players'. No grid changed after sign-off.
+
+Judge round 2 PASS 10/10. Follow-ups (Step 6a): created TASK-7.24 (chart:print --spot); ACs added to TASK-6.16 (TAG aggression after widening) and TASK-7.21 (revisit CO A9o when spots split); correction note on TASK-7.2 (HJ doesn't always close). BB wording follow-up done at sign-off.
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary
 
 <!-- SECTION:FINAL_SUMMARY:BEGIN -->
-Built: npm run chart:print (all 26 spots as 13x13 grids with raise/continue %), and the 6-max chart revised per user decisions Q-1 (openers keep 80-90% of their own range vs a re-raise, only premium 4-bets), Q-2 (printed grids, user signs off) and Q-3 (widen now, split spots later in TASK-7.21). Re-raise shares: UTG 0.60->0.887, HJ 0.54->0.858, CO 0.44->0.832, BTN 0.39->0.844, SB 0.23->0.882; BB re-raise unchanged. BB blind-defence inversions fixed (K9o/K8o/Q8o/J8o now firm calls; 46.3% continue); all 26 justifications made true for every route; HJ raise-and-calls text now says we close the action unless a limper after us is still to act and names its suited aces. BTN re-raise band edited [6,30]->[6,41] (D-3).
-Verification: gate run 1 PASS (npm test 276 passed/2 skipped, lint, typecheck, playtest 0 invariant violations); review round 1 clean on code (15 chart + 7 formatter mutants caught, except the expected BB no-upper-bound case) and security. Judge, CI and user sign-off are pending.
-Assumptions to review: A-1 to A-9 in doc (esp. A-1 SB rule, A-3 premium set, A-4 consistency rule, A-5 HJ wording). Review doit/TASK-7.19/chart-changes.md and chart-print.txt.
-Risks/follow-ups: CO folds A9o/A8o (forced by locked TASK-9.1 test) while continuing KTo - revisit after TASK-7.21; BB re-raise text wording ('our raise is already in' wrong on cold route); fix doc-14 'HJ always closes' note; add --spot filter to chart:print; TASK-6.16 measure TAG aggression after widening (retune if outside 45-65%).
+Built npm run chart:print (all 26 spots as 13x13 grids with raise/continue %) and revised the 6-max chart per user decisions Q-1 to Q-4.
+Re-raise shares of the opener's range: UTG 0.60->0.887, HJ 0.54->0.858, CO 0.44->0.832, BTN 0.39->0.844, SB 0.23->0.882; only premiums 4-bet.
+BB blind defence widened to 46.3% with no offsuit inversions; BTN and SB unopened flags fixed.
+All justifications are accurate for every route, including the two sign-off wording fixes.
+The BTN re-raise test band was widened to [6,41] (D-3).
+Verified: judge rounds 1 and 2 PASS 10/10 (independent share recomputation, dominance check over all 26 spots, mutation probes), npm test 276 passed, playtest 0 violations, CI green.
+USER SIGNED OFF (qa.md Q-4).
+Assumptions A-1 to A-9 are in doc-28.
+Known compromise: CO folds A9o/A8o vs a re-raise (pinned by TASK-9.1's locked test), to revisit in TASK-7.21.
+Cold 3-bet routes are loose until the spots are split (TASK-7.21).
 <!-- SECTION:FINAL_SUMMARY:END -->

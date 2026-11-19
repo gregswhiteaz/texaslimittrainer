@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-18T16:24:00Z'
+updated_date: '2026-11-19T03:52:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-0
@@ -90,6 +90,8 @@ Full spec: doit/TASK-7.2/spec.md
 Build: hand-class.ts, preflop-chart.ts (tlh-preflop-chart v1 parser/validator), preflop.ts (recommendPreflop with legalisation and move), charts/six-max.json (original TAG chart, 26 spots, all within §5 bands); acceptance/unit/content tests; advice 100% lines; gate PASS.
 
 CI run 44345626992 (head 5f18b57): success. Judge round 1: PASS 17/17; 136,890 engine decisions matched an independent oracle; mutation probes caught. Follow-ups (Step 6a): created TASK-7.19 (user chart review + revisions incl. J-1-01..03, K9o, HJ text, print script), TASK-7.20 (validator edge cases), TASK-7.21 (spike: split spots, Q-4), TASK-8.5 (position/situation labels); ACs added to TASK-6.16 (retune vs REQ-027.1), TASK-1.12 (cap agreement), TASK-7.17 (short-stack preflop). Skipped: start<=0 equivalent mutant (no behaviour change).
+
+Correction (TASK-7.19, 2026-11-19): the doc-14 review note that HJ always closes the action in raise-and-calls is wrong. A player who limped after HJ may still be to act (e.g. UTG folds, HJ limps, CO limps, SB raises, BB calls). The chart text now says this.
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary
