@@ -1,10 +1,14 @@
 // CI retry helper (TASK-1.19): runs a command with a per-attempt timeout and retries it.
-// A timed-out attempt's whole process group is killed (the command runs apt through sudo).
+// A timed-out attempt's whole process group is killed (the command runs apt through sudo). If a
+// group kill is refused (EPERM, root members left behind by sudo), it is sent again with
+// `sudo -n kill`, and the next attempt starts only once the group is gone. An attempt whose group
+// cannot be stopped ends the helper with an ::error:: line.
 // Usage: node tools/ci/retry.js --label <text> --attempts <n> --timeout-seconds <s>
 //          [--delay-seconds <s>] [--kill-after-seconds <s>] -- <command> [args...]
-import { spawn } from 'node:child_process';
+import { spawn, spawnSync } from 'node:child_process';
 import process from 'node:process';
 import { clearTimeout, setTimeout } from 'node:timers';
+import { setTimeout as sleep } from 'node:timers/promises';
 import { parseArgs } from 'node:util';
 import { pathToFileURL } from 'node:url';
 
@@ -13,7 +17,12 @@ import { pathToFileURL } from 'node:url';
  *   killAfterSeconds: number, command: string, args: string[] }} RetryOptions
  */
 
+/** @typedef {(pid: number, signal: NodeJS.Signals) => boolean} SudoKill */
+
 class UsageError extends Error {}
+
+const REAP_SECONDS = 2;
+const REAP_POLL_MS = 250;
 
 /** @param {string} line */
 const log = (line) => process.stdout.write(`${line}\n`);
@@ -23,60 +32,142 @@ const log = (line) => process.stdout.write(`${line}\n`);
  * members we may not signal (EPERM, e.g. root-owned under sudo) must not stop the retry loop.
  * @param {number | undefined} pid
  * @param {NodeJS.Signals} signal
+ * @returns {'sent' | 'gone' | 'denied'}
  */
 export function killGroup(pid, signal) {
-  if (pid === undefined) return;
+  if (pid === undefined) return 'gone';
   try {
     process.kill(-pid, signal);
+    return 'sent';
   } catch (error) {
     const code = /** @type {NodeJS.ErrnoException} */ (error).code;
-    if (code === 'EPERM') log(`retry: could not send ${signal} to process group ${pid} (EPERM)`);
-    else if (code !== 'ESRCH') throw error;
+    if (code === 'ESRCH') return 'gone';
+    if (code !== 'EPERM') throw error;
+    log(`retry: could not send ${signal} to process group ${pid} (EPERM)`);
+    return 'denied';
   }
 }
 
 /**
- * Runs one attempt in its own process group. Resolves to null on success, else the failure reason.
+ * Whether the process group led by `pid` still has members (EPERM means members we may not signal).
+ * @param {number} pid
+ */
+export function groupExists(pid) {
+  try {
+    process.kill(-pid, 0);
+    return true;
+  } catch (error) {
+    const code = /** @type {NodeJS.ErrnoException} */ (error).code;
+    if (code === 'EPERM') return true;
+    if (code === 'ESRCH') return false;
+    throw error;
+  }
+}
+
+/**
+ * Signals the process group with `sudo -n kill` (never prompts). Returns whether sudo succeeded.
+ * @type {SudoKill}
+ */
+export function sudoKillGroup(pid, signal) {
+  const name = signal.replace(/^SIG/, '');
+  const result = spawnSync('sudo', ['-n', 'kill', '-s', name, '--', `-${pid}`], {
+    stdio: 'ignore',
+    timeout: 10_000,
+  });
+  const sent = result.status === 0;
+  log(
+    sent
+      ? `retry: sent ${signal} to process group ${pid} with sudo`
+      : `retry: sudo could not send ${signal} to process group ${pid}`,
+  );
+  return sent;
+}
+
+/**
+ * @param {number | undefined} pid
+ * @param {NodeJS.Signals} signal
+ * @param {SudoKill} sudoKill
+ */
+function stopGroup(pid, signal, sudoKill) {
+  if (killGroup(pid, signal) === 'denied' && pid !== undefined) sudoKill(pid, signal);
+}
+
+/**
+ * Keeps SIGKILLing the group until it is gone, for at most REAP_SECONDS. Resolves to whether it is gone.
+ * @param {number | undefined} pid
+ * @param {SudoKill} sudoKill
+ */
+async function reap(pid, sudoKill) {
+  if (pid === undefined) return true;
+  const deadline = Date.now() + REAP_SECONDS * 1000;
+  while (Date.now() < deadline) {
+    if (!groupExists(pid)) return true;
+    stopGroup(pid, 'SIGKILL', sudoKill);
+    await sleep(REAP_POLL_MS);
+  }
+  return !groupExists(pid);
+}
+
+/**
+ * Runs one attempt in its own process group. `failure` is null on success, else the reason;
+ * `stuck` means the failed attempt's process group could not be stopped.
  * @param {RetryOptions} options
  * @param {(pid: number | undefined) => void} onSpawn
- * @returns {Promise<string | null>}
+ * @param {SudoKill} sudoKill
+ * @returns {Promise<{ failure: string | null, stuck: boolean }>}
  */
-function runAttempt(options, onSpawn) {
+function runAttempt(options, onSpawn, sudoKill) {
   return new Promise((resolve) => {
     const child = spawn(options.command, options.args, { stdio: 'inherit', detached: true });
-    onSpawn(child.pid);
+    const pid = child.pid;
+    onSpawn(pid);
+    const timeoutFailure = `timed out after ${options.timeoutSeconds} s`;
     let timedOut = false;
+    let exited = false;
+    let settled = false;
+    /** @param {{ failure: string | null, stuck: boolean }} result */
+    const settle = (result) => {
+      if (settled) return;
+      settled = true;
+      resolve(result);
+    };
     /** @type {NodeJS.Timeout | undefined} */
     let killTimer;
     const timer = setTimeout(() => {
       timedOut = true;
-      killGroup(child.pid, 'SIGTERM');
-      killTimer = setTimeout(
-        () => killGroup(child.pid, 'SIGKILL'),
-        options.killAfterSeconds * 1000,
-      );
+      stopGroup(pid, 'SIGTERM', sudoKill);
+      killTimer = setTimeout(async () => {
+        stopGroup(pid, 'SIGKILL', sudoKill);
+        if ((await reap(pid, sudoKill)) || exited) return;
+        // The child itself cannot be killed: give up on it so the helper can still exit.
+        child.unref();
+        settle({ failure: timeoutFailure, stuck: true });
+      }, options.killAfterSeconds * 1000);
     }, options.timeoutSeconds * 1000);
     /** @param {string | null} failure */
-    const finish = (failure) => {
+    const finish = async (failure) => {
+      exited = true;
       clearTimeout(timer);
       clearTimeout(killTimer);
       // Also reap descendants (e.g. apt still holding its lock) before the next attempt.
-      killGroup(child.pid, 'SIGKILL');
-      resolve(timedOut ? `timed out after ${options.timeoutSeconds} s` : failure);
+      const reaped = await reap(pid, sudoKill);
+      const result = timedOut ? timeoutFailure : failure;
+      settle({ failure: result, stuck: !reaped && result !== null });
     };
-    child.on('error', (error) => finish(`could not start: ${error.message}`));
+    child.on('error', (error) => void finish(`could not start: ${error.message}`));
     child.on('exit', (code, signal) => {
-      if (code === 0) finish(null);
-      else finish(code === null ? `was killed by ${signal}` : `failed with exit code ${code}`);
+      if (code === 0) void finish(null);
+      else void finish(code === null ? `was killed by ${signal}` : `failed with exit code ${code}`);
     });
   });
 }
 
 /**
  * @param {RetryOptions} options
+ * @param {SudoKill} [sudoKill] sends a signal to a process group with sudo (replaced in tests)
  * @returns {Promise<number>} the exit code for the helper
  */
-export async function runWithRetry(options) {
+export async function runWithRetry(options, sudoKill = sudoKillGroup) {
   const { label, attempts } = options;
   const commandLine = [options.command, ...options.args].join(' ');
   /** @type {number | undefined} */
@@ -93,11 +184,17 @@ export async function runWithRetry(options) {
       const prefix = `${label}: attempt ${attempt} of ${attempts}`;
       log(`retry: ${prefix}: ${commandLine}`);
       const started = Date.now();
-      const failure = await runAttempt(options, (pid) => (currentPid = pid));
+      const { failure, stuck } = await runAttempt(options, (pid) => (currentPid = pid), sudoKill);
+      const pid = currentPid;
       currentPid = undefined;
       if (failure === null) {
         log(`retry: ${prefix} succeeded in ${((Date.now() - started) / 1000).toFixed(1)} s`);
         return 0;
+      }
+      if (stuck) {
+        log(`::warning::${prefix} ${failure}`);
+        log(`::error::${prefix} could not be stopped; process group ${pid} is still running`);
+        return 1;
       }
       if (attempt === attempts) {
         log(`::warning::${prefix} ${failure}`);
