@@ -1,10 +1,11 @@
 ---
 id: TASK-3.4
 title: See who won each hand and get the next hand dealt automatically
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-19T00:21:00Z'
+updated_date: '2026-11-19T00:41:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-0
@@ -67,6 +68,19 @@ Plan key: E03-S04 · Dream: limit-holdem-trainer
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
 
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. src/engine/hand.ts: export minimumStack(stakes), used by validate (only engine change).
+2. src/table/session.ts: TableState.button moves one seat clockwise each hand; nextHand(t) carries final stacks, increments handNumber and applies the TEMPORARY top-up to $160 for any seat below minimumStack (Q-4, code comment names the removal task); completedHand fallbacks become explicit throws.
+3. src/table/hand-result.ts: handResultView from hand.result only — one line per winner summed per seat ('Ben wins $122 · Pair of kings'), no hand name when uncontested, split shares, winners' hole cards only (Q-2, Q-3); hand names per Q-1 from card ranks.
+4. UI: 'Hand over' result box under the action bar; pot shows $0 after award; next hand dealt NEXT_HAND_DELAY_MS = 1500 after the result via a gate-able nextHandDelay/holdNextHand (for TASK-9.1); onHandComplete guarded by handNumber.
+5. Cross-story test edits E1–E4 (spec §5, D-2): no assertion removed.
+6. Tests: hand-name unit tests for every category, result view, carry-over/button/top-up, e2e 1.4–1.6 s auto-deal on the paused clock in Chromium + WebKit, axe.
+
+Full spec: doit/TASK-3.4/spec.md
+<!-- SECTION:PLAN:END -->
+
 ## Implementation Notes
 
 <!-- SECTION:NOTES:BEGIN -->
@@ -75,4 +89,6 @@ AC added from TASK-3.1 follow-up (doc-21).
 AC added from TASK-3.1 follow-up (doc-21).
 
 AC added from TASK-3.3 follow-up (doc-24).
+
+Cross-story change (orchestrator D-2 on precedent): exactly the edits E1–E4 listed in spec §5 (e2e/table.spec.ts showdown and fold tests, e2e/action-bar.spec.ts real-timer context, tests/support/table-scenarios.ts button). No other assertion may be removed or weakened. User Q-4: the short-stack top-up is TEMPORARY; its removal becomes a testable AC on TASK-1.16/TASK-3.11 in Step 6a.
 <!-- SECTION:NOTES:END -->
