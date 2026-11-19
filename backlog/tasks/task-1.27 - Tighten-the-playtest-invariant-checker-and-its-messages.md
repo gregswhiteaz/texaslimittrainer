@@ -1,9 +1,11 @@
 ---
 id: TASK-1.27
 title: Tighten the playtest invariant checker and its messages
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-18T18:15:00Z'
+updated_date: '2026-11-19T21:41:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -33,3 +35,21 @@ Follow-up from TASK-1.8 (doc-16) reviews and judge. Two violation messages can m
 - [ ] #5 Given a runner that does not stop a hand at its first violation, When the playtest tests run, Then they fail within the test timeout instead of hanging
 - [ ] #6 Given the CLI violation block, When an action is printed, Then its text comes from describeAction, and the unreachable null guard is removed with the P1 test row asserting a message rather than relying on a throw
 <!-- AC:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. invariants.ts: K2 split — hole-card count message (Q-1); C3 per-award message (Q-2); new deal-order check vs D-5 deck layout (A-3).
+2. checkState: empty history after the deal and non-betting-street records -> legal-action (A-1/A-2).
+3. Test fault engines cap actions per hand so a runner that never stops fails instead of hanging (A-4).
+4. CLI: actions printed via describeAction; ViolatingHand type removes the null guard; P1 row asserts a message.
+5. Update pinned message tests.
+
+Full spec: doit/TASK-1.27/spec.md
+<!-- SECTION:PLAN:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+Q-1..Q-3 (user): recommended wording for hole-card and award-split messages; new history and deal-order messages approved as drafted.
+<!-- SECTION:NOTES:END -->

@@ -1,0 +1,206 @@
+{
+  "id": "TASK-1.27",
+  "title": "Tighten the playtest invariant checker and its messages",
+  "status": "To Do",
+  "archived": false,
+  "type": "chore",
+  "priority": "medium",
+  "project": null,
+  "assignees": [],
+  "reporter": null,
+  "labels": [
+    "dream-limit-holdem-trainer",
+    "follow-up"
+  ],
+  "milestone": "m-0",
+  "parentTaskId": "TASK-1",
+  "acceptanceCriteriaCompleted": 0,
+  "acceptanceCriteriaCount": 6,
+  "references": [
+    "doc-16"
+  ],
+  "modifiedFiles": [],
+  "ordinal": 180000,
+  "createdAt": "2026-11-18T18:15:00Z",
+  "updatedAt": null,
+  "dueDate": null,
+  "isReady": true,
+  "path": "backlog/tasks/task-1.27 - Tighten-the-playtest-invariant-checker-and-its-messages.md",
+  "description": "Follow-up from TASK-1.8 (doc-16) reviews and judge. Two violation messages can mislead (K2 reuses the board/burn wording for a hole-card error; the C3 awards message can read '$20 but players put in $20'). The deck order of dealt cards is not checked, checkState ignores an empty history or non-betting-street records (J-1-02), a runner that never stops a violating hand hangs the suite instead of failing it, and the CLI repeats describeAction's wording. Message wording was user-approved in TASK-1.8 D-2, so new wording needs the user's OK.",
+  "dependencies": [
+    "TASK-1.8"
+  ],
+  "dependencyGraph": {
+    "root": "TASK-1.27",
+    "nodes": [
+      {
+        "id": "TASK-1.27",
+        "title": "Tighten the playtest invariant checker and its messages",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": 0,
+        "dependentDepth": 0
+      },
+      {
+        "id": "TASK-1.1",
+        "title": "Bootstrap the strict TypeScript project with one-command checks",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 3,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.2",
+        "title": "Rank showdown hands by real poker hand rankings",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 5,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.3",
+        "title": "Deal every hand from a seeded shuffle with a replay code",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 5,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.4",
+        "title": "Play a complete fixed-limit hand from blinds to showdown",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 4,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.5",
+        "title": "Give each deciding seat only its own view of the hand",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 3,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.6",
+        "title": "Run seeded bot-only hands from the command line",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 2,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.7",
+        "title": "Run every check in GitHub Actions on each push and pull request",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 2,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.8",
+        "title": "Check game invariants after every playtest action",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 1,
+        "dependentDepth": null
+      }
+    ],
+    "edges": [
+      {
+        "from": "TASK-1.2",
+        "to": "TASK-1.7"
+      },
+      {
+        "from": "TASK-1.3",
+        "to": "TASK-1.7"
+      },
+      {
+        "from": "TASK-1.4",
+        "to": "TASK-1.2"
+      },
+      {
+        "from": "TASK-1.4",
+        "to": "TASK-1.3"
+      },
+      {
+        "from": "TASK-1.5",
+        "to": "TASK-1.4"
+      },
+      {
+        "from": "TASK-1.6",
+        "to": "TASK-1.5"
+      },
+      {
+        "from": "TASK-1.7",
+        "to": "TASK-1.1"
+      },
+      {
+        "from": "TASK-1.8",
+        "to": "TASK-1.6"
+      },
+      {
+        "from": "TASK-1.8",
+        "to": "TASK-1.7"
+      },
+      {
+        "from": "TASK-1.27",
+        "to": "TASK-1.8"
+      }
+    ]
+  },
+  "readiness": {
+    "isReady": true,
+    "isBlocked": false,
+    "blockingDependencies": [],
+    "missingDependencies": []
+  },
+  "documentation": [],
+  "subtasks": [],
+  "acceptanceCriteria": [
+    {
+      "index": 1,
+      "text": "Given a player with other than two hole cards, When checkState runs, Then the cards violation names the seat and its hole-card count, with wording the user has approved",
+      "checked": false
+    },
+    {
+      "index": 2,
+      "text": "Given award shares that don't add up to an award's amount while totals balance, When checkState runs, Then the chips message names the mismatched award and cannot state equal amounts as a contradiction, with wording the user has approved",
+      "checked": false
+    },
+    {
+      "index": 3,
+      "text": "Given a dealt card that is not from its deck position (hole cards, burns, board per hand.ts D-5 layout), When checkState runs, Then a cards violation is reported",
+      "checked": false
+    },
+    {
+      "index": 4,
+      "text": "Given a state with an empty action history after the deal or a history record on a non-betting street, When checkState runs, Then it reports a legal-action violation",
+      "checked": false
+    },
+    {
+      "index": 5,
+      "text": "Given a runner that does not stop a hand at its first violation, When the playtest tests run, Then they fail within the test timeout instead of hanging",
+      "checked": false
+    },
+    {
+      "index": 6,
+      "text": "Given the CLI violation block, When an action is printed, Then its text comes from describeAction, and the unreachable null guard is removed with the P1 test row asserting a message rather than relying on a throw",
+      "checked": false
+    }
+  ],
+  "definitionOfDone": [],
+  "implementationPlan": null,
+  "implementationNotes": null,
+  "comments": [],
+  "finalSummary": null
+}
