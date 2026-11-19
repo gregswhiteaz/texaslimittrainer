@@ -1,10 +1,11 @@
 ---
 id: TASK-1.23
 title: Harden CI child-process cleanup
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-18T07:03:00Z'
-updated_date: '2026-11-19T02:48:00Z'
+updated_date: '2026-11-19T19:22:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -16,7 +17,7 @@ references:
   - doc-11
   - doc-12
 parent_task_id: TASK-1
-priority: low
+priority: high
 type: chore
 ordinal: 168000
 ---
@@ -35,8 +36,22 @@ Follow-up from the TASK-1.19 and TASK-1.20 reviews. In rare cases a hung or unki
 - [ ] #4 Given retry.js times out an attempt whose command runs apt-get under sudo, When it stops the attempt, Then the root apt-get is really stopped (e.g. sudo -n kill on the process group) so it cannot keep holding the dpkg lock for the next attempt
 <!-- AC:END -->
 
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. retry.js: killGroup reports sent/gone/EPERM; EPERM escalates to sudo -n kill on the attempt's process group.
+2. After each attempt, reap: re-send SIGKILL every 250 ms for up to 2 s until the group is gone (lock freed).
+3. Still alive -> ::error:: 'could not be stopped', exit 1 at once (no waiting for the 13 min backstop).
+4. retry.sudo.test.ts: try/finally cleanup; new Linux-CI real-sudo flock test proving attempt 2 gets the lock.
+5. tests/support/process-group.ts: kill the whole nested Vitest group in speed-limits test (100 s).
+
+Full spec: doit/TASK-1.23/spec.md
+<!-- SECTION:PLAN:END -->
+
 ## Implementation Notes
 
 <!-- SECTION:NOTES:BEGIN -->
 AC added from TASK-1.29 follow-up (doc-27): the orphaned sudo'd apt-get (EPERM on kill) was the real cause of the CI lock failures.
+
+2026-11-19: raised to High by the user after CI run #68 (main, 9ba77c8) failed: attempt 1's sudo apt-get (pid 5507) outlived its 240 s timeout and held the dpkg lock through attempts 2 and 3 (AC#4). Second CI failure from this cause.
 <!-- SECTION:NOTES:END -->

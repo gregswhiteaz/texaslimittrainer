@@ -4,6 +4,7 @@ title: Confirm Dependabot runs and clear merged doit branches after the first pu
 status: To Do
 assignee: []
 created_date: '2026-11-19T04:51:00Z'
+updated_date: '2026-11-19T04:54:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -28,5 +29,11 @@ Follow-up from TASK-1.24 (judge J-1-01). Dependabot and the cleanup script can o
 <!-- AC:BEGIN -->
 - [ ] #1 Given main with .github/dependabot.yml is pushed, When GitHub's Dependabot page (Insights > Dependency graph > Dependabot) is opened, Then both github-actions and npm show a successful last check with no config errors
 - [ ] #2 Given the first weekly run has happened, When open pull requests are listed, Then any Dependabot PRs are grouped as configured and their CI runs
-- [ ] #3 Given main is pushed, When node tools/git/prune-merged-branches.js --apply is run, Then every merged doit/* branch is gone locally and on origin and a following dry run reports nothing to clean
+- [x] #3 Given main is pushed, When node tools/git/prune-merged-branches.js --apply is run, Then every merged doit/* branch is gone locally and on origin and a following dry run reports nothing to clean
 <!-- AC:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+2026-11-18: user ran prune --apply: deleted 26 local + 24 remote merged doit/* branches; follow-up dry run reports 0/0; only main and origin/main remain.
+<!-- SECTION:NOTES:END -->
