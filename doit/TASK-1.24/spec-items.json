@@ -3,54 +3,54 @@
     "id": "SPEC-01",
     "verifies": "AC#1",
     "verification": "acceptance `tests/ci/dependabot.acceptance.test.ts::declares weekly github-actions and npm updates`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-02",
     "verifies": "AC#1",
     "verification": "manual After the user's push: open `https://github.com/gregswhiteaz/texaslimittrainer/network/updates`, click \"Check for updates\" on each ecosystem, then `gh pr list --author app/dependabot --state all`; README part checked by acceptance `tests/ci/dependabot.acceptance.test.ts::README documents the Dependabot schedule`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-03",
     "verifies": "AC#3",
     "verification": "acceptance `tests/ci/branch-protection.acceptance.test.ts::README documents branch protection requiring the CI job`; manual Judge runs the read-only verify command `gh api repos/{owner}/{repo}/branches/main/protection` in the project root and confirms it fails with HTTP 403 and the \"Upgrade to GitHub Pro or make this repository public\" message, matching the README note. Applying the rule and confirming GitHub blocks a PR with failing CI is deferred to the follow-up task (it cannot be done on the private free plan)",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-04",
     "verifies": "AC#2",
     "verification": "acceptance `tests/git/prune-merged-branches.acceptance.test.ts::dry run lists merged doit branches and deletes nothing`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-05",
     "verifies": "AC#2",
     "verification": "acceptance `tests/git/prune-merged-branches.acceptance.test.ts::apply deletes merged doit branches locally and on origin`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-06",
     "verifies": "AC#2",
     "verification": "acceptance `tests/git/prune-merged-branches.acceptance.test.ts::keeps the checked-out branch and branches not merged on origin`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-07",
     "verifies": "AC#2",
     "verification": "acceptance `tests/git/prune-merged-branches.acceptance.test.ts::reports none when nothing is merged`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-08",
     "verifies": "AC#2",
     "verification": "unit `tests/git/prune-merged-branches.test.ts::parseOptions and formatPlan`; acceptance `tests/git/prune-merged-branches.acceptance.test.ts::fails clearly outside a repo or without origin`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-09",
     "verifies": "AC#2",
     "verification": "acceptance `tests/git/prune-merged-branches.acceptance.test.ts::README documents the cleanup step`; manual Judge runs `node tools/git/prune-merged-branches.js` in the project root (dry run only) and compares with `git branch -r --merged origin/main`; the user runs `--apply` after pushing `main`, then `git branch -r --list 'origin/doit/*'` lists only unmerged branches",
-    "status": "pending"
+    "status": "pass"
   }
 ]

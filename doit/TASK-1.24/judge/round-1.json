@@ -1,0 +1,84 @@
+{
+  "round": 1,
+  "test_suite": {
+    "command": "npm test",
+    "result": "PASS",
+    "passed": 292,
+    "failed": 0,
+    "notes": "80 files passed; 292 passed, 2 skipped (pre-existing skips). npm run lint (eslint + prettier --check) exit 0; npm run typecheck exit 0."
+  },
+  "end_to_end": {
+    "command": "node tools/git/prune-merged-branches.js (project root, dry run only)",
+    "result": "PASS",
+    "expected": "Exit 0; header 'Dry run: nothing deleted...'; lists merged local doit/* and merged origin/doit/* branches (about 25 on origin) matching git branch --merged; deletes nothing; under 10 s.",
+    "actual": "Exit 0 in about 1 s. Listed 25 local branches (matches `git branch --merged main --list 'doit/*'` = 25; the 26th local is the checked-out, unmerged doit/TASK-1.24, correctly not listed and not shown as skipped) and 24 remote branches (matches `git branch -r --merged origin/main --list 'origin/doit/*'` = 24 = all remote doit/* branches). `git branch -a --list '*doit/*' | wc -l` 50 before and 50 after; hash of `git for-each-ref refs/` identical before and after. --apply was not run against the real repo."
+  },
+  "integrity": {
+    "result": "PASS",
+    "notes": "doit.py test-integrity TASK-1.24 exit 0 with no output. Diff vs e5a4e7b touches only the 7 spec files plus doit/backlog metadata; .github/workflows/ci.yml and tests/ci/workflow.test.ts unchanged. Script has no test-input recognition, hard-coded results or early exits; all git calls use spawnSync with argument arrays (no shell). Tests run real git against mkdtemp repos with a bare origin and scrubbed GIT_* env; the unit under test is never mocked."
+  },
+  "items": [
+    {
+      "spec": "SPEC-01",
+      "result": "PASS",
+      "evidence": "Acceptance test 'declares weekly github-actions and npm updates' passes and asserts version 2, exactly two entries in order, directory /, full schedule block and both groups (would fail on any change). Independent parse of .github/dependabot.yml with a real YAML parser (Ruby YAML) gives version 2, updates [github-actions, npm], each directory '/', schedule weekly/monday/06:00/Etc/UTC, groups {actions:{patterns:['*']}} and {npm-minor-patch:{update-types:[minor,patch]}}, no ignore / versioning-strategy / open-pull-requests-limit - exactly the spec §5 content."
+    },
+    {
+      "spec": "SPEC-02",
+      "result": "PASS",
+      "evidence": "README part: acceptance test 'README documents the Dependabot schedule' passes; holdout check confirms the 'Dependency updates' subsection names Dependabot, Monday, GitHub Actions (grouped), npm minor/patch grouped, majors separate, CI on each PR, and `git pull`. GitHub part is a post-push manual check that cannot be observed yet: `git ls-tree origin/main .github/` shows only workflows/ (dependabot.yml not pushed). Recorded as a follow-up for the user (see J-1-01)."
+    },
+    {
+      "spec": "SPEC-03",
+      "result": "PASS",
+      "evidence": "Acceptance test passes and derives the context from the `name:` under `  checks:` in ci.yml and asserts a single job, so a job rename without a README update fails it. Holdout: README '### Branch protection' is inside '## Continuous integration'; contains the verbatim PUT sh block from spec §5 (body parses as JSON: strict false, one context 'Lint, typecheck, build, test and e2e', enforce_admins false, reviews null, restrictions null), the verify sh block, expected output, the exact GitHub 403 message, and the ci.yml rename note. Manual read-only `gh api repos/{owner}/{repo}/branches/main/protection` → HTTP 403, exit 1, message 'Upgrade to GitHub Pro or make this repository public to enable this feature.' - matches the README note. The PUT command was not run."
+    },
+    {
+      "spec": "SPEC-04",
+      "result": "PASS",
+      "evidence": "Acceptance test passes; asserts exact stdout, absence of doit/b, empty stderr, exit 0 and identical for-each-ref (with object ids) in clone and bare origin before/after. Holdout in a temp repo: merged doit/x and nested doit/TASK-9/sub listed; merged doitx, feature/doit/y, ci-proof/z and unmerged doit/unmerged not listed; counts (2)/(2); a branch deleted on origin by someone else (stale tracking ref) is not listed under Remote, proving the fetch --prune."
+    },
+    {
+      "spec": "SPEC-05",
+      "result": "PASS",
+      "evidence": "Acceptance test passes; asserts 'Deleting these branches.' first line, 'Deleted 2 local and 2 remote branches.', and surviving heads [doit/b, main] in clone and origin. Holdout: --apply in the prefix fixture deletes only the two doit/* merged branches on both sides, leaves doitx, feature/doit/y, ci-proof/z, doit/unmerged and main; a second --apply reports (0)/(none) twice and exits 0; a branch named doit/x$(touch_PWNED) is deleted on both sides and no file is created (no shell injection)."
+    },
+    {
+      "spec": "SPEC-06",
+      "result": "PASS",
+      "evidence": "Acceptance test passes with HEAD on merged doit/c and an unpushed ff of main over doit/b: asserts 'Skipped (checked out): doit/c', local heads [doit/c, main], origin heads [doit/b, main]. Holdout: detached HEAD at a merged branch's commit → no Skipped line, branch deleted on both sides; running from a nested subdirectory of the clone works."
+    },
+    {
+      "spec": "SPEC-07",
+      "result": "PASS",
+      "evidence": "Acceptance test passes for both dry run and --apply with only main: exit 0, both headings '(0)' followed by '  (none)', and a pre-receive hook marker proves no push was attempted. Holdout idempotent second --apply also shows (none) twice, exit 0."
+    },
+    {
+      "spec": "SPEC-08",
+      "result": "PASS",
+      "evidence": "Unit test asserts parseOptions([])={apply:false}, ['--apply']={apply:true}, throws UsageError for --force, x, and --apply x; formatPlan output equals the §5 example exactly. Acceptance test covers non-repo (exit 2, message), --force (exit 2, exact stderr, no stdout, refs unchanged) and missing origin path (exit 1, could not fetch origin). Holdout: x, '--apply extra', -h, --apply=1, --APPLY each exit 2 with 'prune-merged-branches: unknown argument <arg>. Usage: node tools/git/prune-merged-branches.js [--apply]', no stdout, nothing deleted; no origin remote → exit 1 'could not fetch origin'; missing local main → exit 1 'missing ref main', origin untouched; missing origin/main → exit 1 'missing ref origin/main', nothing deleted; origin rejecting the push → exit 1, stderr 'git push origin --delete doit/a failed' plus git's stderr, local deletion still performed, origin branch kept (error-table behaviour)."
+    },
+    {
+      "spec": "SPEC-09",
+      "result": "PASS",
+      "evidence": "Acceptance test 'README documents the cleanup step' passes; holdout confirms both commands are in their own sh blocks in '### Branch cleanup', which is the last subsection of 'Continuous integration'. Manual dry run in the project root: exit 0, 25 local / 24 remote listed, equal to git branch --merged / git branch -r --merged origin/main; no refs changed (see end_to_end). --apply left to the user."
+    }
+  ],
+  "findings": [
+    {
+      "id": "J-1-01",
+      "severity": "LOW",
+      "spec": "SPEC-02",
+      "expected_vs_actual": "Expected: after the push, GitHub's Dependabot page lists github-actions and npm without config errors and update PRs appear from app/dependabot. Actual: not observable yet; .github/dependabot.yml is not on origin/main.",
+      "fix": "No code change. The user should do the SPEC-02 manual check after pushing main (network/updates page, 'Check for updates', `gh pr list --author app/dependabot --state all`)."
+    },
+    {
+      "id": "J-1-02",
+      "severity": "LOW",
+      "spec": "SPEC-03",
+      "expected_vs_actual": "Expected: the spec's 'Verifies' labels match the task's acceptance criteria. Actual: in the backlog task, AC#2 is branch protection and AC#3 is branch cleanup, but the spec maps branch protection to AC#3 (SPEC-03) and cleanup to AC#2 (SPEC-04..09).",
+      "fix": "When finalizing, check off the task's acceptance criteria by content rather than by the spec's AC numbers (cleanup = task AC#3; documented branch protection = task AC#2, whose actual enforcement is deferred to the follow-up per Q-1)."
+    }
+  ],
+  "summary": "All 9 SPEC items PASS. npm test 292 passed / 0 failed, lint and typecheck clean, test integrity clean, no tampering or special-casing. Holdout checks (29 behavioural checks in temp repos with a bare origin, plus a real-YAML parse and README checks) all pass, including prefix filtering, nested names, detached HEAD, subdirectory, missing refs, push failure and shell-metacharacter names. Real-repo dry run lists 25 local / 24 remote merged doit/* branches in about 1 s and changes no refs. Read-only branch-protection GET returns the documented 403. Two LOW non-blocking findings: the post-push Dependabot check is still pending, and the spec's AC numbers are swapped relative to the task."
+}
