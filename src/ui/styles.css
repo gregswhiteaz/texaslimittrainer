@@ -477,3 +477,145 @@ h1[tabindex='-1']:focus {
   width: 30px;
   height: 42px;
 }
+
+/* Hand Review (TASK-9.1, A-4): the table column and the review panel side by side. */
+.table-screen:has(.review-panel) {
+  max-width: 1280px;
+}
+
+.table-layout {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.table-main {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.deal-next {
+  display: block;
+  min-height: 52px;
+  margin: 12px auto 0;
+  padding: 0 28px;
+  background: #d7262e;
+  color: #ffffff;
+  border: 0;
+  border-radius: 10px;
+  font: inherit;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.review-panel {
+  flex: 0 0 400px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 12px;
+  padding: 20px;
+  background: #1a1d22;
+  border: 1px solid #343a43;
+  border-radius: 10px;
+}
+
+.review-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.review-head h2 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.review-head h2[tabindex='-1']:focus {
+  outline: none;
+}
+
+.review-close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  background: none;
+  color: #f2f3f5;
+  border: 1px solid #4a515c;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.review-entries {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.review-entry {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 12px;
+  border: 1px solid #343a43;
+  border-radius: 8px;
+}
+
+.review-entry-top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.review-entry-top [data-part='street'] {
+  color: #a7aeb8;
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.review-entry .table-cards {
+  gap: 4px;
+}
+
+.review-entry svg[data-card] {
+  width: 30px;
+  height: 42px;
+}
+
+.grade-badge {
+  margin-left: auto;
+  padding: 3px 10px;
+  border-radius: 12px;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.grade-badge[data-grade='correct'] {
+  background: #2f6fe0;
+}
+
+.grade-badge[data-grade='minor'] {
+  background: #9a5b00;
+}
+
+.grade-badge[data-grade='major'] {
+  background: #a3151c;
+}
+
+.review-entry [data-part='moves'] {
+  margin: 0;
+  font-size: 15px;
+}

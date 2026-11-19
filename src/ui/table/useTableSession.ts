@@ -32,7 +32,11 @@ export function useTableSession({
   newCode = newReplayCode,
   onHandComplete,
   holdNextHand = false,
-}: TableSessionOptions): { table: TableState; act: (action: Action) => void } {
+}: TableSessionOptions): {
+  table: TableState;
+  act: (action: Action) => void;
+  dealNext: () => void;
+} {
   const [table, setTable] = useState(() => seatSession(config));
   const reported = useRef<number | null>(null);
 
@@ -70,5 +74,11 @@ export function useTableSession({
     setTable((t) => (nextStep(t) === 'user' ? applyUserAction(t, action) : t));
   }, []);
 
-  return { table, act };
+  /** Deals the next hand now, by the auto-deal's code path; a no-op unless the hand is done. */
+  const dealNext = useCallback(() => {
+    const code = newCode();
+    setTable((t) => (nextStep(t) === 'done' ? dealHand(nextHand(t), code) : t));
+  }, [newCode]);
+
+  return { table, act, dealNext };
 }

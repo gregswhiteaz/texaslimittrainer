@@ -1,9 +1,17 @@
 // Scripted table states shared by the Vitest tests and the e2e scene harness (no test-runner imports).
 import { parseCard, type Card } from '../../src/engine/cards';
 import { replayCodeFromWords } from '../../src/engine/deck';
-import { applyAction, createHand, legalActions, type HandState } from '../../src/engine/hand';
+import {
+  applyAction,
+  createHand,
+  legalActions,
+  type HandState,
+  type SeatNumber,
+} from '../../src/engine/hand';
 import {
   DEFAULT_SESSION_CONFIG,
+  USER_SEAT,
+  applyUserAction,
   dealHand,
   resolveSessionConfig,
   seatSession,
@@ -160,4 +168,78 @@ export const AVA_UNCONTESTED: TableState = defaultTableAfter(
 export const SPLIT_STRAIGHT: TableState = defaultTableAfter(
   { 0: 'Kc', 6: 'Kd', 1: 'Qc', 7: 'Qd', 13: '5c', 14: '6d', 15: '7h', 17: '8s', 19: '9c' },
   '3:call 4:fold 5:fold 6:fold 1:raise 2:call 3:fold 1:bet 2:call 1:bet 2:call 1:bet 2:call',
+);
+
+/**
+ * Default six seats at $160, hand 1, dealt from fixedDeck(fixed) and played through `moves`. Moves of the user
+ * (seat 5) go through applyUserAction, so each captures the user's view; every other move goes through play.
+ */
+export function userTableAfter(
+  fixed: Readonly<Record<number, string>>,
+  moves: string,
+  button: SeatNumber = 6,
+): TableState {
+  const start = seatSession({ button });
+  let table: TableState = {
+    ...start,
+    hand: createHand({ stakes: start.stakes, seats: start.stacks, button, deck: fixedDeck(fixed) }),
+    replayCode: SCENARIO_CODE,
+  };
+  for (const move of moves.split(' ')) {
+    const hand = table.hand as HandState;
+    const [seat, type] = move.split(':');
+    if (Number(seat) !== USER_SEAT) {
+      table = { ...table, hand: play(hand, move) };
+      continue;
+    }
+    if (hand.toAct !== USER_SEAT) throw new Error(`Seat ${hand.toAct} is to act, not ${seat}`);
+    const action = legalActions(hand).find((a) => a.type === type);
+    if (action === undefined) throw new Error(`Seat ${seat} cannot ${type}`);
+    table = applyUserAction(table, action);
+  }
+  return table;
+}
+
+/** User Ah 9s, Ben Kd 7c; the board runs Ks 9d 4c, 2h, 6s. */
+const REVIEW_DECK = {
+  1: 'Kd',
+  7: '7c',
+  4: 'Ah',
+  10: '9s',
+  13: 'Ks',
+  14: '9d',
+  15: '4c',
+  17: '2h',
+  19: '6s',
+};
+
+/** 4 user and 9 bot decisions to a showdown that Ben wins: raise, flop bet, turn check, river call. */
+export const REVIEW_FOUR: TableState = userTableAfter(
+  REVIEW_DECK,
+  '3:fold 4:fold 5:raise 6:fold 1:fold 2:call 2:check 5:bet 2:call 2:check 5:check 2:bet 5:call',
+);
+
+/** The user calls Cal's preflop raise, then folds to Ben's re-raise. */
+export const CALL_THEN_FOLD: TableState = userTableAfter(
+  REVIEW_DECK,
+  '3:raise 4:fold 5:call 6:fold 1:fold 2:raise 3:call 5:fold 2:check 3:bet 2:fold',
+);
+
+/** The user's one decision is a preflop fold; Ben wins the blinds. */
+export const PREFLOP_FOLD_ONLY: TableState = userTableAfter(
+  REVIEW_DECK,
+  '3:fold 4:fold 5:fold 6:fold 1:fold',
+);
+
+/** Button 3: every bot folds to the user in the big blind, who makes no decision. */
+export const BB_WALK: TableState = userTableAfter(
+  REVIEW_DECK,
+  '6:fold 1:fold 2:fold 3:fold 4:fold',
+  3,
+);
+
+/** The user's lone preflop raise takes the blinds. */
+export const RAISE_TAKES_BLINDS: TableState = userTableAfter(
+  REVIEW_DECK,
+  '3:fold 4:fold 5:raise 6:fold 1:fold 2:fold',
 );

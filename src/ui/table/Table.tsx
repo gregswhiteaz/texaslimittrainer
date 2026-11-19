@@ -1,16 +1,29 @@
+import { useCallback, useEffect, useRef, useState } from 'react';
 import type { Action } from '../../engine/hand';
 import { userActionBar } from '../../table/action-bar';
 import { handResultView, type HandResultView } from '../../table/hand-result';
-import type { TableState } from '../../table/session';
+import { opensReview, reviewEntries, type ReviewEntry } from '../../table/review';
+import type { CompletedHand, TableState } from '../../table/session';
 import { tableView, type SeatView } from '../../table/table-view';
 import { CardBack, PlayingCard } from '../cards/PlayingCard';
 import { ActionBar } from './ActionBar';
+import { ReviewPanel } from './ReviewPanel';
 import { useTableSession, type TableSessionOptions } from './useTableSession';
+
+export interface ReviewState {
+  readonly entries: readonly ReviewEntry[];
+  readonly open: boolean;
+}
 
 export interface TableViewProps {
   readonly table: TableState;
   readonly onAct: (action: Action) => void;
   readonly onLeave: () => void;
+  /** Non-null while a reviewed hand is held (A-3). Optional: earlier callers render as before. */
+  readonly review?: ReviewState | null;
+  readonly onDealNext?: () => void;
+  readonly onCloseReview?: () => void;
+  readonly dealNextRef?: React.Ref<HTMLButtonElement>;
 }
 
 function SeatMarkers({ seat }: { readonly seat: SeatView }): React.JSX.Element {
@@ -100,7 +113,15 @@ function HandResult({ result }: { readonly result: HandResultView }): React.JSX.
 }
 
 /** Presentational table (D-7): everything shown comes from tableView. */
-export function TableView({ table, onAct, onLeave }: TableViewProps): React.JSX.Element {
+export function TableView({
+  table,
+  onAct,
+  onLeave,
+  review = null,
+  onDealNext,
+  onCloseReview,
+  dealNextRef,
+}: TableViewProps): React.JSX.Element {
   const model = tableView(table);
   const bar = userActionBar(table);
   const result = handResultView(table);
@@ -112,40 +133,97 @@ export function TableView({ table, onAct, onLeave }: TableViewProps): React.JSX.
           Leave table
         </button>
       </header>
-      <section
-        aria-label="Table"
-        className="table"
-        data-street={model.street ?? ''}
-        data-action-count={model.actionCount}
-      >
-        <div className="table-ring">
-          <div className="table-felt">
-            <div role="group" aria-label="Board" className="table-cards table-board">
-              {model.board.map((card) => (
-                <PlayingCard key={card} card={card} />
-              ))}
-              {Array.from({ length: model.placeholders }, (_, i) => (
-                <span key={i} className="board-slot" aria-hidden="true" />
-              ))}
+      <div className="table-layout">
+        <div className="table-main">
+          <section
+            aria-label="Table"
+            className="table"
+            data-street={model.street ?? ''}
+            data-action-count={model.actionCount}
+          >
+            <div className="table-ring">
+              <div className="table-felt">
+                <div role="group" aria-label="Board" className="table-cards table-board">
+                  {model.board.map((card) => (
+                    <PlayingCard key={card} card={card} />
+                  ))}
+                  {Array.from({ length: model.placeholders }, (_, i) => (
+                    <span key={i} className="board-slot" aria-hidden="true" />
+                  ))}
+                </div>
+                <p className="table-pot">{`Pot $${model.pot}`}</p>
+              </div>
+              <ul aria-label="Seats" className="table-seats">
+                {model.seats.map((seat) => (
+                  <Seat key={seat.seat} seat={seat} />
+                ))}
+              </ul>
             </div>
-            <p className="table-pot">{`Pot $${model.pot}`}</p>
-          </div>
-          <ul aria-label="Seats" className="table-seats">
-            {model.seats.map((seat) => (
-              <Seat key={seat.seat} seat={seat} />
-            ))}
-          </ul>
+            {bar !== null && <ActionBar model={bar} onAct={onAct} />}
+            {result !== null && <HandResult result={result} />}
+          </section>
+          {review !== null && result !== null && (
+            <button type="button" className="deal-next" ref={dealNextRef} onClick={onDealNext}>
+              Deal next hand
+            </button>
+          )}
         </div>
-        {bar !== null && <ActionBar model={bar} onAct={onAct} />}
-        {result !== null && <HandResult result={result} />}
-      </section>
+        {review?.open === true && (
+          <ReviewPanel
+            handNumber={table.handNumber}
+            entries={review.entries}
+            onClose={onCloseReview}
+          />
+        )}
+      </div>
     </>
   );
 }
 
 export type TableProps = TableSessionOptions & { readonly onLeave?: () => void };
 
-export function Table({ onLeave = () => undefined, ...options }: TableProps): React.JSX.Element {
-  const { table, act } = useTableSession(options);
-  return <TableView table={table} onAct={act} onLeave={onLeave} />;
+export function Table({
+  onLeave = () => undefined,
+  onHandComplete: external,
+  holdNextHand = false,
+  ...options
+}: TableProps): React.JSX.Element {
+  const [review, setReview] = useState<ReviewState | null>(null);
+  // Read through a ref so onHandComplete stays stable and never restarts the next-hand timer.
+  const externalRef = useRef(external);
+  useEffect(() => {
+    externalRef.current = external;
+  }, [external]);
+  const onHandComplete = useCallback((hand: CompletedHand) => {
+    externalRef.current?.(hand);
+    if (opensReview(hand)) setReview({ entries: reviewEntries(hand), open: true });
+  }, []);
+  const { table, act, dealNext } = useTableSession({
+    ...options,
+    onHandComplete,
+    holdNextHand: holdNextHand || review !== null,
+  });
+
+  const dealNextButton = useRef<HTMLButtonElement>(null);
+  // Deal next hand is already on screen while the review is held, so focus can move before Close unmounts.
+  const closeReview = useCallback(() => {
+    setReview((r) => r && { ...r, open: false });
+    dealNextButton.current?.focus();
+  }, []);
+  const onDealNext = useCallback(() => {
+    setReview(null);
+    dealNext();
+  }, [dealNext]);
+
+  return (
+    <TableView
+      table={table}
+      onAct={act}
+      onLeave={onLeave}
+      review={review}
+      onDealNext={onDealNext}
+      onCloseReview={closeReview}
+      dealNextRef={dealNextButton}
+    />
+  );
 }
