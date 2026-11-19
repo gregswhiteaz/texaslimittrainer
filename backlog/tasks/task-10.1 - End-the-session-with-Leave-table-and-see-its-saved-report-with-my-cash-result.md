@@ -4,7 +4,7 @@ title: End the session with Leave table and see its saved report with my cash re
 status: To Do
 assignee: []
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-17T23:22:00Z'
+updated_date: '2026-11-19T00:21:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -55,6 +55,7 @@ Plan key: E10-S01 · Dream: limit-holdem-trainer
 - [ ] #6 Given a stored session report, When later sessions are played and ended, Then the stored report is byte-identical and a second write for the same session id is rejected [REQ-044.7, REQ-052.5]
 - [ ] #7 Given a session with 0 completed hands (the app was closed during hand 1), When that session is ended, Then no Session Report opens and neither the session nor a report is stored [REQ-044.8]
 - [ ] #8 Given the Hand Review panel is open after hand 12 of a cash session, When the user chooses Leave table, Then no dialog is shown, no hand 13 is dealt and the Session Report opens showing hands played "12" [REQ-004.5]
+- [ ] #9 Given the Table header's Leave table control, When it is chosen, Then App's onLeave handler ends the session and opens the Session Report instead of returning straight to Home (replacing the TASK-3.3 interim behaviour)
 <!-- AC:END -->
 
 ## Definition of Done
@@ -72,3 +73,9 @@ Plan key: E10-S01 · Dream: limit-holdem-trainer
 - [ ] #11 Story documentation is written and published to Backlog.md
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+AC added from TASK-3.3 follow-up (doc-24).
+<!-- SECTION:NOTES:END -->

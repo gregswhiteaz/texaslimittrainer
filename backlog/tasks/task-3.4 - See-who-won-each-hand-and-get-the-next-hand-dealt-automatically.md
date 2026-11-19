@@ -4,7 +4,7 @@ title: See who won each hand and get the next hand dealt automatically
 status: To Do
 assignee: []
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-18T21:33:00Z'
+updated_date: '2026-11-19T00:21:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-0
@@ -48,6 +48,7 @@ Plan key: E03-S04 · Dream: limit-holdem-trainer
 - [ ] #4 Given the Hand Review panel is not open, When the result is shown, Then the next hand is dealt 1.5 s after the result appears (measured within 1.4-1.6 s) with no user input [REQ-024.3]
 - [ ] #5 Given a hand has ended and the next hand is dealt, When stacks carry over, Then the dealer button moves one seat, each seat starts with its final stack from the previous hand, and a seat below the engine's minimum stack is handled by a defined rule (rebuy prompt, bot replacement, or a relaxed createHand minimum) instead of a RangeError
 - [ ] #6 Given completedHand in src/table/session.ts, When the hand-over flow is extended, Then its unreachable fallbacks (the '?? 0' and the 'User seat is not dealt in' throw) are removed or covered by a test
+- [ ] #7 Given the next hand is dealt, When the header is shown, Then TableState.handNumber has increased by one (Hand #2, #3, ...), the pot line shows the decided value after the award, and the unreachable '?? 0' stack fallback in src/table/table-view.ts is removed or covered
 <!-- AC:END -->
 
 ## Definition of Done
@@ -72,4 +73,6 @@ Plan key: E03-S04 · Dream: limit-holdem-trainer
 AC added from TASK-3.1 follow-up (doc-21).
 
 AC added from TASK-3.1 follow-up (doc-21).
+
+AC added from TASK-3.3 follow-up (doc-24).
 <!-- SECTION:NOTES:END -->

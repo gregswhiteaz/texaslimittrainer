@@ -4,7 +4,7 @@ title: Change the style of one bot seat
 status: To Do
 assignee: []
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-17T23:22:00Z'
+updated_date: '2026-11-19T00:21:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -42,6 +42,7 @@ Plan key: E02-S06 · Dream: limit-holdem-trainer
 - [ ] #2 Given the Mixed preset at 6 players, When the user changes seat 3 from Maniac to Rock, Then seat 3 shows Rock and seats 1, 2, 4 and 5 keep TAG, Calling station, Rock and TAG [REQ-009.3]
 - [ ] #3 Given the Mixed preset at 6 players with seat 3 changed to Rock, When the user chooses Start game, Then that bot plays as a Rock at the table and the session's line-up name is Custom [REQ-009.3, REQ-009.6]
 - [ ] #4 Given the Tough preset with one seat changed to Rock and then back to its preset style, When the user chooses Start game, Then the session's line-up name is Tough [REQ-009.6]
+- [ ] #5 Given a bot seat's style is changed to Calling station, Maniac or Rock, When the session starts, Then Game Config shows that style's label and the seat plays that style's own policy rather than tagPolicy
 <!-- AC:END -->
 
 ## Definition of Done
@@ -59,3 +60,9 @@ Plan key: E02-S06 · Dream: limit-holdem-trainer
 - [ ] #11 Story documentation is written and published to Backlog.md
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+AC added from TASK-3.3 follow-up (doc-24).
+<!-- SECTION:NOTES:END -->

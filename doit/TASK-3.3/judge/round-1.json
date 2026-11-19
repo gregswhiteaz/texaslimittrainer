@@ -1,0 +1,134 @@
+{
+ "round": 1,
+ "test_suite": {
+  "command": "npm test",
+  "result": "PASS",
+  "passed": 242,
+  "failed": 0,
+  "notes": "65 files, 242 passed, 1 skipped; coverage 97.4% stmts. Lint and typecheck exit 0. Full Playwright suite 74 passed (Chromium+WebKit)."
+ },
+ "end_to_end": {
+  "command": "npm run build && npm run preview; open http://localhost:4173, New game -> Start game",
+  "result": "PASS",
+  "expected": "Header 'Cash · 6 players · $4/$8 · Hand #1' + Leave table; Eli lower-left, Ava upper-left, Ben top, Cal upper-right, Dee lower-right with 'TAG · $stack', actions, small logo backs; You · Cutoff, Stack $160, two face-up cards bottom centre; D at Eli; 5 dashed slots, Pot $6; Cal/Dee Folded without backs; red border + To act on user; Leave table -> Home; no replay code",
+  "actual": "Observed exactly that at the preflop user turn in Chromium (screenshot); calling moved To act to Eli with 'Called $4'/'This street $4'; board filled 3/4/5 with slots shrinking; Hand over with no To act; Leave table returned Home with h1 focused; no code in page text/attributes/aria at any step (both browsers)."
+ },
+ "integrity": {
+  "result": "PASS",
+  "notes": "doit.py test-integrity exit 0. Diff review: table-view reads the hand only via playerView, never replayCode (proven by Proxy trap); no test-input recognition, hard-coded expected values, early exits or mocks of the unit under test. Scene harness and scenarios are test-only and not imported by src. Earlier-story test edits limited to the 8 D-5 edits plus import lines."
+ },
+ "items": [
+  {
+   "spec": "SPEC-01",
+   "result": "PASS",
+   "evidence": "Locked acceptance test passes and asserts Ben's name/style/stack/street/action and one 30x42 back. Holdout: 3720 seeded states (3-10 seats, every user seat and button, TAG and random bots, random user actions) rendered via TableView and compared per seat to an independent oracle from HandState: name, style, stack, This street, action, back marker size — all match."
+  },
+  {
+   "spec": "SPEC-02",
+   "result": "PASS",
+   "evidence": "Test passes; asserts Folded and no back for seats 1/3/4 on flop and 3/4 preflop. Holdout: every folded seat in 3720 states shows Folded on every later street and has no back; unfolded bots exactly one back. Real app (Chromium+WebKit) Cal/Dee visible Folded with backs removed."
+  },
+  {
+   "spec": "SPEC-03",
+   "result": "PASS",
+   "evidence": "Test passes (Ah 9s Cutoff $184 at seat 5; seat-1 session Small blind, last li, data-user). Holdout: user li always last with data-user only on it, both hole cards = engine hole cards, position = independent A-2 oracle, for all user seats 1..n."
+  },
+  {
+   "spec": "SPEC-04",
+   "result": "PASS",
+   "evidence": "e2e passes both browsers. Holdout scene harness (own Vite IIFE with shipped CSS): user seat 1..6 x button 1..6 x 2 states, user li centre within 2px of felt centre and bottom below every other seat; 'You · <position>' correct; clockwise placement (next seat lower-left ... lower-right) verified geometrically."
+  },
+  {
+   "spec": "SPEC-05",
+   "result": "PASS",
+   "evidence": "Test passes (0/3/4/5 cards, 5/2/1/0 slots, Ks 9d 4c 2h 7c). Holdout: board data-card list equals engine board and slot count 5-len at every state in Vitest and in the real app in both browsers."
+  },
+  {
+   "spec": "SPEC-06",
+   "result": "PASS",
+   "evidence": "Test passes ($14/$30/$46/$54, computed pot every state, dealer at 6, seat-1 and button 3). Holdout: pot = pots + street contributions and single dealer disc at hand.button for every state; before-deal dealer at config.button for buttons 1..6; browser 'D' disc visible with 'Dealer button' text at every button."
+  },
+  {
+   "spec": "SPEC-07",
+   "result": "PASS",
+   "evidence": "Test passes (exactly one seat-to-act matching hand.toAct, none at showdown, no data-to-act). Holdout: same in 3720 states plus real app at every action step (single 'To act' listitem, red border, none at Hand over, no [data-to-act] anywhere)."
+  },
+  {
+   "spec": "SPEC-08",
+   "result": "PASS",
+   "evidence": "e2e passes both browsers (rgb(215,38,46) 2px on user li only). Holdout: at every real-app step the to-act seat has computed border rgb(215, 38, 46), class seat-to-act and visible 'To act'."
+  },
+  {
+   "spec": "SPEC-09",
+   "result": "PASS",
+   "evidence": "Test passes. Holdout: header 'Cash · N players · $s/$b · Hand #k' exact for varied sizes/stakes/hand numbers; live app shows 'Cash · 6 players · $4/$8 · Hand #1' with Leave table button (>=44 px tall)."
+  },
+  {
+   "spec": "SPEC-10",
+   "result": "PASS",
+   "evidence": "e2e passes both browsers. Holdout (both browsers): Leave table mid-hand, after Hand over and before the deal -> Home h1 focused, New game visible, Table region gone, no extra replay draw after 1.2 s / 1000 ms clock, no storage written; New game -> Start game afterwards starts fresh (Hand #1, $160, no prior action, second draw)."
+  },
+  {
+   "spec": "SPEC-11",
+   "result": "PASS",
+   "evidence": "Test passes. Holdout: across 3720 states neither markup nor JSON.stringify(tableView) contains the code, upper-case code or first 8 hex; a Proxy trap shows tableView/TableView never read table.replayCode and the input is unchanged."
+  },
+  {
+   "spec": "SPEC-12",
+   "result": "PASS",
+   "evidence": "e2e passes both browsers. Holdout: 4 pinned-word hands in the real app (passive, aggressive x2, fold-on-flop) in Chromium and WebKit — page.content, title and aria snapshot never contain the code or its first word at any step; bot hole cards never appear as data-card or as accessible card names."
+  },
+  {
+   "spec": "SPEC-13",
+   "result": "PASS",
+   "evidence": "Test passes (30x42, viewBox 0 0 60 84, role, aria-label, data-card, logo href; default 60x84). Holdout: small markup matches; size='standard' identical to default."
+  },
+  {
+   "spec": "SPEC-14",
+   "result": "PASS",
+   "evidence": "e2e passes both browsers. Holdout: every visible face-down card in 72 harness scenes per browser is 30x42 (+-0.5) with logo >= 24px inside it; axe (serious/critical) clean on 42 scenes per browser."
+  },
+  {
+   "spec": "SPEC-15",
+   "result": "PASS",
+   "evidence": "e2e passes both browsers. Holdout real-app replay confirms Small blind $2 / Big blind $4 / Folded / Called $4 / This street $4 and To act moving to seat 6 as visible text, matching the Node replay."
+  },
+  {
+   "spec": "SPEC-16",
+   "result": "PASS",
+   "evidence": "Unit test passes; asserts mapping, positions 3/4/6/9, slots, potTotal(null), rules 1-4, pre-deal model, deep-freeze, import scan. Holdout: positionName equals independent A-2 oracle for every size 3..10 and every button (names unique), non-contiguous seats, RangeError 'Seat 9 is not at the table' for unknown seat/button; seatSlot errors; slot positions (15.4,71)...(84.6,71). Mutation (dropping showdown->river and hand-over Waiting suppression) made holdout fail; reverted."
+  },
+  {
+   "spec": "SPEC-17",
+   "result": "PASS",
+   "evidence": "npx playwright test (full suite) -> 74 passed in Chromium+WebKit locally, incl. table/action-bar/home/cards specs. Diff vs base confirmed: only the 8 D-5 edits (edit 1 BUTTON_NAME, 2 recorder, 3 two :not(back) counts, 4, 5, 6 seven expectToAct swaps with same N, 7, 8 button assertion) plus one expectToAct import line in each of the three e2e files; no assertion removed."
+  },
+  {
+   "spec": "SPEC-18",
+   "result": "PASS",
+   "evidence": "e2e passes both browsers. Holdout: at every step of 4 real-app hands in both browsers scrollWidth-clientWidth <= 0, every seat box within [0,1280], no overlap, all requests same-origin; axe clean on live table at user turn and during bot play."
+  },
+  {
+   "spec": "SPEC-19",
+   "result": "PASS",
+   "evidence": "npm run lint exit 0, npm run typecheck exit 0, npm test 65 files 242 passed/1 skipped; coverage overall 97.4% lines 97.81%, engine 100%, advice 99.79%, table-view.ts 100% lines. No engine/bots/advice/stats files changed."
+  },
+  {
+   "spec": "SPEC-20",
+   "result": "PASS",
+   "evidence": "npm run playtest -- --hands 10000 --seed 42 -> 10000 hands, Invariant violations: 0."
+  },
+  {
+   "spec": "SPEC-21",
+   "result": "PASS",
+   "evidence": "CI run 44426860260 on head 202c194 (doit/TASK-3.3): completed success; job 'Lint, typecheck, build, test and e2e' green, Test 243 passed, E2E 72 passed 2 skipped. backlog doc list shows doc-24 for TASK-3.3 recording Q-1..Q-4 (D-2..D-6), D-5 edits and follow-ups (TASK-10.1, 12.2, 3.16, 4.4, ...). Note: the doc file is untracked in git so far."
+  },
+  {
+   "spec": "SPEC-22",
+   "result": "PASS",
+   "evidence": "git diff 82453f9..HEAD touches no src/advice file, no golden spot, no strategy text. TASK-7.14 (golden spots) and TASK-13.4 (offline) are To Do, not Done."
+  }
+ ],
+ "findings": [],
+ "summary": "All 22 SPEC items PASS. Unit/acceptance/e2e suites green locally and in CI (head 202c194). Independent holdout replay of 3720 rendered states and 4 real-app hands in Chromium and WebKit matched the oracle at every step; Leave table, layout, axe and hidden-information checks pass. No blocking findings. src/, tests/, e2e/ left clean."
+}

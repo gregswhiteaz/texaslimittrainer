@@ -4,7 +4,7 @@ title: Play on a table, rail, chips and dealer button drawn in code
 status: To Do
 assignee: []
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-17T23:22:00Z'
+updated_date: '2026-11-19T00:21:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-2
@@ -48,6 +48,7 @@ Plan key: E04-S03 · Dream: limit-holdem-trainer
 - [ ] #5 Given the Table screen, When the dealer button, chips, felt and rail are inspected, Then each is drawn as SVG or CSS in code and none loads an image file [REQ-067.3]
 - [ ] #6 Given `npm run build`, When the build output is scanned for image files (png, jpg, jpeg, gif, webp, svg, ico, avif), Then the only ones present are the TLH logo and icons generated from it [REQ-067.3]
 - [ ] #7 Given an image file other than the logo is added to the source tree, When the image-asset check runs in `npm test`, Then it fails naming the file [REQ-067.3]
+- [ ] #8 Given the drawn dealer button, When it replaces the TASK-3.3 CSS 'D' disc, Then it keeps data-part="dealer" and the accessible text 'Dealer button'
 <!-- AC:END -->
 
 ## Definition of Done
@@ -66,3 +67,9 @@ Plan key: E04-S03 · Dream: limit-holdem-trainer
 - [ ] #12 Story documentation is written and published to Backlog.md
 - [ ] #13 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+AC added from TASK-3.3 follow-up (doc-24).
+<!-- SECTION:NOTES:END -->

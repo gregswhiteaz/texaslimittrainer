@@ -4,7 +4,7 @@ title: Hide opponent style labels at the table
 status: To Do
 assignee: []
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-17T23:22:00Z'
+updated_date: '2026-11-19T00:21:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -47,6 +47,7 @@ Plan key: E12-S02 · Dream: limit-holdem-trainer
 - [ ] #2 Given 'Show opponent styles' is off and a 6-max table with bots Ben (Calling station) and Ava (TAG), When the table is shown, Then no seat shows a style label and Ben's seat still shows his name and stack [REQ-021.2, REQ-050.3]
 - [ ] #3 Given 'Show opponent styles' is on, When the table is shown, Then every bot seat shows its style label [REQ-050.3]
 - [ ] #4 Given the user turned 'Show opponent styles' off, When the app is closed, relaunched and a table is opened, Then the toggle is still off and no style labels are shown [REQ-050.3, REQ-021.2]
+- [ ] #5 Given 'Show opponent styles' is off, When the table renders, Then each seat's data-part="style" label and its ' · ' separator are absent
 <!-- AC:END -->
 
 ## Definition of Done
@@ -64,3 +65,9 @@ Plan key: E12-S02 · Dream: limit-holdem-trainer
 - [ ] #11 Story documentation is written and published to Backlog.md
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+AC added from TASK-3.3 follow-up (doc-24).
+<!-- SECTION:NOTES:END -->

@@ -4,7 +4,7 @@ title: See each player's bet as chips in front of their seat
 status: To Do
 assignee: []
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-17T23:22:00Z'
+updated_date: '2026-11-19T00:21:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-2
@@ -50,6 +50,7 @@ Plan key: E04-S04 · Dream: limit-holdem-trainer
 - [ ] #5 Given Ben wins a $122 pot at showdown, When the hand ends, Then the pot moves to Ben's seat with "$122" shown there and the pot area is empty [REQ-068.3]
 - [ ] #6 Given two players split a $60 pot, When the hand ends, Then $30 moves to each winner's seat with "$30" shown at each [REQ-068.3]
 - [ ] #7 Given a main pot of $60 won by the short stack and a side pot of $80 won by another player, When the hand ends, Then $60 moves to the short stack's seat and $80 to the other winner's seat, each with its amount [REQ-068.3]
+- [ ] #8 Given chips drawn for each seat's street amount, When they are shown, Then the decision whether the 'This street $X' text line stays is recorded and tested
 <!-- AC:END -->
 
 ## Definition of Done
@@ -67,3 +68,9 @@ Plan key: E04-S04 · Dream: limit-holdem-trainer
 - [ ] #11 Story documentation is written and published to Backlog.md
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+AC added from TASK-3.3 follow-up (doc-24).
+<!-- SECTION:NOTES:END -->

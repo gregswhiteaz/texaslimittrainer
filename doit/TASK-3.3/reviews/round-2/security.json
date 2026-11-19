@@ -1,0 +1,3 @@
+{"reviewer": "security", "round": 2,
+ "findings": [],
+ "summary": "Round 1 had no findings, so nothing needed fixing. Commit 202c194 ('review fixes r1') changes only tests/table/table-view.test.ts (new assertions on button rotation, raise-to text, latest record on a street, and showdown river actions), tests/ui/table-display.acceptance.test.tsx (no 'This street' line at $0), the backlog task notes and doit/ bookkeeping. No src/, package.json, lockfile or e2e harness changes, so no new trust boundaries, dependencies, randomness, network, storage or hidden-information paths. The new assertions only read public view-model fields (action, street) and do not expose bot hole cards. No findings."}

@@ -1,11 +1,11 @@
 ---
 id: TASK-3.3
 title: See every seat, the board, the pot and the button at a glance
-status: In Progress
+status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-19T00:02:00Z'
+updated_date: '2026-11-19T00:21:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-0
@@ -17,6 +17,7 @@ references:
 documentation:
   - doc-1
   - doc-2
+  - doc-24
 parent_task_id: TASK-3
 priority: high
 type: feature
@@ -45,32 +46,32 @@ Plan key: E03-S03 · Dream: limit-holdem-trainer
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Given a scripted 6-max $4/$8 hand on the flop where bot Ben (Calling station) has $146 and bet $4, When the table is shown, Then Ben's seat shows "Ben", "Calling station", "$146", "$4" put in this street, last action "Bet $4" and a card-back marker [REQ-021.1]
-- [ ] #2 Given a bot that has folded, When the table is shown, Then its seat shows last action "Folded" and no card-back marker [REQ-021.1]
-- [ ] #3 Given the user holds seat 5 of 6 in the cutoff with $184 and, in a second session, seat 1, When each table is drawn, Then the user's seat is at the bottom centre in both and in the first shows both hole cards face up, "$184" and the position name "Cutoff" [REQ-010.3, REQ-021.3]
-- [ ] #4 Given the preflop, flop, turn and river of a scripted hand, When the board is shown, Then it shows 0, 3, 4 and 5 dealt cards respectively and an empty placeholder for each undealt card up to 5 [REQ-021.4]
-- [ ] #5 Given a scripted hand at each street, When the table is shown, Then the pot total equals the chips collected from previous streets plus the current-street amounts and the dealer button marker is at the button seat [REQ-021.5, REQ-021.6]
-- [ ] #6 Given a scripted hand, When each player becomes the player to act, Then exactly that player's seat is highlighted [REQ-021.7]
-- [ ] #7 Given hand 133 of a 6-player $4/$8 cash session, When the table is shown, Then the header reads game type "Cash", "6 players", "$4/$8" and "Hand #133" and offers a Leave table control [REQ-021.8]
-- [ ] #8 Given a hand in progress at every street, When the Table screen's text and accessible names are searched, Then the hand's replay code appears nowhere [REQ-013.4]
-- [ ] #9 Given a bot seat holding face-down cards, When the table renders, Then the seat shows a smaller CardBack marker that still shows the logo and passes axe
-- [ ] #10 Given the full seat and header display, When a player acts or is to act, Then the last action and the player to act are shown as visible text, and the TASK-3.1 data-street/data-to-act/data-action-count test hooks are replaced where visible text covers them
+- [x] #1 Given a scripted 6-max $4/$8 hand on the flop where bot Ben (Calling station) has $146 and bet $4, When the table is shown, Then Ben's seat shows "Ben", "Calling station", "$146", "$4" put in this street, last action "Bet $4" and a card-back marker [REQ-021.1]
+- [x] #2 Given a bot that has folded, When the table is shown, Then its seat shows last action "Folded" and no card-back marker [REQ-021.1]
+- [x] #3 Given the user holds seat 5 of 6 in the cutoff with $184 and, in a second session, seat 1, When each table is drawn, Then the user's seat is at the bottom centre in both and in the first shows both hole cards face up, "$184" and the position name "Cutoff" [REQ-010.3, REQ-021.3]
+- [x] #4 Given the preflop, flop, turn and river of a scripted hand, When the board is shown, Then it shows 0, 3, 4 and 5 dealt cards respectively and an empty placeholder for each undealt card up to 5 [REQ-021.4]
+- [x] #5 Given a scripted hand at each street, When the table is shown, Then the pot total equals the chips collected from previous streets plus the current-street amounts and the dealer button marker is at the button seat [REQ-021.5, REQ-021.6]
+- [x] #6 Given a scripted hand, When each player becomes the player to act, Then exactly that player's seat is highlighted [REQ-021.7]
+- [x] #7 Given hand 133 of a 6-player $4/$8 cash session, When the table is shown, Then the header reads game type "Cash", "6 players", "$4/$8" and "Hand #133" and offers a Leave table control [REQ-021.8]
+- [x] #8 Given a hand in progress at every street, When the Table screen's text and accessible names are searched, Then the hand's replay code appears nowhere [REQ-013.4]
+- [x] #9 Given a bot seat holding face-down cards, When the table renders, Then the seat shows a smaller CardBack marker that still shows the logo and passes axe
+- [x] #10 Given the full seat and header display, When a player acts or is to act, Then the last action and the player to act are shown as visible text, and the TASK-3.1 data-street/data-to-act/data-action-count test hooks are replaced where visible text covers them
 <!-- AC:END -->
 
 ## Definition of Done
 <!-- DOD:BEGIN -->
-- [ ] #1 Every acceptance criterion has at least one automated test (unit, property or Playwright) that passes
-- [ ] #2 `npm run lint`, `npm run typecheck` and `npm test` pass with zero errors [REQ-059.1, REQ-059.4]
-- [ ] #3 The golden-spot suite passes 100% (applies from the story that creates the suite, E07-S14, onward) [REQ-039.4]
-- [ ] #4 Coverage thresholds hold: >= 90% engine/bots/advice/statistics, >= 70% overall [REQ-059.3]
-- [ ] #5 Engine, bots, advice and statistics code imports no UI or browser-only code [REQ-059.2]
-- [ ] #6 Stories that touch the engine, bots or advice: a 10,000-hand playtest reports zero invariant violations (applies once the playtest runner exists, E01-S07, onward) [REQ-056.1]
-- [ ] #7 Stories that add or change a screen: Playwright test of the screen flow in Chromium and WebKit, and axe reports zero serious or critical violations (axe tooling is provisioned in the toolchain story E01-S01) [REQ-057.1]
-- [ ] #8 No new network requests beyond the app's own files [REQ-058.1]
-- [ ] #9 Strategy-content stories: text is original and every chart, range or golden spot carries its justification [REQ-061.2]
-- [ ] #10 CI workflow is green on the story's branch (applies once the CI story E01-S02 is done; E01-S01 instead passes the same checks locally) [REQ-064.2]
-- [ ] #11 Story documentation is written and published to Backlog.md
-- [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
+- [x] #1 Every acceptance criterion has at least one automated test (unit, property or Playwright) that passes
+- [x] #2 `npm run lint`, `npm run typecheck` and `npm test` pass with zero errors [REQ-059.1, REQ-059.4]
+- [x] #3 The golden-spot suite passes 100% (applies from the story that creates the suite, E07-S14, onward) [REQ-039.4]
+- [x] #4 Coverage thresholds hold: >= 90% engine/bots/advice/statistics, >= 70% overall [REQ-059.3]
+- [x] #5 Engine, bots, advice and statistics code imports no UI or browser-only code [REQ-059.2]
+- [x] #6 Stories that touch the engine, bots or advice: a 10,000-hand playtest reports zero invariant violations (applies once the playtest runner exists, E01-S07, onward) [REQ-056.1]
+- [x] #7 Stories that add or change a screen: Playwright test of the screen flow in Chromium and WebKit, and axe reports zero serious or critical violations (axe tooling is provisioned in the toolchain story E01-S01) [REQ-057.1]
+- [x] #8 No new network requests beyond the app's own files [REQ-058.1]
+- [x] #9 Strategy-content stories: text is original and every chart, range or golden spot carries its justification [REQ-061.2]
+- [x] #10 CI workflow is green on the story's branch (applies once the CI story E01-S02 is done; E01-S01 instead passes the same checks locally) [REQ-064.2]
+- [x] #11 Story documentation is written and published to Backlog.md
+- [x] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
 
 ## Implementation Plan
@@ -95,4 +96,12 @@ AC added from TASK-3.1 follow-up (doc-21).
 Cross-story change (orchestrator D-5 on precedent, AC#10): exactly the 8 test edits listed in spec §5 D-5 across e2e/table.spec.ts, e2e/action-bar.spec.ts, e2e/home.spec.ts and tests/ui/table.acceptance.test.tsx. No other assertion may be removed or weakened.
 
 Build: src/table/table-view.ts (headless view model from the user's PlayerView only), BotStyle union (Q-1), handNumber, TableView split, seats clockwise from user at bottom centre, To act badge + D disc (Q-3), past-tense seat text (Q-2), small CardBack 30x42, Leave table -> Home (Q-4); 8 D-5 test edits only; e2e 74 passed Chromium + WebKit; playtest 0 violations; gate PASS. Screenshots: doit/TASK-3.3/table-scene.png, table-live.png.
+
+CI run 44426860260 (head 202c194): success. Judge round 1: PASS 22/22, no blocking; 3720 seeded states (3-10 seats, every user seat and button) matched an independent replay; user bottom centre at seats 1-6; 4 pinned hands per browser DOM matched replay; replay code and bot cards never in source/title/accessibility tree; Leave table → Home with fresh session after; no horizontal scroll; axe clean on 42 scenes per browser. Follow-ups (Step 6a): ACs added to TASK-3.4 (handNumber, pot after award, '?? 0' fallback), TASK-10.1 (Leave → Session Report), TASK-10.2 (mid-hand confirm, REQ-004.7), TASK-12.2 (hide style label), TASK-2.8 (style selectors and policies), TASK-2.2 (position names 2-5, 7-10), TASK-3.16 (10 seats fit, one locator module), TASK-4.4 (drawn dealer keeps hooks), TASK-4.5 (chips vs 'This street'). No new tasks needed.
 <!-- SECTION:NOTES:END -->
+
+## Final Summary
+
+<!-- SECTION:FINAL_SUMMARY:BEGIN -->
+Replaced the plain seat list with the storyboard table: seats clockwise round an oval felt, board with placeholders, pot total, dealer 'D' disc, red-border 'To act' badge, header with Leave table (goes Home). Built on a headless view model from the user's PlayerView, so no bot hole cards or replay code can show. Verified: 242 unit tests passed, 74 e2e passed (Chromium, WebKit), 10,000-hand playtest clean, review round 2 with 0 findings, security clean. Judge and final CI pending. Please review assumptions A-1..A-8 (esp. position names, Hand #1 until TASK-3.4, pot after award). Risks: 1606 changed lines (over 1400); 8 earlier locked-test edits (D-5); all non-TAG styles still play TAG until E06. Follow-ups listed in the doc.
+<!-- SECTION:FINAL_SUMMARY:END -->

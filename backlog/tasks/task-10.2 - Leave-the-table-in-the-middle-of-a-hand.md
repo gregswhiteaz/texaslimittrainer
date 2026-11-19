@@ -4,7 +4,7 @@ title: Leave the table in the middle of a hand
 status: To Do
 assignee: []
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-17T23:22:00Z'
+updated_date: '2026-11-19T00:21:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -46,6 +46,7 @@ Plan key: E10-S05 · Dream: limit-holdem-trainer
 - [ ] #6 Given a cash session whose user confirms leaving during hand 1, When hand 1 completes, Then a report with hands played "1" is shown and stored [REQ-004.7]
 - [ ] #7 Given the leave dialog during hand 25 while a bot is to act and the user holds cards, When the user confirms, Then the user's hand is folded at once before that bot acts [REQ-004.8]
 - [ ] #8 Given the user confirmed leaving during hand 25, When hand 25's record and the session report are read, Then the forced fold has no grade and is not counted in Major errors /100, Minor errors /100, hint usage or any leak category [REQ-004.8]
+- [ ] #9 Given Leave table is chosen in the middle of a hand, When onLeave would run, Then the dialog 'Leave now? Your hand will be folded.' is shown first (REQ-004.7)
 <!-- AC:END -->
 
 ## Definition of Done
@@ -63,3 +64,9 @@ Plan key: E10-S05 · Dream: limit-holdem-trainer
 - [ ] #11 Story documentation is written and published to Backlog.md
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+AC added from TASK-3.3 follow-up (doc-24).
+<!-- SECTION:NOTES:END -->
