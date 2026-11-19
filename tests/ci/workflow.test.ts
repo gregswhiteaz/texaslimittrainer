@@ -100,7 +100,7 @@ describe('CI workflow', () => {
       expect(step, name).not.toBeNull();
       const [, stepTimeout = '', run = ''] = step ?? [];
       expect(run).toBe(
-        `node tools/ci/retry.js --label "${name}" --attempts 3 --timeout-seconds 240 --delay-seconds 10 -- ${command}`,
+        `node tools/ci/retry.js --label "${name}" --attempts 3 --timeout-seconds 240 --delay-seconds 10 -- node tools/ci/apt-lock.js --wait-seconds 150 -- ${command}`,
       );
       const flag = (flagName: string) => Number(new RegExp(`--${flagName} (\\S+)`).exec(run)?.[1]);
       const [attempts, timeoutSeconds, delaySeconds] = [
@@ -114,6 +114,41 @@ describe('CI workflow', () => {
       const worstCase = attempts * timeoutSeconds + (attempts - 1) * delaySeconds + attempts * 10;
       expect(worstCase, name).toBeLessThanOrEqual(Number(stepTimeout) * 60);
       expect(Number(stepTimeout), name).toBeLessThan(jobTimeout);
+    }
+  });
+
+  it('waits for the apt lock inside each Playwright install attempt within the step budget', () => {
+    expect(Number(/^ {4}timeout-minutes: (\d+)$/m.exec(workflow)?.[1])).toBe(20);
+    for (const [name, command] of [
+      ['Install Playwright browsers', 'npx playwright install --with-deps chromium webkit'],
+      ['Install Playwright system dependencies', 'npx playwright install-deps chromium webkit'],
+    ]) {
+      const step = new RegExp(
+        `^ {6}- name: ${name}\\n {8}if: .+\\n {8}timeout-minutes: (\\d+)\\n {8}run: (.+)$`,
+        'm',
+      ).exec(workflow);
+      expect(step, name).not.toBeNull();
+      const [, stepTimeout = '', run = ''] = step ?? [];
+      expect(Number(stepTimeout), name).toBe(13);
+      const wiring =
+        /^node tools\/ci\/retry\.js --label "(.+)" --attempts (\d+) --timeout-seconds (\d+) --delay-seconds (\d+) -- node tools\/ci\/apt-lock\.js --wait-seconds (\d+) -- (.+)$/.exec(
+          run,
+        );
+      expect(wiring, name).not.toBeNull();
+      const [, label, ...rest] = wiring ?? [];
+      const [attempts = 0, timeoutSeconds = 0, delaySeconds = 0, waitSeconds = 0] = rest
+        .slice(0, 4)
+        .map(Number);
+      expect([label, rest[4]], name).toEqual([name, command]);
+      expect([attempts, timeoutSeconds, delaySeconds, waitSeconds], name).toEqual([
+        3, 240, 10, 150,
+      ]);
+      expect(waitSeconds, name).toBeGreaterThanOrEqual(60);
+      // Leave at least 60 s of each attempt for the install itself (green installs take 32-45 s).
+      expect(waitSeconds + 60, name).toBeLessThanOrEqual(timeoutSeconds);
+      // A lock that never clears: every attempt waits (+10 s for polling) and gives up.
+      const neverClears = attempts * (waitSeconds + 10) + (attempts - 1) * delaySeconds;
+      expect(neverClears, name).toBeLessThanOrEqual(Number(stepTimeout) * 60);
     }
   });
 

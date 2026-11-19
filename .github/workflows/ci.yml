@@ -52,11 +52,11 @@ jobs:
       - name: Install Playwright browsers
         if: steps.playwright-cache.outputs.cache-hit != 'true'
         timeout-minutes: 13
-        run: node tools/ci/retry.js --label "Install Playwright browsers" --attempts 3 --timeout-seconds 240 --delay-seconds 10 -- npx playwright install --with-deps chromium webkit
+        run: node tools/ci/retry.js --label "Install Playwright browsers" --attempts 3 --timeout-seconds 240 --delay-seconds 10 -- node tools/ci/apt-lock.js --wait-seconds 150 -- npx playwright install --with-deps chromium webkit
       - name: Install Playwright system dependencies
         if: steps.playwright-cache.outputs.cache-hit == 'true'
         timeout-minutes: 13
-        run: node tools/ci/retry.js --label "Install Playwright system dependencies" --attempts 3 --timeout-seconds 240 --delay-seconds 10 -- npx playwright install-deps chromium webkit
+        run: node tools/ci/retry.js --label "Install Playwright system dependencies" --attempts 3 --timeout-seconds 240 --delay-seconds 10 -- node tools/ci/apt-lock.js --wait-seconds 150 -- npx playwright install-deps chromium webkit
       - name: E2E
         id: e2e
         run: npm run e2e

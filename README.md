@@ -38,7 +38,9 @@ version from `.nvmrc`:
 
 Any failing check fails the run. The two Playwright install steps run through `tools/ci/retry.js`,
 which gives each attempt a 4-minute limit and retries up to 3 attempts in all; if every attempt
-fails, the run fails with an error naming the install step. When e2e fails, the Playwright report
+fails, the run fails with an error naming the install step. Each attempt first waits up to 150 s,
+through `tools/ci/apt-lock.js`, for another apt process to release its lock, and fails with an
+error naming the lock if it is never released. When e2e fails, the Playwright report
 is attached to the run as the `playwright-report` artifact (kept 7 days).
 
 Local equivalent:
