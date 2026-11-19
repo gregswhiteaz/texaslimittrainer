@@ -1,0 +1,86 @@
+[
+  {
+    "id": "SPEC-01",
+    "verifies": "AC#1, DoD#1",
+    "verification": "acceptance `tests/table/review.acceptance.test.ts::a hand with 4 user and 9 bot decisions gives 4 entries in order and none for bots`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-02",
+    "verifies": "AC#2, DoD#1",
+    "verification": "acceptance `tests/table/review.acceptance.test.ts::each entry's grade is the grader output for that decision's view`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-03",
+    "verifies": "AC#1, AC#2, AC#6, AC#7, DoD#1",
+    "verification": "acceptance `tests/ui/review-panel.acceptance.test.tsx::the review panel lists 4 graded entries beside the table with Close and Deal next hand`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-04",
+    "verifies": "AC#3, AC#4, DoD#1",
+    "verification": "acceptance `tests/table/review.acceptance.test.ts::a lone preflop fold or a big-blind walk opens no review`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-05",
+    "verifies": "AC#3, AC#4, DoD#7",
+    "verification": "acceptance `e2e/review.spec.ts::a preflop fold or a big-blind walk opens no review and the next hand deals after 1.5 s`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-06",
+    "verifies": "AC#1, AC#2, AC#5, AC#6, AC#9, DoD#7, DoD#8",
+    "verification": "acceptance `e2e/review.spec.ts::after a played hand the review opens beside the table, holds the next hand and Deal next hand deals hand 2`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-07",
+    "verifies": "AC#7, AC#9, DoD#7",
+    "verification": "acceptance `e2e/review.spec.ts::Close keeps the result and Deal next hand and nothing is dealt until it is clicked`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-08",
+    "verifies": "AC#8, DoD#1",
+    "verification": "acceptance `tests/table/review.acceptance.test.ts::calling then folding preflop opens a review with the call and the fold`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-09",
+    "verifies": "AC#1, AC#3",
+    "verification": "unit `tests/table/review.test.ts::review model edges`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-10",
+    "verifies": "AC#3, DoD#7",
+    "verification": "integration `npx playwright test e2e/next-hand.spec.ts e2e/table.spec.ts e2e/action-bar.spec.ts e2e/table-display.spec.ts e2e/home.spec.ts e2e/cards.spec.ts`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-11",
+    "verifies": "AC#9",
+    "verification": "manual Reviewer reads `src/ui/table/useTableSession.ts` and `src/ui/table/Table.tsx` against this item",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-12",
+    "verifies": "DoD#2, DoD#4, DoD#5",
+    "verification": "command `npm run lint && npm run typecheck && npm test`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-13",
+    "verifies": "DoD#10, DoD#11",
+    "verification": "manual CI run on branch `doit/TASK-9.1` and `backlog doc list --plain`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-14",
+    "verifies": "DoD#3, DoD#6, DoD#9, DoD#12",
+    "verification": "manual Judge confirms the diff scope and that TASK-7.11 and TASK-13.4 are not Done",
+    "status": "pending"
+  }
+]

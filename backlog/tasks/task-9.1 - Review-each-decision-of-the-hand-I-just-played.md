@@ -1,10 +1,11 @@
 ---
 id: TASK-9.1
 title: Review each decision of the hand I just played
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-19T01:10:00Z'
+updated_date: '2026-11-19T01:54:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-0
@@ -70,6 +71,18 @@ Plan key: E09-S01 · Dream: limit-holdem-trainer
 - [ ] #11 Story documentation is written and published to Backlog.md
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. src/table/review.ts (headless): opensReview(hand) — open unless the user made no decision or only a single preflop fold; reviewEntries(completed) — grade each user decision once at hand end with gradeView on its stored view and the user's action type, entry = street, board at that point, user action label, advice label (recommendation.move via actionLabel), GradeResult.
+2. src/ui/table/ReviewPanel.tsx: complementary aside 'Hand #N review', × 'Close review' 44x44, a 'Decisions' list with uppercase street, small drawn 'Community cards' (30x42), 'You: Call $4 · Advice: Fold' and a text grade badge (#2F6FE0 / #9A5B00 / #A3151C, white text); focus moves to the heading on open.
+3. useTableSession: holdNextHand while a reviewed hand is held; dealNext() draws a fresh code and runs dealHand(nextHand(t), code); the hold stays after Close (REQ-043.10).
+4. Table: red Deal next hand on the table side only while a reviewed hand is held; Close keeps the result and the button; layout gives the panel 400 px beside the table at 1280 wide.
+5. Tests: review model unit and acceptance tests over scripted hands (4 user and 9 bot decisions, call then fold, preflop fold only, big-blind walk); panel markup; e2e in Chromium + WebKit (open, 10 s hold, Deal next hand, Close then hold, no-panel cases auto-deal at 1.5 s, axe); earlier specs unchanged.
+
+Full spec: doit/TASK-9.1/spec.md
+<!-- SECTION:PLAN:END -->
 
 ## Implementation Notes
 

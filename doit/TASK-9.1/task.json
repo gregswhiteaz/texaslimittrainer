@@ -1,0 +1,750 @@
+{
+  "id": "TASK-9.1",
+  "title": "Review each decision of the hand I just played",
+  "status": "To Do",
+  "archived": false,
+  "type": "feature",
+  "priority": "high",
+  "project": null,
+  "assignees": [],
+  "reporter": null,
+  "labels": [
+    "dream-limit-holdem-trainer"
+  ],
+  "milestone": "m-0",
+  "parentTaskId": "TASK-9",
+  "acceptanceCriteriaCompleted": 0,
+  "acceptanceCriteriaCount": 9,
+  "references": [
+    "dreams/limit-holdem-trainer/requirements.md"
+  ],
+  "modifiedFiles": [],
+  "ordinal": 20000,
+  "createdAt": "2026-11-17T22:46:00Z",
+  "updatedAt": "2026-11-19T01:10:00Z",
+  "dueDate": null,
+  "isReady": true,
+  "path": "backlog/tasks/task-9.1 - Review-each-decision-of-the-hand-I-just-played.md",
+  "description": "As a learner, I want a review panel after each hand that grades every decision I made, so that I see straight away which of my plays were right or wrong.\n\nWalking-skeleton slice of the Hand Review panel (Review storyboard: panel beside the table, result and Deal next hand on the table side, Close button in the panel). When a hand ends in which the user made any decision other than folding preflop, the panel opens; it is skipped only when the user's single action in the hand was a preflop fold, so a hand where the user called or raised preflop and then folded preflop opens it (REQ-043.12). In M1 it reads the completed hand exposed by E03-S01 and grades each user decision with the E07-S04 grader on that decision's PlayerView; each entry shows street, board at that point, the user's action, the recommended action and the grade as text (Correct, Minor error, Major error) with its colour badge. Bot decisions are never graded. Explanations, numbers and basis arrive in M2 (E09-S02) once E07-S12 exists: do not show placeholder text for them. While the panel is open the E03-S04 automatic 1.5 s deal is suspended and the next hand waits for Deal next hand.\n\n## Requirements covered\n- REQ-024 (Must): Between hands \u2014 When a hand ends, TLH Trainer shall show the result, and shall deal the next hand only after the user clicks Deal next hand if the Hand Review panel is open, or automatically after 1.5 seconds if it is not.\n- REQ-043 (Must): Hand Review panel \u2014 When a hand ends in which the user made any decision other than folding preflop, the Table screen shall open the Hand Review panel beside the table, unless auto-open is turned off in Settings.\n- REQ-057 (Should): Accessibility and usability \u2014 Every screen shall meet WCAG 2.1 AA contrast and control-labelling rules, and every grade or status shown in colour shall also be shown as text.\n\nCovers: REQ-024, REQ-043, REQ-057\n\n## Notes\nGate the same next-hand timer E03-S04 uses; after Close the timer stays suspended until Deal next hand (REQ-043.10).\n\nPlan key: E09-S01 \u00b7 Dream: limit-holdem-trainer",
+  "dependencies": [
+    "TASK-3.4",
+    "TASK-7.4"
+  ],
+  "dependencyGraph": {
+    "root": "TASK-9.1",
+    "nodes": [
+      {
+        "id": "TASK-9.1",
+        "title": "Review each decision of the hand I just played",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": 0,
+        "dependentDepth": 0
+      },
+      {
+        "id": "TASK-1.1",
+        "title": "Bootstrap the strict TypeScript project with one-command checks",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 4,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.2",
+        "title": "Rank showdown hands by real poker hand rankings",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 4,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.3",
+        "title": "Deal every hand from a seeded shuffle with a replay code",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 6,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.4",
+        "title": "Play a complete fixed-limit hand from blinds to showdown",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 5,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.5",
+        "title": "Give each deciding seat only its own view of the hand",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 4,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.6",
+        "title": "Run seeded bot-only hands from the command line",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 5,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.7",
+        "title": "Run every check in GitHub Actions on each push and pull request",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 5,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-3.1",
+        "title": "Play a complete hand against TAG bots at a default 6-max table in the browser",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 3,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-3.3",
+        "title": "See every seat, the board, the pot and the button at a glance",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 2,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-3.4",
+        "title": "See who won each hand and get the next hand dealt automatically",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 1,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-3.5",
+        "title": "Read big-index cards drawn in code",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 3,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-5",
+        "title": "Play a sit-and-go",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 3
+      },
+      {
+        "id": "TASK-5.3",
+        "title": "Read every sit-and-go chip amount without a $ sign",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 2
+      },
+      {
+        "id": "TASK-5.8",
+        "title": "See results when I bust in a sit-and-go with the review open",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 2
+      },
+      {
+        "id": "TASK-6.1",
+        "title": "Face TAG bots that act from the advice engine",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 4,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-7.1",
+        "title": "Compute a hand's equity against opponent hands",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 3,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-7.2",
+        "title": "Recommend a preflop action from the 6-max chart",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 3,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-7.3",
+        "title": "Recommend call or fold after the flop from equity and pot odds",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 2,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-7.4",
+        "title": "Grade a decision as Correct, Minor error or Major error",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 1,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-9",
+        "title": "Review the hand just played",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 1
+      },
+      {
+        "id": "TASK-9.2",
+        "title": "Continue to rebuy or leave when I bust with the review open",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 1
+      },
+      {
+        "id": "TASK-9.3",
+        "title": "See the numbers and reason behind each reviewed decision",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 1
+      },
+      {
+        "id": "TASK-9.4",
+        "title": "See the hand number, my cards, position, result and replay code in the review",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 1
+      },
+      {
+        "id": "TASK-9.5",
+        "title": "See opponents' cards in the review only when they were shown at showdown",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 1
+      },
+      {
+        "id": "TASK-9.6",
+        "title": "See which reviewed decisions were hinted",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 2
+      },
+      {
+        "id": "TASK-9.7",
+        "title": "See a grade summary badge after each hand when auto-open is off",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 1
+      },
+      {
+        "id": "TASK-9.8",
+        "title": "Get the review panel within one second of the hand ending",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 2
+      },
+      {
+        "id": "TASK-9.9",
+        "title": "See approximate and short-stack labels in review entries",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 2
+      },
+      {
+        "id": "TASK-12",
+        "title": "Tune the trainer",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 3
+      },
+      {
+        "id": "TASK-12.4",
+        "title": "Delete all my data after confirming",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 3
+      },
+      {
+        "id": "TASK-12.6",
+        "title": "Turn off automatic opening of the Hand Review panel",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 2
+      },
+      {
+        "id": "TASK-13",
+        "title": "Rely on a private offline app",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 2
+      },
+      {
+        "id": "TASK-13.4",
+        "title": "Use every screen offline after the first visit",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 1
+      },
+      {
+        "id": "TASK-13.8",
+        "title": "Get new versions at the next launch, never mid-session",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 2
+      },
+      {
+        "id": "TASK-13.9",
+        "title": "Reach Home within 3 seconds on a repeat launch",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 2
+      },
+      {
+        "id": "TASK-13.10",
+        "title": "Keep every screen within its time limits with 100,000 stored hands",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 3
+      },
+      {
+        "id": "TASK-13.11",
+        "title": "Prove every screen passes automated accessibility checks",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 1
+      }
+    ],
+    "edges": [
+      {
+        "from": "TASK-1.2",
+        "to": "TASK-1.7"
+      },
+      {
+        "from": "TASK-1.3",
+        "to": "TASK-1.7"
+      },
+      {
+        "from": "TASK-1.4",
+        "to": "TASK-1.2"
+      },
+      {
+        "from": "TASK-1.4",
+        "to": "TASK-1.3"
+      },
+      {
+        "from": "TASK-1.5",
+        "to": "TASK-1.4"
+      },
+      {
+        "from": "TASK-1.6",
+        "to": "TASK-1.5"
+      },
+      {
+        "from": "TASK-1.7",
+        "to": "TASK-1.1"
+      },
+      {
+        "from": "TASK-3.1",
+        "to": "TASK-1.5"
+      },
+      {
+        "from": "TASK-3.1",
+        "to": "TASK-3.5"
+      },
+      {
+        "from": "TASK-3.1",
+        "to": "TASK-6.1"
+      },
+      {
+        "from": "TASK-3.3",
+        "to": "TASK-3.1"
+      },
+      {
+        "from": "TASK-3.3",
+        "to": "TASK-3.5"
+      },
+      {
+        "from": "TASK-3.4",
+        "to": "TASK-3.3"
+      },
+      {
+        "from": "TASK-3.5",
+        "to": "TASK-1.1"
+      },
+      {
+        "from": "TASK-5",
+        "to": "TASK-5.3"
+      },
+      {
+        "from": "TASK-5",
+        "to": "TASK-5.8"
+      },
+      {
+        "from": "TASK-5.3",
+        "to": "TASK-9.3"
+      },
+      {
+        "from": "TASK-5.8",
+        "to": "TASK-9.2"
+      },
+      {
+        "from": "TASK-6.1",
+        "to": "TASK-1.6"
+      },
+      {
+        "from": "TASK-6.1",
+        "to": "TASK-7.2"
+      },
+      {
+        "from": "TASK-6.1",
+        "to": "TASK-7.3"
+      },
+      {
+        "from": "TASK-7.1",
+        "to": "TASK-1.2"
+      },
+      {
+        "from": "TASK-7.2",
+        "to": "TASK-1.5"
+      },
+      {
+        "from": "TASK-7.3",
+        "to": "TASK-7.1"
+      },
+      {
+        "from": "TASK-7.3",
+        "to": "TASK-7.2"
+      },
+      {
+        "from": "TASK-7.4",
+        "to": "TASK-7.3"
+      },
+      {
+        "from": "TASK-9",
+        "to": "TASK-9.1"
+      },
+      {
+        "from": "TASK-9",
+        "to": "TASK-9.2"
+      },
+      {
+        "from": "TASK-9",
+        "to": "TASK-9.3"
+      },
+      {
+        "from": "TASK-9",
+        "to": "TASK-9.4"
+      },
+      {
+        "from": "TASK-9",
+        "to": "TASK-9.5"
+      },
+      {
+        "from": "TASK-9",
+        "to": "TASK-9.6"
+      },
+      {
+        "from": "TASK-9",
+        "to": "TASK-9.7"
+      },
+      {
+        "from": "TASK-9",
+        "to": "TASK-9.8"
+      },
+      {
+        "from": "TASK-9",
+        "to": "TASK-9.9"
+      },
+      {
+        "from": "TASK-9.1",
+        "to": "TASK-3.4"
+      },
+      {
+        "from": "TASK-9.1",
+        "to": "TASK-7.4"
+      },
+      {
+        "from": "TASK-9.2",
+        "to": "TASK-9.1"
+      },
+      {
+        "from": "TASK-9.3",
+        "to": "TASK-9.1"
+      },
+      {
+        "from": "TASK-9.4",
+        "to": "TASK-9.1"
+      },
+      {
+        "from": "TASK-9.5",
+        "to": "TASK-9.1"
+      },
+      {
+        "from": "TASK-9.6",
+        "to": "TASK-9.3"
+      },
+      {
+        "from": "TASK-9.7",
+        "to": "TASK-9.1"
+      },
+      {
+        "from": "TASK-9.8",
+        "to": "TASK-9.3"
+      },
+      {
+        "from": "TASK-9.9",
+        "to": "TASK-9.3"
+      },
+      {
+        "from": "TASK-12",
+        "to": "TASK-12.4"
+      },
+      {
+        "from": "TASK-12",
+        "to": "TASK-12.6"
+      },
+      {
+        "from": "TASK-12.4",
+        "to": "TASK-12.6"
+      },
+      {
+        "from": "TASK-12.6",
+        "to": "TASK-9.7"
+      },
+      {
+        "from": "TASK-13",
+        "to": "TASK-13.4"
+      },
+      {
+        "from": "TASK-13",
+        "to": "TASK-13.8"
+      },
+      {
+        "from": "TASK-13",
+        "to": "TASK-13.9"
+      },
+      {
+        "from": "TASK-13",
+        "to": "TASK-13.10"
+      },
+      {
+        "from": "TASK-13",
+        "to": "TASK-13.11"
+      },
+      {
+        "from": "TASK-13.4",
+        "to": "TASK-9.1"
+      },
+      {
+        "from": "TASK-13.8",
+        "to": "TASK-13.4"
+      },
+      {
+        "from": "TASK-13.9",
+        "to": "TASK-13.4"
+      },
+      {
+        "from": "TASK-13.10",
+        "to": "TASK-9.8"
+      },
+      {
+        "from": "TASK-13.10",
+        "to": "TASK-13.9"
+      },
+      {
+        "from": "TASK-13.11",
+        "to": "TASK-9.1"
+      },
+      {
+        "from": "TASK-13.11",
+        "to": "TASK-13.8"
+      }
+    ]
+  },
+  "readiness": {
+    "isReady": true,
+    "isBlocked": false,
+    "blockingDependencies": [],
+    "missingDependencies": []
+  },
+  "documentation": [
+    "doc-1",
+    "doc-2"
+  ],
+  "subtasks": [],
+  "acceptanceCriteria": [
+    {
+      "index": 1,
+      "text": "Given a scripted hand in which the user made 4 decisions and the bots made 9, When the hand ends, Then the Hand Review panel opens beside the table with exactly 4 entries in the order made, each showing street, the board at that point, the user's action and the recommended action, and no entry for any bot decision [REQ-043.2]",
+      "checked": false
+    },
+    {
+      "index": 2,
+      "text": "Given the same scripted hand, When the panel opens, Then each entry's grade equals the E07-S04 grader output for the user's PlayerView at that decision and is shown as the text label Correct, Minor error or Major error, not by colour alone [REQ-057.3, REQ-043.2]",
+      "checked": false
+    },
+    {
+      "index": 3,
+      "text": "Given a hand in which the user's single action was folding preflop at their first decision, When the hand ends, Then no panel opens and the next hand is dealt 1.5 s after the result is shown [REQ-024.3, REQ-043.12]",
+      "checked": false
+    },
+    {
+      "index": 4,
+      "text": "Given a hand in which the user is the big blind and every other player folds, so the user made no decision, When the hand ends, Then no panel opens and the next hand is dealt 1.5 s after the result is shown [REQ-024.3]",
+      "checked": false
+    },
+    {
+      "index": 5,
+      "text": "Given the panel is open, When 10 s pass with no input, Then no next hand has been dealt [REQ-024.2]",
+      "checked": false
+    },
+    {
+      "index": 6,
+      "text": "Given the panel is open, When the user selects Deal next hand, Then the panel closes and the next hand is dealt with the hand number increased by 1 [REQ-043.7, REQ-024.2]",
+      "checked": false
+    },
+    {
+      "index": 7,
+      "text": "Given the panel is open, When the user selects Close, Then the panel closes, the hand's result and the Deal next hand control stay visible on the table, and after 10 s no next hand has been dealt until the user selects Deal next hand [REQ-043.7, REQ-043.10]",
+      "checked": false
+    },
+    {
+      "index": 8,
+      "text": "Given a hand in which the user called $8 preflop and then folded preflop to a re-raise, When the hand ends, Then the panel opens with exactly 2 entries, the call and the fold, and no next hand is dealt until the user chooses [REQ-043.12]",
+      "checked": false
+    },
+    {
+      "index": 9,
+      "text": "Given the Hand Review panel is open when a hand ends, When the 1.5 s auto-deal would fire, Then useTableSession's holdNextHand holds it, and 'Deal next hand' calls dealNext() (dealHand(nextHand(t), newCode())); the hold remains after Close (REQ-043.10)",
+      "checked": false
+    }
+  ],
+  "definitionOfDone": [
+    {
+      "index": 1,
+      "text": "Every acceptance criterion has at least one automated test (unit, property or Playwright) that passes",
+      "checked": false
+    },
+    {
+      "index": 2,
+      "text": "`npm run lint`, `npm run typecheck` and `npm test` pass with zero errors [REQ-059.1, REQ-059.4]",
+      "checked": false
+    },
+    {
+      "index": 3,
+      "text": "The golden-spot suite passes 100% (applies from the story that creates the suite, E07-S14, onward) [REQ-039.4]",
+      "checked": false
+    },
+    {
+      "index": 4,
+      "text": "Coverage thresholds hold: >= 90% engine/bots/advice/statistics, >= 70% overall [REQ-059.3]",
+      "checked": false
+    },
+    {
+      "index": 5,
+      "text": "Engine, bots, advice and statistics code imports no UI or browser-only code [REQ-059.2]",
+      "checked": false
+    },
+    {
+      "index": 6,
+      "text": "Stories that touch the engine, bots or advice: a 10,000-hand playtest reports zero invariant violations (applies once the playtest runner exists, E01-S07, onward) [REQ-056.1]",
+      "checked": false
+    },
+    {
+      "index": 7,
+      "text": "Stories that add or change a screen: Playwright test of the screen flow in Chromium and WebKit, and axe reports zero serious or critical violations (axe tooling is provisioned in the toolchain story E01-S01) [REQ-057.1]",
+      "checked": false
+    },
+    {
+      "index": 8,
+      "text": "No new network requests beyond the app's own files [REQ-058.1]",
+      "checked": false
+    },
+    {
+      "index": 9,
+      "text": "Strategy-content stories: text is original and every chart, range or golden spot carries its justification [REQ-061.2]",
+      "checked": false
+    },
+    {
+      "index": 10,
+      "text": "CI workflow is green on the story's branch (applies once the CI story E01-S02 is done; E01-S01 instead passes the same checks locally) [REQ-064.2]",
+      "checked": false
+    },
+    {
+      "index": 11,
+      "text": "Story documentation is written and published to Backlog.md",
+      "checked": false
+    },
+    {
+      "index": 12,
+      "text": "Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled",
+      "checked": false
+    }
+  ],
+  "implementationPlan": null,
+  "implementationNotes": "AC added from TASK-3.4 follow-up (doc-25).",
+  "comments": [],
+  "finalSummary": null
+}
