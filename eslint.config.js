@@ -4,6 +4,7 @@ import reactHooks from 'eslint-plugin-react-hooks';
 import { defineConfig } from 'eslint/config';
 import tseslint from 'typescript-eslint';
 import { headlessBoundaryConfig } from './tools/lint/headless-boundary.js';
+import { typeStrippingConfig } from './tools/lint/type-stripping.js';
 
 export default defineConfig(
   {
@@ -24,6 +25,7 @@ export default defineConfig(
   tseslint.configs.strict,
   tseslint.configs.stylistic,
   { files: ['src/ui/**/*.{ts,tsx}'], extends: [reactHooks.configs.flat.recommended] },
+  typeStrippingConfig,
   headlessBoundaryConfig,
   prettier,
 );

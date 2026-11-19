@@ -19,6 +19,7 @@ const CONFIG_FILES = [
   'tsconfig.json',
   'eslint.config.js',
   'tools/lint/headless-boundary.js',
+  'tools/lint/type-stripping.js',
   '.prettierrc.json',
   '.prettierignore',
   'vite.config.ts',

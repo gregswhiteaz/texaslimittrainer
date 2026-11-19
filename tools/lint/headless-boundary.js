@@ -1,6 +1,7 @@
 // Headless-boundary lint rules (REQ-059.2): engine, bots, advice, stats, playtest and table code
 // must not use React, DOM or IndexedDB APIs, so it can run in Node without a browser.
 import globals from 'globals';
+import { TYPE_STRIPPING_RESTRICTED_SYNTAX } from './type-stripping.js';
 
 /** Folders under src/ that must stay headless (REQ-059.2; 90% coverage threshold). */
 export const HEADLESS_DIRS = ['engine', 'bots', 'advice', 'stats'];
@@ -68,6 +69,7 @@ export const headlessBoundaryConfig = {
         selector: 'ImportExpression',
         message: 'Dynamic import() is not allowed in headless modules (REQ-059.2).',
       },
+      ...TYPE_STRIPPING_RESTRICTED_SYNTAX,
     ],
   },
 };

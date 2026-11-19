@@ -14,6 +14,7 @@
     "noUnusedParameters": true,
     "verbatimModuleSyntax": true,
     "isolatedModules": true,
+    "erasableSyntaxOnly": true,
     "allowJs": true,
     "checkJs": true,
     "noEmit": true,
