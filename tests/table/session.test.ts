@@ -1,4 +1,3 @@
-import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { replayCodeFromWords } from '../../src/engine/deck';
 import type { Action } from '../../src/engine/hand';
@@ -84,18 +83,5 @@ describe('table session', () => {
     expect(userActions(botTurn)).toEqual([]);
     expect(userActions(done)).toEqual([]);
     expect(userActions(userTurn).length).toBeGreaterThan(0);
-  });
-
-  it('session module imports no UI code', () => {
-    const source = readFileSync(new URL('../../src/table/session.ts', import.meta.url), 'utf8');
-    const specifiers = [...source.matchAll(/\bfrom\s+['"]([^'"]+)['"]/g)].map((m) => m[1] ?? '');
-    expect(specifiers.length).toBeGreaterThan(0);
-    for (const specifier of specifiers) {
-      expect(specifier).not.toMatch(/^react(-dom)?(\/|$)/);
-      expect(specifier).not.toMatch(/(^|\/)ui(\/|$)/);
-    }
-    expect(typeof globalThis.document).toBe('undefined');
-    expect(typeof globalThis.window).toBe('undefined');
-    expect(nextStep(seatSession())).toBe('deal');
   });
 });

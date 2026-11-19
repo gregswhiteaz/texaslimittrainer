@@ -146,6 +146,29 @@ describe('playtest runner units', () => {
     expect(() => summarize([])).toThrow(RangeError);
   });
 
+  it("creates each seat's policy once per hand", () => {
+    let created: string[] = [];
+    const decisions = new Map<number, number>();
+    const counting: PolicyFactory = (code, seat) => {
+      created.push(`${code}/${seat}`);
+      const policy = raiseToCap(code, seat);
+      return (view) => {
+        decisions.set(seat, (decisions.get(seat) ?? 0) + 1);
+        return policy(view);
+      };
+    };
+
+    const code = handReplayCode(5, 1);
+    playHand(code, 4, 2, 1, { makePolicy: counting });
+    expect([...created].sort()).toEqual([1, 2, 3, 4].map((seat) => `${code}/${seat}`));
+    expect(Math.max(...decisions.values())).toBeGreaterThanOrEqual(2);
+
+    created = [];
+    runPlaytest({ hands: 3, seed: 5, size: 4 }, undefined, { makePolicy: counting });
+    expect(created).toHaveLength(12);
+    expect(new Set(created).size).toBe(12);
+  });
+
   it('default seat policy is TAG at 6 players and random-move elsewhere', () => {
     const code = handReplayCode(42, 1);
     for (let seat = 1; seat <= 6; seat++)
