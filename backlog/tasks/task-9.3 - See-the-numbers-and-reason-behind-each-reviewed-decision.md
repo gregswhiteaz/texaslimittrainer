@@ -4,7 +4,7 @@ title: See the numbers and reason behind each reviewed decision
 status: To Do
 assignee: []
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-17T23:22:00Z'
+updated_date: '2026-11-19T02:21:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -50,6 +50,7 @@ Plan key: E09-S02 · Dream: limit-holdem-trainer
 - [ ] #3 Given a flop decision against an opponent observed for 40 hands, When the panel opens, Then the entry shows the basis "based on 40 hands of this opponent"; and a preflop entry shows "typical player" [REQ-035.4]
 - [ ] #4 Given hint advice was requested through the advice worker at the user's flop decision and the opponent's observed hand count goes from 29 to 30 when the hand ends, When the panel opens, Then the flop entry's recommended action, equity %, required equity %, explanation and basis are identical to that hint result [REQ-036.2, REQ-043.1]
 - [ ] #5 Given a 4-decision hand at a table of 10 players, When the panel opens at a 1280 x 720 window, Then all 4 entries with their explanations can be read in the panel without horizontal scrolling [REQ-043.1]
+- [ ] #6 Given each user decision, When it is made, Then its review entry (grade, recommendation, equity, explanation, basis) is computed and stored at decision time off the main thread, replacing the hand-end recomputation in reviewEntries
 <!-- AC:END -->
 
 ## Definition of Done
@@ -67,3 +68,9 @@ Plan key: E09-S02 · Dream: limit-holdem-trainer
 - [ ] #11 Story documentation is written and published to Backlog.md
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+AC added from TASK-9.1 follow-up (doc-26).
+<!-- SECTION:NOTES:END -->

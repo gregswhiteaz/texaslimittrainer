@@ -4,7 +4,7 @@ title: See the hand number, my cards, position, result and replay code in the re
 status: To Do
 assignee: []
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-17T23:22:00Z'
+updated_date: '2026-11-19T02:21:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -43,6 +43,7 @@ Plan key: E09-S03 · Dream: limit-holdem-trainer
 - [ ] #1 Given hand 133 in which the user held A♥ 9♠ in the cutoff and lost $48, When the panel opens, Then the header shows "Hand #133", A♥ 9♠, the position "Cutoff" and "You lost $48" [REQ-043.3]
 - [ ] #2 Given a hand in which the user put in $16 and won a $72 pot, When the panel opens, Then the header shows "You won $56" [REQ-043.3]
 - [ ] #3 Given a completed hand, When the panel opens, Then it shows the hand number and the replay code equal to the hand record's replay code, in a smaller font size than the entry text [REQ-043.4, REQ-013.5]
+- [ ] #4 Given the 'Hand #N review' heading from TASK-9.1, When the panel opens, Then a subtitle under it shows the user's hole cards, position and net result, and the hand's replay code is shown in the panel
 <!-- AC:END -->
 
 ## Definition of Done
@@ -60,3 +61,9 @@ Plan key: E09-S03 · Dream: limit-holdem-trainer
 - [ ] #11 Story documentation is written and published to Backlog.md
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+AC added from TASK-9.1 follow-up (doc-26).
+<!-- SECTION:NOTES:END -->

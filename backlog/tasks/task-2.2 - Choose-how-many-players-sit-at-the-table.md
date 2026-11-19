@@ -4,7 +4,7 @@ title: Choose how many players sit at the table
 status: To Do
 assignee: []
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-19T00:21:00Z'
+updated_date: '2026-11-19T02:21:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -49,6 +49,7 @@ Plan key: E02-S02 · Dream: limit-holdem-trainer
 - [ ] #6 Given 2 players selected on Game Config, When the first hand of the started session is dealt, Then the button posts the small blind and the other player the big blind [REQ-015.1]
 - [ ] #7 Given the player-count selector, When the user picks a table size, Then it writes SessionConfig.players and seats, replaces the read-only 'Players at the table' row, and the heads-up and full-ring size labels are either reachable and tested or removed
 - [ ] #8 Given table sizes 2-5 and 7-10, When position names are shown, Then they are confirmed against the requirements' naming (TASK-3.3 A-2 rule: Button, Small blind, Big blind, Cutoff, Hijack, Under the gun, Under the gun +1, ...) with a test per size
+- [ ] #9 Given a player count other than 6 is selectable, When a hand with user decisions ends, Then gradeView works at that table size (no positionOf throw) and review tests cover 2 and 10 players
 <!-- AC:END -->
 
 ## Definition of Done
@@ -73,4 +74,6 @@ Plan key: E02-S02 · Dream: limit-holdem-trainer
 AC added from TASK-2.1 follow-up (doc-23).
 
 AC added from TASK-3.3 follow-up (doc-24).
+
+AC added from TASK-9.1 follow-up (doc-26).
 <!-- SECTION:NOTES:END -->

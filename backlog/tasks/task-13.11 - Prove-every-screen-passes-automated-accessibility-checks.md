@@ -4,7 +4,7 @@ title: Prove every screen passes automated accessibility checks
 status: To Do
 assignee: []
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-17T23:22:00Z'
+updated_date: '2026-11-19T02:21:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-2
@@ -61,6 +61,7 @@ Plan key: E13-S12 · Dream: limit-holdem-trainer
 - [ ] #4 Given a screen with a deliberately unlabelled button in a test build, When the accessibility suite runs, Then it fails naming the screen and the rule [REQ-057.1]
 - [ ] #5 Given the accessibility suite is part of `npm run e2e`, When CI runs on a push, Then a serious or critical violation fails the workflow [REQ-057.1]
 - [ ] #6 Given every screen and dialog listed in AC1-AC3, When its text and controls are inspected, Then none offers a deposit, payment, purchase, cash-out, wager of real money or real-money conversion [REQ-061.1]
+- [ ] #7 Given the all-screens accessibility run, When it scans the Table screen, Then it includes the state with the Hand Review panel open and the state after Close
 <!-- AC:END -->
 
 ## Definition of Done
@@ -78,3 +79,9 @@ Plan key: E13-S12 · Dream: limit-holdem-trainer
 - [ ] #11 Story documentation is written and published to Backlog.md
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+AC added from TASK-9.1 follow-up (doc-26).
+<!-- SECTION:NOTES:END -->

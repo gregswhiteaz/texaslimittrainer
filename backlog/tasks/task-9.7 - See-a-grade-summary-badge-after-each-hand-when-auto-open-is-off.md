@@ -4,7 +4,7 @@ title: See a grade summary badge after each hand when auto-open is off
 status: To Do
 assignee: []
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-17T23:22:00Z'
+updated_date: '2026-11-19T02:21:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -49,6 +49,7 @@ Plan key: E09-S07 · Dream: limit-holdem-trainer
 - [ ] #4 Given auto-open is off and every decision in the hand was graded Correct, When the hand ends, Then the badge reads "All correct" [REQ-043.11, REQ-057.3]
 - [ ] #5 Given auto-open is off and a badge is shown, When the next hand is dealt, Then the badge is no longer shown [REQ-043.11]
 - [ ] #6 Given auto-open is off, When a hand ends in which the user's single action was folding preflop, Then no badge is shown; and When a hand ends in which the user called $8 preflop and then folded preflop to a re-raise, Then a badge is shown for that hand [REQ-043.11, REQ-043.13]
+- [ ] #7 Given the auto-open setting, When a hand ends, Then the panel opens only if the setting is on and opensReview is true, and otherwise a summary badge built from the reviewEntries grades is shown
 <!-- AC:END -->
 
 ## Definition of Done
@@ -66,3 +67,9 @@ Plan key: E09-S07 · Dream: limit-holdem-trainer
 - [ ] #11 Story documentation is written and published to Backlog.md
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+AC added from TASK-9.1 follow-up (doc-26).
+<!-- SECTION:NOTES:END -->

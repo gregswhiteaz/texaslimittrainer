@@ -4,7 +4,7 @@ title: Continue to rebuy or leave when I bust with the review open
 status: To Do
 assignee: []
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-17T23:22:00Z'
+updated_date: '2026-11-19T02:21:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -47,6 +47,7 @@ Plan key: E09-S06 · Dream: limit-holdem-trainer
 - [ ] #3 Given the dialog opened from Continue, When the user chooses Rebuy, Then the user's stack is $160 and the next hand is dealt [REQ-007.6]
 - [ ] #4 Given a cash hand ends with the user's stack at $1 or more and the panel open, When the panel is shown, Then its next-hand control reads "Deal next hand" [REQ-007.6]
 - [ ] #5 Given the Rebuy / Leave table dialog opened from Continue, When the user chooses Leave table, Then no further hand is dealt and the session is ended, the same outcome as Leave table in the E03-S08 bust dialog (E10-S01 opens the Session Report) [REQ-007.6]
+- [ ] #6 Given the user's stack is $0 when a reviewed hand ends, When the panel is open, Then the table side shows Continue (to Rebuy/Leave) instead of Deal next hand, using the same held-review state
 <!-- AC:END -->
 
 ## Definition of Done
@@ -64,3 +65,9 @@ Plan key: E09-S06 · Dream: limit-holdem-trainer
 - [ ] #11 Story documentation is written and published to Backlog.md
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+AC added from TASK-9.1 follow-up (doc-26).
+<!-- SECTION:NOTES:END -->

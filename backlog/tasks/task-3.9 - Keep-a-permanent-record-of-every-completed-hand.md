@@ -4,7 +4,7 @@ title: Keep a permanent record of every completed hand
 status: To Do
 assignee: []
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-19T01:10:00Z'
+updated_date: '2026-11-19T02:21:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -55,6 +55,7 @@ Plan key: E03-S09 · Dream: limit-holdem-trainer
 - [ ] #8 Given 1,000 stored hand records dated 2 years ago, When the app is launched and a session is played, Then all 1,000 records are still stored [REQ-052.6]
 - [ ] #9 Given a hand completes, When the Table reports it, Then onHandComplete is called exactly once with the CompletedHand and a repeat completion for the same replay code is ignored, covered by a test
 - [ ] #10 Given two consecutive hands with the same replay code, When each completes, Then onHandComplete fires exactly once per hand, covered by a test
+- [ ] #11 Given the Table passes onHandComplete to useTableSession, When the parent re-renders with a new callback, Then a test shows the 1.5 s next-hand timer is not restarted (callback kept stable via a ref)
 <!-- AC:END -->
 
 ## Definition of Done
@@ -79,4 +80,6 @@ Plan key: E03-S09 · Dream: limit-holdem-trainer
 AC added from TASK-3.1 follow-up (doc-21).
 
 AC added from TASK-3.4 follow-up (doc-25).
+
+AC added from TASK-9.1 follow-up (doc-26).
 <!-- SECTION:NOTES:END -->

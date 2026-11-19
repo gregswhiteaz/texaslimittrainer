@@ -1,0 +1,102 @@
+{
+ "round": 1,
+ "test_suite": {
+  "command": "npm run lint && npm run typecheck && npm test",
+  "result": "PASS",
+  "passed": 260,
+  "failed": 0,
+  "notes": "72 files, 260 passed, 1 skipped (pre-existing). Coverage: all files 96.36% statements / 93.35% branches; advice 99.79%, engine 100%, table 99.52%. Full Playwright suite `npx playwright test` locally: 86 passed (Chromium and WebKit), including e2e/review.spec.ts."
+ },
+ "end_to_end": {
+  "command": "npm run build && npm run preview (Playwright drives http://localhost:4173 in Chromium and WebKit with real timers, following spec section 10 steps 1-5)",
+  "result": "PASS",
+  "expected": "Fold at first turn: result, no panel, next hand about 1.5 s later. Check/call to the end: 'Hand #N review' panel to the right of the table with one entry per decision (street, board cards, You, Advice, text badge), no equity/explanation, heading focused. 10 s: nothing dealt. Close: panel gone, result and red Deal next hand stay. 10 s: nothing dealt. Deal next hand: header counts up. Next reviewed hand: Deal next hand from the open panel closes it and deals.",
+  "actual": "All steps observed in both browsers. Fold hand dealt next hand 1.0-2.5 s later (real clock) with no panel; 'Hand #2 review' opened beside the table with 4 entries (PREFLOP Call $4/Fold Major error; FLOP/TURN/RIVER Check/Check Correct with 3/4/5 board cards), heading focused; 10 s real wait kept Hand #2; Close left 'Hand over' result and Deal next hand; further 10 s kept Hand #2; Deal next hand gave Hand #3; next reviewed hand dealt Hand #4 directly from the open panel. Screenshots inspected: panel right of table, badges with text."
+ },
+ "integrity": {
+  "result": "PASS",
+  "notes": "doit.py test-integrity exit 0. Locked test shas match state.json. Diff vs f6d2660: earlier-story test files unchanged; only tests/support/table-scenarios.ts modified, additively (new imports + new helper/scenarios, authorised by spec section 5). No change under src/engine, src/bots, src/advice or src/table/session.ts. No special-casing of test inputs, hard-coded expected values, mocks of the unit under test or early exits found in src/table/review.ts, ReviewPanel.tsx, Table.tsx, useTableSession.ts. Mutation checks (all reverted, tree clean): dropping the preflop-street condition in opensReview -> tests/table/review.test.ts fails; Close clearing the review state -> e2e/review.spec.ts fails; ignoring the review in holdNextHand -> 2 e2e/review.spec.ts tests fail."
+ },
+ "items": [
+  {
+   "spec": "SPEC-01",
+   "result": "PASS",
+   "evidence": "Named test passes and asserts 9 bot/4 user actions, opensReview true and the exact (street, board, You, Advice) tuples plus seat 5. Holdout: 400 seeded session hands with random user actions (headless, public session + review API): entry count equals the user's non-blind actions in the action log for every hand, order/street/type match the log, every userAction.seat is 5, street/board/You/Advice equal an independent recomputation from views captured by the holdout itself -> 817 entries, 0 mismatches."
+  },
+  {
+   "spec": "SPEC-02",
+   "result": "PASS",
+   "evidence": "Named test deep-compares result with gradeView per decision and labels Correct/Minor error/Correct/Correct. Holdout: same 400 hands, each entry's result JSON-equals gradeView(on the holdout-captured view, action.type) and gradeLabel matches (430 Correct, 184 Minor, 203 Major) -> 0 mismatches. In the browser, 50 rendered entries across 15 panels (2 seeds x 2 browsers) matched a Node replay of the same session for street, cards, 'You: X · Advice: Y' and grade text; badge backgrounds rgb(47,111,224)/rgb(154,91,0)/rgb(163,21,28) per grade."
+  },
+  {
+   "spec": "SPEC-03",
+   "result": "PASS",
+   "evidence": "Named renderToString test passes; it checks aside placement after </section>, heading, Close button, 4 entries' street/cards/You/Advice/grade text and data-grade, banned-word absence, open=false and null cases. Holdout browser: panel text contains none of %, equity, Why, explanation, basis, …, TBD; street labels render uppercase via CSS; Close review button 44x44; panel right of the Table section and inside 1280 px."
+  },
+  {
+   "spec": "SPEC-04",
+   "result": "PASS",
+   "evidence": "Named test passes (lone preflop fold and BB walk -> opensReview false, nextHandDelay 1500). Holdout headless: 206 lone-fold hands and 12 walk hands all opensReview false; 10 multi-decision preflop-ending-in-fold hands opened."
+  },
+  {
+   "spec": "SPEC-05",
+   "result": "PASS",
+   "evidence": "e2e test passes in Chromium and WebKit. Holdout browser (paused clock, 40 hands over 2 seeds x 2 browsers): every lone-fold hand showed no complementary region and no Deal next hand, and the next hand appeared 1500-1550 ms after the result with exactly one replay draw."
+  },
+  {
+   "spec": "SPEC-06",
+   "result": "PASS",
+   "evidence": "e2e test passes in both browsers. Holdout browser: every opened panel was named 'Hand #N review' with the h2 focused; 205 x 50 ms with no input dealt nothing (header and draw count unchanged, result visible, no horizontal scroll); Deal next hand (double-clicked) removed panel and button, header +1, exactly one extra replay draw even after further timer slices; all requests same-origin. Real-timer holdout: axe zero serious/critical with the panel open and after Close, in both browsers."
+  },
+  {
+   "spec": "SPEC-07",
+   "result": "PASS",
+   "evidence": "e2e test passes in both browsers. Holdout browser: Close review -> panel gone, 'Hand over' result and Deal next hand visible, Deal next hand focused; 205 x 50 ms dealt nothing; Enter on the focused button dealt exactly one hand (header +1, draws +1). Leave table while held: back at Home, 10 s of clock dealt nothing (draw count unchanged), and a new game starts at Hand #1 with no stale panel or button."
+  },
+  {
+   "spec": "SPEC-08",
+   "result": "PASS",
+   "evidence": "Named test passes (Call $8/Fold Major error, Fold/Fold Correct; lone raise opens with 1 entry). Holdout browser: hands 'Call $4, Fold' (preflop) opened a 2-entry panel and held; a lone 'Raise to $12' that took the pot opened a 1-entry panel; both matched the Node replay."
+  },
+  {
+   "spec": "SPEC-09",
+   "result": "PASS",
+   "evidence": "Named unit test passes; covers lone fold, lone non-fold, non-preflop fold, STREET_LABELS, board copy, empty list and RangeError. Mutation removing the street check is caught by it."
+  },
+  {
+   "spec": "SPEC-10",
+   "result": "PASS",
+   "evidence": "`npx playwright test` (all files, both browsers): 86 passed, including next-hand, table, action-bar, table-display, home and cards specs; none of those files changed since base commit."
+  },
+  {
+   "spec": "SPEC-11",
+   "result": "PASS",
+   "evidence": "Code read: dealNext draws newCode() once outside the updater and applies dealHand(nextHand(t), code) only when nextStep(t) === 'done'; Table passes holdNextHand || review !== null; Close keeps review (open:false); onHandComplete is a useCallback([]) reading the caller's callback via a ref. Observed: no draw while held for 10 s, exactly one draw per Deal next hand including double-click; mutations of the hold and of Close are caught by e2e."
+  },
+  {
+   "spec": "SPEC-12",
+   "result": "PASS",
+   "evidence": "lint, typecheck, npm test exit 0; coverage 96.36% overall, advice 99.79%, engine 100%; src/table/review.ts imports only advice/engine/table modules (no React/DOM); no engine/bots/advice file changed."
+  },
+  {
+   "spec": "SPEC-13",
+   "result": "PASS",
+   "evidence": "CI run 44441353985 on doit/TASK-9.1 (head b434bcd): attempt 1 failed only at 'Install Playwright system dependencies' (runner dpkg lock held by another apt-get, unrelated to the diff); attempt 2 completed with conclusion success. Every step succeeded: Lint, Typecheck, Build, Test (72 files, 261 tests), Playtest, Install Playwright system dependencies and E2E (84 passed). Story doc: `backlog doc list --plain` lists doc-26 'TASK-9.1: Review each decision of the hand I just played', which records D-1..D-3, D-5, D-6, Q-1 (holding D-4's content), A-1..A-8 and the follow-ups."
+  },
+  {
+   "spec": "SPEC-14",
+   "result": "PASS",
+   "evidence": "git diff f6d2660..HEAD touches nothing under src/engine, src/bots, src/advice; no golden spot or strategy text added; TASK-7.11 and TASK-13.4 both 'To Do' in backlog."
+  }
+ ],
+ "findings": [
+  {
+   "id": "J-1-02",
+   "severity": "LOW",
+   "spec": "SPEC-13",
+   "expected_vs_actual": "Spec asks the story doc to record D-1..D-6; doc-26 records D-4's content under Q-1 but has no entry labelled D-4.",
+   "fix": "Label the Q-1 entry as D-4 (or add a D-4 line) in doc-26."
+  }
+ ],
+ "summary": "All 14 SPEC items pass, each backed by evidence I observed. Headless holdout: 400 seeded hands with random user actions; the review opens exactly when REQ-043.12 says; entries equal the user's decisions in order; each grade equals gradeView on a view the holdout captured itself; no bot entries. Browser holdout in Chromium and WebKit: 4 sessions whose 50 rendered entries matched a Node replay; 10 s holds with nothing dealt; Close moves focus to Deal next hand; Deal next hand deals exactly one hand (double-click and keyboard); no-panel hands still deal at 1.5 s; Leave table while held deals nothing; axe clean; no horizontal scroll. Locally the unit suite, lint, typecheck and full e2e (86 tests) pass. No earlier-story test changed, and the mutations were caught. CI attempt 1 failed on a runner infrastructure problem; attempt 2 of run 44441353985 is green, including E2E. One LOW doc-labelling finding."
+}
