@@ -49,6 +49,61 @@ Local equivalent:
 npm audit --omit=dev --audit-level=high && npm audit --audit-level=critical && npm run lint && npm run typecheck && npm run build && npm test && npm run e2e
 ```
 
+### Dependency updates
+
+`.github/dependabot.yml` makes Dependabot open update pull requests every Monday: one grouped pull
+request for the SHA-pinned GitHub Actions, one grouped pull request for npm minor and patch
+updates, and one pull request per npm major update. CI runs on each of them. Merge them on GitHub,
+then run `git pull` before the next local merge.
+
+### Branch protection
+
+This rule makes GitHub block merging a pull request into `main` until the
+`Lint, typecheck, build, test and e2e` check has passed, while the admin can still push to `main`
+directly:
+
+```sh
+gh api -X PUT repos/{owner}/{repo}/branches/main/protection --input - <<'JSON'
+{
+  "required_status_checks": { "strict": false, "contexts": ["Lint, typecheck, build, test and e2e"] },
+  "enforce_admins": false,
+  "required_pull_request_reviews": null,
+  "restrictions": null
+}
+JSON
+```
+
+Verify it:
+
+```sh
+gh api repos/{owner}/{repo}/branches/main/protection --jq '.required_status_checks.contexts'
+```
+
+Expected output: `["Lint, typecheck, build, test and e2e"]`.
+
+While the repository is private on the free plan, both commands fail with HTTP 403 "Upgrade to
+GitHub Pro or make this repository public to enable this feature.", so the rule is not applied
+yet: run the first command once the repository is public or on GitHub Pro. If the CI job's `name:`
+in `.github/workflows/ci.yml` changes, change the `contexts` entry with it.
+
+### Branch cleanup
+
+After pushing `main`, review the `doit/*` branches already merged into `main`, locally and on
+`origin` (a dry run that deletes nothing):
+
+```sh
+node tools/git/prune-merged-branches.js
+```
+
+Then delete the listed branches locally and on `origin`:
+
+```sh
+node tools/git/prune-merged-branches.js --apply
+```
+
+The checked-out branch is never deleted, and a branch on `origin` is kept until `origin/main`
+contains it.
+
 ## Speed targets
 
 The real speed targets are enforced only by these full-speed commands, run on the reference
