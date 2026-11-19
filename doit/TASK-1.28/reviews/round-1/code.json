@@ -1,0 +1,23 @@
+{"reviewer": "code", "round": 1,
+ "rubric": [
+  {"item": "SPEC-01 correctness", "result": "pass"},
+  {"item": "SPEC-01 test strength", "result": "pass"},
+  {"item": "SPEC-02 correctness", "result": "pass"},
+  {"item": "SPEC-02 test strength", "result": "pass"},
+  {"item": "SPEC-03 correctness", "result": "pass"},
+  {"item": "SPEC-03 test strength", "result": "pass"},
+  {"item": "SPEC-04 correctness", "result": "pass"},
+  {"item": "SPEC-04 test strength", "result": "pass"},
+  {"item": "SPEC-05 correctness", "result": "pass"},
+  {"item": "SPEC-05 test strength", "result": "pass"},
+  {"item": "scope", "result": "pass"},
+  {"item": "concision", "result": "pass"},
+  {"item": "clarity", "result": "pass"}
+ ],
+ "findings": [
+  {"fingerprint": "tests/playtest/type-stripping.acceptance.test.ts:spawn-options-duplicated", "severity": "NIT", "file": "tests/playtest/type-stripping.acceptance.test.ts", "line": 23,
+   "issue": "The SPEC-01 test repeats the spawnSync options object that runWithLoader already builds, only because it passes the relative loader path the spec names.",
+   "evidence": "Lines 23-35 inline `{ cwd: REPO_ROOT, env: sandboxEnv(), encoding: 'utf8', timeout: CHILD_TIMEOUT_MS }`, identical to runWithLoader at lines 11-18.",
+   "fix": "Optional: let runWithLoader take the loader path, or accept as is. The spec asks for the literal relative path, so the duplication is defensible."}
+ ],
+ "summary": "All five SPEC items are implemented as designed. tools/lint/type-stripping.js matches the §5 design exactly. It is registered before headlessBoundaryConfig, and the headless block spreads the shared selectors (D-1). tsconfig sets erasableSyntaxOnly, and sandbox CONFIG_FILES includes the new file. The tests are discriminating. SPEC-01 runs the real loader on the real entry. SPEC-02's negative controls show that the loader rejects both blockers. SPEC-03's src/advice probes would fail if the headless spread were dropped. SPEC-04's dyn-probe would fail if the block order were reversed, and ok-probe catches false positives. I ran both new test files: 4/4 pass. The build-1 gate passes lint, typecheck, test and the scope budget. There are no BLOCKER or MAJOR findings and one NIT."}

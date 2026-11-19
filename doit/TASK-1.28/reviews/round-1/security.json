@@ -1,0 +1,3 @@
+{"reviewer": "security", "round": 1,
+ "findings": [],
+ "summary": "This change only adds lint and typecheck tooling: a new ESLint config module (tools/lint/type-stripping.js), wiring in eslint.config.js and headless-boundary.js, erasableSyntaxOnly in tsconfig.json, one more file copied into the sandbox, and two acceptance tests. No untrusted input reaches any changed code. The tests spawn process.execPath with fixed argument arrays (no shell) and the sanitised sandboxEnv(), with a 30 s timeout. Probe files are fixed strings written to a mkdtemp directory and removed in finally. The no-restricted-syntax regex (/\\.json$/) is anchored and linear, so it carries no ReDoS risk. No secrets, no randomness and no new dependencies. No findings."}
