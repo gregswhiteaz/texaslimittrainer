@@ -1,11 +1,11 @@
 ---
 id: TASK-1.29
 title: Make the CI system-package install survive a busy apt lock
-status: In Progress
+status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-19T02:21:00Z'
-updated_date: '2026-11-19T02:33:00Z'
+updated_date: '2026-11-19T02:48:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -15,6 +15,8 @@ dependencies:
 references:
   - doc-11
   - doc-26
+documentation:
+  - doc-27
 parent_task_id: TASK-1
 priority: high
 type: chore
@@ -29,9 +31,9 @@ Found by the TASK-9.1 judge (2026-11-19): CI run 44441353985 attempt 1 and main'
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Given another apt process holds the dpkg lock when the step starts, When the system-package install runs, Then it waits for the lock to clear (or uses apt's lock timeout) for up to a set limit before installing, instead of failing with exit 100
-- [ ] #2 Given the lock never clears within the limit, When the step gives up, Then it fails with a clear ::error:: line naming the lock, within the step's existing timeout
-- [ ] #3 Given the workflow test, When it checks the install step, Then it asserts the lock handling is present
+- [x] #1 Given another apt process holds the dpkg lock when the step starts, When the system-package install runs, Then it waits for the lock to clear (or uses apt's lock timeout) for up to a set limit before installing, instead of failing with exit 100
+- [x] #2 Given the lock never clears within the limit, When the step gives up, Then it fails with a clear ::error:: line naming the lock, within the step's existing timeout
+- [x] #3 Given the workflow test, When it checks the install step, Then it asserts the lock handling is present
 <!-- AC:END -->
 
 ## Implementation Plan
@@ -52,4 +54,14 @@ Full spec: doit/TASK-1.29/spec.md
 Diagnosis corrected during spec (2026-11-19): the dpkg lock was held by attempt 1's own orphaned apt-get (timed out on a stalled mirror; retry.js's kill got EPERM under sudo), not by unattended-upgrades. Fix waits for the lock inside every retry attempt.
 
 Cross-story change (orchestrator decision on precedent, qa.md Q-1): one additive line in tests/ci/workflow.test.ts:102-104 (TASK-1.19's acceptance test) plus a new lock-handling test. No assertion removed or weakened.
+
+Build: tools/ci/apt-lock.js (reads /proc/locks, waits up to 150 s per attempt, ::error:: names lock and holder); both install steps wrapped inside retry; workflow test one-line edit + new AC#3 test; Linux-CI-only real-flock test (kills flock's process group); README; ~560 lines vs 400 (warn); gate PASS.
+
+CI run 44445933036 (head 119bdc0): success first push; the Linux real-flock test ran and passed (270/270, 0 skipped); install-deps ran through apt-lock in 48 s with no lock held. Judge round 1: PASS 12/12, no blocking. Follow-ups (Step 6a): created TASK-1.30 (sanitise comm, three test gaps, devParts high majors, mirror stall timeouts/cache); AC added to TASK-1.23 (really stop a timed-out sudo'd apt-get).
 <!-- SECTION:NOTES:END -->
+
+## Final Summary
+
+<!-- SECTION:FINAL_SUMMARY:BEGIN -->
+Added tools/ci/apt-lock.js, which runs inside every retry attempt of both Playwright install steps. It reads /proc/locks, waits up to 150 s for the apt/dpkg locks, then runs the install. If a lock never clears it prints an ::error:: line naming the lock and its holder and exits 1. Diagnosis corrected: the holder was attempt 1's own orphaned apt-get (retry.js's kill got EPERM under sudo), not unattended-upgrades. Verified so far: build gate PASS (268 tests passed, 2 Linux-only skipped), review round 1 clean. Judge and green branch CI are pending. Assumptions A-1..A-7 to review. Q-1: a one-line additive edit to TASK-1.19's workflow test plus a new AC#3 test, on precedent; the user may veto it. Risks and follow-ups: retry.js should stop a timed-out sudo'd apt-get (TASK-1.23); slow-mirror stalls remain; sanitise comm output; three MINOR test gaps. Size was 563 lines / 5 files vs 400 (warn).
+<!-- SECTION:FINAL_SUMMARY:END -->
