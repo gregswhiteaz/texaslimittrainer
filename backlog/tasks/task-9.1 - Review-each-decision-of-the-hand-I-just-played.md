@@ -4,7 +4,7 @@ title: Review each decision of the hand I just played
 status: To Do
 assignee: []
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-17T23:22:00Z'
+updated_date: '2026-11-19T01:10:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-0
@@ -52,6 +52,7 @@ Plan key: E09-S01 · Dream: limit-holdem-trainer
 - [ ] #6 Given the panel is open, When the user selects Deal next hand, Then the panel closes and the next hand is dealt with the hand number increased by 1 [REQ-043.7, REQ-024.2]
 - [ ] #7 Given the panel is open, When the user selects Close, Then the panel closes, the hand's result and the Deal next hand control stay visible on the table, and after 10 s no next hand has been dealt until the user selects Deal next hand [REQ-043.7, REQ-043.10]
 - [ ] #8 Given a hand in which the user called $8 preflop and then folded preflop to a re-raise, When the hand ends, Then the panel opens with exactly 2 entries, the call and the fold, and no next hand is dealt until the user chooses [REQ-043.12]
+- [ ] #9 Given the Hand Review panel is open when a hand ends, When the 1.5 s auto-deal would fire, Then useTableSession's holdNextHand holds it, and 'Deal next hand' calls dealNext() (dealHand(nextHand(t), newCode())); the hold remains after Close (REQ-043.10)
 <!-- AC:END -->
 
 ## Definition of Done
@@ -69,3 +70,9 @@ Plan key: E09-S01 · Dream: limit-holdem-trainer
 - [ ] #11 Story documentation is written and published to Backlog.md
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+AC added from TASK-3.4 follow-up (doc-25).
+<!-- SECTION:NOTES:END -->

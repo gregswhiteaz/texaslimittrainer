@@ -4,7 +4,7 @@ title: See each side pot and who wins it
 status: To Do
 assignee: []
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-17T23:22:00Z'
+updated_date: '2026-11-19T01:10:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -43,6 +43,7 @@ Plan key: E03-S07 · Dream: limit-holdem-trainer
 - [ ] #1 Given a three-way all-in where the stacks put in are $20, $60 and $60, When the betting ends, Then the table shows a main pot of $60 and a side pot of $80 separately [REQ-021.5]
 - [ ] #2 Given the short stack wins the main pot and another player wins the side pot, When the hand ends, Then the result shows each winner with the pot they won and its amount [REQ-024.1, REQ-021.5]
 - [ ] #3 Given a hand with no all-in, When the table is shown, Then a single pot total is shown [REQ-021.5]
+- [ ] #4 Given side pots, When the hand result is shown, Then there is one result line per pot from result.awards
 <!-- AC:END -->
 
 ## Definition of Done
@@ -60,3 +61,9 @@ Plan key: E03-S07 · Dream: limit-holdem-trainer
 - [ ] #11 Story documentation is written and published to Backlog.md
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+AC added from TASK-3.4 follow-up (doc-25).
+<!-- SECTION:NOTES:END -->

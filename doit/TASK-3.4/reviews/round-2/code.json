@@ -1,0 +1,25 @@
+{"reviewer": "code", "round": 2,
+ "rubric": [
+  {"item": "SPEC-05 correctness", "result": "pass"},
+  {"item": "SPEC-05 test strength", "result": "pass"},
+  {"item": "round-1 MAJOR tests/table/hand-result.test.ts:full-house-pair-above-trips-untested fixed", "result": "pass"},
+  {"item": "no assertions removed", "result": "pass"},
+  {"item": "scope", "result": "pass"},
+  {"item": "concision", "result": "pass"},
+  {"item": "clarity", "result": "pass"}
+ ],
+ "findings": [
+  {"fingerprint": "tests/table/hand-result.test.ts:high-card-single-example",
+   "severity": "MINOR",
+   "file": "tests/table/hand-result.test.ts", "line": 27,
+   "issue": "Not addressed this round, and it is still open from round 1. The only high-card example lists its top card first, so a mutant that names the first card instead of the highest rank would pass.",
+   "evidence": "The 'review fixes r1' commit touches only the full-house examples.",
+   "fix": "Add ['9c 2d', 'Ks Jd 6c 4h 3s', 'King high']."},
+  {"fingerprint": "src/table/hand-result.ts:unreachable-seat-not-at-table-throw",
+   "severity": "MINOR",
+   "file": "src/table/hand-result.ts", "line": 83,
+   "issue": "Not addressed this round, and it is still open from round 1. This is an untested error path that the spec does not list. Gate fix-3 still shows line 83 as uncovered.",
+   "evidence": "gates/fix-3.json coverage: hand-result.ts uncovered line 83.",
+   "fix": "Cover it with a unit test expecting RangeError('Seat 7 is not at the table'), or remove it."}
+ ],
+ "summary": "The latest commit 85b221c changes no files under src/. It adds two full-house examples to tests/table/hand-result.test.ts: '5h 5s' + '5c Kd Kh 2c 3d' and '5h 5s' + '5c Kd Kh Qc Qd', both expected to be 'Full house, fives over kings'. No test lines were removed. In a scratch copy outside the repo (now deleted), both round-1 mutants are now killed. With withAtLeast(2)[1] the result is 'Full house, fives over fives', and with find(rank => rank < trips) it is 'Full house, fives over undefined'. Unmutated, all 5 tests pass. Gate fix-3 passes test, lint and typecheck. The round-1 MAJOR is fixed. The two round-1 MINORs remain, and there are no new findings."}

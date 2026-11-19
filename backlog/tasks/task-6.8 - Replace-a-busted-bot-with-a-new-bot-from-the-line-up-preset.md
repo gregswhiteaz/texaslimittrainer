@@ -4,7 +4,7 @@ title: Replace a busted bot with a new bot from the line-up preset
 status: To Do
 assignee: []
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-17T23:22:00Z'
+updated_date: '2026-11-19T01:10:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -51,6 +51,7 @@ Plan key: E06-S08 · Dream: limit-holdem-trainer
 - [ ] #6 Given `npm run playtest -- --hands 10000 --seed 42 --lineup mixed`, When bots bust, Then they are replaced by this rule, zero invariant violations are reported and it exits 0 [REQ-007.5]
 - [ ] #7 Given a session recorded as Custom, When 10,000 seeded replacements are tallied, Then the new bots' styles include all four styles (TAG, Calling station, Maniac, Rock) and no other [REQ-007.7]
 - [ ] #8 Given 10,000 seeded replacements with the Mixed preset at 3 players and with the Tough preset at heads-up, When the new bots' styles are tallied, Then Mixed yields only TAG and Calling station (both at least once) and heads-up Tough yields only TAG [REQ-007.8]
+- [ ] #9 Given a bot ends a hand at $0, When nextHand runs, Then the bot is replaced by a new bot (preset style, unique name, $160) instead of being topped up
 <!-- AC:END -->
 
 ## Definition of Done
@@ -68,3 +69,9 @@ Plan key: E06-S08 · Dream: limit-holdem-trainer
 - [ ] #11 Story documentation is written and published to Backlog.md
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+AC added from TASK-3.4 follow-up (doc-25).
+<!-- SECTION:NOTES:END -->

@@ -4,7 +4,7 @@ title: Let a short-stacked player call all-in
 status: To Do
 assignee: []
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-18T18:15:00Z'
+updated_date: '2026-11-19T01:10:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -45,6 +45,7 @@ Plan key: E01-S12 · Dream: limit-holdem-trainer
 - [ ] #4 Given a $8 bet called all-in for $5 and nobody else in, When the hand goes to showdown, Then $3 is returned to the bettor before showdown [REQ-018.4]
 - [ ] #5 Given a bet that every other player folds to, When the hand ends, Then the bet is returned to the bettor and is not counted as won from opponents [REQ-018.4]
 - [ ] #6 Given an all-in call for less than the full bet or an uncalled bet returned, When the invariant checker runs after that action, Then legal-action and chips checks accept it and still catch a wrong amount
+- [ ] #7 Given uncalled bets are returned, When the hand result is shown, Then the 'wins $X' amount reflects only chips won from others plus the winner's matched contribution, and TASK-3.4's uncontested example ($16) is rechecked
 <!-- AC:END -->
 
 ## Definition of Done
@@ -67,4 +68,6 @@ Plan key: E01-S12 · Dream: limit-holdem-trainer
 
 <!-- SECTION:NOTES:BEGIN -->
 AC added from TASK-1.8 follow-up (doc-16).
+
+AC added from TASK-3.4 follow-up (doc-25).
 <!-- SECTION:NOTES:END -->

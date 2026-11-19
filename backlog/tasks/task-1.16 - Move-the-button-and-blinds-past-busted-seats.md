@@ -4,7 +4,7 @@ title: Move the button and blinds past busted seats
 status: To Do
 assignee: []
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-18T18:15:00Z'
+updated_date: '2026-11-19T01:10:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -81,4 +81,6 @@ Plan key: E01-S16 · Dream: limit-holdem-trainer
 AC added from TASK-1.6 follow-up (doc-15): replay-code word 2 is reserved (0) for the game type.
 
 AC added from TASK-1.8 follow-up (doc-16).
+
+TASK-3.4 Q-4 interim top-up to $160 must be removed once this and the other all-in/rebuy stories land: tracked as TASK-3.21.
 <!-- SECTION:NOTES:END -->

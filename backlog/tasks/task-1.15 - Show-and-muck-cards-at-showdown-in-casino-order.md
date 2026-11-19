@@ -4,7 +4,7 @@ title: Show and muck cards at showdown in casino order
 status: To Do
 assignee: []
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-18T06:54:00Z'
+updated_date: '2026-11-19T01:10:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -47,6 +47,7 @@ Plan key: E01-S15 · Dream: limit-holdem-trainer
 - [ ] #5 Given a main pot and one side pot, When showdown is resolved, Then the side pot is resolved and awarded first and the main pot last, each only among its eligible players [REQ-019.8]
 - [ ] #6 Given seat 3 (all-in, eligible only for the main pot) shows the best hand and seat 5's bot hand loses to seat 3 but beats every other side-pot contender, When showdown is resolved, Then seat 5 shows for and wins the side pot, mucks for the main pot, and seat 3 wins the main pot [REQ-019.8, REQ-019.5]
 - [ ] #7 Given a completed hand in which a losing bot mucked at showdown, When showdownOf(state) builds the earlier-showdown entry, Then the mucked seat's hole cards are absent from that entry and from every PlayerView built with it in later hands, while every shown hand is present in showdown order [REQ-019.5, REQ-025.1]
+- [ ] #8 Given a showdown with losing hands that are shown under casino order, When the result is displayed, Then handResultView lists shown losing hands in showdown order after the winners, and mucked hands are never shown
 <!-- AC:END -->
 
 ## Definition of Done
@@ -69,4 +70,6 @@ Plan key: E01-S15 · Dream: limit-holdem-trainer
 
 <!-- SECTION:NOTES:BEGIN -->
 AC#7 added at user request (2026-11-18): follow-up from TASK-1.5 security review r1 (showdownOf copies all of result.showdown; mucked-card exclusion depends on this story).
+
+AC added from TASK-3.4 follow-up (doc-25).
 <!-- SECTION:NOTES:END -->

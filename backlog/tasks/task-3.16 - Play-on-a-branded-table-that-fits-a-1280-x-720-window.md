@@ -4,7 +4,7 @@ title: Play on a branded table that fits a 1280 x 720 window
 status: To Do
 assignee: []
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-19T00:21:00Z'
+updated_date: '2026-11-19T01:10:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-2
@@ -44,6 +44,7 @@ Plan key: E03-S16 · Dream: limit-holdem-trainer
 - [ ] #3 Given the Table styling, When the action bar is styled, Then the decision on which action button (if any) carries the red primary accent is recorded and applied, keeping the learner from being nudged toward one action
 - [ ] #4 Given the action bar moves below the felt, When it renders, Then its group keeps the accessible name 'Your actions' (or e2e/table.spec.ts and e2e/action-bar.spec.ts are updated together), the helpers duplicated between those two specs move to e2e/support/, and the unreachable '?? ""' fallback in checkOrCall is removed
 - [ ] #5 Given a 10-seat table at 1280x720, When it renders, Then every seat fits without overlap or horizontal scroll using slotPosition, and the e2e locator helpers (e2e/support/table-locators.ts) and the helpers duplicated across table specs live in one module
+- [ ] #6 Given the branded table, When a hand ends, Then the result is shown on the felt as in the Review storyboard, and the duplicated e2e helpers (installPausedClock, runFor1000, axeWithPausedClock, nextTurnPaused, countReplayDraws) live in e2e/support/
 <!-- AC:END -->
 
 ## Definition of Done
@@ -70,4 +71,6 @@ AC added from TASK-3.2 follow-up (doc-22).
 AC added from TASK-3.2 follow-up (doc-22).
 
 AC added from TASK-3.3 follow-up (doc-24).
+
+AC added from TASK-3.4 follow-up (doc-25).
 <!-- SECTION:NOTES:END -->

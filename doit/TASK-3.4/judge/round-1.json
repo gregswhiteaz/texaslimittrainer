@@ -1,0 +1,132 @@
+{
+ "round": 1,
+ "test_suite": {
+  "command": "npm test",
+  "result": "PASS",
+  "passed": 254,
+  "failed": 0,
+  "notes": "69 files, 254 passed, 1 skipped (pre-existing). Coverage 97.46% lines overall; engine 100% lines; table 100% lines. Full Playwright suite: 80 passed (Chromium + WebKit). Lint and typecheck exit 0."
+ },
+ "end_to_end": {
+  "command": "npm run build && npm run preview (Playwright webServer), New game -> Start game, play consecutive hands on a paused clock in Chromium and WebKit",
+  "result": "PASS",
+  "expected": "Result block with winner lines (hand name + winner cards only at showdown), next hand 1.5 s later with no input, Hand #n increments, button one seat clockwise, stacks carried, seats below $96 reset to $160, Leave during result deals nothing",
+  "actual": "26 consecutive hands in each browser matched an independent Node reference hand by hand: result lines, status cards (winners only), face-up cards outside the result (user's 2 + board only), final stacks, stacks and dealer seat at the user's first turn, Pot $0. Every result->deal gap was within [1400,1600] ms; nothing dealt at +1400 ms; one replay-code draw per hand. The user's seat dropped below $96 and was reset to exactly $160 before hand 13, nobody else changed. axe clean at a showdown and at a fold result; no horizontal scroll; same-origin only. Leave table 50 ms before the deal: Home h1 focused, no further draw over 4 s, a new game restarts at Hand #1 with the button on seat 6."
+ },
+ "integrity": {
+  "result": "PASS",
+  "notes": "doit.py test-integrity exit 0. Diff vs fd8a5df touches only the 15 spec-listed files; earlier-story test edits are exactly E1-E4 (e2e/table.spec.ts E1/E2, e2e/action-bar.spec.ts E3, tests/support/table-scenarios.ts E4 plus new helpers); no assertion removed. No special-casing, hard-coded expected values, mocks of the unit under test or early returns in src. TEMPORARY (TASK-3.4 Q-4) comment sits directly above the top-up line in nextHand. Mutations (top-up < to <=, button offset, full-house pair rank) were each caught by the suite and reverted; src/, tests/, e2e/ clean."
+ },
+ "items": [
+  {
+   "spec": "SPEC-01",
+   "result": "PASS",
+   "evidence": "Named test passes; asserts Ben wins $122, Pair of kings, cards Kd 7c exactly, Pot $0, $222, storyboard You win $54 / Pair of nines. Holdout: 3000 random-session hands rendered via TableView, every showdown winner line, hand name and status cards matched an independent oracle; scripted KINGS scene axe clean in both browsers."
+  },
+  {
+   "spec": "SPEC-02",
+   "result": "PASS",
+   "evidence": "Named test passes (no hand-name, no ' · ', no svg in status, no 2c/3h anywhere). Holdout: ~990 fold-outs in random sessions had no hand name, no cards and no ' · ' in the status; no folded bot card face-up anywhere."
+  },
+  {
+   "spec": "SPEC-03",
+   "result": "PASS",
+   "evidence": "Named test passes (Ava $30 then Ben $30, Straight, own cards, Cal absent). Holdout: 59 split pots in random sessions listed in engine award order with summed shares; split scene fits 1280x720 with no horizontal scroll and is axe clean in Chromium and WebKit."
+  },
+  {
+   "spec": "SPEC-04",
+   "result": "PASS",
+   "evidence": "e2e/next-hand.spec.ts passes in Chromium and WebKit. Holdout live run: showdown and fold results axe clean, status holds only winners' cards, 7 face-up cards outside the result at showdown, all requests same-origin."
+  },
+  {
+   "spec": "SPEC-05",
+   "result": "PASS",
+   "evidence": "Named test passes with all worked examples plus pair-above-trips full houses. Holdout: 30,000 random 5/6/7-card hands named identically by an independent brute-force namer (category also matched handCategory); crafted wheel, steel wheel, three pairs, two trips, trips+pair above, quads+trips, 7-card royal all correct; 4, 8, 0 cards and duplicates throw RangeError."
+  },
+  {
+   "spec": "SPEC-06",
+   "result": "PASS",
+   "evidence": "Named test passes (null states, only Ben's cards in JSON, 31/30 order, summed awards, You win, no replay code, import scan). Holdout: over 3000 hands winners equal engine awards summed per seat in first-appearance order; status never contains the replay code."
+  },
+  {
+   "spec": "SPEC-07",
+   "result": "PASS",
+   "evidence": "Named e2e test passes in both browsers. Holdout: 25 result->deal gaps per browser all within [1400,1600] ms, no deal or draw at +1400 ms, header Hand #n+1, dealer and stacks per Node reference."
+  },
+  {
+   "spec": "SPEC-08",
+   "result": "PASS",
+   "evidence": "Named test passes. Holdout (StrictMode harness, both browsers): hold right after the result kept Hand #1 for 5 s with no draw; release dealt 1400-1600 ms after release; hold toggled 1 s into the wait restarted a fresh 1.5 s; hold set before the hand ended still fired onHandComplete and dealt nothing."
+  },
+  {
+   "spec": "SPEC-09",
+   "result": "PASS",
+   "evidence": "Named test passes. Holdout: 3000 hands, every carried stack equals the final stack (or 160 if < 96), button = previous+1 cyclic, config/seats unchanged, new startingStacks equal carried stacks; 6 non-contiguous seats [2,4,7,8,9,10] button 9 -> 10,2,4,7,8,9,10,2,4."
+  },
+  {
+   "spec": "SPEC-10",
+   "result": "PASS",
+   "evidence": "Named test passes; comment verified in diff. Holdout at $10/$20: finals [239,240,0,400,400,x] -> [400,240,400,400,400,x]; names/styles kept; input not mutated; deal succeeds. 131 top-ups in random sessions, all < 96 -> exactly 160, no others."
+  },
+  {
+   "spec": "SPEC-11",
+   "result": "PASS",
+   "evidence": "Named test passes. Holdout: 50 sessions x 60 hands with a random fold/raise/call user, no throw, handNumber 1..60, chip total = 960 + top-ups after every hand."
+  },
+  {
+   "spec": "SPEC-12",
+   "result": "PASS",
+   "evidence": "Named test passes; diff shows ?? 0 removed and dealtIn throws 'Seat <n> is not dealt in'."
+  },
+  {
+   "spec": "SPEC-13",
+   "result": "PASS",
+   "evidence": "Named test passes. Holdout: tableView header after every nextHand ends 'Hand #k+1' over 3000 hands; live app header counted to Hand #26 in both browsers; Pot $0 at every result."
+  },
+  {
+   "spec": "SPEC-14",
+   "result": "PASS",
+   "evidence": "Named e2e test passes in both browsers. Holdout: Leave clicked 1450 ms into the wait -> Home h1 focused, Table region gone, draw count stays 1 over 4 s, no page errors, a new game starts at Hand #1 with dealer on seat 6."
+  },
+  {
+   "spec": "SPEC-15",
+   "result": "PASS",
+   "evidence": "Named test passes (deep-frozen seated/bot/user tables throw 'Not a next-hand step' unchanged; minimumStack 96 / 240; createHand rejects 95). Holdout: nextHand throws RangeError at every in-progress step of a played hand, leaves a completed table unchanged (JSON compare), createHand accepts 96 and rejects 95 with 'at least 96'."
+  },
+  {
+   "spec": "SPEC-16",
+   "result": "PASS",
+   "evidence": "Full Playwright suite 80/80 in Chromium + WebKit; locked Vitest files pass unchanged (test-integrity exit 0); diffs of e2e/table.spec.ts and e2e/action-bar.spec.ts contain only E1-E3."
+  },
+  {
+   "spec": "SPEC-17",
+   "result": "PASS",
+   "evidence": "npm run lint exit 0, npm run typecheck exit 0, npm test exit 0; coverage 97.46% lines overall, engine 100%; hand.ts change is only minimumStack."
+  },
+  {
+   "spec": "SPEC-18",
+   "result": "PASS",
+   "evidence": "npm run playtest -- --hands 10000 --seed 42 -> Invariant violations: 0, exit 0."
+  },
+  {
+   "spec": "SPEC-19",
+   "result": "PASS",
+   "evidence": "CI run 44433546149 on head 85b221c: completed success, including Lint, Typecheck, Build, Test, Playtest and E2E steps. backlog doc list shows doc-25 for TASK-3.4 with Q-1..Q-4 answers, D-2 edits E1-E4 and the §13 follow-ups."
+  },
+  {
+   "spec": "SPEC-20",
+   "result": "PASS",
+   "evidence": "No file under src/advice or golden spots in the diff; no strategy text added. TASK-7.11 and TASK-13.4 are both To Do."
+  }
+ ],
+ "findings": [
+  {
+   "id": "J-1-01",
+   "severity": "LOW",
+   "spec": "SPEC-19",
+   "expected_vs_actual": "Spec asks the story doc to record D-1..D-6 with their Q answers. The doc records Q-1..Q-4 and D-2 explicitly but does not label D-1, D-3, D-4, D-5 or D-6 (D-6, the fixed 1500 ms delay regardless of speed, is not mentioned as a decision).",
+   "fix": "Add D-ids next to the Q answers in doc-25 and a line for D-6 (NEXT_HAND_DELAY_MS fixed at 1500 for every speed)."
+  }
+ ],
+ "summary": "All 20 SPEC items pass. Suite 254/0, Playwright 80/80, lint/typecheck clean, playtest 0 violations, CI green on 85b221c including E2E. Holdout: independent hand-namer over 30k hands, 3000-hand random sessions vs engine awards, 26-hand live runs in Chromium and WebKit matching a Node reference (timing, stacks, button, top-up, winners-only cards), hold/onHandComplete harness under StrictMode, Leave during the wait. One LOW doc finding; no blocking findings."
+}
