@@ -5,6 +5,7 @@ import { expect, test, type Page } from '@playwright/test';
 import { expectNoSeriousAxeViolations } from './support/axe';
 import { buildCardGallery, openCardGallery } from './support/card-gallery-bundle';
 import { stubReplayWords } from './support/table-harness-bundle';
+import { expectToAct } from './support/table-locators';
 
 const ORIGIN = 'http://localhost:4173';
 /** TASK-3.1's pinned replay code words: 9e3779b9 00000001 00000002 00000003. */
@@ -240,7 +241,7 @@ test('start game deals the first hand at the default table', async ({ page }) =>
   )) {
     expect(code).toMatch(/^[2-9TJQKA][cdhs]$/);
   }
-  await expect(tableSection(page)).toHaveAttribute('data-to-act', '5');
+  await expectToAct(page, '5');
   const actions = page.getByRole('group', { name: 'Your actions' });
   await expect(actions.locator('button:not(:disabled)').first()).toBeVisible();
   await expect(tableSection(page)).toHaveCount(1);

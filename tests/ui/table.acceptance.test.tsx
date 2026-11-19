@@ -28,7 +28,10 @@ function expectSeatedTable(html: string, stack: string): void {
   expect(rows.map((r) => r.stack)).toEqual(Array(6).fill(stack));
   expect(rows.map((r) => r.user)).toEqual([false, false, false, false, false, true]);
   expect(html).toMatch(/<section aria-label="Table"/);
-  expect(html).not.toMatch(/<(input|select|textarea|a|button)[\s>]/);
+  expect(html.match(/<button[\s>]/g)).toHaveLength(1);
+  expect(
+    html.replace(/<button type="button" class="table-leave">Leave table<\/button>/, ''),
+  ).not.toMatch(/<(input|select|textarea|a|button)[\s>]/);
   expect(html).not.toMatch(/data-card=/);
 }
 

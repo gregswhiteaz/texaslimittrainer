@@ -94,12 +94,18 @@ export function PlayingCard({ card, deck }: PlayingCardProps): React.JSX.Element
   );
 }
 
-export function CardBack(): React.JSX.Element {
+export interface CardBackProps {
+  /** 'small' is the half-size seat marker (A-1); the artwork scales with it. */
+  size?: 'standard' | 'small';
+}
+
+export function CardBack({ size = 'standard' }: CardBackProps): React.JSX.Element {
+  const scale = size === 'small' ? 0.5 : 1;
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width={CARD_WIDTH}
-      height={CARD_HEIGHT}
+      width={CARD_WIDTH * scale}
+      height={CARD_HEIGHT * scale}
       viewBox={VIEW_BOX}
       role="img"
       aria-label="Face-down card"

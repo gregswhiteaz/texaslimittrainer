@@ -40,11 +40,13 @@ export function buyIn(stake: Stake): number {
   return 20 * stake.bigBet;
 }
 
+/** REQ-009.2 style names; stored as-is in SessionConfig (D-2/Q-1). All play tagPolicy until E06. */
+export type BotStyle = 'TAG' | 'Calling station' | 'Maniac' | 'Rock';
 export interface SessionSeat {
   readonly seat: SeatNumber;
   readonly name: string;
   readonly kind: 'user' | 'bot';
-  readonly style: 'TAG' | null;
+  readonly style: BotStyle | null;
 }
 export const USER_SEAT: SeatNumber = 5;
 export const DEFAULT_BUTTON: SeatNumber = 6;
@@ -108,6 +110,8 @@ export interface TableState {
   readonly hand: HandState | null;
   readonly replayCode: ReplayCode | null;
   readonly userDecisions: readonly UserDecision[];
+  /** 1-based number of the current hand (the next hand before the deal). */
+  readonly handNumber: number;
 }
 export type NextStep = 'deal' | 'bot' | 'user' | 'done';
 
@@ -122,6 +126,7 @@ export function seatSession(input?: Partial<SessionConfig>): TableState {
     hand: null,
     replayCode: null,
     userDecisions: [],
+    handNumber: 1,
   };
 }
 

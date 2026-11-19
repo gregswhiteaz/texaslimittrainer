@@ -1,8 +1,8 @@
 import {
   buyIn,
+  type BotStyle,
   type GameType,
   type SessionConfig,
-  type SessionSeat,
   type Speed,
 } from '../../table/session';
 import { useHeadingFocus } from '../useHeadingFocus';
@@ -15,7 +15,12 @@ export interface GameConfigScreenProps {
 
 const GAME_TYPE_LABELS: Record<GameType, string> = { cash: 'Cash game' };
 const SPEED_LABELS: Record<Speed, string> = { rapid: 'Rapid' };
-const STYLE_LABELS: Record<NonNullable<SessionSeat['style']>, string> = { TAG: 'Tight-aggressive' };
+const STYLE_LABELS: Record<BotStyle, string> = {
+  TAG: 'Tight-aggressive',
+  'Calling station': 'Calling station',
+  Maniac: 'Maniac',
+  Rock: 'Rock',
+};
 const TABLE_SIZE_NAMES: Partial<Record<number, string>> = {
   2: 'heads-up',
   6: '6-max',

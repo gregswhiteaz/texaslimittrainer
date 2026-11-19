@@ -29,6 +29,11 @@ export default function App(): React.JSX.Element {
         />
       );
     case 'table':
-      return <TableScreen config={screen.config} />;
+      return (
+        <TableScreen
+          config={screen.config}
+          onLeave={() => setScreen({ name: 'home', returned: true })}
+        />
+      );
   }
 }

@@ -1,6 +1,7 @@
 import { expect, test, type Page } from '@playwright/test';
 import { expectNoSeriousAxeViolations } from './support/axe';
 import { stubReplayWords } from './support/table-harness-bundle';
+import { expectToAct } from './support/table-locators';
 
 const ORIGIN = 'http://localhost:4173';
 /** TASK-3.1's pinned replay code words: 9e3779b9 00000001 00000002 00000003. */
@@ -153,17 +154,17 @@ test('the bar is disabled and submits nothing off-turn or after the hand', async
   await installPausedClock(page);
   await openApp(page);
   await runFor1000(page);
-  await expect(tableSection(page)).toHaveAttribute('data-to-act', '5');
+  await expectToAct(page, '5');
   expect(await actionCount(page)).toBe(4);
 
   await clickAction(page, 'Call $4');
   expect(await actionCount(page)).toBe(5);
-  await expect(tableSection(page)).toHaveAttribute('data-to-act', '6');
+  await expectToAct(page, '6');
   expect(await buttonTexts(page)).toEqual(IDLE);
   await expectAll(page, 'disabled');
   await forceClickEvery(page);
   expect(await actionCount(page)).toBe(5);
-  await expect(tableSection(page)).toHaveAttribute('data-to-act', '6');
+  await expectToAct(page, '6');
   expect(await buttonTexts(page)).toEqual(IDLE);
 
   // Real timers for the finished hand: a fresh context has no fake clock.
@@ -182,7 +183,7 @@ test('the bar is disabled and submits nothing off-turn or after the hand', async
   await forceClickEvery(real);
   await real.waitForTimeout(500);
   expect(await actionCount(real)).toBe(finalCount);
-  await expect(tableSection(real)).toHaveAttribute('data-to-act', '');
+  await expectToAct(real, '');
   await expectAll(real, 'disabled');
   await context.close();
 });
@@ -199,7 +200,7 @@ test('single key presses take no action', async ({ page }) => {
   await page.waitForTimeout(500);
 
   expect(await actionCount(page)).toBe(count);
-  await expect(tableSection(page)).toHaveAttribute('data-to-act', '5');
+  await expectToAct(page, '5');
   expect(await buttonTexts(page)).toEqual(texts);
   await expectAll(page, 'enabled');
 });
@@ -219,7 +220,7 @@ test('every action button is at least 44 by 44 px', async ({ page }) => {
 
   await runFor1000(page);
   await expect(tableSection(page)).toHaveAttribute('data-street', 'flop');
-  await expect(tableSection(page)).toHaveAttribute('data-to-act', '5');
+  await expectToAct(page, '5');
   await expectAll(page, 'enabled');
   await expectMinimumSize(page, 2);
 });
@@ -237,7 +238,7 @@ test('action bar is axe clean and makes no outside requests', async ({ page }) =
   await expectAll(page, 'disabled');
   await axeWithPausedClock(page);
   expect(await actionCount(page)).toBe(5);
-  await expect(tableSection(page)).toHaveAttribute('data-to-act', '6');
+  await expectToAct(page, '6');
 
   for (let slice = 0; slice < 400 && (await handOver(page).count()) === 0; slice++) {
     const enabled = page.locator('[aria-label="Your actions"] button:not(:disabled)');

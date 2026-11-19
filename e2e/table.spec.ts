@@ -5,13 +5,14 @@ import {
   openTableHarness,
   stubReplayWords,
 } from './support/table-harness-bundle';
+import { expectToAct } from './support/table-locators';
 
 const ORIGIN = 'http://localhost:4173';
 /** Pinned replay code words for every test (A-11): 9e3779b9 00000001 00000002 00000003. */
 const WORDS = [0x9e3779b9, 1, 2, 3];
 const NAMES = ['Ava', 'Ben', 'Cal', 'Dee', 'Eli', 'You'];
 /** The idle (disabled) set plus the exact-amount labels (TASK-3.2 D-4). */
-const BUTTON_NAME = /^(Fold|Check|Call|Raise|Call \$\d+|Bet \$\d+|Raise to \$\d+)$/;
+const BUTTON_NAME = /^(Fold|Check|Call|Raise|Call \$\d+|Bet \$\d+|Raise to \$\d+|Leave table)$/;
 const BOARD_BY_STREET: Record<string, number> = { preflop: 0, flop: 3, turn: 4, river: 5 };
 
 interface CountChange {
@@ -46,7 +47,10 @@ function recordTable(): void {
       lastCount = count;
       record.changes.push({
         count: Number(count),
-        toAct: section.getAttribute('data-to-act') ?? '',
+        toAct:
+          [...section.querySelectorAll('li[data-seat]')]
+            .find((li) => li.textContent?.includes('To act'))
+            ?.getAttribute('data-seat') ?? '',
         at: now,
       });
     }
@@ -192,7 +196,9 @@ test('check or call at every decision plays to showdown with my cards face up', 
     expect(cards).not.toContain('back');
     dealt ??= cards;
     expect(cards).toEqual(dealt);
-    await expect(tableSection(page).locator('svg[data-card]')).toHaveCount(2 + board);
+    await expect(tableSection(page).locator('svg[data-card]:not([data-card="back"])')).toHaveCount(
+      2 + board,
+    );
 
     await checkOrCall(page);
   }
@@ -203,7 +209,7 @@ test('check or call at every decision plays to showdown with my cards face up', 
   await expect(handOver(page)).toBeVisible();
   expect(await userCards(page)).toEqual(dealt);
   await expect(page.getByRole('group', { name: 'Board' }).locator('svg[data-card]')).toHaveCount(5);
-  await expect(tableSection(page).locator('svg[data-card]')).toHaveCount(7);
+  await expect(tableSection(page).locator('svg[data-card]:not([data-card="back"])')).toHaveCount(7);
 
   const finalCount = await actionCount(page);
   await page.waitForTimeout(3000);
@@ -222,7 +228,7 @@ test('after a preflop fold the bots finish the hand without me', async ({ page }
   await clickAction(page, 'Fold');
   await expect(handOver(page)).toBeVisible();
 
-  await expect(tableSection(page)).toHaveAttribute('data-to-act', '');
+  await expectToAct(page, '');
   await expectDisabledBar(page);
   expect(await userCards(page)).toEqual(dealt);
   const { changes, turns } = await page.evaluate(() => window.__table);
@@ -246,7 +252,7 @@ test('ten idle minutes on my turn change nothing', async ({ page }) => {
   await expect(yourActions(page)).toBeVisible();
   expect(await buttons.allTextContents()).toEqual(names);
   for (const button of await buttons.all()) await expect(button).toBeEnabled();
-  await expect(tableSection(page)).toHaveAttribute('data-to-act', '5');
+  await expectToAct(page, '5');
   expect(await actionCount(page)).toBe(count);
 });
 
