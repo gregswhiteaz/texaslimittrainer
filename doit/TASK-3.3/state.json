@@ -4,17 +4,17 @@
   "branch": "doit/TASK-3.3",
   "base_commit": "82453f98f6c8461a5238e7e71ba0b8012f4d8ab0",
   "started": "2026-11-18T16:33:21",
-  "review_round": 0,
+  "review_round": 1,
   "judge_round": 0,
   "sendbacks": 0,
-  "gate_runs": 1,
+  "gate_runs": 2,
   "questions": 4,
   "assumptions": 8,
   "escalations": 0,
   "item_failures": {},
   "locked_tests": {
     "e2e/table-display.spec.ts": "a4e06772703118a994dcb50ee45769f8b91ec546ac246622800fa6c416858ce2",
-    "tests/ui/table-display.acceptance.test.tsx": "2b5d21118672f202d81cf117bc810bfaeb1a799da26b4759f01a324899a5583d"
+    "tests/ui/table-display.acceptance.test.tsx": "467925921b15034198b3f2b5f388b9081d8826046003ba58ae34d114ca17d5db"
   },
   "test_snapshot": {
     "e2e/table-display.spec.ts": {
@@ -33,8 +33,8 @@
       "skips": 0
     },
     "tests/ui/table-display.acceptance.test.tsx": {
-      "sha": "2b5d21118672f202d81cf117bc810bfaeb1a799da26b4759f01a324899a5583d",
-      "asserts": 57,
+      "sha": "467925921b15034198b3f2b5f388b9081d8826046003ba58ae34d114ca17d5db",
+      "asserts": 60,
       "skips": 0
     },
     "e2e/action-bar.spec.ts": {
@@ -423,7 +423,35 @@
       "skips": 0
     }
   },
-  "history": [],
+  "history": [
+    {
+      "t": "2026-11-18T17:07:27",
+      "event": "unlock",
+      "file": "tests/ui/table-display.acceptance.test.tsx",
+      "reason": "Code review r1 MAJOR street-line-hidden-at-zero-untested: add an assertion that no 'This street' line shows at $0 (strengthens only)"
+    }
+  ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-3.3",
-  "spec_sha256": "547e33a3d5bdd57fce057d035629e396379080213c78a55e72b052153ed8d4a1"
+  "spec_sha256": "547e33a3d5bdd57fce057d035629e396379080213c78a55e72b052153ed8d4a1",
+  "review_findings": {
+    "1": 5
+  },
+  "relock_pending": [],
+  "brief_history": {
+    "tests/table/table-view.test.ts:position-button-rotation-untested": [
+      "review r1"
+    ],
+    "tests/table/table-view.test.ts:raise-text-amount-indistinguishable-from-added": [
+      "review r1"
+    ],
+    "tests/table/table-view.test.ts:latest-record-rule-untested": [
+      "review r1"
+    ],
+    "tests/table/table-view.test.ts:showdown-keeps-river-action-untested": [
+      "review r1"
+    ],
+    "tests/ui/table-display.acceptance.test.tsx:street-line-hidden-at-zero-untested": [
+      "review r1"
+    ]
+  }
 }

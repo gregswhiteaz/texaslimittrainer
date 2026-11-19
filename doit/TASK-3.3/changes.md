@@ -12,8 +12,8 @@
 
 ## Tests
 - `tests/support/table-scenarios.ts` — new: scripted storyboard hand (PREFLOP … SHOWDOWN, full history) and the seat-1 session; shared by Vitest and the e2e scene harness.
-- `tests/table/table-view.test.ts` — new: SPEC-16 unit tests of the view model.
-- `tests/ui/table-display.acceptance.test.tsx` — new: SPEC-01, 02, 03, 05, 06, 07, 09, 11, 13.
+- `tests/table/table-view.test.ts` — new: SPEC-16 unit tests of the view model (FIX round 1: button rotation, raise-to amount, latest record on a street, showdown keeps river actions).
+- `tests/ui/table-display.acceptance.test.tsx` — new: SPEC-01, 02, 03, 05, 06, 07, 09, 11, 13 (FIX round 1: no street line at $0).
 - `e2e/table-display.spec.ts` — new: SPEC-04, 08, 10, 12, 14, 15, 18 (Chromium + WebKit).
 - `e2e/support/table-scenes.tsx` — new: test-only page rendering a named scripted scene with the shipped CSS (`?inline`).
 - `e2e/support/table-harness-bundle.ts` — shared IIFE build helper; `buildTableScenes()` and `openTableScene()`.

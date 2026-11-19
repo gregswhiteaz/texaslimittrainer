@@ -61,6 +61,7 @@ describe('Table view model', () => {
       'Bet $4',
       'Raised to $8',
     ]);
+    expect(lastActionText({ ...record('raise', 8), added: 4 })).toBe('Raised to $8');
 
     const names = (seats: number[], button: number): string[] =>
       seats.map((seat) => positionName(seat, seats, button));
@@ -72,7 +73,21 @@ describe('Table view model', () => {
       'Cutoff',
       'Button',
     ]);
+    const H = 'Hijack';
+    const C = 'Cutoff';
+    const B = 'Button';
+    const S = 'Small blind';
+    const G = 'Big blind';
+    const U = 'Under the gun';
+    expect([1, 2, 3, 4, 5].map((button) => names([1, 2, 3, 4, 5, 6], button))).toEqual([
+      [B, S, G, U, H, C],
+      [C, B, S, G, U, H],
+      [H, C, B, S, G, U],
+      [U, H, C, B, S, G],
+      [G, U, H, C, B, S],
+    ]);
     expect(names([1, 2, 3], 3)).toEqual(['Small blind', 'Big blind', 'Button']);
+    expect(names([1, 2, 3], 1)).toEqual(['Button', 'Small blind', 'Big blind']);
     expect(names([1, 2, 3, 4], 4)).toEqual(['Small blind', 'Big blind', 'Cutoff', 'Button']);
     expect(names([1, 2, 3, 4, 5, 6, 7, 8, 9], 9)).toEqual([
       'Small blind',
@@ -105,6 +120,9 @@ describe('Table view model', () => {
     expect(seatOf(FLOP_BET, 5).action).toBeNull();
     expect(seatOf(FLOP_BET, 5).toAct).toBe(true);
     expect(tableView(SHOWDOWN).seats.map((s) => s.action)).not.toContain('Waiting');
+    expect(seatOf(SHOWDOWN, 2).action).toBe('Checked');
+    expect(seatOf(SHOWDOWN, 5).action).toBe('Checked');
+    expect(seatOf(SHOWDOWN, 6).action).toBe('Folded');
     expect(tableView(SHOWDOWN).seats.some((s) => s.toAct)).toBe(false);
 
     const seated = tableView(seatSession());
@@ -139,6 +157,7 @@ describe('Table view model', () => {
     expect(bb.toAct).toBe(true);
     expect(bb.action).toBe('Big blind $4');
     expect(bb.streetAmount).toBe(4);
+    expect(seatOf({ ...table, hand }, 1).action).toBe('Called $2');
   });
 
   it('the user seat carries position and cards; bots carry slot and card back', () => {

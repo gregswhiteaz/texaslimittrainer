@@ -123,6 +123,9 @@ describe('Table display acceptance', () => {
     expect(part(seatItem(preflop, 2).body, 'stack')).toBe('$154');
     expect(part(seatItem(flop, 6).body, 'action')).toBe('Waiting');
     expect(part(seatItem(flop, 6).body, 'stack')).toBe('$221');
+    expect(part(seatItem(flop, 6).body, 'street')).toBeNull();
+    expect(part(seatItem(flop, 1).body, 'street')).toBeNull();
+    expect(render(seatSession())).not.toContain('data-part="street"');
   });
 
   it('the user seat shows both cards face up, stack and position name at seat 5 and seat 1', () => {

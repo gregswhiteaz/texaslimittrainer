@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-18T23:52:00Z'
+updated_date: '2026-11-19T00:02:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-0
@@ -93,4 +93,6 @@ AC added from TASK-3.5 follow-up (doc-20).
 AC added from TASK-3.1 follow-up (doc-21).
 
 Cross-story change (orchestrator D-5 on precedent, AC#10): exactly the 8 test edits listed in spec §5 D-5 across e2e/table.spec.ts, e2e/action-bar.spec.ts, e2e/home.spec.ts and tests/ui/table.acceptance.test.tsx. No other assertion may be removed or weakened.
+
+Build: src/table/table-view.ts (headless view model from the user's PlayerView only), BotStyle union (Q-1), handNumber, TableView split, seats clockwise from user at bottom centre, To act badge + D disc (Q-3), past-tense seat text (Q-2), small CardBack 30x42, Leave table -> Home (Q-4); 8 D-5 test edits only; e2e 74 passed Chromium + WebKit; playtest 0 violations; gate PASS. Screenshots: doit/TASK-3.3/table-scene.png, table-live.png.
 <!-- SECTION:NOTES:END -->
