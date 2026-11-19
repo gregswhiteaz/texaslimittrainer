@@ -1,0 +1,62 @@
+[
+  {
+    "id": "SPEC-01",
+    "verifies": "AC#1",
+    "verification": "acceptance `tests/advice/chart-print.acceptance.test.ts::chart:print prints every spot as a 13x13 grid with raise and continue percentages`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-02",
+    "verifies": "AC#2",
+    "verification": "acceptance `tests/advice/six-max-chart.acceptance.test.ts::openers continue against a re-raise with 80 to 90 percent of their opening range`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-03",
+    "verifies": "AC#2, AC#6",
+    "verification": "acceptance `tests/advice/six-max-chart.acceptance.test.ts::re-raise spots raise only premium hands and SB and BB keep their own ranges`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-04",
+    "verifies": "AC#4",
+    "verification": "acceptance `tests/advice/six-max-chart.acceptance.test.ts::BB blind defence has no offsuit inversion`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-05",
+    "verifies": "AC#3, AC#4, AC#6",
+    "verification": "acceptance `tests/advice/six-max-chart.acceptance.test.ts::no spot plays a weaker hand more firmly than a hand that dominates it`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-06",
+    "verifies": "AC#2, AC#3",
+    "verification": "manual Review checklist (reviewer and judge). Walk the \u00a75 route table spot by spot against the JSON",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-07",
+    "verifies": "AC#5",
+    "verification": "acceptance `tests/advice/six-max-chart.acceptance.test.ts::HJ raise-and-calls text says we close the action and names only the suited aces it calls`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-08",
+    "verifies": "AC#6",
+    "verification": "command `npm test` (exit 0, no `ERROR: Coverage` line) and `git diff --stat $(jq -r .base_commit doit/TASK-7.19/state.json) -- tests/advice/six-max-chart.test.ts tests/advice/preflop.acceptance.test.ts tests/advice/grade.acceptance.test.ts tests/bots/` (only `six-max-chart.test.ts`, 1\u20133 lines)",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-09",
+    "verifies": "AC#1, AC#6",
+    "verification": "command `npm run lint && npm run typecheck && npm test && git diff $(jq -r .base_commit doit/TASK-7.19/state.json) -- package.json`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-10",
+    "verifies": "AC#2, AC#6",
+    "verification": "manual The orchestrator checks `backlog task view TASK-7.19 --plain` for the sign-off note before Done.",
+    "status": "pending"
+  }
+]

@@ -4,6 +4,7 @@ title: Decide whether to split preflop spots by raiser position and re-raise typ
 status: To Do
 assignee: []
 created_date: '2026-11-18T16:24:00Z'
+updated_date: '2026-11-19T03:03:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -29,3 +30,9 @@ Follow-up from TASK-7.2 Q-4. REQ-032.2 fixes 26 spots, so blind defence and faci
 <!-- AC:BEGIN -->
 - [ ] #1 Given options (split by raiser position, split re-raise by open-vs-cold, keep 26 spots), When the user decides, Then the decision is recorded as a Backlog decision and REQ-032.2 and the chart format are updated if needed
 <!-- AC:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+Evidence from TASK-7.19 (user Q-1/Q-3, 2026-11-19): re-raise spots now continue with 80-90% of each opener's range, which suits 'my open was 3-bet' but makes cold 3-bet routes loose. For example, CO facing a UTG open and an HJ 3-bet continues ~22% of hands from an uninvested seat. Splitting the spot would fix this.
+<!-- SECTION:NOTES:END -->
