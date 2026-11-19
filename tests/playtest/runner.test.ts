@@ -15,6 +15,7 @@ import {
   type PlayedHand,
   type PolicyFactory,
 } from '../../src/playtest/runner';
+import { FAULTS, MAX_ACTIONS_PER_HAND } from '../support/faulty-engine';
 
 const draws = (code: string, seat: number) => {
   const rng = seatGenerator(code, seat);
@@ -210,5 +211,43 @@ describe('playtest runner units', () => {
     expect(hand.record.actions.every((a) => a.type === 'fold')).toBe(true);
     expect(seen.length).toBe(hand.record.actions.length);
     expect(seen.length).toBeGreaterThan(0);
+  });
+
+  it('fault engines fail fast when a runner keeps playing a violating hand', () => {
+    const { engine, makePolicy } = FAULTS.illegalAccepted.seams;
+    const code = handReplayCode(42, 1);
+    const neverStops = () => {
+      let state = engine.createHand({
+        stakes: PLAYTEST_STAKES,
+        seats: Array.from({ length: 6 }, (_, i) => ({ seat: i + 1, stack: CASH_BUY_IN })),
+        button: 1,
+        deck: shuffledDeck(code),
+      });
+      while (state.toAct !== null) {
+        const action = makePolicy(code, state.toAct)(playerView(state, state.toAct));
+        const result = engine.applyAction(state, action);
+        if (result.ok) state = result.state;
+      }
+    };
+    const started = Date.now();
+    expect(neverStops).toThrow(
+      new Error(
+        `runner kept playing a hand past ${MAX_ACTIONS_PER_HAND} actions; it must stop at the first violation`,
+      ),
+    );
+    expect(Date.now() - started).toBeLessThan(10_000);
+
+    for (const [name, fault] of Object.entries(FAULTS)) {
+      const hands: PlayedHand[] = [];
+      const summary = runPlaytest(
+        { hands: 20, seed: 42, size: 6 },
+        (h) => hands.push(h),
+        fault.seams,
+      );
+      expect(summary.violationCounts[fault.invariant], name).toBeGreaterThanOrEqual(1);
+      for (const hand of hands) {
+        expect(hand.violation?.actionNumber ?? 0, name).toBeLessThanOrEqual(MAX_ACTIONS_PER_HAND);
+      }
+    }
   });
 });

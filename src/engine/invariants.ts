@@ -2,6 +2,7 @@ import { formatCard, type Card } from './cards';
 import {
   legalActions,
   type Action,
+  type ActionRecord,
   type ApplyResult,
   type HandState,
   type PlayerState,
@@ -126,17 +127,14 @@ function chipsMessage(state: HandState): string | null {
     }
   } else {
     let awarded = 0;
-    let paid = 0;
-    let balanced = true;
-    for (const award of awards) {
+    for (const award of awards) awarded += award.amount;
+    if (awarded !== total) return `awards pay $${awarded} but players put in $${total}`;
+    for (const [i, award] of awards.entries()) {
       let shares = 0;
       for (const w of award.winners) shares += w.amount;
-      awarded += award.amount;
-      paid += shares;
-      if (shares !== award.amount) balanced = false;
-    }
-    if (awarded !== total || !balanced) {
-      return `awards pay $${awarded !== total ? awarded : paid} but players put in $${total}`;
+      if (shares !== award.amount) {
+        return `award ${i + 1} (${potName(award.pot)}) is $${award.amount} but its winners get $${shares}`;
+      }
     }
   }
   for (const p of state.players) {
@@ -190,8 +188,8 @@ function potEligibilityMessage(state: HandState): string | null {
   for (const [i, pot] of pots.entries()) {
     if (pot.amount <= 0) continue;
     const idle = pot.eligible.find((seat) => {
-      const p = playerAt(state, seat) as PlayerState;
-      return p.totalContribution - p.streetContribution <= 0;
+      const p = playerAt(state, seat);
+      return p === undefined || p.totalContribution - p.streetContribution <= 0;
     });
     if (idle !== undefined)
       return `${potName(i)} lists seat ${idle}, which has not contributed to it`;
@@ -231,12 +229,12 @@ function cardsMessage(state: HandState): string | null {
   all.push(...state.board, ...state.burned);
   const bad = all.find((card) => !isCard(card));
   if (bad !== undefined) return `${bad} is not a card`;
+  for (const p of state.players) {
+    const k = p.holeCards.length;
+    if (k !== 2) return `seat ${p.seat} has ${k} hole card${k === 1 ? '' : 's'} but should have 2`;
+  }
   const [board, burn] = DEALT[state.street] ?? [NaN, NaN];
-  if (
-    state.players.some((p) => p.holeCards.length !== 2) ||
-    state.board.length !== board ||
-    state.burned.length !== burn
-  ) {
+  if (state.board.length !== board || state.burned.length !== burn) {
     return `${state.street} has ${state.board.length} board and ${state.burned.length} burn cards`;
   }
   seen.fill(0);
@@ -244,30 +242,89 @@ function cardsMessage(state: HandState): string | null {
     if (seen[card] === 1) return `${formatCard(card)} dealt twice`;
     seen[card] = 1;
   }
+  return dealOrderMessage(state);
+}
+
+/** Deck offsets after the 2n hole cards (D-5): burns, then board cards. */
+const BURN_AT = [0, 4, 6] as const;
+const BOARD_AT = [1, 2, 3, 5, 7] as const;
+
+/** `<slot> is <card> but the deck deals <deck[position]>`. */
+function deckMismatch(deck: readonly Card[], position: number, card: Card, slot: string): string {
+  const expected = deck[position];
+  const text = expected !== undefined && isCard(expected) ? formatCard(expected) : 'no card';
+  return `${slot} is ${formatCard(card)} but the deck deals ${text}`;
+}
+
+/** K4: every dealt card sits at its D-5 deck position. Players are in ascending seat order. */
+function dealOrderMessage({ players, deck, button, burned, board }: HandState): string | null {
+  const n = players.length;
+  let start = 0;
+  while (start < n && (players[start] as PlayerState).seat <= button) start++;
+  if (start === n) start = 0;
+  for (let i = 0; i < n; i++) {
+    const { seat, holeCards } = players[i] as PlayerState;
+    const p = (i - start + n) % n;
+    if (holeCards[0] !== deck[p]) {
+      return deckMismatch(deck, p, holeCards[0], `seat ${seat} hole card 1`);
+    }
+    if (holeCards[1] !== deck[p + n]) {
+      return deckMismatch(deck, p + n, holeCards[1], `seat ${seat} hole card 2`);
+    }
+  }
+  for (let j = 0; j < burned.length; j++) {
+    const at = 2 * n + (BURN_AT[j] ?? NaN);
+    const card = burned[j] as Card;
+    if (card !== deck[at]) return deckMismatch(deck, at, card, `burn card ${j + 1}`);
+  }
+  for (let j = 0; j < board.length; j++) {
+    const at = 2 * n + (BOARD_AT[j] ?? NaN);
+    const card = board[j] as Card;
+    if (card !== deck[at]) return deckMismatch(deck, at, card, `board card ${j + 1}`);
+  }
   return null;
 }
 
-/** chips, bet-cap, pot-eligibility, cards on one state; [] when all hold. Never throws, never mutates. */
+/** H1/H2: the deal leaves blind records, and every record is on a betting street. */
+function historyMessage({ actions }: HandState): string | null {
+  if (actions.length === 0) return 'history is empty after the deal';
+  for (let i = 0; i < actions.length; i++) {
+    const { street } = actions[i] as ActionRecord;
+    if (BETTING_STREETS.indexOf(street) < 0) {
+      return `history record ${i + 1} is on ${street}, which is not a betting street`;
+    }
+  }
+  return null;
+}
+
+/** chips, legal-action (history shape), bet-cap, pot-eligibility, cards on one state; [] when all
+ *  hold. Never throws, never mutates. */
 export function checkState(state: HandState): readonly Violation[] {
   const chips = chipsMessage(state);
+  const history = historyMessage(state);
   const betCap = betCapMessage(state);
   const pots = potEligibilityMessage(state);
   const cards = cardsMessage(state);
-  if (chips === null && betCap === null && pots === null && cards === null) return NONE;
+  if (chips === null && history === null && betCap === null && pots === null && cards === null) {
+    return NONE;
+  }
   const found: Violation[] = [];
   if (chips !== null) found.push({ invariant: 'chips', message: chips });
+  if (history !== null) found.push({ invariant: 'legal-action', message: history });
   if (betCap !== null) found.push({ invariant: 'bet-cap', message: betCap });
   if (pots !== null) found.push({ invariant: 'pot-eligibility', message: pots });
   if (cards !== null) found.push({ invariant: 'cards', message: cards });
   return found;
 }
 
-/** legal-action for the step, then checkState(result.state) if result.ok. Results in INVARIANTS order, ≤ 1 per id. */
+/** legal-action for the step, then checkState(result.state) if result.ok. Results in INVARIANTS order, ≤ 1 per id:
+ *  the step's own legal-action message replaces checkState's history one. */
 export function checkStep(step: ActionStep): readonly Violation[] {
   const legal = legalActionMessage(step);
   const state = step.result.ok ? checkState(step.result.state) : NONE;
   if (legal === null) return state;
-  const [chips, ...rest] = state;
+  const rest = state.filter((v) => v.invariant !== 'legal-action');
+  const [chips, ...others] = rest;
   const violation = { invariant: 'legal-action', message: legal };
-  return chips?.invariant === 'chips' ? [chips, violation, ...rest] : [violation, ...state];
+  return chips?.invariant === 'chips' ? [chips, violation, ...others] : [violation, ...rest];
 }

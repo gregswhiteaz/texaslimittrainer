@@ -8,10 +8,12 @@ import {
   PLAYTEST_STAKES,
   runPlaytest,
   summarize,
+  toAction,
   type PlayedHand,
   type PlaytestOptions,
   type PlaytestSeams,
   type PlaytestSummary,
+  type ViolatingHand,
 } from './runner';
 
 export interface CliIo {
@@ -126,15 +128,18 @@ export function formatReport(
     ]
       .map((line) => `${line}\n`)
       .join('') +
-    (summary.violations > 0 ? violationBlock(summary, mode) : '')
+    (summary.firstViolation !== null
+      ? violationBlock(summary.firstViolation, summary.violationCounts, mode)
+      : '')
   );
 }
 
-function violationBlock(summary: PlaytestSummary, mode: 'run' | 'replay'): string {
-  const hand = summary.firstViolation;
-  if (hand === null || hand.violation === null) return '';
+function violationBlock(
+  hand: ViolatingHand,
+  counts: PlaytestSummary['violationCounts'],
+  mode: 'run' | 'replay',
+): string {
   const { violation, record } = hand;
-  const counts = summary.violationCounts;
   const ids = [
     ...INVARIANTS,
     ...Object.keys(counts).filter((id) => !INVARIANTS.some((i) => i === id)),
@@ -154,16 +159,10 @@ function violationBlock(summary: PlaytestSummary, mode: 'run' | 'replay'): strin
 const STREETS = ['Preflop', 'Flop', 'Turn', 'River'] as const;
 
 function actionText(record: ActionRecord): string {
-  const words = {
-    'small-blind': `posts small blind $${record.amount}`,
-    'big-blind': `posts big blind $${record.amount}`,
-    fold: 'folds',
-    check: 'checks',
-    call: `calls $${record.amount}`,
-    bet: `bets $${record.amount}`,
-    raise: `raises to $${record.amount}`,
-  }[record.type];
-  return `seat ${record.seat} ${words}`;
+  if (record.type === 'small-blind')
+    return `seat ${record.seat} posts small blind $${record.amount}`;
+  if (record.type === 'big-blind') return `seat ${record.seat} posts big blind $${record.amount}`;
+  return describeAction(toAction(record));
 }
 
 export function formatHand(hand: PlayedHand): string {

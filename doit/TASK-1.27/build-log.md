@@ -1,0 +1,9 @@
+## BUILD (2026-11-19)
+- `invariants.ts`: K2a (`seat <s> has <k> hole card(s) but should have 2`), C3a/C3b (`award <i> (<pot>) is $<amount> but its winners get $<shares>`), K4 deal order after K3 (no per-call allocation on the clean path), H1/H2 in `checkState` under `legal-action`, P3 cast removed, `checkStep` keeps one `legal-action` (the step's wins).
+- `runner.ts`: `toAction`, `ViolatingHand` exported; `firstViolation` typed via a type guard (object identity kept). `cli.ts`: `actionText` delegates to `describeAction`; null guard removed.
+- `faulty-engine.ts`: every `FAULTS` engine wrapped in a 1000-action-per-hand limit.
+- Tests: new `tests/engine/invariant-messages.acceptance.test.ts` (SPEC-01..04); unit tests for SPEC-05, SPEC-06, SPEC-08, SPEC-09; updated K2/C3 rows.
+- SPEC-05 note: the spec's second example ("clean step" with an empty result history → `history is empty after the deal`) cannot occur, because an empty result history always fails L5 (`after.length !== before.actions.length + 1`), and per the same rule the step's L5 message wins. The test asserts that (L5 message only) and covers "L1–L5 pass → checkState's entries returned as is" with a result whose record 1 is on `showdown`.
+- SPEC-07 manual (runner.ts copied aside and restored from the copy, not `git checkout`, to keep uncommitted edits): `break` deleted → `npx vitest run tests/playtest` exit 1 in 4 s, 6 failed tests, 4 mentions of `past 1000 actions`.
+- SPEC-10 manual (same restore method): P1 clause removed → `tests/engine/invariants.test.ts` exit 1, `P1 seat not dealt in` assertion diff (`main pot lists seat 7, which has not contributed to it` vs `main pot has a malformed eligible list`), TypeError count 0.
+- `npm run format` ok. `npm run lint` 0. `npm run typecheck` 0. `npm test`: 84 files, 309 passed, 3 skipped, exit 0; `invariants.ts` 99.4% lines. `npm run playtest -- --hands 10000 --seed 42`: `Invariant violations: 0`, exit 0.

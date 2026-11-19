@@ -77,6 +77,8 @@ export interface PlayedHand {
   /** The action that stopped the hand, or null. */
   readonly violation: HandViolation | null;
 }
+/** A hand that stopped at a violation. */
+export type ViolatingHand = PlayedHand & { readonly violation: HandViolation };
 export interface PlaytestSummary {
   readonly handsPlayed: number;
   readonly foldOuts: number;
@@ -90,7 +92,7 @@ export interface PlaytestSummary {
   /** Hands violating each id: every INVARIANTS id, then custom ids in first-seen order. */
   readonly violationCounts: Readonly<Record<string, number>>;
   /** The earliest violating hand. */
-  readonly firstViolation: PlayedHand | null;
+  readonly firstViolation: ViolatingHand | null;
 }
 
 const randomPolicy: PolicyFactory = (code, seat) => randomMovePolicy(seatGenerator(code, seat));
@@ -111,7 +113,7 @@ export function handReplayCode(seed: number, handNumber: number): ReplayCode {
 }
 
 /** A player action's record (never a blind) back to the Action that produced it. */
-function toAction({ seat, type, amount }: ActionRecord): Action {
+export function toAction({ seat, type, amount }: ActionRecord): Action {
   if (type === 'fold' || type === 'check') return { seat, type };
   return { seat, type: type as 'call' | 'bet' | 'raise', amount };
 }
@@ -186,6 +188,8 @@ function cappedStreets(state: HandState): number {
   return [...counts.values()].filter((count) => count >= MAX_BETS_PER_STREET).length;
 }
 
+const isViolating = (hand: PlayedHand): hand is ViolatingHand => hand.violation !== null;
+
 /** Totals over `hands` (consumed one at a time, never retained). Throws RangeError if empty. */
 export function summarize(hands: Iterable<PlayedHand>): PlaytestSummary {
   let handsPlayed = 0;
@@ -197,7 +201,7 @@ export function summarize(hands: Iterable<PlayedHand>): PlaytestSummary {
   let violations = 0;
   const violationCounts: Record<string, number> = {};
   for (const id of INVARIANTS) violationCounts[id] = 0;
-  let firstViolation: PlayedHand | null = null;
+  let firstViolation: ViolatingHand | null = null;
   let firstReplayCode: ReplayCode | undefined;
   let lastReplayCode: ReplayCode | undefined;
   for (const hand of hands) {
@@ -210,7 +214,7 @@ export function summarize(hands: Iterable<PlayedHand>): PlaytestSummary {
     const pot = (final.result?.awards ?? []).reduce((sum, award) => sum + award.amount, 0);
     largestPot = Math.max(largestPot, pot);
     violations += hand.violations;
-    if (hand.violation !== null) {
+    if (isViolating(hand)) {
       firstViolation ??= hand;
       for (const id of new Set(hand.violation.violations.map((v) => v.invariant))) {
         violationCounts[id] = (violationCounts[id] ?? 0) + 1;

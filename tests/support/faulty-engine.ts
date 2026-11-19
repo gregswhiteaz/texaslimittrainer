@@ -9,7 +9,7 @@ import {
 } from '../../src/engine/hand';
 import type { InvariantId } from '../../src/engine/invariants';
 import type { SeatPolicy } from '../../src/engine/player-view';
-import type { PlaytestSeams, PolicyFactory } from '../../src/playtest/runner';
+import type { PlaytestEngine, PlaytestSeams, PolicyFactory } from '../../src/playtest/runner';
 
 export interface Fault {
   readonly invariant: InvariantId;
@@ -114,25 +114,55 @@ const duplicateCard: typeof createHand = (config) => {
   );
 };
 
+/** Far above any legal hand (10 seats, 4 streets, 4-bet cap is about 184 actions). */
+export const MAX_ACTIONS_PER_HAND = 1000;
+
+/** Throws on the action after MAX_ACTIONS_PER_HAND in one hand, so a runner that keeps playing
+ *  a violating hand fails the test instead of looping forever. createHand resets the count. */
+function bounded(engine: PlaytestEngine): PlaytestEngine {
+  let actions = 0;
+  return {
+    createHand: (config) => {
+      actions = 0;
+      return engine.createHand(config);
+    },
+    applyAction: (state, action) => {
+      actions++;
+      if (actions > MAX_ACTIONS_PER_HAND) {
+        throw new Error(
+          `runner kept playing a hand past ${MAX_ACTIONS_PER_HAND} actions; it must stop at the first violation`,
+        );
+      }
+      return engine.applyAction(state, action);
+    },
+  };
+}
+
 export const FAULTS = {
   chipsCreated: {
     invariant: 'chips',
-    seams: { engine: { createHand, applyAction: chipsCreated } },
+    seams: { engine: bounded({ createHand, applyAction: chipsCreated }) },
   },
   illegalAccepted: {
     invariant: 'legal-action',
-    seams: { engine: { createHand, applyAction: illegalAccepted }, makePolicy: alwaysCheck },
+    seams: {
+      engine: bounded({ createHand, applyAction: illegalAccepted }),
+      makePolicy: alwaysCheck,
+    },
   },
   fifthBet: {
     invariant: 'bet-cap',
-    seams: { engine: { createHand, applyAction: fifthBet }, makePolicy: raiseWheneverOffered },
+    seams: {
+      engine: bounded({ createHand, applyAction: fifthBet }),
+      makePolicy: raiseWheneverOffered,
+    },
   },
   ineligibleWinner: {
     invariant: 'pot-eligibility',
-    seams: { engine: { createHand, applyAction: ineligibleWinner } },
+    seams: { engine: bounded({ createHand, applyAction: ineligibleWinner }) },
   },
   duplicateCard: {
     invariant: 'cards',
-    seams: { engine: { createHand: duplicateCard, applyAction } },
+    seams: { engine: bounded({ createHand: duplicateCard, applyAction }) },
   },
 } as const satisfies Record<string, Fault>;

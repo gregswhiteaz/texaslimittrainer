@@ -1,14 +1,18 @@
+import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { parseCard, type Card } from '../../src/engine/cards';
 import { applyAction, createHand, type Action, type HandState } from '../../src/engine/hand';
+import { describeAction } from '../../src/engine/invariants';
 import { formatHand, formatReport, main, parseArgs, USAGE } from '../../src/playtest/cli';
 import {
   PLAYTEST_STAKES,
   replayHand,
+  toAction,
   type PlayedHand,
   type PlaytestSummary,
   type PlaytestSeams,
   type PolicyFactory,
+  type ViolatingHand,
 } from '../../src/playtest/runner';
 
 function capture(argv: string[], seams?: PlaytestSeams) {
@@ -190,7 +194,7 @@ describe('playtest CLI', () => {
 
   it('appends the violation block only when there are violations', () => {
     const hand = scripted([{ seat: 6, type: 'fold' }]);
-    const firstViolation: PlayedHand = {
+    const firstViolation: ViolatingHand = {
       ...hand,
       violations: 2,
       violation: {
@@ -256,12 +260,50 @@ describe('playtest CLI', () => {
     expect(formatReport('', custom, 'replay')).toContain(
       'Violations by invariant: chips 0, legal-action 1, bet-cap 0, pot-eligibility 0, cards 1, test-probe 1\n',
     );
-    const clean = { ...summary, violations: 0 };
+    const clean: PlaytestSummary = { ...summary, violations: 0, firstViolation: null };
     expect(formatReport('Header\n', clean)).toBe(
       report
         .slice(0, report.indexOf('Violations by'))
         .replace('Invariant violations: 2\n', 'Invariant violations: 0\n'),
     );
+
+    const source = readFileSync(new URL('../../src/playtest/cli.ts', import.meta.url), 'utf8');
+    const block = source.slice(
+      source.indexOf('function violationBlock('),
+      source.indexOf('\n}\n', source.indexOf('function violationBlock(')),
+    );
+    expect(block).toContain('hand: ViolatingHand');
+    expect(block).not.toContain('=== null');
+  });
+
+  it('prints player actions with describeAction wording', () => {
+    const hand = scripted([
+      { seat: 6, type: 'fold' },
+      { seat: 1, type: 'call', amount: 4 },
+      { seat: 2, type: 'raise', amount: 8 },
+      { seat: 3, type: 'fold' },
+      { seat: 4, type: 'call', amount: 6 },
+      { seat: 5, type: 'call', amount: 4 },
+      { seat: 1, type: 'call', amount: 4 },
+      { seat: 4, type: 'check' },
+      { seat: 5, type: 'bet', amount: 4 },
+    ]);
+    const kinds = new Set(hand.final.actions.map((a) => a.type));
+    for (const type of ['fold', 'check', 'call', 'bet', 'raise']) expect(kinds).toContain(type);
+    const printed = formatHand(hand)
+      .split('\n')
+      .filter((line) => /^(Preflop|Flop|Turn|River): /.test(line))
+      .flatMap((line) => line.slice(line.indexOf(': ') + 2).split(', '))
+      .filter((text) => !text.includes(' posts '));
+    const players = hand.final.actions.filter(
+      (a) => a.type !== 'small-blind' && a.type !== 'big-blind',
+    );
+    expect(printed).toEqual(players.map((record) => describeAction(toAction(record))));
+
+    const source = readFileSync(new URL('../../src/playtest/cli.ts', import.meta.url), 'utf8');
+    for (const literal of ["'folds'", "'checks'", 'calls $', 'bets $', 'raises to $']) {
+      expect(source).not.toContain(literal);
+    }
   });
 });
 

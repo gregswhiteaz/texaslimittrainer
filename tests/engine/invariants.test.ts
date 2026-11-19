@@ -122,7 +122,7 @@ describe('invariant checker', () => {
             ],
           },
         },
-        one('chips', 'awards pay $20 but players put in $20'),
+        one('chips', 'award 1 (main pot) is $12 but its winners get $8'),
       ],
       [
         'C4',
@@ -210,7 +210,7 @@ describe('invariant checker', () => {
         'K2 hole cards',
         // Intentionally malformed: a one-card hand the type system would otherwise forbid.
         withPlayers(S, { 3: { holeCards: [10] as unknown as PlayerState['holeCards'] } }),
-        one('cards', 'flop has 3 board and 1 burn cards'),
+        one('cards', 'seat 3 has 1 hole card but should have 2'),
       ],
       ['K3', withPlayers(S, { 2: { holeCards: [5, 6] } }), one('cards', '3d dealt twice')],
     ];
@@ -319,6 +319,31 @@ describe('invariant checker', () => {
         result: applyAction(turn, turnBet),
       }),
     ).toEqual(one('legal-action', 'seat 2 bets $8 does not match the $8 turn betting unit'));
+  });
+
+  it('history violations merge into checkStep', () => {
+    const l3 = { ...cleanStep, action: { seat: 2, type: 'bet', amount: 8 } } as const;
+    const broken = checkStep({
+      ...l3,
+      result: ok({ ...withPlayers(S, { 2: { stack: 153 } }), actions: [] }),
+    });
+    expect(broken.map((v) => v.invariant)).toEqual(['chips', 'legal-action']);
+    expect(broken[1]?.message).toBe('seat 2 bets $8 is not in the legal set');
+
+    // An empty result history also fails L5, so the step's own message is the only legal-action.
+    expect(checkStep({ ...cleanStep, result: ok({ ...S, actions: [] }) })).toEqual(
+      one('legal-action', 'history entry for seat 2 bets $4 does not match the action'),
+    );
+    expect(checkState({ ...S, actions: [] })).toEqual(
+      one('legal-action', 'history is empty after the deal'),
+    );
+
+    // L1-L5 pass (the new last record matches), so checkState's history entry is returned as is.
+    const [first, ...later] = S.actions as [ActionRecord, ...ActionRecord[]];
+    const reshaped = [{ ...first, street: 'showdown' } as unknown as ActionRecord, ...later];
+    expect(checkStep({ ...cleanStep, result: ok({ ...S, actions: reshaped }) })).toEqual(
+      one('legal-action', 'history record 1 is on showdown, which is not a betting street'),
+    );
   });
 
   it('describes actions in the CLI wording', () => {
