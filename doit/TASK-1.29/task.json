@@ -1,0 +1,119 @@
+{
+  "id": "TASK-1.29",
+  "title": "Make the CI system-package install survive a busy apt lock",
+  "status": "To Do",
+  "archived": false,
+  "type": "chore",
+  "priority": "high",
+  "project": null,
+  "assignees": [],
+  "reporter": null,
+  "labels": [
+    "dream-limit-holdem-trainer",
+    "follow-up"
+  ],
+  "milestone": "m-0",
+  "parentTaskId": "TASK-1",
+  "acceptanceCriteriaCompleted": 0,
+  "acceptanceCriteriaCount": 3,
+  "references": [
+    "doc-11",
+    "doc-26"
+  ],
+  "modifiedFiles": [],
+  "ordinal": 188000,
+  "createdAt": "2026-11-19T02:21:00Z",
+  "updatedAt": null,
+  "dueDate": null,
+  "isReady": true,
+  "path": "backlog/tasks/task-1.29 - Make-the-CI-system-package-install-survive-a-busy-apt-lock.md",
+  "description": "Found by the TASK-9.1 judge (2026-11-19): CI run 44441353985 attempt 1 and main's run 44434902016 both failed at 'Install Playwright system dependencies' because the Ubuntu runner's dpkg lock was held by another apt-get (unattended upgrades at boot). apt exits 100 in seconds, so TASK-1.19's three retries (10 s apart) all hit the same lock. A re-run fixed both, but every push risks a false red.",
+  "dependencies": [
+    "TASK-1.19"
+  ],
+  "dependencyGraph": {
+    "root": "TASK-1.29",
+    "nodes": [
+      {
+        "id": "TASK-1.29",
+        "title": "Make the CI system-package install survive a busy apt lock",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": 0,
+        "dependentDepth": 0
+      },
+      {
+        "id": "TASK-1.1",
+        "title": "Bootstrap the strict TypeScript project with one-command checks",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 3,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.7",
+        "title": "Run every check in GitHub Actions on each push and pull request",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 2,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.19",
+        "title": "Retry the stalled Playwright system-dependency install in CI",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 1,
+        "dependentDepth": null
+      }
+    ],
+    "edges": [
+      {
+        "from": "TASK-1.7",
+        "to": "TASK-1.1"
+      },
+      {
+        "from": "TASK-1.19",
+        "to": "TASK-1.7"
+      },
+      {
+        "from": "TASK-1.29",
+        "to": "TASK-1.19"
+      }
+    ]
+  },
+  "readiness": {
+    "isReady": true,
+    "isBlocked": false,
+    "blockingDependencies": [],
+    "missingDependencies": []
+  },
+  "documentation": [],
+  "subtasks": [],
+  "acceptanceCriteria": [
+    {
+      "index": 1,
+      "text": "Given another apt process holds the dpkg lock when the step starts, When the system-package install runs, Then it waits for the lock to clear (or uses apt's lock timeout) for up to a set limit before installing, instead of failing with exit 100",
+      "checked": false
+    },
+    {
+      "index": 2,
+      "text": "Given the lock never clears within the limit, When the step gives up, Then it fails with a clear ::error:: line naming the lock, within the step's existing timeout",
+      "checked": false
+    },
+    {
+      "index": 3,
+      "text": "Given the workflow test, When it checks the install step, Then it asserts the lock handling is present",
+      "checked": false
+    }
+  ],
+  "definitionOfDone": [],
+  "implementationPlan": null,
+  "implementationNotes": null,
+  "comments": [],
+  "finalSummary": null
+}
