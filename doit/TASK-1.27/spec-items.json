@@ -3,66 +3,66 @@
     "id": "SPEC-01",
     "verifies": "AC#1",
     "verification": "acceptance `tests/engine/invariant-messages.acceptance.test.ts::names the seat and hole-card count`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-02",
     "verifies": "AC#2",
     "verification": "acceptance `tests/engine/invariant-messages.acceptance.test.ts::names the mismatched award`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-03",
     "verifies": "AC#3",
     "verification": "acceptance `tests/engine/invariant-messages.acceptance.test.ts::reports cards not dealt from their deck position`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-04",
     "verifies": "AC#4",
     "verification": "acceptance `tests/engine/invariant-messages.acceptance.test.ts::reports a broken action history`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-05",
     "verifies": "AC#4",
     "verification": "unit `tests/engine/invariants.test.ts::history violations merge into checkStep`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-06",
     "verifies": "AC#5",
     "verification": "unit `tests/playtest/runner.test.ts::fault engines fail fast when a runner keeps playing a violating hand`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-07",
     "verifies": "AC#5",
     "verification": "manual `sed -i '' '/^      break;$/d' src/playtest/runner.ts && npx vitest run tests/playtest; git checkout src/playtest/runner.ts` (expect non-zero exit, wall time < 120 s)",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-08",
     "verifies": "AC#6",
     "verification": "unit `tests/playtest/cli.test.ts::prints player actions with describeAction wording`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-09",
     "verifies": "AC#6",
     "verification": "unit `tests/playtest/cli.test.ts::appends the violation block only when there are violations`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-10",
     "verifies": "AC#6",
     "verification": "manual `sed -i '' 's/playerAt(state, seat) !== undefined && //' src/engine/invariants.ts && npx vitest run tests/engine/invariants.test.ts 2>&1 | grep -c TypeError; git checkout src/engine/invariants.ts` (expect test failure and count 0)",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-11",
     "verifies": "AC#1, AC#2, AC#3, AC#4, AC#5, AC#6",
     "verification": "command `npm run lint && npm run typecheck && npm test && npm run playtest -- --hands 10000 --seed 42`",
-    "status": "pending"
+    "status": "pass"
   }
 ]

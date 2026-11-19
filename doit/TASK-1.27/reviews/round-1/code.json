@@ -1,0 +1,25 @@
+{"reviewer": "code", "round": 1,
+ "rubric": [
+  {"item": "SPEC-01 correctness", "result": "pass"}, {"item": "SPEC-01 test strength", "result": "pass"},
+  {"item": "SPEC-02 correctness", "result": "pass"}, {"item": "SPEC-02 test strength", "result": "pass"},
+  {"item": "SPEC-03 correctness", "result": "pass"}, {"item": "SPEC-03 test strength", "result": "pass"},
+  {"item": "SPEC-04 correctness", "result": "pass"}, {"item": "SPEC-04 test strength", "result": "pass"},
+  {"item": "SPEC-05 correctness", "result": "pass"}, {"item": "SPEC-05 test strength", "result": "pass"},
+  {"item": "SPEC-06 correctness", "result": "pass"}, {"item": "SPEC-06 test strength", "result": "pass"},
+  {"item": "SPEC-07 correctness", "result": "pass"}, {"item": "SPEC-07 test strength", "result": "pass"},
+  {"item": "SPEC-08 correctness", "result": "pass"}, {"item": "SPEC-08 test strength", "result": "pass"},
+  {"item": "SPEC-09 correctness", "result": "pass"}, {"item": "SPEC-09 test strength", "result": "pass"},
+  {"item": "SPEC-10 correctness", "result": "pass"}, {"item": "SPEC-10 test strength", "result": "pass"},
+  {"item": "SPEC-11 correctness", "result": "pass"}, {"item": "SPEC-11 test strength", "result": "pass"},
+  {"item": "scope", "result": "pass"}, {"item": "concision", "result": "pass"}, {"item": "clarity", "result": "pass"}],
+ "findings": [
+  {"fingerprint": "src/engine/invariants.ts:checkstep-rest-others-naming", "severity": "MINOR", "file": "src/engine/invariants.ts", "line": 326,
+   "issue": "checkStep now has two similar arrays, `rest` (checkState results without legal-action) and `others` (those minus the leading chips). Neither name says what it holds, so the INVARIANTS-order splice is harder to follow than it should be.",
+   "evidence": "const rest = state.filter((v) => v.invariant !== 'legal-action'); const [chips, ...others] = rest; ... ? [chips, violation, ...others] : [violation, ...rest]",
+   "fix": "Rename `rest` to `stateChecks` (or `withoutHistory`) and `others` to `afterChips`."},
+  {"fingerprint": "tests/engine/invariants.test.ts:spec05-second-example-adapted", "severity": "NIT", "file": "tests/engine/invariants.test.ts", "line": 334,
+   "issue": "SPEC-05's second example (a clean step whose result history is empty gives only the H1 message) can't happen. An empty result history always fails L5 (invariants.ts:87, `after.length !== before.actions.length + 1`), and the step's message wins. The builder's replacement still proves AC#4. (a) The L5 case asserts exactly one legal-action, the step's own message. Without the filter it would return two entries. (b) The L3 + chips case asserts ['chips','legal-action'], which would be three entries without the filter. (c) A record-1 `showdown` result passes L1–L5 and asserts that checkState's H2 entry is returned as is. All three would fail if the merge were broken.",
+   "evidence": "Confirmed L5 at src/engine/invariants.ts:86-96. Removing the `.filter` in checkStep makes cases (a) and (b) fail.",
+   "fix": "No code change. Record the spec amendment in the task notes (already done as A-7)."}
+ ],
+ "summary": "The code meets all 11 SPEC items. The K2a, C3b, K4, H1 and H2 messages match qa.md word for word. K4 follows the D-5 layout and is ordered after K3 (D-3). The short-deck case gives `no card` and is tested. P3 no longer casts. checkStep keeps at most one legal-action, and the step's own message wins. The firstViolation type narrowing removes the guard without a `!` assertion. cli actionText uses describeAction(toAction). Every FAULTS engine is wrapped in `bounded`, so a runner that never stops throws at action 1001 and the test fails fast. The builder's replacement for SPEC-05's second example (A-7) is sound: an empty result history always trips L5, and the replacement cases would fail if the merge were broken. 9 targeted test files pass (37 tests). The gates are green (lint, typecheck, npm test). The only warning is the line count, 455 against a budget of 400, which is under the 800 hard limit. No BLOCKER or MAJOR findings."}
