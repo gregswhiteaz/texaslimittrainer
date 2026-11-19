@@ -1,11 +1,11 @@
 ---
 id: TASK-1.23
 title: Harden CI child-process cleanup
-status: In Progress
+status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-18T07:03:00Z'
-updated_date: '2026-11-19T19:26:00Z'
+updated_date: '2026-11-19T19:55:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -16,6 +16,8 @@ dependencies:
 references:
   - doc-11
   - doc-12
+documentation:
+  - doc-31
 parent_task_id: TASK-1
 priority: high
 type: chore
@@ -30,10 +32,10 @@ Follow-up from the TASK-1.19 and TASK-1.20 reviews. In rare cases a hung or unki
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Given tools/ci/retry.js times out an attempt and both SIGTERM and SIGKILL to the process group fail with EPERM, When the kill grace expires, Then the attempt ends at once with an ::error:: line naming the step instead of waiting for the step timeout
-- [ ] #2 Given tests/ci/retry.sudo.test.ts fails or throws partway, When the test ends, Then any sudo sleep it started is killed (cleanup in finally)
-- [ ] #3 Given the nested Vitest run in tests/ci/speed-limits.acceptance.test.ts exceeds its timeout, When it is stopped, Then the nested Vitest process and its children are killed, not only npx
-- [ ] #4 Given retry.js times out an attempt whose command runs apt-get under sudo, When it stops the attempt, Then the root apt-get is really stopped (e.g. sudo -n kill on the process group) so it cannot keep holding the dpkg lock for the next attempt
+- [x] #1 Given tools/ci/retry.js times out an attempt and both SIGTERM and SIGKILL to the process group fail with EPERM, When the kill grace expires, Then the attempt ends at once with an ::error:: line naming the step instead of waiting for the step timeout
+- [x] #2 Given tests/ci/retry.sudo.test.ts fails or throws partway, When the test ends, Then any sudo sleep it started is killed (cleanup in finally)
+- [x] #3 Given the nested Vitest run in tests/ci/speed-limits.acceptance.test.ts exceeds its timeout, When it is stopped, Then the nested Vitest process and its children are killed, not only npx
+- [x] #4 Given retry.js times out an attempt whose command runs apt-get under sudo, When it stops the attempt, Then the root apt-get is really stopped (e.g. sudo -n kill on the process group) so it cannot keep holding the dpkg lock for the next attempt
 <!-- AC:END -->
 
 ## Implementation Plan
@@ -56,4 +58,14 @@ AC added from TASK-1.29 follow-up (doc-27): the orphaned sudo'd apt-get (EPERM o
 2026-11-19: raised to High by the user after CI run #68 (main, 9ba77c8) failed: attempt 1's sudo apt-get (pid 5507) outlived its 240 s timeout and held the dpkg lock through attempts 2 and 3 (AC#4). Second CI failure from this cause.
 
 Build: retry.js sudo escalation on EPERM + 2 s reap wait + fail-fast stuck attempts; process-group helper for speed-limits test; sudo tests cleanup in finally; Linux-only real-sudo flock test (SPEC-02) pending branch CI; gate PASS
+
+Judge R1 PASS 8/8; real-sudo tests verified on branch CI run 44600933321 (f4a6897). J-1-01 MEDIUM (spurious sudo escalation on macOS during SIGKILL teardown) -> follow-up.
+
+Follow-ups (Step 6a): TASK-1.37 escalate to sudo only when needed (J-1-01, pid-reuse, shared reap, onSignal); TASK-1.38 tidy sudo retry tests (NITs); TASK-1.39 dpkg --configure -a before retry + runInSandbox group kill.
 <!-- SECTION:NOTES:END -->
+
+## Final Summary
+
+<!-- SECTION:FINAL_SUMMARY:BEGIN -->
+Retry.js now really stops a timed-out attempt: after each attempt a 2 s reap loop re-sends SIGKILL, escalating to `sudo -n kill -- -<pgid>` on EPERM, so an orphaned root apt-get no longer holds the dpkg lock; an unstoppable attempt ends at once with `::error::` and exit 1. Sudo tests clean up in finally, and the speed-limits nested Vitest runs as a killable process group (100 s timeout). Verified: npm test 298 passed/3 skipped, lint and typecheck clean, judge PASS 8/8, and Linux CI run 44600933321 passed the real-sudo test (EPERM and sudo-kill lines asserted). Review the assumptions A-1..A-6 (2 s reap, helper exits on a stuck attempt, 100 s nested timeout). Follow-ups: escalate to sudo only when EPERM persists (macOS spurious root kill), pid-reuse check before sudo kill, shared reap promise, dpkg --configure -a before retry, runInSandbox spawnSync timeout, onSignal sudo escalation, test NITs.
+<!-- SECTION:FINAL_SUMMARY:END -->

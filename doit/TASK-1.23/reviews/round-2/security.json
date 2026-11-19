@@ -1,0 +1,16 @@
+{"reviewer": "security", "round": 2,
+ "findings": [
+  {"fingerprint": "tools/ci/retry.js:sudo-kill-pid-reuse-window", "severity": "MINOR", "file": "tools/ci/retry.js", "line": 140,
+   "issue": "Still open from round 1, because tools/ci/retry.js did not change in f4a6897. The root-level `sudo -n kill -- -<pgid>` can fire without a fresh groupExists check. If the group has emptied and its pgid has been reused, the root kill could hit an unrelated process group.",
+   "evidence": "pgid comes from child.pid, which is trusted -> killGroup gets EPERM -> sudoKillGroup runs as root. There is no attacker-controlled input. The pid would have to be recycled within a window of milliseconds to about 2 s on an ephemeral runner, so there is no reachable exploit.",
+   "fix": "Optional: in stopGroup, call groupExists(pid) right before sudoKill and skip the sudo call on ESRCH."},
+  {"fingerprint": "tests/ci/retry.sudo.test.ts:pkill-pattern-unanchored", "severity": "NIT", "file": "tests/ci/retry.sudo.test.ts", "line": 187,
+   "issue": "Still open from round 1, because the cleanUp code did not change. The `sudo -n pkill -KILL -f` pattern is an unanchored substring of a random 9-digit marker.",
+   "evidence": "The marker comes from crypto.randomInt and is passed as an argv element with no shell. A collision is practically impossible.",
+   "fix": "Optional: anchor the pattern to the expected argv tail."},
+  {"fingerprint": "tests/ci/retry.sudo.test.ts:ps-layout-prints-sudo-argv", "severity": "NIT", "file": "tests/ci/retry.sudo.test.ts", "line": 175,
+   "issue": "The new processLayout() diagnostic puts the full args of every process whose command line contains 'sudo' into the assertion message. On a failure, that text lands in the CI log. If another job step ever passes a secret on a sudo command line at the same moment, the secret would be printed.",
+   "evidence": "ps -eo ...,args comes from local process state, not untrusted input. The output appears only when an assertion fails, in a test that runs only on Linux CI. The runner is ephemeral, nothing else runs in parallel during vitest, and GitHub Actions masks registered secrets. No secret reaches this path today.",
+   "fix": "Optional: filter only on the marker, or on sudo lines whose pgid/sid match the helper's child, instead of on every line containing 'sudo'."}
+ ],
+ "summary": "In round 2 the fix commit f4a6897 changes only tests/ci/retry.sudo.test.ts. It adds stronger assertions and a `ps -eo pid,ppid,pgid,sid,user,args` diagnostic that is called through spawnSync with a fixed argv and no shell. The marker is used only for in-process string filtering. No new privileged operation, injection path or dependency was added. Round 1 had no BLOCKER or MAJOR findings. Its MINOR (pgid reuse before the root kill) and NIT (unanchored pkill) stay open because that code did not change. One new NIT: the diagnostic prints the args of all sudo processes into failure messages. There are no BLOCKER or MAJOR findings."}

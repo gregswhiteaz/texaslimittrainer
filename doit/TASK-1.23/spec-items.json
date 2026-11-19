@@ -3,48 +3,48 @@
     "id": "SPEC-01",
     "verifies": "AC#1",
     "verification": "acceptance `tests/ci/retry.sudo.test.ts::stopping an attempt > ends at once with an error when the attempt cannot be killed`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-02",
     "verifies": "AC#4",
     "verification": "acceptance `tests/ci/retry.sudo.test.ts::retry helper around a hanging sudo command (Linux CI only) > stops a root process left behind by its sudo parent before the next attempt`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-03",
     "verifies": "AC#2",
     "verification": "manual Judge reads `tests/ci/retry.sudo.test.ts`. Both Linux-CI-only tests wrap everything after `spawn` in `try { \u2026 } finally { \u2026 }` with steps (1)\u2013(3). `npm test` passes.",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-04",
     "verifies": "AC#4",
     "verification": "unit `tests/ci/retry.sudo.test.ts::stopping an attempt > sends the signal with sudo when the group kill is denied`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-05",
     "verifies": "AC#1, AC#4",
     "verification": "unit `tests/ci/retry.sudo.test.ts::killGroup > returns sent, gone or denied` and `tests/ci/retry.sudo.test.ts::groupExists > treats EPERM as existing and ESRCH as gone`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-06",
     "verifies": "AC#3",
     "verification": "unit `tests/support/process-group.test.ts::runProcessGroup > kills the command and its children at the timeout`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-07",
     "verifies": "AC#3",
     "verification": "unit `tests/support/process-group.test.ts::runProcessGroup > returns the exit code and output`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-08",
     "verifies": "AC#3",
     "verification": "acceptance `tests/ci/speed-limits.acceptance.test.ts::speed limits in CI > CI=true reports but does not enforce the perf limits`",
-    "status": "pending"
+    "status": "pass"
   }
 ]

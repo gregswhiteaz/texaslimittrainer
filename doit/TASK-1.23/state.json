@@ -4,14 +4,23 @@
   "branch": "doit/TASK-1.23",
   "base_commit": "9ba77c822f18e013596442f2bbe471f69aef4b3a",
   "started": "2026-11-19T12:14:15",
-  "review_round": 0,
-  "judge_round": 0,
+  "review_round": 2,
+  "judge_round": 1,
   "sendbacks": 0,
   "gate_runs": 2,
   "questions": 0,
-  "assumptions": 0,
+  "assumptions": 6,
   "escalations": 0,
-  "item_failures": {},
+  "item_failures": {
+    "SPEC-01": 0,
+    "SPEC-02": 0,
+    "SPEC-03": 0,
+    "SPEC-04": 0,
+    "SPEC-05": 0,
+    "SPEC-06": 0,
+    "SPEC-07": 0,
+    "SPEC-08": 0
+  },
   "locked_tests": {
     "tests/ci/retry.sudo.test.ts": "ad19bde7979ec5e93b542959066cd4fd619773ee82547fd9ae7da1d46a09a81b",
     "tests/ci/speed-limits.acceptance.test.ts": "21ef88e374e0b48c18bca5f10089c00bbb135b4de7646c123b2de720d010e66c"
@@ -533,5 +542,12 @@
     "tests/ci/retry.sudo.test.ts:spec02-does-not-prove-sudo-fallback-ran": [
       "review r1"
     ]
-  }
+  },
+  "review_findings": {
+    "2": 0
+  },
+  "judge_results": {
+    "1": "PASS"
+  },
+  "doc_id": "doc-31"
 }
