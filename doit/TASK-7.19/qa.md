@@ -25,3 +25,7 @@ Asked 2026-11-19. Options: printed grids + sign-off before Done (Recommended) / 
 ## Q-3 — Cold re-raise side effect of Q-1 (raised in revision)
 Asked 2026-11-19. The single "re-raise" spot per seat also serves cold 3-bets. Under Q-1, CO facing a UTG open and an HJ 3-bet would continue about 22% of hands with nothing invested. Options: widen now and split later via TASK-7.21 (Recommended) / split the spot in this story / compromise width.
 **Answer (user):** Widen now, split later (Recommended). The spec is unchanged; the evidence is recorded on TASK-7.21.
+
+## Q-4 — User sign-off (AC#6)
+Asked 2026-11-19 after judge round 1 passed every automated item. Options: sign off + fix the 2 wordings (Recommended) / sign off as is / request changes.
+**Answer (user):** Sign off + fix the 2 wordings (Recommended). The user approves the revised chart, provided the BB re-raise text ("When we raised, our blind and our raise are already in…") and the SB blind-defence text ("at least two players") are fixed before Done.

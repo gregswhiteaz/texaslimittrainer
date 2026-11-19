@@ -467,7 +467,7 @@
     {
       "position": "BB",
       "situation": "re-raise",
-      "justification": "Usually we raised the limpers, or re-raised a single raiser, and someone raised again. Our blind and our raise are already in, so the price for one more bet is good, but we will act first or second on every later street. We keep every hand we raised with and add a few that play well in a big pot: sixes, jack-ten suited and ten-nine suited. Only premium hands raise again: aces, kings, queens and ace-king, with jacks close to a raise. Everything else folds, mainly offsuit hands that are dominated and hard to play out of position. The same advice applies when an open and a re-raise come before we act, and when a fourth bet comes after our own re-raise; the betting is then capped, so a raise becomes a call.",
+      "justification": "Usually we raised the limpers, or re-raised a single raiser, and someone raised again. When we raised, our blind and our raise are already in, so the price for one more bet is good, but we will act first or second on every later street. We keep every hand we raised with and add a few that play well in a big pot: sixes, jack-ten suited and ten-nine suited. Only premium hands raise again: aces, kings, queens and ace-king, with jacks close to a raise. Everything else folds, mainly offsuit hands that are dominated and hard to play out of position. The same advice applies when an open and a re-raise come before we act, and when a fourth bet comes after our own re-raise; the betting is then capped, so a raise becomes a call.",
       "grid": [
         "R    R    C    C    C    F    F    F    F    F    F    F    F",
         "R    R    C    C    F    F    F    F    F    F    F    F    F",
@@ -487,7 +487,7 @@
     {
       "position": "SB",
       "situation": "blind-defence",
-      "justification": "One player has raised. Usually the big blind is still behind us, so calling invites the big blind in and leaves us out of position against two players; we mostly re-raise to play heads-up against the raiser, with big and middle pairs, strong aces and the best suited broadways. Sevens, sixes and jack-ten suited call, and everything else folds. If we completed and the big blind raised, nobody is left to act behind us, but we are still out of position, so the same hands re-raise, call or fold.",
+      "justification": "One player has raised. Usually the big blind is still behind us, so calling invites the big blind in and leaves us out of position against at least two players; we mostly re-raise to play heads-up against the raiser, with big and middle pairs, strong aces and the best suited broadways. Sevens, sixes and jack-ten suited call, and everything else folds. If we completed and the big blind raised, nobody is left to act behind us, but we are still out of position, so the same hands re-raise, call or fold.",
       "grid": [
         "R    R    R    R    R    R*/F F    F    F    F    F    F    F",
         "R    R    R    R    R*/F F    F    F    F    F    F    F    F",

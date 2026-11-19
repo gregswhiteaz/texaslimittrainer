@@ -146,11 +146,13 @@ Note: CO re-raise folds A9o and A8o. The locked `tests/table/review.acceptance.t
 
 - Raise: 2.6% → 2.6%; continue: 10.4% → 10.4%
 - Grid changed: no; text changed: yes
+- Sign-off tweak: "Our blind and our raise are already in" now reads "When we raised, our blind and our raise are already in", so it holds on the cold route (open and re-raise before BB acts).
 
 ## SB blind-defence
 
 - Raise: 9.5% → 9.5%; continue: 10.7% → 10.7%
 - Grid changed: no; text changed: yes
+- Sign-off tweak: "out of position against two players" now reads "out of position against at least two players", which stays true when callers are already in.
 
 ## BB blind-defence
 

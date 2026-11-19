@@ -14,3 +14,9 @@
 - Commands: `npm run typecheck` (exit 0), `npm run lint` (exit 0), `npm run playtest -- --hands 10000 --seed 42`
   (Invariant violations: 0), `npm test` (75 files passed; 276 passed, 2 skipped; no coverage error).
 - Saved `chart-print.txt` (full `npm run chart:print` output) and `chart-changes.md` for the user's sign-off.
+
+## FIX (user sign-off tweaks)
+- Item 1 (BB re-raise text): fixed — "Our blind and our raise are already in" → "When we raised, our blind and our raise are already in", true on the cold route too. Grid unchanged.
+- Item 2 (SB blind-defence text): fixed — "against two players" → "against at least two players". Grid unchanged.
+- Regenerated `chart-print.txt` via `npm run --silent chart:print` (identical: the print has no justification text); noted both tweaks in `chart-changes.md`.
+- Commands: `npx vitest run tests/advice` (16 files, 80 passed), `npm run typecheck` (exit 0), `npm run lint` (exit 0).

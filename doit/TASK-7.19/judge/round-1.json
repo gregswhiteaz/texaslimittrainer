@@ -1,0 +1,82 @@
+{
+ "round": 1,
+ "test_suite": {
+  "command": "npm test",
+  "result": "PASS",
+  "passed": 276,
+  "failed": 0,
+  "notes": "75 files, 276 passed, 2 skipped; no 'ERROR: Coverage' line; chart-print.ts not listed in the coverage table (table lists only files below 100%). npm run lint and npm run typecheck exit 0. Locked grade, preflop, review, tag acceptance tests pass unchanged. CI run 44452256365 on head 003cca5 (doit/TASK-7.19): completed, success (job: Lint, typecheck, build, test and e2e)."
+ },
+ "end_to_end": {
+  "command": "npm run chart:print (also with extra args)",
+  "result": "PASS",
+  "expected": "exit 0, no stderr, 26 blocks in APPLICABLE_SPOTS order, header 'P S: raise x.x%, continue y.y%', column header, 13 rank rows of the raw JSON tokens padded to width 5 with trailing spaces trimmed, blocks separated by one empty line, ending in a newline; UTG/HJ/CO/BTN re-raise widths ~80-90% of unopened; only premium R in re-raise spots; BB blind-defence K9o at least as firm as Q9o/J9o/T8o",
+  "actual": "exit 0, empty stderr, extra args ignored; output byte-identical to an independently built rendering of the raw JSON (26 blocks); contains 'UTG unopened: raise 16.0%, continue 16.0%' and 'BB limpers: raise 9.4%, continue 100.0%'; re-raise widths UTG 14.2/16.0, HJ 16.4/19.2, CO 22.5/27.0, BTN 34.2/40.6; R cells in re-raise spots only QQ+/AK (BTN also JJ, AQs); BB blind-defence K9o, Q9o, J9o, T8o all C. Output equals doit/TASK-7.19/chart-print.txt."
+ },
+ "integrity": {
+  "result": "PASS",
+  "notes": "doit.py test-integrity exit 0. Diff vs base touches only the 7 in-scope files; src/advice/preflop.ts, preflop-chart.ts, hand-class.ts, src/engine, src/bots, src/ui, e2e untouched; no existing test changed except the D-3 band line + comment in six-max-chart.test.ts (identical diff vs main). Printer has no special-casing; acceptance tests compute expectations independently from raw JSON. Unopened spots: no action changes; only BTN 98o F*/R->F, SB K9o R*/F->R, SB 98o F*/C->F; UTG unopened untouched; limpers/raise/raise-and-calls grids unchanged. package.json gains only the chart:print script."
+ },
+ "items": [
+  {
+   "spec": "SPEC-01",
+   "result": "PASS",
+   "evidence": "Locked test passes; it spawns npm, reads JSON via node:fs and recomputes shares independently. Holdout: independent renderer of the raw JSON compared byte-for-byte with stdout -> identical. Formatter mutants (2-decimal percentages, dropped '*', wrong call weight, dropped first spot) each make the locked test fail."
+  },
+  {
+   "spec": "SPEC-02",
+   "result": "PASS",
+   "evidence": "Independent recompute: UTG 188/212=0.887, HJ 218/254=0.858, CO 298/358=0.832, BTN 454/538=0.844; every continued class is in the unopened raise set. Pre-task chart fails (0.60/0.54/0.44/0.39). Probe 1 (real): UTG re-raise A9s, KTs, QTs, AJo -> F (164/212=0.774) -> test fails; ATo -> C (200/212=0.943) fails; adding unopened-fold K6s to CO re-raise fails; boundary 170/212=0.802 passes (not over-strict)."
+  },
+  {
+   "spec": "SPEC-03",
+   "result": "PASS",
+   "evidence": "R cells: UTG/HJ/CO/SB {AA,KK,QQ,AKs,AKo}, BTN adds JJ, AQs, BB {AA,KK,QQ,AKs,AKo} - all within premium set. SB 358/406=0.882 subset of SB raise set. BB keeps 124/124 of U; extras 66, JTs, T9s all continue in BB blind-defence. Widths: BTN 34.2 <=41, others <=30. Mutants: CO AJs R, SB drop to 322/406, BB re-raise K2o C, BB U share cut each fail the test."
+  },
+  {
+   "spec": "SPEC-04",
+   "result": "PASS",
+   "evidence": "Holdout A-4 offsuit check on BB blind-defence: 0 violations; K9o/Q9o/J9o/T8o all C; width 46.3% (band 35-60), raise 5.7% (5-15). Mutant K9o -> C*/F fails SPEC-04 and SPEC-05."
+  },
+  {
+   "spec": "SPEC-05",
+   "result": "PASS",
+   "evidence": "Own A-4 implementation (offsuit + suited kicker>=6) over all 26 spots: 0 violations now, 41 on the pre-task chart. Mutants BTN unopened 98o back to F*/R and CO re-raise A9s F (suited inversion vs A8s) both fail the test."
+  },
+  {
+   "spec": "SPEC-06",
+   "result": "PASS",
+   "evidence": "Read all 26 texts + chart text against grids and the section 5 route table. Every named hand/group checked against its grid (e.g. UTG re-raise pairs to 55, folds ATo/KJo; HJ folds KJo/QJo/A9o; CO folds QTo/JTo/A9o-A7o; BTN folds A4o-A2o/K8o/Q9o/J9o/T9o; SB folds A7o-A5o/K9o; BB adds 66/JTs/T9s; BB blind-defence price 3.5:1 lone open, 3:1 SB raise verified). All six re-raise texts state most opened hands continue, only premium raise again, and the other routes with raise->call at the cap. HJ/CO/BTN raise texts cover cold and limp routes; SB blind-defence covers the complete-then-BB-raise route; HJ raise-and-calls qualifies closing the action. Chart-level text updated. One LOW wording nit recorded (J-1-01)."
+  },
+  {
+   "spec": "SPEC-07",
+   "result": "PASS",
+   "evidence": "Text contains 'close the action' (with limper qualifier), no 'usually close'; named {AJs,ATs,A9s,A8s,A5s,A4s} == suited-ace calls. Mutants: 'usually close' restored, A4s removed, A7s added - each fails the test."
+  },
+  {
+   "spec": "SPEC-08",
+   "result": "PASS",
+   "evidence": "npm test exit 0, no coverage error; six-max-chart.test.ts authored-chart test passes; git diff --stat vs base over six-max-chart.test.ts, preflop/grade acceptance and tests/bots shows only six-max-chart.test.ts (2+/1-: band [6,30]->[6,41] plus comment); same diff vs main."
+  },
+  {
+   "spec": "SPEC-09",
+   "result": "PASS",
+   "evidence": "lint, typecheck, npm test all exit 0 (Prettier accepts JSON). chart-print.ts imports only ./hand-class and ./preflop-chart (type). package.json diff: only the chart:print script added. Coverage: chart-print.ts absent from below-100% table."
+  },
+  {
+   "spec": "SPEC-10",
+   "result": "PENDING-USER",
+   "evidence": "User sign-off is collected by the orchestrator after judging (D-4); not judged here. Review material doit/TASK-7.19/chart-print.txt matches current chart:print output."
+  }
+ ],
+ "findings": [
+  {
+   "id": "J-1-01",
+   "severity": "LOW",
+   "spec": "SPEC-06",
+   "expected_vs_actual": "SB blind-defence route (a) includes a raise with callers; text says calling 'leaves us out of position against two players', which understates the field when callers are in (pre-existing phrase, kept).",
+   "fix": "Say 'against at least two players' or similar. Optional; can be folded into the user's sign-off tweaks."
+  }
+ ],
+ "summary": "All automated items pass with independent recomputation and 18 mutants killed (boundary 170/212 correctly passes). Playtest 10,000 hands (seeds 42 and 7): 0 invariant violations. src/ and tests/ left clean. SPEC-10 (user sign-off) pending with orchestrator. No blocking findings. CI run 44452256365 on 003cca5: success."
+}
