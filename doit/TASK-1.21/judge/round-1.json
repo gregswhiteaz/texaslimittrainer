@@ -1,0 +1,43 @@
+{
+  "round": 1,
+  "test_suite": {
+    "command": "npm run lint && npm run typecheck && npm test",
+    "result": "PASS",
+    "passed": 282,
+    "failed": 0,
+    "notes": "76 files, 282 passed, 2 skipped (pre-existing visual skips); coverage thresholds met; lint and typecheck clean. Engine-only verbose run: 17 files / 56 tests pass, including all four input-hardening acceptance tests and the three new unit tests. CI run 44456492713 on doit/TASK-1.21 head 5139015 confirmed: completed / success."
+  },
+  "end_to_end": {
+    "command": "npm run playtest; npm run playtest -- --replay-code 0123456789abcdeffedcba9876543210 --size 6 (base de1e339 vs branch)",
+    "result": "PASS",
+    "expected": "Both exit 0, no invariant violations, output byte-identical to the base commit",
+    "actual": "Both exit 0 on base and branch; full output byte-identical (cmp) for the 10,000-hand default run (Invariant violations: 0, Largest pot $70, 244 capped streets) and the replay-code run. Extra: --hands 10000 --size 10 at seeds 1, 7, 999 also byte-identical to base."
+  },
+  "integrity": {
+    "result": "PASS",
+    "notes": "doit.py test-integrity TASK-1.21 exit 0 with no output. The diff touches only the 8 spec'd files; test diffs are pure additions (no removed lines in tests/). No input recognition, hard-coded expected values, early returns or mocks of the unit under test in src/. The vi.spyOn on nextUint32 in the acceptance test stubs the draw source, not nextIntUnbiased. seeded-random.ts contains none of Math.random/Date/performance/crypto/process (grep empty) and the locked TASK-7.1 check passes."
+  },
+  "items": [
+    {"spec": "SPEC-01", "result": "PASS", "evidence": "Acceptance AC#1 passes and asserts RangeError plus exact message for undefined/null/51/{}/['As']. Holdout via public parseCard: 11 non-string values (also boolean, bigint, symbol, function, String object, NaN) all give RangeError 'Invalid card: expected a string, got <typeof>' with no input echoed."},
+    {"spec": "SPEC-02", "result": "PASS", "evidence": "Acceptance AC#1 includes the 2,000-run fast-check property on exact message and length <= 29. Holdout: 9 and 10 chars echoed whole; 11 chars -> 'Invalid card: \"AsKdQhJcTs...\"'; 12, 50 and 1,000,000 chars truncated to 10 + '...'."},
+    {"spec": "SPEC-03", "result": "PASS", "evidence": "cards.test.ts 'card encoding and text helpers' passes; the original assertions are unchanged and two cases were added. Holdout: all 52 cards round-trip; 20,000+ random strings of <= 10 chars (quotes, newline, backslash, surrogate pairs) give byte-identical error text to base parseCard; parseCards('As Kx'), formatCard and makeCard messages identical to base."},
+    {"spec": "SPEC-04", "result": "PASS", "evidence": "Acceptance AC#2 passes. Holdout: each of the 4 stakes set to NaN, +/-Infinity, 2^53, 2^53+2, MAX_SAFE+2, 2^60, -4, 0, 4.5, '4', null -> RangeError 'Invalid stakes'; seat-3 stack NaN, +/-Infinity, 2^53, 2^53+2, 2^60, '160', 95 -> 'Stack at seat 3 must be an integer of at least 96'; stack MAX_SAFE_INTEGER accepted and startingStack kept."},
+    {"spec": "SPEC-05", "result": "PASS", "evidence": "hand.test.ts 'createHand rejects invalid configs with fixed messages' passes, including the new 2^50 rejection and 2^40/2^44 acceptance. Holdout at the exact A-4 boundary: with smallBet 1 and bigBet floor(MAX_SAFE/80)-1, 10 seats at minimumStack are accepted; one more on bigBet is rejected with 'Invalid stakes'. 18 existing invalid configs give error type and message byte-identical to base createHand. See J-1-01 for the limits of the A-4 guarantee."},
+    {"spec": "SPEC-06", "result": "PASS", "evidence": "Acceptance AC#3 passes. Holdout: config, stakes and seats built from one-shot getters (a second read would return 999999), seats and deck wrapped in counting Proxies -> hand created, 78 distinct fields each read exactly once, and the hand equals one built from plain objects. After return, mutating stakes, seat objects, seats.length=0, deck.fill(0) and button changes nothing in the state or legalActions; state.stakes and state.deck are not the caller's objects; createHand/applyAction never mutate caller input. 2,000 random valid hands played up to 40 random actions are JSON-identical to base."},
+    {"spec": "SPEC-07", "result": "PASS", "evidence": "Acceptance AC#4 passes, including the doc-comment source check. Holdout: 0, -0, -1, 1.5, NaN, +/-Infinity, 2^32+1, 2^32+0.5, 2^53, 2^64, -2^32 each throw RangeError 'nextIntUnbiased needs an integer n from 1 to 2^32, got <String(n)>' and consume no draw (next nextUint32 equals a twin's). n=1 and n=2^32 accepted; n=1 always returns 0."},
+    {"spec": "SPEC-08", "result": "PASS", "evidence": "Holdout BigInt Lemire reference with identical stubbed draws: 89,435 cases over 3,015 n (edge set 1, 2, 3, 52, 65535-65537, 2^21, 2^21+1, 2^31, 2^31+1, 3,000,000,019, 3,221,225,473, 2^32-1, 2^32, plus random n biased above 2^21 and near 2^32), edge x (0, 1, 65535, 65536, 2^31+/-, 2^32-1, 2^32-2) and 2,000 forced-rejection cases. Result and number of draws match in every case. Over the real generator, 45,000 draws match the reference driven by a twin base generator, with equal end state. Sensitivity check: putting the old double product back into src makes this check report 1,365 failures (src restored afterwards)."},
+    {"spec": "SPEC-09", "result": "PASS", "evidence": "seeded-random.test.ts 'nextIntUnbiased matches the previous formula wherever it was exact' passes; the [0,0,0,24,19] vector is kept. Holdout against the real base-commit Xoshiro128: all powers of two 2^0..2^31, plus 1, 2, 3, 52, 65537, 2^21-1, 2^21 and about 2,960 random n <= 2^21, 20 draws each from random states: identical sequences and identical end state."},
+    {"spec": "SPEC-10", "result": "PASS", "evidence": "deck.test.ts 'shuffledDeck deals the same decks as before the exact nextIntUnbiased' passes; locked golden-deck acceptance passes. Holdout: 20,004 replay codes (20,000 from OS randomness plus 4 edge codes) give decks identical to base-commit shuffledDeck."},
+    {"spec": "SPEC-11", "result": "PASS", "evidence": "lint, typecheck and npm test all pass with coverage thresholds met; test-integrity clean; banned-substring grep of seeded-random.ts is empty; npm run playtest exits 0 with 'Invariant violations: 0', byte-identical to base."}
+  ],
+  "findings": [
+    {
+      "id": "J-1-01",
+      "severity": "MEDIUM",
+      "spec": "SPEC-05",
+      "expected_vs_actual": "A-4 says that bounding 10 * minimumStack(stakes) by MAX_SAFE_INTEGER makes every chip amount a hand can produce a safe integer, because a seat can put in at most minimumStack under the 4-bet cap. Actual: legalActions has no raise cap (a raise is always offered while the stack covers it; preflop betCount passed 25 in a 10-seat hand), and SPEC-04 accepts stacks up to MAX_SAFE_INTEGER. A hand that createHand accepts (stakes at the A-4 bound {1,1,1,floor(MAX_SAFE/80)-1}, 10 seats of MAX_SAFE_INTEGER) and plays legally to showdown produces 11 unsafe numbers (largest 90071992547408820). All SPEC-05 behaviours as written pass; the stated safety guarantee does not hold. The missing raise cap is in code this task did not change; the minimumStack doc comment also claims a 4-bet cap.",
+      "fix": "Follow-up rather than a blocker: either enforce the 4-bet cap in legalActions/applyAction (TASK-1.4 behaviour), or also bound stacks (or 10 * max stack) in createHand so pot totals stay safe integers. Then remove the cap claim from the A-4 rationale and the minimumStack comment, or make the claim true."
+    }
+  ],
+  "summary": "All 11 SPEC items PASS. Full suite 282 passed / 0 failed; lint and typecheck clean; CI run 44456492713 on 5139015 succeeded. The 10,000-hand playtest and the replay-code run are byte-identical to the base commit; so are three extra 10-seat seeds. Holdout checks: nextIntUnbiased matches a BigInt Lemire reference on about 134k cases including all edge n, and the check catches the old formula when it is put back; 20,004 random replay codes give the same decks as the base; parseCard truncates correctly at 10/11 characters and rejects 11 kinds of non-string; getter- and Proxy-based configs are read once per field and nothing is aliased after return; unsafe, NaN and Infinity stakes and stacks are rejected with the existing messages; A-4 holds exactly at its boundary; existing messages are byte-identical to base. Integrity clean. One non-blocking MEDIUM finding: the A-4 'pot totals stay safe' rationale relies on a raise cap the engine does not enforce. src/ and tests/ left clean."
+}

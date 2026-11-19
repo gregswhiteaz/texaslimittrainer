@@ -4,7 +4,7 @@ title: Save the session after every hand so it can be resumed
 status: To Do
 assignee: []
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-18T23:20:00Z'
+updated_date: '2026-11-19T04:25:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -46,6 +46,7 @@ Plan key: E03-S11 · Dream: limit-holdem-trainer
 - [ ] #3 Given a session started with an edited line-up, When the session record is read, Then its line-up name is Custom and it lists every seat's style [REQ-052.3]
 - [ ] #4 Given a seat whose bot was replaced after hand 5, When the session is read after hand 5, Then that seat holds the new bot's id, name, style and $160 stack [REQ-052.3]
 - [ ] #5 Given a stored SessionConfig is loaded to resume a session, When it is validated, Then assertSessionConfig throws RangeError unless there is exactly one user seat equal to userSeat, players equals seats.length, button is one of the seats and every value is known — so a corrupt config can never show a bot's cards to the user (REQ-025)
+- [ ] #6 Given a restored session's stakes and stacks, When they are loaded, Then they pass the same safe-integer and pot-bound rules createHand applies before any table is built
 <!-- AC:END -->
 
 ## Definition of Done
@@ -68,4 +69,6 @@ Plan key: E03-S11 · Dream: limit-holdem-trainer
 
 <!-- SECTION:NOTES:BEGIN -->
 AC added from TASK-2.1 follow-up (doc-23).
+
+AC added from TASK-1.21 follow-up (doc-29).
 <!-- SECTION:NOTES:END -->
