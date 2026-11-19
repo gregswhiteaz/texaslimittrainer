@@ -89,8 +89,13 @@ describe('input hardening acceptance', () => {
         new RangeError('Stack at seat 3 must be an integer of at least 96'),
       );
     }
-    const state = createHand(config({ seats: seatsWithSeat3(Number.MAX_SAFE_INTEGER) }));
-    expect(state.players.find((p) => p.seat === 3)?.startingStack).toBe(Number.MAX_SAFE_INTEGER);
+    const state = createHand(config({ seats: seatsWithSeat3(Number.MAX_SAFE_INTEGER - 800) }));
+    expect(state.players.find((p) => p.seat === 3)?.startingStack).toBe(
+      Number.MAX_SAFE_INTEGER - 800,
+    );
+    expect(() => createHand(config({ seats: seatsWithSeat3(Number.MAX_SAFE_INTEGER) }))).toThrow(
+      new RangeError('Stacks must total at most 9007199254740991'),
+    );
   });
 
   it("AC#3 createHand does not alias the caller's stakes or seats", () => {

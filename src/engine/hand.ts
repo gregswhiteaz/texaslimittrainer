@@ -117,7 +117,7 @@ function isPositiveSafeInteger(value: number): boolean {
   return Number.isSafeInteger(value) && value > 0;
 }
 
-/** Least stack createHand accepts: the most one seat can put in under the 4-bet cap. $96 at $4/$8. */
+/** Least stack createHand accepts: 8 small bets + 8 big bets ($96 at $4/$8). */
 export function minimumStack(stakes: Stakes): number {
   return 8 * stakes.smallBet + 8 * stakes.bigBet;
 }
@@ -142,7 +142,7 @@ function validate(config: HandConfig): void {
     stakes.smallBlind > stakes.bigBlind ||
     stakes.bigBlind > stakes.smallBet ||
     stakes.smallBet >= stakes.bigBet ||
-    // Every pot and contribution total is at most 10 seats x minimumStack, so keep that a safe integer.
+    // A-4: keep 10 x minimumStack a safe integer. The stack total below bounds every chip amount.
     10 * minimumStack(stakes) > Number.MAX_SAFE_INTEGER
   ) {
     throw new RangeError('Invalid stakes');
@@ -160,6 +160,10 @@ function validate(config: HandConfig): void {
     if (!Number.isSafeInteger(stack) || stack < min) {
       throw new RangeError(`Stack at seat ${seat} must be an integer of at least ${min}`);
     }
+  }
+  // Chips are conserved, so every stack, contribution, pot and award is at most this total.
+  if (seats.reduce((total, { stack }) => total + stack, 0) > Number.MAX_SAFE_INTEGER) {
+    throw new RangeError('Stacks must total at most 9007199254740991');
   }
 }
 
