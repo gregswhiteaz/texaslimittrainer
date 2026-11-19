@@ -1,0 +1,28 @@
+{"reviewer": "code", "round": 1,
+ "rubric": [
+  {"item": "SPEC-01 correctness", "result": "pass"},
+  {"item": "SPEC-01 test strength", "result": "pass"},
+  {"item": "SPEC-02 correctness", "result": "pass"},
+  {"item": "SPEC-02 test strength", "result": "pass"},
+  {"item": "SPEC-03 correctness", "result": "pass"},
+  {"item": "SPEC-03 test strength", "result": "pass"},
+  {"item": "SPEC-04 correctness", "result": "pass"},
+  {"item": "SPEC-04 test strength", "result": "pass"},
+  {"item": "SPEC-05 correctness", "result": "pass"},
+  {"item": "SPEC-05 test strength", "result": "pass"},
+  {"item": "SPEC-06 correctness", "result": "pass"},
+  {"item": "SPEC-06 test strength", "result": "pass"},
+  {"item": "SPEC-07 correctness", "result": "pass"},
+  {"item": "SPEC-07 test strength", "result": "pass"},
+  {"item": "scope", "result": "pass"},
+  {"item": "concision", "result": "pass"},
+  {"item": "clarity", "result": "pass"}
+ ],
+ "findings": [
+  {"fingerprint": "doit/TASK-1.21/state.json:stale-lock-no-unlock-reason", "severity": "MINOR",
+   "file": "doit/TASK-1.21/state.json", "line": 28,
+   "issue": "Spec section 2 (and qa.md Q-2) asks to 'unlock the file with a reason' for the cross-story edit to tests/engine/input-hardening.acceptance.test.ts. No unlock event or reason is recorded anywhere: TASK-1.21's locked_tests still holds the pre-edit hash, and TASK-1.31's history is empty.",
+   "evidence": "doit/TASK-1.21/state.json:28 records a33876b5... (the base-commit hash). The file is now d8cdd7d8.... TASK-1.31 state.json has \"history\": []. The edit itself is correct and recorded in the TASK-1.31 implementation notes.",
+   "fix": "Run `doit.py unlock` (or update TASK-1.21's lock) with reason 'TASK-1.31 Q-2: total-stack bound makes the MAX_SAFE seat-3 acceptance false' and record the new hash d8cdd7d8b11b393b09fc9431fa459c631f11ea9862cc8e6b2cc486f4ed27efe3, so a later TASK-1.21 lock check does not flag tampering."}
+ ],
+ "summary": "The change matches the spec. validate sums the snapshot stacks after the per-seat loop and throws the exact Q-1 RangeError (A-1 order holds). Both comments are rewritten word for word, and the SPEC-06 grep returns nothing (exit 1). The tests would catch broken implementations. SPEC-03 fails if the check is removed or moved before the per-seat loop (the 2**53 case would then get the total error). SPEC-04 fails under factor 9 or 11. SPEC-05 throws on a second getter read and compares exact counts. SPEC-01/02 scan every chip field and check conservation, with a 10,000-action guard. The locked TASK-1.21 file changes only the seat-3 MAX_SAFE assertion: MAX_SAFE-800 is accepted and MAX_SAFE throws the new error, per Q-2. No scratch files and no new src helpers. Both changed test files pass locally (9/9) and the gate is green. The 211 lines are over the 190 budget, but only by a warn, and the extra lines are test code. One MINOR finding: the TASK-1.21 lock was never formally unlocked or re-hashed."}

@@ -4,14 +4,22 @@
   "branch": "doit/TASK-1.31",
   "base_commit": "67061d6b0c17d8b1c62a22e50ae3add94c8f5c5c",
   "started": "2026-11-19T16:19:13",
-  "review_round": 0,
-  "judge_round": 0,
+  "review_round": 1,
+  "judge_round": 1,
   "sendbacks": 0,
   "gate_runs": 2,
   "questions": 2,
   "assumptions": 0,
   "escalations": 0,
-  "item_failures": {},
+  "item_failures": {
+    "SPEC-01": 0,
+    "SPEC-02": 0,
+    "SPEC-03": 0,
+    "SPEC-04": 0,
+    "SPEC-05": 0,
+    "SPEC-06": 0,
+    "SPEC-07": 0
+  },
   "locked_tests": {
     "tests/engine/chip-safety.acceptance.test.ts": "b45a43e82a5102a6993a842c4dd921626db686a3379a98612730e5a569c7b3cb"
   },
@@ -549,5 +557,12 @@
   },
   "history": [],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-1.31",
-  "spec_sha256": "4c98bb5a4e1aae40fbcdc8678d190eebb2254f577320c30e75f37576100ea9e4"
+  "spec_sha256": "4c98bb5a4e1aae40fbcdc8678d190eebb2254f577320c30e75f37576100ea9e4",
+  "review_findings": {
+    "1": 0
+  },
+  "judge_results": {
+    "1": "PASS"
+  },
+  "doc_id": "doc-35"
 }
