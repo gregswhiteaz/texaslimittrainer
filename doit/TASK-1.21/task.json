@@ -1,0 +1,155 @@
+{
+  "id": "TASK-1.21",
+  "title": "Harden engine input validation found in review",
+  "status": "To Do",
+  "archived": false,
+  "type": "chore",
+  "priority": "medium",
+  "project": null,
+  "assignees": [],
+  "reporter": null,
+  "labels": [
+    "dream-limit-holdem-trainer",
+    "follow-up"
+  ],
+  "milestone": "m-0",
+  "parentTaskId": "TASK-1",
+  "acceptanceCriteriaCompleted": 0,
+  "acceptanceCriteriaCount": 4,
+  "references": [
+    "doc-7",
+    "doc-9",
+    "doc-10"
+  ],
+  "modifiedFiles": [],
+  "ordinal": 166000,
+  "createdAt": "2026-11-18T07:03:00Z",
+  "updatedAt": null,
+  "dueDate": null,
+  "isReady": true,
+  "path": "backlog/tasks/task-1.21 - Harden-engine-input-validation-found-in-review.md",
+  "description": "Follow-up from the TASK-1.2, TASK-1.3 and TASK-1.4 security reviews (non-blocking MINORs). Engine entry points accept a few malformed inputs that a later caller (playtest CLI, session layer, saved data) could pass in.",
+  "dependencies": [
+    "TASK-1.4"
+  ],
+  "dependencyGraph": {
+    "root": "TASK-1.21",
+    "nodes": [
+      {
+        "id": "TASK-1.21",
+        "title": "Harden engine input validation found in review",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": 0,
+        "dependentDepth": 0
+      },
+      {
+        "id": "TASK-1.1",
+        "title": "Bootstrap the strict TypeScript project with one-command checks",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 4,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.2",
+        "title": "Rank showdown hands by real poker hand rankings",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 2,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.3",
+        "title": "Deal every hand from a seeded shuffle with a replay code",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 2,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.4",
+        "title": "Play a complete fixed-limit hand from blinds to showdown",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 1,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.7",
+        "title": "Run every check in GitHub Actions on each push and pull request",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 3,
+        "dependentDepth": null
+      }
+    ],
+    "edges": [
+      {
+        "from": "TASK-1.2",
+        "to": "TASK-1.7"
+      },
+      {
+        "from": "TASK-1.3",
+        "to": "TASK-1.7"
+      },
+      {
+        "from": "TASK-1.4",
+        "to": "TASK-1.2"
+      },
+      {
+        "from": "TASK-1.4",
+        "to": "TASK-1.3"
+      },
+      {
+        "from": "TASK-1.7",
+        "to": "TASK-1.1"
+      },
+      {
+        "from": "TASK-1.21",
+        "to": "TASK-1.4"
+      }
+    ]
+  },
+  "readiness": {
+    "isReady": true,
+    "isBlocked": false,
+    "blockingDependencies": [],
+    "missingDependencies": []
+  },
+  "documentation": [],
+  "subtasks": [],
+  "acceptanceCriteria": [
+    {
+      "index": 1,
+      "text": "Given parseCard is called with a non-string or a string longer than 3 characters, When it rejects the input, Then it throws a typed error whose message echoes at most 10 characters of the input",
+      "checked": false
+    },
+    {
+      "index": 2,
+      "text": "Given createHand with any stake or stack that is not a safe integer, When the hand is created, Then it is rejected with the existing invalid-config error",
+      "checked": false
+    },
+    {
+      "index": 3,
+      "text": "Given createHand has returned, When the caller mutates the stakes or seats objects it passed in, Then the hand state is unchanged",
+      "checked": false
+    },
+    {
+      "index": 4,
+      "text": "Given nextIntUnbiased(n), When n is outside the range for which it is exactly unbiased, Then it either throws RangeError or is exactly unbiased for that n, and its doc comment states the supported range",
+      "checked": false
+    }
+  ],
+  "definitionOfDone": [],
+  "implementationPlan": null,
+  "implementationNotes": null,
+  "comments": [],
+  "finalSummary": null
+}
