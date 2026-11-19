@@ -28,10 +28,14 @@ export function cardSuit(card: Card): Suit {
 }
 
 export function parseCard(text: string): Card {
+  if (typeof text !== 'string') {
+    throw new RangeError(`Invalid card: expected a string, got ${typeof text}`);
+  }
   const rank = RANK_CHARS.indexOf(text.charAt(0));
   const suit = SUIT_CHARS.indexOf(text.charAt(1));
   if (text.length !== 2 || rank < 0 || suit < 0) {
-    throw new RangeError(`Invalid card: "${text}"`);
+    const echo = text.length <= 10 ? text : `${text.slice(0, 10)}...`;
+    throw new RangeError(`Invalid card: "${echo}"`);
   }
   return rank * 4 + suit;
 }

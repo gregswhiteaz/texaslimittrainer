@@ -164,6 +164,13 @@ describe('hand', () => {
         { seats: [...seats([1, 2]), { seat: 3, stack: 95 }] },
         'Stack at seat 3 must be an integer of at least 96',
       ],
+      [
+        {
+          stakes: { smallBlind: 1, bigBlind: 1, smallBet: 1, bigBet: 2 ** 50 },
+          seats: seats(SIX, 2 ** 52),
+        },
+        'Invalid stakes',
+      ],
     ];
     for (const [overrides, message] of cases) {
       expect(() => createHand(config(overrides))).toThrow(new RangeError(message));
@@ -172,6 +179,10 @@ describe('hand', () => {
     const unevenBlinds = { smallBlind: 1, bigBlind: 3, smallBet: 3, bigBet: 6 };
     expect(() => createHand(config({ stakes: unevenBlinds }))).not.toThrow();
     expect(minimum.players.map((p) => p.startingStack)).toEqual([96, 96, 96]);
+    const large = { smallBlind: 1, bigBlind: 1, smallBet: 1, bigBet: 2 ** 40 };
+    const largeHand = createHand(config({ stakes: large, seats: seats(SIX, 2 ** 44) }));
+    expect(largeHand.stakes).toEqual(large);
+    expect(largeHand.players.every((p) => p.startingStack === 2 ** 44)).toBe(true);
   });
 
   it('applyAction is pure and never mutates its input', () => {

@@ -6,6 +6,20 @@ function take(next: () => number, count: number): number[] {
   return Array.from({ length: count }, () => next());
 }
 
+/** The nextIntUnbiased formula before TASK-1.21: a double product, exact only below 2^53. */
+function legacyNextIntUnbiased(rng: Xoshiro128, n: number): number {
+  let m = rng.nextUint32() * n;
+  let low = m % 4294967296;
+  if (low < n) {
+    const threshold = (4294967296 - n) % n;
+    while (low < threshold) {
+      m = rng.nextUint32() * n;
+      low = m % 4294967296;
+    }
+  }
+  return Math.floor(m / 4294967296);
+}
+
 describe('seeded random', () => {
   it('hash and generators match reference vectors', () => {
     expect(fnv1a32('')).toBe(2166136261);
@@ -64,6 +78,31 @@ describe('seeded random', () => {
       }
       if (n === 52) expect(seen.size).toBe(52);
     }
+  });
+
+  it('nextIntUnbiased matches the previous formula wherever it was exact', () => {
+    const fixed = Xoshiro128.fromState(1, 2, 3, 4);
+    expect(take(() => fixed.nextIntUnbiased(52), 5)).toEqual([0, 0, 0, 24, 19]);
+
+    const compare = (state: [number, number, number, number], n: number) => {
+      const current = Xoshiro128.fromState(...state);
+      const legacy = Xoshiro128.fromState(...state);
+      expect(take(() => current.nextIntUnbiased(n), 20)).toEqual(
+        take(() => legacyNextIntUnbiased(legacy, n), 20),
+      );
+      expect(current.nextUint32()).toBe(legacy.nextUint32());
+    };
+
+    const word = fc.integer({ min: 0, max: 0xffffffff });
+    fc.assert(
+      fc.property(
+        fc.tuple(word, word, word, word).filter((w) => w.some((x) => x !== 0)),
+        fc.integer({ min: 1, max: 2 ** 21 }),
+        compare,
+      ),
+      { numRuns: 2_000 },
+    );
+    for (let k = 0; k <= 31; k++) compare([1, 2, 3, 4], 2 ** k);
   });
 
   it('mixState128 matches reference vectors and keeps the state non-zero', () => {

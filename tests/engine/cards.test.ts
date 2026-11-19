@@ -31,6 +31,10 @@ describe('cards', () => {
       expect(() => parseCard(text)).toThrow(new RangeError(`Invalid card: "${text}"`));
     }
     expect(() => parseCards('As Kx')).toThrow(new RangeError('Invalid card: "Kx"'));
+    expect(() => parseCard(undefined as unknown as string)).toThrow(
+      new RangeError('Invalid card: expected a string, got undefined'),
+    );
+    expect(() => parseCards('As KdQhJcTs9x')).toThrow(new RangeError('Invalid card: "KdQhJcTs9x"'));
     for (const value of [52, -1, 1.5, NaN]) {
       expect(() => formatCard(value)).toThrow(new RangeError(`Invalid card: ${value}`));
     }

@@ -113,8 +113,8 @@ function clockwiseAfter(seats: readonly SeatNumber[], from: SeatNumber): SeatNum
   return [...seats.slice(start), ...seats.slice(0, start)];
 }
 
-function isPositiveInteger(value: number): boolean {
-  return Number.isInteger(value) && value > 0;
+function isPositiveSafeInteger(value: number): boolean {
+  return Number.isSafeInteger(value) && value > 0;
 }
 
 /** Least stack createHand accepts: the most one seat can put in under the 4-bet cap. $96 at $4/$8. */
@@ -138,10 +138,12 @@ function validate(config: HandConfig): void {
   if (!seen.has(button)) throw new RangeError(`Button must be a dealt-in seat: ${button}`);
   const amounts = [stakes.smallBlind, stakes.bigBlind, stakes.smallBet, stakes.bigBet];
   if (
-    !amounts.every(isPositiveInteger) ||
+    !amounts.every(isPositiveSafeInteger) ||
     stakes.smallBlind > stakes.bigBlind ||
     stakes.bigBlind > stakes.smallBet ||
-    stakes.smallBet >= stakes.bigBet
+    stakes.smallBet >= stakes.bigBet ||
+    // Every pot and contribution total is at most 10 seats x minimumStack, so keep that a safe integer.
+    10 * minimumStack(stakes) > Number.MAX_SAFE_INTEGER
   ) {
     throw new RangeError('Invalid stakes');
   }
@@ -155,17 +157,27 @@ function validate(config: HandConfig): void {
   }
   const min = minimumStack(stakes);
   for (const { seat, stack } of seats) {
-    if (!Number.isInteger(stack) || stack < min) {
+    if (!Number.isSafeInteger(stack) || stack < min) {
       throw new RangeError(`Stack at seat ${seat} must be an integer of at least ${min}`);
     }
   }
 }
 
-/** Posts blinds and deals hole cards. Throws RangeError on invalid config. */
+/**
+ * Posts blinds and deals hole cards. Copies config first, so later changes to the caller's objects do
+ * not affect the hand. Throws RangeError on invalid config.
+ */
 export function createHand(config: HandConfig): HandState {
-  validate(config);
-  const { stakes, button, deck } = config;
-  const sorted = [...config.seats].sort((a, b) => a.seat - b.seat);
+  const { smallBlind, bigBlind, smallBet, bigBet } = config.stakes;
+  const snapshot: HandConfig = {
+    stakes: { smallBlind, bigBlind, smallBet, bigBet },
+    seats: config.seats.map(({ seat, stack }) => ({ seat, stack })),
+    button: config.button,
+    deck: [...config.deck],
+  };
+  validate(snapshot);
+  const { stakes, button, deck } = snapshot;
+  const sorted = [...snapshot.seats].sort((a, b) => a.seat - b.seat);
   const seats = sorted.map((s) => s.seat);
   const n = seats.length;
   const dealOrder = clockwiseAfter(seats, button);
@@ -190,7 +202,7 @@ export function createHand(config: HandConfig): HandState {
     stakes,
     button,
     players,
-    deck: [...deck],
+    deck,
     board: [],
     burned: [],
     street: 'preflop',

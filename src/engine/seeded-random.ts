@@ -84,18 +84,36 @@ export class Xoshiro128 {
     return Math.floor((this.nextUint32() * n) / 4294967296);
   }
 
-  /** Integer in [0, n), exactly uniform (Lemire multiply-shift with rejection). n is 1..2^31. */
+  /**
+   * Integer in [0, n), exactly uniform for every integer n in 1..2^32 (Lemire multiply-shift with
+   * rejection, exact 64-bit product). Throws RangeError for any other n.
+   */
   nextIntUnbiased(n: number): number {
-    let m = this.nextUint32() * n;
-    let low = m % 4294967296;
+    if (!Number.isInteger(n) || n < 1 || n > 4294967296) {
+      throw new RangeError(`nextIntUnbiased needs an integer n from 1 to 2^32, got ${String(n)}`);
+    }
+    let [high, low] = multiply32(this.nextUint32(), n);
     if (low < n) {
       // Reject the (2^32 mod n) low values that would make some results more likely.
       const threshold = (4294967296 - n) % n;
       while (low < threshold) {
-        m = this.nextUint32() * n;
-        low = m % 4294967296;
+        [high, low] = multiply32(this.nextUint32(), n);
       }
     }
-    return Math.floor(m / 4294967296);
+    return high;
   }
+}
+
+/**
+ * [floor(x * n / 2^32), x * n mod 2^32] for x in 0..2^32-1 and n in 1..2^32, exact: the product is
+ * split into 16-bit halves of n so every intermediate stays below 2^53.
+ */
+function multiply32(x: number, n: number): [number, number] {
+  const nLo = n % 65536;
+  const nHi = (n - nLo) / 65536;
+  const b = x * nHi;
+  const bLo = b % 65536;
+  const s = bLo * 65536 + x * nLo;
+  const low = s % 4294967296;
+  return [(b - bLo) / 65536 + (s - low) / 4294967296, low];
 }

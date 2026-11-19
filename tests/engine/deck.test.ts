@@ -1,11 +1,13 @@
 import fc from 'fast-check';
 import { afterEach, describe, expect, it, vi } from 'vitest';
+import type { Card } from '../../src/engine/cards';
 import {
   isReplayCode,
   newReplayCode,
   replayCodeFromWords,
   shuffledDeck,
 } from '../../src/engine/deck';
+import { mixState128, Xoshiro128 } from '../../src/engine/seeded-random';
 
 const GOLDEN_CODES = [
   '00000000000000000000000000000001',
@@ -13,6 +15,32 @@ const GOLDEN_CODES = [
   '0123456789abcdeffedcba9876543210',
   'ffffffffffffffffffffffffffffffff',
 ];
+
+/** shuffledDeck before TASK-1.21: Fisher-Yates with the double-product nextIntUnbiased. */
+function legacyShuffledDeck(code: string): Card[] {
+  const word = (k: number) => parseInt(code.slice(8 * k, 8 * k + 8), 16);
+  const rng = Xoshiro128.fromState(...mixState128([word(0), word(1), word(2), word(3)]));
+  const nextIntUnbiased = (n: number) => {
+    let m = rng.nextUint32() * n;
+    let low = m % 4294967296;
+    if (low < n) {
+      const threshold = (4294967296 - n) % n;
+      while (low < threshold) {
+        m = rng.nextUint32() * n;
+        low = m % 4294967296;
+      }
+    }
+    return Math.floor(m / 4294967296);
+  };
+  const deck: Card[] = Array.from({ length: 52 }, (_, card) => card);
+  for (let i = 51; i > 0; i--) {
+    const j = nextIntUnbiased(i + 1);
+    const card = deck[i] as Card;
+    deck[i] = deck[j] as Card;
+    deck[j] = card;
+  }
+  return deck;
+}
 
 afterEach(() => {
   vi.restoreAllMocks();
@@ -69,6 +97,16 @@ describe('deck', () => {
       expect(isReplayCode(text), text).toBe(false);
     }
     for (const code of GOLDEN_CODES) expect(isReplayCode(code)).toBe(true);
+  });
+
+  it('shuffledDeck deals the same decks as before the exact nextIntUnbiased', () => {
+    const g = new Xoshiro128(2121);
+    const codes = [...GOLDEN_CODES];
+    while (codes.length < GOLDEN_CODES.length + 10_000) {
+      const words = [g.nextUint32(), g.nextUint32(), g.nextUint32(), g.nextUint32()];
+      if (words.some((w) => w !== 0)) codes.push(replayCodeFromWords(words));
+    }
+    for (const code of codes) expect(shuffledDeck(code), code).toEqual(legacyShuffledDeck(code));
   });
 
   it('invalid words and codes throw RangeError', () => {
