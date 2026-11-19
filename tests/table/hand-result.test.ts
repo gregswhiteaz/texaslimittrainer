@@ -36,6 +36,8 @@ describe('hand result', () => {
       ['Ts 9h', '8c 7d 6s', 'Straight'],
       ['2c 2d', '5h 5s 5c Ah', 'Full house, fives over twos'],
       ['Qc Qd', 'Qh 3s 3c 3d', 'Full house, queens over threes'],
+      ['5h 5s', '5c Kd Kh 2c 3d', 'Full house, fives over kings'],
+      ['5h 5s', '5c Kd Kh Qc Qd', 'Full house, fives over kings'],
     ];
     for (const [hole, board, name] of examples) expect(named(hole, board), hole).toBe(name);
 

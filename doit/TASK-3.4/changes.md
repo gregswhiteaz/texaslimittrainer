@@ -14,7 +14,7 @@
 - `src/ui/styles.css` — modified: `.hand-result` styles (A-9 colours; compact one-row layout, 30×42 shown cards).
 - `tests/support/table-scenarios.ts` — modified: E4 `button: 6` in `tableAt`; `fixedDeck` helper and `KINGS_SHOWDOWN`,
   `AVA_UNCONTESTED`, `SPLIT_STRAIGHT` states.
-- `tests/table/hand-result.test.ts` — created: SPEC-05, SPEC-06.
+- `tests/table/hand-result.test.ts` — created: SPEC-05, SPEC-06 (fix round 1: full-house examples with pair above trips).
 - `tests/table/next-hand.test.ts` — created: SPEC-08, SPEC-12, SPEC-15.
 - `tests/table/next-hand.acceptance.test.ts` — created: SPEC-09, SPEC-10, SPEC-11, SPEC-13.
 - `tests/ui/hand-result.acceptance.test.tsx` — created: SPEC-01, SPEC-02, SPEC-03.

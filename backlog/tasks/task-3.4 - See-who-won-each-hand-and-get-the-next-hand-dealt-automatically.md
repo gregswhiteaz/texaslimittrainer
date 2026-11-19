@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-19T00:41:00Z'
+updated_date: '2026-11-19T00:51:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-0
@@ -91,4 +91,6 @@ AC added from TASK-3.1 follow-up (doc-21).
 AC added from TASK-3.3 follow-up (doc-24).
 
 Cross-story change (orchestrator D-2 on precedent): exactly the edits E1–E4 listed in spec §5 (e2e/table.spec.ts showdown and fold tests, e2e/action-bar.spec.ts real-timer context, tests/support/table-scenarios.ts button). No other assertion may be removed or weakened. User Q-4: the short-stack top-up is TEMPORARY; its removal becomes a testable AC on TASK-1.16/TASK-3.11 in Step 6a.
+
+Build: minimumStack export (only engine change); nextHand (carry stacks, button +1, handNumber +1, TEMPORARY top-up to $160 below minimum per Q-4); hand-result.ts (winner lines, hand names per Q-1, winners' cards only per Q-3); 'Hand over' result row, pot $0 (Q-2); 1.5 s auto-deal gate-able for TASK-9.1; E1–E4 test edits only; e2e 80 passed Chromium + WebKit; playtest 0 violations; gate PASS. Screenshots: doit/TASK-3.4/result-showdown.png, result-uncontested.png.
 <!-- SECTION:NOTES:END -->

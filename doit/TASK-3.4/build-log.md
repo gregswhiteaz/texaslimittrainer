@@ -16,3 +16,6 @@
 - Screenshots: `doit/TASK-3.4/result-showdown.png`, `doit/TASK-3.4/result-uncontested.png` (1280×720, Chromium,
   taken with a temporary spec that was deleted).
 - Full `npm test` left to the stop-hook gate (no other Vitest run active).
+
+## FIX round 1
+- Item 1 (full-house-pair-above-trips-untested): fixed — added `['5h 5s','5c Kd Kh 2c 3d','Full house, fives over kings']` and `['5h 5s','5c Kd Kh Qc Qd','Full house, fives over kings']` to SPEC-05 examples in `tests/table/hand-result.test.ts`. Mutants `withAtLeast(2)[1]` ("fives over fives") and `find(rank => rank < trips)` ("fives over undefined") each fail 1/2 tests in that file; src reverted, 2/2 pass. `npm run typecheck`, `npm run lint`: exit 0. Full `npm test` left to the stop-hook gate.
