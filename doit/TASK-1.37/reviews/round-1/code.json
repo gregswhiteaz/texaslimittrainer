@@ -1,0 +1,33 @@
+{"reviewer": "code", "round": 1,
+ "rubric": [
+  {"item": "SPEC-01 correctness", "result": "pass"},
+  {"item": "SPEC-01 test strength", "result": "pass"},
+  {"item": "SPEC-02 correctness", "result": "pass"},
+  {"item": "SPEC-02 test strength", "result": "pass"},
+  {"item": "SPEC-03 correctness", "result": "pass"},
+  {"item": "SPEC-03 test strength", "result": "pass"},
+  {"item": "SPEC-04 correctness", "result": "pass"},
+  {"item": "SPEC-04 test strength", "result": "pass"},
+  {"item": "SPEC-05 correctness", "result": "pass"},
+  {"item": "SPEC-05 test strength", "result": "pass"},
+  {"item": "SPEC-06 correctness", "result": "pass"},
+  {"item": "SPEC-06 test strength", "result": "pass"},
+  {"item": "scope", "result": "pass"},
+  {"item": "concision", "result": "pass"},
+  {"item": "clarity", "result": "pass"}
+ ],
+ "findings": [
+  {"fingerprint": "tools/ci/retry.js:reap-presudo-groupexists-untested", "severity": "MINOR", "file": "tests/ci/retry.reap.test.ts", "line": 112,
+   "issue": "AC#2 requires a groupExists check immediately before every sudo call, but only the stopGroup call site (SIGTERM path) is tested. The check before the reap loop's sudo call (tools/ci/retry.js:114) can be removed without any test failing.",
+   "evidence": "Mutation: changed retry.js:114 to `if (outcome === 'denied' && deniedLastPoll) sudoKill(pid, 'SIGKILL')`. retry.reap + retry.sudo still pass (12 passed, 4 skipped). The code itself is correct, and SPEC-02's behaviour as written covers only the stopGroup path, so the named test matches the spec.",
+   "fix": "In a follow-up, add a reap-path case: every group SIGKILL throws EPERM, the first 2 probes return true, and the probe right after the second refused SIGKILL throws ESRCH. Assert that the spied call after the second refused (-pid, 'SIGKILL') is (-pid, 0) and that sudo is never called with 'SIGKILL' from the reap loop."},
+  {"fingerprint": "tests/ci/retry.reap.test.ts:cancel-first-refusal-escalation-untested", "severity": "MINOR", "file": "tests/ci/retry.reap.test.ts", "line": 216,
+   "issue": "Under A-1, the cancellation SIGKILL escalates on the first refusal (the stopGroup call in onSignal, retry.js:195). SPEC-04 still passes when that call is removed, because the shared reap escalates on its second refusal about 250 ms later. SPEC-05 cannot tell the two apart either.",
+   "evidence": "Mutation: removed `stopGroup(current.pid, 'SIGKILL', sudoKill);` from onSignal. retry.reap + retry.test still pass (13 passed, 2 skipped). AC#4's outcome (sudo escalation, group gone, exit 130/143) still holds, so this is a timing/A-1 gap and not an AC violation.",
+   "fix": "In SPEC-04, record the spied process.kill calls and assert that the fake sudo was called before the first group signal-0 probe after cancellation (or within 100 ms of the listener call)."},
+  {"fingerprint": "tests/ci/retry.reap.test.ts:double-await-run", "severity": "NIT", "file": "tests/ci/retry.reap.test.ts", "line": 219,
+   "issue": "`await run` appears in both the try block and the finally block.",
+   "evidence": "Lines 219 and 223.",
+   "fix": "Keep only the await in finally."}
+ ],
+ "summary": "retry.js implements D-1..D-4 as specified: groupExists before every sudo call, sudo in the reap loop only after 2 refusals in a row, one memoised reap per attempt shared by the kill timer, finish and cancellation, and a cancellation handler that guards repeats and awaits the shared reap before exiting 130/143. Public exports, log lines and constants are unchanged. Locked retry.sudo/retry.test pass, and the targeted run gives 20 passed, 4 skipped (Linux CI only). SPEC-01..04 discriminate their main mutations: sudo on a single refusal, no pre-sudo probe in stopGroup, two reap loops (about 17 vs 10 EPERM lines), and the old killGroup-only cancellation or a missing repeat guard. SPEC-05 (Linux CI) would catch the fallback not running: it asserts `retry: sent SIGKILL to process group N with sudo`, which only sudoKillGroup prints, so it proves the sudo code path ran and not just that the process is gone. It also checks the exit code and that pgrep finds nothing within 2 s. On Linux this line probably comes from the reap loop's second refusal and not from onSignal's stopGroup, because the runner-owned sudo makes the group kill return 'sent'. That is acceptable for AC#4. Two MINOR test-strength gaps were confirmed by temporary mutations (retry.js restored and checked with cmp). No BLOCKER or MAJOR findings."}

@@ -4,14 +4,21 @@
   "branch": "doit/TASK-1.37",
   "base_commit": "bf465989a45fc09cd53ba0b9784c20152ccee2f7",
   "started": "2026-11-19T18:07:37",
-  "review_round": 0,
-  "judge_round": 0,
+  "review_round": 1,
+  "judge_round": 1,
   "sendbacks": 0,
   "gate_runs": 1,
   "questions": 0,
   "assumptions": 0,
   "escalations": 0,
-  "item_failures": {},
+  "item_failures": {
+    "SPEC-01": 0,
+    "SPEC-02": 0,
+    "SPEC-03": 0,
+    "SPEC-04": 0,
+    "SPEC-05": 0,
+    "SPEC-06": 0
+  },
   "locked_tests": {
     "tests/ci/retry.reap.test.ts": "0f92e1d3fc21e65305bfaaadc1b879e164de2c111a3a68940896313d8dc4ad5d"
   },
@@ -554,5 +561,12 @@
   },
   "history": [],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-1.37",
-  "spec_sha256": "b20a1ae0f34654392cefd2571b00210b8849756a5fb1737ad2cd008e88e0d693"
+  "spec_sha256": "b20a1ae0f34654392cefd2571b00210b8849756a5fb1737ad2cd008e88e0d693",
+  "review_findings": {
+    "1": 0
+  },
+  "judge_results": {
+    "1": "PASS"
+  },
+  "doc_id": "doc-37"
 }

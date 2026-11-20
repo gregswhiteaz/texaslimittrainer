@@ -3,36 +3,36 @@
     "id": "SPEC-01",
     "verifies": "AC#1",
     "verification": "acceptance `tests/ci/retry.reap.test.ts::sudo escalation > does not call sudo when a just-killed group refuses one kill and is gone at the next poll`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-02",
     "verifies": "AC#2",
     "verification": "acceptance `tests/ci/retry.reap.test.ts::sudo escalation > checks the group right before sudo and skips sudo when it is gone`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-03",
     "verifies": "AC#3",
     "verification": "acceptance `tests/ci/retry.reap.test.ts::sudo escalation > runs one shared reap when the kill timer and the child's exit both reap`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-04",
     "verifies": "AC#4",
     "verification": "acceptance `tests/ci/retry.reap.test.ts::cancelling an attempt > escalates a refused group kill to sudo on %s`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-05",
     "verifies": "AC#4",
     "verification": "acceptance `tests/ci/retry.reap.test.ts::cancelling the retry helper around a hanging sudo command (Linux CI only) > kills the root child on %s`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-06",
     "verifies": "AC#1, AC#2, AC#3, AC#4",
     "verification": "command `npx vitest run tests/ci/retry.sudo.test.ts tests/ci/retry.test.ts tests/ci/retry.reap.test.ts`",
-    "status": "pending"
+    "status": "pass"
   }
 ]
