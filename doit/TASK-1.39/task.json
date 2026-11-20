@@ -1,0 +1,148 @@
+{
+  "id": "TASK-1.39",
+  "title": "Recover dpkg and harden the remaining test timeouts",
+  "status": "To Do",
+  "archived": false,
+  "type": "chore",
+  "priority": "low",
+  "project": null,
+  "assignees": [],
+  "reporter": null,
+  "labels": [
+    "dream-limit-holdem-trainer",
+    "follow-up"
+  ],
+  "milestone": "m-0",
+  "parentTaskId": "TASK-1",
+  "acceptanceCriteriaCompleted": 0,
+  "acceptanceCriteriaCount": 3,
+  "references": [
+    "doc-31"
+  ],
+  "modifiedFiles": [],
+  "ordinal": 199000,
+  "createdAt": "2026-11-19T19:55:00Z",
+  "updatedAt": "2026-11-19T20:35:00Z",
+  "dueDate": null,
+  "isReady": true,
+  "path": "backlog/tasks/task-1.39 - Recover-dpkg-and-harden-the-remaining-test-timeouts.md",
+  "description": "Follow-up from TASK-1.23 scope concerns: killing apt mid-install can leave dpkg interrupted for the next attempt, and runInSandbox still has the spawnSync-timeout weakness fixed for the speed-limits test.",
+  "dependencies": [
+    "TASK-1.23"
+  ],
+  "dependencyGraph": {
+    "root": "TASK-1.39",
+    "nodes": [
+      {
+        "id": "TASK-1.39",
+        "title": "Recover dpkg and harden the remaining test timeouts",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": 0,
+        "dependentDepth": 0
+      },
+      {
+        "id": "TASK-1.1",
+        "title": "Bootstrap the strict TypeScript project with one-command checks",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 4,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.7",
+        "title": "Run every check in GitHub Actions on each push and pull request",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 3,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.19",
+        "title": "Retry the stalled Playwright system-dependency install in CI",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 2,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.20",
+        "title": "Keep strict wall-clock speed checks out of the CI test run",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 2,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.23",
+        "title": "Harden CI child-process cleanup",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 1,
+        "dependentDepth": null
+      }
+    ],
+    "edges": [
+      {
+        "from": "TASK-1.7",
+        "to": "TASK-1.1"
+      },
+      {
+        "from": "TASK-1.19",
+        "to": "TASK-1.7"
+      },
+      {
+        "from": "TASK-1.20",
+        "to": "TASK-1.7"
+      },
+      {
+        "from": "TASK-1.23",
+        "to": "TASK-1.19"
+      },
+      {
+        "from": "TASK-1.23",
+        "to": "TASK-1.20"
+      },
+      {
+        "from": "TASK-1.39",
+        "to": "TASK-1.23"
+      }
+    ]
+  },
+  "readiness": {
+    "isReady": true,
+    "isBlocked": false,
+    "blockingDependencies": [],
+    "missingDependencies": []
+  },
+  "documentation": [],
+  "subtasks": [],
+  "acceptanceCriteria": [
+    {
+      "index": 1,
+      "text": "Given retry killed an apt attempt in the Playwright system-dependencies step, When the next attempt starts, Then sudo dpkg --configure -a runs first and an interrupted dpkg no longer fails the install",
+      "checked": false
+    },
+    {
+      "index": 2,
+      "text": "Given tests/support/sandbox.ts runInSandbox times out, When it stops the command, Then the whole process group is killed (via runProcessGroup), with a test using a grandchild that ignores SIGTERM",
+      "checked": false
+    },
+    {
+      "index": 3,
+      "text": "Given main CI run #73 needed 3 attempts (240 s, 240 s, then 164.5 s) for Playwright system dependencies, When the install step's attempt timeout and step timeout are re-tuned (or the apt packages are cached between runs), Then a typical install finishes within its first attempt and the step's total stays under its timeout-minutes",
+      "checked": false
+    }
+  ],
+  "definitionOfDone": [],
+  "implementationPlan": null,
+  "implementationNotes": "AC#3 added 2026-11-19 from CI run #73 (main 769293f): TASK-1.23's sudo kill worked live twice, but attempts 1-2 hit the 240 s limit.",
+  "comments": [],
+  "finalSummary": null
+}

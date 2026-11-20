@@ -1,0 +1,56 @@
+[
+  {
+    "id": "SPEC-01",
+    "verifies": "AC#1",
+    "verification": "acceptance `tests/ci/apt-lock.dpkg.acceptance.test.ts::runs sudo -n dpkg --configure -a before the command when dpkg was interrupted`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-02",
+    "verifies": "AC#1",
+    "verification": "acceptance `tests/ci/apt-lock.dpkg.acceptance.test.ts::does not call sudo when the dpkg journal is empty or missing`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-03",
+    "verifies": "AC#1",
+    "verification": "acceptance `tests/ci/apt-lock.dpkg.acceptance.test.ts::warns and still runs the command when dpkg --configure -a fails`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-04",
+    "verifies": "AC#1",
+    "verification": "unit `tests/ci/apt-lock.dpkg.acceptance.test.ts::does not recover dpkg while an apt lock is still held`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-05",
+    "verifies": "AC#2",
+    "verification": "acceptance `tests/support/sandbox-timeout.acceptance.test.ts::a timed-out runInSandbox kills a grandchild that ignores SIGTERM`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-06",
+    "verifies": "AC#2",
+    "verification": "unit `tests/support/sandbox-timeout.acceptance.test.ts::returns exit code and output for a run that finishes`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-07",
+    "verifies": "AC#3",
+    "verification": "acceptance `tests/ci/apt-archives-cache.test.ts::caches apt archives around both Playwright install steps without touching their run lines`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-08",
+    "verifies": "AC#3",
+    "verification": "manual \u2014 `gh run view <first-branch-run-id> --log | grep -E \"Collect apt archives|Cache saved\"`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-09",
+    "verifies": "AC#3",
+    "verification": "manual \u2014 `gh run view <second-branch-run-id> --log | grep -E \"Cache restored from key: apt-archives|attempt 1 of 3 succeeded|Need to get\"`",
+    "status": "pending"
+  }
+]
