@@ -1,10 +1,11 @@
 ---
 id: TASK-1.32
 title: Tighten the remaining engine input guards
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-19T04:25:00Z'
-updated_date: '2026-11-19T23:33:00Z'
+updated_date: '2026-11-20T04:56:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -31,6 +32,17 @@ Follow-up from TASK-1.21 (doc-29) spec and reviews: a few engine entry points st
 - [ ] #2 Given createHand receives a null config or non-array seats, When called, Then it throws RangeError('Invalid hand config') instead of TypeError
 - [ ] #3 Given an invalid seat, button or replay code longer than 10 characters, When the error is built, Then 'Invalid seat', 'Button must be a dealt-in seat' and 'Invalid replay code' echo at most 10 characters plus '...', and TASK-1.3's locked messages for short inputs stay byte-identical
 <!-- AC:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. Extract echoText (10 chars + ...) in cards.ts; reuse in hand.ts (seat, button) and deck.ts (replay code).
+2. parseCards non-string -> approved 'Invalid card: expected a string, got <typeof>'; evaluate non-array -> 'Invalid hand: expected an array, got <typeof>'.
+3. createHand shape guard -> RangeError('Invalid hand config'), reading each field once (TASK-1.31 lock).
+4. New tests/engine/input-guards.acceptance.test.ts; deck.test.ts long-code assertion updated to the truncated echo (unlocked unit test).
+
+Full spec: doit/TASK-1.32/spec.md
+<!-- SECTION:PLAN:END -->
 
 ## Implementation Notes
 

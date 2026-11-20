@@ -1,0 +1,38 @@
+[
+  {
+    "id": "SPEC-01",
+    "verifies": "AC#1",
+    "verification": "acceptance `tests/engine/input-guards.acceptance.test.ts::AC#1 parseCards rejects non-strings with a RangeError that echoes no input`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-02",
+    "verifies": "AC#1",
+    "verification": "acceptance `tests/engine/input-guards.acceptance.test.ts::AC#1 evaluate rejects non-arrays with a RangeError that echoes no input`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-03",
+    "verifies": "AC#2",
+    "verification": "acceptance `tests/engine/input-guards.acceptance.test.ts::AC#2 createHand rejects malformed config shapes with Invalid hand config`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-04",
+    "verifies": "AC#3",
+    "verification": "acceptance `tests/engine/input-guards.acceptance.test.ts::AC#3 long seat, button and replay code echo at most 10 characters`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-05",
+    "verifies": "AC#3",
+    "verification": "acceptance `tests/engine/input-guards.acceptance.test.ts::AC#3 short seat, button and replay code messages are unchanged`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-06",
+    "verifies": "AC#3",
+    "verification": "unit `tests/engine/deck.test.ts::invalid words and codes throw RangeError`",
+    "status": "pending"
+  }
+]
