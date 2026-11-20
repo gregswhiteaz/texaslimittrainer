@@ -1,0 +1,20 @@
+[
+  {
+    "id": "SPEC-01",
+    "verifies": "AC#1",
+    "verification": "acceptance `tests/engine/review-gaps.acceptance.test.ts::the third kicker decides between equal pairs`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-02",
+    "verifies": "AC#2",
+    "verification": "acceptance `tests/engine/review-gaps.acceptance.test.ts::a folded seat leaves every pot but its chips stay in`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-03",
+    "verifies": "AC#3",
+    "verification": "acceptance `tests/engine/review-gaps.acceptance.test.ts::small blind equal to big blind is accepted`",
+    "status": "pending"
+  }
+]

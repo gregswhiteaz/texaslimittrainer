@@ -1,0 +1,149 @@
+{
+  "id": "TASK-1.22",
+  "title": "Close engine test gaps found in review",
+  "status": "To Do",
+  "archived": false,
+  "type": "chore",
+  "priority": "low",
+  "project": null,
+  "assignees": [],
+  "reporter": null,
+  "labels": [
+    "dream-limit-holdem-trainer",
+    "follow-up"
+  ],
+  "milestone": "m-0",
+  "parentTaskId": "TASK-1",
+  "acceptanceCriteriaCompleted": 0,
+  "acceptanceCriteriaCount": 3,
+  "references": [
+    "doc-7",
+    "doc-10"
+  ],
+  "modifiedFiles": [],
+  "ordinal": 167000,
+  "createdAt": "2026-11-18T07:03:00Z",
+  "updatedAt": null,
+  "dueDate": null,
+  "isReady": true,
+  "path": "backlog/tasks/task-1.22 - Close-engine-test-gaps-found-in-review.md",
+  "description": "Follow-up from the TASK-1.2 judge (J-1-01) and TASK-1.4 code review: behaviours that are correct today but not pinned by a test.",
+  "dependencies": [
+    "TASK-1.4"
+  ],
+  "dependencyGraph": {
+    "root": "TASK-1.22",
+    "nodes": [
+      {
+        "id": "TASK-1.22",
+        "title": "Close engine test gaps found in review",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": 0,
+        "dependentDepth": 0
+      },
+      {
+        "id": "TASK-1.1",
+        "title": "Bootstrap the strict TypeScript project with one-command checks",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 4,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.2",
+        "title": "Rank showdown hands by real poker hand rankings",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 2,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.3",
+        "title": "Deal every hand from a seeded shuffle with a replay code",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 2,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.4",
+        "title": "Play a complete fixed-limit hand from blinds to showdown",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 1,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.7",
+        "title": "Run every check in GitHub Actions on each push and pull request",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 3,
+        "dependentDepth": null
+      }
+    ],
+    "edges": [
+      {
+        "from": "TASK-1.2",
+        "to": "TASK-1.7"
+      },
+      {
+        "from": "TASK-1.3",
+        "to": "TASK-1.7"
+      },
+      {
+        "from": "TASK-1.4",
+        "to": "TASK-1.2"
+      },
+      {
+        "from": "TASK-1.4",
+        "to": "TASK-1.3"
+      },
+      {
+        "from": "TASK-1.7",
+        "to": "TASK-1.1"
+      },
+      {
+        "from": "TASK-1.22",
+        "to": "TASK-1.4"
+      }
+    ]
+  },
+  "readiness": {
+    "isReady": true,
+    "isBlocked": false,
+    "blockingDependencies": [],
+    "missingDependencies": []
+  },
+  "documentation": [],
+  "subtasks": [],
+  "acceptanceCriteria": [
+    {
+      "index": 1,
+      "text": "Given two seven-card hands that differ only in the third kicker, When compared, Then the hand with the higher third kicker wins (unit example)",
+      "checked": false
+    },
+    {
+      "index": 2,
+      "text": "Given a seat that folds after contributing chips, When pots are built, Then it is not eligible for any pot and its totalContribution is still counted in the pot amounts",
+      "checked": false
+    },
+    {
+      "index": 3,
+      "text": "Given stakes where the small blind equals the big blind, When createHand validates them, Then the boundary behaviour (accept or reject) is pinned by a test matching the documented rule",
+      "checked": false
+    }
+  ],
+  "definitionOfDone": [],
+  "implementationPlan": null,
+  "implementationNotes": null,
+  "comments": [],
+  "finalSummary": null
+}
