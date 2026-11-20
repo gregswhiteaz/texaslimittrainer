@@ -4,13 +4,13 @@ title: Confirm Dependabot runs and clear merged doit branches after the first pu
 status: To Do
 assignee: []
 created_date: '2026-11-19T04:51:00Z'
-updated_date: '2026-11-19T04:54:00Z'
+updated_date: '2026-11-20T00:06:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
 milestone: m-0
 dependencies:
-  - TASK-1.24
+  - TASK-1.36
 references:
   - doc-30
 parent_task_id: TASK-1
@@ -36,4 +36,6 @@ Follow-up from TASK-1.24 (judge J-1-01). Dependabot and the cleanup script can o
 
 <!-- SECTION:NOTES:BEGIN -->
 2026-11-18: user ran prune --apply: deleted 26 local + 24 remote merged doit/* branches; follow-up dry run reports 0/0; only main and origin/main remain.
+
+2026-11-19 check (gh): AC#1 not met — Dependabot github_actions update succeeded, npm_and_yarn failed (peer-dependency ETARGET on typescript/typescript-eslint; fix is TASK-1.36). AC#2 pending — first scheduled weekly run not yet happened; only PR #2 (@types/node 26 major, ungrouped as configured for majors) exists, its CI runs #69/#70 were cancelled. AC#3 done earlier. Now depends on TASK-1.36; re-check after it merges and the next Monday run.
 <!-- SECTION:NOTES:END -->

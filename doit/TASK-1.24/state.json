@@ -519,7 +519,14 @@
       "skips": 0
     }
   },
-  "history": [],
+  "history": [
+    {
+      "t": "2026-11-19T17:23:37",
+      "event": "unlock",
+      "file": "tests/ci/dependabot.acceptance.test.ts",
+      "reason": "TASK-1.36 Q-1 (user-approved 2026-11-19): append one it() pinning the @types/node/typescript ignore rules and the typescript group; existing lines unchanged"
+    }
+  ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-1.24",
   "spec_sha256": "2500175635bfc8a37bfbc36b6207a96f038f300c0b343430246188af40459b11",
   "review_findings": {
@@ -528,5 +535,8 @@
   "judge_results": {
     "1": "PASS"
   },
-  "doc_id": "doc-30"
+  "doc_id": "doc-30",
+  "relock_pending": [
+    "tests/ci/dependabot.acceptance.test.ts"
+  ]
 }
