@@ -51,6 +51,26 @@ Local equivalent:
 npm audit --omit=dev --audit-level=high && npm audit --audit-level=critical && npm run lint && npm run typecheck && npm run build && npm test && npm run e2e
 ```
 
+### Card visual baselines
+
+`.github/workflows/visual.yml` (the `Visual` check) runs on every push and pull request. It runs
+the card pixel snapshots (`e2e/cards.visual.spec.ts`) in Chromium and WebKit inside the official
+`mcr.microsoft.com/playwright:v<version>-noble` Docker image, where `<version>` is the
+`@playwright/test` version in `package-lock.json`. It compares them with the committed
+`e2e/cards.visual.spec.ts-snapshots/*-linux.png` baselines. Locally, the visual spec runs only on
+macOS (against the `*-darwin.png` baselines); the main CI e2e step skips it. `Visual` is not a
+required check for merging.
+
+When a baseline is missing, the run writes it and fails. When the run fails, the Linux baselines
+are attached as the `card-visual-baselines` artifact and the Playwright report as
+`card-visual-report` (both kept 7 days). To add or refresh the baselines:
+
+1. Once `visual.yml` is on `main`, regenerate them with
+   `gh workflow run visual.yml --ref <branch> -f update=true`. Before that, use the failed run.
+2. Download them: `gh run download <run-id> -n card-visual-baselines -D <dir>`.
+3. Copy the `*-linux.png` files into `e2e/cards.visual.spec.ts-snapshots/` unchanged, then commit
+   and push. The next `Visual` run must pass.
+
 ### Dependency updates
 
 `.github/dependabot.yml` makes Dependabot open update pull requests every Monday: one grouped pull

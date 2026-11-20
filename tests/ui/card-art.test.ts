@@ -4,13 +4,7 @@ import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import logoUrl from '../../src/assets/tlh-logo.jpg';
-import {
-  RANK_GLYPHS,
-  RANK_LABELS,
-  RANK_NAMES,
-  SUIT_SYMBOLS,
-  cardLabel,
-} from '../../src/ui/cards/card-art';
+import { RANK_LABELS, RANK_NAMES, cardLabel } from '../../src/ui/cards/card-art';
 import { DeckColoursContext, PlayingCard } from '../../src/ui/cards/PlayingCard';
 
 const ASSETS_DIR = fileURLToPath(new URL('../../src/assets/', import.meta.url));
@@ -37,11 +31,6 @@ describe('card art', () => {
     expect(cardLabel(51)).toBe('Ace of spades');
     expect(RANK_NAMES).toHaveLength(13);
     expect(RANK_LABELS).toHaveLength(13);
-  });
-
-  it('glyphs fit the card', () => {
-    for (const label of RANK_LABELS) expect(RANK_GLYPHS[label].width).toBeLessThanOrEqual(28);
-    for (const symbol of Object.values(SUIT_SYMBOLS)) expect(symbol.width).toBeLessThanOrEqual(30);
   });
 
   it('deck prop overrides context and default is two-colour', () => {

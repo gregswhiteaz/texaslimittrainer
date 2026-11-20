@@ -3,7 +3,13 @@ import { buildCardGallery, openCardGallery } from './support/card-gallery-bundle
 
 let bundle = '';
 
-test.skip(process.platform !== 'darwin', 'visual baselines are macOS-only (A-4)');
+const runsHere =
+  process.platform === 'darwin' ||
+  (process.platform === 'linux' && process.env.TLH_VISUAL_LINUX === '1');
+test.skip(
+  !runsHere,
+  'card baselines exist for macOS and for Linux in the Playwright Docker image (Visual workflow)',
+);
 
 test.beforeAll(async () => {
   bundle = await buildCardGallery();
