@@ -1,0 +1,11 @@
+{"reviewer": "security", "round": 1,
+ "findings": [
+  {"fingerprint": "tools/git/prune-merged-branches.js:short-name-delete-refspec",
+   "severity": "NIT",
+   "file": "tools/git/prune-merged-branches.js",
+   "line": 61,
+   "issue": "The lease is keyed on the full ref `refs/heads/<b>`, but the delete refspecs pass the short name `<b>`. Git resolves the short name on the remote; if the remote also had `refs/tags/doit/<b>`, git refuses the ambiguous name and the push fails (exit 1). It fails safe, so there is no reachable harm.",
+   "evidence": "for-each-ref refs/remotes/origin/doit/* -> name 'doit/x' -> `--delete doit/x`; ambiguity -> git error -> generic failure path, exit 1, nothing wrongly deleted",
+   "fix": "Optional: pass `refs/heads/${b.name}` after `--delete` so the deleted ref and the leased ref are named the same way."}
+ ],
+ "summary": "No BLOCKER or MAJOR. Branch names and SHAs come from local `git for-each-ref` limited to `refs/remotes/origin/doit/`. Every name starts with `doit/`, so none can be read as a git option. Refnames cannot contain spaces, ':' or tabs, so splitting on space, the `<ref>:<sha>` lease and the porcelain parsing are safe. Arguments go to spawnSync with no shell, so there is no injection. A malformed listing line gives an empty SHA, and `--force-with-lease=<ref>:` means the ref must not exist, so the push fails and nothing is deleted. Porcelain parsing only builds an error message. The PATH git shim is written inside the test's mkdtemp dir, which is mode 0700 and removed in afterEach. Its PATH goes only to the spawned child's env, never to process.env, and `--exec-path` is resolved with the isolated env. The SPEC-02 pre-receive hook is installed only in the temporary bare origin. Tests strip GIT_* and set GIT_CONFIG_GLOBAL=/dev/null, GIT_CONFIG_NOSYSTEM and GIT_CEILING_DIRECTORIES. No new dependencies, no secrets, no randomness."}

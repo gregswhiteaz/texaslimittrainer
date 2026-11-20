@@ -1,0 +1,27 @@
+{"reviewer": "code", "round": 1,
+ "rubric": [
+  {"item": "SPEC-01 correctness", "result": "pass"},
+  {"item": "SPEC-01 test strength", "result": "pass"},
+  {"item": "SPEC-02 correctness", "result": "pass"},
+  {"item": "SPEC-02 test strength", "result": "pass"},
+  {"item": "SPEC-03 correctness", "result": "pass"},
+  {"item": "SPEC-03 test strength", "result": "pass"},
+  {"item": "SPEC-04 correctness", "result": "pass"},
+  {"item": "SPEC-04 test strength", "result": "pass"},
+  {"item": "scope", "result": "pass"},
+  {"item": "concision", "result": "pass"},
+  {"item": "clarity", "result": "pass"}
+ ],
+ "findings": [
+  {"fingerprint": "tools/git/prune-merged-branches.js:push-failure-duplicates-runOrReport", "severity": "MINOR",
+   "file": "tools/git/prune-merged-branches.js", "line": 155,
+   "issue": "The no-refusal fallback in the remote-delete block repeats runOrReport's body (reportError(`git ${args.join(' ')} failed`), write stderr). The exitCode = 1 line is also repeated.",
+   "evidence": "Lines 141-145 (runOrReport) and 155-158 (the new fallback) do the same reporting.",
+   "fix": "Have runOrReport return the spawn result (or take an onFailure callback) so the remote block can reuse its generic failure report. Alternatively, accept the small duplication. Neither choice changes behaviour."},
+  {"fingerprint": "tests/git/prune-merged-branches-hardening.acceptance.test.ts:over-scope-budget-lines", "severity": "NIT",
+   "file": "tests/git/prune-merged-branches-hardening.acceptance.test.ts", "line": 1,
+   "issue": "The change is 271 lines against the spec's budget of 230. Most of the extra is the acceptance test (158 lines against about 140), which copies the locked test's fixture as the spec told it to.",
+   "evidence": "gates/build-1.json changed_lines=271",
+   "fix": "No action needed. The duplication is required because the locked test file can't be imported."}
+ ],
+ "summary": "All four SPEC items are implemented as specified. The remote delete is a single porcelain push with a per-branch --force-with-lease=refs/heads/<b>:<listed sha>. Each refused branch is reported on its own line from the '!' porcelain lines, with exit 1, and other failures keep the generic path. The helper renames are complete (the SPEC-04 grep prints nothing; the count is 2), and the locked TASK-1.24 tests and README are untouched. The tests would catch a broken implementation. Without the lease, origin's doit/a would be deleted and the branches assertion fails. If refusals went through the generic path, the stderr would mention doit/c and lack the 'refused to delete' text. The SPEC-02 checks compare byte-identical ref snapshots and the push marker. tests/git passes (10/10). There are no BLOCKER or MAJOR findings."}

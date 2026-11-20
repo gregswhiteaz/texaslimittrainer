@@ -3,24 +3,24 @@
     "id": "SPEC-01",
     "verifies": "AC#1",
     "verification": "acceptance `tests/git/prune-merged-branches-hardening.acceptance.test.ts::refuses to delete a remote branch that moved after listing`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-02",
     "verifies": "AC#2",
     "verification": "acceptance `tests/git/prune-merged-branches-hardening.acceptance.test.ts::exits 1 with missing ref and deletes nothing`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-03",
     "verifies": "AC#1",
     "verification": "unit `tests/git/prune-merged-branches-lease.test.ts::builds leased delete args and parses refusals`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-04",
     "verifies": "AC#3",
     "verification": "command `grep -nE '\\b(lines|fail)\\(' tools/git/prune-merged-branches.js; test $(grep -cE 'const (outputLines|reportError) = ' tools/git/prune-merged-branches.js) -eq 2 && npm test`",
-    "status": "pending"
+    "status": "pass"
   }
 ]

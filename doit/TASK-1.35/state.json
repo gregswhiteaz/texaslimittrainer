@@ -4,14 +4,19 @@
   "branch": "doit/TASK-1.35",
   "base_commit": "1d5755d42beee493e1825b6208f489bec37cbe85",
   "started": "2026-11-19T22:47:40",
-  "review_round": 0,
-  "judge_round": 0,
+  "review_round": 1,
+  "judge_round": 1,
   "sendbacks": 0,
   "gate_runs": 1,
   "questions": 0,
   "assumptions": 0,
   "escalations": 0,
-  "item_failures": {},
+  "item_failures": {
+    "SPEC-01": 0,
+    "SPEC-02": 0,
+    "SPEC-03": 0,
+    "SPEC-04": 0
+  },
   "locked_tests": {
     "tests/git/prune-merged-branches-hardening.acceptance.test.ts": "5564aa1b12605648c9c834fe26f60559b4db432462817e7b6c597b5e9e12e027"
   },
@@ -589,5 +594,12 @@
   },
   "history": [],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-1.35",
-  "spec_sha256": "59b6dd0b2ad7e63fa815811eea206406b3688daed7025e93bf29dadbdc268651"
+  "spec_sha256": "59b6dd0b2ad7e63fa815811eea206406b3688daed7025e93bf29dadbdc268651",
+  "review_findings": {
+    "1": 0
+  },
+  "judge_results": {
+    "1": "PASS"
+  },
+  "doc_id": "doc-42"
 }
