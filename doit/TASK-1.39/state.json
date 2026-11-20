@@ -5,13 +5,23 @@
   "base_commit": "dc5272500a576527bbf6d8029502126b0411fc73",
   "started": "2026-11-20T15:29:46",
   "review_round": 1,
-  "judge_round": 0,
+  "judge_round": 1,
   "sendbacks": 0,
   "gate_runs": 2,
   "questions": 1,
   "assumptions": 0,
   "escalations": 0,
-  "item_failures": {},
+  "item_failures": {
+    "SPEC-01": 0,
+    "SPEC-02": 0,
+    "SPEC-03": 0,
+    "SPEC-04": 0,
+    "SPEC-05": 0,
+    "SPEC-06": 0,
+    "SPEC-07": 0,
+    "SPEC-08": 0,
+    "SPEC-09": 0
+  },
   "locked_tests": {
     "tests/ci/apt-archives-cache.test.ts": "0b126c09f1344fd80d34c116558553ed1929dd166d3ea95b372c57ab9c79b668",
     "tests/ci/apt-lock.dpkg.acceptance.test.ts": "82ec8029cccf6d75ed92e6ef3dde3f49c88ea82d6e71b3567e026901cc0cd839",
@@ -614,5 +624,9 @@
   "spec_sha256": "0d84a483f1d929a7f54f9ad180250f9c08370084c846b417c969332c4c7438e2",
   "review_findings": {
     "1": 0
-  }
+  },
+  "judge_results": {
+    "1": "PASS"
+  },
+  "doc_id": "doc-43"
 }
