@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-19T02:48:00Z'
-updated_date: '2026-11-20T04:20:00Z'
+updated_date: '2026-11-20T04:23:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -45,3 +45,9 @@ Follow-up from TASK-1.29 (doc-27) reviews and judge. apt-lock.js prints /proc/<p
 
 Full spec: doit/TASK-1.30/spec.md
 <!-- SECTION:PLAN:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+Build: holderText sanitising, glibc devParts masks, apt-network.conf + CI install step, hardening/network tests; gate PASS (Linux-only SPEC-07 pending branch CI)
+<!-- SECTION:NOTES:END -->

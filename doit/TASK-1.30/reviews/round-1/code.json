@@ -1,0 +1,22 @@
+{"reviewer": "code", "round": 1,
+ "rubric": [
+  {"item": "SPEC-01 correctness", "result": "pass"},
+  {"item": "SPEC-01 test strength", "result": "pass"},
+  {"item": "SPEC-02 correctness", "result": "pass"},
+  {"item": "SPEC-02 test strength", "result": "pass"},
+  {"item": "SPEC-03 correctness", "result": "pass"},
+  {"item": "SPEC-03 test strength", "result": "pass"},
+  {"item": "SPEC-04 correctness", "result": "pass"},
+  {"item": "SPEC-04 test strength", "result": "pass"},
+  {"item": "SPEC-05 correctness", "result": "pass"},
+  {"item": "SPEC-05 test strength", "result": "pass"},
+  {"item": "SPEC-06 correctness", "result": "pass"},
+  {"item": "SPEC-06 test strength", "result": "pass"},
+  {"item": "SPEC-07 correctness", "result": "pass"},
+  {"item": "SPEC-07 test strength", "result": "pass"},
+  {"item": "scope", "result": "pass"},
+  {"item": "concision", "result": "pass"},
+  {"item": "clarity", "result": "pass"}
+ ],
+ "findings": [],
+ "summary": "All seven SPEC items are implemented as specified. holderText is exported, replaces [\\x00-\\x1f\\x7f] with '?', and is the only path into both the waiting line (apt-lock.js:143) and the ::error:: line (:240); held.path there comes from the wrapper's own arguments, not from a process. The devParts masks 0xfffff000n/0xffffff00n match glibc's (unsigned int) casts in gnu_dev_major/gnu_dev_minor, and the kernel 12:20 comment is there. The conf file, the unconditional ci.yml step placed between Set up Node and Install dependencies, and the README sentence match spec section 5. Test strength: the SPEC-01 loop covers every C0 control plus \\x7f, so any regression would fail it. The old ~0xffn mask gives a wrong minor for 17592491180357n and fails the round trip. SPEC-03 checks the exact stderr and that no marker file was created, so it fails if the stray argument is accepted. SPEC-04 pins the exact sleep arrays and the final clock value, so it fails if the clamp is removed (the last sleep would be 2000/3000 and the clock would end past the limit). SPEC-06's regex needs the run line to come right after the name and then the next '- name:', which enforces 'only name and run'; a missing key gives NaN and fails the isInteger check. The budget is computed from the parsed 240. SPEC-07 is correctly gated on GITHUB_ACTIONS Linux, and its proof is the separate branch CI run. Locally, npx vitest run tests/ci gave 11 files and 57 tests passed, with 6 skipped (Linux-only). The latest gate (fix-2) passes: 256/260 lines and 6/6 files. No findings."}

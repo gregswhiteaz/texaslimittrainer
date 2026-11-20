@@ -4,17 +4,17 @@
   "branch": "doit/TASK-1.30",
   "base_commit": "d43eac99298def1c77c87b769bef5896c5fc7dfc",
   "started": "2026-11-19T21:16:41",
-  "review_round": 0,
+  "review_round": 1,
   "judge_round": 0,
   "sendbacks": 0,
-  "gate_runs": 2,
+  "gate_runs": 3,
   "questions": 0,
   "assumptions": 0,
   "escalations": 0,
   "item_failures": {},
   "locked_tests": {
     "tests/ci/apt-lock.hardening.test.ts": "da54d21838d994a86b583b7d2b826a2e1fdb9d0e3c4865fd49a2e2d28334da85",
-    "tests/ci/apt-network.test.ts": "1a1f8811889b87a7b6df83a7fc8f40091ad0738322fb10986f50ae77a234c995"
+    "tests/ci/apt-network.test.ts": "974f544a695e1fe39b308c675f0a019043570a841376c4a8488fd43bc61a95e0"
   },
   "test_snapshot": {
     "tests/ci/apt-lock.hardening.test.ts": {
@@ -23,7 +23,7 @@
       "skips": 0
     },
     "tests/ci/apt-network.test.ts": {
-      "sha": "1a1f8811889b87a7b6df83a7fc8f40091ad0738322fb10986f50ae77a234c995",
+      "sha": "974f544a695e1fe39b308c675f0a019043570a841376c4a8488fd43bc61a95e0",
       "asserts": 14,
       "skips": 0
     },
@@ -573,7 +573,18 @@
       "skips": 0
     }
   },
-  "history": [],
+  "history": [
+    {
+      "t": "2026-11-19T21:30:30",
+      "event": "unlock",
+      "file": "tests/ci/apt-network.test.ts",
+      "reason": "Branch CI 44674060169: runner overrides Acquire::Retries after our apt.conf.d fragment; step must append to /etc/apt/apt.conf (read last) and the static check must follow"
+    }
+  ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-1.30",
-  "spec_sha256": "9814a100599382c460411fe7a97c1aff5e2062206b687dc053a6b7a954ebc5ef"
+  "spec_sha256": "9814a100599382c460411fe7a97c1aff5e2062206b687dc053a6b7a954ebc5ef",
+  "review_findings": {
+    "1": 0
+  },
+  "relock_pending": []
 }

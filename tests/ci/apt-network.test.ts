@@ -8,7 +8,8 @@ const workflow = readFileSync(join(REPO_ROOT, '.github/workflows/ci.yml'), 'utf8
 const conf = readFileSync(join(REPO_ROOT, 'tools/ci/apt-network.conf'), 'utf8');
 
 const STEP_NAME = 'Bound apt network timeouts';
-const STEP_RUN = 'sudo install -m 0644 tools/ci/apt-network.conf /etc/apt/apt.conf.d/99-ci-network';
+// Appended to /etc/apt/apt.conf, which apt reads after every apt.conf.d fragment, so these values win.
+const STEP_RUN = 'sudo tee -a /etc/apt/apt.conf < tools/ci/apt-network.conf > /dev/null';
 // apt's maximum backoff between retries (Acquire::Retries::Delay::Maximum default).
 const MAX_RETRY_DELAY_SECONDS = 30;
 // Install headroom per attempt, as in tests/ci/workflow.test.ts.
@@ -69,12 +70,13 @@ describe.skipIf(!onGitHubLinux)('apt network limits on the runner (GitHub Action
     const dump = spawnSync('apt-config', ['dump'], { encoding: 'utf8' });
     expect(dump.status, dump.stderr).toBe(0);
     const lines = dump.stdout.split('\n');
+    const effective = lines.filter((line) => /Acquire::(Retries|https?::Timeout)/.test(line));
     for (const line of [
       'Acquire::http::Timeout "15";',
       'Acquire::https::Timeout "15";',
       'Acquire::Retries "3";',
     ]) {
-      expect(lines, line).toContain(line);
+      expect(lines, `${line}\neffective:\n${effective.join('\n')}`).toContain(line);
     }
   });
 });

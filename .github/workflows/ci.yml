@@ -25,7 +25,7 @@ jobs:
           node-version-file: .nvmrc
           cache: npm
       - name: Bound apt network timeouts
-        run: sudo install -m 0644 tools/ci/apt-network.conf /etc/apt/apt.conf.d/99-ci-network
+        run: sudo tee -a /etc/apt/apt.conf < tools/ci/apt-network.conf > /dev/null
       - name: Install dependencies
         run: npm ci
       - name: Audit shipped dependencies

@@ -42,9 +42,9 @@ fails, the run fails with an error naming the install step. A timed-out attempt'
 killed (with `sudo -n kill` for root ones such as apt) before the next attempt starts; if they cannot
 be stopped, the run fails at once with an error naming the step. Each attempt first waits up to 150 s,
 through `tools/ci/apt-lock.js`, for another apt process to release its lock, and fails with an
-error naming the lock if it is never released. Before any install, CI installs
-`tools/ci/apt-network.conf` so apt gives up on a stalled mirror connection after 15 s and retries
-it up to 3 times. When e2e fails, the Playwright report
+error naming the lock if it is never released. Before any install, CI appends
+`tools/ci/apt-network.conf` to `/etc/apt/apt.conf` so apt gives up on a stalled mirror connection
+after 15 s and retries it up to 3 times. When e2e fails, the Playwright report
 is attached to the run as the `playwright-report` artifact (kept 7 days).
 
 Local equivalent:
