@@ -2,3 +2,6 @@
 
 ## Q-1 — How to add AC#3's assertions to TASK-1.24's locked tests/ci/dependabot.acceptance.test.ts?
 **Answer: recommended (a)** — append one new `it(...)` block to that file; every existing line stays unchanged. Recorded as an approved cross-story locked-test edit with `doit.py unlock TASK-1.24 … --reason "TASK-1.36 Q-1 …"`.
+
+## Q-2 — Closing with live-only ACs (asked after judge round 1)
+**Answer: recommended** — check AC#3, mark Done with AC#1/#2 unticked and a note; live proof moves to TASK-1.34 ACs.

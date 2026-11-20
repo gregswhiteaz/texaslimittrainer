@@ -1,0 +1,24 @@
+{"reviewer": "code", "round": 1,
+ "rubric": [
+  {"item": "SPEC-01 correctness", "result": "pass"},
+  {"item": "SPEC-01 test strength", "result": "pass"},
+  {"item": "SPEC-02 correctness", "result": "pass"},
+  {"item": "SPEC-02 test strength", "result": "pass"},
+  {"item": "SPEC-03 correctness", "result": "pass"},
+  {"item": "SPEC-03 test strength", "result": "pass"},
+  {"item": "SPEC-04 correctness", "result": "pass"},
+  {"item": "SPEC-04 test strength", "result": "pass"},
+  {"item": "SPEC-05 correctness", "result": "pass"},
+  {"item": "SPEC-05 test strength", "result": "pass"},
+  {"item": "scope", "result": "pass"},
+  {"item": "concision", "result": "pass"},
+  {"item": "clarity", "result": "pass"}
+ ],
+ "findings": [
+  {"fingerprint": "tests/ci/dependabot.acceptance.test.ts:substring-asserts-allow-extra-keys",
+   "severity": "MINOR", "file": "tests/ci/dependabot.acceptance.test.ts", "line": 50,
+   "issue": "The new it() asserts with toContain on fragments, so it would still pass if extra keys were later added inside the npm entry's tail. Examples: an `update-types: [major]` line after the `typescript` group's patterns, which would drop TS/typescript-eslint minor and patch updates entirely; or a third ignore rule for typescript semver-minor, which A-2 explicitly rejects. Spec §5 says the text from `    groups:` to EOF is 'exactly' the given block.",
+   "evidence": "Test lines 47-58 use toContain only; nothing anchors the end of entries[1] or pins the absence of further lines after the typescript group/ignore items.",
+   "fix": "Optional: replace the four fragment checks with one `expect(entries[1].slice(entries[1].indexOf('    groups:\\n'))).toBe(<exact §5 block>)` (or `endsWith`) so the whole tail is pinned. That still leaves every existing line unchanged."}
+ ],
+ "summary": "The change matches spec §5 byte-for-byte: the npm entry tail, the README sentence and an append-only edit to the locked test (the diff adds lines only, approved by Q-1). The Dependabot semantics are sound. ignore[].update-types correctly uses 'version-update:semver-major'. groups.<name>.patterns and exclude-patterns are valid keys, and exclude-patterns is allowed in a group defined only by update-types. Ignoring typescript majors does not conflict with the typescript group: ignore conditions filter candidate versions before grouping, so the group (which has no update-types and so covers all types) gets typescript minor/patch plus any typescript-eslint update, including majors, as spec §5 Rules intends. '@types/node' is quoted, as Prettier and YAML require. Each assertion would fail if its corresponding config line were removed or misspelled (e.g. 'typescript\\n' does not match 'typescript-eslint'). The 6-space list items do not break the /^ {2}- / split. The targeted test passed (3/3) and Prettier is clean. Gates passed. SPEC-04 is manual and comes after the push (TASK-1.34). The only finding is one MINOR about the substring-style assertions. No BLOCKER or MAJOR."}

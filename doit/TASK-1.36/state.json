@@ -4,14 +4,20 @@
   "branch": "doit/TASK-1.36",
   "base_commit": "6fdcefe63112b6189462c4e84f0612f5a1f7f826",
   "started": "2026-11-19T17:08:35",
-  "review_round": 0,
-  "judge_round": 0,
+  "review_round": 1,
+  "judge_round": 1,
   "sendbacks": 0,
   "gate_runs": 1,
   "questions": 1,
   "assumptions": 0,
   "escalations": 0,
-  "item_failures": {},
+  "item_failures": {
+    "SPEC-01": 0,
+    "SPEC-02": 0,
+    "SPEC-03": 0,
+    "SPEC-04": 1,
+    "SPEC-05": 0
+  },
   "locked_tests": {
     "tests/ci/dependabot.acceptance.test.ts": "bfbed69d1ff1b01053dc2fa5dad33329d7e149c4059f3beb4bc7e67754a00eac"
   },
@@ -549,5 +555,12 @@
   },
   "history": [],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-1.36",
-  "spec_sha256": "5c06a90535e0f529bcb10459b136619bff9306631edef957b34b0eee05ef7396"
+  "spec_sha256": "5c06a90535e0f529bcb10459b136619bff9306631edef957b34b0eee05ef7396",
+  "review_findings": {
+    "1": 0
+  },
+  "judge_results": {
+    "1": "FAIL"
+  },
+  "doc_id": "doc-36"
 }

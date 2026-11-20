@@ -1,0 +1,10 @@
+{"reviewer": "security", "round": 1,
+ "findings": [
+  {"fingerprint": ".github/dependabot.yml:major-ignore-may-mask-security-fix",
+   "severity": "MINOR",
+   "file": ".github/dependabot.yml", "line": 26,
+   "issue": "The new ignore rules drop semver-major updates of @types/node and typescript. GitHub applies dependabot.yml ignore conditions to Dependabot security-update PRs as well as version updates, so an advisory whose only fix is a new major of either package would get no automatic PR.",
+   "evidence": "Advisory published against typescript or @types/node, fix only in next major -> Dependabot security update -> matches ignore {dependency-name, version-update:semver-major} -> no PR. There is no reachable exploit path: both are devDependencies (package.json:29, :40). @types/node has no runtime code, and the TypeScript compiler only runs at build time on repo-owned sources. Neither ships in the bundle. Minor and patch fixes still flow, because the rules are scoped to semver-major only and the typescript group has no applies-to: security-updates restriction that would remove them. CI's `npm audit --audit-level=critical` (ci.yml:32) still fails closed on a critical advisory against either package, so the suppression would show up as a red build.",
+   "fix": "No change needed for this round. Optionally add a README note (or a follow-up task) to revisit these ignores when typescript-eslint supports the next TypeScript major or the runtime moves off Node 22, so the ignores don't become permanent."}
+ ],
+ "summary": "Config-only change: Dependabot groups plus semver-major ignore rules for two dev-only packages, with a README sentence and an acceptance test. No secrets, inputs, injection sinks or new dependencies. The ignore rules are narrowly scoped (dependency-name plus semver-major only, no wildcard and no blanket ignore), so minor and patch security fixes are still proposed. The residual risk of a major-only security fix being suppressed has no runtime reachability (build-time devDependencies), and the critical-level npm audit gate in CI is a backstop. No BLOCKER or MAJOR findings."}
