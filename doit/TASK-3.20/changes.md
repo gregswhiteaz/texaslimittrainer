@@ -6,6 +6,12 @@
 - `tests/ci/visual-workflow.test.ts` — new: structural checks of `visual.yml` and presence of the 6 Linux baselines (SPEC-04).
 - `tests/ui/card-art.test.ts` — modified: removed the `glyphs fit the card` test and its now-unused imports (AC#4, A-6).
 - `README.md` — modified: "Card visual baselines" subsection under "Continuous integration".
-- `e2e/cards.visual.spec.ts-snapshots/{faces-two-colour,faces-four-colour,card-back}-{chromium,webkit}-linux.png` — new (pending): to be added by the orchestrator from the branch's `Visual` CI artifact `card-visual-baselines`.
+- `e2e/cards.visual.spec.ts-snapshots/faces-two-colour-chromium-linux.png` — new: Linux baseline from Visual run 44668550588 artifact `card-visual-baselines`, copied unchanged.
+- `e2e/cards.visual.spec.ts-snapshots/faces-two-colour-webkit-linux.png` — new: Linux baseline from Visual run 44668550588 artifact `card-visual-baselines`, copied unchanged.
+- `e2e/cards.visual.spec.ts-snapshots/faces-four-colour-chromium-linux.png` — new: Linux baseline from Visual run 44668550588 artifact `card-visual-baselines`, copied unchanged.
+- `e2e/cards.visual.spec.ts-snapshots/faces-four-colour-webkit-linux.png` — new: Linux baseline from Visual run 44668550588 artifact `card-visual-baselines`, copied unchanged.
+- `e2e/cards.visual.spec.ts-snapshots/card-back-chromium-linux.png` — new: Linux baseline from Visual run 44668550588 artifact `card-visual-baselines`, copied unchanged.
+- `e2e/cards.visual.spec.ts-snapshots/card-back-webkit-linux.png` — new: Linux baseline from Visual run 44668550588 artifact `card-visual-baselines`, copied unchanged.
+- `.claude/settings.json` — modified (user-applied before this run, committed here): autopilot push/merge permissions; force-push, delete, rebase and hard reset denied.
 
 No new dependencies.
