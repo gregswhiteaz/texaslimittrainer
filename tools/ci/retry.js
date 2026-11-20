@@ -1,8 +1,9 @@
 // CI retry helper (TASK-1.19): runs a command with a per-attempt timeout and retries it.
 // A timed-out attempt's whole process group is killed (the command runs apt through sudo). If a
 // group kill is refused (EPERM, root members left behind by sudo), it is sent again with
-// `sudo -n kill`, and the next attempt starts only once the group is gone. An attempt whose group
-// cannot be stopped ends the helper with an ::error:: line.
+// `sudo -n kill` (only while the group still exists), and the next attempt starts only once the
+// group is gone. Cancelling the helper (SIGINT/SIGTERM) stops the running attempt the same way. An
+// attempt whose group cannot be stopped ends the helper with an ::error:: line.
 // Usage: node tools/ci/retry.js --label <text> --attempts <n> --timeout-seconds <s>
 //          [--delay-seconds <s>] [--kill-after-seconds <s>] -- <command> [args...]
 import { spawn, spawnSync } from 'node:child_process';
@@ -18,6 +19,8 @@ import { pathToFileURL } from 'node:url';
  */
 
 /** @typedef {(pid: number, signal: NodeJS.Signals) => boolean} SudoKill */
+
+/** @typedef {{ pid: number | undefined, reap: () => Promise<boolean> }} Attempt */
 
 class UsageError extends Error {}
 
@@ -84,25 +87,32 @@ export function sudoKillGroup(pid, signal) {
 }
 
 /**
+ * Signals the group; a refused signal is sent again with sudo if the group still exists.
  * @param {number | undefined} pid
  * @param {NodeJS.Signals} signal
  * @param {SudoKill} sudoKill
  */
 function stopGroup(pid, signal, sudoKill) {
-  if (killGroup(pid, signal) === 'denied' && pid !== undefined) sudoKill(pid, signal);
+  if (killGroup(pid, signal) === 'denied' && pid !== undefined && groupExists(pid)) {
+    sudoKill(pid, signal);
+  }
 }
 
 /**
  * Keeps SIGKILLing the group until it is gone, for at most REAP_SECONDS. Resolves to whether it is gone.
+ * A just-killed group can refuse one kill while it dies, so sudo runs only after two refusals in a row.
  * @param {number | undefined} pid
  * @param {SudoKill} sudoKill
  */
 async function reap(pid, sudoKill) {
   if (pid === undefined) return true;
   const deadline = Date.now() + REAP_SECONDS * 1000;
+  let deniedLastPoll = false;
   while (Date.now() < deadline) {
     if (!groupExists(pid)) return true;
-    stopGroup(pid, 'SIGKILL', sudoKill);
+    const outcome = killGroup(pid, 'SIGKILL');
+    if (outcome === 'denied' && deniedLastPoll && groupExists(pid)) sudoKill(pid, 'SIGKILL');
+    deniedLastPoll = outcome === 'denied';
     await sleep(REAP_POLL_MS);
   }
   return !groupExists(pid);
@@ -112,7 +122,7 @@ async function reap(pid, sudoKill) {
  * Runs one attempt in its own process group. `failure` is null on success, else the reason;
  * `stuck` means the failed attempt's process group could not be stopped.
  * @param {RetryOptions} options
- * @param {(pid: number | undefined) => void} onSpawn
+ * @param {(attempt: Attempt) => void} onSpawn
  * @param {SudoKill} sudoKill
  * @returns {Promise<{ failure: string | null, stuck: boolean }>}
  */
@@ -120,7 +130,11 @@ function runAttempt(options, onSpawn, sudoKill) {
   return new Promise((resolve) => {
     const child = spawn(options.command, options.args, { stdio: 'inherit', detached: true });
     const pid = child.pid;
-    onSpawn(pid);
+    /** @type {Promise<boolean> | undefined} */
+    let reaping;
+    // The kill timer, the child's exit and a cancellation all share one reap loop.
+    const reapOnce = () => (reaping ??= reap(pid, sudoKill));
+    onSpawn({ pid, reap: reapOnce });
     const timeoutFailure = `timed out after ${options.timeoutSeconds} s`;
     let timedOut = false;
     let exited = false;
@@ -138,7 +152,7 @@ function runAttempt(options, onSpawn, sudoKill) {
       stopGroup(pid, 'SIGTERM', sudoKill);
       killTimer = setTimeout(async () => {
         stopGroup(pid, 'SIGKILL', sudoKill);
-        if ((await reap(pid, sudoKill)) || exited) return;
+        if ((await reapOnce()) || exited) return;
         // The child itself cannot be killed: give up on it so the helper can still exit.
         child.unref();
         settle({ failure: timeoutFailure, stuck: true });
@@ -150,7 +164,7 @@ function runAttempt(options, onSpawn, sudoKill) {
       clearTimeout(timer);
       clearTimeout(killTimer);
       // Also reap descendants (e.g. apt still holding its lock) before the next attempt.
-      const reaped = await reap(pid, sudoKill);
+      const reaped = await reapOnce();
       const result = timedOut ? timeoutFailure : failure;
       settle({ failure: result, stuck: !reaped && result !== null });
     };
@@ -170,11 +184,17 @@ function runAttempt(options, onSpawn, sudoKill) {
 export async function runWithRetry(options, sudoKill = sudoKillGroup) {
   const { label, attempts } = options;
   const commandLine = [options.command, ...options.args].join(' ');
-  /** @type {number | undefined} */
-  let currentPid;
+  /** @type {Attempt | undefined} */
+  let current;
+  let stopping = false;
   /** @param {NodeJS.Signals} signal */
-  const onSignal = (signal) => {
-    killGroup(currentPid, 'SIGKILL');
+  const onSignal = async (signal) => {
+    if (stopping) return;
+    stopping = true;
+    if (current) {
+      stopGroup(current.pid, 'SIGKILL', sudoKill);
+      await current.reap();
+    }
     process.exit(signal === 'SIGINT' ? 130 : 143);
   };
   process.on('SIGINT', onSignal);
@@ -184,9 +204,13 @@ export async function runWithRetry(options, sudoKill = sudoKillGroup) {
       const prefix = `${label}: attempt ${attempt} of ${attempts}`;
       log(`retry: ${prefix}: ${commandLine}`);
       const started = Date.now();
-      const { failure, stuck } = await runAttempt(options, (pid) => (currentPid = pid), sudoKill);
-      const pid = currentPid;
-      currentPid = undefined;
+      const { failure, stuck } = await runAttempt(
+        options,
+        (spawned) => (current = spawned),
+        sudoKill,
+      );
+      const pid = current?.pid;
+      current = undefined;
       if (failure === null) {
         log(`retry: ${prefix} succeeded in ${((Date.now() - started) / 1000).toFixed(1)} s`);
         return 0;
