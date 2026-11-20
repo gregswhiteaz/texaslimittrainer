@@ -1,0 +1,136 @@
+{
+  "id": "TASK-1.30",
+  "title": "Harden the CI apt install wrapper and mirror stalls",
+  "status": "To Do",
+  "archived": false,
+  "type": "chore",
+  "priority": "low",
+  "project": null,
+  "assignees": [],
+  "reporter": null,
+  "labels": [
+    "dream-limit-holdem-trainer",
+    "follow-up"
+  ],
+  "milestone": "m-0",
+  "parentTaskId": "TASK-1",
+  "acceptanceCriteriaCompleted": 0,
+  "acceptanceCriteriaCount": 4,
+  "references": [
+    "doc-27"
+  ],
+  "modifiedFiles": [],
+  "ordinal": 189000,
+  "createdAt": "2026-11-19T02:48:00Z",
+  "updatedAt": null,
+  "dueDate": null,
+  "isReady": true,
+  "path": "backlog/tasks/task-1.30 - Harden-the-CI-apt-install-wrapper-and-mirror-stalls.md",
+  "description": "Follow-up from TASK-1.29 (doc-27) reviews and judge. apt-lock.js prints /proc/<pid>/comm unsanitised (a process name with a newline could start a GitHub workflow command line); three behaviours lack tests (signal-killed child exit, argument before '--', final-sleep clamp with an uneven wait/poll); devParts mis-decodes the minor when the major is >= 4096 (J-1-01, not reachable on CI disks). The underlying CI failure was a stalled us-east-2 Ubuntu mirror (~5.6 MB in 75 s), which no retry can fix.",
+  "dependencies": [
+    "TASK-1.29"
+  ],
+  "dependencyGraph": {
+    "root": "TASK-1.30",
+    "nodes": [
+      {
+        "id": "TASK-1.30",
+        "title": "Harden the CI apt install wrapper and mirror stalls",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": 0,
+        "dependentDepth": 0
+      },
+      {
+        "id": "TASK-1.1",
+        "title": "Bootstrap the strict TypeScript project with one-command checks",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 4,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.7",
+        "title": "Run every check in GitHub Actions on each push and pull request",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 3,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.19",
+        "title": "Retry the stalled Playwright system-dependency install in CI",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 2,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.29",
+        "title": "Make the CI system-package install survive a busy apt lock",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 1,
+        "dependentDepth": null
+      }
+    ],
+    "edges": [
+      {
+        "from": "TASK-1.7",
+        "to": "TASK-1.1"
+      },
+      {
+        "from": "TASK-1.19",
+        "to": "TASK-1.7"
+      },
+      {
+        "from": "TASK-1.29",
+        "to": "TASK-1.19"
+      },
+      {
+        "from": "TASK-1.30",
+        "to": "TASK-1.29"
+      }
+    ]
+  },
+  "readiness": {
+    "isReady": true,
+    "isBlocked": false,
+    "blockingDependencies": [],
+    "missingDependencies": []
+  },
+  "documentation": [],
+  "subtasks": [],
+  "acceptanceCriteria": [
+    {
+      "index": 1,
+      "text": "Given a lock holder whose /proc/<pid>/comm contains control characters (e.g. a newline then ::warning::), When apt-lock prints the waiting or ::error:: line, Then control characters [\\x00-\\x1f\\x7f] are replaced so no new workflow-command line can start",
+      "checked": false
+    },
+    {
+      "index": 2,
+      "text": "Given the wrapped command is killed by a signal, an argument appears before '--', or the wait limit is not a multiple of the poll interval, When apt-lock runs, Then tests pin exit 1, a usage error (exit 2) and the final check landing exactly at the limit respectively",
+      "checked": false
+    },
+    {
+      "index": 3,
+      "text": "Given a device whose major number is 4096 or higher, When devParts decodes it, Then major and minor match /proc/locks (or the limitation is documented in the code)",
+      "checked": false
+    },
+    {
+      "index": 4,
+      "text": "Given the Ubuntu mirror is slow, When the Playwright system packages are installed in CI, Then apt uses a bounded Acquire::http::Timeout and Acquire::Retries (or the .deb archives are cached between runs) so a stalled mirror fails or recovers well inside the step timeout",
+      "checked": false
+    }
+  ],
+  "definitionOfDone": [],
+  "implementationPlan": null,
+  "implementationNotes": null,
+  "comments": [],
+  "finalSummary": null
+}

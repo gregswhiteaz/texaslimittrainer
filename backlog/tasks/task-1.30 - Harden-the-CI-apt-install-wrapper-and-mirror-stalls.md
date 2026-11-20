@@ -1,9 +1,11 @@
 ---
 id: TASK-1.30
 title: Harden the CI apt install wrapper and mirror stalls
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-19T02:48:00Z'
+updated_date: '2026-11-20T04:20:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -31,3 +33,15 @@ Follow-up from TASK-1.29 (doc-27) reviews and judge. apt-lock.js prints /proc/<p
 - [ ] #3 Given a device whose major number is 4096 or higher, When devParts decodes it, Then major and minor match /proc/locks (or the limitation is documented in the code)
 - [ ] #4 Given the Ubuntu mirror is slow, When the Playwright system packages are installed in CI, Then apt uses a bounded Acquire::http::Timeout and Acquire::Retries (or the .deb archives are cached between runs) so a stalled mirror fails or recovers well inside the step timeout
 <!-- AC:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. apt-lock.js holderText replaces control characters with ? (exported).
+2. devParts uses glibc masks; comment that major>=4096 is unreachable.
+3. New tests: apt-lock.hardening.test.ts (sanitising, signal-killed exit 1, stray arg exit 2, final-sleep clamp, devParts).
+4. tools/ci/apt-network.conf (15 s timeouts, 3 retries) installed by a new unconditional CI step; apt-network.test.ts checks the budget and, on Linux CI, apt-config dump.
+5. Branch CI run proves the step and the Linux-only check.
+
+Full spec: doit/TASK-1.30/spec.md
+<!-- SECTION:PLAN:END -->

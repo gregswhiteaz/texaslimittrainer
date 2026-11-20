@@ -1,0 +1,44 @@
+[
+  {
+    "id": "SPEC-01",
+    "verifies": "AC#1",
+    "verification": "acceptance `tests/ci/apt-lock.hardening.test.ts::holderText replaces control characters so no workflow command can start`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-02",
+    "verifies": "AC#2",
+    "verification": "acceptance `tests/ci/apt-lock.hardening.test.ts::exits 1 when the command is killed by a signal`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-03",
+    "verifies": "AC#2",
+    "verification": "acceptance `tests/ci/apt-lock.hardening.test.ts::rejects an argument before -- with a usage error`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-04",
+    "verifies": "AC#2",
+    "verification": "acceptance `tests/ci/apt-lock.hardening.test.ts::clamps the final sleep so the last check is exactly at the limit`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-05",
+    "verifies": "AC#3",
+    "verification": "acceptance `tests/ci/apt-lock.hardening.test.ts::devParts matches glibc for majors of 4096 and above`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-06",
+    "verifies": "AC#4",
+    "verification": "acceptance `tests/ci/apt-network.test.ts::bounds apt network timeouts and retries before the Playwright installs`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-07",
+    "verifies": "AC#4",
+    "verification": "integration `tests/ci/apt-network.test.ts::the runner apt config contains the network limits`",
+    "status": "pending"
+  }
+]
