@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-19T19:55:00Z'
-updated_date: '2026-11-20T22:42:00Z'
+updated_date: '2026-11-20T22:46:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -51,4 +51,6 @@ Full spec: doit/TASK-1.39/spec.md
 AC#3 added 2026-11-19 from CI run #73 (main 769293f): TASK-1.23's sudo kill worked live twice, but attempts 1-2 hit the 240 s limit.
 
 Q-1 (user): cache the .deb archives; Q-2 moot.
+
+Build: dpkg recovery in apt-lock (fake-sudo tests), runInSandbox kills the process group via process-group-cli, .deb archive cache steps in ci.yml (limits unchanged); gate PASS
 <!-- SECTION:NOTES:END -->
