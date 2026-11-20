@@ -45,14 +45,46 @@ export function formatPlan(plan) {
   return `${lines.join('\n')}\n`;
 }
 
+/**
+ * Deletes the listed remote branches only if each still points at the SHA it was listed with.
+ * @param {{ name: string, sha: string }[]} branches
+ * @returns {string[]}
+ */
+export function remoteDeleteArgs(branches) {
+  return [
+    'push',
+    '--porcelain',
+    REMOTE,
+    ...branches.map((b) => `--force-with-lease=refs/heads/${b.name}:${b.sha}`),
+    '--delete',
+    ...branches.map((b) => b.name),
+  ];
+}
+
+/**
+ * Parses porcelain push lines like `!<TAB>(delete):refs/heads/doit/a<TAB>[rejected] (stale info)`.
+ * @param {string} porcelain
+ * @returns {{ name: string, summary: string }[]}
+ */
+export function refusedBranches(porcelain) {
+  return porcelain
+    .split('\n')
+    .filter((line) => line.startsWith('!\t'))
+    .map((line) => {
+      const [, refs = '', summary = ''] = line.split('\t');
+      const name = refs.slice(refs.lastIndexOf(':') + 1).replace(/^refs\/heads\//, '');
+      return { name, summary: summary.trim() };
+    });
+}
+
 /** @param {string[]} args */
 const git = (args) => spawnSync('git', args, { encoding: 'utf8' });
 
 /** @param {string} message */
-const fail = (message) => process.stderr.write(`${NAME}: ${message}\n`);
+const reportError = (message) => process.stderr.write(`${NAME}: ${message}\n`);
 
 /** @param {string} output */
-const lines = (output) => output.split('\n').filter((line) => line !== '');
+const outputLines = (output) => output.split('\n').filter((line) => line !== '');
 
 /**
  * @param {boolean} apply
@@ -60,12 +92,12 @@ const lines = (output) => output.split('\n').filter((line) => line !== '');
  */
 function run(apply) {
   if (git(['rev-parse', '--git-dir']).status !== 0) {
-    fail('not inside a git repository');
+    reportError('not inside a git repository');
     return 2;
   }
   const fetch = git(['fetch', '--prune', REMOTE]);
   if (fetch.status !== 0) {
-    fail(`could not fetch ${REMOTE}`);
+    reportError(`could not fetch ${REMOTE}`);
     process.stderr.write(fetch.stderr);
     return 1;
   }
@@ -73,12 +105,12 @@ function run(apply) {
   const remoteBase = `refs/remotes/${REMOTE}/${BASE}`;
   for (const ref of [localBase, remoteBase]) {
     if (git(['rev-parse', '--verify', '--quiet', ref]).status !== 0) {
-      fail(`missing ref ${ref.replace(/^refs\/(heads|remotes)\//, '')}`);
+      reportError(`missing ref ${ref.replace(/^refs\/(heads|remotes)\//, '')}`);
       return 1;
     }
   }
   const current = git(['symbolic-ref', '--quiet', '--short', 'HEAD']).stdout.trim();
-  const mergedLocal = lines(
+  const mergedLocal = outputLines(
     git([
       'for-each-ref',
       `--merged=${localBase}`,
@@ -86,17 +118,20 @@ function run(apply) {
       `refs/heads/${PREFIX}`,
     ]).stdout,
   );
-  const remote = lines(
+  const remote = outputLines(
     git([
       'for-each-ref',
       `--merged=${remoteBase}`,
-      '--format=%(refname:lstrip=3)',
+      '--format=%(objectname) %(refname:lstrip=3)',
       `refs/remotes/${REMOTE}/${PREFIX}`,
     ]).stdout,
-  );
+  ).map((line) => {
+    const [sha = '', name = ''] = line.split(' ');
+    return { name, sha };
+  });
   const local = mergedLocal.filter((name) => name !== current);
   const skipped = mergedLocal.filter((name) => name === current);
-  process.stdout.write(formatPlan({ apply, local, remote, skipped }));
+  process.stdout.write(formatPlan({ apply, local, remote: remote.map((b) => b.name), skipped }));
   if (!apply) return 0;
 
   let exitCode = 0;
@@ -104,12 +139,26 @@ function run(apply) {
   const runOrReport = (args) => {
     const result = git(args);
     if (result.status === 0) return;
-    fail(`git ${args.join(' ')} failed`);
+    reportError(`git ${args.join(' ')} failed`);
     process.stderr.write(result.stderr);
     exitCode = 1;
   };
   for (const name of local) runOrReport(['branch', '-D', name]);
-  if (remote.length > 0) runOrReport(['push', REMOTE, '--delete', ...remote]);
+  if (remote.length > 0) {
+    const args = remoteDeleteArgs(remote);
+    const result = git(args);
+    if (result.status !== 0) {
+      const refused = refusedBranches(result.stdout);
+      for (const { name, summary } of refused) {
+        reportError(`refused to delete ${name} on ${REMOTE}: ${summary}`);
+      }
+      if (refused.length === 0) {
+        reportError(`git ${args.join(' ')} failed`);
+        process.stderr.write(result.stderr);
+      }
+      exitCode = 1;
+    }
+  }
   if (exitCode === 0) {
     process.stdout.write(`Deleted ${local.length} local and ${remote.length} remote branches.\n`);
   }
@@ -121,7 +170,7 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
     process.exitCode = run(parseOptions(process.argv.slice(2)).apply);
   } catch (error) {
     if (!(error instanceof UsageError)) throw error;
-    fail(error.message);
+    reportError(error.message);
     process.exitCode = 2;
   }
 }
