@@ -54,11 +54,14 @@ export function parseProcLocks(text) {
 
 /**
  * Splits a device number with the Linux/glibc encoding.
+ * Linux's kernel dev_t is 12-bit major / 20-bit minor, so /proc/locks and stat never report a
+ * major >= 4096 on Linux; the masks follow glibc's gnu_dev_major/gnu_dev_minor so the decode is
+ * still correct in that case.
  * @param {bigint} dev
  */
 export function devParts(dev) {
-  const major = ((dev >> 8n) & 0xfffn) | ((dev >> 32n) & ~0xfffn);
-  const minor = (dev & 0xffn) | ((dev >> 12n) & ~0xffn);
+  const major = ((dev >> 8n) & 0xfffn) | ((dev >> 32n) & 0xfffff000n);
+  const minor = (dev & 0xffn) | ((dev >> 12n) & 0xffffff00n);
   return { major: Number(major), minor: Number(minor) };
 }
 
@@ -104,10 +107,16 @@ function processName(pid) {
   }
 }
 
-/** @param {NamedHeldLock} held */
-function holderText(held) {
+/**
+ * Names the lock holder for the job log. Control characters in the name (which any local process
+ * can set) become `?`, so the name cannot start a new workflow-command line.
+ * @param {NamedHeldLock} held
+ */
+export function holderText(held) {
   if (held.pid === null) return 'an unknown process';
-  return held.name ? `process ${held.pid} (${held.name})` : `process ${held.pid}`;
+  if (!held.name) return `process ${held.pid}`;
+  // eslint-disable-next-line no-control-regex
+  return `process ${held.pid} (${held.name.replace(/[\x00-\x1f\x7f]/g, '?')})`;
 }
 
 /**
