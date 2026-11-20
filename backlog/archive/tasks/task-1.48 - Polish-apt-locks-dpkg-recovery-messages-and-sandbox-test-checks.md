@@ -4,6 +4,7 @@ title: Polish apt-lock's dpkg recovery messages and sandbox test checks
 status: To Do
 assignee: []
 created_date: '2026-11-20T23:06:00Z'
+updated_date: '2026-11-20T23:45:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -30,3 +31,9 @@ Follow-up from TASK-1.39 review (code MINOR, judge J-1-02, security NIT, code NI
 - [ ] #2 Given /var/lib/dpkg/updates cannot be read (EACCES), When dpkgInterrupted runs, Then apt-lock reports a clear message instead of a stack trace
 - [ ] #3 Given tests/support/sandbox-timeout.acceptance.test.ts, When it checks the normal run's output, Then the assertion cannot be satisfied by the probe's file name alone
 <!-- AC:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+Won't do (user decision 2026-11-20): infra/tooling chore below the value bar — it hasn't caused and wouldn't plausibly cause a real failure; archived to keep focus on the trainer. Reopen from the archive if that changes.
+<!-- SECTION:NOTES:END -->

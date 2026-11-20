@@ -4,7 +4,7 @@ title: Tidy the sudo retry tests
 status: To Do
 assignee: []
 created_date: '2026-11-19T19:55:00Z'
-updated_date: '2026-11-20T02:13:00Z'
+updated_date: '2026-11-20T23:45:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -39,4 +39,6 @@ Follow-up from TASK-1.23 review NITs (security and code) in tests/ci/retry.sudo.
 
 <!-- SECTION:NOTES:BEGIN -->
 AC#5-6 added from TASK-1.37 follow-up (doc-37, code review MINORs + NIT).
+
+Won't do (user decision 2026-11-20): infra/tooling chore below the value bar — it hasn't caused and wouldn't plausibly cause a real failure; archived to keep focus on the trainer. Reopen from the archive if that changes.
 <!-- SECTION:NOTES:END -->

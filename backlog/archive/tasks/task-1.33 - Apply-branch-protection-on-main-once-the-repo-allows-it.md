@@ -4,7 +4,7 @@ title: Apply branch protection on main once the repo allows it
 status: To Do
 assignee: []
 created_date: '2026-11-19T04:51:00Z'
-updated_date: '2026-11-20T03:45:00Z'
+updated_date: '2026-11-20T23:45:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -37,4 +37,6 @@ Follow-up from TASK-1.24 (Q-1). GitHub returns 403 for branch protection on this
 
 <!-- SECTION:NOTES:BEGIN -->
 AC added from TASK-3.20 follow-up (doc-38).
+
+Won't do (user decision 2026-11-20): infra/tooling chore below the value bar — it hasn't caused and wouldn't plausibly cause a real failure; archived to keep focus on the trainer. Reopen from the archive if that changes.
 <!-- SECTION:NOTES:END -->

@@ -4,6 +4,7 @@ title: Tidy the cleanup script's remote delete
 status: To Do
 assignee: []
 created_date: '2026-11-20T06:02:00Z'
+updated_date: '2026-11-20T23:45:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -29,3 +30,9 @@ Follow-up from TASK-1.35 review (security NIT, code MINOR).
 - [ ] #1 Given the leased remote delete, When the push args are built, Then each branch is deleted by its full ref refs/heads/<b>, matching its lease
 - [ ] #2 Given a push that fails with no refusal lines, When it is reported, Then the 'git … failed' message comes from one shared helper (no duplicated body), with tests still passing
 <!-- AC:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+Won't do (user decision 2026-11-20): infra/tooling chore below the value bar — it hasn't caused and wouldn't plausibly cause a real failure; archived to keep focus on the trainer. Reopen from the archive if that changes.
+<!-- SECTION:NOTES:END -->
