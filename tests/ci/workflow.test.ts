@@ -166,7 +166,9 @@ describe('CI workflow', () => {
     const usesLines = workflow.split('\n').filter((line) => /^\s*(-\s+)?uses: /.test(line));
     expect(usesLines.length).toBeGreaterThan(0);
     for (const line of usesLines) {
-      expect(line).toMatch(/^\s*(-\s+)?uses: [\w.-]+\/[\w.-]+@[0-9a-f]{40} # v\d+\.\d+\.\d+$/);
+      expect(line).toMatch(
+        /^\s*(-\s+)?uses: [\w.-]+\/[\w.-]+(\/[\w.-]+)?@[0-9a-f]{40} # v\d+\.\d+\.\d+$/,
+      );
     }
   });
 

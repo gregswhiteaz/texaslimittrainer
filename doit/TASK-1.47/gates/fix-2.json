@@ -1,0 +1,63 @@
+{
+  "task": "TASK-1.47",
+  "phase": "fix",
+  "run": 2,
+  "result": "PASS",
+  "changed_lines": 614,
+  "changed_files": [
+    ".github/workflows/ci.yml",
+    "README.md",
+    "tests/ci/apt-archives-cache.test.ts",
+    "tests/ci/apt-archives.acceptance.test.ts",
+    "tests/ci/apt-archives.test.ts",
+    "tests/ci/workflow.test.ts",
+    "tools/ci/apt-archives.js"
+  ],
+  "checks": [
+    {
+      "name": "test command",
+      "status": "pass",
+      "detail": "$ npm test\nexit 0\n-network.test.ts > apt network limits on the runner (GitHub Actions only) > the runner apt config contains the network limits\n \u2713 tests/support/speed.test.ts > speedLimitsEnforced > enforces speed limits unless CI is exactly \"true\" 1ms\n \u2713 tests/table/session-config.acceptance.test.ts > session config acceptance > first-use session config carries game type, players, stake, line-up, speed, seat and button 2ms\n \u2713 tests/support/sandbox-timeout.acceptance.test.ts > runInSandbox timeout > returns exit code and output for a run that finishes 434ms\n\n Test Files  100 passed (100)\n      Tests  360 passed | 6 skipped (366)\n   Start at  16:30:21\n   Duration  15.76s (tests 94%, import 5%, worker 1%)\n\n\u001b[34m % \u001b[39m\u001b[2mCoverage report from \u001b[22m\u001b[33mv8\u001b[39m\n-------------------|---------|----------|---------|---------|-------------------\nFile               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s \n-------------------|---------|----------|---------|---------|-------------------\nAll files          |   96.57 |     93.8 |   93.07 |   96.96 |                   \n advice            |    99.8 |    98.23 |     100 |     100 |                   \n  equity.ts        |   99.55 |    93.97 |     100 |     100 | 114,120,199,292   \n engine            |   99.84 |    93.75 |     100 |   99.81 |                   \n  ...-evaluator.ts |     100 |    80.18 |     100 |     100 | ...87-200,214-215 \n  hand.ts          |     100 |    99.22 |     100 |     100 | 271               \n  invariants.ts    |   99.53 |    96.53 |     100 |   99.42 | 272               \n playtest          |     100 |    99.22 |     100 |     100 |                   \n  cli.ts           |     100 |    98.57 |     100 |     100 | 148               \n table             |   99.52 |    99.35 |     100 |     100 |                   \n  hand-result.ts   |   97.77 |    96.29 |     100 |     100 | 83                \n ui                |   35.29 |    14.28 |   28.57 |    37.5 |                   \n  App.tsx          |   33.33 |    33.33 |      20 |   33.33 | 20-35             \n  ...adingFocus.ts |    37.5 |        0 |      50 |   42.85 | 10-13             \n ui/config         |   93.75 |       75 |   83.33 |   93.33 |                   \n  ...figScreen.tsx |   93.75 |       75 |   83.33 |   93.33 | 96                \n ui/table          |   46.42 |     62.5 |   44.73 |   54.28 |                   \n  ActionBar.tsx    |      50 |        0 |   66.66 |   66.66 | 19                \n  Table.tsx        |   70.58 |    89.13 |      60 |      75 | ...10-211,214-215 \n  ...bleSession.ts |    17.5 |       10 |    12.5 |   20.68 | 44-70,74,79-80    \n-------------------|---------|----------|---------|---------|-------------------\n\n=============================== Coverage summary ===============================\nStatements   : 96.57% ( 1690/1750 )\nBranches     : 93.8% ( 1060/1130 )\nFunctions    : 93.07% ( 363/390 )\nLines        : 96.96% ( 1408/1452 )\n================================================================================\n"
+    },
+    {
+      "name": "lint command",
+      "status": "pass",
+      "detail": "$ npm run lint\nexit 0\n\n> tlh-trainer@0.0.0 lint\n> eslint . --max-warnings 0 && prettier --check .\n\nChecking formatting...\nAll matched files use Prettier code style!\n"
+    },
+    {
+      "name": "typecheck command",
+      "status": "pass",
+      "detail": "$ npm run typecheck\nexit 0\n\n> tlh-trainer@0.0.0 typecheck\n> tsc -p tsconfig.json\n\n"
+    },
+    {
+      "name": "spec unchanged",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "name": "scope budget (lines)",
+      "status": "warn",
+      "detail": "614 changed lines vs budget 480 (fail above 960)"
+    },
+    {
+      "name": "scope budget (files)",
+      "status": "pass",
+      "detail": "7 files vs budget 7"
+    },
+    {
+      "name": "files outside spec",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "name": "all changes listed in changes.md",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "name": "test integrity",
+      "status": "pass",
+      "detail": ""
+    }
+  ]
+}

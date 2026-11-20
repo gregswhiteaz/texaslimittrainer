@@ -46,7 +46,10 @@ error naming the lock if it is never released. If an earlier attempt was killed 
 dpkg interrupted, the next attempt runs `sudo -n dpkg --configure -a` first (a failure there is a
 warning, and the install still runs). The downloaded `.deb` packages are kept in an Actions cache
 (keyed on the Playwright version and the month), so a warm-cache install downloads little or
-nothing; a cold cache downloads them all as before. Before any install, CI appends
+nothing; a cold cache downloads them all as before. After a fresh `apt-get update`,
+`tools/ci/apt-archives.js` restores a cached `.deb` only if its sha256 matches the signed apt index
+(others are dropped and downloaded again). The cache is rebuilt with only the packages installed at
+that exact version and saved straight after the install, before e2e runs. Before any install, CI appends
 `tools/ci/apt-network.conf` to `/etc/apt/apt.conf` so apt gives up on a stalled mirror connection
 after 15 s and retries it up to 3 times. When e2e fails, the Playwright report
 is attached to the run as the `playwright-report` artifact (kept 7 days).
