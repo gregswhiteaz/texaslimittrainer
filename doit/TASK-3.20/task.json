@@ -1,0 +1,110 @@
+{
+  "id": "TASK-3.20",
+  "title": "Make card tests catch painted colour and logo regressions in CI",
+  "status": "To Do",
+  "archived": false,
+  "type": "chore",
+  "priority": "medium",
+  "project": null,
+  "assignees": [],
+  "reporter": null,
+  "labels": [
+    "dream-limit-holdem-trainer",
+    "follow-up"
+  ],
+  "milestone": "m-0",
+  "parentTaskId": "TASK-3",
+  "acceptanceCriteriaCompleted": 0,
+  "acceptanceCriteriaCount": 4,
+  "references": [
+    "doc-20"
+  ],
+  "modifiedFiles": [],
+  "ordinal": 184000,
+  "createdAt": "2026-11-18T20:51:00Z",
+  "updatedAt": null,
+  "dueDate": null,
+  "isReady": true,
+  "path": "backlog/tasks/task-3.20 - Make-card-tests-catch-painted-colour-and-logo-regressions-in-CI.md",
+  "description": "Follow-up from TASK-3.5 (doc-20) code review. The card e2e colour checks read the rank/suit group's computed colour rather than the painted path, and the back's logo check doesn't confirm the logo is visible. Both regressions are only caught by the pixel snapshots, which run on macOS only, so Linux CI would miss them. The glyph-fit unit test checks hand-written widths instead of the drawn shapes.",
+  "dependencies": [
+    "TASK-3.5"
+  ],
+  "dependencyGraph": {
+    "root": "TASK-3.20",
+    "nodes": [
+      {
+        "id": "TASK-3.20",
+        "title": "Make card tests catch painted colour and logo regressions in CI",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": 0,
+        "dependentDepth": 0
+      },
+      {
+        "id": "TASK-1.1",
+        "title": "Bootstrap the strict TypeScript project with one-command checks",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 2,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-3.5",
+        "title": "Read big-index cards drawn in code",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 1,
+        "dependentDepth": null
+      }
+    ],
+    "edges": [
+      {
+        "from": "TASK-3.5",
+        "to": "TASK-1.1"
+      },
+      {
+        "from": "TASK-3.20",
+        "to": "TASK-3.5"
+      }
+    ]
+  },
+  "readiness": {
+    "isReady": true,
+    "isBlocked": false,
+    "blockingDependencies": [],
+    "missingDependencies": []
+  },
+  "documentation": [],
+  "subtasks": [],
+  "acceptanceCriteria": [
+    {
+      "index": 1,
+      "text": "Given a rank or suit path painted a different colour from its group, When the card e2e runs in CI (Linux), Then the colour check fails",
+      "checked": false
+    },
+    {
+      "index": 2,
+      "text": "Given the card back's logo is hidden (opacity 0, display none or failed to load), When the card e2e runs in CI, Then the logo check fails",
+      "checked": false
+    },
+    {
+      "index": 3,
+      "text": "Given Linux visual baselines generated in the Playwright Docker image, When CI runs the card visual tests, Then they run on Linux instead of being skipped",
+      "checked": false
+    },
+    {
+      "index": 4,
+      "text": "Given the glyph-fit unit test, When a drawn glyph's real bounding box leaves the card, Then the test fails (or the test is removed if the e2e geometry check covers it)",
+      "checked": false
+    }
+  ],
+  "definitionOfDone": [],
+  "implementationPlan": null,
+  "implementationNotes": null,
+  "comments": [],
+  "finalSummary": null
+}
