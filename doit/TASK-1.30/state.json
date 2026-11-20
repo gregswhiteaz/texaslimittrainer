@@ -4,14 +4,22 @@
   "branch": "doit/TASK-1.30",
   "base_commit": "d43eac99298def1c77c87b769bef5896c5fc7dfc",
   "started": "2026-11-19T21:16:41",
-  "review_round": 1,
-  "judge_round": 0,
+  "review_round": 2,
+  "judge_round": 1,
   "sendbacks": 0,
   "gate_runs": 3,
   "questions": 0,
   "assumptions": 0,
   "escalations": 0,
-  "item_failures": {},
+  "item_failures": {
+    "SPEC-01": 0,
+    "SPEC-02": 0,
+    "SPEC-03": 0,
+    "SPEC-04": 0,
+    "SPEC-05": 0,
+    "SPEC-06": 0,
+    "SPEC-07": 0
+  },
   "locked_tests": {
     "tests/ci/apt-lock.hardening.test.ts": "da54d21838d994a86b583b7d2b826a2e1fdb9d0e3c4865fd49a2e2d28334da85",
     "tests/ci/apt-network.test.ts": "974f544a695e1fe39b308c675f0a019043570a841376c4a8488fd43bc61a95e0"
@@ -584,7 +592,12 @@
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-1.30",
   "spec_sha256": "9814a100599382c460411fe7a97c1aff5e2062206b687dc053a6b7a954ebc5ef",
   "review_findings": {
-    "1": 0
+    "1": 0,
+    "2": 0
   },
-  "relock_pending": []
+  "relock_pending": [],
+  "judge_results": {
+    "1": "PASS"
+  },
+  "doc_id": "doc-40"
 }

@@ -1,0 +1,31 @@
+{"reviewer": "code", "round": 2,
+ "rubric": [
+  {"item": "SPEC-01 correctness", "result": "pass"},
+  {"item": "SPEC-01 test strength", "result": "pass"},
+  {"item": "SPEC-02 correctness", "result": "pass"},
+  {"item": "SPEC-02 test strength", "result": "pass"},
+  {"item": "SPEC-03 correctness", "result": "pass"},
+  {"item": "SPEC-03 test strength", "result": "pass"},
+  {"item": "SPEC-04 correctness", "result": "pass"},
+  {"item": "SPEC-04 test strength", "result": "pass"},
+  {"item": "SPEC-05 correctness", "result": "pass"},
+  {"item": "SPEC-05 test strength", "result": "pass"},
+  {"item": "SPEC-06 correctness", "result": "pass"},
+  {"item": "SPEC-06 test strength", "result": "pass"},
+  {"item": "SPEC-07 correctness", "result": "pass"},
+  {"item": "SPEC-07 test strength", "result": "pass"},
+  {"item": "scope", "result": "pass"},
+  {"item": "concision", "result": "pass"},
+  {"item": "clarity", "result": "pass"}
+ ],
+ "findings": [
+  {"fingerprint": "doit/TASK-1.30/spec.md:spec-06-run-line-deviation-unrecorded", "severity": "MINOR", "file": "doit/TASK-1.30/spec.md", "line": 146,
+   "issue": "SPEC-06 (and section 5 design, A-3, section 8, and SPEC-07's 'reads the live /etc/apt/apt.conf.d') still name `sudo install -m 0644 ... /etc/apt/apt.conf.d/99-ci-network`. The code and the SPEC-06 test now use `sudo tee -a /etc/apt/apt.conf < tools/ci/apt-network.conf > /dev/null`. The orchestrator approved this deviation in fix-brief.md, but it is not recorded anywhere the judge reads against the spec. The judge comparing ci.yml:28 with SPEC-06 literally would see a mismatch.",
+   "evidence": "spec.md:146 vs .github/workflows/ci.yml:28 and tests/ci/apt-network.test.ts:12; `grep -ril deviation doit/TASK-1.30` finds only fix-brief.md",
+   "fix": "Orchestrator: record the approved deviation (SPEC-06 run line becomes the tee -a /etc/apt/apt.conf form, reason: branch CI 44674060169 showed the runner overrides Acquire::Retries after apt.conf.d fragments) in the spec's deviation/decision log or the judge brief. No code change needed."},
+  {"fingerprint": ".github/workflows/ci.yml:append-without-leading-newline", "severity": "NIT", "file": ".github/workflows/ci.yml", "line": 28,
+   "issue": "`tee -a` appends right after the current last byte of /etc/apt/apt.conf. If that file lacked a trailing newline, the conf's first `//` comment line would join the previous line. Today this is harmless (a `//` comment after a `;` still parses, and branch CI 44675074553 passed), but it depends on the comment being first.",
+   "evidence": "tools/ci/apt-network.conf:1 is a `//` comment; apt-config dump on the runner shows all three values (CI 44675074553 green).",
+   "fix": "Optional: leave it as it is. The comment-first layout already makes it safe. Do not add a guard."}
+ ],
+ "summary": "Round 2 reviews fix commit a9117d4 only. Round 1 had no blocking findings. The fix brief's MAJOR (SPEC-07 Acquire::Retries not effective on the runner) is resolved. The step keeps the same name and position, has one run line and no `if:`, and now appends tools/ci/apt-network.conf to /etc/apt/apt.conf. apt reads that file after every Dir::Etc::parts fragment, so its values win, and the conf file is still the single source of the values. The SPEC-06 static test pins the new run line exactly. The name/run/next-step regex and the ordering, value-range and budget checks are unchanged and still fail on a broken step or conf. SPEC-07's assertion is unchanged (toContain on the exact three lines). Only its failure message changed: it now lists every dump line matching /Acquire::(Retries|https?::Timeout)/, as the brief asked. README now says 'appends ... to /etc/apt/apt.conf'. No stale 99-ci-network or apt.conf.d references remain in README, .github, tools or tests. Locally, `npx vitest run tests/ci` passed: 11 files, 57 tests passed and 6 skipped (Linux-only), with the locked workflow.test.ts included. Gate fix-3 passes at 258/260 lines and 6/6 files, and branch CI 44675074553 passed with SPEC-07 running. One MINOR finding: the spec text still describes the old `sudo install` run line, and the deviation is recorded only in fix-brief.md. One NIT. There are no BLOCKER or MAJOR findings."}

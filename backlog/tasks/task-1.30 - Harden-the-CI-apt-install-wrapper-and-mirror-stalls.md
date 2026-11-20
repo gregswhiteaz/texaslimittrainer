@@ -1,11 +1,11 @@
 ---
 id: TASK-1.30
 title: Harden the CI apt install wrapper and mirror stalls
-status: In Progress
+status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-19T02:48:00Z'
-updated_date: '2026-11-20T04:23:00Z'
+updated_date: '2026-11-20T04:45:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -14,6 +14,8 @@ dependencies:
   - TASK-1.29
 references:
   - doc-27
+documentation:
+  - doc-40
 parent_task_id: TASK-1
 priority: low
 type: chore
@@ -28,10 +30,10 @@ Follow-up from TASK-1.29 (doc-27) reviews and judge. apt-lock.js prints /proc/<p
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Given a lock holder whose /proc/<pid>/comm contains control characters (e.g. a newline then ::warning::), When apt-lock prints the waiting or ::error:: line, Then control characters [\x00-\x1f\x7f] are replaced so no new workflow-command line can start
-- [ ] #2 Given the wrapped command is killed by a signal, an argument appears before '--', or the wait limit is not a multiple of the poll interval, When apt-lock runs, Then tests pin exit 1, a usage error (exit 2) and the final check landing exactly at the limit respectively
-- [ ] #3 Given a device whose major number is 4096 or higher, When devParts decodes it, Then major and minor match /proc/locks (or the limitation is documented in the code)
-- [ ] #4 Given the Ubuntu mirror is slow, When the Playwright system packages are installed in CI, Then apt uses a bounded Acquire::http::Timeout and Acquire::Retries (or the .deb archives are cached between runs) so a stalled mirror fails or recovers well inside the step timeout
+- [x] #1 Given a lock holder whose /proc/<pid>/comm contains control characters (e.g. a newline then ::warning::), When apt-lock prints the waiting or ::error:: line, Then control characters [\x00-\x1f\x7f] are replaced so no new workflow-command line can start
+- [x] #2 Given the wrapped command is killed by a signal, an argument appears before '--', or the wait limit is not a multiple of the poll interval, When apt-lock runs, Then tests pin exit 1, a usage error (exit 2) and the final check landing exactly at the limit respectively
+- [x] #3 Given a device whose major number is 4096 or higher, When devParts decodes it, Then major and minor match /proc/locks (or the limitation is documented in the code)
+- [x] #4 Given the Ubuntu mirror is slow, When the Playwright system packages are installed in CI, Then apt uses a bounded Acquire::http::Timeout and Acquire::Retries (or the .deb archives are cached between runs) so a stalled mirror fails or recovers well inside the step timeout
 <!-- AC:END -->
 
 ## Implementation Plan
@@ -50,4 +52,16 @@ Full spec: doit/TASK-1.30/spec.md
 
 <!-- SECTION:NOTES:BEGIN -->
 Build: holderText sanitising, glibc devParts masks, apt-network.conf + CI install step, hardening/network tests; gate PASS (Linux-only SPEC-07 pending branch CI)
+
+Branch CI 44674060169 failed SPEC-07 (runner overrides Acquire::Retries after apt.conf.d). Spec deviation A-5 (orchestrator, autopilot): step now appends tools/ci/apt-network.conf to /etc/apt/apt.conf (read last); SPEC-07 failure message lists competing values.
+
+Judge R1 PASS 7/7, no findings; SPEC-07 proven on branch CI 44675074553 (a9117d4).
+
+Follow-ups (Step 6a): retry/step timeout re-tuning and .deb caching already owned by TASK-1.39 AC#3; no new tasks. Factory lesson applied: doit SKILL autopilot notes on recorded deviations and early branch pushes.
 <!-- SECTION:NOTES:END -->
+
+## Final Summary
+
+<!-- SECTION:FINAL_SUMMARY:BEGIN -->
+Hardened CI apt handling: apt-lock now replaces control characters in the lock holder name, new tests pin signal-kill exit 1, stray argument usage error and the clamped final sleep, devParts decodes majors >= 4096 like glibc, and a new CI step appends Acquire::http(s)::Timeout 15 and Acquire::Retries 3 to /etc/apt/apt.conf before npm ci. Verified: judge PASS, npm test/lint/typecheck green, branch CI 44675074553 green with the live apt-config check. Review deviation: spec said an apt.conf.d fragment, but CI 44674060169 showed the runner overrides Retries after fragments, so the step appends to /etc/apt/apt.conf (spec.md text not updated). Risks: a steadily slow mirror is still bounded only by retry.js's 240 s attempt; TASK-1.39 owns retry tuning and .deb caching.
+<!-- SECTION:FINAL_SUMMARY:END -->
