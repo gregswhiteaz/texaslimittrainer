@@ -1,0 +1,26 @@
+{"reviewer": "code", "round": 1,
+ "rubric": [
+  {"item": "SPEC-01 correctness", "result": "pass"},
+  {"item": "SPEC-01 test strength", "result": "pass"},
+  {"item": "SPEC-02 correctness", "result": "pass"},
+  {"item": "SPEC-02 test strength", "result": "pass"},
+  {"item": "SPEC-03 correctness", "result": "pass"},
+  {"item": "SPEC-03 test strength", "result": "pass"},
+  {"item": "SPEC-04 correctness", "result": "pass"},
+  {"item": "SPEC-04 test strength", "result": "pass"},
+  {"item": "SPEC-05 correctness", "result": "pass"},
+  {"item": "SPEC-05 test strength", "result": "pass"},
+  {"item": "SPEC-06 correctness", "result": "pass"},
+  {"item": "SPEC-06 test strength", "result": "pass"},
+  {"item": "scope", "result": "pass"},
+  {"item": "concision", "result": "pass"},
+  {"item": "clarity", "result": "pass"}
+ ],
+ "findings": [
+  {"fingerprint": "src/engine/hand.ts:seat-entries-walked-twice",
+   "severity": "MINOR", "file": "src/engine/hand.ts", "line": 186,
+   "issue": "The seat-entry shape check (`rawSeats.every(isObject)`) and the snapshot build (`rawSeats.map(({ seat, stack }) => ...)`) walk the seats array separately. Two inputs still get past the guard and throw a native TypeError. (1) A sparse array: `every` skips holes, `map` keeps them, and then `validate` destructures `undefined`. (2) An array whose element getter returns a different value on the second read.",
+   "evidence": "createHand({ ...valid, seats: [ , {seat:2,stack:160}, {seat:3,stack:160}] }) passes the guard, the snapshot keeps the hole, and `for (const { seat } of seats)` in validate throws TypeError. Not reachable from JSON restores (JSON writes holes as null, which the guard catches), so this is not a spec violation.",
+   "fix": "Optional: do the check inside the single walk that builds the snapshot, e.g. `seats: rawSeats.map((entry) => { if (!isObject(entry)) throw new RangeError('Invalid hand config'); const { seat, stack } = entry; return { seat, stack }; })` (or use Array.from so holes become undefined and get checked). Then drop the `every` clause."}
+ ],
+ "summary": "All six SPEC items are implemented exactly as specified, and every worked-example message matches. echoText is extracted and reused in parseCard, hand.ts and deck.ts with no duplicates. createHand reads each config field into locals once, and the locked chip-safety read-once test passes. The new acceptance tests check exact messages and the RangeError class (messageOf fails on no-throw or a non-RangeError), so each one would fail if its guard or truncation were removed. The deck.test.ts edit is limited to D-1. Engine tests pass (21 files, 74 tests). One MINOR robustness note on sparse seat arrays, which JSON restores cannot produce. No BLOCKER or MAJOR findings."}

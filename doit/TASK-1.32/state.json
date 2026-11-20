@@ -4,14 +4,21 @@
   "branch": "doit/TASK-1.32",
   "base_commit": "594d3849ae126e86c4cf99ed255ba0762beff5be",
   "started": "2026-11-19T21:53:35",
-  "review_round": 0,
-  "judge_round": 0,
+  "review_round": 1,
+  "judge_round": 1,
   "sendbacks": 0,
   "gate_runs": 2,
   "questions": 0,
   "assumptions": 0,
   "escalations": 0,
-  "item_failures": {},
+  "item_failures": {
+    "SPEC-01": 0,
+    "SPEC-02": 0,
+    "SPEC-03": 0,
+    "SPEC-04": 0,
+    "SPEC-05": 0,
+    "SPEC-06": 0
+  },
   "locked_tests": {
     "tests/engine/input-guards.acceptance.test.ts": "4b8a2699ba108d30264d740b94f4b1cd7d255c367a36469342db0405eebf0ec7"
   },
@@ -579,5 +586,12 @@
   },
   "history": [],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-1.32",
-  "spec_sha256": "13d1dec6bf3453648de0d999f891bf969bcd461337ff6ccdf5bd64ab64672f42"
+  "spec_sha256": "13d1dec6bf3453648de0d999f891bf969bcd461337ff6ccdf5bd64ab64672f42",
+  "review_findings": {
+    "1": 0
+  },
+  "judge_results": {
+    "1": "PASS"
+  },
+  "doc_id": "doc-41"
 }

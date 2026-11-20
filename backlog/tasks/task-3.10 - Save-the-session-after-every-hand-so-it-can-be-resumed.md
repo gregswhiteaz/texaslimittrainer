@@ -4,7 +4,7 @@ title: Save the session after every hand so it can be resumed
 status: To Do
 assignee: []
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-19T04:25:00Z'
+updated_date: '2026-11-20T05:03:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -47,6 +47,8 @@ Plan key: E03-S11 · Dream: limit-holdem-trainer
 - [ ] #4 Given a seat whose bot was replaced after hand 5, When the session is read after hand 5, Then that seat holds the new bot's id, name, style and $160 stack [REQ-052.3]
 - [ ] #5 Given a stored SessionConfig is loaded to resume a session, When it is validated, Then assertSessionConfig throws RangeError unless there is exactly one user seat equal to userSeat, players equals seats.length, button is one of the seats and every value is known — so a corrupt config can never show a bot's cards to the user (REQ-025)
 - [ ] #6 Given a restored session's stakes and stacks, When they are loaded, Then they pass the same safe-integer and pot-bound rules createHand applies before any table is built
+- [ ] #7 Given restored session JSON whose seat, button or replay-code value is an object (e.g. {"toString":1}) or an array, When it is validated, Then it is rejected with a RangeError before reaching createHand or shuffledDeck (no native TypeError, no array coerced into a valid replay code)
+- [ ] #8 Given restored session JSON whose seats list has gaps or non-object entries, When it is restored, Then a RangeError is raised (e.g. 'Invalid hand config') rather than a TypeError
 <!-- AC:END -->
 
 ## Definition of Done
@@ -71,4 +73,6 @@ Plan key: E03-S11 · Dream: limit-holdem-trainer
 AC added from TASK-2.1 follow-up (doc-23).
 
 AC added from TASK-1.21 follow-up (doc-29).
+
+AC added from TASK-1.32 follow-ups (doc-41): security MINOR String() coercion, code MINOR/judge LOW sparse seats, shuffledDeck/isReplayCode non-string coercion.
 <!-- SECTION:NOTES:END -->

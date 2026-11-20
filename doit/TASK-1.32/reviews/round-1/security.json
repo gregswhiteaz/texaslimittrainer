@@ -1,0 +1,9 @@
+{"reviewer": "security", "round": 1,
+ "findings": [
+  {"fingerprint": "src/engine/hand.ts:string-coercion-typeerror-on-json-object",
+   "severity": "MINOR", "file": "src/engine/hand.ts", "line": 137,
+   "issue": "The echo uses String(value), which still throws a TypeError, not a RangeError, when the value is an object whose toString and valueOf are both non-callable. JSON.parse can produce that object, e.g. {\"toString\":1}. The same applies to button (line 143) and to String(code) in src/engine/deck.ts:43. The input still fails closed because createHand/shuffledDeck throws and no state is created, but the error class goes against the spec's 'predictable RangeError' goal for restored sessions.",
+   "evidence": "future restored session JSON (TASK-3.10) {seats:[{seat:{\"toString\":1},...}]} -> createHand -> validate -> Number.isInteger fails -> String(seat) -> TypeError: Cannot convert object to primitive value. Nothing untrusted reaches this today (spec §1/§8), so no reachable path yet.",
+   "fix": "Optional: for non-primitive values, echo typeof (as parseCard does), e.g. typeof v === 'object' && v !== null ? `<${typeof v}>` : echoText(String(v)). Or leave it to TASK-3.10's session-layer validation."}
+ ],
+ "summary": "The change is small and only adds guards: shape checks in createHand (fields read once into a snapshot, so a getter can't swap values between check and use), a non-string guard in parseCards, a non-array guard in evaluate, and a 10-character bounded echo in the replay-code, seat and button messages. That bounds log flooding and limits how much pasted text leaks. No new dependencies, secrets, randomness or crypto changes; the deck derivation for valid codes is unchanged. The engine messages are not rendered as HTML (spec §8). One MINOR finding: an exotic JSON object can still produce a TypeError through String() coercion, but it fails closed and isn't reachable today. No BLOCKER or MAJOR."}
