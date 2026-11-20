@@ -1,11 +1,11 @@
 ---
 id: TASK-3.20
 title: Make card tests catch painted colour and logo regressions in CI
-status: In Progress
+status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-18T20:51:00Z'
-updated_date: '2026-11-20T03:30:00Z'
+updated_date: '2026-11-20T03:45:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -14,6 +14,8 @@ dependencies:
   - TASK-3.5
 references:
   - doc-20
+documentation:
+  - doc-38
 parent_task_id: TASK-3
 priority: medium
 type: chore
@@ -28,10 +30,10 @@ Follow-up from TASK-3.5 (doc-20) code review. The card e2e colour checks read th
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Given a rank or suit path painted a different colour from its group, When the card e2e runs in CI (Linux), Then the colour check fails
-- [ ] #2 Given the card back's logo is hidden (opacity 0, display none or failed to load), When the card e2e runs in CI, Then the logo check fails
-- [ ] #3 Given Linux visual baselines generated in the Playwright Docker image, When CI runs the card visual tests, Then they run on Linux instead of being skipped
-- [ ] #4 Given the glyph-fit unit test, When a drawn glyph's real bounding box leaves the card, Then the test fails (or the test is removed if the e2e geometry check covers it)
+- [x] #1 Given a rank or suit path painted a different colour from its group, When the card e2e runs in CI (Linux), Then the colour check fails
+- [x] #2 Given the card back's logo is hidden (opacity 0, display none or failed to load), When the card e2e runs in CI, Then the logo check fails
+- [x] #3 Given Linux visual baselines generated in the Playwright Docker image, When CI runs the card visual tests, Then they run on Linux instead of being skipped
+- [x] #4 Given the glyph-fit unit test, When a drawn glyph's real bounding box leaves the card, Then the test fails (or the test is removed if the e2e geometry check covers it)
 <!-- AC:END -->
 
 ## Implementation Plan
@@ -49,4 +51,16 @@ Full spec: doit/TASK-3.20/spec.md
 
 <!-- SECTION:NOTES:BEGIN -->
 Autopilot Q-1 auto-accepted: TASK-3.5 locked tests unlocked under TASK-3.5 (strengthen; glyph-fit unit test removed per AC#4).
+
+Build: drawn-shape colour, logo-visibility and in-card geometry checks with deliberate-break tests; new Visual workflow in the Playwright image; Linux baselines from Visual run 44668550588; glyph-fit unit test removed (AC#4); gate PASS
+
+Judge R1 PASS 6/6; Visual run 44668758859 (2 passed, Linux) and branch CI 44668758850 green.
+
+Follow-ups (Step 6a): TASK-3.23 card check/baseline tidy; TASK-1.33 AC (Visual as required check).
 <!-- SECTION:NOTES:END -->
+
+## Final Summary
+
+<!-- SECTION:FINAL_SUMMARY:BEGIN -->
+Card e2e checks now read the painted rank/suit <path> colour, assert the back logo is visible and decoded, and check glyph paths stay inside the card, each with an in-suite mutation test; the glyph-fit unit test was removed (AC#4). New Visual workflow runs the card pixel snapshots on Linux in the Playwright Docker image against six committed Linux baselines. Verified: npm test 330 passed; macOS card e2e 20 passed; source mutants fail the right tests; Visual run 44668758859 2 passed, branch CI 44668758850 green; judge PASS round 1, no blocking review findings. Assumptions to review: A-1..A-8 (new visual.yml, Visual not a required check, Linux opt-in via TLH_VISUAL_LINUX, image tag from lockfile). Q-1 (unlocking TASK-3.5 tests) auto-accepted under autopilot. Risks: Visual not required (TASK-1.33); Playwright bumps that change rendering need baseline regeneration; image tag not digest-pinned. Minor follow-ups in the doc. .claude/settings.json was the user's autopilot permissions change.
+<!-- SECTION:FINAL_SUMMARY:END -->

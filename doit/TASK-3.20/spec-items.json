@@ -3,36 +3,36 @@
     "id": "SPEC-01",
     "verifies": "AC#1",
     "verification": "acceptance `e2e/cards.spec.ts::two-colour deck colours in the browser`, `e2e/cards.spec.ts::four-colour deck colours in the browser`, `e2e/cards.spec.ts::colour check fails when a path is painted differently from its group`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-02",
     "verifies": "AC#2",
     "verification": "acceptance `e2e/cards.spec.ts::card back shows the decoded TLH logo`, `e2e/cards.spec.ts::logo check fails when the logo is hidden or does not load`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-03",
     "verifies": "AC#4",
     "verification": "acceptance `e2e/cards.spec.ts::rank and suit paths stay inside the card`, `e2e/cards.spec.ts::containment check fails when a glyph leaves the card`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-04",
     "verifies": "AC#3",
     "verification": "unit `tests/ci/visual-workflow.test.ts::visual workflow`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-05",
     "verifies": "AC#3",
     "verification": "command `gh run list --workflow visual.yml --branch doit/TASK-3.20 --limit 1 --json conclusion --jq '.[0].conclusion'` prints `success`, and `gh run view <id> --log | grep -E '2 passed'` matches with no `skipped`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-06",
     "verifies": "AC#3",
     "verification": "command `npm run e2e -- e2e/cards.spec.ts e2e/cards.visual.spec.ts`",
-    "status": "pending"
+    "status": "pass"
   }
 ]
