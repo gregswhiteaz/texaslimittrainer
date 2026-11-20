@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-18T07:03:00Z'
-updated_date: '2026-11-20T04:00:00Z'
+updated_date: '2026-11-20T04:03:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -44,3 +44,9 @@ Follow-up from the TASK-1.2 judge (J-1-01) and TASK-1.4 code review: behaviours 
 
 Full spec: doit/TASK-1.22/spec.md
 <!-- SECTION:PLAN:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+Build: tests/engine/review-gaps.acceptance.test.ts pins third-kicker, folded-contributor and equal-blinds behaviour; no src changes; gate PASS
+<!-- SECTION:NOTES:END -->

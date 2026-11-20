@@ -83,6 +83,7 @@ describe('engine review gaps', () => {
     }
 
     const blindFold = play(createHand(config()), ...limp(4), [2, 'fold']);
+    expect(blindFold.pots.length).toBeGreaterThan(0);
     expect(blindFold.pots.every((pot) => pot.eligible.join() === '1,3,4,5,6')).toBe(true);
     expect(player(blindFold, 2)?.totalContribution).toBe(2);
   });
