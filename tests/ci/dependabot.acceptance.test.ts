@@ -40,4 +40,21 @@ describe('Dependabot', () => {
     expect(section).toContain('GitHub Actions');
     expect(section).toContain('npm');
   });
+
+  it('keeps @types/node and typescript on supported majors and groups typescript with typescript-eslint', () => {
+    const entries = config.split(/^ {2}- /m).slice(1);
+    expect(entries[0]).not.toContain('ignore:');
+    expect(entries[1]).toContain(
+      '      npm-minor-patch:\n        update-types: [minor, patch]\n        exclude-patterns: [typescript, typescript-eslint]\n',
+    );
+    expect(entries[1]).toContain(
+      '      typescript:\n        patterns: [typescript, typescript-eslint]\n',
+    );
+    expect(entries[1]).toContain(
+      "    ignore:\n      - dependency-name: '@types/node'\n        update-types: ['version-update:semver-major']\n",
+    );
+    expect(entries[1]).toContain(
+      "      - dependency-name: typescript\n        update-types: ['version-update:semver-major']\n",
+    );
+  });
 });

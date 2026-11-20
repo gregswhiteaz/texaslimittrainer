@@ -57,6 +57,9 @@ npm audit --omit=dev --audit-level=high && npm audit --audit-level=critical && n
 request for the SHA-pinned GitHub Actions, one grouped pull request for npm minor and patch
 updates, and one pull request per npm major update. CI runs on each of them. Merge them on GitHub,
 then run `git pull` before the next local merge.
+TypeScript and typescript-eslint are updated together in their own grouped pull request, and major
+updates of `@types/node` and `typescript` are ignored, so the types stay on Node 22 and TypeScript
+stays within the range typescript-eslint supports.
 
 ### Branch protection
 
