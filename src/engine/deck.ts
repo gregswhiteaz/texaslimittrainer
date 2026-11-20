@@ -1,4 +1,4 @@
-import type { Card } from './cards';
+import { echoText, type Card } from './cards';
 import { mixState128, Xoshiro128 } from './seeded-random';
 
 /** 32 lowercase hex characters: the hand's 128-bit seed, word 0 first. Never all zeros. */
@@ -40,7 +40,7 @@ export function isReplayCode(text: string): boolean {
 /** A new array of the 52 cards in deal order (index 0 is dealt first). Throws RangeError on an invalid code. */
 export function shuffledDeck(code: ReplayCode): Card[] {
   if (!isReplayCode(code)) {
-    throw new RangeError(`Invalid replay code: "${code}"`);
+    throw new RangeError(`Invalid replay code: "${echoText(String(code))}"`);
   }
   const word = (k: number) => parseInt(code.slice(8 * k, 8 * k + 8), 16);
   const rng = Xoshiro128.fromState(...mixState128([word(0), word(1), word(2), word(3)]));

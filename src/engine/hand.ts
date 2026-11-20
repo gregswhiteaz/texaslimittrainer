@@ -1,4 +1,4 @@
-import type { Card } from './cards';
+import { echoText, type Card } from './cards';
 import { evaluate, type HandRank } from './hand-evaluator';
 
 /** Seat number 1..10. Clockwise = increasing seat number, wrapping. */
@@ -122,6 +122,10 @@ export function minimumStack(stakes: Stakes): number {
   return 8 * stakes.smallBet + 8 * stakes.bigBet;
 }
 
+function isObject(value: unknown): boolean {
+  return typeof value === 'object' && value !== null;
+}
+
 function validate(config: HandConfig): void {
   const { seats, stakes, deck, button } = config;
   if (seats.length < 3 || seats.length > 10) {
@@ -130,12 +134,13 @@ function validate(config: HandConfig): void {
   const seen = new Set<SeatNumber>();
   for (const { seat } of seats) {
     if (!Number.isInteger(seat) || seat < 1 || seat > 10) {
-      throw new RangeError(`Invalid seat: ${seat}`);
+      throw new RangeError(`Invalid seat: ${echoText(String(seat))}`);
     }
     if (seen.has(seat)) throw new RangeError(`Duplicate seat: ${seat}`);
     seen.add(seat);
   }
-  if (!seen.has(button)) throw new RangeError(`Button must be a dealt-in seat: ${button}`);
+  if (!seen.has(button))
+    throw new RangeError(`Button must be a dealt-in seat: ${echoText(String(button))}`);
   const amounts = [stakes.smallBlind, stakes.bigBlind, stakes.smallBet, stakes.bigBet];
   if (
     !amounts.every(isPositiveSafeInteger) ||
@@ -172,12 +177,22 @@ function validate(config: HandConfig): void {
  * not affect the hand. Throws RangeError on invalid config.
  */
 export function createHand(config: HandConfig): HandState {
-  const { smallBlind, bigBlind, smallBet, bigBet } = config.stakes;
+  if (!isObject(config)) throw new RangeError('Invalid hand config');
+  const { stakes: rawStakes, seats: rawSeats, button: rawButton, deck: rawDeck } = config;
+  if (
+    !isObject(rawStakes) ||
+    !Array.isArray(rawSeats) ||
+    !Array.isArray(rawDeck) ||
+    !rawSeats.every(isObject)
+  ) {
+    throw new RangeError('Invalid hand config');
+  }
+  const { smallBlind, bigBlind, smallBet, bigBet } = rawStakes;
   const snapshot: HandConfig = {
     stakes: { smallBlind, bigBlind, smallBet, bigBet },
-    seats: config.seats.map(({ seat, stack }) => ({ seat, stack })),
-    button: config.button,
-    deck: [...config.deck],
+    seats: rawSeats.map(({ seat, stack }) => ({ seat, stack })),
+    button: rawButton,
+    deck: [...rawDeck],
   };
   validate(snapshot);
   const { stakes, button, deck } = snapshot;

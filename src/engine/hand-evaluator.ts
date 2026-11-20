@@ -166,6 +166,9 @@ const suitCounts = new Uint8Array(4);
 
 /** Best five-card rank among 5, 6 or 7 distinct cards. Throws RangeError on invalid input. */
 export function evaluate(cards: readonly Card[]): HandRank {
+  if (!Array.isArray(cards)) {
+    throw new RangeError(`Invalid hand: expected an array, got ${typeof cards}`);
+  }
   const n = cards.length;
   if (n < 5 || n > 7) throw new RangeError(`Hand must have 5 to 7 cards, got ${n}`);
   rankCounts.fill(0);

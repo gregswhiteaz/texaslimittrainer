@@ -27,6 +27,11 @@ export function cardSuit(card: Card): Suit {
   return card & 3;
 }
 
+/** Echo rule for error messages: the first 10 characters, plus '...' when longer. */
+export function echoText(text: string): string {
+  return text.length <= 10 ? text : `${text.slice(0, 10)}...`;
+}
+
 export function parseCard(text: string): Card {
   if (typeof text !== 'string') {
     throw new RangeError(`Invalid card: expected a string, got ${typeof text}`);
@@ -34,13 +39,15 @@ export function parseCard(text: string): Card {
   const rank = RANK_CHARS.indexOf(text.charAt(0));
   const suit = SUIT_CHARS.indexOf(text.charAt(1));
   if (text.length !== 2 || rank < 0 || suit < 0) {
-    const echo = text.length <= 10 ? text : `${text.slice(0, 10)}...`;
-    throw new RangeError(`Invalid card: "${echo}"`);
+    throw new RangeError(`Invalid card: "${echoText(text)}"`);
   }
   return rank * 4 + suit;
 }
 
 export function parseCards(text: string): Card[] {
+  if (typeof text !== 'string') {
+    throw new RangeError(`Invalid card: expected a string, got ${typeof text}`);
+  }
   const trimmed = text.trim();
   return trimmed === '' ? [] : trimmed.split(/\s+/).map(parseCard);
 }

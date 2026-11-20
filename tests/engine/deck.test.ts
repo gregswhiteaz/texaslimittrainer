@@ -127,9 +127,11 @@ describe('deck', () => {
     }
 
     expect(() => shuffledDeck('ABC')).toThrow(new RangeError('Invalid replay code: "ABC"'));
-    for (const code of ['0'.repeat(32), '0123456789ABCDEFFEDCBA9876543210']) {
-      expect(() => shuffledDeck(code)).toThrow(RangeError);
-      expect(() => shuffledDeck(code)).toThrow(`Invalid replay code: "${code}"`);
-    }
+    expect(() => shuffledDeck('0'.repeat(32))).toThrow(
+      new RangeError('Invalid replay code: "0000000000..."'),
+    );
+    expect(() => shuffledDeck('0123456789ABCDEFFEDCBA9876543210')).toThrow(
+      new RangeError('Invalid replay code: "0123456789..."'),
+    );
   });
 });
