@@ -1,0 +1,161 @@
+{
+  "id": "TASK-1.47",
+  "title": "Verify and prune the cached apt archives",
+  "status": "To Do",
+  "archived": false,
+  "type": "chore",
+  "priority": "medium",
+  "project": null,
+  "assignees": [],
+  "reporter": null,
+  "labels": [
+    "dream-limit-holdem-trainer",
+    "follow-up"
+  ],
+  "milestone": "m-0",
+  "parentTaskId": "TASK-1",
+  "acceptanceCriteriaCompleted": 0,
+  "acceptanceCriteriaCount": 3,
+  "references": [
+    "doc-43"
+  ],
+  "modifiedFiles": [],
+  "ordinal": 208000,
+  "createdAt": "2026-11-20T23:06:00Z",
+  "updatedAt": null,
+  "dueDate": null,
+  "isReady": true,
+  "path": "backlog/tasks/task-1.47 - Verify-and-prune-the-cached-apt-archives.md",
+  "description": "Follow-up from TASK-1.39 security review and judge (J-1-01, J-1-03): apt trusts a .deb already in /var/cache/apt/archives on name and size, not hash, so a .deb planted in the Actions cache by code in a main job would be installed as root on later runs for up to a month. restore-keys also carries old .debs forward month to month.",
+  "dependencies": [
+    "TASK-1.39"
+  ],
+  "dependencyGraph": {
+    "root": "TASK-1.47",
+    "nodes": [
+      {
+        "id": "TASK-1.47",
+        "title": "Verify and prune the cached apt archives",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": 0,
+        "dependentDepth": 0
+      },
+      {
+        "id": "TASK-1.1",
+        "title": "Bootstrap the strict TypeScript project with one-command checks",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 5,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.7",
+        "title": "Run every check in GitHub Actions on each push and pull request",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 4,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.19",
+        "title": "Retry the stalled Playwright system-dependency install in CI",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 3,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.20",
+        "title": "Keep strict wall-clock speed checks out of the CI test run",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 3,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.23",
+        "title": "Harden CI child-process cleanup",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 2,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.39",
+        "title": "Recover dpkg and harden the remaining test timeouts",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 1,
+        "dependentDepth": null
+      }
+    ],
+    "edges": [
+      {
+        "from": "TASK-1.7",
+        "to": "TASK-1.1"
+      },
+      {
+        "from": "TASK-1.19",
+        "to": "TASK-1.7"
+      },
+      {
+        "from": "TASK-1.20",
+        "to": "TASK-1.7"
+      },
+      {
+        "from": "TASK-1.23",
+        "to": "TASK-1.19"
+      },
+      {
+        "from": "TASK-1.23",
+        "to": "TASK-1.20"
+      },
+      {
+        "from": "TASK-1.39",
+        "to": "TASK-1.23"
+      },
+      {
+        "from": "TASK-1.47",
+        "to": "TASK-1.39"
+      }
+    ]
+  },
+  "readiness": {
+    "isReady": true,
+    "isBlocked": false,
+    "blockingDependencies": [],
+    "missingDependencies": []
+  },
+  "documentation": [],
+  "subtasks": [],
+  "acceptanceCriteria": [
+    {
+      "index": 1,
+      "text": "Given a restored .deb whose sha256 does not match the signed index (apt-cache show <pkg>=<ver> after apt-get update), When the restore step runs, Then that file is discarded before reaching /var/cache/apt/archives, and a test proves a tampered file is dropped",
+      "checked": false
+    },
+    {
+      "index": 2,
+      "text": "Given the job runs later steps (tests, E2E) after the installs, When the apt cache is saved, Then it is saved right after Collect (actions/cache/restore + actions/cache/save) so later steps cannot add files to it",
+      "checked": false
+    },
+    {
+      "index": 3,
+      "text": "Given last month's cache is restored via restore-keys, When Collect runs, Then .debs no longer needed by the current install are not carried forward (e.g. apt-get autoclean or collect only what this install used)",
+      "checked": false
+    }
+  ],
+  "definitionOfDone": [],
+  "implementationPlan": null,
+  "implementationNotes": null,
+  "comments": [],
+  "finalSummary": null
+}

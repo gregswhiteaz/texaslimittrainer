@@ -1,0 +1,44 @@
+[
+  {
+    "id": "SPEC-01",
+    "verifies": "AC#1",
+    "verification": "acceptance `tests/ci/apt-archives.acceptance.test.ts::restore drops a tampered .deb and copies only archives that match the signed index`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-02",
+    "verifies": "AC#1",
+    "verification": "acceptance `tests/ci/apt-archives.acceptance.test.ts::restore copies nothing when apt-cache is unavailable, accepts a missing cache and fails when the copy fails`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-03",
+    "verifies": "AC#3, AC#1",
+    "verification": "acceptance `tests/ci/apt-archives.acceptance.test.ts::collect rebuilds the cache with only the archives installed at that version`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-04",
+    "verifies": "AC#3",
+    "verification": "acceptance `tests/ci/apt-archives.acceptance.test.ts::collect fails when dpkg-query fails and bad usage exits 2`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-05",
+    "verifies": "AC#1, AC#3",
+    "verification": "unit `tests/ci/apt-archives.test.ts::parses apt file names, records and installed packages`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-06",
+    "verifies": "AC#1, AC#2, AC#3",
+    "verification": "acceptance `tests/ci/apt-archives-cache.test.ts::verifies restored archives, saves the cache right after Collect and leaves the installs unchanged`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-07",
+    "verifies": "AC#1, AC#2, AC#3",
+    "verification": "manual \u2014 `gh run view <branch-run-id> --log | grep -E \"Update apt index|apt-archives: |apt archives: |Need to get|attempt 1 of 3 succeeded|Cache saved|already exists|Cache restored from key\"` plus `gh run view <branch-run-id> --json jobs` for step order and durations",
+    "status": "pending"
+  }
+]
