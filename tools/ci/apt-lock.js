@@ -1,9 +1,11 @@
 // CI apt-lock wrapper (TASK-1.29): waits until no process holds an apt/dpkg lock, then runs a command.
 // Holders are read from /proc/locks (world-readable), so no sudo or external tool is needed.
+// TASK-1.39: once the locks are free, an interrupted dpkg (non-empty updates journal, e.g. after a
+// killed install attempt) is recovered with `sudo -n dpkg --configure -a` before the command runs.
 // Usage: node tools/ci/apt-lock.js --wait-seconds <s> [--poll-seconds <s>] [--lock <path>]...
-//          [--proc-locks <path>] -- <command> [args...]
+//          [--proc-locks <path>] [--dpkg-updates <dir>] -- <command> [args...]
 import { spawn } from 'node:child_process';
-import { existsSync, readFileSync, statSync } from 'node:fs';
+import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import process from 'node:process';
 import { setTimeout } from 'node:timers';
 import { parseArgs } from 'node:util';
@@ -97,6 +99,20 @@ function statLockFile(path) {
   }
 }
 
+/**
+ * True when dpkg's updates journal holds at least one entry, i.e. dpkg was interrupted.
+ * A missing directory means not interrupted.
+ * @param {string} updatesDir
+ */
+export function dpkgInterrupted(updatesDir) {
+  try {
+    return readdirSync(updatesDir).length > 0;
+  } catch (error) {
+    if (/** @type {NodeJS.ErrnoException} */ (error).code === 'ENOENT') return false;
+    throw error;
+  }
+}
+
 /** @param {number | null} pid */
 function processName(pid) {
   if (pid === null) return null;
@@ -186,6 +202,7 @@ function parseOptions(argv) {
         'poll-seconds': { type: 'string' },
         lock: { type: 'string', multiple: true },
         'proc-locks': { type: 'string' },
+        'dpkg-updates': { type: 'string' },
       },
       allowPositionals: true,
       strict: true,
@@ -220,6 +237,7 @@ function parseOptions(argv) {
     pollSeconds: seconds('poll-seconds', 2),
     lockPaths: parsed.values.lock ?? DEFAULT_LOCKS,
     procLocksPath: parsed.values['proc-locks'] ?? '/proc/locks',
+    dpkgUpdatesDir: parsed.values['dpkg-updates'] ?? '/var/lib/dpkg/updates',
     command,
     args,
   };
@@ -240,6 +258,19 @@ async function main(argv) {
       `::error::apt lock ${held.path} is still held by ${holderText(held)} after ${options.waitSeconds} s; not running ${commandLine}`,
     );
     return 1;
+  }
+  if (dpkgInterrupted(options.dpkgUpdatesDir)) {
+    log(
+      `apt-lock: dpkg was interrupted (${options.dpkgUpdatesDir} is not empty); running sudo -n dpkg --configure -a`,
+    );
+    const code = await runCommand('sudo', ['-n', 'dpkg', '--configure', '-a']);
+    if (code === 0) log('apt-lock: dpkg --configure -a finished');
+    else {
+      const commandLine = [options.command, ...options.args].join(' ');
+      log(
+        `::warning::apt-lock: sudo -n dpkg --configure -a failed (exit code ${code}); running ${commandLine} anyway`,
+      );
+    }
   }
   return runCommand(options.command, options.args);
 }

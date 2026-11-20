@@ -45,12 +45,23 @@ jobs:
       - name: Read Playwright version
         id: playwright-version
         run: echo "version=$(node -p "require('./package-lock.json').packages['node_modules/@playwright/test'].version")" >> "$GITHUB_OUTPUT"
+      - name: Read month stamp
+        id: month
+        run: echo "month=$(date -u +%Y-%m)" >> "$GITHUB_OUTPUT"
       - name: Cache Playwright browsers
         id: playwright-cache
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: ~/.cache/ms-playwright
           key: playwright-${{ runner.os }}-${{ steps.playwright-version.outputs.version }}
+      - name: Cache apt archives
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ~/.cache/apt-archives
+          key: apt-archives-${{ runner.os }}-pw${{ steps.playwright-version.outputs.version }}-${{ steps.month.outputs.month }}
+          restore-keys: apt-archives-${{ runner.os }}-pw${{ steps.playwright-version.outputs.version }}-
+      - name: Restore apt archives
+        run: mkdir -p ~/.cache/apt-archives && find ~/.cache/apt-archives -maxdepth 1 -name '*.deb' -exec sudo cp -t /var/cache/apt/archives/ {} +
       - name: Install Playwright browsers
         if: steps.playwright-cache.outputs.cache-hit != 'true'
         timeout-minutes: 13
@@ -59,6 +70,10 @@ jobs:
         if: steps.playwright-cache.outputs.cache-hit == 'true'
         timeout-minutes: 13
         run: node tools/ci/retry.js --label "Install Playwright system dependencies" --attempts 3 --timeout-seconds 240 --delay-seconds 10 -- node tools/ci/apt-lock.js --wait-seconds 150 -- npx playwright install-deps chromium webkit
+      - name: Collect apt archives
+        run: |
+          find /var/cache/apt/archives -maxdepth 1 -name '*.deb' -exec cp -t ~/.cache/apt-archives/ {} +
+          echo "apt archives: $(find ~/.cache/apt-archives -maxdepth 1 -name '*.deb' | wc -l) .deb files, $(du -sh ~/.cache/apt-archives | cut -f1)"
       - name: E2E
         id: e2e
         run: npm run e2e

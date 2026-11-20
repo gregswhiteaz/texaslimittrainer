@@ -42,7 +42,11 @@ fails, the run fails with an error naming the install step. A timed-out attempt'
 killed (with `sudo -n kill` for root ones such as apt) before the next attempt starts; if they cannot
 be stopped, the run fails at once with an error naming the step. Each attempt first waits up to 150 s,
 through `tools/ci/apt-lock.js`, for another apt process to release its lock, and fails with an
-error naming the lock if it is never released. Before any install, CI appends
+error naming the lock if it is never released. If an earlier attempt was killed mid-install and left
+dpkg interrupted, the next attempt runs `sudo -n dpkg --configure -a` first (a failure there is a
+warning, and the install still runs). The downloaded `.deb` packages are kept in an Actions cache
+(keyed on the Playwright version and the month), so a warm-cache install downloads little or
+nothing; a cold cache downloads them all as before. Before any install, CI appends
 `tools/ci/apt-network.conf` to `/etc/apt/apt.conf` so apt gives up on a stalled mirror connection
 after 15 s and retries it up to 3 times. When e2e fails, the Playwright report
 is attached to the run as the `playwright-report` artifact (kept 7 days).

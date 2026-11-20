@@ -10,6 +10,7 @@ export interface SandboxResult {
   exitCode: number;
   /** stdout followed by stderr. */
   output: string;
+  timedOut: boolean;
 }
 
 export const REPO_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
@@ -27,6 +28,11 @@ const CONFIG_FILES = [
 
 /** Timeout for every toolchain test that runs a real npm script. */
 export const TOOLCHAIN_TIMEOUT_MS = 120_000;
+
+const PROCESS_GROUP_CLI = join(REPO_ROOT, 'tests/support/process-group-cli.ts');
+const RESOLVE_TS = join(REPO_ROOT, 'tools/playtest/resolve-ts.js');
+/** Extra time the outer spawnSync allows the CLI to kill the group and report. */
+const CLI_BACKSTOP_MS = 15_000;
 
 const SCRUBBED_ENV_PREFIXES = ['VITEST', 'NODE_V8_COVERAGE', 'TEST'];
 
@@ -47,13 +53,15 @@ export function sandboxEnv(): NodeJS.ProcessEnv {
 
 /**
  * Runs `npm run <script>` in a throw-away copy of the project config plus the given probe files,
- * and removes the copy afterwards.
+ * and removes the copy afterwards. At `timeoutMs` the whole npm process group is killed.
  */
 export function runInSandbox(
   files: Record<string, string>,
   script: SandboxScript,
   args?: string[],
+  options?: { timeoutMs?: number },
 ): SandboxResult {
+  const timeoutMs = options?.timeoutMs ?? TOOLCHAIN_TIMEOUT_MS;
   const dir = mkdtempSync(join(tmpdir(), 'tlh-sandbox-'));
   try {
     for (const file of CONFIG_FILES) {
@@ -64,13 +72,27 @@ export function runInSandbox(
     for (const [relativePath, content] of Object.entries(files)) {
       writeFile(dir, relativePath, content);
     }
-    const result = spawnSync('npm', ['run', script, ...(args ? ['--', ...args] : [])], {
-      cwd: dir,
-      encoding: 'utf8',
-      timeout: TOOLCHAIN_TIMEOUT_MS,
-      env: sandboxEnv(),
-    });
-    return { exitCode: result.status ?? -1, output: result.stdout + result.stderr };
+    const npmArgs = ['run', script, ...(args ? ['--', ...args] : [])];
+    const result = spawnSync(
+      process.execPath,
+      ['--import', RESOLVE_TS, PROCESS_GROUP_CLI, String(timeoutMs), 'npm', ...npmArgs],
+      {
+        cwd: dir,
+        encoding: 'utf8',
+        timeout: timeoutMs + CLI_BACKSTOP_MS,
+        maxBuffer: 64 * 1024 * 1024,
+        env: sandboxEnv(),
+      },
+    );
+    if (result.status === 0) {
+      try {
+        return JSON.parse(result.stdout) as SandboxResult;
+      } catch {
+        // Not the CLI's JSON: fall through and report what it printed.
+      }
+    }
+    const timedOut = (result.error as NodeJS.ErrnoException | undefined)?.code === 'ETIMEDOUT';
+    return { exitCode: -1, output: (result.stdout ?? '') + (result.stderr ?? ''), timedOut };
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }
