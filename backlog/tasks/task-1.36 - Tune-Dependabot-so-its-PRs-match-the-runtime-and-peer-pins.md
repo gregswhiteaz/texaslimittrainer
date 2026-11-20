@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-19T04:55:00Z'
-updated_date: '2026-11-20T00:29:00Z'
+updated_date: '2026-11-20T01:06:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -30,8 +30,8 @@ Follow-up from the first Dependabot run after TASK-1.24 (2026-11-19): it opened 
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Given .github/dependabot.yml, When Dependabot evaluates @types/node, Then it ignores semver-major updates so @types/node stays on the Node major used by CI and engines (22)
-- [ ] #2 Given a new typescript release, When Dependabot runs, Then typescript and typescript-eslint packages are updated in the same grouped PR (or typescript waits until typescript-eslint supports it) and the npm update job completes without a peer-dependency error
+- [x] #1 Given .github/dependabot.yml, When Dependabot evaluates @types/node, Then it ignores semver-major updates so @types/node stays on the Node major used by CI and engines (22)
+- [x] #2 Given a new typescript release, When Dependabot runs, Then typescript and typescript-eslint packages are updated in the same grouped PR (or typescript waits until typescript-eslint supports it) and the npm update job completes without a peer-dependency error
 - [x] #3 Given the config change, When tests/ci/dependabot.acceptance.test.ts runs, Then it pins the @types/node ignore rule and the typescript grouping
 <!-- AC:END -->
 
@@ -56,6 +56,8 @@ Build: typescript group + exclude-patterns, ignore semver-major for @types/node 
 Judge R1: SPEC-01/02/03/05 PASS, SPEC-04 deferred (live Dependabot run). Q-2 (user): close now; AC#1/#2 left unticked because they need the live run — proven via TASK-1.34 AC#4/#5.
 
 Follow-ups (Step 6a): TASK-1.43 removal trigger + exact-match test for the temporary major ignores; live proof via TASK-1.34 AC#4/#5.
+
+Live proof (via TASK-1.34 AC#4/#5): Dependabot run 2026-11-20T00:30Z after bf46598: github_actions success (44646369376); npm_and_yarn success (44646370481) with 0 ETARGET/peer-dependency errors; log: 'All updates for @types/node were ignored', 'All updates for typescript were ignored', 'No update needed for typescript-eslint 8.73.0'; PR #2 closed by Dependabot ('@types/node is no longer being updated').
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary
