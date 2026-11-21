@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-21T18:28:00Z'
+updated_date: '2026-11-21T18:34:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -91,4 +91,6 @@ AC added from TASK-3.2 follow-up (doc-22).
 AC added from TASK-3.2 follow-up (doc-22).
 
 Autopilot Q-1/Q-2 auto-accepted (qa.md).
+
+Build: fullBetTarget exported (no rule change); action bar all-in labels + chip unit; 4 new test files incl. 100k-state property (~0.9 s) and e2e scenes; npm run e2e 120 passed; playtest byte-identical; gate PASS; no deviations.
 <!-- SECTION:NOTES:END -->

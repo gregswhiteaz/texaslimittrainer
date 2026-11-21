@@ -143,4 +143,21 @@ describe('Action bar on capped streets and short stacks', () => {
     }
     expect(spy).not.toHaveBeenCalled();
   });
+
+  it("a disabled bar's buttons submit nothing even when they carry actions", () => {
+    const spy = vi.fn();
+    const hand = play(newHand(CASH, 160), `${LIMP} 2:bet`);
+    const model: ActionBarModel = { ...actionBar(playerView(hand, 5)), enabled: false };
+    expect(model.buttons.every((b) => b.action !== null)).toBe(true);
+    const group = ActionBar({ model, onAct: spy }) as ReactElement<{
+      children: ReactElement<{ onClick: () => void; disabled: boolean }>[];
+    }>;
+    const buttons = group.props.children;
+    expect(buttons).toHaveLength(3);
+    for (const button of buttons) {
+      expect(button.props.disabled).toBe(true);
+      button.props.onClick();
+    }
+    expect(spy).not.toHaveBeenCalled();
+  });
 });

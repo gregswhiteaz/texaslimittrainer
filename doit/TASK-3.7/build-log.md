@@ -12,3 +12,7 @@
 - `npm test`: 141 files passed / 1 skipped; 499 tests passed / 7 skipped; coverage all files 96.78% stmts (thresholds met).
 - `npm run e2e`: 120 passed, 6 skipped.
 - `npm run playtest -- --hands 10000 --seed 42`: 0 invariant violations; output byte-identical (`cmp`) to the same run at base commit 0ebb31a in a temporary worktree (removed afterwards).
+
+## FIX (2026-11-21)
+- R1 NIT (SPEC-11 strengthen): fixed — added "a disabled bar's buttons submit nothing even when they carry actions" (real model from a facing-bet hand, `enabled: false`; all 3 buttons carry non-null actions; onClick never calls onAct). Mutation check: removing `model.enabled &&` from the click guard in `src/ui/table/ActionBar.tsx` fails the new test (1 failed / 8 passed); restored, 9 passed. Existing assertions unchanged.
+- `npm run format`, eslint, tsc: clean.

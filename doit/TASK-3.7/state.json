@@ -4,10 +4,10 @@
   "branch": "doit/TASK-3.7",
   "base_commit": "0ebb31a1e0cce517b9b97b6f7a04ec88a0842dd1",
   "started": "2026-11-21T11:20:51",
-  "review_round": 0,
+  "review_round": 1,
   "judge_round": 0,
   "sendbacks": 0,
-  "gate_runs": 2,
+  "gate_runs": 3,
   "questions": 2,
   "assumptions": 0,
   "escalations": 0,
@@ -15,7 +15,7 @@
   "locked_tests": {
     "e2e/action-bar-limits.spec.ts": "f287186b4fb73ea6b8a76a59dfb0b0971ad254b72e99162d5647d3912505f08b",
     "tests/table/action-bar-limits.acceptance.test.ts": "8629f5397abae76647bf35a41e27c063f76ec55ea05bd66ca3b82fa96dc1700c",
-    "tests/ui/action-bar-limits.acceptance.test.tsx": "06697ba422fe16b152953b782347ac5d0acbd6a93d8f2f62f73580da0f5d26ba"
+    "tests/ui/action-bar-limits.acceptance.test.tsx": "3b8dd71d79e62231946b556ea349ca9009f107212181d35a134b7a7e8877182d"
   },
   "test_snapshot": {
     "e2e/action-bar-limits.spec.ts": {
@@ -29,8 +29,8 @@
       "skips": 0
     },
     "tests/ui/action-bar-limits.acceptance.test.tsx": {
-      "sha": "06697ba422fe16b152953b782347ac5d0acbd6a93d8f2f62f73580da0f5d26ba",
-      "asserts": 24,
+      "sha": "3b8dd71d79e62231946b556ea349ca9009f107212181d35a134b7a7e8877182d",
+      "asserts": 28,
       "skips": 0
     },
     "e2e/action-bar.spec.ts": {
@@ -859,7 +859,18 @@
       "skips": 0
     }
   },
-  "history": [],
+  "history": [
+    {
+      "t": "2026-11-21T11:36:15",
+      "event": "unlock",
+      "file": "tests/ui/action-bar-limits.acceptance.test.tsx",
+      "reason": "Code review R1 NIT: strengthen SPEC-11 with a disabled model that carries a real action (catches dropping model.enabled)"
+    }
+  ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-3.7",
-  "spec_sha256": "08bb932c58c6a33fdc1337c76472c97b7ad1687522b73ec95fd81e1c3c804952"
+  "spec_sha256": "08bb932c58c6a33fdc1337c76472c97b7ad1687522b73ec95fd81e1c3c804952",
+  "review_findings": {
+    "1": 0
+  },
+  "relock_pending": []
 }
