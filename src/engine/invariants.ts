@@ -248,7 +248,7 @@ function potEligibilityMessage(state: HandState): string | null {
 
 /**
  * P6-P8 (D-5): one pot per contribution level of the non-folded seats, each listing exactly the seats that
- * matched its level and holding (or paying) exactly its layer. A seat's level is its completed-street chips,
+ * matched its level and holding (or paying) exactly its layer. A seat's matched amount is its completed-street chips,
  * capped at the second-highest (the uncalled part is returned). Skipped for one pot and one level (A-5).
  */
 function potStructureMessage(state: HandState): string | null {
@@ -264,8 +264,8 @@ function potStructureMessage(state: HandState): string | null {
       second = c;
     }
   }
-  const level = put.map((c) => Math.min(c, second));
-  const levels = [...new Set(level.filter((_, i) => !(players[i] as PlayerState).folded))].sort(
+  const matched = put.map((c) => Math.min(c, second));
+  const levels = [...new Set(matched.filter((_, i) => !(players[i] as PlayerState).folded))].sort(
     (a, b) => a - b,
   );
   if (pots.length <= 1 && levels.length <= 1) return null;
@@ -275,13 +275,13 @@ function potStructureMessage(state: HandState): string | null {
   for (const [k, pot] of pots.entries()) {
     const at = levels[k] as number;
     const short = pot.eligible.find(
-      (seat) => (level[players.findIndex((p) => p.seat === seat)] ?? 0) < at,
+      (seat) => (matched[players.findIndex((p) => p.seat === seat)] ?? 0) < at,
     );
     if (short !== undefined) {
       return `${potName(k)} lists seat ${short}, which has not matched its $${at} level`;
     }
     const missing = players.find(
-      (p, i) => !p.folded && (level[i] as number) >= at && !pot.eligible.includes(p.seat),
+      (p, i) => !p.folded && (matched[i] as number) >= at && !pot.eligible.includes(p.seat),
     );
     if (missing !== undefined) {
       return `seat ${missing.seat} matched the $${at} level of ${potName(k)} but is not eligible for it`;
@@ -291,7 +291,7 @@ function potStructureMessage(state: HandState): string | null {
     const below = k === 0 ? 0 : (levels[k - 1] as number);
     const cap = k === levels.length - 1 ? Infinity : (levels[k] as number);
     let layer = 0;
-    for (const c of level) layer += Math.min(c, cap) - Math.min(c, below);
+    for (const c of matched) layer += Math.min(c, cap) - Math.min(c, below);
     if (result === null) {
       if (pot.amount !== layer)
         return `${potName(k)} holds $${pot.amount} but its layer is $${layer}`;

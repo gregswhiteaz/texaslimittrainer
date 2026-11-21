@@ -5,3 +5,9 @@
 - `npm test`: 117 files, 410 passed, 6 skipped; coverage 96.84% statements overall, invariants.ts 99.65%.
 - `npm run playtest -- --hands 10000 --seed 42`: byte-identical to the §3 baseline (Largest pot $70, 0 violations).
 - `git diff --exit-code 791d900 -- tests/ src/ui src/table src/advice e2e`: empty (no locked test edited).
+
+## FIX round 1
+- Item 1: fixed — added case (f) to `tests/engine/side-pot-invariants.acceptance.test.ts` (single pot $104 on S1 turn → `there are 1 pots but contributions make 3`); mutant `pots.length <= 1 || levels.length <= 1` makes it fail, then reverted.
+- Item 2: fixed — renamed `level` → `matched` in `potStructureMessage` (and the doc comment); no behaviour change.
+- Optional NIT skipped (would add lines).
+- `npm run format`: clean. `npx vitest run`: 117 files, 410 passed, 6 skipped.

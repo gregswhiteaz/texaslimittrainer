@@ -114,6 +114,9 @@ describe('side-pot invariants', () => {
         ]),
       ),
     ).toEqual(one('there are 2 pots but contributions make 3'));
+    expect(checkState(withPots(turn, [{ amount: 104, eligible: [1, 2, 3, 4] }]))).toEqual(
+      one('there are 1 pots but contributions make 3'),
+    );
 
     const result = end.result as HandResult;
     const amounts = [41, 59, 40];

@@ -4,23 +4,23 @@
   "branch": "doit/TASK-1.10",
   "base_commit": "791d9004735891f7c81f9dc64da18eb3668399bb",
   "started": "2026-11-20T22:27:54",
-  "review_round": 0,
+  "review_round": 1,
   "judge_round": 0,
   "sendbacks": 0,
-  "gate_runs": 2,
+  "gate_runs": 3,
   "questions": 0,
   "assumptions": 0,
   "escalations": 0,
   "item_failures": {},
   "locked_tests": {
-    "tests/engine/side-pot-invariants.acceptance.test.ts": "942641a6bd6ce2a2c826b389ca8c5455e54480e7c6a22d386feeae51ddb3765e",
+    "tests/engine/side-pot-invariants.acceptance.test.ts": "5d6fe19396a56acd27d64c44ec96ad37f68760bf224dc71f8759fb6225a0b535",
     "tests/engine/side-pots.acceptance.test.ts": "ff0e65166b1322fb91ec253a5af569f67bc5cccac9d0a271c47a1c6e7e23bc34",
     "tests/engine/side-pots.property.test.ts": "8e289afba4b5e0c471b44c4896b600f9b1cac428e2c9dfb2a6391987181efce5"
   },
   "test_snapshot": {
     "tests/engine/side-pot-invariants.acceptance.test.ts": {
-      "sha": "942641a6bd6ce2a2c826b389ca8c5455e54480e7c6a22d386feeae51ddb3765e",
-      "asserts": 8,
+      "sha": "5d6fe19396a56acd27d64c44ec96ad37f68760bf224dc71f8759fb6225a0b535",
+      "asserts": 9,
       "skips": 0
     },
     "tests/engine/side-pots.acceptance.test.ts": {
@@ -709,7 +709,18 @@
       "skips": 0
     }
   },
-  "history": [],
+  "history": [
+    {
+      "t": "2026-11-20T22:47:13",
+      "event": "unlock",
+      "file": "tests/engine/side-pot-invariants.acceptance.test.ts",
+      "reason": "Code review R1 MINOR: add case (f) one pot but several levels (strengthen only)"
+    }
+  ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-1.10",
-  "spec_sha256": "cdd464f3bbed6a2f2b3322e904bebd7b561133949dd85f50f53fb7f22c94b925"
+  "spec_sha256": "cdd464f3bbed6a2f2b3322e904bebd7b561133949dd85f50f53fb7f22c94b925",
+  "review_findings": {
+    "1": 0
+  },
+  "relock_pending": []
 }

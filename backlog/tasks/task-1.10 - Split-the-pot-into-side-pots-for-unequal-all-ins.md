@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-21T05:37:00Z'
+updated_date: '2026-11-21T05:42:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -87,4 +87,6 @@ AC added from TASK-1.8 follow-up (doc-16).
 AC added from TASK-1.22 follow-up (doc-39).
 
 Autopilot: no asks; assumptions A-1..A-5 in spec.
+
+Build: buildPots per contribution level, per-pot awards via splitPot, payOut sums shares; checker P6–P8; 3 new test files incl. 100k random-stack property test (~2.5 s); locked tests unchanged; playtest identical; gate PASS
 <!-- SECTION:NOTES:END -->
