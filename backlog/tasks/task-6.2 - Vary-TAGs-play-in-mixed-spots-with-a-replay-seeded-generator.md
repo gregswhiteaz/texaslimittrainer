@@ -4,7 +4,7 @@ title: Vary TAG's play in mixed spots from its style data file
 status: To Do
 assignee: []
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-21T21:20:00Z'
+updated_date: '2026-11-21T21:40:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -47,6 +47,8 @@ Plan key: E06-S02 · Dream: limit-holdem-trainer
 - [ ] #3 Given a preflop chart cell with an acceptable alternative in a spot TAG marks as mixed, When TAG acts there under 1,000 different replay codes, Then it chooses only the recommended action or the alternative, and chooses each at least once [REQ-026.1, REQ-028.3]
 - [ ] #4 Given a TAG decision in a spot its file does not mark as mixed, When TAG acts under any replay code, Then it chooses the advice engine's recommended action [REQ-026.1]
 - [ ] #5 Given TAG mixes between actions, When the playtest and the app play the same hand, Then the playtest TAG policy receives the same per-decision seed as the worker (TASK-6.18 D-1), and the TASK-3.6 worker-equals-headless test is updated with its owner's approval to pass real seeds
+- [ ] #6 Given the bot seed is validated in two places (advice-service isSeed and engine bot-random), When TAG starts mixing, Then one shared MAX_SEED/guard is used and the lint guard also catches aliased globals (e.g. const c = crypto) in src/bots and src/advice
+- [ ] #7 Given the bot-randomness lint guard, When it runs, Then it also covers src/engine/bot-random.ts and catches globalThis.Math.random() (TASK-6.18 judge J-1-01)
 <!-- AC:END -->
 
 ## Definition of Done
@@ -69,4 +71,8 @@ Plan key: E06-S02 · Dream: limit-holdem-trainer
 
 <!-- SECTION:NOTES:BEGIN -->
 AC added from TASK-6.18 scope concern (seed plumbing for mixed TAG)
+
+AC added from TASK-6.18 review MINOR/NIT
+
+AC added from TASK-6.18 judge J-1-01
 <!-- SECTION:NOTES:END -->

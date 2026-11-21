@@ -1,0 +1,27 @@
+{"reviewer": "code", "round": 1,
+ "rubric": [
+  {"item": "SPEC-01 correctness", "result": "pass"}, {"item": "SPEC-01 test strength", "result": "pass"},
+  {"item": "SPEC-02 correctness", "result": "pass"}, {"item": "SPEC-02 test strength", "result": "pass"},
+  {"item": "SPEC-03 correctness", "result": "pass"}, {"item": "SPEC-03 test strength", "result": "pass"},
+  {"item": "SPEC-04 correctness", "result": "pass"}, {"item": "SPEC-04 test strength", "result": "pass"},
+  {"item": "SPEC-05 correctness", "result": "pass"}, {"item": "SPEC-05 test strength", "result": "pass"},
+  {"item": "SPEC-06 correctness", "result": "pass"}, {"item": "SPEC-06 test strength", "result": "pass"},
+  {"item": "SPEC-07 correctness", "result": "pass"}, {"item": "SPEC-07 test strength", "result": "pass"},
+  {"item": "SPEC-08 correctness", "result": "pass"}, {"item": "SPEC-08 test strength", "result": "pass"},
+  {"item": "SPEC-09 correctness", "result": "pass"}, {"item": "SPEC-09 test strength", "result": "pass"},
+  {"item": "SPEC-10 correctness", "result": "pass"}, {"item": "SPEC-10 test strength", "result": "pass"},
+  {"item": "scope", "result": "pass"},
+  {"item": "concision", "result": "pass"},
+  {"item": "clarity", "result": "pass"}
+ ],
+ "findings": [
+  {"fingerprint": "src/table/advice-service.ts:seed-range-validated-twice", "severity": "MINOR", "file": "src/table/advice-service.ts", "line": 47,
+   "issue": "isSeed() repeats botRandom's integer/range check, and repeats its bound as a literal 0xffffffff instead of a shared constant. botRandom's RangeError can never be reached from the worker path.",
+   "evidence": "isSeed: typeof seed === 'number' && Number.isInteger(seed) && seed >= 0 && seed <= 0xffffffff; then botRandom(request.seed) checks the same with MAX_SEED in src/engine/bot-random.ts:7,30.",
+   "fix": "Keep the spec's TypeError but derive it from one check, e.g. export MAX_SEED (or an isBotSeed guard) from src/engine/bot-random.ts and use it in both places, so the bound lives in one place."},
+  {"fingerprint": "tools/lint/headless-boundary.js:guard-misses-aliased-globals", "severity": "NIT", "file": "tools/lint/headless-boundary.js", "line": 92,
+   "issue": "The guard only catches member access and Date calls. Aliases such as `const c = crypto; c.getRandomValues(a)` or `globalThis.Math.random()` pass. This is within the spec's D-2 list, so it is not a violation; noted for TASK-6.2 if the guard is to be airtight.",
+   "evidence": "no-restricted-properties entries {object:'crypto'}, {object:'Math',property:'random'}; no Identifier-level ban (deliberately avoiding no-restricted-globals for the locked boundary test).",
+   "fix": "Optional: add no-restricted-syntax selectors like \"Identifier[name=/^(crypto|performance|Date)$/]:not(MemberExpression > .property)\" and \"MemberExpression[object.object.name='globalThis'][object.property.name='Math'][property.name='random']\" in botDeterminismConfig."}
+ ],
+ "summary": "All 10 SPEC items are implemented. The tests would fail if the behaviour broke. Seed derivation in src/engine/bot-random.ts follows D-1/Q-1: seatGenerator = Xoshiro128(fnv1a32(code/seat)), k counts the seat's earlier non-blind actions, and the seed is the (k+1)-th nextUint32. It uses no deck state and no time, and SPEC-03 proves that with fake time, Math.random/performance stubs and interleaved deck/seat draws. Only the numeric seed crosses to the worker. The SPEC-05 test checks the exact key set and that the code and its four words are absent, and covers k+1. The worker answers a missing, non-number, negative, fractional or 2^32 seed with ok:false TypeError 'Malformed bot request seed', and 0 and 2^32-1 are accepted. AC#3 is covered by deep-equal botTurn with and without userDecisions, plus an extra opponentStats field giving the same action. The lint guard covers src/bots and src/advice without no-restricted-globals and re-includes the headless properties/syntax entries. I ran the locked boundary.property test, tag.test.ts and the advice-worker acceptance test: all pass and are unchanged. The playtest SHA-256 a15b8375...c4dc7 matches the spec. The recorded deviation (src/engine/bot-random.ts plus a structural BotRandom type in tag.ts) is sound: behaviour is the same, TASK-6.1's bot boundary test stays untouched, and seatGenerator is re-exported from src/playtest/policy.ts by identity. The locked test hashes match state.json. No BLOCKER or MAJOR findings."}
