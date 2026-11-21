@@ -190,6 +190,17 @@ export function dealHand(table: TableState, code: ReplayCode): TableState {
   return { ...table, hand, replayCode: code };
 }
 
+/** REQ-011.1: at Rapid a bot acts on the next scheduler tick; no artificial wait. */
+export const RAPID_BOT_DELAY_MS = 0;
+
+/** ms the table waits before starting a bot's decision at `speed` (TASK-3.18 adds Realistic). */
+export function botActionDelayMs(speed: Speed): number {
+  switch (speed) {
+    case 'rapid':
+      return RAPID_BOT_DELAY_MS;
+  }
+}
+
 /** REQ-024.3: the pause between a hand's result and the next deal. */
 export const NEXT_HAND_DELAY_MS = 1500;
 

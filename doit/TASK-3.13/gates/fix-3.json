@@ -1,0 +1,66 @@
+{
+  "task": "TASK-3.13",
+  "phase": "fix",
+  "run": 3,
+  "result": "PASS",
+  "changed_lines": 521,
+  "changed_files": [
+    "README.md",
+    "e2e/rapid-pace.spec.ts",
+    "e2e/support/pace-advice.worker.ts",
+    "e2e/support/pace-harness.tsx",
+    "e2e/support/table-harness-bundle.ts",
+    "package.json",
+    "src/table/session.ts",
+    "src/ui/table/useTableSession.ts",
+    "tests/table/pace.acceptance.test.ts",
+    "tests/table/pace.test.ts"
+  ],
+  "checks": [
+    {
+      "name": "test command",
+      "status": "pass",
+      "detail": "$ npm test\nexit 0\nnumbers, not DEFAULT_SEATS 1ms\n \u2713 tests/table/pace.test.ts > bot pace > Rapid adds no wait before a bot acts 1ms\n \u2713 tests/table/pace.test.ts > bot pace > a new session plays at Rapid, so its bots wait 0 ms 0ms\n\n Test Files  148 passed | 1 skipped (149)\n      Tests  517 passed | 7 skipped (524)\n   Start at  13:49:58\n   Duration  23.73s (tests 93%, import 6%, worker 1%)\n\n\u001b[34m % \u001b[39m\u001b[2mCoverage report from \u001b[22m\u001b[33mv8\u001b[39m\n-------------------|---------|----------|---------|---------|-------------------\nFile               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s \n-------------------|---------|----------|---------|---------|-------------------\nAll files          |    96.8 |    94.93 |   93.87 |   97.04 |                   \n advice            |    99.8 |    98.26 |     100 |     100 |                   \n  equity.ts        |   99.55 |    93.97 |     100 |     100 | 114,120,199,292   \n engine            |   99.88 |    95.22 |     100 |   99.85 |                   \n  ...-evaluator.ts |     100 |    80.18 |     100 |     100 | ...87-200,214-215 \n  hand.ts          |     100 |    99.51 |     100 |     100 | 350               \n  invariants.ts    |   99.68 |    97.31 |     100 |   99.62 | 387               \n playtest          |     100 |    98.89 |     100 |     100 |                   \n  cli.ts           |     100 |    99.05 |     100 |     100 | 199               \n  shards.ts        |     100 |    97.53 |     100 |     100 | 197,283           \n table             |     100 |    99.53 |     100 |     100 |                   \n  session.ts       |     100 |    98.27 |     100 |     100 | 250               \n ui                |   35.29 |    14.28 |   28.57 |    37.5 |                   \n  App.tsx          |   33.33 |    33.33 |      20 |   33.33 | 20-35             \n  ...adingFocus.ts |    37.5 |        0 |      50 |   42.85 | 10-13             \n ui/advice         |   94.54 |    94.73 |   92.85 |   95.83 |                   \n  advice-client.ts |   96.15 |    94.44 |   91.66 |   97.82 | 108               \n  advice.worker.ts |       0 |      100 |     100 |       0 | 3                 \n ui/config         |      80 |       70 |   66.66 |   84.61 |                   \n  ...figScreen.tsx |      80 |       70 |   66.66 |   84.61 | 71,83-84,152      \n ui/table          |   46.93 |    65.88 |   51.06 |   52.38 |                   \n  ActionBar.tsx    |      75 |       50 |     100 |     100 | 19                \n  Table.tsx        |   73.68 |    90.74 |   68.42 |   77.77 | ...50-251,254-255 \n  ...bleSession.ts |      18 |       12 |   19.04 |   17.94 | ...11,115,120-121 \n-------------------|---------|----------|---------|---------|-------------------\n\n=============================== Coverage summary ===============================\nStatements   : 96.8% ( 2245/2319 )\nBranches     : 94.93% ( 1461/1539 )\nFunctions    : 93.87% ( 506/539 )\nLines        : 97.04% ( 1872/1929 )\n================================================================================\n"
+    },
+    {
+      "name": "lint command",
+      "status": "pass",
+      "detail": "$ npm run lint\nexit 0\n\n> tlh-trainer@0.0.0 lint\n> eslint . --max-warnings 0 && prettier --check .\n\nChecking formatting...\nAll matched files use Prettier code style!\n"
+    },
+    {
+      "name": "typecheck command",
+      "status": "pass",
+      "detail": "$ npm run typecheck\nexit 0\n\n> tlh-trainer@0.0.0 typecheck\n> tsc -p tsconfig.json\n\n"
+    },
+    {
+      "name": "spec unchanged",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "name": "scope budget (lines)",
+      "status": "warn",
+      "detail": "521 changed lines vs budget 460 (fail above 920)"
+    },
+    {
+      "name": "scope budget (files)",
+      "status": "warn",
+      "detail": "10 files vs budget 9"
+    },
+    {
+      "name": "files outside spec",
+      "status": "warn",
+      "detail": "e2e/support/pace-advice.worker.ts"
+    },
+    {
+      "name": "all changes listed in changes.md",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "name": "test integrity",
+      "status": "pass",
+      "detail": ""
+    }
+  ]
+}

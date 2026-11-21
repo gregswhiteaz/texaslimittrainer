@@ -4,6 +4,7 @@ import type { Action } from '../../engine/hand';
 import {
   applyBotDecision,
   applyUserAction,
+  botActionDelayMs,
   botTurn,
   completedHand,
   dealHand,
@@ -36,7 +37,8 @@ export interface TableSessionOptions {
 }
 
 /**
- * Holds the session and runs deal and bot steps one macrotask each; nothing runs on the user's turn.
+ * Holds the session and runs the deal step one macrotask later and each bot step botActionDelayMs(speed)
+ * later (0 at Rapid, REQ-011.1); nothing runs on the user's turn.
  * Bot decisions are computed by the app-wide advice worker; replies after unmount or for an old turn are dropped.
  * After a hand the next one is dealt NEXT_HAND_DELAY_MS later unless held.
  */
@@ -87,7 +89,7 @@ export function useTableSession({
             }
           },
         );
-      }, 0);
+      }, botActionDelayMs(table.config.speed));
       return () => {
         cancelled = true;
         clearTimeout(timer);

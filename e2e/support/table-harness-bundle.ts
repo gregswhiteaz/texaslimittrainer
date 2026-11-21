@@ -6,6 +6,7 @@ import { build, type Rolldown } from 'vite';
 const HARNESS_ENTRY = fileURLToPath(new URL('./table-harness.tsx', import.meta.url));
 const SCENES_ENTRY = fileURLToPath(new URL('./table-scenes.tsx', import.meta.url));
 const ADVICE_ENTRY = fileURLToPath(new URL('./advice-harness.tsx', import.meta.url));
+const PACE_ENTRY = fileURLToPath(new URL('./pace-harness.tsx', import.meta.url));
 const HARNESS_HTML =
   '<!doctype html><html lang="en"><head><title>Table harness</title></head><body><div id="root"></div></body></html>';
 /** Harness pages are served at the app's origin, so workers can start (D-4). */
@@ -94,6 +95,11 @@ export function buildAdviceHarness(): Promise<string> {
   return buildIife(ADVICE_ENTRY, 'TlhAdviceHarness');
 }
 
+/** Builds the test-only 10-max pace harness (pace-harness.tsx) as one IIFE script. */
+export function buildPaceHarness(): Promise<string> {
+  return buildIife(PACE_ENTRY, 'TlhPaceHarness');
+}
+
 /** Opens `html` at HARNESS_ORIGIN/__harness/<name>, fulfilled by the test instead of the server. */
 async function openHarnessPage(page: Page, name: string, html: string): Promise<void> {
   const url = `${HARNESS_ORIGIN}/__harness/${name}`;
@@ -108,6 +114,17 @@ export async function openTableHarness(
   words: readonly number[],
 ): Promise<void> {
   await openHarnessPage(page, 'table', HARNESS_HTML);
+  await page.evaluate(stubReplayWords, words);
+  await page.addScriptTag({ content: bundle });
+}
+
+/** Renders the 10-max pace harness at the app's origin with replay codes pinned to `words`. */
+export async function openPaceHarness(
+  page: Page,
+  bundle: string,
+  words: readonly number[],
+): Promise<void> {
+  await openHarnessPage(page, 'pace', HARNESS_HTML);
   await page.evaluate(stubReplayWords, words);
   await page.addScriptTag({ content: bundle });
 }

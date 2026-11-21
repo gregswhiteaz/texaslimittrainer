@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-21T20:26:00Z'
+updated_date: '2026-11-21T20:40:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -82,4 +82,6 @@ AC added from TASK-3.1 follow-up (doc-21).
 AC added from TASK-3.4 follow-up (doc-25).
 
 Autopilot: no asks. Timing checks opt-in per the user's standing rule.
+
+Build blocked: 10-player play throws in the 6-max chart (TASK-7.6). Resolved (orchestrator): SPEC-05 uses a test-only non-chart bot policy through the real scheduling path (recorded deviation); AC added to TASK-7.6 to re-prove with real bots.
 <!-- SECTION:NOTES:END -->

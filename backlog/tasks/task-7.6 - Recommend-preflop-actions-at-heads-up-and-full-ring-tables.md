@@ -4,7 +4,7 @@ title: Recommend preflop actions at heads-up and full-ring tables
 status: To Do
 assignee: []
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-18T19:40:00Z'
+updated_date: '2026-11-21T20:40:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -49,6 +49,7 @@ Plan key: E07-S05 · Dream: limit-holdem-trainer
 - [ ] #7 Given a full-ring preflop decision where UTG faces a fourth bet (UTG raised, CO re-raised, BB re-raised), When advice is requested for a hand class whose full-ring UTG facing-a-re-raise cell is raise and for one whose cell is fold, Then it uses those full-ring cells and returns call and fold respectively [REQ-032.6]
 - [ ] #8 Given preflop decisions at the first seat to act, When advice is requested, Then 4-handed uses the 6-max CO cell, 5-handed the 6-max HJ cell, both of the two earliest 7-handed seats the 6-max UTG cell, and 8-handed the full-ring cell of the position 5 seats before the button [REQ-005.4]
 - [ ] #9 Given charts for table sizes 2-10, When the playtest's defaultPolicyFactory seats bots, Then TAG sits in every seat at every supported size and the random-move fallback is removed
+- [ ] #10 Given 10-seat preflop charts exist, When TASK-3.13's e2e/rapid-pace.spec.ts 10-player check (SPEC-05) runs with the real TAG bots instead of its test-only policy, Then every bot action after the user's preflop fold shows within 300 ms
 <!-- AC:END -->
 
 ## Definition of Done
@@ -72,4 +73,6 @@ Plan key: E07-S05 · Dream: limit-holdem-trainer
 
 <!-- SECTION:NOTES:BEGIN -->
 AC added from TASK-6.1 follow-up (doc-18).
+
+AC added from TASK-3.13 (10-player pace proven with a test-only policy until 10-seat charts exist)
 <!-- SECTION:NOTES:END -->

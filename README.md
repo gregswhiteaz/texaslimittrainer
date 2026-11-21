@@ -201,6 +201,13 @@ machine (Apple-silicon Mac, Node 22.18.0) with `CI` unset:
   npm run e2e:slow
   ```
 
+- Rapid pace: at Rapid each bot action shows at most 300 ms after the previous action, at 6
+  players and at 10, and 200 hands with a folding user finish in under 60 minutes, counting
+  the 1.5 s between hands. These real-time Playwright checks (Chromium only) are opt-in too:
+  run `npm run e2e:slow`. Every push still runs two deterministic guards: on a paused clock
+  each bot action must appear within 100 ms of fake time (a 400 ms wait is caught), and a
+  200-hand model counts the scheduled waits and charges the full 300 ms per bot action.
+
 A local `npm test` keeps only slack checks (at least 1,000,000 evals/s, build at most 500 ms,
 equity targets times 20, 2 s per call for the bounded-work equity test). CI (`CI=true`) prints
 the measurements but enforces no speed limit; the bounded-work equity test uses a 10 s ceiling
