@@ -1,0 +1,24 @@
+{"reviewer": "code", "round": 1,
+ "rubric": [
+  {"item": "SPEC-01 correctness", "result": "pass"},
+  {"item": "SPEC-01 test strength", "result": "pass"},
+  {"item": "SPEC-02 correctness", "result": "pass"},
+  {"item": "SPEC-02 test strength", "result": "pass"},
+  {"item": "SPEC-03 correctness", "result": "pass"},
+  {"item": "SPEC-03 test strength", "result": "pass"},
+  {"item": "SPEC-04 correctness", "result": "pass"},
+  {"item": "SPEC-04 test strength", "result": "pass"},
+  {"item": "SPEC-05 correctness", "result": "pass"},
+  {"item": "SPEC-05 test strength", "result": "pass"},
+  {"item": "scope", "result": "pass"},
+  {"item": "concision", "result": "pass"},
+  {"item": "clarity", "result": "pass"}
+ ],
+ "findings": [
+  {"fingerprint": "tests/advice/preflop-chart-edges.acceptance.test.ts:manual-try-catch-for-rangeerror", "severity": "NIT",
+   "file": "tests/advice/preflop-chart-edges.acceptance.test.ts", "line": 100,
+   "issue": "SPEC-03 uses a hand-rolled try/catch plus two expects where a single Vitest matcher would do.",
+   "evidence": "let thrown: unknown; try { chartCell(...) } catch (error) { thrown = error; } expect(thrown).toBeInstanceOf(RangeError); expect(message).toBe(...)",
+   "fix": "Optional: expect(() => chartCell(chart, 'CO', 'unopened', hc)).toThrow(new RangeError(`Unknown hand class ${hc}`)) together with a toThrow(RangeError) check; the current form is correct and fails when the behaviour breaks."}
+ ],
+ "summary": "The diff matches the spec exactly. The module-private echo() with ECHO_CHARS = 20 is used at the three specified sites (invalid action, invalid alternative, spot does not apply). The chartCell JSDoc lists both RangeErrors, and no other behaviour changes. The tests would catch a broken implementation: the /\\S+/ wordCount mutant counts 60 tokens, so both SPEC-01 asserts fail. Off-by-one mutants (< in place of <=, or a limit of 19 or 21) fail the exact-20 and 31-character cases in SPEC-04/05. Removing echo at any site fails its exact-string assert. A missing throw or wrong message fails SPEC-03. Only the two specified files changed. The 153 changed lines exceed the 130-line budget, which is a warning only, because the spec told the builder to copy the test helpers. Gates pass (test, lint, typecheck), and the new test file passes on its own (5/5)."}

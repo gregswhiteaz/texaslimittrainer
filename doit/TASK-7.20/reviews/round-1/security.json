@@ -1,0 +1,12 @@
+{"reviewer": "security", "round": 1,
+ "findings": [
+  {"fingerprint": "src/advice/preflop-chart.ts:reference-size-echo-uncut", "severity": "NIT", "file": "src/advice/preflop-chart.ts", "line": 168,
+   "issue": "The 'unknown reference size' message still puts String(raw.referenceSize) into the error without a length limit. Spec A-3 lists the untrusted echo sites and leaves this one out. The code predates this change and is not part of the diff.",
+   "evidence": "raw.referenceSize (chart JSON) -> String() -> ChartValidationError message. The only caller is src/advice/preflop.ts:17, which passes bundled sixMax JSON, so there is no attacker-reachable path today.",
+   "fix": "Optional: wrap it as echo(String(raw.referenceSize)) for consistency, or record a follow-up. Do not block on this."},
+  {"fingerprint": "src/advice/preflop-chart.ts:echo-utf16-and-control-chars", "severity": "NIT", "file": "src/advice/preflop-chart.ts", "line": 80,
+   "issue": "echo() cuts by UTF-16 code units, so a cut can split a surrogate pair and leave a lone surrogate. It also passes newlines and control characters through, but grid tokens cannot contain whitespace because they come from split(/\\s+/). Only spot keys can carry them.",
+   "evidence": "data.position/situation (chart JSON) -> spotKey -> echo -> problems[]. The input is bundled JSON only, and the output is an error string, not HTML or a shell.",
+   "fix": "None needed now. If parseChart ever takes user-supplied charts, cut with Array.from(text).slice(0, ECHO_CHARS) and replace control characters before echoing."}
+ ],
+ "summary": "The change adds a module-private echo() that limits untrusted text in three ChartValidationError messages to 20 characters plus '...'. This bounds the echoed text and resolves the TASK-7.2 security NIT. The trust boundary is parseChart(raw: unknown), and its only caller passes bundled JSON, so no attacker-controlled path exists. The echoed strings only go into Error messages: no HTML, shell, path, regex or eval sinks. echo() runs in O(1) for each call. There are no new dependencies, secrets or randomness, and the chartCell change is JSDoc only. No BLOCKER or MAJOR findings, plus two hygiene NITs."}

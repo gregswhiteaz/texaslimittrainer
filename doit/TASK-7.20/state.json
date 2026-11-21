@@ -4,14 +4,20 @@
   "branch": "doit/TASK-7.20",
   "base_commit": "28e056179395206f5ace9ced410593a73433bc30",
   "started": "2026-11-20T19:55:44",
-  "review_round": 0,
-  "judge_round": 0,
+  "review_round": 1,
+  "judge_round": 1,
   "sendbacks": 0,
   "gate_runs": 2,
   "questions": 0,
   "assumptions": 0,
   "escalations": 0,
-  "item_failures": {},
+  "item_failures": {
+    "SPEC-01": 0,
+    "SPEC-02": 0,
+    "SPEC-03": 0,
+    "SPEC-04": 0,
+    "SPEC-05": 0
+  },
   "locked_tests": {
     "tests/advice/preflop-chart-edges.acceptance.test.ts": "2307616efa248789f182b29d738db923933102df9370aad5c84a46d52f175f2b"
   },
@@ -659,5 +665,12 @@
   },
   "history": [],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-7.20",
-  "spec_sha256": "33c1075f009e0a328cdaf10c87aa8feb6aea10d4c6a9d67fb2a8b39799bef46f"
+  "spec_sha256": "33c1075f009e0a328cdaf10c87aa8feb6aea10d4c6a9d67fb2a8b39799bef46f",
+  "review_findings": {
+    "1": 0
+  },
+  "judge_results": {
+    "1": "PASS"
+  },
+  "doc_id": "doc-53"
 }
