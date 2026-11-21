@@ -1,0 +1,17 @@
+{"reviewer": "code", "round": 1,
+ "rubric": [
+  {"item": "SPEC-01 correctness", "result": "pass"},
+  {"item": "SPEC-01 test strength", "result": "pass"},
+  {"item": "SPEC-02 correctness", "result": "pass"},
+  {"item": "SPEC-02 test strength", "result": "pass"},
+  {"item": "SPEC-03 correctness", "result": "pass"},
+  {"item": "SPEC-03 test strength", "result": "pass"},
+  {"item": "SPEC-04 correctness", "result": "pass"},
+  {"item": "SPEC-04 test strength", "result": "pass"},
+  {"item": "locked-test edits stricter-only (TASK-1.1 coverage.test.ts, TASK-1.26 headless-lint-dirs.acceptance.test.ts)", "result": "pass"},
+  {"item": "scope", "result": "pass"},
+  {"item": "concision", "result": "pass"},
+  {"item": "clarity", "result": "pass"}
+ ],
+ "findings": [],
+ "summary": "The diff matches the spec exactly across 5 files and 40 lines. vite.config.ts widens the 90% glob to the literal 'src/{engine,bots,advice,stats,playtest,table}/**' (A-1). headless-boundary.js has the 6-entry HEADLESS_DIRS, removes LINT_ONLY_HEADLESS_DIRS (A-2), builds HEADLESS_FILES from HEADLESS_DIRS only, and updates its header comment. The SPEC-02 grep for LINT_ONLY_HEADLESS_DIRS finds nothing in tools, tests, src or vite.config.ts. Both locked-test edits only make the tests stricter. In coverage.test.ts the loop, probe, filler and 'global threshold' negative check are all unchanged. The expected message now has the longer literal key, and a new guard checks that HEADLESS_DIRS contains playtest and table. In headless-lint-dirs.acceptance.test.ts the sandbox lint test is unchanged. The old checks (LINT_ONLY list equals [playtest, table], plus an arrayContaining check on HEADLESS_FILES) are replaced by exact toEqual checks on both HEADLESS_DIRS and HEADLESS_FILES, which catch everything the old checks did and more. If either config edit were reverted, the coverage message assertion and the list assertion would fail. Targeted run: coverage, headless-lint-dirs and boundary tests 8/8 pass. Gate build-1 passes test, lint, typecheck and scope. No findings."}

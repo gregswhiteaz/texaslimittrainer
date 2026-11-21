@@ -1,0 +1,3 @@
+{"reviewer": "security", "round": 1,
+ "findings": [],
+ "summary": "Config/test-only change: vite.config.ts widens the 90% line-coverage threshold glob to include src/playtest and src/table; tools/lint/headless-boundary.js folds LINT_ONLY_HEADLESS_DIRS into HEADLESS_DIRS (HEADLESS_FILES still yields the same six src/<dir>/** globs, so the headless lint boundary is not weakened); two toolchain tests and README updated to match. No remaining references to the removed export. No untrusted input, no new dependencies, no secrets, no file/temp/shell handling changes. Spec section 8 (N/A) is accurate. No findings."}
