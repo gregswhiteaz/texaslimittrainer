@@ -797,7 +797,14 @@
       "skips": 0
     }
   },
-  "history": [],
+  "history": [
+    {
+      "t": "2026-11-21T15:09:49",
+      "event": "unlock",
+      "file": "tests/playtest/games.acceptance.test.ts",
+      "reason": "TASK-6.2 Q-4 (autopilot, recommended): pin the pre-6.2 pure TAG policy via makePolicy so the sng rules scenario is unchanged; assertions unchanged"
+    }
+  ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-1.16",
   "spec_sha256": "87750207c6c5cabfe0d4f69022b4e340b6374b7de4a2537c5579a963e2b7f979",
   "review_findings": {
@@ -812,5 +819,8 @@
   "doc_id": "doc-63",
   "judge_results": {
     "1": "PASS"
-  }
+  },
+  "relock_pending": [
+    "tests/playtest/games.acceptance.test.ts"
+  ]
 }

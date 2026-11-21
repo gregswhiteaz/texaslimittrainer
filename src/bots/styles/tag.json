@@ -1,0 +1,33 @@
+{
+  "format": "tlh-bot-style",
+  "version": 1,
+  "style": "TAG",
+  "description": "TAG (tight-aggressive) plays few starting hands and plays them hard. It follows the trainer's own advice: the 6-max preflop chart before the flop and equity against pot odds after it. In close preflop spots, where the chart lists an acceptable alternative, it usually takes the chart's main action but sometimes the alternative, so it can't be beaten by one simple pattern. It never adapts to how you play.",
+  "mixedSpots": [
+    {
+      "spot": "preflop-unopened",
+      "actions": { "recommended": 0.75, "alternative": 0.25 },
+      "justification": "With the pot unopened the alternative cells are opens or folds with hands of similar value; taking the alternative a quarter of the time stops opponents reading TAG's opening range exactly."
+    },
+    {
+      "spot": "preflop-limpers",
+      "actions": { "recommended": 0.75, "alternative": 0.25 },
+      "justification": "Against limpers the close choices are isolation raises against over-limps or folds; an occasional alternative keeps players from knowing when TAG's raise means a strong hand."
+    },
+    {
+      "spot": "preflop-raise",
+      "actions": { "recommended": 0.75, "alternative": 0.25 },
+      "justification": "Facing one raise the alternatives are re-raises or calls with hands near the edge of the range; mixing them means TAG's re-raises are not always premium hands."
+    },
+    {
+      "spot": "preflop-raise-and-calls",
+      "actions": { "recommended": 0.75, "alternative": 0.25 },
+      "justification": "With a raise and callers the borderline cells are calls or folds that depend on implied odds; mixing them stops opponents assuming every call shows a strong drawing hand."
+    },
+    {
+      "spot": "preflop-blind-defence",
+      "actions": { "recommended": 0.75, "alternative": 0.25 },
+      "justification": "A blind already has chips in the pot, so its alternative cells are close in value; mixing calls, folds and re-raises makes TAG's blinds harder to attack with any two cards."
+    }
+  ]
+}

@@ -4,7 +4,13 @@ import type { SeatNumber } from './hand';
 import type { PlayerView } from './player-view';
 import { fnv1a32, Xoshiro128 } from './seeded-random';
 
-const MAX_SEED = 0xffffffff;
+/** The largest bot seed: seeds are unsigned 32-bit integers. */
+export const MAX_BOT_SEED = 0xffffffff;
+
+/** True iff `seed` is an integer from 0 to MAX_BOT_SEED. */
+export function isBotSeed(seed: unknown): seed is number {
+  return typeof seed === 'number' && Number.isInteger(seed) && seed >= 0 && seed <= MAX_BOT_SEED;
+}
 
 /** The generator for `seat` in the hand dealt from `code`: new Xoshiro128(fnv1a32(`${code}/${seat}`)). */
 export function seatGenerator(code: ReplayCode, seat: SeatNumber): Xoshiro128 {
@@ -27,8 +33,8 @@ export function botDecisionSeed(code: ReplayCode, view: PlayerView): number {
 
 /** new Xoshiro128(seed). RangeError unless seed is an integer from 0 to 4294967295. */
 export function botRandom(seed: number): Xoshiro128 {
-  if (!Number.isInteger(seed) || seed < 0 || seed > MAX_SEED) {
-    throw new RangeError(`Bot seed must be an integer from 0 to ${MAX_SEED}, got ${seed}`);
+  if (!isBotSeed(seed)) {
+    throw new RangeError(`Bot seed must be an integer from 0 to ${MAX_BOT_SEED}, got ${seed}`);
   }
   return new Xoshiro128(seed);
 }

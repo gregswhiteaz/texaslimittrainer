@@ -82,7 +82,9 @@ describe('bot randomness (TASK-6.18)', () => {
         const first = decide(point);
         const second = decide(point);
         expect(second).toEqual(first);
-        expect(first.action).toEqual(decideTag(point.view));
+        expect(first.action).toEqual(
+          decideTag(point.view, { random: botRandom(botDecisionSeed(point.code, point.view)) }),
+        );
         if (i % 10 === 0) {
           const request: AdviceRequest = {
             id: i,

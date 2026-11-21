@@ -1,7 +1,7 @@
 import type { Action } from '../engine/hand';
 import type { PlayerView } from '../engine/player-view';
 import type { Xoshiro128 } from '../engine/seeded-random';
-import { botRandom } from '../engine/bot-random';
+import { botRandom, isBotSeed } from '../engine/bot-random';
 import { decideTag } from '../bots/tag';
 import { recommend, type Recommendation } from '../advice/recommend';
 import { gradeView, type ActionType, type GradeResult } from '../advice/grade';
@@ -44,10 +44,6 @@ export interface AdviceDeps {
 const decideBotDefault = (view: PlayerView, _style: BotStyle, random: Xoshiro128): Action =>
   decideTag(view, { random });
 
-function isSeed(seed: unknown): seed is number {
-  return typeof seed === 'number' && Number.isInteger(seed) && seed >= 0 && seed <= 0xffffffff;
-}
-
 /** Never throws: every error (malformed request, unknown kind or thrown by advice code) becomes ok:false. */
 export function handleAdviceRequest(
   request: AdviceRequest,
@@ -63,7 +59,7 @@ export function handleAdviceRequest(
     id = request.id;
     switch (request.kind) {
       case 'bot': {
-        if (!isSeed(request.seed)) throw new TypeError('Malformed bot request seed');
+        if (!isBotSeed(request.seed)) throw new TypeError('Malformed bot request seed');
         const random = botRandom(request.seed);
         return { id, ok: true, value: decideBot(request.view, request.style, random) };
       }

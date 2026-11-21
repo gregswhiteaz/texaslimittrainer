@@ -22,8 +22,7 @@ import {
   type Violation,
 } from '../engine/invariants';
 import { playerView, type SeatPolicy } from '../engine/player-view';
-import { tagPolicy } from '../bots/tag';
-import { randomMovePolicy, seatGenerator } from './policy';
+import { randomMovePolicy, seatGenerator, seededTagPolicy } from './policy';
 
 export { MAX_BETS_PER_STREET };
 export const PLAYTEST_STAKES: Stakes = { smallBlind: 2, bigBlind: 4, smallBet: 4, bigBet: 8 };
@@ -131,10 +130,10 @@ export interface PlaytestSummary {
 }
 
 const randomPolicy: PolicyFactory = (code, seat) => randomMovePolicy(seatGenerator(code, seat));
-const allTag: PolicyFactory = () => tagPolicy;
+const allTag: PolicyFactory = (code) => seededTagPolicy(code);
 
-/** TAG in every seat at 6 players; randomMovePolicy(seatGenerator(code, seat)) at other sizes,
- *  where TAG has no preflop chart yet. */
+/** seededTagPolicy(code) (TAG with the worker's per-decision seed) in every seat at 6 players;
+ *  randomMovePolicy(seatGenerator(code, seat)) at other sizes, where TAG has no preflop chart yet. */
 export function defaultPolicyFactory(size: number): PolicyFactory {
   return size === 6 ? allTag : randomPolicy;
 }

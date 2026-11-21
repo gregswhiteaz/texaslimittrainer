@@ -1,5 +1,6 @@
 import { MessageChannel, type MessagePort } from 'node:worker_threads';
 import { afterEach, describe, expect, it } from 'vitest';
+import { botDecisionSeed } from '../../src/engine/bot-random';
 import { shuffledDeck } from '../../src/engine/deck';
 import { applyAction, createHand, type Action } from '../../src/engine/hand';
 import { playerView } from '../../src/engine/player-view';
@@ -104,7 +105,10 @@ describe('advice worker', () => {
       while (state.toAct !== null) {
         const view = playerView(state, state.toAct);
         if (view.street !== 'preflop') postflop++;
-        const result = applyAction(state, await client.decideBot(view, 'TAG'));
+        const result = applyAction(
+          state,
+          await client.decideBot(view, 'TAG', botDecisionSeed(code, view)),
+        );
         if (!result.ok) throw new Error(result.error.message);
         state = result.state;
       }

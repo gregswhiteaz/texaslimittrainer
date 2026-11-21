@@ -1,5 +1,6 @@
 import { spawnSync } from 'node:child_process';
 import { describe, expect, it } from 'vitest';
+import { tagPolicy } from '../../src/bots/tag';
 import { applyAction, createHand, type SeatConfig } from '../../src/engine/hand';
 import { main } from '../../src/playtest/cli';
 import {
@@ -9,6 +10,7 @@ import {
   type PlayedHand,
   type PlaytestSeams,
 } from '../../src/playtest/runner';
+import { randomMovePolicy, seatGenerator } from '../../src/playtest/policy';
 import { REPO_ROOT, sandboxEnv } from '../support/sandbox';
 
 const TEST_TIMEOUT_MS = 120_000;
@@ -56,7 +58,13 @@ describe('cash and sit-and-go playtest games', () => {
   it(
     'AC#6 sit-and-go playtest restarts at 1,500 chips, never refills busted seats and skips them',
     () => {
-      const { played, summary } = collect(10_000, 42, 6, 'sng');
+      // The pre-TASK-6.2 default: pure TAG at 6 dealt-in seats, random-move otherwise (TASK-6.2 Q-4).
+      const { played, summary } = collect(10_000, 42, 6, 'sng', {
+        makePolicy: (code, seat) => {
+          const random = randomMovePolicy(seatGenerator(code, seat));
+          return (view) => (view.players.length === 6 ? tagPolicy(view) : random(view));
+        },
+      });
       expect(played).toHaveLength(10_000);
       const chips = new Map<number, number>();
       let fresh = true;

@@ -1,10 +1,11 @@
 import { describe, expect, it } from 'vitest';
 import { shuffledDeck } from '../../src/engine/deck';
 import { applyAction, createHand, type Action } from '../../src/engine/hand';
-import { tagPolicy } from '../../src/bots/tag';
+import { decideTag } from '../../src/bots/tag';
+import { botDecisionSeed, botRandom } from '../../src/engine/bot-random';
 import { checkStep } from '../../src/engine/invariants';
 import { playerView, type SeatPolicy } from '../../src/engine/player-view';
-import { randomMovePolicy, seatGenerator } from '../../src/playtest/policy';
+import { randomMovePolicy, seatGenerator, seededTagPolicy } from '../../src/playtest/policy';
 import {
   defaultPolicyFactory,
   handReplayCode,
@@ -201,8 +202,18 @@ describe('playtest runner units', () => {
 
   it('default seat policy is TAG at 6 players and random-move elsewhere', () => {
     const code = handReplayCode(42, 1);
-    for (let seat = 1; seat <= 6; seat++)
-      expect(defaultPolicyFactory(6)(code, seat)).toBe(tagPolicy);
+    let views = 0;
+    playHand(code, 6, 6, 1, {
+      onAction: (step) => {
+        const view = playerView(step.before, step.action.seat);
+        const seeded = decideTag(view, { random: botRandom(botDecisionSeed(code, view)) });
+        expect(defaultPolicyFactory(6)(code, view.seat)(view)).toEqual(seeded);
+        expect(step.action).toEqual(seeded);
+        views++;
+        return checkStep(step);
+      },
+    });
+    expect(views).toBeGreaterThan(0);
 
     for (const size of [3, 5, 7, 10]) {
       const actual = defaultPolicyFactory(size);
@@ -326,14 +337,14 @@ describe('playtest runner units', () => {
       clean[0]?.final.players.map(({ seat, stack }) => ({ seat, stack })),
     );
 
-    // The default policy follows the seats dealt in: random below 6, TAG at 6.
+    // The default policy follows the seats dealt in: random below 6, seeded TAG at 6.
     const five = [160, 160, 0, 160, 160, 160];
     const random: PolicyFactory = (c, seat) => randomMovePolicy(seatGenerator(c, seat));
     expect(playHand(code, 6, 1, 1, {}, { stacks: five }).record.actions).toEqual(
       playHand(code, 6, 1, 1, { makePolicy: random }, { stacks: five }).record.actions,
     );
     expect(playHand(code, 6, 1).record.actions).toEqual(
-      playHand(code, 6, 1, 1, { makePolicy: () => tagPolicy }).record.actions,
+      playHand(code, 6, 1, 1, { makePolicy: (c) => seededTagPolicy(c) }).record.actions,
     );
   });
 });

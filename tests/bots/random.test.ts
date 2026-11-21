@@ -1,5 +1,9 @@
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import {
+  MAX_BOT_SEED,
+  isBotSeed,
   botDecisionIndex,
   botDecisionSeed,
   botRandom,
@@ -10,6 +14,7 @@ import type { ActionRecord } from '../../src/engine/hand';
 import type { PlayerView } from '../../src/engine/player-view';
 import { Xoshiro128 } from '../../src/engine/seeded-random';
 import { seatGenerator as playtestSeatGenerator } from '../../src/playtest/policy';
+import { REPO_ROOT } from '../support/sandbox';
 
 const CODE = replayCodeFromWords([0x9e3779b9, 1, 2, 3]);
 
@@ -70,5 +75,26 @@ describe('bot random', () => {
         new RangeError(`Bot seed must be an integer from 0 to 4294967295, got ${seed}`),
       );
     }
+  });
+
+  it('one shared bot seed bound and guard', () => {
+    expect(MAX_BOT_SEED).toBe(4294967295);
+    const valid = [0, 1, 4294967295];
+    const invalid = [-1, 1.5, 4294967296, NaN, Infinity, '7', undefined, null];
+    for (const seed of valid) {
+      expect(isBotSeed(seed), String(seed)).toBe(true);
+      expect(() => botRandom(seed)).not.toThrow();
+    }
+    for (const seed of invalid) {
+      expect(isBotSeed(seed), String(seed)).toBe(false);
+      expect(() => botRandom(seed as number)).toThrow(
+        new RangeError(`Bot seed must be an integer from 0 to 4294967295, got ${String(seed)}`),
+      );
+    }
+
+    const service = readFileSync(join(REPO_ROOT, 'src/table/advice-service.ts'), 'utf8');
+    expect(service).toMatch(/import \{[^}]*\bisBotSeed\b[^}]*\} from '\.\.\/engine\/bot-random';/);
+    expect(service).not.toMatch(/0xffffffff|4294967295/i);
+    expect(service).not.toMatch(/function isSeed|Number\.isInteger/);
   });
 });

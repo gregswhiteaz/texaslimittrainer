@@ -32,7 +32,7 @@ describe('advice service', () => {
       expect(handleAdviceRequest({ id: 4, kind: 'bot', view, style: 'TAG', seed: 0 })).toEqual({
         id: 4,
         ok: true,
-        value: decideTag(view),
+        value: decideTag(view, { random: botRandom(0) }),
       });
       expect(handleAdviceRequest({ id: 5, kind: 'recommend', view })).toEqual({
         id: 5,

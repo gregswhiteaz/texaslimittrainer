@@ -1,11 +1,13 @@
 import { spawnSync } from 'node:child_process';
 import { describe, expect, it, vi } from 'vitest';
 import type { Recommendation, RecommendOptions } from '../../src/advice/recommend';
-import { decideTag, tagPolicy } from '../../src/bots/tag';
+import { decideTag } from '../../src/bots/tag';
+import { botDecisionSeed, botRandom } from '../../src/engine/bot-random';
 import { checkStep, type Violation } from '../../src/engine/invariants';
 import { playerView, type PlayerView } from '../../src/engine/player-view';
 import { main } from '../../src/playtest/cli';
-import { runPlaytest } from '../../src/playtest/runner';
+import { seededTagPolicy } from '../../src/playtest/policy';
+import { handReplayCode, runPlaytest } from '../../src/playtest/runner';
 import { REPO_ROOT, sandboxEnv } from '../support/sandbox';
 
 const TEST_TIMEOUT_MS = 120_000;
@@ -54,27 +56,38 @@ describe('TAG bots in the playtest', () => {
       const code = main(
         ['--hands', '10000', '--seed', '42'],
         { out: (t) => (out += t), err: (t) => (err += t) },
-        { makePolicy: () => tagPolicy },
+        { makePolicy: (code) => seededTagPolicy(code) },
       );
       expect(code).toBe(0);
       expect(err).toBe('');
       expect(run.stdout === out).toBe(true);
 
       let steps = 0;
+      let hand = 1;
       const mismatches: string[] = [];
-      const summary = runPlaytest({ hands: 10000, seed: 42, size: 6 }, undefined, {
-        onAction: (step): readonly Violation[] => {
-          steps++;
-          const view = playerView(step.before, step.before.toAct as number);
-          const legal = view.legalActions.some(
-            (a) => JSON.stringify(a) === JSON.stringify(step.action),
-          );
-          if (!legal || JSON.stringify(step.action) !== JSON.stringify(decideTag(view))) {
-            mismatches.push(JSON.stringify(step.action));
-          }
-          return checkStep(step);
+      const summary = runPlaytest(
+        { hands: 10000, seed: 42, size: 6 },
+        () => {
+          hand++;
         },
-      });
+        {
+          onAction: (step): readonly Violation[] => {
+            steps++;
+            const view = playerView(step.before, step.before.toAct as number);
+            const legal = view.legalActions.some(
+              (a) => JSON.stringify(a) === JSON.stringify(step.action),
+            );
+            const replayCode = handReplayCode(42, hand);
+            const seeded = decideTag(view, {
+              random: botRandom(botDecisionSeed(replayCode, view)),
+            });
+            if (!legal || JSON.stringify(step.action) !== JSON.stringify(seeded)) {
+              mismatches.push(JSON.stringify(step.action));
+            }
+            return checkStep(step);
+          },
+        },
+      );
       expect(mismatches).toEqual([]);
       expect(steps).toBe(summary.playerActions);
       expect(summary.handsPlayed).toBe(10000);
@@ -87,23 +100,36 @@ describe('TAG bots in the playtest', () => {
     spy.calls.length = 0;
     spy.recording = true;
     let actions = 0;
+    let hand = 1;
     const problems: string[] = [];
     try {
-      const summary = runPlaytest({ hands: 300, seed: 6, size: 6 }, undefined, {
-        onAction: (step) => {
-          actions++;
-          const call = spy.calls[actions - 1];
-          if (spy.calls.length !== actions || call === undefined) {
-            problems.push(`action ${actions}: ${spy.calls.length} recommend calls`);
-          } else {
-            if (call.view.seat !== step.action.seat) problems.push(`action ${actions}: wrong seat`);
-            if (JSON.stringify(call.result.move) !== JSON.stringify(step.action)) {
-              problems.push(`action ${actions}: played ${JSON.stringify(step.action)}`);
-            }
-          }
-          return checkStep(step);
+      const summary = runPlaytest(
+        { hands: 300, seed: 6, size: 6 },
+        () => {
+          hand++;
         },
-      });
+        {
+          onAction: (step) => {
+            actions++;
+            const call = spy.calls[actions - 1];
+            if (spy.calls.length !== actions || call === undefined) {
+              problems.push(`action ${actions}: ${spy.calls.length} recommend calls`);
+            } else {
+              if (call.view.seat !== step.action.seat)
+                problems.push(`action ${actions}: wrong seat`);
+              spy.recording = false;
+              const seeded = decideTag(call.view, {
+                random: botRandom(botDecisionSeed(handReplayCode(6, hand), call.view)),
+              });
+              spy.recording = true;
+              if (JSON.stringify(seeded) !== JSON.stringify(step.action)) {
+                problems.push(`action ${actions}: played ${JSON.stringify(step.action)}`);
+              }
+            }
+            return checkStep(step);
+          },
+        },
+      );
       expect(summary.violations).toBe(0);
     } finally {
       spy.recording = false;

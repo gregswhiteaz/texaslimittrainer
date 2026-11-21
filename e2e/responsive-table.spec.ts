@@ -1,8 +1,8 @@
 import { expect, test, type Page } from '@playwright/test';
-import { tagPolicy } from '../src/bots/tag';
-import { replayCodeFromWords } from '../src/engine/deck';
+import { replayCodeFromWords, type ReplayCode } from '../src/engine/deck';
 import type { Action, SeatNumber } from '../src/engine/hand';
 import type { SeatPolicy } from '../src/engine/player-view';
+import { seededTagPolicy } from '../src/playtest/policy';
 import { playHand, toAction } from '../src/playtest/runner';
 import type { CompletedHand } from '../src/table/session';
 import { expectNoSeriousAxeViolations } from './support/axe';
@@ -209,8 +209,8 @@ test('bot actions computed in the worker match the headless playtest', async ({ 
   const userActions = actions.filter((a) => a.seat === USER_SEAT);
   let next = 0;
   const replayUser: SeatPolicy = () => userActions[next++] as Action;
-  const makePolicy = (_: unknown, seat: SeatNumber): SeatPolicy =>
-    seat === USER_SEAT ? replayUser : tagPolicy;
+  const makePolicy = (c: ReplayCode, seat: SeatNumber): SeatPolicy =>
+    seat === USER_SEAT ? replayUser : seededTagPolicy(c);
   expect(actions).toEqual(playHand(code, 6, 6, 1, { makePolicy }).record.actions);
   expect(hand.actions.some((a) => a.seat !== USER_SEAT && a.street !== 'preflop')).toBe(true);
 

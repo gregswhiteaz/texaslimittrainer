@@ -23,3 +23,12 @@ alternative". So TASK-6.1 tag-playtest AC#6 (:100) compares to the exact seeded 
    policy/decision exactly.
 4. TASK-6.18 tests/bots/bot-random.acceptance.test.ts — :85 and :174-176, only lines that actually fail, same rule.
 **Answer: auto-accepted (recommended, amended to exact-equality)** — unlocks recorded under each owning task.
+
+## Q-4 — Mid-build: locked TASK-1.16 sit-and-go test (builder blocked.json)
+`tests/playtest/games.acceptance.test.ts` AC#6 (:113 `completed >= 1`) fails because seeded TAG as the 6-max default
+changes the seed-42 sng chip path (0 sit-and-gos complete in 10,000 hands vs 2 before). The test checks button, blind
+and restart rules, not TAG. Options: (a) add it to D-5 — pass an explicit `makePolicy` using the pure pre-6.2 TAG
+factory (defaultPolicyFactory as it was) so the scenario is unchanged and every assertion stays as strict
+[Recommended]; (b) keep the 6-max default pure (drops part of D-4); (c) seeded TAG only for cash (new decision).
+**Answer: auto-accepted (recommended)** — (a). Unlock recorded under TASK-1.16. TASK-5.4 already carries multi-sng
+coverage with another seed.
