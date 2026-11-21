@@ -1,0 +1,94 @@
+{
+ "round": 2,
+ "test_suite": {
+  "command": "npm test",
+  "result": "PASS",
+  "passed": 410,
+  "failed": 0,
+  "notes": "117 files, 410 passed, 6 skipped (pre-existing skips), exit 0. Coverage: all 96.84% stmts; engine 99.87% stmts; invariants.ts 99.65%. Lint exit 0, typecheck exit 0. Round 2: HEAD unchanged at 9f4594e (no src/tests diff); carried forward."
+ },
+ "end_to_end": {
+  "command": "npm run playtest -- --hands 10000 --seed 42 (plus spec \u00a710 Judge end-to-end steps 1-3)",
+  "result": "PASS",
+  "expected": "Exit 0, output byte-identical to the 791d900 baseline (Hands played 10000, Ended by fold 5470, showdown 4530, actions 88831, capped 244, Largest pot $70, replay codes ...0001/...2710, Invariant violations 0); the four named vitest files pass; locked files unchanged",
+  "actual": "Exit 0. I regenerated the baseline in a temporary worktree at 791d900, and `diff` of the full output against HEAD reports it IDENTICAL. The 4 vitest files pass (11 tests, property test 2.7 s). git diff --exit-code 791d900 over the 13 locked files is empty. Round 2: HEAD unchanged; carried forward."
+ },
+ "integrity": {
+  "result": "PASS",
+  "notes": "doit.py test-integrity TASK-1.10 exit 0 with no output. I read the src diff (hand.ts buildPots/gather/foldOut/endRound/payOut, invariants.ts potStructureMessage). It does not recognise test inputs, hard-code values, take early exits, mock anything or override equality. The checker recomputes levels on its own (top-minus-second cap) and does not call engine pot code. 13 mutants were run in a temporary copy: 12 were killed by the builder tests. The one survivor, capping the last pot, is equivalent and unreachable, as the spec says. src in the working tree still matches HEAD. Round 2: test-integrity re-run exit 0; git diff --stat -- src empty."
+ },
+ "items": [
+  {
+   "spec": "SPEC-01",
+   "result": "PASS",
+   "evidence": "Round 2: HEAD unchanged at 9f4594e and src/tests show no diff against it, so carried forward from round 1 (re-ran the 4 side-pot/review-gaps vitest files: 11/11 pass; holdout edges and checker cases ALL OK; holdout oracle fuzz 100,000 hands 0 failures). Round 1: The vitest test passes. It asserts the exact S1turn pots (40/60/4), the {3,6} return, emptied end pots, the three awards to seat 2, stacks 1:0 2:140 3:150 4:0 and checkState []. My holdout rebuilt S1 independently: the crafted checker cases on S1turn/S1end gave the expected per-pot messages, which confirms the turn pot levels $10/$30/$32. The independent-oracle fuzz (300,000 hands, 2 seeds) matched the engine pots exactly at every mid-hand round end."
+  },
+  {
+   "spec": "SPEC-02",
+   "result": "PASS",
+   "evidence": "Round 2: HEAD unchanged at 9f4594e and src/tests show no diff against it, so carried forward from round 1 (re-ran the 4 side-pot/review-gaps vitest files: 11/11 pass; holdout edges and checker cases ALL OK; holdout oracle fuzz 100,000 hands 0 failures). Round 1: The test passes and asserts the fold-state eligibility [1,3,4], seat 2 totalContribution 12, turn pots 32/20, no award to seat 2, paid 52 == sum of contributions, the exact awards, the stacks and checkState []. Holdout E3 (folded seat's dead money above a short all-in, giving a side pot with one eligible pair) produced main 24 [1,2,3] and side 46 [2,3], with stacks summing to the start total and checkState []."
+  },
+  {
+   "spec": "SPEC-03",
+   "result": "PASS",
+   "evidence": "Round 2: HEAD unchanged at 9f4594e and src/tests show no diff against it, so carried forward from round 1 (re-ran the 4 side-pot/review-gaps vitest files: 11/11 pass; holdout edges and checker cases ALL OK; holdout oracle fuzz 100,000 hands 0 failures). Round 1: npx vitest run review-gaps passes, including 'a folded seat leaves every pot but its chips stay in'. git diff --exit-code 791d900 on that file exits 0."
+  },
+  {
+   "spec": "SPEC-04",
+   "result": "PASS",
+   "evidence": "Round 2: HEAD unchanged at 9f4594e and src/tests show no diff against it, so carried forward from round 1 (re-ran the 4 side-pot/review-gaps vitest files: 11/11 pass; holdout edges and checker cases ALL OK; holdout oracle fuzz 100,000 hands 0 failures). Round 1: The test passes with exact assertions: returned {3,2}, eligibility [[1,2,3],[2,3]], awards 30 to seat 1 and 40 to seat 2, stacks 30/40/130, checkState []. Holdout E2 (two equal all-ins plus a covering seat) gives a single merged pot of 36 with return {3,4}, as expected."
+  },
+  {
+   "spec": "SPEC-05",
+   "result": "PASS",
+   "evidence": "Round 2: HEAD unchanged at 9f4594e and src/tests show no diff against it, so carried forward from round 1 (re-ran the 4 side-pot/review-gaps vitest files: 11/11 pass; holdout edges and checker cases ALL OK; holdout oracle fuzz 100,000 hands 0 failures). Round 1: The test passes. It asserts the return, three eligibility lists, three awards to seats 4/1/3, a per-pot best-eligible-hand derivation, the stacks and checkState []. The mutant 'ignore pot eligibility at showdown' is killed by this file and by my oracle."
+  },
+  {
+   "spec": "SPEC-06",
+   "result": "PASS",
+   "evidence": "Round 2: HEAD unchanged at 9f4594e and src/tests show no diff against it, so carried forward from round 1 (re-ran the 4 side-pot/review-gaps vitest files: 11/11 pass; holdout edges and checker cases ALL OK; holdout oracle fuzz 100,000 hands 0 failures). Round 1: The test passes: awards 260 to seat 3 and 1255 split 628 (seat 2) / 627 (seat 5), eligibility [[2,3,5],[2,5]], no return, stacks 850/978/260/977, checkState []. The holdout oracle fuzz included 25/50/50/100 stakes and matched every award, including 2,613 odd-chip ties across both seeds."
+  },
+  {
+   "spec": "SPEC-07",
+   "result": "PASS",
+   "evidence": "Round 2: HEAD unchanged at 9f4594e and src/tests show no diff against it, so carried forward from round 1 (re-ran the 4 side-pot/review-gaps vitest files: 11/11 pass; holdout edges and checker cases ALL OK; holdout oracle fuzz 100,000 hands 0 failures). Round 1: splitPot(29,[3,5,6],4,[1..6]) test passes with [{5,10},{6,10},{3,9}]. My independent clockwise-from-left-of-button split agreed with the engine on every tied pot in 300,000 fuzz hands."
+  },
+  {
+   "spec": "SPEC-08",
+   "result": "PASS",
+   "evidence": "Round 2: HEAD unchanged at 9f4594e and src/tests show no diff against it, so carried forward from round 1 (re-ran the 4 side-pot/review-gaps vitest files: 11/11 pass; holdout edges and checker cases ALL OK; holdout oracle fuzz 100,000 hands 0 failures). Round 1: The property test passes in 2.7 s with a 300,000 ms timeout. It checks per-hand conservation, checkStep [] on every action, the hand index in failure messages, and at least 1,000 two-pot hands and 100 three-pot hands. My holdout oracle fuzz used 3 stake levels, 2-10 seats, uniform/small/clustered-equal stacks and checkState after every step: 300,000 hands, 4.27M actions, 0 failures. It covered 64,264 multi-pot hands, 16,489 hands with 3+ pots and 30,772 single-eligible side pots, and no fold-out had more than one pot."
+  },
+  {
+   "spec": "SPEC-09",
+   "result": "PASS",
+   "evidence": "Round 2: HEAD unchanged at 9f4594e and src/tests show no diff against it, so carried forward from round 1 (re-ran the 4 side-pot/review-gaps vitest files: 11/11 pass; holdout edges and checker cases ALL OK; holdout oracle fuzz 100,000 hands 0 failures). Round 1: The test passes with cases (a)-(e) plus the review case (f), each exactly one pot-eligibility violation with the spec text. Holdout checker cases also pass: a short seat listed in side pot 1, a 61/3 layer error, award pot indices swapped (gives 'main pot paid $60 but its layer is $40'), an extra empty 4th pot, a single collapsed 104 pot ('there are 1 pots but contributions make 3'), and a wrong single-pot amount, which raises only the chips violation and no pot-eligibility violation (A-5). Removing any one of P6, P7a, P7b, P8-held, P8-paid, the guard or the cap is killed by the builder test."
+  },
+  {
+   "spec": "SPEC-10",
+   "result": "PASS",
+   "evidence": "Round 2: HEAD unchanged at 9f4594e and src/tests show no diff against it, so carried forward from round 1 (re-ran the 4 side-pot/review-gaps vitest files: 11/11 pass; holdout edges and checker cases ALL OK; holdout oracle fuzz 100,000 hands 0 failures). Round 1: npm test exits 0. git diff --exit-code 791d900 over all locked files listed in \u00a73 (13 files, including player-view and heads-up) exits 0."
+  },
+  {
+   "spec": "SPEC-11",
+   "result": "PASS",
+   "evidence": "Round 2: HEAD unchanged at 9f4594e and src/tests show no diff against it, so carried forward from round 1 (re-ran the 4 side-pot/review-gaps vitest files: 11/11 pass; holdout edges and checker cases ALL OK; holdout oracle fuzz 100,000 hands 0 failures). Round 1: npm run lint exits 0 (eslint plus prettier clean), npm run typecheck exits 0, and npm test exits 0 with coverage thresholds met (engine 99.87% stmts, overall 96.84%). grep finds no ui/table imports in src/engine."
+  },
+  {
+   "spec": "SPEC-12",
+   "result": "PASS",
+   "evidence": "Round 2: HEAD unchanged at 9f4594e and src/tests show no diff against it, so carried forward from round 1 (re-ran the 4 side-pot/review-gaps vitest files: 11/11 pass; holdout edges and checker cases ALL OK; holdout oracle fuzz 100,000 hands 0 failures). Round 1: The playtest exits 0. Its output is byte-identical to a fresh run at 791d900 (diff empty): Largest pot $70, Invariant violations 0."
+  },
+  {
+   "spec": "SPEC-13",
+   "result": "PASS",
+   "evidence": "CI run 44872609015 on doit/TASK-1.10 at headSha 9f4594e completed with conclusion success. `backlog doc list --plain` lists doc-58 'TASK-1.10: Split the pot into side pots for unequal all-ins', and `backlog task view TASK-1.10` shows Documentation: doc-1, doc-2, doc-58. `backlog doc view doc-58` records A-1..A-5 (assumption table), D-1..D-6, and all five P6-P8 messages verbatim: 'there are N pots but contributions make M', '<pot> lists seat S, which has not matched its $L level', 'seat S matched the $L level of <pot> but is not eligible for it', '<pot> holds $X but its layer is $Y', '<pot> paid $X but its layer is $Y'."
+  },
+  {
+   "spec": "SPEC-14",
+   "result": "PASS",
+   "evidence": "Round 2: HEAD unchanged at 9f4594e and src/tests show no diff against it, so carried forward from round 1 (re-ran the 4 side-pot/review-gaps vitest files: 11/11 pass; holdout edges and checker cases ALL OK; holdout oracle fuzz 100,000 hands 0 failures). Round 1: git diff --stat 791d900 -- src/ui src/table src/advice e2e is empty. Only src/engine/hand.ts and src/engine/invariants.ts changed under src."
+  }
+ ],
+ "findings": [],
+ "summary": "Round 2: all 14 items PASS. SPEC-13 now passes: CI run 44872609015 is green at 9f4594e, and story doc doc-58 is published, attached to TASK-1.10, and records D-1..D-6, A-1..A-5 and the exact P6-P8 messages. HEAD is unchanged at 9f4594e. The other 13 items are carried forward after re-running the side-pot tests, the holdout checks, a 100k-hand oracle fuzz and the integrity check. No findings."
+}

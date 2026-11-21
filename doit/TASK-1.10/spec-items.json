@@ -3,84 +3,84 @@
     "id": "SPEC-01",
     "verifies": "AC#1, DoD#1",
     "verification": "acceptance `tests/engine/side-pots.acceptance.test.ts::three all-ins for $10, $30 and $50 with a covering seat make a main pot and two side pots`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-02",
     "verifies": "AC#2, AC#9, DoD#1",
     "verification": "acceptance `tests/engine/side-pots.acceptance.test.ts::a folded contributor is eligible for no pot but its chips stay in every pot it reached`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-03",
     "verifies": "AC#9, DoD#1",
     "verification": "command `npx vitest run tests/engine/review-gaps.acceptance.test.ts && git diff --exit-code 791d900 -- tests/engine/review-gaps.acceptance.test.ts`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-04",
     "verifies": "AC#3, DoD#1",
     "verification": "acceptance `tests/engine/side-pots.acceptance.test.ts::the shortest all-in with the best hand wins only the main pot`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-05",
     "verifies": "AC#4, DoD#1",
     "verification": "acceptance `tests/engine/side-pots.acceptance.test.ts::a four-way all-in at four stack sizes pays each pot to the best eligible hand`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-06",
     "verifies": "AC#6, DoD#1",
     "verification": "acceptance `tests/engine/side-pots.acceptance.test.ts::a 1,255-chip side pot tied by seats 2 and 5 pays 628 and 627`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-07",
     "verifies": "AC#7, DoD#1",
     "verification": "acceptance `tests/engine/side-pots.acceptance.test.ts::a $29 pot tied by seats 3, 5 and 6 pays $10, $10 and $9 from the left of button 4`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-08",
     "verifies": "AC#5, AC#8, DoD#1",
     "verification": "acceptance `tests/engine/side-pots.property.test.ts::AC#5 100,000 random-stack hands keep the table total and pass every invariant`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-09",
     "verifies": "AC#8, DoD#1",
     "verification": "acceptance `tests/engine/side-pot-invariants.acceptance.test.ts::pot-eligibility checks each side pot's level and layer`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-10",
     "verifies": "AC#5, AC#9, DoD#1, DoD#2",
     "verification": "command `npm test && git diff --exit-code 791d900 -- tests/engine/review-gaps.acceptance.test.ts tests/engine/all-in.acceptance.test.ts tests/engine/all-in-invariants.acceptance.test.ts tests/engine/invariant-messages.acceptance.test.ts tests/engine/fold-out.acceptance.test.ts tests/engine/hand.acceptance.test.ts tests/engine/hand.property.test.ts tests/engine/chip-safety.acceptance.test.ts tests/playtest/invariants.acceptance.test.ts tests/playtest/summary.acceptance.test.ts tests/table/hand-result-uncalled.acceptance.test.ts`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-11",
     "verifies": "DoD#2, DoD#4, DoD#5",
     "verification": "command `npm run lint && npm run typecheck && npm test`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-12",
     "verifies": "DoD#6",
     "verification": "command `npm run playtest -- --hands 10000 --seed 42`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-13",
     "verifies": "DoD#10, DoD#11",
     "verification": "manual CI run on branch `doit/TASK-1.10` and `backlog doc list --plain`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-14",
     "verifies": "DoD#3, DoD#7, DoD#8, DoD#9, DoD#12",
     "verification": "manual Judge confirms `git diff --stat 791d900 -- src/ui src/table src/advice e2e` is empty",
-    "status": "pending"
+    "status": "pass"
   }
 ]

@@ -5,13 +5,28 @@
   "base_commit": "791d9004735891f7c81f9dc64da18eb3668399bb",
   "started": "2026-11-20T22:27:54",
   "review_round": 1,
-  "judge_round": 0,
+  "judge_round": 2,
   "sendbacks": 0,
   "gate_runs": 3,
   "questions": 0,
   "assumptions": 0,
   "escalations": 0,
-  "item_failures": {},
+  "item_failures": {
+    "SPEC-01": 0,
+    "SPEC-02": 0,
+    "SPEC-03": 0,
+    "SPEC-04": 0,
+    "SPEC-05": 0,
+    "SPEC-06": 0,
+    "SPEC-07": 0,
+    "SPEC-08": 0,
+    "SPEC-09": 0,
+    "SPEC-10": 0,
+    "SPEC-11": 0,
+    "SPEC-12": 0,
+    "SPEC-13": 0,
+    "SPEC-14": 0
+  },
   "locked_tests": {
     "tests/engine/side-pot-invariants.acceptance.test.ts": "5d6fe19396a56acd27d64c44ec96ad37f68760bf224dc71f8759fb6225a0b535",
     "tests/engine/side-pots.acceptance.test.ts": "ff0e65166b1322fb91ec253a5af569f67bc5cccac9d0a271c47a1c6e7e23bc34",
@@ -722,5 +737,9 @@
   "review_findings": {
     "1": 0
   },
-  "relock_pending": []
+  "relock_pending": [],
+  "doc_id": "doc-58",
+  "judge_results": {
+    "2": "PASS"
+  }
 }
