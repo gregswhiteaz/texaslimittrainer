@@ -292,7 +292,10 @@ export function createHand(config: HandConfig): HandState {
   return bettingOver(players) ? endRound(dealt, players) : dealt;
 }
 
-function betUnit(state: HandState): number {
+/** The fields the full-bet rule reads; a PlayerView satisfies it. */
+export type BetContext = Pick<HandState, 'street' | 'stakes' | 'actions'>;
+
+function betUnit(state: BetContext): number {
   return state.street === 'preflop' || state.street === 'flop'
     ? state.stakes.smallBet
     : state.stakes.bigBet;
@@ -300,7 +303,7 @@ function betUnit(state: HandState): number {
 
 /** The street's last counted bet level: the big blind, or a bet/raise adding at least half a unit over the
  *  previous level (REQ-016.5). Short all-ins under half a bet leave it unchanged. */
-function fullBetLevel(state: HandState): number {
+function fullBetLevel(state: BetContext): number {
   const unit = betUnit(state);
   let level = 0;
   for (const a of state.actions) {
@@ -311,6 +314,12 @@ function fullBetLevel(state: HandState): number {
     }
   }
   return level;
+}
+
+/** The street total ("to" amount) of a full bet or raise now: the last counted bet level plus one bet unit
+ *  (REQ-016.5, REQ-017.7). A bet or raise below it is a short all-in. */
+export function fullBetTarget(state: BetContext): number {
+  return fullBetLevel(state) + betUnit(state);
 }
 
 /**
@@ -325,7 +334,7 @@ export function legalActions(state: HandState): readonly Action[] {
   if (seat === null || player === undefined) return [];
   const owe = state.currentBet - player.streetContribution;
   const maxTo = player.streetContribution + player.stack;
-  const to = Math.min(fullBetLevel(state) + betUnit(state), maxTo);
+  const to = Math.min(fullBetTarget(state), maxTo);
   const canAggress =
     state.betCount < STREET_BET_CAP && !player.hasActed && maxTo > state.currentBet;
   const actions: Action[] = [];

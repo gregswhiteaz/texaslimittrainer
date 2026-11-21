@@ -171,15 +171,21 @@ export const SPLIT_STRAIGHT: TableState = defaultTableAfter(
 );
 
 /**
- * Default six seats at $160, hand 1, dealt from fixedDeck(fixed) and played through `moves`. Moves of the user
- * (seat 5) go through applyUserAction, so each captures the user's view; every other move goes through play.
+ * Default six seats at $160 (or `stacks[seat]`), hand 1, dealt from fixedDeck(fixed) and played through `moves`.
+ * Moves of the user (seat 5) go through applyUserAction, so each captures the user's view; every other move goes
+ * through play.
  */
 export function userTableAfter(
   fixed: Readonly<Record<number, string>>,
   moves: string,
   button: SeatNumber = 6,
+  stacks: Readonly<Record<number, number>> = {},
 ): TableState {
-  const start = seatSession({ button });
+  const session = seatSession({ button });
+  const start: TableState = {
+    ...session,
+    stacks: session.stacks.map(({ seat, stack }) => ({ seat, stack: stacks[seat] ?? stack })),
+  };
   let table: TableState = {
     ...start,
     hand: createHand({ stakes: start.stakes, seats: start.stacks, button, deck: fixedDeck(fixed) }),
@@ -266,4 +272,26 @@ export const SHOWN_HANDS: TableState = userTableAfter(
 export const RAISE_TAKES_BLINDS: TableState = userTableAfter(
   REVIEW_DECK,
   '3:fold 4:fold 5:raise 6:fold 1:fold 2:fold',
+);
+
+/** $4/$8 flop capped at $16: the user has $12 in and faces the fourth bet (Fold, Call $4). */
+export const CAPPED_FLOP: TableState = userTableAfter(
+  {},
+  '3:fold 4:fold 5:call 6:call 1:fold 2:check 2:check 5:bet 6:raise 2:fold 5:raise 6:raise',
+);
+
+const LIMP_THEN_BET = '3:fold 4:fold 5:call 6:fold 1:fold 2:check 2:bet';
+
+/** The user ($7) limps and faces a $4 flop bet holding $3 (Fold, Call all-in $3). */
+export const CALL_ALL_IN: TableState = userTableAfter({}, LIMP_THEN_BET, 6, { 5: 7 });
+
+/** The user ($10) limps and faces a $4 flop bet holding $6 (Fold, Call $4, Raise all-in to $6). */
+export const RAISE_ALL_IN: TableState = userTableAfter({}, LIMP_THEN_BET, 6, { 5: 10 });
+
+/** The user ($7) limps and the flop is checked to them holding $3 (Check, Bet all-in $3). */
+export const BET_ALL_IN: TableState = userTableAfter(
+  {},
+  '3:fold 4:fold 5:call 6:fold 1:fold 2:check 2:check',
+  6,
+  { 5: 7 },
 );

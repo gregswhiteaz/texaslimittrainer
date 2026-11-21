@@ -1,9 +1,9 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { replayCodeFromWords } from '../../src/engine/deck';
-import type { Action, HandState } from '../../src/engine/hand';
+import { fullBetTarget, type Action, type HandState } from '../../src/engine/hand';
 import { playerView } from '../../src/engine/player-view';
-import { actionBar, actionLabel, userActionBar } from '../../src/table/action-bar';
+import { actionBar, actionLabel, isShortAllIn, userActionBar } from '../../src/table/action-bar';
 import {
   USER_SEAT,
   applyUserAction,
@@ -14,6 +14,7 @@ import {
   userActions,
   type TableState,
 } from '../../src/table/session';
+import { RAISE_ALL_IN, userTableAfter } from '../support/table-scenarios';
 
 const IDLE = {
   enabled: false,
@@ -84,5 +85,46 @@ describe('action bar', () => {
     expect(typeof globalThis.document).toBe('undefined');
     expect(typeof globalThis.window).toBe('undefined');
     expect(actionBar(null).enabled).toBe(false);
+  });
+
+  it("short all-in labels follow the engine's full bet target", () => {
+    const limp = '3:fold 4:fold 5:call 6:fold 1:fold 2:check';
+    const userView = (table: TableState) => playerView(table.hand as HandState, USER_SEAT);
+    const labels = (table: TableState) => actionBar(userView(table)).buttons.map((b) => b.label);
+
+    const raiseAllIn = userView(RAISE_ALL_IN);
+    expect(fullBetTarget(raiseAllIn)).toBe(8);
+    expect(fullBetTarget(RAISE_ALL_IN.hand as HandState)).toBe(8);
+
+    const shortRaise = userTableAfter(
+      {},
+      '3:fold 4:fold 5:call 6:call 1:fold 2:check 2:check 5:bet 6:raise 2:call',
+      6,
+      { 6: 9 },
+    );
+    expect(userView(shortRaise).currentBet).toBe(5);
+    expect(fullBetTarget(userView(shortRaise))).toBe(8);
+    expect(labels(shortRaise)).toEqual(['Fold', 'Call $1']);
+
+    expect(labels(userTableAfter({}, `${limp} 2:check`, 6, { 5: 8 }))).toEqual(['Check', 'Bet $4']);
+    expect(labels(userTableAfter({}, `${limp} 2:bet`, 6, { 5: 12 }))).toEqual([
+      'Fold',
+      'Call $4',
+      'Raise to $8',
+    ]);
+
+    expect(isShortAllIn(raiseAllIn, { seat: 5, type: 'fold' })).toBe(false);
+    expect(isShortAllIn(raiseAllIn, { seat: 5, type: 'check' })).toBe(false);
+    expect(isShortAllIn(raiseAllIn, { seat: 5, type: 'call', amount: 4 })).toBe(false);
+    expect(isShortAllIn(raiseAllIn, { seat: 5, type: 'raise', amount: 6 })).toBe(true);
+    expect(isShortAllIn({ ...raiseAllIn, players: [] }, { seat: 5, type: 'call', amount: 3 })).toBe(
+      true,
+    );
+    expect(actionBar(raiseAllIn)).toEqual(actionBar(raiseAllIn, 'dollars'));
+    expect(actionBar(raiseAllIn, 'chips').buttons.map((b) => b.label)).toEqual([
+      'Fold',
+      'Call 4',
+      'Raise all-in to 6',
+    ]);
   });
 });

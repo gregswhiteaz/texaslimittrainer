@@ -177,7 +177,14 @@ export async function openAdviceHarness(
   await page.getByRole('region', { name: 'Table' }).waitFor();
 }
 
-export type TableScene = 'flop-bet' | 'seat-1' | 'shown-hands';
+export type TableScene =
+  | 'flop-bet'
+  | 'seat-1'
+  | 'shown-hands'
+  | 'capped-flop'
+  | 'call-all-in'
+  | 'raise-all-in'
+  | 'bet-all-in';
 
 /** Renders the scripted `scene` (see table-scenes.tsx) into a blank page. */
 export async function openTableScene(page: Page, bundle: string, scene: TableScene): Promise<void> {

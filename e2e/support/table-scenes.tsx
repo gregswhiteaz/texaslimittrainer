@@ -3,13 +3,25 @@ import { createRoot } from 'react-dom/client';
 import type { TableState } from '../../src/table/session';
 import css from '../../src/ui/styles.css?inline';
 import { TableView } from '../../src/ui/table/Table';
-import { FLOP_BET, SEAT_1_DEALT, SHOWN_HANDS } from '../../tests/support/table-scenarios';
+import {
+  BET_ALL_IN,
+  CALL_ALL_IN,
+  CAPPED_FLOP,
+  FLOP_BET,
+  RAISE_ALL_IN,
+  SEAT_1_DEALT,
+  SHOWN_HANDS,
+} from '../../tests/support/table-scenarios';
 
 // Test-only page (D-8): never imported by the app, built and injected by table-harness-bundle.ts.
 const SCENES: Partial<Record<string, TableState>> = {
   'flop-bet': FLOP_BET,
   'seat-1': SEAT_1_DEALT,
   'shown-hands': SHOWN_HANDS,
+  'capped-flop': CAPPED_FLOP,
+  'call-all-in': CALL_ALL_IN,
+  'raise-all-in': RAISE_ALL_IN,
+  'bet-all-in': BET_ALL_IN,
 };
 const root = document.getElementById('root');
 const table = SCENES[root?.dataset.scene ?? ''];
