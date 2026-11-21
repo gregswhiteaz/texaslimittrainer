@@ -1,0 +1,38 @@
+[
+  {
+    "id": "SPEC-01",
+    "verifies": "AC#1",
+    "verification": "acceptance `tests/advice/grade-hardening.acceptance.test.ts::non-finite call-fold equity throws RangeError`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-02",
+    "verifies": "AC#1",
+    "verification": "acceptance `tests/advice/grade-hardening.acceptance.test.ts::non-finite calling-range equity throws RangeError`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-03",
+    "verifies": "AC#1",
+    "verification": "acceptance `tests/advice/grade-hardening.acceptance.test.ts::unused non-finite numbers do not throw`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-04",
+    "verifies": "AC#2",
+    "verification": "acceptance `tests/advice/grade-hardening.acceptance.test.ts::a -15 wrong-way margin is Minor`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-05",
+    "verifies": "AC#3",
+    "verification": "unit `tests/advice/grade.test.ts::exactly 10 points is Major whether float subtraction is exact (26.7-16.7) or falls short (16.4-6.4)`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-06",
+    "verifies": "AC#1",
+    "verification": "command `npx vitest run tests/advice tests/table`",
+    "status": "pending"
+  }
+]

@@ -1,9 +1,11 @@
 ---
 id: TASK-7.23
 title: Harden the decision grader's inputs and edge-case tests
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-18T20:12:00Z'
+updated_date: '2026-11-21T03:28:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -30,3 +32,13 @@ Follow-up from TASK-7.4 (doc-19) reviews. gradeDecision accepts a hand-built rec
 - [ ] #2 Given a wrong-way margin of -15 points, When graded, Then the result is Minor with marginPts -15
 - [ ] #3 Given the float-subtraction boundary test, When read, Then its cases and name only claim float traps that are real (e.g. 16.4-6.4)
 <!-- AC:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. grade.ts: private finitePct check in the two margin rules; RangeError '<field> must be a finite number, got <v>'; missing equityVsCallingRangePct still grades aggression-no-range.
+2. New grade-hardening acceptance test: non-finite inputs throw; -15 wrong-way margin is Minor with marginPts -15 for all four pairings.
+3. Rename the float-subtraction test and assert 26.7-16.7 is exact (nothing removed).
+
+Full spec: doit/TASK-7.23/spec.md
+<!-- SECTION:PLAN:END -->
