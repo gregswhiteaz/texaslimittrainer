@@ -37,3 +37,11 @@ Result: PASS
 - J-1-02: fixed — added `sums the same invariant across shards` in `tests/playtest/shards.test.ts` (chips 2 + chips 3 -> combined 5). Mutation check: replacing the sum in `combineShards` with `Math.max(before ?? 0, count)` failed it (`expected 3 to be 5`); source restored, no diff.
 - J-1-01: no code change per brief — `e2e/cards.spec.ts` untouched; orchestrator handles CI.
 - `npx vitest run tests/playtest/shards.test.ts`: 3 passed. `npm run format` run.
+
+## FIX (Q-1: make the 100k throughput test opt-in)
+
+1. Fixed: `tests/playtest/throughput.acceptance.test.ts` now uses `describe.runIf(process.env.TLH_SLOW_TESTS === '1')`; assertions and timeouts unchanged. Without the env var: 1 file / 1 test skipped (57 ms).
+2. Fixed: `package.json` adds `"test:slow": "TLH_SLOW_TESTS=1 vitest run tests/playtest/throughput.acceptance.test.ts"`.
+3. Fixed: README Speed targets playtest bullet says the 60-minute check is opt-in (`npm run test:slow`), a speed guard rather than a real scenario, kept out of `npm test` and every push.
+4. Fixed: `npm run test:slow` — 1 file passed, 1 test passed (5209 ms, 100,000 hands, 0 violations). SPEC-06 holds.
+`npm run format` run.

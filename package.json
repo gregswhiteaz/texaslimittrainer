@@ -11,6 +11,7 @@
     "build": "vite build",
     "preview": "vite preview",
     "test": "vitest run --coverage",
+    "test:slow": "TLH_SLOW_TESTS=1 vitest run tests/playtest/throughput.acceptance.test.ts",
     "e2e": "playwright test",
     "lint": "eslint . --max-warnings 0 && prettier --check .",
     "typecheck": "tsc -p tsconfig.json",

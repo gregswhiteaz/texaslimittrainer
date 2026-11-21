@@ -7,7 +7,7 @@
   "review_round": 1,
   "judge_round": 0,
   "sendbacks": 0,
-  "gate_runs": 3,
+  "gate_runs": 4,
   "questions": 0,
   "assumptions": 0,
   "escalations": 0,
@@ -15,7 +15,7 @@
   "locked_tests": {
     "tests/ci/million-workflow.acceptance.test.ts": "28fbcbb96028b84a50adb656821f2a464fc4cbf5640832c3f1fa614491ac9670",
     "tests/playtest/million.acceptance.test.ts": "c96d67cacdd9df62a93e61559b6d9b236553557b568485f6c46ea99e34eb271a",
-    "tests/playtest/throughput.acceptance.test.ts": "27e2e1f859dca2c52672bd945fb621b494a36b87872788ef5d9708c381512bdc"
+    "tests/playtest/throughput.acceptance.test.ts": "cfb968b1cc9fdad3614954559c125827736311f4507f1be567c76b712a3e7b09"
   },
   "test_snapshot": {
     "tests/ci/million-workflow.acceptance.test.ts": {
@@ -34,7 +34,7 @@
       "skips": 0
     },
     "tests/playtest/throughput.acceptance.test.ts": {
-      "sha": "27e2e1f859dca2c52672bd945fb621b494a36b87872788ef5d9708c381512bdc",
+      "sha": "cfb968b1cc9fdad3614954559c125827736311f4507f1be567c76b712a3e7b09",
       "asserts": 5,
       "skips": 0
     },
@@ -799,11 +799,19 @@
       "skips": 0
     }
   },
-  "history": [],
+  "history": [
+    {
+      "t": "2026-11-21T07:36:27",
+      "event": "unlock",
+      "file": "tests/playtest/throughput.acceptance.test.ts",
+      "reason": "TASK-1.17 Q-1 (user, 2026-11-21): make the 100k throughput test opt-in instead of every npm test; assertions unchanged"
+    }
+  ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-1.17",
   "spec_sha256": "b70d64b390293f045fa51ad618190d56aa34c818345ca08ffd87d7c8f400f27b",
   "review_findings": {
     "1": 0
   },
-  "doc_id": "doc-64"
+  "doc_id": "doc-64",
+  "relock_pending": []
 }

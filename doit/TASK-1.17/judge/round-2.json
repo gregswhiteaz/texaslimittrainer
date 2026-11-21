@@ -1,0 +1,82 @@
+{
+ "round": 2,
+ "test_suite": {
+  "command": "npm test",
+  "result": "PASS",
+  "passed": 474,
+  "failed": 0,
+  "notes": "134 files, 474 passed, 6 skipped (opt-in perf suites). The +1 is the new cross-shard sum test. Lint and typecheck exit 0."
+ },
+ "end_to_end": {
+  "command": "npm run playtest:million (twice), each shard header command re-run directly, time npm run playtest -- --hands 100000 --size 6, npm run playtest:million -- --hands 8",
+  "result": "PASS",
+  "expected": "Shard 1..9 headers for sizes 2..10 with seeds 1000002..1000010 and hands 111112/111111x8; Hands played: 1000000, Invariant violations: 0, Result: PASS, exit 0; re-runs byte-identical; each shard section equals a direct run; 100k 6-max well under 60 min; --hands 8 exits 2 with usage",
+  "actual": "Both runs exit 0 in 7.9 s real / ~48 s user (Apple M4 Pro, Node 22.18.0), stdout byte-identical (cmp), stderr empty. Headers exactly as planned. Combined: Shards passed: 9 of 9, Hands played: 1000000, Invariant violations: 0, Violations by invariant: chips 0, legal-action 0, bet-cap 0, pot-eligibility 0, cards 0, Result: PASS. All 9 shard sections are byte-identical to direct npm run playtest runs of their header commands; the shard-5 command run twice is byte-identical. 100k 6-max: 5.27 s real, Hands played: 100000, Invariant violations: 0. --hands 8: exit 2, error + usage on stderr, empty stdout. [Round 2: carried forward; no product code changed since round 1 (git diff ed154d1..da2345f -- src tools .github package.json README.md is empty).]"
+ },
+ "integrity": {
+  "result": "PASS",
+  "notes": "test-integrity exit 0. Since round 1 the only code change is a test addition in tests/playtest/shards.test.ts: it builds ShardResults and asserts that combineShards sums chips 2 + 3 = 5. It is a real assertion; the Math.max mutant fails it. No product changes, no changes to existing tests. git diff --stat -- src tools is empty after the mutant was reverted."
+ },
+ "items": [
+  {
+   "spec": "SPEC-01",
+   "result": "PASS",
+   "evidence": "Acceptance test passes and asserts the plan (sizes, hands, sum, seeds, indexes), exit 0, all 9 header lines and the exact combined block for --hands 900. Full npm run playtest:million: exit 0, Hands played: 1000000, Invariant violations: 0, Result: PASS (7.9 s). Holdout: planShards sum and leftover-to-smallest-sizes for 10 totals including 17 and 1e9; rejects 8, 0, -9, 9.5, 1e9+1, NaN, Infinity with the spec RangeError -> all pass. --hands 10 gives 2,1x8 via real tool. [Round 2: carried forward; git diff ed154d1..da2345f changes only tests/playtest/shards.test.ts among product/test code (src, tools, workflows, package.json, README unchanged); npm test 474 passed incl. all existing tests.]"
+  },
+  {
+   "spec": "SPEC-02",
+   "result": "PASS",
+   "evidence": "Workflow test passes; it checks dispatch-only trigger, no schedule/push/pull_request, contents: read, exactly one job, ubuntu-24.04, timeout 30 <= 360, single run step, no continue-on-error/|| true/if:, pinned SHAs equal ci.yml, package.json script. million.yml read directly matches the spec structure verbatim. Live dispatch deferred post-merge per D-4 (not triggered); tracker recorded in doc-64. [Round 2: carried forward; git diff ed154d1..da2345f changes only tests/playtest/shards.test.ts among product/test code (src, tools, workflows, package.json, README unchanged); npm test 474 passed incl. all existing tests.]"
+  },
+  {
+   "spec": "SPEC-03",
+   "result": "PASS",
+   "evidence": "Acceptance test passes; asserts exit 1, Shard 1 header, the section equals the shard's own report verbatim, Replay line, 'Hand 1: replay code <code>, button seat 1', a Preflop line, and the exact combined tail (8 of 9, 18, 2, chips 2, FAIL). Holdout reproducing the spec scenario through millionMain with real main + forced chips seam on shard 1 -> same results, and the violating shard is not labelled 'failed'. Real-process mutant of the default checker -> exit 1 with Replay and Preflop lines in every shard. [Round 2: carried forward; git diff ed154d1..da2345f changes only tests/playtest/shards.test.ts among product/test code (src, tools, workflows, package.json, README unchanged); npm test 474 passed incl. all existing tests.]"
+  },
+  {
+   "spec": "SPEC-04",
+   "result": "PASS",
+   "evidence": "Unit test passes and covers null code + stderr boom (exact lines and tail), rejected promise, sync throw, exit 3, --game sng, wrong Hands played, exit 0 with violations 1, malformed counts, duplicate report. Holdout: exit codes 2/3/137/-1/255 -> 'exit code N' with handsPlayed 0 and {} counts; other seed, other size, extra option, leading space, missing Options/Hands/violations lines, negative V, empty stdout, real sng run, real run with wrong hand count -> all 'report does not match the shard plan'; every shard rejecting with a non-Error string -> 0 of 9, Hands played 0, FAIL, exit 1. Real-process crash/kill/exit-3 mutants -> exit 1 with the expected failure lines. [Round 2: carried forward; git diff ed154d1..da2345f changes only tests/playtest/shards.test.ts among product/test code (src, tools, workflows, package.json, README unchanged); npm test 474 passed incl. all existing tests.]"
+  },
+  {
+   "spec": "SPEC-05",
+   "result": "PASS",
+   "evidence": "Acceptance test passes (2000-hand size-9 shard twice identical; --hands 900 twice identical; shard 8 section equals direct run). Independently: full million run twice byte-identical; all 9 shard sections byte-identical to direct npm run playtest runs of their header commands; shard 5 direct run repeated byte-identical. [Round 2: carried forward; git diff ed154d1..da2345f changes only tests/playtest/shards.test.ts among product/test code (src, tools, workflows, package.json, README unchanged); npm test 474 passed incl. all existing tests.]"
+  },
+  {
+   "spec": "SPEC-06",
+   "result": "PASS",
+   "evidence": "Throughput test passes (7.5 s under vitest load), asserts no spawn error, exit 0, elapsed <= 3,600,000 ms, Hands played: 100000 and Invariant violations: 0; child timeout 3,600,000 ms, test timeout 3,660,000 ms. Measured myself: 5.27 s real. README records 4.8 s on Apple M4 Pro / Node 22.18.0. [Round 2: carried forward; git diff ed154d1..da2345f changes only tests/playtest/shards.test.ts among product/test code (src, tools, workflows, package.json, README unchanged); npm test 474 passed incl. all existing tests.]"
+  },
+  {
+   "spec": "SPEC-07",
+   "result": "PASS",
+   "evidence": "Acceptance test passes: real main-with-seams shard reports parsed, combined counts in key order chips 3, legal-action 0, bet-cap 2, pot-eligibility 0, cards 0, x-test 1, report line present, every shard argv exact, --game sng report rejected. Holdout with the same invariant id non-zero in two shards (chips 3+1, cards 0+5, custom ids y-two 4+1 and x-one) -> summed values 4/2/2/1/5/5/1, custom ids in first-seen order, failed shard contributes 0, report line correct.  Round 2: the new unit test 'sums the same invariant across shards' (chips 2 + chips 3 -> 5) passes, and the Math.max mutant applied to the combine step is now caught (that test fails; mutant reverted, src diff empty). [Round 2: carried forward; git diff ed154d1..da2345f changes only tests/playtest/shards.test.ts among product/test code (src, tools, workflows, package.json, README unchanged); npm test 474 passed incl. all existing tests.]"
+  },
+  {
+   "spec": "SPEC-08",
+   "result": "PASS",
+   "evidence": "Unit test passes and covers planShards(10), bad totals, parse args incl. all spec errors, help/usage-error without calling the runner, concurrency 2 bound, start order, reverse settle -> ordered results, concurrency above shard count, bad concurrency. Holdout: real-tool CLI error cases (--seed 1, --hands, --hands twice, --help --hands 9, 1e6, -5, 1000000001, 0x10, 9.0, --hands=9) -> exit 2 with the exact spec messages and empty stdout; runShards peak in-flight equals min(conc, 9) for 1/3/9/50 with start order 1..9 and ordered results; 0, -1, 1.5, NaN, Infinity rejected. Mutants killed: seed, leftover placement, concurrency cap, Options exactly-once, Hands check, exit/violation consistency, exit-code rule, counts-line-required, entry argv, exit code, Result line, stderr block. [Round 2: carried forward; git diff ed154d1..da2345f changes only tests/playtest/shards.test.ts among product/test code (src, tools, workflows, package.json, README unchanged); npm test 474 passed incl. all existing tests.]"
+  },
+  {
+   "spec": "SPEC-09",
+   "result": "PASS",
+   "evidence": "Round 2 at da2345f: npm run lint exit 0, npm run typecheck exit 0, npm test exit 0 (134 files, 474 passed, 6 skipped, coverage above thresholds), test-integrity exit 0. The 10k seed-42 playtest was byte-identical to base in round 1, and engine/playtest source is unchanged since then. CI run 44893582074 (CI, push, da2345f): attempt 1 failed only in the E2E step on [webkit] e2e/cards.spec.ts:215 (the same logo test as round 1); attempt 2 concluded success. The Visual run 44893582071 on da2345f succeeded. CI on the branch head is therefore green; the WebKit flake is recorded as J-2-01."
+  },
+  {
+   "spec": "SPEC-10",
+   "result": "PASS",
+   "evidence": "backlog doc list --plain shows doc-64 'TASK-1.17: Prove the engine with a 1,000,000-hand invariant run'; it contains D-1..D-5, A-1..A-9, the full combined report (Shards passed: 9 of 9, Hands played: 1000000, Result: PASS), timing, Actions-minutes estimate, N/A DoD#4/8/9/10/13 and the post-merge live-dispatch tracker. README diff adds the command row, the Million-hand playtest section (plan, seeds, leftover rule, exit codes, gh workflow run million.yml --ref main, dispatch-only) and the 100,000-hand timing under Speed targets. [Round 2: carried forward; git diff ed154d1..da2345f changes only tests/playtest/shards.test.ts among product/test code (src, tools, workflows, package.json, README unchanged); npm test 474 passed incl. all existing tests.]"
+  }
+ ],
+ "findings": [
+  {
+   "id": "J-2-01",
+   "severity": "MEDIUM",
+   "spec": "SPEC-09",
+   "expected_vs_actual": "Expected the CI E2E step to pass reliably; actual: the [webkit] e2e/cards.spec.ts:215 'logo check fails when the logo is hidden or does not load' test failed on 2 of 3 CI attempts on this branch (run 44892551075, and run 44893582074 attempt 1). Each time the bad-image mutant was classified as 'missing' instead of 'not decoded'. Attempt 2 of 44893582074 was green, and the test passes 20/20 locally in WebKit. The task touches no e2e/, src/ui or asset files, so this is a flaky test outside this task's scope.",
+   "fix": "Out of scope for TASK-1.17: track a separate task to make the WebKit logo decode check deterministic, e.g. wait for the image decode or error before classifying it."
+  }
+ ],
+ "summary": "All 10 SPEC items pass. J-1-02 is fixed: a test-only change adds a cross-shard same-invariant sum test, and the Math.max mutant is now caught. J-1-01 is resolved: CI on the branch head da2345f is green on attempt 2. The only finding left is non-blocking (MEDIUM): a flaky WebKit e2e logo test outside this task's scope. Product code is unchanged since round 1, so the round-1 end-to-end results stand: a 1,000,000-hand run with 0 violations, byte-identical re-runs, and shard sections equal to direct runs."
+}

@@ -183,7 +183,9 @@ machine (Apple-silicon Mac, Node 22.18.0) with `CI` unset:
   ```
 
 - Playtest: 100,000 6-max hands in at most 60 minutes. Measured 4.8 s (real) on an Apple M4 Pro
-  with Node 22.18.0. `npm test` checks the 60-minute limit on every run.
+  with Node 22.18.0. The 60-minute check is opt-in: run `npm run test:slow` (it sets
+  `TLH_SLOW_TESTS=1`). It is a speed guard, not a real play scenario, so it is kept out of
+  `npm test` and every push.
 
   ```sh
   time npm run playtest -- --hands 100000 --size 6

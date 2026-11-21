@@ -4,7 +4,7 @@ import { REPO_ROOT, sandboxEnv } from '../support/sandbox';
 
 const SIXTY_MINUTES_MS = 3_600_000;
 
-describe('Playtest throughput', () => {
+describe.runIf(process.env.TLH_SLOW_TESTS === '1')('Playtest throughput', () => {
   it(
     '100,000 6-max hands finish within 60 minutes with zero violations',
     () => {
