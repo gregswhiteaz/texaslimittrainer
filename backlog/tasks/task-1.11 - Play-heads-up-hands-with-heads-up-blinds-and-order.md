@@ -1,10 +1,11 @@
 ---
 id: TASK-1.11
 title: Play heads-up hands with heads-up blinds and order
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-18T17:24:00Z'
+updated_date: '2026-11-21T05:05:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -62,8 +63,21 @@ Plan key: E01-S09 · Dream: limit-holdem-trainer
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
 
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. createHand: with exactly 2 seats the button posts the small blind and the other seat the big blind; accept 2–10 seats.
+2. Existing actor order then gives button-first preflop and non-button-first postflop.
+3. Playtest CLI --size accepts 2–10.
+4. Acceptance tests: heads-up blinds/order; 10k-hand --size 2 run with 0 violations and per-hand blind/order checks; 6-max baseline byte-identical.
+
+Full spec: doit/TASK-1.11/spec.md
+<!-- SECTION:PLAN:END -->
+
 ## Implementation Notes
 
 <!-- SECTION:NOTES:BEGIN -->
 AC added from TASK-1.6 follow-up (doc-15): --size is limited to 3..10 until heads-up exists.
+
+Autopilot: no asks; assumptions A-1..A-3 in spec.
 <!-- SECTION:NOTES:END -->

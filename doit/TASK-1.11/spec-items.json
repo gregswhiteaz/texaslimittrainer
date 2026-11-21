@@ -1,0 +1,74 @@
+[
+  {
+    "id": "SPEC-01",
+    "verifies": "AC#1, DoD#1",
+    "verification": "acceptance `tests/engine/heads-up.acceptance.test.ts::AC#1 heads-up the button posts the $2 small blind and the other player the $4 big blind`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-02",
+    "verifies": "AC#2, DoD#1",
+    "verification": "acceptance `tests/engine/heads-up.acceptance.test.ts::AC#2 heads-up the button acts first preflop`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-03",
+    "verifies": "AC#3, DoD#1",
+    "verification": "acceptance `tests/engine/heads-up.acceptance.test.ts::AC#3 heads-up the non-button player acts first on flop turn and river`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-04",
+    "verifies": "AC#1, AC#3",
+    "verification": "acceptance `tests/engine/heads-up.acceptance.test.ts::heads-up hands deal from the D-5 positions and reach showdown with chips conserved`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-05",
+    "verifies": "AC#4, DoD#1, DoD#6",
+    "verification": "acceptance `tests/playtest/heads-up.acceptance.test.ts::AC#4 10,000 seeded --size 2 hands are all heads-up with heads-up blinds and order and zero violations`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-06",
+    "verifies": "AC#5, DoD#1",
+    "verification": "acceptance `tests/playtest/heads-up.acceptance.test.ts::AC#5 npm run playtest -- --size 2 plays heads-up hands and reports 0 violations`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-07",
+    "verifies": "AC#1",
+    "verification": "unit `tests/engine/hand.test.ts::createHand rejects invalid configs with fixed messages`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-08",
+    "verifies": "AC#2",
+    "verification": "unit `tests/engine/hand.test.ts::heads-up button fold preflop returns the uncalled $2 to the big blind`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-09",
+    "verifies": "AC#4, AC#5",
+    "verification": "unit `tests/playtest/cli.test.ts::parseArgs accepts --size 2 and rejects sizes outside 2 to 10`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-10",
+    "verifies": "DoD#6",
+    "verification": "command `npm run playtest -- --hands 10000 --seed 42`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-11",
+    "verifies": "DoD#2, DoD#3, DoD#4, DoD#5, DoD#7, DoD#8, DoD#9, DoD#10, DoD#12",
+    "verification": "command `npm run lint && npm run typecheck && npm test`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-12",
+    "verifies": "DoD#11",
+    "verification": "manual `backlog doc list --plain` shows the TASK-1.11 story doc",
+    "status": "pending"
+  }
+]
