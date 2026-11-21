@@ -1,4 +1,4 @@
-import type { Action } from '../engine/hand';
+import { STREET_BET_CAP, type Action } from '../engine/hand';
 import type { PlayerView, PublicPlayer } from '../engine/player-view';
 import sixMax from './charts/six-max.json' with { type: 'json' };
 import { handClassOf, type HandClass } from './hand-class';
@@ -43,7 +43,6 @@ export interface PreflopOptions {
 
 /** Seats after the button in clockwise order: SB, BB, UTG, HJ, CO, then the button. */
 const SIX_MAX_ORDER: readonly Position[] = ['SB', 'BB', 'UTG', 'HJ', 'CO', 'BTN'];
-const CAP = 4;
 
 /** The viewer's 6-max position. Throws RangeError unless exactly 6 seats are dealt in. */
 export function positionOf(view: PlayerView): Position {
@@ -89,7 +88,8 @@ export function recommendPreflop(
 
   const hero = view.players.find((p) => p.seat === view.seat) as PublicPlayer;
   const owed = view.currentBet - hero.streetContribution;
-  const canRaise = view.betCount < CAP && view.legalActions.some((a) => a.type === 'raise');
+  const canRaise =
+    view.betCount < STREET_BET_CAP && view.legalActions.some((a) => a.type === 'raise');
   const legal = (chartAction: ChartAction): PreflopAdvice => {
     const advice = chartAction === 'raise' && !canRaise ? 'call' : chartAction;
     return advice !== 'raise' && owed === 0 ? 'check' : advice;

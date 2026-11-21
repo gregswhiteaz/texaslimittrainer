@@ -1,3 +1,4 @@
+import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { shuffledDeck } from '../../src/engine/deck';
 import { applyAction, createHand, type Action, type HandState } from '../../src/engine/hand';
@@ -53,21 +54,40 @@ function choices(state: HandState): Set<Action['type']> {
 }
 
 describe('randomMovePolicy', () => {
-  it('never bets or raises once the street has 4 bets', () => {
-    const spots = [play(6, 1, PREFLOP_4), play(3, 1, TURN_4)];
+  it("draws from the engine's legal set without its own bet-cap filter", () => {
+    const capped = play(6, 1, PREFLOP_4);
+    const view = playerView(capped, capped.toAct as number);
+    const synthetic = {
+      ...view,
+      legalActions: [
+        ...view.legalActions,
+        { seat: view.seat, type: 'raise', amount: 20 } as Action,
+      ],
+    };
+    const drawn = new Set<Action['type']>();
+    for (let seed = 0; seed < 1000; seed++) {
+      drawn.add(randomMovePolicy(new Xoshiro128(seed))(synthetic).type);
+    }
+    expect(synthetic.betCount).toBe(4);
+    expect(drawn.has('raise')).toBe(true);
+
+    const spots = [capped, play(3, 1, TURN_4)];
     expect(spots.map((s) => [s.street, s.betCount])).toEqual([
       ['preflop', 4],
       ['turn', 4],
     ]);
     for (const spot of spots) {
       const offered = playerView(spot, spot.toAct as number).legalActions.map((a) => a.type);
-      expect(offered).toEqual(['fold', 'call', 'raise']);
+      expect(offered).toEqual(['fold', 'call']);
       expect([...choices(spot)].sort()).toEqual(['call', 'fold']);
     }
     for (const control of [play(6, 1, PREFLOP_3), play(3, 1, TURN_3)]) {
       expect(control.betCount).toBe(3);
       expect(choices(control).has('raise')).toBe(true);
     }
+    expect(
+      readFileSync(new URL('../../src/playtest/policy.ts', import.meta.url), 'utf8'),
+    ).not.toContain('betCount');
   });
 
   it('returns one of the legal actions, drawing once per decision', () => {

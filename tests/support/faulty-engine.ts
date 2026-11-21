@@ -65,13 +65,12 @@ function illegalAccepted(state: HandState, action: Action): ApplyResult {
   };
 }
 
-/** bet-cap (B1): a fifth bet goes through even once the engine enforces the cap (TASK-1.12). */
+/** bet-cap (B1): hides the fourth bet from the engine, so it offers and accepts a fifth; the checker
+ *  must catch it from the action records. */
 function fifthBet(state: HandState, action: Action): ApplyResult {
   const result = applyAction(state, action);
-  if (result.ok || action.type !== 'raise' || state.betCount < 4) return result;
-  const forced = applyAction({ ...state, betCount: 3 }, action);
-  if (!forced.ok) return forced;
-  return { ok: true, state: { ...forced.state, betCount: state.betCount + 1 } };
+  if (!result.ok || result.state.result !== null || result.state.betCount < 4) return result;
+  return { ok: true, state: { ...result.state, betCount: 3 } };
 }
 
 /** pot-eligibility (P5): a completed hand pays award 0's first winner share to the lowest folded seat. */

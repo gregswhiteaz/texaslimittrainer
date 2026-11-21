@@ -73,7 +73,7 @@ const aggressive = (legal: Action[]) =>
 
 describe('chip safety acceptance', () => {
   it('AC#1 the worst legal hand at the stack bound keeps every chip amount a safe integer', () => {
-    const start = createHand(config());
+    const start = createHand(config({ stakes: boundStakes(56_294_995_342_130) }));
     expect(start.players.reduce((sum, p) => sum + p.startingStack, 0)).toBe(MAX);
     const end = playOut(start, MAX, aggressive);
     expect(end.street).toBe('showdown');

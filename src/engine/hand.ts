@@ -119,6 +119,9 @@ function isPositiveSafeInteger(value: number): boolean {
   return Number.isSafeInteger(value) && value > 0;
 }
 
+/** Most bets per street: a bet and three raises; preflop the big blind is the first bet (REQ-016.2–016.4). */
+export const STREET_BET_CAP = 4;
+
 /** The most one player can put into a capped hand ($96 at $4/$8). Used by the session's TEMPORARY top-up
  *  (TASK-3.21) and the A-4 stakes bound. createHand's own floor is bigBlind + 1 (D-1). */
 export function minimumStack(stakes: Stakes): number {
@@ -265,7 +268,8 @@ export function legalActions(state: HandState): readonly Action[] {
       : state.stakes.bigBet;
   const owe = state.currentBet - player.streetContribution;
   const raiseTo = state.currentBet + unit;
-  const canRaise = raiseTo - player.streetContribution <= player.stack;
+  const canRaise =
+    state.betCount < STREET_BET_CAP && raiseTo - player.streetContribution <= player.stack;
   const actions: Action[] = [];
   if (owe > 0) {
     actions.push({ seat, type: 'fold' });

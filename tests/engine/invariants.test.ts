@@ -346,6 +346,18 @@ describe('invariant checker', () => {
     );
   });
 
+  it('bet-cap counts action records, not the engine cap', () => {
+    const raises = [8, 12, 16, 20].map((amount): ActionRecord => ({
+      street: 'flop',
+      seat: 3,
+      type: 'raise',
+      amount,
+      added: 0,
+    }));
+    const hidden: HandState = { ...S, betCount: 3, actions: [...S.actions, ...raises] };
+    expect(checkState(hidden)).toEqual(one('bet-cap', 'flop has 5 bets (at most 4)'));
+  });
+
   it('describes actions in the CLI wording', () => {
     expect(
       (

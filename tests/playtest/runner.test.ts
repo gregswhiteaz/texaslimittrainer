@@ -22,15 +22,6 @@ const draws = (code: string, seat: number) => {
   return Array.from({ length: 10 }, () => rng.nextUint32());
 };
 
-/** Always raises when offered, ignoring the cap; otherwise bets, calls or checks. */
-const alwaysRaise: PolicyFactory = () => (view) => {
-  const legal = view.legalActions;
-  return (legal.find((a) => a.type === 'raise') ??
-    legal.find((a) => a.type === 'bet') ??
-    legal.find((a) => a.type === 'call') ??
-    legal[0]) as ReturnType<SeatPolicy>;
-};
-
 /** Bets or raises up to the cap, then calls or checks: every street reaches exactly 4 bets. */
 const raiseToCap: PolicyFactory = () => (view) => {
   const legal = view.legalActions.filter(
@@ -112,16 +103,18 @@ describe('playtest runner units', () => {
     }
 
     const overCap: PlayedHand[] = [];
-    const summary = runPlaytest({ hands: 3, seed: 1, size: 3 }, (h) => overCap.push(h), {
-      makePolicy: alwaysRaise,
-    });
+    const summary = runPlaytest(
+      { hands: 3, seed: 1, size: 3 },
+      (h) => overCap.push(h),
+      FAULTS.fifthBet.seams,
+    );
     expect(summary.violations).toBe(3);
     expect(summary.violationCounts['bet-cap']).toBe(3);
     expect(summary.foldOuts + summary.showdowns).toBeLessThan(3);
     expect(summary.firstViolation).toBe(overCap[0]);
     for (const hand of overCap) {
       expect(hand.final.result).toBeNull();
-      expect(hand.final.betCount).toBe(5);
+      expect(hand.final.betCount).toBe(3);
       expect(hand.violation?.violations).toEqual([
         { invariant: 'bet-cap', message: 'preflop has 5 bets (at most 4)' },
       ]);
