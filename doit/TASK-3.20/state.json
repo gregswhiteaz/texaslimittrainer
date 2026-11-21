@@ -570,6 +570,12 @@
       "event": "unlock",
       "file": "e2e/cards.spec.ts",
       "reason": "TASK-3.23 AC#1-2 (autopilot): strengthen-only \u2014 report parts with no path; drop the duplicate inline logo decode already covered by logoProblems"
+    },
+    {
+      "t": "2026-11-21T09:06:18",
+      "event": "unlock",
+      "file": "e2e/cards.spec.ts",
+      "reason": "TASK-3.25 Q-1 (user): strengthen-only \u2014 logo must exist once and the mutation must apply; expected results unchanged"
     }
   ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-3.20",
@@ -582,6 +588,7 @@
   },
   "doc_id": "doc-38",
   "relock_pending": [
+    "e2e/cards.spec.ts",
     "e2e/cards.spec.ts"
   ]
 }

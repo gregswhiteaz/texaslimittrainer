@@ -655,7 +655,14 @@
       "skips": 0
     }
   },
-  "history": [],
+  "history": [
+    {
+      "t": "2026-11-21T09:06:18",
+      "event": "unlock",
+      "file": "e2e/cards.spec.ts",
+      "reason": "TASK-3.25 Q-1 (user): strengthen-only \u2014 logo must exist once and the mutation must apply; expected results unchanged"
+    }
+  ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-3.23",
   "spec_sha256": "2811307aa7ff5b8483da8bb15c4213f2f990ccb3b39ec65f046b51a8e759ce54",
   "review_findings": {
@@ -664,5 +671,8 @@
   "judge_results": {
     "1": "PASS"
   },
-  "doc_id": "doc-52"
+  "doc_id": "doc-52",
+  "relock_pending": [
+    "e2e/cards.spec.ts"
+  ]
 }
