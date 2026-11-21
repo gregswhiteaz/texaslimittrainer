@@ -31,7 +31,7 @@ export interface PlayerState {
   readonly stack: number;
   readonly holeCards: readonly [Card, Card];
   readonly folded: boolean;
-  /** Always false until TASK-1.9. */
+  /** True once a call, bet or raise left stack at 0; never acts again. */
   readonly allIn: boolean;
   /** Put in on the current street (not yet in pots). */
   readonly streetContribution: number;
@@ -70,8 +70,10 @@ export interface HandResult {
     readonly holeCards: readonly [Card, Card];
     readonly rank: HandRank;
   }[];
-  /** One entry per pot (exactly one in this task). */
+  /** One entry per pot (exactly one until TASK-1.10). Amounts exclude `returned`. */
   readonly awards: readonly PotAward[];
+  /** The uncalled part of the top bet, given back to its bettor (REQ-018.4). Present only when amount > 0. */
+  readonly returned?: { readonly seat: SeatNumber; readonly amount: number };
 }
 export interface HandState {
   readonly stakes: Stakes;
@@ -83,7 +85,7 @@ export interface HandState {
   readonly board: readonly Card[];
   /** Burn cards in burn order (0..3); never revealed. */
   readonly burned: readonly Card[];
-  /** 'showdown' once river betting closes; stays put on a fold-out. */
+  /** 'showdown' once the last betting round closes (river, or a D-7 runout); stays put on a fold-out. */
   readonly street: Street;
   /** Chips from completed streets; exactly one pot until TASK-1.10. */
   readonly pots: readonly Pot[];
@@ -117,7 +119,8 @@ function isPositiveSafeInteger(value: number): boolean {
   return Number.isSafeInteger(value) && value > 0;
 }
 
-/** Least stack createHand accepts: 8 small bets + 8 big bets ($96 at $4/$8). */
+/** The most one player can put into a capped hand ($96 at $4/$8). Used by the session's TEMPORARY top-up
+ *  (TASK-3.21) and the A-4 stakes bound. createHand's own floor is bigBlind + 1 (D-1). */
 export function minimumStack(stakes: Stakes): number {
   return 8 * stakes.smallBet + 8 * stakes.bigBet;
 }
@@ -160,7 +163,8 @@ function validate(config: HandConfig): void {
   ) {
     throw new RangeError('Deck must hold each of the 52 cards exactly once');
   }
-  const min = minimumStack(stakes);
+  // D-1: every blind is fully posted with at least $1 behind (all-in blinds are TASK-1.16).
+  const min = stakes.bigBlind + 1;
   for (const { seat, stack } of seats) {
     if (!Number.isSafeInteger(stack) || stack < min) {
       throw new RangeError(`Stack at seat ${seat} must be an integer of at least ${min}`);
@@ -264,7 +268,7 @@ export function legalActions(state: HandState): readonly Action[] {
   const actions: Action[] = [];
   if (owe > 0) {
     actions.push({ seat, type: 'fold' });
-    if (owe <= player.stack) actions.push({ seat, type: 'call', amount: owe });
+    actions.push({ seat, type: 'call', amount: Math.min(owe, player.stack) });
     if (canRaise) actions.push({ seat, type: 'raise', amount: raiseTo });
   } else if (state.currentBet > 0) {
     actions.push({ seat, type: 'check' });
@@ -284,17 +288,42 @@ function reject(code: ApplyErrorCode, message: string): ApplyResult {
   return { ok: false, error: { code, message } };
 }
 
-/** Moves every street contribution into the main pot. */
+/**
+ * Moves every street contribution into the main pot, except the uncalled part of the top bet (A-5):
+ * the top street contribution minus the second-highest, given back to its bettor.
+ */
 function gather(state: HandState, players: readonly PlayerState[]) {
-  const collected = players.reduce((sum, p) => sum + p.streetContribution, 0);
+  let collected = 0;
+  let top = 0;
+  let second = 0;
+  let topSeat: SeatNumber | null = null;
+  for (const p of players) {
+    const c = p.streetContribution;
+    collected += c;
+    if (c > top) {
+      second = top;
+      top = c;
+      topSeat = p.seat;
+    } else if (c > second) {
+      second = c;
+    }
+  }
+  const back = top - second;
+  const returned = back > 0 && topSeat !== null ? { seat: topSeat, amount: back } : undefined;
   const pot = state.pots[0] as Pot;
   return {
-    amount: pot.amount + collected,
+    amount: pot.amount + collected - back,
     eligible: pot.eligible,
+    returned,
     players: players.map((p) =>
       p.streetContribution === 0 && !p.hasActed
         ? p
-        : { ...p, streetContribution: 0, hasActed: false },
+        : {
+            ...p,
+            stack: p.seat === returned?.seat ? p.stack + back : p.stack,
+            streetContribution: 0,
+            hasActed: false,
+          },
     ),
   };
 }
@@ -346,27 +375,52 @@ function foldOut(state: HandState, players: readonly PlayerState[], winner: Seat
       endedBy: 'fold',
       showdown: [],
       awards: [{ pot: 0, amount: gathered.amount, winners }],
+      ...(gathered.returned && { returned: gathered.returned }),
     },
   };
 }
 
+/** Deals the next street's burn and board cards at their D-5 deck positions. */
+function dealNextStreet(state: HandState): HandState {
+  // D-5: after the 2n hole cards, burn then flop (3), burn then turn, burn then river.
+  const holeEnd = 2 * state.players.length;
+  const next = state.street === 'preflop' ? 'flop' : state.street === 'flop' ? 'turn' : 'river';
+  const burnAt = next === 'flop' ? holeEnd : next === 'turn' ? holeEnd + 4 : holeEnd + 6;
+  const count = next === 'flop' ? 3 : 1;
+  return {
+    ...state,
+    street: next,
+    burned: [...state.burned, state.deck[burnAt] as Card],
+    board: [...state.board, ...state.deck.slice(burnAt + 1, burnAt + 1 + count)],
+  };
+}
+
+/**
+ * Closes a betting round. After the river, or once at most one seat can still bet, deals any remaining
+ * streets with no betting (D-7) and holds the showdown; otherwise deals the next street.
+ */
 function endRound(state: HandState, players: readonly PlayerState[]): HandState {
   const gathered = gather(state, players);
   const seats = state.players.map((p) => p.seat);
-  const active = clockwiseAfter(seats, state.button).filter(
-    (seat) => !(gathered.players.find((p) => p.seat === seat) as PlayerState).folded,
+  const byClockwise = clockwiseAfter(seats, state.button).map(
+    (seat) => gathered.players.find((p) => p.seat === seat) as PlayerState,
   );
-  const base = { ...state, currentBet: 0, betCount: 0 };
-  if (state.street === 'river') {
-    const showdown = active.map((seat) => {
-      const p = gathered.players.find((q) => q.seat === seat) as PlayerState;
-      return { seat, holeCards: p.holeCards, rank: evaluate([...p.holeCards, ...state.board]) };
-    });
+  const active = byClockwise.filter((p) => !p.folded);
+  const open = active.filter((p) => !p.allIn);
+  const base: HandState = { ...state, players: gathered.players, currentBet: 0, betCount: 0 };
+  if (state.street === 'river' || open.length <= 1) {
+    let dealt = base;
+    while (dealt.street !== 'river') dealt = dealNextStreet(dealt);
+    const showdown = active.map((p) => ({
+      seat: p.seat,
+      holeCards: p.holeCards,
+      rank: evaluate([...p.holeCards, ...dealt.board]),
+    }));
     const best = Math.max(...showdown.map((s) => s.rank));
     const winnerSeats = showdown.filter((s) => s.rank === best).map((s) => s.seat);
     const winners = splitPot(gathered.amount, winnerSeats, state.button, seats);
     return {
-      ...base,
+      ...dealt,
       street: 'showdown',
       players: payOut(gathered.players, winners),
       pots: [{ amount: 0, eligible: gathered.eligible }],
@@ -375,22 +429,14 @@ function endRound(state: HandState, players: readonly PlayerState[]): HandState 
         endedBy: 'showdown',
         showdown,
         awards: [{ pot: 0, amount: gathered.amount, winners }],
+        ...(gathered.returned && { returned: gathered.returned }),
       },
     };
   }
-  // D-5: after the 2n hole cards, burn then flop (3), burn then turn, burn then river.
-  const holeEnd = 2 * seats.length;
-  const next = state.street === 'preflop' ? 'flop' : state.street === 'flop' ? 'turn' : 'river';
-  const burnAt = next === 'flop' ? holeEnd : next === 'turn' ? holeEnd + 4 : holeEnd + 6;
-  const count = next === 'flop' ? 3 : 1;
   return {
-    ...base,
-    street: next,
-    players: gathered.players,
+    ...dealNextStreet(base),
     pots: [{ amount: gathered.amount, eligible: gathered.eligible }],
-    burned: [...state.burned, state.deck[burnAt] as Card],
-    board: [...state.board, ...state.deck.slice(burnAt + 1, burnAt + 1 + count)],
-    toAct: active[0] as SeatNumber,
+    toAct: (open[0] as PlayerState).seat,
   };
 }
 
@@ -422,6 +468,7 @@ export function applyAction(state: HandState, action: Action): ApplyResult {
         streetContribution: p.streetContribution + added,
         totalContribution: p.totalContribution + added,
         folded: action.type === 'fold',
+        allIn: action.type !== 'fold' && p.stack - added === 0,
         hasActed: true,
       };
     }
@@ -447,11 +494,12 @@ export function applyAction(state: HandState, action: Action): ApplyResult {
   if (active.length === 1) {
     return { ok: true, state: foldOut(next, players, (active[0] as PlayerState).seat) };
   }
-  if (active.every((p) => p.hasActed && p.streetContribution === next.currentBet)) {
+  const open = active.filter((p) => !p.allIn);
+  if (open.every((p) => p.hasActed && p.streetContribution === next.currentBet)) {
     return { ok: true, state: endRound(next, players) };
   }
   const toAct = clockwiseAfter(
-    active.map((p) => p.seat),
+    open.map((p) => p.seat),
     actor.seat,
   )[0] as SeatNumber;
   return { ok: true, state: { ...next, toAct } };

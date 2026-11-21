@@ -184,7 +184,7 @@ describe('playtest CLI', () => {
       'Board: none',
       'Preflop: seat 4 posts small blind $2, seat 5 posts big blind $4, seat 6 folds, seat 1 folds, ' +
         'seat 2 folds, seat 3 folds, seat 4 folds',
-      'Result: seat 5 wins $6',
+      'Result: seat 5 wins $4',
       '',
     ]);
 

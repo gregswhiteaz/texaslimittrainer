@@ -128,7 +128,7 @@ describe('chip safety acceptance', () => {
       seats: [1, 2, 3, 4, 5, 6].map((seat) => ({ seat, stack: seat === 3 ? 2 ** 53 : 160 })),
     });
     expect(() => createHand(unsafe)).toThrow(
-      new RangeError('Stack at seat 3 must be an integer of at least 96'),
+      new RangeError('Stack at seat 3 must be an integer of at least 5'),
     );
   });
 

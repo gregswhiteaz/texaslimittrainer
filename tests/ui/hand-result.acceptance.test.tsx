@@ -92,7 +92,7 @@ describe('Hand result acceptance', () => {
     expect(text(block)).toContain('Hand over');
     const lines = winnerLines(block);
     expect(lines.map((l) => l.seat)).toEqual(['1']);
-    expect(part((lines[0] as WinnerLine).body, 'winner')).toBe('Ava wins $16');
+    expect(part((lines[0] as WinnerLine).body, 'winner')).toBe('Ava wins $12');
     expect(block).not.toContain('data-part="hand-name"');
     expect(block).not.toContain(' · ');
     expect(block).not.toContain('<svg');

@@ -238,7 +238,7 @@ test('the result shows the winner, amount and hand name, and nothing of an uncon
   await openApp(fresh);
   await foldToResult(fresh);
   await expect(winnerLines(fresh)).toHaveCount(1);
-  await expect(winnerLines(fresh)).toHaveText('Ava wins $12');
+  await expect(winnerLines(fresh)).toHaveText('Ava wins $8');
   await expect(handOver(fresh)).not.toContainText(' · ');
   await expect(handOver(fresh).locator('svg')).toHaveCount(0);
   await axeWithPausedClock(fresh);
@@ -253,7 +253,7 @@ test('the next hand is dealt 1.5 s after the result with stacks carried and the 
   await installPausedClock(page);
   await openApp(page);
   await foldToResult(page);
-  await expect(winnerLines(page)).toHaveText('Ava wins $12');
+  await expect(winnerLines(page)).toHaveText('Ava wins $8');
   expect(await draws(page)).toBe(1);
 
   await expectNextDeal(page, 2);
@@ -263,7 +263,7 @@ test('the next hand is dealt 1.5 s after the result with stacks carried and the 
   expect(await draws(page)).toBe(2);
 
   await foldToResult(page);
-  await expect(winnerLines(page)).toHaveText('Ben wins $12');
+  await expect(winnerLines(page)).toHaveText('Ben wins $8');
   await expectNextDeal(page, 3);
   expect(await dealerSeats(page)).toEqual(['2']);
   expect(await seatStacks(page)).toEqual(['$164', '$160', '$154', '$156', '$160', '$160']);

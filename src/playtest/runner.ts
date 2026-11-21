@@ -211,7 +211,10 @@ export function summarize(hands: Iterable<PlayedHand>): PlaytestSummary {
     if (final.result?.endedBy === 'showdown') showdowns++;
     playerActions += record.actions.length;
     capped += cappedStreets(final);
-    const pot = (final.result?.awards ?? []).reduce((sum, award) => sum + award.amount, 0);
+    // D-5: all chips put in the middle, including the uncalled bet returned to its bettor.
+    const pot =
+      (final.result?.awards ?? []).reduce((sum, award) => sum + award.amount, 0) +
+      (final.result?.returned?.amount ?? 0);
     largestPot = Math.max(largestPot, pot);
     violations += hand.violations;
     if (isViolating(hand)) {

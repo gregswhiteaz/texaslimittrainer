@@ -54,7 +54,7 @@ describe('fold-out bet counters', () => {
     expect(end.street).toBe('flop');
     expectReset(end);
     expect(end.result?.awards).toEqual([
-      { pot: 0, amount: 36, winners: [{ seat: 3, amount: 36 }] },
+      { pot: 0, amount: 32, winners: [{ seat: 3, amount: 32 }] },
     ]);
   });
 });

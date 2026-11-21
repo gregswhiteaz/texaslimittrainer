@@ -86,7 +86,7 @@ describe('input hardening acceptance', () => {
     }
     for (const stack of [2 ** 53, 2 ** 60]) {
       expect(() => createHand(config({ seats: seatsWithSeat3(stack) }))).toThrow(
-        new RangeError('Stack at seat 3 must be an integer of at least 96'),
+        new RangeError('Stack at seat 3 must be an integer of at least 5'),
       );
     }
     const state = createHand(config({ seats: seatsWithSeat3(Number.MAX_SAFE_INTEGER - 800) }));

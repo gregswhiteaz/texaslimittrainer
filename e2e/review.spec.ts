@@ -313,7 +313,7 @@ test('a preflop fold or a big-blind walk opens no review and the next hand deals
     expect(await enabledActions(page).count()).toBe(0);
     await page.clock.runFor(50);
   }
-  await expect(winnerLines(page)).toHaveText('You win $6');
+  await expect(winnerLines(page)).toHaveText('You win $4');
   await expectNoReview(page);
   await expectNextDeal(page, 5);
   expect(await draws(page)).toBe(5);

@@ -158,7 +158,7 @@ export const KINGS_SHOWDOWN: TableState = defaultTableAfter(
   '3:fold 4:fold 5:raise 6:fold 1:fold 2:raise 5:call 2:bet 5:raise 2:call 2:bet 5:raise 2:call 2:bet 5:raise 2:raise 5:call',
 );
 
-/** Everyone folds to Ava's (seat 1, 2c 3h) $4 flop bet: she wins $16 uncontested. */
+/** Everyone folds to Ava's (seat 1, 2c 3h) $4 flop bet: she wins $12 uncontested ($4 bet returned). */
 export const AVA_UNCONTESTED: TableState = defaultTableAfter(
   {},
   '3:fold 4:fold 5:call 6:fold 1:call 2:check 1:bet 2:fold 5:fold',

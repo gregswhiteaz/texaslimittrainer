@@ -70,7 +70,7 @@ describe('TASK-9.1 review model', () => {
     expect(fold.userDecisions[0]?.view.street).toBe('preflop');
     const walk = record(BB_WALK);
     expect(walk.userDecisions).toEqual([]);
-    expect(walk.result.awards[0]?.winners).toEqual([{ seat: 5, amount: 6 }]);
+    expect(walk.result.awards[0]?.winners).toEqual([{ seat: 5, amount: 4 }]);
     for (const [table, hand] of [
       [PREFLOP_FOLD_ONLY, fold],
       [BB_WALK, walk],

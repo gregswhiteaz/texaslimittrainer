@@ -327,7 +327,8 @@ describe('hand acceptance', () => {
     expect(preflop.result).toEqual({
       endedBy: 'fold',
       showdown: [],
-      awards: [{ pot: 0, amount: 6, winners: [{ seat: 3, amount: 6 }] }],
+      awards: [{ pot: 0, amount: 4, winners: [{ seat: 3, amount: 4 }] }],
+      returned: { seat: 3, amount: 2 },
     });
     expect(stackOf(preflop, 3)).toBe(162);
     expect(stackOf(preflop, 2)).toBe(158);
@@ -349,7 +350,7 @@ describe('hand acceptance', () => {
     expect(flop.result?.showdown).toEqual([]);
     expect(flop.board).toHaveLength(3);
     expect(flop.result?.awards).toEqual([
-      { pot: 0, amount: 28, winners: [{ seat: 2, amount: 28 }] },
+      { pot: 0, amount: 24, winners: [{ seat: 2, amount: 24 }] },
     ]);
     expect(stackOf(flop, 2)).toBe(160 + 20);
     expect(totalStacks(flop)).toBe(960);

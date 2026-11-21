@@ -161,8 +161,8 @@ describe('hand', () => {
       [{ deck: DECK.slice(1) }, 'Deck must hold each of the 52 cards exactly once'],
       [{ deck: [0, ...DECK.slice(1, 51), 0] }, 'Deck must hold each of the 52 cards exactly once'],
       [
-        { seats: [...seats([1, 2]), { seat: 3, stack: 95 }] },
-        'Stack at seat 3 must be an integer of at least 96',
+        { seats: [...seats([1, 2]), { seat: 3, stack: 4 }] },
+        'Stack at seat 3 must be an integer of at least 5',
       ],
       [
         {
@@ -216,5 +216,58 @@ describe('hand', () => {
     expect(state.result.endedBy).toBe('showdown');
     expect(state.board).toHaveLength(5);
     expect(state.players.reduce((sum, p) => sum + p.stack, 0)).toBe(960);
+  });
+
+  it('all-in flags, floor and actor order', () => {
+    const three = (stacks: [number, number, number]) =>
+      createHand(config({ seats: stacks.map((stack, i) => ({ seat: i + 1, stack })) }));
+    const allInOf = (state: HandState, seat: SeatNumber) =>
+      state.players.find((p) => p.seat === seat)?.allIn;
+
+    expect(three([160, 160, 5]).players[2]?.stack).toBe(1);
+    expect(() => three([160, 160, 4])).toThrow(
+      new RangeError('Stack at seat 3 must be an integer of at least 5'),
+    );
+
+    // Seat 3 (big blind) faces a $4 flop bet with `stack - 4` behind.
+    const facing = (stack: number) =>
+      play(three([160, 160, stack]), [1, 'call', 4], [2, 'call', 2], [3, 'check'], [2, 'bet', 4]);
+    const exactCall = apply(facing(8), [3, 'call', 4]);
+    expect(allInOf(exactCall, 3)).toBe(true);
+    expect(exactCall.toAct).toBe(1);
+    const leavesOne = apply(facing(9), [3, 'call', 4]);
+    expect(allInOf(leavesOne, 3)).toBe(false);
+    // $6 behind covers the $4 call but not the $8 raise.
+    expect(legalActions(facing(10))).toEqual([
+      { seat: 3, type: 'fold' },
+      { seat: 3, type: 'call', amount: 4 },
+    ]);
+
+    const exactRaise = apply(three([8, 160, 160]), [1, 'raise', 8]);
+    expect(allInOf(exactRaise, 1)).toBe(true);
+    const exactBet = play(
+      three([160, 8, 160]),
+      [1, 'call', 4],
+      [2, 'call', 2],
+      [3, 'check'],
+      [2, 'bet', 4],
+    );
+    expect(allInOf(exactBet, 2)).toBe(true);
+    expect(exactBet.toAct).toBe(3);
+
+    // Seat 2, first after the button, goes all-in on the flop; the turn starts with seat 3.
+    const shortFirst = play(
+      three([160, 7, 160]),
+      [1, 'call', 4],
+      [2, 'call', 2],
+      [3, 'check'],
+      [2, 'check'],
+      [3, 'bet', 4],
+      [1, 'call', 4],
+      [2, 'call', 3],
+    );
+    expect(allInOf(shortFirst, 2)).toBe(true);
+    expect(shortFirst.street).toBe('turn');
+    expect(shortFirst.toAct).toBe(3);
   });
 });

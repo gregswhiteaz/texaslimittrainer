@@ -125,6 +125,7 @@ function chipsMessage(state: HandState): string | null {
   const table = stacks + street + inPots;
   if (table !== start) return `table holds $${table} but the hand started with $${start}`;
   const awards = state.result?.awards ?? [];
+  const back = state.result?.returned;
   if (state.result === null) {
     if (inPots !== total - street) {
       return `pots hold $${inPots} but completed streets took $${total - street}`;
@@ -132,7 +133,8 @@ function chipsMessage(state: HandState): string | null {
   } else {
     let awarded = 0;
     for (const award of awards) awarded += award.amount;
-    if (awarded !== total) return `awards pay $${awarded} but players put in $${total}`;
+    const putIn = total - (back?.amount ?? 0);
+    if (awarded !== putIn) return `awards pay $${awarded} but players put in $${putIn}`;
     for (const [i, award] of awards.entries()) {
       let shares = 0;
       for (const w of award.winners) shares += w.amount;
@@ -146,11 +148,39 @@ function chipsMessage(state: HandState): string | null {
     for (const award of awards) {
       for (const w of award.winners) if (w.seat === p.seat) won += w.amount;
     }
-    if (p.stack + p.totalContribution - won !== p.startingStack) {
-      return `seat ${p.seat} has $${p.stack} but should have $${p.startingStack - p.totalContribution + won}`;
+    const backed = back?.seat === p.seat ? back.amount : 0;
+    if (p.stack + p.totalContribution - won - backed !== p.startingStack) {
+      return `seat ${p.seat} has $${p.stack} but should have $${p.startingStack - p.totalContribution + won + backed}`;
     }
   }
   return null;
+}
+
+/** C5: on a completed hand, `returned` is exactly the uncalled part of the top total contribution (A-5). */
+function returnedMessage(state: HandState): string | null {
+  let top = 0;
+  let second = 0;
+  let dueSeat: SeatNumber | null = null;
+  for (const p of state.players) {
+    const c = p.totalContribution;
+    if (c > top) {
+      second = top;
+      top = c;
+      dueSeat = p.seat;
+    } else if (c > second) {
+      second = c;
+    }
+  }
+  const due = top - second;
+  if (due === 0) dueSeat = null;
+  const returned = state.result?.returned;
+  if (returned !== undefined) {
+    const dueForSeat = returned.seat === dueSeat ? due : 0;
+    return returned.amount === dueForSeat
+      ? null
+      : `seat ${returned.seat} got $${returned.amount} back but $${dueForSeat} was uncalled`;
+  }
+  return dueSeat === null ? null : `seat ${dueSeat} got $0 back but $${due} was uncalled`;
 }
 
 const BETTING_STREETS = ['preflop', 'flop', 'turn', 'river'] as const;
@@ -321,11 +351,20 @@ export function checkState(state: HandState): readonly Violation[] {
   return found;
 }
 
-/** legal-action for the step, then checkState(result.state) if result.ok. Results in INVARIANTS order, ≤ 1 per id:
+/** legal-action for the step, then checkState(result.state) if result.ok, plus the returned-chips rule (C5) on
+ *  the step that completes the hand when chips is otherwise clean. Results in INVARIANTS order, ≤ 1 per id:
  *  the step's own legal-action message replaces checkState's history one. */
 export function checkStep(step: ActionStep): readonly Violation[] {
   const legal = legalActionMessage(step);
-  const state = step.result.ok ? checkState(step.result.state) : NONE;
+  let state = step.result.ok ? checkState(step.result.state) : NONE;
+  if (
+    step.result.ok &&
+    step.result.state.result !== null &&
+    !state.some((v) => v.invariant === 'chips')
+  ) {
+    const returned = returnedMessage(step.result.state);
+    if (returned !== null) state = [{ invariant: 'chips', message: returned }, ...state];
+  }
   if (legal === null) return state;
   const stateChecks = state.filter((v) => v.invariant !== 'legal-action');
   const [chips, ...afterChips] = stateChecks;
