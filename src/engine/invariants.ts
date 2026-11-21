@@ -72,6 +72,10 @@ function legalActionMessage({ before, action, result }: ActionStep): string | nu
     before.street === 'preflop' || before.street === 'flop'
       ? before.stakes.smallBet
       : before.stakes.bigBet;
+  // REQ-016.1: a bet is exactly one unit and a raise goes to exactly currentBet + unit (small bet
+  // preflop/flop, big bet turn/river). Size is checked independently of legalActions (TASK-1.8 A-4).
+  // legalActions only offers currentBet + unit today, so once L3 passes the raise clause cannot fail;
+  // it stays as a guard if legalActions changes. TASK-1.14 (short all-in raises, REQ-016.5) must revisit it.
   if (
     (action.type === 'bet' && (before.currentBet !== 0 || amount !== unit)) ||
     (action.type === 'raise' && amount !== before.currentBet + unit)
@@ -323,8 +327,10 @@ export function checkStep(step: ActionStep): readonly Violation[] {
   const legal = legalActionMessage(step);
   const state = step.result.ok ? checkState(step.result.state) : NONE;
   if (legal === null) return state;
-  const rest = state.filter((v) => v.invariant !== 'legal-action');
-  const [chips, ...others] = rest;
+  const stateChecks = state.filter((v) => v.invariant !== 'legal-action');
+  const [chips, ...afterChips] = stateChecks;
   const violation = { invariant: 'legal-action', message: legal };
-  return chips?.invariant === 'chips' ? [chips, violation, ...others] : [violation, ...rest];
+  return chips?.invariant === 'chips'
+    ? [chips, violation, ...afterChips]
+    : [violation, ...stateChecks];
 }
