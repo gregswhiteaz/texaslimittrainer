@@ -1,10 +1,11 @@
 ---
 id: TASK-1.10
 title: Split the pot into side pots for unequal all-ins
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-20T04:07:00Z'
+updated_date: '2026-11-21T05:37:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -66,10 +67,24 @@ Plan key: E01-S13 · Dream: limit-holdem-trainer
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
 
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. Rebuild pots at every round end: one pot per distinct contribution level among live players; eligible = unfolded seats that matched the level.
+2. Award each pot separately (main first) with the existing splitPot odd-chip rule.
+3. Invariant checker: new P6–P8 (pot count, level eligibility, layer amount), only when side pots exist.
+4. Acceptance tests for scripted hands S1–S5 (AC#1–4, 6, 7), folded-contributor checks on side pots, 100k random-stack property test.
+5. Locked tests unchanged; 6-max playtest byte-identical.
+
+Full spec: doit/TASK-1.10/spec.md
+<!-- SECTION:PLAN:END -->
+
 ## Implementation Notes
 
 <!-- SECTION:NOTES:BEGIN -->
 AC added from TASK-1.8 follow-up (doc-16).
 
 AC added from TASK-1.22 follow-up (doc-39).
+
+Autopilot: no asks; assumptions A-1..A-5 in spec.
 <!-- SECTION:NOTES:END -->
