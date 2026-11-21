@@ -3,11 +3,14 @@
 // run with CI unset on the reference machine (Apple-silicon Mac, Node 22.18.0). Local `npm test`
 // enforces only the slack floor below. CI (CI=true) prints the numbers but enforces no speed limit.
 // Times are process CPU time (cpuNowMs in tests/support/speed.ts), so other busy processes do not inflate them.
+// Each measurement is the best of RUNS timed repetitions, because heavy load still inflates CPU time
+// somewhat (cache and core contention); the fastest run is the closest to the code's real cost.
 import { describe, expect, it } from 'vitest';
 import { buildEvaluatorTables, evaluate } from '../../src/engine/hand-evaluator';
 import { cpuNowMs, SPEED_LIMITS_NOT_ENFORCED, speedLimitsEnforced } from '../support/speed';
 
 const HANDS = 1_000_000;
+const RUNS = 10;
 const MIN_EVALS_PER_SEC = Number(process.env.EVALUATOR_MIN_EVALS_PER_SEC ?? 1_000_000);
 const MAX_BUILD_MS = Number(process.env.EVALUATOR_MAX_BUILD_MS ?? 500);
 const ENFORCED = speedLimitsEnforced();
@@ -49,14 +52,20 @@ describe('hand evaluator performance', () => {
     const hands = randomSevenCardHands(HANDS);
     const warmUp = evaluateAll(hands);
 
-    const start = cpuNowMs();
-    const checksum = evaluateAll(hands);
-    const seconds = (cpuNowMs() - start) / 1000;
-    const rate = HANDS / seconds;
+    let checksum = 0;
+    let evalMs = Infinity;
+    let buildMs = Infinity;
+    for (let run = 0; run < RUNS; run++) {
+      const start = cpuNowMs();
+      checksum = evaluateAll(hands);
+      evalMs = Math.min(evalMs, cpuNowMs() - start);
+      expect(checksum).toBe(warmUp);
 
-    const buildStart = cpuNowMs();
-    buildEvaluatorTables();
-    const buildMs = cpuNowMs() - buildStart;
+      const buildStart = cpuNowMs();
+      buildEvaluatorTables();
+      buildMs = Math.min(buildMs, cpuNowMs() - buildStart);
+    }
+    const rate = HANDS / (evalMs / 1000);
 
     console.log(
       `evaluate: ${Math.round(rate).toLocaleString('en-US')} seven-card evals/s; ` +

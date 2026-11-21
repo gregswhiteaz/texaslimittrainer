@@ -1,0 +1,23 @@
+{
+  "verdict": "FAIL",
+  "round": 1,
+  "test_suite": "PASS",
+  "end_to_end": "PASS",
+  "missing_results": [],
+  "failed": [
+    "SPEC-04"
+  ],
+  "blocking_findings": [
+    "J-1-01"
+  ],
+  "escalate": false,
+  "escalate_items": [],
+  "check_args": [
+    "--check-ac",
+    "1"
+  ],
+  "unproven_ac": [
+    2
+  ],
+  "unproven_dod": []
+}

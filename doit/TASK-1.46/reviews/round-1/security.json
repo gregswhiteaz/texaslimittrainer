@@ -1,0 +1,3 @@
+{"reviewer": "security", "round": 1,
+ "findings": [],
+ "summary": "Test-only change: adds cpuNowMs() (process.cpuUsage, Node built-in) to tests/support/speed.ts, swaps performance.now() for it in six timing tests, adds a cpu-clock acceptance test, and a README sentence. No production code, no new dependencies, no new untrusted input: the only env reads (EQUITY_PERF_SCALE etc., CI) pre-exist and feed numeric thresholds in local tests only. Atomics.wait on a private SharedArrayBuffer is bounded (300 ms). No secrets, no file/shell/network operations added. .claude/settings.json (allow 'gh run rerun *') is the user's own permissions change and out of scope per instructions. No findings."}

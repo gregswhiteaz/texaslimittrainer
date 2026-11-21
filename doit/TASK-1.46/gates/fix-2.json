@@ -1,0 +1,66 @@
+{
+  "task": "TASK-1.46",
+  "phase": "fix",
+  "run": 2,
+  "result": "FAIL",
+  "changed_lines": 116,
+  "changed_files": [
+    ".claude/settings.json",
+    "README.md",
+    "tests/advice/equity.perf.test.ts",
+    "tests/advice/equity.test.ts",
+    "tests/advice/postflop.perf.test.ts",
+    "tests/advice/preflop.test.ts",
+    "tests/engine/hand-evaluator.perf.test.ts",
+    "tests/engine/invariants.perf.test.ts",
+    "tests/support/cpu-clock.acceptance.test.ts",
+    "tests/support/speed.ts"
+  ],
+  "checks": [
+    {
+      "name": "test command",
+      "status": "fail",
+      "detail": "$ npm test\nexit 1\nacceptance.test.ts > engine review gaps > small blind equal to big blind is accepted 1ms\n \u2713 tests/ci/apt-archives-cache.test.ts > apt archive cache > verifies restored archives, saves the cache right after Collect and leaves the installs unchanged 2ms\n \u2713 tests/ci/apt-archives.test.ts > apt-archives parsers > parses apt file names, records and installed packages 2ms\n \u2713 tests/git/prune-merged-branches-lease.test.ts > prune-merged-branches lease helpers > builds leased delete args and parses refusals 1ms\n \u2713 tests/git/prune-merged-branches.test.ts > prune-merged-branches helpers > parseOptions and formatPlan 2ms\n \u2713 tests/ci/branch-protection.acceptance.test.ts > branch protection > README documents branch protection requiring the CI job 2ms\n \u2713 tests/ci/apt-network.test.ts > apt network limits in CI > bounds apt network timeouts and retries before the Playwright installs 1ms\n \u2193 tests/ci/apt-network.test.ts > apt network limits on the runner (GitHub Actions only) > the runner apt config contains the network limits\n \u2713 tests/table/hand-result.test.ts > hand result > handName names every category with its ranks 2ms\n \u2713 tests/table/hand-result.test.ts > hand result > the result model lists winners in award order and exposes only winners' cards 1ms\n \u2713 tests/support/speed.test.ts > speedLimitsEnforced > enforces speed limits unless CI is exactly \"true\" 1ms\n \u2713 tests/table/next-hand.test.ts > next hand > nextHandDelay is 1500 ms after a hand unless held 2ms\n \u2713 tests/table/next-hand.test.ts > next hand > completedHand throws for a seat that was not dealt in 1ms\n \u2713 tests/table/next-hand.test.ts > next hand > nextHand works only after a completed hand 1ms\n \u2713 tests/table/session-config.acceptance.test.ts > session config acceptance > first-use session config carries game type, players, stake, line-up, speed, seat and button 2ms\n\n Test Files  1 failed | 100 passed (101)\n      Tests  1 failed | 361 passed | 6 skipped (368)\n   Start at  17:19:50\n   Duration  18.08s (tests 95%, import 4%)\n\n\n\u23af\u23af\u23af\u23af\u23af\u23af\u23af Failed Tests 1 \u23af\u23af\u23af\u23af\u23af\u23af\u23af\n\n FAIL  tests/support/sandbox-timeout.acceptance.test.ts > runInSandbox timeout > a timed-out runInSandbox kills a grandchild that ignores SIGTERM\nAssertionError: retry: could not send SIGKILL to process group 63232 (EPERM)\n{\"exitCode\":-1,\"output\":\"\\n> tlh-trainer@0.0.0 test\\n> vitest run --coverage\\n\\n\\n RUN  v5.1.0 /private/var/folders/cv/nvgch0w91ng27hm_ys2dn_cm0000gn/T/tlh-sandbox-2GTTjJ\\n      Coverage enabled with v8\\n\\n\",\"timedOut\":true}: expected false to be true // Object.is equality\n\n- Expected\n+ Received\n\n- true\n+ false\n\n \u276f tests/support/sandbox-timeout.acceptance.test.ts:59:48\n     57|         );\n     58|         expect(Date.now() - started).toBeLessThan(30_000);\n     59|         expect(result.timedOut, result.output).toBe(true);\n       |                                                ^\n     60|         expect(result.exitCode).toBe(-1);\n     61|         expect(existsSync(pidFile), result.output).toBe(true);\n\n\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af[1/1]\u23af\n\n"
+    },
+    {
+      "name": "lint command",
+      "status": "pass",
+      "detail": "$ npm run lint\nexit 0\n\n> tlh-trainer@0.0.0 lint\n> eslint . --max-warnings 0 && prettier --check .\n\nChecking formatting...\nAll matched files use Prettier code style!\n"
+    },
+    {
+      "name": "typecheck command",
+      "status": "pass",
+      "detail": "$ npm run typecheck\nexit 0\n\n> tlh-trainer@0.0.0 typecheck\n> tsc -p tsconfig.json\n\n"
+    },
+    {
+      "name": "spec unchanged",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "name": "scope budget (lines)",
+      "status": "warn",
+      "detail": "116 changed lines vs budget 110 (fail above 220)"
+    },
+    {
+      "name": "scope budget (files)",
+      "status": "warn",
+      "detail": "10 files vs budget 9"
+    },
+    {
+      "name": "files outside spec",
+      "status": "warn",
+      "detail": ".claude/settings.json"
+    },
+    {
+      "name": "all changes listed in changes.md",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "name": "test integrity",
+      "status": "pass",
+      "detail": ""
+    }
+  ]
+}

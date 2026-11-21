@@ -3,24 +3,24 @@
     "id": "SPEC-01",
     "verifies": "AC#1",
     "verification": "acceptance `tests/support/cpu-clock.acceptance.test.ts::does not count time the process spends waiting`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-02",
     "verifies": "AC#2",
     "verification": "acceptance `tests/support/cpu-clock.acceptance.test.ts::counts twice the work as about twice the time`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-03",
     "verifies": "AC#1",
     "verification": "command `grep -nE \"performance\\.now\\(|Date\\.now\\(\" tests/engine/hand-evaluator.perf.test.ts tests/engine/invariants.perf.test.ts tests/advice/equity.perf.test.ts tests/advice/postflop.perf.test.ts tests/advice/preflop.test.ts; sed -n '/bounds the work/,/^  });/p' tests/advice/equity.test.ts | grep -cE \"performance\\.now\\(|Date\\.now\\(\"` (first prints nothing, second prints 0); then `N=$(( $(sysctl -n hw.ncpu) * 3 )); for i in $(seq $N); do node -e \"const e=Date.now()+300000;while(Date.now()<e){}\" & done; sleep 5; npx vitest run --coverage tests/engine/hand-evaluator.perf.test.ts tests/engine/invariants.perf.test.ts tests/advice/equity.perf.test.ts tests/advice/postflop.perf.test.ts tests/advice/equity.test.ts tests/advice/preflop.test.ts; echo exit=$?; kill $(jobs -p)` (prints `exit=0`)",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-04",
     "verifies": "AC#2",
     "verification": "manual mutation check with the command above (judge), plus command `npx vitest run tests/ci/speed-limits.acceptance.test.ts`",
-    "status": "pending"
+    "status": "fail"
   }
 ]

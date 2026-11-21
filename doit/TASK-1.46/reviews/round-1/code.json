@@ -1,0 +1,16 @@
+{"reviewer": "code", "round": 1,
+ "rubric": [
+  {"item": "SPEC-01 correctness", "result": "pass"},
+  {"item": "SPEC-01 test strength", "result": "pass"},
+  {"item": "SPEC-02 correctness", "result": "pass"},
+  {"item": "SPEC-02 test strength", "result": "pass"},
+  {"item": "SPEC-03 correctness", "result": "pass"},
+  {"item": "SPEC-03 test strength", "result": "pass"},
+  {"item": "SPEC-04 correctness", "result": "pass"},
+  {"item": "SPEC-04 test strength", "result": "pass"},
+  {"item": "scope", "result": "pass"},
+  {"item": "concision", "result": "pass"},
+  {"item": "clarity", "result": "pass"}
+ ],
+ "findings": [],
+ "summary": "cpuNowMs() in tests/support/speed.ts matches the D-2 interface ((user+system)/1000). Every listed timed section (evaluator throughput and build, invariants timed(), equity and postflop p95 loops, equity bounded-work, preflop 10k calls) swaps performance.now() for cpuNowMs() and nothing else: limits, env names and defaults, ENFORCED gating and log text are unchanged. The four perf file headers, the equity.test.ts comment and the README sentence are present. The SPEC-03 grep prints nothing, and the bounded-work count is 0. The remaining performance.now() calls are the SPEC-01 wall reference and the locked action-bar hang guard, which is out of scope (A-2). The acceptance tests can fail: a wall-clock cpuNowMs fails SPEC-01 (about 300 ms against <50), and a constant or broken clock gives NaN or a ratio below 1.5, which fails SPEC-02. The six timing files, cpu-clock.acceptance and the locked speed-limits.acceptance (15 tests) pass locally. The gate passes test, lint and typecheck. The only file outside the spec is .claude/settings.json, the user's own change, so it is ignored as instructed. No src/** changes. I did not re-run the SPEC-03 load test or the SPEC-04 mutation check; the judge does those."}

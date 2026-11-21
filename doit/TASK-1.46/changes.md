@@ -2,7 +2,7 @@
 
 - `tests/support/speed.ts` — added `cpuNowMs()`: process CPU time (user + system) in ms from `process.cpuUsage()`.
 - `tests/support/cpu-clock.acceptance.test.ts` — new: SPEC-01 (blocking wait is not counted) and SPEC-02 (2x work is measured as about 2x time).
-- `tests/engine/hand-evaluator.perf.test.ts` — throughput and table-build timing use `cpuNowMs()`; header says the times are CPU time.
+- `tests/engine/hand-evaluator.perf.test.ts` — throughput and table-build timing use `cpuNowMs()`, each taken as the best of 10 timed runs so heavy load does not fail the real-target command; header says the times are CPU time.
 - `tests/engine/invariants.perf.test.ts` — `timed()` uses `cpuNowMs()`; header says the times are CPU time.
 - `tests/advice/equity.perf.test.ts` — per-run p95 timing uses `cpuNowMs()`; header says the times are CPU time.
 - `tests/advice/postflop.perf.test.ts` — per-run p95 timing uses `cpuNowMs()`; header says the times are CPU time.

@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-20T06:02:00Z'
-updated_date: '2026-11-21T00:03:00Z'
+updated_date: '2026-11-21T00:09:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -41,3 +41,9 @@ Seen in TASK-1.35 (judge J-1-01 and the build): wall-clock assertions failed und
 
 Full spec: doit/TASK-1.46/spec.md
 <!-- SECTION:PLAN:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+Build: cpuNowMs() (process.cpuUsage) replaces wall-clock in the six local timing sites; new cpu-clock acceptance test; gate PASS. Recorded deviation: SPEC-03's subset run with --coverage exits 1 from global coverage thresholds (not test failures; same when idle) — judge on test counts.
+<!-- SECTION:NOTES:END -->
