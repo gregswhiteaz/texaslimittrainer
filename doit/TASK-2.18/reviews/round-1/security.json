@@ -1,0 +1,3 @@
+{"reviewer": "security", "round": 1,
+ "findings": [],
+ "summary": "Test-only change: three new test files (e2e/home-first-load.spec.ts, tests/ui/user-seat-cards.acceptance.test.tsx, tests/table/session-stacks.acceptance.test.ts). No production code, no new dependencies, no secrets, no shell/file/network operations. Regexes in the UI test run over deterministic server-rendered HTML from a fixed fixture (no untrusted input, lazy quantifiers bounded by literal delimiters), so no ReDoS path. page.evaluate reads document.activeElement only. No reachable trust boundary is touched; nothing to report."}
