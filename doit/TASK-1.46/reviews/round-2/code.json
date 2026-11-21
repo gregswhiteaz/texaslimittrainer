@@ -1,0 +1,19 @@
+{"reviewer": "code", "round": 2,
+ "rubric": [
+  {"item": "SPEC-04 correctness", "result": "pass"},
+  {"item": "SPEC-04 test strength", "result": "pass"},
+  {"item": "scope", "result": "pass"},
+  {"item": "concision", "result": "pass"},
+  {"item": "clarity", "result": "pass"}
+ ],
+ "findings": [
+  {"fingerprint": "tests/engine/hand-evaluator.perf.test.ts:redundant-post-loop-checksum-assert", "severity": "NIT", "file": "tests/engine/hand-evaluator.perf.test.ts", "line": 75,
+   "issue": "expect(checksum).toBe(warmUp) after the loop repeats the per-run check inside the loop (line 62), so it can never fail on its own.",
+   "evidence": "The loop asserts checksum === warmUp on every one of the 10 runs; the post-loop assert checks the last of those values again.",
+   "fix": "Optional: drop the post-loop toBe(warmUp) line and keep toBeGreaterThan(0). Leaving it is harmless."},
+  {"fingerprint": "tests/engine/hand-evaluator.perf.test.ts:ten-runs-adds-npm-test-time", "severity": "NIT", "file": "tests/engine/hand-evaluator.perf.test.ts", "line": 13,
+   "issue": "RUNS = 10 (the brief suggested about 3) makes this file take about 4.6 s under coverage when idle, against roughly 0.5 s before. That is still well inside the 60 s timeout, even with the 4-5x wall-time inflation under load.",
+   "evidence": "npx vitest run --coverage tests/engine/hand-evaluator.perf.test.ts: test took 4605 ms (idle).",
+   "fix": "Optional: lower RUNS to about 5 if npm test time matters. The best-of-N result was already stable under 42-process load."}
+ ],
+ "summary": "Round 1 had no blocking findings, and this round only reviews the judge fix. The fix replaces the single throughput and table-build timings with the minimum CPU time over 10 runs (RUNS). Limits, env names and defaults, ENFORCED gating and the log line are unchanged. The checksum is asserted against the warm-up checksum inside the loop on every run, so a wrong result in any repetition fails the test. Taking the minimum cannot hide a real slowdown: CPU time cannot fall below the work actually done, so doubling evaluate's work doubles every run, including the fastest. Measured idle with CI unset using the real-target command (3 runs): 15.7-15.9M evals/s and 23-24 ms build. A 2x evaluate slowdown would give about 7.9M, below 10M, so it fails. That figure is calculated, not measured: I did not apply the src mutation, because this review is read-only. Under 42 busy node processes (3x the 14 cores), the same command passed 3 of 3 runs: 12.4-14.4M evals/s and 31-32.5 ms build against the 50 ms limit. That fixes the SPEC-04 / J-1-01 failure. All load processes were killed afterwards (0 remaining). The gate fix-2 FAIL comes from tests/support/sandbox-timeout.acceptance.test.ts (EPERM sending SIGKILL in the sandbox) and has nothing to do with this change. .claude/settings.json is out of scope as instructed. There are only two NITs."}
