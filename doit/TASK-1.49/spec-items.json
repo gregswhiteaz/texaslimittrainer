@@ -1,0 +1,20 @@
+[
+  {
+    "id": "SPEC-01",
+    "verifies": "AC#1",
+    "verification": "unit `tests/support/process-group.test.ts::runProcessGroup > ignores an EPERM group kill without printing and still kills the grandchild`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-02",
+    "verifies": "AC#1",
+    "verification": "acceptance `tests/support/sandbox-timeout.acceptance.test.ts::runInSandbox timeout > a timed-out runInSandbox kills a grandchild that ignores SIGTERM`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-03",
+    "verifies": "AC#2",
+    "verification": "command `N=$(( $(sysctl -n hw.ncpu) * 3 )); pids=(); for i in $(seq $N); do node -e 'for(;;){}' & pids+=($!); done; ok=0; for r in $(seq 10); do npx vitest run tests/support/sandbox-timeout.acceptance.test.ts && ok=$((ok+1)); done; kill \"${pids[@]}\"; echo \"passed $ok/10\"` (run from the project root in bash/zsh; expect the last line `passed 10/10`)",
+    "status": "pending"
+  }
+]

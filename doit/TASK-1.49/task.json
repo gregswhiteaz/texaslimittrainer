@@ -1,0 +1,156 @@
+{
+  "id": "TASK-1.49",
+  "title": "Stop the sandbox-timeout test failing with EPERM",
+  "status": "To Do",
+  "archived": false,
+  "type": "chore",
+  "priority": "medium",
+  "project": null,
+  "assignees": [],
+  "reporter": null,
+  "labels": [
+    "dream-limit-holdem-trainer",
+    "follow-up"
+  ],
+  "milestone": "m-0",
+  "parentTaskId": "TASK-1",
+  "acceptanceCriteriaCompleted": 0,
+  "acceptanceCriteriaCount": 2,
+  "references": [
+    "doc-46"
+  ],
+  "modifiedFiles": [],
+  "ordinal": 209000,
+  "createdAt": "2026-11-21T00:53:00Z",
+  "updatedAt": null,
+  "dueDate": null,
+  "isReady": true,
+  "path": "backlog/tasks/task-1.49 - Stop-the-sandbox-timeout-test-failing-with-EPERM.md",
+  "description": "Seen twice on 2026-11-20 (TASK-1.46 fix gate, TASK-1.40 judge scratch runs): tests/support/sandbox-timeout.acceptance.test.ts failed with 'could not send SIGKILL to process group N (EPERM)' while other heavy processes ran; it passed alone and on rerun. Clears the infra value bar because it has failed real gate runs.",
+  "dependencies": [
+    "TASK-1.39"
+  ],
+  "dependencyGraph": {
+    "root": "TASK-1.49",
+    "nodes": [
+      {
+        "id": "TASK-1.49",
+        "title": "Stop the sandbox-timeout test failing with EPERM",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": 0,
+        "dependentDepth": 0
+      },
+      {
+        "id": "TASK-1.1",
+        "title": "Bootstrap the strict TypeScript project with one-command checks",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 5,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.7",
+        "title": "Run every check in GitHub Actions on each push and pull request",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 4,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.19",
+        "title": "Retry the stalled Playwright system-dependency install in CI",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 3,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.20",
+        "title": "Keep strict wall-clock speed checks out of the CI test run",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 3,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.23",
+        "title": "Harden CI child-process cleanup",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 2,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.39",
+        "title": "Recover dpkg and harden the remaining test timeouts",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 1,
+        "dependentDepth": null
+      }
+    ],
+    "edges": [
+      {
+        "from": "TASK-1.7",
+        "to": "TASK-1.1"
+      },
+      {
+        "from": "TASK-1.19",
+        "to": "TASK-1.7"
+      },
+      {
+        "from": "TASK-1.20",
+        "to": "TASK-1.7"
+      },
+      {
+        "from": "TASK-1.23",
+        "to": "TASK-1.19"
+      },
+      {
+        "from": "TASK-1.23",
+        "to": "TASK-1.20"
+      },
+      {
+        "from": "TASK-1.39",
+        "to": "TASK-1.23"
+      },
+      {
+        "from": "TASK-1.49",
+        "to": "TASK-1.39"
+      }
+    ]
+  },
+  "readiness": {
+    "isReady": true,
+    "isBlocked": false,
+    "blockingDependencies": [],
+    "missingDependencies": []
+  },
+  "documentation": [],
+  "subtasks": [],
+  "acceptanceCriteria": [
+    {
+      "index": 1,
+      "text": "Given the sandbox-timeout acceptance test runs while the machine is under heavy load, When the timed-out command's process group is killed, Then an EPERM from an already-exiting group does not fail the test (and the grandchild is still proven dead)",
+      "checked": false
+    },
+    {
+      "index": 2,
+      "text": "Given 10 consecutive runs of that test file under 3x-core load, When they finish, Then all pass",
+      "checked": false
+    }
+  ],
+  "definitionOfDone": [],
+  "implementationPlan": null,
+  "implementationNotes": null,
+  "comments": [],
+  "finalSummary": null
+}
