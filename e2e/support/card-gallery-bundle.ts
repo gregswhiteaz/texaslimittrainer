@@ -30,12 +30,15 @@ export async function buildCardGallery(): Promise<string> {
 export async function openCardGallery(page: Page, bundle: string): Promise<void> {
   await page.setContent(GALLERY_HTML);
   await page.addScriptTag({ content: bundle });
-  await page.waitForFunction(async () => {
-    const href = document.querySelector('[data-testid="card-back"] image')?.getAttribute('href');
-    if (!href) return false;
+  const logo = page.locator('[data-testid="card-back"] image[data-part="logo"]');
+  await logo.waitFor({ state: 'attached' });
+  const size = await logo.evaluate(async (node) => {
     const probe = new Image();
-    probe.src = href;
+    probe.src = node.getAttribute('href') ?? '';
     await probe.decode();
-    return probe.naturalWidth === 512;
+    return { width: probe.naturalWidth, height: probe.naturalHeight };
   });
+  if (size.width !== 512 || size.height !== 512) {
+    throw new Error(`card-back logo decoded at ${size.width}x${size.height}, expected 512x512`);
+  }
 }

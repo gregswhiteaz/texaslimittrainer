@@ -220,13 +220,13 @@ test('logo check fails when the logo is hidden or does not load', async ({ page 
   ];
   for (const [name, value, problems] of mutants) {
     await openCardGallery(page, bundle);
-    await page.evaluate(
-      ([attribute, text]) =>
-        document
-          .querySelector('[data-testid="card-back"] image[data-part="logo"]')
-          ?.setAttribute(attribute, text),
-      [name, value] as const,
-    );
+    const logo = page.locator('[data-testid="card-back"] image[data-part="logo"]');
+    await expect(logo).toHaveCount(1);
+    await logo.evaluate((node, [attribute, text]) => node.setAttribute(attribute, text), [
+      name,
+      value,
+    ] as const);
+    await expect(logo).toHaveAttribute(name, value);
     expect(await logoProblems(page), `${name}=${value}`).toEqual(problems);
   }
 });

@@ -1,0 +1,59 @@
+{
+  "task": "TASK-3.25",
+  "phase": "build",
+  "run": 1,
+  "result": "PASS",
+  "changed_lines": 56,
+  "changed_files": [
+    "e2e/card-gallery-open.spec.ts",
+    "e2e/cards.spec.ts",
+    "e2e/support/card-gallery-bundle.ts"
+  ],
+  "checks": [
+    {
+      "name": "test command",
+      "status": "pass",
+      "detail": "$ npm test && npm run e2e\nexit 0\n[webkit] \u203a e2e/next-hand.spec.ts:250:1 \u203a the next hand is dealt 1.5 s after the result with stacks carried and the button moved (596ms)\n  \u2713   76 [webkit] \u203a e2e/home.spec.ts:181:1 \u203a new game opens game config without starting a session (1.3s)\n  \u2713   89 [webkit] \u203a e2e/smoke.spec.ts:7:1 \u203a start page loads in the built app (246ms)\n  \u2713   79 [webkit] \u203a e2e/home.spec.ts:251:1 \u203a home and game config are axe clean, fit 1280x720 and make only same-origin requests (1.4s)\n  \u2713   85 [webkit] \u203a e2e/review.spec.ts:293:1 \u203a a preflop fold or a big-blind walk opens no review and the next hand deals after 1.5 s (831ms)\n  \u2713   88 [webkit] \u203a e2e/showdown-shown.spec.ts:10:1 \u203a shown losing hands appear after the winner, mucked cards never, axe clean (725ms)\n  \u2713   80 [webkit] \u203a e2e/next-hand.spec.ts:212:1 \u203a the result shows the winner, amount and hand name, and nothing of an uncontested winner (1.8s)\n  \u2713   87 [webkit] \u203a e2e/review.spec.ts:375:1 \u203a Close keeps the result and Deal next hand and nothing is dealt until it is clicked (1.0s)\n  \u2713   90 [webkit] \u203a e2e/smoke.spec.ts:18:1 \u203a start page has no serious or critical axe violations (551ms)\n  \u2713   92 [webkit] \u203a e2e/table-display.spec.ts:156:1 \u203a my seat is drawn at the bottom centre whatever its seat number (396ms)\n  \u2713   93 [webkit] \u203a e2e/table-display.spec.ts:183:1 \u203a the seat to act is highlighted in red and labelled (285ms)\n  \u2713   91 [webkit] \u203a e2e/smoke.spec.ts:33:1 \u203a start page makes only same-origin requests (745ms)\n  \u2713   86 [webkit] \u203a e2e/review.spec.ts:322:1 \u203a after a played hand the review opens beside the table, holds the next hand and Deal next hand deals hand 2 (1.5s)\n  \u2713   97 [webkit] \u203a e2e/table-display.spec.ts:266:1 \u203a last actions and the player to act are visible text (406ms)\n  \u2713   95 [webkit] \u203a e2e/table-display.spec.ts:217:1 \u203a the replay code is not in the page text, attributes or accessible names during the hand (590ms)\n  \u2713   99 [webkit] \u203a e2e/table.spec.ts:159:1 \u203a default table seats the user and five bots with $160 each (393ms)\n  \u2713   96 [webkit] \u203a e2e/table-display.spec.ts:238:1 \u203a a bot's card back marker is small, shows the logo and passes axe (659ms)\n  \u2713  100 [webkit] \u203a e2e/table.spec.ts:173:1 \u203a stake $10/$20 starts every stack at $400 with no buy-in control (365ms)\n  \u2713  102 [webkit] \u203a e2e/table.spec.ts:239:1 \u203a after a preflop fold the bots finish the hand without me (410ms)\n  \u2713  103 [webkit] \u203a e2e/table.spec.ts:260:1 \u203a ten idle minutes on my turn change nothing (397ms)\n  \u2713  101 [webkit] \u203a e2e/table.spec.ts:189:1 \u203a check or call at every decision plays to showdown with my cards face up (630ms)\n  \u2713   94 [webkit] \u203a e2e/table-display.spec.ts:199:1 \u203a the header shows the session and Leave table returns to Home (1.4s)\n  \u2713   98 [webkit] \u203a e2e/table-display.spec.ts:284:1 \u203a the table fits 1280 wide, is axe clean and makes only same-origin requests (1.6s)\n  \u2713  104 [webkit] \u203a e2e/table.spec.ts:278:1 \u203a my buttons are enabled within 100 ms of the bot action, axe clean, no outside requests (1.3s)\n\n  104 passed (12.5s)\n"
+    },
+    {
+      "name": "lint command",
+      "status": "pass",
+      "detail": "$ npm run lint\nexit 0\n\n> tlh-trainer@0.0.0 lint\n> eslint . --max-warnings 0 && prettier --check .\n\nChecking formatting...\nAll matched files use Prettier code style!\n"
+    },
+    {
+      "name": "typecheck command",
+      "status": "pass",
+      "detail": "$ npm run typecheck\nexit 0\n\n> tlh-trainer@0.0.0 typecheck\n> tsc -p tsconfig.json\n\n"
+    },
+    {
+      "name": "spec unchanged",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "name": "scope budget (lines)",
+      "status": "pass",
+      "detail": "56 changed lines vs budget 70 (fail above 140)"
+    },
+    {
+      "name": "scope budget (files)",
+      "status": "pass",
+      "detail": "3 files vs budget 3"
+    },
+    {
+      "name": "files outside spec",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "name": "all changes listed in changes.md",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "name": "tests locked",
+      "status": "pass",
+      "detail": "2 acceptance test file(s) locked; 157 test files snapshotted"
+    }
+  ]
+}
