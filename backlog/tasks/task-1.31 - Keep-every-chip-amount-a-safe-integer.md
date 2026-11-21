@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-19T04:25:00Z'
-updated_date: '2026-11-19T23:33:00Z'
+updated_date: '2026-11-21T06:22:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -57,6 +57,8 @@ Build: total-stacks limit in validate (Q-1 message), cap-free comments, chip-saf
 Judge R1 PASS 7/7. Code MINOR / J-1-01 resolved: recorded the Q-2 cross-story edit with doit.py unlock TASK-1.21 (reason logged), so test-integrity TASK-1.21 is clean.
 
 Follow-ups (Step 6a): non-array seats -> already TASK-1.32 AC#2 (note added); 4-bet cap -> TASK-1.12. No new tasks.
+
+TASK-1.12 Q-1/D-3: chip-safety AC#1 case now uses stake boundStakes(56_294_995_342_130) because the 4-bet cap limits a hand to ~62% at the old stake; all assertions unchanged (unlock logged).
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary
