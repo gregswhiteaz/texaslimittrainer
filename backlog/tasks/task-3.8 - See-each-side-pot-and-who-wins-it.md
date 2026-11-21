@@ -1,10 +1,11 @@
 ---
 id: TASK-3.8
 title: See each side pot and who wins it
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-19T01:10:00Z'
+updated_date: '2026-11-21T19:08:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -62,8 +63,21 @@ Plan key: E03-S07 · Dream: limit-holdem-trainer
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
 
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. Table view: while side pots exist, a 'Pots' list (Main pot / Side pot N) replaces 'Pot $N'; street bets added to the last pot; single pot unchanged (Q-1).
+2. Hand result: 'Pot winners' list before Winners, one line per award incl. splits (Q-2).
+3. Scripted states SIDE_POT_RIVER / SIDE_POT_SHOWDOWN + scene harness scenes; render, model and e2e tests (no overflow at 1280 px).
+4. No engine change; locked tests unchanged.
+
+Full spec: doit/TASK-3.8/spec.md
+<!-- SECTION:PLAN:END -->
+
 ## Implementation Notes
 
 <!-- SECTION:NOTES:BEGIN -->
 AC added from TASK-3.4 follow-up (doc-25).
+
+Autopilot Q-1/Q-2 auto-accepted (qa.md).
 <!-- SECTION:NOTES:END -->
