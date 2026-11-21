@@ -2,18 +2,24 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { newReplayCode, type ReplayCode } from '../../engine/deck';
 import type { Action } from '../../engine/hand';
 import {
+  applyBotDecision,
   applyUserAction,
+  botTurn,
   completedHand,
   dealHand,
   nextHand,
   nextHandDelay,
   nextStep,
   seatSession,
-  stepBot,
   type CompletedHand,
   type SessionConfig,
   type TableState,
 } from '../../table/session';
+import {
+  sharedAdviceClient,
+  createAdviceWorker as createProductionWorker,
+  type WorkerLike,
+} from '../advice/advice-client';
 
 export interface TableSessionOptions {
   readonly config?: Partial<SessionConfig>;
@@ -21,10 +27,13 @@ export interface TableSessionOptions {
   readonly onHandComplete?: (hand: CompletedHand) => void;
   /** While true no next hand is dealt; turning it off starts a fresh delay (E09 seam, A-3). */
   readonly holdNextHand?: boolean;
+  /** Creates the app-wide advice worker if none exists yet (test seam; default: the production worker). */
+  readonly createAdviceWorker?: () => WorkerLike;
 }
 
 /**
  * Holds the session and runs deal and bot steps one macrotask each; nothing runs on the user's turn.
+ * Bot decisions are computed by the app-wide advice worker; replies after unmount or for an old turn are dropped.
  * After a hand the next one is dealt NEXT_HAND_DELAY_MS later unless held.
  */
 export function useTableSession({
@@ -32,6 +41,7 @@ export function useTableSession({
   newCode = newReplayCode,
   onHandComplete,
   holdNextHand = false,
+  createAdviceWorker = createProductionWorker,
 }: TableSessionOptions): {
   table: TableState;
   act: (action: Action) => void;
@@ -39,7 +49,6 @@ export function useTableSession({
 } {
   const [table, setTable] = useState(() => seatSession(config));
   const reported = useRef<number | null>(null);
-
   useEffect(() => {
     const step = nextStep(table);
     if (step === 'deal') {
@@ -51,8 +60,28 @@ export function useTableSession({
       return () => clearTimeout(timer);
     }
     if (step === 'bot') {
-      const timer = setTimeout(() => setTable((t) => stepBot(t)), 0);
-      return () => clearTimeout(timer);
+      let cancelled = false;
+      const timer = setTimeout(() => {
+        const turn = botTurn(table);
+        sharedAdviceClient(createAdviceWorker)
+          .decideBot(turn.view, turn.style)
+          .then(
+            (action) => {
+              if (!cancelled) setTable((t) => applyBotDecision(t, turn, action));
+            },
+            (error: unknown) => {
+              if (!cancelled) {
+                setTable(() => {
+                  throw error;
+                });
+              }
+            },
+          );
+      }, 0);
+      return () => {
+        cancelled = true;
+        clearTimeout(timer);
+      };
     }
     if (step === 'done' && table.handNumber !== reported.current) {
       reported.current = table.handNumber;
@@ -68,7 +97,7 @@ export function useTableSession({
       return () => clearTimeout(timer);
     }
     return undefined;
-  }, [table, newCode, onHandComplete, holdNextHand]);
+  }, [table, newCode, onHandComplete, holdNextHand, createAdviceWorker]);
 
   const act = useCallback((action: Action) => {
     setTable((t) => (nextStep(t) === 'user' ? applyUserAction(t, action) : t));

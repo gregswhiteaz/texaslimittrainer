@@ -191,6 +191,16 @@ machine (Apple-silicon Mac, Node 22.18.0) with `CI` unset:
   time npm run playtest -- --hands 100000 --size 6
   ```
 
+- Responsive table: while bots decide in the advice worker, no main-thread task over 100 ms,
+  p95 frame time at most 100 ms over 200 samples, and a repaint within 100 ms of a hover or
+  resize. These Playwright timing checks are opt-in: run `npm run e2e:slow` (it sets
+  `TLH_SLOW_TESTS=1`). Plain `npm run e2e` skips them but still checks that every bot decision
+  is served by the worker and matches the headless playtest.
+
+  ```sh
+  npm run e2e:slow
+  ```
+
 A local `npm test` keeps only slack checks (at least 1,000,000 evals/s, build at most 500 ms,
 equity targets times 20, 2 s per call for the bounded-work equity test). CI (`CI=true`) prints
 the measurements but enforces no speed limit; the bounded-work equity test uses a 10 s ceiling

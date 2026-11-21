@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-21T17:32:00Z'
+updated_date: '2026-11-21T17:45:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -80,4 +80,6 @@ Full spec: doit/TASK-3.6/spec.md
 
 <!-- SECTION:NOTES:BEGIN -->
 Autopilot: no asks. D-8 per user's standing rule: timing checks opt-in (npm run e2e:slow); every-push structural guard SPEC-15.
+
+Build blocked (paused-clock locked e2e tests vs per-table worker start-up ~30 ms). Resolved by orchestrator: Option A — one app-wide shared advice worker (recorded deviation from D-2/SPEC-09 wording); no locked test edits.
 <!-- SECTION:NOTES:END -->

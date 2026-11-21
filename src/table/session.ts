@@ -14,7 +14,6 @@ import {
   type Stakes,
 } from '../engine/hand';
 import {
-  actWith,
   playerView,
   showdownOf,
   type EarlierShowdown,
@@ -190,12 +189,36 @@ export function nextHand(table: TableState): TableState {
   };
 }
 
-/** One bot action through `policy` on the bot's own view. */
-export function stepBot(table: TableState, policy: SeatPolicy = tagPolicy): TableState {
-  if (nextStep(table) !== 'bot' || table.hand === null) throw new RangeError('Not a bot turn');
-  const applied = actWith(table.hand, policy);
+/** A pending bot decision. Only `view` and `style` go to the advice worker; `hand` is the staleness token. */
+export interface BotTurn {
+  readonly hand: HandState;
+  readonly view: PlayerView;
+  readonly style: BotStyle;
+}
+
+/** The bot to act: its view (playerView(hand, hand.toAct)) and its seat's style ('TAG' if null). */
+export function botTurn(table: TableState): BotTurn {
+  const { hand } = table;
+  if (nextStep(table) !== 'bot' || hand === null || hand.toAct === null) {
+    throw new RangeError('Not a bot turn');
+  }
+  const seat = hand.toAct;
+  const style = table.seats.find((s) => s.seat === seat)?.style ?? 'TAG';
+  return { hand, view: playerView(hand, seat), style };
+}
+
+/** Applies `action` iff table.hand === turn.hand; else returns `table` unchanged. Throws RangeError if illegal. */
+export function applyBotDecision(table: TableState, turn: BotTurn, action: Action): TableState {
+  if (table.hand !== turn.hand) return table;
+  const applied = applyAction(turn.hand, action);
   if (!applied.ok) throw new RangeError(applied.error.message);
   return { ...table, hand: applied.state };
+}
+
+/** One bot action through `policy` on the bot's own view. */
+export function stepBot(table: TableState, policy: SeatPolicy = tagPolicy): TableState {
+  const turn = botTurn(table);
+  return applyBotDecision(table, turn, policy(turn.view));
 }
 
 export function applyUserAction(table: TableState, action: Action): TableState {

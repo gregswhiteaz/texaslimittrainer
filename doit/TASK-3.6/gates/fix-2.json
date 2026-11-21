@@ -1,0 +1,73 @@
+{
+  "task": "TASK-3.6",
+  "phase": "fix",
+  "run": 2,
+  "result": "PASS",
+  "changed_lines": 1145,
+  "changed_files": [
+    "README.md",
+    "e2e/responsive-table.spec.ts",
+    "e2e/support/advice-harness.tsx",
+    "e2e/support/slow-advice.worker.ts",
+    "e2e/support/table-harness-bundle.ts",
+    "e2e/support/table-harness.tsx",
+    "package.json",
+    "src/main.tsx",
+    "src/table/advice-service.ts",
+    "src/table/session.ts",
+    "src/ui/advice/advice-client.ts",
+    "src/ui/advice/advice.worker.ts",
+    "src/ui/advice/worker-host.ts",
+    "src/ui/table/useTableSession.ts",
+    "tests/table/advice-service.test.ts",
+    "tests/table/bot-turn.test.ts",
+    "tests/ui/advice-worker.acceptance.test.ts"
+  ],
+  "checks": [
+    {
+      "name": "test command",
+      "status": "pass",
+      "detail": "$ npm test\nexit 0\nt-edges.acceptance.test.ts > Hand result edge cases > a winner who is not seated throws a RangeError 1ms\n \u2713 tests/table/session-stacks.acceptance.test.ts > stacks follow the configured seat numbers, not DEFAULT_SEATS 1ms\n\n Test Files  138 passed | 1 skipped (139)\n      Tests  485 passed | 7 skipped (492)\n   Start at  10:49:55\n   Duration  27.50s (tests 94%, import 5%)\n\n\u001b[34m % \u001b[39m\u001b[2mCoverage report from \u001b[22m\u001b[33mv8\u001b[39m\n-------------------|---------|----------|---------|---------|-------------------\nFile               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s \n-------------------|---------|----------|---------|---------|-------------------\nAll files          |   96.75 |    94.67 |    93.6 |   96.95 |                   \n advice            |    99.8 |    98.26 |     100 |     100 |                   \n  equity.ts        |   99.55 |    93.97 |     100 |     100 | 114,120,199,292   \n engine            |   99.88 |    95.22 |     100 |   99.85 |                   \n  ...-evaluator.ts |     100 |    80.18 |     100 |     100 | ...87-200,214-215 \n  hand.ts          |     100 |    99.51 |     100 |     100 | 341               \n  invariants.ts    |   99.68 |    97.31 |     100 |   99.62 | 387               \n playtest          |     100 |    98.89 |     100 |     100 |                   \n  cli.ts           |     100 |    99.05 |     100 |     100 | 199               \n  shards.ts        |     100 |    97.53 |     100 |     100 | 197,283           \n table             |     100 |    99.41 |     100 |     100 |                   \n  session.ts       |     100 |    98.03 |     100 |     100 | 206               \n ui                |   35.29 |    14.28 |   28.57 |    37.5 |                   \n  App.tsx          |   33.33 |    33.33 |      20 |   33.33 | 20-35             \n  ...adingFocus.ts |    37.5 |        0 |      50 |   42.85 | 10-13             \n ui/advice         |   96.07 |      100 |   92.85 |   95.65 |                   \n  advice-client.ts |   97.91 |      100 |   91.66 |   97.72 | 105               \n  advice.worker.ts |       0 |      100 |     100 |       0 | 3                 \n ui/config         |   79.16 |       50 |      70 |      85 |                   \n  ...figScreen.tsx |   79.16 |       50 |      70 |      85 | 54-55,120         \n ui/table          |   43.01 |    61.72 |   42.85 |   48.75 |                   \n  ActionBar.tsx    |      50 |        0 |   66.66 |   66.66 | 19                \n  Table.tsx        |   71.42 |       90 |    62.5 |   75.75 | ...29-230,233-234 \n  ...bleSession.ts |   14.58 |       12 |   10.52 |   15.78 | 53-99,103,108-109 \n-------------------|---------|----------|---------|---------|-------------------\n\n=============================== Coverage summary ===============================\nStatements   : 96.75% ( 2180/2253 )\nBranches     : 94.67% ( 1405/1484 )\nFunctions    : 93.6% ( 483/516 )\nLines        : 96.95% ( 1816/1873 )\n================================================================================\n"
+    },
+    {
+      "name": "lint command",
+      "status": "pass",
+      "detail": "$ npm run lint\nexit 0\n\n> tlh-trainer@0.0.0 lint\n> eslint . --max-warnings 0 && prettier --check .\n\nChecking formatting...\nAll matched files use Prettier code style!\n"
+    },
+    {
+      "name": "typecheck command",
+      "status": "pass",
+      "detail": "$ npm run typecheck\nexit 0\n\n> tlh-trainer@0.0.0 typecheck\n> tsc -p tsconfig.json\n\n"
+    },
+    {
+      "name": "spec unchanged",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "name": "scope budget (lines)",
+      "status": "pass",
+      "detail": "1145 changed lines vs budget 1150 (fail above 2300)"
+    },
+    {
+      "name": "scope budget (files)",
+      "status": "warn",
+      "detail": "17 files vs budget 16"
+    },
+    {
+      "name": "files outside spec",
+      "status": "warn",
+      "detail": "src/main.tsx"
+    },
+    {
+      "name": "all changes listed in changes.md",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "name": "test integrity",
+      "status": "pass",
+      "detail": ""
+    }
+  ]
+}

@@ -13,6 +13,7 @@
     "test": "vitest run --coverage",
     "test:slow": "TLH_SLOW_TESTS=1 vitest run tests/playtest/throughput.acceptance.test.ts",
     "e2e": "playwright test",
+    "e2e:slow": "TLH_SLOW_TESTS=1 playwright test e2e/responsive-table.spec.ts",
     "lint": "eslint . --max-warnings 0 && prettier --check .",
     "typecheck": "tsc -p tsconfig.json",
     "format": "prettier --write .",
