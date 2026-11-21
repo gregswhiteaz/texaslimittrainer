@@ -1,7 +1,13 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { parseCard, type Card } from '../../src/engine/cards';
-import { applyAction, createHand, type Action, type HandState } from '../../src/engine/hand';
+import {
+  applyAction,
+  createHand,
+  type Action,
+  type HandState,
+  type SeatConfig,
+} from '../../src/engine/hand';
 import { describeAction } from '../../src/engine/invariants';
 import { formatHand, formatReport, main, parseArgs, USAGE } from '../../src/playtest/cli';
 import {
@@ -23,6 +29,8 @@ function capture(argv: string[], seams?: PlaytestSeams) {
 }
 
 const VALID_CODE = '000000000000002a0000000000000004';
+const STACKS_ERROR =
+  'Error: --stacks must be one whole number per seat (0 for an empty seat), at least two above 0, totalling at most 9007199254740991.';
 
 const ERROR_CASES: [string[], string][] = [
   [['--hands', '0'], 'Error: --hands must be a whole number from 1 to 1000000000.'],
@@ -55,6 +63,19 @@ const ERROR_CASES: [string[], string][] = [
   [['--help', '--hands', '5'], 'Error: --help cannot be combined with other options.'],
   [['--hands'], 'Error: --hands needs a value.'],
   [['--seed', '--size', '4'], 'Error: --seed needs a value.'],
+  [['--game', 'poker'], 'Error: --game must be cash or sng.'],
+  [['--replay-code', VALID_CODE, '--game', 'SNG'], 'Error: --game must be cash or sng.'],
+  [['--stacks', '1,2'], 'Error: --stacks is only valid with --replay-code.'],
+  ...['160,160', '0,0,160', '160,x,160', '9007199254740991,1,0', '160,,160', ' 160,160,160'].map(
+    (stacks): [string[], string] => [
+      ['--replay-code', VALID_CODE, '--size', '3', '--stacks', stacks],
+      STACKS_ERROR,
+    ],
+  ),
+  [
+    ['--replay-code', VALID_CODE, '--size', '3', '--button', '2', '--stacks', '160,0,160'],
+    'Error: --button must be a seat with chips.',
+  ],
 ];
 
 describe('playtest CLI', () => {
@@ -67,16 +88,21 @@ describe('playtest CLI', () => {
 
     expect(capture(['--help'])).toEqual({ code: 0, out: USAGE, err: '' });
     expect(USAGE).toBe(
-      'Usage: npm run playtest -- [--hands <1-1000000000>] [--seed <0-9007199254740991>] [--size <2-10>]\n' +
-        '       npm run playtest -- --replay-code <32 lowercase hex characters> [--size <2-10>] [--button <seat>]\n' +
-        'Defaults: --hands 10000 --seed 42 --size 6 --button 1\n',
+      'Usage: npm run playtest -- [--hands <1-1000000000>] [--seed <0-9007199254740991>] [--size <2-10>] [--game <cash|sng>]\n' +
+        '       npm run playtest -- --replay-code <32 lowercase hex characters> [--size <2-10>] [--button <seat>] [--game <cash|sng>] [--stacks <one stack per seat, comma-separated, 0 = empty seat>]\n' +
+        'Defaults: --hands 10000 --seed 42 --size 6 --button 1 --game cash; --stacks gives every seat $160 (cash) or 1500 (sng)\n',
     );
-    expect(parseArgs([])).toEqual({ kind: 'run', options: { hands: 10000, seed: 42, size: 6 } });
+    expect(parseArgs([])).toEqual({
+      kind: 'run',
+      options: { hands: 10000, seed: 42, size: 6, game: 'cash' },
+    });
     expect(parseArgs(['--replay-code', VALID_CODE])).toEqual({
       kind: 'replay',
       replayCode: VALID_CODE,
       size: 6,
       button: 1,
+      game: 'cash',
+      stacks: [160, 160, 160, 160, 160, 160],
     });
     expect(capture([])).toEqual(capture(['--hands', '10000', '--seed', '42', '--size', '6']));
     expect(capture(['--hands', '007', '--seed', '0042']).out).toContain(
@@ -93,13 +119,15 @@ describe('playtest CLI', () => {
   it('parseArgs accepts --size 2 and rejects sizes outside 2 to 10', () => {
     expect(parseArgs(['--size', '2'])).toEqual({
       kind: 'run',
-      options: { hands: 10000, seed: 42, size: 2 },
+      options: { hands: 10000, seed: 42, size: 2, game: 'cash' },
     });
     expect(parseArgs(['--replay-code', VALID_CODE, '--size', '2', '--button', '2'])).toEqual({
       kind: 'replay',
       replayCode: VALID_CODE,
       size: 2,
       button: 2,
+      game: 'cash',
+      stacks: [160, 160],
     });
     expect(parseArgs(['--replay-code', VALID_CODE, '--size', '2', '--button', '3'])).toEqual({
       kind: 'error',
@@ -299,13 +327,115 @@ describe('playtest CLI', () => {
         .replace('Invariant violations: 2\n', 'Invariant violations: 0\n'),
     );
 
-    const source = readFileSync(new URL('../../src/playtest/cli.ts', import.meta.url), 'utf8');
-    const block = source.slice(
-      source.indexOf('function violationBlock('),
-      source.indexOf('\n}\n', source.indexOf('function violationBlock(')),
+    const atDeal: PlayedHand = {
+      ...scripted([]),
+      violations: 1,
+      dealViolations: [
+        { invariant: 'chips', message: 'seat 1 starts with $161 but should start with $160' },
+      ],
+    };
+    const dealReport = formatReport(
+      '',
+      { ...summary, violations: 1, firstViolation: atDeal },
+      'replay',
     );
-    expect(block).toContain('hand: ViolatingHand');
-    expect(block).not.toContain('=== null');
+    expect(dealReport).toContain(
+      'First violation: hand 7, at the deal\n' +
+        'Violation: chips: seat 1 starts with $161 but should start with $160\n',
+    );
+    expect(dealReport).not.toContain('player action');
+  });
+
+  it('game and stacks options', () => {
+    expect(parseArgs(['--game', 'sng', '--hands', '5'])).toEqual({
+      kind: 'run',
+      options: { hands: 5, seed: 42, size: 6, game: 'sng' },
+    });
+    expect(parseArgs(['--replay-code', VALID_CODE, '--size', '3', '--game', 'sng'])).toMatchObject({
+      game: 'sng',
+      stacks: [1500, 1500, 1500],
+    });
+
+    const replay = capture([
+      '--replay-code',
+      VALID_CODE,
+      '--size',
+      '3',
+      '--button',
+      '2',
+      '--game',
+      'sng',
+      '--stacks',
+      '0,2900,100',
+    ]);
+    expect(replay.code).toBe(0);
+    const lines = replay.out.split('\n');
+    expect(lines).toContain(
+      `Options: --replay-code ${VALID_CODE} --size 3 --button 2 --game sng --stacks 0,2900,100`,
+    );
+    expect(lines).toContain(
+      'Table: 3 players, sit-and-go 20/40 (blinds 10/20), 1500 chips each, busted seats sit out, a new sit-and-go starts when one player has all the chips',
+    );
+    expect(lines.some((line) => line.startsWith('Seat 2 ($2900): '))).toBe(true);
+    expect(lines.some((line) => line.startsWith('Seat 3 ($100): '))).toBe(true);
+    expect(lines.some((line) => line.startsWith('Seat 1 '))).toBe(false);
+    expect(replay.out).toContain('seat 2 posts small blind $10, seat 3 posts big blind $20');
+
+    const sngDefault = capture(['--replay-code', VALID_CODE, '--size', '3', '--game', 'sng']);
+    expect(sngDefault.out).toContain(
+      `Options: --replay-code ${VALID_CODE} --size 3 --button 1 --game sng\n`,
+    );
+    expect(capture(['--hands', '2', '--game', 'sng']).out).toContain(
+      'Options: --hands 2 --seed 42 --size 6 --game sng\n',
+    );
+    const cashStacks = capture(['--replay-code', VALID_CODE, '--size', '2', '--stacks', '1,160']);
+    expect(cashStacks.out).toContain(
+      `Options: --replay-code ${VALID_CODE} --size 2 --button 1 --stacks 1,160\n`,
+    );
+    expect(cashStacks.out).toContain('seat 1 posts small blind $1, seat 2 posts big blind $4');
+
+    // W5: a $1 stack posts $1 of the $2 small blind.
+    const short = scripted(
+      [],
+      [160, 160, 160, 1, 160, 160].map((stack, i) => ({ seat: i + 1, stack })),
+    );
+    expect(formatHand(short)).toContain('seat 4 posts small blind $1, seat 5 posts big blind $4');
+
+    // Replay line suffixes (A-7).
+    const replayLine = (hand: PlayedHand) => {
+      const out = formatReport('', {
+        ...EMPTY_SUMMARY,
+        violations: 1,
+        firstViolation: {
+          ...hand,
+          violations: 1,
+          dealViolations: [{ invariant: 'chips', message: 'x' }],
+        },
+      });
+      return out.split('\n').find((line) => line.startsWith('Replay: '));
+    };
+    const base = scripted([]);
+    expect(replayLine(base)).toBe(
+      'Replay: npm run playtest -- --replay-code 000000000000002a0000000000000007 --size 6 --button 3',
+    );
+    const carried = scripted(
+      [],
+      [1, 2, 3, 4, 6].map((seat) => ({ seat, stack: seat * 100 })),
+    );
+    expect(replayLine(carried)).toBe(
+      'Replay: npm run playtest -- --replay-code 000000000000002a0000000000000007 --size 6 --button 3 --stacks 100,200,300,400,0,600',
+    );
+    const sng: PlayedHand = {
+      ...base,
+      record: {
+        ...base.record,
+        game: 'sng',
+        seats: base.record.seats.map((s) => ({ ...s, stack: 1500 })),
+      },
+    };
+    expect(replayLine(sng)).toBe(
+      'Replay: npm run playtest -- --replay-code 000000000000002a0000000000000007 --size 6 --button 3 --game sng',
+    );
   });
 
   it('prints player actions with describeAction wording', () => {
@@ -357,8 +487,24 @@ function royalDeck(): Card[] {
   ];
 }
 
-function scripted(actions: Action[]): PlayedHand {
-  const seats = [1, 2, 3, 4, 5, 6].map((seat) => ({ seat, stack: 160 }));
+const EMPTY_SUMMARY: PlaytestSummary = {
+  handsPlayed: 1,
+  foldOuts: 0,
+  showdowns: 0,
+  playerActions: 0,
+  cappedStreets: 0,
+  largestPot: 0,
+  firstReplayCode: '000000000000002a0000000000000007',
+  lastReplayCode: '000000000000002a0000000000000007',
+  violations: 0,
+  violationCounts: { chips: 0, 'legal-action': 0, 'bet-cap': 0, 'pot-eligibility': 0, cards: 0 },
+  firstViolation: null,
+};
+
+function scripted(
+  actions: Action[],
+  seats: SeatConfig[] = [1, 2, 3, 4, 5, 6].map((seat) => ({ seat, stack: 160 })),
+): PlayedHand {
   let state: HandState = createHand({
     stakes: PLAYTEST_STAKES,
     seats,
@@ -378,9 +524,12 @@ function scripted(actions: Action[]): PlayedHand {
       seats,
       button: 3,
       actions,
+      game: 'cash',
+      size: 6,
     },
     final: state,
     violations: 0,
     violation: null,
+    dealViolations: [],
   };
 }

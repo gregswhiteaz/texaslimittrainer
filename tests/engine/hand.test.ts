@@ -162,8 +162,8 @@ describe('hand', () => {
       [{ deck: DECK.slice(1) }, 'Deck must hold each of the 52 cards exactly once'],
       [{ deck: [0, ...DECK.slice(1, 51), 0] }, 'Deck must hold each of the 52 cards exactly once'],
       [
-        { seats: [...seats([1, 2]), { seat: 3, stack: 4 }] },
-        'Stack at seat 3 must be an integer of at least 5',
+        { seats: [...seats([1, 2]), { seat: 3, stack: 0 }] },
+        'Stack at seat 3 must be an integer of at least 1',
       ],
       [
         {
@@ -247,8 +247,8 @@ describe('hand', () => {
       state.players.find((p) => p.seat === seat)?.allIn;
 
     expect(three([160, 160, 5]).players[2]?.stack).toBe(1);
-    expect(() => three([160, 160, 4])).toThrow(
-      new RangeError('Stack at seat 3 must be an integer of at least 5'),
+    expect(() => three([160, 160, 0])).toThrow(
+      new RangeError('Stack at seat 3 must be an integer of at least 1'),
     );
 
     // Seat 3 (big blind) faces a $4 flop bet with `stack - 4` behind.

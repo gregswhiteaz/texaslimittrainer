@@ -24,7 +24,7 @@ function playtest(args: string[]): Run {
 }
 
 const lines = (text: string) => text.split('\n');
-const TABLE_LINE = 'Table: 2 players, cash $4/$8, every stack reset to $160 before each hand';
+const TABLE_LINE = 'Table: 2 players, cash $4/$8, stacks carry over, a busted seat rebuys for $160';
 
 /** Returns a description of the first heads-up rule the hand breaks, or null. */
 function headsUpProblem({ number, final }: PlayedHand): string | null {

@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { shuffledDeck } from '../../src/engine/deck';
 import { applyAction, createHand, type Action } from '../../src/engine/hand';
 import { tagPolicy } from '../../src/bots/tag';
+import { checkStep } from '../../src/engine/invariants';
 import { playerView, type SeatPolicy } from '../../src/engine/player-view';
 import { randomMovePolicy, seatGenerator } from '../../src/playtest/policy';
 import {
@@ -11,7 +12,10 @@ import {
   runPlaytest,
   summarize,
   CASH_BUY_IN,
+  GAMES,
   PLAYTEST_STAKES,
+  SNG_STAKES,
+  SNG_STARTING_CHIPS,
   type PlayedHand,
   type PolicyFactory,
 } from '../../src/playtest/runner';
@@ -274,5 +278,58 @@ describe('playtest runner units', () => {
         expect(hand.violation?.actionNumber ?? 0, name).toBeLessThanOrEqual(MAX_ACTIONS_PER_HAND);
       }
     }
+  });
+
+  it('carried stacks and restarts', () => {
+    const code = handReplayCode(42, 1);
+    expect(() => playHand(code, 3, 1, 1, {}, { stacks: [160, 160] })).toThrow(
+      new RangeError('Stacks must list one stack per seat'),
+    );
+    expect(handReplayCode(42, 1, 'sng')).toBe('000000000000002a0000000100000001');
+    expect(handReplayCode(42, 1, 'cash')).toBe(handReplayCode(42, 1));
+    expect(GAMES.sng).toEqual({
+      stakes: SNG_STAKES,
+      startingStack: SNG_STARTING_CHIPS,
+      rebuy: false,
+      codeWord: 1,
+    });
+
+    // Seats with 0 are not dealt in; the record keeps the table size and game.
+    const sng = playHand(code, 4, 2, 1, {}, { game: 'sng', stacks: [0, 900, 0, 2100] });
+    expect(sng.record.seats).toEqual([
+      { seat: 2, stack: 900 },
+      { seat: 4, stack: 2100 },
+    ]);
+    expect(sng.record).toMatchObject({ game: 'sng', size: 4, stakes: SNG_STAKES, button: 2 });
+    expect(sng.dealViolations).toEqual([]);
+
+    // A violating hand restarts the table: button 1, every seat at the starting stack.
+    const flagged: PlayedHand[] = [];
+    runPlaytest({ hands: 3, seed: 3, size: 4 }, (h) => flagged.push(h), {
+      onAction: (step) =>
+        step.before.actions.length === 2 && step.before.button === 1
+          ? [{ invariant: 'custom', message: 'flagged' }]
+          : checkStep(step),
+    });
+    for (const hand of flagged) {
+      expect(hand.record.button).toBe(1);
+      expect(hand.record.seats).toEqual([1, 2, 3, 4].map((seat) => ({ seat, stack: CASH_BUY_IN })));
+    }
+    const clean: PlayedHand[] = [];
+    runPlaytest({ hands: 2, seed: 3, size: 4 }, (h) => clean.push(h));
+    expect(clean[1]?.record.button).toBe(2);
+    expect(clean[1]?.record.seats).toEqual(
+      clean[0]?.final.players.map(({ seat, stack }) => ({ seat, stack })),
+    );
+
+    // The default policy follows the seats dealt in: random below 6, TAG at 6.
+    const five = [160, 160, 0, 160, 160, 160];
+    const random: PolicyFactory = (c, seat) => randomMovePolicy(seatGenerator(c, seat));
+    expect(playHand(code, 6, 1, 1, {}, { stacks: five }).record.actions).toEqual(
+      playHand(code, 6, 1, 1, { makePolicy: random }, { stacks: five }).record.actions,
+    );
+    expect(playHand(code, 6, 1).record.actions).toEqual(
+      playHand(code, 6, 1, 1, { makePolicy: () => tagPolicy }).record.actions,
+    );
   });
 });

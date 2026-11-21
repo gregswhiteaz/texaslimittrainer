@@ -86,7 +86,7 @@ describe('next hand', () => {
     const small = stakesFor({ smallBet: 4, bigBet: 8 });
     expect(minimumStack(small)).toBe(96);
     expect(minimumStack(stakesFor({ smallBet: 10, bigBet: 20 }))).toBe(240);
-    const seats = [4, 160, 160].map((stack, i) => ({ seat: i + 1, stack }));
+    const seats = [0, 160, 160].map((stack, i) => ({ seat: i + 1, stack }));
     expect(() => createHand({ stakes: small, seats, button: 3, deck: shuffledDeck(CODE) })).toThrow(
       RangeError,
     );

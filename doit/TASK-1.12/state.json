@@ -724,7 +724,14 @@
       "skips": 0
     }
   },
-  "history": [],
+  "history": [
+    {
+      "t": "2026-11-21T02:09:41",
+      "event": "unlock",
+      "file": "tests/engine/bet-cap.acceptance.test.ts",
+      "reason": "TASK-1.16 Q-5 (autopilot, recommended): count only REQ-016.5 counted bets now that carried stacks produce short all-in raises; line 233 optional-chain for nullable violation (same assertion)"
+    }
+  ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-1.12",
   "spec_sha256": "57d9b60553dff5b756a71a5769c4d4f2b1eb66be0191cd19a026b716de787101",
   "review_findings": {
@@ -733,5 +740,8 @@
   "doc_id": "doc-59",
   "judge_results": {
     "1": "PASS"
-  }
+  },
+  "relock_pending": [
+    "tests/engine/bet-cap.acceptance.test.ts"
+  ]
 }

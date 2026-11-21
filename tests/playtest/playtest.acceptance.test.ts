@@ -69,7 +69,7 @@ describe('npm run playtest', () => {
       expect(lines[0]).toBe('TLH Trainer playtest');
       expect(lines).toContain('Options: --hands 10000 --seed 42 --size 6');
       expect(lines).toContain(
-        'Table: 6 players, cash $4/$8, every stack reset to $160 before each hand',
+        'Table: 6 players, cash $4/$8, stacks carry over, a busted seat rebuys for $160',
       );
       expect(lines).toContain('Hands played: 10000');
       expect(lines).toContain('Invariant violations: 0');

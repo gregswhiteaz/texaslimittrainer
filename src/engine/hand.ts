@@ -31,7 +31,7 @@ export interface PlayerState {
   readonly stack: number;
   readonly holeCards: readonly [Card, Card];
   readonly folded: boolean;
-  /** True once a call, bet or raise left stack at 0; never acts again. */
+  /** True once a blind, call, bet or raise left stack at 0; never acts again. */
   readonly allIn: boolean;
   /** Put in on the current street (not yet in pots). */
   readonly streetContribution: number;
@@ -133,7 +133,7 @@ function isPositiveSafeInteger(value: number): boolean {
 export const STREET_BET_CAP = 4;
 
 /** The most one player can put into a capped hand ($96 at $4/$8). Used by the session's TEMPORARY top-up
- *  (TASK-3.21) and the A-4 stakes bound. createHand's own floor is bigBlind + 1 (D-1). */
+ *  (TASK-3.21) and the A-4 stakes bound. createHand's own floor is $1: a short stack posts an all-in blind. */
 export function minimumStack(stakes: Stakes): number {
   return 8 * stakes.smallBet + 8 * stakes.bigBet;
 }
@@ -176,11 +176,10 @@ function validate(config: HandConfig): void {
   ) {
     throw new RangeError('Deck must hold each of the 52 cards exactly once');
   }
-  // D-1: every blind is fully posted with at least $1 behind (all-in blinds are TASK-1.16).
-  const min = stakes.bigBlind + 1;
+  // Busted seats are left out by the caller; a stack below a blind posts it all-in (REQ-020.4).
   for (const { seat, stack } of seats) {
-    if (!Number.isSafeInteger(stack) || stack < min) {
-      throw new RangeError(`Stack at seat ${seat} must be an integer of at least ${min}`);
+    if (!isPositiveSafeInteger(stack)) {
+      throw new RangeError(`Stack at seat ${seat} must be an integer of at least 1`);
     }
   }
   // Chips are conserved, so every stack, contribution, pot and award is at most this total.
@@ -190,8 +189,34 @@ function validate(config: HandConfig): void {
 }
 
 /**
- * Posts blinds and deals hole cards. Copies config first, so later changes to the caller's objects do
- * not affect the hand. Throws RangeError on invalid config.
+ * The first seat clockwise after `previous` whose stack is above 0 (REQ-020.1). `previous` need not have
+ * chips. Throws RangeError if fewer than 2 seats have chips.
+ */
+export function nextButton(stacks: readonly SeatConfig[], previous: SeatNumber): SeatNumber {
+  const live = stacks
+    .filter((s) => s.stack > 0)
+    .map((s) => s.seat)
+    .sort((a, b) => a - b);
+  if (live.length < 2) throw new RangeError('Need at least 2 seats with chips');
+  return clockwiseAfter(live, previous)[0] as SeatNumber;
+}
+
+/** True when nobody is left to bet against: no unfolded seat can still bet, or the only one that can already
+ *  has the largest street contribution (D-2, D-3). */
+function bettingOver(players: readonly PlayerState[]): boolean {
+  const active = players.filter((p) => !p.folded);
+  const open = active.filter((p) => !p.allIn);
+  if (open.length === 0) return true;
+  if (open.length > 1) return false;
+  const top = (open[0] as PlayerState).streetContribution;
+  return active.every((p) => p.streetContribution <= top);
+}
+
+/**
+ * Posts blinds and deals hole cards. A stack smaller than its blind posts all of it and is all-in; the blind
+ * record keeps the full blind as `amount` and the chips posted as `added`, and the bet to call stays the full
+ * big blind (D-1). If nobody is left to bet against, the hand is dealt out at once (D-2). Copies config
+ * first, so later changes to the caller's objects do not affect the hand. Throws RangeError on invalid config.
  */
 export function createHand(config: HandConfig): HandState {
   if (!isObject(config)) throw new RangeError('Invalid hand config');
@@ -220,22 +245,27 @@ export function createHand(config: HandConfig): HandState {
   // Heads-up (D-1): the button posts the small blind and the other seat the big blind.
   const sb = n === 2 ? button : (dealOrder[0] as SeatNumber);
   const bb = (n === 2 ? dealOrder[0] : dealOrder[1]) as SeatNumber;
+  const posted = (seat: SeatNumber, blind: number) =>
+    Math.min(blind, (sorted.find((s) => s.seat === seat) as SeatConfig).stack);
+  const sbPosted = posted(sb, stakes.smallBlind);
+  const bbPosted = posted(bb, stakes.bigBlind);
   const players = sorted.map(({ seat, stack }): PlayerState => {
     const position = dealOrder.indexOf(seat);
-    const blind = seat === sb ? stakes.smallBlind : seat === bb ? stakes.bigBlind : 0;
+    const blind = seat === sb ? sbPosted : seat === bb ? bbPosted : 0;
     return {
       seat,
       startingStack: stack,
       stack: stack - blind,
       holeCards: [deck[position] as Card, deck[position + n] as Card],
       folded: false,
-      allIn: false,
+      allIn: stack === blind,
       streetContribution: blind,
       totalContribution: blind,
       hasActed: false,
     };
   });
-  return {
+  const open = players.filter((p) => !p.allIn).map((p) => p.seat);
+  const dealt: HandState = {
     stakes,
     button,
     players,
@@ -246,25 +276,20 @@ export function createHand(config: HandConfig): HandState {
     pots: [{ amount: 0, eligible: seats }],
     currentBet: stakes.bigBlind,
     betCount: 1,
-    toAct: clockwiseAfter(seats, bb)[0] as SeatNumber,
+    toAct: clockwiseAfter(open, bb)[0] ?? null,
     actions: [
       {
         street: 'preflop',
         seat: sb,
         type: 'small-blind',
         amount: stakes.smallBlind,
-        added: stakes.smallBlind,
+        added: sbPosted,
       },
-      {
-        street: 'preflop',
-        seat: bb,
-        type: 'big-blind',
-        amount: stakes.bigBlind,
-        added: stakes.bigBlind,
-      },
+      { street: 'preflop', seat: bb, type: 'big-blind', amount: stakes.bigBlind, added: bbPosted },
     ],
     result: null,
   };
+  return bettingOver(players) ? endRound(dealt, players) : dealt;
 }
 
 function betUnit(state: HandState): number {
@@ -561,7 +586,8 @@ function endRound(state: HandState, players: readonly PlayerState[]): HandState 
  * `state` or `action`. Rejections (REQ-017.4), checked in this order: `hand-complete` (the hand is over),
  * `out-of-turn` (`action.seat` isn't `state.toAct`), `illegal-action` (the type and amount don't exactly match
  * an entry of `legalActions(state)`, e.g. a wrong amount, a raise on a capped street, or a fold when no bet is
- * faced).
+ * faced). The round also ends when the only seat left with chips already has the largest street contribution
+ * (D-3), so a big blind facing only all-in players gets no option.
  */
 export function applyAction(state: HandState, action: Action): ApplyResult {
   if (state.result !== null) return reject('hand-complete', 'The hand is complete');
@@ -619,7 +645,10 @@ export function applyAction(state: HandState, action: Action): ApplyResult {
     return { ok: true, state: foldOut(next, players, (active[0] as PlayerState).seat) };
   }
   const open = active.filter((p) => !p.allIn);
-  if (open.every((p) => p.hasActed && p.streetContribution === next.currentBet)) {
+  if (
+    open.every((p) => p.hasActed && p.streetContribution === next.currentBet) ||
+    bettingOver(players)
+  ) {
     return { ok: true, state: endRound(next, players) };
   }
   const toAct = clockwiseAfter(

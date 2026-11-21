@@ -6,6 +6,7 @@ import {
   type ApplyResult,
   type HandState,
   type PlayerState,
+  type SeatConfig,
   type SeatNumber,
 } from './hand';
 
@@ -452,4 +453,45 @@ export function checkStep(step: ActionStep): readonly Violation[] {
   return chips?.invariant === 'chips'
     ? [chips, violation, ...afterChips]
     : [violation, ...stateChecks];
+}
+
+/** AC#9: each seat starts with its previous final stack; a $0 seat rebuys for `rebuy` or sits out (0), and a
+ *  seat not in `previous` was not on this table, so it starts with 0. */
+function crossHandMessage(
+  state: HandState,
+  previous: readonly SeatConfig[],
+  rebuy: number | null,
+): string | null {
+  const seats = [...new Set([...previous, ...state.players].map((s) => s.seat))].sort(
+    (a, b) => a - b,
+  );
+  for (const seat of seats) {
+    const before = previous.find((s) => s.seat === seat)?.stack;
+    const expected = before === undefined ? 0 : before > 0 ? before : (rebuy ?? 0);
+    const actual = playerAt(state, seat)?.startingStack ?? 0;
+    if (actual !== expected) {
+      return `seat ${seat} starts with $${actual} but should start with $${expected}`;
+    }
+  }
+  return null;
+}
+
+/** Checks a hand right after createHand: checkState(state); the C5 returned rule if the hand finished at the
+ *  deal and chips is clean; and, when `previous` is given (the last hand's final {seat, stack} for each seat
+ *  dealt into it), the cross-hand chip check, whose message takes the chips slot. ≤ 1 violation per id,
+ *  INVARIANTS order; [] when clean. Never throws. */
+export function checkDeal(
+  state: HandState,
+  previous?: readonly SeatConfig[],
+  rebuy: number | null = null,
+): readonly Violation[] {
+  const found = checkState(state);
+  const cross = previous === undefined ? null : crossHandMessage(state, previous, rebuy);
+  const chips =
+    cross ??
+    (state.result !== null && !found.some((v) => v.invariant === 'chips')
+      ? returnedMessage(state)
+      : null);
+  if (chips === null) return found;
+  return [{ invariant: 'chips', message: chips }, ...found.filter((v) => v.invariant !== 'chips')];
 }

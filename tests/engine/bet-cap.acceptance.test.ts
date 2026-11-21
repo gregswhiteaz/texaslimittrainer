@@ -98,14 +98,21 @@ function postflopCapped(): HandState[] {
   return [flop, turn, river];
 }
 
-/** Big-blind, bet and raise records per betting street. */
+/** Counted bets per betting street (REQ-016.5): the big blind, then each bet or raise that adds at least half a
+ *  unit over the street's last counted level. A short all-in under half a bet does not count. */
 function betsPerStreet(state: HandState): number[] {
   const streets = ['preflop', 'flop', 'turn', 'river'];
   const counts = [0, 0, 0, 0];
+  const levels = [0, 0, 0, 0];
   for (const a of state.actions) {
-    if (a.type === 'big-blind' || a.type === 'bet' || a.type === 'raise') {
-      const i = streets.indexOf(a.street);
+    const i = streets.indexOf(a.street);
+    const unit = i < 2 ? state.stakes.smallBet : state.stakes.bigBet;
+    const counted =
+      a.type === 'big-blind' ||
+      ((a.type === 'bet' || a.type === 'raise') && 2 * (a.amount - (levels[i] as number)) >= unit);
+    if (counted) {
       counts[i] = (counts[i] as number) + 1;
+      levels[i] = a.amount;
     }
   }
   return counts;
@@ -230,7 +237,7 @@ describe('bet cap acceptance', () => {
     for (const id of INVARIANTS.filter((id) => id !== 'bet-cap')) {
       expect(summary.violationCounts[id], id).toBe(0);
     }
-    expect(summary.firstViolation?.violation.violations[0]?.message).toMatch(
+    expect(summary.firstViolation?.violation?.violations[0]?.message).toMatch(
       /^(preflop|flop|turn|river) has 5 bets \(at most 4\)$/,
     );
     const checker = readFileSync(

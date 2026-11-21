@@ -25,13 +25,18 @@ function betCounts(state: HandState): number[] {
 }
 
 describe('playtest runner', () => {
-  it('AC#1 hands are real engine hands at $4/$8 with $160 stacks', () => {
+  it('AC#1 hands are real engine hands at $4/$8 starting at $160 and carrying stacks', () => {
     const { played, summary } = collect(600, 42, 6);
     expect(played).toHaveLength(600);
+    let expected = [1, 2, 3, 4, 5, 6].map((seat) => ({ seat, stack: 160 }));
     for (const hand of played) {
       const { record, final } = hand;
       expect(record.stakes).toEqual({ smallBlind: 2, bigBlind: 4, smallBet: 4, bigBet: 8 });
-      expect(record.seats).toEqual([1, 2, 3, 4, 5, 6].map((seat) => ({ seat, stack: 160 })));
+      expect(record.seats).toEqual(expected);
+      expected = final.players.map(({ seat, stack }) => ({
+        seat,
+        stack: stack === 0 ? 160 : stack,
+      }));
       expect(final.result).not.toBeNull();
       expect(replayHand(record).result).toEqual(final.result);
     }
@@ -90,7 +95,16 @@ describe('playtest runner', () => {
     expect(fourth.record.button).toBe(4);
     let out = '';
     const code = main(
-      ['--replay-code', '000000000000002a0000000000000004', '--size', '6', '--button', '4'],
+      [
+        '--replay-code',
+        '000000000000002a0000000000000004',
+        '--size',
+        '6',
+        '--button',
+        '4',
+        '--stacks',
+        fourth.record.seats.map((s) => s.stack).join(','),
+      ],
       { out: (t) => (out += t), err: () => undefined },
     );
     expect(code).toBe(0);
