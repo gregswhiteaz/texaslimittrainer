@@ -1,0 +1,97 @@
+{
+  "round": 1,
+  "test_suite": {
+    "command": "npm test",
+    "result": "PASS",
+    "passed": 538,
+    "failed": 0,
+    "notes": "155 files passed, 1 skipped; 538 tests passed, 7 skipped. Coverage: all files 96.9% stmts / 97.17% lines; bots 98.93% stmts (style.ts 100% lines, tag.ts 100% lines); advice 99.8%, engine 99.88%. npm run lint exit 0 (eslint + prettier clean); npm run typecheck exit 0. npm run e2e: 130 passed, 12 skipped, exit 0 (responsive-table 'bot actions computed in the worker match the headless playtest' passed on chromium and webkit)."
+  },
+  "end_to_end": {
+    "command": "npm run -s playtest -- --hands 10000 --seed 42 --size 6 (twice) | shasum -a 256",
+    "result": "PASS",
+    "expected": "exit 0, Hands played 10000, Player actions 88920, Invariant violations 0, SHA-256 aacd5e94dccba90b4b50936ba1bb2b08aff2bda37d427efdfb56a6b07e488e01, second run byte-identical",
+    "actual": "Both runs exit 0 with SHA-256 aacd5e94dccba90b4b50936ba1bb2b08aff2bda37d427efdfb56a6b07e488e01; Hands played 10000, Ended by fold 5427, showdown 4573, Player actions 88920, capped streets 241, largest pot $70, Invariant violations 0. Spec judge steps 3 and 4 also done: setting preflop-raise to {1,0} in tag.json made every test file importing TAG fail at import and the playtest CLI fail with the exact SPEC-03 message (reverted); lint probes of `const c = crypto;` and `globalThis.Math.random();` linted as src/bots/tag.ts give the REQ-028.1 error."
+  },
+  "integrity": {
+    "result": "PASS",
+    "notes": "doit.py test-integrity TASK-6.2 exit 0. Diff vs base 9f33b90 read in full: no input recognition, hard-coded outputs, early exits or overridden equality in src. The five locked-test edits each replace the old assertion with exact equality against decideTag(view, {random: botRandom(botDecisionSeed(code, view))}) (or seededTagPolicy(code)); no toContain/set/or widening; tag-playtest AC#6 keeps the one-recommend-call-per-action count, with recording off around the recomputation. bot-random.acceptance only :85 edited (:174-176 untouched and passing). Q-4 sit-and-go edit verified on substance: the explicit makePolicy run on the current tree and the base commit's default-policy run for 10,000 sng hands at seed 42 produce identical summaries and an identical SHA-256 over all hand records. The seed-parity test mocks src/engine/bot-random only to record seeds while delegating to the real botRandom; not a mock of the unit under test. Mutants (exact text replacement, each reverted): decideTag ignoring the draw -> SPEC-04, SPEC-06, SPEC-08 tests fail; mixing re-raise via a fallback spot -> SPEC-05 test fails; playtest seed XOR 1 -> seed-parity, tag-playtest AC#5/AC#6 and advice-worker tests fail. git diff --stat HEAD -- src e2e tests tools is empty at the end."
+  },
+  "items": [
+    {
+      "spec": "SPEC-01",
+      "result": "PASS",
+      "evidence": "Named test passes and asserts style, >=15-word description, exact five keys at 0.75/0.25, >=10-word justifications, re-raise absent, raw JSON parses equal to TAG_STYLE. Holdout: TAG_STYLE keys are exactly the five preflop spot types; the shipped file parses with no problems."
+    },
+    {
+      "spec": "SPEC-02",
+      "result": "PASS",
+      "evidence": "Named test passes for missing, empty and 3-word descriptions, checking the exact problem and that the message names tag.json. Holdout: a numeric description and a description of 16 digit-only tokens are both rejected with the exact message; error message format is 'Invalid style file <file>:\\n- ...'."
+    },
+    {
+      "spec": "SPEC-03",
+      "result": "PASS",
+      "evidence": "Named test asserts problems equal exactly [the SPEC-03 message] for {1,0} and {0,1}, and the unchanged file parses. Holdout: {1e-12, 1-1e-12} is accepted (both non-zero); shipped tag.json mutated to {1,0} fails every TAG-importing test file and the CLI with the exact message."
+    },
+    {
+      "spec": "SPEC-04",
+      "result": "PASS",
+      "evidence": "Named test passes (5 situations x 1000 codes, only rec/alt, both seen). Holdout with my own views (playtest seed 777, TAG at seat 4) and 4000 codes handReplayCode(31337, i): in unopened, limpers, raise, raise-and-calls and blind-defence every action is the recommendation or the legal alternative, the alternative rate is 0.2547 in each, and the wrapped generator is called exactly once per decision (24000/24000). In an all-TAG default playtest at seed 2024 (3000 hands, 0 violations) mixed-spot decisions chose the alternative 172/686 = 0.251 and every action equals the exact seeded decision. Recorded deviation on the worked examples verified: the spec's seeds 4290467780/584394998 belong to hand 1 seat 6 (JTs, CO, raise, no alternative) and 3582685763/2590574823 to hand 4 seat 5 (96o, SB, re-raise), neither a mixed spot; the corrected examples reproduce exactly (hand 1 seat 1 ATo BTN raise, seed 600557987, u 3626515352 -> fold; hand 4 seat 3 A6o CO unopened, seed 1408880392, u 168862582 -> raise 8). See LOW finding J-1-01."
+    },
+    {
+      "spec": "SPEC-05",
+      "result": "PASS",
+      "evidence": "Named test passes; a mutant that mixes re-raise makes it fail. Holdout: 6 re-raise views with alternatives x 4000 codes always play the recommendation with zero generator draws; 30 postflop and 20 no-alternative preflop views x 300 codes never draw or deviate; in the seed-2024 playtest all 25,733 non-mixed decisions (incl. 161 re-raise-with-alternative and 8,397 postflop) equal recommend(view).move."
+    },
+    {
+      "spec": "SPEC-06",
+      "result": "PASS",
+      "evidence": "Named test passes and records the seed the playtest policy actually passed to botRandom; the seed-XOR mutant fails it. Holdout: 60 own hands handReplayCode(4242, k) through the app path with a randomly acting user (not just check/call): every turn.seed equals botDecisionSeed(code, view), the worker's actions replayed via playHand with seededTagPolicy are identical in all 60 hands, and 5 bot actions differ from the recommendation (non-trivial)."
+    },
+    {
+      "spec": "SPEC-07",
+      "result": "PASS",
+      "evidence": "Named test asserts every rule's exact message, multiple problems and 20-char echo. Holdout malformed files: string/number input, version '1', missing style, lowercase 'tag', mixedSpots null/missing, null entry, actions null, actions as an array, Infinity, sum 1+3e-9 (rejected) vs 1+5e-10 (accepted), unknown key, a JSON-parsed '__proto__' action key (rejected as unknown), numeric justification, triplicate spot (reported twice), wrong-case spot type, 3 problems in one file, and a 34-char style echoed as 20 chars + '...' — all give the specified problem lists; all throw StyleValidationError."
+    },
+    {
+      "spec": "SPEC-08",
+      "result": "PASS",
+      "evidence": "Named test passes (thresholds 0, 2^30-1, 2^30, 2^32-1 with one call each; no-generator path; stub not called postflop / no alternative). Holdout: drawMixed returns alternative at 1073741823 and recommended at 1073741824 with exactly one call; tagPolicy stays pure (returns the recommendation in an unopened mixed spot)."
+    },
+    {
+      "spec": "SPEC-09",
+      "result": "PASS",
+      "evidence": "Named test passes. Holdout ESLint probes (linted as src/bots/tag.ts, src/advice/probe.ts, src/engine/bot-random.ts, src/bots/sub/deep.ts): 23 flagged forms all give the REQ-028.1 error, including globalThis['Math'].random(), globalThis?.Math.random(), (0, Math).random(), Math?.random(), Math['random'](), const { Math: M } = globalThis, const { now } = Date, Reflect.get(globalThis, 'Math'), [Math][0].random(), plus the spec's aliases; 9 clean forms (Math.floor/max/PI, object keys named crypto/performance, typeof Math in a type, interface/class members named crypto/Date/Math/performance, globalThis.structuredClone) give no errors. src/engine/deck.ts and src/playtest probes are not flagged."
+    },
+    {
+      "spec": "SPEC-10",
+      "result": "PASS",
+      "evidence": "Named test passes. Holdout: globalThis.Math.random(), Math.random(), Date.now(), new Date(), performance.now(), crypto.getRandomValues and globalThis.crypto.randomUUID() linted as src/engine/bot-random.ts all give the REQ-028.1 error; npm run lint on the real tree is clean."
+    },
+    {
+      "spec": "SPEC-11",
+      "result": "PASS",
+      "evidence": "Named test passes (bounds, RangeError text, advice-service imports isBotSeed and has no literal/local check). Holdout: isBotSeed true for 0, -0, 4294967295; false for 4294967296, -0.5, '1', null, 2^31+0.5; handleAdviceRequest rejects seeds 4294967296, -1, 1.5, '3', null with 'Malformed bot request seed' and accepts 4294967295; existing advice-service malformed-seed cases pass."
+    },
+    {
+      "spec": "SPEC-12",
+      "result": "PASS",
+      "evidence": "Two runs of the command: SHA-256 aacd5e94dccba90b4b50936ba1bb2b08aff2bda37d427efdfb56a6b07e488e01 both times, Player actions 88920, Invariant violations 0, exit 0. Edited tag-playtest AC#5/AC#6 pass and compare by exact equality with the seeded decision (they fail under the seed-XOR mutant)."
+    },
+    {
+      "spec": "SPEC-13",
+      "result": "PASS",
+      "evidence": "CI run 44956695569 on doit/TASK-6.2 at 9f9ae7a: completed success (lint, typecheck, build, test and e2e job green). npm run lint, typecheck, npm test (coverage thresholds met) all exit 0; tests/bots/tag.test.ts import boundary passes; npm run e2e 130 passed / 12 skipped incl. same-origin checks; story doc doc-73 present in backlog/docs/stories with the format, mixed spots and justifications, corrected Example 1/2 and the new baseline hash."
+    }
+  ],
+  "findings": [
+    {
+      "id": "J-1-01",
+      "severity": "LOW",
+      "spec": "SPEC-04",
+      "expected_vs_actual": "Spec section 5 and SPEC-04 state Example 1 as seat 6 BTN ATo with seed 4290467780 / draw 584394998 choosing a raise, and Example 2 as seat 5 A6o with seed 3582685763. In the real seed-42 run the button is seat 1: those seeds belong to non-mixed spots (JTs CO with no alternative; 96o SB re-raise). The build asserts the corrected examples (seat 1 ATo seed 600557987 -> fold; seat 3 A6o seed 1408880392 -> raise), which the judge reproduced. Behaviour is correct; only the spec text is wrong.",
+      "fix": "No code change. Spec text could be corrected to the verified examples (already done in build-log.md and the story doc)."
+    }
+  ],
+  "summary": "All 13 SPEC items PASS. Suite 538 passed / 0 failed, lint/typecheck clean, e2e 130 passed. Playtest baseline aacd5e94... reproduced byte-identically with 0 violations. Independent checks: validator rejects a wide set of malformed files with the specified messages; TAG mixes only in the five marked preflop spots at ~25% (0.2547 over 4000 own codes per spot; 0.251 in a 3000-hand seed-2024 playtest) with exactly one draw per mixed decision and none in re-raise, postflop or no-alternative spots; worker == playtest on 60 own hands with a randomly acting user; lint guard catches every alias form probed with no false positives. Locked-test edits are exact-equality only; the Q-4 sit-and-go policy reproduces the pre-6.2 run exactly. One LOW finding (spec's example seats/seeds wrong; build corrected them)."
+}
