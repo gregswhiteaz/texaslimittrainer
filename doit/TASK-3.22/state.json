@@ -657,7 +657,14 @@
       "skips": 0
     }
   },
-  "history": [],
+  "history": [
+    {
+      "t": "2026-11-21T01:13:28",
+      "event": "unlock",
+      "file": "tests/ui/user-shown-cards.acceptance.test.tsx",
+      "reason": "TASK-1.15 Q-4 (autopilot, recommended): losing hands now muck at showdown (REQ-019.5); expected shown-seat lists updated, nothing removed or loosened"
+    }
+  ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-3.22",
   "spec_sha256": "71e9c06a4f8e6e8195dd5c4428b6ade031f50d010652948cb441c53230f588cb",
   "review_findings": {
@@ -666,5 +673,8 @@
   "judge_results": {
     "1": "PASS"
   },
-  "doc_id": "doc-51"
+  "doc_id": "doc-51",
+  "relock_pending": [
+    "tests/ui/user-shown-cards.acceptance.test.tsx"
+  ]
 }

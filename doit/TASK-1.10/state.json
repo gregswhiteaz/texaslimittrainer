@@ -730,6 +730,12 @@
       "event": "unlock",
       "file": "tests/engine/side-pot-invariants.acceptance.test.ts",
       "reason": "Code review R1 MINOR: add case (f) one pot but several levels (strengthen only)"
+    },
+    {
+      "t": "2026-11-21T01:13:28",
+      "event": "unlock",
+      "file": "tests/engine/side-pots.acceptance.test.ts",
+      "reason": "TASK-1.15 Q-4 (autopilot, recommended): losing hands now muck at showdown (REQ-019.5); expected shown-seat lists updated, nothing removed or loosened"
     }
   ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-1.10",
@@ -737,7 +743,9 @@
   "review_findings": {
     "1": 0
   },
-  "relock_pending": [],
+  "relock_pending": [
+    "tests/engine/side-pots.acceptance.test.ts"
+  ],
   "doc_id": "doc-58",
   "judge_results": {
     "2": "PASS"

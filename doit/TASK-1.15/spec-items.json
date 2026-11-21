@@ -1,0 +1,98 @@
+[
+  {
+    "id": "SPEC-01",
+    "verifies": "AC#1",
+    "verification": "acceptance `tests/engine/showdown-order.acceptance.test.ts::the last river raiser shows first`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-02",
+    "verifies": "AC#2",
+    "verification": "acceptance `tests/engine/showdown-order.acceptance.test.ts::a checked-through river shows first from the first active seat left of the button`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-03",
+    "verifies": "AC#3",
+    "verification": "acceptance `tests/engine/showdown-order.acceptance.test.ts::a later hand that beats or ties the best shown hand is shown`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-04",
+    "verifies": "AC#4",
+    "verification": "acceptance `tests/engine/showdown-order.acceptance.test.ts::a losing hand is mucked and absent from the result and later views`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-05",
+    "verifies": "AC#5",
+    "verification": "acceptance `tests/engine/showdown-order.acceptance.test.ts::the side pot is resolved before the main pot, each among its eligible seats`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-06",
+    "verifies": "AC#6",
+    "verification": "acceptance `tests/engine/showdown-order.acceptance.test.ts::a bot shows for the side pot it wins and the all-in seat wins the main pot`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-07",
+    "verifies": "AC#7",
+    "verification": "acceptance `tests/engine/showdown-order.acceptance.test.ts::showdownOf keeps shown hands in showdown order and omits mucked hands`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-08",
+    "verifies": "AC#8",
+    "verification": "acceptance `tests/ui/hand-result-shown.acceptance.test.tsx::shown losing hands follow the winners in showdown order and mucked hands never appear`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-09",
+    "verifies": "AC#1",
+    "verification": "unit `tests/engine/showdown-order.test.ts::a short all-in raise on the river makes its seat show first`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-10",
+    "verifies": "AC#5",
+    "verification": "unit `tests/engine/showdown-order.test.ts::a pot only one seat can win is awarded without a show`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-11",
+    "verifies": "AC#2",
+    "verification": "unit `tests/engine/showdown-order.test.ts::a runout with no river betting starts left of the button`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-12",
+    "verifies": "AC#3, AC#4, AC#5, AC#6, DoD#1",
+    "verification": "unit `tests/engine/showdown-order.property.test.ts::5,000 random all-in hands follow the pot-by-pot show and muck rule`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-13",
+    "verifies": "DoD#1, DoD#2",
+    "verification": "command `npm test && git diff --stat main -- tests e2e`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-14",
+    "verifies": "DoD#7, DoD#8",
+    "verification": "acceptance `e2e/showdown-shown.spec.ts::shown losing hands appear after the winner, mucked cards never, axe clean`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-15",
+    "verifies": "DoD#2, DoD#4, DoD#5, DoD#6, DoD#10",
+    "verification": "command `npm run lint && npm run typecheck && npm test && npm run playtest -- --hands 10000 --seed 42 --size 6 && npm run e2e`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-16",
+    "verifies": "DoD#3, DoD#9, DoD#11, DoD#12",
+    "verification": "manual `backlog doc list --plain` shows the TASK-1.15 doc",
+    "status": "pending"
+  }
+]

@@ -193,6 +193,18 @@
       "event": "unlock",
       "file": "tests/engine/hand.acceptance.test.ts",
       "reason": "TASK-1.9 Q-4 (autopilot, recommended): update expected amounts/messages for all-in support (uncalled bets returned, stack floor bigBlind+1); nothing removed or loosened"
+    },
+    {
+      "t": "2026-11-21T01:13:28",
+      "event": "unlock",
+      "file": "tests/engine/hand.acceptance.test.ts",
+      "reason": "TASK-1.15 Q-4 (autopilot, recommended): losing hands now muck at showdown (REQ-019.5); expected shown-seat lists updated, nothing removed or loosened"
+    },
+    {
+      "t": "2026-11-21T01:13:28",
+      "event": "unlock",
+      "file": "tests/engine/hand.property.test.ts",
+      "reason": "TASK-1.15 Q-4 (autopilot, recommended): losing hands now muck at showdown (REQ-019.5); expected shown-seat lists updated, nothing removed or loosened"
     }
   ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-1.4",
@@ -211,6 +223,8 @@
     "1": "PASS"
   },
   "relock_pending": [
-    "tests/engine/hand.acceptance.test.ts"
+    "tests/engine/hand.acceptance.test.ts",
+    "tests/engine/hand.acceptance.test.ts",
+    "tests/engine/hand.property.test.ts"
   ]
 }

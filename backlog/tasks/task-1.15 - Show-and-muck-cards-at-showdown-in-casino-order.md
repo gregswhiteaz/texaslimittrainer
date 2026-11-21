@@ -1,10 +1,11 @@
 ---
 id: TASK-1.15
 title: Show and muck cards at showdown in casino order
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-19T01:10:00Z'
+updated_date: '2026-11-21T08:13:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -66,10 +67,24 @@ Plan key: E01-S15 · Dream: limit-holdem-trainer
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
 
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. Engine showdown order: last river bet/raise shows first, else first active seat left of the button.
+2. Pots settled side pot first, main last; within a pot a later hand shows only if it beats or ties the best shown, else mucks (dead for lower pots).
+3. HandResult.showdown holds only shown hands, so showdownOf and later PlayerViews never see mucked cards.
+4. handResultView + Table: 'Shown hands' list after Winners (Q-3); user's hand follows the same rule (Q-1).
+5. Q-4 locked-test edits E1–E4; new e2e showdown-shown spec; playtest byte-identical.
+
+Full spec: doit/TASK-1.15/spec.md
+<!-- SECTION:PLAN:END -->
+
 ## Implementation Notes
 
 <!-- SECTION:NOTES:BEGIN -->
 AC#7 added at user request (2026-11-18): follow-up from TASK-1.5 security review r1 (showdownOf copies all of result.showdown; mucked-card exclusion depends on this story).
 
 AC added from TASK-3.4 follow-up (doc-25).
+
+Autopilot Q-1..Q-4 auto-accepted (qa.md); unlocks recorded under TASK-1.4, 1.10, 3.22.
 <!-- SECTION:NOTES:END -->
