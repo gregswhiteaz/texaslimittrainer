@@ -1,0 +1,32 @@
+[
+  {
+    "id": "SPEC-01",
+    "verifies": "AC#1",
+    "verification": "acceptance `tests/advice/preflop-chart-edges.acceptance.test.ts::rejects a justification of 60 numeric or punctuation tokens`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-02",
+    "verifies": "AC#1",
+    "verification": "acceptance `tests/advice/preflop-chart-edges.acceptance.test.ts::the shipped six-max chart still validates`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-03",
+    "verifies": "AC#2",
+    "verification": "acceptance `tests/advice/preflop-chart-edges.acceptance.test.ts::chartCell throws a documented RangeError for an unknown hand class`; command `grep -n \"RangeError('Unknown hand class <hc>')\" src/advice/preflop-chart.ts`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-04",
+    "verifies": "AC#3",
+    "verification": "acceptance `tests/advice/preflop-chart-edges.acceptance.test.ts::cuts an echoed bad token to 20 characters`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-05",
+    "verifies": "AC#3",
+    "verification": "acceptance `tests/advice/preflop-chart-edges.acceptance.test.ts::cuts an echoed bad spot name to 20 characters`",
+    "status": "pending"
+  }
+]
