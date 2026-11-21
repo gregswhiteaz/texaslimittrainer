@@ -1,0 +1,62 @@
+{
+  "round": 1,
+  "test_suite": {
+    "command": "npm test",
+    "result": "PASS",
+    "passed": 382,
+    "failed": 0,
+    "notes": "109/109 files passed, 382 passed, 6 skipped (the same skip count as gate fix-2; none of the skips are in grade-related files). npm run lint exit 0, npm run typecheck exit 0."
+  },
+  "end_to_end": {
+    "command": "N/A (the spec's Run command is N/A: internal grader hardening with no user-facing change). Spec judge scenario run instead: npx vitest run tests/advice/grade-hardening.acceptance.test.ts tests/advice/grade.test.ts tests/advice/grade.acceptance.test.ts tests/table",
+    "result": "N/A",
+    "expected": "No user-visible change. Grader, review and session suites pass. The locked grade.acceptance.test.ts is unchanged.",
+    "actual": "npx vitest run tests/advice tests/table: 33 files, 129 tests, all passed. git diff main and git diff base on tests/advice/grade.acceptance.test.ts are both empty."
+  },
+  "integrity": {
+    "result": "PASS",
+    "notes": "doit.py test-integrity TASK-7.23 exited 0. I read the diff from base d8466a7. src only adds a private finitePct guard, called at the 3 spec'd read sites, plus a doc comment. It does not recognise test inputs, has no hard-coded expectations, no mocks of the unit and no early-return bypasses. grade.test.ts numstat is 2 added and 1 removed: the test rename plus expect(26.7 - 16.7).toBe(10), and no assertion was removed. The locked acceptance file is untouched. Mutation checks (temp edits, src restored byte-identical and git diff --quiet HEAD -- src confirmed): changing the guard's class to Error or TypeError while keeping the same message fails both throw tests ('expected a thrown error to be RangeError'), so toThrow(new RangeError(msg)) does check the class. Removing the aggression guard fails the SPEC-02 test. Removing the equityPct guard fails the SPEC-01 test. A Math.abs margin mutant fails the -15 test and 4 existing margin tests."
+  },
+  "items": [
+    {
+      "spec": "SPEC-01",
+      "result": "PASS",
+      "evidence": "The acceptance test 'non-finite call-fold equity throws RangeError' passes. It loops over all 4 call-fold pairings x both fields x NaN/Infinity/-Infinity/undefined and asserts RangeError with the exact message. Error and TypeError class mutants and an equityPct-guard-removed mutant all make it fail. Holdout check passed: for every pairing and field, NaN/±Infinity/undefined/null and a fully absent key all throw an error whose constructor is exactly RangeError, with the message '<field> must be a finite number, got <String(v)>'. When both fields are bad, equityPct is reported first. Finite extremes (0/0, ±1e9) still grade, so there is no range check."
+    },
+    {
+      "spec": "SPEC-02",
+      "result": "PASS",
+      "evidence": "The acceptance test 'non-finite calling-range equity throws RangeError' passes. It covers 4 aggression pairings x NaN/±Infinity with an exact RangeError, and undefined/null giving minor/aggression-no-range/null. An aggression-guard-removed mutant makes it fail. Holdout check passed: exact RangeError class and message for each pairing. undefined, null and an absent key give aggression-no-range with marginPts null, even when equityPct and requiredEquityPct are NaN. Finite 65 gives major/aggression-margin/15 with NaN call-fold fields, and 45 gives minor."
+    },
+    {
+      "spec": "SPEC-03",
+      "result": "PASS",
+      "evidence": "The acceptance test 'unused non-finite numbers do not throw' passes. It asserts the match case on all-NaN input, correct/alternative, and major/call-fold-margin/10 with NaN calling-range equity. Holdout check passed: for all 5 actions, all-non-finite input with a matching user action gives correct/match. The alternative case gives correct/alternative. rec fold vs user call at 30/40 with NaN calling-range gives major/10. An impossible pairing with non-finite numbers still throws the existing 'fold and check cannot both be legal' error."
+    },
+    {
+      "spec": "SPEC-04",
+      "result": "PASS",
+      "evidence": "The acceptance test 'a -15 wrong-way margin is Minor' passes for all 4 call-fold pairings, asserting minor/call-fold-margin/-15. A Math.abs(equity - required) mutant makes it fail. Holdout check passed: -15, -0.1 (39.9 or 40.1 vs 40), -40 (0 vs 40) and -60 (100 vs 40) are all minor with the correct negative marginPts for every pairing."
+    },
+    {
+      "spec": "SPEC-05",
+      "result": "PASS",
+      "evidence": "In tests/advice/grade.test.ts the test is now named 'exactly 10 points is Major whether float subtraction is exact (26.7-16.7) or falls short (16.4-6.4)', and it passes. The diff from base renames that one test and adds a single line, expect(26.7 - 16.7).toBe(10). The two Major/10 assertions and expect(16.4 - 6.4).toBeLessThan(10) remain, and nothing else in the file changed (numstat +2/-1)."
+    },
+    {
+      "spec": "SPEC-06",
+      "result": "PASS",
+      "evidence": "npx vitest run tests/advice tests/table: 33 files and 129 tests, all passed. The full npm test also passes (382 tests). The locked tests/advice/grade.acceptance.test.ts has an empty diff against both main and base. Production code paths are unchanged for finite inputs; only the three margin read sites are wrapped."
+    }
+  ],
+  "findings": [
+    {
+      "id": "J-1-01",
+      "severity": "LOW",
+      "spec": "SPEC-03",
+      "expected_vs_actual": "Expected: the spec says the all-NaN matching-action case returns Correct. Actual: the code does return correct/match, but the acceptance test only asserts ruleId 'match' for that case and not grade 'correct'. A regression that changed the grade on a match would not be caught by this test.",
+      "fix": "Optional: also assert grade 'correct' for the match case in the SPEC-03 test."
+    }
+  ],
+  "summary": "All 6 SPEC items PASS on the builder's tests, my independent holdout checks and the mutation checks. Full suite: 382 passed, 0 failed. Lint and typecheck are clean. Integrity PASS, and the locked file is unchanged. End-to-end is N/A because the spec's Run command is N/A; the spec's judge scenario passes. The review disagreement is settled: toThrow(new RangeError(msg)) does enforce the class in vitest 5.1.0, because Error and TypeError mutants with the same message fail both throw tests. The only finding is LOW and does not block."
+}

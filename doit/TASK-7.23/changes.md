@@ -5,3 +5,4 @@
 - `tests/advice/grade.test.ts` — renamed the float-subtraction test to `exactly 10 points is Major whether float subtraction is exact (26.7-16.7) or falls short (16.4-6.4)` and added `expect(26.7 - 16.7).toBe(10)`; nothing removed (SPEC-05).
 
 No new dependencies.
+- Judge J-1-01 applied by orchestrator: all-NaN match case now also asserts grade 'correct'.

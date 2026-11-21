@@ -62,7 +62,10 @@ describe('grader input hardening (TASK-7.23)', () => {
 
   it('unused non-finite numbers do not throw', () => {
     const allNaN = { equityPct: NaN, requiredEquityPct: NaN, equityVsCallingRangePct: NaN };
-    expect(gradeDecision(equity('call', allNaN), 'call')).toMatchObject({ ruleId: 'match' });
+    expect(gradeDecision(equity('call', allNaN), 'call')).toMatchObject({
+      grade: 'correct',
+      ruleId: 'match',
+    });
     expect(
       gradeDecision(equity('raise', { ...allNaN, alternative: 'call' }), 'call'),
     ).toMatchObject({ grade: 'correct', ruleId: 'alternative' });

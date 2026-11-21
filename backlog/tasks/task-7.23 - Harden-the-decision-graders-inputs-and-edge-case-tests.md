@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-18T20:12:00Z'
-updated_date: '2026-11-21T03:28:00Z'
+updated_date: '2026-11-21T03:31:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -42,3 +42,9 @@ Follow-up from TASK-7.4 (doc-19) reviews. gradeDecision accepts a hand-built rec
 
 Full spec: doit/TASK-7.23/spec.md
 <!-- SECTION:PLAN:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+Build: finitePct guard in the two margin rules; grade-hardening acceptance tests (non-finite throws, -15 wrong-way Minor; Math.abs and TypeError mutants caught); float test renamed + exact-case assertion; gate PASS
+<!-- SECTION:NOTES:END -->
