@@ -20,6 +20,7 @@ import {
   type PlayerView,
   type SeatPolicy,
 } from '../engine/player-view';
+import { botDecisionSeed } from '../engine/bot-random';
 import { tagPolicy } from '../bots/tag';
 
 export interface Stake {
@@ -233,22 +234,28 @@ export function nextHand(table: TableState): TableState {
   };
 }
 
-/** A pending bot decision. Only `view` and `style` go to the advice worker; `hand` is the staleness token. */
+/**
+ * A pending bot decision. Only `view`, `style` and `seed` go to the advice worker; `hand` is the
+ * staleness token.
+ */
 export interface BotTurn {
   readonly hand: HandState;
   readonly view: PlayerView;
   readonly style: BotStyle;
+  /** botDecisionSeed(replayCode, view): the replay code stays on the main thread (REQ-028.1). */
+  readonly seed: number;
 }
 
-/** The bot to act: its view (playerView(hand, hand.toAct)) and its seat's style ('TAG' if null). */
+/** The bot to act: its view (playerView(hand, hand.toAct)), its seat's style ('TAG' if null) and its seed. */
 export function botTurn(table: TableState): BotTurn {
-  const { hand } = table;
-  if (nextStep(table) !== 'bot' || hand === null || hand.toAct === null) {
+  const { hand, replayCode } = table;
+  if (nextStep(table) !== 'bot' || hand === null || hand.toAct === null || replayCode === null) {
     throw new RangeError('Not a bot turn');
   }
   const seat = hand.toAct;
   const style = table.seats.find((s) => s.seat === seat)?.style ?? 'TAG';
-  return { hand, view: playerView(hand, seat), style };
+  const view = playerView(hand, seat);
+  return { hand, view, style, seed: botDecisionSeed(replayCode, view) };
 }
 
 /** Applies `action` iff table.hand === turn.hand; else returns `table` unchanged. Throws RangeError if illegal. */

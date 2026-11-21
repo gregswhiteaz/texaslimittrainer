@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-17T23:13:00Z'
-updated_date: '2026-11-21T21:20:00Z'
+updated_date: '2026-11-21T21:26:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -83,4 +83,6 @@ Full spec: doit/TASK-6.18/spec.md
 AC added from TASK-3.6 follow-up (D-6: no replay code in the worker)
 
 Autopilot Q-1/Q-2 auto-accepted (qa.md); TASK-6.2 AC added for seed plumbing when TAG mixes.
+
+Build blocked: TASK-6.1 bot boundary test forbids src/bots runtime imports from the engine. Resolved (orchestrator): option (b) — seed derivation lives in src/engine/bot-random.ts; tag.ts types the generator structurally; boundary test untouched (recorded deviation from §5/SPEC-10 file layout).
 <!-- SECTION:NOTES:END -->

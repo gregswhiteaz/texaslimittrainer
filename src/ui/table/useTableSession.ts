@@ -47,7 +47,9 @@ export interface TableSessionOptions {
  * worker or client rejects the promise, like any other advice failure.
  */
 export function requestBotDecision(create: () => WorkerLike, turn: BotTurn): Promise<Action> {
-  return Promise.resolve().then(() => sharedAdviceClient(create).decideBot(turn.view, turn.style));
+  return Promise.resolve().then(() =>
+    sharedAdviceClient(create).decideBot(turn.view, turn.style, turn.seed),
+  );
 }
 
 export function useTableSession({

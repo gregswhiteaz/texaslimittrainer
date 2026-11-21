@@ -94,10 +94,22 @@ describe('bot turn', () => {
       removeEventListener: () => undefined,
       terminate: () => undefined,
     };
-    void new AdviceClient(worker).decideBot(turn.view, turn.style);
+    void new AdviceClient(worker).decideBot(turn.view, turn.style, turn.seed);
     expect(posted).toHaveLength(1);
-    expect(Object.keys(posted[0] as object).sort()).toEqual(['id', 'kind', 'style', 'view']);
-    expect(posted[0]).toEqual({ id: 1, kind: 'bot', view: turn.view, style: 'TAG' });
+    expect(Object.keys(posted[0] as object).sort()).toEqual([
+      'id',
+      'kind',
+      'seed',
+      'style',
+      'view',
+    ]);
+    expect(posted[0]).toEqual({
+      id: 1,
+      kind: 'bot',
+      view: turn.view,
+      style: 'TAG',
+      seed: turn.seed,
+    });
   });
 
   it('applyBotDecision applies only to the turn it was asked for', () => {
@@ -119,6 +131,7 @@ describe('bot turn', () => {
     const userTurn = toUserTurn(table);
     expect(() => botTurn(userTurn)).toThrow(new RangeError('Not a bot turn'));
     expect(() => botTurn(seatSession())).toThrow(new RangeError('Not a bot turn'));
+    expect(() => botTurn({ ...table, replayCode: null })).toThrow(new RangeError('Not a bot turn'));
 
     // Later streets too: the split steps reproduce stepBot for every bot action of a played hand.
     let t = table;

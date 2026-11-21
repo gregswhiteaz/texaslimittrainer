@@ -11,7 +11,12 @@ export type WorkerLike = Pick<
 >;
 
 type Payload =
-  | { readonly kind: 'bot'; readonly view: PlayerView; readonly style: BotStyle }
+  | {
+      readonly kind: 'bot';
+      readonly view: PlayerView;
+      readonly style: BotStyle;
+      readonly seed: number;
+    }
   | { readonly kind: 'recommend'; readonly view: PlayerView }
   | { readonly kind: 'grade'; readonly view: PlayerView; readonly userAction: ActionType };
 
@@ -59,8 +64,9 @@ export class AdviceClient {
     worker.addEventListener('messageerror', this.#onFailure);
   }
 
-  decideBot(view: PlayerView, style: BotStyle): Promise<Action> {
-    return this.#request({ kind: 'bot', view, style }) as Promise<Action>;
+  /** `seed` is the bot's main-thread seed (BotTurn.seed); 0 if omitted. */
+  decideBot(view: PlayerView, style: BotStyle, seed = 0): Promise<Action> {
+    return this.#request({ kind: 'bot', view, style, seed }) as Promise<Action>;
   }
 
   recommend(view: PlayerView): Promise<Recommendation> {

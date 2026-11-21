@@ -1,7 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import { gradeView } from '../../src/advice/grade';
 import { recommend } from '../../src/advice/recommend';
+import { botRandom } from '../../src/engine/bot-random';
 import { decideTag } from '../../src/bots/tag';
+import { Xoshiro128 } from '../../src/engine/seeded-random';
 import { handReplayCode, playHand } from '../../src/playtest/runner';
 import type { PlayerView } from '../../src/engine/player-view';
 import { handleAdviceRequest, type AdviceRequest } from '../../src/table/advice-service';
@@ -27,7 +29,7 @@ describe('advice service', () => {
   it('handleAdviceRequest maps each kind and turns throws into error responses', () => {
     const { preflop, flop } = views();
     for (const view of [preflop, flop]) {
-      expect(handleAdviceRequest({ id: 4, kind: 'bot', view, style: 'TAG' })).toEqual({
+      expect(handleAdviceRequest({ id: 4, kind: 'bot', view, style: 'TAG', seed: 0 })).toEqual({
         id: 4,
         ok: true,
         value: decideTag(view),
@@ -64,7 +66,7 @@ describe('advice service', () => {
     });
 
     const boom = handleAdviceRequest(
-      { id: 9, kind: 'bot', view: preflop, style: 'Maniac' },
+      { id: 9, kind: 'bot', view: preflop, style: 'Maniac', seed: 0 },
       {
         decideBot: () => {
           throw 'boom';
@@ -75,7 +77,7 @@ describe('advice service', () => {
 
     const styles: string[] = [];
     handleAdviceRequest(
-      { id: 10, kind: 'bot', view: preflop, style: 'Rock' },
+      { id: 10, kind: 'bot', view: preflop, style: 'Rock', seed: 0 },
       {
         decideBot: (view, style) => {
           styles.push(style);
@@ -95,5 +97,41 @@ describe('advice service', () => {
         error: malformed,
       });
     }
+  });
+
+  it('bot requests need a 32-bit integer seed', () => {
+    const { preflop: view } = views();
+    for (const x of [-1, 1.5, 4294967296, NaN]) {
+      expect(() => botRandom(x)).toThrow(RangeError);
+    }
+    const bad = { name: 'TypeError', message: 'Malformed bot request seed' };
+    const request = { id: 11, kind: 'bot', view, style: 'TAG' };
+    expect(handleAdviceRequest(request as unknown as AdviceRequest)).toEqual({
+      id: 11,
+      ok: false,
+      error: bad,
+    });
+    for (const seed of ['7', -1, 1.5, 2 ** 32]) {
+      const malformed = { ...request, seed } as unknown as AdviceRequest;
+      expect(handleAdviceRequest(malformed)).toEqual({ id: 11, ok: false, error: bad });
+    }
+
+    const randoms: Xoshiro128[] = [];
+    for (const seed of [0, 4294967295]) {
+      const response = handleAdviceRequest(
+        { id: 12, kind: 'bot', view, style: 'TAG', seed },
+        {
+          decideBot: (v, _style, random) => {
+            randoms.push(random);
+            return decideTag(v);
+          },
+        },
+      );
+      expect(response).toEqual({ id: 12, ok: true, value: decideTag(view) });
+    }
+    expect(randoms.map((r) => r.nextUint32())).toEqual([
+      new Xoshiro128(0).nextUint32(),
+      new Xoshiro128(4294967295).nextUint32(),
+    ]);
   });
 });

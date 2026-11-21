@@ -41,6 +41,20 @@ export const FORBIDDEN_IMPORT_PATTERNS = [
   },
 ];
 
+const HEADLESS_RESTRICTED_PROPERTIES = BROWSER_ONLY_GLOBALS.map((property) => ({
+  object: 'globalThis',
+  property,
+  message: BROWSER_ONLY_MESSAGE,
+}));
+
+const HEADLESS_RESTRICTED_SYNTAX = [
+  {
+    selector: 'ImportExpression',
+    message: 'Dynamic import() is not allowed in headless modules (REQ-059.2).',
+  },
+  ...TYPE_STRIPPING_RESTRICTED_SYNTAX,
+];
+
 /** @type {import('eslint').Linter.Config} */
 export const headlessBoundaryConfig = {
   name: 'headless-boundary',
@@ -51,21 +65,41 @@ export const headlessBoundaryConfig = {
       'error',
       ...BROWSER_ONLY_GLOBALS.map((name) => ({ name, message: BROWSER_ONLY_MESSAGE })),
     ],
+    'no-restricted-properties': ['error', ...HEADLESS_RESTRICTED_PROPERTIES],
+    'no-restricted-syntax': ['error', ...HEADLESS_RESTRICTED_SYNTAX],
+  },
+};
+
+/** Bot decision code: the seeded bot generator is the only source of randomness (REQ-028.1). */
+export const BOT_DETERMINISM_FILES = ['src/bots/**', 'src/advice/**'];
+
+const NON_DETERMINISTIC_MESSAGE =
+  'Non-deterministic source in bot decision code; use the seeded bot generator (REQ-028.1).';
+
+/**
+ * Must come after headlessBoundaryConfig: it replaces that block's no-restricted-properties and
+ * no-restricted-syntax options for these files, so the headless entries are repeated. It doesn't use
+ * no-restricted-globals, whose headless options must stay as they are.
+ * @type {import('eslint').Linter.Config}
+ */
+export const botDeterminismConfig = {
+  name: 'bot-determinism',
+  files: BOT_DETERMINISM_FILES,
+  rules: {
     'no-restricted-properties': [
       'error',
-      ...BROWSER_ONLY_GLOBALS.map((property) => ({
-        object: 'globalThis',
-        property,
-        message: BROWSER_ONLY_MESSAGE,
-      })),
+      ...HEADLESS_RESTRICTED_PROPERTIES,
+      { object: 'Math', property: 'random', message: NON_DETERMINISTIC_MESSAGE },
+      ...['Date', 'crypto', 'performance'].flatMap((name) => [
+        { object: name, message: NON_DETERMINISTIC_MESSAGE },
+        { object: 'globalThis', property: name, message: NON_DETERMINISTIC_MESSAGE },
+      ]),
     ],
     'no-restricted-syntax': [
       'error',
-      {
-        selector: 'ImportExpression',
-        message: 'Dynamic import() is not allowed in headless modules (REQ-059.2).',
-      },
-      ...TYPE_STRIPPING_RESTRICTED_SYNTAX,
+      ...HEADLESS_RESTRICTED_SYNTAX,
+      { selector: "NewExpression[callee.name='Date']", message: NON_DETERMINISTIC_MESSAGE },
+      { selector: "CallExpression[callee.name='Date']", message: NON_DETERMINISTIC_MESSAGE },
     ],
   },
 };
