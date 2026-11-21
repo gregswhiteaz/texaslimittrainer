@@ -1,0 +1,80 @@
+[
+  {
+    "id": "SPEC-01",
+    "verifies": "AC#1, DoD#9",
+    "verification": "acceptance `tests/bots/tag-mixing.acceptance.test.ts::TAG's style file holds its mixed spots and a description`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-02",
+    "verifies": "AC#1",
+    "verification": "acceptance `tests/bots/tag-mixing.acceptance.test.ts::a style file without a description fails naming the file`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-03",
+    "verifies": "AC#2",
+    "verification": "acceptance `tests/bots/tag-mixing.acceptance.test.ts::a mixed spot needs two actions of non-zero probability`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-04",
+    "verifies": "AC#3, DoD#1",
+    "verification": "acceptance `tests/bots/tag-mixing.acceptance.test.ts::in a mixed spot TAG chooses only the recommendation or the alternative and each at least once`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-05",
+    "verifies": "AC#4",
+    "verification": "acceptance `tests/bots/tag-mixing.acceptance.test.ts::outside mixed spots TAG plays the recommended action`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-06",
+    "verifies": "AC#5",
+    "verification": "acceptance `tests/bots/tag-seed-parity.acceptance.test.ts::the playtest TAG gets the same per-decision seed as the worker`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-07",
+    "verifies": "AC#1, AC#2",
+    "verification": "unit `tests/bots/style.test.ts::parseStyle lists every problem`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-08",
+    "verifies": "AC#3, AC#4",
+    "verification": "unit `tests/bots/style.test.ts::drawMixed thresholds and when TAG draws`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-09",
+    "verifies": "AC#6, DoD#2",
+    "verification": "unit `tests/toolchain/bot-determinism.test.ts::aliased globals are caught in bot decision code`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-10",
+    "verifies": "AC#7",
+    "verification": "unit `tests/toolchain/bot-determinism.test.ts::the guard covers bot-random.ts and globalThis.Math`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-11",
+    "verifies": "AC#6",
+    "verification": "unit `tests/bots/random.test.ts::one shared bot seed bound and guard`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-12",
+    "verifies": "DoD#6, AC#5",
+    "verification": "command `npm run -s playtest -- --hands 10000 --seed 42 --size 6 | shasum -a 256`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-13",
+    "verifies": "AC#6, AC#7, DoD#1, DoD#2, DoD#3, DoD#4, DoD#5, DoD#7, DoD#8, DoD#9, DoD#10, DoD#11, DoD#12",
+    "verification": "command `npm run lint && npm run typecheck && npm test`",
+    "status": "pending"
+  }
+]

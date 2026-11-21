@@ -854,7 +854,20 @@
       "skips": 0
     }
   },
-  "history": [],
+  "history": [
+    {
+      "t": "2026-11-21T15:03:06",
+      "event": "unlock",
+      "file": "tests/ui/advice-worker.acceptance.test.ts",
+      "reason": "TASK-6.2 Q-3 (autopilot, recommended): TAG now mixes; assertions compare to the exact seeded decision (no widening)"
+    },
+    {
+      "t": "2026-11-21T15:03:06",
+      "event": "unlock",
+      "file": "e2e/responsive-table.spec.ts",
+      "reason": "TASK-6.2 Q-3 (autopilot, recommended): TAG now mixes; assertions compare to the exact seeded decision (no widening)"
+    }
+  ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-3.6",
   "spec_sha256": "dfc61e9ad4548de395be288f9cdd35adb7b0a85055fb3dc0452784f1e831d816",
   "review_findings": {
@@ -863,5 +876,9 @@
   "doc_id": "doc-67",
   "judge_results": {
     "1": "PASS"
-  }
+  },
+  "relock_pending": [
+    "tests/ui/advice-worker.acceptance.test.ts",
+    "e2e/responsive-table.spec.ts"
+  ]
 }

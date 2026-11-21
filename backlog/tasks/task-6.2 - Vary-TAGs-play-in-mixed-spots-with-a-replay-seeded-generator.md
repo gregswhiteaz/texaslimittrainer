@@ -1,10 +1,11 @@
 ---
 id: TASK-6.2
 title: Vary TAG's play in mixed spots from its style data file
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-21T21:40:00Z'
+updated_date: '2026-11-21T22:03:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -67,6 +68,17 @@ Plan key: E06-S02 · Dream: limit-holdem-trainer
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
 
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. Style file format src/bots/styles/<style>.json + parseStyle/StyleValidationError (Q-1); TAG's file with description and justified mixed spots (Q-2).
+2. decideTag mixes with one generator draw in marked spots; plain recommendation without a generator; seededTagPolicy for the playtest; worker passes botRandom(seed).
+3. Shared MAX_BOT_SEED/isBotSeed; lint guard extended (aliases, globalThis.Math, src/engine/bot-random.ts).
+4. Locked-test edits per Q-3 (exact seeded equality only); AC#3 1,000-code distribution test; new playtest baseline recorded.
+
+Full spec: doit/TASK-6.2/spec.md
+<!-- SECTION:PLAN:END -->
+
 ## Implementation Notes
 
 <!-- SECTION:NOTES:BEGIN -->
@@ -75,4 +87,6 @@ AC added from TASK-6.18 scope concern (seed plumbing for mixed TAG)
 AC added from TASK-6.18 review MINOR/NIT
 
 AC added from TASK-6.18 judge J-1-01
+
+Autopilot Q-1..Q-3 auto-accepted (Q-3 amended: exact-equality only); unlocks under TASK-3.6, 6.1, 6.18.
 <!-- SECTION:NOTES:END -->

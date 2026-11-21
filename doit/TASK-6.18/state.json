@@ -939,7 +939,14 @@
       "skips": 0
     }
   },
-  "history": [],
+  "history": [
+    {
+      "t": "2026-11-21T15:03:06",
+      "event": "unlock",
+      "file": "tests/bots/bot-random.acceptance.test.ts",
+      "reason": "TASK-6.2 Q-3 (autopilot, recommended): TAG now mixes; assertions compare to the exact seeded decision (no widening)"
+    }
+  ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-6.18",
   "spec_sha256": "175c63698ab8893bdf86bf2023ee68b8e0e0f5270a596ffbc2352918a941071c",
   "review_findings": {
@@ -948,5 +955,8 @@
   "doc_id": "doc-72",
   "judge_results": {
     "1": "PASS"
-  }
+  },
+  "relock_pending": [
+    "tests/bots/bot-random.acceptance.test.ts"
+  ]
 }
