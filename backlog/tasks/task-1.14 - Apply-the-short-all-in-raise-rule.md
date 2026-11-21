@@ -1,10 +1,11 @@
 ---
 id: TASK-1.14
 title: Allow short all-in bets and raises under the half-bet reopening rule
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-17T23:22:00Z'
+updated_date: '2026-11-21T07:27:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -67,3 +68,21 @@ Plan key: E01-S14 · Dream: limit-holdem-trainer
 - [ ] #11 Story documentation is written and published to Backlog.md
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. Full bet level derived from the street's action records; a bet/raise counts if it adds at least half a unit over the level.
+2. legalActions: bet/raise amount = min(level+unit, contribution+stack); only seats that have not acted may bet/raise; cap counts only counting bets.
+3. applyAction: betCount and hasActed reset only for counting bets; currentBet always set.
+4. Invariant checker gets its own copy of the rule (size and cap checks).
+5. Acceptance tests AC#1–7, unit tests, 20k-hand short-stack property test with checkStep; playtest byte-identical.
+
+Full spec: doit/TASK-1.14/spec.md
+<!-- SECTION:PLAN:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+Autopilot: no asks. Rules assumptions to review: A-1 short all-ins measured cumulatively against the last full level; A-3 sub-half all-in bet: unacted seats may complete, checked seats only call/fold.
+<!-- SECTION:NOTES:END -->
