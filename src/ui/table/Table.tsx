@@ -108,6 +108,25 @@ function HandResult({ result }: { readonly result: HandResultView }): React.JSX.
           </li>
         ))}
       </ul>
+      {result.shown.length > 0 && (
+        <ul aria-label="Shown hands">
+          {result.shown.map((hand) => (
+            <li key={hand.seat} data-shown-seat={hand.seat}>
+              <span data-part="shown">{hand.text}</span>
+              <span aria-hidden="true"> · </span>
+              <span data-part="hand-name">{hand.handName}</span>
+              <div
+                role="group"
+                aria-label={hand.isUser ? 'Your shown cards' : `${hand.name}'s cards`}
+                className="table-cards"
+              >
+                <PlayingCard card={hand.holeCards[0]} />
+                <PlayingCard card={hand.holeCards[1]} />
+              </div>
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 }

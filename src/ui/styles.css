@@ -464,6 +464,11 @@ h1[tabindex='-1']:focus {
   font-weight: 600;
 }
 
+.hand-result ul[aria-label='Shown hands'] li {
+  color: #a7aeb8;
+  font-weight: 400;
+}
+
 .hand-result li > [aria-hidden='true'] {
   white-space: pre;
 }

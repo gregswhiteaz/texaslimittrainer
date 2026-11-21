@@ -70,8 +70,28 @@ function checkEnd(state: HandState): string | null {
   } else {
     if (active.length < 2) return 'showdown with one player';
     if (state.board.length !== 5) return 'showdown without five board cards';
-    const shown = result.showdown.map((s) => s.seat).sort((a, b) => a - b);
-    if (shown.join() !== active.map((p) => p.seat).join()) return 'showdown seats differ';
+    const lastAggressor = state.actions.findLast(
+      (a) => a.street === 'river' && (a.type === 'bet' || a.type === 'raise'),
+    )?.seat;
+    const clockwise = [
+      ...active.filter((p) => p.seat > state.button),
+      ...active.filter((p) => p.seat <= state.button),
+    ];
+    const first = Math.max(
+      0,
+      clockwise.findIndex((p) => p.seat === lastAggressor),
+    );
+    const expectedShown: number[] = [];
+    let bestShown = -Infinity;
+    for (const p of [...clockwise.slice(first), ...clockwise.slice(0, first)]) {
+      const rank = evaluate([...p.holeCards, ...state.board]);
+      if (rank >= bestShown) {
+        expectedShown.push(p.seat);
+        bestShown = rank;
+      }
+    }
+    const shown = result.showdown.map((s) => s.seat);
+    if (shown.join() !== expectedShown.join()) return 'showdown seats differ';
     const best = Math.max(...result.showdown.map((s) => s.rank));
     for (const s of result.showdown) {
       if (s.rank !== evaluate([...s.holeCards, ...state.board])) return 'wrong rank';

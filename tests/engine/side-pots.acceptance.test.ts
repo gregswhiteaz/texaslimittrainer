@@ -148,7 +148,7 @@ describe('side pots', () => {
     const end = play(turn, [3, 'check'], [4, 'check'], [3, 'check'], [4, 'check']);
     const result = resultOf(end);
     for (const pot of end.pots) expect(pot.eligible).not.toContain(2);
-    expect(result.showdown.map((s) => s.seat).sort((a, b) => a - b)).toEqual([1, 3, 4]);
+    expect(result.showdown.map((s) => s.seat)).toEqual([3]);
     for (const award of result.awards) {
       for (const w of award.winners) expect(w.seat).not.toBe(2);
     }

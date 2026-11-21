@@ -66,6 +66,8 @@ export interface PotAward {
 }
 export interface HandResult {
   readonly endedBy: 'fold' | 'showdown';
+  /** Hands shown at showdown, in showdown order (REQ-019.4/.5/.8). Mucked hands are absent. Empty after a
+   *  fold-out. */
   readonly showdown: readonly {
     readonly seat: SeatNumber;
     readonly holeCards: readonly [Card, Card];
@@ -461,6 +463,44 @@ function dealNextStreet(state: HandState): HandState {
 }
 
 /**
+ * The showdown order (REQ-019.4): `active` (clockwise from left of the button) rotated to start at the seat
+ * of the last river bet or raise, counted or not (A-1); unchanged when nobody bet on the river (D-3).
+ */
+function showdownOrder(state: HandState, active: readonly PlayerState[]): readonly PlayerState[] {
+  const last = state.actions.findLast(
+    (a) => a.street === 'river' && (a.type === 'bet' || a.type === 'raise'),
+  );
+  const at = last === undefined ? -1 : active.findIndex((p) => p.seat === last.seat);
+  return at <= 0 ? active : [...active.slice(at), ...active.slice(0, at)];
+}
+
+/**
+ * Pot-by-pot show/muck (REQ-019.5, REQ-019.8): pots are settled from the last side pot down to the main pot.
+ * In each contested pot, every undecided eligible seat (in `ranked` order) shows if no eligible hand is face
+ * up yet or it ties or beats the best one, and mucks otherwise. A mucked hand stays mucked (A-5); a pot with
+ * one eligible seat needs no show (A-3). Returns the shown hands in `ranked` order (A-4).
+ */
+function revealShown<T extends { readonly seat: SeatNumber; readonly rank: HandRank }>(
+  ranked: readonly T[],
+  pots: readonly Pot[],
+): T[] {
+  const shown = new Set<SeatNumber>();
+  const mucked = new Set<SeatNumber>();
+  for (let k = pots.length - 1; k >= 0; k--) {
+    const eligible = (pots[k] as Pot).eligible;
+    if (eligible.length === 1) continue;
+    for (const c of ranked) {
+      if (!eligible.includes(c.seat) || shown.has(c.seat) || mucked.has(c.seat)) continue;
+      const faceUp = ranked.filter((s) => shown.has(s.seat) && eligible.includes(s.seat));
+      if (faceUp.length === 0 || c.rank >= Math.max(...faceUp.map((s) => s.rank)))
+        shown.add(c.seat);
+      else mucked.add(c.seat);
+    }
+  }
+  return ranked.filter((s) => shown.has(s.seat));
+}
+
+/**
  * Closes a betting round. After the river, or once at most one seat can still bet, deals any remaining
  * streets with no betting (D-7) and holds the showdown; otherwise deals the next street.
  */
@@ -476,15 +516,19 @@ function endRound(state: HandState, players: readonly PlayerState[]): HandState 
   if (state.street === 'river' || open.length <= 1) {
     let dealt = base;
     while (dealt.street !== 'river') dealt = dealNextStreet(dealt);
-    const showdown = active.map((p) => ({
+    const ranked = showdownOrder(state, active).map((p) => ({
       seat: p.seat,
       holeCards: p.holeCards,
       rank: evaluate([...p.holeCards, ...dealt.board]),
     }));
+    const showdown = revealShown(ranked, gathered.pots);
     const awards = gathered.pots.map((pot, k): PotAward => {
       const contenders = showdown.filter((s) => pot.eligible.includes(s.seat));
       const best = Math.max(...contenders.map((s) => s.rank));
-      const winnerSeats = contenders.filter((s) => s.rank === best).map((s) => s.seat);
+      const winnerSeats =
+        pot.eligible.length === 1
+          ? pot.eligible
+          : contenders.filter((s) => s.rank === best).map((s) => s.seat);
       return {
         pot: k,
         amount: pot.amount,

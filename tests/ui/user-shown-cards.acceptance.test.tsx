@@ -13,7 +13,7 @@ const text = (markup: string): string => markup.replace(/<!-- -->/g, '').replace
 const cardCodes = (markup: string): string[] =>
   [...markup.matchAll(/<svg[^>]*data-card="([^"]+)"/g)].map((m) => m[1] ?? '');
 
-// User at seat 3 (Ac Ad); seats 1 (7c 2d), 2 and 5 (Kh Kd) also reach showdown, so 1, 2, 3, 5 are shown.
+// User at seat 3 (Ac Ad); seat 5 (Kh Kd) loses to the user's aces and mucks, so 1, 2, 3 are shown.
 const seats = ['Ava', 'Ben', 'You', 'Dee', 'Cal', 'Eli'].map((name, i): SessionSeat =>
   i === 2
     ? { seat: 3, name, kind: 'user', style: null }
@@ -42,7 +42,7 @@ const table: TableState = { ...start, hand: played };
 
 describe('User shown cards acceptance', () => {
   it('a user at seat 3 sees their own cards as Your shown cards', () => {
-    expect(played.result?.showdown.map((s) => s.seat)).toEqual([1, 2, 3, 5]);
+    expect(played.result?.showdown.map((s) => s.seat)).toEqual([1, 2, 3]);
     const html = renderToString(<TableView table={table} onAct={noop} onLeave={noop} />);
     const blocks = [...html.matchAll(/<div role="status"[^>]*>(.*?)<\/ul><\/div>/gs)];
     expect(blocks).toHaveLength(1);

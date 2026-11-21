@@ -117,7 +117,10 @@ export function actWith(
   return applyAction(state, policy(playerView(state, state.toAct, earlierShowdowns)));
 }
 
-/** The shown hands of a hand that ended at showdown; null for a fold-out or an unfinished hand. */
+/**
+ * Only the hands shown at showdown, in showdown order (mucked hands are absent); null for a fold-out or an
+ * unfinished hand.
+ */
 export function showdownOf(state: HandState): EarlierShowdown | null {
   if (state.result?.endedBy !== 'showdown') return null;
   return {

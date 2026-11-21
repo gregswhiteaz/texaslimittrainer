@@ -72,6 +72,7 @@ describe('hand result', () => {
           holeCards: parseCards('Kd 7c'),
         },
       ],
+      shown: [],
     });
     const json = JSON.stringify(kings);
     const holeCards = [...json.matchAll(/"holeCards":(\[[^\]]*\]|null)/g)].map((m) => m[1]);

@@ -238,6 +238,30 @@ export const BB_WALK: TableState = userTableAfter(
   3,
 );
 
+/**
+ * Button 3, river checked through on 2c 7d 9h Jc 3s: Dee (4h 4s) and You (8h 8s) show and lose, Ava (5h 5s) mucks
+ * behind the eights, and Ben (Kh Ks) shows and wins $16.
+ */
+export const SHOWN_HANDS: TableState = userTableAfter(
+  {
+    0: '4h',
+    6: '4s',
+    1: '8h',
+    7: '8s',
+    3: '5h',
+    9: '5s',
+    4: 'Kh',
+    10: 'Ks',
+    13: '2c',
+    14: '7d',
+    15: '9h',
+    17: 'Jc',
+    19: '3s',
+  },
+  '6:fold 1:call 2:call 3:fold 4:call 5:check' + ' 4:check 5:check 1:check 2:check'.repeat(3),
+  3,
+);
+
 /** The user's lone preflop raise takes the blinds. */
 export const RAISE_TAKES_BLINDS: TableState = userTableAfter(
   REVIEW_DECK,

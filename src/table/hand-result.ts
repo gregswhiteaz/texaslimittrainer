@@ -16,10 +16,21 @@ export interface WinnerView {
   /** Showdown winners only (Q-3). */
   readonly holeCards: readonly [Card, Card] | null;
 }
+export interface ShownHandView {
+  readonly seat: SeatNumber;
+  readonly name: string;
+  readonly isUser: boolean;
+  /** "Dee shows" | "You show" (Q-3). */
+  readonly text: string;
+  readonly handName: string;
+  readonly holeCards: readonly [Card, Card];
+}
 export interface HandResultView {
   readonly endedBy: 'fold' | 'showdown';
   /** Award order (A-7), at least one. */
   readonly winners: readonly WinnerView[];
+  /** Shown hands of seats that won nothing, in showdown order; [] after a fold-out. Never a mucked hand. */
+  readonly shown: readonly ShownHandView[];
 }
 
 /** Rank words by Rank (0 = two … 12 = ace). */
@@ -67,11 +78,19 @@ export function handName(cards: readonly Card[]): string {
   }
 }
 
-/** Winners, amounts and (at showdown) their hand names and cards; null unless table.hand has a result. */
+/**
+ * Winners, amounts and (at showdown) their hand names and cards, then the shown hands that won nothing;
+ * null unless table.hand has a result.
+ */
 export function handResultView(table: TableState): HandResultView | null {
   const { hand } = table;
   if (hand === null || hand.result === null) return null;
   const { result } = hand;
+  const nameOf = (seat: SeatNumber): string => {
+    const sessionSeat = table.seats.find((s) => s.seat === seat);
+    if (sessionSeat === undefined) throw new RangeError(`Seat ${seat} is not at the table`);
+    return sessionSeat.name;
+  };
   const amounts = new Map<SeatNumber, number>();
   for (const award of result.awards) {
     for (const { seat, amount } of award.winners) {
@@ -79,20 +98,33 @@ export function handResultView(table: TableState): HandResultView | null {
     }
   }
   const winners = [...amounts].map(([seat, amount]): WinnerView => {
-    const sessionSeat = table.seats.find((s) => s.seat === seat);
-    if (sessionSeat === undefined) throw new RangeError(`Seat ${seat} is not at the table`);
+    const name = nameOf(seat);
     const isUser = seat === table.config.userSeat;
     const shown =
       result.endedBy === 'showdown' ? result.showdown.find((s) => s.seat === seat) : undefined;
     return {
       seat,
-      name: sessionSeat.name,
+      name,
       isUser,
       amount,
-      text: isUser ? `You win $${amount}` : `${sessionSeat.name} wins $${amount}`,
+      text: isUser ? `You win $${amount}` : `${name} wins $${amount}`,
       handName: shown === undefined ? null : handName([...shown.holeCards, ...hand.board]),
       holeCards: shown === undefined ? null : [shown.holeCards[0], shown.holeCards[1]],
     };
   });
-  return { endedBy: result.endedBy, winners };
+  const shown = result.showdown
+    .filter((s) => !amounts.has(s.seat))
+    .map((s): ShownHandView => {
+      const name = nameOf(s.seat);
+      const isUser = s.seat === table.config.userSeat;
+      return {
+        seat: s.seat,
+        name,
+        isUser,
+        text: isUser ? 'You show' : `${name} shows`,
+        handName: handName([...s.holeCards, ...hand.board]),
+        holeCards: [s.holeCards[0], s.holeCards[1]],
+      };
+    });
+  return { endedBy: result.endedBy, winners, shown };
 }

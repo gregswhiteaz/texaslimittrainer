@@ -451,6 +451,6 @@ describe('hand acceptance', () => {
       { pot: 0, amount: 27, winners: [{ seat: 2, amount: 27 }] },
     ]);
     expect(stackOf(single, 2)).toBe(160 - 12 + 27);
-    expect(single.result?.showdown.map((s) => s.seat)).toEqual([2, 5]);
+    expect(single.result?.showdown.map((s) => s.seat)).toEqual([2]);
   });
 });
