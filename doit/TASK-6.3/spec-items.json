@@ -1,0 +1,68 @@
+[
+  {
+    "id": "SPEC-01",
+    "verifies": "AC#1, DoD#9",
+    "verification": "acceptance `tests/bots/calling-station.acceptance.test.ts::the Calling station style file holds its deviation parameters and a description`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-02",
+    "verifies": "AC#2, DoD#1",
+    "verification": "acceptance `tests/bots/calling-station.acceptance.test.ts::facing a bet where the advice is fold the Calling station calls at more points than TAG`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-03",
+    "verifies": "AC#3, DoD#1",
+    "verification": "acceptance `tests/bots/calling-station.acceptance.test.ts::where the advice is raise the Calling station calls at more points than TAG`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-04",
+    "verifies": "AC#4",
+    "verification": "acceptance `tests/bots/calling-station.acceptance.test.ts::changing the file's call probability changes the call rate with no code change`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-05",
+    "verifies": "AC#5",
+    "verification": "acceptance `tests/bots/calling-station.acceptance.test.ts::with no bet to face the Calling station checks or bets and never folds`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-06",
+    "verifies": "AC#2, AC#3",
+    "verification": "acceptance `tests/bots/calling-station.acceptance.test.ts::a Calling station seat in the worker plays the Calling station decision`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-07",
+    "verifies": "AC#1",
+    "verification": "unit `tests/bots/style.test.ts::parseStyle validates deviations`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-08",
+    "verifies": "DoD#6",
+    "verification": "command `npm run -s playtest -- --hands 10000 --seed 42 --size 6 | shasum -a 256`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-09",
+    "verifies": "AC#2, AC#3, AC#5",
+    "verification": "unit `tests/bots/calling-station.test.ts::Calling station draws once only at deviating decisions`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-10",
+    "verifies": "AC#5",
+    "verification": "unit `tests/table/advice-service.test.ts::default bot decision dispatches the Calling station`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-11",
+    "verifies": "DoD#1, DoD#2, DoD#3, DoD#4, DoD#5, DoD#7, DoD#8, DoD#9, DoD#10, DoD#11, DoD#12",
+    "verification": "command `npm run lint && npm run typecheck && npm test`",
+    "status": "pending"
+  }
+]

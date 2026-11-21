@@ -1,10 +1,11 @@
 ---
 id: TASK-6.3
 title: Face a Calling station that calls where TAG would fold or raise
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-17T23:22:00Z'
+updated_date: '2026-11-21T23:03:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -63,3 +64,20 @@ Plan key: E06-S03 · Dream: limit-holdem-trainer
 - [ ] #11 Story documentation is written and published to Backlog.md
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. Optional 'deviations' list in the style format (Q-1); tag.json unchanged.
+2. calling-station.json (0.5 / 0.6 / 0.5 with justifications, Q-2) and decideCallingStation: one draw per deviating decision, none otherwise; never folds when check is free.
+3. Worker routes 'Calling station' to decideCallingStation (Q-3).
+4. Tests: AC#2/#3 vs TAG over 10,000 seeded points, AC#4 probability change via file only, AC#5; playtest byte-identical.
+
+Full spec: doit/TASK-6.3/spec.md
+<!-- SECTION:PLAN:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+Autopilot Q-1..Q-3 auto-accepted (qa.md). Scope concern: postflop advice never bets/raises → aggression bands (TASK-6.16/6.17) unreachable until advice bets postflop; follow-up at close.
+<!-- SECTION:NOTES:END -->
