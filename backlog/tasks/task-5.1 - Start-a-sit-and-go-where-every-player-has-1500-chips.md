@@ -4,7 +4,7 @@ title: Start a sit-and-go where every player has 1,500 chips
 status: To Do
 assignee: []
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-18T07:03:00Z'
+updated_date: '2026-11-21T19:58:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-2
@@ -48,6 +48,7 @@ Plan key: E05-S01 · Dream: limit-holdem-trainer
 - [ ] #3 Given a sit-and-go has started, When the session record is read, Then it holds game type sit-and-go, the starting player count and no stake or buy-in [REQ-008.1, REQ-008.6]
 - [ ] #4 Given `npm run playtest -- --game sng --size 6 --hands 10000 --seed 42`, When it runs, Then every sit-and-go it plays starts with 1,500 chips per player, the chips at each table always total 9,000, zero invariant violations are reported and it exits 0 [REQ-008.1]
 - [ ] #5 Given the same sit-and-go playtest seed and options, When it is run twice, Then the two outputs are byte-identical [REQ-008.1]
+- [ ] #6 Given the sit-and-go level constants, When the engine and playtest set up a sit-and-go, Then HandConfig/PlayerView carry game type and level, and the playtest's SNG_STAKES/SNG_STARTING_CHIPS are merged with src/table/session.ts SIT_AND_GO_LEVEL_1/SIT_AND_GO_STARTING_CHIPS (one source of truth)
 <!-- AC:END -->
 
 ## Definition of Done
@@ -70,4 +71,6 @@ Plan key: E05-S01 · Dream: limit-holdem-trainer
 
 <!-- SECTION:NOTES:BEGIN -->
 Follow-up from TASK-1.5 (doc-13): PlayerView cannot show game type or sit-and-go level until HandConfig carries them; add both to HandConfig and PlayerView here.
+
+AC added from TASK-2.4 follow-up
 <!-- SECTION:NOTES:END -->

@@ -4,7 +4,7 @@ title: Remove the temporary short-stack top-up once all-ins and rebuy exist
 status: To Do
 assignee: []
 created_date: '2026-11-19T01:10:00Z'
-updated_date: '2026-11-21T19:51:00Z'
+updated_date: '2026-11-21T19:57:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -47,4 +47,6 @@ AC added from TASK-3.7 follow-up (all-in labels live)
 AC added from TASK-3.8 follow-up (live side pots)
 
 AC added from TASK-2.4 (interim sng top-up)
+
+From TASK-2.4 review: tests/table/game-type.test.ts SPEC-08 test is named '...tops up to its 1500 starting stack' but asserts the interim 800 top-up (name tied to TASK-2.4's locked spec). When removing the top-up, rename/rewrite that test to assert sng never refills.
 <!-- SECTION:NOTES:END -->

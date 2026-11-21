@@ -1,0 +1,26 @@
+{"reviewer": "code", "round": 1,
+ "rubric": [
+  {"item": "SPEC-01 correctness", "result": "pass"}, {"item": "SPEC-01 test strength", "result": "pass"},
+  {"item": "SPEC-02 correctness", "result": "pass"}, {"item": "SPEC-02 test strength", "result": "pass"},
+  {"item": "SPEC-03 correctness", "result": "pass"}, {"item": "SPEC-03 test strength", "result": "pass"},
+  {"item": "SPEC-04 correctness", "result": "pass"}, {"item": "SPEC-04 test strength", "result": "pass"},
+  {"item": "SPEC-05 correctness", "result": "pass"}, {"item": "SPEC-05 test strength", "result": "pass"},
+  {"item": "SPEC-06 correctness", "result": "pass"}, {"item": "SPEC-06 test strength", "result": "pass"},
+  {"item": "SPEC-07 correctness", "result": "pass"}, {"item": "SPEC-07 test strength", "result": "pass"},
+  {"item": "SPEC-08 correctness", "result": "pass", "note": "Top-up refills to buyIn(tableStake) = 800, not 1,500. This is the recorded deviation from A-3 in fix-brief.md (Option 2). It is accepted on substance: the locked TASK-3.4 check (tests/table/next-hand.acceptance.test.ts:108) requires a line matching /< minimum \\? buyIn\\(/, so startingStack() could not be used without a contrived Stake. The code is temporary, starting stacks are still 1,500, 800 is above minimumStack at 20/40, and TASK-3.21 carries 'sng never refills'."},
+  {"item": "SPEC-08 test strength", "result": "pass", "note": "The test fails if the top-up is removed (seat stays short) or changed to startingStack (1500 != 800), and it checks that the other seats are unchanged. Its name is misleading; see the MINOR finding."},
+  {"item": "SPEC-09 correctness", "result": "pass"}, {"item": "SPEC-09 test strength", "result": "pass"},
+  {"item": "SPEC-10 correctness", "result": "pass"}, {"item": "SPEC-10 test strength", "result": "pass"},
+  {"item": "SPEC-11 locked tests: only the two D-5 extraction-only edits, values unchanged", "result": "pass"},
+  {"item": "scope", "result": "pass"},
+  {"item": "concision", "result": "pass"},
+  {"item": "clarity", "result": "fail"}
+ ],
+ "findings": [
+  {"fingerprint": "tests/table/game-type.test.ts:test-name-says-1500-asserts-800", "severity": "MINOR",
+   "file": "tests/table/game-type.test.ts", "line": 589,
+   "issue": "The test is named 'sit-and-go resolves without a stake and tops up to its 1500 starting stack', but it asserts that the top-up target is 800 (line 612). The name states behaviour that the code deliberately does not have. SPEC-08's Behaviour and Verification lines and A-3 in spec.md still say 1,500 as well. Someone who reads the name or the spec, for example in TASK-3.21, gets the refill rule wrong. The inline comment at lines 599-600 explains it, but test reports show only the name.",
+   "evidence": "it('sit-and-go resolves without a stake and tops up to its 1500 starting stack', ...) ... expect(next.stacks.find((s) => s.seat === 1)?.stack).toBe(800);",
+   "fix": "Rename the test to e.g. 'sit-and-go resolves without a stake, starts at 1500 and tops up to 20 big bets (800)'. This file is not in locked_tests, so the rename is allowed. Update the SPEC-08 Verification name (spec.md and spec-items.json) to match, and add a note to A-3/SPEC-08 pointing to the fix-brief deviation."}
+ ],
+ "summary": "The implementation matches the spec. SessionConfig is a discriminated union, and the sit-and-go variant has no stake key. configForGameType and resolveSessionConfig build a config with no stake key for a sit-and-go, and the cash default still toStrictEquals DEFAULT_SESSION_CONFIG. seatSession uses tableStake and startingStack. headerText prints 'Sit-and-go · 6 players · 20/40 · Hand #k' and leaves the cash header unchanged. userActionBar uses chips for a sit-and-go. GameConfigScreen renders a native radio group (keyboard and a11y come from native radios with a shared name, the group is labelled by #config-game-type, and the labels are at least 44 px). Its Stakes and Buy-in rows are rendered only for cash, and the stake survives the round trip because it lives in screen state. Start game uses configForGameType. Only the two D-5 locked tests are edited, and the edits change extraction only: the expected field values are byte-identical and the control assertion matches D-5 exactly. No other locked test file is in the diff. The 800 top-up deviation is justified by the locked TASK-3.4 text check and is temporary. New tests are strong: each would fail if its behaviour broke. The 6 relevant unit files pass locally (17 tests). The one finding is a MINOR misleading test name."}
