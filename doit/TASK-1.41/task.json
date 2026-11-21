@@ -1,0 +1,204 @@
+{
+  "id": "TASK-1.41",
+  "title": "Clarify naming and comments in the invariant checker",
+  "status": "To Do",
+  "archived": false,
+  "type": "chore",
+  "priority": "low",
+  "project": null,
+  "assignees": [],
+  "reporter": null,
+  "labels": [
+    "dream-limit-holdem-trainer",
+    "follow-up"
+  ],
+  "milestone": "m-0",
+  "parentTaskId": "TASK-1",
+  "acceptanceCriteriaCompleted": 0,
+  "acceptanceCriteriaCount": 3,
+  "references": [
+    "doc-33"
+  ],
+  "modifiedFiles": [],
+  "ordinal": 201000,
+  "createdAt": "2026-11-19T21:53:00Z",
+  "updatedAt": null,
+  "dueDate": null,
+  "isReady": true,
+  "path": "backlog/tasks/task-1.41 - Clarify-naming-and-comments-in-the-invariant-checker.md",
+  "description": "Follow-up from TASK-1.27 (code MINOR) and TASK-1.8 (L4 raise-clause comment, excluded from TASK-1.27). Readability only; no behaviour change.",
+  "dependencies": [
+    "TASK-1.27"
+  ],
+  "dependencyGraph": {
+    "root": "TASK-1.41",
+    "nodes": [
+      {
+        "id": "TASK-1.41",
+        "title": "Clarify naming and comments in the invariant checker",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": 0,
+        "dependentDepth": 0
+      },
+      {
+        "id": "TASK-1.1",
+        "title": "Bootstrap the strict TypeScript project with one-command checks",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 4,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.2",
+        "title": "Rank showdown hands by real poker hand rankings",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 6,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.3",
+        "title": "Deal every hand from a seeded shuffle with a replay code",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 6,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.4",
+        "title": "Play a complete fixed-limit hand from blinds to showdown",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 5,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.5",
+        "title": "Give each deciding seat only its own view of the hand",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 4,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.6",
+        "title": "Run seeded bot-only hands from the command line",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 3,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.7",
+        "title": "Run every check in GitHub Actions on each push and pull request",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 3,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.8",
+        "title": "Check game invariants after every playtest action",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 2,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.27",
+        "title": "Tighten the playtest invariant checker and its messages",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 1,
+        "dependentDepth": null
+      }
+    ],
+    "edges": [
+      {
+        "from": "TASK-1.2",
+        "to": "TASK-1.7"
+      },
+      {
+        "from": "TASK-1.3",
+        "to": "TASK-1.7"
+      },
+      {
+        "from": "TASK-1.4",
+        "to": "TASK-1.2"
+      },
+      {
+        "from": "TASK-1.4",
+        "to": "TASK-1.3"
+      },
+      {
+        "from": "TASK-1.5",
+        "to": "TASK-1.4"
+      },
+      {
+        "from": "TASK-1.6",
+        "to": "TASK-1.5"
+      },
+      {
+        "from": "TASK-1.7",
+        "to": "TASK-1.1"
+      },
+      {
+        "from": "TASK-1.8",
+        "to": "TASK-1.6"
+      },
+      {
+        "from": "TASK-1.8",
+        "to": "TASK-1.7"
+      },
+      {
+        "from": "TASK-1.27",
+        "to": "TASK-1.8"
+      },
+      {
+        "from": "TASK-1.41",
+        "to": "TASK-1.27"
+      }
+    ]
+  },
+  "readiness": {
+    "isReady": true,
+    "isBlocked": false,
+    "blockingDependencies": [],
+    "missingDependencies": []
+  },
+  "documentation": [],
+  "subtasks": [],
+  "acceptanceCriteria": [
+    {
+      "index": 1,
+      "text": "Given checkStep in src/engine/invariants.ts, When it is read, Then the arrays formerly named rest and others are named stateChecks and afterChips",
+      "checked": false
+    },
+    {
+      "index": 2,
+      "text": "Given the L4 legal-action check, When it is read, Then a comment explains why its raise clause is written as it is (with a reference to the rule it enforces)",
+      "checked": false
+    },
+    {
+      "index": 3,
+      "text": "Given the change, When npm test and npm run playtest -- --hands 10000 --seed 42 run, Then all tests pass and the output is byte-identical to before",
+      "checked": false
+    }
+  ],
+  "definitionOfDone": [],
+  "implementationPlan": null,
+  "implementationNotes": null,
+  "comments": [],
+  "finalSummary": null
+}
