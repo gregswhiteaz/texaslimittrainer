@@ -1,9 +1,11 @@
 ---
 id: TASK-1.44
 title: Pin what a fold-out leaves in currentBet and betCount
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-20T04:07:00Z'
+updated_date: '2026-11-21T01:44:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -29,3 +31,13 @@ Follow-up from TASK-1.4 code review NIT fold-out-resets-bet-counters, still unow
 - [ ] #1 Given a hand that ends because all but one player folded mid-street, When the final state is read, Then currentBet and betCount follow one documented rule (kept or reset) and a test pins it
 - [ ] #2 Given that rule, When the code comment on foldOut is read, Then it states the rule and why
 <!-- AC:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. Keep the reset: foldOut leaves currentBet and betCount at 0, same as endRound; document it on foldOut.
+2. New tests/engine/fold-out.acceptance.test.ts: preflop and flop fold-outs end at 0/0 (asserting 8/2 just before).
+3. hand.ts diff is comment-only; npm test green.
+
+Full spec: doit/TASK-1.44/spec.md
+<!-- SECTION:PLAN:END -->
