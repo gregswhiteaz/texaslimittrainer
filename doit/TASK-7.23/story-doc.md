@@ -31,7 +31,7 @@ No questions asked. D-1: new tests in a new file, not the locked `grade.acceptan
 | SPEC-05 float test claims only real traps | AC#3 | unit test | Pass | gates/build-1.json |
 | SPEC-06 real-decision grades unchanged | AC#1 | full suite | Pass | gates/fix-3.json: 382 passed, 6 skipped |
 
-- Gates: build-1 PASS, fix-2 PASS, fix-3 FAIL on lint only (Prettier formatting of the acceptance test after the J-1-01 edit); tests, typecheck, scope and test-integrity passed. Final prettier state of that file was re-checked while writing this doc (see run result in the final summary).
+- Gates: build-1 PASS, fix-2 PASS, fix-3 FAIL on lint only (Prettier formatting of the acceptance test after the J-1-01 edit); tests, typecheck, scope and test-integrity passed. Prettier was re-run afterwards and passes.
 - Judge round 1: PASS 6/6, one LOW finding J-1-01 (assert grade `correct` in the all-NaN match case), applied in-story by the orchestrator (test unlocked and re-locked, logged in state.json history). The judge's holdout also confirmed the `equityPct`-before-`requiredEquityPct` order.
 
 ## Review
