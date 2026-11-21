@@ -1,10 +1,11 @@
 ---
 id: TASK-1.13
 title: Reject illegal actions without changing the game
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-17T23:22:00Z'
+updated_date: '2026-11-21T06:49:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -63,3 +64,20 @@ Plan key: E01-S11 · Dream: limit-holdem-trainer
 - [ ] #11 Story documentation is written and published to Backlog.md
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. Keep the error interface (out-of-turn, illegal-action, hand-complete); doc comments only in hand.ts.
+2. New acceptance file proving AC#1–4 scripted rejections leave the state byte-identical (frozen input, JSON compare, structuredClone).
+3. AC#5: 100,000 injected illegal actions across seeded 2–10 seat hands with all-ins, with minimum counts per kind.
+4. Playtest byte-identical.
+
+Full spec: doit/TASK-1.13/spec.md
+<!-- SECTION:PLAN:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+Autopilot: no asks; A-1..A-5 in spec.
+<!-- SECTION:NOTES:END -->
