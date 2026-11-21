@@ -1,0 +1,14 @@
+{"reviewer": "code", "round": 1,
+ "rubric": [
+  {"item": "SPEC-01 correctness", "result": "pass"},
+  {"item": "SPEC-01 test strength", "result": "pass"},
+  {"item": "SPEC-02 correctness", "result": "pass"},
+  {"item": "SPEC-02 test strength", "result": "pass"},
+  {"item": "SPEC-03 correctness", "result": "pass"},
+  {"item": "SPEC-03 test strength", "result": "pass"},
+  {"item": "scope", "result": "pass"},
+  {"item": "concision", "result": "pass"},
+  {"item": "clarity", "result": "pass"}
+ ],
+ "findings": [],
+ "summary": "The only source change is in src/engine/invariants.ts. In checkStep, rest/others are renamed to stateChecks/afterChips. The SPEC-01 grep exits 0: stateChecks appears on lines 330, 331 and 335, and afterChips on 331 and 334, after Prettier split the return. The SPEC-02 grep matches all three terms (lines 75-78). The comment is accurate against hand.ts legalActions: raiseTo = currentBet + unit (hand.ts:259), the unit is smallBet on preflop/flop and bigBet on turn/river, and the raise is the only raise amount offered. So once L3 passes, the raise clause cannot fail, as the comment says. The comment's restatement of REQ-016.1 is faithful to requirements.md:315 ('bets and raises are exactly one small bet / big bet'). The TASK-1.8 A-4 citation matches doit/TASK-1.8/spec.md:51, and REQ-016.5 (short all-in raises) exists at requirements.md:319. The logic, messages and order are unchanged. Gate fix-2 passes test, lint, typecheck and scope (12/12 lines, 1 file). No new tests were needed (the spec says so explicitly), and SPEC-03 is a byte-identical playtest cmp that the Judge runs. No findings."}

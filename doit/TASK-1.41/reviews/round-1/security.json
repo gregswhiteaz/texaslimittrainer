@@ -1,0 +1,3 @@
+{"reviewer": "security", "round": 1,
+ "findings": [],
+ "summary": "Change is limited to src/engine/invariants.ts: local variable renames in checkStep (rest->stateChecks, others->afterChips) with identical semantics, and a 4-line explanatory comment above the bet/raise size check in legalActionMessage. No new inputs, trust boundaries, sinks, dependencies, randomness, file or process operations. Comment contains no secrets. No findings."}

@@ -3,18 +3,18 @@
     "id": "SPEC-01",
     "verifies": "AC#1",
     "verification": "command `! grep -nwE 'rest|others' src/engine/invariants.ts && grep -nwE 'stateChecks|afterChips' src/engine/invariants.ts`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-02",
     "verifies": "AC#2",
     "verification": "command `grep -n -B6 \"action.type === 'bet' && (before.currentBet\" src/engine/invariants.ts | grep -E 'REQ-016\\.1|legalActions|TASK-1\\.14'`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-03",
     "verifies": "AC#3",
     "verification": "command `npm test && npm run -s playtest -- --hands 10000 --seed 42 > /tmp/tlh141-after.txt && git stash push -- src/engine/invariants.ts && npm run -s playtest -- --hands 10000 --seed 42 > /tmp/tlh141-before.txt; git stash pop && cmp /tmp/tlh141-before.txt /tmp/tlh141-after.txt`",
-    "status": "pending"
+    "status": "pass"
   }
 ]
