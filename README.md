@@ -15,16 +15,17 @@ npx playwright install chromium webkit
 
 Every check runs with one command and exits non-zero on failure.
 
-| Command             | What it does                                                                 |
-| ------------------- | ---------------------------------------------------------------------------- |
-| `npm run dev`       | Start the Vite dev server                                                    |
-| `npm run build`     | Build the static app into `dist/`                                            |
-| `npm run preview`   | Serve the built `dist/` locally                                              |
-| `npm test`          | Run unit and property tests (Vitest) with coverage thresholds                |
-| `npm run e2e`       | Build, serve and smoke-test the app in Chromium and WebKit, with an axe scan |
-| `npm run lint`      | ESLint (including the headless-boundary rule) and Prettier check             |
-| `npm run typecheck` | TypeScript strict type check                                                 |
-| `npm run format`    | Format all files with Prettier                                               |
+| Command                    | What it does                                                                                    |
+| -------------------------- | ----------------------------------------------------------------------------------------------- |
+| `npm run dev`              | Start the Vite dev server                                                                       |
+| `npm run build`            | Build the static app into `dist/`                                                               |
+| `npm run preview`          | Serve the built `dist/` locally                                                                 |
+| `npm test`                 | Run unit and property tests (Vitest) with coverage thresholds                                   |
+| `npm run e2e`              | Build, serve and smoke-test the app in Chromium and WebKit, with an axe scan                    |
+| `npm run lint`             | ESLint (including the headless-boundary rule) and Prettier check                                |
+| `npm run typecheck`        | TypeScript strict type check                                                                    |
+| `npm run format`           | Format all files with Prettier                                                                  |
+| `npm run playtest:million` | Play 1,000,000 cash hands over table sizes 2 to 10 in parallel shards and check every invariant |
 
 ## Continuous integration
 
@@ -59,6 +60,26 @@ Local equivalent:
 ```sh
 npm audit --omit=dev --audit-level=high && npm audit --audit-level=critical && npm run lint && npm run typecheck && npm run build && npm test && npm run e2e
 ```
+
+### Million-hand playtest
+
+`npm run playtest:million` plays 1,000,000 cash hands with the production engine and bots and
+checks every invariant after every action. It splits them into 9 shards, one per table size 2 to
+10, each with a fixed seed of 1000000 + table size (1000002 to 1000010). Size 2 gets 111,112 hands
+and sizes 3 to 10 get 111,111 each; with `--hands <9-1000000000>`, the hands left over after an
+even split go one each to the smallest sizes first. Each shard is a separate
+`npm run playtest -- --hands <H> --seed <S> --size <N>` process with the default checker, and the
+shards run in parallel, one per CPU core. When they have all finished, the tool prints each shard's
+command and its report exactly as written (so any shard can be re-run on its own and gives
+byte-identical output), then a combined report: shards passed, hands played, invariant violations
+and violations by invariant, summed over the shards, and `Result: PASS` or `Result: FAIL`. A
+shard with a violation prints its replay code and the hand's action history in its report. Exit
+codes: 0 every shard passed, 1 any violation or a shard that crashed, was killed or printed an
+unexpected report, 2 usage error. The full run takes about 8 s on the reference machine.
+
+`.github/workflows/million.yml` runs it in one job (30-minute limit) on manual dispatch only; it
+has no schedule. Start it with `gh workflow run million.yml --ref main` (GitHub only dispatches
+workflows whose file is on the default branch). A violation or failed shard fails the run.
 
 ### Card visual baselines
 
@@ -159,6 +180,13 @@ machine (Apple-silicon Mac, Node 22.18.0) with `CI` unset:
 
   ```sh
   EQUITY_PERF_SCALE=1 npx vitest run tests/advice/equity.perf.test.ts
+  ```
+
+- Playtest: 100,000 6-max hands in at most 60 minutes. Measured 4.8 s (real) on an Apple M4 Pro
+  with Node 22.18.0. `npm test` checks the 60-minute limit on every run.
+
+  ```sh
+  time npm run playtest -- --hands 100000 --size 6
   ```
 
 A local `npm test` keeps only slack checks (at least 1,000,000 evals/s, build at most 500 ms,

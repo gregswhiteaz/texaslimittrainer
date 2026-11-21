@@ -1,0 +1,65 @@
+{
+  "task": "TASK-1.17",
+  "phase": "fix",
+  "run": 2,
+  "result": "PASS",
+  "changed_lines": 965,
+  "changed_files": [
+    ".github/workflows/million.yml",
+    "README.md",
+    "package.json",
+    "src/playtest/shards.ts",
+    "tests/ci/million-workflow.acceptance.test.ts",
+    "tests/playtest/million.acceptance.test.ts",
+    "tests/playtest/shards.test.ts",
+    "tests/playtest/throughput.acceptance.test.ts",
+    "tools/playtest/million.ts"
+  ],
+  "checks": [
+    {
+      "name": "test command",
+      "status": "pass",
+      "detail": "$ npm test\nexit 0\neat show first 2ms\n \u2713 tests/engine/showdown-order.test.ts > showdown order > a pot only one seat can win is awarded without a show 0ms\n \u2713 tests/engine/showdown-order.test.ts > showdown order > a runout with no river betting starts left of the button 0ms\n \u2713 tests/table/hand-result-edges.acceptance.test.ts > Hand result edge cases > a high card on the board is named, not the first card 1ms\n \u2713 tests/table/hand-result-edges.acceptance.test.ts > Hand result edge cases > a winner who is not seated throws a RangeError 1ms\n \u2713 tests/table/session-stacks.acceptance.test.ts > stacks follow the configured seat numbers, not DEFAULT_SEATS 1ms\n\n Test Files  134 passed (134)\n      Tests  473 passed | 6 skipped (479)\n   Start at  03:03:45\n   Duration  23.80s (tests 94%, import 5%)\n\n\u001b[34m % \u001b[39m\u001b[2mCoverage report from \u001b[22m\u001b[33mv8\u001b[39m\n-------------------|---------|----------|---------|---------|-------------------\nFile               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s \n-------------------|---------|----------|---------|---------|-------------------\nAll files          |   97.27 |    95.03 |   94.47 |   97.54 |                   \n advice            |    99.8 |    98.26 |     100 |     100 |                   \n  equity.ts        |   99.55 |    93.97 |     100 |     100 | 114,120,199,292   \n engine            |   99.88 |    95.22 |     100 |   99.85 |                   \n  ...-evaluator.ts |     100 |    80.18 |     100 |     100 | ...87-200,214-215 \n  hand.ts          |     100 |    99.51 |     100 |     100 | 341               \n  invariants.ts    |   99.68 |    97.31 |     100 |   99.62 | 387               \n playtest          |     100 |    98.89 |     100 |     100 |                   \n  cli.ts           |     100 |    99.05 |     100 |     100 | 199               \n  shards.ts        |     100 |    97.53 |     100 |     100 | 197,283           \n ui                |   35.29 |    14.28 |   28.57 |    37.5 |                   \n  App.tsx          |   33.33 |    33.33 |      20 |   33.33 | 20-35             \n  ...adingFocus.ts |    37.5 |        0 |      50 |   42.85 | 10-13             \n ui/config         |   93.75 |       75 |   83.33 |   93.33 |                   \n  ...figScreen.tsx |   93.75 |       75 |   83.33 |   93.33 | 96                \n ui/table          |   47.05 |    64.47 |   46.15 |   54.92 |                   \n  ActionBar.tsx    |      50 |        0 |   66.66 |   66.66 | 19                \n  Table.tsx        |   71.42 |       90 |    62.5 |   75.75 | ...29-230,233-234 \n  ...bleSession.ts |    17.5 |       10 |    12.5 |   20.68 | 44-70,74,79-80    \n-------------------|---------|----------|---------|---------|-------------------\n\n=============================== Coverage summary ===============================\nStatements   : 97.27% ( 2104/2163 )\nBranches     : 95.03% ( 1377/1449 )\nFunctions    : 94.47% ( 462/489 )\nLines        : 97.54% ( 1748/1792 )\n================================================================================\n"
+    },
+    {
+      "name": "lint command",
+      "status": "pass",
+      "detail": "$ npm run lint\nexit 0\n\n> tlh-trainer@0.0.0 lint\n> eslint . --max-warnings 0 && prettier --check .\n\nChecking formatting...\nAll matched files use Prettier code style!\n"
+    },
+    {
+      "name": "typecheck command",
+      "status": "pass",
+      "detail": "$ npm run typecheck\nexit 0\n\n> tlh-trainer@0.0.0 typecheck\n> tsc -p tsconfig.json\n\n"
+    },
+    {
+      "name": "spec unchanged",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "name": "scope budget (lines)",
+      "status": "warn",
+      "detail": "965 changed lines vs budget 750 (fail above 1500)"
+    },
+    {
+      "name": "scope budget (files)",
+      "status": "pass",
+      "detail": "9 files vs budget 9"
+    },
+    {
+      "name": "files outside spec",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "name": "all changes listed in changes.md",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "name": "test integrity",
+      "status": "pass",
+      "detail": ""
+    }
+  ]
+}

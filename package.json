@@ -16,6 +16,7 @@
     "typecheck": "tsc -p tsconfig.json",
     "format": "prettier --write .",
     "playtest": "node --import ./tools/playtest/resolve-ts.js tools/playtest/main.ts",
+    "playtest:million": "node --import ./tools/playtest/resolve-ts.js tools/playtest/million.ts",
     "chart:print": "node --import ./tools/playtest/resolve-ts.js tools/chart-print/main.ts"
   },
   "dependencies": {
