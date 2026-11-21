@@ -1,10 +1,11 @@
 ---
 id: TASK-3.22
 title: Pin the hand-result edge cases
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-19T01:10:00Z'
-updated_date: '2026-11-21T02:09:00Z'
+updated_date: '2026-11-21T02:20:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -31,6 +32,16 @@ Follow-up from TASK-3.4 (doc-25) code review: the only high-card example lists i
 - [ ] #2 Given the 'Seat <n> is not at the table' throw in src/table/hand-result.ts, When reviewed, Then it is either covered by a test or removed
 - [ ] #3 Given a showdown where the user's hand is shown, When the hand result renders, Then 'Your shown cards' lists the user's own two hole cards (src/table/hand-result.ts), and a test fails if another seat's cards are used
 <!-- AC:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. hand-result-edges test: 'King high' when the highest card is on the board; the 'Seat n is not at the table' RangeError is covered.
+2. user-shown-cards test: user at seat 3 among shown seats 1,2,3,5 sees exactly Ac Ad.
+Each proven against its mutants; no src changes.
+
+Full spec: doit/TASK-3.22/spec.md
+<!-- SECTION:PLAN:END -->
 
 ## Implementation Notes
 
