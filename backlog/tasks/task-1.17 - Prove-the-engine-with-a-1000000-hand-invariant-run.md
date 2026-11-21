@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-21T14:48:00Z'
+updated_date: '2026-11-21T15:03:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -99,6 +99,8 @@ Autopilot stopped 2026-11-21: judge R1 16... SPEC-09 failed — branch CI red tw
 User Q-1 (2026-11-21): 100k throughput test made opt-in (TLH_SLOW_TESTS=1 / npm run test:slow; 5.2 s, 0 violations); A-9 reversed. Gate PASS.
 
 Judge R3 PASS 10/10. Follow-ups (Step 6a): WebKit logo flake → TASK-3.25 (created); live million.yml dispatch after merge (D-4); README Commands row for test:slow (J-3-02) and other infra NITs not tracked.
+
+Live dispatch (D-4), 2026-11-21: million.yml run 44916974826 on main (4d2b63a) — success; job 78 s; Shards passed 9 of 9, Hands played 1000000, Invariant violations 0, Result PASS.
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary
