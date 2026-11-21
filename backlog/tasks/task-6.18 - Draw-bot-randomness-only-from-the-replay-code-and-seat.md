@@ -1,10 +1,11 @@
 ---
 id: TASK-6.18
 title: Draw bot randomness only from the replay code and seat
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-17T23:13:00Z'
-updated_date: '2026-11-21T17:57:00Z'
+updated_date: '2026-11-21T21:20:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -65,8 +66,21 @@ Plan key: E06-S18 · Dream: limit-holdem-trainer
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
 
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. Move the per-seat generator to src/bots/random.ts (re-exported); derive the per-decision seed on the main thread from (replay code, seat, k) (Q-1).
+2. Bot request carries a numeric seed (never the replay code); worker builds Xoshiro128(seed) and passes it to decideTag (TAG ignores it until TASK-6.2); malformed seed → error reply.
+3. Lint guard banning Math.random/Date/crypto/performance in src/bots and src/advice (Q-2).
+4. Tests: reproducible seed per seat/decision, isolation from time and other draws, typical-player basis only; playtest byte-identical.
+
+Full spec: doit/TASK-6.18/spec.md
+<!-- SECTION:PLAN:END -->
+
 ## Implementation Notes
 
 <!-- SECTION:NOTES:BEGIN -->
 AC added from TASK-3.6 follow-up (D-6: no replay code in the worker)
+
+Autopilot Q-1/Q-2 auto-accepted (qa.md); TASK-6.2 AC added for seed plumbing when TAG mixes.
 <!-- SECTION:NOTES:END -->
