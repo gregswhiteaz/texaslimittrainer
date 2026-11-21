@@ -1,10 +1,11 @@
 ---
 id: TASK-2.3
 title: Choose the stake for a cash game
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-17T23:22:00Z'
+updated_date: '2026-11-21T16:54:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -61,3 +62,21 @@ Plan key: E02-S03 · Dream: limit-holdem-trainer
 - [ ] #11 Story documentation is written and published to Backlog.md
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. CASH_STAKES list (six stakes) in src/table/session.ts.
+2. Game Config: Stakes row becomes a native select (Q-1), $4/$8 default; Buy-in text follows the stake (20 big bets).
+3. Blinds/buy-in/header already scale via stakesFor/buyIn — prove per stake.
+4. Q-2: amend locked TASK-2.1 home test extraction (one select allowed; values unchanged).
+5. New e2e stake-choice spec (Chromium + WebKit, axe, no money wording).
+
+Full spec: doit/TASK-2.3/spec.md
+<!-- SECTION:PLAN:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+Autopilot Q-1/Q-2 auto-accepted (qa.md); unlock recorded under TASK-2.1.
+<!-- SECTION:NOTES:END -->
