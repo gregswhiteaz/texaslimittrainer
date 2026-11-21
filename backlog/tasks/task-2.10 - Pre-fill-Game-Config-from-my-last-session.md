@@ -4,7 +4,7 @@ title: Pre-fill Game Config from my last session
 status: To Do
 assignee: []
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-17T23:22:00Z'
+updated_date: '2026-11-21T17:02:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-2
@@ -45,6 +45,7 @@ Plan key: E02-S10 · Dream: limit-holdem-trainer
 - [ ] #3 Given the user started session A and later resumed an older paused session B, When Game Config opens, Then it shows session A's values [REQ-012.1]
 - [ ] #4 Given the user changed fields on Game Config and chose Cancel, When Game Config opens again, Then it shows the last started session's values [REQ-012.1]
 - [ ] #5 Given a stored last configuration fixture whose game type is Sit-and-go, When Game Config opens, Then Sit-and-go is selected as the game type [REQ-012.1, REQ-005.1]
+- [ ] #6 Given a stored config whose stake is not one of the six CASH_STAKES, When Game Config opens, Then the stake falls back to $4/$8 and no unlisted stake reaches the table
 <!-- AC:END -->
 
 ## Definition of Done
@@ -62,3 +63,9 @@ Plan key: E02-S10 · Dream: limit-holdem-trainer
 - [ ] #11 Story documentation is written and published to Backlog.md
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+AC added from TASK-2.3 follow-up (validate stored stake against CASH_STAKES)
+<!-- SECTION:NOTES:END -->

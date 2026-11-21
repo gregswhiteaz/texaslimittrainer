@@ -1,0 +1,94 @@
+{
+ "round": 1,
+ "test_suite": {
+  "command": "npm test (plus npm run lint, npm run typecheck, npm run e2e)",
+  "result": "PASS",
+  "passed": 479,
+  "failed": 0,
+  "notes": "npm test: 135 files passed / 1 skipped, 479 tests passed / 7 skipped, exit 0; coverage 97.1% stmts / 94.9% branches overall, thresholds met. lint (eslint + prettier) and tsc exit 0. npm run e2e: 110 passed, 0 failed (Chromium + WebKit), incl. all 3 stake-choice specs in both browsers and locked e2e/home.spec.ts."
+ },
+ "end_to_end": {
+  "command": "npm run build && npm run preview (Playwright-driven Chromium and WebKit at 1280x720 against http://localhost:4173)",
+  "result": "PASS",
+  "expected": "Stakes select lists $2 / $4 ... $20 / $40 with $4 / $8 selected and Buy-in $160 (20 big bets); choosing a stake updates Buy-in to 20 big bets; Cancel or Home resets to $4 / $8; Start game opens the table at the chosen stake with header Cash · 6 players · $s/$b · Hand #1, all stacks 20 big bets, seat 1 posts floor(s/2), seat 2 posts s; keyboard selection works; a hand can be played.",
+  "actual": "Both browsers: for $2/$4, $3/$6, $6/$12, $20/$40 (and $10/$20 via the builder spec) the Buy-in text, header, 20bb stacks ($80/$120/$240/$800), blinds ($1/$2, $1/$3, $3/$6, $10/$20) and post-blind stacks all matched. Home and Cancel both reset to 4/8 with $160 buy-in. Clicking the label focuses the select; Tab reaches it; typeahead ('$1' -> $10 / $20, '$2' -> $20 / $40) changes the value and the Buy-in follows ($800); Tab to Start game + Enter opened the table at $20/$40. Arrow keys on a closed select open the native macOS popup (platform behaviour; value unchanged until chosen). Played a full hand at $20/$40: action labels Call $20 / Raise to $40 / Raise to $60 / Bet $20 / Bet $40, seat texts Small blind $10, Big blind $20, Raised to $40; 'Hand over' result shown. Screenshot: select 118x44 px, #f2f3f5 on #1a1d22, 15px system-ui, chevron visible, focus ring visible; layout fits 1280x720."
+ },
+ "integrity": {
+  "result": "PASS",
+  "notes": "doit.py test-integrity TASK-2.3 exit 0 (no output). Diff vs base 2b3e33d touches only the 7 spec'd files; no special-casing of test inputs, no hard-coded expectations, no mocks of the unit under test. Locked TASK-2.1 test amendment is extraction-only as approved in D-2: expected fields/buttons unchanged, no-controls assertion narrowed to exactly one '<select '. TASK-2.1 state.json change is the recorded unlock event plus reformatting. Mutants: Start game passing the unmodified config -> SPEC-08 e2e fails; Buy-in computed from config.stake instead of chosen stake -> SPEC-07 e2e fails (the renderToString unit tests cannot see interaction, as the spec anticipates). git diff --stat -- src e2e tests is empty after mutants and temp holdout copies were removed."
+ },
+ "items": [
+  {
+   "spec": "SPEC-01",
+   "result": "PASS",
+   "evidence": "stakes.acceptance 'cash stakes are exactly...' passes; asserts exact ordered list, length 6, array and entries frozen, default {4,8}. Holdout: push to CASH_STAKES and assigning to an entry both throw; keys 2/4..20/40 in order; default {4,8} -> pass."
+  },
+  {
+   "spec": "SPEC-02",
+   "result": "PASS",
+   "evidence": "stakes.acceptance 'every stake posts...' passes; asserts first two actions [small-blind,big-blind] with per-stake amounts, stakesFor blinds, table stacks and hand startingStack = 20bb. Holdout with two other replay codes: blinds [1,2],[1,3],[2,4],[3,6],[5,10],[10,20], buyIn = 20bb, all stacks 20bb -> pass."
+  },
+  {
+   "spec": "SPEC-03",
+   "result": "PASS",
+   "evidence": "stakes.acceptance '$10/$20 session...' passes; asserts header text, 400 stacks, hand.stakes {5,10,10,20}, seat1 SB 5 / seat2 BB 10."
+  },
+  {
+   "spec": "SPEC-04",
+   "result": "PASS",
+   "evidence": "game-config-stake 'six stakes with $4 / $8 selected' passes; asserts single select id config-stake, label for/text, six option texts, only $4 / $8 selected, $160 buy-in. Holdout render for each of 6 stakes: exactly one select, 6 options, only the matching option selected with key s/b, label present, row order Game type/Players/Stakes/Buy-in/Speed -> pass."
+  },
+  {
+   "spec": "SPEC-05",
+   "result": "PASS",
+   "evidence": "game-config-stake 'buy-in reads 20 big bets...' passes; checks $3/$6 -> $120 with no control in the dd and every stake $80..$800. Mutant (buy-in from config.stake) is killed by SPEC-07 e2e. Browser: $3/$6 -> '$120 (20 big bets)', $20/$40 -> '$800 (20 big bets)', Buy-in dd non-interactive."
+  },
+  {
+   "spec": "SPEC-06",
+   "result": "PASS",
+   "evidence": "game-config-stake 'no stake or buy-in text...' passes for all six stakes: no real-money wording in text or controls, buttons exactly ['← Home','Cancel','Start game'], one select, no a/input/form. Holdout render per stake shows no deposit/payment/cash-out wording."
+  },
+  {
+   "spec": "SPEC-07",
+   "result": "PASS",
+   "evidence": "e2e stake-choice 'stake list is the six stakes...' passes in Chromium and WebKit; mutant computing buy-in from the unchanged config made it fail. Holdout: Home and Cancel both reset to 4/8 / $160; keyboard typeahead changes stake and buy-in follows."
+  },
+  {
+   "spec": "SPEC-08",
+   "result": "PASS",
+   "evidence": "e2e 'starting at $10 / $20...' passes in both browsers; mutant where Start passes the unmodified config failed it. Holdout in both browsers at $2/$4, $3/$6, $6/$12, $20/$40: header, 20bb stacks, Small blind/Big blind texts and post-blind stacks all correct."
+  },
+  {
+   "spec": "SPEC-09",
+   "result": "PASS",
+   "evidence": "e2e 'every stake keeps game config free...' passes in both browsers (axe, one combobox, no link/textbox, buttons, height >= 44, no overflow). Measured select box 118x44 in both browsers; screenshot shows dark-themed select with chevron and focus ring (appearance:none deviation acceptable in substance)."
+  },
+  {
+   "spec": "SPEC-10",
+   "result": "PASS",
+   "evidence": "npm test exit 0 (479 passed) and npm run e2e 110 passed, incl. locked e2e/home.spec.ts, tests/table/session-config.acceptance.test.ts and the D-2-amended tests/ui/home.acceptance.test.tsx with unchanged expected values."
+  },
+  {
+   "spec": "SPEC-11",
+   "result": "PASS",
+   "evidence": "npm run lint (eslint --max-warnings 0 + prettier --check) exit 0; npm run typecheck exit 0; npm test exit 0 with coverage 97.1% statements overall, thresholds (90% headless / 70% overall) enforced and met."
+  },
+  {
+   "spec": "SPEC-12",
+   "result": "PASS",
+   "evidence": "npm run playtest -- --hands 10000 --seed 42 -> 'Invariant violations: 0'."
+  },
+  {
+   "spec": "SPEC-13",
+   "result": "PASS",
+   "evidence": "backlog doc list --plain shows 'doc-66 - TASK-2.3: Choose the stake for a cash game'. gh run watch 44927816510 --exit-status exit 0: conclusion success on branch doit/TASK-2.3 head 92a19d3, job 'Lint, typecheck, build, test and e2e' success."
+  },
+  {
+   "spec": "SPEC-14",
+   "result": "PASS",
+   "evidence": "Diff adds no strategy text (only a stake constant, selector UI and CSS). Golden-spot tasks TASK-7.11 / TASK-7.14 are not Done (0/6 AC); offline task TASK-13.4 not Done (0/4 AC). N/A confirmed."
+  }
+ ],
+ "findings": [],
+ "summary": "All 14 SPEC items PASS. Unit suite 479 passed, e2e 110 passed (Chromium + WebKit), lint/typecheck clean, playtest 0 violations, CI green on 92a19d3, doc-66 published. End to end in both browsers at $2/$4, $3/$6, $6/$12, $20/$40 the header, 20bb stacks and blinds are correct; keyboard selection (typeahead, Tab, Enter) works; a full hand plays at $20/$40 with stake-scaled bets. Integrity clean; two mutants killed by the e2e specs. No findings."
+}
