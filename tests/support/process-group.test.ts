@@ -2,11 +2,12 @@ import { mkdtempSync, readFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { setTimeout as sleep } from 'node:timers/promises';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { runProcessGroup } from './process-group';
 import { REPO_ROOT } from './sandbox';
 
 const STUB = join(REPO_ROOT, 'tests/ci/fixtures/flaky-command.js');
+const realKill = process.kill.bind(process);
 
 function isAlive(pid: number): boolean {
   try {
@@ -46,5 +47,39 @@ describe('runProcessGroup', () => {
     const script = "process.stdout.write('out'); process.stderr.write('err'); process.exit(3)";
     const result = await runProcessGroup(process.execPath, ['-e', script], { timeoutMs: 10_000 });
     expect(result).toEqual({ exitCode: 3, output: 'outerr', timedOut: false });
+  });
+
+  it('ignores an EPERM group kill without printing and still kills the grandchild', async () => {
+    const dir = mkdtempSync(join(tmpdir(), 'tlh-process-group-'));
+    try {
+      const state = join(dir, 'state');
+      let output = '';
+      vi.spyOn(process.stdout, 'write').mockImplementation((chunk) => {
+        output += String(chunk);
+        return true;
+      });
+      let denied = 0;
+      vi.spyOn(process, 'kill').mockImplementation((target, signal) => {
+        if (target >= 0) return realKill(target, signal);
+        try {
+          realKill(target, signal);
+        } catch {
+          // The spy always reports EPERM below, whatever the real kill did.
+        }
+        denied += 1;
+        throw Object.assign(new Error('EPERM'), { code: 'EPERM' });
+      });
+      const result = await runProcessGroup(process.execPath, [STUB, state, '1', 'hang-tree'], {
+        timeoutMs: 500,
+      });
+      expect(result).toMatchObject({ timedOut: true, exitCode: -1 });
+      expect(denied).toBeGreaterThanOrEqual(1);
+      expect(output).not.toContain('could not send');
+      const grandchild = Number(readFileSync(`${state}.child`, 'utf8'));
+      expect(await waitUntilGone(grandchild, 2000)).toBe(true);
+    } finally {
+      vi.restoreAllMocks();
+      rmSync(dir, { recursive: true, force: true });
+    }
   });
 });

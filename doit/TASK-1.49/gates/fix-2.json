@@ -1,0 +1,58 @@
+{
+  "task": "TASK-1.49",
+  "phase": "fix",
+  "run": 2,
+  "result": "PASS",
+  "changed_lines": 56,
+  "changed_files": [
+    "tests/support/process-group.test.ts",
+    "tests/support/process-group.ts"
+  ],
+  "checks": [
+    {
+      "name": "test command",
+      "status": "pass",
+      "detail": "$ npm test\nexit 0\nthrows for a seat that was not dealt in 1ms\n \u2713 tests/table/next-hand.test.ts > next hand > nextHand works only after a completed hand 1ms\n \u2713 tests/table/hand-result.test.ts > hand result > handName names every category with its ranks 2ms\n \u2713 tests/table/hand-result.test.ts > hand result > the result model lists winners in award order and exposes only winners' cards 1ms\n \u2713 tests/table/session-config.acceptance.test.ts > session config acceptance > first-use session config carries game type, players, stake, line-up, speed, seat and button 2ms\n\n Test Files  101 passed (101)\n      Tests  363 passed | 6 skipped (369)\n   Start at  18:11:38\n   Duration  17.72s (tests 95%, import 4%, worker 1%)\n\n\u001b[34m % \u001b[39m\u001b[2mCoverage report from \u001b[22m\u001b[33mv8\u001b[39m\n-------------------|---------|----------|---------|---------|-------------------\nFile               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s \n-------------------|---------|----------|---------|---------|-------------------\nAll files          |   96.57 |     93.8 |   93.07 |   96.96 |                   \n advice            |    99.8 |    98.23 |     100 |     100 |                   \n  equity.ts        |   99.55 |    93.97 |     100 |     100 | 114,120,199,292   \n engine            |   99.84 |    93.75 |     100 |   99.81 |                   \n  ...-evaluator.ts |     100 |    80.18 |     100 |     100 | ...87-200,214-215 \n  hand.ts          |     100 |    99.22 |     100 |     100 | 271               \n  invariants.ts    |   99.53 |    96.53 |     100 |   99.42 | 272               \n playtest          |     100 |    99.22 |     100 |     100 |                   \n  cli.ts           |     100 |    98.57 |     100 |     100 | 148               \n table             |   99.52 |    99.35 |     100 |     100 |                   \n  hand-result.ts   |   97.77 |    96.29 |     100 |     100 | 83                \n ui                |   35.29 |    14.28 |   28.57 |    37.5 |                   \n  App.tsx          |   33.33 |    33.33 |      20 |   33.33 | 20-35             \n  ...adingFocus.ts |    37.5 |        0 |      50 |   42.85 | 10-13             \n ui/config         |   93.75 |       75 |   83.33 |   93.33 |                   \n  ...figScreen.tsx |   93.75 |       75 |   83.33 |   93.33 | 96                \n ui/table          |   46.42 |     62.5 |   44.73 |   54.28 |                   \n  ActionBar.tsx    |      50 |        0 |   66.66 |   66.66 | 19                \n  Table.tsx        |   70.58 |    89.13 |      60 |      75 | ...10-211,214-215 \n  ...bleSession.ts |    17.5 |       10 |    12.5 |   20.68 | 44-70,74,79-80    \n-------------------|---------|----------|---------|---------|-------------------\n\n=============================== Coverage summary ===============================\nStatements   : 96.57% ( 1690/1750 )\nBranches     : 93.8% ( 1060/1130 )\nFunctions    : 93.07% ( 363/390 )\nLines        : 96.96% ( 1408/1452 )\n================================================================================\n"
+    },
+    {
+      "name": "lint command",
+      "status": "pass",
+      "detail": "$ npm run lint\nexit 0\n\n> tlh-trainer@0.0.0 lint\n> eslint . --max-warnings 0 && prettier --check .\n\nChecking formatting...\nAll matched files use Prettier code style!\n"
+    },
+    {
+      "name": "typecheck command",
+      "status": "pass",
+      "detail": "$ npm run typecheck\nexit 0\n\n> tlh-trainer@0.0.0 typecheck\n> tsc -p tsconfig.json\n\n"
+    },
+    {
+      "name": "spec unchanged",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "name": "scope budget (lines)",
+      "status": "pass",
+      "detail": "56 changed lines vs budget 60 (fail above 120)"
+    },
+    {
+      "name": "scope budget (files)",
+      "status": "pass",
+      "detail": "2 files vs budget 2"
+    },
+    {
+      "name": "files outside spec",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "name": "all changes listed in changes.md",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "name": "test integrity",
+      "status": "pass",
+      "detail": ""
+    }
+  ]
+}
