@@ -125,7 +125,8 @@ async function partsOutsideCard(page: Page, section: string): Promise<string[]> 
             }),
           );
         });
-        if (leaves) outside.push(`${face.getAttribute('data-card') ?? ''} ${part}`);
+        if (paths.length === 0 || leaves)
+          outside.push(`${face.getAttribute('data-card') ?? ''} ${part}`);
       }
     }
     return outside;
@@ -251,6 +252,19 @@ test('containment check fails when a glyph leaves the card', async ({ page }) =>
   });
   const outside = await partsOutsideCard(page, 'faces-two-colour');
   expect(outside.sort()).toEqual(['Ac rank', 'Kh suit']);
+});
+
+test('containment check reports a part with no path', async ({ page }) => {
+  await openCardGallery(page, bundle);
+  await page.evaluate(() => {
+    const section = document.querySelector('[data-testid="faces-two-colour"]');
+    section
+      ?.querySelectorAll('[data-card="Qs"] [data-part="rank"] path')
+      .forEach((path) => path.remove());
+    section?.querySelector('[data-card="3h"] [data-part="suit"]')?.remove();
+  });
+  const outside = await partsOutsideCard(page, 'faces-two-colour');
+  expect(outside.sort()).toEqual(['3h suit', 'Qs rank']);
 });
 
 test('gallery has no serious axe violations and no network requests', async ({ page }) => {

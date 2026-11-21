@@ -65,4 +65,12 @@ describe('visual workflow', () => {
       .filter((file) => !existsSync(join(SNAPSHOTS, file)));
     expect(missing).toEqual([]);
   });
+
+  it('README explains regenerating baselines after a Playwright bump', () => {
+    const readme = readFileSync(join(REPO_ROOT, 'README.md'), 'utf8');
+    const section = /^### Card visual baselines\n([\s\S]*?)(?=^#)/m.exec(readme)?.[1] ?? '';
+    expect(section).toContain('Dependabot');
+    expect(section).toContain('@playwright/test');
+    expect(section).toContain('gh workflow run visual.yml --ref <branch> -f update=true');
+  });
 });

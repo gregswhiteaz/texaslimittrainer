@@ -6,14 +6,8 @@
     "status": "pending"
   },
   {
-    "id": "SPEC-02",
-    "verifies": "AC#2",
-    "verification": "acceptance `e2e/cards.spec.ts::card back shows the decoded TLH logo`, `e2e/cards.spec.ts::logo check fails when the logo is hidden or does not load`; command `grep -c \"new Image()\" e2e/cards.spec.ts` prints `1` and `grep -c \"\\.decode()\" e2e/cards.spec.ts` prints `1`",
-    "status": "pending"
-  },
-  {
     "id": "SPEC-03",
-    "verifies": "AC#3",
+    "verifies": "AC#2",
     "verification": "unit `tests/ci/visual-workflow.test.ts::README explains regenerating baselines after a Playwright bump`",
     "status": "pending"
   }

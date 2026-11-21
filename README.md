@@ -80,6 +80,12 @@ are attached as the `card-visual-baselines` artifact and the Playwright report a
 3. Copy the `*-linux.png` files into `e2e/cards.visual.spec.ts-snapshots/` unchanged, then commit
    and push. The next `Visual` run must pass.
 
+When a Dependabot pull request bumps `@playwright/test`, the `Visual` job uses the matching new
+Docker image. If the new browsers render the cards differently, `Visual` goes red on that pull
+request. Regenerate the baselines on the Dependabot branch with
+`gh workflow run visual.yml --ref <branch> -f update=true`, then follow steps 2 and 3 and push the
+new `*-linux.png` files to that branch before merging.
+
 ### Dependency updates
 
 `.github/dependabot.yml` makes Dependabot open update pull requests every Monday: one grouped pull

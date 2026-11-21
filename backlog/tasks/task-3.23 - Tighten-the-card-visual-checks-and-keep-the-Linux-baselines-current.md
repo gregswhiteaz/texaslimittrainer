@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-20T03:45:00Z'
-updated_date: '2026-11-21T02:35:00Z'
+updated_date: '2026-11-21T02:42:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -29,8 +29,7 @@ Follow-up from TASK-3.20 review (MINOR, NITs) and spec scope concerns: containme
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
 - [ ] #1 Given a card part with no <path>, When partsOutsideCard runs, Then it reports that part
-- [ ] #2 Given the card-back logo test, When it runs, Then the image is decoded once (via logoProblems) with no inline duplicate
-- [ ] #3 Given a Dependabot Playwright bump that changes rendering, When Visual goes red, Then the README documents (or a workflow automates) regenerating baselines with gh workflow run visual.yml --ref <branch> -f update=true
+- [ ] #2 Given a Dependabot Playwright bump that changes rendering, When Visual goes red, Then the README documents (or a workflow automates) regenerating baselines with gh workflow run visual.yml --ref <branch> -f update=true
 <!-- AC:END -->
 
 ## Implementation Plan
@@ -49,4 +48,6 @@ Full spec: doit/TASK-3.23/spec.md
 Infra ACs removed 2026-11-20 under the user's value filter (artifact-step assertions, container digest pin); trainer-test and baseline-regeneration ACs kept.
 
 Autopilot D-1: strengthen-only edit to e2e/cards.spec.ts, unlocks recorded under TASK-3.20 and TASK-3.5.
+
+Escalation Q-1 (user): AC#2 (remove the duplicate inline logo decode) dropped — the permission safeguard refused deleting assertions from a locked test; the duplicate check stays. Former AC#3 is now AC#2.
 <!-- SECTION:NOTES:END -->
