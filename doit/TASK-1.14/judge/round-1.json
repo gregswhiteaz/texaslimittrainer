@@ -1,0 +1,114 @@
+{
+ "round": 1,
+ "test_suite": {
+  "command": "npm test",
+  "result": "PASS",
+  "passed": 437,
+  "failed": 0,
+  "notes": "122 files, 437 passed, 6 skipped (pre-existing skips). lint and typecheck exit 0. Coverage thresholds met."
+ },
+ "end_to_end": {
+  "command": "npm run playtest -- --hands 10000 --seed 42 --size 6 (also --size 2, --size 10; compared with base dffb820)",
+  "result": "PASS",
+  "expected": "exit 0; Ended by fold 5470, showdown 4530, Player actions 88831, capped 244, Largest pot $70, Invariant violations 0; byte-identical to main",
+  "actual": "exit 0, exactly those figures; byte-identical to base for sizes 6, 2 and 10; sizes 2 and 10 show 0 invariant violations"
+ },
+ "integrity": {
+  "result": "PASS",
+  "notes": "doit.py test-integrity rc 0 (locked acceptance/property files unchanged). Diff vs base: src changes only in hand.ts/invariants.ts; nothing recognises test inputs, no hard-coded expected values, early exits, mocks or equality overrides. The only edit to an existing test is the D-3 assertion in hand.test.ts, which now expects the extra raise 6 and is no looser. 14 mutants: all 13 reachable ones are killed by the suite; the one survivor sits in unreachable guard code. git diff --stat -- src is empty after mutation (matches HEAD)."
+ },
+ "items": [
+  {
+   "spec": "SPEC-01",
+   "result": "PASS",
+   "evidence": "AC#1 acceptance test passes; it asserts toAct 2, currentBet 5, betCount 1, exact set [fold, call 1], raise 9/8 rejected with state unchanged, seat 3 [fold, call 1], then turn/toAct 2/bc 0/pot $54 (I checked $24+6x$5=$54 by hand). Holdout: replayed the script against an oracle that works only from action records and starting stacks; every step matched, seats 2/3 keep hasActed after the $5 all-in, raise 5/8/9 by seat 2 are rejected and the state is unchanged, and the all-in seat 4 is skipped on the turn. Killed mutants: dropping the !hasActed guard, always clearing hasActed, always counting."
+  },
+  {
+   "spec": "SPEC-02",
+   "result": "PASS",
+   "evidence": "AC#2 acceptance passes (bc 2, cb 6, seats 2/3 cleared, seat 5 [fold, call 6, raise 10], seat 2 [fold, call 2, raise 10], bc 3 after raise 10, seat 3 [fold, call 6, raise 14]). Holdout replay matched exactly. The exact-half boundary mutants (>= to > in applyAction or in fullBetLevel) both fail this test and the holdout."
+  },
+  {
+   "spec": "SPEC-03",
+   "result": "PASS",
+   "evidence": "AC#3 acceptance passes: seat 4 [fold, call 8, raise 10], bc 3 after the $10 all-in, seat 5 [fold, call 10, raise 14], bc 4, seat 6 [fold, call 14], raise 18 rejected, flop records [4,8,10,14]. Holdout replay matched through the close to the turn. Holdout cap cases: a counted short all-in as the 4th bet (flop and preflop) leaves later seats with call/fold only; at betCount 4 a stack above the call gets no all-in raise; preflop cap with blind counted as 1."
+  },
+  {
+   "spec": "SPEC-04",
+   "result": "PASS",
+   "evidence": "AC#4 acceptance passes (bc 1, cb 5, seat 4 [fold, call 5, raise 8], bc 2 after raise 8, seat 2 hasActed cleared). Holdout replay matched, plus seat 5 [fold, call 8, raise 12] and seat 2 [fold, call 4, raise 12]."
+  },
+  {
+   "spec": "SPEC-05",
+   "result": "PASS",
+   "evidence": "AC#5 acceptance passes ([check, bet 3], bet 4 rejected with state unchanged, stack 0, allIn, last record {flop,4,bet,3,added 3}). Holdout also rejects bet 2 and raise 3 and confirms bc 1 / seat 5 [fold, call 3, raise 7] / seat 2 [fold, call 3, raise 7]. Killed mutant: a bet offered only at the full unit."
+  },
+  {
+   "spec": "SPEC-06",
+   "result": "PASS",
+   "evidence": "AC#6 acceptance passes: [fold, call 4, raise 6], raise 8 rejected and the state deep-equals a structuredClone, record {flop,4,raise,6,added 6}, stack 0, allIn. Holdout also rejects raise 5. hand.test.ts D-3 update is the only edit to an existing test and is as strict as before."
+  },
+  {
+   "spec": "SPEC-07",
+   "result": "PASS",
+   "evidence": "AC#7 acceptance passes ([fold, call 4], raise 8 and raise 4 rejected, call leaves stack 0 / allIn). Mutant maxTo >= currentBet is killed. Holdout: also a stack below the call ($3 facing $4) gets [fold, call 3] only."
+  },
+  {
+   "spec": "SPEC-08",
+   "result": "PASS",
+   "evidence": "Unit test passes and asserts every value in the spec (counted $3 bet; $1 bet bc 0/cb 1; completion raise 4; path (a) [fold, call 1] for seats 2 and 3; path (b) bc 1 then seat 2 [fold, call 4, raise 8]). Holdout replay of both paths matched, and raise 4 by already-checked seat 2 on path (a) is rejected."
+  },
+  {
+   "spec": "SPEC-09",
+   "result": "PASS",
+   "evidence": "Unit test passes (seat 4 [fold, call 5, raise 6], bc 2, seat 5 [fold, call 6, raise 10], seat 2 [fold, call 2, raise 10]). Holdout cumulative cases on the $8 turn: four consecutive short all-ins (+1, +2, +3 uncounted, then +4 cumulative counted) give bc 1,1,1,2 with the exact sets at each seat; seat 2 is reopened only after the cumulative +4; a variant with three uncounted all-ins leaves seat 2 [fold, call 3]."
+  },
+  {
+   "spec": "SPEC-10",
+   "result": "PASS",
+   "evidence": "Unit test passes for turn +$3 (uncounted, seat 2 [fold, call 3]) / +$4 (bc 2, seat 2 [fold, call 4, raise 20]) and odd unit $5 +$2 / +$3 (seat 1 [fold, call 8, raise 13], seat 2 [fold, call 3, raise 13]). Holdout replays of the odd-unit script matched, and the oracle fuzz at $5/$10 and $3/$6 stakes showed 0 mismatches."
+  },
+  {
+   "spec": "SPEC-11",
+   "result": "PASS",
+   "evidence": "Unit test passes (preflop seat 4 [fold, call 4, raise 5]; SB [fold, call 3, raise 8]; BB [fold, call 1, raise 8]; cap script 13 uncounted bc 3, seat 6 [fold, call 13, raise 16], bc 4, seat 1 [fold, call 16]). Holdout heads-up: SB $5 [fold, call 2, raise 5] then BB [fold, call 1, raise 8]; SB $6 raise 6 counted (bc 2) then BB [fold, call 2, raise 10]; short BB option [check, raise 6] counted and [check, raise 5] uncounted, after which the limper gets [fold, call 1]; heads-up postflop short all-in leaves the bettor call-only. Holdout preflop cap: an uncounted $13 at bc 3 leaves room for the 4th raise and checkState is clean."
+  },
+  {
+   "spec": "SPEC-12",
+   "result": "PASS",
+   "evidence": "Unit test passes: every scripted step asserts checkStep [] and checkState(capped) is []; the forged 5th record yields exactly [{bet-cap, 'flop has 5 bets (at most 4)'}]. Mutants killed: checker counting every bet/raise, checker raise exemption removed, checker bet exemption removed, bet exemption without the all-in condition (the last only via the forged-level test). Holdout: checkStep is [] on every step of ~410k fuzz actions, and a forged uncounted record raises no bet-cap. Also confirmed that the raise clause's '=== allInTo' sub-condition can't be reached through legalActions (the mutant setting it to true survives everything); the review already noted it as a guard."
+  },
+  {
+   "spec": "SPEC-13",
+   "result": "PASS",
+   "evidence": "Property test passes (20,000 hands, seed 20261121) and is not vacuous: 6 of my 14 mutants fail it. A gap: it checks that bet/raise is withheld when required and that offered amounts are valid, but not that a raise is offered when the rule requires one. My holdout closes that gap: an independent oracle (level, counts and 'acted since last counted raise' from records only; stacks from starting stacks minus added) compared the full legal set, betCount and currentBet at every step of 40,000 hands over 5 configurations (2-10 seats, heads-up only, odd $5/$10, $3/$6, stacks up to $120), about 411k actions. It also sent about 96k random illegal bet/raise probes (all rejected, state unchanged) and checked chip conservation and round-close consistency. 0 failures out of 2,337,391 checks."
+  },
+  {
+   "spec": "SPEC-14",
+   "result": "PASS",
+   "evidence": "npm run lint rc 0, npm run typecheck rc 0, npm test rc 0 (122 files, 437 passed, 6 skipped; engine lines 99.84%, hand.ts 100%). Playtest --hands 10000 --seed 42 --size 6 exits 0 with Ended by fold 5470 / showdown 4530 / Player actions 88831 / capped 244 / Largest pot $70 / Invariant violations 0. The output is byte-identical (cmp) to the base commit dffb820 for sizes 6, 2 and 10. CI run 44881244466 on 1bc8ad7: success."
+  },
+  {
+   "spec": "SPEC-15",
+   "result": "PASS",
+   "evidence": "backlog doc list shows doc-61 'TASK-1.14: Allow short all-in bets and raises under the half-bet reopening rule'. It describes the half-bet rule, the all-in amounts, the already-acted rule, A-1..A-4, the checker change (D-2), and the N/A DoD items (#3, #7, #12, #8, #9). git diff --stat main touches no src/ui, src/table, e2e or chart files."
+  }
+ ],
+ "findings": [
+  {
+   "id": "J-1-01",
+   "severity": "LOW",
+   "spec": "SPEC-15",
+   "expected_vs_actual": "Expected the story doc to say that only the all-in condition inside the checker's raise-size exemption can't be reached through legal play. Actual: it says the raise-clause exemption as a whole is unreachable, but the exemption itself is exercised by every short all-in raise (removing it breaks the suite).",
+   "fix": "Reword the doc note: the '=== streetContribution + stack' condition within the raise exemption is the unreachable guard."
+  },
+  {
+   "id": "J-1-02",
+   "severity": "LOW",
+   "spec": "SPEC-13",
+   "expected_vs_actual": "Expected the property test to also catch a raise wrongly withheld (completeness). Actual: it only checks that bet/raise is absent when forbidden and that offered amounts are valid; a raise missing where it should be offered would pass the property test. The acceptance and unit tests cover the scripted cases.",
+   "fix": "Optional: also assert that a bet/raise is offered whenever betCount < 4, the seat hasn't acted and stack > owe."
+  }
+ ],
+ "summary": "All 15 SPEC items PASS. The engine and checker implement the half-bet rule exactly as specified: an independent oracle agreed on the full legal set, betCount and currentBet at every step of ~411k random short-stack actions (heads-up, consecutive short all-ins, cap interplay, odd units), and the playtest is byte-identical to base. Only two LOW findings, neither blocking."
+}
