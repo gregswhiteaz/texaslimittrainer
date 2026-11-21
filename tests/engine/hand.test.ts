@@ -11,6 +11,7 @@ import {
   type HandState,
   type SeatNumber,
 } from '../../src/engine/hand';
+import { checkStep } from '../../src/engine/invariants';
 
 const STAKES = { smallBlind: 2, bigBlind: 4, smallBet: 4, bigBet: 8 };
 const DECK: Card[] = Array.from({ length: 52 }, (_, card) => card);
@@ -146,8 +147,8 @@ describe('hand', () => {
   it('createHand rejects invalid configs with fixed messages', () => {
     const seats = (list: number[], stack = 160) => list.map((seat) => ({ seat, stack }));
     const cases: [Partial<HandConfig>, string][] = [
-      [{ seats: seats([1, 2]) }, 'Hand needs 3 to 10 seats, got 2'],
-      [{ seats: seats([...SIX, 7, 8, 9, 10, 11]) }, 'Hand needs 3 to 10 seats, got 11'],
+      [{ seats: seats([1]) }, 'Hand needs 2 to 10 seats, got 1'],
+      [{ seats: seats([...SIX, 7, 8, 9, 10, 11]) }, 'Hand needs 2 to 10 seats, got 11'],
       [{ seats: seats([0, 1, 2]) }, 'Invalid seat: 0'],
       [{ seats: seats([1, 2, 11]) }, 'Invalid seat: 11'],
       [{ seats: seats([1, 2, 2.5]) }, 'Invalid seat: 2.5'],
@@ -175,6 +176,7 @@ describe('hand', () => {
     for (const [overrides, message] of cases) {
       expect(() => createHand(config(overrides))).toThrow(new RangeError(message));
     }
+    expect(createHand(config({ seats: seats([1, 2]) })).players).toHaveLength(2);
     const minimum = createHand(config({ seats: seats([1, 2, 3], 96) }));
     const unevenBlinds = { smallBlind: 1, bigBlind: 3, smallBet: 3, bigBet: 6 };
     expect(() => createHand(config({ stakes: unevenBlinds }))).not.toThrow();
@@ -183,6 +185,26 @@ describe('hand', () => {
     const largeHand = createHand(config({ stakes: large, seats: seats(SIX, 2 ** 44) }));
     expect(largeHand.stakes).toEqual(large);
     expect(largeHand.players.every((p) => p.startingStack === 2 ** 44)).toBe(true);
+  });
+
+  it('heads-up button fold preflop returns the uncalled $2 to the big blind', () => {
+    const start = createHand(config({ seats: [1, 2].map((seat) => ({ seat, stack: 160 })) }));
+    const action: Action = { seat: 1, type: 'fold' };
+    const result = applyAction(start, action);
+    if (!result.ok) throw new Error(result.error.message);
+    const done = result.state;
+    expect(checkStep({ before: start, action, result })).toEqual([]);
+    expect(done.result?.endedBy).toBe('fold');
+    expect(done.result?.awards[0]).toEqual({
+      pot: 0,
+      amount: 4,
+      winners: [{ seat: 2, amount: 4 }],
+    });
+    expect(done.result?.returned).toEqual({ seat: 2, amount: 2 });
+    expect(done.players.map((p) => [p.seat, p.stack])).toEqual([
+      [1, 158],
+      [2, 162],
+    ]);
   });
 
   it('applyAction is pure and never mutates its input', () => {

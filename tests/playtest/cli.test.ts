@@ -33,11 +33,11 @@ const ERROR_CASES: [string[], string][] = [
     ['--seed', '9007199254740992'],
     'Error: --seed must be a whole number from 0 to 9007199254740991.',
   ],
-  [['--size', '2'], 'Error: --size must be a whole number from 3 to 10.'],
-  [['--size', '11'], 'Error: --size must be a whole number from 3 to 10.'],
+  [['--size', '1'], 'Error: --size must be a whole number from 2 to 10.'],
+  [['--size', '11'], 'Error: --size must be a whole number from 2 to 10.'],
   [
-    ['--replay-code', VALID_CODE, '--size', '2'],
-    'Error: --size must be a whole number from 3 to 10.',
+    ['--replay-code', VALID_CODE, '--size', '1'],
+    'Error: --size must be a whole number from 2 to 10.',
   ],
   [['--bogus'], 'Error: unknown option.'],
   [['--hands=5'], 'Error: unknown option.'],
@@ -67,8 +67,8 @@ describe('playtest CLI', () => {
 
     expect(capture(['--help'])).toEqual({ code: 0, out: USAGE, err: '' });
     expect(USAGE).toBe(
-      'Usage: npm run playtest -- [--hands <1-1000000000>] [--seed <0-9007199254740991>] [--size <3-10>]\n' +
-        '       npm run playtest -- --replay-code <32 lowercase hex characters> [--size <3-10>] [--button <seat>]\n' +
+      'Usage: npm run playtest -- [--hands <1-1000000000>] [--seed <0-9007199254740991>] [--size <2-10>]\n' +
+        '       npm run playtest -- --replay-code <32 lowercase hex characters> [--size <2-10>] [--button <seat>]\n' +
         'Defaults: --hands 10000 --seed 42 --size 6 --button 1\n',
     );
     expect(parseArgs([])).toEqual({ kind: 'run', options: { hands: 10000, seed: 42, size: 6 } });
@@ -88,6 +88,38 @@ describe('playtest CLI', () => {
     expect(largest.out).toContain('Options: --hands 1 --seed 9007199254740991 --size 6\n');
     expect(largest.out).toContain('First replay code: 001fffffffffffff0000000000000001\n');
     expect(largest.out).toContain('Last replay code: 001fffffffffffff0000000000000001\n');
+  });
+
+  it('parseArgs accepts --size 2 and rejects sizes outside 2 to 10', () => {
+    expect(parseArgs(['--size', '2'])).toEqual({
+      kind: 'run',
+      options: { hands: 10000, seed: 42, size: 2 },
+    });
+    expect(parseArgs(['--replay-code', VALID_CODE, '--size', '2', '--button', '2'])).toEqual({
+      kind: 'replay',
+      replayCode: VALID_CODE,
+      size: 2,
+      button: 2,
+    });
+    expect(parseArgs(['--replay-code', VALID_CODE, '--size', '2', '--button', '3'])).toEqual({
+      kind: 'error',
+      message: 'Error: --button must be a seat number from 1 to the table size.',
+    });
+    const sizeError = {
+      kind: 'error',
+      message: 'Error: --size must be a whole number from 2 to 10.',
+    };
+    for (const argv of [
+      ['--size', '0'],
+      ['--size', '1'],
+      ['--size', '11'],
+      ['--replay-code', VALID_CODE, '--size', '1'],
+    ]) {
+      expect(parseArgs(argv)).toEqual(sizeError);
+    }
+    const usageLines = USAGE.split('\n');
+    expect(usageLines[0]).toContain('[--size <2-10>]');
+    expect(usageLines[1]).toContain('[--size <2-10>]');
   });
 
   it('returns exit code 1 when the run has violations', () => {

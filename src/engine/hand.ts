@@ -16,7 +16,7 @@ export interface SeatConfig {
 }
 export interface HandConfig {
   readonly stakes: Stakes;
-  /** 3..10 dealt-in seats, any order. */
+  /** 2..10 dealt-in seats, any order. */
   readonly seats: readonly SeatConfig[];
   /** One of seats. */
   readonly button: SeatNumber;
@@ -131,8 +131,8 @@ function isObject(value: unknown): boolean {
 
 function validate(config: HandConfig): void {
   const { seats, stakes, deck, button } = config;
-  if (seats.length < 3 || seats.length > 10) {
-    throw new RangeError(`Hand needs 3 to 10 seats, got ${seats.length}`);
+  if (seats.length < 2 || seats.length > 10) {
+    throw new RangeError(`Hand needs 2 to 10 seats, got ${seats.length}`);
   }
   const seen = new Set<SeatNumber>();
   for (const { seat } of seats) {
@@ -204,8 +204,9 @@ export function createHand(config: HandConfig): HandState {
   const seats = sorted.map((s) => s.seat);
   const n = seats.length;
   const dealOrder = clockwiseAfter(seats, button);
-  const sb = dealOrder[0] as SeatNumber;
-  const bb = dealOrder[1] as SeatNumber;
+  // Heads-up (D-1): the button posts the small blind and the other seat the big blind.
+  const sb = n === 2 ? button : (dealOrder[0] as SeatNumber);
+  const bb = (n === 2 ? dealOrder[0] : dealOrder[1]) as SeatNumber;
   const players = sorted.map(({ seat, stack }): PlayerState => {
     const position = dealOrder.indexOf(seat);
     const blind = seat === sb ? stakes.smallBlind : seat === bb ? stakes.bigBlind : 0;

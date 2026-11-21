@@ -32,15 +32,15 @@ export type ParsedArgs =
   | { readonly kind: 'error'; readonly message: string };
 
 export const USAGE =
-  'Usage: npm run playtest -- [--hands <1-1000000000>] [--seed <0-9007199254740991>] [--size <3-10>]\n' +
-  '       npm run playtest -- --replay-code <32 lowercase hex characters> [--size <3-10>] [--button <seat>]\n' +
+  'Usage: npm run playtest -- [--hands <1-1000000000>] [--seed <0-9007199254740991>] [--size <2-10>]\n' +
+  '       npm run playtest -- --replay-code <32 lowercase hex characters> [--size <2-10>] [--button <seat>]\n' +
   'Defaults: --hands 10000 --seed 42 --size 6 --button 1\n';
 
 const VALUE_OPTIONS = ['--hands', '--seed', '--size', '--replay-code', '--button'] as const;
 type ValueOption = (typeof VALUE_OPTIONS)[number];
 
 const error = (message: string): ParsedArgs => ({ kind: 'error', message });
-const SIZE_ERROR = 'Error: --size must be a whole number from 3 to 10.';
+const SIZE_ERROR = 'Error: --size must be a whole number from 2 to 10.';
 
 export function parseArgs(argv: readonly string[]): ParsedArgs {
   const values = new Map<ValueOption, string>();
@@ -75,7 +75,7 @@ export function parseArgs(argv: readonly string[]): ParsedArgs {
     return value >= min && value <= max ? value : undefined;
   };
 
-  const size = whole('--size', 6, 3, 10);
+  const size = whole('--size', 6, 2, 10);
   const replayCode = values.get('--replay-code');
   if (replayCode !== undefined) {
     if (values.has('--hands') || values.has('--seed')) {
