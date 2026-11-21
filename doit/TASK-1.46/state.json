@@ -4,8 +4,8 @@
   "branch": "doit/TASK-1.46",
   "base_commit": "fb040bd80760230616ec82fa0f98ebd4341382e2",
   "started": "2026-11-20T16:55:32",
-  "review_round": 1,
-  "judge_round": 1,
+  "review_round": 2,
+  "judge_round": 2,
   "sendbacks": 1,
   "gate_runs": 3,
   "questions": 0,
@@ -15,7 +15,7 @@
     "SPEC-01": 0,
     "SPEC-02": 0,
     "SPEC-03": 0,
-    "SPEC-04": 1
+    "SPEC-04": 0
   },
   "locked_tests": {
     "tests/support/cpu-clock.acceptance.test.ts": "87a6249d690f3deee142ce65bf0d6c194cea7f70b80cba3bb494391295536dec"
@@ -631,14 +631,17 @@
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-1.46",
   "spec_sha256": "8b55498a6de01ae9d55baefa1a0705b00a9b7a33dff01b206ce651cbefa7edff",
   "review_findings": {
-    "1": 0
+    "1": 0,
+    "2": 0
   },
   "judge_results": {
-    "1": "FAIL"
+    "1": "FAIL",
+    "2": "PASS"
   },
   "brief_history": {
     "SPEC-04": [
       "judge r1"
     ]
-  }
+  },
+  "doc_id": "doc-45"
 }

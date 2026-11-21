@@ -21,6 +21,6 @@
     "id": "SPEC-04",
     "verifies": "AC#2",
     "verification": "manual mutation check with the command above (judge), plus command `npx vitest run tests/ci/speed-limits.acceptance.test.ts`",
-    "status": "fail"
+    "status": "pass"
   }
 ]
