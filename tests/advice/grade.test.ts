@@ -160,12 +160,13 @@ describe('margin boundaries for every postflop rule', () => {
     }
   });
 
-  it('one-decimal inputs are exactly 10 points apart despite float subtraction', () => {
+  it('exactly 10 points is Major whether float subtraction is exact (26.7-16.7) or falls short (16.4-6.4)', () => {
     const result = gradeDecision(
       equity('call', { equityPct: 26.7, requiredEquityPct: 16.7 }),
       'fold',
     );
     expect(result).toMatchObject({ grade: 'major', marginPts: 10 });
+    expect(26.7 - 16.7).toBe(10);
     expect(16.4 - 6.4).toBeLessThan(10);
     expect(
       gradeDecision(equity('call', { equityPct: 16.4, requiredEquityPct: 6.4 }), 'fold'),

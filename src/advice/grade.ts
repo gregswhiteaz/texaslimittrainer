@@ -69,7 +69,20 @@ const IMPOSSIBLE_PAIRS: readonly (readonly [ActionType, ActionType])[] = [
 /** Percent → integer tenths of a point, so margins compare the one-decimal numbers the player sees. */
 const tenths = (pct: number): number => Math.round(pct * 10);
 
-/** Pure: same inputs → deep-equal result. Throws RangeError for impossible pairings (A-5). */
+function finitePct(
+  field: 'equityPct' | 'requiredEquityPct' | 'equityVsCallingRangePct',
+  value: number | undefined,
+): number {
+  if (value === undefined || !Number.isFinite(value)) {
+    throw new RangeError(`${field} must be a finite number, got ${String(value)}`);
+  }
+  return value;
+}
+
+/**
+ * Pure: same inputs → deep-equal result. Throws RangeError for impossible pairings (A-5) and when a
+ * number the deciding margin rule reads is NaN, ±Infinity or missing.
+ */
 export function gradeDecision<R extends GradeInput>(
   recommendation: R,
   userAction: ActionType,
@@ -100,8 +113,8 @@ export function gradeDecision<R extends GradeInput>(
   }
 
   if (userAction === 'fold' || recommended === 'fold') {
-    const equity = tenths(recommendation.equityPct);
-    const required = tenths(recommendation.requiredEquityPct);
+    const equity = tenths(finitePct('equityPct', recommendation.equityPct));
+    const required = tenths(finitePct('requiredEquityPct', recommendation.requiredEquityPct));
     const margin = userAction === 'fold' ? equity - required : required - equity;
     return result(
       margin >= CALL_FOLD_MAJOR_TENTHS ? 'major' : 'minor',
@@ -114,7 +127,7 @@ export function gradeDecision<R extends GradeInput>(
   if (vsCallingRange === undefined || vsCallingRange === null) {
     return result('minor', 'aggression-no-range', null);
   }
-  const distance = Math.abs(tenths(vsCallingRange) - 500);
+  const distance = Math.abs(tenths(finitePct('equityVsCallingRangePct', vsCallingRange)) - 500);
   return result(
     distance >= AGGRESSION_MAJOR_TENTHS ? 'major' : 'minor',
     'aggression-margin',
