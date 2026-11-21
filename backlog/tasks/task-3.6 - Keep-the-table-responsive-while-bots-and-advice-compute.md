@@ -1,11 +1,11 @@
 ---
 id: TASK-3.6
 title: Keep the table responsive while bots and advice compute
-status: In Progress
+status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-21T17:50:00Z'
+updated_date: '2026-11-21T18:11:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -16,6 +16,7 @@ references:
 documentation:
   - doc-1
   - doc-2
+  - doc-67
 parent_task_id: TASK-3
 priority: high
 type: feature
@@ -42,26 +43,26 @@ Plan key: E03-S12 · Dream: limit-holdem-trainer
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Given a scripted 6-max hand where each bot postflop decision takes at least 300 ms to compute, When the table plays it in Chromium, Then a long-task observer records no main-thread task longer than 100 ms during the computation [REQ-055.6]
-- [ ] #2 Given a bot decision is being computed, When the user hovers a seat or the window is resized, Then the table repaints within 100 ms [REQ-055.6]
-- [ ] #3 Given the same seed and user actions, When a hand is played with computation in the worker and headlessly in the playtest, Then every bot action is identical [REQ-055.6]
+- [x] #1 Given a scripted 6-max hand where each bot postflop decision takes at least 300 ms to compute, When the table plays it in Chromium, Then a long-task observer records no main-thread task longer than 100 ms during the computation [REQ-055.6]
+- [x] #2 Given a bot decision is being computed, When the user hovers a seat or the window is resized, Then the table repaints within 100 ms [REQ-055.6]
+- [x] #3 Given the same seed and user actions, When a hand is played with computation in the worker and headlessly in the playtest, Then every bot action is identical [REQ-055.6]
 <!-- AC:END -->
 
 ## Definition of Done
 <!-- DOD:BEGIN -->
-- [ ] #1 Automated timing test over 200 samples reports p95 main-thread frame time during computation at most 100 ms [REQ-055.6]
-- [ ] #2 Every acceptance criterion has at least one automated test (unit, property or Playwright) that passes
-- [ ] #3 `npm run lint`, `npm run typecheck` and `npm test` pass with zero errors [REQ-059.1, REQ-059.4]
-- [ ] #4 The golden-spot suite passes 100% (applies from the story that creates the suite, E07-S14, onward) [REQ-039.4]
-- [ ] #5 Coverage thresholds hold: >= 90% engine/bots/advice/statistics, >= 70% overall [REQ-059.3]
-- [ ] #6 Engine, bots, advice and statistics code imports no UI or browser-only code [REQ-059.2]
-- [ ] #7 Stories that touch the engine, bots or advice: a 10,000-hand playtest reports zero invariant violations (applies once the playtest runner exists, E01-S07, onward) [REQ-056.1]
-- [ ] #8 Stories that add or change a screen: Playwright test of the screen flow in Chromium and WebKit, and axe reports zero serious or critical violations (axe tooling is provisioned in the toolchain story E01-S01) [REQ-057.1]
-- [ ] #9 No new network requests beyond the app's own files [REQ-058.1]
-- [ ] #10 Strategy-content stories: text is original and every chart, range or golden spot carries its justification [REQ-061.2]
-- [ ] #11 CI workflow is green on the story's branch (applies once the CI story E01-S02 is done; E01-S01 instead passes the same checks locally) [REQ-064.2]
-- [ ] #12 Story documentation is written and published to Backlog.md
-- [ ] #13 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
+- [x] #1 Automated timing test over 200 samples reports p95 main-thread frame time during computation at most 100 ms [REQ-055.6]
+- [x] #2 Every acceptance criterion has at least one automated test (unit, property or Playwright) that passes
+- [x] #3 `npm run lint`, `npm run typecheck` and `npm test` pass with zero errors [REQ-059.1, REQ-059.4]
+- [x] #4 The golden-spot suite passes 100% (applies from the story that creates the suite, E07-S14, onward) [REQ-039.4]
+- [x] #5 Coverage thresholds hold: >= 90% engine/bots/advice/statistics, >= 70% overall [REQ-059.3]
+- [x] #6 Engine, bots, advice and statistics code imports no UI or browser-only code [REQ-059.2]
+- [x] #7 Stories that touch the engine, bots or advice: a 10,000-hand playtest reports zero invariant violations (applies once the playtest runner exists, E01-S07, onward) [REQ-056.1]
+- [x] #8 Stories that add or change a screen: Playwright test of the screen flow in Chromium and WebKit, and axe reports zero serious or critical violations (axe tooling is provisioned in the toolchain story E01-S01) [REQ-057.1]
+- [x] #9 No new network requests beyond the app's own files [REQ-058.1]
+- [x] #10 Strategy-content stories: text is original and every chart, range or golden spot carries its justification [REQ-061.2]
+- [x] #11 CI workflow is green on the story's branch (applies once the CI story E01-S02 is done; E01-S01 instead passes the same checks locally) [REQ-064.2]
+- [x] #12 Story documentation is written and published to Backlog.md
+- [x] #13 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
 
 ## Implementation Plan
@@ -84,4 +85,16 @@ Autopilot: no asks. D-8 per user's standing rule: timing checks opt-in (npm run 
 Build blocked (paused-clock locked e2e tests vs per-table worker start-up ~30 ms). Resolved by orchestrator: Option A — one app-wide shared advice worker (recorded deviation from D-2/SPEC-09 wording); no locked test edits.
 
 Build: advice service + shared app-wide worker (prewarmed in main.tsx) + AdviceClient; bot turns via worker with stale-reply guard; e2e every-push worker-serves-bots + determinism; opt-in e2e:slow timing checks (8 passed, 2 Chromium-only skips); npm run e2e 114 passed (x2); dist has no test worker; playtest 0 violations; gate PASS.
+
+Review R1: 0 blocking; 3 MINORs + 1 NIT fixed in-story (malformed request → error reply; sync worker-creation failure rejects; createAdviceWorker doc/dup prop; failed worker terminated); gate PASS.
+
+Follow-ups (Step 6a): ACs added to TASK-9.3 (grade via worker), TASK-6.18 (D-6 seed, no replay code to worker), TASK-13.1 (worker failure → error path).
+
+Judge R1 PASS 15/15; D-2 deviation accepted; J-1-01 → TASK-13.1 AC; J-1-02 documented.
 <!-- SECTION:NOTES:END -->
+
+## Final Summary
+
+<!-- SECTION:FINAL_SUMMARY:BEGIN -->
+Bot decisions now run in a Web Worker (one app-wide worker prewarmed in src/main.tsx) behind a headless advice service that also serves recommend and grade requests for E08/E09; nothing changes on screen. Deviation D-2: shared worker instead of per-table, because a cold per-table worker outlasted the locked paused-clock e2e tests. Verified: npm test 488 passed/7 skipped, lint and typecheck clean, npm run e2e 114 passed, npm run e2e:slow 8 passed (timing checks opt-in, D-8), 10,000-hand playtest 0 violations, dist has exactly one advice.worker and no test marker. Review R1: 0 blocking, 3 MINOR + 1 NIT fixed in-story. Assumptions A-1..A-7 to review in the doc. Follow-ups: TASK-9.3 should use the worker's grade request; TASK-6.18 must follow D-6 (never send the replay code to the worker).
+<!-- SECTION:FINAL_SUMMARY:END -->

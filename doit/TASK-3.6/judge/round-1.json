@@ -1,0 +1,114 @@
+{
+ "round": 1,
+ "test_suite": {
+  "command": "npm test",
+  "result": "PASS",
+  "passed": 488,
+  "failed": 0,
+  "notes": "139 files passed, 1 skipped; 7 tests skipped (pre-existing opt-in slow tests). Lint and typecheck clean."
+ },
+ "end_to_end": {
+  "command": "npm run build && npm run preview (driven by Playwright in Chromium and WebKit against http://localhost:4173)",
+  "result": "PASS",
+  "expected": "Home -> New game -> Start game; hands play normally with bots acting, nothing visibly changes, bot decisions come from one same-origin advice.worker asset, table stays responsive while a bot computes",
+  "actual": "Played 3 hands by check/call (Deal next hand between hands) in both engines: one worker at http://localhost:4173/assets/advice.worker-*.js, every bot decision posted to it and answered ok, ids 1..n, view-only payloads, only same-origin requests, no page/console errors. With the production worker slowed to 700 ms per reply: max frame gap 16.8 ms (chromium) / 18.0 ms (webkit) during the computation; Leave table mid-decision then a new game played to the end without errors. Also npm run e2e -- responsive-table: 2 pass + 3 skip per engine; npm run e2e:slow: chromium 5 pass, webkit 3 pass + 2 skip, as the spec's Judge scenario states."
+ },
+ "integrity": {
+  "result": "PASS",
+  "notes": "doit.py test-integrity TASK-3.6 exit 0. Locked tests byte-identical to base. Diff read: no test-input recognition, hard-coded expected values, early exits, mocks of the unit under test or overridden equality. The slow worker and harnesses live under e2e/ and are not imported from src (marker absent from dist). Recorded deviation D-2 (app-wide shared worker prewarmed in src/main.tsx instead of one worker per mounted Table) judged acceptable on substance: it was needed to keep locked paused-clock tests green (verified 50/50 serially), the behavioural guarantees (worker-only decisions, stale replies dropped via cancelled flag + hand identity, failures surface) all hold, and src/main.tsx change is 3 lines. Side effects recorded as LOW findings."
+ },
+ "items": [
+  {
+   "spec": "SPEC-01",
+   "result": "PASS",
+   "evidence": "npm run e2e:slow -> chromium 'slow bot decisions never block the main thread for more than 100 ms' passed (4.5s), webkit skipped 'WebKit has no Long Tasks API'. Test asserts longtask support, a postflop window, every window >= 300 ms, no >100 ms long task overlapping any window, and a live-observer sanity loop. Mutant (bot decision computed on main thread) leaves the window log empty, so the postflop-window assertion cannot pass. Judge check on the real built app with the production worker slowed to 700 ms per reply: max rAF gap during an in-flight decision 16.8 ms (chromium) / 18.0 ms (webkit)."
+  },
+  {
+   "spec": "SPEC-02",
+   "result": "PASS",
+   "evidence": "npm run e2e:slow -> chromium p95 test passed (8.6s); asserts >=200 samples and p95 <= 100 with the specified ceil(0.95n)-1 index and a frame-times annotation; webkit skipped per A-2."
+  },
+  {
+   "spec": "SPEC-03",
+   "result": "PASS",
+   "evidence": "npm run e2e:slow -> 'hovering a seat and resizing repaint within 100 ms while a bot decides' passed in chromium (1.8s) and webkit (1.8s); asserts pointerover and resize events inside a computation window, repaint-at <= 100, a later bot action and axe clean."
+  },
+  {
+   "spec": "SPEC-04",
+   "result": "PASS",
+   "evidence": "npm run e2e -> 'bot actions computed in the worker match the headless playtest' passed in chromium and webkit; asserts pinned replay code, toAction(record) deep-equals playHand(code,6,6,1,{makePolicy}) with seat 5 replayed, a postflop bot action, and all requests at http://localhost:4173. Judge check: 60 hands on judge seeds (2026, 31337, 5, 99, 123456) with buttons 6/3/1/2/5, every decision via installAdviceWorker over a real MessageChannel, equal playHand actions."
+  },
+  {
+   "spec": "SPEC-05",
+   "result": "PASS",
+   "evidence": "vitest 'worker-hosted bot decisions equal the headless playtest for 50 hands' passed; uses real structured clone over node MessageChannel and asserts postflop decisions occurred. Judge holdout on different seeds/buttons also passed (see SPEC-04)."
+  },
+  {
+   "spec": "SPEC-06",
+   "result": "PASS",
+   "evidence": "vitest bot-turn SPEC-06 test passed (playerView equality, no other seat's hole card in payload JSON with cards formatted as text, fast-check 100 runs over permuted hidden cards/deck, posted keys exactly id/kind/style/view). Judge check over three full sessions: every posted bot message has exactly those keys, contains no other seat's hole card, no undealt deck card, no replay code and no 'deck'/'replay' key. Real built app (chromium+webkit, 3 hands): every message posted to the worker is kind 'bot' with keys id/kind/style/view, view.seat == toAct and never seat 5, players carry no holeCards, no replay-code hex in the payload."
+  },
+  {
+   "spec": "SPEC-07",
+   "result": "PASS",
+   "evidence": "vitest 'applyBotDecision applies only to the turn it was asked for' passed and fails on the mutant that removes the hand-identity check (verified). Judge check: a deep-equal clone of the hand, a later turn, a finished hand, a newly dealt hand, and applying the same reply twice all return the input table unchanged (same object). Real app: Leave table while a slowed decision was in flight, orphan reply arrived after unmount, new game played to the end with no page or console errors (chromium+webkit)."
+  },
+  {
+   "spec": "SPEC-08",
+   "result": "PASS",
+   "evidence": "vitest advice-service tests passed (bot/recommend/grade for preflop and flop views, illegal grade -> RangeError '<type> is not legal for seat <n>', unknown kind, string throw -> Error/boom, malformed requests). Judge check: undefined, string, array, id-only, missing view, null view, empty view, '__proto__' kind, NaN id all return ok:false without throwing; id preserved when numeric."
+  },
+  {
+   "spec": "SPEC-09",
+   "result": "PASS",
+   "evidence": "vitest 'client correlates replies and rejects on errors, worker failure and dispose' passed: reverse-order replies resolve correctly, unknown id ignored, ok:false rejects with name+message, error/messageerror reject pending and later calls without posting, dispose terminates once, rejects pending and removes listeners. Judge check over real MessageChannel: ids 1..4 in order, illegal grade rejects with RangeError and engine message, dispose rejects pending and later calls post nothing."
+  },
+  {
+   "spec": "SPEC-10",
+   "result": "PASS",
+   "evidence": "npm run build && ! grep -rq tlh-test-slow-advice dist && ls dist/assets | grep -c '^advice.worker' | grep -qx 1 -> pass (advice.worker-BP53QRMg.js only, no marker)."
+  },
+  {
+   "spec": "SPEC-11",
+   "result": "PASS",
+   "evidence": "npm run lint exit 0, npm run typecheck exit 0, npm test: 139 files passed / 1 skipped, 488 tests passed / 7 skipped; coverage lines 96.96% overall, table 100%, all headless dirs >= 99%; thresholds enforced by vite.config.ts."
+  },
+  {
+   "spec": "SPEC-12",
+   "result": "PASS",
+   "evidence": "Local npm run e2e: 114 passed, 6 skipped (the three timing tests x 2 engines). npm run e2e:slow: 8 passed, 2 skipped (SPEC-01/02 in webkit). Locked paused-clock files (action-bar, table-display, table, next-hand, review, replay-seed) with --workers=1: 50 passed. Locked test files unchanged vs base. CI run 44932801837: conclusion success (lint, typecheck, build, test, playtest, e2e)."
+  },
+  {
+   "spec": "SPEC-13",
+   "result": "PASS",
+   "evidence": "npm run playtest -- --hands 10000 --seed 42 --size 6 -> exit 0, 10000 hands, Invariant violations: 0."
+  },
+  {
+   "spec": "SPEC-14",
+   "result": "PASS",
+   "evidence": "backlog doc list --plain shows doc-67 'TASK-3.6: Keep the table responsive while bots and advice compute'; story doc records D-1 protocol, D-5 slow seam, D-6 TASK-6.18 hook and the D-2 deviation. N/A confirmed: no golden-spot suite in tests/ (DoD#4), no strategy content in the diff (DoD#10), no new screen and no serviceWorker in src (DoD#13)."
+  },
+  {
+   "spec": "SPEC-15",
+   "result": "PASS",
+   "evidence": "npm run e2e -> 'every bot decision is served by the advice worker' passed in chromium and webkit. Mutant: requestBotDecision changed to compute decideTag on the main thread -> test fails in both engines ('Expected length: 8, Received length: 0'); SPEC-04 still passes under that mutant, so SPEC-15 is the guard that catches it. Source restored; git diff --stat -- src e2e tests empty."
+  }
+ ],
+ "findings": [
+  {
+   "id": "J-1-01",
+   "severity": "LOW",
+   "spec": "SPEC-09",
+   "expected_vs_actual": "Expected (spec D-2/D-7): a worker failure affects the mounted table; leaving and starting a new table gets a fresh worker. Actual: the app-wide client enters its failed state permanently, so after any worker error or messageerror every later table in the session fails its first bot step until the page is reloaded. Recovery is out of scope (REQ-056), so not blocking.",
+   "fix": "When REQ-056 recovery lands, let the shared client be replaced after it fails (e.g. sharedAdviceClient recreates a client whose worker has failed), or note the reload requirement in that story."
+  },
+  {
+   "id": "J-1-02",
+   "severity": "LOW",
+   "spec": "SPEC-12",
+   "expected_vs_actual": "Expected (spec \u00a75): useTableSession's createAdviceWorker option creates that table's worker. Actual: the option is ignored whenever the app-wide client already exists (always in the app and harnesses), so it is a near-dead seam and leaving a table no longer stops an in-flight computation (the orphan reply is still computed and dropped; a new table's first request queues behind it).",
+   "fix": "Record in the spec/story that the seam only applies before the shared client exists, or remove it in a later story; no behaviour change required now."
+  }
+ ],
+ "summary": "All 15 SPEC items PASS. Vitest 488/0, lint/typecheck clean, e2e 114 pass/6 skip, e2e:slow 8 pass/2 skip, locked paused-clock e2e 50/50 serial, playtest 10k clean, SPEC-10 bundle check clean. Judge holdouts: worker==headless on 60 judge hands, no hidden info or replay code in any posted message (unit and real app), stale replies never apply, hostile service inputs never throw, real app responsive with a slowed production worker and safe Leave-table mid-decision. SPEC-15 kills the main-thread mutant. D-2 deviation accepted on substance; two LOW findings, no blocking findings."
+}

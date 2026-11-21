@@ -4,7 +4,7 @@ title: Draw bot randomness only from the replay code and seat
 status: To Do
 assignee: []
 created_date: '2026-11-17T23:13:00Z'
-updated_date: '2026-11-17T23:22:00Z'
+updated_date: '2026-11-21T17:57:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -46,6 +46,7 @@ Plan key: E06-S18 · Dream: limit-holdem-trainer
 - [ ] #1 Given the same replay code, seat and decision point, When TAG decides twice, Then it chooses the same action; Given the same replay code at a different seat, When the generator is created, Then its random sequence differs [REQ-028.1]
 - [ ] #2 Given a TAG decision point and replay code, When it is evaluated in two runs started at different wall-clock times and after different numbers of other random draws (deck shuffle, other seats), Then TAG chooses the same action in both [REQ-028.1]
 - [ ] #3 Given two bot decision points identical except for the observed statistics of the opponents (including the user), When the bot decides, Then its advice request uses the typical-player basis with no observed statistics and its action is identical in both [REQ-029.2]
+- [ ] #4 Given a bot decision needs randomness, When the request is sent to the advice worker, Then the per-decision seed is derived on the main thread from (replay code, seat) and sent as a numeric field on the bot request, and the replay code itself is never sent to the worker (TASK-3.6 D-6)
 <!-- AC:END -->
 
 ## Definition of Done
@@ -63,3 +64,9 @@ Plan key: E06-S18 · Dream: limit-holdem-trainer
 - [ ] #11 Story documentation is written and published to Backlog.md
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+AC added from TASK-3.6 follow-up (D-6: no replay code in the worker)
+<!-- SECTION:NOTES:END -->

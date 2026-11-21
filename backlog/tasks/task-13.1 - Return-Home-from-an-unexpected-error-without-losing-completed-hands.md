@@ -4,7 +4,7 @@ title: Return Home from an unexpected error without losing completed hands
 status: To Do
 assignee: []
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-17T23:22:00Z'
+updated_date: '2026-11-21T18:11:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -49,6 +49,8 @@ Plan key: E13-S02 · Dream: limit-holdem-trainer
 - [ ] #3 Given the user returned Home after an error in hand 15, When the user chooses Resume session, Then hand 15 is dealt fresh with every stack as at the end of hand 14 and hand records 1 to 14 are all stored and unchanged [REQ-056.3]
 - [ ] #4 Given a test build that throws while the Session Report screen renders, When the error occurs, Then the error screen with Return Home is shown and Return Home opens Home [REQ-056.3]
 - [ ] #5 Given the error screen is shown, When its text is read, Then it contains no stack trace or source file names and Return Home is a native button reachable with Tab [REQ-056.3, REQ-057.2]
+- [ ] #6 Given the advice worker fails (error/messageerror or a rejected bot decision), When the table is waiting on it, Then the unexpected-error path shows and Return Home works without losing completed hands
+- [ ] #7 Given the shared advice worker has failed, When the user returns Home and starts a new game, Then a fresh worker is created and bots act normally without a page reload
 <!-- AC:END -->
 
 ## Definition of Done
@@ -66,3 +68,11 @@ Plan key: E13-S02 · Dream: limit-holdem-trainer
 - [ ] #11 Story documentation is written and published to Backlog.md
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+AC added from TASK-3.6 follow-up (worker failure has no UI yet)
+
+AC added from TASK-3.6 judge J-1-01 (shared worker stays failed)
+<!-- SECTION:NOTES:END -->
