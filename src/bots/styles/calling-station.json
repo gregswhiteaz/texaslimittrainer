@@ -1,0 +1,30 @@
+{
+  "format": "tlh-bot-style",
+  "version": 1,
+  "style": "Calling station",
+  "description": "Calling station (loose-passive) plays far too many hands and rarely raises. It starts from the trainer's own advice, like TAG, but where the advice is to fold against a bet it often calls instead, and where the advice is to raise it usually just calls. It hardly ever bets on its own, so bet your good hands for value against it and don't try to bluff it off a hand.",
+  "mixedSpots": [],
+  "deviations": [
+    {
+      "street": "preflop",
+      "advice": "fold",
+      "instead": "call",
+      "probability": 0.5,
+      "justification": "Calling half of the hands the chart folds against a bet roughly doubles TAG's starting range, which puts the station's VPIP near the middle of its 45 to 65 percent band."
+    },
+    {
+      "street": "preflop",
+      "advice": "raise",
+      "instead": "call",
+      "probability": 0.6,
+      "justification": "Just calling with most hands the chart raises leaves only a few raises, which keeps the station's PFR inside its 3 to 10 percent band and makes its raises mean a strong hand."
+    },
+    {
+      "street": "postflop",
+      "advice": "fold",
+      "instead": "call",
+      "probability": 0.5,
+      "justification": "Calling half the time when the pot odds say fold is the station's defining leak: it pays off value bets with weak pairs and missed draws, which the learner should exploit."
+    }
+  ]
+}

@@ -1,6 +1,12 @@
 import { describe, expect, it } from 'vitest';
 import { recommend } from '../../src/advice/recommend';
-import { drawMixed, parseStyle, StyleValidationError, type MixedSpot } from '../../src/bots/style';
+import {
+  drawMixed,
+  findDeviation,
+  parseStyle,
+  StyleValidationError,
+  type MixedSpot,
+} from '../../src/bots/style';
 import { decideTag } from '../../src/bots/tag';
 import type { PlayerView } from '../../src/engine/player-view';
 import { seededTagPolicy } from '../../src/playtest/policy';
@@ -158,6 +164,100 @@ describe('bot style files', () => {
       'x.json: style has no plain-English description (at least 15 words)',
       `x.json: style ? has unknown spot type "${'x'.repeat(20)}..."`,
       'x.json: style ? marks spot type preflop-limpers as mixed with fewer than two actions of non-zero probability',
+    ]);
+  });
+
+  it('parseStyle validates deviations', () => {
+    const dev = (street: unknown, advice: unknown, probability: unknown = 0.5, extra = {}) => ({
+      street,
+      advice,
+      instead: 'call',
+      probability,
+      justification: JUSTIFICATION,
+      ...extra,
+    });
+    const station = (deviations: unknown) =>
+      file({ style: 'Calling station', mixedSpots: [], deviations });
+    const WHERE = 'x.json: style Calling station';
+
+    expect(parseStyle(file(), 'x.json').deviations).toEqual([]);
+    const valid = parseStyle(
+      station([dev('preflop', 'fold', 0), dev('preflop', 'raise', 1), dev('postflop', 'fold')]),
+      'x.json',
+    );
+    expect(valid.deviations).toEqual([
+      {
+        street: 'preflop',
+        advice: 'fold',
+        instead: 'call',
+        probability: 0,
+        justification: JUSTIFICATION,
+      },
+      {
+        street: 'preflop',
+        advice: 'raise',
+        instead: 'call',
+        probability: 1,
+        justification: JUSTIFICATION,
+      },
+      {
+        street: 'postflop',
+        advice: 'fold',
+        instead: 'call',
+        probability: 0.5,
+        justification: JUSTIFICATION,
+      },
+    ]);
+    expect(findDeviation(valid, 'preflop', 'raise')).toBe(valid.deviations[1]);
+    expect(findDeviation(valid, 'postflop', 'fold')).toBe(valid.deviations[2]);
+    expect(findDeviation(valid, 'postflop', 'raise')).toBeUndefined();
+    expect(findDeviation(valid, 'preflop', 'call')).toBeUndefined();
+
+    expect(problemsOf(station({}))).toEqual(['x.json: deviations must be a list']);
+    expect(problemsOf(station([dev('river', 'fold')]))).toEqual([
+      `${WHERE} has unsupported deviation "river" "fold" to "call"`,
+    ]);
+    expect(problemsOf(station([dev('preflop', 'check')]))).toEqual([
+      `${WHERE} has unsupported deviation "preflop" "check" to "call"`,
+    ]);
+    expect(problemsOf(station([dev('preflop', 'fold', 0.5, { instead: 'raise' })]))).toEqual([
+      `${WHERE} has unsupported deviation "preflop" "fold" to "raise"`,
+    ]);
+    expect(problemsOf(station([dev('postflop', 'raise')]))).toEqual([
+      `${WHERE} has unsupported deviation "postflop" "raise" to "call"`,
+    ]);
+    expect(problemsOf(station([dev('preflop', 'fold'), dev('preflop', 'fold')]))).toEqual([
+      `${WHERE} lists deviation preflop fold twice`,
+    ]);
+    const missing: Record<string, unknown> = dev('preflop', 'fold');
+    delete missing.probability;
+    const bads: Record<string, unknown>[] = [-0.1, 1.5, '0.5', NaN].map((p) =>
+      dev('preflop', 'fold', p),
+    );
+    for (const entry of [...bads, missing]) {
+      expect(problemsOf(station([entry])), String(entry.probability)).toEqual([
+        `${WHERE} deviation preflop fold has an invalid probability`,
+      ]);
+    }
+    expect(
+      problemsOf(station([dev('postflop', 'fold', 0.5, { justification: 'Too few words' })])),
+    ).toEqual([`${WHERE} deviation postflop fold has no justification (at least 10 words)`]);
+
+    // Several problems are all listed, and untrusted text is cut to 20 characters.
+    const long = 'y'.repeat(30);
+    expect(
+      problemsOf(
+        file({
+          style: 'Shark',
+          deviations: [dev(long, 'fold'), dev('preflop', 'raise', 2, { justification: '' }), 7],
+        }),
+      ),
+    ).toEqual([
+      'x.json: unknown style "Shark"',
+      `x.json: style ? has unsupported deviation "${'y'.repeat(20)}..." "fold" to "call"`,
+      'x.json: style ? deviation preflop raise has an invalid probability',
+      'x.json: style ? deviation preflop raise has no justification (at least 10 words)',
+      'x.json: style ? has unsupported deviation "undefined" "undefined" to "undefined"',
     ]);
   });
 

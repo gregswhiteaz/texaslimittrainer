@@ -3,6 +3,7 @@ import type { PlayerView } from '../engine/player-view';
 import type { Xoshiro128 } from '../engine/seeded-random';
 import { botRandom, isBotSeed } from '../engine/bot-random';
 import { decideTag } from '../bots/tag';
+import { decideCallingStation } from '../bots/calling-station';
 import { recommend, type Recommendation } from '../advice/recommend';
 import { gradeView, type ActionType, type GradeResult } from '../advice/grade';
 import type { BotStyle } from './session';
@@ -40,9 +41,11 @@ export interface AdviceDeps {
   readonly decideBot?: (view: PlayerView, style: BotStyle, random: Xoshiro128) => Action;
 }
 
-/** Every style decides with decideTag until E06 (A-1). */
-const decideBotDefault = (view: PlayerView, _style: BotStyle, random: Xoshiro128): Action =>
-  decideTag(view, { random });
+/** Calling station seats decide with decideCallingStation; every other style with decideTag until its bot lands. */
+const decideBotDefault = (view: PlayerView, style: BotStyle, random: Xoshiro128): Action =>
+  style === 'Calling station'
+    ? decideCallingStation(view, { random })
+    : decideTag(view, { random });
 
 /** Never throws: every error (malformed request, unknown kind or thrown by advice code) becomes ok:false. */
 export function handleAdviceRequest(

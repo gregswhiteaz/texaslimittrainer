@@ -25,10 +25,29 @@ export interface MixedSpot {
   readonly justification: string;
 }
 
+export type DeviationStreet = 'preflop' | 'postflop';
+export type DeviationAdvice = 'fold' | 'raise';
+const DEVIATION_PAIRS: readonly string[] = [
+  'preflop/fold/call',
+  'preflop/raise/call',
+  'postflop/fold/call',
+];
+
+/** Where the advice is `advice` on `street`, play `instead` with `probability` (one draw). */
+export interface Deviation {
+  readonly street: DeviationStreet;
+  readonly advice: DeviationAdvice;
+  readonly instead: 'call';
+  readonly probability: number;
+  readonly justification: string;
+}
+
 export interface BotStyleData {
   readonly style: StyleName;
   readonly description: string;
   readonly mixedSpots: ReadonlyMap<SpotType, MixedSpot>;
+  /** In file order; [] when the file has no deviations. */
+  readonly deviations: readonly Deviation[];
 }
 
 export class StyleValidationError extends Error {
@@ -140,11 +159,57 @@ export function parseStyle(raw: unknown, fileName: string): BotStyleData {
     }
   }
 
+  const deviations: Deviation[] = [];
+  if (raw.deviations !== undefined && !Array.isArray(raw.deviations)) {
+    problems.push(`${fileName}: deviations must be a list`);
+  }
+  const seenPairs = new Set<string>();
+  for (const entry of Array.isArray(raw.deviations) ? (raw.deviations as unknown[]) : []) {
+    const data = isRecord(entry) ? entry : {};
+    if (
+      !DEVIATION_PAIRS.includes(
+        `${String(data.street)}/${String(data.advice)}/${String(data.instead)}`,
+      )
+    ) {
+      problems.push(
+        `${fileName}: style ${name} has unsupported deviation "${echo(data.street)}" "${echo(data.advice)}" to "${echo(data.instead)}"`,
+      );
+      continue;
+    }
+    const street = data.street as DeviationStreet;
+    const advice = data.advice as DeviationAdvice;
+    if (seenPairs.has(`${street} ${advice}`)) {
+      problems.push(`${fileName}: style ${name} lists deviation ${street} ${advice} twice`);
+      continue;
+    }
+    seenPairs.add(`${street} ${advice}`);
+    const where = `${fileName}: style ${name} deviation ${street} ${advice}`;
+    let valid = true;
+    if (!isProbability(data.probability)) {
+      problems.push(`${where} has an invalid probability`);
+      valid = false;
+    }
+    if (wordCount(data.justification) < JUSTIFICATION_WORDS) {
+      problems.push(`${where} has no justification (at least ${JUSTIFICATION_WORDS} words)`);
+      valid = false;
+    }
+    if (valid) {
+      deviations.push({
+        street,
+        advice,
+        instead: 'call',
+        probability: data.probability as number,
+        justification: data.justification as string,
+      });
+    }
+  }
+
   if (problems.length > 0) throw new StyleValidationError(fileName, problems);
   return {
     style: style as StyleName,
     description: raw.description as string,
     mixedSpots,
+    deviations,
   };
 }
 
@@ -154,4 +219,18 @@ export function drawMixed(
   random: { nextUint32(): number },
 ): 'recommended' | 'alternative' {
   return random.nextUint32() < spot.alternative * 2 ** 32 ? 'alternative' : 'recommended';
+}
+
+/** The style's deviation for advice `advice` on `street`, if any. */
+export function findDeviation(
+  style: BotStyleData,
+  street: DeviationStreet,
+  advice: string,
+): Deviation | undefined {
+  return style.deviations.find((d) => d.street === street && d.advice === advice);
+}
+
+/** One nextUint32 draw u: true iff u < probability * 2**32. */
+export function drawDeviation(probability: number, random: { nextUint32(): number }): boolean {
+  return random.nextUint32() < probability * 2 ** 32;
 }
