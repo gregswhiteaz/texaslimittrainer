@@ -1,9 +1,11 @@
 ---
 id: TASK-2.18
 title: Pin Home focus, user-seat cards and config-driven stacks in tests
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-18T23:20:00Z'
+updated_date: '2026-11-21T02:03:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -30,3 +32,14 @@ Follow-up from TASK-2.1 (doc-23) code review: three behaviours are correct today
 - [ ] #2 Given a SessionConfig whose userSeat is not 5, When the Table renders, Then the user's face-up cards appear at that seat, and a test fails if seat 5 is hard-coded
 - [ ] #3 Given a SessionConfig whose seats differ from DEFAULT_SEATS in seat numbers, When the table is seated, Then stacks are keyed by config.seats, and a test fails if DEFAULT_SEATS is used
 <!-- AC:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. e2e/home-first-load.spec.ts: first load leaves focus on body (fails if focus is always moved).
+2. tests/ui/user-seat-cards.acceptance.test.tsx: user at seat 1 sees seat 1's real hole cards (fails if seat 5 is hard-coded).
+3. tests/table/session-stacks.acceptance.test.ts: seats 1,3,5,7,9 get stacks keyed by config.seats (fails if DEFAULT_SEATS used).
+Each proven against its mutant; no src changes.
+
+Full spec: doit/TASK-2.18/spec.md
+<!-- SECTION:PLAN:END -->

@@ -1,0 +1,20 @@
+[
+  {
+    "id": "SPEC-01",
+    "verifies": "AC#1",
+    "verification": "acceptance `e2e/home-first-load.spec.ts::first load of Home does not move focus to its heading`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-02",
+    "verifies": "AC#2",
+    "verification": "acceptance `tests/ui/user-seat-cards.acceptance.test.tsx::the user's face-up cards are the hole cards of the configured user seat`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-03",
+    "verifies": "AC#3",
+    "verification": "acceptance `tests/table/session-stacks.acceptance.test.ts::stacks follow the configured seat numbers, not DEFAULT_SEATS`",
+    "status": "pending"
+  }
+]
