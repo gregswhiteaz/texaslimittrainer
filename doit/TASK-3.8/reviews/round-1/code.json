@@ -1,0 +1,22 @@
+{"reviewer": "code", "round": 1,
+ "rubric": [
+  {"item": "SPEC-01 correctness", "result": "pass"}, {"item": "SPEC-01 test strength", "result": "pass"},
+  {"item": "SPEC-02 correctness", "result": "pass"}, {"item": "SPEC-02 test strength", "result": "pass"},
+  {"item": "SPEC-03 correctness", "result": "pass"}, {"item": "SPEC-03 test strength", "result": "pass"},
+  {"item": "SPEC-04 correctness", "result": "pass"}, {"item": "SPEC-04 test strength", "result": "pass"},
+  {"item": "SPEC-05 correctness", "result": "pass"}, {"item": "SPEC-05 test strength", "result": "pass"},
+  {"item": "SPEC-06 correctness", "result": "pass"}, {"item": "SPEC-06 test strength", "result": "pass"},
+  {"item": "SPEC-07 correctness", "result": "pass"}, {"item": "SPEC-07 test strength", "result": "pass"},
+  {"item": "SPEC-08 correctness", "result": "pass"}, {"item": "SPEC-08 test strength", "result": "pass"},
+  {"item": "SPEC-09 correctness", "result": "pass"}, {"item": "SPEC-09 test strength", "result": "pass"},
+  {"item": "SPEC-10 correctness", "result": "n/a (CI/doc, judged later)"}, {"item": "SPEC-10 test strength", "result": "n/a"},
+  {"item": "SPEC-11 correctness", "result": "pass"}, {"item": "SPEC-11 test strength", "result": "n/a (manual)"},
+  {"item": "scope", "result": "pass"}, {"item": "concision", "result": "pass"}, {"item": "clarity", "result": "pass"}
+ ],
+ "findings": [
+  {"fingerprint": "src/ui/table/Table.tsx:pot-winner-line-formatted-in-jsx", "severity": "NIT", "file": "src/ui/table/Table.tsx", "line": 92,
+   "issue": "The Pot winners line rebuilds `${p.label} $${p.amount}` and `winners.map(w => w.text).join(', ')` in JSX, so PotResultView.text is only consumed by tests; the two compositions could drift (D-4 prefers the model to own strings).",
+   "evidence": "Table.tsx:92-94 vs hand-result.ts `text: `${label} $${award.amount} · ${potWinners.map((w) => w.text).join(', ')}``. The JSX span shape was prescribed by spec section 5 Rendering, so this is a spec-sanctioned preference, not a defect.",
+   "fix": "Optional: add `potText` and `winnersText` fields to PotResultView (build `text` from them) and render those in the two spans."}
+ ],
+ "summary": "All SPEC items implemented as specified; no BLOCKER/MAJOR. potLines adds street bets only to the last pot so lines sum to potTotal (unit test walks every intermediate state of the hand); labels follow Q-1 (Main pot / Side pot / Side pot k; awards.length equals pot count because the engine emits one award per pot, hand.ts:76); single-pot felt markup is the unchanged <p class=\"table-pot\"> branch; per-award result lines follow Q-2 incl. a split side pot and a seat winning two pots (invariant checked against WinnerView amounts); award order via award.pot; uncalled return excluded (test asserts returned {1,8} and 'Side pot $80 · Ava wins $80'). AC#1/#2 amounts are asserted against engine state (contributions [60,60,0,0,20,0], 2 awards). Deviations judged on substance: (1) optional HandResultView.pots is justified - locked tests tests/ui/hand-result-shown.acceptance.test.tsx:36 and tests/table/hand-result.test.ts:62 assert the whole view with toEqual, which would fail on an extra `pots: []`; SPEC-04 semantics preserved via `?? []` and the single-award case asserts the property is absent; (2) the table-harness-bundle.ts TableScene union extension is required for typecheck and minimal; (3) no flex-wrap is acceptable since the spec made it conditional and the e2e asserts no horizontal overflow at 1280px. Locked new-test SHAs match state.json; no prior locked test files changed; no src/engine, src/bots or src/advice changes; new and related Vitest files pass (6 files, 21 tests)."}

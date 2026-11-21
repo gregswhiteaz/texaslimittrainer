@@ -1,0 +1,101 @@
+{
+  "round": 1,
+  "test_suite": {
+    "command": "npm test",
+    "result": "PASS",
+    "passed": 506,
+    "failed": 0,
+    "notes": "143 files passed, 1 skipped; 7 tests skipped; coverage statements 96.77%. Lint and typecheck clean. npm run e2e: 122 passed, 6 skipped, 0 failed (chromium + webkit)."
+  },
+  "end_to_end": {
+    "command": "npm run build && npm run preview (New game -> Start game, play a hand); npx playwright test e2e/side-pots.spec.ts; side-pot-river / side-pot-showdown scenes in a browser",
+    "result": "PASS",
+    "expected": "Live play: single 'Pot $N', no pot lists. side-pot-river: felt reads 'Main pot $60' and 'Side pot $80'. side-pot-showdown: Pot winners 'Main pot $60 · You win $60', 'Side pot $80 · Ben wins $80'; Winners unchanged; felt Pot $0.",
+    "actual": "Live: hand played to 'Hand over' with one 'Pot $N' throughout and no Pots or Pot winners list (result 'Eli wins $30'). River scene felt: ['Main pot $60','Side pot $80'] side by side at 16px/600. Showdown scene: Pot winners lines as expected, then Winners 'You win $60 · Pair of aces', 'Ben wins $80 · Pair of kings', Shown 'Ava shows · Pair of queens', felt 'Pot $0', scrollWidth 1280. side-pots spec passes in both projects."
+  },
+  "integrity": {
+    "result": "PASS",
+    "notes": "doit.py test-integrity TASK-3.8 exit 0. Diff: no engine/bots/advice change, no test-input detection, no hard-coded expected values in product code, no mocks of the unit under test; potLines/handResultView derive everything from engine pots/awards (confirmed by 600-hand fuzz against the real engine). No locked test edited. git diff --stat -- src e2e tests matches HEAD after Judge mutants/temp files were removed."
+  },
+  "items": [
+    {
+      "spec": "SPEC-01",
+      "result": "PASS",
+      "evidence": "npx vitest run tests/ui/side-pots.acceptance.test.tsx -> 4/4 pass; test asserts the Pots list items ['Main pot $60','Side pot $80'], data-pot 0/1, no <p class=table-pot>, pot 140, contributions [60,60,0,0,20,0]. Judge holdout render check over 600 fuzzed engine hands (up to 5 pots): every state with >=2 pots and hand not over rendered a Pots list whose items equal the expected labels/amounts and no table-pot paragraph -> PASS. Browser (Chromium) side-pot-river scene shows 'Main pot $60' and 'Side pot $80' on one row in the felt at 16px/600."
+    },
+    {
+      "spec": "SPEC-02",
+      "result": "PASS",
+      "evidence": "Acceptance test asserts the Pot winners list ['Main pot $60 · You win $60','Side pot $80 · Ben wins $80'], placed after 'Hand over' and before Winners; Winners unchanged; Shown hands 'Ava shows · Pair of queens'; felt 'Pot $0'. Browser side-pot-showdown scene shows the same, scrollWidth 1280."
+    },
+    {
+      "spec": "SPEC-03",
+      "result": "PASS",
+      "evidence": "Acceptance test compares li count, data-pot and data-part=pot text with hand.result.awards. Holdout: for 562 fuzzed multi-award showdowns (incl. 3-5 awards, 314 split lines, 528 results where one seat won 2+ pots, 103 with an uncalled return) the rendered Pot winners items equal one line per award in award order with the engine amounts and winner shares -> PASS; award pot indices were always contiguous so felt and result labels agree."
+    },
+    {
+      "spec": "SPEC-04",
+      "result": "PASS",
+      "evidence": "Acceptance test iterates STORYBOARD_HISTORY + KINGS_SHOWDOWN, SPLIT_STRAIGHT, AVA_UNCONTESTED asserting one 'Pot $<potTotal>' paragraph, no Pots/Pot winners lists, empty pots. Holdout: every single-pot or hand-over state in the fuzz rendered exactly one 'Pot $N' paragraph; single-award results had no Pot winners list. Live app (npm run build && preview, New game -> Start game, played to Hand over) kept a single 'Pot $N' and showed no Pots or Pot winners list."
+    },
+    {
+      "spec": "SPEC-05",
+      "result": "PASS",
+      "evidence": "tests/table/side-pots.test.ts passes and covers labels, street bets [60,88]/148, sum invariant over every intermediate state, mid-street all-in -> [], showdown -> [], crafted 3-pot and split texts, per-seat sums, single award, uncalled 1:bet 2:fold. Mutants (drop street bets, wrong label count, <1 pot threshold, ignore handOver, <1 award threshold, split separator in model, wrong label count in result) all killed. Holdout: felt line sum == potTotal in 7205 multi-pot states including 5801 mid-street ones with bets on the last line; per-seat pot shares == WinnerView.amount in every multi-award result. Deviation judged: HandResultView.pots is optional and omitted for a single award instead of []; substance holds (consumers see no list; `?.pots ?? []` is []), and it keeps the locked whole-object toEqual assertions passing."
+    },
+    {
+      "spec": "SPEC-06",
+      "result": "PASS",
+      "evidence": "Unit test asserts toThrow(new RangeError('Seat 2 is not at the table')) with seat 2 removed; passes. The pot path reuses nameOf, which throws before any output."
+    },
+    {
+      "spec": "SPEC-07",
+      "result": "PASS",
+      "evidence": "npx playwright test e2e/side-pots.spec.ts -> pass in chromium and webkit (asserts Pots items, Pot winners items, Winners unchanged, Pot $0, status right edge and scrollWidth <= 1280, flop-bet Pot $30 with no Pots list, axe on each scene, no http(s) requests). Judge browser check agrees (scrollWidth 1280). No flex-wrap was added; not needed because nothing overflows horizontally (see LOW finding on text wrapping)."
+    },
+    {
+      "spec": "SPEC-08",
+      "result": "PASS",
+      "evidence": "The 6 locked Vitest files -> 20/20 pass; the 3 locked e2e specs + side-pots -> 24/24 pass. git diff base..HEAD touches no locked file. Note: the recorded hashes of e2e/next-hand.spec.ts and tests/ui/hand-result.acceptance.test.tsx (TASK-3.4) and tests/ui/user-shown-cards.acceptance.test.tsx (TASK-3.22) differ from the current files, but those files were last changed by earlier tasks (TASK-1.15/TASK-1.9 builds) and are byte-identical to this branch's base commit, so the gap predates this story."
+    },
+    {
+      "spec": "SPEC-09",
+      "result": "PASS",
+      "evidence": "npm run lint clean; npm run typecheck clean; npm test -> 143 files passed/1 skipped, 506 tests passed/7 skipped, statements 96.77%, table 100%, engine 99.88%; npm run e2e -> 122 passed, 6 skipped. src/table imports only engine/session/table modules (hand-result.ts imports ./table-view); boundary tests pass within npm test."
+    },
+    {
+      "spec": "SPEC-10",
+      "result": "PASS",
+      "evidence": "CI run 44939863707 on doit/TASK-3.8 @ c94a229: conclusion success (job 'Lint, typecheck, build, test and e2e' green). backlog doc list --plain lists doc-69 'TASK-3.8: See each side pot and who wins it', which records Q-1/Q-2 wording, A-1, A-2 and that side pots are proven by scenes only until TASK-3.21 removes the top-up."
+    },
+    {
+      "spec": "SPEC-11",
+      "result": "PASS",
+      "evidence": "git diff --stat main...doit/TASK-3.8 -- src/engine src/bots src/advice -> empty. Golden spots (TASK-7.11) and offline use (TASK-13.4) are both To Do."
+    }
+  ],
+  "findings": [
+    {
+      "id": "J-1-01",
+      "severity": "LOW",
+      "spec": "SPEC-02",
+      "expected_vs_actual": "Expected the result lines to stay compact at 1280x720. Actual: with side pots the result block has four columns (title, Pot winners, Winners, Shown hands), so 'Hand over' wraps onto two lines and 'Ava shows · Pair of queens' squeezes into a narrow, wrapped column. Still readable and no horizontal overflow, so the spec's criterion is met.",
+      "fix": "Optional: let the result block wrap, or stack Pot winners above the row, so labels do not wrap mid-phrase."
+    },
+    {
+      "id": "J-1-02",
+      "severity": "LOW",
+      "spec": "SPEC-03",
+      "expected_vs_actual": "Expected the render tests to pin how a split side pot appears in the rendered result. Actual: the rendered Pot winners line re-joins winner texts in the component, separately from the model's text, and no render or browser test renders a split pot. Changing the rendered separator goes undetected. Behaviour is correct today: the Judge saw split lines render 'Ben wins $41, Ava wins $40'-style text.",
+      "fix": "Add a render assertion for a split side pot, or render p.text parts from the model so there is one source of the separator."
+    },
+    {
+      "id": "J-1-03",
+      "severity": "LOW",
+      "spec": "SPEC-05",
+      "expected_vs_actual": "Spec interface says HandResultView.pots is a required array, [] for a single pot. Actual: the property is optional and omitted for a single award (deviation recorded so the locked whole-object assertions still pass). Observable behaviour is the same: no Pot winners list.",
+      "fix": "None required; record the interface deviation in the story doc / spec follow-up."
+    }
+  ],
+  "summary": "All 11 SPEC items verified by observed behaviour. The felt pot lines and result Pot winners lines match the real engine across 600 fuzzed hands (3-5 pots, splits, one seat winning several pots, uncalled returns); single-pot markup unchanged; locked tests pass; 10/11 mutants killed (survivor: rendered split separator, LOW). CI green. Three LOW findings, none blocking."
+}

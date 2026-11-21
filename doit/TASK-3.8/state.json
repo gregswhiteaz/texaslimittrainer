@@ -4,14 +4,26 @@
   "branch": "doit/TASK-3.8",
   "base_commit": "1b929fb06f61746c33c3ee8fa05e4e4ed07f48ba",
   "started": "2026-11-21T12:02:26",
-  "review_round": 0,
-  "judge_round": 0,
+  "review_round": 1,
+  "judge_round": 1,
   "sendbacks": 0,
   "gate_runs": 2,
   "questions": 2,
   "assumptions": 0,
   "escalations": 0,
-  "item_failures": {},
+  "item_failures": {
+    "SPEC-01": 0,
+    "SPEC-02": 0,
+    "SPEC-03": 0,
+    "SPEC-04": 0,
+    "SPEC-05": 0,
+    "SPEC-06": 0,
+    "SPEC-07": 0,
+    "SPEC-08": 0,
+    "SPEC-09": 0,
+    "SPEC-10": 0,
+    "SPEC-11": 0
+  },
   "locked_tests": {
     "e2e/side-pots.spec.ts": "dcc830bd2873be238f9b7e76d4760728a8217112bc261e19d6444b2e6b9a3b89",
     "tests/ui/side-pots.acceptance.test.tsx": "2fef7bf2dce092bb9c6a279d25e85d4c96138fe9c81e5c45cf1ee28cb60567e0"
@@ -875,5 +887,12 @@
   },
   "history": [],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-3.8",
-  "spec_sha256": "3ff8d2eb4e13093cbcacb994a19517028c5b5886e3028b2dd88c79715d497185"
+  "spec_sha256": "3ff8d2eb4e13093cbcacb994a19517028c5b5886e3028b2dd88c79715d497185",
+  "review_findings": {
+    "1": 0
+  },
+  "doc_id": "doc-69",
+  "judge_results": {
+    "1": "PASS"
+  }
 }

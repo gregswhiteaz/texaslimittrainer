@@ -1,0 +1,3 @@
+{"reviewer": "security", "round": 1,
+ "findings": [],
+ "summary": "UI-only change. potLines() reads PlayerView (the user's filtered view) pot amounts and public street contributions; handResultView().pots reads result.awards (pot index, amount, winner seat and amount) — no hole cards, mucked hands or deck data enter either new list, so no hidden-information leak. Winner names come from session config and are rendered as React text children (escaped); no dangerouslySetInnerHTML or innerHTML. No new input, storage, network, randomness or dependencies. No findings."}

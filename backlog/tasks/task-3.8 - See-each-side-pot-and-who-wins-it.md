@@ -1,11 +1,11 @@
 ---
 id: TASK-3.8
 title: See each side pot and who wins it
-status: In Progress
+status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-21T19:08:00Z'
+updated_date: '2026-11-21T19:29:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -17,6 +17,7 @@ references:
 documentation:
   - doc-1
   - doc-2
+  - doc-69
 parent_task_id: TASK-3
 priority: high
 type: feature
@@ -41,26 +42,26 @@ Plan key: E03-S07 · Dream: limit-holdem-trainer
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Given a three-way all-in where the stacks put in are $20, $60 and $60, When the betting ends, Then the table shows a main pot of $60 and a side pot of $80 separately [REQ-021.5]
-- [ ] #2 Given the short stack wins the main pot and another player wins the side pot, When the hand ends, Then the result shows each winner with the pot they won and its amount [REQ-024.1, REQ-021.5]
-- [ ] #3 Given a hand with no all-in, When the table is shown, Then a single pot total is shown [REQ-021.5]
-- [ ] #4 Given side pots, When the hand result is shown, Then there is one result line per pot from result.awards
+- [x] #1 Given a three-way all-in where the stacks put in are $20, $60 and $60, When the betting ends, Then the table shows a main pot of $60 and a side pot of $80 separately [REQ-021.5]
+- [x] #2 Given the short stack wins the main pot and another player wins the side pot, When the hand ends, Then the result shows each winner with the pot they won and its amount [REQ-024.1, REQ-021.5]
+- [x] #3 Given a hand with no all-in, When the table is shown, Then a single pot total is shown [REQ-021.5]
+- [x] #4 Given side pots, When the hand result is shown, Then there is one result line per pot from result.awards
 <!-- AC:END -->
 
 ## Definition of Done
 <!-- DOD:BEGIN -->
-- [ ] #1 Every acceptance criterion has at least one automated test (unit, property or Playwright) that passes
-- [ ] #2 `npm run lint`, `npm run typecheck` and `npm test` pass with zero errors [REQ-059.1, REQ-059.4]
-- [ ] #3 The golden-spot suite passes 100% (applies from the story that creates the suite, E07-S14, onward) [REQ-039.4]
-- [ ] #4 Coverage thresholds hold: >= 90% engine/bots/advice/statistics, >= 70% overall [REQ-059.3]
-- [ ] #5 Engine, bots, advice and statistics code imports no UI or browser-only code [REQ-059.2]
-- [ ] #6 Stories that touch the engine, bots or advice: a 10,000-hand playtest reports zero invariant violations (applies once the playtest runner exists, E01-S07, onward) [REQ-056.1]
-- [ ] #7 Stories that add or change a screen: Playwright test of the screen flow in Chromium and WebKit, and axe reports zero serious or critical violations (axe tooling is provisioned in the toolchain story E01-S01) [REQ-057.1]
-- [ ] #8 No new network requests beyond the app's own files [REQ-058.1]
-- [ ] #9 Strategy-content stories: text is original and every chart, range or golden spot carries its justification [REQ-061.2]
-- [ ] #10 CI workflow is green on the story's branch (applies once the CI story E01-S02 is done; E01-S01 instead passes the same checks locally) [REQ-064.2]
-- [ ] #11 Story documentation is written and published to Backlog.md
-- [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
+- [x] #1 Every acceptance criterion has at least one automated test (unit, property or Playwright) that passes
+- [x] #2 `npm run lint`, `npm run typecheck` and `npm test` pass with zero errors [REQ-059.1, REQ-059.4]
+- [x] #3 The golden-spot suite passes 100% (applies from the story that creates the suite, E07-S14, onward) [REQ-039.4]
+- [x] #4 Coverage thresholds hold: >= 90% engine/bots/advice/statistics, >= 70% overall [REQ-059.3]
+- [x] #5 Engine, bots, advice and statistics code imports no UI or browser-only code [REQ-059.2]
+- [x] #6 Stories that touch the engine, bots or advice: a 10,000-hand playtest reports zero invariant violations (applies once the playtest runner exists, E01-S07, onward) [REQ-056.1]
+- [x] #7 Stories that add or change a screen: Playwright test of the screen flow in Chromium and WebKit, and axe reports zero serious or critical violations (axe tooling is provisioned in the toolchain story E01-S01) [REQ-057.1]
+- [x] #8 No new network requests beyond the app's own files [REQ-058.1]
+- [x] #9 Strategy-content stories: text is original and every chart, range or golden spot carries its justification [REQ-061.2]
+- [x] #10 CI workflow is green on the story's branch (applies once the CI story E01-S02 is done; E01-S01 instead passes the same checks locally) [REQ-064.2]
+- [x] #11 Story documentation is written and published to Backlog.md
+- [x] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
 
 ## Implementation Plan
@@ -80,4 +81,16 @@ Full spec: doit/TASK-3.8/spec.md
 AC added from TASK-3.4 follow-up (doc-25).
 
 Autopilot Q-1/Q-2 auto-accepted (qa.md).
+
+Build: table 'Pots' list + result 'Pot winners' list; side-pot scenes; 3 new test files; npm run e2e 122 passed; gate PASS. Recorded deviations: HandResultView.pots optional (absent for one award, so locked toEqual tests stay byte-identical); e2e/support/table-harness-bundle.ts scene-type line (10th file); no flex-wrap needed.
+
+Follow-ups (Step 6a): AC added to TASK-3.21 (live side-pot display). NIT (PotResultView text) not tracked.
+
+Judge R1 PASS 11/11 (600-hand engine oracle, 10/11 mutants). LOW J-1-01/J-1-02 → follow-up task created; J-1-03 is the recorded deviation.
 <!-- SECTION:NOTES:END -->
+
+## Final Summary
+
+<!-- SECTION:FINAL_SUMMARY:BEGIN -->
+Side pots now show on the felt as a 'Pots' list (main/side amounts) once betting ends, and the result block gains a 'Pot winners' list with one line per pot (winner and amount); single-pot hands are unchanged. Display-only; engine untouched. Verified: lint, typecheck, 506 unit tests, 122 e2e (Chromium+WebKit) pass; review round 1 had 0 blocking findings. Review assumptions: Q-1/Q-2 wording (auto-accepted), A-1..A-4. Risk: side pots are proven by scripted scenes only until TASK-3.21 removes the top-up.
+<!-- SECTION:FINAL_SUMMARY:END -->
