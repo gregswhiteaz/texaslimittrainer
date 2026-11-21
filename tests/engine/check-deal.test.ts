@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import type { Card } from '../../src/engine/cards';
 import { createHand, type HandState, type Stakes } from '../../src/engine/hand';
-import { checkDeal } from '../../src/engine/invariants';
+import { checkDeal, checkState } from '../../src/engine/invariants';
 
 const CASH: Stakes = { smallBlind: 2, bigBlind: 4, smallBet: 4, bigBet: 8 };
 const SNG: Stakes = { smallBlind: 10, bigBlind: 20, smallBet: 20, bigBet: 40 };
@@ -53,6 +53,23 @@ describe('checkDeal', () => {
       players: dealtOut.players.map((p) => (p.seat === 2 ? { ...p, stack: p.stack - 3 } : p)),
     };
     expect(checkDeal(wrongReturn).map((v) => v.invariant)).toEqual(['chips']);
+    // Conservation holds, so only the C5 returned rule catches this.
+    const phantomReturn: HandState = {
+      ...dealtOut,
+      result: {
+        ...(dealtOut.result as NonNullable<HandState['result']>),
+        returned: { seat: 1, amount: 3 },
+      },
+      players: dealtOut.players.map((p) =>
+        p.seat === 1
+          ? { ...p, stack: p.stack + 3 }
+          : p.seat === 2
+            ? { ...p, stack: p.stack - 3 }
+            : p,
+      ),
+    };
+    expect(checkState(phantomReturn)).toEqual([]);
+    expect(checkDeal(phantomReturn)).toEqual(chips('seat 1 got $3 back but $0 was uncalled'));
 
     const clean = deal({ 1: 160, 2: 160, 3: 160 }, 1);
     const duplicate: HandState = {

@@ -78,3 +78,7 @@ First replay code: 000000000000002a0000000100000001
 Last replay code: 000000000000002a0000000100002710
 Invariant violations: 0
 ```
+
+## FIX round 1
+- [MAJOR] check-deal C5 untested: fixed. Added `phantomReturn` (W7 dealt-out, returned {seat 1, $3}, seat 1 +3, seat 2 -3); asserts checkState is [] and checkDeal is chips 'seat 1 got $3 back but $0 was uncalled'. Mutant `? returnedMessage(state)` -> `? null` fails it; restored.
+- [MINOR] restart-after-violation: fixed. onAction now flags the action whose result completes the hand; test asserts 3 hands, each with a result and 1 violation, button 1 and buy-in stacks. Mutant dropping `hand.violations > 0 ||` in runner.ts fails it (expected 2 to be 1); restored.

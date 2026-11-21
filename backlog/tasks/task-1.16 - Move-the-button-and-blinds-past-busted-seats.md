@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-21T09:02:00Z'
+updated_date: '2026-11-21T09:16:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -98,4 +98,6 @@ AC added from TASK-1.8 follow-up (doc-16).
 TASK-3.4 Q-4 interim top-up to $160 must be removed once this and the other all-in/rebuy stories land: tracked as TASK-3.21.
 
 Autopilot Q-1..Q-4 auto-accepted (qa.md); unlocks under TASK-1.31, 1.21, 1.6, 1.11.
+
+Build: button/blinds skip busted seats, all-in blinds, deal-out/no-BB-option vs all-ins, checkDeal cross-hand check, cash carry-over + rebuy, --game sng, replay word 2; E1–E7 locked edits (E7 via Q-5); SPEC-10 threshold per Q-6; new baselines cash 5461/4539/88746/242/$70/0 and sng 8061/1939/57692/870/$880/0; gate PASS. Recorded deviations Q-5, Q-6. Unlocked cli.test source-text check replaced by a behaviour test.
 <!-- SECTION:NOTES:END -->

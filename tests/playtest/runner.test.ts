@@ -303,15 +303,19 @@ describe('playtest runner units', () => {
     expect(sng.record).toMatchObject({ game: 'sng', size: 4, stakes: SNG_STAKES, button: 2 });
     expect(sng.dealViolations).toEqual([]);
 
-    // A violating hand restarts the table: button 1, every seat at the starting stack.
+    // A violating hand restarts the table: button 1, every seat at the starting stack. The flag is on the
+    // action that completes the hand, so the hand has a result and only its violation forces the restart.
     const flagged: PlayedHand[] = [];
     runPlaytest({ hands: 3, seed: 3, size: 4 }, (h) => flagged.push(h), {
       onAction: (step) =>
-        step.before.actions.length === 2 && step.before.button === 1
+        step.result.ok && step.result.state.result !== null
           ? [{ invariant: 'custom', message: 'flagged' }]
           : checkStep(step),
     });
+    expect(flagged).toHaveLength(3);
     for (const hand of flagged) {
+      expect(hand.final.result).not.toBeNull();
+      expect(hand.violations).toBe(1);
       expect(hand.record.button).toBe(1);
       expect(hand.record.seats).toEqual([1, 2, 3, 4].map((seat) => ({ seat, stack: CASH_BUY_IN })));
     }

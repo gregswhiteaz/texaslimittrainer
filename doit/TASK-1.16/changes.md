@@ -9,10 +9,10 @@
 - `src/playtest/cli.ts`: `--game`, and `--stacks` (replay only). New USAGE, Table, Options and Replay lines. Blinds print the chips posted (`added`). A deal violation is reported as "at the deal".
 - `tests/engine/button-blinds.acceptance.test.ts`: new. AC#1–AC#5 (SPEC-01..07).
 - `tests/engine/all-in-blinds.test.ts`: new. The lone-player rule, the floor, `nextButton`, and the small-stack grid (SPEC-08, SPEC-09).
-- `tests/engine/check-deal.test.ts`: new. `checkDeal` cases (SPEC-14).
+- `tests/engine/check-deal.test.ts`: new. `checkDeal` cases (SPEC-14), including a C5-only returned-chips case (fix round 1).
 - `tests/playtest/games.acceptance.test.ts`: new. AC#6–AC#9 (SPEC-10..13). SPEC-10 uses the Q-6 threshold: at least 1 completed sit-and-go, and the next hand is a fresh sit-and-go.
 - `tests/playtest/cli.test.ts`: updated for the new fields, flags, lines and error cases. New "game and stacks options" test (SPEC-15).
-- `tests/playtest/runner.test.ts`: new "carried stacks and restarts" test (SPEC-15).
+- `tests/playtest/runner.test.ts`: new "carried stacks and restarts" test (SPEC-15); restart case flags the hand-completing action (fix round 1).
 - `tests/engine/hand.test.ts`: floor cases now use stack 0 and the "at least 1" message.
 - `tests/table/next-hand.test.ts`: same floor change, stack 4 → 0 (fix brief item 3, unlocked).
 - `tests/engine/bet-cap.acceptance.test.ts`: E7 (Q-5, unlocked under TASK-1.12). `betsPerStreet` counts only REQ-016.5 counted bets. Line 233 now reads `violation?.violations`.
