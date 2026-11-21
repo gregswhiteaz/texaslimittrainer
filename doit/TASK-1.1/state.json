@@ -1,119 +1,129 @@
 {
- "task": "TASK-1.1",
- "stage": "done",
- "branch": "doit/TASK-1.1",
- "base_commit": "bf273355f5157043ee4017d5c0140c47449ca928",
- "started": "2026-11-17T17:18:53",
- "review_round": 1,
- "judge_round": 1,
- "sendbacks": 0,
- "gate_runs": 1,
- "questions": 3,
- "assumptions": 1,
- "escalations": 0,
- "item_failures": {
-  "SPEC-01": 0,
-  "SPEC-02": 0,
-  "SPEC-03": 0,
-  "SPEC-04": 0,
-  "SPEC-05": 0,
-  "SPEC-06": 0,
-  "SPEC-07": 0,
-  "SPEC-08": 0,
-  "SPEC-09": 0,
-  "SPEC-10": 0,
-  "SPEC-11": 0,
-  "SPEC-12": 0,
-  "SPEC-13": 0,
-  "SPEC-14": 0,
-  "SPEC-15": 0,
-  "SPEC-16": 0,
-  "SPEC-17": 0,
-  "SPEC-18": 0,
-  "SPEC-19": 0,
-  "SPEC-20": 0,
-  "SPEC-21": 0,
-  "SPEC-22": 0,
-  "SPEC-23": 0,
-  "SPEC-24": 0,
-  "SPEC-25": 0
- },
- "locked_tests": {
-  "e2e/axe-helper.spec.ts": "fac8886c55d45c226d9dd62c5c6247987fdf4f35edc5f798a6253e62cb77cbf1",
-  "e2e/smoke.spec.ts": "052090b55bd1662345a948b679cf410cef655940d1cd5a0afd3313163741fe6b",
-  "tests/toolchain/boundary.property.test.ts": "fac3eccaeb87838390df011e51b3370286a1f1a77cecdae3e04764631d0a32bf",
-  "tests/toolchain/boundary.test.ts": "469d9c2a27e5dc7c68783db76c2707e3fc75cdd93f7fe767f406f9734dbae572",
-  "tests/toolchain/build.test.ts": "b2ab2335d769dc7490129d06e3d6a41e86307f1effa226066c72de88d1e75f24",
-  "tests/toolchain/coverage.test.ts": "4d89b456086e68389f854fecccdee34fc1ea741d87ca1ce8d4452952da61152c",
-  "tests/toolchain/lint.test.ts": "fd630f668d01409729d2a7c58a5e8cbf2a7ae3dbf82b756b61d5f568586981ba",
-  "tests/toolchain/test-command.test.ts": "d3ac8c091ec592d12cb45e23361870660f73594556777ccf9bd4f2b146b624e6",
-  "tests/toolchain/typecheck.test.ts": "b6d8be168555d2abd103c089d323c0555641402b96bca3ef84172ef444eccf17"
- },
- "test_snapshot": {
-  "e2e/axe-helper.spec.ts": {
-   "sha": "fac8886c55d45c226d9dd62c5c6247987fdf4f35edc5f798a6253e62cb77cbf1",
-   "asserts": 2,
-   "skips": 0
+  "task": "TASK-1.1",
+  "stage": "done",
+  "branch": "doit/TASK-1.1",
+  "base_commit": "bf273355f5157043ee4017d5c0140c47449ca928",
+  "started": "2026-11-17T17:18:53",
+  "review_round": 1,
+  "judge_round": 1,
+  "sendbacks": 0,
+  "gate_runs": 1,
+  "questions": 3,
+  "assumptions": 1,
+  "escalations": 0,
+  "item_failures": {
+    "SPEC-01": 0,
+    "SPEC-02": 0,
+    "SPEC-03": 0,
+    "SPEC-04": 0,
+    "SPEC-05": 0,
+    "SPEC-06": 0,
+    "SPEC-07": 0,
+    "SPEC-08": 0,
+    "SPEC-09": 0,
+    "SPEC-10": 0,
+    "SPEC-11": 0,
+    "SPEC-12": 0,
+    "SPEC-13": 0,
+    "SPEC-14": 0,
+    "SPEC-15": 0,
+    "SPEC-16": 0,
+    "SPEC-17": 0,
+    "SPEC-18": 0,
+    "SPEC-19": 0,
+    "SPEC-20": 0,
+    "SPEC-21": 0,
+    "SPEC-22": 0,
+    "SPEC-23": 0,
+    "SPEC-24": 0,
+    "SPEC-25": 0
   },
-  "e2e/smoke.spec.ts": {
-   "sha": "052090b55bd1662345a948b679cf410cef655940d1cd5a0afd3313163741fe6b",
-   "asserts": 6,
-   "skips": 0
+  "locked_tests": {
+    "e2e/axe-helper.spec.ts": "fac8886c55d45c226d9dd62c5c6247987fdf4f35edc5f798a6253e62cb77cbf1",
+    "e2e/smoke.spec.ts": "052090b55bd1662345a948b679cf410cef655940d1cd5a0afd3313163741fe6b",
+    "tests/toolchain/boundary.property.test.ts": "fac3eccaeb87838390df011e51b3370286a1f1a77cecdae3e04764631d0a32bf",
+    "tests/toolchain/boundary.test.ts": "469d9c2a27e5dc7c68783db76c2707e3fc75cdd93f7fe767f406f9734dbae572",
+    "tests/toolchain/build.test.ts": "b2ab2335d769dc7490129d06e3d6a41e86307f1effa226066c72de88d1e75f24",
+    "tests/toolchain/coverage.test.ts": "4d89b456086e68389f854fecccdee34fc1ea741d87ca1ce8d4452952da61152c",
+    "tests/toolchain/lint.test.ts": "fd630f668d01409729d2a7c58a5e8cbf2a7ae3dbf82b756b61d5f568586981ba",
+    "tests/toolchain/test-command.test.ts": "d3ac8c091ec592d12cb45e23361870660f73594556777ccf9bd4f2b146b624e6",
+    "tests/toolchain/typecheck.test.ts": "b6d8be168555d2abd103c089d323c0555641402b96bca3ef84172ef444eccf17"
   },
-  "tests/support/sandbox.ts": {
-   "sha": "1c532a3216ec9a8eb05d6fc357f372c12a89a26ce6384441e52d4bb1041fcf65",
-   "asserts": 0,
-   "skips": 0
+  "test_snapshot": {
+    "e2e/axe-helper.spec.ts": {
+      "sha": "fac8886c55d45c226d9dd62c5c6247987fdf4f35edc5f798a6253e62cb77cbf1",
+      "asserts": 2,
+      "skips": 0
+    },
+    "e2e/smoke.spec.ts": {
+      "sha": "052090b55bd1662345a948b679cf410cef655940d1cd5a0afd3313163741fe6b",
+      "asserts": 6,
+      "skips": 0
+    },
+    "tests/support/sandbox.ts": {
+      "sha": "1c532a3216ec9a8eb05d6fc357f372c12a89a26ce6384441e52d4bb1041fcf65",
+      "asserts": 0,
+      "skips": 0
+    },
+    "tests/toolchain/boundary.property.test.ts": {
+      "sha": "fac3eccaeb87838390df011e51b3370286a1f1a77cecdae3e04764631d0a32bf",
+      "asserts": 6,
+      "skips": 0
+    },
+    "tests/toolchain/boundary.test.ts": {
+      "sha": "469d9c2a27e5dc7c68783db76c2707e3fc75cdd93f7fe767f406f9734dbae572",
+      "asserts": 8,
+      "skips": 0
+    },
+    "tests/toolchain/build.test.ts": {
+      "sha": "b2ab2335d769dc7490129d06e3d6a41e86307f1effa226066c72de88d1e75f24",
+      "asserts": 4,
+      "skips": 0
+    },
+    "tests/toolchain/coverage.test.ts": {
+      "sha": "4d89b456086e68389f854fecccdee34fc1ea741d87ca1ce8d4452952da61152c",
+      "asserts": 10,
+      "skips": 0
+    },
+    "tests/toolchain/lint.test.ts": {
+      "sha": "fd630f668d01409729d2a7c58a5e8cbf2a7ae3dbf82b756b61d5f568586981ba",
+      "asserts": 6,
+      "skips": 0
+    },
+    "tests/toolchain/test-command.test.ts": {
+      "sha": "d3ac8c091ec592d12cb45e23361870660f73594556777ccf9bd4f2b146b624e6",
+      "asserts": 8,
+      "skips": 0
+    },
+    "tests/toolchain/typecheck.test.ts": {
+      "sha": "b6d8be168555d2abd103c089d323c0555641402b96bca3ef84172ef444eccf17",
+      "asserts": 6,
+      "skips": 0
+    },
+    "tests/unit/app.test.tsx": {
+      "sha": "44fab51033bfa350a15f89a675400c55283f2f41790bad77bc222d1bd40a3c54",
+      "asserts": 1,
+      "skips": 0
+    }
   },
-  "tests/toolchain/boundary.property.test.ts": {
-   "sha": "fac3eccaeb87838390df011e51b3370286a1f1a77cecdae3e04764631d0a32bf",
-   "asserts": 6,
-   "skips": 0
+  "history": [
+    {
+      "t": "2026-11-20T17:42:15",
+      "event": "unlock",
+      "file": "tests/toolchain/coverage.test.ts",
+      "reason": "TASK-1.40 AC#2 (autopilot): widen 90% coverage glob to playtest,table \u2014 stricter only"
+    }
+  ],
+  "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-1.1",
+  "spec_sha256": "975704cc34fa52752f7d637c6030f7f954022157e657dd2a5022740ae2181972",
+  "review_findings": {
+    "1": 0
   },
-  "tests/toolchain/boundary.test.ts": {
-   "sha": "469d9c2a27e5dc7c68783db76c2707e3fc75cdd93f7fe767f406f9734dbae572",
-   "asserts": 8,
-   "skips": 0
+  "judge_results": {
+    "1": "PASS"
   },
-  "tests/toolchain/build.test.ts": {
-   "sha": "b2ab2335d769dc7490129d06e3d6a41e86307f1effa226066c72de88d1e75f24",
-   "asserts": 4,
-   "skips": 0
-  },
-  "tests/toolchain/coverage.test.ts": {
-   "sha": "4d89b456086e68389f854fecccdee34fc1ea741d87ca1ce8d4452952da61152c",
-   "asserts": 10,
-   "skips": 0
-  },
-  "tests/toolchain/lint.test.ts": {
-   "sha": "fd630f668d01409729d2a7c58a5e8cbf2a7ae3dbf82b756b61d5f568586981ba",
-   "asserts": 6,
-   "skips": 0
-  },
-  "tests/toolchain/test-command.test.ts": {
-   "sha": "d3ac8c091ec592d12cb45e23361870660f73594556777ccf9bd4f2b146b624e6",
-   "asserts": 8,
-   "skips": 0
-  },
-  "tests/toolchain/typecheck.test.ts": {
-   "sha": "b6d8be168555d2abd103c089d323c0555641402b96bca3ef84172ef444eccf17",
-   "asserts": 6,
-   "skips": 0
-  },
-  "tests/unit/app.test.tsx": {
-   "sha": "44fab51033bfa350a15f89a675400c55283f2f41790bad77bc222d1bd40a3c54",
-   "asserts": 1,
-   "skips": 0
-  }
- },
- "history": [],
- "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-1.1",
- "spec_sha256": "975704cc34fa52752f7d637c6030f7f954022157e657dd2a5022740ae2181972",
- "review_findings": {
-  "1": 0
- },
- "judge_results": {
-  "1": "PASS"
- },
- "doc_id": "doc-5"
+  "doc_id": "doc-5",
+  "relock_pending": [
+    "tests/toolchain/coverage.test.ts"
+  ]
 }

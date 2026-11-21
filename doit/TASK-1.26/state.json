@@ -536,7 +536,14 @@
       "skips": 0
     }
   },
-  "history": [],
+  "history": [
+    {
+      "t": "2026-11-20T17:42:15",
+      "event": "unlock",
+      "file": "tests/toolchain/headless-lint-dirs.acceptance.test.ts",
+      "reason": "TASK-1.40 AC#2 (autopilot): LINT_ONLY_HEADLESS_DIRS folded into HEADLESS_DIRS \u2014 stricter only"
+    }
+  ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-1.26",
   "spec_sha256": "b2ecb378725a8e317024f909ce5d26f5807390b37ba43ff38486a6413adc1dbf",
   "review_findings": {
@@ -545,5 +552,8 @@
   "judge_results": {
     "1": "PASS"
   },
-  "doc_id": "doc-32"
+  "doc_id": "doc-32",
+  "relock_pending": [
+    "tests/toolchain/headless-lint-dirs.acceptance.test.ts"
+  ]
 }

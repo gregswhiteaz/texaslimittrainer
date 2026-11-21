@@ -1,0 +1,26 @@
+[
+  {
+    "id": "SPEC-01",
+    "verifies": "AC#1, AC#2",
+    "verification": "acceptance `tests/toolchain/coverage.test.ts::npm test fails and names the 90% headless threshold when a headless folder is under-covered`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-02",
+    "verifies": "AC#2",
+    "verification": "acceptance `tests/toolchain/headless-lint-dirs.acceptance.test.ts::the headless folders include playtest and table`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-03",
+    "verifies": "AC#1",
+    "verification": "command `npm test`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-04",
+    "verifies": "AC#2",
+    "verification": "acceptance `tests/toolchain/boundary.test.ts::lint reports each forbidden React, DOM, IndexedDB and UI use in every headless folder`",
+    "status": "pending"
+  }
+]

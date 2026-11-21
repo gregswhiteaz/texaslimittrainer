@@ -1,0 +1,182 @@
+{
+  "id": "TASK-1.40",
+  "title": "Hold src/playtest and src/table to the 90% coverage threshold",
+  "status": "To Do",
+  "archived": false,
+  "type": "chore",
+  "priority": "low",
+  "project": null,
+  "assignees": [],
+  "reporter": null,
+  "labels": [
+    "dream-limit-holdem-trainer",
+    "follow-up"
+  ],
+  "milestone": "m-0",
+  "parentTaskId": "TASK-1",
+  "acceptanceCriteriaCompleted": 0,
+  "acceptanceCriteriaCount": 2,
+  "references": [
+    "doc-32"
+  ],
+  "modifiedFiles": [],
+  "ordinal": 200000,
+  "createdAt": "2026-11-19T20:45:00Z",
+  "updatedAt": null,
+  "dueDate": null,
+  "isReady": true,
+  "path": "backlog/tasks/task-1.40 - Hold-src-playtest-and-src-table-to-the-90-coverage-threshold.md",
+  "description": "Follow-up from TASK-1.26 (A-1): the two folders now get the headless lint rule but not the 90% coverage threshold, because HEADLESS_DIRS also drives TASK-1.1's locked coverage test. Both are near 100% today, so this pins it.",
+  "dependencies": [
+    "TASK-1.26"
+  ],
+  "dependencyGraph": {
+    "root": "TASK-1.40",
+    "nodes": [
+      {
+        "id": "TASK-1.40",
+        "title": "Hold src/playtest and src/table to the 90% coverage threshold",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": 0,
+        "dependentDepth": 0
+      },
+      {
+        "id": "TASK-1.1",
+        "title": "Bootstrap the strict TypeScript project with one-command checks",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 7,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.2",
+        "title": "Rank showdown hands by real poker hand rankings",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 5,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.3",
+        "title": "Deal every hand from a seeded shuffle with a replay code",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 5,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.4",
+        "title": "Play a complete fixed-limit hand from blinds to showdown",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 4,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.5",
+        "title": "Give each deciding seat only its own view of the hand",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 3,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.6",
+        "title": "Run seeded bot-only hands from the command line",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 2,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.7",
+        "title": "Run every check in GitHub Actions on each push and pull request",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 6,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.26",
+        "title": "Pin the playtest summary and policy-lifetime tests",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 1,
+        "dependentDepth": null
+      }
+    ],
+    "edges": [
+      {
+        "from": "TASK-1.2",
+        "to": "TASK-1.7"
+      },
+      {
+        "from": "TASK-1.3",
+        "to": "TASK-1.7"
+      },
+      {
+        "from": "TASK-1.4",
+        "to": "TASK-1.2"
+      },
+      {
+        "from": "TASK-1.4",
+        "to": "TASK-1.3"
+      },
+      {
+        "from": "TASK-1.5",
+        "to": "TASK-1.4"
+      },
+      {
+        "from": "TASK-1.6",
+        "to": "TASK-1.5"
+      },
+      {
+        "from": "TASK-1.7",
+        "to": "TASK-1.1"
+      },
+      {
+        "from": "TASK-1.26",
+        "to": "TASK-1.6"
+      },
+      {
+        "from": "TASK-1.40",
+        "to": "TASK-1.26"
+      }
+    ]
+  },
+  "readiness": {
+    "isReady": true,
+    "isBlocked": false,
+    "blockingDependencies": [],
+    "missingDependencies": []
+  },
+  "documentation": [],
+  "subtasks": [],
+  "acceptanceCriteria": [
+    {
+      "index": 1,
+      "text": "Given vite.config.ts, When coverage runs, Then src/playtest/** and src/table/** are held to the same 90% thresholds as engine, bots, advice and stats",
+      "checked": false
+    },
+    {
+      "index": 2,
+      "text": "Given TASK-1.1's coverage test (unlocked with a recorded reason), When it runs, Then it checks the widened glob and LINT_ONLY_HEADLESS_DIRS is folded into HEADLESS_DIRS",
+      "checked": false
+    }
+  ],
+  "definitionOfDone": [],
+  "implementationPlan": null,
+  "implementationNotes": null,
+  "comments": [],
+  "finalSummary": null
+}
