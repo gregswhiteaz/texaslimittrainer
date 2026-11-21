@@ -5,13 +5,24 @@
   "base_commit": "18febbb4691f3dd1bd6dcc1ab330c7a550a0614e",
   "started": "2026-11-21T02:50:17",
   "review_round": 1,
-  "judge_round": 0,
+  "judge_round": 3,
   "sendbacks": 0,
   "gate_runs": 4,
   "questions": 0,
   "assumptions": 0,
   "escalations": 0,
-  "item_failures": {},
+  "item_failures": {
+    "SPEC-01": 0,
+    "SPEC-02": 0,
+    "SPEC-03": 0,
+    "SPEC-04": 0,
+    "SPEC-05": 0,
+    "SPEC-06": 0,
+    "SPEC-07": 0,
+    "SPEC-08": 0,
+    "SPEC-09": 0,
+    "SPEC-10": 0
+  },
   "locked_tests": {
     "tests/ci/million-workflow.acceptance.test.ts": "28fbcbb96028b84a50adb656821f2a464fc4cbf5640832c3f1fa614491ac9670",
     "tests/playtest/million.acceptance.test.ts": "c96d67cacdd9df62a93e61559b6d9b236553557b568485f6c46ea99e34eb271a",
@@ -813,5 +824,8 @@
     "1": 0
   },
   "doc_id": "doc-64",
-  "relock_pending": []
+  "relock_pending": [],
+  "judge_results": {
+    "3": "PASS"
+  }
 }
