@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-21T07:27:00Z'
+updated_date: '2026-11-21T07:33:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -85,4 +85,6 @@ Full spec: doit/TASK-1.14/spec.md
 
 <!-- SECTION:NOTES:BEGIN -->
 Autopilot: no asks. Rules assumptions to review: A-1 short all-ins measured cumulatively against the last full level; A-3 sub-half all-in bet: unacted seats may complete, checked seats only call/fold.
+
+Build: full-bet level from action records; short all-in bets/raises in legalActions; betCount/hasActed reset only for counting bets; checker's own copy of the rule; 3 new test files (20k-hand property ~0.6 s); playtest identical; gate PASS; no deviations.
 <!-- SECTION:NOTES:END -->

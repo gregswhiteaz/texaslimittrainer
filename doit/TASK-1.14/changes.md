@@ -4,7 +4,7 @@
 - `src/engine/invariants.ts` — private `unitOf`/`countedBets` (checker's own derivation, D-2); bet-size clause accepts an all-in short bet/raise; `betCapMessage` counts only counted bets per street.
 - `tests/engine/hand.test.ts` — D-3: the $6-stack-facing-$4 assertion now expects `[fold, call 4, raise 6]`.
 - `tests/engine/short-all-in.acceptance.test.ts` — new: SPEC-01..07 (AC#1–AC#7).
-- `tests/engine/short-all-in.test.ts` — new: SPEC-08..12 (completion, cumulative, turn/odd-unit thresholds, blinds and cap, checker).
+- `tests/engine/short-all-in.test.ts` — new: SPEC-08..12 (completion, cumulative, turn/odd-unit thresholds, blinds and cap, checker); FIX round 1: checker size-exemption test (forged non-all-in short bet rejected; genuine short all-in bet/raise accepted).
 - `tests/engine/short-all-in.property.test.ts` — new: SPEC-13 (20,000 seeded short-stack hands).
 
 New dependencies: none.

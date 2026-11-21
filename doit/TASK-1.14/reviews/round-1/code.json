@@ -1,0 +1,30 @@
+{"reviewer": "code", "round": 1,
+ "rubric": [
+  {"item": "SPEC-01 correctness", "result": "pass"}, {"item": "SPEC-01 test strength", "result": "pass"},
+  {"item": "SPEC-02 correctness", "result": "pass"}, {"item": "SPEC-02 test strength", "result": "pass"},
+  {"item": "SPEC-03 correctness", "result": "pass"}, {"item": "SPEC-03 test strength", "result": "pass"},
+  {"item": "SPEC-04 correctness", "result": "pass"}, {"item": "SPEC-04 test strength", "result": "pass"},
+  {"item": "SPEC-05 correctness", "result": "pass"}, {"item": "SPEC-05 test strength", "result": "pass"},
+  {"item": "SPEC-06 correctness", "result": "pass"}, {"item": "SPEC-06 test strength", "result": "pass"},
+  {"item": "SPEC-07 correctness", "result": "pass"}, {"item": "SPEC-07 test strength", "result": "pass"},
+  {"item": "SPEC-08 correctness", "result": "pass"}, {"item": "SPEC-08 test strength", "result": "pass"},
+  {"item": "SPEC-09 correctness", "result": "pass"}, {"item": "SPEC-09 test strength", "result": "pass"},
+  {"item": "SPEC-10 correctness", "result": "pass"}, {"item": "SPEC-10 test strength", "result": "pass"},
+  {"item": "SPEC-11 correctness", "result": "pass"}, {"item": "SPEC-11 test strength", "result": "pass"},
+  {"item": "SPEC-12 correctness", "result": "pass"}, {"item": "SPEC-12 test strength", "result": "pass"},
+  {"item": "SPEC-13 correctness", "result": "pass"}, {"item": "SPEC-13 test strength", "result": "pass"},
+  {"item": "SPEC-14 correctness", "result": "pass"}, {"item": "SPEC-14 test strength", "result": "pass"},
+  {"item": "SPEC-15 correctness", "result": "n/a (docs step, after review)"}, {"item": "SPEC-15 test strength", "result": "n/a"},
+  {"item": "scope", "result": "pass"}, {"item": "concision", "result": "pass"}, {"item": "clarity", "result": "pass"}
+ ],
+ "findings": [
+  {"fingerprint": "src/engine/invariants.ts:all-in-size-exemptions-untested", "severity": "MINOR", "file": "src/engine/invariants.ts", "line": 106,
+   "issue": "The checker's new size-clause conditions `amount === allInTo` (bet and raise) and `amount > before.currentBet` have no negative test. Deleting `&& amount === allInTo` from either clause leaves all engine/invariant tests green.",
+   "evidence": "Mutation run in a /tmp copy: dropping `amount === allInTo` from the raise clause (M5) or the bet clause (M6) gave 48/48 passing across short-all-in*, invariants, hand, all-in*, side-pots*, bet-cap* tests. These clauses sit behind L3 (legalActions membership), so only a faulty engine reaches them. The pre-existing L4 test reaches the size clause only through `currentBet: -1`.",
+   "fix": "Optional: add a faulty-engine case (tests/support/faulty-engine.ts pattern) whose legalActions offers a short non-all-in raise (e.g. raise to 5 with $160 behind), and assert checkStep reports 'does not match the $4 flop betting unit'. Or accept as a guard and note it in the comment, as TASK-1.8 did."},
+  {"fingerprint": "tests/engine/short-all-in.property.test.ts:all-in-amount-offered-only-when-short", "severity": "NIT", "file": "tests/engine/short-all-in.property.test.ts", "line": 70,
+   "issue": "The property accepts an offered amount equal to either fullTo or allInTo, so it doesn't check that the all-in amount is offered only when allInTo < fullTo (the `min`). It also never checks the positive side (bet/raise offered whenever stack > owe, !hasActed, betCount < 4).",
+   "evidence": "Line 70: `a.amount !== fullTo && a.amount !== allInTo`. The acceptance tests and the checkStep size clause cover these, so the gap is redundant coverage, not a missed bug.",
+   "fix": "Compare against `Math.min(fullTo, allInTo)` and assert that an aggressive action exists when `!hasActed && betCount < 4 && allInTo > currentBet`."}
+ ],
+ "summary": "Implementation matches §5 exactly: fullBetLevel/countedBets walk the street's records (big blind sets the level; bet/raise counts when 2*(amount-level) >= unit), legalActions offers min(level+unit, sc+stack) gated on cap, !hasActed and maxTo > currentBet, and applyAction increments betCount and clears hasActed only for counted aggression. Checked against standard limit rules and every worked example; probed heads-up preflop (SB $5 raise all-in to 5 uncounted, BB may raise to 8; BB $6 facing 8 gets fold/call 2; BB option short raise to 7 counts), a sub-half bet followed by a cumulative half-bet all-in (bet 1, raise 2 reopens checkers 2/3 with raise 6), and an uncounted all-in that everyone folds to (returned $1 to the all-in seat, checkState clean). Side pots are formed correctly. Mutation testing: >= vs >, dropping !hasActed, measuring against currentBet instead of the level (A-1), clearing hasActed on uncounted all-ins, checker counting every record, and checker ignoring records were each caught by the new tests. The checker's derivation is its own copy (no import from hand.ts). betCapMessage still takes max(state.betCount, record count), and a real fifth bet is always full (2*unit >= unit) so it is always counted. The existing faulty-engine fifthBet test still fails the mutant. Playtest baseline is byte-identical (5470/4530/88831/244/$70/0). Size of 728 lines against a 650 budget: about 610 lines are scripted tests whose scenarios the spec dictates; source is about 115 lines. Justified, well under the 1300 hard cap. No BLOCKER or MAJOR findings."}

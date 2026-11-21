@@ -263,4 +263,35 @@ describe('short all-in rule', () => {
       { invariant: 'bet-cap', message: 'flop has 5 bets (at most 4)' },
     ]);
   });
+
+  it('the invariant checker exempts a short bet or raise from the unit only when it is all-in', () => {
+    const sizeViolations = (before: HandState, action: Action) => {
+      const result = applyAction(before, action);
+      expect(result.ok).toBe(true);
+      return checkStep({ before, action, result }).filter((v) => v.invariant === 'legal-action');
+    };
+
+    // A forged flop level of -$1 makes legalActions offer a $3 bet to a seat with $156 behind: a short bet
+    // that is not all-in, so only the checker's all-in condition can reject it.
+    const forged = flop({});
+    const shortBetState: HandState = {
+      ...forged,
+      actions: [
+        ...forged.actions,
+        { street: 'flop', seat: 3, type: 'big-blind', amount: -1, added: 0 },
+      ],
+    };
+    expectLegal(shortBetState, 2, [['check'], ['bet', 3]]);
+    expect(sizeViolations(shortBetState, { seat: 2, type: 'bet', amount: 3 })).toEqual([
+      {
+        invariant: 'legal-action',
+        message: 'seat 2 bets $3 does not match the $4 flop betting unit',
+      },
+    ]);
+
+    const allInBet = play(flop({ 4: 7 }), [2, 'check'], [3, 'check']);
+    expect(sizeViolations(allInBet, { seat: 4, type: 'bet', amount: 3 })).toEqual([]);
+    const allInRaise = play(flop({ 4: 9 }), [2, 'bet', 4], [3, 'call', 4]);
+    expect(sizeViolations(allInRaise, { seat: 4, type: 'raise', amount: 5 })).toEqual([]);
+  });
 });
