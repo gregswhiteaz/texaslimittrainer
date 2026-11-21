@@ -1,10 +1,11 @@
 ---
 id: TASK-1.9
 title: Let a short-stacked player call all-in
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-19T01:10:00Z'
+updated_date: '2026-11-21T04:25:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -64,10 +65,25 @@ Plan key: E01-S12 · Dream: limit-holdem-trainer
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
 
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. createHand stack floor -> bigBlind+1 (Q-1).
+2. Call all-in for the remaining stack when owe > stack; mark allIn on any action that empties the stack; all-in players never asked to act.
+3. When at most one player can still act, deal the rest of the board with no betting.
+4. Return uncalled bets (blinds included, Q-2) via HandResult.returned (Q-3); awards exclude them.
+5. Invariant checker: chips rules account for returned; new check that returned equals the uncalled amount.
+6. Update 8 earlier locked tests' amounts/messages (Q-4); playtest report byte-identical.
+
+Full spec: doit/TASK-1.9/spec.md
+<!-- SECTION:PLAN:END -->
+
 ## Implementation Notes
 
 <!-- SECTION:NOTES:BEGIN -->
 AC added from TASK-1.8 follow-up (doc-16).
 
 AC added from TASK-3.4 follow-up (doc-25).
+
+Autopilot Q-1..Q-4 auto-accepted (qa.md). Cross-story locked-test unlocks recorded under TASK-1.4, 1.44, 9.1, 3.4, 1.21, 1.31.
 <!-- SECTION:NOTES:END -->

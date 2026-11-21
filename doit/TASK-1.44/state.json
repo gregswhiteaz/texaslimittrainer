@@ -632,7 +632,14 @@
       "skips": 0
     }
   },
-  "history": [],
+  "history": [
+    {
+      "t": "2026-11-20T21:25:46",
+      "event": "unlock",
+      "file": "tests/engine/fold-out.acceptance.test.ts",
+      "reason": "TASK-1.9 Q-4 (autopilot, recommended): update expected amounts/messages for all-in support (uncalled bets returned, stack floor bigBlind+1); nothing removed or loosened"
+    }
+  ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-1.44",
   "spec_sha256": "50f242bc78e27c21e07170e7b9fc96c8cb100eb665441312b745f0ba9fe54b6e",
   "review_findings": {
@@ -641,5 +648,8 @@
   "judge_results": {
     "1": "PASS"
   },
-  "doc_id": "doc-49"
+  "doc_id": "doc-49",
+  "relock_pending": [
+    "tests/engine/fold-out.acceptance.test.ts"
+  ]
 }
