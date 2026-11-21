@@ -1,10 +1,11 @@
 ---
 id: TASK-1.17
 title: Prove the engine with a 1,000,000-hand invariant run
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-18T18:15:00Z'
+updated_date: '2026-11-21T09:57:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -70,8 +71,21 @@ Plan key: E01-S17 · Dream: limit-holdem-trainer
 - [ ] #13 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
 
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. npm run playtest:million: 9 parallel shards (sizes 2–10, seed 1,000,000+size) spawning the normal playtest entry; ordered shard reports + combined per-invariant counts; exit 0/1/2.
+2. .github/workflows/million.yml: workflow_dispatch only, one ubuntu job, 30-min timeout, no npm ci (D-1, D-2: cheapest; ~2–3 Actions minutes per run, 0/month unless triggered).
+3. Tests: workflow text, violation and failed-shard paths, byte-identical shard re-run, AC#4 100k 6-max run (~5 s).
+4. Live dispatch after merge (D-4): proof via gh workflow run on main, else tracker task.
+
+Full spec: doit/TASK-1.17/spec.md
+<!-- SECTION:PLAN:END -->
+
 ## Implementation Notes
 
 <!-- SECTION:NOTES:BEGIN -->
 AC added from TASK-1.8 follow-up (doc-16).
+
+Autopilot: no asks. Cost-driven decisions to review: D-1 single job (not a matrix), D-2 manual dispatch only (no nightly), D-4 live run after merge. Measured: 100k 6-max 4.75 s; 1M as 9 shards 7 s wall locally.
 <!-- SECTION:NOTES:END -->
