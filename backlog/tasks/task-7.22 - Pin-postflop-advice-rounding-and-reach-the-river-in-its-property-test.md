@@ -1,11 +1,11 @@
 ---
 id: TASK-7.22
 title: Pin postflop advice rounding and reach the river in its property test
-status: In Progress
+status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-18T19:10:00Z'
-updated_date: '2026-11-21T03:14:00Z'
+updated_date: '2026-11-21T03:19:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -14,6 +14,8 @@ dependencies:
   - TASK-7.3
 references:
   - doc-17
+documentation:
+  - doc-54
 parent_task_id: TASK-7
 priority: low
 type: chore
@@ -28,8 +30,8 @@ Follow-up from TASK-7.3 (doc-17) code review and judge (J-1-01, J-1-02): the +1e
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Given toPct, When the nudge is either pinned by a case such as 0.5005 -> 50.1 or removed, Then a test fails if the chosen behaviour changes
-- [ ] #2 Given the AC#3 property, When it runs, Then it reaches flop, turn and river decisions (stop point up to 23) with some non-hero seats folding, and its discard path is exercised
+- [x] #1 Given toPct, When the nudge is either pinned by a case such as 0.5005 -> 50.1 or removed, Then a test fails if the chosen behaviour changes
+- [x] #2 Given the AC#3 property, When it runs, Then it reaches flop, turn and river decisions (stop point up to 23) with some non-hero seats folding, and its discard path is exercised
 <!-- AC:END -->
 
 ## Implementation Plan
@@ -40,3 +42,19 @@ Follow-up from TASK-7.3 (doc-17) code review and judge (J-1-01, J-1-02): the +1e
 
 Full spec: doit/TASK-7.22/spec.md
 <!-- SECTION:PLAN:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+Build: postflop-coverage acceptance test (toPct nudge pinned on 12 inputs, river-reaching fold-enabled property); nudge-removal mutant fails; no src changes; gate PASS
+
+Judge R1 PASS 3/3; nudge removal caught only by the new test; coverage checks proven able to fail.
+
+Follow-ups (Step 6a): stale A-4 rationale corrected by a note on TASK-7.3 (docs-only, no task).
+<!-- SECTION:NOTES:END -->
+
+## Final Summary
+
+<!-- SECTION:FINAL_SUMMARY:BEGIN -->
+Added tests/advice/postflop-coverage.acceptance.test.ts (no production change). AC#1 pins toPct's +1e-9 nudge at 0.5005..0.5115 (50.1..51.2). AC#2 adds an every-street property (folds, stop 0..23, 60 runs) asserting flop/turn/river coverage, folded non-acting seats and discards. Verified: npm test 378 passed, lint/typecheck clean, review and judge round 1 PASS with no findings. Assumptions A-1..A-5 in doc-54 are test-only. Follow-up: doc-17 / TASK-7.3 A-4 justify the nudge with 0.1665, which rounds the same without it; correct examples are 0.5005..0.5115.
+<!-- SECTION:FINAL_SUMMARY:END -->

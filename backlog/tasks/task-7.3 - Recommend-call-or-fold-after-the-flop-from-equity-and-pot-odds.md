@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-18T19:10:00Z'
+updated_date: '2026-11-21T03:19:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-0
@@ -86,6 +86,8 @@ Full spec: doit/TASK-7.3/spec.md
 Build: src/advice/postflop.ts (recommendPostflop; check-free/pot-odds-call/pot-odds-fold on rounded %), src/advice/recommend.ts (Recommendation union + recommend by street), docs/advice/postflop-rules.md, acceptance/unit/perf tests; p95 HU 5.4 ms, 6-max 12.9 ms, 10-seat 71.4 ms; gate PASS. Builder interpretation: AC#3 property draws a postflop stop point 0..11 so call/fold spots are covered, not only the first (free-check) flop decision.
 
 CI run 44376112966 (head b4840a5): success. Judge round 1: PASS 15/15; 160 real random hands (flop/turn/river, 3-10 seats, folds) all correct; brute-force exact oracle agrees; 3133 holdout checks, 0 failures; playtest 10,000 hands 0 violations. Follow-ups (Step 6a): created TASK-7.22 (toPct nudge, AC#3 reaches river); ACs added to TASK-7.17 (all-in/side-pot pot odds), TASK-6.1 (TAG via recommend), TASK-7.8 (value fields), TASK-7.5 (action ranges), TASK-7.18 (9-opponent latency), TASK-8.1 (off main thread).
+
+Correction (from TASK-7.22, doc-54): A-4's example 0.1665 rounds the same without toPct's +1e-9 nudge; the inputs the nudge actually changes are 0.5005..0.5115 (now pinned by tests/advice/postflop-coverage.acceptance.test.ts).
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary

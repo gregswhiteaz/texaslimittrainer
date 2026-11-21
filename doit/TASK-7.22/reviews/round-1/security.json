@@ -1,0 +1,3 @@
+{"reviewer": "security", "round": 1,
+ "findings": [],
+ "summary": "Test-only change: one new file tests/advice/postflop-coverage.acceptance.test.ts plus doit/backlog bookkeeping. No production code, no new dependencies (fast-check and vitest already present), no file, network, env, shell or process APIs, no secrets. Randomness is a seeded fast-check property in tests only and does not affect production shuffling. No untrusted input crosses a trust boundary in the change, so no reachable path exists; spec section 8 (N/A) is accurate."}

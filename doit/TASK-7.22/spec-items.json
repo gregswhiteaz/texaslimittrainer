@@ -3,18 +3,18 @@
     "id": "SPEC-01",
     "verifies": "AC#1",
     "verification": "acceptance `tests/advice/postflop-coverage.acceptance.test.ts::AC#1 toPct rounds the half-way points the nudge decides up: 0.5005 is 50.1`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-02",
     "verifies": "AC#2",
     "verification": "acceptance `tests/advice/postflop-coverage.acceptance.test.ts::AC#2 decisions on the flop, turn and river, with folded seats, all get legal advice`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-03",
     "verifies": "AC#2",
     "verification": "acceptance `tests/advice/postflop-coverage.acceptance.test.ts::AC#2 decisions on the flop, turn and river, with folded seats, all get legal advice`",
-    "status": "pending"
+    "status": "pass"
   }
 ]

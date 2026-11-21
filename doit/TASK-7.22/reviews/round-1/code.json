@@ -1,0 +1,14 @@
+{"reviewer": "code", "round": 1,
+ "rubric": [
+  {"item": "SPEC-01 correctness", "result": "pass"},
+  {"item": "SPEC-01 test strength", "result": "pass"},
+  {"item": "SPEC-02 correctness", "result": "pass"},
+  {"item": "SPEC-02 test strength", "result": "pass"},
+  {"item": "SPEC-03 correctness", "result": "pass"},
+  {"item": "SPEC-03 test strength", "result": "pass"},
+  {"item": "scope", "result": "pass"},
+  {"item": "concision", "result": "pass"},
+  {"item": "clarity", "result": "pass"}
+ ],
+ "findings": [],
+ "summary": "Only one file changed: the new tests/advice/postflop-coverage.acceptance.test.ts (110 lines, within the 130-line budget). src/, the locked postflop.acceptance.test.ts, postflop.test.ts and docs have no diff against base 3f1669f. SPEC-01: the guard asserts Math.round(0.5005*1000)/10 === 50, and all twelve literal pairs 0.5005..0.5115 -> 50.1..51.2 are present. I checked with Node that every pinned input gives a value 0.1 lower without the + 1e-9 nudge, so removing the nudge fails all twelve cases, not only the first. SPEC-02/03: the property follows the spec design exactly. Folds are allowed, stopAt is fc.nat({max:23}), choices has length 80, and it runs with numRuns 60 and seed 7322. It repeats every assertion from the locked AC#3 property and adds the street-equality and rounded-comparison rule checks. The coverage counters (streets, foldedSeatRuns, discards) are asserted after fc.assert with the specified values, and the discard counter sits right before fc.pre(state.toAct !== null). The test file passes locally (2/2, AC#2 in about 0.5 s). The gate build-1 passed test, lint, typecheck and the scope checks. No helpers, comments or dead code beyond what the spec asks for. The duplicated setup (STAKES_4_8, SEATS, ALL_CARDS) is the copy the spec requires, because the source file is locked and exports nothing."}

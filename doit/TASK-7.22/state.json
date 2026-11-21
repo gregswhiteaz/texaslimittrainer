@@ -4,14 +4,18 @@
   "branch": "doit/TASK-7.22",
   "base_commit": "3f1669f73b7dc954aff4c90fadfc4f78c736d4be",
   "started": "2026-11-20T20:11:30",
-  "review_round": 0,
-  "judge_round": 0,
+  "review_round": 1,
+  "judge_round": 1,
   "sendbacks": 0,
   "gate_runs": 1,
   "questions": 0,
   "assumptions": 0,
   "escalations": 0,
-  "item_failures": {},
+  "item_failures": {
+    "SPEC-01": 0,
+    "SPEC-02": 0,
+    "SPEC-03": 0
+  },
   "locked_tests": {
     "tests/advice/postflop-coverage.acceptance.test.ts": "3bf1c110c7f0d9b1d3a53a296c52207bfdca4ed551114842a02b7f029e65dc5b"
   },
@@ -664,5 +668,12 @@
   },
   "history": [],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-7.22",
-  "spec_sha256": "e095cc5316a9a53ca254149d4a168601470281aa924210598655fd426a7f5539"
+  "spec_sha256": "e095cc5316a9a53ca254149d4a168601470281aa924210598655fd426a7f5539",
+  "review_findings": {
+    "1": 0
+  },
+  "judge_results": {
+    "1": "PASS"
+  },
+  "doc_id": "doc-54"
 }
