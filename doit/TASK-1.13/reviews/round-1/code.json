@@ -1,0 +1,33 @@
+{"reviewer": "code", "round": 1,
+ "rubric": [
+  {"item": "SPEC-01 correctness", "result": "pass"},
+  {"item": "SPEC-01 test strength", "result": "pass"},
+  {"item": "SPEC-02 correctness", "result": "pass"},
+  {"item": "SPEC-02 test strength", "result": "pass"},
+  {"item": "SPEC-03 correctness", "result": "pass"},
+  {"item": "SPEC-03 test strength", "result": "pass"},
+  {"item": "SPEC-04 correctness", "result": "pass"},
+  {"item": "SPEC-04 test strength", "result": "pass"},
+  {"item": "SPEC-05 correctness", "result": "pass"},
+  {"item": "SPEC-05 test strength", "result": "pass"},
+  {"item": "SPEC-06 correctness", "result": "pass"},
+  {"item": "SPEC-06 test strength", "result": "pass"},
+  {"item": "SPEC-07 correctness", "result": "pass"},
+  {"item": "SPEC-07 test strength", "result": "pass"},
+  {"item": "scope", "result": "pass"},
+  {"item": "concision", "result": "pass"},
+  {"item": "clarity", "result": "pass"}
+ ],
+ "findings": [
+  {"fingerprint": "tests/engine/illegal-actions.acceptance.test.ts:tautological-count-sum-assert", "severity": "NIT",
+   "file": "tests/engine/illegal-actions.acceptance.test.ts", "line": 337,
+   "issue": "The assertion that the five per-kind counts sum to TARGET can't fail: every loop iteration increments exactly one counts[kind] and injected together, and injected is already asserted to equal TARGET on line 336.",
+   "evidence": "Lines 320-322 always run counts[kind]++ and injected++ together. The kind variable is only reassigned within the five-kind set (line 310).",
+   "fix": "Drop lines 337-343, or leave them in as documentation. The per-kind minimums on lines 344-349 are the assertions that matter."},
+  {"fingerprint": "tests/engine/illegal-actions.acceptance.test.ts:unreachable-return-after-expect", "severity": "NIT",
+   "file": "tests/engine/illegal-actions.acceptance.test.ts", "line": 326,
+   "issue": "`if (!result.ok) return;` can't run at runtime because the expect on line 325 throws first. It exists only to narrow the type. If a future edit softened the expect, a failure would end the test silently and skip the count assertions.",
+   "evidence": "expect(result.ok).toBe(true); if (!result.ok) return;",
+   "fix": "Replace it with `if (!result.ok) throw new Error(result.error.message);`, which narrows the type and fails loudly. The `play` helper on line 37 already does this."}
+ ],
+ "summary": "The change does what the spec asks. hand.ts gets doc comments only (no logic diff), and one new locked acceptance file covers AC#1-AC#5 with the cases, controls and fast-check property that §5 lists. Test strength is sound. (a) Mutating input: state and action are deep-frozen before every rejected call, and applyAction is an ES module (strict), so any write throws and fails the test. Mutations that are later undone are caught too. A JSON snapshot and, for the scripted ACs, a toStrictEqual against a structuredClone back this up. (b) Accepting an illegal action of any kind: toStrictEqual against {ok:false,error:{code,message}} fails on ok:true. (c) Returning a state on error: toStrictEqual rejects an extra key, even one set to undefined, and there is also an explicit 'state' in result check. Empty messages are caught by the length check. Precedence (D-2) is exercised: seat 5 raise 12 and call 0 get out-of-turn, and finished hands get hand-complete from arbitrary dealt seats while toAct is null. The 100k run is not vacuous. Exactly 100,000 in-progress injections are asserted, with per-kind minimums (20k/20k/20k/1k/1k/1k). Every generated illegal action is provably illegal: wrong-amount keeps the type and only legalActions offers one entry per type, and amounts are never 0 so -a differs from a. out-of-turn draws uniformly from 1..10 excluding toAct. unoffered-type always has at least 2 missing types. Every legal follow-up is asserted ok. The A-5 deviation (Xoshiro128.fromState(...mixState128([...])) because the constructor takes a single seed) is a sound way to get a fixed 4-word seed. The file runs locally in 2.5 s (AC#5 2.4 s). Size: 365 lines against a 300 budget (hard limit 600). This is justified because almost all of it is spec-dictated scripted scenarios and the AC#5 generator, with no unrequested helpers. Two NITs, no BLOCKER/MAJOR."}

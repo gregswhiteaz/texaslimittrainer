@@ -4,14 +4,22 @@
   "branch": "doit/TASK-1.13",
   "base_commit": "490ed1e89d8275d292dacdfaaff1b0cf69b09299",
   "started": "2026-11-20T23:45:15",
-  "review_round": 0,
-  "judge_round": 0,
+  "review_round": 1,
+  "judge_round": 1,
   "sendbacks": 0,
   "gate_runs": 2,
   "questions": 0,
   "assumptions": 0,
   "escalations": 0,
-  "item_failures": {},
+  "item_failures": {
+    "SPEC-01": 0,
+    "SPEC-02": 0,
+    "SPEC-03": 0,
+    "SPEC-04": 0,
+    "SPEC-05": 0,
+    "SPEC-06": 0,
+    "SPEC-07": 0
+  },
   "locked_tests": {
     "tests/engine/illegal-actions.acceptance.test.ts": "102ff00cfadedfeeb5e3aedef728b2e5bfddd3c463b428619923be499b82d12a"
   },
@@ -719,5 +727,12 @@
   },
   "history": [],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-1.13",
-  "spec_sha256": "5ea58914c765431880da74ab08853d6d9b2d199598805c71e213543d85b069c6"
+  "spec_sha256": "5ea58914c765431880da74ab08853d6d9b2d199598805c71e213543d85b069c6",
+  "review_findings": {
+    "1": 0
+  },
+  "doc_id": "doc-60",
+  "judge_results": {
+    "1": "PASS"
+  }
 }
