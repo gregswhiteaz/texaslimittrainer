@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-21T19:47:00Z'
+updated_date: '2026-11-21T19:51:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -88,4 +88,6 @@ Follow-up from TASK-1.5 (doc-13): PlayerView cannot show game type or sit-and-go
 AC added from TASK-3.7 follow-up (wire chip labels)
 
 Autopilot Q-1..Q-5 auto-accepted (qa.md); unlocks under TASK-2.1 and TASK-2.3.
+
+Build blocked: locked TASK-3.4 text check requires 'buyIn(' in the top-up. Resolved (orchestrator): sng interim top-up refills to buyIn(tableStake) = 800 (recorded deviation from A-3); no locked test touched; TASK-3.21 AC added (sng never refills).
 <!-- SECTION:NOTES:END -->

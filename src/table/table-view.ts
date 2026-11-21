@@ -1,7 +1,13 @@
 import type { Card } from '../engine/cards';
 import type { ActionRecord, SeatNumber, Street } from '../engine/hand';
 import { playerView, type PlayerView } from '../engine/player-view';
-import type { BotStyle, GameType, SessionConfig, TableState } from './session';
+import {
+  tableStake,
+  type BotStyle,
+  type GameType,
+  type SessionConfig,
+  type TableState,
+} from './session';
 
 export interface SeatView {
   readonly seat: SeatNumber;
@@ -52,11 +58,13 @@ export interface TableViewModel {
   readonly handOver: boolean;
 }
 
-const GAME_LABEL: Record<GameType, string> = { cash: 'Cash' };
+const GAME_LABEL: Record<GameType, string> = { cash: 'Cash', 'sit-and-go': 'Sit-and-go' };
 
+/** Cash limits in dollars; sit-and-go limits in plain chips (REQ-008.7, D-2). */
 export function headerText(config: SessionConfig, handNumber: number): string {
-  const { stake } = config;
-  return `${GAME_LABEL[config.gameType]} · ${config.players} players · $${stake.smallBet}/$${stake.bigBet} · Hand #${handNumber}`;
+  const { smallBet, bigBet } = tableStake(config);
+  const limits = config.gameType === 'cash' ? `$${smallBet}/$${bigBet}` : `${smallBet}/${bigBet}`;
+  return `${GAME_LABEL[config.gameType]} · ${config.players} players · ${limits} · Hand #${handNumber}`;
 }
 
 /** Past-tense text of one action record (D-3/Q-2). */

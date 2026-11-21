@@ -4,7 +4,7 @@ title: Remove the temporary short-stack top-up once all-ins and rebuy exist
 status: To Do
 assignee: []
 created_date: '2026-11-19T01:10:00Z'
-updated_date: '2026-11-21T19:16:00Z'
+updated_date: '2026-11-21T19:51:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -36,6 +36,7 @@ Promised to the user in TASK-3.4 Q-4. Until all-ins exist the engine refuses sta
 - [ ] #3 Given src/table/session.ts, When it is searched, Then the comment 'TEMPORARY (TASK-3.4 Q-4)' and the top-up code are gone, and TASK-3.4's SPEC-10/SPEC-11 tests are updated to the new rule
 - [ ] #4 Given the top-up is removed and the user is short, When the action bar is shown in the live app, Then the all-in labels from TASK-3.7 ('Call all-in $X', 'Bet all-in $X', 'Raise all-in to $X') appear, proven by an e2e test on the real session
 - [ ] #5 Given the top-up is removed, When a real all-in with unequal stacks happens in live play, Then the table shows the TASK-3.8 'Pots' list and the result shows 'Pot winners' lines, proven by an e2e test on the real session
+- [ ] #6 Given a sit-and-go seat busts or runs short, When the next hand is dealt, Then it is never refilled (no top-up of any amount), per REQ-008 — TASK-2.4 left the interim top-up refilling sng short stacks to 20 big bets (800 at 20/40)
 <!-- AC:END -->
 
 ## Implementation Notes
@@ -44,4 +45,6 @@ Promised to the user in TASK-3.4 Q-4. Until all-ins exist the engine refuses sta
 AC added from TASK-3.7 follow-up (all-in labels live)
 
 AC added from TASK-3.8 follow-up (live side pots)
+
+AC added from TASK-2.4 (interim sng top-up)
 <!-- SECTION:NOTES:END -->

@@ -149,6 +149,35 @@ h1[tabindex='-1']:focus {
   font-size: 15px;
 }
 
+.config-fields .config-choice {
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* Storyboard Config.dc.html: checked 2px #d7262e, other 1px #343a43; padding keeps the box size equal. */
+.config-choice label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 0 16px;
+  border: 1px solid #343a43;
+  border-radius: 8px;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.config-choice label:has(input:checked) {
+  padding: 0 15px;
+  border: 2px solid #d7262e;
+}
+
+.config-choice input {
+  margin: 0;
+  accent-color: #d7262e;
+}
+
 .config-fields dt {
   font-size: 14px;
   font-weight: 600;

@@ -64,7 +64,11 @@ describe('Game Config stake acceptance', () => {
       const buttons = [...html.matchAll(/<button[^>]*>(.*?)<\/button>/g)].map(([, t]) => t);
       expect(buttons).toEqual(['← Home', 'Cancel', 'Start game']);
       expect(selects(html)).toHaveLength(1);
-      expect(html).not.toMatch(/<(a|input|form)[\s>]/);
+      expect(html).not.toMatch(/<(a|form)[\s>]/);
+      expect((html.match(/<input[^>]*>/g) ?? []).map((i) => /type="radio"/.test(i))).toEqual([
+        true,
+        true,
+      ]);
     }
   });
 });

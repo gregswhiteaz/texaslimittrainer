@@ -46,7 +46,12 @@ describe('Home and Game Config acceptance', () => {
         dt.replace(/<[^>]*>/g, ''),
         dd.includes('<select')
           ? (/<option[^>]*selected=""[^>]*>(.*?)<\/option>/.exec(dd)?.[1] ?? '')
-          : dd,
+          : dd.includes('type="radio"')
+            ? (/<label><input[^>]*checked=""[^>]*\/?>(.*?)<\/label>/.exec(dd)?.[1] ?? '').replace(
+                /<[^>]*>/g,
+                '',
+              )
+            : dd,
       ],
     );
     expect(fields).toEqual([
@@ -71,7 +76,11 @@ describe('Home and Game Config acceptance', () => {
     ]);
     const buttons = [...html.matchAll(/<button[^>]*>(.*?)<\/button>/g)].map(([, label]) => label);
     expect(buttons).toEqual(['← Home', 'Cancel', 'Start game']);
-    expect(html.match(/<(input|select|textarea)[\s>]/g)).toEqual(['<select ']);
+    expect(html.match(/<(input|select|textarea)[\s>]/g)).toEqual([
+      '<input ',
+      '<input ',
+      '<select ',
+    ]);
     expect(html).not.toContain('aria-label="Table"');
   });
 });

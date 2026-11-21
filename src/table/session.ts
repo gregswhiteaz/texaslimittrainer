@@ -65,19 +65,16 @@ export const DEFAULT_SEATS: readonly SessionSeat[] = ['Ava', 'Ben', 'Cal', 'Dee'
   },
 );
 
-/** TASK-2.4 widens: 'sit-and-go' (no stake). */
-export type GameType = 'cash';
+/** REQ-005.1: a cash game carries a stake; a sit-and-go has none (D-3). */
+export type GameType = 'cash' | 'sit-and-go';
 /** REQ-009.1, REQ-009.6: the preset name, or Custom when the bot styles match no preset. */
 export type LineUpName = 'Mixed' | 'Tough' | 'Soft' | 'Custom';
 /** TASK-2.11 / TASK-3.18 widen: 'realistic'. */
 export type Speed = 'rapid';
 
-/** Plain, JSON-serialisable session configuration (D-2). */
-export interface SessionConfig {
-  readonly gameType: GameType;
+interface SessionConfigBase {
   /** 2..10 including the user (REQ-005.2); equals seats.length. */
   readonly players: number;
-  readonly stake: Stake;
   readonly lineUp: LineUpName;
   /** Ascending seat order; one 'user' seat at userSeat; bots carry a style. */
   readonly seats: readonly SessionSeat[];
@@ -86,7 +83,16 @@ export interface SessionConfig {
   /** Starting dealer button. */
   readonly button: SeatNumber;
 }
-export const DEFAULT_SESSION_CONFIG: SessionConfig = {
+export interface CashSessionConfig extends SessionConfigBase {
+  readonly gameType: 'cash';
+  readonly stake: Stake;
+}
+export interface SitAndGoSessionConfig extends SessionConfigBase {
+  readonly gameType: 'sit-and-go';
+}
+/** Plain, JSON-serialisable session configuration (D-2). */
+export type SessionConfig = CashSessionConfig | SitAndGoSessionConfig;
+export const DEFAULT_SESSION_CONFIG: CashSessionConfig = {
   gameType: 'cash',
   players: DEFAULT_SEATS.length,
   stake: { smallBet: 4, bigBet: 8 },
@@ -97,9 +103,36 @@ export const DEFAULT_SESSION_CONFIG: SessionConfig = {
   button: DEFAULT_BUTTON,
 };
 
-/** `input` merged over the first-use defaults; not validated (A-11). */
+/** REQ-008.1: every sit-and-go seat starts with 1,500 chips. */
+export const SIT_AND_GO_STARTING_CHIPS = 1500;
+/** REQ-008.2 level 1 (blinds 10/20); fixed until TASK-5.4 adds the level schedule. */
+export const SIT_AND_GO_LEVEL_1: Stake = Object.freeze({ smallBet: 20, bigBet: 40 });
+
+/** The limits the table plays: the cash stake, or the sit-and-go level-1 limits. */
+export function tableStake(config: SessionConfig): Stake {
+  return config.gameType === 'cash' ? config.stake : SIT_AND_GO_LEVEL_1;
+}
+
+/** Chips each seat starts with: the cash buy-in, or 1,500 in a sit-and-go. */
+export function startingStack(config: SessionConfig): number {
+  return config.gameType === 'cash' ? buyIn(config.stake) : SIT_AND_GO_STARTING_CHIPS;
+}
+
+/** `config` with the chosen game type; `stake` is kept only for a cash game. */
+export function configForGameType(
+  config: SessionConfig,
+  gameType: GameType,
+  stake: Stake,
+): SessionConfig {
+  const { players, lineUp, seats, speed, userSeat, button } = config;
+  const common = { players, lineUp, seats, speed, userSeat, button };
+  return gameType === 'cash' ? { gameType, ...common, stake } : { gameType, ...common };
+}
+
+/** `input` merged over the first-use defaults; a sit-and-go drops the stake. Not validated (A-11). */
 export function resolveSessionConfig(input: Partial<SessionConfig> = {}): SessionConfig {
-  return { ...DEFAULT_SESSION_CONFIG, ...input };
+  const merged = { ...DEFAULT_SESSION_CONFIG, ...input };
+  return configForGameType(merged, merged.gameType, merged.stake);
 }
 
 export interface UserDecision {
@@ -125,10 +158,10 @@ export type NextStep = 'deal' | 'bot' | 'user' | 'done';
 
 export function seatSession(input?: Partial<SessionConfig>): TableState {
   const config = resolveSessionConfig(input);
-  const stack = buyIn(config.stake);
+  const stack = startingStack(config);
   return {
     config,
-    stakes: stakesFor(config.stake),
+    stakes: stakesFor(tableStake(config)),
     seats: config.seats,
     stacks: config.seats.map(({ seat }) => ({ seat, stack })),
     hand: null,
@@ -172,9 +205,9 @@ export function nextHand(table: TableState): TableState {
   const minimum = minimumStack(table.stakes);
   const stacks = hand.players.map(({ seat, stack }) => ({
     seat,
-    // TEMPORARY (TASK-3.4 Q-4): tops seats below minimumStack back to the buy-in because the engine has no
-    // all-in yet. Removal is an acceptance criterion on TASK-1.16 / TASK-3.11 (whichever lands last).
-    stack: stack < minimum ? buyIn(table.config.stake) : stack,
+    // TEMPORARY (TASK-3.4 Q-4): tops seats below minimumStack back to 20 big bets (the cash buy-in; 800
+    // in a sit-and-go at 20/40) because the engine has no all-in yet. Removal is an acceptance criterion on TASK-1.16 / TASK-3.11 (whichever lands last).
+    stack: stack < minimum ? buyIn(tableStake(table.config)) : stack,
   }));
   const seats = table.seats.map((s) => s.seat);
   const button = seats[(seats.indexOf(hand.button) + 1) % seats.length] as SeatNumber;

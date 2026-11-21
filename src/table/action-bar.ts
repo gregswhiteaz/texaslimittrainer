@@ -74,8 +74,9 @@ export function actionBar(view: PlayerView | null, unit: AmountUnit = 'dollars')
   };
 }
 
-/** Null before the first deal (A-1); else the bar for the user's view, in dollars. TASK-2.4 passes 'chips'
- *  here once the sit-and-go game type exists. */
+/** Null before the first deal (A-1); else the bar for the user's view, in chips for a sit-and-go, else dollars. */
 export function userActionBar(table: TableState): ActionBarModel | null {
-  return table.hand === null ? null : actionBar(playerView(table.hand, table.config.userSeat));
+  if (table.hand === null) return null;
+  const unit = table.config.gameType === 'sit-and-go' ? 'chips' : 'dollars';
+  return actionBar(playerView(table.hand, table.config.userSeat), unit);
 }

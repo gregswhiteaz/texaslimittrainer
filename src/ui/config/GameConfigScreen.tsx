@@ -2,6 +2,8 @@ import { useState } from 'react';
 import {
   buyIn,
   CASH_STAKES,
+  configForGameType,
+  DEFAULT_SESSION_CONFIG,
   type BotStyle,
   type GameType,
   type SessionConfig,
@@ -16,7 +18,11 @@ export interface GameConfigScreenProps {
   readonly onCancel: () => void;
 }
 
-const GAME_TYPE_LABELS: Record<GameType, string> = { cash: 'Cash game' };
+const GAME_TYPES: readonly GameType[] = ['cash', 'sit-and-go'];
+const GAME_TYPE_LABELS: Record<GameType, string> = {
+  cash: 'Cash game',
+  'sit-and-go': 'Sit-and-go',
+};
 const SPEED_LABELS: Record<Speed, string> = { rapid: 'Rapid' };
 const STYLE_LABELS: Record<BotStyle, string> = {
   TAG: 'Tight-aggressive',
@@ -37,15 +43,38 @@ function playersLabel(players: number): string {
 
 const stakeKey = (stake: Stake): string => `${stake.smallBet}/${stake.bigBet}`;
 
-/** Summary of `config` (TASK-2.1 D-6) plus the stake choice (TASK-2.3 D-1); Start game hands over the chosen stake. */
+type Field = readonly [string, React.ReactNode, React.ReactNode];
+
+/** Summary of `config` (TASK-2.1 D-6) plus the game-type (TASK-2.4 D-4) and stake (TASK-2.3 D-1) choices;
+ *  Start game hands over the chosen game type, and the chosen stake for a cash game. */
 export function GameConfigScreen({
   config,
   onStart,
   onCancel,
 }: GameConfigScreenProps): React.JSX.Element {
   const heading = useHeadingFocus(true);
-  const [stake, setStake] = useState<Stake>(config.stake);
+  const [gameType, setGameType] = useState<GameType>(config.gameType);
+  // A-7: a sit-and-go config carries no stake, so the hidden cash stake starts at the default.
+  const [stake, setStake] = useState<Stake>(
+    config.gameType === 'cash' ? config.stake : DEFAULT_SESSION_CONFIG.stake,
+  );
   const stack = buyIn(stake);
+  const gameTypeChoice = (
+    <div role="radiogroup" aria-labelledby="config-game-type" className="config-choice">
+      {GAME_TYPES.map((value) => (
+        <label key={value}>
+          <input
+            type="radio"
+            name="game-type"
+            value={value}
+            checked={gameType === value}
+            onChange={() => setGameType(value)}
+          />
+          {GAME_TYPE_LABELS[value]}
+        </label>
+      ))}
+    </div>
+  );
   const stakeSelect = (
     <select
       id="config-stake"
@@ -62,11 +91,14 @@ export function GameConfigScreen({
       ))}
     </select>
   );
-  const fields: readonly (readonly [string, React.ReactNode, React.ReactNode])[] = [
-    ['game', 'Game type', GAME_TYPE_LABELS[config.gameType]],
-    ['players', 'Players at the table', playersLabel(config.players)],
+  const cashFields: readonly Field[] = [
     ['stake', <label htmlFor="config-stake">Stakes (small bet / big bet)</label>, stakeSelect],
     ['buy-in', 'Buy-in', `$${stack} (${stack / stake.bigBet} big bets)`],
+  ];
+  const fields: readonly Field[] = [
+    ['game', <span id="config-game-type">Game type</span>, gameTypeChoice],
+    ['players', 'Players at the table', playersLabel(config.players)],
+    ...(gameType === 'cash' ? cashFields : []),
     ['speed', 'Speed', SPEED_LABELS[config.speed]],
   ];
   const bots = config.seats.filter((s) => s.kind === 'bot');
@@ -117,7 +149,7 @@ export function GameConfigScreen({
         <button
           type="button"
           className="button-primary"
-          onClick={() => onStart({ ...config, stake })}
+          onClick={() => onStart(configForGameType(config, gameType, stake))}
         >
           Start game
         </button>

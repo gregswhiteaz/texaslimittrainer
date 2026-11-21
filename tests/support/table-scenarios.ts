@@ -17,6 +17,7 @@ import {
   seatSession,
   stakesFor,
   type BotStyle,
+  type CashSessionConfig,
   type SessionConfig,
   type SessionSeat,
   type TableState,
@@ -28,7 +29,7 @@ export const SCENARIO_CODE = replayCodeFromWords([0x9e3779b9, 1, 2, 3]);
 const STYLES: Partial<Record<number, BotStyle>> = { 2: 'Calling station', 3: 'Maniac', 4: 'Rock' };
 
 /** The Table storyboard's line-up: Ben Calling station, Cal Maniac, Dee Rock, Ava and Eli TAG. */
-export const STORYBOARD_CONFIG: SessionConfig = {
+export const STORYBOARD_CONFIG: CashSessionConfig = {
   ...DEFAULT_SESSION_CONFIG,
   seats: DEFAULT_SESSION_CONFIG.seats.map((s): SessionSeat =>
     s.kind === 'bot' ? { ...s, style: STYLES[s.seat] ?? 'TAG' } : s,
