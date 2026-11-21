@@ -57,6 +57,32 @@ const isCard = (value: Card): boolean => Number.isInteger(value) && value >= 0 &
 const potName = (index: number): string => (index === 0 ? 'main pot' : `side pot ${index}`);
 const playerAt = (state: HandState, seat: SeatNumber): PlayerState | undefined =>
   state.players.find((p) => p.seat === seat);
+const unitOf = (state: HandState, street: ActionRecord['street']): number =>
+  street === 'preflop' || street === 'flop' ? state.stakes.smallBet : state.stakes.bigBet;
+
+/**
+ * REQ-016.5, derived here independently of the engine (TASK-1.8 A-4): walking the street's records, the big
+ * blind sets the level, and a bet/raise counts (and sets the level) when it adds at least half a unit over it.
+ */
+function countedBets(
+  state: HandState,
+  street: ActionRecord['street'],
+): { level: number; count: number } {
+  const unit = unitOf(state, street);
+  let level = 0;
+  let count = 0;
+  for (const a of state.actions) {
+    if (a.street !== street) continue;
+    if (a.type === 'big-blind') {
+      level = a.amount;
+      count++;
+    } else if ((a.type === 'bet' || a.type === 'raise') && 2 * (a.amount - level) >= unit) {
+      level = a.amount;
+      count++;
+    }
+  }
+  return { level, count };
+}
 
 function legalActionMessage({ before, action, result }: ActionStep): string | null {
   const text = describeAction(action);
@@ -68,23 +94,25 @@ function legalActionMessage({ before, action, result }: ActionStep): string | nu
   if (!legalActions(before).some((a) => a.type === action.type && amountOf(a) === amount)) {
     return `${text} is not in the legal set`;
   }
-  const unit =
-    before.street === 'preflop' || before.street === 'flop'
-      ? before.stakes.smallBet
-      : before.stakes.bigBet;
-  // REQ-016.1: a bet is exactly one unit and a raise goes to exactly currentBet + unit (small bet
-  // preflop/flop, big bet turn/river). Size is checked independently of legalActions (TASK-1.8 A-4).
-  // legalActions only offers currentBet + unit today, so once L3 passes the raise clause cannot fail;
-  // it stays as a guard if legalActions changes. TASK-1.14 (short all-in raises, REQ-016.5) must revisit it.
+  const street = before.street as ActionRecord['street'];
+  const unit = unitOf(before, street);
+  const actor = playerAt(before, action.seat);
+  // REQ-016.1 / REQ-017.7: a bet is exactly one unit and a raise goes to exactly the street's full bet
+  // level + unit (small bet preflop/flop, big bet turn/river), unless it is a smaller all-in for the whole
+  // stack. Size is checked independently of legalActions (TASK-1.8 A-4).
+  const allInTo = actor === undefined ? NaN : actor.streetContribution + actor.stack;
+  const fullTo = countedBets(before, street).level + unit;
   if (
-    (action.type === 'bet' && (before.currentBet !== 0 || amount !== unit)) ||
-    (action.type === 'raise' && amount !== before.currentBet + unit)
+    (action.type === 'bet' &&
+      (before.currentBet !== 0 || (amount !== unit && !(amount < unit && amount === allInTo)))) ||
+    (action.type === 'raise' &&
+      amount !== fullTo &&
+      !(amount > before.currentBet && amount < fullTo && amount === allInTo))
   ) {
     return `${text} does not match the $${unit} ${before.street} betting unit`;
   }
   const after = result.state.actions;
   const last = after[after.length - 1];
-  const actor = playerAt(before, action.seat);
   const added =
     action.type === 'raise' ? amount - (actor?.streetContribution ?? NaN) : amountOf(action);
   if (
@@ -186,13 +214,7 @@ function returnedMessage(state: HandState): string | null {
 const BETTING_STREETS = ['preflop', 'flop', 'turn', 'river'] as const;
 
 function betCapMessage(state: HandState): string | null {
-  const counts = [0, 0, 0, 0];
-  for (const a of state.actions) {
-    if (a.type === 'big-blind' || a.type === 'bet' || a.type === 'raise') {
-      const i = BETTING_STREETS.indexOf(a.street);
-      if (i >= 0) counts[i] = (counts[i] as number) + 1;
-    }
-  }
+  const counts = BETTING_STREETS.map((street) => countedBets(state, street).count);
   let worstStreet: string = state.street;
   let worst = state.betCount;
   counts.forEach((count, i) => {

@@ -37,7 +37,8 @@ export interface PlayerState {
   readonly streetContribution: number;
   /** Put in this hand. */
   readonly totalContribution: number;
-  /** Acted since the last bet/raise on this street (blinds do not count). */
+  /** Acted since the last counted bet/raise on this street (blinds do not count); a short all-in under half a
+   *  bet does not clear it (REQ-016.5). */
   readonly hasActed: boolean;
 }
 /** `eligible` is in ascending seat order. */
@@ -91,7 +92,8 @@ export interface HandState {
   readonly pots: readonly Pot[];
   /** Highest streetContribution. */
   readonly currentBet: number;
-  /** Bets + raises this street; the big blind counts as 1 preflop. */
+  /** Counted bets + raises this street (full, or all-in of at least half a bet); the big blind counts as 1
+   *  preflop. */
   readonly betCount: number;
   /** Null once the hand is complete. */
   readonly toAct: SeatNumber | null;
@@ -263,30 +265,53 @@ export function createHand(config: HandConfig): HandState {
   };
 }
 
-/** Exact legal actions for state.toAct, in the order fold, check, call, bet, raise. [] when complete. */
+function betUnit(state: HandState): number {
+  return state.street === 'preflop' || state.street === 'flop'
+    ? state.stakes.smallBet
+    : state.stakes.bigBet;
+}
+
+/** The street's last counted bet level: the big blind, or a bet/raise adding at least half a unit over the
+ *  previous level (REQ-016.5). Short all-ins under half a bet leave it unchanged. */
+function fullBetLevel(state: HandState): number {
+  const unit = betUnit(state);
+  let level = 0;
+  for (const a of state.actions) {
+    if (a.street !== state.street) continue;
+    if (a.type === 'big-blind') level = a.amount;
+    else if ((a.type === 'bet' || a.type === 'raise') && 2 * (a.amount - level) >= unit) {
+      level = a.amount;
+    }
+  }
+  return level;
+}
+
+/**
+ * Exact legal actions for state.toAct, in the order fold, check, call, bet, raise. [] when complete.
+ * A bet/raise goes to one unit over the street's full bet level, or all-in for the whole stack when that is
+ * less (REQ-017.7). A seat that already acted since the last counted bet/raise may only call or fold
+ * (REQ-016.5).
+ */
 export function legalActions(state: HandState): readonly Action[] {
   const seat = state.toAct;
   const player = state.players.find((p) => p.seat === seat);
   if (seat === null || player === undefined) return [];
-  const unit =
-    state.street === 'preflop' || state.street === 'flop'
-      ? state.stakes.smallBet
-      : state.stakes.bigBet;
   const owe = state.currentBet - player.streetContribution;
-  const raiseTo = state.currentBet + unit;
-  const canRaise =
-    state.betCount < STREET_BET_CAP && raiseTo - player.streetContribution <= player.stack;
+  const maxTo = player.streetContribution + player.stack;
+  const to = Math.min(fullBetLevel(state) + betUnit(state), maxTo);
+  const canAggress =
+    state.betCount < STREET_BET_CAP && !player.hasActed && maxTo > state.currentBet;
   const actions: Action[] = [];
   if (owe > 0) {
     actions.push({ seat, type: 'fold' });
     actions.push({ seat, type: 'call', amount: Math.min(owe, player.stack) });
-    if (canRaise) actions.push({ seat, type: 'raise', amount: raiseTo });
+    if (canAggress) actions.push({ seat, type: 'raise', amount: to });
   } else if (state.currentBet > 0) {
     actions.push({ seat, type: 'check' });
-    if (canRaise) actions.push({ seat, type: 'raise', amount: raiseTo });
+    if (canAggress) actions.push({ seat, type: 'raise', amount: to });
   } else {
     actions.push({ seat, type: 'check' });
-    if (unit <= player.stack) actions.push({ seat, type: 'bet', amount: unit });
+    if (canAggress) actions.push({ seat, type: 'bet', amount: to });
   }
   return actions;
 }
@@ -513,6 +538,8 @@ export function applyAction(state: HandState, action: Action): ApplyResult {
         ? 0
         : amount;
   const isAggressive = action.type === 'bet' || action.type === 'raise';
+  // A short all-in under half a bet neither counts toward the cap nor reopens betting (REQ-016.5).
+  const counted = isAggressive && 2 * (amount - fullBetLevel(state)) >= betUnit(state);
   const players = state.players.map((p): PlayerState => {
     if (p.seat === actor.seat) {
       return {
@@ -525,7 +552,7 @@ export function applyAction(state: HandState, action: Action): ApplyResult {
         hasActed: true,
       };
     }
-    return isAggressive && !p.folded && p.hasActed ? { ...p, hasActed: false } : p;
+    return counted && !p.folded && p.hasActed ? { ...p, hasActed: false } : p;
   });
   const street = state.street as Exclude<Street, 'showdown'>;
   const next: HandState = {
@@ -539,7 +566,7 @@ export function applyAction(state: HandState, action: Action): ApplyResult {
           }))
         : state.pots,
     currentBet: isAggressive ? amount : state.currentBet,
-    betCount: isAggressive ? state.betCount + 1 : state.betCount,
+    betCount: counted ? state.betCount + 1 : state.betCount,
     actions: [...state.actions, { street, seat: actor.seat, type: action.type, amount, added }],
   };
 

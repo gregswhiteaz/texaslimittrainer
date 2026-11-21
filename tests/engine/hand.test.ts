@@ -286,10 +286,11 @@ describe('hand', () => {
     expect(awarded(runout)).toBe(20);
     const leavesOne = apply(facing(9), [3, 'call', 4]);
     expect(allInOf(leavesOne, 3)).toBe(false);
-    // $6 behind covers the $4 call but not the $8 raise.
+    // $6 behind: a raise all-in to $6 (REQ-017.7).
     expect(legalActions(facing(10))).toEqual([
       { seat: 3, type: 'fold' },
       { seat: 3, type: 'call', amount: 4 },
+      { seat: 3, type: 'raise', amount: 6 },
     ]);
 
     const exactRaise = apply(three([8, 160, 160]), [1, 'raise', 8]);
