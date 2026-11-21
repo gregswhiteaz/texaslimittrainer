@@ -1,10 +1,11 @@
 ---
 id: TASK-2.4
 title: Choose Cash game or Sit-and-go
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-21T18:38:00Z'
+updated_date: '2026-11-21T19:47:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -67,10 +68,24 @@ Plan key: E02-S04 · Dream: limit-holdem-trainer
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
 
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. SessionConfig as a cash | sit-and-go union (Q-3); sng constants 1,500 chips at 20/40.
+2. Game Config: game-type radio group (Q-4); Stakes/Buy-in hidden for Sit-and-go; stake kept while switching back.
+3. Start game with Sit-and-go opens a 1,500-chip 20/40 table (Q-1); header per Q-2.
+4. userActionBar passes 'chips' for sit-and-go (AC#6).
+5. Q-5 extraction-only edits to two locked tests; unit + e2e (Chromium + WebKit) tests.
+
+Full spec: doit/TASK-2.4/spec.md
+<!-- SECTION:PLAN:END -->
+
 ## Implementation Notes
 
 <!-- SECTION:NOTES:BEGIN -->
 Follow-up from TASK-1.5 (doc-13): PlayerView cannot show game type or sit-and-go level until HandConfig carries them; add both to HandConfig and PlayerView here.
 
 AC added from TASK-3.7 follow-up (wire chip labels)
+
+Autopilot Q-1..Q-5 auto-accepted (qa.md); unlocks under TASK-2.1 and TASK-2.3.
 <!-- SECTION:NOTES:END -->
