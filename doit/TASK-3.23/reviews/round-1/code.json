@@ -1,0 +1,21 @@
+{"reviewer": "code", "round": 1,
+ "rubric": [
+  {"item": "SPEC-01 correctness", "result": "pass"},
+  {"item": "SPEC-01 test strength", "result": "pass"},
+  {"item": "SPEC-03 correctness", "result": "pass"},
+  {"item": "SPEC-03 test strength", "result": "pass"},
+  {"item": "scope", "result": "pass"},
+  {"item": "concision", "result": "pass"},
+  {"item": "clarity", "result": "pass"}
+ ],
+ "findings": [
+  {"fingerprint": "tests/ci/visual-workflow.test.ts:readme-assertions-match-preexisting-text", "severity": "MINOR", "file": "tests/ci/visual-workflow.test.ts", "line": 69,
+   "issue": "Two of the three assertions are already satisfied by the README section as it was before this change, so only the 'Dependabot' assertion depends on the new paragraph. A paragraph that mentions Dependabot but leaves out the command or the Playwright bump would still pass.",
+   "evidence": "At base 0624fd0 the '### Card visual baselines' section already contains '@playwright/test' (the image-version sentence) and 'gh workflow run visual.yml --ref <branch> -f update=true' (step 1). If the new paragraph is removed, the test still fails on 'Dependabot', so it can fail and is not a tautology. The spec prescribed these assertions.",
+   "fix": "Run the checks against the new paragraph only, e.g. const para = /^When a Dependabot[\\s\\S]*?(?=\\n\\n)/m.exec(section)?.[0] ?? ''; then assert that para contains '@playwright/test', 'Visual' and the gh workflow run command."},
+  {"fingerprint": "doit/TASK-3.23/changes.md:stale-spec-02-note", "severity": "NIT", "file": "doit/TASK-3.23/changes.md", "line": 3,
+   "issue": "changes.md still says SPEC-02 was 'NOT done' because of a blocked permission and points to blocked.json. SPEC-02 was withdrawn (Q-1), so it is not an outstanding item.",
+   "evidence": "Line 3: 'The inline decode deletion ... (SPEC-02) is NOT done: the auto-mode permission classifier denied it (see blocked.json).'",
+   "fix": "Change it to: 'SPEC-02 withdrawn per Q-1; card back logo test unchanged.'"}
+ ],
+ "summary": "SPEC-01: in partsOutsideCard, the check 'paths.length === 0 || leaves' reports a part with no path and also a missing part group. The new mutation test asserts exactly ['3h suit', 'Qs rank']; without the guard it would get [] and fail. Strengthen-only edit confirmed: the only removed line in e2e/cards.spec.ts is the old 'if (leaves)' push, which is replaced by a strictly stronger condition. No assertion was removed or loosened, and the logo test is unchanged. SPEC-03: the README paragraph has every required fact and the exact command. The unit test passes and fails if the paragraph is removed, but two of its assertions also match text that was already there (MINOR). Scope is 3 files and 30 lines, with no src/, workflow or baseline changes. No BLOCKER or MAJOR findings."}

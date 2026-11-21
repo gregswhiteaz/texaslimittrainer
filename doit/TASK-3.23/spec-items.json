@@ -3,12 +3,12 @@
     "id": "SPEC-01",
     "verifies": "AC#1",
     "verification": "acceptance `e2e/cards.spec.ts::containment check reports a part with no path`, `e2e/cards.spec.ts::rank and suit paths stay inside the card`, `e2e/cards.spec.ts::containment check fails when a glyph leaves the card`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-03",
     "verifies": "AC#2",
     "verification": "unit `tests/ci/visual-workflow.test.ts::README explains regenerating baselines after a Playwright bump`",
-    "status": "pending"
+    "status": "pass"
   }
 ]
