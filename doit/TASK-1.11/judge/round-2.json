@@ -1,0 +1,102 @@
+{
+ "round": 2,
+ "test_suite": {
+  "command": "npm test",
+  "result": "PASS",
+  "passed": 402,
+  "failed": 0,
+  "notes": "114 files passed, 6 skipped (pre-existing). Coverage: all files 96.67% stmts, engine 99.85% stmts. npm run lint exit 0 (eslint + prettier clean); tsc -p tsconfig.json exit 0. Round 2: HEAD unchanged (8c1dbfb), src/tests have no working-tree diff, so round-1 runs carry forward."
+ },
+ "end_to_end": {
+  "command": "npm run playtest -- --size 2",
+  "result": "PASS",
+  "expected": "exit 0, Options/Table lines for 2 players, Invariant violations: 0; replay of first code with --button 1 shows seat 1 SB $2 then seat 2 BB $4; postflop opened by non-button; --size 1 exits 2 with the 2..10 error; 6-max baseline byte-identical",
+  "actual": "exit 0 in 0.32 s; 'Options: --hands 10000 --seed 42 --size 2', 'Table: 2 players, cash $4/$8, every stack reset to $160 before each hand', 'Hands played: 10000', 'Invariant violations: 0' (fold 8940 / showdown 1060). Replay 000000000000002a0000000000000001 --button 1: 'Preflop: seat 1 posts small blind $2, seat 2 posts big blind $4, seat 1 folds'; --button 2 mirrors it. Replay of hand 5 with --button 2: preflop seat 2 SB, seat 1 BB; 'Flop: seat 1 bets $4' (non-button first). --size 1 and --size 0 exit 2 with 'Error: --size must be a whole number from 2 to 10.' plus <2-10> usage. --size 2 --button 3 rejected with the button error."
+ },
+ "integrity": {
+  "result": "PASS",
+  "notes": "doit.py test-integrity exit 0, no output. src diff vs f237fab is 8 lines: range 3->2 in validate and parseArgs, SIZE_ERROR/USAGE text, doc comment, and the n===2 blind selection in createHand. No test-input recognition, hard-coded results, early returns or mocks. Locked tests untouched (only hand.test.ts and cli.test.ts edited, per U1/U2 and spec). Mutants: reverting the blind fix fails 7 tests (all four engine acceptance, SPEC-08, AC#4, AC#5); restoring the CLI lower bound to 3 and loosening the seat floor to 1 fails SPEC-07, SPEC-09, AC#4, AC#5. git diff --stat -- src empty afterwards (matches HEAD)."
+ },
+ "items": [
+  {
+   "spec": "SPEC-01",
+   "result": "PASS",
+   "evidence": "Carried forward from round 1 (HEAD 8c1dbfb unchanged, git diff --stat -- src tests empty). Acceptance AC#1 passes; asserts exact actions[0..1] records and stacks for {1,2} btn 1, {1,2} btn 2, {3,7} btn 7; killed by the blind-fix revert mutant. Holdout: seat pairs {1,2},{10,1},{4,9},{2,10} with each button -> button posts SB $2, other BB $4, checkState [] (all pass)."
+  },
+  {
+   "spec": "SPEC-02",
+   "result": "PASS",
+   "evidence": "Carried forward from round 1 (HEAD 8c1dbfb unchanged, git diff --stat -- src tests empty). Acceptance AC#2 passes; asserts toAct, exact legalActions before/after the call and flop transition, both buttons. Holdout: button acts first for all 8 seat/button combos; non-button acting first is rejected; button raise / BB re-raise / button re-raise alternate correctly; BB fold to button raise leaves button +4, BB -4."
+  },
+  {
+   "spec": "SPEC-03",
+   "result": "PASS",
+   "evidence": "Carried forward from round 1 (HEAD 8c1dbfb unchanged, git diff --stat -- src tests empty). Acceptance AC#3 passes (check-down per street, bet/raise/call flop line, both buttons). Holdout: after a capped-style preflop war, flop/turn/river all start with the non-button seat; flop check-raise passes action back to the button; chips total 320 at the end; checkStep clean on every action."
+  },
+  {
+   "spec": "SPEC-04",
+   "result": "PASS",
+   "evidence": "Carried forward from round 1 (HEAD 8c1dbfb unchanged, git diff --stat -- src tests empty). Acceptance test passes; asserts hole cards deck[0],deck[2] / deck[1],deck[3], board and burns at D-5 offsets, checkState [] after each step, showdown, total 320."
+  },
+  {
+   "spec": "SPEC-05",
+   "result": "PASS",
+   "evidence": "Carried forward from round 1 (HEAD 8c1dbfb unchanged, git diff --stat -- src tests empty). Acceptance AC#4 passes (hand walk over 10,000 hands + subprocess). Holdout: runPlaytest size 2 with seeds 1, 999, 123456789 (3,000 hands each) -> every hand SB=button, BB=other, preflop opened by button, each postflop street opened by non-button, no seat acts twice in a row, chips conserved, violations 0."
+  },
+  {
+   "spec": "SPEC-06",
+   "result": "PASS",
+   "evidence": "Carried forward from round 1 (HEAD 8c1dbfb unchanged, git diff --stat -- src tests empty). Acceptance AC#5 passes. Observed directly: npm run playtest -- --size 2 exit 0 with required lines; replay of first code --size 2 --button 1 exit 0 with 'Preflop: seat 1 posts small blind $2, seat 2 posts big blind $4, ...'."
+  },
+  {
+   "spec": "SPEC-07",
+   "result": "PASS",
+   "evidence": "Carried forward from round 1 (HEAD 8c1dbfb unchanged, git diff --stat -- src tests empty). Unit test passes and fails under the seat-floor mutant. Holdout: 0, 1, 11 seats throw RangeError 'Hand needs 2 to 10 seats, got <n>'; 2 seats accepted (incl. at the bigBlind+1 stack floor of $5; $4 rejected); button not among seats rejected; 3-handed blinds unchanged (btn 1 -> SB 2, BB 3, toAct 1)."
+  },
+  {
+   "spec": "SPEC-08",
+   "result": "PASS",
+   "evidence": "Carried forward from round 1 (HEAD 8c1dbfb unchanged, git diff --stat -- src tests empty). Unit test passes and fails under the blind-fix revert. Asserts endedBy fold, awards[0] {pot 0, amount 4, winners [{seat 2, amount 4}]}, returned {seat 2, amount 2}, stacks 158/162, checkStep []. CLI replay of hand 1 (button folds) shows 'seat 2 wins $4'."
+  },
+  {
+   "spec": "SPEC-09",
+   "result": "PASS",
+   "evidence": "Carried forward from round 1 (HEAD 8c1dbfb unchanged, git diff --stat -- src tests empty). Unit test passes and fails under the CLI-range mutant. Holdout parseArgs: --size 2 -> run size 2; --size 10 accepted; '0','1','11','-2','2.0',' 2' -> 'Error: --size must be a whole number from 2 to 10.'. Observed USAGE shows [--size <2-10>] on both lines."
+  },
+  {
+   "spec": "SPEC-10",
+   "result": "PASS",
+   "evidence": "Carried forward from round 1 (HEAD 8c1dbfb unchanged, git diff --stat -- src tests empty). npm run playtest -- --hands 10000 --seed 42 output diffed against the same command run from a git-archive copy of base f237fab: byte-identical (fold 5470, showdown 4530, actions 88831, capped 244, largest $70, same replay codes, 0 violations). Also --size 3 and --size 10 (3,000 hands, seed 7) byte-identical to base. Locked 6-max/property/playtest acceptance tests pass unmodified."
+  },
+  {
+   "spec": "SPEC-11",
+   "result": "PASS",
+   "evidence": "gh run view 44869653305: status completed, conclusion success, headSha 8c1dbfb37fbbf65d5d00de56fcc7a33a5e1205d9, branch doit/TASK-1.11, job 'Lint, typecheck, build, test and e2e' success; Visual workflow success. Local round 1: lint exit 0, tsc exit 0, npm test 402 passed / 0 failed, coverage 96.67% overall / 99.85% engine."
+  },
+  {
+   "spec": "SPEC-12",
+   "result": "FAIL",
+   "evidence": "backlog doc list shows doc-57 'TASK-1.11: Play heads-up hands with heads-up blinds and order'; TASK-1.11 Documentation lists doc-57. The doc records heads-up support and the `--size` range 2..10, but does not give the heads-up playtest result line: the only mention of the run is the requirement in 'What was asked' and 'PASS / judge round 1' in the verification table. No observed output (Hands played / Invariant violations) for `--size 2` appears anywhere in it. Earlier story docs (doc-15, doc-16, doc-33) quote their playtest result lines.",
+   "expected": "Story doc gives the heads-up playtest result line from `npm run playtest -- --size 2` (e.g. Hands played: 10000 ... Invariant violations: 0)",
+   "actual": "No result line from the heads-up run is in the doc; it also still says SPEC-11 is 'Judge pending on CI' and that SPEC-11/SPEC-12 were open",
+   "observed_via": "backlog doc view doc-57 --plain"
+  }
+ ],
+ "findings": [
+  {
+   "id": "J-2-01",
+   "severity": "MEDIUM",
+   "spec": "SPEC-12",
+   "expected_vs_actual": "Expected the story doc to give the heads-up playtest result line; actual doc-57 states only the requirement and 'PASS (judge round 1)' with no observed output from `npm run playtest -- --size 2`.",
+   "fix": "Add the observed `--size 2` result to doc-57 (Options/Table lines, Hands played: 10000, Ended by fold: 8940, Ended at showdown: 1060, Invariant violations: 0), and update the SPEC-11/SPEC-12 rows now that CI run 44869653305 succeeded and the doc is published."
+  },
+  {
+   "id": "J-2-02",
+   "severity": "LOW",
+   "spec": "SPEC-10",
+   "expected_vs_actual": "Related behaviour outside the engine: the table view's position label names the heads-up non-button seat 'Small blind', while the engine now makes it the big blind. Not reachable from any screen today (no UI offers 2 players).",
+   "fix": "Already recorded in doc-57 as a TASK-2.2 follow-up; no change needed in this task."
+  }
+ ],
+ "summary": "Round 2: HEAD unchanged since round 1; SPEC-01..SPEC-10 carried forward PASS. SPEC-11 now PASS (CI run 44869653305 succeeded on 8c1dbfb). SPEC-12 FAIL: doc-57 is published and attached but omits the heads-up playtest result line the spec requires; it also has stale 'pending' text. Findings are MEDIUM/LOW (non-blocking severity), but the failed item fails the computed verdict until the doc is amended."
+}
