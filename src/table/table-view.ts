@@ -26,6 +26,15 @@ export interface SeatView {
   /** Null for the user (bottom centre); else percentages inside the table ring. */
   readonly slot: { readonly left: number; readonly top: number } | null;
 }
+export interface PotLineView {
+  /** Index into PlayerView.pots (0 = main pot). */
+  readonly pot: number;
+  /** "Main pot" | "Side pot" | "Side pot 1", "Side pot 2", … (Q-1). */
+  readonly label: string;
+  readonly amount: number;
+  /** `${label} $${amount}`, e.g. "Main pot $60". */
+  readonly text: string;
+}
 export interface TableViewModel {
   /** "Cash · 6 players · $4/$8 · Hand #1" */
   readonly header: string;
@@ -36,6 +45,8 @@ export interface TableViewModel {
   readonly placeholders: number;
   /** A-4 */
   readonly pot: number;
+  /** REQ-021.5: one line per pot while side pots exist; [] = show the single `pot` total. */
+  readonly pots: readonly PotLineView[];
   readonly street: Street | null;
   readonly actionCount: number;
   readonly handOver: boolean;
@@ -128,6 +139,24 @@ export function potTotal(view: PlayerView | null): number {
   return view.players.reduce((sum, p) => sum + p.streetContribution, pots);
 }
 
+/** Pot labels for `count` pots: index 0 "Main pot"; one side pot "Side pot"; several "Side pot k". */
+export function potLabel(index: number, count: number): string {
+  if (index === 0) return 'Main pot';
+  return count === 2 ? 'Side pot' : `Side pot ${index}`;
+}
+
+/** [] unless view has ≥ 2 pots and the hand is not over (A-1, A-2); street bets go to the last line (D-3). */
+export function potLines(view: PlayerView | null, handOver: boolean): PotLineView[] {
+  if (view === null || handOver || view.pots.length < 2) return [];
+  const bets = view.players.reduce((sum, p) => sum + p.streetContribution, 0);
+  const last = view.pots.length - 1;
+  return view.pots.map((pot, k): PotLineView => {
+    const label = potLabel(k, view.pots.length);
+    const amount = pot.amount + (k === last ? bets : 0);
+    return { pot: k, label, amount, text: `${label} $${amount}` };
+  });
+}
+
 function actionLine(view: PlayerView, seat: SeatNumber, handOver: boolean): string | null {
   if (view.players.find((p) => p.seat === seat)?.folded === true) return 'Folded';
   const line = view.street === 'showdown' ? 'river' : view.street;
@@ -183,6 +212,7 @@ export function tableView(table: TableState): TableViewModel {
     board,
     placeholders: 5 - board.length,
     pot: potTotal(view),
+    pots: potLines(view, handOver),
     street: view?.street ?? null,
     actionCount: view?.actions.length ?? 0,
     handOver,

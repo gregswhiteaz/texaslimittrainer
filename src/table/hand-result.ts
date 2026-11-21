@@ -2,6 +2,7 @@ import { cardRank, type Card, type Rank } from '../engine/cards';
 import { evaluate, handCategory } from '../engine/hand-evaluator';
 import type { SeatNumber } from '../engine/hand';
 import type { TableState } from './session';
+import { potLabel } from './table-view';
 
 export interface WinnerView {
   readonly seat: SeatNumber;
@@ -25,12 +26,31 @@ export interface ShownHandView {
   readonly handName: string;
   readonly holeCards: readonly [Card, Card];
 }
+export interface PotResultView {
+  readonly pot: number;
+  readonly label: string;
+  readonly amount: number;
+  /** award.winners in order. */
+  readonly winners: readonly {
+    readonly seat: SeatNumber;
+    readonly isUser: boolean;
+    /** "You win $60" | "Ben wins $80" */
+    readonly text: string;
+  }[];
+  /** "Main pot $60 · You win $60"; split: "Side pot $81 · Ben wins $41, Ava wins $40" (Q-2). */
+  readonly text: string;
+}
 export interface HandResultView {
   readonly endedBy: 'fold' | 'showdown';
   /** Award order (A-7), at least one. */
   readonly winners: readonly WinnerView[];
   /** Shown hands of seats that won nothing, in showdown order; [] after a fold-out. Never a mucked hand. */
   readonly shown: readonly ShownHandView[];
+  /**
+   * One per result.awards entry when there are ≥ 2 (AC#4). Absent for a single pot (A-3), so single-pot results
+   * keep their exact shape.
+   */
+  readonly pots?: readonly PotResultView[];
 }
 
 /** Rank words by Rank (0 = two … 12 = ace). */
@@ -91,6 +111,8 @@ export function handResultView(table: TableState): HandResultView | null {
     if (sessionSeat === undefined) throw new RangeError(`Seat ${seat} is not at the table`);
     return sessionSeat.name;
   };
+  const winText = (seat: SeatNumber, amount: number): string =>
+    seat === table.config.userSeat ? `You win $${amount}` : `${nameOf(seat)} wins $${amount}`;
   const amounts = new Map<SeatNumber, number>();
   for (const award of result.awards) {
     for (const { seat, amount } of award.winners) {
@@ -107,7 +129,7 @@ export function handResultView(table: TableState): HandResultView | null {
       name,
       isUser,
       amount,
-      text: isUser ? `You win $${amount}` : `${name} wins $${amount}`,
+      text: winText(seat, amount),
       handName: shown === undefined ? null : handName([...shown.holeCards, ...hand.board]),
       holeCards: shown === undefined ? null : [shown.holeCards[0], shown.holeCards[1]],
     };
@@ -126,5 +148,21 @@ export function handResultView(table: TableState): HandResultView | null {
         holeCards: [s.holeCards[0], s.holeCards[1]],
       };
     });
-  return { endedBy: result.endedBy, winners, shown };
+  if (result.awards.length < 2) return { endedBy: result.endedBy, winners, shown };
+  const pots = result.awards.map((award): PotResultView => {
+    const label = potLabel(award.pot, result.awards.length);
+    const potWinners = award.winners.map(({ seat, amount }) => ({
+      seat,
+      isUser: seat === table.config.userSeat,
+      text: winText(seat, amount),
+    }));
+    return {
+      pot: award.pot,
+      label,
+      amount: award.amount,
+      winners: potWinners,
+      text: `${label} $${award.amount} · ${potWinners.map((w) => w.text).join(', ')}`,
+    };
+  });
+  return { endedBy: result.endedBy, winners, shown, pots };
 }

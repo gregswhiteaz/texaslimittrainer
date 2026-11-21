@@ -184,7 +184,9 @@ export type TableScene =
   | 'capped-flop'
   | 'call-all-in'
   | 'raise-all-in'
-  | 'bet-all-in';
+  | 'bet-all-in'
+  | 'side-pot-river'
+  | 'side-pot-showdown';
 
 /** Renders the scripted `scene` (see table-scenes.tsx) into a blank page. */
 export async function openTableScene(page: Page, bundle: string, scene: TableScene): Promise<void> {

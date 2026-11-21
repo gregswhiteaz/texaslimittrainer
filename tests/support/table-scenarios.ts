@@ -295,3 +295,37 @@ export const BET_ALL_IN: TableState = userTableAfter(
   6,
   { 5: 7 },
 );
+
+/** You Ah As, Ben Kh Ks, Ava Qh Qs; the board runs 2c 7d 9h, Jc, 3s. */
+export const SIDE_POT_DECK = {
+  4: 'Ah',
+  10: 'As',
+  1: 'Kh',
+  7: 'Ks',
+  0: 'Qh',
+  6: 'Qs',
+  13: '2c',
+  14: '7d',
+  15: '9h',
+  17: 'Jc',
+  19: '3s',
+};
+
+/** The user ($20) is all-in on the flop; Ava and Ben each put in $60 by the turn's end. */
+export const SIDE_POT_MOVES =
+  '3:fold 4:fold 5:raise 6:fold 1:raise 2:raise 5:call 1:call' +
+  ' 1:bet 2:raise 5:call 1:raise 2:call' +
+  ' 1:bet 2:raise 1:raise 2:raise 1:call';
+
+/** River, Ava to act: main pot $60 {Ava, Ben, You} and side pot $80 {Ava, Ben}. */
+export const SIDE_POT_RIVER: TableState = userTableAfter(SIDE_POT_DECK, SIDE_POT_MOVES, 6, {
+  5: 20,
+});
+
+/** River checked through: You win the $60 main pot (aces), Ben the $80 side pot (kings); Ava shows queens. */
+export const SIDE_POT_SHOWDOWN: TableState = userTableAfter(
+  SIDE_POT_DECK,
+  `${SIDE_POT_MOVES} 1:check 2:check`,
+  6,
+  { 5: 20 },
+);

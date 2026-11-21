@@ -85,6 +85,17 @@ function HandResult({ result }: { readonly result: HandResultView }): React.JSX.
   return (
     <div role="status" className="hand-result">
       <p className="hand-result-title">Hand over</p>
+      {result.pots !== undefined && (
+        <ul aria-label="Pot winners">
+          {result.pots.map((p) => (
+            <li key={p.pot} data-pot={p.pot}>
+              <span data-part="pot">{`${p.label} $${p.amount}`}</span>
+              <span aria-hidden="true"> · </span>
+              <span data-part="pot-winners">{p.winners.map((w) => w.text).join(', ')}</span>
+            </li>
+          ))}
+        </ul>
+      )}
       <ul aria-label="Winners">
         {result.winners.map((winner) => (
           <li key={winner.seat} data-seat={winner.seat}>
@@ -170,7 +181,17 @@ export function TableView({
                     <span key={i} className="board-slot" aria-hidden="true" />
                   ))}
                 </div>
-                <p className="table-pot">{`Pot $${model.pot}`}</p>
+                {model.pots.length === 0 ? (
+                  <p className="table-pot">{`Pot $${model.pot}`}</p>
+                ) : (
+                  <ul aria-label="Pots" className="table-pots">
+                    {model.pots.map((line) => (
+                      <li key={line.pot} data-pot={line.pot}>
+                        {line.text}
+                      </li>
+                    ))}
+                  </ul>
+                )}
               </div>
               <ul aria-label="Seats" className="table-seats">
                 {model.seats.map((seat) => (

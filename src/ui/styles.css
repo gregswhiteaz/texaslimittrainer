@@ -297,6 +297,16 @@ h1[tabindex='-1']:focus {
   font-weight: 600;
 }
 
+.table-pots {
+  display: flex;
+  gap: 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 16px;
+  font-weight: 600;
+}
+
 .table-seats {
   margin: 0;
   padding: 0;

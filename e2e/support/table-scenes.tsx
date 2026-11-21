@@ -11,6 +11,8 @@ import {
   RAISE_ALL_IN,
   SEAT_1_DEALT,
   SHOWN_HANDS,
+  SIDE_POT_RIVER,
+  SIDE_POT_SHOWDOWN,
 } from '../../tests/support/table-scenarios';
 
 // Test-only page (D-8): never imported by the app, built and injected by table-harness-bundle.ts.
@@ -22,6 +24,8 @@ const SCENES: Partial<Record<string, TableState>> = {
   'call-all-in': CALL_ALL_IN,
   'raise-all-in': RAISE_ALL_IN,
   'bet-all-in': BET_ALL_IN,
+  'side-pot-river': SIDE_POT_RIVER,
+  'side-pot-showdown': SIDE_POT_SHOWDOWN,
 };
 const root = document.getElementById('root');
 const table = SCENES[root?.dataset.scene ?? ''];
