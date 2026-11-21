@@ -325,6 +325,13 @@ function payOut(
   });
 }
 
+/**
+ * Ends the hand for the last unfolded seat. Resets `currentBet` and `betCount` to 0,
+ * as `endRound` does at every round end including showdown: `gather` moves every
+ * streetContribution into the pot, so 0 is the highest one (the `currentBet` meaning), and a
+ * finished hand has no betting round. The street's bets stay in `actions` (review, bet-cap
+ * invariant). Pinned by tests/engine/fold-out.acceptance.test.ts.
+ */
 function foldOut(state: HandState, players: readonly PlayerState[], winner: SeatNumber): HandState {
   const gathered = gather(state, players);
   const winners = [{ seat: winner, amount: gathered.amount }];
