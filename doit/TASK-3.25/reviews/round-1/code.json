@@ -1,0 +1,25 @@
+{"reviewer": "code", "round": 1,
+ "rubric": [
+  {"item": "SPEC-01 correctness", "result": "pass"},
+  {"item": "SPEC-01 test strength", "result": "pass"},
+  {"item": "SPEC-02 correctness", "result": "pass"},
+  {"item": "SPEC-02 test strength", "result": "pass"},
+  {"item": "SPEC-03 correctness", "result": "pass"},
+  {"item": "SPEC-03 test strength", "result": "pass"},
+  {"item": "SPEC-04 correctness", "result": "pass"},
+  {"item": "SPEC-04 test strength", "result": "pass"},
+  {"item": "scope", "result": "pass"},
+  {"item": "concision", "result": "pass"},
+  {"item": "clarity", "result": "pass"}
+ ],
+ "findings": [
+  {"fingerprint": "e2e/card-gallery-open.spec.ts:spec-02-generic-rejection-matcher", "severity": "MINOR", "file": "e2e/card-gallery-open.spec.ts", "line": 28,
+   "issue": "`rejects.toThrow()` accepts any rejection, so the test cannot tell a decode failure from an unrelated one (a strict-mode error, or a broken injected script). It also passes on the old async-waitForFunction helper: a scratch run showed the old helper rejects with 'EncodingError' in both browsers. The spec only requires that it rejects, so this is not a violation, but the guard is looser than it could be.",
+   "evidence": "Scratch run of the old predicate against the AAAA logo: chromium 'EncodingError: The source image cannot be decoded.', webkit 'EncodingError: Loading error.'. Both reject, so SPEC-02 is not a regression discriminator.",
+   "fix": "Optionally narrow the matcher to the decode failure, e.g. `.rejects.toThrow(/decod|EncodingError|Loading error/i)`, so an unrelated rejection does not count as a pass."},
+  {"fingerprint": "e2e/card-gallery-open.spec.ts:third-copy-of-decode-probe", "severity": "NIT", "file": "e2e/card-gallery-open.spec.ts", "line": 12,
+   "issue": "The `new Image(); probe.src = href; await probe.decode()` probe now exists in four places: openCardGallery, cards.spec.ts:205, logoProblems and this test. The spec asks for the pattern to be reused, and the test must check the result independently of the helper, so this is acceptable.",
+   "evidence": "e2e/support/card-gallery-bundle.ts:35-40, e2e/cards.spec.ts:91-96 and 205-210, e2e/card-gallery-open.spec.ts:12-21",
+   "fix": "None required; leave as is."}
+ ],
+ "summary": "The fix matches D-1. openCardGallery now uses a polling, strict locator.waitFor({state:'attached'}) and then an awaited locator.evaluate that decodes href. It throws the specified message unless the result is 512x512, and no async predicate remains. A rejected decode propagates. The D-2 edit to locked e2e/cards.spec.ts is strengthen-only: the only removed lines are the `?.setAttribute` page.evaluate. It adds toHaveCount(1) before the mutation, a locator-based setAttribute, and toHaveAttribute after it. The mutant table and the logoProblems expectation are byte-identical. SPEC-01 really reproduces the race: a scratch run of the old async waitForFunction against a 500 ms delayed render resolved with `false` and found 0 logos in both Chromium and WebKit, so the new test's `count: 1` would fail on the old helper. The other users are fine. cards.visual.spec.ts and home.spec.ts:148 pass the real bundle, so the stricter postcondition holds; cards.spec + card-gallery-open.spec ran 24/24 green locally in both browsers. The grep of e2e/ found no other waitForFunction calls, so the async-predicate bug exists nowhere else. Gates pass (tests, lint, typecheck, scope, integrity). SPEC-04 (50x repeat + CI) is a one-off run for the build log and judge to verify, not code. No BLOCKER or MAJOR findings."}

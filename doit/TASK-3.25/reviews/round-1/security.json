@@ -1,0 +1,3 @@
+{"reviewer": "security", "round": 1,
+ "findings": [],
+ "summary": "Test-harness-only change (e2e/support/card-gallery-bundle.ts, e2e/cards.spec.ts, new e2e/card-gallery-open.spec.ts). All script content injected via page.addScriptTag/setContent comes from the repo-built gallery bundle or hardcoded test literals; no untrusted input (user, network, env, CLI) reaches any sink. No new dependencies, secrets, randomness, file or temp-file handling. Spec section 8 (N/A) is accurate. No findings."}
