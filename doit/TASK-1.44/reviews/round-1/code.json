@@ -1,0 +1,21 @@
+{"reviewer": "code", "round": 1,
+ "rubric": [
+  {"item": "SPEC-01 correctness", "result": "pass"},
+  {"item": "SPEC-01 test strength", "result": "pass"},
+  {"item": "SPEC-02 correctness", "result": "pass"},
+  {"item": "SPEC-02 test strength", "result": "pass"},
+  {"item": "SPEC-03 correctness", "result": "pass"},
+  {"item": "SPEC-03 test strength", "result": "pass"},
+  {"item": "SPEC-04 correctness", "result": "pass"},
+  {"item": "SPEC-04 test strength", "result": "pass"},
+  {"item": "scope", "result": "pass"},
+  {"item": "concision", "result": "pass"},
+  {"item": "clarity", "result": "pass"}
+ ],
+ "findings": [
+  {"fingerprint": "src/engine/hand.ts:foldout-comment-line-count", "severity": "NIT", "file": "src/engine/hand.ts", "line": 328,
+   "issue": "Spec §2 asks for a comment of 3-6 lines; the JSDoc spans 7 physical lines (5 text lines plus the /** and */ delimiters).",
+   "evidence": "Lines 328-334 of src/engine/hand.ts; changes.md itself calls it a '7-line JSDoc'. The text lines (5) are within budget, so this is a reading of the limit, not a real violation.",
+   "fix": "Optional: collapse the text to 4 lines so the block including delimiters is 6 lines, or leave as is."}
+ ],
+ "summary": "Both changes match the spec. The hand.ts diff adds only comment lines: the SPEC-04 grep finds no non-comment lines (exit 1) and foldOut's logic is unchanged. The comment covers all three §5 points (the reset rule matching endRound, why it resets via gather / no betting round / actions kept, and a pointer to the test), and the SPEC-03 grep prints 3. The new acceptance test checks the pre-fold values [8, 2] before checking the reset to 0/0, plus street, toAct, endedBy and every streetContribution. The flop case also checks the exact awards. If foldOut kept the street's values, both tests would fail, so they are not tautologies. The test helpers copy the review-gaps pattern as A-2 allows. The new test passes (2/2) and the build-1 gates are green. No BLOCKER or MAJOR findings."}

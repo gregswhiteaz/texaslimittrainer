@@ -1,0 +1,3 @@
+{"reviewer": "security", "round": 1,
+ "findings": [],
+ "summary": "Change is a 7-line JSDoc above foldOut in src/engine/hand.ts (no executable change) plus a new acceptance test tests/engine/fold-out.acceptance.test.ts using a fixed deck and constant inputs. No new trust boundary, input handling, I/O, randomness, secrets, or dependencies. Nothing reachable by untrusted input changed; no findings."}

@@ -3,24 +3,24 @@
     "id": "SPEC-01",
     "verifies": "AC#1",
     "verification": "acceptance `tests/engine/fold-out.acceptance.test.ts::a preflop fold-out leaves currentBet and betCount at 0`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-02",
     "verifies": "AC#1",
     "verification": "acceptance `tests/engine/fold-out.acceptance.test.ts::a flop fold-out after a raise leaves currentBet and betCount at 0`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-03",
     "verifies": "AC#2",
     "verification": "command `grep -n -B8 '^function foldOut' src/engine/hand.ts | grep -cE 'currentBet|betCount|endRound'`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-04",
     "verifies": "AC#1",
     "verification": "command `git diff -U0 src/engine/hand.ts | grep -E '^[+-][^+-]' | grep -vE '^[+-]\\s*(//|/\\*\\*?|\\*)' ; test $? -eq 1 && npm test`",
-    "status": "pending"
+    "status": "pass"
   }
 ]
