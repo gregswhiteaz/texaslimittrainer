@@ -561,6 +561,12 @@
       "event": "unlock",
       "file": "tests/engine/chip-safety.acceptance.test.ts",
       "reason": "TASK-1.9 Q-4 (autopilot, recommended): update expected amounts/messages for all-in support (uncalled bets returned, stack floor bigBlind+1); nothing removed or loosened"
+    },
+    {
+      "t": "2026-11-20T23:15:37",
+      "event": "unlock",
+      "file": "tests/engine/chip-safety.acceptance.test.ts",
+      "reason": "TASK-1.12 Q-1 (autopilot, recommended): stake fixture raised to boundStakes(56_294_995_342_130) so the capped worst hand still reaches ~99.99% of MAX_SAFE_INTEGER; all assertions kept"
     }
   ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-1.31",
@@ -573,6 +579,7 @@
   },
   "doc_id": "doc-35",
   "relock_pending": [
+    "tests/engine/chip-safety.acceptance.test.ts",
     "tests/engine/chip-safety.acceptance.test.ts"
   ]
 }

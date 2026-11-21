@@ -1,10 +1,11 @@
 ---
 id: TASK-1.12
 title: Cap each street at one bet plus three raises
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-18T18:15:00Z'
+updated_date: '2026-11-21T06:16:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -62,10 +63,25 @@ Plan key: E01-S10 · Dream: limit-holdem-trainer
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
 
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. STREET_BET_CAP = 4 in the engine; legalActions offers no raise at 4 bets (applyAction already rejects illegal actions).
+2. Advice uses STREET_BET_CAP; invariant checker keeps its own independent cap.
+3. Remove the playtest policy's betCount filter; rework the fifthBet fault fixture.
+4. Acceptance tests AC#1–6 incl. heads-up cap and a 100k-hand 2–10-seat run.
+5. Q-1: one fixture line in TASK-1.31's chip-safety test (stake only, assertions kept).
+6. 6-max playtest byte-identical; e2e action-bar/table pass.
+
+Full spec: doit/TASK-1.12/spec.md
+<!-- SECTION:PLAN:END -->
+
 ## Implementation Notes
 
 <!-- SECTION:NOTES:BEGIN -->
 AC added from TASK-7.2 follow-up (doc-14).
 
 AC added from TASK-1.8 follow-up (doc-16).
+
+Autopilot Q-1 auto-accepted (qa.md); unlock recorded under TASK-1.31.
 <!-- SECTION:NOTES:END -->
