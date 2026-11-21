@@ -7,3 +7,8 @@
 - `npx playwright test e2e/stake-choice.spec.ts` — 6 passed (Chromium + WebKit).
 - `npm run e2e` — 110 passed.
 - `npm run playtest -- --hands 10000 --seed 42` — invariant violations: 0.
+
+## FIX round 1 (2026-11-21)
+- Item 1: fixed — added `font-family: inherit;` to `.config-fields select` in `src/ui/styles.css`.
+- Item 2: fixed — `.config-fields select` border #4a515c -> #6b7380; measured WCAG contrast on #1a1d22: 3.53:1 (was 2.11:1), meets 3:1. Other #4a515c borders in the file left untouched (out of scope).
+- `npm run format` — ok. `npx playwright test e2e/stake-choice.spec.ts` — 6 passed (Chromium + WebKit).

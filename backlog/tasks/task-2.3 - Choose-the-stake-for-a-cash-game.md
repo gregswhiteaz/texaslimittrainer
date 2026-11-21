@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-21T16:54:00Z'
+updated_date: '2026-11-21T16:58:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -79,4 +79,6 @@ Full spec: doit/TASK-2.3/spec.md
 
 <!-- SECTION:NOTES:BEGIN -->
 Autopilot Q-1/Q-2 auto-accepted (qa.md); unlock recorded under TASK-2.1.
+
+Build: CASH_STAKES; Game Config stake select + buy-in text follows stake; D-2 locked-test edit; 3 new test files incl. e2e stake-choice (6/6), npm run e2e 110 passed; gate PASS. Recorded deviation: select styled with appearance:none + inline SVG chevron because WebKit ignored min-height (44 px target, SPEC-09).
 <!-- SECTION:NOTES:END -->

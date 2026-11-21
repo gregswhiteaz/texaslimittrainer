@@ -143,8 +143,9 @@ h1[tabindex='-1']:focus {
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%23f2f3f5' stroke-width='2'/%3E%3C/svg%3E")
     no-repeat right 12px center;
   color: #f2f3f5;
-  border: 1px solid #4a515c;
+  border: 1px solid #6b7380;
   border-radius: 8px;
+  font-family: inherit;
   font-size: 15px;
 }
 
