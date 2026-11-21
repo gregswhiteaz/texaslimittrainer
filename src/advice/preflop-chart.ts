@@ -61,6 +61,7 @@ export class ChartValidationError extends Error {
 const FORMAT = 'tlh-preflop-chart';
 const CHART_WORDS = 50;
 const SPOT_WORDS = 15;
+const ECHO_CHARS = 20;
 const ACTION_LETTERS = new Map<string, ChartAction>([
   ['F', 'fold'],
   ['C', 'call'],
@@ -73,6 +74,11 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 
 function wordCount(text: unknown): number {
   return typeof text === 'string' ? (text.match(/\p{L}+/gu) ?? []).length : 0;
+}
+
+/** Untrusted text for an error message: the first ECHO_CHARS characters, then '...' if cut. */
+function echo(text: string): string {
+  return text.length <= ECHO_CHARS ? text : `${text.slice(0, ECHO_CHARS)}...`;
 }
 
 const spotKey = (position: unknown, situation: unknown) =>
@@ -92,7 +98,7 @@ function parseToken(
   const action = ACTION_LETTERS.get(head.charAt(0));
   const mark = head.slice(1);
   if (action === undefined || (mark !== '' && mark !== '*')) {
-    problems.push(`${where} has invalid action "${token}" (use F, C or R)`);
+    problems.push(`${where} has invalid action "${echo(token)}" (use F, C or R)`);
     return null;
   }
   if (alternatives.length > 1) {
@@ -103,7 +109,7 @@ function parseToken(
   if (alternatives.length === 1) {
     alternative = ACTION_LETTERS.get(alternatives[0] as string) ?? null;
     if (alternative === null) {
-      problems.push(`${where} has invalid alternative "${token}"`);
+      problems.push(`${where} has invalid alternative "${echo(token)}"`);
       return null;
     }
     if (alternative === action) {
@@ -172,7 +178,7 @@ export function parseChart(raw: unknown): PreflopChart {
     const key = spotKey(data.position, data.situation);
     const spot = applicable.find((s) => spotKey(s.position, s.situation) === key);
     if (spot === undefined) {
-      problems.push(`${label}: spot ${key} does not apply at ${referenceSize}`);
+      problems.push(`${label}: spot ${echo(key)} does not apply at ${referenceSize}`);
       continue;
     }
     if (found.has(key)) {
@@ -199,7 +205,11 @@ export function parseChart(raw: unknown): PreflopChart {
   };
 }
 
-/** Throws RangeError('Chart <size> has no spot <position> <situation>') if absent. */
+/**
+ * The authored cell for `hc` in the (position, situation) spot.
+ * Throws RangeError('Chart <size> has no spot <position> <situation>') if the spot is absent.
+ * Throws RangeError('Unknown hand class <hc>') if `hc` is not one of the 169 hand classes.
+ */
 export function chartCell(
   chart: PreflopChart,
   position: Position,
