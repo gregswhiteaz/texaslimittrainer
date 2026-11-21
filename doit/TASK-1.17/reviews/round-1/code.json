@@ -1,0 +1,32 @@
+{"reviewer": "code", "round": 1,
+ "rubric": [
+  {"item": "SPEC-01 correctness", "result": "pass"}, {"item": "SPEC-01 test strength", "result": "pass"},
+  {"item": "SPEC-02 correctness", "result": "pass"}, {"item": "SPEC-02 test strength", "result": "pass"},
+  {"item": "SPEC-03 correctness", "result": "pass"}, {"item": "SPEC-03 test strength", "result": "pass"},
+  {"item": "SPEC-04 correctness", "result": "pass"}, {"item": "SPEC-04 test strength", "result": "pass"},
+  {"item": "SPEC-05 correctness", "result": "pass"}, {"item": "SPEC-05 test strength", "result": "pass"},
+  {"item": "SPEC-06 correctness", "result": "pass"}, {"item": "SPEC-06 test strength", "result": "pass"},
+  {"item": "SPEC-07 correctness", "result": "pass"}, {"item": "SPEC-07 test strength", "result": "pass"},
+  {"item": "SPEC-08 correctness", "result": "pass"}, {"item": "SPEC-08 test strength", "result": "pass"},
+  {"item": "SPEC-09 correctness", "result": "pass"}, {"item": "SPEC-09 test strength", "result": "pass"},
+  {"item": "SPEC-10 correctness", "result": "pass"}, {"item": "SPEC-10 test strength", "result": "pass"},
+  {"item": "scope", "result": "pass"}, {"item": "concision", "result": "pass"}, {"item": "clarity", "result": "pass"}
+ ],
+ "findings": [
+  {"fingerprint": "tests/playtest/throughput.acceptance.test.ts:timeout-exceeds-ci-job-limit", "severity": "MINOR",
+   "file": "tests/playtest/throughput.acceptance.test.ts", "line": 30,
+   "issue": "The child timeout (60 min) and vitest timeout (61 min) are both above ci.yml's job timeout-minutes: 20. In CI, a hung or badly regressed playtest kills the whole job at 20 min instead of failing this test with a clear message. The test is not flaky: 100k hands took 5.7 s locally, and a 2-vCPU runner under parallel vitest load should take tens of seconds, far below any bound.",
+   "evidence": ".github/workflows/ci.yml:18 timeout-minutes: 20; test uses timeout: SIXTY_MINUTES_MS and SIXTY_MINUTES_MS + 60_000",
+   "fix": "Optional. Leave as specified (SPEC-06 fixes the 3,600,000 ms values), or note in the README/implementation notes that in CI the job timeout is the effective bound. Don't add CI-specific branches."},
+  {"fingerprint": "src/playtest/shards.ts:help-twice-error-not-in-spec", "severity": "NIT",
+   "file": "src/playtest/shards.ts", "line": 238,
+   "issue": "'Error: --help given more than once.' isn't in the spec's error list. The spec says only that --help must be alone. The behaviour is reasonable, and cli.ts may use the same wording style.",
+   "evidence": "parseMillionArgs returns it for ['--help','--help']; tested at tests/playtest/shards.test.ts:77",
+   "fix": "Keep it, or fold it into 'Error: --help cannot be combined with other options.'"},
+  {"fingerprint": "tools/playtest/million.ts:redundant-max-1", "severity": "NIT",
+   "file": "tools/playtest/million.ts", "line": 31,
+   "issue": "os.availableParallelism() always returns at least 1, so Math.max(1, ...) is defensive code for a case that can't happen. It mirrors the wording of A-3, though.",
+   "evidence": "Node docs: availableParallelism returns at least 1",
+   "fix": "Pass os.availableParallelism() directly."}
+ ],
+ "summary": "Every SPEC item is implemented as specified. Plan/seeds/hand split (A-1/A-2) are correct and tested at 9, 10, 900, 1e6 and 1e9. Every shard spawns process.execPath with the fixed argv tools/playtest/main.ts --hands --seed --size (no shell, no seams), and the acceptance test checks that the real tool's shard-8 section matches a direct npm run playtest byte for byte. readShard is strict: code null -> stopped, other exit codes are rejected, there must be exactly one exact Options line (so an extra --game sng is rejected), Hands played must equal the plan, V must be digits and agree with the exit code, and V>0 needs a well-formed counts line. A rejected or synchronously throwing runner becomes a failed shard. Per-invariant sums keep INVARIANTS order then custom ids, and the Object.hasOwn guard is justified and tested with 'constructor'. Output is buffered and written once in shard order, with no timing or progress, and the re-run byte-identity test passes. The runner caps concurrency and its test settles calls in reverse order. Children are only piped (not detached), share the process group, and are bounded by the job timeout. Ctrl-C reaches them. The workflow is workflow_dispatch only, contents: read, one job, 30 min, the same pinned SHAs as ci.yml, a single run step, and no continue-on-error, if: or || true. The AC#4 throughput test ran in 5.7 s locally. It is robust on slower runners because its only assertions are exit 0, the two report lines and a 60-min bound. Its only cost is ~10-30 s of CPU per npm test. Size 965 vs the 750 budget: about 580 lines are tests that cover every SPEC item. The README table reformat (~20 lines) is forced by the wider command cell under Prettier. Production code is ~340 lines with no unrequested options. Justified. No BLOCKER or MAJOR findings. All 8 new tests pass locally (5.76 s)."}

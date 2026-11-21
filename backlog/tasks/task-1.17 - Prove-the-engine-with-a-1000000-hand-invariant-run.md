@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-21T10:01:00Z'
+updated_date: '2026-11-21T10:06:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -20,6 +20,7 @@ references:
 documentation:
   - doc-1
   - doc-2
+  - doc-64
 parent_task_id: TASK-1
 priority: high
 type: feature
@@ -90,4 +91,12 @@ AC added from TASK-1.8 follow-up (doc-16).
 Autopilot: no asks. Cost-driven decisions to review: D-1 single job (not a matrix), D-2 manual dispatch only (no nightly), D-4 live run after merge. Measured: 100k 6-max 4.75 s; 1M as 9 shards 7 s wall locally.
 
 Timing (DoD#1, AC#4): `time npm run playtest -- --hands 100000 --size 6` on the reference machine (Apple M4 Pro, 14 cores, Node 22.18.0): real 4.81 s and 4.83 s over two runs, Hands played: 100000, Invariant violations: 0. Limit: 60 minutes. Full `npm run playtest:million` (1,000,000 hands, 9 shards in parallel): real 7.88 s, 47.3 s CPU, Result: PASS, exit 0.
+
+Build: playtest:million (9 shards, combined report), million.yml (dispatch-only), README; 4 new test files; local million run PASS 1,000,000 hands 0 violations in 7.9 s; gate PASS.
 <!-- SECTION:NOTES:END -->
+
+## Final Summary
+
+<!-- SECTION:FINAL_SUMMARY:BEGIN -->
+Added npm run playtest:million: 1,000,000 cash hands in 9 fixed-seed shards (sizes 2-10) as parallel child processes of npm run playtest, with a combined per-invariant report; exit 1 on any violation, crash or mismatched shard. Added dispatch-only million.yml (one job, 30 min timeout). Verified: npm test 473 passed, lint/typecheck clean, local million run 7.88 s, 0 violations of 1,000,000 hands; 100k 6-max hands 4.8 s. Review: 0 blocking. Assumptions to review: D-1 one job not matrix, D-2 dispatch only (~2-3 Actions min/run), A-9 100k test in every npm test (~5 s local, 10-30 s CI). Follow-up: live dispatch after merge (D-4).
+<!-- SECTION:FINAL_SUMMARY:END -->

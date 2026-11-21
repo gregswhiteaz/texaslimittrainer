@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { main } from '../../src/playtest/cli';
 import {
   MILLION_USAGE,
+  combineShards,
   millionMain,
   parseMillionArgs,
   planShards,
@@ -10,6 +11,7 @@ import {
   shardArgs,
   shardNodeArgs,
   type Shard,
+  type ShardResult,
   type ShardRun,
   type ShardRunner,
 } from '../../src/playtest/shards';
@@ -251,5 +253,21 @@ describe('Shards', () => {
       violationCounts: { chips: 1, constructor: 2 },
     });
     expect(problem({ code: 0, stdout: '', stderr: '' })).toBe(mismatch);
+  });
+
+  it('sums the same invariant across shards', () => {
+    const [first, second] = planShards(9) as [Shard, Shard];
+    const failing = (shard: Shard, chips: number): ShardResult => ({
+      shard,
+      run: { code: 1, stdout: '', stderr: '' },
+      passed: false,
+      handsPlayed: 1,
+      violations: chips,
+      violationCounts: { chips },
+      problem: null,
+    });
+    const combined = combineShards([failing(first, 2), failing(second, 3)]);
+    expect(combined.violationCounts.chips).toBe(5);
+    expect(combined.violations).toBe(5);
   });
 });

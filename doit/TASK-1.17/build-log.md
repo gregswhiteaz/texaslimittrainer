@@ -31,3 +31,9 @@ Result: PASS
 ```
 
 - No shard child processes remain after the run (`pgrep -fl tools/playtest` printed nothing).
+
+## FIX (judge round 1)
+
+- J-1-02: fixed — added `sums the same invariant across shards` in `tests/playtest/shards.test.ts` (chips 2 + chips 3 -> combined 5). Mutation check: replacing the sum in `combineShards` with `Math.max(before ?? 0, count)` failed it (`expected 3 to be 5`); source restored, no diff.
+- J-1-01: no code change per brief — `e2e/cards.spec.ts` untouched; orchestrator handles CI.
+- `npx vitest run tests/playtest/shards.test.ts`: 3 passed. `npm run format` run.
