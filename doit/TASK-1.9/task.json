@@ -1,12 +1,14 @@
 {
   "id": "TASK-1.9",
   "title": "Let a short-stacked player call all-in",
-  "status": "To Do",
+  "status": "In Progress",
   "archived": false,
   "type": "feature",
   "priority": "high",
   "project": null,
-  "assignees": [],
+  "assignees": [
+    "@claude"
+  ],
   "reporter": null,
   "labels": [
     "dream-limit-holdem-trainer"
@@ -21,7 +23,7 @@
   "modifiedFiles": [],
   "ordinal": 21000,
   "createdAt": "2026-11-17T22:46:00Z",
-  "updatedAt": "2026-11-19T01:10:00Z",
+  "updatedAt": "2026-11-21T04:33:00Z",
   "dueDate": null,
   "isReady": true,
   "path": "backlog/tasks/task-1.9 - Let-a-short-stacked-player-call-all-in.md",
@@ -35,7 +37,7 @@
       {
         "id": "TASK-1.9",
         "title": "Let a short-stacked player call all-in",
-        "status": "To Do",
+        "status": "In Progress",
         "state": "resolved",
         "completed": false,
         "dependencyDepth": 0,
@@ -2167,8 +2169,8 @@
       "checked": false
     }
   ],
-  "implementationPlan": null,
-  "implementationNotes": "AC added from TASK-1.8 follow-up (doc-16).\n\nAC added from TASK-3.4 follow-up (doc-25).",
+  "implementationPlan": "1. createHand stack floor -> bigBlind+1 (Q-1).\n2. Call all-in for the remaining stack when owe > stack; mark allIn on any action that empties the stack; all-in players never asked to act.\n3. When at most one player can still act, deal the rest of the board with no betting.\n4. Return uncalled bets (blinds included, Q-2) via HandResult.returned (Q-3); awards exclude them.\n5. Invariant checker: chips rules account for returned; new check that returned equals the uncalled amount.\n6. Update 8 earlier locked tests' amounts/messages (Q-4); playtest report byte-identical.\n\nFull spec: doit/TASK-1.9/spec.md",
+  "implementationNotes": "AC added from TASK-1.8 follow-up (doc-16).\n\nAC added from TASK-3.4 follow-up (doc-25).\n\nAutopilot Q-1..Q-4 auto-accepted (qa.md). Cross-story locked-test unlocks recorded under TASK-1.4, 1.44, 9.1, 3.4, 1.21, 1.31.\n\nBuild: all-in calls, allIn flag, skip all-in seats, board runout, uncalled-bet return via HandResult.returned, stack floor bigBlind+1, checker C3/C4/C5; 3 new acceptance files; E1\u2013E8 locked edits as listed; playtest identical to baseline; gate PASS",
   "comments": [],
   "finalSummary": null
 }

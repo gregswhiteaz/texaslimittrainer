@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { shuffledDeck } from '../../src/engine/deck';
-import { applyAction, createHand } from '../../src/engine/hand';
+import { applyAction, createHand, type Action } from '../../src/engine/hand';
 import { tagPolicy } from '../../src/bots/tag';
 import { playerView, type SeatPolicy } from '../../src/engine/player-view';
 import { randomMovePolicy, seatGenerator } from '../../src/playtest/policy';
@@ -145,6 +145,38 @@ describe('playtest runner units', () => {
     expect(summary.violations).toBe(0);
     expect(summary.showdowns).toBe(1);
     expect(() => summarize([])).toThrow(RangeError);
+  });
+
+  it('Largest pot counts the uncalled bet returned to its bettor', () => {
+    const base = playHand(handReplayCode(1, 1), 3, 1);
+    const played = (...steps: Action[]): PlayedHand => {
+      let state = createHand({
+        stakes: PLAYTEST_STAKES,
+        seats: [1, 2, 3].map((seat) => ({ seat, stack: CASH_BUY_IN })),
+        button: 1,
+        deck: shuffledDeck(base.record.replayCode),
+      });
+      for (const action of steps) {
+        const next = applyAction(state, action);
+        if (!next.ok) throw new Error(next.error.message);
+        state = next.state;
+      }
+      expect(state.result?.returned).toBeDefined();
+      return { ...base, final: state };
+    };
+    const walk = played({ seat: 1, type: 'fold' }, { seat: 2, type: 'fold' });
+    expect(summarize([walk]).largestPot).toBe(6);
+    const flopFoldToRaise = played(
+      { seat: 1, type: 'raise', amount: 8 },
+      { seat: 2, type: 'call', amount: 6 },
+      { seat: 3, type: 'call', amount: 4 },
+      { seat: 2, type: 'bet', amount: 4 },
+      { seat: 3, type: 'raise', amount: 8 },
+      { seat: 1, type: 'fold' },
+      { seat: 2, type: 'fold' },
+    );
+    expect(summarize([flopFoldToRaise]).largestPot).toBe(36);
+    expect(summarize([walk, flopFoldToRaise]).largestPot).toBe(36);
   });
 
   it("creates each seat's policy once per hand", () => {

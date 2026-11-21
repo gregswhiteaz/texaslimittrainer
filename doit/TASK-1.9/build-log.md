@@ -9,3 +9,9 @@
 - `npm run format` ok; `npm run lint` ok; `npm run typecheck` ok.
 - `npm test` (with coverage) → 112 files, 393 passed, 6 skipped; all files 96.72% lines.
 - `git diff 9ccffbc --stat` on `invariant-messages.acceptance`, `summary.acceptance`, `src/table/session.ts`, `src/advice`, `src/ui`: empty. Locked E-files: 12 insertions, 11 deletions (E1–E8 only).
+
+## FIX round 1 (judge LOW findings)
+- J-1-02: fixed — `tests/engine/hand.test.ts` extends the `exactCall` case: the exact $8 whole-stack call played to showdown (returned undefined, award = pot = $24) and the runout variant (seat 1 folds → board runs out, returned undefined, award = $20).
+- J-1-01: fixed — new `tests/playtest/runner.test.ts` test `Largest pot counts the uncalled bet returned to its bettor`: walk → 6, flop fold-to-raise → 36.
+- NIT (rename `backed`): not done — fix was test-only per orchestrator; src unchanged.
+- Commands: `npm run format`, `npm run typecheck` (clean), `npm run lint` (clean), `npm test` → 112 files, 394 passed | 6 skipped.

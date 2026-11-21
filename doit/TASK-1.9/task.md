@@ -3,12 +3,13 @@ File: /Users/gregwhite/Documents/claudeworkspaces/limitholdem/backlog/tasks/task
 Task TASK-1.9 - Let a short-stacked player call all-in
 ==================================================
 
-Status: ○ To Do
+Status: ◒ In Progress
 Priority: High
 Type: feature
 Ordinal: 21000
+Assignee: @claude
 Created: 2026-11-17 22:46 (UTC)
-Updated: 2026-11-19 01:10 (UTC)
+Updated: 2026-11-21 04:33 (UTC)
 Labels: dream-limit-holdem-trainer
 Milestone: m-1
 Parent: TASK-1 - Prove the game headlessly
@@ -320,9 +321,24 @@ Definition of Done:
 - [ ] #11 Story documentation is written and published to Backlog.md
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 
+Implementation Plan:
+--------------------------------------------------
+1. createHand stack floor -> bigBlind+1 (Q-1).
+2. Call all-in for the remaining stack when owe > stack; mark allIn on any action that empties the stack; all-in players never asked to act.
+3. When at most one player can still act, deal the rest of the board with no betting.
+4. Return uncalled bets (blinds included, Q-2) via HandResult.returned (Q-3); awards exclude them.
+5. Invariant checker: chips rules account for returned; new check that returned equals the uncalled amount.
+6. Update 8 earlier locked tests' amounts/messages (Q-4); playtest report byte-identical.
+
+Full spec: doit/TASK-1.9/spec.md
+
 Implementation Notes:
 --------------------------------------------------
 AC added from TASK-1.8 follow-up (doc-16).
 
 AC added from TASK-3.4 follow-up (doc-25).
+
+Autopilot Q-1..Q-4 auto-accepted (qa.md). Cross-story locked-test unlocks recorded under TASK-1.4, 1.44, 9.1, 3.4, 1.21, 1.31.
+
+Build: all-in calls, allIn flag, skip all-in seats, board runout, uncalled-bet return via HandResult.returned, stack floor bigBlind+1, checker C3/C4/C5; 3 new acceptance files; E1–E8 locked edits as listed; playtest identical to baseline; gate PASS
 

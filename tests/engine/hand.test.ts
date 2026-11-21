@@ -235,6 +235,33 @@ describe('hand', () => {
     const exactCall = apply(facing(8), [3, 'call', 4]);
     expect(allInOf(exactCall, 3)).toBe(true);
     expect(exactCall.toAct).toBe(1);
+    const potOf = (state: HandState) =>
+      state.players.reduce((sum, p) => sum + p.totalContribution, 0);
+    const awarded = (state: HandState) =>
+      (state.result?.awards ?? []).reduce((sum, award) => sum + award.amount, 0);
+    // Calling the whole stack is fully matched: nothing comes back, the award is the whole pot.
+    let finished = apply(exactCall, [1, 'call', 4]);
+    while (finished.result === null) {
+      const legal = legalActions(finished);
+      const step = legal.find((a) => a.type === 'check') ?? legal.find((a) => a.type === 'call');
+      if (step === undefined) throw new Error('no check or call');
+      finished = apply(finished, [
+        step.seat,
+        step.type,
+        'amount' in step ? step.amount : undefined,
+      ]);
+    }
+    expect(finished.result.endedBy).toBe('showdown');
+    expect(finished.result.returned).toBeUndefined();
+    expect(potOf(finished)).toBe(24);
+    expect(awarded(finished)).toBe(24);
+    // Runout: after the fold only seat 2 can still bet, so the board runs out at once.
+    const runout = apply(exactCall, [1, 'fold']);
+    expect(runout.result?.endedBy).toBe('showdown');
+    expect(runout.board).toHaveLength(5);
+    expect(runout.result?.returned).toBeUndefined();
+    expect(potOf(runout)).toBe(20);
+    expect(awarded(runout)).toBe(20);
     const leavesOne = apply(facing(9), [3, 'call', 4]);
     expect(allInOf(leavesOne, 3)).toBe(false);
     // $6 behind covers the $4 call but not the $8 raise.

@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-21T04:25:00Z'
+updated_date: '2026-11-21T04:33:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -86,4 +86,6 @@ AC added from TASK-1.8 follow-up (doc-16).
 AC added from TASK-3.4 follow-up (doc-25).
 
 Autopilot Q-1..Q-4 auto-accepted (qa.md). Cross-story locked-test unlocks recorded under TASK-1.4, 1.44, 9.1, 3.4, 1.21, 1.31.
+
+Build: all-in calls, allIn flag, skip all-in seats, board runout, uncalled-bet return via HandResult.returned, stack floor bigBlind+1, checker C3/C4/C5; 3 new acceptance files; E1–E8 locked edits as listed; playtest identical to baseline; gate PASS
 <!-- SECTION:NOTES:END -->
