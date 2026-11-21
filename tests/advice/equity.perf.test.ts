@@ -3,10 +3,11 @@
 // run with CI unset on the reference machine (Apple-silicon Mac, Node 22.18.0). Local `npm test`
 // enforces only the targets times the slack scale below. CI (CI=true) prints the numbers but
 // enforces no speed limit.
+// Times are process CPU time (cpuNowMs in tests/support/speed.ts), so other busy processes do not inflate them.
 import { describe, expect, it } from 'vitest';
 import { computeEquity, type EquityInput, type HoleCards } from '../../src/advice/equity';
 import { parseCards, type Card } from '../../src/engine/cards';
-import { SPEED_LIMITS_NOT_ENFORCED, speedLimitsEnforced } from '../support/speed';
+import { cpuNowMs, SPEED_LIMITS_NOT_ENFORCED, speedLimitsEnforced } from '../support/speed';
 
 const SCALE = Number(process.env.EQUITY_PERF_SCALE ?? 20);
 const RUNS = 20;
@@ -59,9 +60,9 @@ describe('equity performance', () => {
       const used = computeEquity(input).method;
       const times: number[] = [];
       for (let i = 0; i < RUNS; i++) {
-        const start = performance.now();
+        const start = cpuNowMs();
         computeEquity(input);
-        times.push(performance.now() - start);
+        times.push(cpuNowMs() - start);
       }
       times.sort((a, b) => a - b);
       const p95 = times[RUNS - 2] ?? Infinity;

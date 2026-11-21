@@ -5,6 +5,7 @@ import { positionOf, recommendPreflop, situationOf } from '../../src/advice/pref
 import { parseCards, type Card } from '../../src/engine/cards';
 import { applyAction, createHand, type Action, type SeatNumber } from '../../src/engine/hand';
 import { playerView, type PlayerView } from '../../src/engine/player-view';
+import { cpuNowMs } from '../support/speed';
 
 const STAKES_4_8 = { smallBlind: 2, bigBlind: 4, smallBet: 4, bigBet: 8 };
 const ORDERED_DECK = Array.from({ length: 52 }, (_, i) => i as Card);
@@ -160,8 +161,8 @@ describe('preflop advice', () => {
       ...view,
       holeCards: parseCards('Ah Kd') as [Card, Card],
     }));
-    const start = performance.now();
+    const start = cpuNowMs();
     for (let i = 0; i < 10_000; i++) recommendPreflop(views[i % 3] as PlayerView);
-    expect(performance.now() - start).toBeLessThan(1000);
+    expect(cpuNowMs() - start).toBeLessThan(1000);
   });
 });

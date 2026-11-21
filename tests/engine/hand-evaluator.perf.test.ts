@@ -2,9 +2,10 @@
 //   EVALUATOR_MIN_EVALS_PER_SEC=10000000 EVALUATOR_MAX_BUILD_MS=50 npx vitest run tests/engine/hand-evaluator.perf.test.ts
 // run with CI unset on the reference machine (Apple-silicon Mac, Node 22.18.0). Local `npm test`
 // enforces only the slack floor below. CI (CI=true) prints the numbers but enforces no speed limit.
+// Times are process CPU time (cpuNowMs in tests/support/speed.ts), so other busy processes do not inflate them.
 import { describe, expect, it } from 'vitest';
 import { buildEvaluatorTables, evaluate } from '../../src/engine/hand-evaluator';
-import { SPEED_LIMITS_NOT_ENFORCED, speedLimitsEnforced } from '../support/speed';
+import { cpuNowMs, SPEED_LIMITS_NOT_ENFORCED, speedLimitsEnforced } from '../support/speed';
 
 const HANDS = 1_000_000;
 const MIN_EVALS_PER_SEC = Number(process.env.EVALUATOR_MIN_EVALS_PER_SEC ?? 1_000_000);
@@ -48,14 +49,14 @@ describe('hand evaluator performance', () => {
     const hands = randomSevenCardHands(HANDS);
     const warmUp = evaluateAll(hands);
 
-    const start = performance.now();
+    const start = cpuNowMs();
     const checksum = evaluateAll(hands);
-    const seconds = (performance.now() - start) / 1000;
+    const seconds = (cpuNowMs() - start) / 1000;
     const rate = HANDS / seconds;
 
-    const buildStart = performance.now();
+    const buildStart = cpuNowMs();
     buildEvaluatorTables();
-    const buildMs = performance.now() - buildStart;
+    const buildMs = cpuNowMs() - buildStart;
 
     console.log(
       `evaluate: ${Math.round(rate).toLocaleString('en-US')} seven-card evals/s; ` +

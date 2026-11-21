@@ -2,10 +2,11 @@
 //   INVARIANTS_MAX_US_PER_ACTION=2 npx vitest run tests/engine/invariants.perf.test.ts
 // run with CI unset on the reference machine (Apple-silicon Mac, Node 22.18.0). Local `npm test`
 // enforces only the slack floor below. CI (CI=true) prints the numbers but enforces no speed limit.
+// Times are process CPU time (cpuNowMs in tests/support/speed.ts), so other busy processes do not inflate them.
 import { describe, expect, it } from 'vitest';
 import { checkStep, type Violation } from '../../src/engine/invariants';
 import { runPlaytest, type ActionHook } from '../../src/playtest/runner';
-import { SPEED_LIMITS_NOT_ENFORCED, speedLimitsEnforced } from '../support/speed';
+import { cpuNowMs, SPEED_LIMITS_NOT_ENFORCED, speedLimitsEnforced } from '../support/speed';
 
 const HANDS = 10_000;
 const MAX_US_PER_ACTION = Number(process.env.INVARIANTS_MAX_US_PER_ACTION ?? 10);
@@ -13,9 +14,9 @@ const ENFORCED = speedLimitsEnforced();
 const EMPTY: readonly Violation[] = Object.freeze([]);
 
 function timed(onAction: ActionHook) {
-  const start = performance.now();
+  const start = cpuNowMs();
   const summary = runPlaytest({ hands: HANDS, seed: 42, size: 6 }, undefined, { onAction });
-  return { ms: performance.now() - start, summary };
+  return { ms: cpuNowMs() - start, summary };
 }
 
 describe('invariant checker performance', () => {

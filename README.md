@@ -160,6 +160,9 @@ equity targets times 20, 2 s per call for the bounded-work equity test). CI (`CI
 the measurements but enforces no speed limit; the bounded-work equity test uses a 10 s ceiling
 there.
 
+Local limits, including the full-speed commands, are measured in process CPU time, so a busy
+machine does not fail them but slower code still does.
+
 ## Conventions
 
 - Unit and property tests live in `tests/**` or next to the code as `src/**/*.test.{ts,tsx}`.

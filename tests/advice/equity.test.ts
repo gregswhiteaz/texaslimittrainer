@@ -17,7 +17,7 @@ import { parseCards, type Card } from '../../src/engine/cards';
 import { evaluate } from '../../src/engine/hand-evaluator';
 import { enumerateExact } from '../../tools/equity/generate-reference.js';
 import { REPO_ROOT } from '../support/sandbox';
-import { speedLimitsEnforced } from '../support/speed';
+import { cpuNowMs, speedLimitsEnforced } from '../support/speed';
 
 function hole(text: string): HoleCards {
   const [a = -1, b = -1] = parseCards(text);
@@ -246,15 +246,16 @@ describe('computeEquity', () => {
     const low = everyCombo(known).filter(([a, b]) => a < 32 && b < 32);
     expect(broadway).toHaveLength(105);
     // The error messages prove the rejection cap or feasibility budget ended each call; the ceiling
-    // catches a much larger budget. CI uses 10 s because shared runners are slow.
+    // catches a much larger budget. Times are process CPU time, so a busy machine does not inflate
+    // them. CI uses 10 s because shared runners are slow.
     const BOUNDED_WORK_MS = speedLimitsEnforced() ? 2000 : 10_000;
     const timed = (opponents: Range[], message: string): void => {
-      const start = performance.now();
+      const start = cpuNowMs();
       expectRangeError(
         () => computeEquity({ hero: hole('Ah Kh'), board: parseCards('Qh Jh Th'), opponents }),
         message,
       );
-      expect(performance.now() - start).toBeLessThan(BOUNDED_WORK_MS);
+      expect(cpuNowMs() - start).toBeLessThan(BOUNDED_WORK_MS);
     };
     // 8 opponents need 16 cards from the 15 left in T-A.
     timed(new Array<Range>(8).fill(broadway), "Opponents' hands cannot all be dealt together");
