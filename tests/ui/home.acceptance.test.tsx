@@ -41,10 +41,14 @@ describe('Home and Game Config acceptance', () => {
     );
 
     expect(html.match(/<h1[^>]*>.*?<\/h1>/g)).toEqual(['<h1>New game</h1>']);
-    const fields = [...html.matchAll(/<dt>(.*?)<\/dt><dd>(.*?)<\/dd>/g)].map(([, dt, dd]) => [
-      dt,
-      dd,
-    ]);
+    const fields = [...html.matchAll(/<dt>(.*?)<\/dt><dd>(.*?)<\/dd>/g)].map(
+      ([, dt = '', dd = '']) => [
+        dt.replace(/<[^>]*>/g, ''),
+        dd.includes('<select')
+          ? (/<option[^>]*selected=""[^>]*>(.*?)<\/option>/.exec(dd)?.[1] ?? '')
+          : dd,
+      ],
+    );
     expect(fields).toEqual([
       ['Game type', 'Cash game'],
       ['Players at the table', '6 (6-max)'],
@@ -67,7 +71,7 @@ describe('Home and Game Config acceptance', () => {
     ]);
     const buttons = [...html.matchAll(/<button[^>]*>(.*?)<\/button>/g)].map(([, label]) => label);
     expect(buttons).toEqual(['← Home', 'Cancel', 'Start game']);
-    expect(html).not.toMatch(/<(input|select|textarea)[\s>]/);
+    expect(html.match(/<(input|select|textarea)[\s>]/g)).toEqual(['<select ']);
     expect(html).not.toContain('aria-label="Table"');
   });
 });

@@ -1,9 +1,12 @@
+import { useState } from 'react';
 import {
   buyIn,
+  CASH_STAKES,
   type BotStyle,
   type GameType,
   type SessionConfig,
   type Speed,
+  type Stake,
 } from '../../table/session';
 import { useHeadingFocus } from '../useHeadingFocus';
 
@@ -32,21 +35,39 @@ function playersLabel(players: number): string {
   return name === undefined ? String(players) : `${players} (${name})`;
 }
 
-/** Read-only summary of `config` (D-6); Start game hands over the same object. */
+const stakeKey = (stake: Stake): string => `${stake.smallBet}/${stake.bigBet}`;
+
+/** Summary of `config` (TASK-2.1 D-6) plus the stake choice (TASK-2.3 D-1); Start game hands over the chosen stake. */
 export function GameConfigScreen({
   config,
   onStart,
   onCancel,
 }: GameConfigScreenProps): React.JSX.Element {
   const heading = useHeadingFocus(true);
-  const { stake } = config;
+  const [stake, setStake] = useState<Stake>(config.stake);
   const stack = buyIn(stake);
-  const fields: readonly (readonly [string, string])[] = [
-    ['Game type', GAME_TYPE_LABELS[config.gameType]],
-    ['Players at the table', playersLabel(config.players)],
-    ['Stakes (small bet / big bet)', `$${stake.smallBet} / $${stake.bigBet}`],
-    ['Buy-in', `$${stack} (${stack / stake.bigBet} big bets)`],
-    ['Speed', SPEED_LABELS[config.speed]],
+  const stakeSelect = (
+    <select
+      id="config-stake"
+      value={stakeKey(stake)}
+      onChange={(event) => {
+        const chosen = CASH_STAKES.find((s) => stakeKey(s) === event.target.value);
+        if (chosen !== undefined) setStake(chosen);
+      }}
+    >
+      {CASH_STAKES.map((s) => (
+        <option key={stakeKey(s)} value={stakeKey(s)}>
+          {`$${s.smallBet} / $${s.bigBet}`}
+        </option>
+      ))}
+    </select>
+  );
+  const fields: readonly (readonly [string, React.ReactNode, React.ReactNode])[] = [
+    ['game', 'Game type', GAME_TYPE_LABELS[config.gameType]],
+    ['players', 'Players at the table', playersLabel(config.players)],
+    ['stake', <label htmlFor="config-stake">Stakes (small bet / big bet)</label>, stakeSelect],
+    ['buy-in', 'Buy-in', `$${stack} (${stack / stake.bigBet} big bets)`],
+    ['speed', 'Speed', SPEED_LABELS[config.speed]],
   ];
   const bots = config.seats.filter((s) => s.kind === 'bot');
 
@@ -64,8 +85,8 @@ export function GameConfigScreen({
             Session
           </h2>
           <dl className="config-fields">
-            {fields.map(([label, value]) => (
-              <div key={label}>
+            {fields.map(([key, label, value]) => (
+              <div key={key}>
                 <dt>{label}</dt>
                 <dd>{value}</dd>
               </div>
@@ -93,7 +114,11 @@ export function GameConfigScreen({
         <button type="button" className="button-outline" onClick={onCancel}>
           Cancel
         </button>
-        <button type="button" className="button-primary" onClick={() => onStart(config)}>
+        <button
+          type="button"
+          className="button-primary"
+          onClick={() => onStart({ ...config, stake })}
+        >
           Start game
         </button>
       </div>

@@ -42,6 +42,11 @@ export function buyIn(stake: Stake): number {
   return 20 * stake.bigBet;
 }
 
+/** REQ-006.1: the cash stakes offered on Game Config, ascending; first-use default $4/$8. */
+export const CASH_STAKES: readonly Stake[] = Object.freeze(
+  [2, 3, 4, 6, 10, 20].map((smallBet) => Object.freeze({ smallBet, bigBet: 2 * smallBet })),
+);
+
 /** REQ-009.2 style names; stored as-is in SessionConfig (D-2/Q-1). All play tagPolicy until E06. */
 export type BotStyle = 'TAG' | 'Calling station' | 'Maniac' | 'Rock';
 export interface SessionSeat {
