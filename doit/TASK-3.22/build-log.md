@@ -1,0 +1,13 @@
+## BUILD (2026-11-20)
+- Wrote the two test files named in spec §5; Run command: 2 files, 3 tests passed.
+- Mutants applied one at a time to `src/table/hand-result.ts` by exact text replacement, run, then restored from a copy:
+  - M1a: `expected 'Nine high' to be 'King high'` (SPEC-01 fails).
+  - M1b: `expected 'Two high' to be 'King high'` (SPEC-01 fails).
+  - M2: `expected a thrown error to be RangeError: Seat 2 is not at the table` — received `TypeError` (SPEC-02 fails).
+  - M3a: `expected [ '7c', '2d' ] to deeply equal [ 'Ac', 'Ad' ]` (SPEC-03 fails).
+  - M3b: `expected [ '7c', '2d' ] to deeply equal [ 'Ac', 'Ad' ]`.
+  - M3c: `expected [ 'Kh', 'Kd' ] to deeply equal [ 'Ac', 'Ad' ]`.
+  - M3d: `expected [ 'Kh', 'Kd' ] to deeply equal [ 'Ac', 'Ad' ]`.
+  - SPEC-03 checks the card codes before the winner-line text so the M3 failures report the wrong cards (with the text first they failed on "Queen high"/"Pair of kings").
+- `git diff --stat src`: empty after reverting.
+- `npm run format`, `npm run lint`, `npm run typecheck`: clean. `npm test`: 106 files, 370 passed, 6 skipped.
