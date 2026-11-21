@@ -127,6 +127,14 @@ describe('bot style files', () => {
     ).toEqual([`${SPOT} probabilities sum to 0.8999999999999999, not 1`]);
     expect(
       problemsOf(
+        file({ mixedSpots: [entry('preflop-raise', { recommended: 0, alternative: 0 })] }),
+      ),
+    ).toEqual([
+      `${SPOT} probabilities sum to 0, not 1`,
+      'x.json: style TAG marks spot type preflop-raise as mixed with fewer than two actions of non-zero probability',
+    ]);
+    expect(
+      problemsOf(
         file({
           mixedSpots: [
             { spot: 'preflop-raise', actions: { recommended: 0.75, alternative: 0.25 } },

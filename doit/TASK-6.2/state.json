@@ -4,17 +4,17 @@
   "branch": "doit/TASK-6.2",
   "base_commit": "9f33b906985372101e676ac331d40842a7d6f029",
   "started": "2026-11-21T14:53:28",
-  "review_round": 0,
+  "review_round": 1,
   "judge_round": 0,
   "sendbacks": 0,
-  "gate_runs": 2,
+  "gate_runs": 3,
   "questions": 3,
   "assumptions": 0,
   "escalations": 0,
   "item_failures": {},
   "locked_tests": {
     "tests/bots/tag-mixing.acceptance.test.ts": "5f19abee24a5ce759167ced56158c6fd82c06666ed767357ba10165ccf917aaf",
-    "tests/bots/tag-seed-parity.acceptance.test.ts": "3bd57f3a0d83a72237a5afe58eb6bccae40d17e735e68e2524d86c2fda13187e"
+    "tests/bots/tag-seed-parity.acceptance.test.ts": "fbe8f58b9ea7dccbaa0263a213e15491f29df8cfb3b3ef397baf38532e7aa2bf"
   },
   "test_snapshot": {
     "tests/bots/style.test.ts": {
@@ -28,8 +28,8 @@
       "skips": 0
     },
     "tests/bots/tag-seed-parity.acceptance.test.ts": {
-      "sha": "3bd57f3a0d83a72237a5afe58eb6bccae40d17e735e68e2524d86c2fda13187e",
-      "asserts": 6,
+      "sha": "fbe8f58b9ea7dccbaa0263a213e15491f29df8cfb3b3ef397baf38532e7aa2bf",
+      "asserts": 7,
       "skips": 0
     },
     "e2e/action-bar-limits.spec.ts": {
@@ -943,7 +943,18 @@
       "skips": 0
     }
   },
-  "history": [],
+  "history": [
+    {
+      "t": "2026-11-21T15:22:30",
+      "event": "unlock",
+      "file": "tests/bots/tag-seed-parity.acceptance.test.ts",
+      "reason": "Code review R1 MINOR: record the seed the playtest policy actually used (strengthen)"
+    }
+  ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-6.2",
-  "spec_sha256": "32b44dbac960d85cc80bacb2038a71a6949f4127df299bf33852e87134d6be34"
+  "spec_sha256": "32b44dbac960d85cc80bacb2038a71a6949f4127df299bf33852e87134d6be34",
+  "review_findings": {
+    "1": 0
+  },
+  "relock_pending": []
 }

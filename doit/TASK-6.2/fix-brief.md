@@ -1,8 +1,10 @@
-# Fix brief — TASK-6.2 (resolving blocked.json; Q-4 in qa.md)
+# Fix brief — TASK-6.2 (code review round 1 MINOR + NIT, applied in-story)
 
-Option (a): in the locked `tests/playtest/games.acceptance.test.ts` (unlocked under TASK-1.16 for this only), pass an
-explicit `makePolicy` that reproduces the pre-6.2 default (pure `tagPolicy` at 6 seats, random-move otherwise) to the
-AC#6 sit-and-go run, so its scenario is exactly as before. Change nothing else in that file — every assertion stays
-byte-identical. Record it as D-5 item 5 in build-log.md and changes.md. Then delete blocked.json and finish the BUILD:
-SPEC tests, D-5 edits (exact seeded equality only), unlocked test updates, verify hand-worked Examples 1 and 2,
-`npm run e2e`, the 10k playtest twice, `npm run format`, gate. Never push. Leave no background processes.
+1. **MINOR** `tests/bots/tag-seed-parity.acceptance.test.ts:67` (unlocked for this, strengthen-only): record the seed
+   the playtest policy actually used — capture it inside `makePolicy` (wrap seededTagPolicy so each decision logs the
+   seed it derived) — and assert it equals the worker request's seed for every bot decision, in addition to the existing
+   action-list equality. Prove it fails if the policy used a different seed (e.g. k+1) — exact text replacement in a
+   temp copy, then restore.
+2. **NIT** `src/bots/style.ts:121`: for {0,0} report both problems (fewer than two non-zero actions AND sum ≠ 1) instead
+   of `else if`; add the {0,0} case to tests/bots/style.test.ts.
+Don't change other assertions. `npm run format` before the gate. Never push.

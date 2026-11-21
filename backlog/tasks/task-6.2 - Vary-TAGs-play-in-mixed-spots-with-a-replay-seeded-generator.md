@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-21T22:03:00Z'
+updated_date: '2026-11-21T22:20:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -89,4 +89,6 @@ AC added from TASK-6.18 review MINOR/NIT
 AC added from TASK-6.18 judge J-1-01
 
 Autopilot Q-1..Q-3 auto-accepted (Q-3 amended: exact-equality only); unlocks under TASK-3.6, 6.1, 6.18.
+
+Build: style file format + validator; TAG style JSON (5 mixed spots 0.75/0.25); decideTag mixing; seededTagPolicy default; shared isBotSeed; lint guard extended; 5 locked-test edits (exact seeded equality; Q-3, Q-4); new playtest baseline aacd5e94… (88920 actions, 0 violations, byte-identical reruns); e2e 130 passed; gate PASS. Recorded deviation: hand-worked examples corrected to the real seats/values (button seat 1).
 <!-- SECTION:NOTES:END -->

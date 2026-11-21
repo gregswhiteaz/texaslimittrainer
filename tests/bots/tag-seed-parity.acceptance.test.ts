@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { recommend } from '../../src/advice/recommend';
 import { botDecisionIndex, botDecisionSeed } from '../../src/engine/bot-random';
 import type { Action } from '../../src/engine/hand';
@@ -19,6 +19,19 @@ import {
 } from '../../src/table/session';
 
 const TEST_TIMEOUT_MS = 120_000;
+
+/** Seeds passed to botRandom while a recorder is set: the seed a policy actually used. */
+const seedLog = vi.hoisted(() => ({ seeds: undefined as number[] | undefined }));
+vi.mock('../../src/engine/bot-random', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('../../src/engine/bot-random')>();
+  return {
+    ...actual,
+    botRandom: (seed: number) => {
+      seedLog.seeds?.push(seed);
+      return actual.botRandom(seed);
+    },
+  };
+});
 
 /** The user's rule in both paths: check when free, else call. */
 function checkOrCall(options: readonly Action[]): Action {
@@ -62,8 +75,21 @@ describe('playtest and app seed parity', () => {
           .map(toAction);
 
         const playtestSeeds = new Map<string, number>();
+        const policySeeds = new Map<string, number[]>();
         const played = playHand(code, 6, button, 1, {
-          makePolicy: (c, seat) => (seat === USER_SEAT ? replayUser : seededTagPolicy(c)),
+          makePolicy: (c, seat) => {
+            if (seat === USER_SEAT) return replayUser;
+            const policy = seededTagPolicy(c);
+            return (view) => {
+              seedLog.seeds = [];
+              try {
+                return policy(view);
+              } finally {
+                policySeeds.set(`${view.seat}/${botDecisionIndex(view)}`, seedLog.seeds);
+                seedLog.seeds = undefined;
+              }
+            };
+          },
           onAction: (step) => {
             if (step.action.seat !== USER_SEAT) {
               const view = playerView(step.before, step.action.seat);
@@ -79,6 +105,9 @@ describe('playtest and app seed parity', () => {
         expect(played.record.actions, `hand ${k}`).toEqual(appActions);
         expect(appSeeds.size, `hand ${k}`).toBeGreaterThan(0);
         expect(playtestSeeds, `hand ${k}`).toEqual(appSeeds);
+        expect(policySeeds, `hand ${k}`).toEqual(
+          new Map([...appSeeds].map(([key, seed]) => [key, [seed]])),
+        );
 
         expect(playHand(code, 6, 6, k).record.actions).toEqual(
           playHand(code, 6, 6, k, { makePolicy: (c) => seededTagPolicy(c) }).record.actions,

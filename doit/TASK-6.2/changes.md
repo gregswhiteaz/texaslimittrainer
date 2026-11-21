@@ -1,7 +1,7 @@
 # TASK-6.2 changes
 
 ## Source
-- `src/bots/style.ts` — new: style types, `SPOT_TYPES`, `parseStyle` validator, `StyleValidationError`, `drawMixed` (D-1, A-2).
+- `src/bots/style.ts` — new: style types, `SPOT_TYPES`, `parseStyle` validator, `StyleValidationError`, `drawMixed` (D-1, A-2). Fix round 1: a mixed spot with a bad sum and a zero action reports both problems.
 - `src/bots/styles/tag.json` — new: TAG's style file (description, five mixed preflop spot types at 0.75/0.25, justifications) (D-2).
 - `src/bots/tag.ts` — `TAG_STYLE` loaded and validated at import; `decideTag` mixes when a generator is passed (D-3).
 - `src/playtest/policy.ts` — `seededTagPolicy(code)` (D-4).
@@ -12,8 +12,8 @@
 
 ## New tests
 - `tests/bots/tag-mixing.acceptance.test.ts` — SPEC-01..SPEC-05.
-- `tests/bots/tag-seed-parity.acceptance.test.ts` — SPEC-06.
-- `tests/bots/style.test.ts` — SPEC-07, SPEC-08.
+- `tests/bots/tag-seed-parity.acceptance.test.ts` — SPEC-06. Fix round 1: records the seed the playtest policy passes to `botRandom` (module mock wrapping the real function) and asserts it equals the worker request's seed for every bot decision.
+- `tests/bots/style.test.ts` — SPEC-07, SPEC-08; fix round 1 adds the {0,0} case.
 
 ## Extended / updated unlocked tests
 - `tests/toolchain/bot-determinism.test.ts` — SPEC-09, SPEC-10 probes.

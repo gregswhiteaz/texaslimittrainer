@@ -119,7 +119,8 @@ export function parseStyle(raw: unknown, fileName: string): BotStyleData {
       if (Math.abs(sum - 1) > SUM_TOLERANCE) {
         problems.push(`${where} probabilities sum to ${sum}, not 1`);
         valid = false;
-      } else if (recommended === 0 || alternative === 0) {
+      }
+      if (recommended === 0 || alternative === 0) {
         problems.push(
           `${fileName}: style ${name} marks spot type ${spot} as mixed with fewer than two actions of non-zero probability`,
         );

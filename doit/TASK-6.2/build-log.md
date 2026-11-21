@@ -17,3 +17,8 @@
 - `npm run format` done; `npm run lint` clean; `npm run typecheck` clean.
 - `npm test`: 155 files passed, 1 skipped; 538 tests passed, 7 skipped. Coverage all files 96.9% statements; `src/bots/style.ts` 100% lines, `src/bots/tag.ts` 100% lines.
 - `npm run e2e`: 130 passed, 12 skipped.
+
+## FIX round 1
+- Item 1 (MINOR) fixed: `tests/bots/tag-seed-parity.acceptance.test.ts` mocks `src/engine/bot-random` so `botRandom` records the seeds it is passed (then calls the real function). `makePolicy` wraps `seededTagPolicy(c)` and logs the seeds used per bot decision. A new assertion requires exactly `[workerSeed]` for every decision. Existing assertions are unchanged. Mutation check: a temp copy with `seededTagPolicy(handReplayCode(7, k + 1))` failed at hand 1 on the new assertion (`'3/0' => [2957422605]` vs `[1312541879]`). The action-list equality still passed for that hand. File restored.
+- Item 2 (NIT) fixed: `src/bots/style.ts` now uses `if` instead of `else if`, so {0,0} reports both the bad sum and the fewer-than-two-non-zero problem. `tests/bots/style.test.ts` has the {0,0} case.
+- `npm run format` ok; `npx vitest run`: 155 files passed, 1 skipped; 538 tests passed, 7 skipped. lint and typecheck clean.
