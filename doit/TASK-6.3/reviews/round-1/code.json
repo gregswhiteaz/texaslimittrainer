@@ -1,0 +1,30 @@
+{"reviewer": "code", "round": 1,
+ "rubric": [
+  {"item": "SPEC-01 correctness", "result": "pass"}, {"item": "SPEC-01 test strength", "result": "pass"},
+  {"item": "SPEC-02 correctness", "result": "pass"}, {"item": "SPEC-02 test strength", "result": "pass"},
+  {"item": "SPEC-03 correctness", "result": "pass"}, {"item": "SPEC-03 test strength", "result": "pass"},
+  {"item": "SPEC-04 correctness", "result": "pass"}, {"item": "SPEC-04 test strength", "result": "pass"},
+  {"item": "SPEC-05 correctness", "result": "pass"}, {"item": "SPEC-05 test strength", "result": "pass"},
+  {"item": "SPEC-06 correctness", "result": "pass"}, {"item": "SPEC-06 test strength", "result": "pass"},
+  {"item": "SPEC-07 correctness", "result": "pass"}, {"item": "SPEC-07 test strength", "result": "pass"},
+  {"item": "SPEC-08 correctness", "result": "pass"}, {"item": "SPEC-08 test strength", "result": "pass"},
+  {"item": "SPEC-09 correctness", "result": "pass"}, {"item": "SPEC-09 test strength", "result": "pass"},
+  {"item": "SPEC-10 correctness", "result": "pass"}, {"item": "SPEC-10 test strength", "result": "pass"},
+  {"item": "SPEC-11 correctness", "result": "pass"}, {"item": "SPEC-11 test strength", "result": "pass"},
+  {"item": "scope", "result": "pass"},
+  {"item": "concision", "result": "pass"},
+  {"item": "clarity", "result": "pass"}
+ ],
+ "findings": [
+  {"fingerprint": "tests/bots/calling-station.test.ts:duplicate-d5-view-collection", "severity": "MINOR",
+   "file": "tests/bots/calling-station.test.ts", "line": 26,
+   "issue": "seatOneViews() re-implements the D-5 seat-1 view collection that tests/bots/calling-station.acceptance.test.ts collect() already does (same runPlaytest seed 61, same policies), then re-derives the fold/raise/free buckets. It adds about 40 lines to a change that is already 840 vs the 650-line budget.",
+   "evidence": "Both files call runPlaytest({hands:200, seed:61, size:6}) with seededTagPolicy at seat 1 and randomMovePolicy elsewhere, then filter by recommend(view).action and owed. The acceptance file is locked, so the duplication can only be removed from the unit file.",
+   "fix": "Optional: move the collection into a shared tests/support helper and use it from the unit file (the locked acceptance file stays as it is), or accept the duplication because the files are independent."},
+  {"fingerprint": "src/bots/calling-station.ts:unreachable-missing-hero-branch", "severity": "NIT",
+   "file": "src/bots/calling-station.ts", "line": 32,
+   "issue": "`hero === undefined ? 0 : ...` handles a view with no hero seat, which can't happen in a valid PlayerView. It's the only uncovered branch in the file (coverage reports line 32).",
+   "evidence": "Gate coverage: calling-station.ts 95.23% branches, uncovered line 32. decideTag has the same guard (src/bots/tag.ts:33), so this follows the existing pattern.",
+   "fix": "Leave it for parity with decideTag, or drop the guard in both files in a later cleanup."}
+ ],
+ "summary": "All SPEC items are implemented as specified. The deviations format is optional (absent gives []), and parseStyle validates street/advice/instead pairs, duplicate pairs, probability (via the existing isProbability) and justification, collecting every problem and echoing at most 20 characters. tag.json and the locked TASK-6.2 tests are unchanged and pass. decideCallingStation draws exactly once, and only when a deviation applies and a generator is passed (u < p*2^32 via drawDeviation, which applies to 0 and 1 too). It plays check when nothing is owed (A-4) and never folds at 0 owed. Worker dispatch sends 'Calling station' to decideCallingStation and every other style to decideTag. I probed SPEC-10's views: seeds 12345 and 4294967295 at the preflop view give call vs raise, so that test would catch a wrong dispatch. The SPEC-06 locked test also pins Example A to call 2 vs raise 8. The AC#2/#3/#4 tests assert that every point is a real fold/raise-with-owed point, that the station's move is the advice or the legal call, and that call counts relate as specified, so they're non-vacuous. Re-ran tests/bots and advice-service: 38/38 pass. Playtest stdout SHA-256 = aacd5e94...8e01, which matches the baseline, and the default line-ups are untouched. The size overrun (840 vs 650) is mostly the 394-line locked acceptance test. No BLOCKER or MAJOR findings."}

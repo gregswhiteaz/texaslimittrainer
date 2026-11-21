@@ -4,12 +4,12 @@ title: Keep TAG and Rock bots inside their style bands
 status: To Do
 assignee: []
 created_date: '2026-11-17T23:03:00Z'
-updated_date: '2026-11-19T03:52:00Z'
+updated_date: '2026-11-21T23:16:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
 dependencies:
-  - TASK-6.11
+  - TASK-7.8
 references:
   - dreams/limit-holdem-trainer/requirements.md
 documentation:
@@ -68,4 +68,6 @@ Plan key: E06-S16 · Dream: limit-holdem-trainer
 AC added from TASK-7.2 follow-up (doc-14).
 
 AC added from TASK-7.19 follow-up (doc-28).
+
+Dependency on TASK-7.8 added from TASK-6.3: postflop advice never bets/raises until value betting (REQ-033.2) lands, so postflop aggression (REQ-027.6) is 0% for every bot until then.
 <!-- SECTION:NOTES:END -->

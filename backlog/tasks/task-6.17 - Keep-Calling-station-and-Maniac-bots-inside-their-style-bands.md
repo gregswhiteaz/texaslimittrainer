@@ -4,12 +4,12 @@ title: Keep Calling station and Maniac bots inside their style bands
 status: To Do
 assignee: []
 created_date: '2026-11-17T23:03:00Z'
-updated_date: '2026-11-17T23:22:00Z'
+updated_date: '2026-11-21T23:16:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
 dependencies:
-  - TASK-6.16
+  - TASK-7.8
 references:
   - dreams/limit-holdem-trainer/requirements.md
 documentation:
@@ -61,3 +61,9 @@ Plan key: E06-S17 · Dream: limit-holdem-trainer
 - [ ] #12 Story documentation is written and published to Backlog.md
 - [ ] #13 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+Dependency on TASK-7.8 added from TASK-6.3: postflop advice never bets/raises until value betting (REQ-033.2) lands, so postflop aggression (REQ-027.6) is 0% for every bot until then.
+<!-- SECTION:NOTES:END -->
