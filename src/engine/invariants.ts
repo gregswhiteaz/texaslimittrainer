@@ -243,6 +243,64 @@ function potEligibilityMessage(state: HandState): string | null {
       }
     }
   }
+  return potStructureMessage(state);
+}
+
+/**
+ * P6-P8 (D-5): one pot per contribution level of the non-folded seats, each listing exactly the seats that
+ * matched its level and holding (or paying) exactly its layer. A seat's level is its completed-street chips,
+ * capped at the second-highest (the uncalled part is returned). Skipped for one pot and one level (A-5).
+ */
+function potStructureMessage(state: HandState): string | null {
+  const { pots, players, result } = state;
+  const put = players.map((p) => p.totalContribution - p.streetContribution);
+  let top = 0;
+  let second = 0;
+  for (const c of put) {
+    if (c > top) {
+      second = top;
+      top = c;
+    } else if (c > second) {
+      second = c;
+    }
+  }
+  const level = put.map((c) => Math.min(c, second));
+  const levels = [...new Set(level.filter((_, i) => !(players[i] as PlayerState).folded))].sort(
+    (a, b) => a - b,
+  );
+  if (pots.length <= 1 && levels.length <= 1) return null;
+  if (pots.length !== levels.length) {
+    return `there are ${pots.length} pots but contributions make ${levels.length}`;
+  }
+  for (const [k, pot] of pots.entries()) {
+    const at = levels[k] as number;
+    const short = pot.eligible.find(
+      (seat) => (level[players.findIndex((p) => p.seat === seat)] ?? 0) < at,
+    );
+    if (short !== undefined) {
+      return `${potName(k)} lists seat ${short}, which has not matched its $${at} level`;
+    }
+    const missing = players.find(
+      (p, i) => !p.folded && (level[i] as number) >= at && !pot.eligible.includes(p.seat),
+    );
+    if (missing !== undefined) {
+      return `seat ${missing.seat} matched the $${at} level of ${potName(k)} but is not eligible for it`;
+    }
+  }
+  for (const [k, pot] of pots.entries()) {
+    const below = k === 0 ? 0 : (levels[k - 1] as number);
+    const cap = k === levels.length - 1 ? Infinity : (levels[k] as number);
+    let layer = 0;
+    for (const c of level) layer += Math.min(c, cap) - Math.min(c, below);
+    if (result === null) {
+      if (pot.amount !== layer)
+        return `${potName(k)} holds $${pot.amount} but its layer is $${layer}`;
+    } else {
+      let paid = 0;
+      for (const award of result.awards) if (award.pot === k) paid += award.amount;
+      if (paid !== layer) return `${potName(k)} paid $${paid} but its layer is $${layer}`;
+    }
+  }
   return null;
 }
 

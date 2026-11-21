@@ -70,7 +70,7 @@ export interface HandResult {
     readonly holeCards: readonly [Card, Card];
     readonly rank: HandRank;
   }[];
-  /** One entry per pot (exactly one until TASK-1.10). Amounts exclude `returned`. */
+  /** One entry per pot, ascending pot index (main pot first). Amounts exclude `returned`. */
   readonly awards: readonly PotAward[];
   /** The uncalled part of the top bet, given back to its bettor (REQ-018.4). Present only when amount > 0. */
   readonly returned?: { readonly seat: SeatNumber; readonly amount: number };
@@ -87,7 +87,7 @@ export interface HandState {
   readonly burned: readonly Card[];
   /** 'showdown' once the last betting round closes (river, or a D-7 runout); stays put on a fold-out. */
   readonly street: Street;
-  /** Chips from completed streets; exactly one pot until TASK-1.10. */
+  /** Chips from completed streets: the main pot then side pots, ascending contribution level (TASK-1.10). */
   readonly pots: readonly Pot[];
   /** Highest streetContribution. */
   readonly currentBet: number;
@@ -290,17 +290,42 @@ function reject(code: ApplyErrorCode, message: string): ApplyResult {
 }
 
 /**
- * Moves every street contribution into the main pot, except the uncalled part of the top bet (A-5):
- * the top street contribution minus the second-highest, given back to its bettor.
+ * One pot per distinct contribution level of the non-folded seats, ascending (D-1). Pot k holds every
+ * seat's chips between the level below and its own level, and lists the non-folded seats that reached
+ * it. The last pot is uncapped, so no chip can drop out.
  */
-function gather(state: HandState, players: readonly PlayerState[]) {
-  let collected = 0;
+function buildPots(
+  players: readonly PlayerState[],
+  returned?: { readonly seat: SeatNumber; readonly amount: number },
+): Pot[] {
+  const put = players.map(
+    (p) => p.totalContribution - (p.seat === returned?.seat ? returned.amount : 0),
+  );
+  const levels = [...new Set(put.filter((_, i) => !(players[i] as PlayerState).folded))].sort(
+    (a, b) => a - b,
+  );
+  return levels.map((level, k) => {
+    const below = k === 0 ? 0 : (levels[k - 1] as number);
+    const last = k === levels.length - 1;
+    let amount = 0;
+    for (const c of put) amount += (last ? c : Math.min(c, level)) - Math.min(c, below);
+    const eligible = players
+      .filter((p, i) => !p.folded && (put[i] as number) >= level)
+      .map((p) => p.seat);
+    return { amount, eligible };
+  });
+}
+
+/**
+ * Ends a street: gives back the uncalled part of the top bet (A-5), the top street contribution minus
+ * the second-highest, and rebuilds the pots from every seat's contribution.
+ */
+function gather(players: readonly PlayerState[]) {
   let top = 0;
   let second = 0;
   let topSeat: SeatNumber | null = null;
   for (const p of players) {
     const c = p.streetContribution;
-    collected += c;
     if (c > top) {
       second = top;
       top = c;
@@ -311,10 +336,8 @@ function gather(state: HandState, players: readonly PlayerState[]) {
   }
   const back = top - second;
   const returned = back > 0 && topSeat !== null ? { seat: topSeat, amount: back } : undefined;
-  const pot = state.pots[0] as Pot;
   return {
-    amount: pot.amount + collected - back,
-    eligible: pot.eligible,
+    pots: buildPots(players, returned),
     returned,
     players: players.map((p) =>
       p.streetContribution === 0 && !p.hasActed
@@ -345,15 +368,17 @@ export function splitPot(
   return ordered.map((seat, i) => ({ seat, amount: base + (i < odd ? 1 : 0) }));
 }
 
-function payOut(
-  players: readonly PlayerState[],
-  winners: readonly { seat: SeatNumber; amount: number }[],
-): PlayerState[] {
+function payOut(players: readonly PlayerState[], awards: readonly PotAward[]): PlayerState[] {
   return players.map((p) => {
-    const share = winners.find((w) => w.seat === p.seat);
-    return share === undefined ? p : { ...p, stack: p.stack + share.amount };
+    let won = 0;
+    for (const award of awards) {
+      for (const w of award.winners) if (w.seat === p.seat) won += w.amount;
+    }
+    return won === 0 ? p : { ...p, stack: p.stack + won };
   });
 }
+
+const emptied = (pots: readonly Pot[]): Pot[] => pots.map((pot) => ({ ...pot, amount: 0 }));
 
 /**
  * Ends the hand for the last unfolded seat. Resets `currentBet` and `betCount` to 0,
@@ -363,19 +388,23 @@ function payOut(
  * invariant). Pinned by tests/engine/fold-out.acceptance.test.ts.
  */
 function foldOut(state: HandState, players: readonly PlayerState[], winner: SeatNumber): HandState {
-  const gathered = gather(state, players);
-  const winners = [{ seat: winner, amount: gathered.amount }];
+  const gathered = gather(players);
+  const awards = gathered.pots.map((pot, k) => ({
+    pot: k,
+    amount: pot.amount,
+    winners: [{ seat: winner, amount: pot.amount }],
+  }));
   return {
     ...state,
-    players: payOut(gathered.players, winners),
-    pots: [{ amount: 0, eligible: gathered.eligible }],
+    players: payOut(gathered.players, awards),
+    pots: emptied(gathered.pots),
     currentBet: 0,
     betCount: 0,
     toAct: null,
     result: {
       endedBy: 'fold',
       showdown: [],
-      awards: [{ pot: 0, amount: gathered.amount, winners }],
+      awards,
       ...(gathered.returned && { returned: gathered.returned }),
     },
   };
@@ -401,7 +430,7 @@ function dealNextStreet(state: HandState): HandState {
  * streets with no betting (D-7) and holds the showdown; otherwise deals the next street.
  */
 function endRound(state: HandState, players: readonly PlayerState[]): HandState {
-  const gathered = gather(state, players);
+  const gathered = gather(players);
   const seats = state.players.map((p) => p.seat);
   const byClockwise = clockwiseAfter(seats, state.button).map(
     (seat) => gathered.players.find((p) => p.seat === seat) as PlayerState,
@@ -417,26 +446,33 @@ function endRound(state: HandState, players: readonly PlayerState[]): HandState 
       holeCards: p.holeCards,
       rank: evaluate([...p.holeCards, ...dealt.board]),
     }));
-    const best = Math.max(...showdown.map((s) => s.rank));
-    const winnerSeats = showdown.filter((s) => s.rank === best).map((s) => s.seat);
-    const winners = splitPot(gathered.amount, winnerSeats, state.button, seats);
+    const awards = gathered.pots.map((pot, k): PotAward => {
+      const contenders = showdown.filter((s) => pot.eligible.includes(s.seat));
+      const best = Math.max(...contenders.map((s) => s.rank));
+      const winnerSeats = contenders.filter((s) => s.rank === best).map((s) => s.seat);
+      return {
+        pot: k,
+        amount: pot.amount,
+        winners: splitPot(pot.amount, winnerSeats, state.button, seats),
+      };
+    });
     return {
       ...dealt,
       street: 'showdown',
-      players: payOut(gathered.players, winners),
-      pots: [{ amount: 0, eligible: gathered.eligible }],
+      players: payOut(gathered.players, awards),
+      pots: emptied(gathered.pots),
       toAct: null,
       result: {
         endedBy: 'showdown',
         showdown,
-        awards: [{ pot: 0, amount: gathered.amount, winners }],
+        awards,
         ...(gathered.returned && { returned: gathered.returned }),
       },
     };
   }
   return {
     ...dealNextStreet(base),
-    pots: [{ amount: gathered.amount, eligible: gathered.eligible }],
+    pots: gathered.pots,
     toAct: (open[0] as PlayerState).seat,
   };
 }
