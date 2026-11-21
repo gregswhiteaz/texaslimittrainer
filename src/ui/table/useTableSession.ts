@@ -11,6 +11,7 @@ import {
   nextHandDelay,
   nextStep,
   seatSession,
+  type BotTurn,
   type CompletedHand,
   type SessionConfig,
   type TableState,
@@ -27,7 +28,10 @@ export interface TableSessionOptions {
   readonly onHandComplete?: (hand: CompletedHand) => void;
   /** While true no next hand is dealt; turning it off starts a fresh delay (E09 seam, A-3). */
   readonly holdNextHand?: boolean;
-  /** Creates the app-wide advice worker if none exists yet (test seam; default: the production worker). */
+  /**
+   * Used only if no app-wide advice client exists yet, to create its worker; ignored once one exists
+   * (main.tsx and the e2e harnesses create it at load). Default: the production worker.
+   */
   readonly createAdviceWorker?: () => WorkerLike;
 }
 
@@ -36,6 +40,14 @@ export interface TableSessionOptions {
  * Bot decisions are computed by the app-wide advice worker; replies after unmount or for an old turn are dropped.
  * After a hand the next one is dealt NEXT_HAND_DELAY_MS later unless held.
  */
+/**
+ * Asks the app-wide advice worker for a bot decision. Never throws synchronously: a failure creating the
+ * worker or client rejects the promise, like any other advice failure.
+ */
+export function requestBotDecision(create: () => WorkerLike, turn: BotTurn): Promise<Action> {
+  return Promise.resolve().then(() => sharedAdviceClient(create).decideBot(turn.view, turn.style));
+}
+
 export function useTableSession({
   config,
   newCode = newReplayCode,
@@ -63,20 +75,18 @@ export function useTableSession({
       let cancelled = false;
       const timer = setTimeout(() => {
         const turn = botTurn(table);
-        sharedAdviceClient(createAdviceWorker)
-          .decideBot(turn.view, turn.style)
-          .then(
-            (action) => {
-              if (!cancelled) setTable((t) => applyBotDecision(t, turn, action));
-            },
-            (error: unknown) => {
-              if (!cancelled) {
-                setTable(() => {
-                  throw error;
-                });
-              }
-            },
-          );
+        requestBotDecision(createAdviceWorker, turn).then(
+          (action) => {
+            if (!cancelled) setTable((t) => applyBotDecision(t, turn, action));
+          },
+          (error: unknown) => {
+            if (!cancelled) {
+              setTable(() => {
+                throw error;
+              });
+            }
+          },
+        );
       }, 0);
       return () => {
         cancelled = true;

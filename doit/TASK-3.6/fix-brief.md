@@ -1,15 +1,15 @@
-# Fix brief — TASK-3.6 (resolving blocked.json; recorded deviation from locked spec D-2/SPEC-09)
+# Fix brief — TASK-3.6 (review round 1 MINORs, applied in-story)
 
-Decision (orchestrator, autopilot): **Option A.** One advice worker for the whole app, created once when the app
-module loads (lazily on first import in a browser context, never during SSR/renderToString), and shared by every table.
-Unmounting a table drops its pending replies (stale-reply guard already in applyBotDecision) instead of terminating the
-worker. Update SPEC-09's dispose wording accordingly in tests; keep `createAdviceWorker` as the test seam (the harness
-can still inject the slow worker — inject it before the first table mounts).
-Do NOT edit any locked test (Option B rejected). Then:
-1. Re-run `e2e/action-bar.spec.ts e2e/table-display.spec.ts e2e/table.spec.ts --workers=1` and full `npm run e2e`
-   (7 workers) — all locked tests must pass. If any still fail on the paused clock, stop and write blocked.json again
-   with the probe evidence.
-2. Re-run `npm run e2e:slow`, SPEC-10 dist check, and SPEC-13 (10,000-hand playtest).
-3. Record results in build-log.md, note the deviation (D-2 → app-wide worker) there and in changes.md, delete
-   blocked.json, `npm run format`, gate.
-Never push. Leave no background processes.
+No blocking findings. Apply these robustness fixes, each with a test that fails without it:
+1. **Security MINOR** `src/table/advice-service.ts:43`: move the request-shape check inside the `try` — a null /
+   non-object / id-less message returns an error reply (id null if absent) instead of throwing in the worker listener
+   (which would permanently fail the shared client). Unit test with null, a number, and `{}`.
+2. **Code MINOR #2** `src/ui/table/useTableSession.ts:66`: start the bot chain with
+   `Promise.resolve().then(() => sharedAdviceClient(createAdviceWorker).decideBot(...))` so a synchronous factory/client
+   failure goes through the same rejection path (surfaced via setTable) instead of escaping the timer and hanging the table.
+3. **Code MINOR #1** `useTableSession.ts:31`: document that `createAdviceWorker` is used only if no shared client exists
+   yet; remove the duplicate prop pass-through in the harnesses and drop it from the effect's dependency list if it is
+   unused there.
+4. **NIT #3** `src/ui/advice/advice-client.ts:51`: terminate the worker when the client enters its failed state.
+Don't touch locked tests. Re-run the three locked paused-clock e2e files with --workers=1, full `npm run e2e`, and
+`npm run e2e:slow`. `npm run format` before the gate. Never push.

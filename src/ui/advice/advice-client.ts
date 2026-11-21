@@ -31,6 +31,7 @@ export class AdviceClient {
 
   readonly #onMessage = (event: MessageEvent<AdviceResponse>): void => {
     const response = event.data;
+    if (response.id === null) return;
     const pending = this.#pending.get(response.id);
     if (pending === undefined) return;
     this.#pending.delete(response.id);
@@ -72,12 +73,11 @@ export class AdviceClient {
     >;
   }
 
-  /** Removes listeners, terminates the worker, rejects pending requests with Error('Advice client disposed'). */
+  /** Unless already failed: removes listeners, terminates the worker, rejects pending requests with Error('Advice client disposed'). */
   dispose(): void {
     if (this.#disposed) return;
     this.#disposed = true;
     this.#fail(new Error('Advice client disposed'));
-    this.#worker.terminate();
   }
 
   #request(payload: Payload): Promise<AdviceValue> {
@@ -90,8 +90,11 @@ export class AdviceClient {
     });
   }
 
+  /** Enters the failed state once: removes listeners, terminates the worker, rejects pending requests. */
   #fail(error: Error): void {
+    if (this.#failure !== null) return;
     this.#failure = error;
+    this.#worker.terminate();
     this.#worker.removeEventListener('message', this.#onMessage);
     this.#worker.removeEventListener('error', this.#onFailure);
     this.#worker.removeEventListener('messageerror', this.#onFailure);

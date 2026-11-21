@@ -15,10 +15,7 @@ createRoot(root).render(
   <StrictMode>
     <main>
       <h1>Table harness</h1>
-      <Table
-        config={{ stake: { smallBet: 10, bigBet: 20 } }}
-        createAdviceWorker={createAdviceWorker}
-      />
+      <Table config={{ stake: { smallBet: 10, bigBet: 20 } }} />
     </main>
   </StrictMode>,
 );

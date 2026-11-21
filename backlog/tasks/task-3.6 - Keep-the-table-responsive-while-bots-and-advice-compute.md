@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-21T17:45:00Z'
+updated_date: '2026-11-21T17:50:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -82,4 +82,6 @@ Full spec: doit/TASK-3.6/spec.md
 Autopilot: no asks. D-8 per user's standing rule: timing checks opt-in (npm run e2e:slow); every-push structural guard SPEC-15.
 
 Build blocked (paused-clock locked e2e tests vs per-table worker start-up ~30 ms). Resolved by orchestrator: Option A — one app-wide shared advice worker (recorded deviation from D-2/SPEC-09 wording); no locked test edits.
+
+Build: advice service + shared app-wide worker (prewarmed in main.tsx) + AdviceClient; bot turns via worker with stale-reply guard; e2e every-push worker-serves-bots + determinism; opt-in e2e:slow timing checks (8 passed, 2 Chromium-only skips); npm run e2e 114 passed (x2); dist has no test worker; playtest 0 violations; gate PASS.
 <!-- SECTION:NOTES:END -->

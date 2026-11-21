@@ -21,3 +21,10 @@
 - SPEC-13: `npm run playtest -- --hands 10000 --seed 42 --size 6` reports 0 invariant violations (5461 folds, 4539 showdowns).
 - `npm run format`, `npm run lint` and `npm run typecheck`: pass. `npm test`: 138 files passed, 1 skipped; 485 tests passed, 7 skipped. Coverage 96.75% lines.
 - Deleted blocked.json.
+
+## FIX round 1 (review MINORs)
+1. Security MINOR advice-service.ts: fixed. Shape check moved inside the `try`; malformed messages get `{id: null, ok: false, error: TypeError 'Malformed advice request'}` (`AdviceResponse` error id is now `number | null`; the client ignores id-null replies). Test: `tests/table/advice-service.test.ts` malformed-request case (null, 42, {}, no id, string id).
+2. Code MINOR #2 useTableSession.ts: fixed. New exported `requestBotDecision(create, turn)` = `Promise.resolve().then(() => sharedAdviceClient(create).decideBot(...))`, used by the bot effect; sync failures now take the rejection path into setTable. Test: `tests/ui/advice-robustness.test.ts` (throwing factory: no sync throw, promise rejects). Exported helper because vitest runs in node with no DOM to render the hook.
+3. Code MINOR #1: fixed. Option documented as used only if no app-wide client exists yet; `createAdviceWorker` prop removed from both e2e harnesses. It stays in the effect's deps because the effect still uses it.
+4. NIT #3 advice-client.ts: fixed. `#fail` runs once and terminates the worker; `dispose` relies on it (still terminates exactly once). Test: `tests/ui/advice-robustness.test.ts` (error/messageerror → terminated 1, later dispose keeps 1).
+Commands: `npm test` 139 files passed / 1 skipped, 488 tests passed / 7 skipped; typecheck, lint clean; paused-clock e2e (action-bar, table-display, table, --workers=1) 36 passed; `npm run e2e` 114 passed, 6 skipped; `npm run e2e:slow` 8 passed, 2 skipped; `npm run format` run.

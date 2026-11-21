@@ -24,7 +24,8 @@ export type AdviceValue = Action | Recommendation | GradeResult<Recommendation>;
 export type AdviceResponse =
   | { readonly id: number; readonly ok: true; readonly value: AdviceValue }
   | {
-      readonly id: number;
+      /** null when the request carried no numeric id. */
+      readonly id: number | null;
       readonly ok: false;
       readonly error: { readonly name: string; readonly message: string };
     };
@@ -35,13 +36,19 @@ export interface AdviceDeps {
 /** Every style decides with decideTag until E06 (A-1). */
 const decideBotDefault = (view: PlayerView): Action => decideTag(view);
 
-/** Never throws: every error (thrown by advice code or an unknown kind) becomes ok:false. */
+/** Never throws: every error (malformed request, unknown kind or thrown by advice code) becomes ok:false. */
 export function handleAdviceRequest(
   request: AdviceRequest,
   { decideBot = decideBotDefault }: AdviceDeps = {},
 ): AdviceResponse {
-  const { id } = request;
+  let id: number | null = null;
   try {
+    // Messages cross a worker boundary, so the shape is checked rather than trusted.
+    const raw: unknown = request;
+    if (typeof raw !== 'object' || raw === null || !('id' in raw) || typeof raw.id !== 'number') {
+      throw new TypeError('Malformed advice request');
+    }
+    id = request.id;
     switch (request.kind) {
       case 'bot':
         return { id, ok: true, value: decideBot(request.view, request.style) };

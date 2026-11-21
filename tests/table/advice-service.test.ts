@@ -85,4 +85,15 @@ describe('advice service', () => {
     );
     expect(styles).toEqual(['Rock']);
   });
+
+  it('handleAdviceRequest answers a malformed request with an error instead of throwing', () => {
+    const malformed = { name: 'TypeError', message: 'Malformed advice request' };
+    for (const request of [null, 42, {}, { kind: 'bot' }, { id: 'x', kind: 'bot' }]) {
+      expect(handleAdviceRequest(request as unknown as AdviceRequest)).toEqual({
+        id: null,
+        ok: false,
+        error: malformed,
+      });
+    }
+  });
 });

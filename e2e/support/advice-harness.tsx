@@ -48,10 +48,7 @@ createRoot(root).render(
   <StrictMode>
     <main>
       <h1>Advice harness</h1>
-      <Table
-        createAdviceWorker={createAdviceWorker}
-        onHandComplete={(hand) => record.hands.push(hand)}
-      />
+      <Table onHandComplete={(hand) => record.hands.push(hand)} />
     </main>
   </StrictMode>,
 );
