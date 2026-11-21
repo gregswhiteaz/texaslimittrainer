@@ -1,10 +1,11 @@
 ---
 id: TASK-3.6
 title: Keep the table responsive while bots and advice compute
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-17T23:22:00Z'
+updated_date: '2026-11-21T17:32:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -62,3 +63,21 @@ Plan key: E03-S12 · Dream: limit-holdem-trainer
 - [ ] #12 Story documentation is written and published to Backlog.md
 - [ ] #13 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. Headless advice service (bot / recommend / grade requests) in src/table/advice-service.ts; session gains botTurn + applyBotDecision (stale replies ignored).
+2. Browser worker + AdviceClient in src/ui/advice; useTableSession sends bot turns to the worker (only the acting player's PlayerView crosses).
+3. Test-only slow worker seam (never shipped; dist grep).
+4. Tests: every-push worker-serves-every-bot-decision + worker==headless determinism; opt-in (npm run e2e:slow) long-task, p95 frame and repaint timing checks.
+5. No locked test changes; review grading stays on main thread (TASK-9.3).
+
+Full spec: doit/TASK-3.6/spec.md
+<!-- SECTION:PLAN:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+Autopilot: no asks. D-8 per user's standing rule: timing checks opt-in (npm run e2e:slow); every-push structural guard SPEC-15.
+<!-- SECTION:NOTES:END -->
