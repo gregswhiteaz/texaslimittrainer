@@ -1,9 +1,11 @@
 ---
 id: TASK-1.46
 title: Stop local timing tests flaking under heavy load
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-20T06:02:00Z'
+updated_date: '2026-11-21T00:03:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -29,3 +31,13 @@ Seen in TASK-1.35 (judge J-1-01 and the build): wall-clock assertions failed und
 - [ ] #1 Given a full local npm test while other heavy processes run (load average well above the core count), When the timing assertions run, Then they do not fail spuriously (e.g. run perf files serially, measure CPU time, or widen local limits with a documented margin)
 - [ ] #2 Given a real 2x slowdown in one of those hot paths, When the timing tests run locally, Then they still fail
 <!-- AC:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. tests/support/speed.ts cpuNowMs() via process.cpuUsage(); replace performance.now() in the six timing call sites; limits/env/CI skip unchanged.
+2. New cpu-clock acceptance test: blocked time not counted; doubled work measured >=1.5x.
+3. Manual: timing files pass under 3x-core load; a doubled evaluate fails the README real-target command.
+
+Full spec: doit/TASK-1.46/spec.md
+<!-- SECTION:PLAN:END -->

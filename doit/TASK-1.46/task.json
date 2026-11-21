@@ -1,0 +1,126 @@
+{
+  "id": "TASK-1.46",
+  "title": "Stop local timing tests flaking under heavy load",
+  "status": "To Do",
+  "archived": false,
+  "type": "chore",
+  "priority": "medium",
+  "project": null,
+  "assignees": [],
+  "reporter": null,
+  "labels": [
+    "dream-limit-holdem-trainer",
+    "follow-up"
+  ],
+  "milestone": "m-0",
+  "parentTaskId": "TASK-1",
+  "acceptanceCriteriaCompleted": 0,
+  "acceptanceCriteriaCount": 2,
+  "references": [
+    "doc-42"
+  ],
+  "modifiedFiles": [],
+  "ordinal": 207000,
+  "createdAt": "2026-11-20T06:02:00Z",
+  "updatedAt": null,
+  "dueDate": null,
+  "isReady": true,
+  "path": "backlog/tasks/task-1.46 - Stop-local-timing-tests-flaking-under-heavy-load.md",
+  "description": "Seen in TASK-1.35 (judge J-1-01 and the build): wall-clock assertions failed under parallel load on the Mac \u2014 tests/advice/equity.test.ts 'bounds the work when range sets cannot all be dealt' (2092 ms vs 2000 ms), hand-evaluator.perf and invariants.perf once each \u2014 then passed on rerun. CI already skips wall-clock checks (TASK-1.20). Flaky local gates slow every doit run.",
+  "dependencies": [
+    "TASK-1.35"
+  ],
+  "dependencyGraph": {
+    "root": "TASK-1.46",
+    "nodes": [
+      {
+        "id": "TASK-1.46",
+        "title": "Stop local timing tests flaking under heavy load",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": 0,
+        "dependentDepth": 0
+      },
+      {
+        "id": "TASK-1.1",
+        "title": "Bootstrap the strict TypeScript project with one-command checks",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 4,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.7",
+        "title": "Run every check in GitHub Actions on each push and pull request",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 3,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.24",
+        "title": "Protect main and keep CI action pins current",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 2,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.35",
+        "title": "Harden and tidy the merged-branch cleanup script",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 1,
+        "dependentDepth": null
+      }
+    ],
+    "edges": [
+      {
+        "from": "TASK-1.7",
+        "to": "TASK-1.1"
+      },
+      {
+        "from": "TASK-1.24",
+        "to": "TASK-1.7"
+      },
+      {
+        "from": "TASK-1.35",
+        "to": "TASK-1.24"
+      },
+      {
+        "from": "TASK-1.46",
+        "to": "TASK-1.35"
+      }
+    ]
+  },
+  "readiness": {
+    "isReady": true,
+    "isBlocked": false,
+    "blockingDependencies": [],
+    "missingDependencies": []
+  },
+  "documentation": [],
+  "subtasks": [],
+  "acceptanceCriteria": [
+    {
+      "index": 1,
+      "text": "Given a full local npm test while other heavy processes run (load average well above the core count), When the timing assertions run, Then they do not fail spuriously (e.g. run perf files serially, measure CPU time, or widen local limits with a documented margin)",
+      "checked": false
+    },
+    {
+      "index": 2,
+      "text": "Given a real 2x slowdown in one of those hot paths, When the timing tests run locally, Then they still fail",
+      "checked": false
+    }
+  ],
+  "definitionOfDone": [],
+  "implementationPlan": null,
+  "implementationNotes": null,
+  "comments": [],
+  "finalSummary": null
+}
