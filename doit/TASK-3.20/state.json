@@ -564,7 +564,14 @@
       "skips": 0
     }
   },
-  "history": [],
+  "history": [
+    {
+      "t": "2026-11-20T19:35:53",
+      "event": "unlock",
+      "file": "e2e/cards.spec.ts",
+      "reason": "TASK-3.23 AC#1-2 (autopilot): strengthen-only \u2014 report parts with no path; drop the duplicate inline logo decode already covered by logoProblems"
+    }
+  ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-3.20",
   "spec_sha256": "43ff0448720e51565c36ce86cf20302388ad6d08af29095bbd505e8bffb80f6c",
   "review_findings": {
@@ -573,5 +580,8 @@
   "judge_results": {
     "1": "PASS"
   },
-  "doc_id": "doc-38"
+  "doc_id": "doc-38",
+  "relock_pending": [
+    "e2e/cards.spec.ts"
+  ]
 }

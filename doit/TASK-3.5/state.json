@@ -376,6 +376,12 @@
       "event": "unlock",
       "file": "tests/ui/playing-card.acceptance.test.tsx",
       "reason": "TASK-3.20 AC#1-4 (autopilot): strengthen the colour/logo/geometry checks and run visuals on Linux; AC#4 allows removing the glyph-fit unit test (covered by the new e2e geometry check)"
+    },
+    {
+      "t": "2026-11-20T19:35:53",
+      "event": "unlock",
+      "file": "e2e/cards.spec.ts",
+      "reason": "TASK-3.23 AC#1-2 (autopilot): strengthen-only \u2014 report parts with no path; drop the duplicate inline logo decode already covered by logoProblems"
     }
   ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-3.5",
@@ -390,6 +396,7 @@
   "relock_pending": [
     "e2e/cards.spec.ts",
     "e2e/cards.visual.spec.ts",
-    "tests/ui/playing-card.acceptance.test.tsx"
+    "tests/ui/playing-card.acceptance.test.tsx",
+    "e2e/cards.spec.ts"
   ]
 }
