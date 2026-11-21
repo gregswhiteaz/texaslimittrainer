@@ -4,7 +4,7 @@ title: Save the session after every hand so it can be resumed
 status: To Do
 assignee: []
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-21T02:09:00Z'
+updated_date: '2026-11-21T04:50:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -50,6 +50,7 @@ Plan key: E03-S11 · Dream: limit-holdem-trainer
 - [ ] #7 Given restored session JSON whose seat, button or replay-code value is an object (e.g. {"toString":1}) or an array, When it is validated, Then it is rejected with a RangeError before reaching createHand or shuffledDeck (no native TypeError, no array coerced into a valid replay code)
 - [ ] #8 Given restored session JSON whose seats list has gaps or non-object entries, When it is restored, Then a RangeError is raised (e.g. 'Invalid hand config') rather than a TypeError
 - [ ] #9 Given an in-app Partial session config, When resolveSessionConfig merges it with defaults, Then the result always passes assertSessionConfig (e.g. players, seats, userSeat and button stay consistent), with a test for a partial override that would otherwise be inconsistent
+- [ ] #10 Given a saved session holding an in-progress hand (HandState, including allIn, stack and contribution fields), When it is restored, Then the state is validated (e.g. checkState) before any action is applied and an invalid state is rejected
 <!-- AC:END -->
 
 ## Definition of Done
@@ -78,4 +79,6 @@ AC added from TASK-1.21 follow-up (doc-29).
 AC added from TASK-1.32 follow-ups (doc-41): security MINOR String() coercion, code MINOR/judge LOW sparse seats, shuffledDeck/isReplayCode non-string coercion.
 
 AC added from TASK-2.18 follow-up (doc-50, TASK-2.1 review MINOR).
+
+AC added from TASK-1.9 follow-up (security review: restored HandState fields become untrusted)
 <!-- SECTION:NOTES:END -->

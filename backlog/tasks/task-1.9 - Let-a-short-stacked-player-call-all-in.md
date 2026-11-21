@@ -1,11 +1,11 @@
 ---
 id: TASK-1.9
 title: Let a short-stacked player call all-in
-status: In Progress
+status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-21T04:33:00Z'
+updated_date: '2026-11-21T04:51:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -16,6 +16,7 @@ references:
 documentation:
   - doc-1
   - doc-2
+  - doc-56
 parent_task_id: TASK-1
 priority: high
 type: feature
@@ -40,29 +41,29 @@ Plan key: E01-S12 · Dream: limit-holdem-trainer
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Given a player with $3 facing a $4 bet, When they call, Then they put in $3, are marked all-in and are never asked to act again in the hand [REQ-018.1]
-- [ ] #2 Given an all-in player who has not folded, When the hand reaches showdown, Then that player's hand is included in the showdown [REQ-018.1]
-- [ ] #3 Given all remaining players but at most one are all-in, When the betting round ends, Then the remaining board cards are dealt with no further betting [REQ-014.6]
-- [ ] #4 Given a $8 bet called all-in for $5 and nobody else in, When the hand goes to showdown, Then $3 is returned to the bettor before showdown [REQ-018.4]
-- [ ] #5 Given a bet that every other player folds to, When the hand ends, Then the bet is returned to the bettor and is not counted as won from opponents [REQ-018.4]
-- [ ] #6 Given an all-in call for less than the full bet or an uncalled bet returned, When the invariant checker runs after that action, Then legal-action and chips checks accept it and still catch a wrong amount
-- [ ] #7 Given uncalled bets are returned, When the hand result is shown, Then the 'wins $X' amount reflects only chips won from others plus the winner's matched contribution, and TASK-3.4's uncontested example ($16) is rechecked
+- [x] #1 Given a player with $3 facing a $4 bet, When they call, Then they put in $3, are marked all-in and are never asked to act again in the hand [REQ-018.1]
+- [x] #2 Given an all-in player who has not folded, When the hand reaches showdown, Then that player's hand is included in the showdown [REQ-018.1]
+- [x] #3 Given all remaining players but at most one are all-in, When the betting round ends, Then the remaining board cards are dealt with no further betting [REQ-014.6]
+- [x] #4 Given a $8 bet called all-in for $5 and nobody else in, When the hand goes to showdown, Then $3 is returned to the bettor before showdown [REQ-018.4]
+- [x] #5 Given a bet that every other player folds to, When the hand ends, Then the bet is returned to the bettor and is not counted as won from opponents [REQ-018.4]
+- [x] #6 Given an all-in call for less than the full bet or an uncalled bet returned, When the invariant checker runs after that action, Then legal-action and chips checks accept it and still catch a wrong amount
+- [x] #7 Given uncalled bets are returned, When the hand result is shown, Then the 'wins $X' amount reflects only chips won from others plus the winner's matched contribution, and TASK-3.4's uncontested example ($16) is rechecked
 <!-- AC:END -->
 
 ## Definition of Done
 <!-- DOD:BEGIN -->
-- [ ] #1 Every acceptance criterion has at least one automated test (unit, property or Playwright) that passes
-- [ ] #2 `npm run lint`, `npm run typecheck` and `npm test` pass with zero errors [REQ-059.1, REQ-059.4]
-- [ ] #3 The golden-spot suite passes 100% (applies from the story that creates the suite, E07-S14, onward) [REQ-039.4]
-- [ ] #4 Coverage thresholds hold: >= 90% engine/bots/advice/statistics, >= 70% overall [REQ-059.3]
-- [ ] #5 Engine, bots, advice and statistics code imports no UI or browser-only code [REQ-059.2]
-- [ ] #6 Stories that touch the engine, bots or advice: a 10,000-hand playtest reports zero invariant violations (applies once the playtest runner exists, E01-S07, onward) [REQ-056.1]
-- [ ] #7 Stories that add or change a screen: Playwright test of the screen flow in Chromium and WebKit, and axe reports zero serious or critical violations (axe tooling is provisioned in the toolchain story E01-S01) [REQ-057.1]
-- [ ] #8 No new network requests beyond the app's own files [REQ-058.1]
-- [ ] #9 Strategy-content stories: text is original and every chart, range or golden spot carries its justification [REQ-061.2]
-- [ ] #10 CI workflow is green on the story's branch (applies once the CI story E01-S02 is done; E01-S01 instead passes the same checks locally) [REQ-064.2]
-- [ ] #11 Story documentation is written and published to Backlog.md
-- [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
+- [x] #1 Every acceptance criterion has at least one automated test (unit, property or Playwright) that passes
+- [x] #2 `npm run lint`, `npm run typecheck` and `npm test` pass with zero errors [REQ-059.1, REQ-059.4]
+- [x] #3 The golden-spot suite passes 100% (applies from the story that creates the suite, E07-S14, onward) [REQ-039.4]
+- [x] #4 Coverage thresholds hold: >= 90% engine/bots/advice/statistics, >= 70% overall [REQ-059.3]
+- [x] #5 Engine, bots, advice and statistics code imports no UI or browser-only code [REQ-059.2]
+- [x] #6 Stories that touch the engine, bots or advice: a 10,000-hand playtest reports zero invariant violations (applies once the playtest runner exists, E01-S07, onward) [REQ-056.1]
+- [x] #7 Stories that add or change a screen: Playwright test of the screen flow in Chromium and WebKit, and axe reports zero serious or critical violations (axe tooling is provisioned in the toolchain story E01-S01) [REQ-057.1]
+- [x] #8 No new network requests beyond the app's own files [REQ-058.1]
+- [x] #9 Strategy-content stories: text is original and every chart, range or golden spot carries its justification [REQ-061.2]
+- [x] #10 CI workflow is green on the story's branch (applies once the CI story E01-S02 is done; E01-S01 instead passes the same checks locally) [REQ-064.2]
+- [x] #11 Story documentation is written and published to Backlog.md
+- [x] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
 
 ## Implementation Plan
@@ -88,4 +89,14 @@ AC added from TASK-3.4 follow-up (doc-25).
 Autopilot Q-1..Q-4 auto-accepted (qa.md). Cross-story locked-test unlocks recorded under TASK-1.4, 1.44, 9.1, 3.4, 1.21, 1.31.
 
 Build: all-in calls, allIn flag, skip all-in seats, board runout, uncalled-bet return via HandResult.returned, stack floor bigBlind+1, checker C3/C4/C5; 3 new acceptance files; E1–E8 locked edits as listed; playtest identical to baseline; gate PASS
+
+Judge R1: 16/17 PASS (SPEC-16 pending story doc); J-1-01/J-1-02 LOW test pins added in-story; gate PASS
+
+Follow-ups (Step 6a): AC added to TASK-3.10 (validate restored HandState). Side pots (A-1) owned by TASK-1.10. NIT rename 'backed' not tracked (no behaviour change).
 <!-- SECTION:NOTES:END -->
+
+## Final Summary
+
+<!-- SECTION:FINAL_SUMMARY:BEGIN -->
+Engine now lets a short stack call all-in: call = min(owe, stack), derived allIn flag, all-in seats skipped for action and round closing, board runs out when at most one seat can bet, uncalled top bet returned to the bettor (HandResult.returned) and excluded from awards/'wins $X'; createHand floor is bigBlind+1; invariant checker gains returned-aware C3/C4 and a new C5. Verified: 394 tests pass, lint/typecheck clean, 10k-hand playtest byte-identical to base, e2e 12 passed, branch CI green, judge 16/17 PASS (SPEC-16 = this doc), 6000-hand fuzz 0 violations. Review: assumptions A-1..A-5 and auto-accepted Q-1..Q-4 (floor $5, blinds count as bets, optional returned field, locked-test amount edits E1-E8/U1-U4). Risks: no side pots until TASK-1.10 (a short all-in can win the whole single pot); TASK-3.10 must validate restored HandState at load; NIT rename 'backed' not done.
+<!-- SECTION:FINAL_SUMMARY:END -->

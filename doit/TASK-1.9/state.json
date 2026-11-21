@@ -5,13 +5,31 @@
   "base_commit": "9ccffbcf58bedbaf2b9f34fcc1ebadf430d0b5f4",
   "started": "2026-11-20T21:08:20",
   "review_round": 1,
-  "judge_round": 0,
+  "judge_round": 2,
   "sendbacks": 0,
   "gate_runs": 3,
   "questions": 4,
   "assumptions": 0,
   "escalations": 0,
-  "item_failures": {},
+  "item_failures": {
+    "SPEC-01": 0,
+    "SPEC-02": 0,
+    "SPEC-03": 0,
+    "SPEC-04": 0,
+    "SPEC-05": 0,
+    "SPEC-06": 0,
+    "SPEC-07": 0,
+    "SPEC-08": 0,
+    "SPEC-09": 0,
+    "SPEC-10": 0,
+    "SPEC-11": 0,
+    "SPEC-12": 0,
+    "SPEC-13": 0,
+    "SPEC-14": 0,
+    "SPEC-15": 0,
+    "SPEC-16": 0,
+    "SPEC-17": 0
+  },
   "locked_tests": {
     "tests/engine/all-in-invariants.acceptance.test.ts": "26d7be28a29e07f1c98afc2cb0cb5d32122705cc88991f33aab5662490c88686",
     "tests/engine/all-in.acceptance.test.ts": "84f8638f687584ab036d9b6897ce2163b5fbd71e178be8e91767683d9cdc206a",
@@ -689,5 +707,9 @@
   "spec_sha256": "80db4aaed9667cfc87f193b11722d5ae5515344f42ce57eadbc3f96fa2096860",
   "review_findings": {
     "1": 0
+  },
+  "doc_id": "doc-56",
+  "judge_results": {
+    "2": "PASS"
   }
 }

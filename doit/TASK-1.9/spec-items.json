@@ -3,102 +3,102 @@
     "id": "SPEC-01",
     "verifies": "AC#1, DoD#1",
     "verification": "acceptance `tests/engine/all-in.acceptance.test.ts::a seat with $3 facing a $4 bet may only fold or call $3`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-02",
     "verifies": "AC#1, DoD#1",
     "verification": "acceptance `tests/engine/all-in.acceptance.test.ts::the all-in caller puts in $3, is marked all-in and is never asked to act again`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-03",
     "verifies": "AC#2, DoD#1",
     "verification": "acceptance `tests/engine/all-in.acceptance.test.ts::an all-in player who has not folded is included in the showdown`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-04",
     "verifies": "AC#3, DoD#1",
     "verification": "acceptance `tests/engine/all-in.acceptance.test.ts::when all but one remaining player are all-in the rest of the board is dealt with no betting`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-05",
     "verifies": "AC#3, AC#4, DoD#1",
     "verification": "acceptance `tests/engine/all-in.acceptance.test.ts::the board also runs out from preflop and when no player can still bet`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-06",
     "verifies": "AC#4, DoD#1",
     "verification": "acceptance `tests/engine/all-in.acceptance.test.ts::the uncalled $3 of an $8 bet called all-in for $5 is returned to the bettor`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-07",
     "verifies": "AC#5, DoD#1",
     "verification": "acceptance `tests/engine/all-in.acceptance.test.ts::a bet that every other player folds to is returned and not counted as won`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-08",
     "verifies": "AC#6, DoD#1",
     "verification": "acceptance `tests/engine/all-in-invariants.acceptance.test.ts::legal-action and chips accept an all-in call and catch a wrong amount`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-09",
     "verifies": "AC#6, DoD#1",
     "verification": "acceptance `tests/engine/all-in-invariants.acceptance.test.ts::chips accepts a returned uncalled bet and catches a wrong return`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-10",
     "verifies": "AC#7, AC#5, DoD#1",
     "verification": "acceptance `tests/table/hand-result-uncalled.acceptance.test.ts::wins amounts exclude returned uncalled bets`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-11",
     "verifies": "AC#1, AC#3, DoD#1",
     "verification": "unit `tests/engine/hand.test.ts::all-in flags, floor and actor order`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-12",
     "verifies": "AC#5, AC#7, DoD#1, DoD#2",
     "verification": "command `npm test && git diff --stat 9ccffbc -- tests/engine/invariant-messages.acceptance.test.ts tests/playtest/summary.acceptance.test.ts`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-13",
     "verifies": "DoD#2, DoD#4, DoD#5",
     "verification": "command `npm run lint && npm run typecheck && npm test`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-14",
     "verifies": "DoD#6",
     "verification": "command `npm run playtest -- --hands 10000 --seed 42`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-15",
     "verifies": "AC#7, DoD#7, DoD#8",
     "verification": "integration `npx playwright test e2e/next-hand.spec.ts e2e/review.spec.ts`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-16",
     "verifies": "DoD#10, DoD#11",
     "verification": "manual CI run on branch `doit/TASK-1.9` and `backlog doc list --plain`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-17",
     "verifies": "DoD#3, DoD#9, DoD#12",
     "verification": "manual Judge confirms that TASK-7.11 and TASK-13.4 are not Done and that `git diff --stat 9ccffbc -- src/advice src/ui` is empty",
-    "status": "pending"
+    "status": "pass"
   }
 ]

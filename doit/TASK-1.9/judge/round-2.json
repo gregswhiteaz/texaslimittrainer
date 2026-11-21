@@ -1,0 +1,109 @@
+{
+  "round": 2,
+  "test_suite": {
+    "command": "npm test",
+    "result": "PASS",
+    "passed": 394,
+    "failed": 0,
+    "notes": "HEAD cf0bee2: 112 files, 394 passed, 6 skipped, exit 0. Lint and typecheck exit 0. Holdout suite: 13/13 passed."
+  },
+  "end_to_end": {
+    "command": "npm run playtest -- --hands 10000 --seed 42",
+    "result": "PASS",
+    "expected": "Exit 0 and a report byte-identical to base 9ccffbc (fold 5470, showdown 4530, actions 88831, capped 244, Largest pot $70, 0 violations).",
+    "actual": "Exit 0. The report diffs identical to the base output captured in round 1."
+  },
+  "integrity": {
+    "result": "PASS",
+    "notes": "test-integrity exits 0. cf0bee2 makes test-only additions to two unlocked files and changes no src, e2e or locked tests. git diff --stat HEAD -- src is empty after the mutant runs."
+  },
+  "items": [
+    {
+      "spec": "SPEC-01",
+      "result": "PASS",
+      "evidence": "Re-verified on HEAD cf0bee2: npm test 394/394 green and the 13 holdout checks pass. Round 1: The acceptance test passes. It asserts the exact legal set [fold, call 3] and that call 4 is rejected with illegal-action. Killed by mutant call amount = owe (10 suite failures). Holdout: S-A gives exactly [fold, call 3]. Call amounts 4, 2, 0, 1 and 3.5, raise 8 and check are all illegal-action. Preflop with $1 behind facing a raise to 8 gives [fold, call 1]."
+    },
+    {
+      "spec": "SPEC-02",
+      "result": "PASS",
+      "evidence": "Re-verified on HEAD cf0bee2: npm test 394/394 green and the 13 holdout checks pass. Round 1: The acceptance test passes. It checks the player fields, the exact last record, toAct 1, that toAct is never 3, and that seat 3 has no later record. Killed by mutants allIn:false and toAct-from-active (no open filter). Holdout: same values. The all-in seat is rejected with out-of-turn, and checkStep is [] on every step."
+    },
+    {
+      "spec": "SPEC-03",
+      "result": "PASS",
+      "evidence": "Re-verified on HEAD cf0bee2: npm test 394/394 green and the 13 holdout checks pass. Round 1: The acceptance test passes. Showdown seats are [2,3,1], and seat 3's rank equals evaluate(...). Holdout confirms this. Nothing is returned when the top bet is matched by two seats, chips total 327, and checkState is []."
+    },
+    {
+      "spec": "SPEC-04",
+      "result": "PASS",
+      "evidence": "Re-verified on HEAD cf0bee2: npm test 394/394 green and the 13 holdout checks pass. Round 1: The acceptance test passes. Killed by mutant open.length < 1. Holdout: one applyAction adds exactly one record and goes from turn to showdown. Board is 3s 4c 4d 4s 5d, burns are 3h 4h 5c. toAct is null, legalActions is [], and a later action is rejected with hand-complete."
+    },
+    {
+      "spec": "SPEC-05",
+      "result": "PASS",
+      "evidence": "Re-verified on HEAD cf0bee2: npm test 394/394 green and the 13 holdout checks pass. Round 1: The acceptance test passes. Holdout: S-C gives returned {2,3}, award 18 to seat 3, and stacks {160,3,18}. S-D runs out from preflop with returned {1,3}, split 6/6 and stacks {161,158,6}. checkStep is [] on every step."
+    },
+    {
+      "spec": "SPEC-06",
+      "result": "PASS",
+      "evidence": "Re-verified on HEAD cf0bee2: npm test 394/394 green and the 13 holdout checks pass. Round 1: The acceptance test passes. Killed by the gather 'no subtraction of back' mutant and the 'no stack refund' mutant (33 and 29 failures). Holdout: returned {2,3}, award 18, stacks {160,151,18}."
+    },
+    {
+      "spec": "SPEC-07",
+      "result": "PASS",
+      "evidence": "Re-verified on HEAD cf0bee2: npm test 394/394 green and the 13 holdout checks pass. Round 1: The acceptance test passes. Holdout covers (a), (b) and (c), plus a new case: SB completes, BB raises to 8, SB folds. That gives returned {3,4}, award 8 and BB stack 164. In (c) the raiser ends on 184 (160\u221212+4+32). checkStep is [] on every step."
+    },
+    {
+      "spec": "SPEC-08",
+      "result": "PASS",
+      "evidence": "Re-verified on HEAD cf0bee2: npm test 394/394 green and the 13 holdout checks pass. Round 1: The acceptance test passes. It asserts the exact violation arrays for (a), (b) and (c)."
+    },
+    {
+      "spec": "SPEC-09",
+      "result": "PASS",
+      "evidence": "Re-verified on HEAD cf0bee2: npm test 394/394 green and the 13 holdout checks pass. Round 1: The acceptance test passes. Killed by both C5 mutants (always-null return check) and by the C3 putIn mutant. Holdout: returned {2, amount 0} with consistent stacks gives 'seat 2 got $0 back but $3 was uncalled'. A spurious return ({1, $2}) when the top bet was matched passes checkState but gives 'seat 1 got $2 back but $0 was uncalled' from checkStep. Shifting the return to the wrong seat is caught under chips."
+    },
+    {
+      "spec": "SPEC-10",
+      "result": "PASS",
+      "evidence": "Re-verified on HEAD cf0bee2: npm test 394/394 green and the 13 holdout checks pass. Round 1: The acceptance test passes. Holdout through handResultView: AVA_UNCONTESTED is 'Ava wins $12', BB_WALK is 'You win $4', and the S-B final state is 'Cal wins $18' with 'Full house, fours over threes'."
+    },
+    {
+      "spec": "SPEC-11",
+      "result": "PASS",
+      "evidence": "Round 2: the unit test now plays the exact-stack all-in call to hand end. At showdown nothing is returned and the award is 24, equal to the pot. On the runout after a fold nothing is returned and the award is 20. Mutant check: making tied top street contributions return chips, or not running out the board with one open seat, each fails this test. Round 1: The unit test passes. Killed by mutant floor = bigBlind (5 failures). Holdout: stack 5 is accepted. Stacks 4, 0, 4.5, 5.5, -5 and NaN are rejected with 'Stack at seat 3 must be an integer of at least 5'. At $5/$10 the floor is 11. An exact-stack raise sets allIn, and the round then runs out with nothing returned and award 18. A stack between the call and a raise gets [fold, call 4]. Less than one unit with no bet facing gets [check]."
+    },
+    {
+      "spec": "SPEC-12",
+      "result": "PASS",
+      "evidence": "Round 2 re-run on HEAD cf0bee2: npm test has 394 passed, 6 skipped, 0 failed; lint and typecheck exit 0; coverage unchanged (engine 99.82%, playtest 100%, overall 97.06% lines). test-integrity exits 0. cf0bee2 changes only tests/engine/hand.test.ts and tests/playtest/runner.test.ts, both additions. Round 1: npm test: 393 passed, 0 failed. git diff --stat 9ccffbc on invariant-messages.acceptance and summary.acceptance is empty. The locked-file diffs show only the E1\u2013E8 lines (see integrity)."
+    },
+    {
+      "spec": "SPEC-13",
+      "result": "PASS",
+      "evidence": "Round 2 re-run on HEAD cf0bee2: npm test has 394 passed, 6 skipped, 0 failed; lint and typecheck exit 0; coverage unchanged (engine 99.82%, playtest 100%, overall 97.06% lines). test-integrity exits 0. cf0bee2 changes only tests/engine/hand.test.ts and tests/playtest/runner.test.ts, both additions. Round 1: npm run lint exit 0 (Prettier clean). npm run typecheck exit 0. npm test exit 0 with coverage thresholds met (engine 99.82%, playtest 100%, overall 97.06% lines). src/engine has no UI imports, and the headless-lint toolchain tests pass."
+    },
+    {
+      "spec": "SPEC-14",
+      "result": "PASS",
+      "evidence": "Round 2: the playtest on HEAD is byte-identical to base. The new runner unit test pins Largest pot including returned chips: walk 6, flop fold-to-raise 36. A mutant that drops returned from largestPot now fails it. Round 1: The playtest exits 0 and its output is byte-identical to the base commit's output (diffed). Holdout on summarize: a walk counts as largestPot $6 and a flop fold-to-raise as $36, so returned chips are included per D-5."
+    },
+    {
+      "spec": "SPEC-15",
+      "result": "PASS",
+      "evidence": "Re-verified on HEAD cf0bee2: npm test 394/394 green and the 13 holdout checks pass. Round 1: npx playwright test e2e/next-hand.spec.ts e2e/review.spec.ts: 12 passed (Chromium and WebKit), including the axe checks and the request assertions in those specs."
+    },
+    {
+      "spec": "SPEC-16",
+      "result": "PASS",
+      "evidence": "CI: run 44866667944 (CI workflow, push) on doit/TASK-1.9 head 8caa0266 finished with conclusion success, and the Visual run 44866668007 also succeeded. The later commit cf0bee2 only adds tests (no src or e2e change) and is local, one commit ahead of origin, because nothing is pushed. It passes locally: npm test, lint, typecheck and the playtest. Doc: `backlog doc list --plain` lists 'doc-56 - TASK-1.9: Let a short-stacked player call all-in'. It records A-1 (and A-2..A-5) with TASK-1.10 as the follow-up owner. It gives the Q-1..Q-4 answers, which map to D-1, D-2, D-3 and D-6, and names D-1, D-5 and D-7 explicitly. It describes C5 in checkStep (D-4) and the E1\u2013E8/U1\u2013U4 edits with their unlock owners. Its follow-ups section names owners TASK-1.10 and TASK-3.10. The doc and its markdown file are untracked and still need committing in the docs step."
+    },
+    {
+      "spec": "SPEC-17",
+      "result": "PASS",
+      "evidence": "Re-verified on HEAD cf0bee2: npm test 394/394 green and the 13 holdout checks pass. Round 1: TASK-7.11 and TASK-13.4 are both 'To Do'. git diff --stat 9ccffbc -- src/advice src/ui is empty."
+    }
+  ],
+  "findings": [],
+  "summary": "All 17 items pass. SPEC-16 now passes: CI is green on the build head and story doc doc-56 is published with the decisions, Q answers, E1\u2013E8 edits, A-1 and follow-ups. Round 1's two LOW findings are resolved. J-1-01: the new runner test pins Largest pot including returned chips, and a mutant dropping it now fails. J-1-02: the exact-stack all-in call is played to hand end with nothing returned and the full pot awarded, and a tie-returns-chips mutant now fails it. No findings. Note: cf0bee2 (test-only) has not been pushed, so no CI run covers it; it passes locally. doc-56 is still untracked in git."
+}
