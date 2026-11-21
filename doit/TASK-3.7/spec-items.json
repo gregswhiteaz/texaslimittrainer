@@ -1,0 +1,110 @@
+[
+  {
+    "id": "SPEC-01",
+    "verifies": "AC#1",
+    "verification": "acceptance `tests/ui/action-bar-limits.acceptance.test.tsx::a capped flop offers Fold and Call $4 and no Raise`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-02",
+    "verifies": "AC#2",
+    "verification": "acceptance `tests/ui/action-bar-limits.acceptance.test.tsx::with $3 facing a $4 bet the bar offers Fold and Call all-in $3 and no Raise`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-03",
+    "verifies": "AC#3",
+    "verification": "acceptance `tests/ui/action-bar-limits.acceptance.test.tsx::with exactly $4 facing a $4 bet the bar offers Fold and Call $4 and no Raise`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-04",
+    "verifies": "AC#4, AC#9",
+    "verification": "acceptance `tests/ui/action-bar-limits.acceptance.test.tsx::a sit-and-go bar facing 40 chips reads Call 40 and Raise to 80 without a $ sign`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-05",
+    "verifies": "AC#6",
+    "verification": "acceptance `tests/ui/action-bar-limits.acceptance.test.tsx::with $6 facing a $4 flop bet the bar offers Fold, Call $4 and Raise all-in to $6`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-06",
+    "verifies": "AC#7",
+    "verification": "acceptance `tests/ui/action-bar-limits.acceptance.test.tsx::with $3 and no bet facing the bar offers Check and Bet all-in $3 and no Fold`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-07",
+    "verifies": "AC#8",
+    "verification": "acceptance `tests/ui/action-bar-limits.acceptance.test.tsx::after a short all-in raise to $5 the bar offers Fold and Call $1 and no Raise`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-08",
+    "verifies": "AC#5, AC#9",
+    "verification": "acceptance `tests/table/action-bar-limits.acceptance.test.ts::the bar equals the engine's legal set in 100,000 capped and short-stack states`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-09",
+    "verifies": "AC#9",
+    "verification": "acceptance `tests/table/action-bar-limits.acceptance.test.ts::actionLabel names all-in and chip amounts`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-10",
+    "verifies": "AC#10",
+    "verification": "acceptance `e2e/action-bar-limits.spec.ts::an idle button with its disabled attribute removed changes nothing`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-11",
+    "verifies": "AC#10",
+    "verification": "acceptance `tests/ui/action-bar-limits.acceptance.test.tsx::an idle button's click handler submits nothing`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-12",
+    "verifies": "AC#1, AC#2, AC#6, AC#7, DoD#7, DoD#8",
+    "verification": "acceptance `e2e/action-bar-limits.spec.ts::capped and all-in scenes show the exact labels` and `e2e/action-bar-limits.spec.ts::the all-in bar is 44 px, axe clean and makes no outside requests`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-13",
+    "verifies": "AC#9, DoD#1",
+    "verification": "unit `tests/table/action-bar.test.ts::short all-in labels follow the engine's full bet target`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-14",
+    "verifies": "AC#9, DoD#1",
+    "verification": "integration `npx vitest run tests/table/action-bar.acceptance.test.ts tests/ui/action-bar.acceptance.test.tsx tests/table/action-bar.test.ts && npx playwright test e2e/action-bar.spec.ts`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-15",
+    "verifies": "DoD#1, DoD#2, DoD#4, DoD#5",
+    "verification": "command `npm run lint && npm run typecheck && npm test && npm run e2e`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-16",
+    "verifies": "DoD#6",
+    "verification": "command `npm run playtest -- --hands 10000 --seed 42`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-17",
+    "verifies": "DoD#10, DoD#11",
+    "verification": "manual CI run on branch `doit/TASK-3.7` and `backlog doc list --plain`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-18",
+    "verifies": "DoD#3, DoD#9, DoD#12",
+    "verification": "manual Judge confirms the diff has no strategy content and that E07-S14 and E13-S07 are not Done",
+    "status": "pending"
+  }
+]

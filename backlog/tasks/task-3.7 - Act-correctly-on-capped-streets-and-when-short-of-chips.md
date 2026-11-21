@@ -1,10 +1,11 @@
 ---
 id: TASK-3.7
 title: Act correctly on capped streets and when short of chips
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-18T22:48:00Z'
+updated_date: '2026-11-21T18:28:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -70,10 +71,24 @@ Plan key: E03-S06 · Dream: limit-holdem-trainer
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
 
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. Export fullBetTarget(state) from the engine (no rule change); legalActions uses it.
+2. Action bar: actionLabel(action, {allIn, unit}), isShortAllIn(view, action), actionBar(view, unit) — all-in wording; chip labels without $; plain digits (Q-2).
+3. New action-bar-limits acceptance property: 100k seeded states, 2–10 seats, short stacks, chip stakes, bar == engine legal set (Q-1; TASK-3.2 file untouched).
+4. Browser scenes for capped / call all-in / raise all-in / bet all-in; stripped-disabled click leaves state unchanged (Chromium + WebKit).
+5. 10k-hand playtest unchanged.
+
+Full spec: doit/TASK-3.7/spec.md
+<!-- SECTION:PLAN:END -->
+
 ## Implementation Notes
 
 <!-- SECTION:NOTES:BEGIN -->
 AC added from TASK-3.2 follow-up (doc-22).
 
 AC added from TASK-3.2 follow-up (doc-22).
+
+Autopilot Q-1/Q-2 auto-accepted (qa.md).
 <!-- SECTION:NOTES:END -->
