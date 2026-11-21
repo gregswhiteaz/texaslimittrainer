@@ -1,0 +1,20 @@
+{"reviewer": "code", "round": 1,
+ "rubric": [
+  {"item": "SPEC-01 correctness", "result": "pass"},
+  {"item": "SPEC-01 test strength", "result": "pass"},
+  {"item": "SPEC-02 correctness", "result": "pass"},
+  {"item": "SPEC-02 test strength", "result": "pass"},
+  {"item": "SPEC-03 correctness", "result": "pass"},
+  {"item": "SPEC-03 test strength", "result": "pass"},
+  {"item": "scope", "result": "pass"},
+  {"item": "concision", "result": "pass"},
+  {"item": "clarity", "result": "pass"}
+ ],
+ "findings": [
+  {"fingerprint": "tests/table/hand-result-edges.acceptance.test.ts:double-invocation-for-throw-check", "severity": "NIT",
+   "file": "tests/table/hand-result-edges.acceptance.test.ts", "line": 17,
+   "issue": "handResultView is called twice: once to check the message (toThrow(new RangeError(...)) compares message only) and once to check the class.",
+   "evidence": "Lines 17-18: expect(() => handResultView(table)).toThrow(new RangeError('Seat 2 is not at the table')); expect(() => handResultView(table)).toThrow(RangeError);",
+   "fix": "Optional: keep as is (both assertions are needed for class + exact message), or add a one-line comment saying why there are two assertions."}
+ ],
+ "summary": "Test-only change, two new files, no src changes (git status src clean). SPEC-01: exact 'King high' for 9c 2d Ks Jd 6c 4h 3s (no pair/straight/flush), fails on M1a ('Nine high') and M1b ('Two high'). SPEC-02: KINGS_SHOWDOWN with seat 2 filtered out; asserts exact message and RangeError class, so M2 (TypeError on sessionSeat.name) fails. SPEC-03: seat-3 user fixture matches spec section 5; asserts showdown seats [1,2,3,5], one status block, one winner line data-seat 3, 'Your shown cards' group codes equal engine hole cards and literal ['Ac','Ad'], and text 'You win $16 · Pair of aces'; M3a/M3b give 7c 2d and M3c/M3d give Kh Kd, all caught by the cardCodes assertion. Helpers copied minimally from the locked file per the spec's reuse list. Both files pass (3 tests, 141 ms). Mutants were reasoned through rather than applied, since this reviewer does not modify src. One NIT only."}

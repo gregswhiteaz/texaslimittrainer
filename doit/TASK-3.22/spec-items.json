@@ -3,18 +3,18 @@
     "id": "SPEC-01",
     "verifies": "AC#1",
     "verification": "acceptance `tests/table/hand-result-edges.acceptance.test.ts::a high card on the board is named, not the first card`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-02",
     "verifies": "AC#2",
     "verification": "unit `tests/table/hand-result-edges.acceptance.test.ts::a winner who is not seated throws a RangeError`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-03",
     "verifies": "AC#3",
     "verification": "acceptance `tests/ui/user-shown-cards.acceptance.test.tsx::a user at seat 3 sees their own cards as Your shown cards`",
-    "status": "pending"
+    "status": "pass"
   }
 ]

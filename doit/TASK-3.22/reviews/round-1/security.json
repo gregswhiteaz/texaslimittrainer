@@ -1,0 +1,3 @@
+{"reviewer": "security", "round": 1,
+ "findings": [],
+ "summary": "Test-only change: two new test files (tests/table/hand-result-edges.acceptance.test.ts, tests/ui/user-shown-cards.acceptance.test.tsx) plus doit/backlog bookkeeping. No production code under src/ changed, no package.json/lockfile changes, no new dependencies. Tests use fixed in-memory fixtures and renderToString; the regexes run over locally rendered markup only (no untrusted input, no ReDoS exposure). No secrets in the diff. SPEC-03 also confirms the fairness property that the result block shows only the user's own two shown cards. No reachable path to any dangerous sink; no findings."}
