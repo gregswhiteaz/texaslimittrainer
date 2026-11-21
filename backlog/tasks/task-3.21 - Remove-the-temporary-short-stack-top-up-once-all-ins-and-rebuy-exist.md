@@ -4,6 +4,7 @@ title: Remove the temporary short-stack top-up once all-ins and rebuy exist
 status: To Do
 assignee: []
 created_date: '2026-11-19T01:10:00Z'
+updated_date: '2026-11-21T18:38:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -33,4 +34,11 @@ Promised to the user in TASK-3.4 Q-4. Until all-ins exist the engine refuses sta
 - [ ] #1 Given a seat below the old $96 minimum, When the next hand is dealt, Then its stack is not topped up — it plays its chips (or goes to Rebuy / bot replacement at $0) — and the interim top-up in nextHand is removed
 - [ ] #2 Given a seat that ends a hand with $95 at $4/$8, When the next hand is dealt, Then that seat starts the hand with $95, and a test proves it
 - [ ] #3 Given src/table/session.ts, When it is searched, Then the comment 'TEMPORARY (TASK-3.4 Q-4)' and the top-up code are gone, and TASK-3.4's SPEC-10/SPEC-11 tests are updated to the new rule
+- [ ] #4 Given the top-up is removed and the user is short, When the action bar is shown in the live app, Then the all-in labels from TASK-3.7 ('Call all-in $X', 'Bet all-in $X', 'Raise all-in to $X') appear, proven by an e2e test on the real session
 <!-- AC:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+AC added from TASK-3.7 follow-up (all-in labels live)
+<!-- SECTION:NOTES:END -->

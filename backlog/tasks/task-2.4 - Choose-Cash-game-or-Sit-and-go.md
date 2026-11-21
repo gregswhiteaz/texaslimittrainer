@@ -4,7 +4,7 @@ title: Choose Cash game or Sit-and-go
 status: To Do
 assignee: []
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-18T07:03:00Z'
+updated_date: '2026-11-21T18:38:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -48,6 +48,7 @@ Plan key: E02-S04 · Dream: limit-holdem-trainer
 - [ ] #3 Given Game Config with $6/$12 selected, When the user chooses Sit-and-go, Then the stake selector is not shown [REQ-006.4]
 - [ ] #4 Given Sit-and-go was chosen after $6/$12 was selected, When the user chooses Cash game again, Then the stake selector is shown with $6/$12 selected [REQ-006.4]
 - [ ] #5 Given Sit-and-go chosen, When the user chooses Start game, Then the session configuration has game type Sit-and-go and carries no stake [REQ-005.1, REQ-006.4]
+- [ ] #6 Given a sit-and-go game is chosen, When the user's action bar is built, Then userActionBar passes the 'chips' unit so labels read e.g. 'Call 40' / 'Raise to 80' with no $ sign (TASK-3.7 actionBar(view, 'chips'))
 <!-- AC:END -->
 
 ## Definition of Done
@@ -70,4 +71,6 @@ Plan key: E02-S04 · Dream: limit-holdem-trainer
 
 <!-- SECTION:NOTES:BEGIN -->
 Follow-up from TASK-1.5 (doc-13): PlayerView cannot show game type or sit-and-go level until HandConfig carries them; add both to HandConfig and PlayerView here.
+
+AC added from TASK-3.7 follow-up (wire chip labels)
 <!-- SECTION:NOTES:END -->
