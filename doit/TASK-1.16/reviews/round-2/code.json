@@ -1,0 +1,160 @@
+{
+  "reviewer": "code",
+  "round": 2,
+  "rubric": [
+    {
+      "item": "SPEC-01 correctness",
+      "result": "pass"
+    },
+    {
+      "item": "SPEC-01 test strength",
+      "result": "pass"
+    },
+    {
+      "item": "SPEC-02 correctness",
+      "result": "pass"
+    },
+    {
+      "item": "SPEC-02 test strength",
+      "result": "pass"
+    },
+    {
+      "item": "SPEC-03 correctness",
+      "result": "pass"
+    },
+    {
+      "item": "SPEC-03 test strength",
+      "result": "pass"
+    },
+    {
+      "item": "SPEC-04 correctness",
+      "result": "pass"
+    },
+    {
+      "item": "SPEC-04 test strength",
+      "result": "pass"
+    },
+    {
+      "item": "SPEC-05 correctness",
+      "result": "pass"
+    },
+    {
+      "item": "SPEC-05 test strength",
+      "result": "pass"
+    },
+    {
+      "item": "SPEC-06 correctness",
+      "result": "pass"
+    },
+    {
+      "item": "SPEC-06 test strength",
+      "result": "pass"
+    },
+    {
+      "item": "SPEC-07 correctness",
+      "result": "pass"
+    },
+    {
+      "item": "SPEC-07 test strength",
+      "result": "pass"
+    },
+    {
+      "item": "SPEC-08 correctness",
+      "result": "pass"
+    },
+    {
+      "item": "SPEC-08 test strength",
+      "result": "pass"
+    },
+    {
+      "item": "SPEC-09 correctness",
+      "result": "pass"
+    },
+    {
+      "item": "SPEC-09 test strength",
+      "result": "pass"
+    },
+    {
+      "item": "SPEC-10 correctness",
+      "result": "pass"
+    },
+    {
+      "item": "SPEC-10 test strength",
+      "result": "pass"
+    },
+    {
+      "item": "SPEC-11 correctness",
+      "result": "pass"
+    },
+    {
+      "item": "SPEC-11 test strength",
+      "result": "pass"
+    },
+    {
+      "item": "SPEC-12 correctness",
+      "result": "pass"
+    },
+    {
+      "item": "SPEC-12 test strength",
+      "result": "pass"
+    },
+    {
+      "item": "SPEC-13 correctness",
+      "result": "pass"
+    },
+    {
+      "item": "SPEC-13 test strength",
+      "result": "pass"
+    },
+    {
+      "item": "SPEC-14 correctness",
+      "result": "pass"
+    },
+    {
+      "item": "SPEC-14 test strength",
+      "result": "pass"
+    },
+    {
+      "item": "SPEC-15 correctness",
+      "result": "pass"
+    },
+    {
+      "item": "SPEC-15 test strength",
+      "result": "pass"
+    },
+    {
+      "item": "SPEC-16 correctness (E1-E7 exactly as approved, nothing loosened)",
+      "result": "pass"
+    },
+    {
+      "item": "SPEC-16 test strength",
+      "result": "pass"
+    },
+    {
+      "item": "SPEC-17 correctness (both 10k runs exit 0, 0 violations, byte-identical reruns)",
+      "result": "pass"
+    },
+    {
+      "item": "SPEC-17 test strength",
+      "result": "pass"
+    },
+    {
+      "item": "SPEC-18 (docs, later stage)",
+      "result": "n/a"
+    },
+    {
+      "item": "scope",
+      "result": "pass"
+    },
+    {
+      "item": "concision",
+      "result": "pass"
+    },
+    {
+      "item": "clarity",
+      "result": "pass"
+    }
+  ],
+  "findings": [],
+  "summary": "Both round-1 findings are fixed, and I checked each fix with its mutant. (1) MAJOR tests/engine/check-deal.test.ts:c5-returned-rule-untested is fixed. The new phantomReturn case asserts checkState(phantomReturn) is [] and checkDeal returns chips 'seat 1 got $3 back but $0 was uncalled'. I re-applied the mutant (`? returnedMessage(state)` -> `? null`, invariants.ts:493) and check-deal.test.ts fails at line 72. (2) MINOR tests/playtest/runner.test.ts:restart-after-violation-not-isolated is fixed. onAction now flags the step whose result completes the hand. The test asserts 3 hands, each with a non-null result, violations === 1, button 1 and buy-in stacks. I re-applied the mutant (runner.ts:320 `if (final.result === null) continue;`) and runner.test.ts fails at line 319 (button). The result===null restart path is still covered by the AC#9 seam case. src/ was restored after both mutations, and `git diff -- src` is empty. The diff since the build commit de21775 touches only these two test files outside doit/ and backlog/, and makes no source changes. The full vitest suite passes: 130 files, 465 passed and 6 skipped. Gate fix-3 is PASS. Locked acceptance tests are untouched. No new scope, concision or clarity issues."
+}

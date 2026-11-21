@@ -4,14 +4,33 @@
   "branch": "doit/TASK-1.16",
   "base_commit": "a8bc283bace3abfb6095cdae00c3a288e5003eb1",
   "started": "2026-11-21T01:45:21",
-  "review_round": 1,
-  "judge_round": 0,
+  "review_round": 2,
+  "judge_round": 1,
   "sendbacks": 0,
   "gate_runs": 3,
   "questions": 4,
   "assumptions": 0,
   "escalations": 0,
-  "item_failures": {},
+  "item_failures": {
+    "SPEC-01": 0,
+    "SPEC-02": 0,
+    "SPEC-03": 0,
+    "SPEC-04": 0,
+    "SPEC-05": 0,
+    "SPEC-06": 0,
+    "SPEC-07": 0,
+    "SPEC-08": 0,
+    "SPEC-09": 0,
+    "SPEC-10": 0,
+    "SPEC-11": 0,
+    "SPEC-12": 0,
+    "SPEC-13": 0,
+    "SPEC-14": 0,
+    "SPEC-15": 0,
+    "SPEC-16": 0,
+    "SPEC-17": 0,
+    "SPEC-18": 0
+  },
   "locked_tests": {
     "tests/engine/button-blinds.acceptance.test.ts": "834a4154da2ff06e7561aadad9ce2a51a79fa26dd334b5e0968201875a5bc8e6",
     "tests/playtest/games.acceptance.test.ts": "4aec9a165d7b97ddbec35414dfe392c43dd2329e31eee59b658ef66352a974f4"
@@ -782,11 +801,16 @@
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-1.16",
   "spec_sha256": "87750207c6c5cabfe0d4f69022b4e340b6374b7de4a2537c5579a963e2b7f979",
   "review_findings": {
-    "1": 1
+    "1": 1,
+    "2": 0
   },
   "brief_history": {
     "tests/engine/check-deal.test.ts:c5-returned-rule-untested": [
       "review r1"
     ]
+  },
+  "doc_id": "doc-63",
+  "judge_results": {
+    "1": "PASS"
   }
 }

@@ -4,7 +4,7 @@ title: Raise the sit-and-go limits every 10 hands on the published schedule
 status: To Do
 assignee: []
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-17T23:22:00Z'
+updated_date: '2026-11-21T09:25:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-2
@@ -49,6 +49,7 @@ Plan key: E05-S02 · Dream: limit-holdem-trainer
 - [ ] #4 Given a sit-and-go hand at level 3, When its stored hand record is read, Then its stake-or-level field holds level 3 with limits 40/80 [REQ-008.2]
 - [ ] #5 Given a sit-and-go at level 3 where the user has 790 chips (under 10 big bets of 80), When advice is requested for the user's decision, Then it includes the short-stack note; and Given the same stack of 790 at level 2 (big bet 60), Then no short-stack note is included [REQ-041.2]
 - [ ] #6 Given `npm run playtest -- --game sng --size 9 --hands 10000 --seed 7`, When it runs, Then every hand's blinds and bet sizes match the level for its hand number and zero invariant violations are reported [REQ-008.2, REQ-008.3]
+- [ ] #7 Given the sit-and-go playtest, When it runs, Then a test pins coverage of more than one completed sit-and-go (another seed or smaller --size), since seed 42 at 10,000 hands completes only one (TASK-1.16 Q-6)
 <!-- AC:END -->
 
 ## Definition of Done
@@ -66,3 +67,9 @@ Plan key: E05-S02 · Dream: limit-holdem-trainer
 - [ ] #11 Story documentation is written and published to Backlog.md
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+AC added from TASK-1.16 follow-up (multi-restart sng coverage)
+<!-- SECTION:NOTES:END -->
