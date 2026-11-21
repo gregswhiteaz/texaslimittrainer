@@ -13,7 +13,10 @@ export default defineConfig({
       include: ['src/**/*.{ts,tsx}'],
       exclude: ['src/**/*.test.{ts,tsx}', 'src/main.tsx'],
       reporter: ['text'],
-      thresholds: { lines: 70, 'src/{engine,bots,advice,stats}/**': { lines: 90 } },
+      thresholds: {
+        lines: 70,
+        'src/{engine,bots,advice,stats,playtest,table}/**': { lines: 90 },
+      },
     },
   },
 });

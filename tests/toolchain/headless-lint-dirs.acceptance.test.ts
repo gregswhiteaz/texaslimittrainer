@@ -1,9 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import {
-  HEADLESS_DIRS,
-  HEADLESS_FILES,
-  LINT_ONLY_HEADLESS_DIRS,
-} from '../../tools/lint/headless-boundary.js';
+import { HEADLESS_DIRS, HEADLESS_FILES } from '../../tools/lint/headless-boundary.js';
 import { runInSandbox, TOOLCHAIN_TIMEOUT_MS } from '../support/sandbox';
 
 const PROBE = [
@@ -54,14 +50,8 @@ describe('headless lint covers src/playtest and src/table', () => {
     TOOLCHAIN_TIMEOUT_MS,
   );
 
-  it('the lint-only headless folders are playtest and table', () => {
-    expect(LINT_ONLY_HEADLESS_DIRS).toEqual(['playtest', 'table']);
-    expect(HEADLESS_FILES).toEqual(
-      expect.arrayContaining([
-        'src/playtest/**',
-        'src/table/**',
-        ...HEADLESS_DIRS.map((dir) => `src/${dir}/**`),
-      ]),
-    );
+  it('the headless folders include playtest and table', () => {
+    expect(HEADLESS_DIRS).toEqual(['engine', 'bots', 'advice', 'stats', 'playtest', 'table']);
+    expect(HEADLESS_FILES).toEqual(HEADLESS_DIRS.map((dir) => `src/${dir}/**`));
   });
 });

@@ -4,13 +4,9 @@ import globals from 'globals';
 import { TYPE_STRIPPING_RESTRICTED_SYNTAX } from './type-stripping.js';
 
 /** Folders under src/ that must stay headless (REQ-059.2; 90% coverage threshold). */
-export const HEADLESS_DIRS = ['engine', 'bots', 'advice', 'stats'];
-/** Also linted as headless, but outside REQ-059.2's coverage set. */
-export const LINT_ONLY_HEADLESS_DIRS = ['playtest', 'table'];
+export const HEADLESS_DIRS = ['engine', 'bots', 'advice', 'stats', 'playtest', 'table'];
 
-export const HEADLESS_FILES = [...HEADLESS_DIRS, ...LINT_ONLY_HEADLESS_DIRS].map(
-  (dir) => `src/${dir}/**`,
-);
+export const HEADLESS_FILES = HEADLESS_DIRS.map((dir) => `src/${dir}/**`);
 
 const BROWSER_ONLY_MESSAGE = 'Browser-only API in a headless module (REQ-059.2).';
 

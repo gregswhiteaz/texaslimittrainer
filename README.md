@@ -167,8 +167,8 @@ machine does not fail them but slower code still does.
 
 - Unit and property tests live in `tests/**` or next to the code as `src/**/*.test.{ts,tsx}`.
   Playwright specs live in `e2e/**/*.spec.ts`.
-- `src/engine`, `src/bots`, `src/advice` and `src/stats` are headless: lint rejects React, DOM,
-  IndexedDB and `src/ui` imports there (see `tools/lint/headless-boundary.js`). Lint applies the
-  same import and global rules to `src/playtest` and `src/table`.
+- `src/engine`, `src/bots`, `src/advice`, `src/stats`, `src/playtest` and `src/table` are
+  headless: lint rejects React, DOM, IndexedDB and `src/ui` imports there (see
+  `tools/lint/headless-boundary.js`).
 - Coverage: at least 90% of lines in the headless folders and 70% overall.
 - Accessibility: e2e specs call `expectNoSeriousAxeViolations(page)` from `e2e/support/axe.ts`.

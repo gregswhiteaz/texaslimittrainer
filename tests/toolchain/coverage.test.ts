@@ -48,6 +48,7 @@ describe('coverage thresholds via npm test', () => {
   it(
     'npm test fails and names the 90% headless threshold when a headless folder is under-covered',
     () => {
+      expect(HEADLESS_DIRS).toEqual(expect.arrayContaining(['playtest', 'table']));
       for (const dir of HEADLESS_DIRS) {
         const result = runInSandbox(
           {
@@ -61,7 +62,7 @@ describe('coverage thresholds via npm test', () => {
 
         expect(result.exitCode, `${dir}: ${result.output}`).not.toBe(0);
         expect(result.output).toContain(
-          'does not meet "src/{engine,bots,advice,stats}/**" threshold (90%)',
+          'does not meet "src/{engine,bots,advice,stats,playtest,table}/**" threshold (90%)',
         );
         expect(result.output).not.toContain('global threshold');
       }
