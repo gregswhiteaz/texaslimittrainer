@@ -1,10 +1,11 @@
 ---
 id: TASK-1.16
 title: Move the button and blinds past busted seats
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-19T01:10:00Z'
+updated_date: '2026-11-21T09:02:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -75,6 +76,18 @@ Plan key: E01-S16 · Dream: limit-holdem-trainer
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
 
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. Engine: nextButton skipping busted seats; heads-up transition; all-in blinds (floor 1, short BB keeps full blind level — Q-1); deal-out when nobody can bet; no BB option vs all-ins.
+2. Playtest cash: stacks carry between hands, busted seats rebuy ; cross-hand chip check.
+3. Playtest --game sng: 1,500 chips at 20/40, no refills, restart when one player has all chips; replay word 2 = 1 (Q-3).
+4. CLI flags/text per Q-2; deal-time violations reported 'at the deal'.
+5. Locked-test edits E1–E6 (Q-4); new deterministic cash and sng baselines recorded.
+
+Full spec: doit/TASK-1.16/spec.md
+<!-- SECTION:PLAN:END -->
+
 ## Implementation Notes
 
 <!-- SECTION:NOTES:BEGIN -->
@@ -83,4 +96,6 @@ AC added from TASK-1.6 follow-up (doc-15): replay-code word 2 is reserved (0) fo
 AC added from TASK-1.8 follow-up (doc-16).
 
 TASK-3.4 Q-4 interim top-up to $160 must be removed once this and the other all-in/rebuy stories land: tracked as TASK-3.21.
+
+Autopilot Q-1..Q-4 auto-accepted (qa.md); unlocks under TASK-1.31, 1.21, 1.6, 1.11.
 <!-- SECTION:NOTES:END -->

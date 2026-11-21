@@ -1,0 +1,697 @@
+{
+  "id": "TASK-1.16",
+  "title": "Move the button and blinds past busted seats",
+  "status": "To Do",
+  "archived": false,
+  "type": "feature",
+  "priority": "high",
+  "project": null,
+  "assignees": [],
+  "reporter": null,
+  "labels": [
+    "dream-limit-holdem-trainer"
+  ],
+  "milestone": "m-1",
+  "parentTaskId": "TASK-1",
+  "acceptanceCriteriaCompleted": 0,
+  "acceptanceCriteriaCount": 9,
+  "references": [
+    "dreams/limit-holdem-trainer/requirements.md"
+  ],
+  "modifiedFiles": [],
+  "ordinal": 30000,
+  "createdAt": "2026-11-17T22:46:00Z",
+  "updatedAt": "2026-11-19T01:10:00Z",
+  "dueDate": null,
+  "isReady": true,
+  "path": "backlog/tasks/task-1.16 - Move-the-button-and-blinds-past-busted-seats.md",
+  "description": "As a learner, I want positions to rotate after each hand to the next players who have chips, so that positions rotate correctly as players bust.\n\nAfter each hand the button moves to the next seated player with chips and the next two such players post the blinds. Seats with no chips (busted in a sit-and-go) are skipped. No missed or dead blinds. When play becomes heads-up, heads-up rules apply from the next hand. A player who cannot cover a blind posts all their chips and is all-in. The playtest gains an interim `--game sng` mode: every seat starts with 1,500 chips (REQ-008.1) at fixed Level 1 limits 20/40 with blinds 10/20, busted seats are not refilled, and a new sit-and-go starts when one player holds all chips. E05 adds the rising level schedule to this same mode (it must not create a second sng mode). This story is the last of the M2 all-in rule stories (S12-S15 are its deps), so it also switches the cash playtest from the interim $160-per-hand reset to real stacks.\n\n## Requirements covered\n- REQ-018 (Must): All-in and side pots \u2014 When a player cannot match a bet, the engine shall let that player call all-in for the chips they have and shall create side pots so that each player can win only the amounts they matched.\n- REQ-020 (Must): Button and blind movement \u2014 After each hand, the engine shall move the button to the next seated player who has chips, and the next two such players shall post the small and big blinds.\n- REQ-056 (Must): Reliability and invariants \u2014 The engine shall complete 1,000,000 headless hands across all table sizes, game types and line-ups with zero invariant violations, and the app shall recover from an unexpected error without losing completed hands.\n- REQ-062 (Must): Headless playtest CLI \u2014 The project shall provide a command-line playtest runner that plays seeded bot-only hands with the production engine, checks invariants after every action and reports results.\n\nCovers: REQ-018, REQ-020, REQ-056, REQ-062\n\n## Notes\nE05 adds the rising level schedule (REQ-008.2/008.3) to this playtest sng mode and owns sit-and-go coverage of the 1,000,000-hand run in M3.\n\nPlan key: E01-S16 \u00b7 Dream: limit-holdem-trainer",
+  "dependencies": [
+    "TASK-1.11",
+    "TASK-1.9",
+    "TASK-1.10",
+    "TASK-1.14",
+    "TASK-1.15"
+  ],
+  "dependencyGraph": {
+    "root": "TASK-1.16",
+    "nodes": [
+      {
+        "id": "TASK-1.16",
+        "title": "Move the button and blinds past busted seats",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": 0,
+        "dependentDepth": 0
+      },
+      {
+        "id": "TASK-1",
+        "title": "Prove the game headlessly",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 1
+      },
+      {
+        "id": "TASK-1.1",
+        "title": "Bootstrap the strict TypeScript project with one-command checks",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 4,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.2",
+        "title": "Rank showdown hands by real poker hand rankings",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 6,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.3",
+        "title": "Deal every hand from a seeded shuffle with a replay code",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 6,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.4",
+        "title": "Play a complete fixed-limit hand from blinds to showdown",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 5,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.5",
+        "title": "Give each deciding seat only its own view of the hand",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 4,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.6",
+        "title": "Run seeded bot-only hands from the command line",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 3,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.7",
+        "title": "Run every check in GitHub Actions on each push and pull request",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 3,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.8",
+        "title": "Check game invariants after every playtest action",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 2,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.9",
+        "title": "Let a short-stacked player call all-in",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 1,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.10",
+        "title": "Split the pot into side pots for unequal all-ins",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 1,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.11",
+        "title": "Play heads-up hands with heads-up blinds and order",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 1,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.12",
+        "title": "Cap each street at one bet plus three raises",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 2,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.14",
+        "title": "Allow short all-in bets and raises under the half-bet reopening rule",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 1,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.15",
+        "title": "Show and muck cards at showdown in casino order",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 1,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.17",
+        "title": "Prove the engine with a 1,000,000-hand invariant run",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 1
+      },
+      {
+        "id": "TASK-3",
+        "title": "Play hands at the table",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 2
+      },
+      {
+        "id": "TASK-3.7",
+        "title": "Act correctly on capped streets and when short of chips",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 1
+      },
+      {
+        "id": "TASK-3.21",
+        "title": "Remove the temporary short-stack top-up once all-ins and rebuy exist",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 1
+      },
+      {
+        "id": "TASK-5",
+        "title": "Play a sit-and-go",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 2
+      },
+      {
+        "id": "TASK-5.1",
+        "title": "Start a sit-and-go where every player has 1,500 chips",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 1
+      },
+      {
+        "id": "TASK-5.2",
+        "title": "Leave a busted bot's seat empty for the rest of the sit-and-go",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 2
+      },
+      {
+        "id": "TASK-5.3",
+        "title": "Read every sit-and-go chip amount without a $ sign",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 2
+      },
+      {
+        "id": "TASK-5.4",
+        "title": "Raise the sit-and-go limits every 10 hands on the published schedule",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 2
+      },
+      {
+        "id": "TASK-5.5",
+        "title": "See the current level, its limits and hands to the next level in the header",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 3
+      },
+      {
+        "id": "TASK-5.6",
+        "title": "See the level on Home's Resume entry for a paused sit-and-go",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 4
+      },
+      {
+        "id": "TASK-5.7",
+        "title": "Finish a sit-and-go by busting or winning all the chips and see my finishing position",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 3
+      },
+      {
+        "id": "TASK-5.8",
+        "title": "See results when I bust in a sit-and-go with the review open",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 4
+      },
+      {
+        "id": "TASK-5.9",
+        "title": "See my last sit-and-go's finishing position in the Home snapshot",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 4
+      },
+      {
+        "id": "TASK-5.10",
+        "title": "Prove the sit-and-go structure over the 1,000,000-hand invariant run",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 2
+      },
+      {
+        "id": "TASK-5.11",
+        "title": "Leave a sit-and-go early and get my finishing position",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 4
+      },
+      {
+        "id": "TASK-6",
+        "title": "Face distinct opponents",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 3
+      },
+      {
+        "id": "TASK-6.9",
+        "title": "Prove the engine over 1,000,000 cash hands with every line-up preset",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 2
+      }
+    ],
+    "edges": [
+      {
+        "from": "TASK-1",
+        "to": "TASK-1.16"
+      },
+      {
+        "from": "TASK-1",
+        "to": "TASK-1.17"
+      },
+      {
+        "from": "TASK-1.2",
+        "to": "TASK-1.7"
+      },
+      {
+        "from": "TASK-1.3",
+        "to": "TASK-1.7"
+      },
+      {
+        "from": "TASK-1.4",
+        "to": "TASK-1.2"
+      },
+      {
+        "from": "TASK-1.4",
+        "to": "TASK-1.3"
+      },
+      {
+        "from": "TASK-1.5",
+        "to": "TASK-1.4"
+      },
+      {
+        "from": "TASK-1.6",
+        "to": "TASK-1.5"
+      },
+      {
+        "from": "TASK-1.7",
+        "to": "TASK-1.1"
+      },
+      {
+        "from": "TASK-1.8",
+        "to": "TASK-1.6"
+      },
+      {
+        "from": "TASK-1.8",
+        "to": "TASK-1.7"
+      },
+      {
+        "from": "TASK-1.9",
+        "to": "TASK-1.8"
+      },
+      {
+        "from": "TASK-1.10",
+        "to": "TASK-1.9"
+      },
+      {
+        "from": "TASK-1.11",
+        "to": "TASK-1.8"
+      },
+      {
+        "from": "TASK-1.12",
+        "to": "TASK-1.11"
+      },
+      {
+        "from": "TASK-1.14",
+        "to": "TASK-1.9"
+      },
+      {
+        "from": "TASK-1.14",
+        "to": "TASK-1.12"
+      },
+      {
+        "from": "TASK-1.15",
+        "to": "TASK-1.8"
+      },
+      {
+        "from": "TASK-1.15",
+        "to": "TASK-1.10"
+      },
+      {
+        "from": "TASK-1.16",
+        "to": "TASK-1.9"
+      },
+      {
+        "from": "TASK-1.16",
+        "to": "TASK-1.10"
+      },
+      {
+        "from": "TASK-1.16",
+        "to": "TASK-1.11"
+      },
+      {
+        "from": "TASK-1.16",
+        "to": "TASK-1.14"
+      },
+      {
+        "from": "TASK-1.16",
+        "to": "TASK-1.15"
+      },
+      {
+        "from": "TASK-1.17",
+        "to": "TASK-1.16"
+      },
+      {
+        "from": "TASK-3",
+        "to": "TASK-3.7"
+      },
+      {
+        "from": "TASK-3.7",
+        "to": "TASK-1.16"
+      },
+      {
+        "from": "TASK-3.21",
+        "to": "TASK-1.16"
+      },
+      {
+        "from": "TASK-5",
+        "to": "TASK-5.1"
+      },
+      {
+        "from": "TASK-5",
+        "to": "TASK-5.2"
+      },
+      {
+        "from": "TASK-5",
+        "to": "TASK-5.3"
+      },
+      {
+        "from": "TASK-5",
+        "to": "TASK-5.4"
+      },
+      {
+        "from": "TASK-5",
+        "to": "TASK-5.5"
+      },
+      {
+        "from": "TASK-5",
+        "to": "TASK-5.6"
+      },
+      {
+        "from": "TASK-5",
+        "to": "TASK-5.7"
+      },
+      {
+        "from": "TASK-5",
+        "to": "TASK-5.8"
+      },
+      {
+        "from": "TASK-5",
+        "to": "TASK-5.9"
+      },
+      {
+        "from": "TASK-5",
+        "to": "TASK-5.10"
+      },
+      {
+        "from": "TASK-5",
+        "to": "TASK-5.11"
+      },
+      {
+        "from": "TASK-5.1",
+        "to": "TASK-1.16"
+      },
+      {
+        "from": "TASK-5.2",
+        "to": "TASK-5.1"
+      },
+      {
+        "from": "TASK-5.3",
+        "to": "TASK-5.1"
+      },
+      {
+        "from": "TASK-5.3",
+        "to": "TASK-5.7"
+      },
+      {
+        "from": "TASK-5.4",
+        "to": "TASK-5.1"
+      },
+      {
+        "from": "TASK-5.5",
+        "to": "TASK-5.4"
+      },
+      {
+        "from": "TASK-5.6",
+        "to": "TASK-5.5"
+      },
+      {
+        "from": "TASK-5.7",
+        "to": "TASK-5.2"
+      },
+      {
+        "from": "TASK-5.8",
+        "to": "TASK-5.7"
+      },
+      {
+        "from": "TASK-5.9",
+        "to": "TASK-5.7"
+      },
+      {
+        "from": "TASK-5.10",
+        "to": "TASK-1.17"
+      },
+      {
+        "from": "TASK-5.10",
+        "to": "TASK-5.2"
+      },
+      {
+        "from": "TASK-5.10",
+        "to": "TASK-5.4"
+      },
+      {
+        "from": "TASK-5.10",
+        "to": "TASK-6.9"
+      },
+      {
+        "from": "TASK-5.11",
+        "to": "TASK-5.7"
+      },
+      {
+        "from": "TASK-6",
+        "to": "TASK-6.9"
+      },
+      {
+        "from": "TASK-6.9",
+        "to": "TASK-1.17"
+      }
+    ]
+  },
+  "readiness": {
+    "isReady": true,
+    "isBlocked": false,
+    "blockingDependencies": [],
+    "missingDependencies": []
+  },
+  "documentation": [
+    "doc-1",
+    "doc-2"
+  ],
+  "subtasks": [],
+  "acceptanceCriteria": [
+    {
+      "index": 1,
+      "text": "Given a 6-player hand ends with the button at seat 1 and all seats holding chips, When the next hand starts, Then the button is at seat 2 and seats 3 and 4 post the blinds [REQ-020.1]",
+      "checked": false
+    },
+    {
+      "index": 2,
+      "text": "Given seat 3 has no chips and the button is at seat 1, When the next hand starts, Then seat 3 is skipped: the button is at seat 2 and seats 4 and 5 post the blinds [REQ-020.1]",
+      "checked": false
+    },
+    {
+      "index": 3,
+      "text": "Given a player busted while due to post the big blind next hand, When the next hand starts, Then no player posts a missed or dead blind and only one small blind and one big blind are posted [REQ-020.2]",
+      "checked": false
+    },
+    {
+      "index": 4,
+      "text": "Given three players remain and one busts, When the next hand starts, Then the button posts the small blind and acts first preflop [REQ-020.3]",
+      "checked": false
+    },
+    {
+      "index": 5,
+      "text": "Given a player with $1 due to post the $2 small blind, When blinds are posted, Then that player posts $1 and is all-in [REQ-020.4]",
+      "checked": false
+    },
+    {
+      "index": 6,
+      "text": "Given `npm run playtest -- --hands 10000 --game sng --seed 42`, When it runs, Then every sit-and-go starts each seat with 1,500 chips at 20/40 limits, busted seats are never refilled and are skipped for button and blinds, a new sit-and-go starts when one player holds all chips, and zero invariant violations are reported [REQ-062.1, REQ-020.1]",
+      "checked": false
+    },
+    {
+      "index": 7,
+      "text": "Given `npm run playtest -- --hands 10000 --seed 42` (cash), When hands are played, Then every seat keeps its real stack between hands, only a busted seat is restored to the $160 buy-in, short-stack all-ins and side pots occur, and zero invariant violations are reported [REQ-056.1, REQ-018.5]",
+      "checked": false
+    },
+    {
+      "index": 8,
+      "text": "Given --game sng and --game cash with the same --seed, When both runs deal hand k, Then their replay codes differ in word 2 and are otherwise derived from seed and k",
+      "checked": false
+    },
+    {
+      "index": 9,
+      "text": "Given consecutive playtest hands, When the next hand starts, Then each seat's starting stack equals its final stack from the previous hand (cross-hand chip check)",
+      "checked": false
+    }
+  ],
+  "definitionOfDone": [
+    {
+      "index": 1,
+      "text": "Every acceptance criterion has at least one automated test (unit, property or Playwright) that passes",
+      "checked": false
+    },
+    {
+      "index": 2,
+      "text": "`npm run lint`, `npm run typecheck` and `npm test` pass with zero errors [REQ-059.1, REQ-059.4]",
+      "checked": false
+    },
+    {
+      "index": 3,
+      "text": "The golden-spot suite passes 100% (applies from the story that creates the suite, E07-S14, onward) [REQ-039.4]",
+      "checked": false
+    },
+    {
+      "index": 4,
+      "text": "Coverage thresholds hold: >= 90% engine/bots/advice/statistics, >= 70% overall [REQ-059.3]",
+      "checked": false
+    },
+    {
+      "index": 5,
+      "text": "Engine, bots, advice and statistics code imports no UI or browser-only code [REQ-059.2]",
+      "checked": false
+    },
+    {
+      "index": 6,
+      "text": "Stories that touch the engine, bots or advice: a 10,000-hand playtest reports zero invariant violations (applies once the playtest runner exists, E01-S07, onward) [REQ-056.1]",
+      "checked": false
+    },
+    {
+      "index": 7,
+      "text": "Stories that add or change a screen: Playwright test of the screen flow in Chromium and WebKit, and axe reports zero serious or critical violations (axe tooling is provisioned in the toolchain story E01-S01) [REQ-057.1]",
+      "checked": false
+    },
+    {
+      "index": 8,
+      "text": "No new network requests beyond the app's own files [REQ-058.1]",
+      "checked": false
+    },
+    {
+      "index": 9,
+      "text": "Strategy-content stories: text is original and every chart, range or golden spot carries its justification [REQ-061.2]",
+      "checked": false
+    },
+    {
+      "index": 10,
+      "text": "CI workflow is green on the story's branch (applies once the CI story E01-S02 is done; E01-S01 instead passes the same checks locally) [REQ-064.2]",
+      "checked": false
+    },
+    {
+      "index": 11,
+      "text": "Story documentation is written and published to Backlog.md",
+      "checked": false
+    },
+    {
+      "index": 12,
+      "text": "Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled",
+      "checked": false
+    }
+  ],
+  "implementationPlan": null,
+  "implementationNotes": "AC added from TASK-1.6 follow-up (doc-15): replay-code word 2 is reserved (0) for the game type.\n\nAC added from TASK-1.8 follow-up (doc-16).\n\nTASK-3.4 Q-4 interim top-up to $160 must be removed once this and the other all-in/rebuy stories land: tracked as TASK-3.21.",
+  "comments": [],
+  "finalSummary": null
+}

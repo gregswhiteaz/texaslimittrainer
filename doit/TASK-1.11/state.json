@@ -706,7 +706,14 @@
       "skips": 0
     }
   },
-  "history": [],
+  "history": [
+    {
+      "t": "2026-11-21T02:02:18",
+      "event": "unlock",
+      "file": "tests/playtest/heads-up.acceptance.test.ts",
+      "reason": "TASK-1.16 Q-4 (autopilot, recommended): all-in blinds (floor 1), cash stacks carry between hands, new Table/replay text; nothing removed or loosened"
+    }
+  ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-1.11",
   "spec_sha256": "0146d06793ced16642c337af81c6373968ee73b23037c8e28838d6bbdc0e3423",
   "review_findings": {
@@ -715,5 +722,8 @@
   "doc_id": "doc-57",
   "judge_results": {
     "3": "PASS"
-  }
+  },
+  "relock_pending": [
+    "tests/playtest/heads-up.acceptance.test.ts"
+  ]
 }

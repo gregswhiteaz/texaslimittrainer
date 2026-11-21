@@ -511,6 +511,12 @@
       "event": "unlock",
       "file": "tests/engine/input-hardening.acceptance.test.ts",
       "reason": "TASK-1.9 Q-4 (autopilot, recommended): update expected amounts/messages for all-in support (uncalled bets returned, stack floor bigBlind+1); nothing removed or loosened"
+    },
+    {
+      "t": "2026-11-21T02:02:17",
+      "event": "unlock",
+      "file": "tests/engine/input-hardening.acceptance.test.ts",
+      "reason": "TASK-1.16 Q-4 (autopilot, recommended): all-in blinds (floor 1), cash stacks carry between hands, new Table/replay text; nothing removed or loosened"
     }
   ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-1.21",
@@ -523,6 +529,7 @@
     "1": "PASS"
   },
   "relock_pending": [
+    "tests/engine/input-hardening.acceptance.test.ts",
     "tests/engine/input-hardening.acceptance.test.ts",
     "tests/engine/input-hardening.acceptance.test.ts"
   ]
