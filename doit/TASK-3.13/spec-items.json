@@ -1,0 +1,62 @@
+[
+  {
+    "id": "SPEC-01",
+    "verifies": "AC#4",
+    "verification": "unit `tests/table/pace.test.ts::Rapid adds no wait before a bot acts`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-02",
+    "verifies": "AC#4, DoD#1, DoD#8",
+    "verification": "acceptance `e2e/rapid-pace.spec.ts::each bot action appears on the next tick of a paused clock` and `e2e/rapid-pace.spec.ts::the paused-clock pace check catches a 400 ms wait`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-03",
+    "verifies": "AC#3, AC#5, DoD#1",
+    "verification": "acceptance `tests/table/pace.acceptance.test.ts::200 rapid hands with a folding user fit in 60 minutes including the 1.5 s between hands`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-04",
+    "verifies": "AC#1, DoD#1",
+    "verification": "acceptance `e2e/rapid-pace.spec.ts::each bot action at 6-max shows within 300 ms of the previous action`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-05",
+    "verifies": "AC#2, DoD#1",
+    "verification": "acceptance `e2e/rapid-pace.spec.ts::at 10 players every bot action after the user folds shows within 300 ms`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-06",
+    "verifies": "AC#3, AC#5, DoD#1",
+    "verification": "acceptance `e2e/rapid-pace.spec.ts::200 rapid hands with a folding user finish in under 60 minutes`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-07",
+    "verifies": "DoD#2, DoD#4, DoD#5",
+    "verification": "command `npm run lint && npm run typecheck && npm test`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-08",
+    "verifies": "DoD#6",
+    "verification": "command `npm run playtest -- --hands 10000 --seed 42 && npm run playtest -- --hands 10000 --seed 42 --game sng`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-09",
+    "verifies": "DoD#10, DoD#11",
+    "verification": "manual CI run on branch `doit/TASK-3.13` and `backlog doc list --plain`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-10",
+    "verifies": "DoD#3, DoD#7, DoD#9, DoD#12",
+    "verification": "manual Judge confirms the diff changes no screen markup or text, adds no strategy text, and that E07-S14 and E13-S07 are not Done",
+    "status": "pending"
+  }
+]

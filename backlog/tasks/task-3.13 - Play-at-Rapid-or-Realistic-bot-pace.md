@@ -1,10 +1,11 @@
 ---
 id: TASK-3.13
 title: Play at Rapid bot pace
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-19T01:10:00Z'
+updated_date: '2026-11-21T20:26:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -62,10 +63,23 @@ Plan key: E03-S13 · Dream: limit-holdem-trainer
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
 
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. Name the Rapid bot delay (RAPID_BOT_DELAY_MS = 0, botActionDelayMs) and use it in useTableSession (no timing change).
+2. Every push: unit check (0 ms), paused-fake-clock e2e guard that fails on an artificial wait (self-test with a 400 ms wait), 200-hand model of scheduled waits (exactly 300,000 ms; worst case ≥200 hands/hour).
+3. Opt-in (npm run e2e:slow): real-time 300 ms per bot action at 6-max and 10 players; 200 real hands under 60 minutes.
+4. README pace note.
+
+Full spec: doit/TASK-3.13/spec.md
+<!-- SECTION:PLAN:END -->
+
 ## Implementation Notes
 
 <!-- SECTION:NOTES:BEGIN -->
 AC added from TASK-3.1 follow-up (doc-21).
 
 AC added from TASK-3.4 follow-up (doc-25).
+
+Autopilot: no asks. Timing checks opt-in per the user's standing rule.
 <!-- SECTION:NOTES:END -->

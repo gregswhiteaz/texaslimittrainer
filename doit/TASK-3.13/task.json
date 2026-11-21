@@ -1,0 +1,681 @@
+{
+  "id": "TASK-3.13",
+  "title": "Play at Rapid bot pace",
+  "status": "To Do",
+  "archived": false,
+  "type": "feature",
+  "priority": "high",
+  "project": null,
+  "assignees": [],
+  "reporter": null,
+  "labels": [
+    "dream-limit-holdem-trainer"
+  ],
+  "milestone": "m-1",
+  "parentTaskId": "TASK-3",
+  "acceptanceCriteriaCompleted": 0,
+  "acceptanceCriteriaCount": 5,
+  "references": [
+    "dreams/limit-holdem-trainer/requirements.md"
+  ],
+  "modifiedFiles": [],
+  "ordinal": 34000,
+  "createdAt": "2026-11-17T22:46:00Z",
+  "updatedAt": "2026-11-19T01:10:00Z",
+  "dueDate": null,
+  "isReady": true,
+  "path": "backlog/tasks/task-3.13 - Play-at-Rapid-or-Realistic-bot-pace.md",
+  "description": "As a learner, I want bots to act at Rapid pace, so that I can practise many hands per hour.\n\nMoved to M2 by Q-99 so G-5 is testable early. Rapid: each bot action is displayed within 300 ms of the previous action. In M2 every session plays at Rapid (the speed choice is E02-S11, the Settings default E12, Realistic pace E03-S18, in-session change E03-S14, all M3). G-5 fit (REQ-024 fit criterion): at Rapid with the review panel not opening and the user folding every hand, 200 hands complete in under 60 minutes.\n\n## Requirements covered\n- REQ-011 (Should): Speed choice \u2014 The Game Config screen shall let the user choose Rapid or Realistic speed, defaulting to the speed set in Settings.\n- REQ-024 (Must): Between hands \u2014 When a hand ends, TLH Trainer shall show the result, and shall deal the next hand only after the user clicks Deal next hand if the Hand Review panel is open, or automatically after 1.5 seconds if it is not.\n\nCovers: REQ-011, REQ-024\n\nPlan key: E03-S13 \u00b7 Dream: limit-holdem-trainer",
+  "dependencies": [
+    "TASK-3.4"
+  ],
+  "dependencyGraph": {
+    "root": "TASK-3.13",
+    "nodes": [
+      {
+        "id": "TASK-3.13",
+        "title": "Play at Rapid bot pace",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": 0,
+        "dependentDepth": 0
+      },
+      {
+        "id": "TASK-1.1",
+        "title": "Bootstrap the strict TypeScript project with one-command checks",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 4,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.2",
+        "title": "Rank showdown hands by real poker hand rankings",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 6,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.3",
+        "title": "Deal every hand from a seeded shuffle with a replay code",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 6,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.4",
+        "title": "Play a complete fixed-limit hand from blinds to showdown",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 5,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.5",
+        "title": "Give each deciding seat only its own view of the hand",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 4,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.6",
+        "title": "Run seeded bot-only hands from the command line",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 5,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.7",
+        "title": "Run every check in GitHub Actions on each push and pull request",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 7,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-2",
+        "title": "Launch and set up a session",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 2
+      },
+      {
+        "id": "TASK-2.11",
+        "title": "Choose Rapid or Realistic speed for the session",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 1
+      },
+      {
+        "id": "TASK-3",
+        "title": "Play hands at the table",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 1
+      },
+      {
+        "id": "TASK-3.1",
+        "title": "Play a complete hand against TAG bots at a default 6-max table in the browser",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 3,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-3.3",
+        "title": "See every seat, the board, the pot and the button at a glance",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 2,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-3.4",
+        "title": "See who won each hand and get the next hand dealt automatically",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 1,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-3.5",
+        "title": "Read big-index cards drawn in code",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 3,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-3.15",
+        "title": "Change speed during a session from the table",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 2
+      },
+      {
+        "id": "TASK-3.17",
+        "title": "Operate every table control with native buttons and large targets",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 3
+      },
+      {
+        "id": "TASK-3.18",
+        "title": "Play at Realistic bot pace",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 1
+      },
+      {
+        "id": "TASK-4",
+        "title": "Follow the action at a glance",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 2
+      },
+      {
+        "id": "TASK-4.2",
+        "title": "See a bot's in-style speech bubble after a table event",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 1
+      },
+      {
+        "id": "TASK-4.6",
+        "title": "Watch deals and chip moves animate without slowing my play",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 1
+      },
+      {
+        "id": "TASK-4.8",
+        "title": "Keep bot banter rare and free of hidden information",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 2
+      },
+      {
+        "id": "TASK-6.1",
+        "title": "Face TAG bots that act from the advice engine",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 4,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-7.1",
+        "title": "Compute a hand's equity against opponent hands",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 6,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-7.2",
+        "title": "Recommend a preflop action from the 6-max chart",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 5,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-7.3",
+        "title": "Recommend call or fold after the flop from equity and pot odds",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 5,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-12",
+        "title": "Tune the trainer",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 3
+      },
+      {
+        "id": "TASK-12.3",
+        "title": "Open Settings over the table without pausing the session",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 2
+      },
+      {
+        "id": "TASK-12.4",
+        "title": "Delete all my data after confirming",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 3
+      },
+      {
+        "id": "TASK-12.5",
+        "title": "Choose the default speed for new sessions in Settings",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 2
+      },
+      {
+        "id": "TASK-12.6",
+        "title": "Turn off automatic opening of the Hand Review panel",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 3
+      },
+      {
+        "id": "TASK-12.7",
+        "title": "Switch to a four-colour deck",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 3
+      },
+      {
+        "id": "TASK-12.8",
+        "title": "Turn bot banter off",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 2
+      },
+      {
+        "id": "TASK-12.9",
+        "title": "Warn me in Settings when the browser can clear my history",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 3
+      }
+    ],
+    "edges": [
+      {
+        "from": "TASK-1.2",
+        "to": "TASK-1.7"
+      },
+      {
+        "from": "TASK-1.3",
+        "to": "TASK-1.7"
+      },
+      {
+        "from": "TASK-1.4",
+        "to": "TASK-1.2"
+      },
+      {
+        "from": "TASK-1.4",
+        "to": "TASK-1.3"
+      },
+      {
+        "from": "TASK-1.5",
+        "to": "TASK-1.4"
+      },
+      {
+        "from": "TASK-1.6",
+        "to": "TASK-1.5"
+      },
+      {
+        "from": "TASK-1.7",
+        "to": "TASK-1.1"
+      },
+      {
+        "from": "TASK-2",
+        "to": "TASK-2.11"
+      },
+      {
+        "from": "TASK-2.11",
+        "to": "TASK-3.13"
+      },
+      {
+        "from": "TASK-2.11",
+        "to": "TASK-3.18"
+      },
+      {
+        "from": "TASK-3",
+        "to": "TASK-3.13"
+      },
+      {
+        "from": "TASK-3",
+        "to": "TASK-3.15"
+      },
+      {
+        "from": "TASK-3",
+        "to": "TASK-3.17"
+      },
+      {
+        "from": "TASK-3",
+        "to": "TASK-3.18"
+      },
+      {
+        "from": "TASK-3.1",
+        "to": "TASK-1.5"
+      },
+      {
+        "from": "TASK-3.1",
+        "to": "TASK-3.5"
+      },
+      {
+        "from": "TASK-3.1",
+        "to": "TASK-6.1"
+      },
+      {
+        "from": "TASK-3.3",
+        "to": "TASK-3.1"
+      },
+      {
+        "from": "TASK-3.3",
+        "to": "TASK-3.5"
+      },
+      {
+        "from": "TASK-3.4",
+        "to": "TASK-3.3"
+      },
+      {
+        "from": "TASK-3.5",
+        "to": "TASK-1.1"
+      },
+      {
+        "from": "TASK-3.13",
+        "to": "TASK-3.4"
+      },
+      {
+        "from": "TASK-3.15",
+        "to": "TASK-3.18"
+      },
+      {
+        "from": "TASK-3.17",
+        "to": "TASK-3.15"
+      },
+      {
+        "from": "TASK-3.18",
+        "to": "TASK-3.13"
+      },
+      {
+        "from": "TASK-4",
+        "to": "TASK-4.2"
+      },
+      {
+        "from": "TASK-4",
+        "to": "TASK-4.6"
+      },
+      {
+        "from": "TASK-4",
+        "to": "TASK-4.8"
+      },
+      {
+        "from": "TASK-4.2",
+        "to": "TASK-3.13"
+      },
+      {
+        "from": "TASK-4.2",
+        "to": "TASK-3.18"
+      },
+      {
+        "from": "TASK-4.6",
+        "to": "TASK-3.13"
+      },
+      {
+        "from": "TASK-4.6",
+        "to": "TASK-3.18"
+      },
+      {
+        "from": "TASK-4.8",
+        "to": "TASK-4.2"
+      },
+      {
+        "from": "TASK-6.1",
+        "to": "TASK-1.6"
+      },
+      {
+        "from": "TASK-6.1",
+        "to": "TASK-7.2"
+      },
+      {
+        "from": "TASK-6.1",
+        "to": "TASK-7.3"
+      },
+      {
+        "from": "TASK-7.1",
+        "to": "TASK-1.2"
+      },
+      {
+        "from": "TASK-7.2",
+        "to": "TASK-1.5"
+      },
+      {
+        "from": "TASK-7.3",
+        "to": "TASK-7.1"
+      },
+      {
+        "from": "TASK-7.3",
+        "to": "TASK-7.2"
+      },
+      {
+        "from": "TASK-12",
+        "to": "TASK-12.3"
+      },
+      {
+        "from": "TASK-12",
+        "to": "TASK-12.4"
+      },
+      {
+        "from": "TASK-12",
+        "to": "TASK-12.5"
+      },
+      {
+        "from": "TASK-12",
+        "to": "TASK-12.6"
+      },
+      {
+        "from": "TASK-12",
+        "to": "TASK-12.7"
+      },
+      {
+        "from": "TASK-12",
+        "to": "TASK-12.8"
+      },
+      {
+        "from": "TASK-12",
+        "to": "TASK-12.9"
+      },
+      {
+        "from": "TASK-12.3",
+        "to": "TASK-3.18"
+      },
+      {
+        "from": "TASK-12.4",
+        "to": "TASK-12.3"
+      },
+      {
+        "from": "TASK-12.4",
+        "to": "TASK-12.5"
+      },
+      {
+        "from": "TASK-12.4",
+        "to": "TASK-12.6"
+      },
+      {
+        "from": "TASK-12.4",
+        "to": "TASK-12.7"
+      },
+      {
+        "from": "TASK-12.4",
+        "to": "TASK-12.8"
+      },
+      {
+        "from": "TASK-12.5",
+        "to": "TASK-2.11"
+      },
+      {
+        "from": "TASK-12.6",
+        "to": "TASK-12.3"
+      },
+      {
+        "from": "TASK-12.7",
+        "to": "TASK-12.3"
+      },
+      {
+        "from": "TASK-12.8",
+        "to": "TASK-4.2"
+      },
+      {
+        "from": "TASK-12.9",
+        "to": "TASK-12.3"
+      }
+    ]
+  },
+  "readiness": {
+    "isReady": true,
+    "isBlocked": false,
+    "blockingDependencies": [],
+    "missingDependencies": []
+  },
+  "documentation": [
+    "doc-1",
+    "doc-2"
+  ],
+  "subtasks": [],
+  "acceptanceCriteria": [
+    {
+      "index": 1,
+      "text": "Given Rapid speed in a timed 6-max session, When consecutive bot actions are measured, Then each bot action is displayed within 300 ms of the previous action [REQ-011.1]",
+      "checked": false
+    },
+    {
+      "index": 2,
+      "text": "Given Rapid speed at a 10-player table where the user folds preflop, When the remaining nine players' actions are measured, Then no bot action is displayed later than 300 ms after the previous action [REQ-011.1]",
+      "checked": false
+    },
+    {
+      "index": 3,
+      "text": "Given Rapid speed, the Hand Review panel not opening and a scripted user folding every hand, When an automated run plays 200 hands, Then they complete in under 60 minutes [REQ-024.6]",
+      "checked": false
+    },
+    {
+      "index": 4,
+      "text": "Given Rapid pace, When bots act in sequence, Then a test fails if any bot action is delayed by an artificial wait (e.g. 400 ms) rather than acting on the next scheduler tick",
+      "checked": false
+    },
+    {
+      "index": 5,
+      "text": "Given the pace check, When hands per hour are measured, Then the 1.5 s between-hands delay (fixed for every speed, TASK-3.4 D-6) is included",
+      "checked": false
+    }
+  ],
+  "definitionOfDone": [
+    {
+      "index": 1,
+      "text": "Every acceptance criterion has at least one automated test (unit, property or Playwright) that passes",
+      "checked": false
+    },
+    {
+      "index": 2,
+      "text": "`npm run lint`, `npm run typecheck` and `npm test` pass with zero errors [REQ-059.1, REQ-059.4]",
+      "checked": false
+    },
+    {
+      "index": 3,
+      "text": "The golden-spot suite passes 100% (applies from the story that creates the suite, E07-S14, onward) [REQ-039.4]",
+      "checked": false
+    },
+    {
+      "index": 4,
+      "text": "Coverage thresholds hold: >= 90% engine/bots/advice/statistics, >= 70% overall [REQ-059.3]",
+      "checked": false
+    },
+    {
+      "index": 5,
+      "text": "Engine, bots, advice and statistics code imports no UI or browser-only code [REQ-059.2]",
+      "checked": false
+    },
+    {
+      "index": 6,
+      "text": "Stories that touch the engine, bots or advice: a 10,000-hand playtest reports zero invariant violations (applies once the playtest runner exists, E01-S07, onward) [REQ-056.1]",
+      "checked": false
+    },
+    {
+      "index": 7,
+      "text": "Stories that add or change a screen: Playwright test of the screen flow in Chromium and WebKit, and axe reports zero serious or critical violations (axe tooling is provisioned in the toolchain story E01-S01) [REQ-057.1]",
+      "checked": false
+    },
+    {
+      "index": 8,
+      "text": "No new network requests beyond the app's own files [REQ-058.1]",
+      "checked": false
+    },
+    {
+      "index": 9,
+      "text": "Strategy-content stories: text is original and every chart, range or golden spot carries its justification [REQ-061.2]",
+      "checked": false
+    },
+    {
+      "index": 10,
+      "text": "CI workflow is green on the story's branch (applies once the CI story E01-S02 is done; E01-S01 instead passes the same checks locally) [REQ-064.2]",
+      "checked": false
+    },
+    {
+      "index": 11,
+      "text": "Story documentation is written and published to Backlog.md",
+      "checked": false
+    },
+    {
+      "index": 12,
+      "text": "Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled",
+      "checked": false
+    }
+  ],
+  "implementationPlan": null,
+  "implementationNotes": "AC added from TASK-3.1 follow-up (doc-21).\n\nAC added from TASK-3.4 follow-up (doc-25).",
+  "comments": [],
+  "finalSummary": null
+}
