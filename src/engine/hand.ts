@@ -100,6 +100,12 @@ export interface HandState {
   /** Non-null iff the hand is complete. */
   readonly result: HandResult | null;
 }
+/**
+ * Why `applyAction` rejected an action (REQ-017.4):
+ * - `hand-complete`: the hand is over.
+ * - `out-of-turn`: `action.seat` isn't `state.toAct`.
+ * - `illegal-action`: the type and amount don't exactly match an entry of `legalActions(state)`.
+ */
 export type ApplyErrorCode = 'hand-complete' | 'out-of-turn' | 'illegal-action';
 export type ApplyResult =
   | { readonly ok: true; readonly state: HandState }
@@ -481,7 +487,13 @@ function endRound(state: HandState, players: readonly PlayerState[]): HandState 
   };
 }
 
-/** Applies a legal action; never mutates `state`. */
+/**
+ * Applies a legal action and returns the next state. Never throws for a well-typed action and never mutates
+ * `state` or `action`. Rejections (REQ-017.4), checked in this order: `hand-complete` (the hand is over),
+ * `out-of-turn` (`action.seat` isn't `state.toAct`), `illegal-action` (the type and amount don't exactly match
+ * an entry of `legalActions(state)`, e.g. a wrong amount, a raise on a capped street, or a fold when no bet is
+ * faced).
+ */
 export function applyAction(state: HandState, action: Action): ApplyResult {
   if (state.result !== null) return reject('hand-complete', 'The hand is complete');
   if (action.seat !== state.toAct) {
