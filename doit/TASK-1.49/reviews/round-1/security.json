@@ -1,0 +1,3 @@
+{"reviewer": "security", "round": 1,
+ "findings": [],
+ "summary": "Test-support-only change. killGroupQuietly(pid) signals -child.pid, where child is spawned with detached:true so it leads its own process group; pid comes from spawn, not from external input, and the undefined guard prevents a kill(-0)/own-group signal. Ignoring EPERM/ESRCH and rethrowing everything else is fine here. Silencing the log only removes a stdout line, so no secret or diagnostic is newly exposed or hidden in a security-relevant way. The test mocks process.kill only for negative targets and restores mocks in finally. No new dependencies, no untrusted input, no file-permission or temp-file issues beyond mkdtempSync, which is used and cleaned up correctly. Consistent with spec section 8 (N/A)."}

@@ -1,11 +1,11 @@
 ---
 id: TASK-1.49
 title: Stop the sandbox-timeout test failing with EPERM
-status: In Progress
+status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-21T00:53:00Z'
-updated_date: '2026-11-21T01:05:00Z'
+updated_date: '2026-11-21T01:18:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -14,6 +14,8 @@ dependencies:
   - TASK-1.39
 references:
   - doc-46
+documentation:
+  - doc-47
 parent_task_id: TASK-1
 priority: medium
 type: chore
@@ -28,8 +30,8 @@ Seen twice on 2026-11-20 (TASK-1.46 fix gate, TASK-1.40 judge scratch runs): tes
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Given the sandbox-timeout acceptance test runs while the machine is under heavy load, When the timed-out command's process group is killed, Then an EPERM from an already-exiting group does not fail the test (and the grandchild is still proven dead)
-- [ ] #2 Given 10 consecutive runs of that test file under 3x-core load, When they finish, Then all pass
+- [x] #1 Given the sandbox-timeout acceptance test runs while the machine is under heavy load, When the timed-out command's process group is killed, Then an EPERM from an already-exiting group does not fail the test (and the grandchild is still proven dead)
+- [x] #2 Given 10 consecutive runs of that test file under 3x-core load, When they finish, Then all pass
 <!-- AC:END -->
 
 ## Implementation Plan
@@ -41,3 +43,19 @@ Seen twice on 2026-11-20 (TASK-1.46 fix gate, TASK-1.40 judge scratch runs): tes
 
 Full spec: doit/TASK-1.49/spec.md
 <!-- SECTION:PLAN:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+Build: process-group.ts uses a quiet local group kill (EPERM/ESRCH ignored, no stdout), unit test proves it; locked sandbox-timeout test unchanged and 10/10 under 3x-core load; gate PASS
+
+Judge R1 PASS 3/3; 10/10 under 3x-core load; base commit reproduces the corrupted-JSON bug.
+
+Follow-ups (Step 6a): none.
+<!-- SECTION:NOTES:END -->
+
+## Final Summary
+
+<!-- SECTION:FINAL_SUMMARY:BEGIN -->
+Fixed the intermittent EPERM failure of the locked sandbox-timeout test. runProcessGroup now uses a local quiet group kill (ignores EPERM/ESRCH, writes nothing) instead of tools/ci/retry.js killGroup, whose EPERM log line corrupted the CLI's JSON stdout and made timedOut false. Changed tests/support/process-group.ts and its unit test only (56 lines). Verified: npm test 363 passed; locked test unchanged and passing; 10/10 runs under 3x-core load; review and judge round 1 had no findings. Assumptions to review: EPERM ignored silently in test support (A-1); fix placed in the helper, not in sandbox.ts parsing (A-2). No follow-ups.
+<!-- SECTION:FINAL_SUMMARY:END -->

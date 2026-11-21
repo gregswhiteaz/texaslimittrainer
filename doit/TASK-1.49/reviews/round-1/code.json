@@ -1,0 +1,14 @@
+{"reviewer": "code", "round": 1,
+ "rubric": [
+  {"item": "SPEC-01 correctness", "result": "pass"},
+  {"item": "SPEC-01 test strength", "result": "pass"},
+  {"item": "SPEC-02 correctness", "result": "pass"},
+  {"item": "SPEC-02 test strength", "result": "pass"},
+  {"item": "SPEC-03 correctness", "result": "pass"},
+  {"item": "SPEC-03 test strength", "result": "pass"},
+  {"item": "scope", "result": "pass"},
+  {"item": "concision", "result": "pass"},
+  {"item": "clarity", "result": "pass"}
+ ],
+ "findings": [],
+ "summary": "killGroupQuietly in tests/support/process-group.ts matches the design: it returns on an undefined pid, SIGKILLs -pid, ignores ESRCH/EPERM, rethrows anything else and writes nothing. Both call sites use it, the retry.js import is gone, and the doc comment is updated. The SPEC-01 test would catch a regression. If the old retry.js killGroup came back, the captured stdout would contain 'could not send'. If EPERM were rethrown, the timer callback would throw. If the kill were skipped, waitUntilGone would fail. The spy forwards to the real kill first, so the grandchild check stays meaningful. Mocks are restored and the temp dir is removed in finally. The locked test sha is unchanged (41ab930e...b66). I ran both test files here and all 5 tests passed. Gate fix-2 passed on test, lint, typecheck and scope (56/60 lines, 2/2 files). SPEC-03 (the 10x run under load) is the Judge's command check, and the code doesn't block it. No scope creep and no duplication. The overlap with retry.js killGroup is the deliberate choice recorded in decision D-1."}
