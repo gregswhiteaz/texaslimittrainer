@@ -7,7 +7,7 @@
   "review_round": 0,
   "judge_round": 0,
   "sendbacks": 0,
-  "gate_runs": 3,
+  "gate_runs": 5,
   "questions": 6,
   "assumptions": 0,
   "escalations": 0,
@@ -15,7 +15,7 @@
   "locked_tests": {
     "tests/ci/branch-protection.acceptance.test.ts": "3687516d374756b04030ceffe4c1b34c5ea646b5420c393c9a4bf9010dadbf18",
     "tests/ci/ci-jobs.acceptance.test.ts": "c99ef9f76c1f62aa4fc15ba0725f7754a210e20ba6cda5e41a5a6274e265d037",
-    "tests/toolchain/test-groups.acceptance.test.ts": "0269dcaa35ca4a93dd0fa493da68a7c03c2226a1df9f7c573df709db4aaa10ac"
+    "tests/toolchain/test-groups.acceptance.test.ts": "559428eedb808b0779aea3a7632d6777ebaf09a96a3737fd4502fff264736668"
   },
   "test_snapshot": {
     "tests/ci/ci-jobs.acceptance.test.ts": {
@@ -29,7 +29,7 @@
       "skips": 0
     },
     "tests/toolchain/test-groups.acceptance.test.ts": {
-      "sha": "0269dcaa35ca4a93dd0fa493da68a7c03c2226a1df9f7c573df709db4aaa10ac",
+      "sha": "559428eedb808b0779aea3a7632d6777ebaf09a96a3737fd4502fff264736668",
       "asserts": 20,
       "skips": 0
     },
@@ -989,7 +989,15 @@
       "skips": 0
     }
   },
-  "history": [],
+  "history": [
+    {
+      "t": "2026-11-21T21:06:12",
+      "event": "unlock",
+      "file": "tests/toolchain/test-groups.acceptance.test.ts",
+      "reason": "CI run #165: GitHub Actions colours vitest output, so plain-text toContain failed; strip ANSI before matching (also makes the not.toContain check meaningful \u2014 strengthen)"
+    }
+  ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-1.50",
-  "spec_sha256": "971f31348a705f1295396b8c055cc08ba438b4eb771a71cca0948201642aacbe"
+  "spec_sha256": "971f31348a705f1295396b8c055cc08ba438b4eb771a71cca0948201642aacbe",
+  "relock_pending": []
 }

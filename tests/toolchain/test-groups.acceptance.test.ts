@@ -1,3 +1,4 @@
+import { stripVTControlCharacters } from 'node:util';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
@@ -14,6 +15,9 @@ const ci = readFileSync(join(REPO_ROOT, '.github/workflows/ci.yml'), 'utf8');
 const GROUPS = ['test:unit', 'test:sweeps', 'test:tooling'] as const;
 const TOOLING_DIRS = ['tests/ci/', 'tests/git/', 'tests/toolchain/'];
 const SWEEP_FILE = /\.(acceptance|perf|property)\.test\./;
+
+/** Sandbox output without ANSI colour codes (GitHub Actions forces colour). */
+const plain = (text: string): string => stripVTControlCharacters(text);
 
 /** Splits an npm script into argv, honouring single quotes (as the shell does for these scripts). */
 function argv(script: string): string[] {
@@ -121,7 +125,7 @@ describe('test groups', () => {
         'test:unit',
       );
       expect(underCovered.exitCode, underCovered.output).not.toBe(0);
-      expect(underCovered.output).toContain(
+      expect(plain(underCovered.output)).toContain(
         'does not meet "src/{engine,bots,advice,stats,playtest,table}/**" threshold (90%)',
       );
 
@@ -133,8 +137,8 @@ describe('test groups', () => {
         'test:unit',
       );
       expect(covered.exitCode, covered.output).toBe(0);
-      expect(covered.output).toContain('Coverage enabled with v8');
-      expect(covered.output).not.toContain('ERROR: Coverage');
+      expect(plain(covered.output)).toContain('Coverage enabled with v8');
+      expect(plain(covered.output)).not.toContain('ERROR: Coverage');
     },
     TOOLCHAIN_TIMEOUT_MS * 2,
   );

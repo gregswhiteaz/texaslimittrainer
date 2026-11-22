@@ -7,7 +7,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-22T03:13:00Z'
-updated_date: '2026-11-22T03:28:00Z'
+updated_date: '2026-11-22T04:00:00Z'
 labels:
   - chore
   - ci
@@ -46,3 +46,9 @@ CI is now a blocker: main's unit-test step grew from 319 s (#148) to 661 s (#161
 
 Full spec: doit/TASK-1.50/spec.md
 <!-- SECTION:PLAN:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+Build: 6-job ci.yml (e2e, checks, coverage, sweeps×2, changes, tooling), tools/ci/tooling-changed.js, test:unit/sweeps/tooling scripts, 30-min limits, daily tooling-only schedule, README checks; Q-6 locked edits only; gate PASS. Live proofs A–D pending.
+<!-- SECTION:NOTES:END -->
