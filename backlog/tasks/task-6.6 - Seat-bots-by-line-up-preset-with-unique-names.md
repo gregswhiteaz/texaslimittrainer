@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-22T05:35:00Z'
+updated_date: '2026-11-22T22:07:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -91,6 +91,8 @@ Build: seatLineUp + BOT_NAMES, shared decideStyle, playtest --lineup (styles in 
 Review R1: 1 MAJOR (line-up replay untested) fixed with a 6-seat Mixed replay test (mutant caught); R2: 0 blocking. Branch CI #172 green.
 
 Judge R1 PASS 15/15 (162 line-ups recomputed; per-seat decisions match decideStyle; worker fingerprint unchanged; 16/17 mutants — survivor J-1-01 LOW is the temporary 7–8-seat fallback, removed by TASK-7.6 AC). Follow-ups: TASK-7.6 AC (remove fallback); scope 3 covered by TASK-2.5.
+
+Locked test edited for TASK-7.6 Q-4 (user-approved): Line-up note removed; 10k 9-seat run opt-in slow.
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary

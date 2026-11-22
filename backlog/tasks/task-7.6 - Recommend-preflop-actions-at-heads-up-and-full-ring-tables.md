@@ -1,10 +1,11 @@
 ---
 id: TASK-7.6
 title: Recommend preflop actions at heads-up and full-ring tables
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-22T05:01:00Z'
+updated_date: '2026-11-22T22:07:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -69,6 +70,18 @@ Plan key: E07-S05 · Dream: limit-holdem-trainer
 - [ ] #12 Story documentation is written and published to Backlog.md
 - [ ] #13 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. Authored heads-up (6 spots) and full-ring (41 spots, 9 positions) charts with justifications; validator covers all three sizes.
+2. referenceSizeOf + seat→position mapping for 2–10 dealt-in seats (A-1); advice picks heads-up / 6-max / full ring.
+3. Remove random-move fallbacks (default playtest and --lineup) and the Line-up note; Rock maps its 6-max range by seat.
+4. AC#10: pace harness uses the real advice worker (locked rapid-pace spec untouched).
+5. Approved TASK-6.6 locked-test edits (Q-4); measure playtest:million --lineups (Q-5).
+
+Full spec: doit/TASK-7.6/spec.md
+<!-- SECTION:PLAN:END -->
 
 ## Implementation Notes
 

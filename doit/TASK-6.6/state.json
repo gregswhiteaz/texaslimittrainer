@@ -1019,7 +1019,14 @@
       "skips": 0
     }
   },
-  "history": [],
+  "history": [
+    {
+      "t": "2026-11-22T15:07:02",
+      "event": "unlock",
+      "file": "tests/playtest/lineup.acceptance.test.ts",
+      "reason": "TASK-7.6 Q-4 (user-approved): Line-up note now absent at 9 seats; 10k 9-seat Tough run opt-in slow with a small every-push check"
+    }
+  ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-6.6",
   "spec_sha256": "3faa9b01f1e3e53df9f34419983e86a99ae31800498c98b6ec85721c9efad7f2",
   "review_findings": {
@@ -1034,5 +1041,8 @@
   "doc_id": "doc-79",
   "judge_results": {
     "1": "PASS"
-  }
+  },
+  "relock_pending": [
+    "tests/playtest/lineup.acceptance.test.ts"
+  ]
 }
