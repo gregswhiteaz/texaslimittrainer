@@ -1,5 +1,6 @@
 import { expect, test, type Page } from '@playwright/test';
 import { expectNoSeriousAxeViolations } from './support/axe';
+import { runUntilMyTurn } from './support/paused-clock';
 import {
   buildTableScenes,
   openTableScene,
@@ -37,8 +38,7 @@ test('an idle button with its disabled attribute removed changes nothing', async
   await page.goto('/');
   await page.getByRole('button', { name: 'New game' }).click();
   await page.getByRole('button', { name: 'Start game' }).click();
-  // clock.runFor in 50 ms slices so each bot timer is scheduled after the previous commit.
-  for (let ms = 0; ms < 1000; ms += 50) await page.clock.runFor(50);
+  await runUntilMyTurn(page);
   await expectToAct(page, '5');
 
   await actionButtons(page).getByText('Call $4', { exact: true }).click();

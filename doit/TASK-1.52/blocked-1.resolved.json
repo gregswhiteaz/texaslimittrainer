@@ -1,0 +1,10 @@
+{
+  "spec": "SPEC-04",
+  "reason": "A-3's default fake-time bound (maxFakeMs = 60,000) contradicts SPEC-04/SPEC-05. A 50 ms clock.runFor slice costs only ~2.6 ms of real time, so 60,000 fake ms (1,200 slices) is used up after ~3 s of real time, before the two 2 s delayed worker replies (>= 4 s real) arrive. runUntilMyTurn(page) with the spec's defaults therefore throws in the delayed run, and would also throw on a slow runner whenever replies take > ~3 s in total, which is the race this task is meant to remove.",
+  "evidence": "npx playwright test e2e/worker-delay.spec.ts (helper exactly per §5, defaults per A-3): SPEC-04 and SPEC-05 fail on Chromium and WebKit with 'runUntilMyTurn: not my turn after 60000 ms fake / 3105 ms real' (WebKit). SPEC-07 passes. Re-running SPEC-04 with only maxFakeMs raised to 10,000,000 passes on both engines (2 passed, 5.4 s), so delayWorkerReplies and the loop work; only the fake bound is too tight.",
+  "options": [
+    "Recommended: raise the default maxFakeMs to 600,000 (12,000 slices, ~30 s real at the measured rate) so the 10 s real-time bound is what normally trips; A-4 already argues extra fake time is harmless (and table.spec's 'ten idle minutes' runs 600,000 ms at the user's turn).",
+    "Drop the fake-time bound entirely and keep only the 10 s real-time bound (simpler signature).",
+    "Keep 60,000 but lower REPLY_DELAY_MS in SPEC-04/05 to ~1,000 ms (weaker proof; still fragile on slow runners, and judge step 2 at 4,000 ms would fail)."
+  ]
+}

@@ -1,5 +1,6 @@
 import { expect, test, type Page } from '@playwright/test';
 import { expectNoSeriousAxeViolations } from './support/axe';
+import { runUntilMyTurn } from './support/paused-clock';
 import { stubReplayWords } from './support/table-harness-bundle';
 import { expectToAct } from './support/table-locators';
 
@@ -19,11 +20,6 @@ async function openApp(page: Page): Promise<void> {
 async function installPausedClock(page: Page): Promise<void> {
   await page.clock.install({ time: 0 });
   await page.clock.pauseAt(1000);
-}
-
-/** clock.runFor(1000) in 50 ms slices so each bot timer is scheduled after the previous commit. */
-async function runFor1000(page: Page): Promise<void> {
-  for (let ms = 0; ms < 1000; ms += 50) await page.clock.runFor(50);
 }
 
 interface TimerWindow {
@@ -153,7 +149,7 @@ test('the bar is disabled and submits nothing off-turn or after the hand', async
 }) => {
   await installPausedClock(page);
   await openApp(page);
-  await runFor1000(page);
+  await runUntilMyTurn(page);
   await expectToAct(page, '5');
   expect(await actionCount(page)).toBe(4);
 
@@ -175,7 +171,7 @@ test('the bar is disabled and submits nothing off-turn or after the hand', async
   const real = await context.newPage();
   await installPausedClock(real);
   await openApp(real);
-  await runFor1000(real);
+  await runUntilMyTurn(real);
   await expectToAct(real, '5');
   await clickAction(real, 'Fold');
   for (let slice = 0; slice < 400 && (await handOver(real).count()) === 0; slice++) {
@@ -214,7 +210,7 @@ test('every action button is at least 44 by 44 px', async ({ page }) => {
   expect(page.viewportSize()).toEqual({ width: 1280, height: 720 });
   await installPausedClock(page);
   await openApp(page);
-  await runFor1000(page);
+  await runUntilMyTurn(page);
   await expect(tableSection(page)).toHaveAttribute('data-street', 'preflop');
   await expectAll(page, 'enabled');
   await expectMinimumSize(page, 3);
@@ -223,7 +219,7 @@ test('every action button is at least 44 by 44 px', async ({ page }) => {
   await expectAll(page, 'disabled');
   await expectMinimumSize(page, 3);
 
-  await runFor1000(page);
+  await runUntilMyTurn(page);
   await expect(tableSection(page)).toHaveAttribute('data-street', 'flop');
   await expectToAct(page, '5');
   await expectAll(page, 'enabled');
@@ -235,7 +231,7 @@ test('action bar is axe clean and makes no outside requests', async ({ page }) =
   page.on('request', (request) => requests.push(request.url()));
   await installPausedClock(page);
   await openApp(page);
-  await runFor1000(page);
+  await runUntilMyTurn(page);
   await expectAll(page, 'enabled');
   await axeWithPausedClock(page);
 

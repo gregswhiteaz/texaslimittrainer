@@ -1,0 +1,68 @@
+{
+  "task": "TASK-1.52",
+  "phase": "build",
+  "run": 1,
+  "result": "PASS",
+  "changed_lines": 491,
+  "changed_files": [
+    "e2e/action-bar-limits.spec.ts",
+    "e2e/action-bar.spec.ts",
+    "e2e/game-type-choice.spec.ts",
+    "e2e/home.spec.ts",
+    "e2e/support/paused-clock.ts",
+    "e2e/table-display.spec.ts",
+    "e2e/table.spec.ts",
+    "e2e/worker-delay.spec.ts",
+    "tests/bots/calling-station-draws.acceptance.test.ts",
+    "tests/bots/calling-station.test.ts",
+    "tests/playtest/policy-lineup.acceptance.test.ts",
+    "tests/playtest/policy.test.ts"
+  ],
+  "checks": [
+    {
+      "name": "test command",
+      "status": "pass",
+      "detail": "$ npm run test:unit && npm run test:sweeps && npm run e2e\nexit 0\nwebkit] \u203a e2e/smoke.spec.ts:18:1 \u203a start page has no serious or critical axe violations (565ms)\n  \u2713  123 [webkit] \u203a e2e/review.spec.ts:322:1 \u203a after a played hand the review opens beside the table, holds the next hand and Deal next hand deals hand 2 (1.5s)\n  \u2713  129 [webkit] \u203a e2e/smoke.spec.ts:33:1 \u203a start page makes only same-origin requests (739ms)\n  \u2713  130 [webkit] \u203a e2e/stake-choice.spec.ts:31:1 \u203a stake list is the six stakes with $4 / $8 selected and the buy-in follows the stake (409ms)\n  \u2713  131 [webkit] \u203a e2e/stake-choice.spec.ts:59:1 \u203a starting at $10 / $20 shows $10/$20, posts $5 and $10 and seats $400 (418ms)\n  \u2713  134 [webkit] \u203a e2e/table-display.spec.ts:179:1 \u203a the seat to act is highlighted in red and labelled (329ms)\n  \u2713  133 [webkit] \u203a e2e/table-display.spec.ts:152:1 \u203a my seat is drawn at the bottom centre whatever its seat number (419ms)\n  \u2713  126 [webkit] \u203a e2e/side-pots.spec.ts:17:1 \u203a side pots and their winners are shown separately, single pot otherwise, axe clean (1.5s)\n  \u2713  136 [webkit] \u203a e2e/table-display.spec.ts:213:1 \u203a the replay code is not in the page text, attributes or accessible names during the hand (606ms)\n  \u2713  138 [webkit] \u203a e2e/table-display.spec.ts:262:1 \u203a last actions and the player to act are visible text (408ms)\n  \u2713  137 [webkit] \u203a e2e/table-display.spec.ts:234:1 \u203a a bot's card back marker is small, shows the logo and passes axe (656ms)\n  \u2713  140 [webkit] \u203a e2e/table.spec.ts:160:1 \u203a default table seats the user and five bots with $160 each (387ms)\n  \u2713  141 [webkit] \u203a e2e/table.spec.ts:174:1 \u203a stake $10/$20 starts every stack at $400 with no buy-in control (388ms)\n  \u2713  135 [webkit] \u203a e2e/table-display.spec.ts:195:1 \u203a the header shows the session and Leave table returns to Home (1.4s)\n  \u2713  143 [webkit] \u203a e2e/table.spec.ts:240:1 \u203a after a preflop fold the bots finish the hand without me (435ms)\n  \u2713  144 [webkit] \u203a e2e/table.spec.ts:261:1 \u203a ten idle minutes on my turn change nothing (386ms)\n  \u2713  142 [webkit] \u203a e2e/table.spec.ts:190:1 \u203a check or call at every decision plays to showdown with my cards face up (679ms)\n  \u2713  132 [webkit] \u203a e2e/stake-choice.spec.ts:86:1 \u203a every stake keeps game config free of real-money controls and axe clean (2.4s)\n  \u2713  139 [webkit] \u203a e2e/table-display.spec.ts:280:1 \u203a the table fits 1280 wide, is axe clean and makes only same-origin requests (1.8s)\n  \u2713  148 [webkit] \u203a e2e/worker-delay.spec.ts:57:1 \u203a runUntilMyTurn throws when my turn never comes (767ms)\n  \u2713  145 [webkit] \u203a e2e/table.spec.ts:279:1 \u203a my buttons are enabled within 100 ms of the bot action, axe clean, no outside requests (1.4s)\n  \u2713  112 [webkit] \u203a e2e/rapid-pace.spec.ts:249:1 \u203a the paused-clock pace check catches a 400 ms wait (6.8s)\n  \u2713  147 [webkit] \u203a e2e/worker-delay.spec.ts:47:1 \u203a with every worker reply 2 s late a fixed 1,000 ms budget is not enough (4.4s)\n  \u2713  146 [webkit] \u203a e2e/worker-delay.spec.ts:33:1 \u203a with every worker reply 2 s late the bounded advance still reaches my turn (4.4s)\n\n  12 skipped\n  136 passed (21.9s)\n"
+    },
+    {
+      "name": "lint command",
+      "status": "pass",
+      "detail": "$ npm run lint\nexit 0\n\n> tlh-trainer@0.0.0 lint\n> eslint . --max-warnings 0 && prettier --check .\n\nChecking formatting...\nAll matched files use Prettier code style!\n"
+    },
+    {
+      "name": "typecheck command",
+      "status": "pass",
+      "detail": "$ npm run typecheck\nexit 0\n\n> tlh-trainer@0.0.0 typecheck\n> tsc -p tsconfig.json\n\n"
+    },
+    {
+      "name": "spec unchanged",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "name": "scope budget (lines)",
+      "status": "pass",
+      "detail": "491 changed lines vs budget 600 (fail above 1200)"
+    },
+    {
+      "name": "scope budget (files)",
+      "status": "pass",
+      "detail": "12 files vs budget 12"
+    },
+    {
+      "name": "files outside spec",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "name": "all changes listed in changes.md",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "name": "tests locked",
+      "status": "pass",
+      "detail": "1 acceptance test file(s) locked; 200 test files snapshotted"
+    }
+  ]
+}

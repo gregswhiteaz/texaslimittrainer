@@ -1,7 +1,8 @@
 import { expect, test, type Page } from '@playwright/test';
 import { expectNoSeriousAxeViolations } from './support/axe';
+import { runUntilMyTurn } from './support/paused-clock';
 import { stubReplayWords } from './support/table-harness-bundle';
-import { expectToAct, toActSeats } from './support/table-locators';
+import { expectToAct } from './support/table-locators';
 
 const ORIGIN = 'http://localhost:4173';
 
@@ -90,11 +91,7 @@ test('starting a sit-and-go opens the table with chip labels on the action bar',
     await expect(page.locator(`li[data-seat="${seat}"] [data-part="stack"]`)).toContainText('1500');
   }
 
-  // 50 ms slices: React commits in a real task, so each bot timer is scheduled after the last slice.
-  const userToAct = toActSeats(page).and(page.locator('[data-seat="5"]'));
-  for (let ms = 0; ms < 5000 && (await userToAct.count()) === 0; ms += 50) {
-    await page.clock.runFor(50);
-  }
+  await runUntilMyTurn(page);
   await expectToAct(page, '5');
   const labels = await page
     .getByRole('group', { name: 'Your actions' })

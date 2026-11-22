@@ -4,6 +4,7 @@ import { fileURLToPath } from 'node:url';
 import { expect, test, type Page } from '@playwright/test';
 import { expectNoSeriousAxeViolations } from './support/axe';
 import { buildCardGallery, openCardGallery } from './support/card-gallery-bundle';
+import { runUntilMyTurn } from './support/paused-clock';
 import { stubReplayWords } from './support/table-harness-bundle';
 import { expectToAct } from './support/table-locators';
 
@@ -230,8 +231,7 @@ test('start game deals the first hand at the default table', async ({ page }) =>
   expect(rows).toEqual(NAMES.map((name) => ({ name, stack: '$160' })));
   await expect(tableSection(page)).toHaveAttribute('data-action-count', '0');
 
-  // 50 ms slices: React commits in a real task, so each bot timer is scheduled after the last slice.
-  for (let ms = 0; ms < 1000; ms += 50) await page.clock.runFor(50);
+  await runUntilMyTurn(page);
   await expect(stackOf(page, 1)).toHaveText('$158');
   await expect(stackOf(page, 2)).toHaveText('$156');
   const cards = page.locator('li[data-user] svg[data-card]');

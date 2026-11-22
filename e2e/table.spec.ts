@@ -5,6 +5,7 @@ import {
   openTableHarness,
   stubReplayWords,
 } from './support/table-harness-bundle';
+import { runUntilMyTurn } from './support/paused-clock';
 import { expectToAct } from './support/table-locators';
 
 const ORIGIN = 'http://localhost:4173';
@@ -260,7 +261,7 @@ test('after a preflop fold the bots finish the hand without me', async ({ page }
 test('ten idle minutes on my turn change nothing', async ({ page }) => {
   await installPausedClock(page);
   await openApp(page);
-  await runFor1000(page);
+  await runUntilMyTurn(page);
   await expect(yourActions(page)).toBeVisible();
   const buttons = yourActions(page).getByRole('button');
   const names = await buttons.allTextContents();

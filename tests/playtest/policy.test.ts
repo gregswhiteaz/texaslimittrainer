@@ -125,19 +125,19 @@ describe('randomMovePolicy', () => {
 
 describe('lineUpPolicyFactory', () => {
   it('lineUpPolicyFactory plays the preset at 6 seats and random moves otherwise', () => {
-    const tough = runPlaytest({ hands: 200, seed: 42, size: 6, lineUp: 'Tough' });
+    const tough = runPlaytest({ hands: 20, seed: 42, size: 6, lineUp: 'Tough' });
     const maniacAtSeat2: PolicyFactory = (code, seat) =>
       seat === 2
         ? (view) => decideManiac(view, { random: botRandom(botDecisionSeed(code, view)) })
         : seededTagPolicy(code);
     expect(tough).toEqual(
-      runPlaytest({ hands: 200, seed: 42, size: 6 }, undefined, { makePolicy: maniacAtSeat2 }),
+      runPlaytest({ hands: 20, seed: 42, size: 6 }, undefined, { makePolicy: maniacAtSeat2 }),
     );
     expect(tough.violations).toBe(0);
-    expect(tough).not.toEqual(runPlaytest({ hands: 200, seed: 42, size: 6 }));
+    expect(tough).not.toEqual(runPlaytest({ hands: 20, seed: 42, size: 6 }));
 
-    expect(runPlaytest({ hands: 500, seed: 42, size: 9, lineUp: 'Tough' })).toEqual(
-      runPlaytest({ hands: 500, seed: 42, size: 9 }),
+    expect(runPlaytest({ hands: 100, seed: 42, size: 9, lineUp: 'Tough' })).toEqual(
+      runPlaytest({ hands: 100, seed: 42, size: 9 }),
     );
 
     const allRandom: PolicyFactory = (code, seat) => randomMovePolicy(seatGenerator(code, seat));

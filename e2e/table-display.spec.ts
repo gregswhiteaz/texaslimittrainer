@@ -1,5 +1,6 @@
 import { expect, test, type Locator, type Page } from '@playwright/test';
 import { expectNoSeriousAxeViolations } from './support/axe';
+import { runUntilMyTurn } from './support/paused-clock';
 import { buildTableScenes, openTableScene, stubReplayWords } from './support/table-harness-bundle';
 import { expectToAct } from './support/table-locators';
 
@@ -37,11 +38,6 @@ async function openApp(page: Page): Promise<void> {
 async function installPausedClock(page: Page): Promise<void> {
   await page.clock.install({ time: 0 });
   await page.clock.pauseAt(1000);
-}
-
-/** clock.runFor(1000) in 50 ms slices so each bot timer is scheduled after the previous commit. */
-async function runFor1000(page: Page): Promise<void> {
-  for (let ms = 0; ms < 1000; ms += 50) await page.clock.runFor(50);
 }
 
 interface TimerWindow {
@@ -266,7 +262,7 @@ test("a bot's card back marker is small, shows the logo and passes axe", async (
 test('last actions and the player to act are visible text', async ({ page }) => {
   await installPausedClock(page);
   await openApp(page);
-  await runFor1000(page);
+  await runUntilMyTurn(page);
   await expect(yourActions(page).getByRole('button', { name: 'Call $4' })).toBeEnabled();
 
   for (const n of [3, 4]) await expect(seat(page, n).getByText('Folded')).toBeVisible();
@@ -288,7 +284,7 @@ test('the table fits 1280 wide, is axe clean and makes only same-origin requests
   page.on('request', (request) => requests.push(request.url()));
   await installPausedClock(page);
   await openApp(page);
-  await runFor1000(page);
+  await runUntilMyTurn(page);
   await expect(yourActions(page).getByRole('button', { name: 'Call $4' })).toBeEnabled();
   await expectSeatsFit(page);
   await axeWithPausedClock(page);

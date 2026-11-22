@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-22T14:55:00Z'
-updated_date: '2026-11-22T15:15:00Z'
+updated_date: '2026-11-22T15:18:00Z'
 labels:
   - follow-up
   - bug
@@ -44,3 +44,9 @@ Main CI #174 (44990101974, 341563c) failed on two code checks that passed on re-
 
 Full spec: doit/TASK-1.52/spec.md
 <!-- SECTION:PLAN:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+Build blocked on A-3 vs SPEC-04 (60 s fake cap exhausted in ~3 s real). Resolved by orchestrator: maxFakeMs default 600,000; 10 s real bound governs (recorded deviation).
+<!-- SECTION:NOTES:END -->
