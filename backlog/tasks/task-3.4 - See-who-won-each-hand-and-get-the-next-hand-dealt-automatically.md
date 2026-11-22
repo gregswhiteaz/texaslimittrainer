@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-22T15:34:00Z'
+updated_date: '2026-11-22T17:18:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-0
@@ -98,6 +98,8 @@ Build: minimumStack export (only engine change); nextHand (carry stacks, button 
 CI run 44433546149 (head 85b221c): success. Judge round 1: PASS 20/20, no blocking; 26 consecutive hands in the real app per browser matched a Node simulation (results, 1.4-1.6 s deals, button, Hand #, carry-over, top-up of the user to exactly $160 at hand 13); 30,000 random hands named correctly; 3,000 session hands' winner lines equal awards; only winners' cards ever shown. Follow-ups (Step 6a): created TASK-3.21 (remove the TEMPORARY top-up; depends on TASK-1.9/1.16/3.11, as promised to the user in Q-4; notes on TASK-1.16 and TASK-3.11) and TASK-3.22 (hand-result edge cases); ACs added to TASK-9.1, 6.8, 1.15, 1.9, 3.8, 3.9, 3.16, 3.13. Judge LOW J-1-01 (doc labels D-1/D-3..D-6) noted; D-6 is covered by the TASK-3.13 AC.
 
 Locked e2e test unlocked for TASK-1.52 Q-2 (user-approved; clock-advance loop bound only).
+
+Locked test edited for TASK-6.8 Q-4 (user-approved): bots are replaced, not topped up.
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary

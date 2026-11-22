@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-22T14:55:00Z'
-updated_date: '2026-11-22T15:51:00Z'
+updated_date: '2026-11-22T17:18:00Z'
 labels:
   - follow-up
   - bug
@@ -57,6 +57,8 @@ Build: slow line-up and calling-station tests moved to sweeps (unit versions kee
 Audit correction (spec §5, 400-slice loops): measured ~2.6–2.8 ms real per 50 ms slice, so 400 slices ≈ 1.0–1.1 s real (not 'several seconds'). Fixed under Q-2 with runUntil (10 s real / 600 s fake caps). Normal runs: slowest wait 450 ms fake / 310 ms real across 72 calls. stake-choice.spec:76 left alone: it asserts only blinds/stacks from the deal timer (spec §5).
 
 Judge R1 PASS 8/8 (own 4,000 ms delay checks; diffs of every locked e2e file; CI slowest unit test 8.96 s cli.test.ts). Non-blocking: J-1-01 no-turn test does not prove which bound tripped; J-1-02 audit margins (cli.test.ts 8.96 s on CI vs 10 s AC target; million-hand timeout is 120 s). Not tracked (infra, no failure path): J-1-01, NITs, ~42 s e2e cost of delayed-hand proofs (left for the user to decide).
+
+Locked test edited for TASK-6.8 Q-4 (user-approved): Tough comparison shortened to 45 hands.
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary

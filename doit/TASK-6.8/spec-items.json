@@ -1,0 +1,86 @@
+[
+  {
+    "id": "SPEC-01",
+    "verifies": "AC#1, AC#9, DoD#1",
+    "verification": "acceptance `tests/table/replace-bot.acceptance.test.ts::a bot on $0 is replaced by a new bot with $160 when nextHand runs`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-02",
+    "verifies": "AC#2",
+    "verification": "acceptance `tests/table/replace-bot.acceptance.test.ts::a bot with $1 keeps its seat and its stack`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-03",
+    "verifies": "AC#4",
+    "verification": "acceptance `tests/table/replace-bot.acceptance.test.ts::two bots bust in one hand and the new bots have unique names`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-04",
+    "verifies": "AC#9",
+    "verification": "unit `tests/table/next-hand.test.ts::the user and sit-and-go seats are never replaced`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-05",
+    "verifies": "AC#3",
+    "verification": "acceptance `tests/bots/replacement.acceptance.test.ts::10,000 replacements at 6 players draw only each preset's styles`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-06",
+    "verifies": "AC#7",
+    "verification": "acceptance `tests/bots/replacement.acceptance.test.ts::a session recorded as Custom draws all four styles`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-07",
+    "verifies": "AC#8",
+    "verification": "acceptance `tests/bots/replacement.acceptance.test.ts::Mixed at 3 players draws TAG or Calling station and heads-up Tough draws TAG`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-08",
+    "verifies": "AC#5, AC#4",
+    "verification": "unit `tests/bots/lineup.test.ts::replacement draws and names are deterministic and validated`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-09",
+    "verifies": "AC#5, AC#6",
+    "verification": "acceptance `tests/playtest/replacement.acceptance.test.ts::a cash line-up playtest replaces busted bots the same way every run`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-10",
+    "verifies": "AC#6, DoD#6",
+    "verification": "acceptance `tests/playtest/replacement.acceptance.test.ts::10,000 Mixed hands replace busted bots with zero violations (slow, opt-in)`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-11",
+    "verifies": "AC#6, DoD#6",
+    "verification": "command `npm run -s playtest -- --hands 10000 --seed 42 --size 6 | shasum -a 256`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-12",
+    "verifies": "AC#5",
+    "verification": "acceptance `tests/playtest/replacement.acceptance.test.ts::a violation after a replacement prints a Replay line that reproduces the hand`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-13",
+    "verifies": "DoD#2, DoD#4, DoD#5, DoD#10",
+    "verification": "command `npm run lint && npm run typecheck && npm test`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-14",
+    "verifies": "DoD#3, DoD#7, DoD#8, DoD#9, DoD#11, DoD#12",
+    "verification": "manual `grep -rn \"fetch(\\|XMLHttpRequest\\|WebSocket\" src/bots src/table src/playtest src/engine` finds nothing new; the docs stage publishes the story doc",
+    "status": "pending"
+  }
+]

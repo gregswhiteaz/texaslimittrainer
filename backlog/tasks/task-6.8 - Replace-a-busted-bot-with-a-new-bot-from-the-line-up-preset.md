@@ -1,10 +1,11 @@
 ---
 id: TASK-6.8
 title: Replace a busted bot with a new bot from the line-up preset
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-19T01:10:00Z'
+updated_date: '2026-11-22T17:19:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -69,6 +70,18 @@ Plan key: E06-S08 · Dream: limit-holdem-trainer
 - [ ] #11 Story documentation is written and published to Backlog.md
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. replacementGenerator(code, seat) + uniform draw over the preset's distinct styles at config.players (all four for Custom).
+2. REPLACEMENT_NAMES Jay…Zed then 'Jay 2'…; TableState.nextBotName; skip names at the table.
+3. nextHand (cash): a $0 bot is replaced ($160, new style/name) instead of topped up; user/sng top-up unchanged.
+4. Playtest: --lineup cash runs replace busted bots, 'Bots replaced: N', Replay line --styles; default run byte-identical.
+5. Approved locked-test edits (TASK-3.4 next-hand, TASK-1.52 policy-lineup); tallies in normal suite; 10k --lineup mixed in slow group.
+
+Full spec: doit/TASK-6.8/spec.md
+<!-- SECTION:PLAN:END -->
 
 ## Implementation Notes
 
