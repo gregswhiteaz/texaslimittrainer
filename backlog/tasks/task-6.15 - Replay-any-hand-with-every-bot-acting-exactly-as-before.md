@@ -4,7 +4,7 @@ title: Replay any hand with every bot acting exactly as before
 status: To Do
 assignee: []
 created_date: '2026-11-17T23:03:00Z'
-updated_date: '2026-11-17T23:22:00Z'
+updated_date: '2026-11-22T18:28:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -42,6 +42,7 @@ Plan key: E06-S15 · Dream: limit-holdem-trainer
 - [ ] #1 Given 1,000 recorded hands from a 6-max TAG playtest in which seat 1 follows a scripted user policy, When each hand is replayed with its replay code and seat 1's recorded actions, Then every bot action matches in order and amount [REQ-028.2]
 - [ ] #2 Given 1,000 recorded hands from a 6-max Mixed playtest in which seat 1 follows a scripted user policy, When each hand is replayed with its replay code and seat 1's recorded actions, Then every bot action of every style matches in order and amount [REQ-028.2]
 - [ ] #3 Given a recorded hand, When it is replayed with the same replay code but a different user action at the first decision, Then the replay still deals the same cards and every bot decision point reached identically before that action matches the original [REQ-028.1, REQ-028.2]
+- [ ] #4 Given a hand played in the app or replayed with --replay-code, When bots decide, Then they receive the same earlier-showdowns list they had when the hand was first played (the app session passes earlier showdowns like the playtest runner does since TASK-6.9)
 <!-- AC:END -->
 
 ## Definition of Done
@@ -59,3 +60,9 @@ Plan key: E06-S15 · Dream: limit-holdem-trainer
 - [ ] #11 Story documentation is written and published to Backlog.md
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+AC added from TASK-6.9 follow-up (app session and replay pass no earlier showdowns)
+<!-- SECTION:NOTES:END -->

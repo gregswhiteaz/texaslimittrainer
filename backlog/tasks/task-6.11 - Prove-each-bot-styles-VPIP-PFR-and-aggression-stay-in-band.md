@@ -4,7 +4,7 @@ title: Report each bot style's VPIP, PFR and aggression against its band
 status: To Do
 assignee: []
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-22T02:38:00Z'
+updated_date: '2026-11-22T18:28:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -72,4 +72,6 @@ Plan key: E06-S09 · Dream: limit-holdem-trainer
 AC added from TASK-6.4 follow-up
 
 AC added from TASK-6.5 follow-up
+
+From TASK-6.9: compose style-band checks with checkStep via composeChecks (src/playtest/runner.ts), not a new runner parameter.
 <!-- SECTION:NOTES:END -->

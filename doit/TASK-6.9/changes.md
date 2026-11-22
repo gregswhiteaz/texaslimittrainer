@@ -9,6 +9,6 @@
 - `tests/playtest/lineup-throughput.acceptance.test.ts` — created: SPEC-07 (opt-in, `TLH_SLOW_TESTS=1`).
 - `tests/playtest/style-bots.acceptance.test.ts` — created: SPEC-08, SPEC-09, SPEC-10.
 - `tests/playtest/shards.test.ts` — modified: existing `parseMillionArgs` expectations gain `lineUps: false`; new SPEC-06 unit test.
-- `tests/playtest/runner.test.ts` — modified: units for the earlier-showdown window, immutability, `playHand` setup pass-through, sit-and-go restart, and `composeChecks`.
+- `tests/playtest/runner.test.ts` — modified: units for the earlier-showdown window, immutability, `playHand` setup pass-through, sit-and-go restart, `composeChecks`, and (fix r1) earlier showdowns two or more hands after a violation restart and a new sit-and-go.
 
 New dependencies: none.

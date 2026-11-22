@@ -4,6 +4,7 @@ title: Keep earlier showdowns tied to the player, not the seat
 status: To Do
 assignee: []
 created_date: '2026-11-18T07:03:00Z'
+updated_date: '2026-11-22T18:28:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -29,3 +30,9 @@ Follow-up from TASK-1.5. earlierShowdowns is keyed by seat number. When a busted
 - [ ] #1 Given a bot at seat 4 is replaced, When later views are built, Then no earlier showdown of the previous seat-4 player is attributed to the new bot
 - [ ] #2 Given the session appends an earlier showdown, When any seat policy receives it, Then the entry is frozen and cannot be changed by a policy
 <!-- AC:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+From TASK-6.9: the playtest runner now passes earlier showdowns (runner.ts, last 1,000, keyed by seat). Its seat-vs-player attribution and freezing are this task's ACs #1–#2 — cover the runner too.
+<!-- SECTION:NOTES:END -->

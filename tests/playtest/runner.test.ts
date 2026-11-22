@@ -419,6 +419,59 @@ describe('playtest runner units', () => {
     expect(sngSeen[restart]?.every((v) => v.length === 0)).toBe(true);
   });
 
+  it('earlier showdowns hold only showdowns since the last restart, hands after it too', () => {
+    const entryOf = (hand: PlayedHand | undefined) => showdownOf((hand as PlayedHand).final);
+
+    // Cash: every hand checks down to showdown; hand 3 is flagged, so the table restarts at hand 4.
+    const cash: PlayedHand[] = [];
+    const cashSeen: (readonly EarlierShowdown[])[][] = [];
+    const checkDown: PolicyFactory = () => (view) => {
+      (cashSeen[cash.length] ??= []).push(view.earlierShowdowns);
+      const legal = view.legalActions;
+      return (legal.find((a) => a.type === 'check') ??
+        legal.find((a) => a.type === 'call')) as ReturnType<SeatPolicy>;
+    };
+    runPlaytest({ hands: 6, seed: 7, size: 2 }, (hand) => cash.push(hand), {
+      makePolicy: checkDown,
+      onAction: (step) =>
+        cash.length === 2 && step.result.ok && step.result.state.result !== null
+          ? [{ invariant: 'custom', message: 'flagged' }]
+          : checkStep(step),
+    });
+    expect(cash.map((hand) => hand.violations)).toEqual([0, 0, 1, 0, 0, 0]);
+    expect(cash.every((hand) => entryOf(hand) !== null)).toBe(true);
+    expect(cashSeen[2]?.every((v) => v.length === 2)).toBe(true);
+    expect(cashSeen[3]?.every((v) => v.length === 0)).toBe(true);
+    for (const k of [4, 5]) {
+      const since = cash.slice(3, k).map(entryOf);
+      expect(cashSeen[k]?.length).toBeGreaterThan(0);
+      for (const v of cashSeen[k] ?? []) expect(v).toEqual(since);
+    }
+
+    // Sit-and-go: raising or calling to showdown busts a seat; the next hand starts a new sit-and-go.
+    const sng: PlayedHand[] = [];
+    const sngSeen: (readonly EarlierShowdown[])[][] = [];
+    const raiseOrCall: PolicyFactory = () => (view) => {
+      (sngSeen[sng.length] ??= []).push(view.earlierShowdowns);
+      const legal = view.legalActions;
+      return (legal.find((a) => a.type === 'raise' || a.type === 'bet') ??
+        legal.find((a) => a.type === 'call' || a.type === 'check')) as ReturnType<SeatPolicy>;
+    };
+    runPlaytest({ hands: 40, seed: 5, size: 2, game: 'sng' }, (hand) => sng.push(hand), {
+      makePolicy: raiseOrCall,
+    });
+    const busted = (hand: PlayedHand | undefined) =>
+      (hand as PlayedHand).final.players.some((p) => p.stack === 0);
+    const restart = sng.findIndex((_, k) => k > 0 && busted(sng[k - 1]));
+    expect(restart).toBeGreaterThan(1);
+    expect(sngSeen[restart - 1]?.every((v) => v.length > 0)).toBe(true);
+    expect(busted(sng[restart])).toBe(false);
+    expect(entryOf(sng[restart])).not.toBeNull();
+    const after = sngSeen[restart + 1] ?? [];
+    expect(after.length).toBeGreaterThan(0);
+    for (const v of after) expect(v).toEqual([entryOf(sng[restart])]);
+  });
+
   it('composeChecks runs every hook in order and joins their violations', () => {
     const order: string[] = [];
     const hook =
