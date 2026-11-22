@@ -18,6 +18,7 @@ import {
   type PlaytestSummary,
 } from './runner';
 import { seatStylesPolicyFactory } from './policy';
+import { BotResults, formatBotResults } from './winrate';
 
 export interface CliIo {
   readonly out: (text: string) => void;
@@ -377,13 +378,18 @@ export function main(argv: readonly string[], io: CliIo, seams: PlaytestSeams = 
     const { hands, seed, size, game } = parsed.options;
     const sng = game === 'sng' ? ' --game sng' : '';
     header += `Options: --hands ${hands} --seed ${seed} --size ${size}${sng}${option}\n${table(size, game)}`;
-    if (preset !== undefined && game === 'cash') {
-      let count = 0;
-      summary = runPlaytest(parsed.options, (hand) => (count += hand.replaced?.length ?? 0), seams);
-      replaced = count;
-    } else {
-      summary = runPlaytest(parsed.options, undefined, seams);
-    }
+    const bots = new BotResults(size, game);
+    let count = 0;
+    summary = runPlaytest(
+      parsed.options,
+      (hand) => {
+        bots.add(hand);
+        count += hand.replaced?.length ?? 0;
+      },
+      seams,
+    );
+    if (preset !== undefined && game === 'cash') replaced = count;
+    header += formatBotResults(bots.rows(), game);
   } else {
     const { replayCode, size, button, game, stacks, styles } = parsed;
     const seats = preset === undefined ? undefined : seatsAt(size, styles);
