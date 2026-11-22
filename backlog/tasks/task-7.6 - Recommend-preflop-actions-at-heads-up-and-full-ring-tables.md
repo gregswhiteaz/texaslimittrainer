@@ -4,7 +4,7 @@ title: Recommend preflop actions at heads-up and full-ring tables
 status: To Do
 assignee: []
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-21T20:40:00Z'
+updated_date: '2026-11-22T05:01:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -50,6 +50,7 @@ Plan key: E07-S05 · Dream: limit-holdem-trainer
 - [ ] #8 Given preflop decisions at the first seat to act, When advice is requested, Then 4-handed uses the 6-max CO cell, 5-handed the 6-max HJ cell, both of the two earliest 7-handed seats the 6-max UTG cell, and 8-handed the full-ring cell of the position 5 seats before the button [REQ-005.4]
 - [ ] #9 Given charts for table sizes 2-10, When the playtest's defaultPolicyFactory seats bots, Then TAG sits in every seat at every supported size and the random-move fallback is removed
 - [ ] #10 Given 10-seat preflop charts exist, When TASK-3.13's e2e/rapid-pace.spec.ts 10-player check (SPEC-05) runs with the real TAG bots instead of its test-only policy, Then every bot action after the user's preflop fold shows within 300 ms
+- [ ] #11 Given a playtest with --lineup at 2 to 10 seats, When it runs after full-ring and heads-up advice exist, Then every line-up seat plays its own style in every hand (the TASK-6.6 random-move fallback for non-6-seat hands and its Line-up note are removed) and zero invariant violations are reported
 <!-- AC:END -->
 
 ## Definition of Done
@@ -75,4 +76,6 @@ Plan key: E07-S05 · Dream: limit-holdem-trainer
 AC added from TASK-6.1 follow-up (doc-18).
 
 AC added from TASK-3.13 (10-player pace proven with a test-only policy until 10-seat charts exist)
+
+AC added from TASK-6.6 Q-1
 <!-- SECTION:NOTES:END -->

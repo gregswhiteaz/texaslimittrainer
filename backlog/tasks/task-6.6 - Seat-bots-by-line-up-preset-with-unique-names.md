@@ -1,10 +1,11 @@
 ---
 id: TASK-6.6
 title: Seat bots by line-up preset with unique names
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-22T01:16:00Z'
+updated_date: '2026-11-22T05:01:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -66,6 +67,18 @@ Plan key: E06-S06 · Dream: limit-holdem-trainer
 - [ ] #11 Story documentation is written and published to Backlog.md
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. src/bots/lineup.ts: seatLineUp(preset, size, userSeat) + BOT_NAMES (types-only imports).
+2. src/bots/decide.ts: decideStyle shared by the worker and the playtest.
+3. Playtest --lineup mixed|tough|soft (seat 1 = user via seededTagPolicy; styles only in 6-seat hands, random fallback otherwise, Line-up note); replay support.
+4. Tests: unit (lineup, policy, cli, advice-service), acceptance (AC#1–7), opt-in slow 10k 6-max Tough/Mixed timing (AC#8).
+5. Baseline playtest SHA unchanged.
+
+Full spec: doit/TASK-6.6/spec.md
+<!-- SECTION:PLAN:END -->
 
 ## Implementation Notes
 
