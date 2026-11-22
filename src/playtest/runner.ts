@@ -22,7 +22,8 @@ import {
   type Violation,
 } from '../engine/invariants';
 import { playerView, type SeatPolicy } from '../engine/player-view';
-import { randomMovePolicy, seatGenerator, seededTagPolicy } from './policy';
+import type { LineUpPreset } from '../bots/lineup';
+import { lineUpPolicyFactory, randomMovePolicy, seatGenerator, seededTagPolicy } from './policy';
 
 export { MAX_BETS_PER_STREET };
 export const PLAYTEST_STAKES: Stakes = { smallBlind: 2, bigBlind: 4, smallBet: 4, bigBet: 8 };
@@ -50,6 +51,9 @@ export interface PlaytestOptions {
   readonly size: number;
   /** Default 'cash'. */
   readonly game?: GameType;
+  /** Seat 1 plays the user (TAG), seats 2..size the preset's styles (lineUpPolicyFactory); an explicit
+   *  seams.makePolicy wins. Default: defaultPolicyFactory. */
+  readonly lineUp?: LineUpPreset;
 }
 /** One hand's table. */
 export interface HandSetup {
@@ -304,13 +308,17 @@ export function runPlaytest(
   onHand?: (hand: PlayedHand) => void,
   seams: PlaytestSeams = {},
 ): PlaytestSummary {
-  const { hands, seed, size, game = 'cash' } = options;
+  const { hands, seed, size, game = 'cash', lineUp } = options;
   const rules = GAMES[game];
+  const handSeams =
+    lineUp === undefined || seams.makePolicy !== undefined
+      ? seams
+      : { ...seams, makePolicy: lineUpPolicyFactory(lineUp, size) };
   function* play(): Generator<PlayedHand> {
     let setup: HandSetup = { game };
     let button = 1;
     for (let k = 1; k <= hands; k++) {
-      const hand = playHand(handReplayCode(seed, k, game), size, button, k, seams, setup);
+      const hand = playHand(handReplayCode(seed, k, game), size, button, k, handSeams, setup);
       onHand?.(hand);
       yield hand;
       setup = { game };

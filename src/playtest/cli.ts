@@ -1,3 +1,4 @@
+import { seatLineUp, type LineUpPreset } from '../bots/lineup';
 import { formatCard } from '../engine/cards';
 import { isReplayCode, type ReplayCode } from '../engine/deck';
 import type { ActionRecord, SeatNumber } from '../engine/hand';
@@ -15,6 +16,7 @@ import {
   type PlaytestSeams,
   type PlaytestSummary,
 } from './runner';
+import { lineUpPolicyFactory } from './policy';
 
 export interface CliIo {
   readonly out: (text: string) => void;
@@ -30,14 +32,16 @@ export type ParsedArgs =
       readonly game: GameType;
       /** One per seat 1..size; 0 = empty seat. */
       readonly stacks: readonly number[];
+      readonly lineUp?: LineUpPreset;
     }
   | { readonly kind: 'help' }
   | { readonly kind: 'error'; readonly message: string };
 
 export const USAGE =
-  'Usage: npm run playtest -- [--hands <1-1000000000>] [--seed <0-9007199254740991>] [--size <2-10>] [--game <cash|sng>]\n' +
-  '       npm run playtest -- --replay-code <32 lowercase hex characters> [--size <2-10>] [--button <seat>] [--game <cash|sng>] [--stacks <one stack per seat, comma-separated, 0 = empty seat>]\n' +
-  'Defaults: --hands 10000 --seed 42 --size 6 --button 1 --game cash; --stacks gives every seat $160 (cash) or 1500 (sng)\n';
+  'Usage: npm run playtest -- [--hands <1-1000000000>] [--seed <0-9007199254740991>] [--size <2-10>] [--game <cash|sng>] [--lineup <mixed|tough|soft>]\n' +
+  '       npm run playtest -- --replay-code <32 lowercase hex characters> [--size <2-10>] [--button <seat>] [--game <cash|sng>] [--stacks <one stack per seat, comma-separated, 0 = empty seat>] [--lineup <mixed|tough|soft>]\n' +
+  'Defaults: --hands 10000 --seed 42 --size 6 --button 1 --game cash; --stacks gives every seat $160 (cash) or 1500 (sng)\n' +
+  "--lineup: seat 1 plays the user (TAG) and seats 2 and up play the preset's styles; without it every seat plays TAG at 6 seats and random moves at other sizes\n";
 
 const VALUE_OPTIONS = [
   '--hands',
@@ -47,10 +51,17 @@ const VALUE_OPTIONS = [
   '--button',
   '--game',
   '--stacks',
+  '--lineup',
 ] as const;
 type ValueOption = (typeof VALUE_OPTIONS)[number];
 
 const error = (message: string): ParsedArgs => ({ kind: 'error', message });
+/** CLI name → preset (A-3). */
+const LINE_UPS: Readonly<Record<string, LineUpPreset>> = {
+  mixed: 'Mixed',
+  tough: 'Tough',
+  soft: 'Soft',
+};
 const SIZE_ERROR = 'Error: --size must be a whole number from 2 to 10.';
 const STACKS_ERROR =
   'Error: --stacks must be one whole number per seat (0 for an empty seat), at least two above 0, totalling at most 9007199254740991.';
@@ -103,6 +114,16 @@ export function parseArgs(argv: readonly string[]): ParsedArgs {
 
   const game = values.get('--game') ?? 'cash';
   if (game !== 'cash' && game !== 'sng') return error('Error: --game must be cash or sng.');
+  const lineUpText = values.get('--lineup');
+  // hasOwn: a prototype key such as 'toString' is not a line-up.
+  const lineUp =
+    lineUpText !== undefined && Object.hasOwn(LINE_UPS, lineUpText)
+      ? LINE_UPS[lineUpText]
+      : undefined;
+  if (lineUpText !== undefined && lineUp === undefined) {
+    return error('Error: --lineup must be mixed, tough or soft.');
+  }
+  const withLineUp = lineUp === undefined ? {} : { lineUp };
   const size = whole('--size', 6, 2, 10);
   const replayCode = values.get('--replay-code');
   if (replayCode !== undefined) {
@@ -126,7 +147,7 @@ export function parseArgs(argv: readonly string[]): ParsedArgs {
         : parseStacks(stacksText, size);
     if (stacks === undefined) return error(STACKS_ERROR);
     if (stacks[button - 1] === 0) return error('Error: --button must be a seat with chips.');
-    return { kind: 'replay', replayCode, size, button, game, stacks };
+    return { kind: 'replay', replayCode, size, button, game, stacks, ...withLineUp };
   }
   if (values.has('--button')) return error('Error: --button is only valid with --replay-code.');
   if (values.has('--stacks')) return error('Error: --stacks is only valid with --replay-code.');
@@ -139,15 +160,17 @@ export function parseArgs(argv: readonly string[]): ParsedArgs {
     return error('Error: --seed must be a whole number from 0 to 9007199254740991.');
   }
   if (size === undefined) return error(SIZE_ERROR);
-  return { kind: 'run', options: { hands, seed, size, game } };
+  return { kind: 'run', options: { hands, seed, size, game, ...withLineUp } };
 }
 
 /** `header` (whole lines) followed by the summary lines, then the violation block when there are
- *  violations. Replay mode has already printed the hand, so its block has no Replay line or hand. */
+ *  violations. Replay mode has already printed the hand, so its block has no Replay line or hand.
+ *  `lineUp` is the CLI line-up name, appended to the Replay line. */
 export function formatReport(
   header: string,
   summary: PlaytestSummary,
   mode: 'run' | 'replay' = 'run',
+  lineUp?: string,
 ): string {
   return (
     header +
@@ -165,7 +188,7 @@ export function formatReport(
       .map((line) => `${line}\n`)
       .join('') +
     (summary.firstViolation !== null
-      ? violationBlock(summary.firstViolation, summary.violationCounts, mode)
+      ? violationBlock(summary.firstViolation, summary.violationCounts, mode, lineUp)
       : '')
   );
 }
@@ -176,6 +199,9 @@ function gameSuffix(game: GameType, stacks: readonly number[]): string {
   return (game === 'sng' ? ' --game sng' : '') + (changed ? ` --stacks ${stacks.join(',')}` : '');
 }
 
+const lineUpOption = (lineUp: string | undefined): string =>
+  lineUp === undefined ? '' : ` --lineup ${lineUp}`;
+
 /** One stack per seat 1..size: each dealt-in seat's starting stack, 0 for the others. */
 function recordStacks({ seats, size }: HandRecord): number[] {
   return Array.from({ length: size }, (_, i) => seats.find((s) => s.seat === i + 1)?.stack ?? 0);
@@ -185,6 +211,7 @@ function violationBlock(
   hand: PlayedHand,
   counts: PlaytestSummary['violationCounts'],
   mode: 'run' | 'replay',
+  lineUp: string | undefined,
 ): string {
   const { violation, record, dealViolations } = hand;
   const ids = [
@@ -205,7 +232,8 @@ function violationBlock(
   if (mode === 'replay') return lines.map((line) => `${line}\n`).join('');
   lines.push(
     `Replay: npm run playtest -- --replay-code ${record.replayCode} --size ${record.size} --button ${record.button}` +
-      gameSuffix(record.game, recordStacks(record)),
+      gameSuffix(record.game, recordStacks(record)) +
+      lineUpOption(lineUp),
   );
   return lines.map((line) => `${line}\n`).join('') + formatHand(hand);
 }
@@ -254,6 +282,18 @@ function tableLine(size: number, game: GameType): string {
   return `Table: ${size} players, sit-and-go ${smallBet}/${bigBet} (blinds ${smallBlind}/${bigBlind}), ${startingStack} chips each, busted seats sit out, a new sit-and-go starts when one player has all the chips\n`;
 }
 
+/** The Line-up line, plus the note when styles can't play (size ≠ 6 or sng; D-2). */
+function lineUpLines(preset: LineUpPreset, name: string, size: number, game: GameType): string {
+  const bots = seatLineUp(preset, size, 1)
+    .filter((s) => s.kind === 'bot')
+    .map((s) => `, seat ${s.seat} ${String(s.name)} (${String(s.style)})`);
+  const note =
+    size !== 6 || game === 'sng'
+      ? 'Line-up note: styles play only in hands with 6 seats dealt in; other hands use random moves until advice covers other table sizes.\n'
+      : '';
+  return `Line-up: ${name}, seat 1 plays the user${bots.join('')}\n${note}`;
+}
+
 /** Returns the exit code: 0 no violations, 1 violations, 2 usage error. Writes everything through io.
  *  seams are test seams; the entry never passes them. */
 export function main(argv: readonly string[], io: CliIo, seams: PlaytestSeams = {}): number {
@@ -266,20 +306,30 @@ export function main(argv: readonly string[], io: CliIo, seams: PlaytestSeams = 
     io.out(USAGE);
     return 0;
   }
+  const preset = parsed.kind === 'run' ? parsed.options.lineUp : parsed.lineUp;
+  const lineUpName = preset?.toLowerCase();
+  const option = lineUpOption(lineUpName);
+  const table = (size: number, game: GameType) =>
+    tableLine(size, game) +
+    (preset === undefined ? '' : lineUpLines(preset, String(lineUpName), size, game));
   let header = 'TLH Trainer playtest\n';
   let summary: PlaytestSummary;
   if (parsed.kind === 'run') {
     const { hands, seed, size, game } = parsed.options;
     const sng = game === 'sng' ? ' --game sng' : '';
-    header += `Options: --hands ${hands} --seed ${seed} --size ${size}${sng}\n${tableLine(size, game)}`;
+    header += `Options: --hands ${hands} --seed ${seed} --size ${size}${sng}${option}\n${table(size, game)}`;
     summary = runPlaytest(parsed.options, undefined, seams);
   } else {
     const { replayCode, size, button, game, stacks } = parsed;
-    const hand = playHand(replayCode, size, button, 1, seams, { game, stacks });
-    header += `Options: --replay-code ${replayCode} --size ${size} --button ${button}${gameSuffix(game, stacks)}\n`;
-    header += tableLine(size, game) + formatHand(hand);
+    const handSeams =
+      preset === undefined || seams.makePolicy !== undefined
+        ? seams
+        : { ...seams, makePolicy: lineUpPolicyFactory(preset, size) };
+    const hand = playHand(replayCode, size, button, 1, handSeams, { game, stacks });
+    header += `Options: --replay-code ${replayCode} --size ${size} --button ${button}${gameSuffix(game, stacks)}${option}\n`;
+    header += table(size, game) + formatHand(hand);
     summary = summarize([hand]);
   }
-  io.out(formatReport(header, summary, parsed.kind));
+  io.out(formatReport(header, summary, parsed.kind, lineUpName));
   return summary.violations > 0 ? 1 : 0;
 }

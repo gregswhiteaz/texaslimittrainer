@@ -2,10 +2,7 @@ import type { Action } from '../engine/hand';
 import type { PlayerView } from '../engine/player-view';
 import type { Xoshiro128 } from '../engine/seeded-random';
 import { botRandom, isBotSeed } from '../engine/bot-random';
-import { decideTag } from '../bots/tag';
-import { decideCallingStation } from '../bots/calling-station';
-import { decideManiac } from '../bots/maniac';
-import { decideRock } from '../bots/rock';
+import { decideStyle } from '../bots/decide';
 import { recommend, type Recommendation } from '../advice/recommend';
 import { gradeView, type ActionType, type GradeResult } from '../advice/grade';
 import type { BotStyle } from './session';
@@ -43,14 +40,7 @@ export interface AdviceDeps {
   readonly decideBot?: (view: PlayerView, style: BotStyle, random: Xoshiro128) => Action;
 }
 
-/** Rock, Maniac and Calling station seats decide with their own bots; every other style with decideTag.
- *  The Rock draws nothing, so its seat ignores the generator. */
-const decideBotDefault = (view: PlayerView, style: BotStyle, random: Xoshiro128): Action => {
-  if (style === 'Rock') return decideRock(view);
-  if (style === 'Maniac') return decideManiac(view, { random });
-  if (style === 'Calling station') return decideCallingStation(view, { random });
-  return decideTag(view, { random });
-};
+const decideBotDefault = decideStyle;
 
 /** Never throws: every error (malformed request, unknown kind or thrown by advice code) becomes ok:false. */
 export function handleAdviceRequest(

@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { gradeView } from '../../src/advice/grade';
 import { recommend } from '../../src/advice/recommend';
 import { botRandom } from '../../src/engine/bot-random';
+import { decideStyle } from '../../src/bots/decide';
 import { decideCallingStation } from '../../src/bots/calling-station';
 import { decideManiac } from '../../src/bots/maniac';
 import { decideRock } from '../../src/bots/rock';
@@ -188,5 +189,23 @@ describe('advice service', () => {
       new Xoshiro128(0).nextUint32(),
       new Xoshiro128(4294967295).nextUint32(),
     ]);
+  });
+
+  it("decideStyle matches each bot's own decision", () => {
+    const { preflop, flop } = views();
+    for (const view of [preflop, flop]) {
+      for (const seed of [0, 12345, 4294967295]) {
+        expect(decideStyle(view, 'Rock', botRandom(seed))).toEqual(decideRock(view));
+        expect(decideStyle(view, 'Maniac', botRandom(seed))).toEqual(
+          decideManiac(view, { random: botRandom(seed) }),
+        );
+        expect(decideStyle(view, 'Calling station', botRandom(seed))).toEqual(
+          decideCallingStation(view, { random: botRandom(seed) }),
+        );
+        expect(decideStyle(view, 'TAG', botRandom(seed))).toEqual(
+          decideTag(view, { random: botRandom(seed) }),
+        );
+      }
+    }
   });
 });

@@ -88,9 +88,10 @@ describe('playtest CLI', () => {
 
     expect(capture(['--help'])).toEqual({ code: 0, out: USAGE, err: '' });
     expect(USAGE).toBe(
-      'Usage: npm run playtest -- [--hands <1-1000000000>] [--seed <0-9007199254740991>] [--size <2-10>] [--game <cash|sng>]\n' +
-        '       npm run playtest -- --replay-code <32 lowercase hex characters> [--size <2-10>] [--button <seat>] [--game <cash|sng>] [--stacks <one stack per seat, comma-separated, 0 = empty seat>]\n' +
-        'Defaults: --hands 10000 --seed 42 --size 6 --button 1 --game cash; --stacks gives every seat $160 (cash) or 1500 (sng)\n',
+      'Usage: npm run playtest -- [--hands <1-1000000000>] [--seed <0-9007199254740991>] [--size <2-10>] [--game <cash|sng>] [--lineup <mixed|tough|soft>]\n' +
+        '       npm run playtest -- --replay-code <32 lowercase hex characters> [--size <2-10>] [--button <seat>] [--game <cash|sng>] [--stacks <one stack per seat, comma-separated, 0 = empty seat>] [--lineup <mixed|tough|soft>]\n' +
+        'Defaults: --hands 10000 --seed 42 --size 6 --button 1 --game cash; --stacks gives every seat $160 (cash) or 1500 (sng)\n' +
+        "--lineup: seat 1 plays the user (TAG) and seats 2 and up play the preset's styles; without it every seat plays TAG at 6 seats and random moves at other sizes\n",
     );
     expect(parseArgs([])).toEqual({
       kind: 'run',
@@ -466,6 +467,84 @@ describe('playtest CLI', () => {
     for (const literal of ["'folds'", "'checks'", 'calls $', 'bets $', 'raises to $']) {
       expect(source).not.toContain(literal);
     }
+  });
+
+  it('--lineup parsing, header lines and replay suffix', () => {
+    expect(parseArgs(['--lineup', 'soft'])).toEqual({
+      kind: 'run',
+      options: { hands: 10000, seed: 42, size: 6, game: 'cash', lineUp: 'Soft' },
+    });
+    expect(parseArgs(['--replay-code', VALID_CODE, '--lineup', 'mixed'])).toEqual({
+      kind: 'replay',
+      replayCode: VALID_CODE,
+      size: 6,
+      button: 1,
+      game: 'cash',
+      stacks: [160, 160, 160, 160, 160, 160],
+      lineUp: 'Mixed',
+    });
+    const badLineUp = { kind: 'error', message: 'Error: --lineup must be mixed, tough or soft.' };
+    for (const value of ['loose', 'Tough', 'custom', '', 'toString', 'MIXED']) {
+      expect(parseArgs(['--lineup', value])).toEqual(badLineUp);
+    }
+    expect(parseArgs(['--lineup', 'soft', '--lineup', 'soft'])).toEqual({
+      kind: 'error',
+      message: 'Error: --lineup given more than once.',
+    });
+    expect(parseArgs(['--lineup'])).toEqual({
+      kind: 'error',
+      message: 'Error: --lineup needs a value.',
+    });
+
+    const note =
+      'Line-up note: styles play only in hands with 6 seats dealt in; other hands use random moves until advice covers other table sizes.\n';
+    const faulty = capture(['--hands', '2', '--seed', '1', '--size', '3', '--lineup', 'tough'], {
+      makePolicy: () => (view) => ({ seat: view.seat, type: 'raise', amount: 999 }),
+    });
+    expect(faulty.code).toBe(1);
+    const replayLine = faulty.out.split('\n').find((line) => line.startsWith('Replay: '));
+    expect(replayLine).toMatch(
+      /^Replay: npm run playtest -- --replay-code [0-9a-f]{32} .* --lineup tough$/,
+    );
+    expect(faulty.out).toContain(
+      'Options: --hands 2 --seed 1 --size 3 --lineup tough\n' +
+        'Table: 3 players, cash $4/$8, stacks carry over, a busted seat rebuys for $160\n' +
+        'Line-up: tough, seat 1 plays the user, seat 2 Ava (Maniac), seat 3 Ben (TAG)\n' +
+        note,
+    );
+
+    const small = capture(['--hands', '3', '--size', '3', '--lineup', 'soft']);
+    expect(small.code).toBe(0);
+    expect(small.out).toContain(
+      'Line-up: soft, seat 1 plays the user, seat 2 Ava (Calling station), seat 3 Ben (Rock)\n' +
+        note,
+    );
+    const sng = capture(['--hands', '3', '--game', 'sng', '--lineup', 'soft']);
+    expect(sng.out).toContain('Options: --hands 3 --seed 42 --size 6 --game sng --lineup soft\n');
+    expect(sng.out).toContain(note);
+    const six = capture(['--hands', '3', '--lineup', 'mixed']);
+    expect(six.out).not.toContain('Line-up note:');
+    expect(capture(['--hands', '3']).out).not.toContain('Line-up');
+
+    const replay = capture(['--replay-code', VALID_CODE, '--size', '3', '--lineup', 'mixed']);
+    expect(replay.code).toBe(0);
+    expect(replay.out).toContain(
+      'Options: --replay-code ' +
+        VALID_CODE +
+        ' --size 3 --button 1 --lineup mixed\n' +
+        'Table: 3 players, cash $4/$8, stacks carry over, a busted seat rebuys for $160\n' +
+        'Line-up: mixed, seat 1 plays the user, seat 2 Ava (TAG), seat 3 Ben (Calling station)\n' +
+        note +
+        'Hand 1: ',
+    );
+    const replayFaulty = capture(
+      ['--replay-code', VALID_CODE, '--size', '3', '--lineup', 'mixed'],
+      {
+        makePolicy: () => (view) => ({ seat: view.seat, type: 'check' }),
+      },
+    );
+    expect(replayFaulty.code).toBe(1);
+    expect(replayFaulty.out).not.toContain('Replay: ');
   });
 });
 
