@@ -1,10 +1,11 @@
 ---
 id: TASK-6.10
 title: Report each bot's BB/100 with a 95% confidence interval
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-17T23:22:00Z'
+updated_date: '2026-11-22T18:56:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -60,3 +61,13 @@ Plan key: E06-S10 · Dream: limit-holdem-trainer
 - [ ] #11 Story documentation is written and published to Backlog.md
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. src/playtest/winrate.ts: per-bot running stats (Welford), BB/100 and 95% CI (sample SD, 1.96·SD/√n), formatting.
+2. cli.ts: Bot results block between header and 'Hands played:' in every mode; bots keyed by seat+name+style (replacements separate); default seats 'Seat N'; line-up seat 1 'User'.
+3. Acceptance + unit tests; new default baseline SHA recorded; old SHA recovered with grep -v '^Bot'.
+
+Full spec: doit/TASK-6.10/spec.md
+<!-- SECTION:PLAN:END -->
