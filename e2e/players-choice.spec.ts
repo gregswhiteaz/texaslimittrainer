@@ -20,6 +20,8 @@ const playersSelect = (page: Page) => page.getByLabel('Players at the table');
 const note = (page: Page) => page.locator('#config-players-note');
 const opponents = (page: Page) =>
   page.locator('section[aria-labelledby="config-opponents"] li').filter({ hasNotText: /^You/ });
+const youRow = (page: Page) =>
+  page.locator('section[aria-labelledby="config-opponents"] li').filter({ hasText: /^You/ });
 const seats = (page: Page) => page.getByRole('list', { name: 'Seats' }).getByRole('listitem');
 const header = (page: Page) => page.locator('.table-header-line');
 const seatPart = (page: Page, seat: number, part: string) =>
@@ -114,6 +116,7 @@ test('each table size from 2 to 10 starts with that many players and the right a
     expect(await selectedText(page)).toBe(label);
     await expectNote(page, n);
     await expect(opponents(page)).toHaveCount(n - 1);
+    await expect(youRow(page)).toHaveText(new RegExp(`^You\\s*Seat ${Math.min(5, n)}$`));
     if (n === 7) await axeWithPausedClock(page);
   }
   await playersSelect(page).selectOption({ label: '6 (6-max)' });

@@ -4,23 +4,41 @@
   "branch": "doit/TASK-2.2",
   "base_commit": "5e3928f59172ee4e6bb1f29530d7e1aa489d99e4",
   "started": "2026-11-22T16:07:15",
-  "review_round": 0,
-  "judge_round": 0,
+  "review_round": 1,
+  "judge_round": 1,
   "sendbacks": 0,
-  "gate_runs": 2,
+  "gate_runs": 3,
   "questions": 5,
   "assumptions": 0,
   "escalations": 0,
-  "item_failures": {},
+  "item_failures": {
+    "SPEC-01": 0,
+    "SPEC-02": 0,
+    "SPEC-03": 0,
+    "SPEC-04": 0,
+    "SPEC-05": 0,
+    "SPEC-06": 0,
+    "SPEC-07": 0,
+    "SPEC-08": 0,
+    "SPEC-09": 0,
+    "SPEC-10": 0,
+    "SPEC-11": 0,
+    "SPEC-12": 0,
+    "SPEC-13": 0,
+    "SPEC-14": 0,
+    "SPEC-15": 0,
+    "SPEC-16": 0,
+    "SPEC-17": 0
+  },
   "locked_tests": {
-    "e2e/players-choice.spec.ts": "f8cf3528fde6562f32651056a62f8db9580239d15903bfbcd67232361d0418f0",
+    "e2e/players-choice.spec.ts": "635bfa45dabbd285edbdf3c6e490fa872c37e166c8a1ab892233305614af8993",
     "tests/table/table-size.acceptance.test.ts": "6ce26efa6870c66ac38e4d60391a2107df798ba60b9e0feeaa0286c57a160bab",
     "tests/ui/game-config-players.acceptance.test.tsx": "f63ed85497486dfa434a5ca3bcc3adadfc23270d912eb82b289dde53c3d33073"
   },
   "test_snapshot": {
     "e2e/players-choice.spec.ts": {
-      "sha": "f8cf3528fde6562f32651056a62f8db9580239d15903bfbcd67232361d0418f0",
-      "asserts": 30,
+      "sha": "635bfa45dabbd285edbdf3c6e490fa872c37e166c8a1ab892233305614af8993",
+      "asserts": 31,
       "skips": 0
     },
     "tests/table/table-size.acceptance.test.ts": {
@@ -1124,7 +1142,22 @@
       "skips": 0
     }
   },
-  "history": [],
+  "history": [
+    {
+      "t": "2026-11-22T16:37:47",
+      "event": "unlock",
+      "file": "e2e/players-choice.spec.ts",
+      "reason": "Judge J-1-01: assert the 'You \u00b7 Seat n' row follows the chosen size (strengthen)"
+    }
+  ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-2.2",
-  "spec_sha256": "24e0d0b195c93154d5c0295a216b41300f57413679bf82e93c9de1f945a66408"
+  "spec_sha256": "24e0d0b195c93154d5c0295a216b41300f57413679bf82e93c9de1f945a66408",
+  "review_findings": {
+    "1": 0
+  },
+  "doc_id": "doc-88",
+  "judge_results": {
+    "1": "PASS"
+  },
+  "relock_pending": []
 }

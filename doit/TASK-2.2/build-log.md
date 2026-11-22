@@ -12,3 +12,6 @@
   - `npm run playtest -- --hands 10000 --seed 42 [--size 2|--size 10]` — 0 invariant violations at 2, 6 and 10.
 - Scope: 629 changed lines vs budget 560 (warn band) — mostly the three new acceptance test files and the axe worker-timer helper copied into the e2e spec (same pattern as review/next-hand/table-display specs).
 - Gate build #1: PASS (629 lines, 14 files; scope lines warn).
+
+## FIX (judge R1)
+- J-1-01: fixed — `e2e/players-choice.spec.ts` first test now asserts the `You` row reads `Seat ${Math.min(5, n)}` after each size pick. Mutant (row uses `config.userSeat`) fails in Chromium and WebKit (expected `Seat 2`, got `Seat 5`); source restored byte-for-byte (git diff clean). `npm run format`; `npx playwright test e2e/players-choice.spec.ts` → 4 passed (chromium + webkit).

@@ -3,7 +3,7 @@
 ## Created
 - `tests/ui/game-config-players.acceptance.test.tsx` — SPEC-01..04: players options 2..10 with size names and 6 selected; approximate note at 3/4/5/7 (6-max) and 8 (full ring) with aria-describedby; no note at 2/6/9/10; Opponents list n − 1 bots and `You · Seat min(5, n)`.
 - `tests/table/table-size.acceptance.test.ts` — SPEC-05..09: seating, header and dealt players at every size (cash and sit-and-go); heads-up blinds and labels across a button move (pins SCENARIO_CODE: the button bot does not fold, used by the e2e); position names at 2..10; review grading at 2 and 10 players; size survives game type and stake.
-- `e2e/players-choice.spec.ts` — SPEC-10/11: every size in the browser (options, note, opponents, header, seat count, Leave table, axe on Config at 7 and the table at 2 and 10, same-origin requests); heads-up table under a paused clock with `runUntilMyTurn`. Carries the worker-timer axe helper used by the other paused-clock specs.
+- `e2e/players-choice.spec.ts` — SPEC-10/11: every size in the browser (options, note, opponents, header, seat count, Leave table, axe on Config at 7 and the table at 2 and 10, same-origin requests); heads-up table under a paused clock with `runUntilMyTurn`. FIX J-1-01: after each size pick, asserts the Opponents `You` row reads `Seat min(5, n)`. Carries the worker-timer axe helper used by the other paused-clock specs.
 
 ## Modified
 - `src/table/session.ts` — `TABLE_SIZES` (frozen 2..10) and `configForPlayers` (D-4 seating, A-2 carry-over, A-5 RangeError).
