@@ -1,0 +1,79 @@
+{
+ "round": 2,
+ "test_suite": {
+  "command": "npm test",
+  "result": "PASS",
+  "passed": 558,
+  "failed": 0,
+  "notes": "Local: 159 files passed / 1 skipped; 558 passed / 8 skipped (the new opt-in 200-hand seated run is skipped without TLH_SLOW_TESTS); coverage all files 96.98% stmts, maniac.ts 100% lines. lint and typecheck clean. TLH_SLOW_TESTS=1 maniac.test.ts: 4/4 passed incl. the 200-hand seated run (2986 ms). CI run 44972930191 (CI workflow) on eb4edeb: SUCCESS; vitest 564 passed / 2 skipped, Duration 487.53 s (Test step 01:46:02-01:54:10 = 8m08s) vs 942.6 s in round 1; E2E step success (2m31s). Visual run 44972930126 success."
+ },
+ "end_to_end": {
+  "command": "npm run -s playtest -- --hands 10000 --seed 42 --size 6 (twice)",
+  "result": "PASS",
+  "expected": "Player actions: 88920, Invariant violations: 0, stdout SHA-256 aacd5e94dccba90b4b50936ba1bb2b08aff2bda37d427efdfb56a6b07e488e01, identical across runs",
+  "actual": "Round 2 rerun: SHA-256 aacd5e94dccba90b4b50936ba1bb2b08aff2bda37d427efdfb56a6b07e488e01 (src unchanged since 7bbf6ab: git diff 7bbf6ab HEAD -- src is empty), Player actions 88920, Invariant violations 0"
+ },
+ "integrity": {
+  "result": "PASS",
+  "notes": "doit.py test-integrity exit 0. Round-2 commit eb4edeb is test/package.json only (no src change). Locked acceptance file change is input preparation only: seat 1 plays decideTag with the per-decision seed and the memoized equity instead of seededTagPolicy (which is decideTag with the same seed and no memo); no assertion touched. Independent holdout check: collection run with seededTagPolicy vs the memoized policy gives byte-identical view/action/record/summary hashes for seed 61 x 200 hands (423 decisions) and seed 313 x 120 hands (206 decisions). maniac.test.ts: draw-count test now uses the first 50 hands (all example views and the postflop-fold view still present; assertions unchanged, equity memo added); seated run is 20 hands every push with the 200-hand run opt-in via TLH_SLOW_TESTS (recorded deviation from A-8 wording; package.json test:slow includes it); new river/turn/flop check->bet test. No assertion loosened. Mutants re-run: river-never-deviates (round-1 survivor) KILLED, turn-never-deviates KILLED, drop-call-fallback KILLED, always-draw KILLED; git diff --stat -- src e2e tests empty afterwards."
+ },
+ "items": [
+  {
+   "spec": "SPEC-01",
+   "result": "PASS",
+   "evidence": "Round 2 (src unchanged since round 1, npm test green, holdout re-run all checks passed): Acceptance test passes and asserts exact deviation table, word counts, reparse equality, missing-description and 1.5-probability messages; json 0.85->0.8 mutant killed. Holdout: MANIAC_STYLE name, empty mixedSpots, deviation table = D-2; short description rejected with the description message."
+  },
+  {
+   "spec": "SPEC-02",
+   "result": "PASS",
+   "evidence": "Acceptance test pins Examples A (bet 4 vs TAG check), D (check) and E (raise 8). Holdout with own views (seed 977, seat 3) and codes 8801: Maniac bet/raise 4984 vs TAG 0 over 6000 check points; postflop check->bet rate 0.868 vs 0.85 and preflop check->raise 0.525 (n=200) vs 0.6, within statistical bounds; every action legal. Round 2: new unit test requires the aggressive Maniac to bet at every flop/turn/river check point with a legal bet; river-never-deviates and turn-never-deviates mutants now killed. Holdout re-run: 4984 vs 0."
+  },
+  {
+   "spec": "SPEC-03",
+   "result": "PASS",
+   "evidence": "Round 2 (src unchanged since round 1, npm test green, holdout re-run all checks passed): Acceptance test pins Examples B (raise 12 vs call 4) and C (raise 16 vs call 8). Holdout codes 8802: Maniac raises 4063 vs TAG 11 over 6000 call points; postflop call->raise 0.869 vs 0.85, preflop call->raise 0.542/0.621 (two code sets) vs 0.6, preflop fold->raise 3692/8200 = 0.450 vs 0.45."
+  },
+  {
+   "spec": "SPEC-04",
+   "result": "PASS",
+   "evidence": "Round 2 (src unchanged since round 1, npm test green, holdout re-run all checks passed): Acceptance test asserts lowered count, p=0 == removed, p=1 raises every legal preflop call point; ignore-style mutant killed. Holdout via parseStyle on modified JSON copies, no code change: preflop call p=0.6/0.2/0.9 -> rates 0.621/0.211/0.919; postflop call p=0.85/0.3 -> 0.848/0.296; p=0 -> 0 raises; p=1 -> 1093/1093."
+  },
+  {
+   "spec": "SPEC-05",
+   "result": "PASS",
+   "evidence": "Round 2 (src unchanged since round 1, npm test green, holdout re-run all checks passed): Acceptance test with always-aggressive stub requires the exact legal call at every capped view (incl. preflop fold advice) and Examples F (call 14 vs TAG fold) and G; drop-call-fallback mutant killed. Holdout: 1400 capped decisions, 0 raises, all legal; 240 aggressive draws on fold-advice caps became the legal call; independent oracle (instead if legal, else legal call, else advice) matched all 18320 decisions, including uncapped no-re-raise/short-stack spots."
+  },
+  {
+   "spec": "SPEC-06",
+   "result": "PASS",
+   "evidence": "Round 2 (src unchanged since round 1, npm test green, holdout re-run all checks passed): Acceptance test: worker 'Maniac' at Example B returns raise 12, 'TAG' call 4, and equals decideManiac over 10000 check points; dispatch mutant killed. Holdout: worker 'Maniac' == decideManiac at 1600/1600 (400 views x 4 seeds incl. 0 and 4294967295), differs from TAG at 887; bad seed -> ok:false TypeError."
+  },
+  {
+   "spec": "SPEC-07",
+   "result": "PASS",
+   "evidence": "Round 2 (src unchanged since round 1, npm test green, holdout re-run all checks passed): Unit test passes; extra-triple and instead-as-call mutants killed. Recorded deviation (different-instead duplicate shown with preflop/fold) judged sound: postflop/call has only one supported instead, so [postflop/call/raise, postflop/call/bet] is rejected (holdout: unsupported-deviation message for the bet entry), and the duplicate check keys on (street, advice) regardless of instead (holdout: preflop/fold call then raise -> 'lists deviation preflop fold twice'). Holdout: all 8 triples accepted keeping instead; 12 malformed triples (incl. river street, uppercase RAISE, check->check) rejected with exactly the unsupported message; probabilities -0.01, 1.0001, NaN, '0.5', null, Infinity rejected with the invalid-probability message; missing/numeric instead rejected; findDeviation postflop/check -> bet, postflop/fold and preflop/raise -> undefined."
+  },
+  {
+   "spec": "SPEC-08",
+   "result": "PASS",
+   "evidence": "Round 2: playtest SHA-256 aacd5e94...e01, 88920 actions, 0 violations. Seated unit run now 20 hands every push (passes) and 200 hands under TLH_SLOW_TESTS=1 (passes, 2986 ms) - recorded deviation from A-8 wording, accepted on substance. Holdout seated playtests re-run: all-Maniac 150 hands 0 violations VPIP 53.0 PFR 42.7; seats 2,4 300 hands 0 violations VPIP 54.3 PFR 51.5."
+  },
+  {
+   "spec": "SPEC-09",
+   "result": "PASS",
+   "evidence": "Round 2 (src unchanged since round 1, npm test green, holdout re-run all checks passed): Unit test passes; skip-draw and always-draw mutants killed. Holdout with counting wrapper over real seeded generators: exactly one draw at every deviating (street, advice) decision including capped views, zero at preflop raise and postflop fold advice, over 18320 decisions."
+  },
+  {
+   "spec": "SPEC-10",
+   "result": "PASS",
+   "evidence": "Round 2 (src unchanged since round 1, npm test green, holdout re-run all checks passed): Unit test passes; dispatch mutant killed. Holdout: exact-name 'Maniac' routes to decideManiac; 'maniac' and 'Maniac ' do not (TAG or ok:false); 'Calling station' -> decideCallingStation and 'TAG'/'Rock' -> decideTag at 1600/1600. Base-vs-HEAD fingerprint of TAG, Calling station and worker TAG/station/Rock answers over 197 views x 6 codes is identical (b85172e6...)."
+  },
+  {
+   "spec": "SPEC-11",
+   "result": "PASS",
+   "evidence": "CI run 44972930191 on eb4edeb completed SUCCESS (Lint, Build, Test, Playtest, E2E all success). vitest Duration 487.53 s vs 942.6 s in round 1; the Maniac tests now take ~20.6 s on CI (round 1 ~119 s). Locally lint, typecheck and npm test clean, coverage thresholds hold, bots import-boundary test passes. Story doc doc-76 present."
+  }
+ ],
+ "findings": [],
+ "summary": "All 11 SPEC items PASS. J-1-02 resolved: CI run 44972930191 on eb4edeb is green, Test step 8m08s (vitest 487.5 s vs 942.6 s). J-1-01 resolved: the river (and turn) never-deviate mutants are now killed by the new check->bet test. The locked acceptance file change is input-only and verified byte-identical independently; no assertion was loosened. The 200-hand seated run is opt-in with a 20-hand smoke run on every push (recorded deviation, passes both ways). No findings."
+}

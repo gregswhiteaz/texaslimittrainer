@@ -1,11 +1,11 @@
 ---
 id: TASK-6.4
 title: Face a Maniac that bets and raises where TAG would check or call
-status: In Progress
+status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-22T01:16:00Z'
+updated_date: '2026-11-22T01:58:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -40,27 +40,27 @@ Plan key: E06-S04 · Dream: limit-holdem-trainer
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Given the Maniac style data file, When it is loaded, Then it holds the style's deviation parameters and a plain-English description of the style [REQ-026.3]
-- [ ] #2 Given 10,000 seeded decision points with no bet to face where the advice is check, When a Maniac and a TAG each act at the same points, Then the Maniac bets at more of them than TAG [REQ-026.2]
-- [ ] #3 Given 10,000 seeded decision points where the advice is call, When a Maniac and a TAG each act at the same points, Then the Maniac raises at more of them than TAG [REQ-026.2]
-- [ ] #4 Given the Maniac file's raise probability is changed and no code is changed, When the same 10,000 seeded decision points are replayed, Then its raise rate changes [REQ-026.3]
-- [ ] #5 Given a Maniac facing a bet on a capped street (one bet and three raises made), When it chooses to be aggressive, Then it calls and the action is legal [REQ-026.2]
+- [x] #1 Given the Maniac style data file, When it is loaded, Then it holds the style's deviation parameters and a plain-English description of the style [REQ-026.3]
+- [x] #2 Given 10,000 seeded decision points with no bet to face where the advice is check, When a Maniac and a TAG each act at the same points, Then the Maniac bets at more of them than TAG [REQ-026.2]
+- [x] #3 Given 10,000 seeded decision points where the advice is call, When a Maniac and a TAG each act at the same points, Then the Maniac raises at more of them than TAG [REQ-026.2]
+- [x] #4 Given the Maniac file's raise probability is changed and no code is changed, When the same 10,000 seeded decision points are replayed, Then its raise rate changes [REQ-026.3]
+- [x] #5 Given a Maniac facing a bet on a capped street (one bet and three raises made), When it chooses to be aggressive, Then it calls and the action is legal [REQ-026.2]
 <!-- AC:END -->
 
 ## Definition of Done
 <!-- DOD:BEGIN -->
-- [ ] #1 Every acceptance criterion has at least one automated test (unit, property or Playwright) that passes
-- [ ] #2 `npm run lint`, `npm run typecheck` and `npm test` pass with zero errors [REQ-059.1, REQ-059.4]
-- [ ] #3 The golden-spot suite passes 100% (applies from the story that creates the suite, E07-S14, onward) [REQ-039.4]
-- [ ] #4 Coverage thresholds hold: >= 90% engine/bots/advice/statistics, >= 70% overall [REQ-059.3]
-- [ ] #5 Engine, bots, advice and statistics code imports no UI or browser-only code [REQ-059.2]
-- [ ] #6 Stories that touch the engine, bots or advice: a 10,000-hand playtest reports zero invariant violations (applies once the playtest runner exists, E01-S07, onward) [REQ-056.1]
-- [ ] #7 Stories that add or change a screen: Playwright test of the screen flow in Chromium and WebKit, and axe reports zero serious or critical violations (axe tooling is provisioned in the toolchain story E01-S01) [REQ-057.1]
-- [ ] #8 No new network requests beyond the app's own files [REQ-058.1]
-- [ ] #9 Strategy-content stories: text is original and every chart, range or golden spot carries its justification [REQ-061.2]
-- [ ] #10 CI workflow is green on the story's branch (applies once the CI story E01-S02 is done; E01-S01 instead passes the same checks locally) [REQ-064.2]
-- [ ] #11 Story documentation is written and published to Backlog.md
-- [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
+- [x] #1 Every acceptance criterion has at least one automated test (unit, property or Playwright) that passes
+- [x] #2 `npm run lint`, `npm run typecheck` and `npm test` pass with zero errors [REQ-059.1, REQ-059.4]
+- [x] #3 The golden-spot suite passes 100% (applies from the story that creates the suite, E07-S14, onward) [REQ-039.4]
+- [x] #4 Coverage thresholds hold: >= 90% engine/bots/advice/statistics, >= 70% overall [REQ-059.3]
+- [x] #5 Engine, bots, advice and statistics code imports no UI or browser-only code [REQ-059.2]
+- [x] #6 Stories that touch the engine, bots or advice: a 10,000-hand playtest reports zero invariant violations (applies once the playtest runner exists, E01-S07, onward) [REQ-056.1]
+- [x] #7 Stories that add or change a screen: Playwright test of the screen flow in Chromium and WebKit, and axe reports zero serious or critical violations (axe tooling is provisioned in the toolchain story E01-S01) [REQ-057.1]
+- [x] #8 No new network requests beyond the app's own files [REQ-058.1]
+- [x] #9 Strategy-content stories: text is original and every chart, range or golden spot carries its justification [REQ-061.2]
+- [x] #10 CI workflow is green on the story's branch (applies once the CI story E01-S02 is done; E01-S01 instead passes the same checks locally) [REQ-064.2]
+- [x] #11 Story documentation is written and published to Backlog.md
+- [x] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
 
 ## Implementation Plan
@@ -82,6 +82,12 @@ Autopilot Q-1..Q-3 auto-accepted (qa.md).
 Build: aggressive deviation pairs in the style format; maniac.json + decideManiac (capped → call); worker dispatch; examples A–G match; playtest byte-identical; 557 tests, e2e 130; gate PASS. Recorded deviation: SPEC-07 'different instead' duplicate shown with preflop/fold (postflop/call has only one legal replacement).
 
 Follow-ups (Step 6a): ACs added to TASK-6.11 (aggression after TASK-7.8) and TASK-6.6 (Maniac playtest speed).
+
+Judge R1 FAIL (CI timeout). Fix: Maniac tests ~37.8 s → ~14.4 s locally (memoized equity; 200-hand seated run opt-in; 20-hand smoke every push; acceptance collect() input-prep only, actions byte-identical); J-1-01 river test added; gate PASS.
+
+Recorded deviation (orchestrator, judge R1 fix): SPEC-08/A-8's 200-hand seated run moved to the opt-in slow group (TLH_SLOW_TESTS=1) per the user's standing rule after CI timed out; a 20-hand seated smoke run stays in every push.
+
+Judge R2 PASS 11/11 (CI 44972930191 green; Test step 487 s vs 943 s; Maniac tests ~20.6 s on CI vs ~119 s; J-1-01 river mutant killed).
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary

@@ -63,6 +63,6 @@
     "id": "SPEC-11",
     "verifies": "DoD#1, DoD#2, DoD#3, DoD#4, DoD#5, DoD#7, DoD#8, DoD#9, DoD#10, DoD#11, DoD#12",
     "verification": "command `npm run lint && npm run typecheck && npm test`",
-    "status": "fail"
+    "status": "pass"
   }
 ]

@@ -4,8 +4,8 @@
   "branch": "doit/TASK-6.4",
   "base_commit": "e6efdf3d716d97242e8728832e10d9498a2391b2",
   "started": "2026-11-21T17:50:48",
-  "review_round": 1,
-  "judge_round": 1,
+  "review_round": 2,
+  "judge_round": 2,
   "sendbacks": 1,
   "gate_runs": 3,
   "questions": 3,
@@ -22,7 +22,7 @@
     "SPEC-08": 0,
     "SPEC-09": 0,
     "SPEC-10": 0,
-    "SPEC-11": 3
+    "SPEC-11": 0
   },
   "locked_tests": {
     "tests/bots/maniac.acceptance.test.ts": "e4b22be74f6bc9d6c7ce6bb0378394be433a05880c978c8970ed2de8eef7e52b"
@@ -985,11 +985,13 @@
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-6.4",
   "spec_sha256": "41ed7ee38437cff3a9338e48f9391972edec57ff7ba552985bbcb74e218556be",
   "review_findings": {
-    "1": 0
+    "1": 0,
+    "2": 0
   },
   "doc_id": "doc-76",
   "judge_results": {
-    "1": "FAIL"
+    "1": "FAIL",
+    "2": "PASS"
   },
   "brief_history": {
     "SPEC-11": [
