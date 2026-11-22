@@ -197,18 +197,19 @@ async function toNextHand(page: Page, n: number, holdMs: number): Promise<void> 
 /**
  * Paused clock: advances fake time 1 ms at a time until the pending bot action shows, never while a worker
  * request is in flight (§5). Returns the fake ms, cap + 1 if the action has not shown after `cap` ms, or null
- * when it is the user's turn or the hand is over.
+ * when it is the user's turn or the hand is over and no bot decision has been posted since metering began.
+ * The post check comes before the turn check: a reply landing between reads still counts as a bot action.
  */
 async function meterBotAction(page: Page, cap: number): Promise<number | null> {
   const before = await actionCount(page);
   const posts = await workerPosts(page);
   for (let fake = 0; ; fake += 1) {
     if ((await actionCount(page)) > before) return fake;
-    if ((await enabledActions(page).count()) > 0 || (await handOver(page).count()) > 0) return null;
     if ((await workerPosts(page)) > posts) {
       await expect.poll(() => actionCount(page), { timeout: 10_000 }).toBeGreaterThan(before);
       return fake;
     }
+    if ((await enabledActions(page).count()) > 0 || (await handOver(page).count()) > 0) return null;
     if (fake > cap) return fake;
     await page.clock.runFor(1);
   }
@@ -254,11 +255,12 @@ test('the paused-clock pace check catches a 400 ms wait', async ({ page }) => {
       fakeSetTimeout(handler, Number(ms ?? 0) === 0 ? 400 : ms, ...args)) as typeof setTimeout;
   });
   await startGame(page);
-  for (let slice = 0; slice < 40 && (await actionCount(page)) === 0; slice++) {
-    await page.clock.runFor(50);
+  for (let ms = 0; ms < 2000 && (await actionCount(page)) === 0; ms++) {
+    await page.clock.runFor(1);
   }
   await expect(header(page)).toHaveText(/Hand #1$/);
-  expect(await actionCount(page)).toBeGreaterThan(0);
+  expect(await actionCount(page), 'only the blinds are posted').toBe(2);
+  await expect(tableSection(page).locator('li[data-seat="3"]')).toContainText('To act');
 
   const samples: number[] = [];
   while (samples.length < 2) {
