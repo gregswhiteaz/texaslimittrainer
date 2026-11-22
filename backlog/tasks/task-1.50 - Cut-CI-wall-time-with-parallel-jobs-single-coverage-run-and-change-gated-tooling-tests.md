@@ -7,7 +7,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-22T03:13:00Z'
-updated_date: '2026-11-22T04:00:00Z'
+updated_date: '2026-11-22T04:20:00Z'
 labels:
   - chore
   - ci
@@ -51,4 +51,6 @@ Full spec: doit/TASK-1.50/spec.md
 
 <!-- SECTION:NOTES:BEGIN -->
 Build: 6-job ci.yml (e2e, checks, coverage, sweeps×2, changes, tooling), tools/ci/tooling-changed.js, test:unit/sweeps/tooling scripts, 30-min limits, daily tooling-only schedule, README checks; Q-6 locked edits only; gate PASS. Live proofs A–D pending.
+
+Review R1: 0 blocking; security MINOR (:: line injection) + 2 code MINORs fixed in-story; gate PASS. Live: #166 green 212 s; #167 tooling skipped on doit-only push.
 <!-- SECTION:NOTES:END -->

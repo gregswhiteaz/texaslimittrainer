@@ -73,3 +73,5 @@ After merge (A-2): record the first `main` run's wall time in story-doc.md, and 
 - 3 fixed: `listFiles` asserts every non-empty `vitest list --filesOnly` line is a test path (output checked locally: only paths and a trailing blank). ANSI stripping kept; all prior assertions kept.
 - NIT left as is.
 - `npm run format`: clean. eslint + tsc on touched files: OK. `npm test`: 164 files passed, 1 skipped; 575 tests passed, 8 skipped.
+- Run C #168 (44984659036, a21a611, drill on top of review fixes 93ec73e): exactly Unit, Sweep 1/2, Sweep 2/2, Tooling failed, each '1 failed' naming only its DRILL test; Lint/typecheck/build/playtest, E2E, Detect success; nothing skipped or cancelled.
+- Run D #169 (44984984048, a303541, drill reverted; src/tests/tools/.github identical to 93ec73e): SUCCESS all 7 jobs, wall 233 s (≤ 540 s; target 300–360 s met). Tooling ran (branch touches tools/.github).
