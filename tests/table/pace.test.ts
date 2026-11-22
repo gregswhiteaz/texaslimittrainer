@@ -13,3 +13,7 @@ describe('bot pace', () => {
     expect(botActionDelayMs(table.config.speed)).toBe(0);
   });
 });
+
+it('DRILL TASK-1.50: deliberately broken (tests/table/pace.test.ts)', () => {
+  expect('drill').toBe('green');
+});
