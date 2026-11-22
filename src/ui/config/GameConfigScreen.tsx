@@ -1,14 +1,18 @@
 import { useState } from 'react';
+import { referenceSizeOf } from '../../advice/preflop';
+import type { ReferenceSize } from '../../advice/preflop-chart';
 import {
   buyIn,
   CASH_STAKES,
   configForGameType,
+  configForPlayers,
   DEFAULT_SESSION_CONFIG,
   type BotStyle,
   type GameType,
   type SessionConfig,
   type Speed,
   type Stake,
+  TABLE_SIZES,
 } from '../../table/session';
 import { useHeadingFocus } from '../useHeadingFocus';
 
@@ -41,12 +45,26 @@ function playersLabel(players: number): string {
   return name === undefined ? String(players) : `${players} (${name})`;
 }
 
+const REFERENCE_SIZE_TABLE: Record<ReferenceSize, number> = {
+  'heads-up': 2,
+  '6-max': 6,
+  'full-ring': 10,
+};
+
+/** REQ-005.3/005.4: the approximate-advice note, or null at 2, 6, 9 and 10 players. */
+function playersNote(players: number): string | null {
+  if ([2, 6, 9, 10].includes(players)) return null;
+  const reference = REFERENCE_SIZE_TABLE[referenceSizeOf(players)];
+  return `Advice will be approximate (based on ${TABLE_SIZE_NAMES[reference]}).`;
+}
+
 const stakeKey = (stake: Stake): string => `${stake.smallBet}/${stake.bigBet}`;
 
 type Field = readonly [string, React.ReactNode, React.ReactNode];
 
-/** Summary of `config` (TASK-2.1 D-6) plus the game-type (TASK-2.4 D-4) and stake (TASK-2.3 D-1) choices;
- *  Start game hands over the chosen game type, and the chosen stake for a cash game. */
+/** Summary of `config` (TASK-2.1 D-6) plus the game-type (TASK-2.4 D-4), players (TASK-2.2 D-1) and stake
+ *  (TASK-2.3 D-1) choices; Start game hands over the chosen size's seats, the chosen game type, and the chosen
+ *  stake for a cash game. */
 export function GameConfigScreen({
   config,
   onStart,
@@ -58,6 +76,10 @@ export function GameConfigScreen({
   const [stake, setStake] = useState<Stake>(
     config.gameType === 'cash' ? config.stake : DEFAULT_SESSION_CONFIG.stake,
   );
+  const [players, setPlayers] = useState(config.players);
+  // A-1: the given config is kept as-is while its own size is chosen.
+  const seated = players === config.players ? config : configForPlayers(config, players);
+  const note = playersNote(players);
   const stack = buyIn(stake);
   const gameTypeChoice = (
     <div role="radiogroup" aria-labelledby="config-game-type" className="config-choice">
@@ -74,6 +96,30 @@ export function GameConfigScreen({
         </label>
       ))}
     </div>
+  );
+  const playersChoice = (
+    <>
+      <select
+        id="config-players"
+        value={String(players)}
+        aria-describedby={note === null ? undefined : 'config-players-note'}
+        onChange={(event) => {
+          const chosen = Number(event.target.value);
+          if (TABLE_SIZES.includes(chosen)) setPlayers(chosen);
+        }}
+      >
+        {TABLE_SIZES.map((n) => (
+          <option key={n} value={String(n)}>
+            {playersLabel(n)}
+          </option>
+        ))}
+      </select>
+      {note !== null && (
+        <p id="config-players-note" className="config-note">
+          {note}
+        </p>
+      )}
+    </>
   );
   const stakeSelect = (
     <select
@@ -97,11 +143,11 @@ export function GameConfigScreen({
   ];
   const fields: readonly Field[] = [
     ['game', <span id="config-game-type">Game type</span>, gameTypeChoice],
-    ['players', 'Players at the table', playersLabel(config.players)],
+    ['players', <label htmlFor="config-players">Players at the table</label>, playersChoice],
     ...(gameType === 'cash' ? cashFields : []),
     ['speed', 'Speed', SPEED_LABELS[config.speed]],
   ];
-  const bots = config.seats.filter((s) => s.kind === 'bot');
+  const bots = seated.seats.filter((s) => s.kind === 'bot');
 
   return (
     <main className="screen">
@@ -137,7 +183,7 @@ export function GameConfigScreen({
             ))}
             <li>
               <span className="seat-label">You</span>
-              <span>Seat {config.userSeat}</span>
+              <span>Seat {seated.userSeat}</span>
             </li>
           </ul>
         </section>
@@ -149,7 +195,7 @@ export function GameConfigScreen({
         <button
           type="button"
           className="button-primary"
-          onClick={() => onStart(configForGameType(config, gameType, stake))}
+          onClick={() => onStart(configForGameType(seated, gameType, stake))}
         >
           Start game
         </button>

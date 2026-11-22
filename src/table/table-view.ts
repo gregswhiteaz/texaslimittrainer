@@ -93,7 +93,7 @@ function indexAt(seat: SeatNumber, seats: readonly SeatNumber[]): number {
   return index;
 }
 
-/** Position name of `seat` (A-2); `seats` ascending. */
+/** Position name of `seat` (A-2); `seats` ascending. Heads-up the button is the small blind (TASK-2.2 D-3). */
 export function positionName(
   seat: SeatNumber,
   seats: readonly SeatNumber[],
@@ -101,6 +101,7 @@ export function positionName(
 ): string {
   indexAt(seat, seats);
   const b = indexAt(button, seats);
+  if (seats.length === 2) return seat === button ? 'Small blind' : 'Big blind';
   // Clockwise from the small blind; the button is last.
   const order = [...seats.slice(b + 1), ...seats.slice(0, b + 1)];
   const n = order.length;

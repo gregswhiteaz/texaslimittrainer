@@ -47,7 +47,7 @@ test('stake list is the six stakes with $4 / $8 selected and the buy-in follows 
   await expect(
     buyInRow(page).locator('input, select, textarea, button, a, [contenteditable], [tabindex]'),
   ).toHaveCount(0);
-  await expect(page.getByRole('combobox')).toHaveCount(1);
+  await expect(page.getByRole('combobox')).toHaveCount(2);
 
   await button(page, 'Cancel').click();
   await page.getByRole('button', { name: /^New game/ }).click();
@@ -99,7 +99,7 @@ test('every stake keeps game config free of real-money controls and axe clean', 
       'Cancel',
       'Start game',
     ]);
-    await expect(page.getByRole('combobox')).toHaveCount(1);
+    await expect(page.getByRole('combobox')).toHaveCount(2);
     await expect(page.getByRole('link')).toHaveCount(0);
     await expect(page.getByRole('textbox')).toHaveCount(0);
     await expectNoSeriousAxeViolations(page);

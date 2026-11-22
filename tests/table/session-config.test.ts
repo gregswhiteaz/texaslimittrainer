@@ -6,6 +6,8 @@ import {
   DEFAULT_SEATS,
   DEFAULT_SESSION_CONFIG,
   applyUserAction,
+  configForGameType,
+  configForPlayers,
   completedHand,
   dealHand,
   nextStep,
@@ -79,5 +81,30 @@ describe('session config', () => {
 
   it('the first-use config is plain JSON data', () => {
     expect(JSON.parse(JSON.stringify(DEFAULT_SESSION_CONFIG))).toEqual(DEFAULT_SESSION_CONFIG);
+  });
+
+  it('configForPlayers rejects bad sizes and keeps game type, stake, speed and line-up', () => {
+    for (const bad of [1, 11, 2.5, NaN]) {
+      expect(() => configForPlayers(DEFAULT_SESSION_CONFIG, bad)).toThrow(
+        new RangeError('Table size must be a whole number from 2 to 10'),
+      );
+    }
+    const stake = { smallBet: 10, bigBet: 20 };
+    const sitAndGo = configForPlayers(
+      configForGameType(DEFAULT_SESSION_CONFIG, 'sit-and-go', stake),
+      3,
+    );
+    expect(sitAndGo.gameType).toBe('sit-and-go');
+    expect('stake' in sitAndGo).toBe(false);
+    const cash = configForPlayers({ ...DEFAULT_SESSION_CONFIG, stake, lineUp: 'Tough' }, 8);
+    expect(cash).toMatchObject({
+      gameType: 'cash',
+      stake,
+      speed: 'rapid',
+      lineUp: 'Tough',
+      players: 8,
+    });
+    expect(sitAndGo).toMatchObject({ speed: 'rapid', lineUp: 'Custom', players: 3 });
+    expect(JSON.parse(JSON.stringify(cash))).toEqual(cash);
   });
 });

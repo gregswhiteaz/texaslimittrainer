@@ -53,7 +53,8 @@ test('sit-and-go hides the stake selector and cash game brings back the chosen s
   await stakeSelect(page).selectOption({ label: '$6 / $12' });
   await radio(page, 'Sit-and-go').check();
   await expect(radio(page, 'Sit-and-go')).toBeChecked();
-  await expect(page.getByRole('combobox')).toHaveCount(0);
+  await expect(stakeSelect(page)).toHaveCount(0);
+  await expect(page.getByRole('combobox')).toHaveCount(1);
   const fields = await page.locator('.config-fields').innerText();
   expect(fields).not.toContain('Stakes (small bet / big bet)');
   expect(fields).not.toContain('Buy-in');

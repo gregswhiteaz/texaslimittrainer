@@ -188,6 +188,13 @@ h1[tabindex='-1']:focus {
   font-size: 15px;
 }
 
+.config-note {
+  margin: 6px 0 0;
+  max-width: 280px;
+  color: #a7aeb8;
+  font-size: 13px;
+}
+
 .config-seats {
   margin: 0;
   padding: 0;

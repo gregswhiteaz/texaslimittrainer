@@ -60,7 +60,7 @@ describe('Game Config game type acceptance', () => {
     const html = render(SIT_AND_GO);
 
     expect(checkedValues(html)).toEqual(['sit-and-go']);
-    expect(html).not.toContain('<select');
+    expect(html.match(/<select id="[^"]*"/g)).toEqual(['<select id="config-players"']);
     expect(html).not.toContain('config-stake');
     expect(html).not.toContain('Stakes (small bet / big bet)');
     expect(html).not.toContain('Buy-in');

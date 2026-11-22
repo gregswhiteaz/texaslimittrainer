@@ -30,8 +30,8 @@ describe('Game Config stake acceptance', () => {
     const html = render(DEFAULT_SESSION_CONFIG.stake);
 
     const all = selects(html);
-    expect(all).toHaveLength(1);
-    const select = all[0] ?? '';
+    expect(all.map((s) => /id="([^"]*)"/.exec(s)?.[1])).toEqual(['config-players', 'config-stake']);
+    const select = all.find((s) => s.includes('id="config-stake"')) ?? '';
     expect(select).toMatch(/^<select id="config-stake"/);
     expect(html).toContain('<label for="config-stake">Stakes (small bet / big bet)</label>');
     expect(optionTexts(select)).toEqual(OPTIONS);
@@ -44,13 +44,16 @@ describe('Game Config stake acceptance', () => {
     expect(buyInValue(html)).toBe('$120 (20 big bets)');
     expect(buyInValue(html)).not.toMatch(/<input|<select|<textarea|<button|contenteditable/);
     expect(selects(html).map((s) => [/id="([^"]*)"/.exec(s)?.[1], selectedTexts(s)])).toEqual([
+      ['config-players', ['6 (6-max)']],
       ['config-stake', ['$3 / $6']],
     ]);
 
     CASH_STAKES.forEach((stake, i) => {
       const each = render(stake);
       expect(buyInValue(each)).toBe(BUY_INS[i]);
-      expect(selectedTexts(selects(each)[0] ?? '')).toEqual([OPTIONS[i]]);
+      expect(
+        selectedTexts(selects(each).find((s) => s.includes('id="config-stake"')) ?? ''),
+      ).toEqual([OPTIONS[i]]);
     });
   });
 
@@ -63,7 +66,7 @@ describe('Game Config stake acceptance', () => {
       for (const control of controls) expect(control).not.toMatch(REAL_MONEY);
       const buttons = [...html.matchAll(/<button[^>]*>(.*?)<\/button>/g)].map(([, t]) => t);
       expect(buttons).toEqual(['← Home', 'Cancel', 'Start game']);
-      expect(selects(html)).toHaveLength(1);
+      expect(selects(html)).toHaveLength(2);
       expect(html).not.toMatch(/<(a|form)[\s>]/);
       expect((html.match(/<input[^>]*>/g) ?? []).map((i) => /type="radio"/.test(i))).toEqual([
         true,

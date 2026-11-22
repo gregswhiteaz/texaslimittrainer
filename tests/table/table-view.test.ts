@@ -86,6 +86,8 @@ describe('Table view model', () => {
       [U, H, C, B, S, G],
       [G, U, H, C, B, S],
     ]);
+    expect(names([1, 2], 2)).toEqual(['Big blind', 'Small blind']);
+    expect(names([1, 2], 1)).toEqual(['Small blind', 'Big blind']);
     expect(names([1, 2, 3], 3)).toEqual(['Small blind', 'Big blind', 'Button']);
     expect(names([1, 2, 3], 1)).toEqual(['Button', 'Small blind', 'Big blind']);
     expect(names([1, 2, 3, 4], 4)).toEqual(['Small blind', 'Big blind', 'Cutoff', 'Button']);

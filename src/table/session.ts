@@ -23,7 +23,7 @@ import {
 import { botDecisionSeed, replacementGenerator } from '../engine/bot-random';
 import { isReplayCode } from '../engine/deck';
 import { tagPolicy } from '../bots/tag';
-import { nextReplacementName, replacementStyles } from '../bots/lineup';
+import { BOT_NAMES, nextReplacementName, replacementStyles } from '../bots/lineup';
 
 export interface Stake {
   readonly smallBet: number;
@@ -131,6 +131,27 @@ export function configForGameType(
   const { players, lineUp, seats, speed, userSeat, button } = config;
   const common = { players, lineUp, seats, speed, userSeat, button };
   return gameType === 'cash' ? { gameType, ...common, stake } : { gameType, ...common };
+}
+
+/** REQ-005.2: the players options, 2..10 including the user, ascending. */
+export const TABLE_SIZES: readonly number[] = Object.freeze([2, 3, 4, 5, 6, 7, 8, 9, 10]);
+
+/** `config` seated for `players` (D-4): seats 1..players; the user at min(USER_SEAT, players); TAG bots named
+ *  BOT_NAMES in ascending seat order; button = the seat after the user. Game type, stake, speed and line-up
+ *  are kept. RangeError if `players` is not an integer from 2 to 10. */
+export function configForPlayers(config: SessionConfig, players: number): SessionConfig {
+  if (!TABLE_SIZES.includes(players)) {
+    throw new RangeError('Table size must be a whole number from 2 to 10');
+  }
+  const userSeat = Math.min(USER_SEAT, players);
+  let bot = 0;
+  const seats = Array.from({ length: players }, (_, index): SessionSeat => {
+    const seat = index + 1;
+    return seat === userSeat
+      ? { seat, name: 'You', kind: 'user', style: null }
+      : { seat, name: BOT_NAMES[bot++] as string, kind: 'bot', style: 'TAG' };
+  });
+  return { ...config, players, seats, userSeat, button: (userSeat % players) + 1 };
 }
 
 /** `input` merged over the first-use defaults; a sit-and-go drops the stake. Not validated (A-11). */

@@ -80,6 +80,7 @@ describe('Home and Game Config acceptance', () => {
       '<input ',
       '<input ',
       '<select ',
+      '<select ',
     ]);
     expect(html).not.toContain('aria-label="Table"');
   });
