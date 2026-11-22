@@ -1,0 +1,32 @@
+{"reviewer": "code", "round": 2,
+ "rubric": [
+  {"item": "R1 MAJOR e2e/action-bar.spec.ts:400-slice-loop-justification-contradicted-by-measurement fixed", "result": "pass"},
+  {"item": "SPEC-01..SPEC-08 correctness (unchanged since r1)", "result": "pass"},
+  {"item": "SPEC-01..SPEC-08 test strength (unchanged since r1)", "result": "pass"},
+  {"item": "Q-2 runUntil helper correctness (check before every slice, both bounds, labelled throw, runUntilMyTurn reuses it with same message)", "result": "pass"},
+  {"item": "Q-2 five unlocked files: no expect added/removed/loosened", "result": "pass"},
+  {"item": "Q-2 proof test strength (worker-delay-hand: reach end, control fails, fake-bound trip)", "result": "pass"},
+  {"item": "AC#3 audit completeness (correction in task notes; stake-choice.spec:76 left alone)", "result": "pass"},
+  {"item": "locked e2e/worker-delay.spec.ts untouched", "result": "pass"},
+  {"item": "scope", "result": "pass"},
+  {"item": "concision", "result": "pass"},
+  {"item": "clarity", "result": "pass"}
+ ],
+ "findings": [
+  {"fingerprint": "e2e/worker-delay-hand.spec.ts:ten-second-tests-in-every-e2e-run",
+   "severity": "MINOR", "file": "e2e/worker-delay-hand.spec.ts", "line": 36,
+   "issue": "The two delayed-hand tests take about 10.5 s each on each engine (gate fix-3), so every e2e run and CI push gets about 42 s more worker time. That is the CI cost the slow-tests-opt-in rule is meant to keep down. These are correctness proofs of the test harness, not speed checks, so the rule does not strictly apply, but they are now the slowest e2e tests.",
+   "evidence": "gates/fix-3.json: 'worker-delay-hand.spec.ts:36 ... (10.5s)', ':44 ... (10.5s)'.",
+   "fix": "Optional: use a shorter REPLY_DELAY_MS (for example 1,500 ms) in this file, or run the control only on chromium with test.skip(browserName !== 'chromium'). Or note it in the parked CI-speed plan."},
+  {"fingerprint": "e2e/next-hand.spec.ts:slicesUntil-return-always-true-without-max",
+   "severity": "NIT", "file": "e2e/next-hand.spec.ts", "line": 142,
+   "issue": "Without `max`, slicesUntil now either returns true or throws, so `expect(await slicesUntil(...)).toBe(true)` at :161/:163 (and review.spec.ts:310/:314) can only fail by throwing. That is harmless: the failure still happens, just with the runUntil message. The doc comment says so.",
+   "evidence": "`if (max === undefined) return runUntil(page, done);`",
+   "fix": "None required."},
+  {"fingerprint": "e2e/action-bar.spec.ts:extra-slice-after-click",
+   "severity": "NIT", "file": "e2e/action-bar.spec.ts", "line": 243,
+   "issue": "In the play-to-end callbacks (action-bar :243, table-display :298, next-hand :229, review checkOrCallToResult), a click is now followed by one 50 ms slice when the hand is not over. The old loop did a click or a slice, not both. This is harmless: the check runs before each slice and stops before any slice once Hand over shows, the user's turn has no timer, and the next-hand delay is far longer than 50 ms.",
+   "evidence": "`if ((await enabled.count()) > 0) await checkOrCall(page); return (await handOver(page).count()) > 0;` followed by runUntil's runFor(50).",
+   "fix": "None required."}
+ ],
+ "summary": "The round-1 MAJOR is fixed per Q-2. runUntil in e2e/support/paused-clock.ts runs check before every 50 ms slice, returns the truthy result, and throws `<label> after X ms fake / Y ms real` past maxFakeMs 600,000 or maxRealMs 10,000. runUntilMyTurn is a thin wrapper that keeps its old message, so the locked worker-delay.spec.ts is still satisfied (its sha matches the lock). In the five unlocked files only the loop mechanics changed (git diff 6c4fb32..2377109). No expect was added, removed or loosened. The review.spec big-blind-walk expect now sits inside the check callback after the hand-over early return. It still runs before every slice, as before, and a failing expect rejects check, which propagates out of runUntil and fails the test. table.spec nextTurnPaused lost its 'timeout' return; the callers at :197/:242/:247 now get a throw instead of a wrong value, which is stricter. next-hand/review slicesUntil keeps the 4-slice capped deal-timing check unchanged. In the new e2e/worker-delay-hand.spec.ts, runUntil reaches Hand over under 2 s replies. The control asserts that the old 400-slice loop does not reach it (about 1 s real against at least 2 s per remaining bot reply, so this is deterministic), then finishes the hand. The fake-bound trip test matches the exact message with an anchored regex. The audit correction (2.6 to 2.8 ms real per slice, so 400 slices are about 1.0 to 1.1 s) is in the task notes. stake-choice.spec:76 is rightly left alone: dealHand posts the blinds from the 0 ms deal timer in useTableSession.ts:71 with no worker involved, and the test asserts only the blind actions and stacks. Gate fix-3 passed (142 passed, lint, typecheck). One MINOR: the two delayed-hand tests cost about 10.5 s each per engine in every e2e run."}
