@@ -2,13 +2,14 @@ import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { shuffledDeck } from '../../src/engine/deck';
 import { applyAction, createHand, type Action, type HandState } from '../../src/engine/hand';
-import { playerView } from '../../src/engine/player-view';
+import { playerView, type SeatPolicy } from '../../src/engine/player-view';
 import { fnv1a32, Xoshiro128 } from '../../src/engine/seeded-random';
 import { decideManiac } from '../../src/bots/maniac';
 import { botDecisionSeed, botRandom } from '../../src/engine/bot-random';
 import {
   lineUpPolicyFactory,
   randomMovePolicy,
+  scriptedPolicy,
   seatGenerator,
   seededTagPolicy,
 } from '../../src/playtest/policy';
@@ -148,5 +149,27 @@ describe('lineUpPolicyFactory', () => {
     ).toEqual(runPlaytest({ hands: 20, seed: 42, size: 6 }, undefined, { makePolicy: allRandom }));
 
     expect(() => lineUpPolicyFactory('Mixed', 11)).toThrow(RangeError);
+  });
+});
+
+describe('scriptedPolicy', () => {
+  it('scriptedPolicy returns recorded actions in order, then falls back or throws', () => {
+    const view = playerView(play(6, 1, PREFLOP_3), 6);
+    const userView = { ...view, seat: 1 };
+    const a1: Action = { seat: 1, type: 'call', amount: 4 };
+    const a2: Action = { seat: 1, type: 'check' };
+
+    const scripted = scriptedPolicy([a1, a2]);
+    expect(scripted(userView)).toBe(a1);
+    expect(scripted(userView)).toBe(a2);
+    expect(() => scripted(userView)).toThrow(new RangeError('No recorded action left for seat 1'));
+
+    const fallback: SeatPolicy = (v) => ({ seat: v.seat, type: 'fold' });
+    const withThen = scriptedPolicy([a1], fallback);
+    expect(withThen(userView)).toBe(a1);
+    expect(withThen(userView)).toEqual({ seat: 1, type: 'fold' });
+    expect(withThen(userView)).toEqual({ seat: 1, type: 'fold' });
+
+    expect(scriptedPolicy([], fallback)(view)).toEqual({ seat: 6, type: 'fold' });
   });
 });

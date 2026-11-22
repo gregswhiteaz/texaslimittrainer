@@ -48,6 +48,8 @@ export const SNG_STAKES: Stakes = { smallBlind: 10, bigBlind: 20, smallBet: 20, 
 export const SNG_STARTING_CHIPS = 1500; // REQ-008.1
 /** runPlaytest keeps at most this many earlier showdowns per table (oldest dropped first). */
 export const EARLIER_SHOWDOWN_LIMIT = 1000;
+/** The playtest's user seat (seatLineUp(preset, size, 1)). */
+export const PLAYTEST_USER_SEAT: SeatNumber = 1;
 
 export type GameType = 'cash' | 'sng';
 export interface GameRules {
@@ -73,6 +75,8 @@ export interface PlaytestOptions {
    *  that busts is replaced by a new bot drawn from the preset (REQ-007.5). An explicit seams.makePolicy wins.
    *  Default: defaultPolicyFactory. */
   readonly lineUp?: LineUpPreset;
+  /** Passed to every hand as HandSetup.userPolicy. Default: none. */
+  readonly userPolicy?: PolicyFactory;
 }
 /** One hand's table. */
 export interface HandSetup {
@@ -85,6 +89,9 @@ export interface HandSetup {
   readonly previous?: readonly SeatConfig[];
   /** Earlier hands at this table that reached showdown, oldest first; passed to every view. Default []. */
   readonly earlierShowdowns?: readonly EarlierShowdown[];
+  /** Seat 1's policy, replacing the one makePolicy, the line-up or the default gives it. Other seats are
+   *  unchanged. Default: none. */
+  readonly userPolicy?: PolicyFactory;
 }
 /** Makes the policy for one seat of one hand. Default: defaultPolicyFactory(seats dealt in). */
 export type PolicyFactory = (code: ReplayCode, seat: SeatNumber) => SeatPolicy;
@@ -209,7 +216,7 @@ export function playHand(
   seams: PlaytestSeams = {},
   setup: HandSetup = {},
 ): PlayedHand {
-  const { game = 'cash', previous, earlierShowdowns = [] } = setup;
+  const { game = 'cash', previous, earlierShowdowns = [], userPolicy } = setup;
   const rules = GAMES[game];
   const stacks = setup.stacks ?? Array.from({ length: size }, () => rules.startingStack);
   if (stacks.length !== size) throw new RangeError('Stacks must list one stack per seat');
@@ -226,7 +233,14 @@ export function playHand(
     deck: shuffledDeck(code),
   });
   const dealViolations = checkDeal(state, previous, rules.rebuy ? rules.startingStack : null);
-  const policies = new Map(seats.map(({ seat }) => [seat, makePolicy(code, seat)]));
+  const policies = new Map(
+    seats.map(({ seat }) => [
+      seat,
+      seat === PLAYTEST_USER_SEAT && userPolicy !== undefined
+        ? userPolicy(code, seat)
+        : makePolicy(code, seat),
+    ]),
+  );
   let violation: HandViolation | null = null;
   let actionNumber = 0;
   while (dealViolations.length === 0 && state.toAct !== null) {
@@ -340,7 +354,7 @@ export function runPlaytest(
   onHand?: (hand: PlayedHand) => void,
   seams: PlaytestSeams = {},
 ): PlaytestSummary {
-  const { hands, seed, size, game = 'cash', lineUp } = options;
+  const { hands, seed, size, game = 'cash', lineUp, userPolicy } = options;
   const rules = GAMES[game];
   const preset = lineUp === undefined ? undefined : seatLineUp(lineUp, size, 1);
   function* play(): Generator<PlayedHand> {
@@ -355,7 +369,10 @@ export function runPlaytest(
         seats === undefined || seams.makePolicy !== undefined
           ? seams
           : { ...seams, makePolicy: seatStylesPolicyFactory(seats) };
-      const played = playHand(handReplayCode(seed, k, game), size, button, k, handSeams, setup);
+      const played = playHand(handReplayCode(seed, k, game), size, button, k, handSeams, {
+        ...setup,
+        userPolicy,
+      });
       const hand = seats === undefined ? played : { ...played, lineUp: seats, replaced };
       onHand?.(hand);
       yield hand;
@@ -419,4 +436,28 @@ export function replayHand(record: HandRecord): HandState {
     state = applied.state;
   });
   return state;
+}
+
+/** One stack per seat 1..size: each dealt-in seat's starting stack, 0 for the others. */
+export function recordStacks({ seats, size }: HandRecord): number[] {
+  return Array.from({ length: size }, (_, i) => seats.find((s) => s.seat === i + 1)?.stack ?? 0);
+}
+
+/** Re-deals record.replayCode at the record's table (size, button, game, recordStacks) and plays it with the
+ *  bots deciding again: seatStylesPolicyFactory(lineUp) when lineUp is given, else defaultPolicyFactory.
+ *  Seat 1 plays userPolicy. Passes no earlier showdowns (A-1). Returns playHand's PlayedHand (number 1). */
+export function replayWithBots(
+  record: HandRecord,
+  lineUp: readonly LineUpSeat[] | undefined,
+  userPolicy: SeatPolicy,
+): PlayedHand {
+  const makePolicy = lineUp === undefined ? undefined : seatStylesPolicyFactory(lineUp);
+  return playHand(
+    record.replayCode,
+    record.size,
+    record.button,
+    1,
+    { makePolicy },
+    { game: record.game, stacks: recordStacks(record), userPolicy: () => userPolicy },
+  );
 }

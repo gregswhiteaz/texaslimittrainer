@@ -1,0 +1,11 @@
+{
+  "spec": "SPEC-01, SPEC-02 (spec §9 Non-functional)",
+  "reason": "Spec §9 requires bot-replay.acceptance.test.ts to finish in under 15 s and stay in the normal `npm test` suite (120 s per-test timeout), based on 'about 1 s per 1,000 hands'. With seat 1 on randomMovePolicy (A-2), the 1,000-hand runs + replays mandated by SPEC-01/02 cost ~5 ms per hand per pass, so the file takes 29 s standalone and 73-80 s per test inside `npm test` (coverage + parallel load), dominating the suite and within ~1.5x of the timeout on a slower CI runner. Also conflicts with the standing rule that slow checks stay out of every npm test/CI push.",
+  "evidence": "Standalone `npx vitest run tests/playtest/bot-replay.acceptance.test.ts`: 10.8 s / 15.5 s / 2.8 s (29.2 s). Full `npm test` (all pass): Duration 168 s; bot-replay tests 73.0 s / 80.5 s / 14.3 s. Profile: runPlaytest({hands:1000, seed:15, size:6, userPolicy: random}) = 5.4 s; replaying those 1,000 = 5.4 s; plain runPlaytest({hands:1000, seed:15, size:6}) = 0.056 s. Cause: postflop TAG decisions facing a bet run computeEquity with SAMPLE_TRIALS = 30_000 (src/advice/equity.ts:37; decideTag skips equity only when nothing is owed, src/bots/tag.ts:33-37), and a random-move user bets/raises constantly. Bot code is out of scope (spec §2). All three tests pass; only the speed/placement NFR is unmet.",
+  "options": [
+    "(a) Recommended: keep the 1,000-hand SPEC-01/02 runs but gate them behind TLH_SLOW_TESTS (add the file to `npm run test:slow`), with an always-on smaller variant (e.g. 100 hands each + SPEC-03 on the first 50 user hands, ~3 s standalone) in `npm test`; amend §9.",
+    "(b) Accept as is: keep everything in `npm test`, raise the per-test timeout to e.g. 300 s, amend §9's 15 s target (suite wall time rises to ~170 s).",
+    "(c) Lower SPEC-01/02 hand counts in `npm test` (e.g. 200 each) and amend AC#1/AC#2 wording; no slow-gate.",
+    "(d) Change A-2 to a cheaper user policy (e.g. random among fold/check/call only) — fewer raised pots but still postflop equity when facing bets; gain unmeasured and weakens the test."
+  ]
+}

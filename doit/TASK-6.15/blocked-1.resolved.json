@@ -1,0 +1,10 @@
+{
+  "spec": "SPEC-04",
+  "reason": "Spec §3 says no locked test needs an edit, but adding the spec-mandated optional `PlaytestSeams.userPolicy` (D-1, §5) breaks typecheck of the locked TASK-6.9 acceptance test tests/playtest/style-bots.acceptance.test.ts, which pins PlaytestSeams to exactly three keys.",
+  "evidence": "tests/playtest/style-bots.acceptance.test.ts:187-192: `const seamKeys: Record<keyof PlaytestSeams, true> = { makePolicy: true, onAction: true, engine: true }; expect(Object.keys(seamKeys)).toHaveLength(3);` -> `npm run typecheck`: error TS2741: Property 'userPolicy' is missing in type '{ makePolicy: true; onAction: true; engine: true; }' but required in type 'Record<keyof PlaytestSeams, true>'. (runPlaytest.length 2 and playHand.length 3, asserted at :184-185, are unaffected.)",
+  "options": [
+    "(a) Approve a locked-test edit: add `userPolicy: true` to seamKeys and change toHaveLength(3) to 4 in tests/playtest/style-bots.acceptance.test.ts (the intent - no seam beyond what is tested - is kept; spec §3 'Locked tests' line amended).",
+    "(b) Amend the spec to carry the user policy outside PlaytestSeams, e.g. a new optional trailing parameter of playHand/runPlaytest (default params do not change Function.length) or a field on HandSetup/PlaytestOptions; no locked-test edit, but a less natural API than D-1.",
+    "(c) Amend D-1 to wrap seams.makePolicy instead - rejected in the spec because it switches off line-up styles in runPlaytest."
+  ]
+}

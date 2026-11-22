@@ -7,11 +7,11 @@ import { describeAction, INVARIANTS } from '../engine/invariants';
 import {
   GAMES,
   playHand,
+  recordStacks,
   runPlaytest,
   summarize,
   toAction,
   type GameType,
-  type HandRecord,
   type PlayedHand,
   type PlaytestOptions,
   type PlaytestSeams,
@@ -246,11 +246,6 @@ function replacedStylesOption(hand: PlayedHand, lineUp: string | undefined): str
   const seated = seatLineUp(preset, hand.record.size, 1);
   const changed = hand.lineUp.some((s) => s.style !== seated[s.seat - 1]?.style);
   return changed ? stylesOption(hand.lineUp) : '';
-}
-
-/** One stack per seat 1..size: each dealt-in seat's starting stack, 0 for the others. */
-function recordStacks({ seats, size }: HandRecord): number[] {
-  return Array.from({ length: size }, (_, i) => seats.find((s) => s.seat === i + 1)?.stack ?? 0);
 }
 
 function violationBlock(

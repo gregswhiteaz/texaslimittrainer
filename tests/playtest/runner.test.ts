@@ -10,7 +10,12 @@ import {
   type EarlierShowdown,
   type SeatPolicy,
 } from '../../src/engine/player-view';
-import { randomMovePolicy, seatGenerator, seededTagPolicy } from '../../src/playtest/policy';
+import {
+  randomMovePolicy,
+  scriptedPolicy,
+  seatGenerator,
+  seededTagPolicy,
+} from '../../src/playtest/policy';
 import {
   composeChecks,
   defaultPolicyFactory,
@@ -22,6 +27,9 @@ import {
   CASH_BUY_IN,
   GAMES,
   PLAYTEST_STAKES,
+  PLAYTEST_USER_SEAT,
+  recordStacks,
+  replayWithBots,
   SNG_STAKES,
   SNG_STARTING_CHIPS,
   type ActionHook,
@@ -496,5 +504,74 @@ describe('playtest runner units', () => {
       { invariant: 'c', message: 'c 1' },
     ]);
     expect(order).toEqual(['a', 'b', 'c']);
+  });
+
+  it("userPolicy replaces only seat 1's policy", () => {
+    expect(PLAYTEST_USER_SEAT).toBe(1);
+    const code = handReplayCode(7, 1);
+    const made: number[] = [];
+    const makePolicy: PolicyFactory = (c, seat) => {
+      made.push(seat);
+      return seededTagPolicy(c);
+    };
+    const userCalls: [string, number][] = [];
+    const userViews: number[] = [];
+    const userPolicy: PolicyFactory = (c, seat) => {
+      userCalls.push([c, seat]);
+      const policy = seededTagPolicy(c);
+      return (view) => {
+        userViews.push(view.seat);
+        return policy(view);
+      };
+    };
+    const hand = playHand(code, 6, 1, 1, { makePolicy }, { userPolicy });
+    expect(hand.violations).toBe(0);
+    expect(userCalls).toEqual([[code, 1]]);
+    expect([...made].sort()).toEqual([2, 3, 4, 5, 6]);
+    const seat1Actions = hand.record.actions.filter((a) => a.seat === 1).length;
+    expect(seat1Actions).toBeGreaterThan(0);
+    expect(userViews).toEqual(Array.from({ length: seat1Actions }, () => 1));
+
+    const seats: number[] = [];
+    const summary = runPlaytest({
+      hands: 20,
+      seed: 1,
+      size: 6,
+      lineUp: 'Mixed',
+      userPolicy: (c, seat) => {
+        seats.push(seat);
+        return seededTagPolicy(c);
+      },
+    });
+    expect(summary.violations).toBe(0);
+    expect(seats).toEqual(Array.from({ length: 20 }, () => 1));
+    // seededTagPolicy is seat 1's policy in a line-up run anyway, so the run is unchanged.
+    expect(summary).toEqual(runPlaytest({ hands: 20, seed: 1, size: 6, lineUp: 'Mixed' }));
+  });
+
+  it("replayWithBots replays the record's table and reports a diverged user script", () => {
+    const stacks = [1500, 1500, 0, 1400, 1600, 1500];
+    const original = playHand(handReplayCode(9, 3, 'sng'), 6, 2, 1, {}, { game: 'sng', stacks });
+    const { record } = original;
+    expect(record.seats.map((s) => s.seat)).toEqual([1, 2, 4, 5, 6]);
+    expect(recordStacks(record)).toEqual(stacks);
+
+    const user = scriptedPolicy(record.actions.filter((a) => a.seat === 1));
+    const replay = replayWithBots(record, undefined, user);
+    expect(replay.number).toBe(1);
+    expect(replay.violations).toBe(0);
+    expect(replay.record).toEqual(record);
+    expect(replay.final).toEqual(original.final);
+
+    // Seat 1 on the button always faces at least the big blind preflop, so a check is illegal.
+    const cash = playHand(handReplayCode(9, 1), 6, 1);
+    const diverged = replayWithBots(
+      cash.record,
+      undefined,
+      scriptedPolicy([{ seat: 1, type: 'check' }]),
+    );
+    expect(diverged.violations).toBeGreaterThan(0);
+    expect(diverged.violation?.action).toEqual({ seat: 1, type: 'check' });
+    expect(diverged.violation?.violations.map((v) => v.invariant)).toEqual(['legal-action']);
   });
 });

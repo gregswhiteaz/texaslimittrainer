@@ -1,5 +1,5 @@
 import type { ReplayCode } from '../engine/deck';
-import type { SeatNumber } from '../engine/hand';
+import type { Action, SeatNumber } from '../engine/hand';
 import type { SeatPolicy } from '../engine/player-view';
 import type { Xoshiro128 } from '../engine/seeded-random';
 import { botDecisionSeed, botRandom, seatGenerator } from '../engine/bot-random';
@@ -21,6 +21,21 @@ export function randomMovePolicy(rng: Xoshiro128): SeatPolicy {
     const allowed = view.legalActions;
     if (allowed.length === 0) throw new RangeError(`Seat ${view.seat} has no action to choose`);
     return allowed[rng.nextInt(allowed.length)] as (typeof allowed)[number];
+  };
+}
+
+/** Returns actions[0], actions[1], … on successive calls, as given. Once they run out it calls `then(view)`,
+ *  or throws RangeError(`No recorded action left for seat ${view.seat}`) if `then` is absent. */
+export function scriptedPolicy(actions: readonly Action[], then?: SeatPolicy): SeatPolicy {
+  let next = 0;
+  return (view) => {
+    const action = actions[next];
+    if (action !== undefined) {
+      next++;
+      return action;
+    }
+    if (then === undefined) throw new RangeError(`No recorded action left for seat ${view.seat}`);
+    return then(view);
   };
 }
 

@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-17T23:03:00Z'
-updated_date: '2026-11-22T19:32:00Z'
+updated_date: '2026-11-22T19:43:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -79,4 +79,8 @@ Full spec: doit/TASK-6.15/spec.md
 AC added from TASK-6.9 follow-up (app session and replay pass no earlier showdowns)
 
 AC#4 (earlier showdowns on replay) moved to a follow-up task depending on spike TASK-6.20 (Q-1 auto-accepted: don't pre-empt the user's replay-context decision).
+
+Build blocked: PlaytestSeams.userPolicy would break TASK-6.9's locked seam-key test. Resolved (recorded deviation): userPolicy is a PlaytestOptions/HandSetup field, no new parameter or seam; no locked-test edit.
+
+Second block: the 1,000-hand replays take ~11–16 s alone (~80 s in npm test) because the random user forces many TAG equity calls. Resolved per the slow-tests rule: 1,000-hand runs opt-in (test:slow); 100-hand versions every push.
 <!-- SECTION:NOTES:END -->
