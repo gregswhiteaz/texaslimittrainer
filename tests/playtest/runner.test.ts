@@ -4,10 +4,17 @@ import { applyAction, createHand, type Action } from '../../src/engine/hand';
 import { decideTag } from '../../src/bots/tag';
 import { botDecisionSeed, botRandom } from '../../src/engine/bot-random';
 import { checkStep } from '../../src/engine/invariants';
-import { playerView, type SeatPolicy } from '../../src/engine/player-view';
+import {
+  playerView,
+  showdownOf,
+  type EarlierShowdown,
+  type SeatPolicy,
+} from '../../src/engine/player-view';
 import { randomMovePolicy, seatGenerator, seededTagPolicy } from '../../src/playtest/policy';
 import {
+  composeChecks,
   defaultPolicyFactory,
+  EARLIER_SHOWDOWN_LIMIT,
   handReplayCode,
   playHand,
   runPlaytest,
@@ -17,6 +24,7 @@ import {
   PLAYTEST_STAKES,
   SNG_STAKES,
   SNG_STARTING_CHIPS,
+  type ActionHook,
   type PlayedHand,
   type PolicyFactory,
 } from '../../src/playtest/runner';
@@ -346,5 +354,94 @@ describe('playtest runner units', () => {
     expect(playHand(code, 6, 1).record.actions).toEqual(
       playHand(code, 6, 1, 1, { makePolicy: (c) => seededTagPolicy(c) }).record.actions,
     );
+  });
+
+  it('keeps a bounded window of earlier showdowns and never changes a list already handed out', () => {
+    expect(EARLIER_SHOWDOWN_LIMIT).toBe(1000);
+    // Checking down every hand means every hand reaches showdown.
+    const seenByHand: (readonly EarlierShowdown[])[] = [];
+    const checkDown: PolicyFactory = () => (view) => {
+      seenByHand[played.length] ??= view.earlierShowdowns;
+      const legal = view.legalActions;
+      return (legal.find((a) => a.type === 'check') ??
+        legal.find((a) => a.type === 'call')) as ReturnType<SeatPolicy>;
+    };
+    const played: PlayedHand[] = [];
+    const hands = EARLIER_SHOWDOWN_LIMIT + 2;
+    runPlaytest({ hands, seed: 7, size: 2 }, (hand) => played.push(hand), {
+      makePolicy: checkDown,
+    });
+    const entries = played.map((hand) => showdownOf(hand.final));
+    expect(entries.every((entry) => entry !== null)).toBe(true);
+    expect(seenByHand[0]).toEqual([]);
+    expect(seenByHand[2]).toEqual(entries.slice(0, 2));
+    const third = seenByHand[3] as readonly EarlierShowdown[];
+    const snapshot = structuredClone(third);
+    expect(seenByHand[EARLIER_SHOWDOWN_LIMIT]).toHaveLength(EARLIER_SHOWDOWN_LIMIT);
+    const last = seenByHand[hands - 1] as readonly EarlierShowdown[];
+    expect(last).toHaveLength(EARLIER_SHOWDOWN_LIMIT);
+    expect(last).toEqual(entries.slice(1, hands - 1));
+    expect(third).toEqual(snapshot);
+    expect(third).toHaveLength(3);
+
+    // playHand passes setup.earlierShowdowns to every view, [] by default.
+    const given = [entries[0] as EarlierShowdown];
+    let views: (readonly EarlierShowdown[])[] = [];
+    const record: PolicyFactory = (code, seat) => (view) => {
+      views.push(view.earlierShowdowns);
+      return randomMovePolicy(seatGenerator(code, seat))(view);
+    };
+    playHand(handReplayCode(1, 1), 3, 1, 1, { makePolicy: record }, { earlierShowdowns: given });
+    expect(views.length).toBeGreaterThan(0);
+    expect(views.every((v) => v === given)).toBe(true);
+    views = [];
+    playHand(handReplayCode(1, 1), 3, 1, 1, { makePolicy: record });
+    expect(views.length).toBeGreaterThan(0);
+    expect(views.every((v) => v.length === 0)).toBe(true);
+
+    // A new sit-and-go restarts the list.
+    const sngSeen: (readonly EarlierShowdown[])[][] = [];
+    const sngHands: PlayedHand[] = [];
+    const raiseOrCall: PolicyFactory = () => (view) => {
+      (sngSeen[sngHands.length] ??= []).push(view.earlierShowdowns);
+      const legal = view.legalActions;
+      return (legal.find((a) => a.type === 'raise' || a.type === 'bet') ??
+        legal.find((a) => a.type === 'call' || a.type === 'check')) as ReturnType<SeatPolicy>;
+    };
+    runPlaytest({ hands: 40, seed: 5, size: 2, game: 'sng' }, (hand) => sngHands.push(hand), {
+      makePolicy: raiseOrCall,
+    });
+    const restart = sngHands.findIndex(
+      (_, k) => k > 0 && sngHands[k - 1]?.final.players.some((p) => p.stack === 0),
+    );
+    expect(restart).toBeGreaterThan(1);
+    expect(sngSeen[restart - 1]?.every((v) => v.length > 0)).toBe(true);
+    expect(sngSeen[restart]?.every((v) => v.length === 0)).toBe(true);
+  });
+
+  it('composeChecks runs every hook in order and joins their violations', () => {
+    const order: string[] = [];
+    const hook =
+      (id: string, found: number): ActionHook =>
+      () => {
+        order.push(id);
+        return Array.from({ length: found }, (_, i) => ({ invariant: id, message: `${id} ${i}` }));
+      };
+    const steps: Parameters<ActionHook>[0][] = [];
+    playHand(handReplayCode(1, 1), 2, 1, 1, {
+      onAction: (step) => {
+        steps.push(step);
+        return checkStep(step);
+      },
+    });
+    const step = steps[0] as Parameters<ActionHook>[0];
+    expect(composeChecks()(step)).toEqual([]);
+    expect(composeChecks(checkStep)(step)).toEqual(checkStep(step));
+    expect(composeChecks(hook('a', 1), hook('b', 0), hook('c', 2))(step)).toEqual([
+      { invariant: 'a', message: 'a 0' },
+      { invariant: 'c', message: 'c 0' },
+      { invariant: 'c', message: 'c 1' },
+    ]);
+    expect(order).toEqual(['a', 'b', 'c']);
   });
 });

@@ -21,7 +21,12 @@ import {
   type ActionStep,
   type Violation,
 } from '../engine/invariants';
-import { playerView, type SeatPolicy } from '../engine/player-view';
+import {
+  playerView,
+  showdownOf,
+  type EarlierShowdown,
+  type SeatPolicy,
+} from '../engine/player-view';
 import { drawReplacementStyle } from '../table/session';
 import {
   nextReplacementName,
@@ -41,6 +46,8 @@ export const PLAYTEST_STAKES: Stakes = { smallBlind: 2, bigBlind: 4, smallBet: 4
 export const CASH_BUY_IN = 160; // 20 × bigBet (REQ-007.1)
 export const SNG_STAKES: Stakes = { smallBlind: 10, bigBlind: 20, smallBet: 20, bigBet: 40 }; // REQ-008.2 L1
 export const SNG_STARTING_CHIPS = 1500; // REQ-008.1
+/** runPlaytest keeps at most this many earlier showdowns per table (oldest dropped first). */
+export const EARLIER_SHOWDOWN_LIMIT = 1000;
 
 export type GameType = 'cash' | 'sng';
 export interface GameRules {
@@ -76,11 +83,18 @@ export interface HandSetup {
   /** Previous hand's final {seat, stack} for each seat dealt into it, on the same table; enables the AC#9
    *  cross-hand check. */
   readonly previous?: readonly SeatConfig[];
+  /** Earlier hands at this table that reached showdown, oldest first; passed to every view. Default []. */
+  readonly earlierShowdowns?: readonly EarlierShowdown[];
 }
 /** Makes the policy for one seat of one hand. Default: defaultPolicyFactory(seats dealt in). */
 export type PolicyFactory = (code: ReplayCode, seat: SeatNumber) => SeatPolicy;
 /** Called after every applied player action; returns the violations it found ([] when clean). */
 export type ActionHook = (step: ActionStep) => readonly Violation[];
+
+/** One hook that runs `hooks` in order and returns all their violations, e.g. composeChecks(checkStep, styleCheck). */
+export function composeChecks(...hooks: readonly ActionHook[]): ActionHook {
+  return (step) => hooks.flatMap((hook) => hook(step));
+}
 export interface PlaytestEngine {
   readonly createHand: (config: HandConfig) => HandState;
   readonly applyAction: (state: HandState, action: Action) => ApplyResult;
@@ -195,7 +209,7 @@ export function playHand(
   seams: PlaytestSeams = {},
   setup: HandSetup = {},
 ): PlayedHand {
-  const { game = 'cash', previous } = setup;
+  const { game = 'cash', previous, earlierShowdowns = [] } = setup;
   const rules = GAMES[game];
   const stacks = setup.stacks ?? Array.from({ length: size }, () => rules.startingStack);
   if (stacks.length !== size) throw new RangeError('Stacks must list one stack per seat');
@@ -217,7 +231,7 @@ export function playHand(
   let actionNumber = 0;
   while (dealViolations.length === 0 && state.toAct !== null) {
     const policy = policies.get(state.toAct) as SeatPolicy;
-    const action = policy(playerView(state, state.toAct));
+    const action = policy(playerView(state, state.toAct, earlierShowdowns));
     const result = engine.applyAction(state, action);
     actionNumber++;
     let found = onAction({ before: state, action, result });
@@ -319,7 +333,8 @@ export function summarize(hands: Iterable<PlayedHand>): PlaytestSummary {
  *  Stacks carry over between hands (D-8): in cash a seat that ends on 0 rebuys (with a line-up, a bot that ends
  *  on 0 is replaced by a new bot from the preset); in sng it sits out, and a new sit-and-go starts when one seat
  *  has every chip. A table starts with every seat at the starting stack, the button at seat 1 and the preset's
- *  seats, also after a hand with a violation (A-2, A-3). */
+ *  seats, also after a hand with a violation (A-2, A-3). Each hand's views get the table's earlier showdowns
+ *  (the last EARLIER_SHOWDOWN_LIMIT), which restart with the table. */
 export function runPlaytest(
   options: PlaytestOptions,
   onHand?: (hand: PlayedHand) => void,
@@ -334,6 +349,7 @@ export function runPlaytest(
     let seats = preset;
     let position = 0;
     let replaced: SeatNumber[] = [];
+    let showdowns: readonly EarlierShowdown[] = [];
     for (let k = 1; k <= hands; k++) {
       const handSeams =
         seats === undefined || seams.makePolicy !== undefined
@@ -350,6 +366,7 @@ export function runPlaytest(
       if (hand.violations > 0 || final.result === null) {
         seats = preset;
         position = 0;
+        showdowns = [];
         continue;
       }
       const stackOf = (seat: SeatNumber) => final.players.find((p) => p.seat === seat)?.stack ?? 0;
@@ -368,13 +385,19 @@ export function runPlaytest(
         const stack = stackOf(i + 1);
         return stack === 0 && rules.rebuy ? rules.startingStack : stack;
       });
-      if (stacks.filter((stack) => stack > 0).length < 2) continue;
+      if (stacks.filter((stack) => stack > 0).length < 2) {
+        showdowns = [];
+        continue;
+      }
+      const entry = showdownOf(final);
+      if (entry !== null) showdowns = [...showdowns, entry].slice(-EARLIER_SHOWDOWN_LIMIT);
       const next = stacks.map((stack, i) => ({ seat: i + 1, stack }));
       button = nextButton(next, final.button);
       setup = {
         game,
         stacks,
         previous: final.players.map(({ seat, stack }) => ({ seat, stack })),
+        earlierShowdowns: showdowns,
       };
     }
   }

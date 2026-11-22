@@ -1,4 +1,5 @@
 // The 1,000,000-hand sharded playtest (TASK-1.17): one `npm run playtest` child per table size, combined.
+// With --lineups (TASK-6.9): one child per line-up preset and table size.
 import { INVARIANTS } from '../engine/invariants';
 import type { CliIo } from './cli';
 
@@ -6,6 +7,9 @@ export const MILLION_HANDS = 1_000_000;
 export const SHARD_SIZES: readonly number[] = [2, 3, 4, 5, 6, 7, 8, 9, 10];
 export const SHARD_SEED_BASE = 1_000_000;
 const MAX_HANDS = 1_000_000_000;
+export type ShardLineUp = 'mixed' | 'tough' | 'soft';
+export const LINEUP_SHARD_PRESETS: readonly ShardLineUp[] = ['mixed', 'tough', 'soft'];
+const LINEUP_SHARDS = LINEUP_SHARD_PRESETS.length * SHARD_SIZES.length;
 
 export interface Shard {
   /** 1-based. */
@@ -13,6 +17,8 @@ export interface Shard {
   readonly size: number;
   readonly hands: number;
   readonly seed: number;
+  /** Line-up shards only: passed as `--lineup <name>`. */
+  readonly lineUp?: ShardLineUp;
 }
 export interface ShardRun {
   /** null when the child was killed or never started. */
@@ -38,13 +44,14 @@ export interface CombinedReport {
   readonly violationCounts: Readonly<Record<string, number>>;
 }
 export type MillionArgs =
-  | { readonly kind: 'run'; readonly hands: number }
+  | { readonly kind: 'run'; readonly hands: number; readonly lineUps: boolean }
   | { readonly kind: 'help' }
   | { readonly kind: 'error'; readonly message: string };
 
 export const MILLION_USAGE =
-  'Usage: npm run playtest:million -- [--hands <9-1000000000>]\n' +
-  'Defaults: --hands 1000000; cash hands spread over table sizes 2 to 10, one shard per size with seed 1000000 + size\n';
+  'Usage: npm run playtest:million -- [--hands <9-1000000000>] [--lineups]\n' +
+  'Defaults: --hands 1000000; cash hands spread over table sizes 2 to 10, one shard per size with seed 1000000 + size\n' +
+  '--lineups: cash hands spread over line-ups mixed, tough and soft at table sizes 2 to 10, one shard per line-up and size (27 or more hands)\n';
 
 /** Leftover hands go one each to the smallest table sizes first (A-2). */
 export function planShards(totalHands: number): Shard[] {
@@ -61,8 +68,30 @@ export function planShards(totalHands: number): Shard[] {
   }));
 }
 
+/** Preset-major (mixed 2..10, tough, soft); seed 1000000 + 100 × (preset position + 1) + size (A-1); leftover hands
+ *  go one each to the earliest shards (A-2). */
+export function planLineUpShards(totalHands: number): Shard[] {
+  if (!Number.isInteger(totalHands) || totalHands < LINEUP_SHARDS || totalHands > MAX_HANDS) {
+    throw new RangeError('Total hands must be a whole number from 27 to 1000000000');
+  }
+  const base = Math.floor(totalHands / LINEUP_SHARDS);
+  const extra = totalHands % LINEUP_SHARDS;
+  return LINEUP_SHARD_PRESETS.flatMap((lineUp, p) =>
+    SHARD_SIZES.map((size, i) => {
+      const index = p * SHARD_SIZES.length + i + 1;
+      return {
+        index,
+        size,
+        hands: base + (index <= extra ? 1 : 0),
+        seed: SHARD_SEED_BASE + 100 * (p + 1) + size,
+        lineUp,
+      };
+    }),
+  );
+}
+
 export function shardArgs(shard: Shard): string[] {
-  return [
+  const args = [
     '--hands',
     String(shard.hands),
     '--seed',
@@ -70,6 +99,7 @@ export function shardArgs(shard: Shard): string[] {
     '--size',
     String(shard.size),
   ];
+  return shard.lineUp === undefined ? args : [...args, '--lineup', shard.lineUp];
 }
 
 /** The `npm run playtest` entry, which passes no seams, so every shard uses the default checker. */
@@ -171,9 +201,13 @@ const withNewline = (text: string) => (text === '' || text.endsWith('\n') ? text
 
 export function formatMillionReport(totalHands: number, results: readonly ShardResult[]): string {
   const total = results.length;
+  const lineUps = results.some(({ shard }) => shard.lineUp !== undefined);
+  const over = lineUps
+    ? 'line-ups mixed, tough and soft at table sizes 2 to 10'
+    : 'table sizes 2 to 10';
   let text =
     'TLH Trainer million-hand playtest\n' +
-    `Plan: ${totalHands} cash hands over table sizes 2 to 10 in ${total} shards, one seed per shard\n`;
+    `Plan: ${totalHands} cash hands over ${over} in ${total} shards, one seed per shard\n`;
   for (const { shard, run, problem } of results) {
     text += `Shard ${shard.index} of ${total}: npm run playtest -- ${shardArgs(shard).join(' ')}\n`;
     text += withNewline(run.stdout);
@@ -192,6 +226,7 @@ export function formatMillionReport(totalHands: number, results: readonly ShardR
       'Combined report',
       `Shards passed: ${combined.passed} of ${combined.shards}`,
       `Hands played: ${combined.handsPlayed}`,
+      ...(lineUps ? LINEUP_SHARD_PRESETS.map((lineUp) => lineUpHands(lineUp, results)) : []),
       `Invariant violations: ${combined.violations}`,
       `Violations by invariant: ${counts}`,
       `Result: ${combined.passed === combined.shards ? 'PASS' : 'FAIL'}`,
@@ -199,6 +234,13 @@ export function formatMillionReport(totalHands: number, results: readonly ShardR
       .map((line) => `${line}\n`)
       .join('')
   );
+}
+
+function lineUpHands(lineUp: ShardLineUp, results: readonly ShardResult[]): string {
+  const cells = results
+    .filter(({ shard }) => shard.lineUp === lineUp)
+    .map(({ shard, handsPlayed }) => `size ${shard.size} ${handsPlayed}`);
+  return `Hands for line-up ${lineUp}: ${cells.join(', ')}`;
 }
 
 /** Runs at most `concurrency` shards at a time, starting them in index order; results in shard order. */
@@ -231,12 +273,18 @@ export async function runShards(
 
 export function parseMillionArgs(argv: readonly string[]): MillionArgs {
   let help = false;
+  let lineUps = false;
   let hands: string | undefined;
   for (let i = 0; i < argv.length; i++) {
     const name = argv[i];
     if (name === '--help') {
       if (help) return { kind: 'error', message: 'Error: --help given more than once.' };
       help = true;
+      continue;
+    }
+    if (name === '--lineups') {
+      if (lineUps) return { kind: 'error', message: 'Error: --lineups given more than once.' };
+      lineUps = true;
       continue;
     }
     if (name !== '--hands') return { kind: 'error', message: 'Error: unknown option.' };
@@ -251,15 +299,21 @@ export function parseMillionArgs(argv: readonly string[]): MillionArgs {
     i++;
   }
   if (help) {
-    return hands === undefined
+    return hands === undefined && !lineUps
       ? { kind: 'help' }
       : { kind: 'error', message: 'Error: --help cannot be combined with other options.' };
   }
-  if (hands === undefined) return { kind: 'run', hands: MILLION_HANDS };
+  if (hands === undefined) return { kind: 'run', hands: MILLION_HANDS, lineUps };
   const value = /^[0-9]+$/.test(hands) ? Number(hands) : NaN;
-  return value >= SHARD_SIZES.length && value <= MAX_HANDS
-    ? { kind: 'run', hands: value }
-    : { kind: 'error', message: 'Error: --hands must be a whole number from 9 to 1000000000.' };
+  if (value >= (lineUps ? LINEUP_SHARDS : SHARD_SIZES.length) && value <= MAX_HANDS) {
+    return { kind: 'run', hands: value, lineUps };
+  }
+  return {
+    kind: 'error',
+    message: lineUps
+      ? 'Error: --hands must be a whole number from 27 to 1000000000 with --lineups.'
+      : 'Error: --hands must be a whole number from 9 to 1000000000.',
+  };
 }
 
 /** Returns the exit code: 0 every shard passed, 1 a violation or failed shard, 2 usage error. */
@@ -278,7 +332,8 @@ export async function millionMain(
     io.out(MILLION_USAGE);
     return 0;
   }
-  const results = await runShards(planShards(parsed.hands), runShard, concurrency);
+  const plan = parsed.lineUps ? planLineUpShards(parsed.hands) : planShards(parsed.hands);
+  const results = await runShards(plan, runShard, concurrency);
   io.out(formatMillionReport(parsed.hands, results));
   return results.every((result) => result.passed) ? 0 : 1;
 }

@@ -5,6 +5,7 @@ import {
   combineShards,
   millionMain,
   parseMillionArgs,
+  planLineUpShards,
   planShards,
   readShard,
   runShards,
@@ -18,6 +19,8 @@ import {
 
 const PLAN_ERROR = 'Total hands must be a whole number from 9 to 1000000000';
 const HANDS_ERROR = 'Error: --hands must be a whole number from 9 to 1000000000.';
+const LINEUP_HANDS_ERROR =
+  'Error: --hands must be a whole number from 27 to 1000000000 with --lineups.';
 
 /** The real CLI's report for a shard, in-process with default seams. */
 function cliRun(shard: Shard, extra: string[] = []): ShardRun {
@@ -57,11 +60,12 @@ describe('Shards', () => {
     }
     expect(planShards(1_000_000_000).reduce((sum, s) => sum + s.hands, 0)).toBe(1_000_000_000);
 
-    expect(parseMillionArgs([])).toEqual({ kind: 'run', hands: 1_000_000 });
-    expect(parseMillionArgs(['--hands', '9'])).toEqual({ kind: 'run', hands: 9 });
+    expect(parseMillionArgs([])).toEqual({ kind: 'run', hands: 1_000_000, lineUps: false });
+    expect(parseMillionArgs(['--hands', '9'])).toEqual({ kind: 'run', hands: 9, lineUps: false });
     expect(parseMillionArgs(['--hands', '1000000000'])).toEqual({
       kind: 'run',
       hands: 1_000_000_000,
+      lineUps: false,
     });
     for (const value of ['8', '1e6', '-5', '1000000001', '', ' 9']) {
       expect(parseMillionArgs(['--hands', value])).toEqual({ kind: 'error', message: HANDS_ERROR });
@@ -269,5 +273,97 @@ describe('Shards', () => {
     const combined = combineShards([failing(first, 2), failing(second, 3)]);
     expect(combined.violationCounts.chips).toBe(5);
     expect(combined.violations).toBe(5);
+  });
+
+  it('--lineups parsing and the line-up shard plan', async () => {
+    const run = (hands: number) => ({ kind: 'run', hands, lineUps: true });
+    expect(parseMillionArgs(['--lineups'])).toEqual(run(1_000_000));
+    expect(parseMillionArgs(['--hands', '270', '--lineups'])).toEqual(run(270));
+    expect(parseMillionArgs(['--lineups', '--hands', '270'])).toEqual(run(270));
+    expect(parseMillionArgs(['--lineups', '--hands', '27'])).toEqual(run(27));
+    expect(parseMillionArgs(['--lineups', '--hands', '1000000000'])).toEqual(run(1_000_000_000));
+    expect(parseMillionArgs([])).toEqual({ kind: 'run', hands: 1_000_000, lineUps: false });
+    const error = (message: string) => ({ kind: 'error', message });
+    expect(parseMillionArgs(['--lineups', '--lineups'])).toEqual(
+      error('Error: --lineups given more than once.'),
+    );
+    for (const value of ['26', '9', '1000000001', '1e3', '']) {
+      expect(parseMillionArgs(['--lineups', '--hands', value])).toEqual(error(LINEUP_HANDS_ERROR));
+    }
+    expect(parseMillionArgs(['--help', '--lineups'])).toEqual(
+      error('Error: --help cannot be combined with other options.'),
+    );
+    expect(parseMillionArgs(['--lineups', '--help'])).toEqual(
+      error('Error: --help cannot be combined with other options.'),
+    );
+
+    const neverCalled: ShardRunner = () => {
+      throw new Error('runner called');
+    };
+    for (const [argv, message] of [
+      [['--lineups', '--hands', '26'], LINEUP_HANDS_ERROR],
+      [['--lineups', '--lineups'], 'Error: --lineups given more than once.'],
+    ] as const) {
+      expect(await capture([...argv], neverCalled)).toMatchObject({
+        code: 2,
+        out: '',
+        err: `${message}\n${MILLION_USAGE}`,
+      });
+    }
+    expect(MILLION_USAGE).toContain('[--lineups]');
+
+    for (const bad of [26, 27.5, 1_000_000_001, Number.NaN]) {
+      expect(() => planLineUpShards(bad)).toThrow(
+        new RangeError('Total hands must be a whole number from 27 to 1000000000'),
+      );
+    }
+    const plan = planLineUpShards(28);
+    expect(plan.map((s) => s.hands)).toEqual([2, ...Array<number>(26).fill(1)]);
+    expect(plan.map((s) => s.index)).toEqual(Array.from({ length: 27 }, (_, i) => i + 1));
+    expect(plan[0]).toEqual({ index: 1, size: 2, hands: 2, seed: 1000102, lineUp: 'mixed' });
+    expect(plan[13]).toEqual({ index: 14, size: 6, hands: 1, seed: 1000206, lineUp: 'tough' });
+    expect(plan[26]).toEqual({ index: 27, size: 10, hands: 1, seed: 1000310, lineUp: 'soft' });
+    expect(planLineUpShards(1_000_000_000).reduce((sum, s) => sum + s.hands, 0)).toBe(
+      1_000_000_000,
+    );
+    expect(shardArgs(plan[13] as Shard)).toEqual([
+      '--hands',
+      '1',
+      '--seed',
+      '1000206',
+      '--size',
+      '6',
+      '--lineup',
+      'tough',
+    ]);
+    expect(shardNodeArgs(plan[0] as Shard).slice(-2)).toEqual(['--lineup', 'mixed']);
+
+    // A line-up run reports hands per line-up and size; a failed shard counts 0 in its cell.
+    const lineUpRun = await capture(['--lineups', '--hands', '27'], (shard) =>
+      shard.index === 5
+        ? Promise.resolve({ code: null, stdout: '', stderr: '' })
+        : cleanRunner(shard),
+    );
+    expect(lineUpRun.code).toBe(1);
+    expect(lineUpRun.lines[1]).toBe(
+      'Plan: 27 cash hands over line-ups mixed, tough and soft at table sizes 2 to 10 in 27 shards, one seed per shard',
+    );
+    expect(lineUpRun.lines).toContain(
+      'Shard 27 of 27: npm run playtest -- --hands 1 --seed 1000310 --size 10 --lineup soft',
+    );
+    const cells = (counts: number[]) =>
+      counts.map((count, i) => `size ${i + 2} ${count}`).join(', ');
+    expect(lineUpRun.lines.slice(lineUpRun.lines.indexOf('Combined report'))).toEqual([
+      'Combined report',
+      'Shards passed: 26 of 27',
+      'Hands played: 26',
+      `Hands for line-up mixed: ${cells([1, 1, 1, 1, 0, 1, 1, 1, 1])}`,
+      `Hands for line-up tough: ${cells(Array<number>(9).fill(1))}`,
+      `Hands for line-up soft: ${cells(Array<number>(9).fill(1))}`,
+      'Invariant violations: 0',
+      'Violations by invariant: chips 0, legal-action 0, bet-cap 0, pot-eligibility 0, cards 0',
+      'Result: FAIL',
+      '',
+    ]);
   });
 });
