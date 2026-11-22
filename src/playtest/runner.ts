@@ -22,8 +22,19 @@ import {
   type Violation,
 } from '../engine/invariants';
 import { playerView, type SeatPolicy } from '../engine/player-view';
-import type { LineUpPreset } from '../bots/lineup';
-import { lineUpPolicyFactory, randomMovePolicy, seatGenerator, seededTagPolicy } from './policy';
+import { drawReplacementStyle } from '../table/session';
+import {
+  nextReplacementName,
+  seatLineUp,
+  type LineUpPreset,
+  type LineUpSeat,
+} from '../bots/lineup';
+import {
+  randomMovePolicy,
+  seatGenerator,
+  seatStylesPolicyFactory,
+  seededTagPolicy,
+} from './policy';
 
 export { MAX_BETS_PER_STREET };
 export const PLAYTEST_STAKES: Stakes = { smallBlind: 2, bigBlind: 4, smallBet: 4, bigBet: 8 };
@@ -51,8 +62,9 @@ export interface PlaytestOptions {
   readonly size: number;
   /** Default 'cash'. */
   readonly game?: GameType;
-  /** Seat 1 plays the user (TAG), seats 2..size the preset's styles (lineUpPolicyFactory); an explicit
-   *  seams.makePolicy wins. Default: defaultPolicyFactory. */
+  /** Seat 1 plays the user (TAG), seats 2..size the preset's styles (seatStylesPolicyFactory); in cash a bot
+   *  that busts is replaced by a new bot drawn from the preset (REQ-007.5). An explicit seams.makePolicy wins.
+   *  Default: defaultPolicyFactory. */
   readonly lineUp?: LineUpPreset;
 }
 /** One hand's table. */
@@ -114,6 +126,10 @@ export interface PlayedHand {
   readonly violation: HandViolation | null;
   /** Problems found at the deal (A-6); [] when clean. Non-empty ⇒ no actions were played. */
   readonly dealViolations: readonly Violation[];
+  /** --lineup runs only: seats 1..size at this hand's deal (seat 1 the user). */
+  readonly lineUp?: readonly LineUpSeat[];
+  /** --lineup runs only: bot seats whose bot is new at this hand (replaced after the previous hand), ascending. */
+  readonly replaced?: readonly SeatNumber[];
 }
 /** A hand that stopped at a violation. */
 export type ViolatingHand = PlayedHand & { readonly violation: HandViolation };
@@ -300,9 +316,10 @@ export function summarize(hands: Iterable<PlayedHand>): PlaytestSummary {
 }
 
 /** Plays options.hands hands; calls onHand after each (not retained, so memory is O(1) in hands).
- *  Stacks carry over between hands (D-8): in cash a seat that ends on 0 rebuys; in sng it sits out, and a new
- *  sit-and-go starts when one seat has every chip. A table starts with every seat at the starting stack and
- *  the button at seat 1, also after a hand with a violation (A-2, A-3). */
+ *  Stacks carry over between hands (D-8): in cash a seat that ends on 0 rebuys (with a line-up, a bot that ends
+ *  on 0 is replaced by a new bot from the preset); in sng it sits out, and a new sit-and-go starts when one seat
+ *  has every chip. A table starts with every seat at the starting stack, the button at seat 1 and the preset's
+ *  seats, also after a hand with a violation (A-2, A-3). */
 export function runPlaytest(
   options: PlaytestOptions,
   onHand?: (hand: PlayedHand) => void,
@@ -310,23 +327,45 @@ export function runPlaytest(
 ): PlaytestSummary {
   const { hands, seed, size, game = 'cash', lineUp } = options;
   const rules = GAMES[game];
-  const handSeams =
-    lineUp === undefined || seams.makePolicy !== undefined
-      ? seams
-      : { ...seams, makePolicy: lineUpPolicyFactory(lineUp, size) };
+  const preset = lineUp === undefined ? undefined : seatLineUp(lineUp, size, 1);
   function* play(): Generator<PlayedHand> {
     let setup: HandSetup = { game };
     let button = 1;
+    let seats = preset;
+    let position = 0;
+    let replaced: SeatNumber[] = [];
     for (let k = 1; k <= hands; k++) {
-      const hand = playHand(handReplayCode(seed, k, game), size, button, k, handSeams, setup);
+      const handSeams =
+        seats === undefined || seams.makePolicy !== undefined
+          ? seams
+          : { ...seams, makePolicy: seatStylesPolicyFactory(seats) };
+      const played = playHand(handReplayCode(seed, k, game), size, button, k, handSeams, setup);
+      const hand = seats === undefined ? played : { ...played, lineUp: seats, replaced };
       onHand?.(hand);
       yield hand;
       setup = { game };
       button = 1;
+      replaced = [];
       const { final } = hand;
-      if (hand.violations > 0 || final.result === null) continue;
+      if (hand.violations > 0 || final.result === null) {
+        seats = preset;
+        position = 0;
+        continue;
+      }
+      const stackOf = (seat: SeatNumber) => final.players.find((p) => p.seat === seat)?.stack ?? 0;
+      if (seats !== undefined && lineUp !== undefined && rules.rebuy) {
+        for (const { seat, kind } of seats) {
+          if (kind !== 'bot' || stackOf(seat) !== 0) continue;
+          const style = drawReplacementStyle(lineUp, size, hand.record.replayCode, seat);
+          const names = seats.flatMap((s) => (s.name === null ? [] : [s.name]));
+          const { name, next } = nextReplacementName(position, names);
+          position = next;
+          seats = seats.map((s) => (s.seat === seat ? { seat, kind: 'bot', style, name } : s));
+          replaced.push(seat);
+        }
+      }
       const stacks = Array.from({ length: size }, (_, i) => {
-        const stack = final.players.find((p) => p.seat === i + 1)?.stack ?? 0;
+        const stack = stackOf(i + 1);
         return stack === 0 && rules.rebuy ? rules.startingStack : stack;
       });
       if (stacks.filter((stack) => stack > 0).length < 2) continue;

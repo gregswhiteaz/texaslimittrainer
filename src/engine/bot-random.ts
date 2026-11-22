@@ -17,6 +17,12 @@ export function seatGenerator(code: ReplayCode, seat: SeatNumber): Xoshiro128 {
   return new Xoshiro128(fnv1a32(`${code}/${seat}`));
 }
 
+/** The generator for the new bot at `seat` after the hand dealt from `code` (REQ-007.5):
+ *  new Xoshiro128(fnv1a32(`${code}/${seat}/replace`)). A separate stream from seatGenerator. */
+export function replacementGenerator(code: ReplayCode, seat: SeatNumber): Xoshiro128 {
+  return new Xoshiro128(fnv1a32(`${code}/${seat}/replace`));
+}
+
 /** Seat's earlier non-blind actions in view.actions (0 for its first decision). */
 export function botDecisionIndex(view: PlayerView): number {
   return view.actions.filter(

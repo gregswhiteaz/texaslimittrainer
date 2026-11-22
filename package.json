@@ -14,7 +14,7 @@
     "test:unit": "vitest run --coverage --exclude 'tests/ci/**' --exclude 'tests/git/**' --exclude 'tests/toolchain/**' --exclude '**/*.acceptance.test.*' --exclude '**/*.perf.test.*' --exclude '**/*.property.test.*'",
     "test:sweeps": "vitest run --exclude 'tests/ci/**' --exclude 'tests/git/**' --exclude 'tests/toolchain/**' .acceptance.test. .perf.test. .property.test.",
     "test:tooling": "vitest run tests/ci/ tests/git/ tests/toolchain/",
-    "test:slow": "TLH_SLOW_TESTS=1 vitest run tests/playtest/throughput.acceptance.test.ts tests/bots/maniac.test.ts tests/playtest/lineup.acceptance.test.ts",
+    "test:slow": "TLH_SLOW_TESTS=1 vitest run tests/playtest/throughput.acceptance.test.ts tests/bots/maniac.test.ts tests/playtest/lineup.acceptance.test.ts tests/playtest/replacement.acceptance.test.ts",
     "e2e": "playwright test",
     "e2e:slow": "TLH_SLOW_TESTS=1 playwright test e2e/responsive-table.spec.ts e2e/rapid-pace.spec.ts",
     "lint": "eslint . --max-warnings 0 && prettier --check .",

@@ -24,17 +24,14 @@ export function randomMovePolicy(rng: Xoshiro128): SeatPolicy {
   };
 }
 
-/** Seat 1 = user (seededTagPolicy), seats 2..size = seatLineUp(preset, size, 1) styles, each deciding with
+/** Seat s plays seats[s-1]: user (style null) → seededTagPolicy; a bot → decideStyle with its style, deciding with
  *  botRandom(botDecisionSeed(code, view)); but in a hand whose view.players.length !== 6 every seat plays
- *  randomMovePolicy(seatGenerator(code, seat)) (D-2: the advice has only a 6-max chart). Throws RangeError via
- *  seatLineUp for a bad size. */
-export function lineUpPolicyFactory(
-  preset: LineUpPreset,
-  size: number,
+ *  randomMovePolicy(seatGenerator(code, seat)) (D-2 of TASK-6.6: the advice has only a 6-max chart). */
+export function seatStylesPolicyFactory(
+  seats: readonly LineUpSeat[],
 ): (code: ReplayCode, seat: SeatNumber) => SeatPolicy {
-  const lineUp = seatLineUp(preset, size, 1);
   return (code, seat) => {
-    const { style } = lineUp[seat - 1] as LineUpSeat;
+    const { style } = seats[seat - 1] as LineUpSeat;
     const styled: SeatPolicy =
       style === null
         ? seededTagPolicy(code)
@@ -42,4 +39,13 @@ export function lineUpPolicyFactory(
     const random = randomMovePolicy(seatGenerator(code, seat));
     return (view) => (view.players.length === 6 ? styled(view) : random(view));
   };
+}
+
+/** seatStylesPolicyFactory(seatLineUp(preset, size, 1)): seat 1 = user (seededTagPolicy), seats 2..size the
+ *  preset's styles. Throws RangeError via seatLineUp for a bad size. */
+export function lineUpPolicyFactory(
+  preset: LineUpPreset,
+  size: number,
+): (code: ReplayCode, seat: SeatNumber) => SeatPolicy {
+  return seatStylesPolicyFactory(seatLineUp(preset, size, 1));
 }

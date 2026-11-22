@@ -92,8 +92,8 @@ describe('next hand acceptance', () => {
 
     const edge = nextHand(withFinalStacks([0, 222, 160, 160, 96, 165]));
     expect(stackValues(edge)).toEqual([160, 222, 160, 160, 96, 165]);
-    expect(edge.seats).toEqual(KINGS_SHOWDOWN.seats);
-    expect(edge.seats[0]).toMatchObject({ seat: 1, name: 'Ava', kind: 'bot', style: 'TAG' });
+    expect(edge.seats.slice(1)).toEqual(KINGS_SHOWDOWN.seats.slice(1));
+    expect(edge.seats[0]).toMatchObject({ seat: 1, name: 'Jay', kind: 'bot' });
     const dealt = dealHand(edge, replayCodeFromWords([1, 1, 2, 3]));
     expect((dealt.hand as HandState).players.map((p) => p.startingStack)).toEqual([
       160, 222, 160, 160, 96, 165,
@@ -115,7 +115,7 @@ describe('next hand acceptance', () => {
   it('sixty hands in a row carry stacks and never raise the minimum-stack error', () => {
     let table = seatSession();
     let added = 0;
-    let topUps = 0;
+    let short = 0;
     const buttons: number[] = [];
     for (let k = 1; k <= 60; k++) {
       expect(table.handNumber).toBe(k);
@@ -125,11 +125,23 @@ describe('next hand acceptance', () => {
       const next = nextHand(table);
       for (const [i, stack] of final.entries()) {
         const carried = stackValues(next)[i] as number;
+        const before = table.seats[i];
+        const after = next.seats[i];
         if (carried !== stack) {
-          expect(stack).toBeLessThan(96);
           expect(carried).toBe(160);
+          if (before?.kind === 'bot') {
+            expect(stack).toBe(0);
+            expect(after?.name).not.toBe(before.name);
+          } else {
+            expect(stack).toBeLessThan(96);
+          }
           added += carried - stack;
-          topUps++;
+        } else {
+          expect(after).toEqual(before);
+        }
+        if (k === 43 && i === 1) {
+          expect(stack).toBe(94);
+          short = carried;
         }
       }
       expect(stackValues(next).reduce((a, b) => a + b, 0)).toBe(960 + added);
@@ -138,7 +150,7 @@ describe('next hand acceptance', () => {
     }
     expect(table.handNumber).toBe(61);
     expect(buttons).toEqual(Array.from({ length: 60 }, (_, i) => (i % 6) + 1));
-    expect(topUps).toBeGreaterThan(0);
+    expect(short).toBe(94);
   });
 
   it('the header counts each hand and the pot line reads the decided value after the award', () => {

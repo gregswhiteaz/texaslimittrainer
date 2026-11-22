@@ -20,8 +20,10 @@ import {
   type PlayerView,
   type SeatPolicy,
 } from '../engine/player-view';
-import { botDecisionSeed } from '../engine/bot-random';
+import { botDecisionSeed, replacementGenerator } from '../engine/bot-random';
+import { isReplayCode } from '../engine/deck';
 import { tagPolicy } from '../bots/tag';
+import { nextReplacementName, replacementStyles } from '../bots/lineup';
 
 export interface Stake {
   readonly smallBet: number;
@@ -155,6 +157,8 @@ export interface TableState {
   readonly handNumber: number;
   /** Button of the current hand (the next hand before the deal). */
   readonly button: SeatNumber;
+  /** Position of the next replacement bot's name in the replacement-name sequence (0 at seating). */
+  readonly nextBotName: number;
 }
 export type NextStep = 'deal' | 'bot' | 'user' | 'done';
 
@@ -171,6 +175,7 @@ export function seatSession(input?: Partial<SessionConfig>): TableState {
     userDecisions: [],
     handNumber: 1,
     button: config.button,
+    nextBotName: 0,
   };
 }
 
@@ -211,27 +216,61 @@ export function nextHandDelay(table: TableState, hold = false): number | null {
   return nextStep(table) === 'done' && !hold ? NEXT_HAND_DELAY_MS : null;
 }
 
-/** The session ready for the next deal: final stacks carried, button one seat on, hand number + 1. */
+/** REQ-007.5: a new bot's style, styles[replacementGenerator(code, seat).nextIntUnbiased(styles.length)] with
+ *  styles = replacementStyles(lineUp, size). Pure. RangeError as replacementStyles, or on an invalid replay code. */
+export function drawReplacementStyle(
+  lineUp: LineUpName,
+  size: number,
+  code: ReplayCode,
+  seat: SeatNumber,
+): BotStyle {
+  const styles = replacementStyles(lineUp, size);
+  if (!isReplayCode(code)) throw new RangeError('Invalid replay code');
+  return styles[replacementGenerator(code, seat).nextIntUnbiased(styles.length)] as BotStyle;
+}
+
+/** The session ready for the next deal: final stacks carried, button one seat on, hand number + 1. In cash a
+ *  bot on $0 is replaced by a new bot (REQ-007.5): next unused replacement name, style drawn from the line-up
+ *  with the finished hand's replay code, a fresh buy-in. Throws RangeError if that draw has no replay code. */
 export function nextHand(table: TableState): TableState {
-  const { hand } = table;
+  const { hand, config } = table;
   if (nextStep(table) !== 'done' || hand === null) throw new RangeError('Not a next-hand step');
   const minimum = minimumStack(table.stakes);
-  const stacks = hand.players.map(({ seat, stack }) => ({
-    seat,
-    // TEMPORARY (TASK-3.4 Q-4): tops seats below minimumStack back to 20 big bets (the cash buy-in; 800
-    // in a sit-and-go at 20/40) because the engine has no all-in yet. Removal is an acceptance criterion on TASK-1.16 / TASK-3.11 (whichever lands last).
-    stack: stack < minimum ? buyIn(tableStake(table.config)) : stack,
-  }));
-  const seats = table.seats.map((s) => s.seat);
-  const button = seats[(seats.indexOf(hand.button) + 1) % seats.length] as SeatNumber;
+  let seats = table.seats;
+  let nextBotName = table.nextBotName;
+  const stacks = hand.players.map(({ seat, stack }) => {
+    const current = seats.find((s) => s.seat === seat) as SessionSeat;
+    if (config.gameType === 'cash' && current.kind === 'bot') {
+      if (stack > 0) return { seat, stack };
+      if (table.replayCode === null) throw new RangeError('No replay code to draw a new bot from');
+      const style = drawReplacementStyle(config.lineUp, config.players, table.replayCode, seat);
+      const { name, next } = nextReplacementName(
+        nextBotName,
+        seats.map((s) => s.name),
+      );
+      nextBotName = next;
+      seats = seats.map((s) => (s.seat === seat ? { seat, kind: 'bot', name, style } : s));
+      return { seat, stack: buyIn(config.stake) };
+    }
+    return {
+      seat,
+      // TEMPORARY (TASK-3.4 Q-4): tops seats below minimumStack back to 20 big bets (the cash buy-in; 800
+      // in a sit-and-go at 20/40) because the engine has no all-in yet. Removal is an acceptance criterion on TASK-1.16 / TASK-3.11 (whichever lands last).
+      stack: stack < minimum ? buyIn(tableStake(config)) : stack,
+    };
+  });
+  const order = seats.map((s) => s.seat);
+  const button = order[(order.indexOf(hand.button) + 1) % order.length] as SeatNumber;
   return {
     ...table,
+    seats,
     stacks,
     button,
     handNumber: table.handNumber + 1,
     hand: null,
     replayCode: null,
     userDecisions: [],
+    nextBotName,
   };
 }
 

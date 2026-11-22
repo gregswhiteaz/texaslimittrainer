@@ -15,6 +15,26 @@ export const BOT_NAMES: readonly string[] = Object.freeze([
   'Hal',
   'Ivy',
 ]);
+/** Names for replacement bots, in order; initials J–Z, none shared with BOT_NAMES. */
+export const REPLACEMENT_NAMES: readonly string[] = Object.freeze([
+  'Jay',
+  'Kit',
+  'Lou',
+  'Max',
+  'Ned',
+  'Oli',
+  'Pip',
+  'Quin',
+  'Ray',
+  'Sam',
+  'Tom',
+  'Uma',
+  'Val',
+  'Wes',
+  'Xia',
+  'Yul',
+  'Zed',
+]);
 
 export interface LineUpSeat {
   /** 1..size. */
@@ -106,4 +126,39 @@ export function lineUpSessionConfig(
   );
   const userSeat = (seats.find((s) => s.kind === 'user') as LineUpSeat).seat;
   return { ...base, players: seats.length, userSeat, lineUp, seats: sessionSeats };
+}
+
+/** REQ-007.7/007.8: distinct styles a replacement may have, in order TAG, Calling station, Maniac, Rock.
+ *  'Custom' → all four. RangeError: size not an integer 2..10, or unknown line-up name. */
+export function replacementStyles(lineUp: LineUpName, size: number): readonly StyleName[] {
+  if (!Number.isInteger(size) || size < 2 || size > 10) {
+    throw new RangeError('Table size must be a whole number from 2 to 10');
+  }
+  if (lineUp === 'Custom') return MIXED_CYCLE;
+  if (!LINE_UP_PRESETS.includes(lineUp)) {
+    throw new RangeError(`Unknown line-up: ${String(lineUp)}`);
+  }
+  const seated = seatLineUp(lineUp, size, 1).map((s) => s.style);
+  return MIXED_CYCLE.filter((style) => seated.includes(style));
+}
+
+/** Name at `position` in the sequence: REPLACEMENT_NAMES[p mod 17], plus ` ${floor(p/17)+1}` when p ≥ 17.
+ *  RangeError if position is not a non-negative safe integer. */
+export function replacementName(position: number): string {
+  if (!Number.isSafeInteger(position) || position < 0) {
+    throw new RangeError('Name position must be a whole number of at least 0');
+  }
+  const name = REPLACEMENT_NAMES[position % REPLACEMENT_NAMES.length] as string;
+  const round = Math.floor(position / REPLACEMENT_NAMES.length);
+  return round === 0 ? name : `${name} ${round + 1}`;
+}
+
+/** The first name at position ≥ `position` not in `seated`, and the position after it. */
+export function nextReplacementName(
+  position: number,
+  seated: readonly string[],
+): { readonly name: string; readonly next: number } {
+  let p = position;
+  while (seated.includes(replacementName(p))) p++;
+  return { name: replacementName(p), next: p + 1 };
 }

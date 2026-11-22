@@ -1,4 +1,5 @@
-import { seatLineUp, type LineUpPreset } from '../bots/lineup';
+import { seatLineUp, type LineUpPreset, type LineUpSeat } from '../bots/lineup';
+import type { StyleName } from '../bots/style';
 import { formatCard } from '../engine/cards';
 import { isReplayCode, type ReplayCode } from '../engine/deck';
 import type { ActionRecord, SeatNumber } from '../engine/hand';
@@ -16,7 +17,7 @@ import {
   type PlaytestSeams,
   type PlaytestSummary,
 } from './runner';
-import { lineUpPolicyFactory } from './policy';
+import { seatStylesPolicyFactory } from './policy';
 
 export interface CliIo {
   readonly out: (text: string) => void;
@@ -33,13 +34,15 @@ export type ParsedArgs =
       /** One per seat 1..size; 0 = empty seat. */
       readonly stacks: readonly number[];
       readonly lineUp?: LineUpPreset;
+      /** --styles: the style of each seat 2..size (only with lineUp). */
+      readonly styles?: readonly StyleName[];
     }
   | { readonly kind: 'help' }
   | { readonly kind: 'error'; readonly message: string };
 
 export const USAGE =
   'Usage: npm run playtest -- [--hands <1-1000000000>] [--seed <0-9007199254740991>] [--size <2-10>] [--game <cash|sng>] [--lineup <mixed|tough|soft>]\n' +
-  '       npm run playtest -- --replay-code <32 lowercase hex characters> [--size <2-10>] [--button <seat>] [--game <cash|sng>] [--stacks <one stack per seat, comma-separated, 0 = empty seat>] [--lineup <mixed|tough|soft>]\n' +
+  '       npm run playtest -- --replay-code <32 lowercase hex characters> [--size <2-10>] [--button <seat>] [--game <cash|sng>] [--stacks <one stack per seat, comma-separated, 0 = empty seat>] [--lineup <mixed|tough|soft>] [--styles <style of each seat from 2 up, comma-separated: tag|calling-station|maniac|rock>]\n' +
   'Defaults: --hands 10000 --seed 42 --size 6 --button 1 --game cash; --stacks gives every seat $160 (cash) or 1500 (sng)\n' +
   "--lineup: seat 1 plays the user (TAG) and seats 2 and up play the preset's styles; without it every seat plays TAG at 6 seats and random moves at other sizes\n";
 
@@ -52,6 +55,7 @@ const VALUE_OPTIONS = [
   '--game',
   '--stacks',
   '--lineup',
+  '--styles',
 ] as const;
 type ValueOption = (typeof VALUE_OPTIONS)[number];
 
@@ -62,7 +66,19 @@ const LINE_UPS: Readonly<Record<string, LineUpPreset>> = {
   tough: 'Tough',
   soft: 'Soft',
 };
+/** --styles slug → style. */
+const STYLE_SLUGS: Readonly<Record<string, StyleName>> = {
+  tag: 'TAG',
+  'calling-station': 'Calling station',
+  maniac: 'Maniac',
+  rock: 'Rock',
+};
+const styleSlug = (style: StyleName): string =>
+  Object.keys(STYLE_SLUGS).find((slug) => STYLE_SLUGS[slug] === style) as string;
 const SIZE_ERROR = 'Error: --size must be a whole number from 2 to 10.';
+const STYLES_ONLY_ERROR = 'Error: --styles is only valid with --replay-code and --lineup.';
+const STYLES_ERROR =
+  'Error: --styles must list tag, calling-station, maniac or rock for each seat from 2 to the table size.';
 const STACKS_ERROR =
   'Error: --stacks must be one whole number per seat (0 for an empty seat), at least two above 0, totalling at most 9007199254740991.';
 
@@ -147,8 +163,19 @@ export function parseArgs(argv: readonly string[]): ParsedArgs {
         : parseStacks(stacksText, size);
     if (stacks === undefined) return error(STACKS_ERROR);
     if (stacks[button - 1] === 0) return error('Error: --button must be a seat with chips.');
-    return { kind: 'replay', replayCode, size, button, game, stacks, ...withLineUp };
+    const stylesText = values.get('--styles');
+    if (stylesText === undefined) {
+      return { kind: 'replay', replayCode, size, button, game, stacks, ...withLineUp };
+    }
+    if (lineUp === undefined) return error(STYLES_ONLY_ERROR);
+    const slugs = stylesText.split(',');
+    if (slugs.length !== size - 1 || !slugs.every((slug) => Object.hasOwn(STYLE_SLUGS, slug))) {
+      return error(STYLES_ERROR);
+    }
+    const styles = slugs.map((slug) => STYLE_SLUGS[slug] as StyleName);
+    return { kind: 'replay', replayCode, size, button, game, stacks, lineUp, styles };
   }
+  if (values.has('--styles')) return error(STYLES_ONLY_ERROR);
   if (values.has('--button')) return error('Error: --button is only valid with --replay-code.');
   if (values.has('--stacks')) return error('Error: --stacks is only valid with --replay-code.');
   const hands = whole('--hands', 10_000, 1, 1_000_000_000);
@@ -165,12 +192,14 @@ export function parseArgs(argv: readonly string[]): ParsedArgs {
 
 /** `header` (whole lines) followed by the summary lines, then the violation block when there are
  *  violations. Replay mode has already printed the hand, so its block has no Replay line or hand.
- *  `lineUp` is the CLI line-up name, appended to the Replay line. */
+ *  `lineUp` is the CLI line-up name, appended to the Replay line. `replaced` (a --lineup cash run's
+ *  replacement count) adds a `Bots replaced:` line after the violation count. */
 export function formatReport(
   header: string,
   summary: PlaytestSummary,
   mode: 'run' | 'replay' = 'run',
   lineUp?: string,
+  replaced?: number,
 ): string {
   return (
     header +
@@ -184,6 +213,7 @@ export function formatReport(
       `First replay code: ${summary.firstReplayCode}`,
       `Last replay code: ${summary.lastReplayCode}`,
       `Invariant violations: ${summary.violations}`,
+      ...(replaced === undefined ? [] : [`Bots replaced: ${replaced}`]),
     ]
       .map((line) => `${line}\n`)
       .join('') +
@@ -201,6 +231,21 @@ function gameSuffix(game: GameType, stacks: readonly number[]): string {
 
 const lineUpOption = (lineUp: string | undefined): string =>
   lineUp === undefined ? '' : ` --lineup ${lineUp}`;
+
+const stylesOption = (seats: readonly LineUpSeat[]): string =>
+  ` --styles ${seats
+    .slice(1)
+    .map((s) => styleSlug(s.style as StyleName))
+    .join(',')}`;
+
+/** ` --styles …` when a bot in `hand.lineUp` no longer plays the preset's style at its seat, else ''. */
+function replacedStylesOption(hand: PlayedHand, lineUp: string | undefined): string {
+  const preset = lineUp === undefined ? undefined : LINE_UPS[lineUp];
+  if (hand.lineUp === undefined || preset === undefined) return '';
+  const seated = seatLineUp(preset, hand.record.size, 1);
+  const changed = hand.lineUp.some((s) => s.style !== seated[s.seat - 1]?.style);
+  return changed ? stylesOption(hand.lineUp) : '';
+}
 
 /** One stack per seat 1..size: each dealt-in seat's starting stack, 0 for the others. */
 function recordStacks({ seats, size }: HandRecord): number[] {
@@ -233,7 +278,8 @@ function violationBlock(
   lines.push(
     `Replay: npm run playtest -- --replay-code ${record.replayCode} --size ${record.size} --button ${record.button}` +
       gameSuffix(record.game, recordStacks(record)) +
-      lineUpOption(lineUp),
+      lineUpOption(lineUp) +
+      replacedStylesOption(hand, lineUp),
   );
   return lines.map((line) => `${line}\n`).join('') + formatHand(hand);
 }
@@ -282,9 +328,14 @@ function tableLine(size: number, game: GameType): string {
   return `Table: ${size} players, sit-and-go ${smallBet}/${bigBet} (blinds ${smallBlind}/${bigBlind}), ${startingStack} chips each, busted seats sit out, a new sit-and-go starts when one player has all the chips\n`;
 }
 
-/** The Line-up line, plus the note when styles can't play (size ≠ 6 or sng; D-2). */
-function lineUpLines(preset: LineUpPreset, name: string, size: number, game: GameType): string {
-  const bots = seatLineUp(preset, size, 1)
+/** The Line-up line for `seats`, plus the note when styles can't play (size ≠ 6 or sng; D-2). */
+function lineUpLines(
+  seats: readonly LineUpSeat[],
+  name: string,
+  size: number,
+  game: GameType,
+): string {
+  const bots = seats
     .filter((s) => s.kind === 'bot')
     .map((s) => `, seat ${s.seat} ${String(s.name)} (${String(s.style)})`);
   const note =
@@ -309,27 +360,43 @@ export function main(argv: readonly string[], io: CliIo, seams: PlaytestSeams = 
   const preset = parsed.kind === 'run' ? parsed.options.lineUp : parsed.lineUp;
   const lineUpName = preset?.toLowerCase();
   const option = lineUpOption(lineUpName);
-  const table = (size: number, game: GameType) =>
+  /** The preset's seats at `size`, with `styles` (seats 2..size) when given. */
+  const seatsAt = (size: number, styles?: readonly StyleName[]) =>
+    seatLineUp(preset as LineUpPreset, size, 1).map((s, i) =>
+      styles === undefined || i === 0 ? s : { ...s, style: styles[i - 1] as StyleName },
+    );
+  const table = (size: number, game: GameType, styles?: readonly StyleName[]) =>
     tableLine(size, game) +
-    (preset === undefined ? '' : lineUpLines(preset, String(lineUpName), size, game));
+    (preset === undefined
+      ? ''
+      : lineUpLines(seatsAt(size, styles), String(lineUpName), size, game));
   let header = 'TLH Trainer playtest\n';
   let summary: PlaytestSummary;
+  let replaced: number | undefined;
   if (parsed.kind === 'run') {
     const { hands, seed, size, game } = parsed.options;
     const sng = game === 'sng' ? ' --game sng' : '';
     header += `Options: --hands ${hands} --seed ${seed} --size ${size}${sng}${option}\n${table(size, game)}`;
-    summary = runPlaytest(parsed.options, undefined, seams);
+    if (preset !== undefined && game === 'cash') {
+      let count = 0;
+      summary = runPlaytest(parsed.options, (hand) => (count += hand.replaced?.length ?? 0), seams);
+      replaced = count;
+    } else {
+      summary = runPlaytest(parsed.options, undefined, seams);
+    }
   } else {
-    const { replayCode, size, button, game, stacks } = parsed;
+    const { replayCode, size, button, game, stacks, styles } = parsed;
+    const seats = preset === undefined ? undefined : seatsAt(size, styles);
     const handSeams =
-      preset === undefined || seams.makePolicy !== undefined
+      seats === undefined || seams.makePolicy !== undefined
         ? seams
-        : { ...seams, makePolicy: lineUpPolicyFactory(preset, size) };
+        : { ...seams, makePolicy: seatStylesPolicyFactory(seats) };
     const hand = playHand(replayCode, size, button, 1, handSeams, { game, stacks });
-    header += `Options: --replay-code ${replayCode} --size ${size} --button ${button}${gameSuffix(game, stacks)}${option}\n`;
-    header += table(size, game) + formatHand(hand);
+    const stylesEcho = seats === undefined || styles === undefined ? '' : stylesOption(seats);
+    header += `Options: --replay-code ${replayCode} --size ${size} --button ${button}${gameSuffix(game, stacks)}${option}${stylesEcho}\n`;
+    header += table(size, game, styles) + formatHand(hand);
     summary = summarize([hand]);
   }
-  io.out(formatReport(header, summary, parsed.kind, lineUpName));
+  io.out(formatReport(header, summary, parsed.kind, lineUpName, replaced));
   return summary.violations > 0 ? 1 : 0;
 }

@@ -1,13 +1,16 @@
 import { describe, expect, it } from 'vitest';
-import { replayCodeFromWords, shuffledDeck } from '../../src/engine/deck';
+import { replayCodeFromWords, shuffledDeck, type ReplayCode } from '../../src/engine/deck';
 import { createHand, minimumStack, type HandState } from '../../src/engine/hand';
 import {
   NEXT_HAND_DELAY_MS,
+  SIT_AND_GO_LEVEL_1,
   completedHand,
   dealHand,
+  drawReplacementStyle,
   nextHand,
   nextHandDelay,
   nextStep,
+  resolveSessionConfig,
   seatSession,
   stakesFor,
   stepBot,
@@ -90,5 +93,51 @@ describe('next hand', () => {
     expect(() => createHand({ stakes: small, seats, button: 3, deck: shuffledDeck(CODE) })).toThrow(
       RangeError,
     );
+  });
+});
+
+/** KINGS_SHOWDOWN (or `table`) with its final stacks replaced by `stacks` (ascending seat order). */
+function withFinalStacks(stacks: number[], table: TableState = KINGS_SHOWDOWN): TableState {
+  const hand = table.hand as HandState;
+  return {
+    ...table,
+    hand: { ...hand, players: hand.players.map((p, i) => ({ ...p, stack: stacks[i] as number })) },
+  };
+}
+
+describe('busted seats', () => {
+  it('the user and sit-and-go seats are never replaced', () => {
+    for (const userStack of [0, 95]) {
+      const next = nextHand(withFinalStacks([160, 222, 160, 160, userStack, 165]));
+      expect(next.seats).toEqual(KINGS_SHOWDOWN.seats);
+      expect(next.seats[4]).toEqual({ seat: 5, name: 'You', kind: 'user', style: null });
+      expect(next.stacks[4]).toEqual({ seat: 5, stack: 160 });
+      expect(next.nextBotName).toBe(0);
+    }
+
+    const config = resolveSessionConfig({ gameType: 'sit-and-go' });
+    const sitAndGo: TableState = {
+      ...KINGS_SHOWDOWN,
+      config,
+      stakes: stakesFor(SIT_AND_GO_LEVEL_1),
+    };
+    const next = nextHand(withFinalStacks([0, 222, 160, 160, 96, 165], sitAndGo));
+    expect(next.seats).toEqual(KINGS_SHOWDOWN.seats);
+    expect(next.stacks[0]).toEqual({ seat: 1, stack: 800 });
+    expect(next.nextBotName).toBe(0);
+  });
+
+  it('nextHand throws when a bot must be replaced but the hand has no replay code', () => {
+    const noCode = { ...withFinalStacks([0, 222, 160, 160, 96, 165]), replayCode: null };
+    expect(() => nextHand(noCode)).toThrow(new RangeError('No replay code to draw a new bot from'));
+    expect(() => nextHand({ ...KINGS_SHOWDOWN, replayCode: null })).not.toThrow();
+
+    const replaced = nextHand(withFinalStacks([0, 222, 160, 160, 96, 0]));
+    expect(replaced.seats.map((s) => s.name)).toEqual(['Jay', 'Ben', 'Cal', 'Dee', 'You', 'Kit']);
+    expect(replaced.stacks.map((s) => s.stack)).toEqual([160, 222, 160, 160, 96, 160]);
+    expect(replaced.seats[5]?.style).toBe(
+      drawReplacementStyle('Custom', 6, KINGS_SHOWDOWN.replayCode as ReplayCode, 6),
+    );
+    expect(replaced.nextBotName).toBe(2);
   });
 });

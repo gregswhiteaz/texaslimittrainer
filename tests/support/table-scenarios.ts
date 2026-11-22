@@ -84,6 +84,7 @@ function tableAt(hand: HandState): TableState {
     userDecisions: [],
     handNumber: 133,
     button: 6,
+    nextBotName: 0,
   };
 }
 

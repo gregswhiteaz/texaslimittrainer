@@ -8,6 +8,7 @@ import {
   type HandState,
   type SeatConfig,
 } from '../../src/engine/hand';
+import { seatLineUp } from '../../src/bots/lineup';
 import { describeAction } from '../../src/engine/invariants';
 import { formatHand, formatReport, main, parseArgs, USAGE } from '../../src/playtest/cli';
 import {
@@ -32,6 +33,9 @@ function capture(argv: string[], seams?: PlaytestSeams) {
 const VALID_CODE = '000000000000002a0000000000000004';
 const STACKS_ERROR =
   'Error: --stacks must be one whole number per seat (0 for an empty seat), at least two above 0, totalling at most 9007199254740991.';
+const STYLES_ONLY_ERROR = 'Error: --styles is only valid with --replay-code and --lineup.';
+const STYLES_ERROR =
+  'Error: --styles must list tag, calling-station, maniac or rock for each seat from 2 to the table size.';
 
 const ERROR_CASES: [string[], string][] = [
   [['--hands', '0'], 'Error: --hands must be a whole number from 1 to 1000000000.'],
@@ -77,6 +81,19 @@ const ERROR_CASES: [string[], string][] = [
     ['--replay-code', VALID_CODE, '--size', '3', '--button', '2', '--stacks', '160,0,160'],
     'Error: --button must be a seat with chips.',
   ],
+  [['--styles', 'tag'], STYLES_ONLY_ERROR],
+  [['--lineup', 'mixed', '--styles', 'tag,tag,tag,tag,tag'], STYLES_ONLY_ERROR],
+  [['--replay-code', VALID_CODE, '--size', '2', '--styles', 'tag'], STYLES_ONLY_ERROR],
+  ...['tag', 'tag,rock,maniac', 'tag,TAG', 'tag,', 'tag,toString', 'tag,calling station'].map(
+    (styles): [string[], string] => [
+      ['--replay-code', VALID_CODE, '--size', '3', '--lineup', 'soft', '--styles', styles],
+      STYLES_ERROR,
+    ],
+  ),
+  [
+    ['--replay-code', VALID_CODE, '--lineup', 'soft', '--styles', 'tag', '--styles', 'tag'],
+    'Error: --styles given more than once.',
+  ],
 ];
 
 describe('playtest CLI', () => {
@@ -90,7 +107,7 @@ describe('playtest CLI', () => {
     expect(capture(['--help'])).toEqual({ code: 0, out: USAGE, err: '' });
     expect(USAGE).toBe(
       'Usage: npm run playtest -- [--hands <1-1000000000>] [--seed <0-9007199254740991>] [--size <2-10>] [--game <cash|sng>] [--lineup <mixed|tough|soft>]\n' +
-        '       npm run playtest -- --replay-code <32 lowercase hex characters> [--size <2-10>] [--button <seat>] [--game <cash|sng>] [--stacks <one stack per seat, comma-separated, 0 = empty seat>] [--lineup <mixed|tough|soft>]\n' +
+        '       npm run playtest -- --replay-code <32 lowercase hex characters> [--size <2-10>] [--button <seat>] [--game <cash|sng>] [--stacks <one stack per seat, comma-separated, 0 = empty seat>] [--lineup <mixed|tough|soft>] [--styles <style of each seat from 2 up, comma-separated: tag|calling-station|maniac|rock>]\n' +
         'Defaults: --hands 10000 --seed 42 --size 6 --button 1 --game cash; --stacks gives every seat $160 (cash) or 1500 (sng)\n' +
         "--lineup: seat 1 plays the user (TAG) and seats 2 and up play the preset's styles; without it every seat plays TAG at 6 seats and random moves at other sizes\n",
     );
@@ -571,6 +588,119 @@ describe('playtest CLI', () => {
       if (!capture(argv).out.includes(expected)) differing++;
     }
     expect(differing).toBeGreaterThan(0);
+  });
+});
+
+describe('replacement bots in the CLI', () => {
+  it('Bots replaced: is printed only for --lineup cash runs', () => {
+    // Seed 42's first replacement (Mixed, 6 seats) takes effect at hand 57.
+    for (const [hands, count] of [
+      ['56', 0],
+      ['57', 1],
+    ] as const) {
+      const mixed = capture(['--hands', hands, '--seed', '42', '--lineup', 'mixed']);
+      expect(mixed.code).toBe(0);
+      expect(mixed.out.endsWith(`Invariant violations: 0\nBots replaced: ${count}\n`)).toBe(true);
+    }
+
+    for (const argv of [
+      ['--hands', '30', '--seed', '42'],
+      ['--hands', '30', '--seed', '42', '--game', 'sng', '--lineup', 'mixed'],
+    ]) {
+      const out = capture(argv).out;
+      expect(out).not.toContain('Bots replaced:');
+      expect(out.endsWith('Invariant violations: 0\n')).toBe(true);
+    }
+    const played: PlayedHand[] = [];
+    runPlaytest({ hands: 30, seed: 42, size: 6 }, (hand) => played.push(hand));
+    expect(played.every((hand) => hand.lineUp === undefined && hand.replaced === undefined)).toBe(
+      true,
+    );
+    const sng: PlayedHand[] = [];
+    runPlaytest({ hands: 30, seed: 42, size: 6, game: 'sng', lineUp: 'Soft' }, (hand) =>
+      sng.push(hand),
+    );
+    for (const hand of sng) {
+      expect(hand.lineUp).toEqual(seatLineUp('Soft', 6, 1));
+      expect(hand.replaced).toEqual([]);
+    }
+
+    const summary = runPlaytest({ hands: 1, seed: 42, size: 6 });
+    expect(formatReport('', summary, 'run', 'mixed', 4)).toBe(
+      formatReport('', summary, 'run', 'mixed') + 'Bots replaced: 4\n',
+    );
+  });
+
+  it('--styles replays a hand with the given styles and the Replay line carries replaced styles', () => {
+    expect(
+      parseArgs([
+        '--replay-code',
+        VALID_CODE,
+        '--size',
+        '3',
+        '--lineup',
+        'soft',
+        '--styles',
+        'maniac,tag',
+      ]),
+    ).toEqual({
+      kind: 'replay',
+      replayCode: VALID_CODE,
+      size: 3,
+      button: 1,
+      game: 'cash',
+      stacks: [160, 160, 160],
+      lineUp: 'Soft',
+      styles: ['Maniac', 'TAG'],
+    });
+    const styled = capture([
+      '--replay-code',
+      VALID_CODE,
+      '--lineup',
+      'mixed',
+      '--styles',
+      'rock,calling-station,maniac,tag,tag',
+    ]);
+    expect(styled.code).toBe(0);
+    expect(styled.out).toContain(
+      ` --size 6 --button 1 --lineup mixed --styles rock,calling-station,maniac,tag,tag\n` +
+        'Table: 6 players, cash $4/$8, stacks carry over, a busted seat rebuys for $160\n' +
+        'Line-up: mixed, seat 1 plays the user, seat 2 Ava (Rock), seat 3 Ben (Calling station), seat 4 Cal (Maniac), seat 5 Dee (TAG), seat 6 Eli (TAG)\n' +
+        'Hand 1: ',
+    );
+    expect(styled.out).not.toEqual(capture(['--replay-code', VALID_CODE, '--lineup', 'mixed']).out);
+
+    const rejected = (): PlaytestSeams['makePolicy'] => () => (view) => ({
+      seat: view.seat,
+      type: 'raise',
+      amount: 999,
+    });
+    const faulty = runPlaytest({ hands: 1, seed: 42, size: 6, lineUp: 'Mixed' }, undefined, {
+      makePolicy: rejected(),
+    });
+    const hand = faulty.firstViolation as PlayedHand;
+    const lineUp = seatLineUp('Mixed', 6, 1);
+    const swapped = lineUp.map((s) =>
+      s.seat === 3 ? { ...s, name: 'Jay', style: 'Rock' as const } : s,
+    );
+    const replayLine = (report: string) =>
+      report.split('\n').find((line) => line.startsWith('Replay: ')) as string;
+    expect(replayLine(formatReport('', faulty, 'run', 'mixed')).endsWith(' --lineup mixed')).toBe(
+      true,
+    );
+    expect(
+      replayLine(
+        formatReport(
+          '',
+          { ...faulty, firstViolation: { ...hand, lineUp: swapped } },
+          'run',
+          'mixed',
+        ),
+      ).endsWith(' --lineup mixed --styles tag,rock,maniac,rock,tag'),
+    ).toBe(true);
+    expect(
+      replayLine(formatReport('', { ...faulty, firstViolation: { ...hand, lineUp: swapped } })),
+    ).not.toContain('--styles');
   });
 });
 

@@ -1,0 +1,11 @@
+## BUILD (TASK-6.8)
+- Implemented the replacement rule per spec: `replacementGenerator` (bot-random), replacement styles/names (lineup), `nextHand` cash replacement + `nextBotName` (session), `seatStylesPolicyFactory` (policy), per-hand line-up and replacement in `--lineup` cash playtests (runner), `Bots replaced:` / `--styles` (cli), `test:slow` entry.
+- Deviation (placement only): `drawReplacementStyle` lives in `src/table/session.ts`, not `src/bots/lineup.ts`. The existing unit test `tests/bots/tag.test.ts::bots import only PlayerView-boundary types from the engine` forbids any `src/bots/*` file from importing engine runtime code or `ReplayCode`; the draw needs `replacementGenerator` and `isReplayCode`. Same signature, seeding and behaviour; session.ts is its main consumer and the runner imports it from there.
+- Locked-test edits exactly as approved in Q-4: `tests/table/next-hand.acceptance.test.ts` (lines 93-96; sixty-hand test: changed stack only for a bot on 0 with a new name or the user below 96; hand 43 seat-2 bot keeps $94) and `tests/playtest/policy-lineup.acceptance.test.ts` (200 → 45 hands; both `toEqual` and `not.toEqual` hold at 45). Unlocked: `tests/support/table-scenarios.ts` gains `nextBotName: 0`; `tests/playtest/cli.test.ts` USAGE line 2.
+- Measured (seed 42, 300 hands): Mixed replaces seat 3 at hand 57 (Jay, TAG), seat 4 at 109 and 181; Soft one replacement (Rock); Tough first replacement at hand 46.
+- `npm run -s playtest -- --hands 10000 --seed 42 --size 6 | shasum -a 256` → `aacd5e94…e01` (unchanged).
+- `npm run playtest -- --hands 10000 --seed 42 --lineup mixed` → exit 0, `Invariant violations: 0`, `Bots replaced: 34` (about 7 s).
+- `TLH_SLOW_TESTS=1 vitest run tests/playtest/replacement.acceptance.test.ts` → 3 passed (slow test 13.5 s for two runs).
+- `npm test` → 173 files passed, 1 skipped; 609+ tests passed, 10 skipped. `npm run test:unit` → coverage thresholds met (session.ts replacement branch covered by `tests/table/next-hand.test.ts`). No new unit test above ~2 s.
+- `npm run e2e` → 142 passed, 12 skipped.
+- `npm run format`, `npm run lint`, `npm run typecheck` → clean.

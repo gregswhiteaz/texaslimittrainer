@@ -2,6 +2,10 @@ import { describe, expect, it } from 'vitest';
 import {
   BOT_NAMES,
   LINE_UP_PRESETS,
+  nextReplacementName,
+  REPLACEMENT_NAMES,
+  replacementName,
+  replacementStyles,
   lineUpSessionConfig,
   resolveLineUpName,
   seatLineUp,
@@ -9,7 +13,15 @@ import {
   type LineUpSeat,
 } from '../../src/bots/lineup';
 import type { StyleName } from '../../src/bots/style';
-import { configForGameType, DEFAULT_SESSION_CONFIG } from '../../src/table/session';
+import { replacementGenerator } from '../../src/engine/bot-random';
+import { replayCodeFromWords, type ReplayCode } from '../../src/engine/deck';
+import { fnv1a32, Xoshiro128 } from '../../src/engine/seeded-random';
+import {
+  configForGameType,
+  DEFAULT_SESSION_CONFIG,
+  drawReplacementStyle,
+  type LineUpName,
+} from '../../src/table/session';
 
 const SIZE_ERROR = new RangeError('Table size must be a whole number from 2 to 10');
 const SEAT_ERROR = new RangeError('User seat must be a whole number from 1 to the table size');
@@ -172,6 +184,53 @@ describe('resolveLineUpName and lineUpSessionConfig', () => {
       expect(() =>
         lineUpSessionConfig({ ...DEFAULT_SESSION_CONFIG, button: 7 }, 'Mixed', seats),
       ).toThrow(new RangeError(message));
+    }
+  });
+});
+
+describe('replacement bots', () => {
+  it('replacement draws and names are deterministic and validated', () => {
+    const code = replayCodeFromWords([5, 6, 8, 3]);
+    expect(replacementGenerator(code, 3).nextUint32()).toBe(
+      new Xoshiro128(fnv1a32(`${code}/3/replace`)).nextUint32(),
+    );
+    for (const lineUp of ['Mixed', 'Tough', 'Soft', 'Custom'] as const) {
+      for (const seat of [2, 3, 4]) {
+        const style = drawReplacementStyle(lineUp, 6, code, seat);
+        expect(drawReplacementStyle(lineUp, 6, code, seat)).toBe(style);
+        const styles = replacementStyles(lineUp, 6);
+        expect(style).toBe(styles[replacementGenerator(code, seat).nextIntUnbiased(styles.length)]);
+      }
+    }
+    expect(replacementStyles('Soft', 2)).toEqual(['Calling station']);
+    expect(replacementStyles('Tough', 3)).toEqual(['TAG', 'Maniac']);
+    expect(replacementStyles('Mixed', 4)).toEqual(['TAG', 'Calling station', 'Maniac']);
+
+    expect(replacementName(0)).toBe('Jay');
+    expect(replacementName(16)).toBe('Zed');
+    expect(replacementName(17)).toBe('Jay 2');
+    expect(replacementName(34)).toBe('Jay 3');
+    expect(REPLACEMENT_NAMES.filter((name) => BOT_NAMES.includes(name))).toEqual([]);
+    expect(new Set(REPLACEMENT_NAMES.map((name) => name[0])).size).toBe(17);
+    expect(Object.isFrozen(REPLACEMENT_NAMES)).toBe(true);
+    expect(nextReplacementName(0, ['Jay', 'Kit', 'You'])).toEqual({ name: 'Lou', next: 3 });
+    expect(nextReplacementName(5, [])).toEqual({ name: 'Oli', next: 6 });
+
+    for (const size of [1, 11, 2.5, Number.NaN]) {
+      expect(() => replacementStyles('Mixed', size)).toThrow(SIZE_ERROR);
+      expect(() => drawReplacementStyle('Custom', size, code, 2)).toThrow(SIZE_ERROR);
+    }
+    expect(() => replacementStyles('Loose' as LineUpName, 6)).toThrow(
+      new RangeError('Unknown line-up: Loose'),
+    );
+    expect(() => replacementStyles('Loose' as LineUpName, 11)).toThrow(SIZE_ERROR);
+    expect(() => drawReplacementStyle('Mixed', 6, 'not a code' as ReplayCode, 2)).toThrow(
+      new RangeError('Invalid replay code'),
+    );
+    const positionError = new RangeError('Name position must be a whole number of at least 0');
+    for (const position of [-1, 1.5, Number.NaN, Number.MAX_SAFE_INTEGER + 1]) {
+      expect(() => replacementName(position)).toThrow(positionError);
+      expect(() => nextReplacementName(position, [])).toThrow(positionError);
     }
   });
 });
