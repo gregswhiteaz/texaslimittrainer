@@ -1,0 +1,86 @@
+[
+  {
+    "id": "SPEC-01",
+    "verifies": "AC#1",
+    "verification": "manual \u2014 `git log --format=%s --reverse <base>..doit/TASK-1.50 -- doit/TASK-1.50/spec.md .github/` lists the spec commit first; `doit/TASK-1.50/story-doc.md` has a \"CI profile (before)\" section matching \u00a73.1.",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-02",
+    "verifies": "AC#2",
+    "verification": "acceptance `tests/ci/ci-jobs.acceptance.test.ts::ci.yml runs lint, coverage, two sweep shards, tooling and e2e as parallel jobs that keep every check`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-03",
+    "verifies": "AC#2, AC#6",
+    "verification": "acceptance `tests/toolchain/test-groups.acceptance.test.ts::unit, sweeps and tooling partition every test file exactly once`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-04",
+    "verifies": "AC#2",
+    "verification": "manual \u2014 `gh run view <run-id> --json createdAt,jobs --jq '{created: .createdAt, jobs: [.jobs[] | {name, conclusion, startedAt, completedAt}]}'` plus `gh run view <run-id> --log | grep \"Test Files\"`; the run ID is recorded in `doit/TASK-1.50/build-log.md`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-05",
+    "verifies": "AC#3",
+    "verification": "acceptance `tests/toolchain/test-groups.acceptance.test.ts::coverage runs only in test:unit, which enforces the existing thresholds`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-06",
+    "verifies": "AC#3",
+    "verification": "manual \u2014 `gh run view <run-id> --log | grep -c \"Coverage enabled\"` per job (expect 1 for `Unit tests with coverage`, 0 elsewhere)",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-07",
+    "verifies": "AC#4",
+    "verification": "acceptance `tests/ci/ci-jobs.acceptance.test.ts::tooling tests are gated on the changes job and always run on the schedule`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-08",
+    "verifies": "AC#4",
+    "verification": "unit `tests/ci/tooling-changed.test.ts::decides tooling=true only for tooling changes and fails safe`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-09",
+    "verifies": "AC#4",
+    "verification": "unit `tests/ci/tooling-changed.test.ts::every repo file a tooling test reads is a tooling path`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-10",
+    "verifies": "AC#4",
+    "verification": "manual \u2014 `gh run view <id> --json jobs --jq '.jobs[] | {name, conclusion}'` for both run IDs recorded in `doit/TASK-1.50/build-log.md`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-11",
+    "verifies": "AC#5",
+    "verification": "acceptance `tests/ci/ci-jobs.acceptance.test.ts::every job in every workflow has a 30-minute limit`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-12",
+    "verifies": "AC#6",
+    "verification": "manual \u2014 the builder runs the drill and records both run IDs in `doit/TASK-1.50/build-log.md`; the judge checks `gh run view <drill-id> --json jobs --jq '.jobs[] | {name, conclusion}'` and `gh run view <drill-id> --log-failed | grep -E \"FAIL|failed\"`, then the revert run's conclusions",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-13",
+    "verifies": "AC#2, AC#5",
+    "verification": "command `npx vitest run tests/ci/workflow.test.ts tests/ci/apt-archives-cache.test.ts tests/ci/branch-protection.acceptance.test.ts tests/ci/million-workflow.acceptance.test.ts tests/ci/apt-network.test.ts tests/ci/dependabot.acceptance.test.ts`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-14",
+    "verifies": "AC#2, AC#4",
+    "verification": "acceptance `tests/ci/branch-protection.acceptance.test.ts::README documents branch protection requiring the CI job` (edited per D-6) plus manual README review by the judge",
+    "status": "pending"
+  }
+]

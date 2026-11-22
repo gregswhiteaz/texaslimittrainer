@@ -816,6 +816,12 @@
       "event": "unlock",
       "file": "tests/playtest/throughput.acceptance.test.ts",
       "reason": "TASK-1.17 Q-1 (user, 2026-11-21): make the 100k throughput test opt-in instead of every npm test; assertions unchanged"
+    },
+    {
+      "t": "2026-11-21T20:27:31",
+      "event": "unlock",
+      "file": "tests/ci/million-workflow.acceptance.test.ts",
+      "reason": "TASK-1.50 Q-6 (user-approved): CI split into parallel jobs; intent kept or tightened; timeout 20\u219230 per AC#5"
     }
   ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-1.17",
@@ -824,7 +830,9 @@
     "1": 0
   },
   "doc_id": "doc-64",
-  "relock_pending": [],
+  "relock_pending": [
+    "tests/ci/million-workflow.acceptance.test.ts"
+  ],
   "judge_results": {
     "3": "PASS"
   }

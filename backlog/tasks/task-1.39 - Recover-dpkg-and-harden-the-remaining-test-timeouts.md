@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-19T19:55:00Z'
-updated_date: '2026-11-20T23:06:00Z'
+updated_date: '2026-11-22T03:27:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -59,6 +59,8 @@ Build: dpkg recovery in apt-lock (fake-sudo tests), runInSandbox kills the proce
 Judge R1 PASS 9/9. Cache proven: cold run 44831732531 saved 186 .debs; warm run 44832759000 'Need to get 0 B/126 MB', attempt 1 in 33.3 s.
 
 Follow-ups (Step 6a): TASK-1.47 verify + prune cached .debs; TASK-1.48 apt-lock/sandbox polish. Cold-cache slow-mirror limit stays with the user's parked CI container-image plan (memory: project-ci-speed-plan; user deferred CI restructuring until m-0 is done).
+
+Locked test unlocked for TASK-1.50 Q-6 (user-approved CI split).
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary

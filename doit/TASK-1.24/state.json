@@ -525,6 +525,12 @@
       "event": "unlock",
       "file": "tests/ci/dependabot.acceptance.test.ts",
       "reason": "TASK-1.36 Q-1 (user-approved 2026-11-19): append one it() pinning the @types/node/typescript ignore rules and the typescript group; existing lines unchanged"
+    },
+    {
+      "t": "2026-11-21T20:27:31",
+      "event": "unlock",
+      "file": "tests/ci/branch-protection.acceptance.test.ts",
+      "reason": "TASK-1.50 Q-6 (user-approved): CI split into parallel jobs; intent kept or tightened; timeout 20\u219230 per AC#5"
     }
   ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-1.24",
@@ -537,6 +543,7 @@
   },
   "doc_id": "doc-30",
   "relock_pending": [
-    "tests/ci/dependabot.acceptance.test.ts"
+    "tests/ci/dependabot.acceptance.test.ts",
+    "tests/ci/branch-protection.acceptance.test.ts"
   ]
 }

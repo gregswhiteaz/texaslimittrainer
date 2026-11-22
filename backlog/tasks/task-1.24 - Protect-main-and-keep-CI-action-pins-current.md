@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-18T07:03:00Z'
-updated_date: '2026-11-19T04:51:00Z'
+updated_date: '2026-11-22T03:27:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -55,6 +55,8 @@ Build: dependabot.yml (weekly, grouped), tools/git/prune-merged-branches.js (dry
 Judge R1 PASS 9/9. J-1-02 (AC numbering swapped) is a false alarm: judge read the pre-Q-1 task snapshot; live AC#2=cleanup, AC#3=protection match the spec. AC#1 live check (Dependabot PRs appear on GitHub) needs the user's push of main.
 
 Follow-ups (Step 6a): TASK-1.33 apply branch protection once public/Pro; TASK-1.34 confirm Dependabot + run cleanup --apply after push; TASK-1.35 harden/tidy cleanup script (lease, missing-ref test, renames).
+
+Locked test unlocked for TASK-1.50 Q-6 (user-approved CI split).
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary

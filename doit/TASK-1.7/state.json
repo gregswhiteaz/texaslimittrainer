@@ -111,6 +111,12 @@
       "event": "unlock",
       "file": "tests/ci/workflow.test.ts",
       "reason": "TASK-1.47 Q-1 (autopilot, recommended): widen only the action pin regex to allow owner/repo/subpath@<40-hex sha> # vX.Y.Z for actions/cache/restore and /save"
+    },
+    {
+      "t": "2026-11-21T20:27:31",
+      "event": "unlock",
+      "file": "tests/ci/workflow.test.ts",
+      "reason": "TASK-1.50 Q-6 (user-approved): CI split into parallel jobs; intent kept or tightened; timeout 20\u219230 per AC#5"
     }
   ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-1.7",
@@ -124,6 +130,7 @@
   },
   "doc_id": "doc-6",
   "relock_pending": [
+    "tests/ci/workflow.test.ts",
     "tests/ci/workflow.test.ts"
   ]
 }

@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-21T15:03:00Z'
+updated_date: '2026-11-22T03:27:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -101,6 +101,8 @@ User Q-1 (2026-11-21): 100k throughput test made opt-in (TLH_SLOW_TESTS=1 / npm 
 Judge R3 PASS 10/10. Follow-ups (Step 6a): WebKit logo flake → TASK-3.25 (created); live million.yml dispatch after merge (D-4); README Commands row for test:slow (J-3-02) and other infra NITs not tracked.
 
 Live dispatch (D-4), 2026-11-21: million.yml run 44916974826 on main (4d2b63a) — success; job 78 s; Shards passed 9 of 9, Hands played 1000000, Invariant violations 0, Result PASS.
+
+Locked test unlocked for TASK-1.50 Q-6 (user-approved CI split).
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary

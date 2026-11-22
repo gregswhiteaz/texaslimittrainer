@@ -1,0 +1,30 @@
+File: /Users/gregwhite/Documents/claudeworkspaces/limitholdem/backlog/tasks/task-1.50 - Cut-CI-wall-time-with-parallel-jobs-single-coverage-run-and-change-gated-tooling-tests.md
+
+Task TASK-1.50 - Cut CI wall time with parallel jobs, single coverage run and change-gated tooling tests
+==================================================
+
+Status: ○ To Do
+Priority: High
+Ordinal: 215000
+Created: 2026-11-22 03:13 (UTC)
+Labels: chore, ci, dream-limit-holdem-trainer
+Milestone: m-1
+Parent: TASK-1 - Prove the game headlessly
+
+Description:
+--------------------------------------------------
+CI is now a blocker: main's unit-test step grew from 319 s (#148) to 661 s (#161) to 869 s (#164) in about nine merges, browser tests take 150–210 s, and TASK-6.4's branch hit the 20-minute GitHub job limit once. The apt install is no longer the bottleneck (~20 s with the cache). User asked (2026-11-22) for one story doing all of: measure first, parallel CI jobs, coverage measured once, tooling tests only when tooling changes, and a 30-minute safety timeout. Must stay within the free GitHub Actions budget (no paid runners) and keep every check that runs today running somewhere.
+
+Acceptance Criteria:
+--------------------------------------------------
+- [ ] #1 Given the current CI, When the slowest test files are profiled on CI (per-file durations from a CI run), Then the top files and the share of time spent on coverage instrumentation, process-spawning tooling tests and bot/engine sweeps are recorded in the story doc before any change
+- [ ] #2 Given a push, When CI runs, Then lint+typecheck, unit tests split into at least two shards, and browser (e2e) tests run as parallel jobs, every existing check still runs, and the workflow's wall time on main is measured and is at most about half of CI #164's (about 18 min) — target 5–6 min
+- [ ] #3 Given a push, When unit tests run, Then code coverage is measured once (one shard or one dedicated job) and the existing coverage thresholds are still enforced, and the other shards run without coverage instrumentation
+- [ ] #4 Given a push that touches no tooling files (tools/, configuration files, .github/), When CI runs, Then the process-spawning tooling tests (CI scripts, git helpers, lint/toolchain config tests) are skipped; Given a push that touches any of those, or the scheduled run, Then they run
+- [ ] #5 Given the CI workflows, When a job runs, Then its time limit is 30 minutes
+- [ ] #6 Given the new CI, When a test is deliberately broken in each shard and in a tooling test (on a branch, then reverted), Then CI fails in the right job each time — nothing is silently skipped
+
+Definition of Done:
+--------------------------------------------------
+No Definition of Done items defined
+

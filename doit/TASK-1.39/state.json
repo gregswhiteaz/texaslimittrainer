@@ -625,6 +625,12 @@
       "event": "unlock",
       "file": "tests/ci/apt-archives-cache.test.ts",
       "reason": "TASK-1.47 AC#1-3 replace the cache wiring it pins"
+    },
+    {
+      "t": "2026-11-21T20:27:31",
+      "event": "unlock",
+      "file": "tests/ci/apt-archives-cache.test.ts",
+      "reason": "TASK-1.50 Q-6 (user-approved): CI split into parallel jobs; intent kept or tightened; timeout 20\u219230 per AC#5"
     }
   ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-1.39",
@@ -637,6 +643,7 @@
   },
   "doc_id": "doc-43",
   "relock_pending": [
+    "tests/ci/apt-archives-cache.test.ts",
     "tests/ci/apt-archives-cache.test.ts"
   ]
 }
