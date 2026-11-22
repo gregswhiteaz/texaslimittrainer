@@ -1,6 +1,6 @@
 import { expect, test, type Locator, type Page } from '@playwright/test';
 import { expectNoSeriousAxeViolations } from './support/axe';
-import { runUntilMyTurn } from './support/paused-clock';
+import { runUntil, runUntilMyTurn } from './support/paused-clock';
 import { buildTableScenes, openTableScene, stubReplayWords } from './support/table-harness-bundle';
 import { expectToAct } from './support/table-locators';
 
@@ -294,11 +294,11 @@ test('the table fits 1280 wide, is axe clean and makes only same-origin requests
   await expectSeatsFit(page);
   await axeWithPausedClock(page);
 
-  for (let slice = 0; slice < 400 && (await handOver(page).count()) === 0; slice++) {
-    const enabled = page.locator('[aria-label="Your actions"] button:not(:disabled)');
+  const enabled = page.locator('[aria-label="Your actions"] button:not(:disabled)');
+  await runUntil(page, async () => {
     if ((await enabled.count()) > 0) await checkOrCall(page);
-    else await page.clock.runFor(50);
-  }
+    return (await handOver(page).count()) > 0;
+  });
   await expect(handOver(page)).toBeVisible();
   await expectToAct(page, '');
   await expectSeatsFit(page);

@@ -1,0 +1,3 @@
+{"reviewer": "security", "round": 1,
+ "findings": [],
+ "summary": "Test-only change. git diff vs base 341563c touches no src/ files and no package.json/package-lock.json (no new dependencies). New e2e/support/paused-clock.ts is imported only by e2e specs; the only src/ mention is a pre-existing comment in src/ui/advice/advice-client.ts, not an import, so delayWorkerReplies cannot reach dist/. The init script interpolates its ms argument through Number() into a blob-worker source; the value is test-controlled, so no injection path. Moved vitest tests (tests/bots, tests/playtest) involve no untrusted input, secrets, file I/O or randomness concerns. No findings."}

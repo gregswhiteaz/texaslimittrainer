@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-22T15:14:00Z'
+updated_date: '2026-11-22T15:34:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-0
@@ -88,6 +88,8 @@ Build: src/table/action-bar.ts (headless bar model, exact labels, idle greyed Fo
 CI run 44413273045 (head 9bfb87d): success first push. Judge round 1: PASS 18/18, no findings; 25,004-decision own property; 14 seeded hands per browser matched an independent replay at every user turn; force-clicks, DOM re-enables and 15+ single keys did nothing; Tab+Enter/Space work; axe clean at user turn, bot turn and hand over; e2e/table.spec.ts differs from main only by the three D-4 edits. Follow-ups (Step 6a): ACs added to TASK-3.16 (primary accent decision; keep 'Your actions', move duplicated e2e helpers, drop checkOrCall fallback), TASK-3.7 (all-in labels, wider property; DOM re-enable test), TASK-8.1 (Hint only on enabled bar). No new tasks needed.
 
 Locked e2e test unlocked for TASK-1.52 Q-1 (user-approved; clock-advance only).
+
+Locked e2e test unlocked for TASK-1.52 Q-2 (user-approved; clock-advance loop bound only).
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary

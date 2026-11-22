@@ -1,5 +1,6 @@
 import { expect, test, type Page } from '@playwright/test';
 import { expectNoSeriousAxeViolations } from './support/axe';
+import { runUntil } from './support/paused-clock';
 import { stubReplayWords } from './support/table-harness-bundle';
 import { expectToAct } from './support/table-locators';
 
@@ -134,8 +135,16 @@ async function checkOrCall(page: Page): Promise<void> {
   await clickAction(page, texts.includes('Check') ? 'Check' : /^Call \$\d+$/);
 }
 
-/** Runs 50 ms slices, at most `max`, until `done` holds; returns whether it did. */
-async function slicesUntil(page: Page, done: () => Promise<boolean>, max = 400): Promise<boolean> {
+/**
+ * Runs 50 ms slices until `done` holds; returns whether it did. With `max`, at most `max` slices; without,
+ * runUntil's fake and real-time bounds (throws past them).
+ */
+async function slicesUntil(
+  page: Page,
+  done: () => Promise<boolean>,
+  max?: number,
+): Promise<boolean> {
+  if (max === undefined) return runUntil(page, done);
   for (let slice = 0; slice < max; slice++) {
     if (await done()) return true;
     await page.clock.runFor(50);
@@ -217,10 +226,10 @@ test('the result shows the winner, amount and hand name, and nothing of an uncon
   await installPausedClock(page);
   await openApp(page);
 
-  for (let slice = 0; slice < 400 && (await handOver(page).count()) === 0; slice++) {
+  await runUntil(page, async () => {
     if ((await enabledActions(page).count()) > 0) await checkOrCall(page);
-    else await page.clock.runFor(50);
-  }
+    return (await handOver(page).count()) > 0;
+  });
   await expect(handOver(page)).toBeVisible();
   await expect(tableSection(page)).toHaveAttribute('data-street', 'showdown');
   await expect(winnerLines(page)).toHaveCount(1);

@@ -5,3 +5,8 @@ Replace fixed paused-clock budgets that wait on a worker reply with the bounded 
 changes. Files: e2e/action-bar-limits.spec.ts (TASK-3.7), e2e/action-bar.spec.ts (TASK-3.2), e2e/table-display.spec.ts
 (TASK-3.3), e2e/table.spec.ts (TASK-3.1), e2e/home.spec.ts (TASK-2.1), e2e/game-type-choice.spec.ts (TASK-2.4).
 **Answer: user — approve all six (recommended).**
+
+## Q-2 — Extend to the 400-slice "play to the end" loops (code review R1 MAJOR)
+Give the loops in e2e/action-bar.spec.ts (TASK-3.2), table.spec.ts (TASK-3.1), table-display.spec.ts (TASK-3.3),
+next-hand.spec.ts (TASK-3.4) and review.spec.ts (TASK-9.1) the same real-time bound; no assertion changes.
+**Answer: user — yes, fix them in this story (recommended).**

@@ -458,6 +458,12 @@
       "event": "unlock",
       "file": "e2e/table-display.spec.ts",
       "reason": "TASK-1.52 Q-1 (user-approved): reach state via bounded runUntilMyTurn; assertions unchanged"
+    },
+    {
+      "t": "2026-11-22T08:34:21",
+      "event": "unlock",
+      "file": "e2e/table-display.spec.ts",
+      "reason": "TASK-1.52 Q-2 (user-approved): bound 400-slice play-to-end loops by real time; assertions unchanged"
     }
   ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-3.3",
@@ -467,6 +473,7 @@
     "2": 0
   },
   "relock_pending": [
+    "e2e/table-display.spec.ts",
     "e2e/table-display.spec.ts"
   ],
   "brief_history": {

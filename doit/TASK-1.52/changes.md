@@ -13,5 +13,12 @@
 - `e2e/home.spec.ts` (locked TASK-2.1) — fixed 1,000 ms loop → runUntilMyTurn; import.
 - `e2e/game-type-choice.spec.ts` (locked TASK-2.4) — 5,000 ms capped loop → runUntilMyTurn; unused toActSeats import dropped.
 - `doit/TASK-1.52/blocked-1.resolved.json`, `doit/TASK-1.52/fix-brief.md` — orchestrator's block resolution (not builder-authored).
+- `e2e/support/paused-clock.ts` (fix r1) — new runUntil(page, check, { maxFakeMs 600,000, maxRealMs 10,000, label }): 50 ms slices until check returns truthy, returns it, throws `<label> after … ms fake / … ms real`; runUntilMyTurn now reuses it (same message).
+- `e2e/action-bar.spec.ts` (locked TASK-3.2, Q-2) — two 400-slice end-of-hand loops → runUntil; import.
+- `e2e/table.spec.ts` (locked TASK-3.1, Q-2) — nextTurnPaused's 400-slice loop → runUntil ('timeout' result gone; the helper throws instead); import.
+- `e2e/table-display.spec.ts` (locked TASK-3.3, Q-2) — 400-slice end-of-hand loop → runUntil; import.
+- `e2e/next-hand.spec.ts` (locked TASK-3.4, Q-2) — slicesUntil without `max` → runUntil (the 4-slice deal-timing check keeps its slice cap); 400-slice play-to-result loop → runUntil; import.
+- `e2e/review.spec.ts` (locked TASK-9.1, Q-2) — same slicesUntil change; checkOrCallToResult and the big-blind-walk loop → runUntil (the in-loop expect kept inside the check); import.
+- `e2e/worker-delay-hand.spec.ts` (fix r1) — new: 2 s delayed replies, fold and play the hand to its end through runUntil; control showing the old 400-slice loop does not reach the end under the same delay; runUntil fake-bound trip test. Separate file because the existing worker-delay spec is locked for this task.
 
 No new dependencies.

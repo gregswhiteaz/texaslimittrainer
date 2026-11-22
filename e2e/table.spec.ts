@@ -5,7 +5,7 @@ import {
   openTableHarness,
   stubReplayWords,
 } from './support/table-harness-bundle';
-import { runUntilMyTurn } from './support/paused-clock';
+import { runUntil, runUntilMyTurn } from './support/paused-clock';
 import { expectToAct } from './support/table-locators';
 
 const ORIGIN = 'http://localhost:4173';
@@ -120,14 +120,13 @@ async function nextTurn(page: Page): Promise<'user' | 'done'> {
 }
 
 /** Under the paused clock: runs 50 ms slices until the user's turn (enabled buttons) or the end of the hand. */
-async function nextTurnPaused(page: Page): Promise<'user' | 'done' | 'timeout'> {
+async function nextTurnPaused(page: Page): Promise<'user' | 'done'> {
   const enabled = page.locator('[aria-label="Your actions"] button:not(:disabled)');
-  for (let slice = 0; slice < 400; slice++) {
+  return runUntil(page, async () => {
     if ((await enabled.count()) > 0) return 'user';
     if ((await handOver(page).count()) > 0) return 'done';
-    await page.clock.runFor(50);
-  }
-  return 'timeout';
+    return null;
+  });
 }
 
 /** Clicks `name` and waits until the click has been applied. */

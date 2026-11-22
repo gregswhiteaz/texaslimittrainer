@@ -1,6 +1,6 @@
 import { expect, test, type Page } from '@playwright/test';
 import { expectNoSeriousAxeViolations } from './support/axe';
-import { runUntilMyTurn } from './support/paused-clock';
+import { runUntil, runUntilMyTurn } from './support/paused-clock';
 import { stubReplayWords } from './support/table-harness-bundle';
 import { expectToAct } from './support/table-locators';
 
@@ -174,9 +174,7 @@ test('the bar is disabled and submits nothing off-turn or after the hand', async
   await runUntilMyTurn(real);
   await expectToAct(real, '5');
   await clickAction(real, 'Fold');
-  for (let slice = 0; slice < 400 && (await handOver(real).count()) === 0; slice++) {
-    await real.clock.runFor(50);
-  }
+  await runUntil(real, async () => (await handOver(real).count()) > 0);
   await expect(handOver(real)).toBeVisible();
   const finalCount = await actionCount(real);
   expect(await buttonTexts(real)).toEqual(IDLE);
@@ -241,11 +239,11 @@ test('action bar is axe clean and makes no outside requests', async ({ page }) =
   expect(await actionCount(page)).toBe(5);
   await expectToAct(page, '6');
 
-  for (let slice = 0; slice < 400 && (await handOver(page).count()) === 0; slice++) {
-    const enabled = page.locator('[aria-label="Your actions"] button:not(:disabled)');
+  const enabled = page.locator('[aria-label="Your actions"] button:not(:disabled)');
+  await runUntil(page, async () => {
     if ((await enabled.count()) > 0) await checkOrCall(page);
-    else await page.clock.runFor(50);
-  }
+    return (await handOver(page).count()) > 0;
+  });
   await expect(handOver(page)).toBeVisible();
   await expectAll(page, 'disabled');
   await axeWithPausedClock(page);

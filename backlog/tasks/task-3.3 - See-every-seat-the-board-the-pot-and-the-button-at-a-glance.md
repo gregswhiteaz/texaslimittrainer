@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-22T15:14:00Z'
+updated_date: '2026-11-22T15:34:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-0
@@ -100,6 +100,8 @@ Build: src/table/table-view.ts (headless view model from the user's PlayerView o
 CI run 44426860260 (head 202c194): success. Judge round 1: PASS 22/22, no blocking; 3720 seeded states (3-10 seats, every user seat and button) matched an independent replay; user bottom centre at seats 1-6; 4 pinned hands per browser DOM matched replay; replay code and bot cards never in source/title/accessibility tree; Leave table → Home with fresh session after; no horizontal scroll; axe clean on 42 scenes per browser. Follow-ups (Step 6a): ACs added to TASK-3.4 (handNumber, pot after award, '?? 0' fallback), TASK-10.1 (Leave → Session Report), TASK-10.2 (mid-hand confirm, REQ-004.7), TASK-12.2 (hide style label), TASK-2.8 (style selectors and policies), TASK-2.2 (position names 2-5, 7-10), TASK-3.16 (10 seats fit, one locator module), TASK-4.4 (drawn dealer keeps hooks), TASK-4.5 (chips vs 'This street'). No new tasks needed.
 
 Locked e2e test unlocked for TASK-1.52 Q-1 (user-approved; clock-advance only).
+
+Locked e2e test unlocked for TASK-1.52 Q-2 (user-approved; clock-advance loop bound only).
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary

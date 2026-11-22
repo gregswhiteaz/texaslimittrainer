@@ -496,6 +496,12 @@
       "event": "unlock",
       "file": "e2e/review.spec.ts",
       "reason": "TASK-1.9 Q-4 (autopilot, recommended): update expected amounts/messages for all-in support (uncalled bets returned, stack floor bigBlind+1); nothing removed or loosened"
+    },
+    {
+      "t": "2026-11-22T08:34:22",
+      "event": "unlock",
+      "file": "e2e/review.spec.ts",
+      "reason": "TASK-1.52 Q-2 (user-approved): bound 400-slice play-to-end loops by real time; assertions unchanged"
     }
   ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-9.1",
@@ -509,6 +515,7 @@
   },
   "relock_pending": [
     "tests/table/review.acceptance.test.ts",
+    "e2e/review.spec.ts",
     "e2e/review.spec.ts"
   ]
 }

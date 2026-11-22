@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-19T02:21:00Z'
+updated_date: '2026-11-22T15:34:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-0
@@ -93,6 +93,8 @@ AC added from TASK-3.4 follow-up (doc-25).
 Build: src/table/review.ts (opensReview, reviewEntries graded once at hand end), ReviewPanel (Hand #N review, Decisions list, drawn board, exact-amount 'You/Advice' line, text grade badges per Q-1), dealNext + holdNextHand, Deal next hand on the table side, Close keeps the hold; stable onHandComplete; no earlier tests edited; e2e 86 passed Chromium + WebKit; gate PASS. Screenshots: doit/TASK-9.1/review-open.png, review-closed.png (vertical scroll at 1280x720, fit is TASK-3.16).
 
 CI run 44441353985: attempt 1 failed only at 'Install Playwright system dependencies' (dpkg lock held by another apt-get on the runner; same on main run 44434902016); attempt 2 success incl. E2E. Judge round 1: PASS 14/14, no blocking; 400 seeded hands headless: review opened exactly per REQ-043.12, all 817 entries matched independent grading; 40 browser hands: no-panel hands dealt in 1500-1550 ms, panel hands held 10 s, Deal next hand (incl. double-click and Enter) dealt exactly one hand, Leave while held dealt nothing, axe clean. Follow-ups (Step 6a): created TASK-1.29 (CI apt lock); ACs added to TASK-3.16, 9.3, 9.4, 9.7, 9.2, 2.2, 13.11, 3.9.
+
+Locked e2e test unlocked for TASK-1.52 Q-2 (user-approved; clock-advance loop bound only).
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary

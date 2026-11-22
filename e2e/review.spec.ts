@@ -1,5 +1,6 @@
 import { expect, test, type Locator, type Page } from '@playwright/test';
 import { expectNoSeriousAxeViolations } from './support/axe';
+import { runUntil } from './support/paused-clock';
 
 // Helpers copied from next-hand.spec.ts and table-display.spec.ts; TASK-3.16 moves them into e2e/support.
 
@@ -148,8 +149,16 @@ async function checkOrCall(page: Page): Promise<void> {
   await clickAction(page, texts.includes('Check') ? 'Check' : /^Call \$\d+$/);
 }
 
-/** Runs 50 ms slices, at most `max`, until `done` holds; returns whether it did. */
-async function slicesUntil(page: Page, done: () => Promise<boolean>, max = 400): Promise<boolean> {
+/**
+ * Runs 50 ms slices until `done` holds; returns whether it did. With `max`, at most `max` slices; without,
+ * runUntil's fake and real-time bounds (throws past them).
+ */
+async function slicesUntil(
+  page: Page,
+  done: () => Promise<boolean>,
+  max?: number,
+): Promise<boolean> {
+  if (max === undefined) return runUntil(page, done);
   for (let slice = 0; slice < max; slice++) {
     if (await done()) return true;
     await page.clock.runFor(50);
@@ -163,10 +172,10 @@ async function slices(page: Page, count: number): Promise<void> {
 
 /** Checks or calls every turn until the result appears. */
 async function checkOrCallToResult(page: Page): Promise<void> {
-  for (let slice = 0; slice < 400 && (await handOver(page).count()) === 0; slice++) {
+  await runUntil(page, async () => {
     if ((await enabledActions(page).count()) > 0) await checkOrCall(page);
-    else await page.clock.runFor(50);
-  }
+    return (await handOver(page).count()) > 0;
+  });
   await expect(handOver(page)).toBeVisible();
 }
 
@@ -309,10 +318,11 @@ test('a preflop fold or a big-blind walk opens no review and the next hand deals
 
   await expect(header(page)).toHaveText(`${HEADER}4`);
   expect(await dealerSeats(page)).toEqual(['3']);
-  for (let slice = 0; slice < 400 && (await handOver(page).count()) === 0; slice++) {
+  await runUntil(page, async () => {
+    if ((await handOver(page).count()) > 0) return true;
     expect(await enabledActions(page).count()).toBe(0);
-    await page.clock.runFor(50);
-  }
+    return false;
+  });
   await expect(winnerLines(page)).toHaveText('You win $4');
   await expectNoReview(page);
   await expectNextDeal(page, 5);

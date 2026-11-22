@@ -1,25 +1,44 @@
 import type { Page } from '@playwright/test';
 
 /**
- * Under a paused clock: runs 50 ms fake slices until a Your actions button is enabled. Each slice waits
- * for the previous one, so a bot timer set after a real-time worker reply still gets its turn.
- * Throws past either bound; real time uses Node's clock, which the page clock does not fake.
+ * Under a paused clock: runs 50 ms fake slices until `check` returns a truthy value, and returns it. Each
+ * slice waits for the previous one, so a bot timer set after a real-time worker reply still gets its turn.
+ * Throws `${label} after … ms fake / … ms real` past either bound; real time uses Node's clock, which the
+ * page clock does not fake.
  */
-export async function runUntilMyTurn(
+export async function runUntil<T>(
   page: Page,
-  { maxFakeMs = 600_000, maxRealMs = 10_000 }: { maxFakeMs?: number; maxRealMs?: number } = {},
-): Promise<void> {
-  const enabled = page.locator('[aria-label="Your actions"] button:not(:disabled)');
+  check: () => Promise<T | null>,
+  {
+    maxFakeMs = 600_000,
+    maxRealMs = 10_000,
+    label = 'runUntil: condition not met',
+  }: { maxFakeMs?: number; maxRealMs?: number; label?: string } = {},
+): Promise<T> {
   const start = Date.now();
   let fake = 0;
-  while ((await enabled.count()) === 0) {
+  for (;;) {
+    const result = await check();
+    if (result) return result;
     const real = Date.now() - start;
     if (fake >= maxFakeMs || real >= maxRealMs) {
-      throw new Error(`runUntilMyTurn: not my turn after ${fake} ms fake / ${real} ms real`);
+      throw new Error(`${label} after ${fake} ms fake / ${real} ms real`);
     }
     await page.clock.runFor(50);
     fake += 50;
   }
+}
+
+/** runUntil a Your actions button is enabled. */
+export async function runUntilMyTurn(
+  page: Page,
+  bounds: { maxFakeMs?: number; maxRealMs?: number } = {},
+): Promise<void> {
+  const enabled = page.locator('[aria-label="Your actions"] button:not(:disabled)');
+  await runUntil(page, async () => (await enabled.count()) > 0, {
+    ...bounds,
+    label: 'runUntilMyTurn: not my turn',
+  });
 }
 
 /**

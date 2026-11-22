@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-22T14:55:00Z'
-updated_date: '2026-11-22T15:18:00Z'
+updated_date: '2026-11-22T15:24:00Z'
 labels:
   - follow-up
   - bug
@@ -49,4 +49,6 @@ Full spec: doit/TASK-1.52/spec.md
 
 <!-- SECTION:NOTES:BEGIN -->
 Build blocked on A-3 vs SPEC-04 (60 s fake cap exhausted in ~3 s real). Resolved by orchestrator: maxFakeMs default 600,000; 10 s real bound governs (recorded deviation).
+
+Build: slow line-up and calling-station tests moved to sweeps (unit versions keep every expect, 1.7 s / 1 ms); runUntilMyTurn helper (50 ms slices, 600 s fake / 10 s real cap); six locked e2e files switched (clock advance only); worker-delay.spec (2 s replies: control fails, helper passes, bound throws); e2e twice green; gate PASS.
 <!-- SECTION:NOTES:END -->
