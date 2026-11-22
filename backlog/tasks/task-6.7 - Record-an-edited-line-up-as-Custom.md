@@ -1,10 +1,11 @@
 ---
 id: TASK-6.7
 title: Record an edited line-up as Custom
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-17T23:22:00Z'
+updated_date: '2026-11-22T16:03:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -62,3 +63,14 @@ Plan key: E06-S07 · Dream: limit-holdem-trainer
 - [ ] #11 Story documentation is written and published to Backlog.md
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. resolveLineUpName(preset, seats) in src/bots/lineup.ts: preset name when every bot style matches seatLineUp, else Custom.
+2. lineUpSessionConfig(base, preset, seats): SessionConfig with resolved name, seats with names/styles, base gameType/stake/speed/button; RangeError on bad input.
+3. Acceptance tests (new file) + unit tests for coverage; LineUpName doc comment fixed.
+4. DoD#6: 10k --lineup mixed playtest once, 0 violations.
+
+Full spec: doit/TASK-6.7/spec.md
+<!-- SECTION:PLAN:END -->
