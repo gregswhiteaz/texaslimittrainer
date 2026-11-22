@@ -4,7 +4,7 @@ title: Report each bot style's VPIP, PFR and aggression against its band
 status: To Do
 assignee: []
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-17T23:22:00Z'
+updated_date: '2026-11-22T01:16:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -46,6 +46,7 @@ Plan key: E06-S09 · Dream: limit-holdem-trainer
 - [ ] #3 Given a style whose actions in a run are 2 preflop raises, 3 postflop bets, 1 postflop raise and 4 postflop calls, When its aggression is reported, Then it is 50.0% because preflop actions are excluded [REQ-027.6]
 - [ ] #4 Given a run with `--check-styles`, When it reports, Then it lists the action counts for every spot type each style marks as mixed and exits non-zero if any of those spot types used only one action [REQ-028.3]
 - [ ] #5 Given a test style file whose measured stats are all inside its bands, When the playtest runs with `--check-styles`, Then it prints each stat with its band and exits 0 [REQ-027.5]
+- [ ] #6 Given aggression is measured per style, When the report runs, Then it is measured after TASK-7.8 (postflop value betting) in mixed line-ups — a lone Maniac among TAGs reads 100% today because no bot bets postflop (TASK-6.4 finding)
 <!-- AC:END -->
 
 ## Definition of Done
@@ -63,3 +64,9 @@ Plan key: E06-S09 · Dream: limit-holdem-trainer
 - [ ] #11 Story documentation is written and published to Backlog.md
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+AC added from TASK-6.4 follow-up
+<!-- SECTION:NOTES:END -->

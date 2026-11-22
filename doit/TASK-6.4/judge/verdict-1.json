@@ -1,0 +1,45 @@
+{
+  "verdict": "FAIL",
+  "round": 1,
+  "test_suite": "PASS",
+  "end_to_end": "PASS",
+  "missing_results": [],
+  "failed": [
+    "SPEC-11"
+  ],
+  "blocking_findings": [
+    "J-1-02"
+  ],
+  "escalate": true,
+  "escalate_items": [
+    "SPEC-11"
+  ],
+  "check_args": [
+    "--check-ac",
+    "1",
+    "--check-ac",
+    "2",
+    "--check-ac",
+    "3",
+    "--check-ac",
+    "4",
+    "--check-ac",
+    "5",
+    "--check-dod",
+    "6"
+  ],
+  "unproven_ac": [],
+  "unproven_dod": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+  ]
+}

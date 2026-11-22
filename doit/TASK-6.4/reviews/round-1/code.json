@@ -1,0 +1,21 @@
+{"reviewer": "code", "round": 1,
+ "rubric": [
+  {"item": "SPEC-01 correctness", "result": "pass"}, {"item": "SPEC-01 test strength", "result": "pass"},
+  {"item": "SPEC-02 correctness", "result": "pass"}, {"item": "SPEC-02 test strength", "result": "pass"},
+  {"item": "SPEC-03 correctness", "result": "pass"}, {"item": "SPEC-03 test strength", "result": "pass"},
+  {"item": "SPEC-04 correctness", "result": "pass"}, {"item": "SPEC-04 test strength", "result": "pass"},
+  {"item": "SPEC-05 correctness", "result": "pass"}, {"item": "SPEC-05 test strength", "result": "pass"},
+  {"item": "SPEC-06 correctness", "result": "pass"}, {"item": "SPEC-06 test strength", "result": "pass"},
+  {"item": "SPEC-07 correctness", "result": "pass"}, {"item": "SPEC-07 test strength", "result": "pass"},
+  {"item": "SPEC-08 correctness", "result": "pass"}, {"item": "SPEC-08 test strength", "result": "pass"},
+  {"item": "SPEC-09 correctness", "result": "pass"}, {"item": "SPEC-09 test strength", "result": "pass"},
+  {"item": "SPEC-10 correctness", "result": "pass"}, {"item": "SPEC-10 test strength", "result": "pass"},
+  {"item": "SPEC-11 correctness", "result": "pass"}, {"item": "SPEC-11 test strength", "result": "pass"},
+  {"item": "scope", "result": "pass"}, {"item": "concision", "result": "pass"}, {"item": "clarity", "result": "pass"}],
+ "findings": [
+  {"fingerprint": "src/bots/maniac.ts:unreachable-missing-hero-branch", "severity": "NIT", "file": "src/bots/maniac.ts", "line": 27,
+   "issue": "`hero === undefined ? 0 : ...` guards a case that can't happen (the view always contains the acting seat); it is the one uncovered branch in maniac.ts.",
+   "evidence": "Gate coverage: maniac.ts branch 95%, uncovered line 27. Same guard exists in calling-station.ts:31, so it mirrors the established pattern the spec asked to follow.",
+   "fix": "Leave as is for consistency with decideCallingStation, or drop the guard in both bots in a later cleanup."}
+ ],
+ "summary": "Clean. Format widening matches D-1 exactly (five new triples only; messages unchanged; stored instead taken from the validated input); tag.json and calling-station.json still parse to their exported styles. decideManiac follows D-4/A-2: one draw only when a deviation applies (including capped views), none otherwise, instead -> legal call -> advice move. Probed: all-Maniac 6-max, 150 hands -> 0 invariant violations, 0 illegal actions in 2886 decisions, 13 uncapped no-raise spots (REQ-016.5 / short stack) correctly fell back to the legal call. Heads-up isn't reachable (6-max chart throws for 2 seats, pre-existing). Tests are non-vacuous: Examples A-G pinned with seeds/draws; capped stub-0 loop covers fold-advice caps (kills an advice-move fallback); draw-count stubs kill skip-draw-when-illegal; noBet case kills an unconditional call fallback; SPEC-10's flop view differs from TAG at seeds 12345/4294967295 and SPEC-06 pins raise 12 vs call 4. SPEC-07 recorded deviation is sound: postflop/call/<other> is itself unsupported and reports the unsupported message before the duplicate check, so the different-instead duplicate can only be shown with preflop/fold (raise, call); the same-instead postflop/call duplicate is also tested. Playtest SHA re-run: aacd5e94...e01 (unchanged). 762 vs 750 lines (+1.6%) is the 427-line locked acceptance file; not a concern."}

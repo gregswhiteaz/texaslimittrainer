@@ -3,66 +3,66 @@
     "id": "SPEC-01",
     "verifies": "AC#1, DoD#9",
     "verification": "acceptance `tests/bots/maniac.acceptance.test.ts::the Maniac style file holds its deviation parameters and a description`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-02",
     "verifies": "AC#2, DoD#1",
     "verification": "acceptance `tests/bots/maniac.acceptance.test.ts::with no bet to face where the advice is check the Maniac bets at more points than TAG`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-03",
     "verifies": "AC#3, DoD#1",
     "verification": "acceptance `tests/bots/maniac.acceptance.test.ts::where the advice is call the Maniac raises at more points than TAG`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-04",
     "verifies": "AC#4",
     "verification": "acceptance `tests/bots/maniac.acceptance.test.ts::changing the file's raise probability changes the raise rate with no code change`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-05",
     "verifies": "AC#5",
     "verification": "acceptance `tests/bots/maniac.acceptance.test.ts::on a capped street an aggressive Maniac calls and the action is legal`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-06",
     "verifies": "AC#2, AC#3",
     "verification": "acceptance `tests/bots/maniac.acceptance.test.ts::a Maniac seat in the worker plays the Maniac decision`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-07",
     "verifies": "AC#1",
     "verification": "unit `tests/bots/style.test.ts::parseStyle validates deviations`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-08",
     "verifies": "DoD#6",
     "verification": "command `npm run -s playtest -- --hands 10000 --seed 42 --size 6 | shasum -a 256`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-09",
     "verifies": "AC#2, AC#3, AC#5",
     "verification": "unit `tests/bots/maniac.test.ts::Maniac draws once only at deviating decisions`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-10",
     "verifies": "AC#5",
     "verification": "unit `tests/table/advice-service.test.ts::default bot decision dispatches the Maniac`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-11",
     "verifies": "DoD#1, DoD#2, DoD#3, DoD#4, DoD#5, DoD#7, DoD#8, DoD#9, DoD#10, DoD#11, DoD#12",
     "verification": "command `npm run lint && npm run typecheck && npm test`",
-    "status": "pending"
+    "status": "fail"
   }
 ]

@@ -10,7 +10,7 @@ import { formatCard } from '../../src/engine/cards';
 import type { ReplayCode } from '../../src/engine/deck';
 import type { Action } from '../../src/engine/hand';
 import type { PlayerView } from '../../src/engine/player-view';
-import { randomMovePolicy, seatGenerator, seededTagPolicy } from '../../src/playtest/policy';
+import { randomMovePolicy, seatGenerator } from '../../src/playtest/policy';
 import { handReplayCode, runPlaytest } from '../../src/playtest/runner';
 import { handleAdviceRequest } from '../../src/table/advice-service';
 import maniac from '../../src/bots/styles/maniac.json' with { type: 'json' };
@@ -65,7 +65,9 @@ function collect(): Points {
   const summary = runPlaytest({ hands: 200, seed: 61, size: 6 }, undefined, {
     makePolicy: (code, seat) => {
       if (seat !== SEAT) return randomMovePolicy(seatGenerator(code, seat));
-      const policy = seededTagPolicy(code);
+      // seededTagPolicy's decision with the memoized equity: the same actions, each equity computed once.
+      const policy = (view: PlayerView) =>
+        decideTag(view, { random: botRandom(botDecisionSeed(code, view)), equity });
       return (view) => {
         const action = recommend(view, { equity }).action;
         const due = owed(view);

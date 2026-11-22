@@ -4,7 +4,7 @@ title: Seat bots by line-up preset with unique names
 status: To Do
 assignee: []
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-17T23:22:00Z'
+updated_date: '2026-11-22T01:16:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -48,6 +48,7 @@ Plan key: E06-S06 · Dream: limit-holdem-trainer
 - [ ] #5 Given each preset and every table size from 2 to 10, When bots are seated, Then no two bots share a display name [REQ-009.4]
 - [ ] #6 Given `npm run playtest -- --hands 10000 --seed 42 --size 9 --lineup tough`, When it runs, Then seat 2 is the Maniac, seats 3 to 9 are TAG, zero invariant violations are reported and it exits 0 [REQ-062.1, REQ-009.1]
 - [ ] #7 Given `npm run playtest -- --lineup` with a name other than mixed, tough or soft, When it starts, Then it prints the valid line-up names and exits non-zero without playing [REQ-062.1]
+- [ ] #8 Given a line-up with Maniacs seated, When a 10,000-hand playtest runs, Then its run time is measured and kept practical (TASK-6.4 measured ~168 s vs ~1 s all-TAG, from postflop equity runs) — e.g. equity caching or keeping such runs in the opt-in slow group
 <!-- AC:END -->
 
 ## Definition of Done
@@ -65,3 +66,9 @@ Plan key: E06-S06 · Dream: limit-holdem-trainer
 - [ ] #11 Story documentation is written and published to Backlog.md
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+AC added from TASK-6.4 follow-up
+<!-- SECTION:NOTES:END -->

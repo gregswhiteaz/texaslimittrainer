@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-22T01:04:00Z'
+updated_date: '2026-11-22T01:16:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -16,6 +16,7 @@ references:
 documentation:
   - doc-1
   - doc-2
+  - doc-76
 parent_task_id: TASK-6
 priority: high
 type: feature
@@ -77,4 +78,14 @@ Full spec: doit/TASK-6.4/spec.md
 
 <!-- SECTION:NOTES:BEGIN -->
 Autopilot Q-1..Q-3 auto-accepted (qa.md).
+
+Build: aggressive deviation pairs in the style format; maniac.json + decideManiac (capped → call); worker dispatch; examples A–G match; playtest byte-identical; 557 tests, e2e 130; gate PASS. Recorded deviation: SPEC-07 'different instead' duplicate shown with preflop/fold (postflop/call has only one legal replacement).
+
+Follow-ups (Step 6a): ACs added to TASK-6.11 (aggression after TASK-7.8) and TASK-6.6 (Maniac playtest speed).
 <!-- SECTION:NOTES:END -->
+
+## Final Summary
+
+<!-- SECTION:FINAL_SUMMARY:BEGIN -->
+Added the Maniac bot: widened the deviation format (five new triples, v1 kept), shipped maniac.json (0.45/0.6/0.6/0.85/0.85 with justifications), decideManiac, and worker dispatch for 'Maniac'. Verified: npm test 557 passed (coverage 96.98%), lint/typecheck clean, e2e 130 passed, Examples A-G pinned, playtest baseline unchanged (aacd5e94...e01), review 0 blocking, security clean. Assumptions to review: Q-1 format widening, Q-2 values (two-Maniac 10k prototype VPIP 56.0%, PFR 53.3%, aggression 84.9%), Q-3 worker dispatch, A-1..A-8. Follow-ups: [trainer] aggression depends on line-up until TASK-7.8 (lone Maniac 100%; TASK-6.11/6.17); [trainer] seated Maniacs make 10k-hand playtests ~168 s vs ~1 s (TASK-6.6).
+<!-- SECTION:FINAL_SUMMARY:END -->

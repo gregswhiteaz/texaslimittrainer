@@ -4,20 +4,32 @@
   "branch": "doit/TASK-6.4",
   "base_commit": "e6efdf3d716d97242e8728832e10d9498a2391b2",
   "started": "2026-11-21T17:50:48",
-  "review_round": 0,
-  "judge_round": 0,
-  "sendbacks": 0,
-  "gate_runs": 2,
+  "review_round": 1,
+  "judge_round": 1,
+  "sendbacks": 1,
+  "gate_runs": 3,
   "questions": 3,
   "assumptions": 0,
   "escalations": 0,
-  "item_failures": {},
+  "item_failures": {
+    "SPEC-01": 0,
+    "SPEC-02": 0,
+    "SPEC-03": 0,
+    "SPEC-04": 0,
+    "SPEC-05": 0,
+    "SPEC-06": 0,
+    "SPEC-07": 0,
+    "SPEC-08": 0,
+    "SPEC-09": 0,
+    "SPEC-10": 0,
+    "SPEC-11": 3
+  },
   "locked_tests": {
-    "tests/bots/maniac.acceptance.test.ts": "da35717d991873632a1ccf86ace4d67db62b4eca4ec83306365ea550292d86b6"
+    "tests/bots/maniac.acceptance.test.ts": "e4b22be74f6bc9d6c7ce6bb0378394be433a05880c978c8970ed2de8eef7e52b"
   },
   "test_snapshot": {
     "tests/bots/maniac.acceptance.test.ts": {
-      "sha": "da35717d991873632a1ccf86ace4d67db62b4eca4ec83306365ea550292d86b6",
+      "sha": "e4b22be74f6bc9d6c7ce6bb0378394be433a05880c978c8970ed2de8eef7e52b",
       "asserts": 103,
       "skips": 0
     },
@@ -962,7 +974,27 @@
       "skips": 0
     }
   },
-  "history": [],
+  "history": [
+    {
+      "t": "2026-11-21T18:41:38",
+      "event": "unlock",
+      "file": "tests/bots/maniac.acceptance.test.ts",
+      "reason": "Judge J-1-02 (CI timeout): option 1 \u2014 collect() seat 1 uses decideTag with the shared equity memo instead of seededTagPolicy; identical actions; assertions unchanged"
+    }
+  ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-6.4",
-  "spec_sha256": "41ed7ee38437cff3a9338e48f9391972edec57ff7ba552985bbcb74e218556be"
+  "spec_sha256": "41ed7ee38437cff3a9338e48f9391972edec57ff7ba552985bbcb74e218556be",
+  "review_findings": {
+    "1": 0
+  },
+  "doc_id": "doc-76",
+  "judge_results": {
+    "1": "FAIL"
+  },
+  "brief_history": {
+    "SPEC-11": [
+      "judge r1"
+    ]
+  },
+  "relock_pending": []
 }

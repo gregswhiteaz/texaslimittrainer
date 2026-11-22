@@ -1,0 +1,97 @@
+{
+ "round": 1,
+ "test_suite": {
+  "command": "npm test",
+  "result": "PASS",
+  "passed": 557,
+  "failed": 0,
+  "notes": "159 files passed / 1 skipped; 557 tests passed / 7 skipped. Coverage all files 96.98% stmts; bots 99.35%; maniac.ts 100% lines (95% branch, unreachable hero guard). npm run lint and npm run typecheck clean. npm run e2e: 130 passed, 12 skipped. CI run 44970396930 (CI workflow) on 7bbf6ab: CANCELLED at the 20m job timeout during E2E; its Test step passed (563 passed / 1 skipped) but took 942.6 s vs 466.6 s on TASK-3.27; Visual workflow run 44970396927 succeeded."
+ },
+ "end_to_end": {
+  "command": "npm run -s playtest -- --hands 10000 --seed 42 --size 6 (twice)",
+  "result": "PASS",
+  "expected": "Player actions: 88920, Invariant violations: 0, stdout SHA-256 aacd5e94dccba90b4b50936ba1bb2b08aff2bda37d427efdfb56a6b07e488e01, identical across runs",
+  "actual": "Both runs: SHA-256 aacd5e94dccba90b4b50936ba1bb2b08aff2bda37d427efdfb56a6b07e488e01, Player actions 88920, Invariant violations 0"
+ },
+ "integrity": {
+  "result": "PASS",
+  "notes": "doit.py test-integrity exit 0 (locked maniac.acceptance.test.ts hash matches). Diff of src: style.ts (types + 5 triples + stored instead), maniac.ts, maniac.json, advice-service.ts dispatch. No test-input recognition, hard-coded results, early exits, mocks of the unit under test or overridden equality. Unit-test edits replace the preflop/fold/raise rejection with preflop/fold/bet and remove 'Maniac' from the TAG list, both as specified. Mutants (exact text replacement, restored): skip draw at illegal aggression, drop call fallback, ignore style option, Maniac->TAG dispatch, json 0.85->0.8, instead stored as call, always draw, bet->raise substitution, extra accepted triple: all killed. One mutant survived: Maniac never deviates at river check points (LOW test-strength finding J-1-01). git diff --stat -- src e2e tests empty after mutation run."
+ },
+ "items": [
+  {
+   "spec": "SPEC-01",
+   "result": "PASS",
+   "evidence": "Acceptance test passes and asserts exact deviation table, word counts, reparse equality, missing-description and 1.5-probability messages; json 0.85->0.8 mutant killed. Holdout: MANIAC_STYLE name, empty mixedSpots, deviation table = D-2; short description rejected with the description message."
+  },
+  {
+   "spec": "SPEC-02",
+   "result": "PASS",
+   "evidence": "Acceptance test pins Examples A (bet 4 vs TAG check), D (check) and E (raise 8). Holdout with own views (seed 977, seat 3) and codes 8801: Maniac bet/raise 4984 vs TAG 0 over 6000 check points; postflop check->bet rate 0.868 vs 0.85 and preflop check->raise 0.525 (n=200) vs 0.6, within statistical bounds; every action legal."
+  },
+  {
+   "spec": "SPEC-03",
+   "result": "PASS",
+   "evidence": "Acceptance test pins Examples B (raise 12 vs call 4) and C (raise 16 vs call 8). Holdout codes 8802: Maniac raises 4063 vs TAG 11 over 6000 call points; postflop call->raise 0.869 vs 0.85, preflop call->raise 0.542/0.621 (two code sets) vs 0.6, preflop fold->raise 3692/8200 = 0.450 vs 0.45."
+  },
+  {
+   "spec": "SPEC-04",
+   "result": "PASS",
+   "evidence": "Acceptance test asserts lowered count, p=0 == removed, p=1 raises every legal preflop call point; ignore-style mutant killed. Holdout via parseStyle on modified JSON copies, no code change: preflop call p=0.6/0.2/0.9 -> rates 0.621/0.211/0.919; postflop call p=0.85/0.3 -> 0.848/0.296; p=0 -> 0 raises; p=1 -> 1093/1093."
+  },
+  {
+   "spec": "SPEC-05",
+   "result": "PASS",
+   "evidence": "Acceptance test with always-aggressive stub requires the exact legal call at every capped view (incl. preflop fold advice) and Examples F (call 14 vs TAG fold) and G; drop-call-fallback mutant killed. Holdout: 1400 capped decisions, 0 raises, all legal; 240 aggressive draws on fold-advice caps became the legal call; independent oracle (instead if legal, else legal call, else advice) matched all 18320 decisions, including uncapped no-re-raise/short-stack spots."
+  },
+  {
+   "spec": "SPEC-06",
+   "result": "PASS",
+   "evidence": "Acceptance test: worker 'Maniac' at Example B returns raise 12, 'TAG' call 4, and equals decideManiac over 10000 check points; dispatch mutant killed. Holdout: worker 'Maniac' == decideManiac at 1600/1600 (400 views x 4 seeds incl. 0 and 4294967295), differs from TAG at 887; bad seed -> ok:false TypeError."
+  },
+  {
+   "spec": "SPEC-07",
+   "result": "PASS",
+   "evidence": "Unit test passes; extra-triple and instead-as-call mutants killed. Recorded deviation (different-instead duplicate shown with preflop/fold) judged sound: postflop/call has only one supported instead, so [postflop/call/raise, postflop/call/bet] is rejected (holdout: unsupported-deviation message for the bet entry), and the duplicate check keys on (street, advice) regardless of instead (holdout: preflop/fold call then raise -> 'lists deviation preflop fold twice'). Holdout: all 8 triples accepted keeping instead; 12 malformed triples (incl. river street, uppercase RAISE, check->check) rejected with exactly the unsupported message; probabilities -0.01, 1.0001, NaN, '0.5', null, Infinity rejected with the invalid-probability message; missing/numeric instead rejected; findDeviation postflop/check -> bet, postflop/fold and preflop/raise -> undefined."
+  },
+  {
+   "spec": "SPEC-08",
+   "result": "PASS",
+   "evidence": "Playtest run twice -> SHA-256 aacd5e94...e01, 88920 actions, 0 violations. Seated unit test passes. Holdout playtests seed 2024: all-Maniac 150 hands, 2932 actions, 0 violations, 0 illegal, VPIP 53.0, PFR 42.7 (bands 50-75 / 35-60), postflop aggression 64.4; Maniacs at seats 2,4 for 300 hands, 3530 actions, 0 violations, VPIP 54.3, PFR 51.5, aggression 83.1."
+  },
+  {
+   "spec": "SPEC-09",
+   "result": "PASS",
+   "evidence": "Unit test passes; skip-draw and always-draw mutants killed. Holdout with counting wrapper over real seeded generators: exactly one draw at every deviating (street, advice) decision including capped views, zero at preflop raise and postflop fold advice, over 18320 decisions."
+  },
+  {
+   "spec": "SPEC-10",
+   "result": "PASS",
+   "evidence": "Unit test passes; dispatch mutant killed. Holdout: exact-name 'Maniac' routes to decideManiac; 'maniac' and 'Maniac ' do not (TAG or ok:false); 'Calling station' -> decideCallingStation and 'TAG'/'Rock' -> decideTag at 1600/1600. Base-vs-HEAD fingerprint of TAG, Calling station and worker TAG/station/Rock answers over 197 views x 6 codes is identical (b85172e6...)."
+  },
+  {
+   "spec": "SPEC-11",
+   "result": "FAIL",
+   "evidence": "Local lint, typecheck, npm test (coverage thresholds hold, bots import-boundary passes) and npm run e2e (130 passed) are clean; story doc doc-76 present with required content. But CI run 44970396930 for 7bbf6ab ended CANCELLED: \"The job has exceeded the maximum execution time of 20m0s\" during E2E, after a 15m44s Test step (vitest Duration 942.60s vs 466.60s on the TASK-3.27 run). The runner was slow across the board (unchanged calling-station tests took ~2x their earlier CI time), and the new Maniac tests account for ~119 s of CI time on this runner (seated 200-hand run 51.4 s, draw-count test 26.6 s, check-point test 31.7 s).",
+   "expected": "CI green on doit/TASK-6.4 (DoD)",
+   "actual": "CI workflow cancelled by the 20-minute job timeout; no green CI run for 7bbf6ab",
+   "observed_via": "gh run view 44970396930 / gh run list --branch doit/TASK-6.4"
+  }
+ ],
+ "findings": [
+  {
+   "id": "J-1-02",
+   "severity": "HIGH",
+   "spec": "SPEC-11",
+   "expected_vs_actual": "Expected a green CI workflow run on doit/TASK-6.4. Actual: run 44970396930 was cancelled at the 20-minute job limit during E2E after the unit Test step took 15m44s (942.6 s; previous task 466.6 s). Every test that ran passed; the cause looks mostly like a slow runner, but the job is now close enough to the limit that the new tests (about 2 minutes on a slow runner) helped push it over.",
+   "fix": "Get a green CI run for the branch head (a rerun is the first step). If it times out again, reduce the new tests' CI cost (e.g. fewer seated hands or points, or reuse the collected views across the two Maniac test files) so the job fits within 20 minutes."
+  },
+  {
+   "id": "J-1-01",
+   "severity": "LOW",
+   "spec": "SPEC-02",
+   "expected_vs_actual": "Expected the suite to fail if the Maniac stopped deviating at some postflop check points (e.g. never betting on the river when checked to). Actual: such a behaviour change still passes every test, because SPEC-02 compares only the total bet count with TAG and pins flop/turn examples. Product behaviour is correct (independently verified per decision).",
+   "fix": "Optional: assert the aggressive action appears at each postflop street in the check-point set, or that the postflop check->bet rate is near the file probability."
+  }
+ ],
+ "summary": "10 of 11 SPEC items PASS; SPEC-11 FAILS only because CI run 44970396930 was cancelled at the 20-minute job timeout (slow runner; all tests that ran passed). Locally the test suite, lint, typecheck and e2e are green, and the playtest baseline is byte-identical. The independent holdout confirms that rates track the file probabilities, each applicable deviation takes exactly one draw, capped spots fall back to a legal call, probability changes work from the file alone, worker dispatch matches exact names, TAG and Calling station are unchanged against base, and all-Maniac and mixed playtests have 0 violations with VPIP and PFR in band. Blocking: J-1-02 (CI not green). Non-blocking: J-1-01 (LOW test strength)."
+}

@@ -1,7 +1,8 @@
 import { describe, expect, it } from 'vitest';
+import { computeEquity, type EquityInput, type EquityResult } from '../../src/advice/equity';
 import { recommend } from '../../src/advice/recommend';
 import { MANIAC_STYLE, decideManiac } from '../../src/bots/maniac';
-import { FREE_CHECK_EQUITY } from '../../src/bots/tag';
+import { FREE_CHECK_EQUITY, decideTag } from '../../src/bots/tag';
 import { botDecisionSeed, botRandom } from '../../src/engine/bot-random';
 import type { Action } from '../../src/engine/hand';
 import type { PlayerView } from '../../src/engine/player-view';
@@ -9,6 +10,19 @@ import { randomMovePolicy, seatGenerator, seededTagPolicy } from '../../src/play
 import { runPlaytest } from '../../src/playtest/runner';
 
 const TEST_TIMEOUT_MS = 120_000;
+const SLOW = process.env.TLH_SLOW_TESTS === '1';
+
+/** computeEquity, memoized on its input: returns exactly computeEquity's result (A-6). */
+const memo = new Map<string, EquityResult>();
+function equity(input: EquityInput): EquityResult {
+  const key = JSON.stringify(input);
+  let result = memo.get(key);
+  if (result === undefined) {
+    result = computeEquity(input);
+    memo.set(key, result);
+  }
+  return result;
+}
 
 /** A stub generator returning `values` in turn (then 0) and counting calls. */
 function stub(...values: number[]) {
@@ -22,16 +36,16 @@ function stub(...values: number[]) {
 const owed = (view: PlayerView): number =>
   view.currentBet - (view.players.find((p) => p.seat === view.seat)?.streetContribution ?? 0);
 
-/** Seat 1's views in the D-5 collection run (seeded TAG at seat 1 against random seats, seed 61). */
+/** Seat 1's views in the first 50 hands of the D-5 collection run (seeded TAG at seat 1 against random seats,
+ *  seed 61). Every example view is in hands 1-41; the memo gives TAG exactly seededTagPolicy's actions. */
 function seatOneViews(): PlayerView[] {
   const views: PlayerView[] = [];
-  runPlaytest({ hands: 200, seed: 61, size: 6 }, undefined, {
+  runPlaytest({ hands: 50, seed: 61, size: 6 }, undefined, {
     makePolicy: (code, seat) => {
       if (seat !== 1) return randomMovePolicy(seatGenerator(code, seat));
-      const policy = seededTagPolicy(code);
       return (view) => {
         views.push(view);
-        return policy(view);
+        return decideTag(view, { random: botRandom(botDecisionSeed(code, view)), equity });
       };
     },
   });
@@ -48,7 +62,7 @@ describe('Maniac decision', () => {
           v,
           recommend(
             v,
-            v.street !== 'preflop' && owed(v) === 0 ? { equity: FREE_CHECK_EQUITY } : {},
+            v.street !== 'preflop' && owed(v) === 0 ? { equity: FREE_CHECK_EQUITY } : { equity },
           ),
         ]),
       );
@@ -62,10 +76,10 @@ describe('Maniac decision', () => {
       );
       for (const view of examples) {
         const random = stub(4294967295);
-        expect(decideManiac(view, { random })).toEqual(advice(view).move);
+        expect(decideManiac(view, { random, equity })).toEqual(advice(view).move);
         expect(random.calls).toBe(1);
         const hot = stub(0);
-        decideManiac(view, { random: hot });
+        decideManiac(view, { random: hot, equity });
         expect(hot.calls).toBe(1);
       }
 
@@ -103,7 +117,7 @@ describe('Maniac decision', () => {
       ];
       for (const [view, extra] of zeroDraw) {
         const random = stub(0);
-        expect(decideManiac(view, { random, ...extra })).toEqual(advice(view).move);
+        expect(decideManiac(view, { random, equity, ...extra })).toEqual(advice(view).move);
         expect(random.calls).toBe(0);
       }
     },
@@ -111,25 +125,57 @@ describe('Maniac decision', () => {
   );
 
   it(
-    'seated Maniacs among seeded TAGs break no invariant',
+    'checked to on every postflop street an aggressive Maniac bets',
     () => {
-      const maniacActions: Action[] = [];
-      const summary = runPlaytest({ hands: 200, seed: 42, size: 6 }, undefined, {
-        makePolicy: (code, seat) =>
-          seat === 2 || seat === 4
-            ? (view) => {
-                const action = decideManiac(view, {
-                  random: botRandom(botDecisionSeed(code, view)),
-                });
-                maniacActions.push(action);
-                return action;
-              }
-            : seededTagPolicy(code),
-      });
-      expect(summary.violations).toBe(0);
-      expect(summary.handsPlayed).toBe(200);
-      expect(maniacActions.some((a) => a.type === 'bet')).toBe(true);
+      const checkedTo = seatOneViews().filter(
+        (v) =>
+          v.street !== 'preflop' &&
+          owed(v) === 0 &&
+          recommend(v, { equity: FREE_CHECK_EQUITY }).action === 'check',
+      );
+      expect(new Set(checkedTo.map((v) => v.street))).toEqual(new Set(['flop', 'turn', 'river']));
+      for (const view of checkedTo) {
+        const bet = view.legalActions.find((a) => a.type === 'bet');
+        if (bet === undefined) continue;
+        expect(decideManiac(view, { random: stub(0) })).toEqual(bet);
+      }
+      expect(
+        checkedTo.some((v) => v.street === 'river' && v.legalActions.some((a) => a.type === 'bet')),
+      ).toBe(true);
     },
+    TEST_TIMEOUT_MS,
+  );
+
+  /** SPEC-08's seated run: seats 2 and 4 play the seeded Maniac, the rest seeded TAG. */
+  function seatedManiacs(hands: number) {
+    const maniacActions: Action[] = [];
+    const summary = runPlaytest({ hands, seed: 42, size: 6 }, undefined, {
+      makePolicy: (code, seat) =>
+        seat === 2 || seat === 4
+          ? (view) => {
+              const action = decideManiac(view, {
+                random: botRandom(botDecisionSeed(code, view)),
+              });
+              maniacActions.push(action);
+              return action;
+            }
+          : seededTagPolicy(code),
+    });
+    expect(summary.violations).toBe(0);
+    expect(summary.handsPlayed).toBe(hands);
+    expect(maniacActions.some((a) => a.type === 'bet')).toBe(true);
+  }
+
+  it(
+    'seated Maniacs among seeded TAGs break no invariant',
+    () => seatedManiacs(20),
+    TEST_TIMEOUT_MS,
+  );
+
+  // The 200-hand run (A-8) is opt-in: TLH_SLOW_TESTS=1.
+  it.runIf(SLOW)(
+    'seated Maniacs among seeded TAGs break no invariant over 200 hands',
+    () => seatedManiacs(200),
     TEST_TIMEOUT_MS,
   );
 });
