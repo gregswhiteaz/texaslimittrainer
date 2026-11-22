@@ -1,0 +1,148 @@
+{
+  "reviewer": "code",
+  "round": 2,
+  "rubric": [
+    {
+      "item": "SPEC-01 correctness",
+      "result": "pass"
+    },
+    {
+      "item": "SPEC-01 test strength",
+      "result": "pass"
+    },
+    {
+      "item": "SPEC-02 correctness",
+      "result": "pass"
+    },
+    {
+      "item": "SPEC-02 test strength",
+      "result": "pass"
+    },
+    {
+      "item": "SPEC-03 correctness",
+      "result": "pass"
+    },
+    {
+      "item": "SPEC-03 test strength",
+      "result": "pass"
+    },
+    {
+      "item": "SPEC-04 correctness",
+      "result": "pass"
+    },
+    {
+      "item": "SPEC-04 test strength",
+      "result": "pass"
+    },
+    {
+      "item": "SPEC-05 correctness",
+      "result": "pass"
+    },
+    {
+      "item": "SPEC-05 test strength",
+      "result": "pass"
+    },
+    {
+      "item": "SPEC-06 correctness",
+      "result": "pass"
+    },
+    {
+      "item": "SPEC-06 test strength",
+      "result": "pass"
+    },
+    {
+      "item": "SPEC-07 correctness",
+      "result": "pass"
+    },
+    {
+      "item": "SPEC-07 test strength",
+      "result": "pass"
+    },
+    {
+      "item": "SPEC-08 correctness",
+      "result": "pass"
+    },
+    {
+      "item": "SPEC-08 test strength",
+      "result": "pass"
+    },
+    {
+      "item": "SPEC-09 correctness",
+      "result": "pass"
+    },
+    {
+      "item": "SPEC-09 test strength",
+      "result": "pass"
+    },
+    {
+      "item": "SPEC-10 correctness",
+      "result": "pass"
+    },
+    {
+      "item": "SPEC-10 test strength",
+      "result": "pass"
+    },
+    {
+      "item": "SPEC-11 correctness",
+      "result": "pass"
+    },
+    {
+      "item": "SPEC-11 test strength",
+      "result": "pass"
+    },
+    {
+      "item": "SPEC-12 correctness",
+      "result": "pass"
+    },
+    {
+      "item": "SPEC-12 test strength",
+      "result": "pass"
+    },
+    {
+      "item": "SPEC-13 correctness",
+      "result": "pass"
+    },
+    {
+      "item": "SPEC-13 test strength",
+      "result": "pass"
+    },
+    {
+      "item": "SPEC-14 correctness",
+      "result": "pass"
+    },
+    {
+      "item": "SPEC-14 test strength",
+      "result": "pass"
+    },
+    {
+      "item": "SPEC-15 correctness",
+      "result": "pass"
+    },
+    {
+      "item": "SPEC-15 test strength",
+      "result": "pass"
+    },
+    {
+      "item": "SPEC-16 correctness",
+      "result": "pass"
+    },
+    {
+      "item": "SPEC-16 test strength",
+      "result": "pass"
+    },
+    {
+      "item": "scope",
+      "result": "pass"
+    },
+    {
+      "item": "concision",
+      "result": "pass"
+    },
+    {
+      "item": "clarity",
+      "result": "pass"
+    }
+  ],
+  "findings": [],
+  "summary": "Round-1 MAJOR src/advice/recommend.ts:exact-options-bypassed-by-style-only-variable is FIXED. ExactOptions is now O & Allowed & Record<extra keys, never>, with <O extends object> on recommend, recommendPostflop and gradeView. I checked it with a scratch tsc file under tests/, using the repo tsconfig; the file has since been removed. These are all rejected: a style-only variable, a random-only variable passed to recommendPostflop and gradeView, a spread of { random: 1 } as const, CallingStationOptions passed to each of the three functions, the literal { style: 'Maniac' }, and a variable that mixes opponentRanges and style. These still compile: RecommendOptions | undefined (the tag-playtest mock signature), no argument, spreads of RecommendOptions including an extra equity key, { opponentRanges: 'actions' } for recommendPostflop, and gradeView with or without options. The whole project typechecks, including the bot calls through adviceOptions. Reverting the guard in a scratch copy makes 6 @ts-expect-error lines in tests/advice/ranges.test.ts unused (TS2578), so the typecheck gate catches the regression. Both round-1 MINORs are fixed and their mutants are now caught. Swapping AGGRESSION to ['bet','raise',...] fails 'expands, narrows per street and estimates from the view'. The builder's bet / raise / re-raise line on a shuffled deck does tell the two apart: it asserts that raise narrowing is non-empty, that it differs from bet narrowing, and that it equals the estimate. Dropping the hole-card condition in hasOpenEnder fails 'notation, lines and classifier edge cases'. Nothing regressed. The fix-3 gates pass test, lint and typecheck; the scope-budget gates only warn. tests/advice plus tests/bots: 41 files and 179 tests pass, 1 skipped. Bots are unchanged: playtest --hands 10000 --seed 42 --size 6 gives SHA-256 442dbf55...408fbc with 0 invariant violations. No findings."
+}

@@ -1,0 +1,112 @@
+{
+  "round": 1,
+  "test_suite": {
+    "command": "npm test",
+    "result": "PASS",
+    "passed": 654,
+    "failed": 0,
+    "notes": "182 files passed, 2 skipped; 13 tests skipped (pre-existing opt-in slow tests). Lint and typecheck exit 0. npm run e2e: 142 passed, 12 skipped."
+  },
+  "end_to_end": {
+    "command": "npm run dev (vite on port 5199), New game > Start game, play hands calling/checking, open each review",
+    "result": "PASS",
+    "expected": "Hands play normally and the end-of-hand review opens with preflop and postflop (flop/turn/river) grades, no errors",
+    "actual": "131+ hands played in Chromium; reviews opened with PREFLOP, FLOP, TURN and RIVER rows graded (e.g. 'FLOP Correct You: Check \u00b7 Advice: Check'); no page or console errors. Library check (the three new test files) passes; the wiring through userReviewEntries was confirmed at library level (differs from default review in 103 of 120 hands)."
+  },
+  "integrity": {
+    "result": "PASS",
+    "notes": "doit.py test-integrity exit 0, no warnings. Only the new TASK-7.5 acceptance file is locked and unchanged; no earlier-task locked test edited. Diff read: no input recognition, hard-coded expectations, early returns or mocks of the unit under test. 12 mutants of ranges.ts, postflop.ts, advice-service.ts and review.ts were all killed by the spec tests. src/e2e/tests match HEAD after mutation runs."
+  },
+  "items": [
+    {
+      "spec": "SPEC-01",
+      "result": "PASS",
+      "evidence": "AC#1 acceptance passes and asserts 36 ranges in APPLICABLE_LINES order, justifications, and the three exact problem lists. Holdout: 36 entries, file justification 141 words; validator also returns the exact spec texts for bad format (alone), unknown size, short file justification, non-applicable BB limp, duplicate key, invalid token (KAs) and collects all 7 problems at once; defaultRange absent -> 'Ranges 6-max have no range CO limp'."
+    },
+    {
+      "spec": "SPEC-02",
+      "result": "PASS",
+      "evidence": "AC#2 acceptance passes (spy called once, one range equal to an independently built expansion, length = sum comboCount - dead). Holdout with a different button (4) and two live opponents: CO open-raise start equals my own expansion of the authored hands minus dead cards (211 combos), spy gets ranges in seat order, HJ limper-then-caller keyed call-raise, combos == start when the opponent has not acted on the flop."
+    },
+    {
+      "spec": "SPEC-03",
+      "result": "PASS",
+      "evidence": "AC#3 passes. Holdout: fixture classes strong,strong,pair,pair,draw,draw,air,air; bet -> KhKd,8h7h,AhKh,9h9d,6h5h,Th9h; input order preserved on a reversed range. Independent classifier agreed with product on 75,750 (combo, board) pairs, 0 mismatches (random, paired/two-pair/trips/quads, flush, straight, straight-flush, full-house, wheel and broadway boards, plus exhaustive combos on 14 special boards)."
+    },
+    {
+      "spec": "SPEC-04",
+      "result": "PASS",
+      "evidence": "AC#4 passes. Holdout: check -> AhKh,9h9d,6h5h,Th9h,QhJh,Ac2c; KEEP table matches spec; narrowRange equals my KEEP+classifier filter on 1,200 random range/board/action cases."
+    },
+    {
+      "spec": "SPEC-05",
+      "result": "PASS",
+      "evidence": "AC#5 passes. Holdout: call -> AhKh,9h9d,6h5h,Th9h; raise -> KhKd,8h7h,6h5h,Th9h."
+    },
+    {
+      "spec": "SPEC-06",
+      "result": "PASS",
+      "evidence": "AC#6 passes. Holdout: check on Ks 8d 7c then call on +2d -> AhKh,9h9d,6h5h,Th9h,Ac2c; turn classes give Ac2c pair, QhJh air."
+    },
+    {
+      "spec": "SPEC-07",
+      "result": "PASS",
+      "evidence": "AC#7 passes (Maniac vs Rock, import-boundary scan). Holdout: 30 scripted hands across TAG/Calling station, Maniac/Rock, Rock/TAG style swaps on three seats -> 90 postflop views, estimateOpponentRanges and recommend(view, ACTION_RANGE_ADVICE) identical in all. ranges.ts imports only engine/ and advice/."
+    },
+    {
+      "spec": "SPEC-08",
+      "result": "PASS",
+      "evidence": "npm run typecheck exit 0 with the acceptance @ts-expect-error lines. Holdout tsc file (own tsconfig extending the project's): 14 extra must-fail cases all rejected (variables with only random, spread of station options, mixed advice+random, TagOptions/ManiacOptions/RockOptions variables, styleName/random on recommendPostflop, style variable and spread on gradeView, object 2nd arg to estimateOpponentRanges); controls compile (undefined, {}, ACTION_RANGE_ADVICE, adviceOptions(...), RecommendOptions|undefined variable, PostflopOptions variable). Removing one directive makes tsc fail, so the check is live. Runtime adviceOptions keys subset of equity/chart/opponentRanges."
+    },
+    {
+      "spec": "SPEC-09",
+      "result": "PASS",
+      "evidence": "AC#9 passes. Holdout over 120 random 6-max hands (476 postflop user views): handleAdviceRequest recommend == recommend(view, ACTION_RANGE_ADVICE) and grade == gradeView(view, a, ACTION_RANGE_ADVICE) in every case; userReviewEntries == reviewEntries(hand, ACTION_RANGE_ADVICE) for all 120 hands and differs from the default review in 103, so action ranges really reach the user. Docs: postflop-rules.md drops the 1,081 sentence, links range-model.md, TASK-7.5 removed from Not applied yet; range-model.md has the fixture and all seven lines."
+    },
+    {
+      "spec": "SPEC-10",
+      "result": "PASS",
+      "evidence": "Unit test passes and asserts the listed cases. Holdout: notation (TT+, A9s+, KTo+, 66-22, reversed K9s-K5s, 32o+, overlap collapse, whitespace) correct; 15 invalid tokens throw RangeError 'Invalid range token \"...\"' with 20-char echo truncation. Lines from 11 engine-built sequences all correct: limp, SB complete, BB check, open, BB call-raise, 3-bet, call 3-bet, 4-bet and callers of 4-bet (call-three-bet), limp-then-call-raise, BB raise over limps (open-raise), SB 3-bet, BB all-in on blind facing a raise (call-raise), BB/SB all-in on blind with 0 raises (check/limp), SB all-in with 2 raises (call-three-bet). Street aggregation: bet-then-call -> bet, check-raise -> raise."
+    },
+    {
+      "spec": "SPEC-11",
+      "result": "PASS",
+      "evidence": "Unit test passes. Holdout: all 36 widths inside the Q-2 bands (e.g. UTG open 12.2%, BTN open 34.5%, BB check 90.3%, four-bets 2.6-3.8%), justifications unique and 27-38 words, four-bet <= three-bet and subset per position, opens UTG<=HJ<=CO<=BTN, BB check disjoint from BB open-raise. Sampled justifications are original plain English describing a typical low-stakes player."
+    },
+    {
+      "spec": "SPEC-12",
+      "result": "PASS",
+      "evidence": "Unit test passes. Holdout: no throws, deterministic, legal moves, one-decimal percentages over 476 random postflop views; fallback chain verified with spies (2nd call gets start, 3rd gets 1081 unseen, 3 RangeErrors propagate after exactly 3 calls, TypeError propagates after 1 call); heads-up and 5-handed starts are 1081 unseen with null position/line; preflop view throws the spec message. Mutating out the empty-narrowing guard or the start fallback is caught by the tests."
+    },
+    {
+      "spec": "SPEC-13",
+      "result": "PASS",
+      "evidence": "Playtest 10,000/42/6 output SHA 442dbf55bd32d87a5e367d3c5b9be28ec9303c57174783eae5947134aa408fbc, Invariant violations: 0. Decision fingerprint vs base commit (git worktree at 2af6313): identical output hashes for --lineup mixed/tough/soft (3,000 hands, seed 7) and an SNG mixed run (2,000 hands, seed 3). Default mode still passes 1081-combo ranges. No locked test changed (test-integrity clean)."
+    },
+    {
+      "spec": "SPEC-14",
+      "result": "PASS",
+      "evidence": "ADVICE_PERF_SCALE=1: actions mode p95 14.26 ms (1 opponent, target 25) and 10.70 ms (3 opponents, target 50); existing scenarios 6.0/17.5/72.3 ms within 25/50/100."
+    },
+    {
+      "spec": "SPEC-15",
+      "result": "PASS",
+      "evidence": "npm run lint exit 0, npm run typecheck exit 0, npm test exit 0 (654 passed, 13 skipped). Coverage: advice 99.73% stmts / 100% lines, bots 100% lines, table 100% lines, overall 97.79% lines. No fetch/XMLHttpRequest/WebSocket in src/advice; range JSON is a bundled import."
+    },
+    {
+      "spec": "SPEC-16",
+      "result": "PASS",
+      "evidence": "CI run 45069542040 on 9859cf6 completed with conclusion success. backlog doc list shows doc-86 for TASK-7.5. npm run e2e: 142 passed, 12 skipped, exit 0. DoD#4/#8/#13 N/A as specified."
+    }
+  ],
+  "findings": [
+    {
+      "id": "J-1-01",
+      "severity": "LOW",
+      "spec": "SPEC-09",
+      "expected_vs_actual": "Expected: some automated test fails if the table's end-of-hand review stops using the action-range review. Actual: switching the review in the table UI back to the default review leaves npm test (tests/ui) green; only the library-level userReviewEntries is pinned.",
+      "fix": "Add a UI-level assertion that the review the table opens is built with action ranges (non-blocking)."
+    }
+  ],
+  "summary": "All 16 SPEC items PASS. Independent classifier matched the product on 75,750 pairs; lines, estimation, fallbacks, validator, type guard, user wiring, style independence, content bands, bots unchanged (playtest SHA and base-commit fingerprints), perf and e2e all verified. One LOW non-blocking finding: the Table.tsx switch to userReviewEntries has no test that would catch a regression."
+}

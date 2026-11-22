@@ -4,14 +4,31 @@
   "branch": "doit/TASK-7.5",
   "base_commit": "2af6313a58e7e6649ca18ad16ae1bd79151cab02",
   "started": "2026-11-22T13:13:43",
-  "review_round": 1,
-  "judge_round": 0,
+  "review_round": 2,
+  "judge_round": 1,
   "sendbacks": 0,
   "gate_runs": 3,
   "questions": 3,
   "assumptions": 0,
   "escalations": 0,
-  "item_failures": {},
+  "item_failures": {
+    "SPEC-01": 0,
+    "SPEC-02": 0,
+    "SPEC-03": 0,
+    "SPEC-04": 0,
+    "SPEC-05": 0,
+    "SPEC-06": 0,
+    "SPEC-07": 0,
+    "SPEC-08": 0,
+    "SPEC-09": 0,
+    "SPEC-10": 0,
+    "SPEC-11": 0,
+    "SPEC-12": 0,
+    "SPEC-13": 0,
+    "SPEC-14": 0,
+    "SPEC-15": 0,
+    "SPEC-16": 0
+  },
   "locked_tests": {
     "tests/advice/range-model.acceptance.test.ts": "5eeda2b85d8182c2ac0f50172385fc5ee7e45a3d1266d7c2db9c6f4d01cecf6d"
   },
@@ -1096,11 +1113,16 @@
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-7.5",
   "spec_sha256": "1cc42fe7737031abd54793c288c3b1ab76935c780e8798b2a2d823f597a75496",
   "review_findings": {
-    "1": 1
+    "1": 1,
+    "2": 0
   },
   "brief_history": {
     "src/advice/recommend.ts:exact-options-bypassed-by-style-only-variable": [
       "review r1"
     ]
+  },
+  "doc_id": "doc-86",
+  "judge_results": {
+    "1": "PASS"
   }
 }
