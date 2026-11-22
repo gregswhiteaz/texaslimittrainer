@@ -106,7 +106,3 @@ describe('heads-up playtest', () => {
     TEST_TIMEOUT_MS,
   );
 });
-
-it('DRILL TASK-1.50: deliberately broken (tests/playtest/heads-up.acceptance.test.ts)', () => {
-  expect('drill').toBe('green');
-});

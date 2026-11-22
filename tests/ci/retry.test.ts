@@ -170,7 +170,3 @@ describe('retry helper', () => {
     }
   });
 });
-
-it('DRILL TASK-1.50: deliberately broken (tests/ci/retry.test.ts)', () => {
-  expect('drill').toBe('green');
-});

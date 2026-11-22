@@ -247,7 +247,3 @@ describe('bet cap acceptance', () => {
     expect(checker).not.toContain('STREET_BET_CAP');
   });
 });
-
-it('DRILL TASK-1.50: deliberately broken (tests/engine/bet-cap.acceptance.test.ts)', () => {
-  expect('drill').toBe('green');
-});
