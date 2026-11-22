@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-21T21:05:00Z'
+updated_date: '2026-11-22T00:06:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -89,6 +89,8 @@ Build blocked: 10-player play throws in the 6-max chart (TASK-7.6). Resolved (or
 Build: RAPID_BOT_DELAY_MS/botActionDelayMs; every-push unit + fake-clock guard (cap+1 fix) + 200-hand model; opt-in real-time checks — 6p slowest 16 ms, 10p (test-only policy) slowest 45.8 ms, 200 hands 365.8 s = 1,968 hands/hour; dist clean; gate PASS.
 
 Judge R1 PASS 10/10 (re-ran e2e:slow: 6p max 17.7 ms, 10p max 50.3 ms, 200 hands 1,954/h; 400 ms mutant caught everywhere). Follow-ups: 10-seat real-bot pace → TASK-7.6 AC#10.
+
+Locked e2e/rapid-pace.spec.ts unlocked for TASK-3.27 Q-2 (user-approved strengthen-only race fix).
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary

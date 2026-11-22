@@ -919,7 +919,14 @@
       "skips": 0
     }
   },
-  "history": [],
+  "history": [
+    {
+      "t": "2026-11-21T17:06:08",
+      "event": "unlock",
+      "file": "e2e/rapid-pace.spec.ts",
+      "reason": "TASK-3.27 Q-2 (user): strengthen-only \u2014 meterBotAction check order fixes a race; self-test exact start (2 blinds, seat 3 to act)"
+    }
+  ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-3.13",
   "spec_sha256": "cb2abaa0fdded03cd9c23ecaea831427a28d932efc65e6ab212a442bf01ec2d4",
   "review_findings": {
@@ -928,5 +935,8 @@
   "doc_id": "doc-71",
   "judge_results": {
     "1": "PASS"
-  }
+  },
+  "relock_pending": [
+    "e2e/rapid-pace.spec.ts"
+  ]
 }
