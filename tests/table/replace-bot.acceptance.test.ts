@@ -9,19 +9,10 @@ import {
   type SessionSeat,
   type TableState,
 } from '../../src/table/session';
-import { KINGS_SHOWDOWN } from '../support/table-scenarios';
+import { KINGS_SHOWDOWN, withFinalStacks } from '../support/table-scenarios';
 
 const STYLES = ['TAG', 'Calling station', 'Maniac', 'Rock'];
 const NEXT_CODE = replayCodeFromWords([1, 1, 2, 3]);
-
-/** `table` (a finished hand) with its final stacks replaced by `stacks` (ascending seat order). */
-function withFinalStacks(stacks: number[], table: TableState = KINGS_SHOWDOWN): TableState {
-  const hand = table.hand as HandState;
-  return {
-    ...table,
-    hand: { ...hand, players: hand.players.map((p, i) => ({ ...p, stack: stacks[i] as number })) },
-  };
-}
 
 const stackValues = (table: TableState): number[] => table.stacks.map((s) => s.stack);
 const startingStacks = (table: TableState): number[] =>

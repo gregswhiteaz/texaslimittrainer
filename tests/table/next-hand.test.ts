@@ -16,7 +16,7 @@ import {
   stepBot,
   type TableState,
 } from '../../src/table/session';
-import { KINGS_SHOWDOWN } from '../support/table-scenarios';
+import { KINGS_SHOWDOWN, withFinalStacks } from '../support/table-scenarios';
 
 const CODE = replayCodeFromWords([7, 1, 2, 3]);
 
@@ -95,15 +95,6 @@ describe('next hand', () => {
     );
   });
 });
-
-/** KINGS_SHOWDOWN (or `table`) with its final stacks replaced by `stacks` (ascending seat order). */
-function withFinalStacks(stacks: number[], table: TableState = KINGS_SHOWDOWN): TableState {
-  const hand = table.hand as HandState;
-  return {
-    ...table,
-    hand: { ...hand, players: hand.players.map((p, i) => ({ ...p, stack: stacks[i] as number })) },
-  };
-}
 
 describe('busted seats', () => {
   it('the user and sit-and-go seats are never replaced', () => {

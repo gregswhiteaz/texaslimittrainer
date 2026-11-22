@@ -8,12 +8,12 @@
 - `src/playtest/cli.ts` — `Bots replaced: <n>` line for `--lineup` cash runs; `--styles` option (replay mode only, with `--lineup`), its parse errors, USAGE line 2; Replay line appends `--styles` when a bot's style differs from the preset; Line-up line built from seats.
 - `package.json` — `test:slow` also runs `tests/playtest/replacement.acceptance.test.ts`.
 - `tests/bots/replacement.acceptance.test.ts` — new: SPEC-05/06/07 tallies (AC#3, AC#7, AC#8) and the name sequence.
-- `tests/table/replace-bot.acceptance.test.ts` — new: SPEC-01/02/03 (AC#1, AC#2, AC#4, AC#9) through `nextHand`.
-- `tests/playtest/replacement.acceptance.test.ts` — new: SPEC-09, SPEC-11 (300-hand CLI count), SPEC-12, and the opt-in slow SPEC-10 run.
+- `tests/table/replace-bot.acceptance.test.ts` — new: SPEC-01/02/03 (AC#1, AC#2, AC#4, AC#9) through `nextHand`; imports the shared `withFinalStacks` (fix r1).
+- `tests/playtest/replacement.acceptance.test.ts` — new: SPEC-09, SPEC-11 (300-hand CLI count), SPEC-12, and the opt-in slow SPEC-10 run; fix r1: each Soft replacement's style checked against `drawReplacementStyle`, one `styleSlugs` helper for both slug conversions.
 - `tests/bots/lineup.test.ts` — unit: SPEC-08 (determinism, names, RangeErrors).
 - `tests/playtest/cli.test.ts` — unit: USAGE line 2, `--styles` parse errors and success, `Bots replaced:` presence/absence, Replay-line `--styles` suffix, `--styles` replay echo and Line-up line.
-- `tests/table/next-hand.test.ts` — unit: SPEC-04 (user / sit-and-go seats never replaced), A-6 error, replacement branch coverage.
-- `tests/support/table-scenarios.ts` — the hand-built `TableState` literal gains `nextBotName: 0` (required field).
+- `tests/table/next-hand.test.ts` — unit: SPEC-04 (user / sit-and-go seats never replaced), A-6 error, replacement branch coverage; imports the shared `withFinalStacks` (fix r1).
+- `tests/support/table-scenarios.ts` — the hand-built `TableState` literal gains `nextBotName: 0` (required field); exports `withFinalStacks` (moved from next-hand.test.ts, fix r1).
 - `tests/table/next-hand.acceptance.test.ts` — locked (TASK-3.4), edited as approved in Q-4: lines 93-96 expect a new bot Jay at seat 1; the sixty-hand test allows a changed stack only for a bot on 0 (new name) or the user below 96, and asserts the seat-2 bot ending hand 43 on $94 keeps $94.
 - `tests/playtest/policy-lineup.acceptance.test.ts` — locked (TASK-1.52), edited as approved in Q-4: the Tough run is 45 hands (both the `toEqual` and the `not.toEqual` hold at 45).
 

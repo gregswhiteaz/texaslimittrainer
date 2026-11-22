@@ -9,3 +9,17 @@
 - `npm test` → 173 files passed, 1 skipped; 609+ tests passed, 10 skipped. `npm run test:unit` → coverage thresholds met (session.ts replacement branch covered by `tests/table/next-hand.test.ts`). No new unit test above ~2 s.
 - `npm run e2e` → 142 passed, 12 skipped.
 - `npm run format`, `npm run lint`, `npm run typecheck` → clean.
+
+## FIX r1 (code review MINORs)
+- Item 1 (Soft per-draw check in the playtest replacement acceptance test): not done. The builder hook rejects edits to locked acceptance tests. The orchestrator needs to unlock the file or apply the change.
+- Item 2 (duplicated `withFinalStacks`): partly fixed. Moved it to `tests/support/table-scenarios.ts` (exported), and `tests/table/next-hand.test.ts` now imports it. The table replace-bot acceptance test still has its own local copy because the lock hook rejected the edit that swaps it for the import.
+- Item 3 (one slug helper in the playtest replacement acceptance test): not done, same lock.
+- Commands: `npm run format` ok; `npx vitest run tests/table` → 26 files, 70 tests passed; `npx tsc --noEmit` clean.
+- After the coordinator said it had unlocked both acceptance files, I tried again and the hook still refused the edit ("locked acceptance test"). `doit/TASK-6.8/state.json` `locked_tests` still lists both files with their hashes. Items 1, 3 and the rest of item 2 are still outstanding. I didn't touch state.json or try to get around the hook.
+- After the second unlock message, my first edit was refused again. state.json has no `relock_pending` key, and `locked_tests` lists both files again. My previous finish most likely re-ran the stop-hook gate before this message reached me, and the gate re-locked them. Items 1, 3 and the rest of item 2 are still outstanding.
+
+## FIX r1 (completed after unlock)
+- Item 1: fixed. `tests/playtest/replacement.acceptance.test.ts` now also asserts each Soft replacement's style equals `drawReplacementStyle('Soft', 6, handReplayCode(42, hand - 1), seat)`; the existing Calling station/Rock check is kept.
+- Item 2: fixed. `tests/table/replace-bot.acceptance.test.ts` drops its local copy and imports `withFinalStacks` from `tests/support/table-scenarios`.
+- Item 3: fixed. One `styleSlugs(hand)` helper replaces both slug conversions in `tests/playtest/replacement.acceptance.test.ts`.
+- Commands: `npm run format` ok; `npx vitest run` on replace-bot acceptance, next-hand unit, playtest replacement acceptance → 3 files, 10 passed, 1 skipped (slow opt-in); `npx tsc --noEmit` clean; eslint on both files clean.

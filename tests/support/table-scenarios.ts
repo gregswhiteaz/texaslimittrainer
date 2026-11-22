@@ -160,6 +160,15 @@ export const KINGS_SHOWDOWN: TableState = defaultTableAfter(
   '3:fold 4:fold 5:raise 6:fold 1:fold 2:raise 5:call 2:bet 5:raise 2:call 2:bet 5:raise 2:call 2:bet 5:raise 2:raise 5:call',
 );
 
+/** KINGS_SHOWDOWN (or `table`, a finished hand) with its final stacks replaced by `stacks` (ascending seat order). */
+export function withFinalStacks(stacks: number[], table: TableState = KINGS_SHOWDOWN): TableState {
+  const hand = table.hand as HandState;
+  return {
+    ...table,
+    hand: { ...hand, players: hand.players.map((p, i) => ({ ...p, stack: stacks[i] as number })) },
+  };
+}
+
 /** Everyone folds to Ava's (seat 1, 2c 3h) $4 flop bet: she wins $12 uncontested ($4 bet returned). */
 export const AVA_UNCONTESTED: TableState = defaultTableAfter(
   {},

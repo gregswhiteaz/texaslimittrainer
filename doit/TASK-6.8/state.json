@@ -4,18 +4,18 @@
   "branch": "doit/TASK-6.8",
   "base_commit": "37d65f51443a437f3cfb74d598ba10e8bbd6fb78",
   "started": "2026-11-22T09:26:25",
-  "review_round": 0,
+  "review_round": 1,
   "judge_round": 0,
   "sendbacks": 0,
-  "gate_runs": 2,
+  "gate_runs": 7,
   "questions": 4,
   "assumptions": 0,
   "escalations": 0,
   "item_failures": {},
   "locked_tests": {
     "tests/bots/replacement.acceptance.test.ts": "460bd1f83c84381972390ad339af8454b8beb05a397b5d401e3a040b69440b68",
-    "tests/playtest/replacement.acceptance.test.ts": "d766f11db4facf6d38e1067b9d003106849953e730dae003dd769b39bcacecb2",
-    "tests/table/replace-bot.acceptance.test.ts": "9e5d13bdb8548e9658ed4f26452dd216a954a0a0147a616b6628ed9922d4dc8b"
+    "tests/playtest/replacement.acceptance.test.ts": "8491dd0130ae0a1e26ac90f2416553b05db0e4eec47583ebc3026b18c0963752",
+    "tests/table/replace-bot.acceptance.test.ts": "97fff80c898affb3cebe753d504eb3396412f5968711bca7d424db2a3935dd2b"
   },
   "test_snapshot": {
     "tests/bots/replacement.acceptance.test.ts": {
@@ -24,12 +24,12 @@
       "skips": 0
     },
     "tests/playtest/replacement.acceptance.test.ts": {
-      "sha": "d766f11db4facf6d38e1067b9d003106849953e730dae003dd769b39bcacecb2",
-      "asserts": 34,
+      "sha": "8491dd0130ae0a1e26ac90f2416553b05db0e4eec47583ebc3026b18c0963752",
+      "asserts": 35,
       "skips": 0
     },
     "tests/table/replace-bot.acceptance.test.ts": {
-      "sha": "9e5d13bdb8548e9658ed4f26452dd216a954a0a0147a616b6628ed9922d4dc8b",
+      "sha": "97fff80c898affb3cebe753d504eb3396412f5968711bca7d424db2a3935dd2b",
       "asserts": 28,
       "skips": 0
     },
@@ -1044,7 +1044,24 @@
       "skips": 0
     }
   },
-  "history": [],
+  "history": [
+    {
+      "t": "2026-11-22T10:46:19",
+      "event": "unlock",
+      "file": "tests/playtest/replacement.acceptance.test.ts",
+      "reason": "Re-lock with the reviewed MINOR edits: an overlapping builder gate re-locked the pre-edit hashes"
+    },
+    {
+      "t": "2026-11-22T10:46:19",
+      "event": "unlock",
+      "file": "tests/table/replace-bot.acceptance.test.ts",
+      "reason": "Re-lock with the reviewed MINOR edits: an overlapping builder gate re-locked the pre-edit hashes"
+    }
+  ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-6.8",
-  "spec_sha256": "e8fc64c041eb7be1560c4d041870a69d5d2304fc00fb958cf0cefbd482cdec7c"
+  "spec_sha256": "e8fc64c041eb7be1560c4d041870a69d5d2304fc00fb958cf0cefbd482cdec7c",
+  "review_findings": {
+    "1": 0
+  },
+  "relock_pending": []
 }

@@ -43,6 +43,14 @@ function replacements(hands: readonly PlayedHand[]): Replacement[] {
   );
 }
 
+/** The `--styles` value for `hand`: seats 2..6 styles as lowercase, hyphenated slugs. */
+function styleSlugs(hand: PlayedHand): string {
+  return (hand.lineUp ?? [])
+    .slice(1)
+    .map((s) => String(s.style).toLowerCase().replace(' ', '-'))
+    .join(',');
+}
+
 function capture(argv: string[], seams?: PlaytestSeams) {
   let out = '';
   let err = '';
@@ -125,6 +133,9 @@ describe('replacement bots in the playtest', () => {
       const soft = replacements(run('Soft').hands);
       expect(soft.length).toBeGreaterThan(0);
       for (const { style } of soft) expect(['Calling station', 'Rock']).toContain(style);
+      for (const { hand, seat, style } of soft) {
+        expect(style).toBe(drawReplacementStyle('Soft', 6, handReplayCode(42, hand - 1), seat));
+      }
     },
     TEST_TIMEOUT_MS,
   );
@@ -135,10 +146,7 @@ describe('replacement bots in the playtest', () => {
       const { hands } = run('Mixed');
       const firstReplaced = hands.find((hand) => (hand.replaced ?? []).length > 0) as PlayedHand;
       const k = firstReplaced.number;
-      const slugs = (firstReplaced.lineUp ?? [])
-        .slice(1)
-        .map((s) => String(s.style).toLowerCase().replace(' ', '-'))
-        .join(',');
+      const slugs = styleSlugs(firstReplaced);
 
       const violating = capture(['--hands', String(k), '--seed', '42', '--lineup', 'mixed'], {
         onAction: flagFirstActionOfHand(k),
@@ -160,10 +168,7 @@ describe('replacement bots in the playtest', () => {
 
       // Every hand with a replaced bot replays in full from its printed options.
       for (const hand of hands.filter((h) => (h.replaced ?? []).length > 0)) {
-        const styles = (hand.lineUp ?? [])
-          .slice(1)
-          .map((s) => String(s.style).toLowerCase().replace(' ', '-'))
-          .join(',');
+        const styles = styleSlugs(hand);
         const stacks = Array.from(
           { length: 6 },
           (_, i) => hand.record.seats.find((s) => s.seat === i + 1)?.stack ?? 0,

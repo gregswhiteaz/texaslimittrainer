@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-22T17:19:00Z'
+updated_date: '2026-11-22T17:46:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -16,6 +16,7 @@ references:
 documentation:
   - doc-1
   - doc-2
+  - doc-82
 parent_task_id: TASK-6
 priority: high
 type: feature
@@ -87,4 +88,14 @@ Full spec: doit/TASK-6.8/spec.md
 
 <!-- SECTION:NOTES:BEGIN -->
 AC added from TASK-3.4 follow-up (doc-25).
+
+Build: replacementGenerator + uniform style draw, REPLACEMENT_NAMES never reused (nextBotName), cash nextHand replaces $0 bots, playtest --lineup replacement + 'Bots replaced' + --styles; Q-4 locked edits only; recorded deviation: drawReplacementStyle lives in src/table/session.ts (bots/ boundary test forbids engine runtime imports); default SHA unchanged; gate PASS.
+
+Note: tests/playtest/policy-lineup.acceptance.test.ts was not in TASK-1.52's locked_tests, so no unlock event exists; the Q-4 edit (200→45 hands) is user-approved and recorded in qa.md and TASK-1.52 notes.
 <!-- SECTION:NOTES:END -->
+
+## Final Summary
+
+<!-- SECTION:FINAL_SUMMARY:BEGIN -->
+Cash bots on $0 are now replaced before the next hand by a new bot ($160, style drawn seeded from replay code+seat from the line-up's styles, unique name Jay…Zed then 'Jay 2'); bots with $1+ keep their stack; user seat and sit-and-go keep the TEMPORARY top-up. --lineup cash playtests use the same rule, print 'Bots replaced: n', and replay with --styles. Verified: npm test/lint/typecheck pass, 10k --lineup mixed = 34 replacements, 0 violations, default-run SHA unchanged, branch CI #183 green; review R1 0 blocking, security clean. Review: assumptions A-1..A-6 and decisions Q-1..Q-4 (three approved locked-test edits) in the story doc. Deviation: drawReplacementStyle is in src/table/session.ts (bots/ boundary test). Risks: scope 995 lines vs 700; TASK-3.21 and TASK-4.7/3.14 need notes (bot top-up gone; bot identity = never-reused name).
+<!-- SECTION:FINAL_SUMMARY:END -->
