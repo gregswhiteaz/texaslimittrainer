@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-22T05:01:00Z'
+updated_date: '2026-11-22T05:12:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -84,4 +84,6 @@ Full spec: doit/TASK-6.6/spec.md
 
 <!-- SECTION:NOTES:BEGIN -->
 AC added from TASK-6.4 follow-up
+
+Build: seatLineUp + BOT_NAMES, shared decideStyle, playtest --lineup (styles in 6-seat hands; random fallback otherwise), slow AC#8 (Tough 57 s, Mixed 72 s); baseline SHA unchanged; gate PASS.
 <!-- SECTION:NOTES:END -->

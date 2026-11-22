@@ -7,3 +7,8 @@
 - SPEC-14 baseline: `npm run -s playtest -- --hands 10000 --seed 42 --size 6 | shasum -a 256` = aacd5e94dccba90b4b50936ba1bb2b08aff2bda37d427efdfb56a6b07e488e01 (unchanged).
 - Scope: 13 files (budget 12; `tests/table/advice-service.test.ts` is required by SPEC-07 but missing from §5's list), about 630 changed lines (budget 700).
 - Not done here: the SPEC-15 story doc (`backlog doc`) and CI-green check, which are left for the orchestrator.
+
+## FIX round 1 (2026-11-21)
+- 1 [MAJOR] lineup-replay-policies-untested: fixed. In '--lineup parsing, header lines and replay suffix' added a 6-max check: 5 hands from `runPlaytest({hands: 5, seed: 42, size: 6, lineUp: 'Mixed'})` are each replayed via `main(['--replay-code', ..., '--button', ..., '--stacks', ..., '--lineup', 'mixed'])` and must print `formatHand` of the run's hand (number 1); at least one must not reproduce without `--lineup`. Mutant check: with `true ||` at src/playtest/cli.ts:325 the test fails (AssertionError: output does not contain the hand); mutant reverted, `git diff src/` empty.
+- MINOR (shared policy-seam helper): not done, optional, kept out to hold scope.
+- `npm run format`, `lint`, `typecheck` clean. `npm test`: 167 files passed, 1 skipped; 587 tests passed, 9 skipped.

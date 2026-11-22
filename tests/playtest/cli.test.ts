@@ -13,6 +13,7 @@ import { formatHand, formatReport, main, parseArgs, USAGE } from '../../src/play
 import {
   PLAYTEST_STAKES,
   replayHand,
+  runPlaytest,
   toAction,
   type PlayedHand,
   type PlaytestSummary,
@@ -545,6 +546,31 @@ describe('playtest CLI', () => {
     );
     expect(replayFaulty.code).toBe(1);
     expect(replayFaulty.out).not.toContain('Replay: ');
+
+    // A 6-max line-up hand replays with the line-up's policies (A-5).
+    const played: PlayedHand[] = [];
+    runPlaytest({ hands: 5, seed: 42, size: 6, lineUp: 'Mixed' }, (hand) => played.push(hand));
+    let differing = 0;
+    for (const hand of played) {
+      const stacks = Array.from(
+        { length: 6 },
+        (_, i) => hand.record.seats.find((s) => s.seat === i + 1)?.stack ?? 0,
+      ).join(',');
+      const argv = [
+        '--replay-code',
+        hand.record.replayCode,
+        '--button',
+        String(hand.record.button),
+        '--stacks',
+        stacks,
+      ];
+      const withLineUp = capture([...argv, '--lineup', 'mixed']);
+      expect(withLineUp.code).toBe(0);
+      const expected = formatHand({ ...hand, number: 1 });
+      expect(withLineUp.out).toContain(expected);
+      if (!capture(argv).out.includes(expected)) differing++;
+    }
+    expect(differing).toBeGreaterThan(0);
   });
 });
 

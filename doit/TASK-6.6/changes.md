@@ -11,7 +11,7 @@
 - `tests/bots/lineup.test.ts` — new: SPEC-06 errors, purity, worked examples.
 - `tests/table/advice-service.test.ts` — SPEC-07 `decideStyle matches each bot's own decision`.
 - `tests/playtest/policy.test.ts` — SPEC-08 `lineUpPolicyFactory` runner cases.
-- `tests/playtest/cli.test.ts` — SPEC-13 parsing, header, replay suffix; USAGE exact assertion updated to R-5.
+- `tests/playtest/cli.test.ts` — SPEC-13 parsing, header, replay suffix; USAGE exact assertion updated to R-5; FIX round 1: 6-max Mixed line-up hands replayed with `--lineup mixed` must print the run's hand, and at least one differs without `--lineup`.
 - `tests/playtest/lineup.acceptance.test.ts` — new: SPEC-09..12 (AC#6, AC#7, short 6-max runs, opt-in slow AC#8).
 
 No new dependencies.
