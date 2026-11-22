@@ -26,18 +26,24 @@ export interface MixedSpot {
 }
 
 export type DeviationStreet = 'preflop' | 'postflop';
-export type DeviationAdvice = 'fold' | 'raise';
+export type DeviationAdvice = 'fold' | 'raise' | 'check' | 'call';
+export type DeviationInstead = 'call' | 'bet' | 'raise';
 const DEVIATION_PAIRS: readonly string[] = [
   'preflop/fold/call',
   'preflop/raise/call',
   'postflop/fold/call',
+  'preflop/fold/raise',
+  'preflop/check/raise',
+  'preflop/call/raise',
+  'postflop/check/bet',
+  'postflop/call/raise',
 ];
 
 /** Where the advice is `advice` on `street`, play `instead` with `probability` (one draw). */
 export interface Deviation {
   readonly street: DeviationStreet;
   readonly advice: DeviationAdvice;
-  readonly instead: 'call';
+  readonly instead: DeviationInstead;
   readonly probability: number;
   readonly justification: string;
 }
@@ -197,7 +203,7 @@ export function parseStyle(raw: unknown, fileName: string): BotStyleData {
       deviations.push({
         street,
         advice,
-        instead: 'call',
+        instead: data.instead as DeviationInstead,
         probability: data.probability as number,
         justification: data.justification as string,
       });

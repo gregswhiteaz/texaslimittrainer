@@ -3,6 +3,7 @@ import { gradeView } from '../../src/advice/grade';
 import { recommend } from '../../src/advice/recommend';
 import { botRandom } from '../../src/engine/bot-random';
 import { decideCallingStation } from '../../src/bots/calling-station';
+import { decideManiac } from '../../src/bots/maniac';
 import { decideTag } from '../../src/bots/tag';
 import { Xoshiro128 } from '../../src/engine/seeded-random';
 import { handReplayCode, playHand } from '../../src/playtest/runner';
@@ -100,7 +101,7 @@ describe('advice service', () => {
           ok: true,
           value: decideCallingStation(view, { random: botRandom(seed) }),
         });
-        for (const style of ['TAG', 'Maniac', 'Rock'] as const) {
+        for (const style of ['TAG', 'Rock'] as const) {
           expect(handleAdviceRequest({ id: 2, kind: 'bot', view, style, seed })).toEqual({
             id: 2,
             ok: true,
@@ -115,6 +116,19 @@ describe('advice service', () => {
     expect(
       handleAdviceRequest({ id: 3, kind: 'bot', view: flop, style: 'Calling station', seed: 0 }),
     ).toEqual({ id: 3, ok: true, value: flop.legalActions.find((a) => a.type === 'check') });
+  });
+
+  it('default bot decision dispatches the Maniac', () => {
+    const { preflop, flop } = views();
+    for (const view of [preflop, flop]) {
+      for (const seed of [0, 12345, 4294967295]) {
+        expect(handleAdviceRequest({ id: 4, kind: 'bot', view, style: 'Maniac', seed })).toEqual({
+          id: 4,
+          ok: true,
+          value: decideManiac(view, { random: botRandom(seed) }),
+        });
+      }
+    }
   });
 
   it('handleAdviceRequest answers a malformed request with an error instead of throwing', () => {

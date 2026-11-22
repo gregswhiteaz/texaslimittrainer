@@ -7,10 +7,14 @@ import {
   StyleValidationError,
   type MixedSpot,
 } from '../../src/bots/style';
-import { decideTag } from '../../src/bots/tag';
+import { CALLING_STATION_STYLE } from '../../src/bots/calling-station';
+import { MANIAC_STYLE } from '../../src/bots/maniac';
+import { TAG_STYLE, decideTag } from '../../src/bots/tag';
 import type { PlayerView } from '../../src/engine/player-view';
 import { seededTagPolicy } from '../../src/playtest/policy';
 import { runPlaytest } from '../../src/playtest/runner';
+import tagJson from '../../src/bots/styles/tag.json' with { type: 'json' };
+import callingStationJson from '../../src/bots/styles/calling-station.json' with { type: 'json' };
 
 const JUSTIFICATION = 'One two three four five six seven eight nine ten words of reasoning.';
 const DESCRIPTION =
@@ -220,8 +224,8 @@ describe('bot style files', () => {
     expect(problemsOf(station([dev('preflop', 'check')]))).toEqual([
       `${WHERE} has unsupported deviation "preflop" "check" to "call"`,
     ]);
-    expect(problemsOf(station([dev('preflop', 'fold', 0.5, { instead: 'raise' })]))).toEqual([
-      `${WHERE} has unsupported deviation "preflop" "fold" to "raise"`,
+    expect(problemsOf(station([dev('preflop', 'fold', 0.5, { instead: 'bet' })]))).toEqual([
+      `${WHERE} has unsupported deviation "preflop" "fold" to "bet"`,
     ]);
     expect(problemsOf(station([dev('postflop', 'raise')]))).toEqual([
       `${WHERE} has unsupported deviation "postflop" "raise" to "call"`,
@@ -242,6 +246,68 @@ describe('bot style files', () => {
     expect(
       problemsOf(station([dev('postflop', 'fold', 0.5, { justification: 'Too few words' })])),
     ).toEqual([`${WHERE} deviation postflop fold has no justification (at least 10 words)`]);
+
+    // The Maniac's aggressive triples (D-1) parse and keep their `instead`.
+    const maniacFile = (deviations: unknown) =>
+      file({ style: 'Maniac', mixedSpots: [], deviations });
+    const aggressive = [
+      ['preflop', 'fold', 'raise'],
+      ['preflop', 'check', 'raise'],
+      ['preflop', 'call', 'raise'],
+      ['postflop', 'check', 'bet'],
+      ['postflop', 'call', 'raise'],
+    ] as const;
+    expect(
+      parseStyle(
+        maniacFile(aggressive.map(([s, a, instead]) => dev(s, a, 0.5, { instead }))),
+        'x.json',
+      ).deviations,
+    ).toEqual(
+      aggressive.map(([street, advice, instead]) => ({
+        street,
+        advice,
+        instead,
+        probability: 0.5,
+        justification: JUSTIFICATION,
+      })),
+    );
+    for (const [street, advice, instead] of [
+      ['preflop', 'fold', 'bet'],
+      ['postflop', 'fold', 'raise'],
+      ['postflop', 'check', 'raise'],
+      ['preflop', 'check', 'bet'],
+      ['postflop', 'raise', 'call'],
+      ['preflop', 'call', 'call'],
+    ]) {
+      expect(problemsOf(maniacFile([dev(street, advice, 0.5, { instead })]))).toEqual([
+        `x.json: style Maniac has unsupported deviation "${street}" "${advice}" to "${instead}"`,
+      ]);
+    }
+    expect(
+      problemsOf(
+        maniacFile([
+          dev('postflop', 'call', 0.5, { instead: 'raise' }),
+          dev('postflop', 'call', 0.2, { instead: 'raise' }),
+        ]),
+      ),
+    ).toEqual(['x.json: style Maniac lists deviation postflop call twice']);
+    // postflop/call has one supported `instead`, so a different one is shown with preflop/fold.
+    expect(
+      problemsOf(
+        maniacFile([
+          dev('preflop', 'fold', 0.5, { instead: 'raise' }),
+          dev('preflop', 'fold', 0.5, { instead: 'call' }),
+        ]),
+      ),
+    ).toEqual(['x.json: style Maniac lists deviation preflop fold twice']);
+    expect(parseStyle(tagJson, 'tag.json')).toEqual(TAG_STYLE);
+    expect(parseStyle(callingStationJson, 'calling-station.json')).toEqual(CALLING_STATION_STYLE);
+    expect(findDeviation(MANIAC_STYLE, 'postflop', 'check')).toMatchObject({
+      street: 'postflop',
+      advice: 'check',
+      instead: 'bet',
+    });
+    expect(findDeviation(MANIAC_STYLE, 'postflop', 'fold')).toBeUndefined();
 
     // Several problems are all listed, and untrusted text is cut to 20 characters.
     const long = 'y'.repeat(30);

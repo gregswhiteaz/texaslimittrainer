@@ -1,0 +1,44 @@
+{
+  "format": "tlh-bot-style",
+  "version": 1,
+  "style": "Maniac",
+  "description": "Maniac (loose-aggressive) plays far too many hands and bets and raises far too often. It starts from the trainer's own advice, like TAG, but often raises hands the advice folds, raises where the advice only calls, and bets most of the time when everyone checks to it. It still calls when the betting is capped and folds after the flop when the price is clearly wrong. Call it down with good hands and re-raise your strong ones.",
+  "mixedSpots": [],
+  "deviations": [
+    {
+      "street": "preflop",
+      "advice": "fold",
+      "instead": "raise",
+      "probability": 0.45,
+      "justification": "Raising nearly half of the hands the chart folds against a bet more than doubles TAG's starting range and makes most of those entries raises, which puts the Maniac's VPIP and PFR inside their bands."
+    },
+    {
+      "street": "preflop",
+      "advice": "call",
+      "instead": "raise",
+      "probability": 0.6,
+      "justification": "Turning most of the chart's calls into raises means the Maniac rarely just calls before the flop, so its raises carry little information about its hand strength."
+    },
+    {
+      "street": "preflop",
+      "advice": "check",
+      "instead": "raise",
+      "probability": 0.6,
+      "justification": "In the big blind with only limpers in, the Maniac usually raises its free option, punishing limps and building pots it cannot win on hand strength alone."
+    },
+    {
+      "street": "postflop",
+      "advice": "check",
+      "instead": "bet",
+      "probability": 0.85,
+      "justification": "Betting almost every time it is checked to, whatever it holds, is the Maniac's defining leak: its bets show no strength, so the learner should call down lighter."
+    },
+    {
+      "street": "postflop",
+      "advice": "call",
+      "instead": "raise",
+      "probability": 0.85,
+      "justification": "Raising most bets it would call keeps the pot growing with drawing and medium hands, so the learner gets value by letting the Maniac raise into strong hands."
+    }
+  ]
+}
