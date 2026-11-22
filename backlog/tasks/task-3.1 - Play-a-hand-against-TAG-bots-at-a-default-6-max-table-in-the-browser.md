@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-18T21:33:00Z'
+updated_date: '2026-11-22T15:14:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-0
@@ -89,6 +89,8 @@ Full spec: doit/TASK-3.1/spec.md
 Build: src/table/session.ts (headless session: seat, deal, bot steps via tagPolicy, user actions, CompletedHand), src/ui/table/{useTableSession.ts,Table.tsx} (minimal table, Hand over per Q-1), App renders Table; e2e 36 passed in Chromium + WebKit (fake clock paused before load; 10-minute idle check); action buttons given explicit colours to pass WebKit axe contrast; gate PASS. Screenshots: doit/TASK-3.1/table-turn.png, table-end.png.
 
 CI run 44401280144 (head 69dbc9b): success first push (E2E 34 passed). Judge round 1: PASS 21/21, no findings; 900 headless hands and 48 seeded browser hands in Chromium + WebKit: turn order always correct, buttons equal legal actions, no hidden cards in the DOM, one deal per load incl. StrictMode dev, 0 ms button gap, 10-minute idle unchanged. Follow-ups (Step 6a): ACs added to TASK-3.4 (stack carry-over/button/min-stack rule; completedHand fallbacks), TASK-1.26 (src/table headless lint), TASK-3.3 (visible text over data hooks), TASK-2.1 (full SessionConfig), TASK-3.9 (onHandComplete once, tested), TASK-3.13 (no-artificial-delay pacing test). No new tasks needed.
+
+Locked e2e test unlocked for TASK-1.52 Q-1 (user-approved; clock-advance only).
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary

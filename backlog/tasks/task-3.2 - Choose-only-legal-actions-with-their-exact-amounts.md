@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-18T22:48:00Z'
+updated_date: '2026-11-22T15:14:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-0
@@ -86,6 +86,8 @@ Cross-story change: e2e/table.spec.ts (TASK-3.1 acceptance test) gets three edit
 Build: src/table/action-bar.ts (headless bar model, exact labels, idle greyed Fold/Call/Raise per Q-1), src/ui/table/ActionBar.tsx, Table uses it; styles .action-bar 52 px; e2e/table.spec.ts three D-4 edits only; e2e 46 passed (Chromium + WebKit); playtest 0 violations; gate PASS. Orchestrator decision (A-7, test technique, reversible): axe scans at a bot's turn run with worker-backed real timers while the page clock is paused, then assert the paused state was unchanged.
 
 CI run 44413273045 (head 9bfb87d): success first push. Judge round 1: PASS 18/18, no findings; 25,004-decision own property; 14 seeded hands per browser matched an independent replay at every user turn; force-clicks, DOM re-enables and 15+ single keys did nothing; Tab+Enter/Space work; axe clean at user turn, bot turn and hand over; e2e/table.spec.ts differs from main only by the three D-4 edits. Follow-ups (Step 6a): ACs added to TASK-3.16 (primary accent decision; keep 'Your actions', move duplicated e2e helpers, drop checkOrCall fallback), TASK-3.7 (all-in labels, wider property; DOM re-enable test), TASK-8.1 (Hint only on enabled bar). No new tasks needed.
+
+Locked e2e test unlocked for TASK-1.52 Q-1 (user-approved; clock-advance only).
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary

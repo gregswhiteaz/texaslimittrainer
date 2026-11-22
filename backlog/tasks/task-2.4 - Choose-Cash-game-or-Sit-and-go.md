@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-21T20:08:00Z'
+updated_date: '2026-11-22T15:14:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -99,6 +99,8 @@ Review R1: 0 blocking. MINOR (SPEC-08 test name says 1500, asserts 800) kept bec
 Follow-ups (Step 6a): AC added to TASK-5.1 (game type/level + merge sng constants); TASK-3.21 already carries sng-never-refills + test rename; plain-chip stacks/pot owned by TASK-5.3.
 
 Judge R1 PASS 15/15 (real app both browsers, keyboard; 9/9 mutants). J-1-02 → TASK-3.26 AC.
+
+Locked e2e test unlocked for TASK-1.52 Q-1 (user-approved; clock-advance only).
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary

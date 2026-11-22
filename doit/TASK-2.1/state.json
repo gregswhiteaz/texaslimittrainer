@@ -434,6 +434,12 @@
       "event": "unlock",
       "file": "tests/ui/home.acceptance.test.tsx",
       "reason": "TASK-2.4 Q-5 (autopilot, recommended): game-type radios added; extraction-only edit, expected values unchanged"
+    },
+    {
+      "t": "2026-11-22T08:14:53",
+      "event": "unlock",
+      "file": "e2e/home.spec.ts",
+      "reason": "TASK-1.52 Q-1 (user-approved): reach state via bounded runUntilMyTurn; assertions unchanged"
     }
   ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-2.1",
@@ -447,6 +453,7 @@
   },
   "relock_pending": [
     "tests/ui/home.acceptance.test.tsx",
-    "tests/ui/home.acceptance.test.tsx"
+    "tests/ui/home.acceptance.test.tsx",
+    "e2e/home.spec.ts"
   ]
 }

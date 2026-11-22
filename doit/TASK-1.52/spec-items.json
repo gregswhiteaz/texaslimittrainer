@@ -1,0 +1,50 @@
+[
+  {
+    "id": "SPEC-01",
+    "verifies": "AC#1, AC#4",
+    "verification": "unit `tests/playtest/policy.test.ts::lineUpPolicyFactory plays the preset at 6 seats and random moves otherwise` and `tests/playtest/policy-lineup.acceptance.test.ts::lineUpPolicyFactory plays the preset at 6 seats and random moves otherwise`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-02",
+    "verifies": "AC#1, AC#4",
+    "verification": "unit `tests/bots/calling-station-draws.acceptance.test.ts::Calling station draws once only at deviating decisions` and `tests/bots/calling-station.test.ts::drawDeviation draws once and compares against p`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-03",
+    "verifies": "AC#1, AC#3",
+    "verification": "command `gh run view <branch-run-id> --log | sed 's/\\x1b\\[[0-9;]*m//g' | perl -ne 'print if /^Unit tests with coverage\\t.*[\u2713\u00d7].*\\s(\\d+)ms\\s*$/ && $1 >= 10000'` prints nothing",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-04",
+    "verifies": "AC#2",
+    "verification": "acceptance `e2e/worker-delay.spec.ts::with every worker reply 2 s late the bounded advance still reaches my turn`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-05",
+    "verifies": "AC#2",
+    "verification": "acceptance `e2e/worker-delay.spec.ts::with every worker reply 2 s late a fixed 1,000 ms budget is not enough`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-06",
+    "verifies": "AC#2, AC#3, AC#4",
+    "verification": "command `npx playwright test e2e/action-bar-limits.spec.ts e2e/action-bar.spec.ts e2e/table-display.spec.ts e2e/table.spec.ts e2e/home.spec.ts e2e/game-type-choice.spec.ts e2e/worker-delay.spec.ts && git diff main -- e2e/ tests/ | grep -E '^-.*expect' ` (the grep prints nothing except lines moved verbatim to the new sweep files)",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-07",
+    "verifies": "AC#2",
+    "verification": "unit `e2e/worker-delay.spec.ts::runUntilMyTurn throws when my turn never comes`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-08",
+    "verifies": "AC#4",
+    "verification": "command `gh run list --branch doit/TASK-1.52 --limit 1 --json conclusion,attempt` shows `success` with attempt 1",
+    "status": "pending"
+  }
+]

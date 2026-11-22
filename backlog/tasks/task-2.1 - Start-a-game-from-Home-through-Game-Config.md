@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-18T23:20:00Z'
+updated_date: '2026-11-22T15:14:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-0
@@ -95,6 +95,8 @@ Cross-story change (user Q-3): exactly four test edits listed in spec §4 — e2
 Build: full SessionConfig with defaults (Q-2); App screens Home -> Game Config -> Table; HomeScreen (logo = src/assets/tlh-logo.jpg, red New game), GameConfigScreen (read-only, Q-4), TableScreen; useHeadingFocus (tabIndex -1 only while focusing, keeps TASK-3.1's plain h1); charcoal theme; four cross-story test edits only (Q-3); e2e 60/60 Chromium + WebKit; playtest 0 violations; ~918 lines vs 700 (warn); gate PASS. Screenshots: doit/TASK-2.1/home.png, config.png.
 
 CI run 44418379341 (head 954a0b6): success first push. Judge round 1: PASS 17/17, no blocking; full flow in Chromium + WebKit; logo mean diff 0.78/2.63 (limit 4); colours measured exact; Config text matches Q-4; user at seat 1 with button 1 played 40 hands correctly; only the four Q-3 test edits vs main; 5 mutants caught. Follow-ups (Step 6a): created TASK-2.18 (Home first-load focus, user-seat cards, config-driven stacks tests); ACs added to TASK-2.2 (player selector writes config; size labels), TASK-2.13 (random seat/button into config), TASK-2.14 (browser Back/Forward), TASK-3.10 (assertSessionConfig, REQ-025). Skipped: Table Home control (TASK-2.14's own purpose), Home right column (TASK-2.16/2.17's own purpose), other Game Config selectors (TASK-2.3/2.4/2.5/2.11's own purpose).
+
+Locked e2e test unlocked for TASK-1.52 Q-1 (user-approved; clock-advance only).
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary
