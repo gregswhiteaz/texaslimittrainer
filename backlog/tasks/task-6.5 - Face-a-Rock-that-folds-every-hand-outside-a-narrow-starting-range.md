@@ -1,10 +1,11 @@
 ---
 id: TASK-6.5
 title: Face a Rock that folds every hand outside a narrow starting range
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-17T23:22:00Z'
+updated_date: '2026-11-22T02:23:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -65,3 +66,21 @@ Plan key: E06-S05 · Dream: limit-holdem-trainer
 - [ ] #12 Story documentation is written and published to Backlog.md
 - [ ] #13 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. Optional startingRange section in the style format; validator enforces all 26 spots, TAG-subset and fewer-classes rules (Q-1).
+2. rock.json with ranges, description and justifications (Q-2).
+3. decideRock: outside range fold when owing / check when free; inside range plays the advice; no randomness (Q-3).
+4. Worker routes 'Rock' to decideRock (Q-4).
+5. Fast tests (seconds): AC#2–#5, 1,000-hand seated run; playtest byte-identical.
+
+Full spec: doit/TASK-6.5/spec.md
+<!-- SECTION:PLAN:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+Autopilot Q-1..Q-4 auto-accepted (qa.md).
+<!-- SECTION:NOTES:END -->
