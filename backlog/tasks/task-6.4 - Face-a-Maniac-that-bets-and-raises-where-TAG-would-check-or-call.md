@@ -1,10 +1,11 @@
 ---
 id: TASK-6.4
 title: Face a Maniac that bets and raises where TAG would check or call
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-17T23:22:00Z'
+updated_date: '2026-11-22T01:04:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -60,3 +61,20 @@ Plan key: E06-S04 · Dream: limit-holdem-trainer
 - [ ] #11 Story documentation is written and published to Backlog.md
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. Widen the deviation format: advice fold|raise|check|call, instead call|bet|raise, five new allowed pairs, still v1 (Q-1).
+2. maniac.json (0.45/0.6/0.6/0.85/0.85 + description, Q-2) and decideManiac: one draw per applicable deviation; aggressive move illegal (capped) → call when owed.
+3. Worker routes 'Maniac' to decideManiac (Q-3).
+4. Tests: AC#2/#3 vs TAG over 10,000 points, AC#4 via file change, AC#5 capped; 200 seated hands in the normal suite; playtest byte-identical.
+
+Full spec: doit/TASK-6.4/spec.md
+<!-- SECTION:PLAN:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+Autopilot Q-1..Q-3 auto-accepted (qa.md).
+<!-- SECTION:NOTES:END -->
