@@ -1,7 +1,15 @@
 import { describe, expect, it } from 'vitest';
 import { HAND_CLASSES } from '../../src/advice/hand-class';
 import type { ChartCell, Position, PreflopChart, Situation } from '../../src/advice/preflop-chart';
-import { positionOf, recommendPreflop, situationOf } from '../../src/advice/preflop';
+import { chartCell } from '../../src/advice/preflop-chart';
+import {
+  chartSpotOf,
+  positionOf,
+  PREFLOP_CHARTS,
+  recommendPreflop,
+  referenceSizeOf,
+  situationOf,
+} from '../../src/advice/preflop';
 import { parseCards, type Card } from '../../src/engine/cards';
 import { applyAction, createHand, type Action, type SeatNumber } from '../../src/engine/hand';
 import { playerView, type PlayerView } from '../../src/engine/player-view';
@@ -144,11 +152,11 @@ describe('preflop advice', () => {
     expect(() => recommendPreflop(viewAfter(1, [f(4)]))).toThrow(
       new RangeError('Seat 1 is not to act'),
     );
-    expect(() => recommendPreflop(viewAfter(4, [], [1, 2, 3, 4, 5]))).toThrow(
-      new RangeError('The 6-max chart needs 6 dealt-in seats, got 5'),
-    );
-    expect(() => recommendPreflop(viewAfter(4, [], [1, 2, 3, 4, 5, 6, 7]))).toThrow(
-      new RangeError('The 6-max chart needs 6 dealt-in seats, got 7'),
+    expect(() =>
+      recommendPreflop(viewAfter(4, [], [1, 2, 3, 4, 5, 6, 7, 8, 9]), { chart: coChart }),
+    ).toThrow(new RangeError('The 6-max chart does not fit 9 dealt-in seats'));
+    expect(() => recommendPreflop(viewAfter(1, [], [1, 2]), { chart: coChart })).toThrow(
+      new RangeError('The 6-max chart does not fit 2 dealt-in seats'),
     );
     expect(() =>
       recommendPreflop(co, { chart: oneSpotChart('UTG', 'unopened', cell('raise')) }),
@@ -164,5 +172,74 @@ describe('preflop advice', () => {
     const start = cpuNowMs();
     for (let i = 0; i < 10_000; i++) recommendPreflop(views[i % 3] as PlayerView);
     expect(cpuNowMs() - start).toBeLessThan(1000);
+  });
+
+  it('maps every seat at sizes 2 to 10', () => {
+    expect([2, 3, 7, 8, 10].map(referenceSizeOf)).toEqual([
+      'heads-up',
+      '6-max',
+      '6-max',
+      'full-ring',
+      'full-ring',
+    ]);
+    for (const n of [1, 11, 0]) {
+      expect(() => referenceSizeOf(n)).toThrow(
+        new RangeError(`No reference size for ${n} dealt-in seats`),
+      );
+    }
+
+    // Positions by seats after the button: index 0 = the button, 1 = the next seat, and so on.
+    const fromButton: Record<number, Position[]> = {
+      2: ['BTN', 'BB'],
+      3: ['BTN', 'SB', 'BB'],
+      4: ['BTN', 'SB', 'BB', 'CO'],
+      5: ['BTN', 'SB', 'BB', 'HJ', 'CO'],
+      6: ['BTN', 'SB', 'BB', 'UTG', 'HJ', 'CO'],
+      7: ['BTN', 'SB', 'BB', 'UTG', 'UTG', 'HJ', 'CO'],
+      8: ['BTN', 'SB', 'BB', 'UTG+1', 'MP', 'LJ', 'HJ', 'CO'],
+      9: ['BTN', 'SB', 'BB', 'UTG', 'UTG+1', 'MP', 'LJ', 'HJ', 'CO'],
+      10: ['BTN', 'SB', 'BB', 'UTG', 'UTG', 'UTG+1', 'MP', 'LJ', 'HJ', 'CO'],
+    };
+    for (let n = 2; n <= 10; n++) {
+      const all = Array.from({ length: 10 }, (_, i) => (i + 1) as SeatNumber);
+      // Seats 1..n, and the last n seats (empty seats before them), with every seat as the button.
+      for (const seats of [all.slice(0, n), all.slice(10 - n)]) {
+        for (let b = 0; b < n; b++) {
+          const got = seats.map((seat) => positionOf(viewAfter(seat, [], seats, seats[b])));
+          const want = seats.map((_, j) => fromButton[n]?.[(j - b + n) % n]);
+          expect(got, `${n} seats ${seats.join(',')} button ${seats[b]}`).toEqual(want);
+        }
+      }
+    }
+    // Explicit sizes override the dealt-in count's chart.
+    const nine = [1, 2, 3, 4, 5, 6, 7, 8, 9] as SeatNumber[];
+    expect(positionOf(viewAfter(4, [], nine), '6-max')).toBe('UTG');
+    expect(positionOf(viewAfter(6, [], nine), '6-max')).toBe('UTG');
+    expect(positionOf(viewAfter(7, [], nine), '6-max')).toBe('UTG');
+    expect(positionOf(viewAfter(8, [], nine), '6-max')).toBe('HJ');
+
+    // A-3: the earliest-mapped seat facing a limp reads the limpers spot one seat later.
+    const sevenLimp = viewAfter(5, [c(4, 4)], [1, 2, 3, 4, 5, 6, 7]);
+    expect(positionOf(sevenLimp)).toBe('UTG');
+    expect(chartSpotOf(sevenLimp)).toEqual({ position: 'HJ', situation: 'limpers' });
+    const tenLimp = viewAfter(5, [c(4, 4)], [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+    expect(positionOf(tenLimp)).toBe('UTG');
+    expect(chartSpotOf(tenLimp)).toEqual({ position: 'UTG+1', situation: 'limpers' });
+    for (const view of [sevenLimp, tenLimp]) {
+      const rec = recommendPreflop(view);
+      expect(rec.position).toBe(chartSpotOf(view).position);
+      expect(rec.cell).toEqual(
+        chartCell(PREFLOP_CHARTS[rec.referenceSize], rec.position, rec.situation, rec.handClass),
+      );
+    }
+    // Spots that exist keep their own position.
+    expect(chartSpotOf(viewAfter(4, [], [1, 2, 3, 4, 5, 6, 7]))).toEqual({
+      position: 'UTG',
+      situation: 'unopened',
+    });
+    expect(chartSpotOf(viewAfter(6, [c(4, 4), f(5)], [1, 2, 3, 4, 5, 6, 7, 8, 9]))).toEqual({
+      position: 'MP',
+      situation: 'limpers',
+    });
   });
 });

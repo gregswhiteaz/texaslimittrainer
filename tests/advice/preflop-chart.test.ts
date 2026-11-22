@@ -76,9 +76,19 @@ describe('preflop chart validator', () => {
     expect(problemsOf([])).toEqual(formatProblem);
     expect(problemsOf({ ...minimalChart(), format: 'other' })).toEqual(formatProblem);
     expect(problemsOf({ ...minimalChart(), version: 2 })).toEqual(formatProblem);
-    expect(problemsOf({ ...minimalChart(), referenceSize: 'full-ring' })).toEqual([
-      'Chart file: unknown reference size "full-ring"',
+    expect(problemsOf({ ...minimalChart(), referenceSize: '9-max' })).toEqual([
+      'Chart file: unknown reference size "9-max"',
     ]);
+    // Every 6-max spot also applies at full ring, so a 6-max spot list misses only the full-ring-only spots.
+    const sixMaxKeys = new Set(
+      APPLICABLE_SPOTS['6-max'].map((s) => `${s.position} ${s.situation}`),
+    );
+    expect(problemsOf({ ...minimalChart(), referenceSize: 'full-ring' })).toEqual(
+      APPLICABLE_SPOTS['full-ring']
+        .map((s) => `${s.position} ${s.situation}`)
+        .filter((key) => !sixMaxKeys.has(key))
+        .map((key) => `full-ring chart: missing spot ${key}`),
+    );
 
     expect(problemsOf({ ...minimalChart(), justification: words(49) })).toEqual([
       '6-max chart: missing plain-English justification (at least 50 words)',

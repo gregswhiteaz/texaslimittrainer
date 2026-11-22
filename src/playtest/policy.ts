@@ -40,19 +40,15 @@ export function scriptedPolicy(actions: readonly Action[], then?: SeatPolicy): S
 }
 
 /** Seat s plays seats[s-1]: user (style null) → seededTagPolicy; a bot → decideStyle with its style, deciding with
- *  botRandom(botDecisionSeed(code, view)); but in a hand whose view.players.length !== 6 every seat plays
- *  randomMovePolicy(seatGenerator(code, seat)) (D-2 of TASK-6.6: the advice has only a 6-max chart). */
+ *  botRandom(botDecisionSeed(code, view)). */
 export function seatStylesPolicyFactory(
   seats: readonly LineUpSeat[],
 ): (code: ReplayCode, seat: SeatNumber) => SeatPolicy {
   return (code, seat) => {
     const { style } = seats[seat - 1] as LineUpSeat;
-    const styled: SeatPolicy =
-      style === null
-        ? seededTagPolicy(code)
-        : (view) => decideStyle(view, style, botRandom(botDecisionSeed(code, view)));
-    const random = randomMovePolicy(seatGenerator(code, seat));
-    return (view) => (view.players.length === 6 ? styled(view) : random(view));
+    return style === null
+      ? seededTagPolicy(code)
+      : (view) => decideStyle(view, style, botRandom(botDecisionSeed(code, view)));
   };
 }
 

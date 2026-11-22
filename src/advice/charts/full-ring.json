@@ -1,0 +1,828 @@
+{
+  "format": "tlh-preflop-chart",
+  "version": 1,
+  "referenceSize": "full-ring",
+  "justification": "A tight-aggressive plan for full-ring fixed-limit hold'em, with eight or nine opponents. With so many players still to act, someone often holds a strong hand, so we enter far fewer pots than at six-handed and the first positions are the tightest of all. The under-the-gun range is built to stay sound at both nine and ten seats, since a ten-handed table's two earliest seats both use it. First in, we raise or fold; only the small blind sometimes completes. Behind limpers we raise hands that beat a limping range and call with hands that win big pots when they hit, such as small pairs and suited aces. Facing a single raise we mostly re-raise or fold; callers in between give a better price for speculative hands. Once our own raise is re-raised we call with most of our range and raise again only with the very best hands. Overall the chart aims to play roughly 12 to 16 percent of hands voluntarily.",
+  "spots": [
+    {
+      "position": "UTG",
+      "situation": "unopened",
+      "justification": "Up to nine players act behind us, so we open only hands that hold up when one of them wakes up: sevens or better, the strong suited aces and suited broadway cards, and ace-queen or better offsuit. Ace-jack offsuit and sixes are edge opens, kept small so the range stays sound at a ten-handed table.",
+      "grid": [
+        "R    R    R    R    R    F    F    F    F    F    F    F    F",
+        "R    R    R    R    F*/R F    F    F    F    F    F    F    F",
+        "R    F    R    R    F    F    F    F    F    F    F    F    F",
+        "R*/F F    F    R    R    F    F    F    F    F    F    F    F",
+        "F    F    F    F    R    F    F    F    F    F    F    F    F",
+        "F    F    F    F    F    R    F    F    F    F    F    F    F",
+        "F    F    F    F    F    F    R    F    F    F    F    F    F",
+        "F    F    F    F    F    F    F    R    F    F    F    F    F",
+        "F    F    F    F    F    F    F    F    R*/F F    F    F    F",
+        "F    F    F    F    F    F    F    F    F    F    F    F    F",
+        "F    F    F    F    F    F    F    F    F    F    F    F    F",
+        "F    F    F    F    F    F    F    F    F    F    F    F    F",
+        "F    F    F    F    F    F    F    F    F    F    F    F    F"
+      ]
+    },
+    {
+      "position": "UTG+1",
+      "situation": "unopened",
+      "justification": "One seat later the field behind is still large, so the range grows by only a step: sixes, king-ten suited, ace-nine suited and ace-jack offsuit become standard. King-queen offsuit is a close open, and fives or queen-ten suited are folds that a looser table could tempt us to raise.",
+      "grid": [
+        "R    R    R    R    R    R    F    F    F    F    F    F    F",
+        "R    R    R    R    R    F    F    F    F    F    F    F    F",
+        "R    R*/F R    R    F*/R F    F    F    F    F    F    F    F",
+        "R    F    F    R    R    F    F    F    F    F    F    F    F",
+        "F    F    F    F    R    F    F    F    F    F    F    F    F",
+        "F    F    F    F    F    R    F    F    F    F    F    F    F",
+        "F    F    F    F    F    F    R    F    F    F    F    F    F",
+        "F    F    F    F    F    F    F    R    F    F    F    F    F",
+        "F    F    F    F    F    F    F    F    R    F    F    F    F",
+        "F    F    F    F    F    F    F    F    F    F*/R F    F    F",
+        "F    F    F    F    F    F    F    F    F    F    F    F    F",
+        "F    F    F    F    F    F    F    F    F    F    F    F    F",
+        "F    F    F    F    F    F    F    F    F    F    F    F    F"
+      ]
+    },
+    {
+      "position": "MP",
+      "situation": "unopened",
+      "justification": "In the middle position six or seven opponents remain. We add fives, queen-ten suited, ten-nine suited, and the ace-eight and ace-five suited, which make nut flushes and the wheel. Ace-ten offsuit is a borderline open because it is easily dominated by stronger aces behind.",
+      "grid": [
+        "R    R    R    R    R    R    R    F    F    R    F    F    F",
+        "R    R    R    R    R    F    F    F    F    F    F    F    F",
+        "R    R    R    R    R    F    F    F    F    F    F    F    F",
+        "R    F*/R F    R    R    F    F    F    F    F    F    F    F",
+        "R*/F F    F    F    R    R    F    F    F    F    F    F    F",
+        "F    F    F    F    F    R    F    F    F    F    F    F    F",
+        "F    F    F    F    F    F    R    F    F    F    F    F    F",
+        "F    F    F    F    F    F    F    R    F    F    F    F    F",
+        "F    F    F    F    F    F    F    F    R    F    F    F    F",
+        "F    F    F    F    F    F    F    F    F    R    F    F    F",
+        "F    F    F    F    F    F    F    F    F    F    F*/R F    F",
+        "F    F    F    F    F    F    F    F    F    F    F    F    F",
+        "F    F    F    F    F    F    F    F    F    F    F    F    F"
+      ]
+    },
+    {
+      "position": "LJ",
+      "situation": "unopened",
+      "justification": "Four seats before the button the range opens up a little more. Fours, ace-ten and king-jack offsuit, and the ace-seven and ace-four suited now raise. Ace-six suited is a close raise; threes and king-nine suited are close folds that a passive table would let us open.",
+      "grid": [
+        "R    R    R    R    R    R    R    R    R*/F R    R    F    F",
+        "R    R    R    R    R    F*/R F    F    F    F    F    F    F",
+        "R    R    R    R    R    F    F    F    F    F    F    F    F",
+        "R    R    F    R    R    F    F    F    F    F    F    F    F",
+        "R    F    F    F    R    R    F    F    F    F    F    F    F",
+        "F    F    F    F    F    R    F    F    F    F    F    F    F",
+        "F    F    F    F    F    F    R    F    F    F    F    F    F",
+        "F    F    F    F    F    F    F    R    F    F    F    F    F",
+        "F    F    F    F    F    F    F    F    R    F    F    F    F",
+        "F    F    F    F    F    F    F    F    F    R    F    F    F",
+        "F    F    F    F    F    F    F    F    F    F    R    F    F",
+        "F    F    F    F    F    F    F    F    F    F    F    F*/R F",
+        "F    F    F    F    F    F    F    F    F    F    F    F    F"
+      ]
+    },
+    {
+      "position": "HJ",
+      "situation": "unopened",
+      "justification": "With only the cutoff, button and blinds left behind, we raise every suited ace, threes, queen-jack offsuit, king-nine and jack-nine suited. Nine-eight suited is a borderline raise; twos and king-ten offsuit are close folds.",
+      "grid": [
+        "R    R    R    R    R    R    R    R    R    R    R    R    R",
+        "R    R    R    R    R    R    F    F    F    F    F    F    F",
+        "R    R    R    R    R    F    F    F    F    F    F    F    F",
+        "R    R    R    R    R    R    F    F    F    F    F    F    F",
+        "R    F*/R F    F    R    R    F    F    F    F    F    F    F",
+        "F    F    F    F    F    R    R*/F F    F    F    F    F    F",
+        "F    F    F    F    F    F    R    F    F    F    F    F    F",
+        "F    F    F    F    F    F    F    R    F    F    F    F    F",
+        "F    F    F    F    F    F    F    F    R    F    F    F    F",
+        "F    F    F    F    F    F    F    F    F    R    F    F    F",
+        "F    F    F    F    F    F    F    F    F    F    R    F    F",
+        "F    F    F    F    F    F    F    F    F    F    F    R    F",
+        "F    F    F    F    F    F    F    F    F    F    F    F    F*/R"
+      ]
+    },
+    {
+      "position": "CO",
+      "situation": "unopened",
+      "justification": "In the cutoff three players remain, and we often win the blinds outright or play the flop in position. The range takes in every pair, more offsuit broadway hands and aces, queen-nine and king-eight suited and eight-seven suited. Jack-ten offsuit and seven-six suited are close raises.",
+      "grid": [
+        "R    R    R    R    R    R    R    R    R    R    R    R    R",
+        "R    R    R    R    R    R    R    F    F    F    F    F    F",
+        "R    R    R    R    R    R    F    F    F    F    F    F    F",
+        "R    R    R    R    R    R    F    F    F    F    F    F    F",
+        "R    R    R    R*/F R    R    F    F    F    F    F    F    F",
+        "R    F*/R F    F    F    R    R    F    F    F    F    F    F",
+        "R    F    F    F    F    F    R    R    F    F    F    F    F",
+        "F    F    F    F    F    F    F    R    R*/F F    F    F    F",
+        "F    F    F    F    F    F    F    F    R    F    F    F    F",
+        "F    F    F    F    F    F    F    F    F    R    F    F    F",
+        "F    F    F    F    F    F    F    F    F    F    R    F    F",
+        "F    F    F    F    F    F    F    F    F    F    F    R    F",
+        "F    F    F    F    F    F    F    F    F    F    F    F    R"
+      ]
+    },
+    {
+      "position": "BTN",
+      "situation": "unopened",
+      "justification": "On the button only the blinds are left, and we hold position on every later street, so we raise a wide range to attack the blinds: every offsuit ace, every suited king, more suited connectors and the better offsuit kings, queens and jacks. Ten-nine offsuit and five-four suited are the weakest raises.",
+      "grid": [
+        "R    R    R    R    R    R    R    R    R    R    R    R    R",
+        "R    R    R    R    R    R    R    R    R    R    R    R    R",
+        "R    R    R    R    R    R    R    F    F    F    F    F    F",
+        "R    R    R    R    R    R    R    F    F    F    F    F    F",
+        "R    R    R    R    R    R    R    F    F    F    F    F    F",
+        "R    R    R    R    R*/F R    R    R    F    F    F    F    F",
+        "R    F*/R F    F    F    F    R    R    F    F    F    F    F",
+        "R    F    F    F    F    F    F    R    R    F    F    F    F",
+        "R    F    F    F    F    F    F    F    R    R    F    F    F",
+        "R    F    F    F    F    F    F    F    F    R    R*/F F    F",
+        "R    F    F    F    F    F    F    F    F    F    R    F    F",
+        "R    F    F    F    F    F    F    F    F    F    F    R    F",
+        "R    F    F    F    F    F    F    F    F    F    F    F    R"
+      ]
+    },
+    {
+      "position": "SB",
+      "situation": "unopened",
+      "justification": "Only the big blind is left, but we will be out of position for the whole hand. We raise a cutoff-sized range of hands that play well heads-up, and complete with suited and connected hands that already get a good price from the half bet we posted.",
+      "grid": [
+        "R    R    R    R    R    R    R    R    R    R    R    R    R",
+        "R    R    R    R    R    R    R    C    C    F    F    F    F",
+        "R    R    R    R    R    R    C    F    F    F    F    F    F",
+        "R    R    R    R    R    R    C    F    F    F    F    F    F",
+        "R    R    R    R    R    R    C    F    F    F    F    F    F",
+        "R    C    C    C    C    R    R    C    F    F    F    F    F",
+        "R    F    F    F    F    F    R    C    F*/C F    F    F    F",
+        "R    F    F    F    F    F    F    R    C    F    F    F    F",
+        "R*/F F    F    F    F    F    F    F    R    C    F    F    F",
+        "C*/F F    F    F    F    F    F    F    F    R    C    F    F",
+        "F    F    F    F    F    F    F    F    F    F    R    F    F",
+        "F    F    F    F    F    F    F    F    F    F    F    R    F",
+        "F    F    F    F    F    F    F    F    F    F    F    F    R"
+      ]
+    },
+    {
+      "position": "UTG+1",
+      "situation": "limpers",
+      "justification": "An under-the-gun limper usually holds a decent hand and many players are still to act. We raise strong pairs and big aces to isolate and take the lead, overlimp smaller pairs and a few suited broadway hands, and fold the rest.",
+      "grid": [
+        "R    R    R    R    C    F    F    F    F    F    F    F    F",
+        "R    R    R    C    F    F    F    F    F    F    F    F    F",
+        "R    F    R    C    F    F    F    F    F    F    F    F    F",
+        "F*/R F    F    R    C    F    F    F    F    F    F    F    F",
+        "F    F    F    F    R    F    F    F    F    F    F    F    F",
+        "F    F    F    F    F    R    F    F    F    F    F    F    F",
+        "F    F    F    F    F    F    R*/C F    F    F    F    F    F",
+        "F    F    F    F    F    F    F    C    F    F    F    F    F",
+        "F    F    F    F    F    F    F    F    C    F    F    F    F",
+        "F    F    F    F    F    F    F    F    F    C    F    F    F",
+        "F    F    F    F    F    F    F    F    F    F    C    F    F",
+        "F    F    F    F    F    F    F    F    F    F    F    C    F",
+        "F    F    F    F    F    F    F    F    F    F    F    F    C"
+      ]
+    },
+    {
+      "position": "MP",
+      "situation": "limpers",
+      "justification": "Behind one or more early limpers we raise hands that dominate a limping range and call with pairs and suited aces that can win a large multiway pot. Offsuit broadway hands below ace-queen fold because they rarely improve to the best hand.",
+      "grid": [
+        "R    R    R    R    C    F    F    F    F    C    F    F    F",
+        "R    R    R    C    F    F    F    F    F    F    F    F    F",
+        "R    F    R    C    F    F    F    F    F    F    F    F    F",
+        "F*/R F    F    R    C    F    F    F    F    F    F    F    F",
+        "F    F    F    F    R    C    F    F    F    F    F    F    F",
+        "F    F    F    F    F    R    F    F    F    F    F    F    F",
+        "F    F    F    F    F    F    R*/C F    F    F    F    F    F",
+        "F    F    F    F    F    F    F    C    F    F    F    F    F",
+        "F    F    F    F    F    F    F    F    C    F    F    F    F",
+        "F    F    F    F    F    F    F    F    F    C    F    F    F",
+        "F    F    F    F    F    F    F    F    F    F    C    F    F",
+        "F    F    F    F    F    F    F    F    F    F    F    C    F",
+        "F    F    F    F    F    F    F    F    F    F    F    F    C"
+      ]
+    },
+    {
+      "position": "LJ",
+      "situation": "limpers",
+      "justification": "From the lojack we isolate with nines or better, strong aces and king-queen suited, and overlimp small pairs, suited aces and suited connectors. A large field and cheap price favour hands that make straights, flushes and sets.",
+      "grid": [
+        "R    R    R    R    C    C    F    F    F    C    C    F    F",
+        "R    R    R    C    F    F    F    F    F    F    F    F    F",
+        "R    F*/R R    C    F    F    F    F    F    F    F    F    F",
+        "R    F    F    R    C    F    F    F    F    F    F    F    F",
+        "F    F    F    F    R    C    F    F    F    F    F    F    F",
+        "F    F    F    F    F    R    F    F    F    F    F    F    F",
+        "F    F    F    F    F    F    R*/C F    F    F    F    F    F",
+        "F    F    F    F    F    F    F    C    F    F    F    F    F",
+        "F    F    F    F    F    F    F    F    C    F    F    F    F",
+        "F    F    F    F    F    F    F    F    F    C    F    F    F",
+        "F    F    F    F    F    F    F    F    F    F    C    F    F",
+        "F    F    F    F    F    F    F    F    F    F    F    C    F",
+        "F    F    F    F    F    F    F    F    F    F    F    F    C"
+      ]
+    },
+    {
+      "position": "HJ",
+      "situation": "limpers",
+      "justification": "Three seats before the button we isolate with all strong pairs, the best aces and king-queen. Speculative suited hands and small pairs overlimp, since the pot already offers good odds and we often have position after the flop.",
+      "grid": [
+        "R    R    R    R    R    C    C    C    C    C    C    C    C",
+        "R    R    R    R    C    F    F    F    F    F    F    F    F",
+        "R    R    R    C    C    F    F    F    F    F    F    F    F",
+        "R    F*/R F    R    C    F    F    F    F    F    F    F    F",
+        "F    F    F    F    R    C    F    F    F    F    F    F    F",
+        "F    F    F    F    F    R    C    F    F    F    F    F    F",
+        "F    F    F    F    F    F    R    F    F    F    F    F    F",
+        "F    F    F    F    F    F    F    R*/C F    F    F    F    F",
+        "F    F    F    F    F    F    F    F    C    F    F    F    F",
+        "F    F    F    F    F    F    F    F    F    C    F    F    F",
+        "F    F    F    F    F    F    F    F    F    F    C    F    F",
+        "F    F    F    F    F    F    F    F    F    F    F    C    F",
+        "F    F    F    F    F    F    F    F    F    F    F    F    C"
+      ]
+    },
+    {
+      "position": "CO",
+      "situation": "limpers",
+      "justification": "In the cutoff, with only the button and blinds behind, we raise more often to buy position over the limpers. Small pairs, suited aces and suited connectors call to see a cheap flop with good implied odds.",
+      "grid": [
+        "R    R    R    R    R    C    C    C    C    C    C    C    C",
+        "R    R    R    R    C    F*/C F    F    F    F    F    F    F",
+        "R    R    R    R    C    F    F    F    F    F    F    F    F",
+        "R    F    F    R    C    F    F    F    F    F    F    F    F",
+        "R*/F F    F    F    R    C    F    F    F    F    F    F    F",
+        "F    F    F    F    F    R    C    F    F    F    F    F    F",
+        "F    F    F    F    F    F    R    C    F    F    F    F    F",
+        "F    F    F    F    F    F    F    R    C    F    F    F    F",
+        "F    F    F    F    F    F    F    F    C    F    F    F    F",
+        "F    F    F    F    F    F    F    F    F    C    F    F    F",
+        "F    F    F    F    F    F    F    F    F    F    C    F    F",
+        "F    F    F    F    F    F    F    F    F    F    F    C    F",
+        "F    F    F    F    F    F    F    F    F    F    F    F    C"
+      ]
+    },
+    {
+      "position": "BTN",
+      "situation": "limpers",
+      "justification": "On the button we act last after the flop, which makes both raising and overlimping more profitable. We isolate with a wider set of pairs and broadway hands and call with suited hands and small pairs that can win a big pot.",
+      "grid": [
+        "R    R    R    R    R    C    C    C    C    C    C    C    C",
+        "R    R    R    R    R    C    F    F    F    F    F    F    F",
+        "R    R    R    R    C    C    F    F    F    F    F    F    F",
+        "R    R*/F F    R    C    C    F    F    F    F    F    F    F",
+        "R    F    F*/C F    R    C    F    F    F    F    F    F    F",
+        "F    F    F    F    F    R    C    F    F    F    F    F    F",
+        "F    F    F    F    F    F    R    C    F    F    F    F    F",
+        "F    F    F    F    F    F    F    R    C    F    F    F    F",
+        "F    F    F    F    F    F    F    F    C    C    F    F    F",
+        "F    F    F    F    F    F    F    F    F    C    F    F    F",
+        "F    F    F    F    F    F    F    F    F    F    C    F    F",
+        "F    F    F    F    F    F    F    F    F    F    F    C    F",
+        "F    F    F    F    F    F    F    F    F    F    F    F    C"
+      ]
+    },
+    {
+      "position": "SB",
+      "situation": "limpers",
+      "justification": "The small blind completes for half a bet, so many hands are worth seeing a flop, but we act first after it. We raise only premium hands that play well out of position and complete with pairs and suited hands.",
+      "grid": [
+        "R    R    R    C    C    C    C    C    C    C    C    C    C",
+        "R    R    C    C    C    C*/F F    F    F    F    F    F    F",
+        "C    C    R    C    C    F    F    F    F    F    F    F    F",
+        "C    F    F    R    C    F    F    F    F    F    F    F    F",
+        "F    F    F    F    R    C    F    F    F    F    F    F    F",
+        "F    F    F    F    F    C*/R C    F    F    F    F    F    F",
+        "F    F    F    F    F    F    C    C    F    F    F    F    F",
+        "F    F    F    F    F    F    F    C    C    F    F    F    F",
+        "F    F    F    F    F    F    F    F    C    C    F    F    F",
+        "F    F    F    F    F    F    F    F    F    C    F    F    F",
+        "F    F    F    F    F    F    F    F    F    F    C    F    F",
+        "F    F    F    F    F    F    F    F    F    F    F    C    F",
+        "F    F    F    F    F    F    F    F    F    F    F    F    C"
+      ]
+    },
+    {
+      "position": "BB",
+      "situation": "limpers",
+      "justification": "In the big blind checking is free, so we never fold. We raise strong pairs and big cards that are ahead of the limpers' ranges, and check everything else to see the flop at no extra cost.",
+      "grid": [
+        "R    R    R    R    R    C    C    C    C    C    C    C    C",
+        "R    R    R    R    C    C    C    C    C    C    C    C    C",
+        "R    R    R    R*/C C    C    C    C    C    C    C    C    C",
+        "R    C    C    R    C    C    C    C    C    C    C    C    C",
+        "C    C    C    C    R    C    C    C    C    C    C    C    C",
+        "C    C    C    C    C    R    C    C    C    C    C    C    C",
+        "C    C    C    C    C    C    R*/C C    C    C    C    C    C",
+        "C    C    C    C    C    C    C    C    C    C    C    C    C",
+        "C    C    C    C    C    C    C    C    C    C    C    C    C",
+        "C    C    C    C    C    C    C    C    C    C    C    C    C",
+        "C    C    C    C    C    C    C    C    C    C    C    C    C",
+        "C    C    C    C    C    C    C    C    C    C    C    C    C",
+        "C    C    C    C    C    C    C    C    C    C    C    C    C"
+      ]
+    },
+    {
+      "position": "UTG",
+      "situation": "raise",
+      "justification": "We limped under the gun and someone raised behind us, which is rare because this chart opens by raising. With the whole table left to act we re-raise only the very best hands and call with a few strong ones.",
+      "grid": [
+        "R    R    C    F    F    F    F    F    F    F    F    F    F",
+        "R    R    F    F    F    F    F    F    F    F    F    F    F",
+        "C*/F F    R    F    F    F    F    F    F    F    F    F    F",
+        "F    F    F    R*/C F    F    F    F    F    F    F    F    F",
+        "F    F    F    F    C    F    F    F    F    F    F    F    F",
+        "F    F    F    F    F    F    F    F    F    F    F    F    F",
+        "F    F    F    F    F    F    F    F    F    F    F    F    F",
+        "F    F    F    F    F    F    F    F    F    F    F    F    F",
+        "F    F    F    F    F    F    F    F    F    F    F    F    F",
+        "F    F    F    F    F    F    F    F    F    F    F    F    F",
+        "F    F    F    F    F    F    F    F    F    F    F    F    F",
+        "F    F    F    F    F    F    F    F    F    F    F    F    F",
+        "F    F    F    F    F    F    F    F    F    F    F    F    F"
+      ]
+    },
+    {
+      "position": "UTG+1",
+      "situation": "raise",
+      "justification": "Facing an under-the-gun raise, the tightest range at the table, we need a very strong hand to continue. We re-raise queens or better and ace-king, treat jacks as a close re-raise, call with tens and nines, and fold the rest.",
+      "grid": [
+        "R    R    C    F    F    F    F    F    F    F    F    F    F",
+        "R    R    F    F    F    F    F    F    F    F    F    F    F",
+        "F*/C F    R    F    F    F    F    F    F    F    F    F    F",
+        "F    F    F    R*/C F    F    F    F    F    F    F    F    F",
+        "F    F    F    F    C    F    F    F    F    F    F    F    F",
+        "F    F    F    F    F    C    F    F    F    F    F    F    F",
+        "F    F    F    F    F    F    F    F    F    F    F    F    F",
+        "F    F    F    F    F    F    F    F    F    F    F    F    F",
+        "F    F    F    F    F    F    F    F    F    F    F    F    F",
+        "F    F    F    F    F    F    F    F    F    F    F    F    F",
+        "F    F    F    F    F    F    F    F    F    F    F    F    F",
+        "F    F    F    F    F    F    F    F    F    F    F    F    F",
+        "F    F    F    F    F    F    F    F    F    F    F    F    F"
+      ]
+    },
+    {
+      "position": "MP",
+      "situation": "raise",
+      "justification": "An early raiser still shows a strong range, and several players act after us. We re-raise the hands that are clearly ahead and keep calling to a small set of pairs and ace-queen suited.",
+      "grid": [
+        "R    R    C    F    F    F    F    F    F    F    F    F    F",
+        "R    R    F    F    F    F    F    F    F    F    F    F    F",
+        "C*/F F    R    F    F    F    F    F    F    F    F    F    F",
+        "F    F    F    R*/C F    F    F    F    F    F    F    F    F",
+        "F    F    F    F    C    F    F    F    F    F    F    F    F",
+        "F    F    F    F    F    C    F    F    F    F    F    F    F",
+        "F    F    F    F    F    F    F    F    F    F    F    F    F",
+        "F    F    F    F    F    F    F    F    F    F    F    F    F",
+        "F    F    F    F    F    F    F    F    F    F    F    F    F",
+        "F    F    F    F    F    F    F    F    F    F    F    F    F",
+        "F    F    F    F    F    F    F    F    F    F    F    F    F",
+        "F    F    F    F    F    F    F    F    F    F    F    F    F",
+        "F    F    F    F    F    F    F    F    F    F    F    F    F"
+      ]
+    },
+    {
+      "position": "LJ",
+      "situation": "raise",
+      "justification": "Facing one raise from an earlier seat, we prefer re-raising to calling so we play against one opponent with the initiative. Jacks and ace-queen suited join the re-raising range; a few pairs still call.",
+      "grid": [
+        "R    R    R    F*/C F    F    F    F    F    F    F    F    F",
+        "R    R    F    F    F    F    F    F    F    F    F    F    F",
+        "C*/R F    R    F    F    F    F    F    F    F    F    F    F",
+        "F    F    F    R    F    F    F    F    F    F    F    F    F",
+        "F    F    F    F    C    F    F    F    F    F    F    F    F",
+        "F    F    F    F    F    C    F    F    F    F    F    F    F",
+        "F    F    F    F    F    F    F    F    F    F    F    F    F",
+        "F    F    F    F    F    F    F    F    F    F    F    F    F",
+        "F    F    F    F    F    F    F    F    F    F    F    F    F",
+        "F    F    F    F    F    F    F    F    F    F    F    F    F",
+        "F    F    F    F    F    F    F    F    F    F    F    F    F",
+        "F    F    F    F    F    F    F    F    F    F    F    F    F",
+        "F    F    F    F    F    F    F    F    F    F    F    F    F"
+      ]
+    },
+    {
+      "position": "HJ",
+      "situation": "raise",
+      "justification": "The raiser's range widens as the raise comes from later seats, so we re-raise a little more. Ace-queen offsuit is a close re-raise and we call with a narrow set of pairs and suited broadway hands.",
+      "grid": [
+        "R    R    R    C    F    F    F    F    F    F    F    F    F",
+        "R    R    C*/F F    F    F    F    F    F    F    F    F    F",
+        "R*/C F    R    F    F    F    F    F    F    F    F    F    F",
+        "F    F    F    R    F    F    F    F    F    F    F    F    F",
+        "F    F    F    F    C    F    F    F    F    F    F    F    F",
+        "F    F    F    F    F    C    F    F    F    F    F    F    F",
+        "F    F    F    F    F    F    F    F    F    F    F    F    F",
+        "F    F    F    F    F    F    F    F    F    F    F    F    F",
+        "F    F    F    F    F    F    F    F    F    F    F    F    F",
+        "F    F    F    F    F    F    F    F    F    F    F    F    F",
+        "F    F    F    F    F    F    F    F    F    F    F    F    F",
+        "F    F    F    F    F    F    F    F    F    F    F    F    F",
+        "F    F    F    F    F    F    F    F    F    F    F    F    F"
+      ]
+    },
+    {
+      "position": "CO",
+      "situation": "raise",
+      "justification": "In the cutoff we can re-raise to isolate the opener and keep position after the flop. Tens join the re-raising range; small pairs and weaker aces still fold because the blinds can wake up behind us.",
+      "grid": [
+        "R    R    R    C    F*/C F    F    F    F    F    F    F    F",
+        "R    R    C    F    F    F    F    F    F    F    F    F    F",
+        "R    F    R    F    F    F    F    F    F    F    F    F    F",
+        "F*/C F    F    R    F    F    F    F    F    F    F    F    F",
+        "F    F    F    F    R    F    F    F    F    F    F    F    F",
+        "F    F    F    F    F    C    F    F    F    F    F    F    F",
+        "F    F    F    F    F    F    C    F    F    F    F    F    F",
+        "F    F    F    F    F    F    F    F    F    F    F    F    F",
+        "F    F    F    F    F    F    F    F    F    F    F    F    F",
+        "F    F    F    F    F    F    F    F    F    F    F    F    F",
+        "F    F    F    F    F    F    F    F    F    F    F    F    F",
+        "F    F    F    F    F    F    F    F    F    F    F    F    F",
+        "F    F    F    F    F    F    F    F    F    F    F    F    F"
+      ]
+    },
+    {
+      "position": "BTN",
+      "situation": "raise",
+      "justification": "On the button only the blinds are behind, and we will have position for the rest of the hand. We re-raise a wider value range to isolate the raiser and call with a few pairs and suited broadway hands.",
+      "grid": [
+        "R    R    R    R    F    F    F    F    F    F    F    F    F",
+        "R    R    R    C    F    F    F    F    F    F    F    F    F",
+        "R    F    R    C    F    F    F    F    F    F    F    F    F",
+        "R*/F F    F    R    F    F    F    F    F    F    F    F    F",
+        "F    F    F    F    R    F    F    F    F    F    F    F    F",
+        "F    F    F    F    F    C    F    F    F    F    F    F    F",
+        "F    F    F    F    F    F    C    F    F    F    F    F    F",
+        "F    F    F    F    F    F    F    C    F    F    F    F    F",
+        "F    F    F    F    F    F    F    F    F*/C F    F    F    F",
+        "F    F    F    F    F    F    F    F    F    F    F    F    F",
+        "F    F    F    F    F    F    F    F    F    F    F    F    F",
+        "F    F    F    F    F    F    F    F    F    F    F    F    F",
+        "F    F    F    F    F    F    F    F    F    F    F    F    F"
+      ]
+    },
+    {
+      "position": "UTG",
+      "situation": "raise-and-calls",
+      "justification": "Our limp was raised and others called, so the pot is already large and multiway. We re-raise only the top pairs and ace-king and call with hands that can make a strong hand in a crowded pot.",
+      "grid": [
+        "R    R    C    C    F    F    F    F    F    F    F    F    F",
+        "R    R    C    F    F    F    F    F    F    F    F    F    F",
+        "C*/F F    R    F    F    F    F    F    F    F    F    F    F",
+        "F    F    F    C    F    F    F    F    F    F    F    F    F",
+        "F    F    F    F    C    F    F    F    F    F    F    F    F",
+        "F    F    F    F    F    C    F    F    F    F    F    F    F",
+        "F    F    F    F    F    F    C*/F F    F    F    F    F    F",
+        "F    F    F    F    F    F    F    F    F    F    F    F    F",
+        "F    F    F    F    F    F    F    F    F    F    F    F    F",
+        "F    F    F    F    F    F    F    F    F    F    F    F    F",
+        "F    F    F    F    F    F    F    F    F    F    F    F    F",
+        "F    F    F    F    F    F    F    F    F    F    F    F    F",
+        "F    F    F    F    F    F    F    F    F    F    F    F    F"
+      ]
+    },
+    {
+      "position": "UTG+1",
+      "situation": "raise-and-calls",
+      "justification": "A raise and a call in front of us mean at least one strong range plus a caller. Strong pairs and ace-king re-raise; middle pairs and the best suited broadway cards call for set and flush value.",
+      "grid": [
+        "R    R    C    C    F    F    F    F    F    F    F    F    F",
+        "R    R    C    F    F    F    F    F    F    F    F    F    F",
+        "C*/F F    R    F    F    F    F    F    F    F    F    F    F",
+        "F    F    F    C    F    F    F    F    F    F    F    F    F",
+        "F    F    F    F    C    F    F    F    F    F    F    F    F",
+        "F    F    F    F    F    C    F    F    F    F    F    F    F",
+        "F    F    F    F    F    F    C    F    F    F    F    F    F",
+        "F    F    F    F    F    F    F    C    F    F    F    F    F",
+        "F    F    F    F    F    F    F    F    F*/C F    F    F    F",
+        "F    F    F    F    F    F    F    F    F    F    F    F    F",
+        "F    F    F    F    F    F    F    F    F    F    F    F    F",
+        "F    F    F    F    F    F    F    F    F    F    F    F    F",
+        "F    F    F    F    F    F    F    F    F    F    F    F    F"
+      ]
+    },
+    {
+      "position": "MP",
+      "situation": "raise-and-calls",
+      "justification": "With callers already in, the pot offers a good price for hands that improve to very strong holdings. We call with more pairs and suited aces and keep re-raising only premium hands.",
+      "grid": [
+        "R    R    C    C    C    F    F    F    F    F    F    F    F",
+        "R    R    C    C    F    F    F    F    F    F    F    F    F",
+        "C*/F F    R    F    F    F    F    F    F    F    F    F    F",
+        "F    F    F    C    F    F    F    F    F    F    F    F    F",
+        "F    F    F    F    C    F    F    F    F    F    F    F    F",
+        "F    F    F    F    F    C    F    F    F    F    F    F    F",
+        "F    F    F    F    F    F    C    F    F    F    F    F    F",
+        "F    F    F    F    F    F    F    C    F    F    F    F    F",
+        "F    F    F    F    F    F    F    F    C    F    F    F    F",
+        "F    F    F    F    F    F    F    F    F    C    F    F    F",
+        "F    F    F    F    F    F    F    F    F    F    C*/F F    F",
+        "F    F    F    F    F    F    F    F    F    F    F    F    F",
+        "F    F    F    F    F    F    F    F    F    F    F    F    F"
+      ]
+    },
+    {
+      "position": "LJ",
+      "situation": "raise-and-calls",
+      "justification": "Multiway pots reward sets and suited hands more than high cards. From the lojack we call with every pair down to fours and the better suited broadway hands, and re-raise only the strongest hands.",
+      "grid": [
+        "R    R    C    C    C    F    F    F    F    C*/F F    F    F",
+        "R    R    C    C    F    F    F    F    F    F    F    F    F",
+        "C    F    R    C    F    F    F    F    F    F    F    F    F",
+        "F    F    F    C    C    F    F    F    F    F    F    F    F",
+        "F    F    F    F    C    F    F    F    F    F    F    F    F",
+        "F    F    F    F    F    C    F    F    F    F    F    F    F",
+        "F    F    F    F    F    F    C    F    F    F    F    F    F",
+        "F    F    F    F    F    F    F    C    F    F    F    F    F",
+        "F    F    F    F    F    F    F    F    C    F    F    F    F",
+        "F    F    F    F    F    F    F    F    F    C    F    F    F",
+        "F    F    F    F    F    F    F    F    F    F    C    F    F",
+        "F    F    F    F    F    F    F    F    F    F    F    C*/F F",
+        "F    F    F    F    F    F    F    F    F    F    F    F    F"
+      ]
+    },
+    {
+      "position": "HJ",
+      "situation": "raise-and-calls",
+      "justification": "Later seats see the raise and calls with fewer players behind, so speculative hands become playable. Every pair and several suited aces and connectors call; premium pairs and ace-king re-raise.",
+      "grid": [
+        "R    R    C    C    C    F    F    F    F    C    C    F    F",
+        "R    R    C    C    C*/F F    F    F    F    F    F    F    F",
+        "C    F    R    C    F    F    F    F    F    F    F    F    F",
+        "F    F    F    C    C    F    F    F    F    F    F    F    F",
+        "F    F    F    F    C    C    F    F    F    F    F    F    F",
+        "F    F    F    F    F    C    C*/F F    F    F    F    F    F",
+        "F    F    F    F    F    F    C    F    F    F    F    F    F",
+        "F    F    F    F    F    F    F    C    F    F    F    F    F",
+        "F    F    F    F    F    F    F    F    C    F    F    F    F",
+        "F    F    F    F    F    F    F    F    F    C    F    F    F",
+        "F    F    F    F    F    F    F    F    F    F    C    F    F",
+        "F    F    F    F    F    F    F    F    F    F    F    C    F",
+        "F    F    F    F    F    F    F    F    F    F    F    F    C"
+      ]
+    },
+    {
+      "position": "CO",
+      "situation": "raise-and-calls",
+      "justification": "In the cutoff we keep position on most players in the pot. We call with every pair, all suited aces and suited connectors that can make a big hand, and re-raise our strongest hands for value.",
+      "grid": [
+        "R    R    C    C    C    C    C    C    C    C    C    C    C",
+        "R    R    C    C    C    F    F    F    F    F    F    F    F",
+        "C    F    R    C    C    F    F    F    F    F    F    F    F",
+        "F*/C F    F    C    C    F    F    F    F    F    F    F    F",
+        "F    F    F    F    C    C    F    F    F    F    F    F    F",
+        "F    F    F    F    F    C    C    F    F    F    F    F    F",
+        "F    F    F    F    F    F    C    C*/F F    F    F    F    F",
+        "F    F    F    F    F    F    F    C    F    F    F    F    F",
+        "F    F    F    F    F    F    F    F    C    F    F    F    F",
+        "F    F    F    F    F    F    F    F    F    C    F    F    F",
+        "F    F    F    F    F    F    F    F    F    F    C    F    F",
+        "F    F    F    F    F    F    F    F    F    F    F    C    F",
+        "F    F    F    F    F    F    F    F    F    F    F    F    C"
+      ]
+    },
+    {
+      "position": "BTN",
+      "situation": "raise-and-calls",
+      "justification": "On the button we act last on every street, so a crowded pot is the best spot for speculative hands. Suited connectors, suited aces and every pair call; jacks or better and ace-king re-raise for value.",
+      "grid": [
+        "R    R    R*/C C    C    C    C    C    C    C    C    C    C",
+        "R    R    C    C    C    F    F    F    F    F    F    F    F",
+        "C    F    R    C    C    F    F    F    F    F    F    F    F",
+        "C    F    F    R    C    C    F    F    F    F    F    F    F",
+        "F    F    F    F    C    C    F    F    F    F    F    F    F",
+        "F    F    F    F    F    C    C    F    F    F    F    F    F",
+        "F    F    F    F    F    F    C    C    F    F    F    F    F",
+        "F    F    F    F    F    F    F    C    F    F    F    F    F",
+        "F    F    F    F    F    F    F    F    C    C*/F F    F    F",
+        "F    F    F    F    F    F    F    F    F    C    F    F    F",
+        "F    F    F    F    F    F    F    F    F    F    C    F    F",
+        "F    F    F    F    F    F    F    F    F    F    F    C    F",
+        "F    F    F    F    F    F    F    F    F    F    F    F    C"
+      ]
+    },
+    {
+      "position": "UTG",
+      "situation": "re-raise",
+      "justification": "Our under-the-gun raise was re-raised. Our range is already narrow, so we call with most of it, raise again with queens or better and ace-king, and give up only on the weakest opens.",
+      "grid": [
+        "R    R    C    C    C    F    F    F    F    F    F    F    F",
+        "R    R    C    C    F    F    F    F    F    F    F    F    F",
+        "C    F    R    C    F    F    F    F    F    F    F    F    F",
+        "F*/C F    F    C    C    F    F    F    F    F    F    F    F",
+        "F    F    F    F    C    F    F    F    F    F    F    F    F",
+        "F    F    F    F    F    C    F    F    F    F    F    F    F",
+        "F    F    F    F    F    F    C    F    F    F    F    F    F",
+        "F    F    F    F    F    F    F    C    F    F    F    F    F",
+        "F    F    F    F    F    F    F    F    F*/C F    F    F    F",
+        "F    F    F    F    F    F    F    F    F    F    F    F    F",
+        "F    F    F    F    F    F    F    F    F    F    F    F    F",
+        "F    F    F    F    F    F    F    F    F    F    F    F    F",
+        "F    F    F    F    F    F    F    F    F    F    F    F    F"
+      ]
+    },
+    {
+      "position": "UTG+1",
+      "situation": "re-raise",
+      "justification": "After raising from the second seat and facing a re-raise, the price is good for most of our opening hands. Premium pairs and ace-king raise again; we fold only the edge of the opening range.",
+      "grid": [
+        "R    R    C    C    C    C    F    F    F    F    F    F    F",
+        "R    R    C    C    C    F    F    F    F    F    F    F    F",
+        "C    C*/F R    C    F    F    F    F    F    F    F    F    F",
+        "C    F    F    C    C    F    F    F    F    F    F    F    F",
+        "F    F    F    F    C    F    F    F    F    F    F    F    F",
+        "F    F    F    F    F    C    F    F    F    F    F    F    F",
+        "F    F    F    F    F    F    C    F    F    F    F    F    F",
+        "F    F    F    F    F    F    F    C    F    F    F    F    F",
+        "F    F    F    F    F    F    F    F    C    F    F    F    F",
+        "F    F    F    F    F    F    F    F    F    F*/C F    F    F",
+        "F    F    F    F    F    F    F    F    F    F    F    F    F",
+        "F    F    F    F    F    F    F    F    F    F    F    F    F",
+        "F    F    F    F    F    F    F    F    F    F    F    F    F"
+      ]
+    },
+    {
+      "position": "MP",
+      "situation": "re-raise",
+      "justification": "From the middle position, our opening range was a bit wider, but a re-raise from behind still usually shows a strong hand. We keep pairs and good suited hands, fold weak offsuit hands, and cap the betting with premium pairs and ace-king.",
+      "grid": [
+        "R    R    C    C    C    C    C    F    F    C    F    F    F",
+        "R    R    C    C    C    F    F    F    F    F    F    F    F",
+        "C    C    R    C    C    F    F    F    F    F    F    F    F",
+        "C    F    F    C    C    F    F    F    F    F    F    F    F",
+        "C*/F F    F    F    C    C    F    F    F    F    F    F    F",
+        "F    F    F    F    F    C    F    F    F    F    F    F    F",
+        "F    F    F    F    F    F    C    F    F    F    F    F    F",
+        "F    F    F    F    F    F    F    C    F    F    F    F    F",
+        "F    F    F    F    F    F    F    F    C    F    F    F    F",
+        "F    F    F    F    F    F    F    F    F    C    F    F    F",
+        "F    F    F    F    F    F    F    F    F    F    F*/C F    F",
+        "F    F    F    F    F    F    F    F    F    F    F    F    F",
+        "F    F    F    F    F    F    F    F    F    F    F    F    F"
+      ]
+    },
+    {
+      "position": "LJ",
+      "situation": "re-raise",
+      "justification": "The lojack opens wider, so a re-raise against it can be lighter. We continue with every pair down to fours, all suited aces and the stronger offsuit broadway cards, and raise again with premium pairs and ace-king.",
+      "grid": [
+        "R    R    C    C    C    C    C    C    C    C    C    C    C",
+        "R    R    C    C    C    F    F    F    F    F    F    F    F",
+        "C    C    R    C    C    F    F    F    F    F    F    F    F",
+        "C    C    F    C    C    C    F    F    F    F    F    F    F",
+        "C    F    F    F    C    C    F    F    F    F    F    F    F",
+        "F    F    F    F    F    C    C*/F F    F    F    F    F    F",
+        "F    F    F    F    F    F    C    F    F    F    F    F    F",
+        "F    F    F    F    F    F    F    C    F    F    F    F    F",
+        "F    F    F    F    F    F    F    F    C    F    F    F    F",
+        "F    F    F    F    F    F    F    F    F    C    F    F    F",
+        "F    F    F    F    F    F    F    F    F    F    C    F    F",
+        "F    F    F    F    F    F    F    F    F    F    F    C*/F F",
+        "F    F    F    F    F    F    F    F    F    F    F    F    F"
+      ]
+    },
+    {
+      "position": "HJ",
+      "situation": "re-raise",
+      "justification": "Facing a re-raise after opening from the hijack, the pot odds let us call with most of a range that is now fairly wide. Small pairs, suited aces and suited connectors continue; premium hands raise.",
+      "grid": [
+        "R    R    C    C    C    C    C    C    C    C    C    C    C",
+        "R    R    C    C    C    C    F    F    F    F    F    F    F",
+        "C    C    R    C    C    C    F    F    F    F    F    F    F",
+        "C    C    C    C    C    C    F    F    F    F    F    F    F",
+        "C    F*/C F    F    C    C    F    F    F    F    F    F    F",
+        "C*/F F    F    F    F    C    C    F    F    F    F    F    F",
+        "F    F    F    F    F    F    C    F    F    F    F    F    F",
+        "F    F    F    F    F    F    F    C    F    F    F    F    F",
+        "F    F    F    F    F    F    F    F    C    F    F    F    F",
+        "F    F    F    F    F    F    F    F    F    C    F    F    F",
+        "F    F    F    F    F    F    F    F    F    F    C    F    F",
+        "F    F    F    F    F    F    F    F    F    F    F    C    F",
+        "F    F    F    F    F    F    F    F    F    F    F    F    C"
+      ]
+    },
+    {
+      "position": "CO",
+      "situation": "re-raise",
+      "justification": "A re-raise against a cutoff open often comes from the blinds or button with a wide range. We continue with most of our opening hands, including small pairs and suited connectors, and raise again with the top of the range.",
+      "grid": [
+        "R    R    C    C    C    C    C    C    C    C    C    C    C",
+        "R    R    C    C    C    C    C    F    F    F    F    F    F",
+        "C    C    R    C    C    C    C    F    F    F    F    F    F",
+        "C    C    C    R*/C C    C    C    F    F    F    F    F    F",
+        "C    C    C    C    C    C    C    F    F    F    F    F    F",
+        "C    F    F    F    F    C    C    C    F    F    F    F    F",
+        "C*/F F    F    F    F    F    C    C    F    F    F    F    F",
+        "F    F    F    F    F    F    F    C    C    F    F    F    F",
+        "F    F    F    F    F    F    F    F    C    C*/F F    F    F",
+        "F    F    F    F    F    F    F    F    F    C    F    F    F",
+        "F    F    F    F    F    F    F    F    F    F    C    F    F",
+        "F    F    F    F    F    F    F    F    F    F    F    C    F",
+        "F    F    F    F    F    F    F    F    F    F    F    F    C"
+      ]
+    },
+    {
+      "position": "BTN",
+      "situation": "re-raise",
+      "justification": "Our button raise is the widest, and the blinds re-raise it often. We defend most suited hands, pairs and broadway cards, fold the weakest offsuit steals, and raise again with jacks or better and ace-king.",
+      "grid": [
+        "R    R    R*/C C    C    C    C    C    C    C    C    C    C",
+        "R    R    C    C    C    C    C    F    F    F    F    F    F",
+        "C    C    R    C    C    C    C    F    F    F    F    F    F",
+        "C    C    C    R    C    C    C    F    F    F    F    F    F",
+        "C    C    C    C    C    C    C    F    F    F    F    F    F",
+        "C    F*/C F    F    F    C    C    C    F    F    F    F    F",
+        "C    F    F    F    F    F    C    C    F    F    F    F    F",
+        "C*/F F    F    F    F    F    F    C    C    F    F    F    F",
+        "F    F    F    F    F    F    F    F    C    C    F    F    F",
+        "F    F    F    F    F    F    F    F    F    C    F    F    F",
+        "F    F    F    F    F    F    F    F    F    F    C    F    F",
+        "F    F    F    F    F    F    F    F    F    F    F    C    F",
+        "F    F    F    F    F    F    F    F    F    F    F    F    C"
+      ]
+    },
+    {
+      "position": "SB",
+      "situation": "re-raise",
+      "justification": "From the small blind, facing a third bet means our raise was re-raised by the big blind or a later seat. We call with hands that play well out of position and raise again with premium pairs and ace-king.",
+      "grid": [
+        "R    R    C    C    C    C    C    C    C    C    C    C    C",
+        "R    R    C    C    C    C    C    F    F    F    F    F    F",
+        "C    C    R    C    C    C    F    F    F    F    F    F    F",
+        "C    C    C    R*/C C    C    F    F    F    F    F    F    F",
+        "C    C    F    F    C    C    F    F    F    F    F    F    F",
+        "C    F    F    F    F    C    C    F    F    F    F    F    F",
+        "F    F    F    F    F    F    C    C*/F F    F    F    F    F",
+        "F    F    F    F    F    F    F    C    F    F    F    F    F",
+        "F    F    F    F    F    F    F    F    C    F    F    F    F",
+        "F    F    F    F    F    F    F    F    F    C    F    F    F",
+        "F    F    F    F    F    F    F    F    F    F    C    F    F",
+        "F    F    F    F    F    F    F    F    F    F    F    C    F",
+        "F    F    F    F    F    F    F    F    F    F    F    F    C"
+      ]
+    },
+    {
+      "position": "BB",
+      "situation": "re-raise",
+      "justification": "In the big blind, facing a re-raise means we raised and were raised again, or a raise and re-raise came before us. Both show strength, so we keep a tighter range and raise again only with premium hands.",
+      "grid": [
+        "R    R    C    C    C    F    F    F    F    F    F    F    F",
+        "R    R    C    C    F    F    F    F    F    F    F    F    F",
+        "C    C    R    C    F    F    F    F    F    F    F    F    F",
+        "C    F    F    R*/C F*/C F    F    F    F    F    F    F    F",
+        "F    F    F    F    C    F    F    F    F    F    F    F    F",
+        "F    F    F    F    F    C    F    F    F    F    F    F    F",
+        "F    F    F    F    F    F    C    F    F    F    F    F    F",
+        "F    F    F    F    F    F    F    C    F    F    F    F    F",
+        "F    F    F    F    F    F    F    F    C*/F F    F    F    F",
+        "F    F    F    F    F    F    F    F    F    F    F    F    F",
+        "F    F    F    F    F    F    F    F    F    F    F    F    F",
+        "F    F    F    F    F    F    F    F    F    F    F    F    F",
+        "F    F    F    F    F    F    F    F    F    F    F    F    F"
+      ]
+    },
+    {
+      "position": "SB",
+      "situation": "blind-defence",
+      "justification": "In the small blind, facing a raise with the big blind still to act, calling is unattractive: we would be out of position and could be squeezed. We mostly re-raise or fold, calling only with a few pairs and suited broadway hands.",
+      "grid": [
+        "R    R    R    R    C    F    F    F    F    F    F    F    F",
+        "R    R    R    C    F    F    F    F    F    F    F    F    F",
+        "R    F    R    C    F    F    F    F    F    F    F    F    F",
+        "R*/F F    F    R    C    F    F    F    F    F    F    F    F",
+        "F    F    F    F    R    F    F    F    F    F    F    F    F",
+        "F    F    F    F    F    C    F    F    F    F    F    F    F",
+        "F    F    F    F    F    F    C    F    F    F    F    F    F",
+        "F    F    F    F    F    F    F    C    F    F    F    F    F",
+        "F    F    F    F    F    F    F    F    C*/F F    F    F    F",
+        "F    F    F    F    F    F    F    F    F    F    F    F    F",
+        "F    F    F    F    F    F    F    F    F    F    F    F    F",
+        "F    F    F    F    F    F    F    F    F    F    F    F    F",
+        "F    F    F    F    F    F    F    F    F    F    F    F    F"
+      ]
+    },
+    {
+      "position": "BB",
+      "situation": "blind-defence",
+      "justification": "In the big blind we already have a full bet in and close the action, so a call needs only a small extra share of the pot. Full-ring raises are stronger than six-handed ones, so we defend somewhat tighter, re-raising only the strongest hands.",
+      "grid": [
+        "R    R    R    C    C    C    C    C    C    C    C    C    C",
+        "R    R    C    C    C    C    C    C    C    C    F    F    F",
+        "R*/C C    R    C    C    C    C    C    F    F    F    F    F",
+        "C    C    C    R    C    C    C    C    F    F    F    F    F",
+        "C    C    C    C    C    C    C    C    F    F    F    F    F",
+        "C    C    C    C    C    C    C    C    C    F    F    F    F",
+        "C    F    F    F    F    C    C    C    C    F    F    F    F",
+        "C    F    F    F    F    F    F*/C C    C    C    F    F    F",
+        "C*/F F    F    F    F    F    F    F    C    C    C    F    F",
+        "F    F    F    F    F    F    F    F    F    C    C    C    F",
+        "F    F    F    F    F    F    F    F    F    F    C    C    F",
+        "F    F    F    F    F    F    F    F    F    F    F    C    F",
+        "F    F    F    F    F    F    F    F    F    F    F    F    C"
+      ]
+    }
+  ]
+}

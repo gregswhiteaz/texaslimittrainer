@@ -1,0 +1,128 @@
+{
+  "format": "tlh-preflop-chart",
+  "version": 1,
+  "referenceSize": "heads-up",
+  "justification": "A tight-aggressive plan for heads-up fixed-limit hold'em, where we face a single opponent. The button posts the small blind, acts first before the flop and last after it, so it raises most hands: with only one opponent, an average hand is often the best one, and the raise both builds the pot and keeps the lead. The big blind already has a full bet in and closes the action, so it defends against a raise with the large majority of hands and re-raises a broad value range. Hands are valued mostly by high cards and pairs rather than by drawing power, because pots are rarely multiway. When the betting gets to the third or fourth bet we still continue with many hands, since one opponent's raising range is wide and the pot price is good.",
+  "spots": [
+    {
+      "position": "BTN",
+      "situation": "unopened",
+      "justification": "Heads-up the button acts first before the flop but last on every later street, against a single opponent. Most hands are worth a raise because an ordinary ace, king or pair is often best. We complete the small blind with weak offsuit and low suited hands that still get a good price, and fold only the worst offsuit trash.",
+      "grid": [
+        "R    R    R    R    R    R    R    R    R    R    R    R    R",
+        "R    R    R    R    R    R    R    R    R    R    R    R    R",
+        "R    R    R    R    R    R    R    R    R    R    R    R    R",
+        "R    R    R    R    R    R    R    R    R    R    R    R    R",
+        "R    R    R    R    R    R    R    R    R    R    R    R    R",
+        "R    R    R    R    R    R    R    R    R    R    R    R    C",
+        "R    R    R    R    R    R    R    R    R    R    R    R    C",
+        "R    R    R    R    R    R    R    R    R    R    R    R    C",
+        "R    R    R    R    R    R    R    R    R    R    R    R    C",
+        "R    R    R    R    R    C    C    R*/C R    R    R    R    R",
+        "R    R    R    R*/C C    F    F    C    C    R    R    R    C",
+        "R    R    R    C    C    F    F    F    F*/C C    C    R    C",
+        "R    R    R    C    C    F    F    F    F    F    F    F    R"
+      ]
+    },
+    {
+      "position": "BB",
+      "situation": "limpers",
+      "justification": "The button completed instead of raising, which usually caps its hand below the strongest holdings. Checking is free, so we never fold. We raise every pair, good aces, strong kings and suited connected cards to take the lead, and check the rest to see a flop for nothing.",
+      "grid": [
+        "R    R    R    R    R    R    R    R    R    R    R    R    R",
+        "R    R    R    R    R    R    R    R    C*/R C    C    C    C",
+        "R    R    R    R    R    R    C    C    C    C    C    C    C",
+        "R    R    R    R    R    R    C    C    C    C    C    C    C",
+        "R    R    C*/R C    R    R    C    C    C    C    C    C    C",
+        "R    R    C    C    C    R    R    C    C    C    C    C    C",
+        "R    C    C    C    C    C    R    R    C    C    C    C    C",
+        "R    C    C    C    C    C    C    R    C    C    C    C    C",
+        "R    C    C    C    C    C    C    C    R    C    C    C    C",
+        "R*/C C    C    C    C    C    C    C    C    R    C    C    C",
+        "C    C    C    C    C    C    C    C    C    C    R    C    C",
+        "C    C    C    C    C    C    C    C    C    C    C    R    C",
+        "C    C    C    C    C    C    C    C    C    C    C    C    R"
+      ]
+    },
+    {
+      "position": "BTN",
+      "situation": "raise",
+      "justification": "We completed the small blind and the big blind raised. Our completing range is mostly weaker hands, but the pot now lays a good price and we keep position. We re-raise strong pairs and big aces, call with any pair, ace or reasonable high-card hand, and fold weak offsuit hands.",
+      "grid": [
+        "R    R    R    R    C    C    C    C    C    C    C    C    C",
+        "R    R    R    C    C    C    C    C    C    C    C    C    C",
+        "R    C    R    C    C    C    C    C    C    C    C    C    C",
+        "C    C    C    R    C    C    C    C    C    C    C    C    C",
+        "C    C    C    C    R    C    C    C    C    C    C    F    F",
+        "C    C    C    C    C    R    C    C    C    C    C    F    F",
+        "C    C    C    C    C    C    R*/C C    C    C    C    F    F",
+        "C    C    C    C    C    C    C    C    C    C    C    F    F",
+        "C    C    C    C    C*/F F    F    C    C    C    C    F    F",
+        "C    C    C    F*/C F    F    F    F    C    C    C    F    F",
+        "C    C    C    F    F    F    F    F    F    C    C    F    F",
+        "C    C    F    F    F    F    F    F    F    F    F    C    F",
+        "C    C    F    F    F    F    F    F    F    F    F    F    C"
+      ]
+    },
+    {
+      "position": "BTN",
+      "situation": "re-raise",
+      "justification": "Our button raise was re-raised by the big blind. Its re-raising range heads-up is wide, so we continue with most hands that have a pair, an ace or two high cards, and cap the betting with the strong pairs and best aces.",
+      "grid": [
+        "R    R    R    R    C    C    C    C    C    C    C    C    C",
+        "R    R    R    C    C    C    C    C    C    C    C    C    C",
+        "R    C    R    C    C    C    C    C    C    C    C    C    C",
+        "C    C    C    R    C    C    C    C    C    C    C    C    F",
+        "C    C    C    C    R    C    C    C    C    C    F    F    F",
+        "C    C    C    C    C    R*/C C    C    C    C    F    F    F",
+        "C    C    C    C    C    C    C    C    C    C    F    F    F",
+        "C    C    C    C    F*/C F    C    C    C    C    F    F    F",
+        "C    C    C    C    F    F    F    F    C    C    F    F    F",
+        "C    C    C*/F F    F    F    F    F    F    C    C    F    F",
+        "C    C    F    F    F    F    F    F    F    F    C    F    F",
+        "C    C    F    F    F    F    F    F    F    F    F    C    F",
+        "C    F    F    F    F    F    F    F    F    F    F    F    C"
+      ]
+    },
+    {
+      "position": "BB",
+      "situation": "re-raise",
+      "justification": "In the big blind we raised and the button raised again, a sign of real strength from a player who acts last. We still call with a broad range because the pot is large and our opponent's range is wide, and raise again only with the very best hands.",
+      "grid": [
+        "R    R    R    C    C    C    C    C    C    C    C    C    C",
+        "R    R    C    C    C    C    C    C    C    C    C    C    C",
+        "C    C    R    C    C    C    C    C    C    C    C    C    F",
+        "C    C    C    R*/C C    C    C    C    C    C    F    F    F",
+        "C    C    C    C    C    C    C    C    C    F    F    F    F",
+        "C    C    C    C    C    C    C    C    C    F    F    F    F",
+        "C    C    C    C    F    F    C    C    C    F    F    F    F",
+        "C    C    F*/C F    F    F    F    C    C    F    F    F    F",
+        "C    C    F    F    F    F    F    F    C    F    F    F    F",
+        "C    C*/F F    F    F    F    F    F    F    C    F    F    F",
+        "C    F    F    F    F    F    F    F    F    F    C    F    F",
+        "C    F    F    F    F    F    F    F    F    F    F    C    F",
+        "C    F    F    F    F    F    F    F    F    F    F    F    C"
+      ]
+    },
+    {
+      "position": "BB",
+      "situation": "blind-defence",
+      "justification": "The button raised and we have a full bet in, closing the action. Folding gives up too much against a wide button range, so we defend almost every hand and re-raise pairs, good aces and strong broadway hands for value. Only the weakest offsuit hands fold.",
+      "grid": [
+        "R    R    R    R    R    R    R    R    R    R    R    R    R",
+        "R    R    R    R    R    R    C    C    C    C    C    C    C",
+        "R    R    R    R    R    C    C    C    C    C    C    C    C",
+        "R    R    C    R    R    C    C    C    C    C    C    C    C",
+        "R    C    C    C    R    C    C    C    C    C    C    C    C",
+        "R    C    C    C    C    R    C    C    C    C    C    C    C",
+        "R    C    C    C    C    C    R    C    C    C    C    C    C",
+        "R    C    C    C    C    C    C    R    C    C    C    C    C",
+        "R*/C C    C    C    C    C    C    C    R    C    C    C    C",
+        "C    C    C    C    C    C    C    C    C    R    C    C    C",
+        "C    C    C    C    C    F    F    C*/F C    C    R*/C C    C",
+        "C    C    C    C    C    F    F    F    F    C    C    C    C",
+        "C    C    C    C    C    F    F    F    F    F    F    F    C"
+      ]
+    }
+  ]
+}

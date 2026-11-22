@@ -13,7 +13,12 @@ import {
   seatGenerator,
   seededTagPolicy,
 } from '../../src/playtest/policy';
-import { runPlaytest, type PolicyFactory } from '../../src/playtest/runner';
+import {
+  handReplayCode,
+  playHand,
+  runPlaytest,
+  type PolicyFactory,
+} from '../../src/playtest/runner';
 
 const STAKES = { smallBlind: 2, bigBlind: 4, smallBet: 4, bigBet: 8 };
 const DECK = shuffledDeck('00000000000000000000000000000001');
@@ -125,7 +130,7 @@ describe('randomMovePolicy', () => {
 });
 
 describe('lineUpPolicyFactory', () => {
-  it('lineUpPolicyFactory plays the preset at 6 seats and random moves otherwise', () => {
+  it('lineUpPolicyFactory plays the preset at every size', () => {
     const tough = runPlaytest({ hands: 20, seed: 42, size: 6, lineUp: 'Tough' });
     const maniacAtSeat2: PolicyFactory = (code, seat) =>
       seat === 2
@@ -137,9 +142,19 @@ describe('lineUpPolicyFactory', () => {
     expect(tough.violations).toBe(0);
     expect(tough).not.toEqual(runPlaytest({ hands: 20, seed: 42, size: 6 }));
 
-    expect(runPlaytest({ hands: 100, seed: 42, size: 9, lineUp: 'Tough' })).toEqual(
-      runPlaytest({ hands: 100, seed: 42, size: 9 }),
-    );
+    // 9 seats: seat 2 plays the Maniac and the rest TAG in every hand (no random-move fallback).
+    const nine = lineUpPolicyFactory('Tough', 9);
+    let differs = false;
+    for (let k = 1; k <= 4; k++) {
+      const code = handReplayCode(42, k);
+      const styled = playHand(code, 9, 1, k, { makePolicy: nine }).record.actions;
+      expect(styled).toEqual(playHand(code, 9, 1, k, { makePolicy: maniacAtSeat2 }).record.actions);
+      const random: PolicyFactory = (c, seat) => randomMovePolicy(seatGenerator(c, seat));
+      expect(styled).not.toEqual(playHand(code, 9, 1, k, { makePolicy: random }).record.actions);
+      differs ||= JSON.stringify(styled) !== JSON.stringify(playHand(code, 9, 1, k).record.actions);
+    }
+    expect(differs).toBe(true);
+    expect(runPlaytest({ hands: 20, seed: 42, size: 9, lineUp: 'Tough' }).violations).toBe(0);
 
     const allRandom: PolicyFactory = (code, seat) => randomMovePolicy(seatGenerator(code, seat));
     expect(

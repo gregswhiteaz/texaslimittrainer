@@ -2,6 +2,7 @@ import { readdirSync, readFileSync } from 'node:fs';
 import { join, posix } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import type { EquityInput, EquityResult } from '../../src/advice/equity';
+import { SIX_MAX_CHART } from '../../src/advice/preflop';
 import { decideTag, FREE_CHECK_EQUITY } from '../../src/bots/tag';
 import { parseCards, type Card } from '../../src/engine/cards';
 import { applyAction, createHand, type Action, type SeatNumber } from '../../src/engine/hand';
@@ -138,10 +139,10 @@ describe('TAG bot units', () => {
     expect(() => decideTag(playerView(stateAfter(FLOP_BET), 6))).toThrow(
       new RangeError('Seat 6 is not to act'),
     );
-    const five = stateAfter([], 5);
-    expect(() => decideTag(playerView(five, five.toAct as SeatNumber))).toThrow(
-      new RangeError('The 6-max chart needs 6 dealt-in seats, got 5'),
-    );
+    const nine = stateAfter([], 9);
+    expect(() =>
+      decideTag(playerView(nine, nine.toAct as SeatNumber), { chart: SIX_MAX_CHART }),
+    ).toThrow(new RangeError('The 6-max chart does not fit 9 dealt-in seats'));
   });
 
   it('bots import only PlayerView-boundary types from the engine', () => {

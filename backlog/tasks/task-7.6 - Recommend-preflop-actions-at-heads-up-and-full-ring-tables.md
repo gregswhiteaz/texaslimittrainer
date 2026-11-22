@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-22T22:07:00Z'
+updated_date: '2026-11-22T22:18:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -91,4 +91,6 @@ AC added from TASK-6.1 follow-up (doc-18).
 AC added from TASK-3.13 (10-player pace proven with a test-only policy until 10-seat charts exist)
 
 AC added from TASK-6.6 Q-1
+
+Build blocked on TASK-7.2's AC#6 sandbox file list; user approved adding the two chart paths (Q-6).
 <!-- SECTION:NOTES:END -->

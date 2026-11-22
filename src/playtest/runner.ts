@@ -34,12 +34,7 @@ import {
   type LineUpPreset,
   type LineUpSeat,
 } from '../bots/lineup';
-import {
-  randomMovePolicy,
-  seatGenerator,
-  seatStylesPolicyFactory,
-  seededTagPolicy,
-} from './policy';
+import { seatStylesPolicyFactory, seededTagPolicy } from './policy';
 
 export { MAX_BETS_PER_STREET };
 export const PLAYTEST_STAKES: Stakes = { smallBlind: 2, bigBlind: 4, smallBet: 4, bigBet: 8 };
@@ -108,7 +103,7 @@ export interface PlaytestEngine {
 }
 /** Test seams; the CLI entry passes none. */
 export interface PlaytestSeams {
-  /** Default: defaultPolicyFactory(seats dealt in) (TAG at 6 players, random-move elsewhere). */
+  /** Default: defaultPolicyFactory(seats dealt in) (TAG in every seat). */
   readonly makePolicy?: PolicyFactory;
   /** Default: checkStep. A custom hook replaces it (compose with checkStep to keep the built-in checks). */
   readonly onAction?: ActionHook;
@@ -170,14 +165,10 @@ export interface PlaytestSummary {
   readonly firstViolation: PlayedHand | null;
 }
 
-const randomPolicy: PolicyFactory = (code, seat) => randomMovePolicy(seatGenerator(code, seat));
 const allTag: PolicyFactory = (code) => seededTagPolicy(code);
 
-/** seededTagPolicy(code) (TAG with the worker's per-decision seed) in every seat at 6 players;
- *  randomMovePolicy(seatGenerator(code, seat)) at other sizes, where TAG has no preflop chart yet. */
-export function defaultPolicyFactory(size: number): PolicyFactory {
-  return size === 6 ? allTag : randomPolicy;
-}
+/** seededTagPolicy(code) (TAG with the worker's per-decision seed) in every seat, at every size. */
+export const defaultPolicyFactory: (size: number) => PolicyFactory = () => allTag;
 
 /** Hand k's code: replayCodeFromWords([floor(seed / 2^32), seed mod 2^32, GAMES[game].codeWord, k]).
  *  Throws RangeError on bad input. */

@@ -216,7 +216,7 @@ describe('playtest runner units', () => {
     expect(new Set(created).size).toBe(12);
   });
 
-  it('default seat policy is TAG at 6 players and random-move elsewhere', () => {
+  it('default seat policy is TAG at every size', () => {
     const code = handReplayCode(42, 1);
     let views = 0;
     playHand(code, 6, 6, 1, {
@@ -231,11 +231,14 @@ describe('playtest runner units', () => {
     });
     expect(views).toBeGreaterThan(0);
 
-    for (const size of [3, 5, 7, 10]) {
+    for (const size of [2, 3, 5, 7, 8, 10]) {
       const actual = defaultPolicyFactory(size);
       const policies = new Map<number, [SeatPolicy, SeatPolicy]>();
       for (let seat = 1; seat <= size; seat++) {
-        policies.set(seat, [actual(code, seat), randomMovePolicy(seatGenerator(code, seat))]);
+        policies.set(seat, [
+          actual(code, seat),
+          (view) => decideTag(view, { random: botRandom(botDecisionSeed(code, view)) }),
+        ]);
       }
       let state = createHand({
         stakes: PLAYTEST_STAKES,
@@ -353,10 +356,14 @@ describe('playtest runner units', () => {
       clean[0]?.final.players.map(({ seat, stack }) => ({ seat, stack })),
     );
 
-    // The default policy follows the seats dealt in: random below 6, seeded TAG at 6.
+    // The default policy is seeded TAG whatever the seats dealt in, and never random moves.
     const five = [160, 160, 0, 160, 160, 160];
+    const tag: PolicyFactory = (c) => seededTagPolicy(c);
     const random: PolicyFactory = (c, seat) => randomMovePolicy(seatGenerator(c, seat));
     expect(playHand(code, 6, 1, 1, {}, { stacks: five }).record.actions).toEqual(
+      playHand(code, 6, 1, 1, { makePolicy: tag }, { stacks: five }).record.actions,
+    );
+    expect(playHand(code, 6, 1, 1, {}, { stacks: five }).record.actions).not.toEqual(
       playHand(code, 6, 1, 1, { makePolicy: random }, { stacks: five }).record.actions,
     );
     expect(playHand(code, 6, 1).record.actions).toEqual(

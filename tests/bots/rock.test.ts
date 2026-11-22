@@ -1,10 +1,14 @@
 import { describe, expect, it } from 'vitest';
 import { computeEquity, type EquityInput, type EquityResult } from '../../src/advice/equity';
 import { recommend } from '../../src/advice/recommend';
-import { decideRock } from '../../src/bots/rock';
+import { HAND_CLASSES, handClassOf, type HandClass } from '../../src/advice/hand-class';
+import { chartSpotOf } from '../../src/advice/preflop';
+import { decideRock, ROCK_STYLE } from '../../src/bots/rock';
+import { startingRangeFor } from '../../src/bots/style';
 import { TAG_STYLE } from '../../src/bots/tag';
-import type { Action, SeatNumber } from '../../src/engine/hand';
-import type { PlayerView } from '../../src/engine/player-view';
+import { RANK_CHARS, type Card } from '../../src/engine/cards';
+import { applyAction, createHand, type Action, type SeatNumber } from '../../src/engine/hand';
+import { playerView, type PlayerView } from '../../src/engine/player-view';
 import { randomMovePolicy, seatGenerator, seededTagPolicy } from '../../src/playtest/policy';
 import { handReplayCode, playHand, runPlaytest } from '../../src/playtest/runner';
 
@@ -41,6 +45,30 @@ function seatOneViews(): PlayerView[] {
   return views;
 }
 
+/** Seats 1..n, button 1, the hero holding a combo of `hc`, after `steps`. */
+function scriptedView(n: number, hero: SeatNumber, hc: HandClass, steps: Action[]): PlayerView {
+  const high = RANK_CHARS.indexOf(hc.charAt(0));
+  const low = RANK_CHARS.indexOf(hc.charAt(1));
+  const cards: Card[] = [high * 4 + 3, low * 4 + (hc.endsWith('s') ? 3 : 2)];
+  const deck = Array.from({ length: 52 }, (_, i) => i).filter((x) => !cards.includes(x));
+  // Seats are dealt clockwise from the seat after the button (seat 1).
+  const index = hero === 1 ? n - 1 : hero - 2;
+  deck.splice(index, 0, cards[0] as Card);
+  deck.splice(index + n, 0, cards[1] as Card);
+  let state = createHand({
+    stakes: { smallBlind: 2, bigBlind: 4, smallBet: 4, bigBet: 8 },
+    seats: Array.from({ length: n }, (_, i) => ({ seat: i + 1, stack: 160 })),
+    button: 1,
+    deck,
+  });
+  for (const action of steps) {
+    const result = applyAction(state, action);
+    if (!result.ok) throw new Error(result.error.message);
+    state = result.state;
+  }
+  return playerView(state, hero);
+}
+
 describe('Rock decision', () => {
   it(
     'Rock folds or checks outside its range and plays the advice inside it',
@@ -64,8 +92,15 @@ describe('Rock decision', () => {
           };
         },
       });
-      expect(() => decideRock(five as PlayerView)).toThrow(
-        new RangeError('The 6-max chart needs 6 dealt-in seats, got 5'),
+      // 5 seats: the Rock's 6-max range at the mapped spot decides, the 6-max advice plays inside it.
+      const fiveView = five as PlayerView;
+      const fiveSpot = chartSpotOf(fiveView, '6-max');
+      const fiveRange = startingRangeFor(ROCK_STYLE, fiveSpot.position, fiveSpot.situation);
+      expect(fiveRange).toBeDefined();
+      expect(decideRock(fiveView)).toEqual(
+        fiveRange?.hands.has(handClassOf(fiveView.holeCards))
+          ? recommend(fiveView).move
+          : fiveView.legalActions.find((a) => a.type === (owed(fiveView) > 0 ? 'fold' : 'check')),
       );
 
       const postflop = views.filter((v) => v.street !== 'preflop');
@@ -107,4 +142,29 @@ describe('Rock decision', () => {
     },
     TEST_TIMEOUT_MS,
   );
+
+  it('Rock maps its 6-max range at other sizes', () => {
+    const utg = startingRangeFor(ROCK_STYLE, 'UTG', 'unopened');
+    const inside = HAND_CLASSES.find((hc) => utg?.hands.has(hc));
+    const outside = HAND_CLASSES.find((hc) => !utg?.hands.has(hc));
+    expect(inside).toBeDefined();
+    expect(outside).toBeDefined();
+
+    // Nine-handed seat 5 is UTG+1 on the full-ring chart and UTG on the Rock's 6-max range.
+    const foldUtg: Action[] = [{ seat: 4, type: 'fold' }];
+    const playing = scriptedView(9, 5, inside as HandClass, foldUtg);
+    expect(recommend(playing)).toMatchObject({ referenceSize: 'full-ring', position: 'UTG+1' });
+    expect(chartSpotOf(playing, '6-max')).toEqual({ position: 'UTG', situation: 'unopened' });
+    expect(decideRock(playing)).toEqual(recommend(playing).move);
+    const folding = scriptedView(9, 5, outside as HandClass, foldUtg);
+    expect(decideRock(folding)).toEqual({ seat: 5, type: 'fold' });
+
+    // Heads-up: the button completes and the big blind, outside the Rock's BB limpers range, checks.
+    const bbLimpers = startingRangeFor(ROCK_STYLE, 'BB', 'limpers');
+    const junk = HAND_CLASSES.find((hc) => !bbLimpers?.hands.has(hc));
+    expect(junk).toBeDefined();
+    const bb = scriptedView(2, 2, junk as HandClass, [{ seat: 1, type: 'call', amount: 2 }]);
+    expect(recommend(bb)).toMatchObject({ referenceSize: 'heads-up', position: 'BB' });
+    expect(decideRock(bb)).toEqual({ seat: 2, type: 'check' });
+  });
 });

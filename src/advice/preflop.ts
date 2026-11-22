@@ -1,10 +1,14 @@
 import { STREET_BET_CAP, type Action } from '../engine/hand';
 import type { PlayerView, PublicPlayer } from '../engine/player-view';
+import fullRing from './charts/full-ring.json' with { type: 'json' };
+import headsUp from './charts/heads-up.json' with { type: 'json' };
 import sixMax from './charts/six-max.json' with { type: 'json' };
 import { handClassOf, type HandClass } from './hand-class';
 import {
+  APPLICABLE_SPOTS,
   chartCell,
   parseChart,
+  SEATS_BEFORE_BUTTON,
   type ChartAction,
   type ChartCell,
   type Position,
@@ -13,8 +17,16 @@ import {
   type Situation,
 } from './preflop-chart';
 
-/** The shipped 6-max chart, validated at import. */
+/** The shipped charts, validated at import. */
+export const HEADS_UP_CHART: PreflopChart = parseChart(headsUp);
 export const SIX_MAX_CHART: PreflopChart = parseChart(sixMax);
+export const FULL_RING_CHART: PreflopChart = parseChart(fullRing);
+
+export const PREFLOP_CHARTS: Readonly<Record<ReferenceSize, PreflopChart>> = {
+  'heads-up': HEADS_UP_CHART,
+  '6-max': SIX_MAX_CHART,
+  'full-ring': FULL_RING_CHART,
+};
 
 export type PreflopAdvice = 'fold' | 'check' | 'call' | 'raise';
 
@@ -37,22 +49,53 @@ export interface PreflopRecommendation {
 }
 
 export interface PreflopOptions {
-  /** Default SIX_MAX_CHART. */
+  /** Default PREFLOP_CHARTS[referenceSizeOf(dealt-in seats)]; its referenceSize must match. */
   readonly chart?: PreflopChart;
 }
 
-/** Seats after the button in clockwise order: SB, BB, UTG, HJ, CO, then the button. */
-const SIX_MAX_ORDER: readonly Position[] = ['SB', 'BB', 'UTG', 'HJ', 'CO', 'BTN'];
+/** 2 → 'heads-up'; 3–7 → '6-max'; 8–10 → 'full-ring'. Throws RangeError otherwise. */
+export function referenceSizeOf(dealtIn: number): ReferenceSize {
+  if (dealtIn === 2) return 'heads-up';
+  if (dealtIn >= 3 && dealtIn <= 7) return '6-max';
+  if (dealtIn >= 8 && dealtIn <= 10) return 'full-ring';
+  throw new RangeError(`No reference size for ${dealtIn} dealt-in seats`);
+}
 
-/** The viewer's 6-max position. Throws RangeError unless exactly 6 seats are dealt in. */
-export function positionOf(view: PlayerView): Position {
+/**
+ * The viewer's position on `size`'s chart, counting dealt-in seats. Heads-up: the button is BTN, the other seat BB.
+ * Otherwise the first two seats after the button are SB and BB, and a seat k seats before the button takes
+ * SEATS_BEFORE_BUTTON[size][k], or the chart's earliest position when k is beyond it.
+ */
+export function positionOf(
+  view: PlayerView,
+  size: ReferenceSize = referenceSizeOf(view.players.length),
+): Position {
   const seats = view.players.map((p) => p.seat);
-  if (seats.length !== 6) {
-    throw new RangeError(`The 6-max chart needs 6 dealt-in seats, got ${seats.length}`);
-  }
   const start = seats.findIndex((seat) => seat > view.button);
   const order = start <= 0 ? seats : [...seats.slice(start), ...seats.slice(0, start)];
-  return SIX_MAX_ORDER[order.indexOf(view.seat)] as Position;
+  const i = order.indexOf(view.seat);
+  const n = order.length;
+  if (n === 2) return i === 0 ? 'BB' : 'BTN';
+  if (i === 0) return 'SB';
+  if (i === 1) return 'BB';
+  const named = SEATS_BEFORE_BUTTON[size];
+  return named[Math.min(n - 1 - i, named.length - 1)] as Position;
+}
+
+/** The chart spot the viewer's decision reads. A position with no limpers spot (the earliest one) reads the
+ *  limpers spot of the position one seat later. */
+export function chartSpotOf(
+  view: PlayerView,
+  size: ReferenceSize = referenceSizeOf(view.players.length),
+): { position: Position; situation: Situation } {
+  const position = positionOf(view, size);
+  const situation = situationOf(view);
+  const hasSpot = APPLICABLE_SPOTS[size].some(
+    (s) => s.position === position && s.situation === situation,
+  );
+  if (hasSpot) return { position, situation };
+  const named = SEATS_BEFORE_BUTTON[size];
+  return { position: named[named.length - 2] as Position, situation };
 }
 
 /** The preflop action now facing the viewer. Blinds are not actions; limps before a raise are not callers. */
@@ -80,9 +123,14 @@ export function recommendPreflop(
     throw new RangeError(`Preflop advice needs a preflop view, got ${view.street}`);
   }
   if (view.toAct !== view.seat) throw new RangeError(`Seat ${view.seat} is not to act`);
-  const position = positionOf(view);
-  const situation = situationOf(view);
-  const chart = options.chart ?? SIX_MAX_CHART;
+  const size = referenceSizeOf(view.players.length);
+  const chart = options.chart ?? PREFLOP_CHARTS[size];
+  if (chart.referenceSize !== size) {
+    throw new RangeError(
+      `The ${chart.referenceSize} chart does not fit ${view.players.length} dealt-in seats`,
+    );
+  }
+  const { position, situation } = chartSpotOf(view, size);
   const handClass = handClassOf(view.holeCards);
   const cell = chartCell(chart, position, situation, handClass);
 

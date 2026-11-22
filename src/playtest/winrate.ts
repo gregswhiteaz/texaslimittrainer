@@ -1,4 +1,3 @@
-import type { StyleName } from '../bots/style';
 import { GAMES, type GameType, type PlayedHand } from './runner';
 
 /** Welford's online accumulator of one bot's per-hand chip results (A-5). Mutable. */
@@ -58,11 +57,9 @@ interface Bot {
 /** Per-bot results of a run, fed one PlayedHand at a time. A bot is (seat, name, style) (A-2). */
 export class BotResults {
   private readonly bots = new Map<string, Bot>();
-  private readonly defaultStyle: StyleName | 'Random';
   private readonly bigBet: number;
 
-  constructor(size: number, game: GameType) {
-    this.defaultStyle = size === 6 ? 'TAG' : 'Random';
+  constructor(game: GameType) {
     this.bigBet = GAMES[game].stakes.bigBet;
   }
 
@@ -73,7 +70,7 @@ export class BotResults {
       const lineUpSeat = hand.lineUp?.[p.seat - 1];
       const [name, style] =
         lineUpSeat === undefined
-          ? [`Seat ${p.seat}`, this.defaultStyle]
+          ? [`Seat ${p.seat}`, 'TAG']
           : lineUpSeat.kind === 'user'
             ? ['User', 'TAG']
             : [String(lineUpSeat.name), String(lineUpSeat.style)];

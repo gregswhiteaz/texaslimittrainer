@@ -113,7 +113,7 @@ describe('per-bot BB/100 with a 95% confidence interval', () => {
       expect(nine.status).toBe(0);
       expect(nine.stdout).toContain(`${CASH_HEADER}\n`);
       expect(rows(nine.stdout).map((r) => [r.name, r.style, r.seat])).toEqual(
-        Array.from({ length: 9 }, (_, i) => [`Seat ${i + 1}`, 'Random', i + 1]),
+        Array.from({ length: 9 }, (_, i) => [`Seat ${i + 1}`, 'TAG', i + 1]),
       );
 
       const tough = capture([

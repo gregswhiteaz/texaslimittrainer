@@ -45,7 +45,7 @@ export const USAGE =
   'Usage: npm run playtest -- [--hands <1-1000000000>] [--seed <0-9007199254740991>] [--size <2-10>] [--game <cash|sng>] [--lineup <mixed|tough|soft>]\n' +
   '       npm run playtest -- --replay-code <32 lowercase hex characters> [--size <2-10>] [--button <seat>] [--game <cash|sng>] [--stacks <one stack per seat, comma-separated, 0 = empty seat>] [--lineup <mixed|tough|soft>] [--styles <style of each seat from 2 up, comma-separated: tag|calling-station|maniac|rock>]\n' +
   'Defaults: --hands 10000 --seed 42 --size 6 --button 1 --game cash; --stacks gives every seat $160 (cash) or 1500 (sng)\n' +
-  "--lineup: seat 1 plays the user (TAG) and seats 2 and up play the preset's styles; without it every seat plays TAG at 6 seats and random moves at other sizes\n";
+  "--lineup: seat 1 plays the user (TAG) and seats 2 and up play the preset's styles; without it every seat plays TAG\n";
 
 const VALUE_OPTIONS = [
   '--hands',
@@ -324,21 +324,12 @@ function tableLine(size: number, game: GameType): string {
   return `Table: ${size} players, sit-and-go ${smallBet}/${bigBet} (blinds ${smallBlind}/${bigBlind}), ${startingStack} chips each, busted seats sit out, a new sit-and-go starts when one player has all the chips\n`;
 }
 
-/** The Line-up line for `seats`, plus the note when styles can't play (size ≠ 6 or sng; D-2). */
-function lineUpLines(
-  seats: readonly LineUpSeat[],
-  name: string,
-  size: number,
-  game: GameType,
-): string {
+/** The Line-up line for `seats`. */
+function lineUpLines(seats: readonly LineUpSeat[], name: string): string {
   const bots = seats
     .filter((s) => s.kind === 'bot')
     .map((s) => `, seat ${s.seat} ${String(s.name)} (${String(s.style)})`);
-  const note =
-    size !== 6 || game === 'sng'
-      ? 'Line-up note: styles play only in hands with 6 seats dealt in; other hands use random moves until advice covers other table sizes.\n'
-      : '';
-  return `Line-up: ${name}, seat 1 plays the user${bots.join('')}\n${note}`;
+  return `Line-up: ${name}, seat 1 plays the user${bots.join('')}\n`;
 }
 
 /** Returns the exit code: 0 no violations, 1 violations, 2 usage error. Writes everything through io.
@@ -363,9 +354,7 @@ export function main(argv: readonly string[], io: CliIo, seams: PlaytestSeams = 
     );
   const table = (size: number, game: GameType, styles?: readonly StyleName[]) =>
     tableLine(size, game) +
-    (preset === undefined
-      ? ''
-      : lineUpLines(seatsAt(size, styles), String(lineUpName), size, game));
+    (preset === undefined ? '' : lineUpLines(seatsAt(size, styles), String(lineUpName)));
   let header = 'TLH Trainer playtest\n';
   let summary: PlaytestSummary;
   let replaced: number | undefined;
@@ -373,7 +362,7 @@ export function main(argv: readonly string[], io: CliIo, seams: PlaytestSeams = 
     const { hands, seed, size, game } = parsed.options;
     const sng = game === 'sng' ? ' --game sng' : '';
     header += `Options: --hands ${hands} --seed ${seed} --size ${size}${sng}${option}\n${table(size, game)}`;
-    const bots = new BotResults(size, game);
+    const bots = new BotResults(game);
     let count = 0;
     summary = runPlaytest(
       parsed.options,

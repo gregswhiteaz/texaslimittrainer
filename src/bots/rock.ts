@@ -1,7 +1,7 @@
 import type { Action } from '../engine/hand';
 import type { PlayerView } from '../engine/player-view';
 import { handClassOf } from '../advice/hand-class';
-import { positionOf, situationOf } from '../advice/preflop';
+import { chartSpotOf } from '../advice/preflop';
 import { adviceOptions, recommend, type RecommendOptions } from '../advice/recommend';
 import { parseStyle, startingRangeFor, type BotStyleData } from './style';
 import { FREE_CHECK_EQUITY } from './tag';
@@ -29,8 +29,8 @@ export function decideRock(view: PlayerView, options: RockOptions = {}): Action 
       : recommend(view, adviceOptions(options)).move;
   }
   const style = options.style ?? ROCK_STYLE;
-  const position = positionOf(view);
-  const situation = situationOf(view);
+  // The style's range is written for 6-max; other sizes map onto its positions (TASK-7.6 A-4).
+  const { position, situation } = chartSpotOf(view, '6-max');
   if (style.startingRange === null) {
     throw new RangeError(`Style ${style.style} has no starting range`);
   }

@@ -43,7 +43,7 @@ const LINE_POSITIONS: Readonly<Record<PreflopLine, readonly Position[]>> = {
 };
 
 /** Lines each 6-max position can take (36 pairs). */
-export const APPLICABLE_LINES: Readonly<Record<ReferenceSize, readonly RangeId[]>> = {
+export const APPLICABLE_LINES: Readonly<Record<'6-max', readonly RangeId[]>> = {
   '6-max': PREFLOP_LINES.flatMap((line) =>
     LINE_POSITIONS[line].map((position) => ({ position, line })),
   ),

@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-22T19:21:00Z'
+updated_date: '2026-11-22T22:33:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -81,6 +81,8 @@ Build: winrate.ts (Welford, BB/100, 95% CI), Bot results block before 'Hands pla
 Review R1: 0 blocking; MINOR #1 (violating completed hand counted) fixed with a unit test; MINOR #2 (replacement-name reuse after restart can merge rows) documented; security MINOR (rows grow with busts) accepted per A-5. SHAs unchanged. gate PASS.
 
 Judge R1 PASS 13/13 (own two-pass recompute of every row across 7 run modes; 8/8 mutants; 1105 holdout checks). Follow-ups: AC on TASK-6.12 (pool win rates across shards); VPIP/PFR TASK-6.11; app UI BB/100 TASK-11.
+
+Locked test edited for TASK-7.6 Q-7 (user-approved): default seat label TAG at every size.
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary

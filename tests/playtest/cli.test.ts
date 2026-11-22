@@ -109,7 +109,7 @@ describe('playtest CLI', () => {
       'Usage: npm run playtest -- [--hands <1-1000000000>] [--seed <0-9007199254740991>] [--size <2-10>] [--game <cash|sng>] [--lineup <mixed|tough|soft>]\n' +
         '       npm run playtest -- --replay-code <32 lowercase hex characters> [--size <2-10>] [--button <seat>] [--game <cash|sng>] [--stacks <one stack per seat, comma-separated, 0 = empty seat>] [--lineup <mixed|tough|soft>] [--styles <style of each seat from 2 up, comma-separated: tag|calling-station|maniac|rock>]\n' +
         'Defaults: --hands 10000 --seed 42 --size 6 --button 1 --game cash; --stacks gives every seat $160 (cash) or 1500 (sng)\n' +
-        "--lineup: seat 1 plays the user (TAG) and seats 2 and up play the preset's styles; without it every seat plays TAG at 6 seats and random moves at other sizes\n",
+        "--lineup: seat 1 plays the user (TAG) and seats 2 and up play the preset's styles; without it every seat plays TAG\n",
     );
     expect(parseArgs([])).toEqual({
       kind: 'run',
@@ -514,8 +514,6 @@ describe('playtest CLI', () => {
       message: 'Error: --lineup needs a value.',
     });
 
-    const note =
-      'Line-up note: styles play only in hands with 6 seats dealt in; other hands use random moves until advice covers other table sizes.\n';
     const faulty = capture(['--hands', '2', '--seed', '1', '--size', '3', '--lineup', 'tough'], {
       makePolicy: () => (view) => ({ seat: view.seat, type: 'raise', amount: 999 }),
     });
@@ -528,18 +526,23 @@ describe('playtest CLI', () => {
       'Options: --hands 2 --seed 1 --size 3 --lineup tough\n' +
         'Table: 3 players, cash $4/$8, stacks carry over, a busted seat rebuys for $160\n' +
         'Line-up: tough, seat 1 plays the user, seat 2 Ava (Maniac), seat 3 Ben (TAG)\n' +
-        note,
+        'Hands played: 2\n',
     );
 
     const small = capture(['--hands', '3', '--size', '3', '--lineup', 'soft']);
     expect(small.code).toBe(0);
     expect(small.out).toContain(
       'Line-up: soft, seat 1 plays the user, seat 2 Ava (Calling station), seat 3 Ben (Rock)\n' +
-        note,
+        'Bot results: ',
     );
+    expect(small.out).not.toContain('Line-up note:');
     const sng = capture(['--hands', '3', '--game', 'sng', '--lineup', 'soft']);
     expect(sng.out).toContain('Options: --hands 3 --seed 42 --size 6 --game sng --lineup soft\n');
-    expect(sng.out).toContain(note);
+    expect(sng.out).toContain(
+      'Line-up: soft, seat 1 plays the user, seat 2 Ava (Calling station), seat 3 Ben (Rock), seat 4 Cal (Calling station), seat 5 Dee (Rock), seat 6 Eli (Calling station)\n' +
+        'Bot results: ',
+    );
+    expect(sng.out).not.toContain('Line-up note:');
     const six = capture(['--hands', '3', '--lineup', 'mixed']);
     expect(six.out).not.toContain('Line-up note:');
     expect(capture(['--hands', '3']).out).not.toContain('Line-up');
@@ -552,9 +555,9 @@ describe('playtest CLI', () => {
         ' --size 3 --button 1 --lineup mixed\n' +
         'Table: 3 players, cash $4/$8, stacks carry over, a busted seat rebuys for $160\n' +
         'Line-up: mixed, seat 1 plays the user, seat 2 Ava (TAG), seat 3 Ben (Calling station)\n' +
-        note +
         'Hand 1: ',
     );
+    expect(replay.out).not.toContain('Line-up note:');
     const replayFaulty = capture(
       ['--replay-code', VALID_CODE, '--size', '3', '--lineup', 'mixed'],
       {

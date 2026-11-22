@@ -13,7 +13,11 @@ import {
   type GradeRuleId,
 } from '../../src/advice/grade';
 import { recommendPostflop, type PostflopRecommendation } from '../../src/advice/postflop';
-import { recommendPreflop, type PreflopRecommendation } from '../../src/advice/preflop';
+import {
+  FULL_RING_CHART,
+  recommendPreflop,
+  type PreflopRecommendation,
+} from '../../src/advice/preflop';
 import { parseCards, type Card } from '../../src/engine/cards';
 import { applyAction, createHand, type Action, type SeatNumber } from '../../src/engine/hand';
 import { playerView, type PlayerView } from '../../src/engine/player-view';
@@ -241,7 +245,9 @@ describe('errors', () => {
       new RangeError('Seat 3 is not to act'),
     );
     const bbFacingNothing = heroView([f(4), f(5), f(1), c(2, 2)], [1, 2, 3, 4, 5]);
-    expect(() => gradeView(bbFacingNothing, 'check')).toThrow(RangeError);
+    expect(() => gradeView(bbFacingNothing, 'check', { chart: FULL_RING_CHART })).toThrow(
+      new RangeError('The full-ring chart does not fit 5 dealt-in seats'),
+    );
   });
 });
 

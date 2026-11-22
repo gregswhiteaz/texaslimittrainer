@@ -3,10 +3,10 @@ import { createRoot } from 'react-dom/client';
 import { sharedAdviceClient } from '../../src/ui/advice/advice-client';
 import type { SessionSeat } from '../../src/table/session';
 import { Table } from '../../src/ui/table/Table';
-import PaceAdviceWorker from './pace-advice.worker.ts?worker&inline';
+import AdviceWorker from '../../src/ui/advice/advice.worker.ts?worker&inline';
 
 // Test-only 10-max page (TASK-3.13 A-6, D-3): never imported by the app, built by table-harness-bundle.ts.
-// Bots decide in the test-only pace worker (no 6-max chart) through the app-wide advice client.
+// Bots decide in the production advice worker (real TAG bots, full-ring chart) through the app-wide advice client.
 const TEN_SEATS: readonly SessionSeat[] = [
   'Ava',
   'Ben',
@@ -24,7 +24,7 @@ const TEN_SEATS: readonly SessionSeat[] = [
     : { seat: index + 1, name, kind: 'bot', style: 'TAG' },
 );
 
-sharedAdviceClient(() => new PaceAdviceWorker());
+sharedAdviceClient(() => new AdviceWorker());
 const root = document.getElementById('root');
 if (!root) throw new Error('Pace harness needs a #root element');
 createRoot(root).render(

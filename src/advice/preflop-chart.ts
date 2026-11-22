@@ -1,7 +1,7 @@
 import { handClassAt, type HandClass } from './hand-class';
 
-export type ReferenceSize = '6-max';
-export type Position = 'UTG' | 'HJ' | 'CO' | 'BTN' | 'SB' | 'BB';
+export type ReferenceSize = 'heads-up' | '6-max' | 'full-ring';
+export type Position = 'UTG' | 'UTG+1' | 'MP' | 'LJ' | 'HJ' | 'CO' | 'BTN' | 'SB' | 'BB';
 export type Situation =
   'unopened' | 'limpers' | 'raise' | 'raise-and-calls' | 're-raise' | 'blind-defence';
 export type ChartAction = 'fold' | 'call' | 'raise';
@@ -36,14 +36,40 @@ function spotsOf(situation: Situation, positions: readonly Position[]): SpotId[]
   return positions.map((position) => ({ position, situation }));
 }
 
+const REFERENCE_SIZES: readonly ReferenceSize[] = ['heads-up', '6-max', 'full-ring'];
+
+/** Non-blind chart positions by seats before the button: index 0 = BTN. Last entry = earliest position. */
+export const SEATS_BEFORE_BUTTON: Readonly<Record<ReferenceSize, readonly Position[]>> = {
+  'heads-up': ['BTN'],
+  '6-max': ['BTN', 'CO', 'HJ', 'UTG'],
+  'full-ring': ['BTN', 'CO', 'HJ', 'LJ', 'MP', 'UTG+1', 'UTG'],
+};
+
+const FULL_RING_OPENERS: readonly Position[] = ['UTG', 'UTG+1', 'MP', 'LJ', 'HJ', 'CO', 'BTN'];
+
 /** The (position, situation) spots each chart must hold, in chart order. */
 export const APPLICABLE_SPOTS: Readonly<Record<ReferenceSize, readonly SpotId[]>> = {
+  'heads-up': [
+    ...spotsOf('unopened', ['BTN']),
+    ...spotsOf('limpers', ['BB']),
+    ...spotsOf('raise', ['BTN']),
+    ...spotsOf('re-raise', ['BTN', 'BB']),
+    ...spotsOf('blind-defence', ['BB']),
+  ],
   '6-max': [
     ...spotsOf('unopened', ['UTG', 'HJ', 'CO', 'BTN', 'SB']),
     ...spotsOf('limpers', ['HJ', 'CO', 'BTN', 'SB', 'BB']),
     ...spotsOf('raise', ['UTG', 'HJ', 'CO', 'BTN']),
     ...spotsOf('raise-and-calls', ['UTG', 'HJ', 'CO', 'BTN']),
     ...spotsOf('re-raise', ['UTG', 'HJ', 'CO', 'BTN', 'SB', 'BB']),
+    ...spotsOf('blind-defence', ['SB', 'BB']),
+  ],
+  'full-ring': [
+    ...spotsOf('unopened', [...FULL_RING_OPENERS, 'SB']),
+    ...spotsOf('limpers', ['UTG+1', 'MP', 'LJ', 'HJ', 'CO', 'BTN', 'SB', 'BB']),
+    ...spotsOf('raise', FULL_RING_OPENERS),
+    ...spotsOf('raise-and-calls', FULL_RING_OPENERS),
+    ...spotsOf('re-raise', [...FULL_RING_OPENERS, 'SB', 'BB']),
     ...spotsOf('blind-defence', ['SB', 'BB']),
   ],
 };
@@ -160,12 +186,12 @@ export function parseChart(raw: unknown): PreflopChart {
   if (!isRecord(raw) || raw.format !== FORMAT || raw.version !== 1) {
     throw new ChartValidationError([`Chart file: expected format "${FORMAT}" version 1`]);
   }
-  if (raw.referenceSize !== '6-max') {
+  if (!REFERENCE_SIZES.includes(raw.referenceSize as ReferenceSize)) {
     throw new ChartValidationError([
       `Chart file: unknown reference size "${String(raw.referenceSize)}"`,
     ]);
   }
-  const referenceSize: ReferenceSize = raw.referenceSize;
+  const referenceSize = raw.referenceSize as ReferenceSize;
   const label = `${referenceSize} chart`;
   const applicable = APPLICABLE_SPOTS[referenceSize];
   const problems: string[] = [];

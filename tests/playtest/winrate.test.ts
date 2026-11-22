@@ -95,7 +95,7 @@ describe('winrate', () => {
   it('bot identity, ordering and per-hand results', () => {
     const seats = [user, bot(2, 'Ava', 'TAG'), bot(3, 'Ben', 'Rock')];
     const swapped = [user, bot(2, 'Jay', 'Maniac'), seats[2] as LineUpSeat];
-    const lineUp = new BotResults(3, 'cash');
+    const lineUp = new BotResults('cash');
     lineUp.add(hand(1, { 1: 8, 2: -8, 3: 0 }, seats));
     lineUp.add(hand(2, { 1: 4, 2: -4, 3: 0 }, swapped));
     lineUp.add(hand(3, { 1: 100, 2: -100 }, seats, false));
@@ -111,20 +111,20 @@ describe('winrate', () => {
     ]);
     expect(rows[1]?.rate.bbPer100).toBeCloseTo(50, 9);
 
-    const six = new BotResults(6, 'cash');
+    const six = new BotResults('cash');
     six.add(hand(1, { 1: 8, 2: -8 }));
     expect(six.rows().map((r) => [r.name, r.style])).toEqual([
       ['Seat 1', 'TAG'],
       ['Seat 2', 'TAG'],
     ]);
-    const sng = new BotResults(3, 'sng');
+    const sng = new BotResults('sng');
     sng.add(hand(1, { 1: 40, 2: -20, 3: -20 }));
     sng.add(hand(2, { 1: 40, 3: -40 }));
     const sngRows = sng.rows();
     expect(sngRows.map((r) => [r.name, r.style, r.rate.hands])).toEqual([
-      ['Seat 1', 'Random', 2],
-      ['Seat 2', 'Random', 1],
-      ['Seat 3', 'Random', 2],
+      ['Seat 1', 'TAG', 2],
+      ['Seat 2', 'TAG', 1],
+      ['Seat 3', 'TAG', 2],
     ]);
     expect(sngRows[0]?.rate.bbPer100).toBe(100);
 

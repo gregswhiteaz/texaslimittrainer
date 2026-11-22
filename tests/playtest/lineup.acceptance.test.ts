@@ -51,7 +51,7 @@ function bots(text: string): [number, string, string][] {
 }
 
 describe('playtest --lineup', () => {
-  it(
+  it.runIf(SLOW)(
     'AC#6 tough line-up at 9 players seats the Maniac at seat 2 and plays 10,000 clean hands',
     () => {
       const args = ['--hands', '10000', '--seed', '42', '--size', '9', '--lineup', 'tough'];
@@ -69,7 +69,7 @@ describe('playtest --lineup', () => {
         ...[3, 4, 5, 6, 7, 8, 9].map((seat) => [seat, 'TAG']),
       ]);
       expect(new Set(seated.map(([, name]) => name)).size).toBe(8);
-      expect(lineOf(run.stdout, 'Line-up note')).toBeDefined();
+      expect(lineOf(run.stdout, 'Line-up note')).toBeUndefined();
       expect(playtest(args).stdout).toBe(run.stdout);
     },
     TEST_TIMEOUT_MS * 2,

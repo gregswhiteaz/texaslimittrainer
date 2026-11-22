@@ -1,0 +1,10 @@
+{
+  "spec": "SPEC-08",
+  "reason": "With the random-move fallback removed (AC#9), every default playtest seat plays TAG at every size, but the per-bot results report still labels default seats at sizes other than 6 as 'Random': src/playtest/winrate.ts:65 `this.defaultStyle = size === 6 ? 'TAG' : 'Random'`. The spec does not list winrate.ts, and correcting the label to 'TAG' breaks a locked TASK-6.10 test that asserts the old label: tests/playtest/bot-results.acceptance.test.ts:116 expects 9-seat default rows `[`Seat ${i + 1}`, 'Random', i + 1]`. The unlocked tests/playtest/winrate.test.ts:125-127 (BotResults(3, 'sng')) would also change.",
+  "evidence": "npm run -s playtest -- --hands 10000 --size 9 prints 'Bot: Seat 1, Random, seat 1, 10000 hands, ...' while runPlaytest's default policy is seededTagPolicy at every size (tests/playtest/all-sizes.acceptance.test.ts AC#9 passes). playtest:million -- --hands 900 reports 'Random' for every seat at sizes 2-5 and 7-10. The locked test passes today only because the label is stale. Everything else is done: npm test has 1 failure (the Q-4-pending locked lineup AC#6), lint/typecheck/format clean, e2e 142 passed, SPEC-13 passes.",
+  "options": [
+    "(Recommended) Unlock tests/playtest/bot-results.acceptance.test.ts (owner TASK-6.10) for one edit: line 116 'Random' -> 'TAG'. Then set BotResults' default style to 'TAG' at every size in src/playtest/winrate.ts (drop the 'Random' union member and the size check) and update tests/playtest/winrate.test.ts:125-127 to 'TAG'. Two extra files in scope (well inside the 26-file budget).",
+    "Leave the stale 'Random' label for now and open a follow-up task to correct the bot-results label at sizes other than 6; no locked edit in this story.",
+    "Amend the spec so the CLI drops the style column for default seats; larger change, not recommended."
+  ]
+}
