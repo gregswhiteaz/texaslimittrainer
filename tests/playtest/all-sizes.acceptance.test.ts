@@ -30,7 +30,7 @@ vi.mock('../../src/advice/equity', async (importOriginal) => {
 });
 
 const SIZES = [2, 3, 4, 5, 6, 7, 8, 9, 10];
-const TEST_TIMEOUT_MS = 60_000;
+const TEST_TIMEOUT_MS = 120_000;
 
 describe('playtests at every table size', () => {
   it(

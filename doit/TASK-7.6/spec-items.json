@@ -3,96 +3,96 @@
     "id": "SPEC-01",
     "verifies": "AC#1",
     "verification": "acceptance `tests/advice/table-sizes.acceptance.test.ts::AC#1 heads-up, 6-max and full-ring charts exist and a missing chart fails`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-02",
     "verifies": "AC#2",
     "verification": "acceptance `tests/advice/table-sizes.acceptance.test.ts::AC#2 every heads-up and full-ring spot assigns all 169 hand classes`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-03",
     "verifies": "AC#3, DoD#10",
     "verification": "acceptance `tests/advice/table-sizes.acceptance.test.ts::AC#3 a chart without justification fails naming the chart`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-04",
     "verifies": "AC#4",
     "verification": "acceptance `tests/advice/table-sizes.acceptance.test.ts::AC#4 the chart used is heads-up for 2, 6-max for 3 to 7 and full ring for 8 to 10`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-05",
     "verifies": "AC#5",
     "verification": "acceptance `tests/advice/table-sizes.acceptance.test.ts::AC#5 heads-up button advice comes from the heads-up chart cell`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-06",
     "verifies": "AC#6, AC#7",
     "verification": "acceptance `tests/advice/table-sizes.acceptance.test.ts::AC#6 AC#7 a capped fourth bet uses the re-raise cell and caps raise to call`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-07",
     "verifies": "AC#8",
     "verification": "acceptance `tests/advice/table-sizes.acceptance.test.ts::AC#8 the first seat to act maps by seats before the button`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-08",
     "verifies": "AC#9, DoD#7",
     "verification": "acceptance `tests/playtest/all-sizes.acceptance.test.ts::AC#9 default playtest seats TAG at every size from 2 to 10`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-09",
     "verifies": "AC#11, DoD#7",
     "verification": "acceptance `tests/playtest/all-sizes.acceptance.test.ts::AC#11 line-up seats play their own style in every hand at sizes 2 to 10`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-10",
     "verifies": "DoD#1, DoD#10",
     "verification": "unit `tests/advice/reference-charts.test.ts::heads-up and full-ring charts hold the authoring bands`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-11",
     "verifies": "AC#4, AC#8",
     "verification": "unit `tests/advice/preflop.test.ts::maps every seat at sizes 2 to 10`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-12",
     "verifies": "AC#11",
     "verification": "unit `tests/bots/rock.test.ts::Rock maps its 6-max range at other sizes`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-13",
     "verifies": "AC#10",
     "verification": "command `TLH_SLOW_TESTS=1 npx playwright test e2e/rapid-pace.spec.ts -g \"at 10 players\" && ! grep -rn \"tlh-test-pace-advice\\|pace-advice.worker\" e2e src`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-14",
     "verifies": "DoD#2, DoD#3, DoD#5, DoD#6, DoD#11",
     "verification": "command `npm run lint && npm run typecheck && npm test`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-15",
     "verifies": "DoD#7",
     "verification": "command `npm run -s playtest -- --hands 10000 --size 2 && npm run -s playtest -- --hands 10000 --size 9 && npm run -s playtest -- --hands 10000 --size 10 --lineup mixed`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-16",
     "verifies": "DoD#4, DoD#8, DoD#9, DoD#12, DoD#13",
     "verification": "manual Judge confirms `git diff --stat main` touches no `src/ui/**` file, no `fetch(` was added",
-    "status": "pending"
+    "status": "pass"
   }
 ]

@@ -5,16 +5,33 @@
   "base_commit": "8fa61a96b5f86eab040c77cc72705a5ca9a06f86",
   "started": "2026-11-22T14:24:18",
   "review_round": 1,
-  "judge_round": 0,
+  "judge_round": 1,
   "sendbacks": 0,
-  "gate_runs": 2,
+  "gate_runs": 3,
   "questions": 5,
   "assumptions": 0,
   "escalations": 0,
-  "item_failures": {},
+  "item_failures": {
+    "SPEC-01": 0,
+    "SPEC-02": 0,
+    "SPEC-03": 0,
+    "SPEC-04": 0,
+    "SPEC-05": 0,
+    "SPEC-06": 0,
+    "SPEC-07": 0,
+    "SPEC-08": 0,
+    "SPEC-09": 0,
+    "SPEC-10": 0,
+    "SPEC-11": 0,
+    "SPEC-12": 0,
+    "SPEC-13": 0,
+    "SPEC-14": 0,
+    "SPEC-15": 0,
+    "SPEC-16": 0
+  },
   "locked_tests": {
     "tests/advice/table-sizes.acceptance.test.ts": "4ca31ee530a580bb0031ee793bdc17f36b0e04c333878a80127b8ba008ed3988",
-    "tests/playtest/all-sizes.acceptance.test.ts": "215918235ce99f57c3cb6f38d090b2e060321ef1a211ab5968f44648d4db5a33"
+    "tests/playtest/all-sizes.acceptance.test.ts": "48d0373f1a0946e81de60635367b2c13d9663c92f76225b94e228052457fadde"
   },
   "test_snapshot": {
     "tests/advice/reference-charts.test.ts": {
@@ -28,7 +45,7 @@
       "skips": 0
     },
     "tests/playtest/all-sizes.acceptance.test.ts": {
-      "sha": "215918235ce99f57c3cb6f38d090b2e060321ef1a211ab5968f44648d4db5a33",
+      "sha": "48d0373f1a0946e81de60635367b2c13d9663c92f76225b94e228052457fadde",
       "asserts": 10,
       "skips": 0
     },
@@ -1108,10 +1125,22 @@
       "skips": 0
     }
   },
-  "history": [],
+  "history": [
+    {
+      "t": "2026-11-22T16:00:10",
+      "event": "unlock",
+      "file": "tests/playtest/all-sizes.acceptance.test.ts",
+      "reason": "Judge J-1-01: 40 s under local coverage load vs 60 s timeout \u2014 use the repo's 120 s acceptance timeout (no assertion change)"
+    }
+  ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-7.6",
   "spec_sha256": "4ef76692b8babd322e9738e31c00dbf65c5f2dd5060a013c232c483779d0cbe3",
   "review_findings": {
     "1": 0
-  }
+  },
+  "doc_id": "doc-87",
+  "judge_results": {
+    "1": "PASS"
+  },
+  "relock_pending": []
 }
