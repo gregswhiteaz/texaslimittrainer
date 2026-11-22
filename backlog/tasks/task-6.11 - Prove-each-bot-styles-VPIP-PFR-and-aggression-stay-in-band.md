@@ -4,7 +4,7 @@ title: Report each bot style's VPIP, PFR and aggression against its band
 status: To Do
 assignee: []
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-22T01:16:00Z'
+updated_date: '2026-11-22T02:38:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -47,6 +47,7 @@ Plan key: E06-S09 · Dream: limit-holdem-trainer
 - [ ] #4 Given a run with `--check-styles`, When it reports, Then it lists the action counts for every spot type each style marks as mixed and exits non-zero if any of those spot types used only one action [REQ-028.3]
 - [ ] #5 Given a test style file whose measured stats are all inside its bands, When the playtest runs with `--check-styles`, Then it prints each stat with its band and exits 0 [REQ-027.5]
 - [ ] #6 Given aggression is measured per style, When the report runs, Then it is measured after TASK-7.8 (postflop value betting) in mixed line-ups — a lone Maniac among TAGs reads 100% today because no bot bets postflop (TASK-6.4 finding)
+- [ ] #7 Given the Rock seated with a Maniac at the table, When its VPIP and PFR are reported, Then they are re-measured against the 8–15% / 6–12% band (TASK-6.5 prototype: 9.9% / 8.3%, close to the floors)
 <!-- AC:END -->
 
 ## Definition of Done
@@ -69,4 +70,6 @@ Plan key: E06-S09 · Dream: limit-holdem-trainer
 
 <!-- SECTION:NOTES:BEGIN -->
 AC added from TASK-6.4 follow-up
+
+AC added from TASK-6.5 follow-up
 <!-- SECTION:NOTES:END -->
