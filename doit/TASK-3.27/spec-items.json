@@ -3,30 +3,30 @@
     "id": "SPEC-01",
     "verifies": "AC#2, AC#1",
     "verification": "acceptance `e2e/rapid-pace.spec.ts::the paused-clock pace check catches a 400 ms wait`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-02",
     "verifies": "AC#2",
     "verification": "acceptance `e2e/rapid-pace.spec.ts::the paused-clock pace check catches a 400 ms wait`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-03",
     "verifies": "AC#1",
     "verification": "acceptance `e2e/rapid-pace.spec.ts::each bot action appears on the next tick of a paused clock`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-04",
     "verifies": "AC#1",
     "verification": "command `npx playwright test e2e/rapid-pace.spec.ts -g \"paused\" --project chromium --project webkit --repeat-each 50 --reporter=line` then `gh run watch <run-id> --exit-status` on the pushed branch",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-05",
     "verifies": "AC#1",
     "verification": "manual `npx playwright test e2e/rapid-pace.spec.ts -g \"paused\" --project chromium --project webkit` under M1 and M2 (expect failures), and the stress copy with `--project webkit --repeat-each 30`",
-    "status": "pending"
+    "status": "pass"
   }
 ]

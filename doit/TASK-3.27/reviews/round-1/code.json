@@ -1,0 +1,27 @@
+{"reviewer": "code", "round": 1,
+ "rubric": [
+  {"item": "SPEC-01 correctness", "result": "pass"},
+  {"item": "SPEC-01 test strength", "result": "pass"},
+  {"item": "SPEC-02 correctness", "result": "pass"},
+  {"item": "SPEC-02 test strength", "result": "pass"},
+  {"item": "SPEC-03 correctness", "result": "pass"},
+  {"item": "SPEC-03 test strength", "result": "pass"},
+  {"item": "SPEC-04 correctness", "result": "pass"},
+  {"item": "SPEC-04 test strength", "result": "pass"},
+  {"item": "SPEC-05 correctness", "result": "pass"},
+  {"item": "SPEC-05 test strength", "result": "pass"},
+  {"item": "scope", "result": "pass"},
+  {"item": "concision", "result": "pass"},
+  {"item": "clarity", "result": "pass"}
+ ],
+ "findings": [
+  {"fingerprint": "e2e/rapid-pace.spec.ts:race-fix-has-no-permanent-regression-test", "severity": "MINOR", "file": "e2e/rapid-pace.spec.ts", "line": 206,
+   "issue": "Reverting the reorder in meterBotAction would not make any committed test fail deterministically; the race only reproduces with injected worker latency (SPEC-05 stress copy, deleted).",
+   "evidence": "Spec A-2 accepts this deliberately (one-off proof plus the ordering argument in spec section 5). Unmodified test passed 50/50 locally before the fix.",
+   "fix": "None required under A-2. If a regression guard is later wanted, add the jittered-worker harness as an opt-in slow test (e.g. behind the existing SLOW flag)."},
+  {"fingerprint": "e2e/rapid-pace.spec.ts:startup-cap-literal", "severity": "NIT", "file": "e2e/rapid-pace.spec.ts", "line": 258,
+   "issue": "The self-test start-up cap is a bare 2000 while the guard's start-up loop uses the named FAKE_CAP_MS.",
+   "evidence": "for (let ms = 0; ms < 2000 && (await actionCount(page)) === 0; ms++)",
+   "fix": "Optional: name it (e.g. const DEAL_CAP_MS = 2000) or leave as is; spec prescribes the literal."}
+ ],
+ "summary": "The diff to e2e/rapid-pace.spec.ts (12 lines vs base 3637e36) matches the spec exactly. meterBotAction now checks workerPosts > posts before the user's-turn/hand-over null check. A bot action whose reply lands between reads now returns fake (via the unchanged 10 s poll) instead of null. null is still returned when no post happened and the user's buttons or Hand over show. The only worker poster in src is decideBot (useTableSession.ts:51), so a user-turn post cannot trigger a spurious poll. The reorder creates no new way to report a too-small time: step 2 returns the same fake value it did before. Only the branch order changed, and fake time moves only in runFor. The self-test start-up now steps 1 ms (cap 2000), asserts actionCount toBe(2) (was > 0) and li[data-seat=3] contains 'To act' (Table.tsx:36 renders that span only for the seat to act). Nothing was removed or loosened: >= 400, cap 1000, not.toBeNull 'a bot is to act', the guard's <= FAKE_CAP_MS, >= 5 samples and same-origin checks are all intact. M1 still trips the guard via the unchanged fake > cap path. M2 would make the self-test fail on a sample < 400 or on toBe(2). Local re-run: 20/20 passed (paused tests, both projects, repeat-each 5). The gates show test, lint and typecheck passing. No leftover zz-stress files."}
