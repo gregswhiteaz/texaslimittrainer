@@ -916,6 +916,18 @@
       "event": "unlock",
       "file": "e2e/game-type-choice.spec.ts",
       "reason": "TASK-1.52 Q-1 (user-approved): reach state via bounded runUntilMyTurn; assertions unchanged"
+    },
+    {
+      "t": "2026-11-22T16:14:50",
+      "event": "unlock",
+      "file": "tests/ui/game-config-game-type.acceptance.test.tsx",
+      "reason": "TASK-2.2 Q-5 (user-approved): Game Config gains a players <select>; update select/combobox counts and pick the stake select by id; no other expected value changes"
+    },
+    {
+      "t": "2026-11-22T16:14:50",
+      "event": "unlock",
+      "file": "e2e/game-type-choice.spec.ts",
+      "reason": "TASK-2.2 Q-5 (user-approved): Game Config gains a players <select>; update select/combobox counts and pick the stake select by id; no other expected value changes"
     }
   ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-2.4",
@@ -928,6 +940,8 @@
     "1": "PASS"
   },
   "relock_pending": [
+    "e2e/game-type-choice.spec.ts",
+    "tests/ui/game-config-game-type.acceptance.test.tsx",
     "e2e/game-type-choice.spec.ts"
   ]
 }

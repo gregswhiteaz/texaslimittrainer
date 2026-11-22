@@ -1,0 +1,104 @@
+[
+  {
+    "id": "SPEC-01",
+    "verifies": "AC#1, AC#7, AC#10, DoD#1",
+    "verification": "acceptance `tests/ui/game-config-players.acceptance.test.tsx::players options are exactly 2 to 10 with heads-up, 6-max and full ring labels and 6 selected`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-02",
+    "verifies": "AC#2, DoD#1",
+    "verification": "acceptance `tests/ui/game-config-players.acceptance.test.tsx::3, 4, 5 and 7 players say advice is approximate based on 6-max`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-03",
+    "verifies": "AC#3, DoD#1",
+    "verification": "acceptance `tests/ui/game-config-players.acceptance.test.tsx::8 players says advice is approximate based on full ring`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-04",
+    "verifies": "AC#4, AC#7, DoD#1",
+    "verification": "acceptance `tests/ui/game-config-players.acceptance.test.tsx::2, 6, 9 and 10 players show no approximate note and list size minus 1 opponents`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-05",
+    "verifies": "AC#5, AC#7, DoD#1",
+    "verification": "acceptance `tests/table/table-size.acceptance.test.ts::every size from 2 to 10 seats the user and size minus 1 bots with the size in the header`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-06",
+    "verifies": "AC#6, AC#11, DoD#1",
+    "verification": "acceptance `tests/table/table-size.acceptance.test.ts::heads-up the button posts the small blind and is labelled Small blind`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-07",
+    "verifies": "AC#8, AC#11, DoD#1",
+    "verification": "acceptance `tests/table/table-size.acceptance.test.ts::position names at 2 to 10 seats follow the Button, blinds, Cutoff, Hijack, Under the gun rule`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-08",
+    "verifies": "AC#9, DoD#1",
+    "verification": "acceptance `tests/table/table-size.acceptance.test.ts::review grades every user decision at 2 and 10 players`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-09",
+    "verifies": "AC#5, AC#7, DoD#1",
+    "verification": "acceptance `tests/table/table-size.acceptance.test.ts::the chosen size survives the game type and stake choice`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-10",
+    "verifies": "AC#1, AC#2, AC#3, AC#4, AC#5, AC#7, DoD#1, DoD#7, DoD#8",
+    "verification": "acceptance `e2e/players-choice.spec.ts::each table size from 2 to 10 starts with that many players and the right advice note`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-11",
+    "verifies": "AC#6, AC#11, DoD#1, DoD#7",
+    "verification": "acceptance `e2e/players-choice.spec.ts::a heads-up table puts the small blind on the button`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-12",
+    "verifies": "AC#7, DoD#1",
+    "verification": "unit `tests/table/session-config.test.ts::configForPlayers rejects bad sizes and keeps game type, stake, speed and line-up`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-13",
+    "verifies": "DoD#1, DoD#7",
+    "verification": "integration `npm test && npm run e2e`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-14",
+    "verifies": "DoD#2, DoD#4, DoD#5",
+    "verification": "command `npm run lint && npm run typecheck && npm test`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-15",
+    "verifies": "DoD#6",
+    "verification": "command `npm run playtest -- --hands 10000 --seed 42 --size 2 && npm run playtest -- --hands 10000 --seed 42 && npm run playtest -- --hands 10000 --seed 42 --size 10`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-16",
+    "verifies": "DoD#10, DoD#11",
+    "verification": "manual CI run on branch `doit/TASK-2.2` and `backlog doc list --plain`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-17",
+    "verifies": "DoD#3, DoD#9, DoD#12",
+    "verification": "manual Judge confirms no `tests/advice/*golden*` suite and no service worker exist, and the diff adds no strategy content",
+    "status": "pending"
+  }
+]

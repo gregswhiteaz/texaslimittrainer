@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-22T15:14:00Z'
+updated_date: '2026-11-22T23:14:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-0
@@ -97,6 +97,8 @@ Build: full SessionConfig with defaults (Q-2); App screens Home -> Game Config -
 CI run 44418379341 (head 954a0b6): success first push. Judge round 1: PASS 17/17, no blocking; full flow in Chromium + WebKit; logo mean diff 0.78/2.63 (limit 4); colours measured exact; Config text matches Q-4; user at seat 1 with button 1 played 40 hands correctly; only the four Q-3 test edits vs main; 5 mutants caught. Follow-ups (Step 6a): created TASK-2.18 (Home first-load focus, user-seat cards, config-driven stacks tests); ACs added to TASK-2.2 (player selector writes config; size labels), TASK-2.13 (random seat/button into config), TASK-2.14 (browser Back/Forward), TASK-3.10 (assertSessionConfig, REQ-025). Skipped: Table Home control (TASK-2.14's own purpose), Home right column (TASK-2.16/2.17's own purpose), other Game Config selectors (TASK-2.3/2.4/2.5/2.11's own purpose).
 
 Locked e2e test unlocked for TASK-1.52 Q-1 (user-approved; clock-advance only).
+
+Locked test(s) edited for TASK-2.2 Q-5 (user-approved): dropdown counts after adding the players select.
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary

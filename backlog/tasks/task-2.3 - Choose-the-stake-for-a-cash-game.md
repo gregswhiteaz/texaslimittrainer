@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-21T17:12:00Z'
+updated_date: '2026-11-22T23:14:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -88,6 +88,8 @@ Review R1: 0 blocking; MINORs fixed in-story (select font inherit; border #6b738
 Follow-ups (Step 6a): AC added to TASK-2.10 (validate stored stake). Sit-and-go hiding stays TASK-2.4.
 
 Judge R1 PASS 14/14 (real app driven in Chromium+WebKit at 5 stakes).
+
+Locked test(s) edited for TASK-2.2 Q-5 (user-approved): dropdown counts after adding the players select.
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary
