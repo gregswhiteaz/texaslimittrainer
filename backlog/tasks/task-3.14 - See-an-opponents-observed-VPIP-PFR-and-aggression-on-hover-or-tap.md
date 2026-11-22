@@ -4,7 +4,7 @@ title: See an opponent's observed VPIP, PFR and aggression on hover or tap
 status: To Do
 assignee: []
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-17T23:22:00Z'
+updated_date: '2026-11-22T17:47:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-2
@@ -63,3 +63,9 @@ Plan key: E03-S15 · Dream: limit-holdem-trainer
 - [ ] #11 Story documentation is written and published to Backlog.md
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+From TASK-6.8 (D-7): bot identity is the never-reused display name (Ava…Ivy, then Jay…Zed, 'Jay 2'…); SessionSeat has no id field — add one only if this story needs more than the name.
+<!-- SECTION:NOTES:END -->

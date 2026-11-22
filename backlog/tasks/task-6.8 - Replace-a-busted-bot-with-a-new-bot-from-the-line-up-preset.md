@@ -1,11 +1,11 @@
 ---
 id: TASK-6.8
 title: Replace a busted bot with a new bot from the line-up preset
-status: In Progress
+status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-22T17:46:00Z'
+updated_date: '2026-11-22T17:55:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -45,31 +45,31 @@ Plan key: E06-S08 · Dream: limit-holdem-trainer
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Given a $4/$8 cash game where a bot's stack is $0 at the end of a hand, When the next hand is dealt, Then that bot has left and a new bot holds the seat with $160 [REQ-007.5]
-- [ ] #2 Given a bot with $1 left at the end of a hand, When the next hand is dealt, Then the same bot keeps the seat with $1 [REQ-007.5]
-- [ ] #3 Given 10,000 seeded replacements at 6 players for each preset, When the new bots' styles are tallied, Then Mixed yields all four styles, Tough only TAG and Maniac, Soft only Calling station and Rock, and every allowed style appears at least once [REQ-007.5, REQ-007.8]
-- [ ] #4 Given two bots bust in the same hand, When the next hand is dealt, Then both seats hold new bots with fresh buy-ins and no two bots at the table share a display name [REQ-007.5, REQ-009.4]
-- [ ] #5 Given a cash playtest with the same seed and options, When it is run twice, Then the same bots are replaced after the same hands with the same styles and names [REQ-007.5, REQ-062.4]
-- [ ] #6 Given `npm run playtest -- --hands 10000 --seed 42 --lineup mixed`, When bots bust, Then they are replaced by this rule, zero invariant violations are reported and it exits 0 [REQ-007.5]
-- [ ] #7 Given a session recorded as Custom, When 10,000 seeded replacements are tallied, Then the new bots' styles include all four styles (TAG, Calling station, Maniac, Rock) and no other [REQ-007.7]
-- [ ] #8 Given 10,000 seeded replacements with the Mixed preset at 3 players and with the Tough preset at heads-up, When the new bots' styles are tallied, Then Mixed yields only TAG and Calling station (both at least once) and heads-up Tough yields only TAG [REQ-007.8]
-- [ ] #9 Given a bot ends a hand at $0, When nextHand runs, Then the bot is replaced by a new bot (preset style, unique name, $160) instead of being topped up
+- [x] #1 Given a $4/$8 cash game where a bot's stack is $0 at the end of a hand, When the next hand is dealt, Then that bot has left and a new bot holds the seat with $160 [REQ-007.5]
+- [x] #2 Given a bot with $1 left at the end of a hand, When the next hand is dealt, Then the same bot keeps the seat with $1 [REQ-007.5]
+- [x] #3 Given 10,000 seeded replacements at 6 players for each preset, When the new bots' styles are tallied, Then Mixed yields all four styles, Tough only TAG and Maniac, Soft only Calling station and Rock, and every allowed style appears at least once [REQ-007.5, REQ-007.8]
+- [x] #4 Given two bots bust in the same hand, When the next hand is dealt, Then both seats hold new bots with fresh buy-ins and no two bots at the table share a display name [REQ-007.5, REQ-009.4]
+- [x] #5 Given a cash playtest with the same seed and options, When it is run twice, Then the same bots are replaced after the same hands with the same styles and names [REQ-007.5, REQ-062.4]
+- [x] #6 Given `npm run playtest -- --hands 10000 --seed 42 --lineup mixed`, When bots bust, Then they are replaced by this rule, zero invariant violations are reported and it exits 0 [REQ-007.5]
+- [x] #7 Given a session recorded as Custom, When 10,000 seeded replacements are tallied, Then the new bots' styles include all four styles (TAG, Calling station, Maniac, Rock) and no other [REQ-007.7]
+- [x] #8 Given 10,000 seeded replacements with the Mixed preset at 3 players and with the Tough preset at heads-up, When the new bots' styles are tallied, Then Mixed yields only TAG and Calling station (both at least once) and heads-up Tough yields only TAG [REQ-007.8]
+- [x] #9 Given a bot ends a hand at $0, When nextHand runs, Then the bot is replaced by a new bot (preset style, unique name, $160) instead of being topped up
 <!-- AC:END -->
 
 ## Definition of Done
 <!-- DOD:BEGIN -->
-- [ ] #1 Every acceptance criterion has at least one automated test (unit, property or Playwright) that passes
-- [ ] #2 `npm run lint`, `npm run typecheck` and `npm test` pass with zero errors [REQ-059.1, REQ-059.4]
-- [ ] #3 The golden-spot suite passes 100% (applies from the story that creates the suite, E07-S14, onward) [REQ-039.4]
-- [ ] #4 Coverage thresholds hold: >= 90% engine/bots/advice/statistics, >= 70% overall [REQ-059.3]
-- [ ] #5 Engine, bots, advice and statistics code imports no UI or browser-only code [REQ-059.2]
-- [ ] #6 Stories that touch the engine, bots or advice: a 10,000-hand playtest reports zero invariant violations (applies once the playtest runner exists, E01-S07, onward) [REQ-056.1]
-- [ ] #7 Stories that add or change a screen: Playwright test of the screen flow in Chromium and WebKit, and axe reports zero serious or critical violations (axe tooling is provisioned in the toolchain story E01-S01) [REQ-057.1]
-- [ ] #8 No new network requests beyond the app's own files [REQ-058.1]
-- [ ] #9 Strategy-content stories: text is original and every chart, range or golden spot carries its justification [REQ-061.2]
-- [ ] #10 CI workflow is green on the story's branch (applies once the CI story E01-S02 is done; E01-S01 instead passes the same checks locally) [REQ-064.2]
-- [ ] #11 Story documentation is written and published to Backlog.md
-- [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
+- [x] #1 Every acceptance criterion has at least one automated test (unit, property or Playwright) that passes
+- [x] #2 `npm run lint`, `npm run typecheck` and `npm test` pass with zero errors [REQ-059.1, REQ-059.4]
+- [x] #3 The golden-spot suite passes 100% (applies from the story that creates the suite, E07-S14, onward) [REQ-039.4]
+- [x] #4 Coverage thresholds hold: >= 90% engine/bots/advice/statistics, >= 70% overall [REQ-059.3]
+- [x] #5 Engine, bots, advice and statistics code imports no UI or browser-only code [REQ-059.2]
+- [x] #6 Stories that touch the engine, bots or advice: a 10,000-hand playtest reports zero invariant violations (applies once the playtest runner exists, E01-S07, onward) [REQ-056.1]
+- [x] #7 Stories that add or change a screen: Playwright test of the screen flow in Chromium and WebKit, and axe reports zero serious or critical violations (axe tooling is provisioned in the toolchain story E01-S01) [REQ-057.1]
+- [x] #8 No new network requests beyond the app's own files [REQ-058.1]
+- [x] #9 Strategy-content stories: text is original and every chart, range or golden spot carries its justification [REQ-061.2]
+- [x] #10 CI workflow is green on the story's branch (applies once the CI story E01-S02 is done; E01-S01 instead passes the same checks locally) [REQ-064.2]
+- [x] #11 Story documentation is written and published to Backlog.md
+- [x] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
 
 ## Implementation Plan
@@ -92,6 +92,10 @@ AC added from TASK-3.4 follow-up (doc-25).
 Build: replacementGenerator + uniform style draw, REPLACEMENT_NAMES never reused (nextBotName), cash nextHand replaces $0 bots, playtest --lineup replacement + 'Bots replaced' + --styles; Q-4 locked edits only; recorded deviation: drawReplacementStyle lives in src/table/session.ts (bots/ boundary test forbids engine runtime imports); default SHA unchanged; gate PASS.
 
 Note: tests/playtest/policy-lineup.acceptance.test.ts was not in TASK-1.52's locked_tests, so no unlock event exists; the Q-4 edit (200→45 hands) is user-approved and recorded in qa.md and TASK-1.52 notes.
+
+Gate fix-6 FAIL was a lock-timing issue (overlapping builder gates re-locked pre-edit hashes); edits re-checked (no expect removed), re-unlocked, gate fix #7 PASS (6c7713b). Follow-ups: notes on TASK-3.21, TASK-4.7, TASK-3.14.
+
+Judge R1 PASS 14/14 (own 10k-draw tallies per preset/size, forced post-replacement violation replays with --styles, 12/13 mutants). Non-blocking: J-1-01 playtest restart-after-violation untested (A-4), J-1-02 replay Line-up line shows original names — not tracked (playtest display, no failure path).
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary
