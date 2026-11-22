@@ -87,6 +87,6 @@ describe('apt archive cache', () => {
         ),
       );
     }
-    expect(/^ {4}timeout-minutes: (\d+)$/m.exec(workflow)?.[1]).toBe('20');
+    expect(/^ {4}timeout-minutes: (\d+)$/m.exec(workflow)?.[1]).toBe('30');
   });
 });

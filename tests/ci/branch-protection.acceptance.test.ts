@@ -9,15 +9,35 @@ const readme = readFileSync(join(REPO_ROOT, 'README.md'), 'utf8');
 describe('branch protection', () => {
   it('README documents branch protection requiring the CI job', () => {
     const jobs = workflow.slice(workflow.indexOf('\njobs:\n'));
-    expect([...jobs.matchAll(/^ {2}[\w-]+:$/gm)].map((match) => match[0])).toEqual(['  checks:']);
-    const jobName = /^ {2}checks:\n {4}name: (.+)$/m.exec(workflow)?.[1];
-    expect(jobName).toBe('Lint, typecheck, build, test and e2e');
+    expect([...jobs.matchAll(/^ {2}[\w-]+:$/gm)].map((match) => match[0])).toEqual([
+      '  e2e:',
+      '  checks:',
+      '  coverage:',
+      '  sweeps:',
+      '  changes:',
+      '  tooling:',
+    ]);
+    const contexts = [...jobs.matchAll(/^ {2}([\w-]+):\n {4}name: (.+)$/gm)]
+      .filter((match) => match[1] !== 'changes')
+      .flatMap(([, , name = '']) =>
+        name.includes('${{ matrix.shard }}')
+          ? [1, 2].map((shard) => name.replace('${{ matrix.shard }}', String(shard)))
+          : [name],
+      );
+    expect(contexts).toEqual([
+      'E2E (Chromium and WebKit)',
+      'Lint, typecheck, build and playtest',
+      'Unit tests with coverage',
+      'Sweep tests (shard 1 of 2)',
+      'Sweep tests (shard 2 of 2)',
+      'Tooling tests',
+    ]);
 
     const ci = /^## Continuous integration\n([\s\S]*?)(?=^## )/m.exec(readme)?.[1] ?? '';
     const section = /^### Branch protection\n([\s\S]*?)(?=^#)/m.exec(ci + '\n#')?.[1] ?? '';
     for (const text of [
       'gh api -X PUT repos/{owner}/{repo}/branches/main/protection',
-      `"contexts": ["${jobName}"]`,
+      `"contexts": [${contexts.map((name) => `"${name}"`).join(', ')}]`,
       '"strict": false',
       '"enforce_admins": false',
       '"required_pull_request_reviews": null',

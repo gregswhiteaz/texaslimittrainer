@@ -4,7 +4,7 @@ import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-export type SandboxScript = 'lint' | 'typecheck' | 'test';
+export type SandboxScript = 'lint' | 'typecheck' | 'test' | 'test:unit';
 
 export interface SandboxResult {
   exitCode: number;

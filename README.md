@@ -30,12 +30,41 @@ Every check runs with one command and exits non-zero on failure.
 ## Continuous integration
 
 `.github/workflows/ci.yml` runs on every push and every pull request, on Ubuntu with the Node
-version from `.nvmrc`:
+version from `.nvmrc`, as parallel jobs. Each job has a 30-minute limit (as do the jobs in
+`visual.yml` and `million.yml`):
 
-1. `npm ci`
-2. Audit shipped dependencies: no high or critical advisory (`npm audit --omit=dev --audit-level=high`)
-3. Audit all dependencies: no critical advisory (`npm audit --audit-level=critical`)
-4. Lint, typecheck, build, test, then e2e in Chromium and WebKit with axe
+| Job (check name)                                  | What it runs                                                                                                                                                                                                                                            |
+| ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `E2E (Chromium and WebKit)`                       | `npm ci`, the Playwright browser and system dependency installs, then `npm run e2e` in Chromium and WebKit with axe                                                                                                                                     |
+| `Lint, typecheck, build and playtest`             | `npm ci`, the two audits (shipped dependencies: no high or critical advisory, `npm audit --omit=dev --audit-level=high`; all dependencies: no critical advisory, `npm audit --audit-level=critical`), lint, typecheck, build and a 10,000-hand playtest |
+| `Unit tests with coverage`                        | `npm run test:unit`, with the coverage thresholds                                                                                                                                                                                                       |
+| `Sweep tests (shard 1 of 2)` and `(shard 2 of 2)` | `npm run test:sweeps -- --shard=<n>/2`, without coverage; one shard failing does not cancel the other                                                                                                                                                   |
+| `Detect tooling changes`                          | `tools/ci/tooling-changed.js`, which decides whether the tooling tests run                                                                                                                                                                              |
+| `Tooling tests`                                   | `npm run test:tooling`, only when `Detect tooling changes` says so; otherwise it shows as skipped                                                                                                                                                       |
+
+The Vitest suite is split into three groups, each with its own command:
+
+- `npm run test:unit`: every test file that is not in the other two groups. This is the only group
+  that measures coverage, and it enforces the thresholds in `vite.config.ts` (70% of lines overall,
+  90% in the headless folders) on it alone.
+- `npm run test:sweeps`: the `*.acceptance.test.*`, `*.perf.test.*` and `*.property.test.*` files
+  outside the tooling folders (the slow bot, engine and playtest sweeps), without coverage.
+- `npm run test:tooling`: everything under `tests/ci/`, `tests/git/` and `tests/toolchain/` (the
+  tests that spawn CI scripts, git helpers, lint and toolchain processes), without coverage.
+
+Locally, `npm test` still runs the whole suite with coverage and the thresholds.
+
+The tooling tests run only when a push or pull request changes a tooling file: anything under
+`tools/`, `.github/`, `tests/ci/`, `tests/git/`, `tests/toolchain/`, `tests/support/` or
+`e2e/cards.visual.spec.ts-snapshots/`; `package.json`, `package-lock.json`, `tsconfig.json`,
+`eslint.config.js`, `vite.config.ts`, `playwright.config.ts`, `.prettierrc.json`, `.prettierignore`,
+`.nvmrc`, `README.md` or `src/engine/bot-random.ts`; or any `*.perf.test.*` file. A push is compared
+with the previous push (a new branch with where it left the default branch), and a pull request
+with its base. When the detector cannot tell what changed (an unknown event, a missing or unknown
+commit, a git error), it runs the tooling tests and prints a warning naming the reason; it never
+skips them on doubt. Every day at 06:00 UTC a scheduled run on the default branch runs only
+`Detect tooling changes` and `Tooling tests`, so tooling tests skipped on earlier pushes still run
+daily.
 
 Any failing check fails the run. The two Playwright install steps run through `tools/ci/retry.js`,
 which gives each attempt a 4-minute limit and retries up to 3 attempts in all; if every attempt
@@ -119,14 +148,15 @@ stays within the range typescript-eslint supports.
 
 ### Branch protection
 
-This rule makes GitHub block merging a pull request into `main` until the
-`Lint, typecheck, build, test and e2e` check has passed, while the admin can still push to `main`
-directly:
+This rule makes GitHub block merging a pull request into `main` until all six CI checks have
+passed (`Detect tooling changes` is not required: if it fails, `Tooling tests` is skipped and the
+run still fails), while the admin can still push to `main` directly. A skipped `Tooling tests`
+check counts as passed:
 
 ```sh
 gh api -X PUT repos/{owner}/{repo}/branches/main/protection --input - <<'JSON'
 {
-  "required_status_checks": { "strict": false, "contexts": ["Lint, typecheck, build, test and e2e"] },
+  "required_status_checks": { "strict": false, "contexts": ["E2E (Chromium and WebKit)", "Lint, typecheck, build and playtest", "Unit tests with coverage", "Sweep tests (shard 1 of 2)", "Sweep tests (shard 2 of 2)", "Tooling tests"] },
   "enforce_admins": false,
   "required_pull_request_reviews": null,
   "restrictions": null
@@ -140,12 +170,12 @@ Verify it:
 gh api repos/{owner}/{repo}/branches/main/protection --jq '.required_status_checks.contexts'
 ```
 
-Expected output: `["Lint, typecheck, build, test and e2e"]`.
+Expected output: the six names above.
 
 While the repository is private on the free plan, both commands fail with HTTP 403 "Upgrade to
 GitHub Pro or make this repository public to enable this feature.", so the rule is not applied
-yet: run the first command once the repository is public or on GitHub Pro. If the CI job's `name:`
-in `.github/workflows/ci.yml` changes, change the `contexts` entry with it.
+yet: run the first command once the repository is public or on GitHub Pro. If a job's `name:` in
+`.github/workflows/ci.yml` changes, change its `contexts` entry with it.
 
 ### Branch cleanup
 

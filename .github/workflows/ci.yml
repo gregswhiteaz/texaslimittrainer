@@ -3,6 +3,8 @@ name: CI
 on:
   push:
   pull_request:
+  schedule:
+    - cron: '0 6 * * *'
 
 permissions:
   contents: read
@@ -12,10 +14,11 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  checks:
-    name: Lint, typecheck, build, test and e2e
+  e2e:
+    name: E2E (Chromium and WebKit)
+    if: github.event_name != 'schedule'
     runs-on: ubuntu-24.04
-    timeout-minutes: 20
+    timeout-minutes: 30
     steps:
       - name: Check out
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -28,20 +31,6 @@ jobs:
         run: sudo tee -a /etc/apt/apt.conf < tools/ci/apt-network.conf > /dev/null
       - name: Install dependencies
         run: npm ci
-      - name: Audit shipped dependencies
-        run: npm audit --omit=dev --audit-level=high
-      - name: Audit all dependencies
-        run: npm audit --audit-level=critical
-      - name: Lint
-        run: npm run lint
-      - name: Typecheck
-        run: npm run typecheck
-      - name: Build
-        run: npm run build
-      - name: Test
-        run: npm test
-      - name: Playtest
-        run: npm run playtest -- --hands 10000 --seed 42
       - name: Read Playwright version
         id: playwright-version
         run: echo "version=$(node -p "require('./package-lock.json').packages['node_modules/@playwright/test'].version")" >> "$GITHUB_OUTPUT"
@@ -91,3 +80,117 @@ jobs:
           name: playwright-report
           path: playwright-report/
           retention-days: 7
+
+  checks:
+    name: Lint, typecheck, build and playtest
+    if: github.event_name != 'schedule'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - name: Check out
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Set up Node from .nvmrc
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - name: Install dependencies
+        run: npm ci
+      - name: Audit shipped dependencies
+        run: npm audit --omit=dev --audit-level=high
+      - name: Audit all dependencies
+        run: npm audit --audit-level=critical
+      - name: Lint
+        run: npm run lint
+      - name: Typecheck
+        run: npm run typecheck
+      - name: Build
+        run: npm run build
+      - name: Playtest
+        run: npm run playtest -- --hands 10000 --seed 42
+
+  coverage:
+    name: Unit tests with coverage
+    if: github.event_name != 'schedule'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - name: Check out
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Set up Node from .nvmrc
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - name: Install dependencies
+        run: npm ci
+      - name: Test
+        run: npm run test:unit
+
+  sweeps:
+    name: Sweep tests (shard ${{ matrix.shard }} of 2)
+    if: github.event_name != 'schedule'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2]
+    steps:
+      - name: Check out
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Set up Node from .nvmrc
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - name: Install dependencies
+        run: npm ci
+      - name: Sweep tests
+        run: npm run test:sweeps -- --shard=${{ matrix.shard }}/2
+
+  changes:
+    name: Detect tooling changes
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    outputs:
+      tooling: ${{ steps.detect.outputs.tooling }}
+    steps:
+      - name: Check out
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+      - name: Set up Node from .nvmrc
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - name: Detect tooling changes
+        id: detect
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+          DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+        run: node tools/ci/tooling-changed.js --event "$EVENT_NAME" --base "$BASE_SHA" --head "$HEAD_SHA" --default-branch "$DEFAULT_BRANCH"
+
+  tooling:
+    name: Tooling tests
+    needs: changes
+    if: needs.changes.outputs.tooling == 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - name: Check out
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Set up Node from .nvmrc
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - name: Bound apt network timeouts
+        run: sudo tee -a /etc/apt/apt.conf < tools/ci/apt-network.conf > /dev/null
+      - name: Install dependencies
+        run: npm ci
+      - name: Tooling tests
+        run: npm run test:tooling

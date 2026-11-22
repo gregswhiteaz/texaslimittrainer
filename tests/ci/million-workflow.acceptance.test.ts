@@ -34,8 +34,9 @@ describe('Million-hand workflow', () => {
 
     for (const action of ['actions/checkout', 'actions/setup-node']) {
       const fromCi = pinned(ci, action);
-      expect(fromCi).toHaveLength(1);
-      expect(pinned(workflow, action)).toEqual(fromCi);
+      expect(fromCi.length).toBeGreaterThanOrEqual(1);
+      expect(new Set(fromCi).size).toBe(1);
+      expect(pinned(workflow, action)).toEqual([fromCi[0]]);
     }
     expect([...workflow.matchAll(/uses: /g)]).toHaveLength(2);
 

@@ -23,6 +23,22 @@ function compareVersions(a: number[], b: number[]): number {
   return 0;
 }
 
+/** Each job id → the job's text. */
+const jobTexts = Object.fromEntries(
+  workflow
+    .slice(workflow.indexOf('\njobs:\n'))
+    .split(/^(?= {2}[\w-]+:$)/m)
+    .slice(1)
+    .map((job) => [/^ {2}([\w-]+):$/m.exec(job)?.[1] ?? '', job]),
+);
+/** Each job id → the `run: npm …` commands of its steps, in order. */
+const jobCommands = Object.fromEntries(
+  Object.entries(jobTexts).map(([id, job]) => [
+    id,
+    [...job.matchAll(/^\s+run: (npm .+)$/gm)].map((match) => match[1] ?? ''),
+  ]),
+);
+
 describe('CI workflow', () => {
   it('triggers on every push and every pull request without branch or path filters', () => {
     expect(workflow).toContain('on:\n  push:\n  pull_request:\n');
@@ -32,28 +48,40 @@ describe('CI workflow', () => {
   });
 
   it('runs install, audits, lint, typecheck, build, test and e2e in that order', () => {
-    const commands = [...workflow.matchAll(/^\s+run: (npm .+)$/gm)].map((match) => match[1]);
-    expect(commands).toEqual([
-      'npm ci',
-      'npm audit --omit=dev --audit-level=high',
-      'npm audit --audit-level=critical',
-      'npm run lint',
-      'npm run typecheck',
-      'npm run build',
-      'npm test',
-      'npm run playtest -- --hands 10000 --seed 42',
-      'npm run e2e',
+    expect(Object.keys(jobCommands)).toEqual([
+      'e2e',
+      'checks',
+      'coverage',
+      'sweeps',
+      'changes',
+      'tooling',
     ]);
+    expect(jobCommands).toEqual({
+      e2e: ['npm ci', 'npm run e2e'],
+      checks: [
+        'npm ci',
+        'npm audit --omit=dev --audit-level=high',
+        'npm audit --audit-level=critical',
+        'npm run lint',
+        'npm run typecheck',
+        'npm run build',
+        'npm run playtest -- --hands 10000 --seed 42',
+      ],
+      coverage: ['npm ci', 'npm run test:unit'],
+      sweeps: ['npm ci', 'npm run test:sweeps -- --shard=${{ matrix.shard }}/2'],
+      changes: [],
+      tooling: ['npm ci', 'npm run test:tooling'],
+    });
   });
 
   it('runs a 10,000-hand playtest step that fails the job on a non-zero exit', () => {
     const step = /^ {6}- name: Playtest\n((?: {8}.+\n)+)/m.exec(workflow);
     expect(step).not.toBeNull();
     expect(step?.[1]).toBe('        run: npm run playtest -- --hands 10000 --seed 42\n');
-    const commands = [...workflow.matchAll(/^\s+run: (npm .+)$/gm)].map((match) => match[1]);
-    const playtest = commands.indexOf('npm run playtest -- --hands 10000 --seed 42');
-    expect(playtest).toBeGreaterThan(commands.indexOf('npm test'));
-    expect(playtest).toBeLessThan(commands.indexOf('npm run e2e'));
+    expect(jobTexts.checks?.trimEnd()).toMatch(
+      /\n {6}- name: Playtest\n {8}run: npm run playtest -- --hands 10000 --seed 42$/,
+    );
+    expect(workflow.match(/^ {6}- name: Playtest$/gm)).toHaveLength(1);
     for (const forbidden of ['if:', 'continue-on-error', '|| true']) {
       expect(step?.[0]).not.toContain(forbidden);
     }
@@ -68,9 +96,14 @@ describe('CI workflow', () => {
       .map((line) => line.trim())
       .filter((line) => line.startsWith('if:'));
     expect(conditions).toEqual([
+      "if: github.event_name != 'schedule'",
       "if: steps.playwright-cache.outputs.cache-hit != 'true'",
       "if: steps.playwright-cache.outputs.cache-hit == 'true'",
       "if: failure() && steps.e2e.outcome == 'failure'",
+      "if: github.event_name != 'schedule'",
+      "if: github.event_name != 'schedule'",
+      "if: github.event_name != 'schedule'",
+      "if: needs.changes.outputs.tooling == 'true'",
     ]);
   });
 
@@ -86,8 +119,11 @@ describe('CI workflow', () => {
   });
 
   it('gives each Playwright install attempt a timeout well below the job timeout and retries it', () => {
-    const jobTimeout = Number(/^ {4}timeout-minutes: (\d+)$/m.exec(workflow)?.[1]);
-    expect(jobTimeout).toBe(20);
+    const jobTimeouts = [...workflow.matchAll(/^ {4}timeout-minutes: (\d+)$/gm)].map((m) =>
+      Number(m[1]),
+    );
+    expect(jobTimeouts).toEqual([30, 30, 30, 30, 30, 30]);
+    const jobTimeout = Math.min(...jobTimeouts);
     const steps = [
       ['Install Playwright browsers', 'npx playwright install --with-deps chromium webkit'],
       ['Install Playwright system dependencies', 'npx playwright install-deps chromium webkit'],
@@ -118,7 +154,9 @@ describe('CI workflow', () => {
   });
 
   it('waits for the apt lock inside each Playwright install attempt within the step budget', () => {
-    expect(Number(/^ {4}timeout-minutes: (\d+)$/m.exec(workflow)?.[1])).toBe(20);
+    for (const [, minutes] of workflow.matchAll(/^ {4}timeout-minutes: (\d+)$/gm)) {
+      expect(Number(minutes)).toBe(30);
+    }
     for (const [name, command] of [
       ['Install Playwright browsers', 'npx playwright install --with-deps chromium webkit'],
       ['Install Playwright system dependencies', 'npx playwright install-deps chromium webkit'],
@@ -174,7 +212,9 @@ describe('CI workflow', () => {
 
   it('has read-only token permissions, a job timeout and the named check steps', () => {
     expect(workflow).toContain('permissions:\n  contents: read');
-    expect(workflow).toContain('timeout-minutes: 20');
+    expect([...workflow.matchAll(/^ {4}timeout-minutes: (\d+)$/gm)].map((m) => m[1])).toEqual(
+      Array(6).fill('30'),
+    );
     expect(workflow).toContain('runs-on: ubuntu-24.04');
     for (const step of ['Lint', 'Typecheck', 'Build', 'Test', 'E2E']) {
       expect(workflow).toMatch(new RegExp(`^\\s*- name: ${step}$`, 'm'));
