@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-22T20:27:00Z'
+updated_date: '2026-11-22T20:45:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -87,4 +87,6 @@ Full spec: doit/TASK-7.5/spec.md
 
 <!-- SECTION:NOTES:BEGIN -->
 AC added from TASK-7.3 follow-up (doc-17).
+
+Build: 36 authored 6-max ranges + validator, classifier/narrowing, user-only ACTION_RANGE_ADVICE (hint + review), ExactOptions type ban, range-model doc; bots unchanged (SHA 442dbf55…08fbc); e2e 142 pass; gate PASS. Recorded spec-text deviations: ACTION_RANGE_ADVICE typed PostflopOptions; ExactOptions written in lint-friendly equivalent form.
 <!-- SECTION:NOTES:END -->

@@ -141,7 +141,7 @@ export function gradeDecision<R extends GradeInput>(
 }
 
 /** One recommend(view, options) call, then gradeDecision. Throws RangeError if userAction is not legal in view. */
-export function gradeView<O extends RecommendOptions = RecommendOptions>(
+export function gradeView<O extends object = RecommendOptions>(
   view: PlayerView,
   userAction: ActionType,
   options?: ExactOptions<O, RecommendOptions>,

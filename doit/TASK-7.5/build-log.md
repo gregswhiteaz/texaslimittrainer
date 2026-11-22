@@ -7,3 +7,11 @@
 - New tests in isolation each < 1 s (range-model.acceptance 9 tests, ranges.test 4, postflop-ranges 3, review.test 2).
 - `npm run e2e` → 142 passed, 12 skipped.
 - No locked test was edited.
+
+## FIX round 1
+- MAJOR exact-options-bypassed-by-style-only-variable: fixed. `ExactOptions<O, Allowed> = O & Allowed & Readonly<Record<Exclude<keyof O, keyof Allowed>, never>>`; `O extends object` on `recommend`, `gradeView` (default RecommendOptions) and `recommendPostflop` (default PostflopOptions). Doc comment notes explicit type arguments and variables already widened to `Allowed` are not caught. Locked AC#8 `@ts-expect-error` lines and the tag-playtest mock (`options?: RecommendOptions`) still typecheck.
+- MINOR open-ender hole-card requirement: fixed, `classify('Ah Kd', '5c 6d 7h 8s')` → 'air'. Removing the `fromHole` check now fails ranges.test.ts.
+- MINOR raise > bet aggregation: fixed. Seat 3 bets then re-raises the flop on a `(i * 7) % 52` deal (flop Js Kh 2d, which leaves Pair combos so raise and bet narrowing differ); combos equal 'raise' narrowing. Swapping AGGRESSION to bet-first now fails. (The check-raise line from the brief can't catch it: that opponent never bets, and on the default deal's trips board raise and bet narrowing are identical.)
+- Type-ban cases: `@ts-expect-error` for `{ style: TAG_STYLE }` and `{ random: botRandom(1) }` variables on recommend, recommendPostflop and gradeView, plus `{ equity: 5 }`, in tests/advice/ranges.test.ts (inside an uncalled function, so no equity runs). Under the old constraint all six bot-key lines report unused `@ts-expect-error`.
+- `npm run typecheck` 0 errors; `npm run format`, `npm run lint` clean; `npm test` 182 files passed / 2 skipped, 654 tests passed / 13 skipped.
+- Playtest `--hands 10000 --seed 42 --size 6` SHA-256 442dbf55…408fbc, 0 invariant violations (bots unchanged).

@@ -1,0 +1,76 @@
+{
+  "task": "TASK-7.5",
+  "phase": "fix",
+  "run": 3,
+  "result": "PASS",
+  "changed_lines": 2196,
+  "changed_files": [
+    "docs/advice/postflop-rules.md",
+    "docs/advice/range-model.md",
+    "src/advice/grade.ts",
+    "src/advice/postflop.ts",
+    "src/advice/ranges.ts",
+    "src/advice/ranges/six-max.json",
+    "src/advice/recommend.ts",
+    "src/bots/calling-station.ts",
+    "src/bots/maniac.ts",
+    "src/bots/rock.ts",
+    "src/bots/tag.ts",
+    "src/table/advice-service.ts",
+    "src/table/review.ts",
+    "src/ui/table/Table.tsx",
+    "tests/advice/postflop-ranges.test.ts",
+    "tests/advice/postflop.perf.test.ts",
+    "tests/advice/range-model.acceptance.test.ts",
+    "tests/advice/ranges.test.ts",
+    "tests/table/advice-service.test.ts",
+    "tests/table/review.test.ts"
+  ],
+  "checks": [
+    {
+      "name": "test command",
+      "status": "pass",
+      "detail": "$ npm test\nexit 0\n--|-------------------\nAll files          |   97.54 |     95.8 |   95.34 |   97.79 |                   \n advice            |   99.73 |    97.94 |     100 |     100 |                   \n  equity.ts        |     100 |    95.18 |     100 |     100 | 114,120,199       \n  ranges.ts        |     100 |    97.85 |     100 |     100 | 96,112,250        \n  recommend.ts     |   81.81 |       80 |     100 |     100 | 27-28             \n bots              |   99.68 |    97.36 |     100 |     100 |                   \n  ...ng-station.ts |     100 |    95.23 |     100 |     100 | 32                \n  maniac.ts        |     100 |       95 |     100 |     100 | 27                \n  rock.ts          |     100 |    94.11 |     100 |     100 | 24                \n  style.ts         |     100 |    97.52 |     100 |     100 | 138,150,342       \n  tag.ts           |   95.65 |       95 |     100 |     100 | 46                \n engine            |   99.88 |    95.29 |     100 |   99.86 |                   \n  ...-evaluator.ts |     100 |    80.18 |     100 |     100 | ...87-200,214-215 \n  hand.ts          |     100 |    99.51 |     100 |     100 | 350               \n  invariants.ts    |   99.68 |    97.31 |     100 |   99.62 | 387               \n playtest          |     100 |    99.28 |     100 |     100 |                   \n  cli.ts           |     100 |    99.39 |     100 |     100 | 267               \n  shards.ts        |     100 |    98.11 |     100 |     100 | 232,338           \n table             |     100 |    99.56 |     100 |     100 |                   \n  session.ts       |     100 |    98.59 |     100 |     100 | 296               \n ui                |   35.29 |    14.28 |   28.57 |    37.5 |                   \n  App.tsx          |   33.33 |    33.33 |      20 |   33.33 | 20-35             \n  ...adingFocus.ts |    37.5 |        0 |      50 |   42.85 | 10-13             \n ui/advice         |   94.54 |       95 |   92.85 |   95.83 |                   \n  advice-client.ts |   96.15 |    94.73 |   91.66 |   97.82 | 114               \n  advice.worker.ts |       0 |      100 |     100 |       0 | 3                 \n ui/config         |      80 |       70 |   66.66 |   84.61 |                   \n  ...figScreen.tsx |      80 |       70 |   66.66 |   84.61 | 71,83-84,152      \n ui/table          |   46.93 |    65.88 |   51.06 |   52.94 |                   \n  ActionBar.tsx    |      75 |       50 |     100 |     100 | 19                \n  Table.tsx        |   73.68 |    90.74 |   68.42 |   77.77 | ...50-251,254-255 \n  ...bleSession.ts |      18 |       12 |   19.04 |      20 | ...13,117,122-123 \n-------------------|---------|----------|---------|---------|-------------------\n\n=============================== Coverage summary ===============================\nStatements   : 97.54% ( 3017/3093 )\nBranches     : 95.8% ( 2031/2120 )\nFunctions    : 95.34% ( 676/709 )\nLines        : 97.79% ( 2523/2580 )\n================================================================================\n"
+    },
+    {
+      "name": "lint command",
+      "status": "pass",
+      "detail": "$ npm run lint\nexit 0\n\n> tlh-trainer@0.0.0 lint\n> eslint . --max-warnings 0 && prettier --check .\n\nChecking formatting...\nAll matched files use Prettier code style!\n"
+    },
+    {
+      "name": "typecheck command",
+      "status": "pass",
+      "detail": "$ npm run typecheck\nexit 0\n\n> tlh-trainer@0.0.0 typecheck\n> tsc -p tsconfig.json\n\n"
+    },
+    {
+      "name": "spec unchanged",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "name": "scope budget (lines)",
+      "status": "warn",
+      "detail": "2196 changed lines vs budget 2100 (fail above 4200)"
+    },
+    {
+      "name": "scope budget (files)",
+      "status": "warn",
+      "detail": "20 files vs budget 17"
+    },
+    {
+      "name": "files outside spec",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "name": "all changes listed in changes.md",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "name": "test integrity",
+      "status": "pass",
+      "detail": ""
+    }
+  ]
+}

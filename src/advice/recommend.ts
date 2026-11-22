@@ -7,10 +7,14 @@ export type Recommendation = PreflopRecommendation | PostflopRecommendation;
 export type RecommendOptions = PreflopOptions & PostflopOptions;
 
 /**
- * `O` with every key outside `Allowed` typed `never`: passing a bot's style or parameters (or any other extra
- * key) into the advice engine is a type error, for literals and variables alike (REQ-035.3).
+ * `O` checked against `Allowed`, with every key outside `Allowed` typed `never`: passing a bot's style or
+ * parameters (or any other extra key) into the advice engine is a type error, for literals and variables alike
+ * (REQ-035.3). Not caught structurally: an explicit type argument (`recommend<RecommendOptions>(view, x)`) or a
+ * variable already widened to `Allowed`.
  */
-export type ExactOptions<O, Allowed> = O & Readonly<Record<Exclude<keyof O, keyof Allowed>, never>>;
+export type ExactOptions<O, Allowed> = O &
+  Allowed &
+  Readonly<Record<Exclude<keyof O, keyof Allowed>, never>>;
 
 /** User-facing advice: opponent ranges estimated from their actions (TASK-7.5). */
 // Typed as PostflopOptions (a RecommendOptions subset) so it also passes recommendPostflop's exact-keys guard.
@@ -26,7 +30,7 @@ export function adviceOptions(options: RecommendOptions): RecommendOptions {
 }
 
 /** Preflop views → recommendPreflop; flop/turn/river → recommendPostflop. Errors propagate. */
-export function recommend<O extends RecommendOptions = RecommendOptions>(
+export function recommend<O extends object = RecommendOptions>(
   view: PlayerView,
   options?: ExactOptions<O, RecommendOptions>,
 ): Recommendation {

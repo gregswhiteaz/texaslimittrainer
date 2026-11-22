@@ -59,7 +59,7 @@ function withFallbacks(
 }
 
 /** Check when free, else call when the rounded equity % reaches the rounded required %, else fold. */
-export function recommendPostflop<O extends PostflopOptions = PostflopOptions>(
+export function recommendPostflop<O extends object = PostflopOptions>(
   view: PlayerView,
   options?: ExactOptions<O, PostflopOptions>,
 ): PostflopRecommendation {

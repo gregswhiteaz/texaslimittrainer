@@ -1,7 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import type { HoleCards } from '../../src/advice/equity';
+import { gradeView } from '../../src/advice/grade';
 import { comboCount, HAND_CLASSES } from '../../src/advice/hand-class';
+import { recommendPostflop } from '../../src/advice/postflop';
 import type { Position } from '../../src/advice/preflop-chart';
+import { recommend } from '../../src/advice/recommend';
 import {
   classifyCombo,
   defaultRange,
@@ -16,6 +19,8 @@ import {
   unseenCombos,
   type PreflopLine,
 } from '../../src/advice/ranges';
+import { TAG_STYLE } from '../../src/bots/tag';
+import { botRandom } from '../../src/engine/bot-random';
 import { formatCard, parseCards } from '../../src/engine/cards';
 import {
   applyAction,
@@ -32,12 +37,17 @@ const ORDERED_DECK = Array.from({ length: 52 }, (_, i) => i);
 type Step = [SeatNumber, Action['type'], number?];
 
 /** Button 1 (SB 2, BB 3, UTG 4, HJ 5, CO 6, BTN 1 at 6 seats); plays `steps`. */
-function stateAfter(steps: Step[], seats = 6, stacks: number[] = []): HandState {
+function stateAfter(
+  steps: Step[],
+  seats = 6,
+  stacks: number[] = [],
+  deck = ORDERED_DECK,
+): HandState {
   let state = createHand({
     stakes: STAKES_4_8,
     seats: Array.from({ length: seats }, (_, i) => ({ seat: i + 1, stack: stacks[i] ?? 160 })),
     button: 1,
-    deck: ORDERED_DECK,
+    deck,
   });
   for (const [seat, type, amount] of steps) {
     const action = (amount === undefined ? { seat, type } : { seat, type, amount }) as Action;
@@ -251,6 +261,7 @@ describe('range notation, lines and classifier', () => {
     expect(classify('5h 5c', '9c 9s 4h 4d')).toBe('pair');
     expect(classify('Ah Qc', '9c 9s 4h Kd')).toBe('air');
     expect(classify('Qh Jd', '9c 9s 4h 4d 2c')).toBe('air');
+    expect(classify('Ah Kd', '5c 6d 7h 8s')).toBe('air');
   });
 
   it('expands, narrows per street and estimates from the view', () => {
@@ -302,6 +313,26 @@ describe('range notation, lines and classifier', () => {
 
     const heroLine = estimateOpponentRanges(viewOf(flop, 6));
     expect(heroLine[0]).toMatchObject({ seat: 3, position: 'BB', line: 'call-raise' });
+    // Seat 3 bets then re-raises the flop: the raise is the street's aggregate action (D-3). This deal (flop
+    // Js Kh 2d) leaves Pair combos in range, so raise and bet narrowing differ.
+    const shuffled = ORDERED_DECK.map((i) => (i * 7) % 52);
+    const betReraise: Step[] = [
+      ...pre,
+      [3, 'bet', 4],
+      [6, 'raise', 8],
+      [3, 'raise', 12],
+      [6, 'call', 4],
+    ];
+    const betRaise = playerView(stateAfter(betReraise, 6, [], shuffled), 6);
+    const raiseDead = [...betRaise.holeCards, ...betRaise.board];
+    const bbStart = expandRange(
+      defaultRange(SIX_MAX_RANGES, 'BB', 'call-raise').classes,
+      raiseDead,
+    );
+    const bbAfterRaise = narrowRange(bbStart, betRaise.board.slice(0, 3), 'raise');
+    expect(bbAfterRaise.length).toBeGreaterThan(0);
+    expect(bbAfterRaise).not.toEqual(narrowRange(bbStart, betRaise.board.slice(0, 3), 'bet'));
+    expect(estimateOpponentRanges(betRaise)[0]?.combos).toEqual(bbAfterRaise);
 
     expect(() => estimateOpponentRanges(viewOf(pre.slice(0, 3), 1))).toThrow(
       'Range estimation needs a flop, turn or river view, got preflop',
@@ -370,5 +401,29 @@ describe('range notation, lines and classifier', () => {
     expect(opens).toEqual([...opens].sort((a, b) => a - b));
     const bbRaise = of('BB', 'open-raise');
     for (const hc of of('BB', 'check')) expect(bbRaise.has(hc), hc).toBe(false);
+  });
+
+  it('a variable holding only bot keys is not an advice option', () => {
+    const styleOnly = { style: TAG_STYLE };
+    const randomOnly = { random: botRandom(1) };
+    // Compile-time checks only; never called, so no equity is computed.
+    const typeChecks = (view: PlayerView) => {
+      // @ts-expect-error a bot's style is not an advice option
+      recommend(view, styleOnly);
+      // @ts-expect-error a bot's random source is not an advice option
+      recommend(view, randomOnly);
+      // @ts-expect-error a bot's style is not a postflop advice option
+      recommendPostflop(view, styleOnly);
+      // @ts-expect-error a bot's random source is not a postflop advice option
+      recommendPostflop(view, randomOnly);
+      // @ts-expect-error a bot's style is not a grading option
+      gradeView(view, 'check', styleOnly);
+      // @ts-expect-error a bot's random source is not a grading option
+      gradeView(view, 'check', randomOnly);
+      // @ts-expect-error advice option values are still type-checked
+      recommend(view, { equity: 5 });
+      recommend(view, { opponentRanges: 'actions' });
+    };
+    expect(typeChecks).toBeTypeOf('function');
   });
 });
