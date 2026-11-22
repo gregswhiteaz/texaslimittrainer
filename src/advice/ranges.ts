@@ -1,0 +1,399 @@
+import { cardRank, cardSuit, RANK_CHARS, type Card } from '../engine/cards';
+import type { SeatNumber } from '../engine/hand';
+import {
+  evaluate,
+  HAND_CATEGORIES,
+  handCategory,
+  type HandCategory,
+} from '../engine/hand-evaluator';
+import type { PlayerView } from '../engine/player-view';
+import type { HoleCards } from './equity';
+import { handClassOf, type HandClass } from './hand-class';
+import { positionOf } from './preflop';
+import type { Position, ReferenceSize } from './preflop-chart';
+// The JSON import stays last, like the chart's.
+import sixMax from './ranges/six-max.json' with { type: 'json' };
+
+export type PreflopLine =
+  'check' | 'limp' | 'open-raise' | 'call-raise' | 'three-bet' | 'call-three-bet' | 'four-bet';
+export const PREFLOP_LINES: readonly PreflopLine[] = [
+  'check',
+  'limp',
+  'open-raise',
+  'call-raise',
+  'three-bet',
+  'call-three-bet',
+  'four-bet',
+];
+
+interface RangeId {
+  readonly position: Position;
+  readonly line: PreflopLine;
+}
+
+const ALL_POSITIONS: readonly Position[] = ['UTG', 'HJ', 'CO', 'BTN', 'SB', 'BB'];
+const LINE_POSITIONS: Readonly<Record<PreflopLine, readonly Position[]>> = {
+  check: ['BB'],
+  limp: ['UTG', 'HJ', 'CO', 'BTN', 'SB'],
+  'open-raise': ALL_POSITIONS,
+  'call-raise': ALL_POSITIONS,
+  'three-bet': ALL_POSITIONS,
+  'call-three-bet': ALL_POSITIONS,
+  'four-bet': ALL_POSITIONS,
+};
+
+/** Lines each 6-max position can take (36 pairs). */
+export const APPLICABLE_LINES: Readonly<Record<ReferenceSize, readonly RangeId[]>> = {
+  '6-max': PREFLOP_LINES.flatMap((line) =>
+    LINE_POSITIONS[line].map((position) => ({ position, line })),
+  ),
+};
+
+export type StrengthClass = 'strong' | 'pair' | 'draw' | 'air';
+export type NarrowingAction = 'bet' | 'check' | 'call' | 'raise';
+export const KEEP: Readonly<Record<NarrowingAction, readonly StrengthClass[]>> = {
+  bet: ['strong', 'pair', 'draw'],
+  check: ['pair', 'draw', 'air'],
+  call: ['pair', 'draw'],
+  raise: ['strong', 'draw'],
+};
+
+export interface DefaultRange {
+  readonly position: Position;
+  readonly line: PreflopLine;
+  readonly justification: string;
+  /** Parsed from `hands`. */
+  readonly classes: ReadonlySet<HandClass>;
+}
+
+export interface DefaultRanges {
+  readonly referenceSize: ReferenceSize;
+  readonly justification: string;
+  /** In APPLICABLE_LINES order. */
+  readonly ranges: readonly DefaultRange[];
+}
+
+export class RangeValidationError extends Error {
+  readonly problems: readonly string[];
+
+  constructor(problems: readonly string[]) {
+    super('Invalid default ranges:\n- ' + problems.join('\n- '));
+    this.name = 'RangeValidationError';
+    this.problems = problems;
+  }
+}
+
+const FORMAT = 'tlh-default-ranges';
+const FILE_WORDS = 50;
+const RANGE_WORDS = 15;
+const ECHO_CHARS = 20;
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null && !Array.isArray(value);
+}
+
+function wordCount(text: unknown): number {
+  return typeof text === 'string' ? (text.match(/\p{L}+/gu) ?? []).length : 0;
+}
+
+/** Untrusted text for an error message: the first ECHO_CHARS characters, then '...' if cut. */
+function echo(text: string): string {
+  return text.length <= ECHO_CHARS ? text : `${text.slice(0, ECHO_CHARS)}...`;
+}
+
+const rangeKey = (position: unknown, line: unknown) => `${String(position)} ${String(line)}`;
+
+const R = '[2-9TJQKA]';
+const PAIR = new RegExp(`^(${R})\\1(\\+)?$`);
+const PAIR_SPAN = new RegExp(`^(${R})\\1-(${R})\\2$`);
+const UNPAIRED = new RegExp(`^(${R})(${R})([so])(\\+)?$`);
+const UNPAIRED_SPAN = new RegExp(`^(${R})(${R})([so])-\\1(${R})\\3$`);
+
+const rankOf = (char: string | undefined) => RANK_CHARS.indexOf(char ?? '');
+const pairClass = (rank: number) => RANK_CHARS.charAt(rank).repeat(2);
+const unpairedClass = (high: number, low: number, suited: string) =>
+  RANK_CHARS.charAt(high) + RANK_CHARS.charAt(low) + suited;
+
+function span(from: number, to: number): number[] {
+  const [low, high] = from <= to ? [from, to] : [to, from];
+  return Array.from({ length: high - low + 1 }, (_, i) => low + i);
+}
+
+/** The classes one token names, or null if the token is not valid notation. */
+function tokenClasses(token: string): HandClass[] | null {
+  let m = PAIR.exec(token);
+  if (m !== null) {
+    const rank = rankOf(m[1]);
+    return m[2] === '+' ? span(rank, 12).map(pairClass) : [pairClass(rank)];
+  }
+  m = PAIR_SPAN.exec(token);
+  if (m !== null) return span(rankOf(m[1]), rankOf(m[2])).map(pairClass);
+  m = UNPAIRED.exec(token);
+  if (m !== null) {
+    const [high, low, suited] = [rankOf(m[1]), rankOf(m[2]), m[3] as string];
+    if (low >= high) return null;
+    const lows = m[4] === '+' ? span(low, high - 1) : [low];
+    return lows.map((l) => unpairedClass(high, l, suited));
+  }
+  m = UNPAIRED_SPAN.exec(token);
+  if (m !== null) {
+    const [high, a, b, suited] = [rankOf(m[1]), rankOf(m[2]), rankOf(m[4]), m[3] as string];
+    if (a >= high || b >= high) return null;
+    return span(a, b).map((l) => unpairedClass(high, l, suited));
+  }
+  return null;
+}
+
+/** Whitespace-separated hand-class notation. Throws RangeError(`Invalid range token "<echo>"`). */
+export function parseHandRange(text: string): ReadonlySet<HandClass> {
+  const tokens = text.split(/\s+/).filter((t) => t !== '');
+  if (tokens.length === 0) throw new RangeError(`Invalid range token "${echo(text)}"`);
+  const classes = new Set<HandClass>();
+  for (const token of tokens) {
+    const found = tokenClasses(token);
+    if (found === null) throw new RangeError(`Invalid range token "${echo(token)}"`);
+    for (const hc of found) classes.add(hc);
+  }
+  return classes;
+}
+
+/** Validates and compiles authored JSON. Throws RangeValidationError listing every problem. */
+export function parseDefaultRanges(raw: unknown): DefaultRanges {
+  if (!isRecord(raw) || raw.format !== FORMAT || raw.version !== 1) {
+    throw new RangeValidationError([`Range file: expected format "${FORMAT}" version 1`]);
+  }
+  if (raw.referenceSize !== '6-max') {
+    throw new RangeValidationError([
+      `Range file: unknown reference size "${echo(String(raw.referenceSize))}"`,
+    ]);
+  }
+  const referenceSize: ReferenceSize = raw.referenceSize;
+  const label = `${referenceSize} ranges`;
+  const applicable = APPLICABLE_LINES[referenceSize];
+  const problems: string[] = [];
+  if (wordCount(raw.justification) < FILE_WORDS) {
+    problems.push(`${label}: missing plain-English justification (at least ${FILE_WORDS} words)`);
+  }
+  const found = new Map<string, DefaultRange>();
+  for (const entry of Array.isArray(raw.ranges) ? (raw.ranges as unknown[]) : []) {
+    const data = isRecord(entry) ? entry : {};
+    const key = rangeKey(data.position, data.line);
+    const id = applicable.find((r) => rangeKey(r.position, r.line) === key);
+    if (id === undefined) {
+      problems.push(`${label}: range ${echo(key)} does not apply at ${referenceSize}`);
+      continue;
+    }
+    if (found.has(key)) {
+      problems.push(`${label}: duplicate range ${key}`);
+      continue;
+    }
+    if (wordCount(data.justification) < RANGE_WORDS) {
+      problems.push(
+        `${label}: ${key} is missing its plain-English justification (at least ${RANGE_WORDS} words)`,
+      );
+    }
+    let classes: ReadonlySet<HandClass> = new Set();
+    if (typeof data.hands !== 'string' || data.hands.trim() === '') {
+      problems.push(`${label}: ${key} has no hands`);
+    } else {
+      try {
+        classes = parseHandRange(data.hands);
+      } catch (error) {
+        problems.push(`${label}: ${key} has invalid hands: ${(error as Error).message}`);
+      }
+    }
+    found.set(key, { ...id, justification: String(data.justification), classes });
+  }
+  for (const id of applicable) {
+    const key = rangeKey(id.position, id.line);
+    if (!found.has(key)) problems.push(`${label}: missing range ${key}`);
+  }
+  if (problems.length > 0) throw new RangeValidationError(problems);
+  return {
+    referenceSize,
+    justification: raw.justification as string,
+    ranges: applicable.map((r) => found.get(rangeKey(r.position, r.line)) as DefaultRange),
+  };
+}
+
+/** The shipped 6-max default ranges, validated at import. */
+export const SIX_MAX_RANGES: DefaultRanges = parseDefaultRanges(sixMax);
+
+/** Throws RangeError('Ranges <size> have no range <position> <line>') if absent. */
+export function defaultRange(
+  ranges: DefaultRanges,
+  position: Position,
+  line: PreflopLine,
+): DefaultRange {
+  const range = ranges.ranges.find((r) => r.position === position && r.line === line);
+  if (range === undefined) {
+    throw new RangeError(`Ranges ${ranges.referenceSize} have no range ${position} ${line}`);
+  }
+  return range;
+}
+
+const LINE_BY_ACTION: Readonly<Record<'call' | 'raise', readonly PreflopLine[]>> = {
+  call: ['limp', 'call-raise', 'call-three-bet'],
+  raise: ['open-raise', 'three-bet', 'four-bet'],
+};
+
+/** The seat's preflop line: its last voluntary preflop action keyed by the raises before it (A-4). */
+export function preflopLineOf(view: PlayerView, seat: SeatNumber): PreflopLine {
+  const records = view.actions.filter(
+    (a) => a.street === 'preflop' && a.type !== 'small-blind' && a.type !== 'big-blind',
+  );
+  let raises = 0;
+  let line: PreflopLine | null = null;
+  for (const record of records) {
+    if (record.seat === seat) {
+      if (record.type === 'check') line = 'check';
+      else if (record.type === 'call' || record.type === 'raise') {
+        line = LINE_BY_ACTION[record.type][Math.min(raises, 2)] as PreflopLine;
+      }
+    }
+    if (record.type === 'raise') raises++;
+  }
+  if (line !== null) return line;
+  // No voluntary action (all in on posting a blind): keyed as if the seat had called.
+  if (raises === 0) {
+    const bb = view.actions.find((a) => a.street === 'preflop' && a.type === 'big-blind');
+    return bb?.seat === seat ? 'check' : 'limp';
+  }
+  return raises === 1 ? 'call-raise' : 'call-three-bet';
+}
+
+/** Every two-card combo with neither card in `dead`, ascending [low, high]. */
+export function unseenCombos(dead: readonly Card[]): HoleCards[] {
+  const combos: HoleCards[] = [];
+  for (let a = 0; a < 52; a++) {
+    if (dead.includes(a)) continue;
+    for (let b = a + 1; b < 52; b++) {
+      if (!dead.includes(b)) combos.push([a, b]);
+    }
+  }
+  return combos;
+}
+
+/** The combos of `classes` with neither card in `dead`, ascending [low, high] by low*52+high. */
+export function expandRange(classes: ReadonlySet<HandClass>, dead: readonly Card[]): HoleCards[] {
+  return unseenCombos(dead).filter((combo) => classes.has(handClassOf(combo)));
+}
+
+/** 0 = high-card ... 8 = straight-flush (HAND_CATEGORIES is strongest first). */
+const categoryIndex = (category: HandCategory) =>
+  HAND_CATEGORIES.length - 1 - HAND_CATEGORIES.indexOf(category);
+
+/** The board's own category; 3 or 4 cards from rank multiplicities only. */
+function boardCategory(board: readonly Card[]): number {
+  if (board.length === 5) return categoryIndex(handCategory(evaluate(board)));
+  const counts = new Map<number, number>();
+  for (const card of board) counts.set(cardRank(card), (counts.get(cardRank(card)) ?? 0) + 1);
+  const sizes = [...counts.values()];
+  let category: HandCategory = 'high-card';
+  if (sizes.includes(4)) category = 'four-of-a-kind';
+  else if (sizes.includes(3)) category = 'three-of-a-kind';
+  else if (sizes.filter((n) => n === 2).length >= 2) category = 'two-pair';
+  else if (sizes.includes(2)) category = 'one-pair';
+  return categoryIndex(category);
+}
+
+const TWO_PAIR = categoryIndex('two-pair');
+
+function hasFlushDraw(hole: HoleCards, board: readonly Card[]): boolean {
+  const cards = [...hole, ...board];
+  return hole.some((h) => cards.filter((c) => cardSuit(c) === cardSuit(h)).length >= 4);
+}
+
+/**
+ * Four consecutive ranks v..v+3, one from a hole card, that one more rank completes at either end. The ace
+ * counts below the 2 only to complete 2345, so A234 and JQKA are not open-ended.
+ */
+function hasOpenEnder(hole: HoleCards, board: readonly Card[]): boolean {
+  const present = new Set([...hole, ...board].map(cardRank));
+  const fromHole = new Set(hole.map(cardRank));
+  for (let v = 0; v + 4 <= 12; v++) {
+    const run = [v, v + 1, v + 2, v + 3];
+    if (run.every((x) => present.has(x)) && run.some((x) => fromHole.has(x))) return true;
+  }
+  return false;
+}
+
+/** Strong / Pair / Draw / Air on a board of 3, 4 or 5 cards (spec §5). */
+export function classifyCombo(hole: HoleCards, board: readonly Card[]): StrengthClass {
+  const handCat = categoryIndex(handCategory(evaluate([...hole, ...board])));
+  if (handCat >= TWO_PAIR && handCat > boardCategory(board)) return 'strong';
+  const boardRanks = board.map(cardRank);
+  const [a, b] = hole;
+  if (
+    cardRank(a) === cardRank(b) ||
+    boardRanks.includes(cardRank(a)) ||
+    boardRanks.includes(cardRank(b))
+  ) {
+    return 'pair';
+  }
+  if (hasFlushDraw(hole, board) || hasOpenEnder(hole, board)) return 'draw';
+  return 'air';
+}
+
+/** The combos whose class on `board` is kept by `action`, in input order. */
+export function narrowRange(
+  range: readonly HoleCards[],
+  board: readonly Card[],
+  action: NarrowingAction,
+): HoleCards[] {
+  const keep = KEEP[action];
+  return range.filter((combo) => keep.includes(classifyCombo(combo, board)));
+}
+
+export interface OpponentRange {
+  readonly seat: SeatNumber;
+  /** null when not exactly 6 seats are dealt in (A-3). */
+  readonly position: Position | null;
+  /** null when not exactly 6 seats are dealt in. */
+  readonly line: PreflopLine | null;
+  /** The expanded default range, or every unseen combo (A-3). */
+  readonly start: readonly HoleCards[];
+  /** After postflop narrowing. */
+  readonly combos: readonly HoleCards[];
+}
+
+const AGGRESSION: readonly NarrowingAction[] = ['raise', 'bet', 'call', 'check'];
+const STREET_BOARDS = [
+  ['flop', 3],
+  ['turn', 4],
+  ['river', 5],
+] as const;
+
+/** One entry per live opponent (not folded, not the viewer), ascending seat. Reads only `view`. */
+export function estimateOpponentRanges(view: PlayerView): readonly OpponentRange[] {
+  if (view.board.length < 3 || view.board.length > 5) {
+    throw new RangeError(`Range estimation needs a flop, turn or river view, got ${view.street}`);
+  }
+  const dead = [...view.holeCards, ...view.board];
+  const sixMax = view.players.length === 6;
+  return view.players
+    .filter((p) => p.seat !== view.seat && !p.folded)
+    .map(({ seat }) => {
+      let position: Position | null = null;
+      let line: PreflopLine | null = null;
+      let start: HoleCards[] = [];
+      if (sixMax) {
+        position = positionOf({ ...view, seat });
+        line = preflopLineOf(view, seat);
+        start = expandRange(defaultRange(SIX_MAX_RANGES, position, line).classes, dead);
+      }
+      if (start.length === 0) start = unseenCombos(dead);
+      let combos = start;
+      for (const [street, size] of STREET_BOARDS) {
+        if (view.board.length < size) break;
+        const types = new Set(
+          view.actions.filter((a) => a.street === street && a.seat === seat).map((a) => a.type),
+        );
+        const action = AGGRESSION.find((t) => types.has(t));
+        if (action === undefined) continue;
+        const narrowed = narrowRange(combos, view.board.slice(0, size), action);
+        if (narrowed.length > 0) combos = narrowed;
+      }
+      return { seat, position, line, start, combos };
+    });
+}

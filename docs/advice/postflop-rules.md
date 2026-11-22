@@ -11,10 +11,13 @@ all match.
   used. Other players' cards, burn cards and cards still in the deck are never looked at.
 - **Live opponents.** Every other player dealt into the hand who has not folded. A player who is
   all in still counts.
-- **Opponent hands.** Each live opponent is treated as holding any two cards that the hero cannot
-  see, every combination equally likely. On the flop that is 1,081 combinations per opponent, on
-  the turn 1,035 and on the river 990. Cards shown at earlier showdowns are not removed, because
-  every hand is dealt from a fresh deck.
+- **Opponent hands.** The advice the player sees (hints and review grades) puts each live opponent
+  on a range estimated from that opponent's actions in the hand: a default range for their seat
+  and preflop line, narrowed on each later street by what they did there. The range model, its
+  default ranges and the narrowing rule are described in [range-model.md](range-model.md). The
+  bots still treat each opponent as holding any two cards the bot cannot see, every combination
+  equally likely. Cards shown at earlier showdowns are never removed, because every hand is dealt
+  from a fresh deck.
 - **Equity.** The hero's share of the pot if the hand were played out to the river against all live
   opponents at once: wins count in full, ties count as an equal split.
 - **Pot.** Every chip already in the middle before the hero acts: all pots from earlier streets
@@ -62,11 +65,14 @@ The rules are checked in the order below and the first one that matches decides 
 
 ## Not applied yet
 
-These rules use immediate pot odds against random hands only. Later work adds:
+These rules use immediate pot odds only. Later work adds:
 
 - betting and raising for value when the hand is ahead of the hands that would call (TASK-7.8);
 - implied odds, counting chips won on later streets when a draw hits (TASK-7.9);
-- opponent ranges narrowed by their actions and observed habits, in place of every unseen hand
-  (TASK-7.5).
+- adjusting each opponent's range to their observed habits once 30 or more of their hands have
+  been seen (TASK-7.13);
+- default ranges for heads-up and full-ring tables (TASK-7.6). Until then opponents at other
+  table sizes start from every unseen hand and are narrowed by their actions after the flop;
+- action-based ranges for the bots' own decisions, which still use every unseen hand.
 
 Until then the advice never recommends a bet or a raise after the flop.

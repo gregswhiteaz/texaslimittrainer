@@ -1,5 +1,5 @@
 import { GRADE_LABELS, gradeView, type Grade, type GradeResult } from '../advice/grade';
-import type { RecommendOptions } from '../advice/recommend';
+import { ACTION_RANGE_ADVICE, type RecommendOptions } from '../advice/recommend';
 import type { Card } from '../engine/cards';
 import type { Action } from '../engine/hand';
 import { actionLabel } from './action-bar';
@@ -55,4 +55,9 @@ export function reviewEntries(
       result,
     };
   });
+}
+
+/** The review the user sees: postflop grades against action-based opponent ranges (TASK-7.5). */
+export function userReviewEntries(hand: CompletedHand): readonly ReviewEntry[] {
+  return reviewEntries(hand, ACTION_RANGE_ADVICE);
 }

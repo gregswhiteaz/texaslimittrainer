@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { gradeView } from '../../src/advice/grade';
-import { recommend } from '../../src/advice/recommend';
+import { ACTION_RANGE_ADVICE, recommend } from '../../src/advice/recommend';
 import { botRandom } from '../../src/engine/bot-random';
 import { decideStyle } from '../../src/bots/decide';
 import { decideCallingStation } from '../../src/bots/calling-station';
@@ -41,13 +41,13 @@ describe('advice service', () => {
       expect(handleAdviceRequest({ id: 5, kind: 'recommend', view })).toEqual({
         id: 5,
         ok: true,
-        value: recommend(view),
+        value: recommend(view, ACTION_RANGE_ADVICE),
       });
       const legal = view.legalActions[0]?.type ?? 'fold';
       expect(handleAdviceRequest({ id: 6, kind: 'grade', view, userAction: legal })).toEqual({
         id: 6,
         ok: true,
-        value: gradeView(view, legal),
+        value: gradeView(view, legal, ACTION_RANGE_ADVICE),
       });
     }
 

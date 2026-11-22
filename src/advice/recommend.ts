@@ -6,9 +6,32 @@ import { recommendPreflop, type PreflopOptions, type PreflopRecommendation } fro
 export type Recommendation = PreflopRecommendation | PostflopRecommendation;
 export type RecommendOptions = PreflopOptions & PostflopOptions;
 
+/**
+ * `O` with every key outside `Allowed` typed `never`: passing a bot's style or parameters (or any other extra
+ * key) into the advice engine is a type error, for literals and variables alike (REQ-035.3).
+ */
+export type ExactOptions<O, Allowed> = O & Readonly<Record<Exclude<keyof O, keyof Allowed>, never>>;
+
+/** User-facing advice: opponent ranges estimated from their actions (TASK-7.5). */
+// Typed as PostflopOptions (a RecommendOptions subset) so it also passes recommendPostflop's exact-keys guard.
+export const ACTION_RANGE_ADVICE: PostflopOptions = { opponentRanges: 'actions' };
+
+/** Only the advice keys of `options` (equity, chart, opponentRanges); bots pass their options through this. */
+export function adviceOptions(options: RecommendOptions): RecommendOptions {
+  const picked: { -readonly [K in keyof RecommendOptions]: RecommendOptions[K] } = {};
+  if (options.equity !== undefined) picked.equity = options.equity;
+  if (options.chart !== undefined) picked.chart = options.chart;
+  if (options.opponentRanges !== undefined) picked.opponentRanges = options.opponentRanges;
+  return picked;
+}
+
 /** Preflop views → recommendPreflop; flop/turn/river → recommendPostflop. Errors propagate. */
-export function recommend(view: PlayerView, options: RecommendOptions = {}): Recommendation {
+export function recommend<O extends RecommendOptions = RecommendOptions>(
+  view: PlayerView,
+  options?: ExactOptions<O, RecommendOptions>,
+): Recommendation {
+  const advice: RecommendOptions = options ?? {};
   return view.street === 'preflop'
-    ? recommendPreflop(view, options)
-    : recommendPostflop(view, options);
+    ? recommendPreflop(view, advice)
+    : recommendPostflop<PostflopOptions>(view, advice);
 }

@@ -1,6 +1,13 @@
 import { describe, expect, it } from 'vitest';
 import { formatCard } from '../../src/engine/cards';
-import { opensReview, reviewEntries, STREET_LABELS } from '../../src/table/review';
+import { ACTION_RANGE_ADVICE } from '../../src/advice/recommend';
+import { handleAdviceRequest } from '../../src/table/advice-service';
+import {
+  opensReview,
+  reviewEntries,
+  STREET_LABELS,
+  userReviewEntries,
+} from '../../src/table/review';
 import {
   completedHand,
   type CompletedHand,
@@ -58,5 +65,18 @@ describe('TASK-9.1 review model', () => {
 
     expect(reviewEntries(withDecisions(four, []))).toEqual([]);
     expect(() => reviewEntries(withDecisions(four, [flopFold]))).toThrow(RangeError);
+  });
+
+  it('the user review grades against action ranges, like the advice service', () => {
+    const four = record(REVIEW_FOUR);
+    const entries = userReviewEntries(four);
+    expect(entries).toEqual(reviewEntries(four, ACTION_RANGE_ADVICE));
+    four.userDecisions.forEach(({ view, action }, i) => {
+      expect(handleAdviceRequest({ id: i, kind: 'grade', view, userAction: action.type })).toEqual({
+        id: i,
+        ok: true,
+        value: entries[i]?.result,
+      });
+    });
   });
 });

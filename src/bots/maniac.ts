@@ -1,6 +1,6 @@
 import type { Action } from '../engine/hand';
 import type { PlayerView } from '../engine/player-view';
-import { recommend, type RecommendOptions } from '../advice/recommend';
+import { adviceOptions, recommend, type RecommendOptions } from '../advice/recommend';
 import { drawDeviation, findDeviation, parseStyle, type BotStyleData } from './style';
 import { FREE_CHECK_EQUITY, type BotRandom } from './tag';
 // The JSON import stays last: the bots import-boundary test's regex can't read past its `with` clause.
@@ -29,8 +29,8 @@ export function decideManiac(view: PlayerView, options: ManiacOptions = {}): Act
   const advice =
     street === 'postflop' && owed === 0
       ? // Skips the equity run the free check never reads (the move is identical).
-        recommend(view, { ...options, equity: FREE_CHECK_EQUITY })
-      : recommend(view, options);
+        recommend(view, { ...adviceOptions(options), equity: FREE_CHECK_EQUITY })
+      : recommend(view, adviceOptions(options));
   if (options.random === undefined) return advice.move;
   const deviation = findDeviation(options.style ?? MANIAC_STYLE, street, advice.action);
   if (deviation === undefined || !drawDeviation(deviation.probability, options.random)) {

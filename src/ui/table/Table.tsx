@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import type { Action } from '../../engine/hand';
 import { userActionBar } from '../../table/action-bar';
 import { handResultView, type HandResultView } from '../../table/hand-result';
-import { opensReview, reviewEntries, type ReviewEntry } from '../../table/review';
+import { opensReview, userReviewEntries, type ReviewEntry } from '../../table/review';
 import type { CompletedHand, TableState } from '../../table/session';
 import { tableView, type SeatView } from '../../table/table-view';
 import { CardBack, PlayingCard } from '../cards/PlayingCard';
@@ -236,7 +236,7 @@ export function Table({
   }, [external]);
   const onHandComplete = useCallback((hand: CompletedHand) => {
     externalRef.current?.(hand);
-    if (opensReview(hand)) setReview({ entries: reviewEntries(hand), open: true });
+    if (opensReview(hand)) setReview({ entries: userReviewEntries(hand), open: true });
   }, []);
   const { table, act, dealNext } = useTableSession({
     ...options,

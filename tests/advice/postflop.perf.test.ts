@@ -5,7 +5,8 @@
 // enforces no speed limit.
 // Times are process CPU time (cpuNowMs in tests/support/speed.ts), so other busy processes do not inflate them.
 import { describe, expect, it } from 'vitest';
-import { recommendPostflop } from '../../src/advice/postflop';
+import { recommendPostflop, type PostflopOptions } from '../../src/advice/postflop';
+import { ACTION_RANGE_ADVICE } from '../../src/advice/recommend';
 import { applyAction, createHand, type Action, type SeatNumber } from '../../src/engine/hand';
 import { playerView, type PlayerView } from '../../src/engine/player-view';
 import { cpuNowMs, SPEED_LIMITS_NOT_ENFORCED, speedLimitsEnforced } from '../support/speed';
@@ -72,27 +73,70 @@ const SCENARIOS: [string, PlayerView, number][] = [
   ['10-seat flop vs 9 opponents', viewAfter(10, [...fullRingPreflop, [2, 'bet', 4]]), 100],
 ];
 
+/** p95 failures for `scenarios` run with `options`; logs every scenario's numbers. */
+function slowScenarios(
+  scenarios: [string, PlayerView, number][],
+  options?: PostflopOptions,
+): string[] {
+  const failures: string[] = [];
+  if (!ENFORCED) console.log(SPEED_LIMITS_NOT_ENFORCED);
+  for (const [name, view, targetMs] of scenarios) {
+    const first = recommendPostflop(view, options);
+    expect(first.callAmount, name).toBeGreaterThan(0);
+    const times: number[] = [];
+    for (let i = 0; i < RUNS; i++) {
+      const start = cpuNowMs();
+      recommendPostflop(view, options);
+      times.push(cpuNowMs() - start);
+    }
+    times.sort((a, b) => a - b);
+    const p95 = times[RUNS - 2] ?? Infinity;
+    const limit = targetMs * SCALE;
+    console.log(
+      `${name}: ${first.opponents} opponents, ${first.equityMethod}, p95 ${p95.toFixed(2)} ms (target ${targetMs} ms x ${SCALE} = ${limit} ms)`,
+    );
+    if (ENFORCED && p95 > limit) failures.push(`${name}: p95 ${p95.toFixed(2)} ms > ${limit} ms`);
+  }
+  return failures;
+}
+
+/** Action-range scenarios (TASK-7.5 spec SPEC-14): six seats, so the authored ranges apply. */
+const ACTION_SCENARIOS: [string, PlayerView, number][] = [
+  [
+    'actions: 6-max flop facing a bet, one opponent',
+    viewAfter(6, [
+      [4, 'fold'],
+      [5, 'fold'],
+      [6, 'fold'],
+      [1, 'raise', 8],
+      [2, 'fold'],
+      [3, 'call', 4],
+      [3, 'check'],
+      [1, 'bet', 4],
+    ]),
+    25,
+  ],
+  [
+    'actions: 6-max flop vs 3 opponents',
+    viewAfter(6, [
+      [4, 'fold'],
+      [5, 'fold'],
+      [6, 'call', 4],
+      [1, 'call', 4],
+      [2, 'call', 2],
+      [3, 'check'],
+      [2, 'bet', 4],
+    ]),
+    50,
+  ],
+];
+
 describe('postflop advice performance', () => {
   it('postflop advice latency within target times slack', () => {
-    const failures: string[] = [];
-    if (!ENFORCED) console.log(SPEED_LIMITS_NOT_ENFORCED);
-    for (const [name, view, targetMs] of SCENARIOS) {
-      const first = recommendPostflop(view);
-      expect(first.callAmount, name).toBeGreaterThan(0);
-      const times: number[] = [];
-      for (let i = 0; i < RUNS; i++) {
-        const start = cpuNowMs();
-        recommendPostflop(view);
-        times.push(cpuNowMs() - start);
-      }
-      times.sort((a, b) => a - b);
-      const p95 = times[RUNS - 2] ?? Infinity;
-      const limit = targetMs * SCALE;
-      console.log(
-        `${name}: ${first.opponents} opponents, ${first.equityMethod}, p95 ${p95.toFixed(2)} ms (target ${targetMs} ms x ${SCALE} = ${limit} ms)`,
-      );
-      if (ENFORCED && p95 > limit) failures.push(`${name}: p95 ${p95.toFixed(2)} ms > ${limit} ms`);
-    }
-    expect(failures).toEqual([]);
+    expect(slowScenarios(SCENARIOS)).toEqual([]);
+  }, 120_000);
+
+  it('actions-mode postflop advice latency within target times slack', () => {
+    expect(slowScenarios(ACTION_SCENARIOS, ACTION_RANGE_ADVICE)).toEqual([]);
   }, 120_000);
 });

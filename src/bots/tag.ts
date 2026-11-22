@@ -1,7 +1,7 @@
 import type { Action } from '../engine/hand';
 import type { PlayerView, PublicPlayer, SeatPolicy } from '../engine/player-view';
 import type { EquityInput, EquityResult } from '../advice/equity';
-import { recommend, type RecommendOptions } from '../advice/recommend';
+import { adviceOptions, recommend, type RecommendOptions } from '../advice/recommend';
 import { drawMixed, parseStyle, type BotStyleData } from './style';
 // The JSON import stays last: the bots import-boundary test's regex can't read past its `with` clause.
 import tagStyle from './styles/tag.json' with { type: 'json' };
@@ -33,9 +33,9 @@ export function decideTag(view: PlayerView, options: TagOptions = {}): Action {
   const postflop = view.street === 'flop' || view.street === 'turn' || view.street === 'river';
   if (postflop && hero !== undefined && view.currentBet - hero.streetContribution === 0) {
     // Skips the equity run the free check never reads (the move is identical).
-    return recommend(view, { ...options, equity: FREE_CHECK_EQUITY }).move;
+    return recommend(view, { ...adviceOptions(options), equity: FREE_CHECK_EQUITY }).move;
   }
-  const advice = recommend(view, options);
+  const advice = recommend(view, adviceOptions(options));
   if (options.random === undefined || advice.basis !== 'chart' || advice.alternative === null) {
     return advice.move;
   }

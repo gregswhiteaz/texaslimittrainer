@@ -3,7 +3,7 @@ import type { PlayerView } from '../engine/player-view';
 import type { Xoshiro128 } from '../engine/seeded-random';
 import { botRandom, isBotSeed } from '../engine/bot-random';
 import { decideStyle } from '../bots/decide';
-import { recommend, type Recommendation } from '../advice/recommend';
+import { ACTION_RANGE_ADVICE, recommend, type Recommendation } from '../advice/recommend';
 import { gradeView, type ActionType, type GradeResult } from '../advice/grade';
 import type { BotStyle } from './session';
 
@@ -62,9 +62,13 @@ export function handleAdviceRequest(
         return { id, ok: true, value: decideBot(request.view, request.style, random) };
       }
       case 'recommend':
-        return { id, ok: true, value: recommend(request.view) };
+        return { id, ok: true, value: recommend(request.view, ACTION_RANGE_ADVICE) };
       case 'grade':
-        return { id, ok: true, value: gradeView(request.view, request.userAction) };
+        return {
+          id,
+          ok: true,
+          value: gradeView(request.view, request.userAction, ACTION_RANGE_ADVICE),
+        };
       default: {
         const kind = (request as { kind: unknown }).kind;
         throw new RangeError(`Unknown advice request kind: ${String(kind)}`);

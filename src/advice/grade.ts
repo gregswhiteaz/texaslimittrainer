@@ -1,5 +1,10 @@
 import type { PlayerView } from '../engine/player-view';
-import { recommend, type Recommendation, type RecommendOptions } from './recommend';
+import {
+  recommend,
+  type ExactOptions,
+  type Recommendation,
+  type RecommendOptions,
+} from './recommend';
 
 export type ActionType = 'fold' | 'check' | 'call' | 'bet' | 'raise';
 export type Grade = 'correct' | 'minor' | 'major';
@@ -136,13 +141,14 @@ export function gradeDecision<R extends GradeInput>(
 }
 
 /** One recommend(view, options) call, then gradeDecision. Throws RangeError if userAction is not legal in view. */
-export function gradeView(
+export function gradeView<O extends RecommendOptions = RecommendOptions>(
   view: PlayerView,
   userAction: ActionType,
-  options?: RecommendOptions,
+  options?: ExactOptions<O, RecommendOptions>,
 ): GradeResult<Recommendation> {
   if (!view.legalActions.some((a) => a.type === userAction)) {
     throw new RangeError(`${userAction} is not legal for seat ${view.seat}`);
   }
-  return gradeDecision(recommend(view, options), userAction);
+  const advice: RecommendOptions | undefined = options;
+  return gradeDecision(recommend(view, advice), userAction);
 }

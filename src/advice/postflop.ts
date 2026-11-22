@@ -1,7 +1,8 @@
-import type { Card } from '../engine/cards';
 import type { Action } from '../engine/hand';
 import type { PlayerView, PublicPlayer } from '../engine/player-view';
-import { computeEquity, type EquityInput, type EquityResult, type HoleCards } from './equity';
+import { computeEquity, type EquityInput, type EquityResult, type Range } from './equity';
+import { estimateOpponentRanges, unseenCombos } from './ranges';
+import type { ExactOptions } from './recommend';
 
 export type PostflopAdvice = 'fold' | 'check' | 'call';
 /** Rule ids in evaluation order; each is documented in docs/advice/postflop-rules.md. */
@@ -34,6 +35,8 @@ export interface PostflopRecommendation {
 export interface PostflopOptions {
   /** Default computeEquity. Test seam and future range models; must be deterministic. */
   readonly equity?: (input: EquityInput) => EquityResult;
+  /** 'unseen' (default): every unseen combo. 'actions': estimateOpponentRanges (TASK-7.5). */
+  readonly opponentRanges?: 'unseen' | 'actions';
 }
 
 /** Percent with one decimal, half up: Math.round(fraction * 1000 + 1e-9) / 10. */
@@ -41,23 +44,26 @@ export function toPct(fraction: number): number {
   return Math.round(fraction * 1000 + 1e-9) / 10;
 }
 
-/** Every two-card combo with neither card in `dead`, ascending [low, high]. */
-function unseenCombos(dead: readonly Card[]): HoleCards[] {
-  const combos: HoleCards[] = [];
-  for (let a = 0; a < 52; a++) {
-    if (dead.includes(a)) continue;
-    for (let b = a + 1; b < 52; b++) {
-      if (!dead.includes(b)) combos.push([a, b]);
+/** Equity for the first attempt that does not throw a RangeError; the last attempt's errors propagate (A-6). */
+function withFallbacks(
+  run: (opponents: readonly Range[]) => EquityResult,
+  attempts: readonly (readonly Range[])[],
+): EquityResult {
+  for (let i = 0; ; i++) {
+    try {
+      return run(attempts[i] as readonly Range[]);
+    } catch (error) {
+      if (!(error instanceof RangeError) || i === attempts.length - 1) throw error;
     }
   }
-  return combos;
 }
 
 /** Check when free, else call when the rounded equity % reaches the rounded required %, else fold. */
-export function recommendPostflop(
+export function recommendPostflop<O extends PostflopOptions = PostflopOptions>(
   view: PlayerView,
-  options: PostflopOptions = {},
+  options?: ExactOptions<O, PostflopOptions>,
 ): PostflopRecommendation {
+  const { equity = computeEquity, opponentRanges = 'unseen' }: PostflopOptions = options ?? {};
   const street = view.street;
   if (street !== 'flop' && street !== 'turn' && street !== 'river') {
     throw new RangeError(`Postflop advice needs a flop, turn or river view, got ${street}`);
@@ -78,13 +84,24 @@ export function recommendPostflop(
     callAmount = call.amount;
   }
 
-  const range = unseenCombos([...view.holeCards, ...view.board]);
-  const opponents = view.players.filter((p) => p.seat !== view.seat && !p.folded).map(() => range);
-  const result = (options.equity ?? computeEquity)({
-    hero: view.holeCards,
-    board: view.board,
-    opponents,
-  });
+  const run = (opponents: readonly Range[]) =>
+    equity({ hero: view.holeCards, board: view.board, opponents });
+  const unseen = unseenCombos([...view.holeCards, ...view.board]);
+  let opponents: number;
+  let result: EquityResult;
+  if (opponentRanges === 'unseen') {
+    const ranges = view.players.filter((p) => p.seat !== view.seat && !p.folded).map(() => unseen);
+    opponents = ranges.length;
+    result = run(ranges);
+  } else {
+    const estimated = estimateOpponentRanges(view);
+    opponents = estimated.length;
+    result = withFallbacks(run, [
+      estimated.map((o) => o.combos),
+      estimated.map((o) => o.start),
+      estimated.map(() => unseen),
+    ]);
+  }
   const equityPct = toPct(result.hero.equity);
   const requiredEquityPct = owed > 0 ? toPct(callAmount / (pot + callAmount)) : 0;
 
@@ -114,7 +131,7 @@ export function recommendPostflop(
     requiredEquityPct,
     callAmount,
     pot,
-    opponents: opponents.length,
+    opponents,
     equityMethod: result.method,
   };
 }

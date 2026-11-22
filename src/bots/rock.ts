@@ -2,7 +2,7 @@ import type { Action } from '../engine/hand';
 import type { PlayerView } from '../engine/player-view';
 import { handClassOf } from '../advice/hand-class';
 import { positionOf, situationOf } from '../advice/preflop';
-import { recommend, type RecommendOptions } from '../advice/recommend';
+import { adviceOptions, recommend, type RecommendOptions } from '../advice/recommend';
 import { parseStyle, startingRangeFor, type BotStyleData } from './style';
 import { FREE_CHECK_EQUITY } from './tag';
 // The JSON import stays last: the bots import-boundary test's regex can't read past its `with` clause.
@@ -25,8 +25,8 @@ export function decideRock(view: PlayerView, options: RockOptions = {}): Action 
   if (view.street !== 'preflop') {
     return owed === 0
       ? // Skips the equity run the free check never reads (the move is identical).
-        recommend(view, { ...options, equity: FREE_CHECK_EQUITY }).move
-      : recommend(view, options).move;
+        recommend(view, { ...adviceOptions(options), equity: FREE_CHECK_EQUITY }).move
+      : recommend(view, adviceOptions(options)).move;
   }
   const style = options.style ?? ROCK_STYLE;
   const position = positionOf(view);
@@ -38,7 +38,8 @@ export function decideRock(view: PlayerView, options: RockOptions = {}): Action 
   if (spot === undefined) {
     throw new RangeError(`Style ${style.style} has no starting range for ${position} ${situation}`);
   }
-  if (spot.hands.has(handClassOf(view.holeCards))) return recommend(view, options).move;
+  if (spot.hands.has(handClassOf(view.holeCards)))
+    return recommend(view, adviceOptions(options)).move;
   // Preflop the engine always offers fold when a bet is owed and check when none is.
   const type = owed > 0 ? 'fold' : 'check';
   return view.legalActions.find((a) => a.type === type) as Action;
