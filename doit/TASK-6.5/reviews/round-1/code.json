@@ -1,0 +1,28 @@
+{"reviewer": "code", "round": 1,
+ "rubric": [
+  {"item": "SPEC-01 correctness", "result": "pass"}, {"item": "SPEC-01 test strength", "result": "pass"},
+  {"item": "SPEC-02 correctness", "result": "pass"}, {"item": "SPEC-02 test strength", "result": "pass"},
+  {"item": "SPEC-03 correctness", "result": "pass"}, {"item": "SPEC-03 test strength", "result": "pass"},
+  {"item": "SPEC-04 correctness", "result": "pass"}, {"item": "SPEC-04 test strength", "result": "pass"},
+  {"item": "SPEC-05 correctness", "result": "pass"}, {"item": "SPEC-05 test strength", "result": "pass"},
+  {"item": "SPEC-06 correctness", "result": "pass"}, {"item": "SPEC-06 test strength", "result": "pass"},
+  {"item": "SPEC-07 correctness", "result": "pass"}, {"item": "SPEC-07 test strength", "result": "pass"},
+  {"item": "SPEC-08 correctness", "result": "pass"}, {"item": "SPEC-08 test strength", "result": "pass"},
+  {"item": "SPEC-09 correctness", "result": "pass"}, {"item": "SPEC-09 test strength", "result": "pass"},
+  {"item": "SPEC-10 correctness", "result": "pass"}, {"item": "SPEC-10 test strength", "result": "pass"},
+  {"item": "SPEC-11 correctness", "result": "pass"}, {"item": "SPEC-11 test strength", "result": "pass"},
+  {"item": "scope", "result": "pass"}, {"item": "concision", "result": "pass"}, {"item": "clarity", "result": "pass"}
+ ],
+ "findings": [
+  {"fingerprint": "tests/bots/rock.acceptance.test.ts:spec05-sweep-bypasses-parsestyle", "severity": "MINOR",
+   "file": "tests/bots/rock.acceptance.test.ts", "line": 371,
+   "issue": "The SPEC-05 per-class sweep builds the modified style by copying ROCK_STYLE and editing the parsed Set, not by removing the class from the file JSON and running parseStyle. Only Example E (one class, AQo in UTG unopened) goes through the file-to-decision path.",
+   "evidence": "`const without: BotStyleData = { ...ROCK_STYLE, startingRange: ...map(s => s === spot ? {...s, hands: new Set(...)} : s) }`. The spec text says only 'a copy that removes just that class from just that spot', so this meets the letter of SPEC-05. AC#5 ('no code change') is still shown end to end by Example E, and SPEC-01's `parseStyle(raw()) toEqual ROCK_STYLE` pins how parseStyle stores the hands. I judge it adequate. The gap is small: a parseStyle bug that only shows up after removing one class (for example an empty-string or last-token edge) would only be caught for AQo.",
+   "fix": "Optional: in the sweep, build `without` with `parseStyle(fileWithout(spot, hc), 'rock.json')`, where the helper removes the token from a structuredClone of rock.json. That is about 366 parses of roughly 10k chart lookups each, so it should still finish well under 1 s. Or leave as is."},
+  {"fingerprint": "tests/bots/rock.test.ts:free-check-shortcut-not-observable", "severity": "NIT",
+   "file": "tests/bots/rock.test.ts", "line": 77,
+   "issue": "The postflop owed-0 assertion (legal check) would also pass without the FREE_CHECK_EQUITY shortcut, because the advice's move is check either way. Only speed shows whether the shortcut is there.",
+   "evidence": "`expect(decideRock(free)).toEqual(free.legalActions.find((a) => a.type === 'check'))`. The Maniac and Calling-station tests have the same property. The behaviour asserted is correct.",
+   "fix": "Optional: pass a throwing `equity` option, `decideRock(free, { equity: () => { throw new Error('no equity run') } })`, and assert the check. That proves the shortcut overrides the caller's equity function."}
+ ],
+ "summary": "The implementation matches the spec. The validator follows the Q-1/D-1 rules: 26 spots once each, unknown and repeated spots, unknown and repeated classes, a 10-word justification, a subset of TAG non-fold cells, fewer classes per spot, and a per-position union check only when all of a position's spots are clean. The messages match exactly. tag.json, calling-station.json and maniac.json parse with startingRange null. decideRock follows Q-3/D-3. Preflop outside the range it returns the legal fold when owed > 0 and the legal check when owed is 0. Inside the range it plays recommend's move. It has no randomness. Postflop it mirrors the Maniac's free-check shortcut. The null-range and missing-spot RangeErrors are present, and a 5-seat view throws from positionOf. The worker sends 'Rock' to decideRock(view) and ignores the seed. Tests would catch the plausible breakages: always-fold, always-check, ignoring the range, dropping the union rule, or not reading the passed chart. All Rock tests pass in about 0.4 s in total. TAG, Calling station and Maniac tests pass unchanged. The playtest SHA-256 matches aacd5e94…e01. Size is 1,024 lines against a budget of 950; most of the excess is the prettier-expanded rock.json, which is acceptable. There are no BLOCKER or MAJOR findings."}

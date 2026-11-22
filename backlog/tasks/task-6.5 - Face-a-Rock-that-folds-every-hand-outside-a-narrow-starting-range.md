@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-22T02:23:00Z'
+updated_date: '2026-11-22T02:32:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -83,4 +83,6 @@ Full spec: doit/TASK-6.5/spec.md
 
 <!-- SECTION:NOTES:BEGIN -->
 Autopilot Q-1..Q-4 auto-accepted (qa.md).
+
+Build: startingRange format + validator; rock.json (identical to spec §5, checked by orchestrator); decideRock; worker dispatch; new tests <1 s locally; playtest byte-identical; gate PASS.
 <!-- SECTION:NOTES:END -->

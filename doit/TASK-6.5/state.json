@@ -4,21 +4,21 @@
   "branch": "doit/TASK-6.5",
   "base_commit": "10a5f3e2cab3c200c7fea4d66b42cadfdbc5a8ae",
   "started": "2026-11-21T19:13:50",
-  "review_round": 0,
+  "review_round": 1,
   "judge_round": 0,
   "sendbacks": 0,
-  "gate_runs": 2,
+  "gate_runs": 3,
   "questions": 4,
   "assumptions": 0,
   "escalations": 0,
   "item_failures": {},
   "locked_tests": {
-    "tests/bots/rock.acceptance.test.ts": "1d5c91cd4fa575be14a66cb3e223a7bc21b8cc4c88d02d7402d7cb593f80cc2f"
+    "tests/bots/rock.acceptance.test.ts": "3d2087b8e0e151ef6a452b37d78a6c4473a039a7ea20904189caed9329a4460a"
   },
   "test_snapshot": {
     "tests/bots/rock.acceptance.test.ts": {
-      "sha": "1d5c91cd4fa575be14a66cb3e223a7bc21b8cc4c88d02d7402d7cb593f80cc2f",
-      "asserts": 73,
+      "sha": "3d2087b8e0e151ef6a452b37d78a6c4473a039a7ea20904189caed9329a4460a",
+      "asserts": 74,
       "skips": 0
     },
     "tests/bots/rock.test.ts": {
@@ -972,7 +972,18 @@
       "skips": 0
     }
   },
-  "history": [],
+  "history": [
+    {
+      "t": "2026-11-21T19:34:16",
+      "event": "unlock",
+      "file": "tests/bots/rock.acceptance.test.ts",
+      "reason": "Code review R1 MINOR: SPEC-05 sweep builds each modified style through parseStyle (strengthen)"
+    }
+  ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-6.5",
-  "spec_sha256": "49c742b1d1e5f3b2dd1f61a90116d3ea582c288369d9ebf59b28aa13b2fe32bc"
+  "spec_sha256": "49c742b1d1e5f3b2dd1f61a90116d3ea582c288369d9ebf59b28aa13b2fe32bc",
+  "review_findings": {
+    "1": 0
+  },
+  "relock_pending": []
 }

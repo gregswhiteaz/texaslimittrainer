@@ -15,7 +15,6 @@ import {
   StyleValidationError,
   parseStyle,
   startingRangeFor,
-  type BotStyleData,
   type RangeSpot,
 } from '../../src/bots/style';
 import { decideTag } from '../../src/bots/tag';
@@ -381,12 +380,16 @@ describe('Rock (very tight) bot', () => {
           const action = decideRock(sub);
           expect(action.type).not.toBe('fold');
           expect(action).toEqual(recommend(sub).move);
-          const without: BotStyleData = {
-            ...ROCK_STYLE,
-            startingRange: (ROCK_STYLE.startingRange ?? []).map((s) =>
-              s === spot ? { ...s, hands: new Set([...s.hands].filter((c) => c !== hc)) } : s,
-            ),
-          };
+          const edited = raw();
+          const target = rawSpot(edited, spot.position, spot.situation);
+          target.hands = target.hands
+            .split(/\s+/)
+            .filter((c) => c !== hc)
+            .join(' ');
+          const without = parseStyle(edited, 'rock.json');
+          expect(startingRangeFor(without, spot.position, spot.situation)?.hands.size).toBe(
+            spot.hands.size - 1,
+          );
           expect(decideRock(sub, { style: without })).toEqual(legal(sub, 'fold'));
           checked++;
         }

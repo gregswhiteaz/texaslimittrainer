@@ -7,8 +7,8 @@
 - `src/table/advice-service.ts` — worker default bot decision sends `'Rock'` to `decideRock` (D-4).
 
 ## New tests
-- `tests/bots/rock.acceptance.test.ts` — SPEC-01..SPEC-06 (Examples A–E pinned).
-- `tests/bots/rock.test.ts` — SPEC-09 decision units and SPEC-08's seated 1,000-hand Rock run.
+- `tests/bots/rock.acceptance.test.ts` — SPEC-01..SPEC-06 (Examples A–E pinned); SPEC-05 per-class sweep re-parses edited rock.json copies (fix r1).
+- `tests/bots/rock.test.ts` — SPEC-09 decision units and SPEC-08's seated 1,000-hand Rock run. Free-check case asserts no equity call (fix r1).
 
 ## Extended tests
 - `tests/bots/style.test.ts` — SPEC-07 (`parseStyle validates starting ranges`).

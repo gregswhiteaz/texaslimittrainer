@@ -76,6 +76,12 @@ describe('Rock decision', () => {
       }
       const free = postflop.find((v) => owed(v) === 0) as PlayerView;
       expect(decideRock(free)).toEqual(free.legalActions.find((a) => a.type === 'check'));
+      const noEquity = (): EquityResult => {
+        throw new Error('equity must not be computed when checking is free');
+      };
+      expect(decideRock(free, { equity: noEquity })).toEqual(
+        free.legalActions.find((a) => a.type === 'check'),
+      );
     },
     TEST_TIMEOUT_MS,
   );

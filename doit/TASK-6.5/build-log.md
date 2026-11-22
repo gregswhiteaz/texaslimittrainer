@@ -22,3 +22,8 @@
 - `npm test` → 161 files passed / 1 skipped; 568 tests passed / 8 skipped; coverage all files 97.05% stmts, bots 99.59%.
 - `npm run lint`, `npm run typecheck` → clean. `npm run format` run. `npm run e2e` → 130 passed, 12 skipped.
 - Gate build #1: PASS (1,024 changed lines vs budget 950: warn; 166 of them are prettier's one-key-per-line `rock.json`, 431 the acceptance file).
+
+## FIX r1 (code review MINOR + NIT)
+- MINOR (fixed): SPEC-05's per-class sweep now builds each "Rock without class X" by editing a `raw()` copy of rock.json (drop the class from that spot's `hands`) and running it through `parseStyle(edited, 'rock.json')`; added an assertion that the parsed spot has one class fewer. All prior assertions kept; unused `BotStyleData` import removed. Test time: 185 ms (was 9 ms), whole acceptance file under 0.4 s.
+- NIT (fixed): rock.test's postflop no-bet case now also calls `decideRock(free, { equity })` with an `equity` that throws, and asserts the Rock still checks (free-check shortcut observed). Test time: 127 ms.
+- `npx vitest run tests/bots/rock.acceptance.test.ts tests/bots/rock.test.ts` → 2 files, 8 tests passed (527 ms). `npx tsc --noEmit`, eslint on both files: clean. `npm run format` run.
