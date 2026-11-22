@@ -1,0 +1,9 @@
+{"reviewer": "security", "round": 1,
+ "findings": [
+  {"fingerprint": "src/playtest/winrate.ts:rows-grow-with-busts",
+   "severity": "MINOR", "file": "src/playtest/winrate.ts", "line": 82,
+   "issue": "BotResults keeps one Map entry per (seat, name, style). In cash line-up runs each bust adds a new entry and replacementName() makes unique suffixed names, so memory and the formatted header grow linearly with busts (about 0.3% of hands), not stay constant. At the --hands cap (1e9) that is about 3.4M Map entries plus a header string of about 270 MB built in memory before output.",
+   "evidence": "--hands (local operator CLI arg, capped at 1e9 in cli.ts:182) -> runPlaytest busts -> nextReplacementName unique names -> BotResults.add new Map key -> formatBotResults joins all rows into header. The only effect is local memory use in a developer tool the operator runs on purpose, and a 1e9 run already takes about 22 hours. No attacker is involved. Spec A-5 documents and accepts this.",
+   "fix": "None needed for this task. If very long runs become routine, stream rows or cap the printed rows and aggregate the rest."}
+ ],
+ "summary": "No BLOCKER or MAJOR. The change is playtest-only and adds no new trust boundary. Hidden information: results use only p.stack - p.startingStack from hand.final, so no hole cards or deck are read. Injection: bot names and styles come from internal constants (lineup presets, REPLACEMENT_NAMES), never from CLI text, and go only to stdout text. Nothing is executed, so a crafted name cannot run anything. Numeric safety: bigBet comes from the constant GAMES table (non-zero) and stack values are integers. Welford with n>=2 gives m2>=0 in practice; zero hands throw RangeError, but rows() only rates entries that have at least one result. NaN/Infinity cannot reach toFixed. Memory: O(1) per bot (Welford), with one MINOR note on rows growing per bust at extreme --hands. No new dependencies or randomness."}

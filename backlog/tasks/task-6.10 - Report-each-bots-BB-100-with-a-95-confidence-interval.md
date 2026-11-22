@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-22T18:56:00Z'
+updated_date: '2026-11-22T19:07:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -71,3 +71,9 @@ Plan key: E06-S10 · Dream: limit-holdem-trainer
 
 Full spec: doit/TASK-6.10/spec.md
 <!-- SECTION:PLAN:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+Build: winrate.ts (Welford, BB/100, 95% CI), Bot results block before 'Hands played:'; new default SHA 442dbf55…08fbc (old aacd5e94…e01 with grep -v '^Bot'); million runs PASS; gate PASS.
+<!-- SECTION:NOTES:END -->

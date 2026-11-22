@@ -8,3 +8,11 @@
 - New default-run baseline: `npm run -s playtest -- --hands 10000 --seed 42 --size 6 | shasum -a 256` = `442dbf55bd32d87a5e367d3c5b9be28ec9303c57174783eae5947134aa408fbc`.
 - `npm run playtest:million -- --hands 900`: exit 0, `Result: PASS`, shard sections carry the bot block.
 - `npm run playtest:million -- --lineups --hands 270`: `Result: PASS`.
+
+## Fix (round 1)
+
+- R1 MINOR #1 (completed-violating-hand-counted): fixed. `BotResults.add` now skips a hand when `hand.violations > 0 || hand.final.result === null` (same condition as the runner's restart). Added a completed-but-violating hand to the "bot identity" case in `tests/playtest/winrate.test.ts`; confirmed it fails without the fix (1 failed / 3 passed) and passes with it.
+- NIT (redundant `first` sort key): dropped. Map insertion order is first-hand order and `Array.prototype.sort` is stable, so sorting by seat alone gives identical output; default-run SHA unchanged confirms this.
+- MINOR #2: not changed (documented only, per brief).
+- `npm run format`, `npm run lint`, `npm run typecheck`: clean. `npm test`: 178 files passed, 2 skipped; 629 tests passed, 11 skipped.
+- Default-run SHA unchanged: `442dbf55bd32d87a5e367d3c5b9be28ec9303c57174783eae5947134aa408fbc`; without `Bot` lines unchanged: `aacd5e94…e488e01`.

@@ -52,7 +52,6 @@ interface Bot {
   readonly seat: number;
   readonly name: string;
   readonly style: string;
-  readonly first: number;
   readonly tally: Tally;
 }
 
@@ -67,9 +66,9 @@ export class BotResults {
     this.bigBet = GAMES[game].stakes.bigBet;
   }
 
-  /** Counts each dealt-in seat's chip result; abandoned hands count for no bot (A-1). */
+  /** Counts each dealt-in seat's chip result; abandoned or violating hands count for no bot (A-1). */
   add(hand: PlayedHand): void {
-    if (hand.final.result === null) return;
+    if (hand.violations > 0 || hand.final.result === null) return;
     for (const p of hand.final.players) {
       const lineUpSeat = hand.lineUp?.[p.seat - 1];
       const [name, style] =
@@ -81,17 +80,17 @@ export class BotResults {
       const key = `${p.seat}\u0000${name}\u0000${style}`;
       let bot = this.bots.get(key);
       if (bot === undefined) {
-        bot = { seat: p.seat, name, style, first: hand.number, tally: newTally() };
+        bot = { seat: p.seat, name, style, tally: newTally() };
         this.bots.set(key, bot);
       }
       addResult(bot.tally, p.stack - p.startingStack);
     }
   }
 
-  /** One row per bot with at least one counted hand, by seat, then first hand. */
+  /** One row per bot with at least one counted hand, by seat, then first hand (stable sort of insertion order). */
   rows(): BotRow[] {
     return [...this.bots.values()]
-      .sort((a, b) => a.seat - b.seat || a.first - b.first)
+      .sort((a, b) => a.seat - b.seat)
       .map(({ seat, name, style, tally }) => ({
         seat,
         name,

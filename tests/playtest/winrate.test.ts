@@ -24,6 +24,7 @@ function hand(
   results: Readonly<Record<number, number>>,
   lineUp?: readonly LineUpSeat[],
   complete = true,
+  violations = 0,
 ): PlayedHand {
   const players = Object.entries(results).map(([seat, result]) => ({
     seat: Number(seat),
@@ -32,6 +33,7 @@ function hand(
   }));
   return {
     number,
+    violations,
     final: { players, result: complete ? {} : null },
     ...(lineUp === undefined ? {} : { lineUp }),
   } as unknown as PlayedHand;
@@ -97,6 +99,8 @@ describe('winrate', () => {
     lineUp.add(hand(1, { 1: 8, 2: -8, 3: 0 }, seats));
     lineUp.add(hand(2, { 1: 4, 2: -4, 3: 0 }, swapped));
     lineUp.add(hand(3, { 1: 100, 2: -100 }, seats, false));
+    // Completed (result non-null) but flagged on its final action: still not counted (A-1).
+    lineUp.add(hand(5, { 1: 50, 2: -50, 3: 0 }, seats, true, 1));
     lineUp.add(hand(4, { 1: -16, 2: 16, 3: 0 }, seats));
     const rows = lineUp.rows();
     expect(rows.map((r) => [r.seat, r.name, r.style, r.rate.hands])).toEqual([
