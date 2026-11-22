@@ -1,0 +1,98 @@
+[
+  {
+    "id": "SPEC-01",
+    "verifies": "AC#1, DoD#10",
+    "verification": "acceptance `tests/advice/range-model.acceptance.test.ts::AC#1 every 6-max position and line has a justified range and gaps fail validation`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-02",
+    "verifies": "AC#2",
+    "verification": "acceptance `tests/advice/range-model.acceptance.test.ts::AC#2 a CO open-raiser who has not acted on the flop is the authored CO open-raise range`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-03",
+    "verifies": "AC#3",
+    "verification": "acceptance `tests/advice/range-model.acceptance.test.ts::AC#3 a flop bet removes Air from the fixture`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-04",
+    "verifies": "AC#4",
+    "verification": "acceptance `tests/advice/range-model.acceptance.test.ts::AC#4 a flop check removes Strong from the fixture`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-05",
+    "verifies": "AC#5",
+    "verification": "acceptance `tests/advice/range-model.acceptance.test.ts::AC#5 a flop call keeps Pair and Draw and a raise keeps Strong and Draw`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-06",
+    "verifies": "AC#6",
+    "verification": "acceptance `tests/advice/range-model.acceptance.test.ts::AC#6 a flop check then a turn call re-classifies on the turn`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-07",
+    "verifies": "AC#7",
+    "verification": "acceptance `tests/advice/range-model.acceptance.test.ts::AC#7 identical actions give identical ranges whatever the bot style`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-08",
+    "verifies": "AC#8",
+    "verification": "acceptance `tests/advice/range-model.acceptance.test.ts::AC#8 a bot style passed into the advice engine fails the typecheck`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-09",
+    "verifies": "AC#9",
+    "verification": "acceptance `tests/advice/range-model.acceptance.test.ts::AC#9 user advice and review use action ranges and the docs describe them`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-10",
+    "verifies": "AC#1, AC#3",
+    "verification": "unit `tests/advice/ranges.test.ts::notation, lines and classifier edge cases`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-11",
+    "verifies": "DoD#1, DoD#10",
+    "verification": "unit `tests/advice/ranges.test.ts::default range content sanity`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-12",
+    "verifies": "AC#9, DoD#2",
+    "verification": "unit `tests/advice/postflop-ranges.test.ts::actions mode is total, deterministic and falls back`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-13",
+    "verifies": "DoD#3, DoD#7",
+    "verification": "command `npm run -s playtest -- --hands 10000 --seed 42 --size 6 | shasum -a 256`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-14",
+    "verifies": "DoD#3",
+    "verification": "unit `tests/advice/postflop.perf.test.ts::actions-mode postflop advice latency within target times slack`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-15",
+    "verifies": "DoD#2, DoD#3, DoD#5, DoD#6, DoD#9",
+    "verification": "command `npm run lint && npm run typecheck && npm test`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-16",
+    "verifies": "DoD#4, DoD#8, DoD#11, DoD#12, DoD#13",
+    "verification": "manual `gh run list --branch doit/TASK-7.5 --limit 1` shows success; `backlog doc list --plain` lists the TASK-7.5 story doc",
+    "status": "pending"
+  }
+]

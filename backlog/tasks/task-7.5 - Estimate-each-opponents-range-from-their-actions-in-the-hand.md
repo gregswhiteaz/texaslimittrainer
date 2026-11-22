@@ -1,10 +1,11 @@
 ---
 id: TASK-7.5
 title: Estimate each opponent's range from their actions in the hand
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-18T19:10:00Z'
+updated_date: '2026-11-22T20:27:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -69,6 +70,18 @@ Plan key: E07-S07 · Dream: limit-holdem-trainer
 - [ ] #12 Story documentation is written and published to Backlog.md
 - [ ] #13 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. src/advice/ranges.ts + ranges/six-max.json: 36 authored 6-max default ranges (position × line) with justifications; validator.
+2. Classifier (Strong/Pair/Draw/Air) and street-by-street narrowing by the most aggressive action; estimateOpponentRanges(view).
+3. Option opponentRanges 'unseen'|'actions'; user hint + review grades use ACTION_RANGE_ADVICE; bots unchanged (playtest SHA unchanged).
+4. AC#8: ExactOptions type ban on extra keys (style) into recommend/recommendPostflop/gradeView; bots pass adviceOptions(...).
+5. docs/advice/range-model.md + rules doc update; fixture tests AC#3–#6; perf within existing targets.
+
+Full spec: doit/TASK-7.5/spec.md
+<!-- SECTION:PLAN:END -->
 
 ## Implementation Notes
 
