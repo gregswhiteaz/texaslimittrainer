@@ -4,7 +4,7 @@ title: Prove TAG beats tables of each weaker style
 status: To Do
 assignee: []
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-17T23:22:00Z'
+updated_date: '2026-11-22T19:15:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-2
@@ -44,6 +44,7 @@ Plan key: E06-S12 · Dream: limit-holdem-trainer
 - [ ] #2 Given the same run with five Maniacs (`--lineup tag,maniac,maniac,maniac,maniac,maniac`), When it completes, Then TAG's BB/100 lower 95% bound is above 0 [REQ-030.2]
 - [ ] #3 Given the same run with five Rocks (`--lineup tag,rock,rock,rock,rock,rock`), When it completes, Then TAG's BB/100 lower 95% bound is above 0 [REQ-030.3]
 - [ ] #4 Given `--lineup` with a per-seat list containing a token other than tag, calling-station, maniac or rock, or with a seat count different from `--size`, When the playtest starts, Then it prints the accepted tokens and the expected seat count and exits non-zero without playing [REQ-062.1]
+- [ ] #5 Given a TAG-strength run large enough to need the million tool's shards, When the combined report is printed, Then each style's BB/100 and 95% CI are pooled across shards (not only printed per shard)
 <!-- AC:END -->
 
 ## Definition of Done
@@ -62,3 +63,9 @@ Plan key: E06-S12 · Dream: limit-holdem-trainer
 - [ ] #12 Story documentation is written and published to Backlog.md
 - [ ] #13 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+AC added from TASK-6.10 follow-up (cross-shard pooling of win rates)
+<!-- SECTION:NOTES:END -->
