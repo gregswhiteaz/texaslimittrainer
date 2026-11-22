@@ -1,0 +1,80 @@
+[
+  {
+    "id": "SPEC-01",
+    "verifies": "AC#1",
+    "verification": "acceptance `tests/playtest/million-lineups.acceptance.test.ts::an on-demand line-up run plays Mixed, Tough and Soft at every table size 2 to 10 and reports zero violations`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-02",
+    "verifies": "AC#1, AC#3",
+    "verification": "command `time npm run playtest:million -- --lineups`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-03",
+    "verifies": "AC#3",
+    "verification": "acceptance `tests/playtest/million-lineups.acceptance.test.ts::re-running a line-up shard with its seed gives byte-identical output`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-04",
+    "verifies": "AC#3",
+    "verification": "acceptance `tests/ci/million-lineups-workflow.acceptance.test.ts::the line-up million workflow runs on manual dispatch as one bounded job that fails on a non-zero exit`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-05",
+    "verifies": "AC#3",
+    "verification": "command `npm run -s playtest:million -- --hands 900 | shasum -a 256`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-06",
+    "verifies": "AC#1",
+    "verification": "unit `tests/playtest/shards.test.ts::--lineups parsing and the line-up shard plan`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-07",
+    "verifies": "AC#2, DoD#1",
+    "verification": "acceptance `tests/playtest/lineup-throughput.acceptance.test.ts::100,000 6-max Mixed hands with style bots finish within 60 minutes with zero violations`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-08",
+    "verifies": "AC#4",
+    "verification": "acceptance `tests/playtest/style-bots.acceptance.test.ts::the playtest passes each seat the earlier showdowns from previous hands`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-09",
+    "verifies": "AC#5",
+    "verification": "acceptance `tests/playtest/style-bots.acceptance.test.ts::bot style checks are composed with checkStep through the onAction hook`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-10",
+    "verifies": "AC#6",
+    "verification": "acceptance `tests/playtest/style-bots.acceptance.test.ts::a 6-player line-up with betting policies exercises postflop bets and the postflop cap`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-11",
+    "verifies": "DoD#7",
+    "verification": "command `npm run -s playtest -- --hands 10000 --seed 42 --size 6 | shasum -a 256`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-12",
+    "verifies": "DoD#2, DoD#3, DoD#5, DoD#6, DoD#11",
+    "verification": "command `npm run lint && npm run typecheck && npm test`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-13",
+    "verifies": "DoD#4, DoD#8, DoD#9, DoD#10, DoD#12, DoD#13",
+    "verification": "manual `grep -rn \"fetch(\\|XMLHttpRequest\\|WebSocket\" src/playtest` finds nothing; the docs stage publishes the story doc",
+    "status": "pending"
+  }
+]

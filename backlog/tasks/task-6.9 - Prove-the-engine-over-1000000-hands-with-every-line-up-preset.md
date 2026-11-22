@@ -1,10 +1,11 @@
 ---
 id: TASK-6.9
 title: Prove the engine over 1,000,000 cash hands with every line-up preset
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-18T19:40:00Z'
+updated_date: '2026-11-22T18:07:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -67,6 +68,19 @@ Plan key: E06-S11 · Dream: limit-holdem-trainer
 - [ ] #12 Story documentation is written and published to Backlog.md
 - [ ] #13 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. playtest:million --lineups: 27 shards (Mixed/Tough/Soft × sizes 2–10), deterministic seeds, combined report with per line-up/size counts; default run byte-identical.
+2. Dispatch-only .github/workflows/million-lineups.yml (no schedule).
+3. Runner passes earlier showdowns (HandSetup.earlierShowdowns, last 1,000); composeChecks for onAction.
+4. AC#6 proof: Tough 6-max includes postflop bets and a capped street.
+5. Opt-in throughput test (100k 6-max Mixed ≤ 60 min).
+6. Live GitHub dispatch not in scope (budget, TASK-1.51).
+
+Full spec: doit/TASK-6.9/spec.md
+<!-- SECTION:PLAN:END -->
 
 ## Implementation Notes
 
