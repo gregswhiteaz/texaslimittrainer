@@ -61,3 +61,7 @@ The drill commit edits locked test files and the revert restores them byte for b
 After merge (A-2): record the first `main` run's wall time in story-doc.md, and the first scheduled 06:00 UTC run (only `Detect tooling changes` + `Tooling tests`). Open a follow-up task if the main run is over 540 s.
 
 - Gate build #1: PASS (1124 changed lines vs budget 1000: warn; 13 files).
+
+## Live runs (orchestrator)
+- Run A1 #165 (44983160212, c24fd6f): FAIL — Tooling tests: test-groups.acceptance `toContain('Coverage enabled with v8')` failed because GitHub Actions colours vitest output. Fixed (b968549): sandbox output checks use `stripVTControlCharacters` (own test unlocked, strengthen — the `not.toContain('ERROR: Coverage')` check is now meaningful under colour too). Wall 247 s.
+- Run A2 #166 (44983750106, b968549): SUCCESS, all 7 jobs, wall 212 s (unit 73, shard1 136, shard2 107, tooling 108, e2e 210, checks 46, detect 20).
