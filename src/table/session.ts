@@ -68,7 +68,8 @@ export const DEFAULT_SEATS: readonly SessionSeat[] = ['Ava', 'Ben', 'Cal', 'Dee'
 
 /** REQ-005.1: a cash game carries a stake; a sit-and-go has none (D-3). */
 export type GameType = 'cash' | 'sit-and-go';
-/** REQ-009.1, REQ-009.6: the preset name, or Custom when the bot styles match no preset. */
+/** REQ-009.1, REQ-009.6: the chosen preset's name, or Custom when any bot style differs from that preset's
+ *  assignment (another preset's pattern is still Custom). */
 export type LineUpName = 'Mixed' | 'Tough' | 'Soft' | 'Custom';
 /** TASK-2.11 / TASK-3.18 widen: 'realistic'. */
 export type Speed = 'rapid';

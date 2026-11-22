@@ -1,3 +1,4 @@
+import type { LineUpName, SessionConfig, SessionSeat } from '../table/session';
 import type { StyleName } from './style';
 
 export type LineUpPreset = 'Mixed' | 'Tough' | 'Soft';
@@ -61,4 +62,48 @@ export function seatLineUp(
       name: BOT_NAMES[k - 1] as string,
     };
   });
+}
+
+/** Checks the §5 seat invariants and returns the user's seat. Throws RangeError on malformed seats. */
+function checkedUserSeat(seats: readonly LineUpSeat[]): number {
+  if (seats.length === 0 || seats.some((s, i) => s.seat !== i + 1)) {
+    throw new RangeError('Seats must be numbered 1 to the table size in ascending order');
+  }
+  const users = seats.filter((s) => s.kind === 'user');
+  if (users.length !== 1) throw new RangeError('A line-up must have exactly one user seat');
+  if (seats.some((s) => s.kind === 'bot' && (s.style === null || s.name === null))) {
+    throw new RangeError('Every bot seat must have a style and a name');
+  }
+  return (users[0] as LineUpSeat).seat;
+}
+
+/** REQ-009.6: `preset` when every bot seat's style equals seatLineUp(preset, seats.length, userSeat) at that
+ *  seat, otherwise 'Custom' (only the chosen preset is compared). Names are ignored.
+ *  Throws RangeError on malformed seats, a bad size or an unknown preset. */
+export function resolveLineUpName(preset: LineUpPreset, seats: readonly LineUpSeat[]): LineUpName {
+  const expected = seatLineUp(preset, seats.length, checkedUserSeat(seats));
+  return seats.every((s) => s.kind === 'user' || s.style === expected[s.seat - 1]?.style)
+    ? preset
+    : 'Custom';
+}
+
+/** The SessionConfig for Start game: `base` with players, userSeat, lineUp and seats taken from the line-up
+ *  (bots keep their name and style; the user is named 'You'). gameType, stake (cash only), speed and button
+ *  come from `base`. Throws RangeError as resolveLineUpName does, or when `base.button` is not a seat. */
+export function lineUpSessionConfig(
+  base: SessionConfig,
+  preset: LineUpPreset,
+  seats: readonly LineUpSeat[],
+): SessionConfig {
+  const lineUp = resolveLineUpName(preset, seats);
+  if (!Number.isInteger(base.button) || base.button < 1 || base.button > seats.length) {
+    throw new RangeError('Button must be a seat at the table');
+  }
+  const sessionSeats = seats.map((s): SessionSeat =>
+    s.kind === 'user'
+      ? { seat: s.seat, name: 'You', kind: 'user', style: null }
+      : { seat: s.seat, name: s.name as string, kind: 'bot', style: s.style },
+  );
+  const userSeat = (seats.find((s) => s.kind === 'user') as LineUpSeat).seat;
+  return { ...base, players: seats.length, userSeat, lineUp, seats: sessionSeats };
 }
