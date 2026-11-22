@@ -1,0 +1,22 @@
+{"reviewer": "code", "round": 1,
+ "rubric": [
+  {"item": "SPEC-01 correctness", "result": "pass"}, {"item": "SPEC-01 test strength", "result": "pass"},
+  {"item": "SPEC-02 correctness", "result": "pass"}, {"item": "SPEC-02 test strength", "result": "pass"},
+  {"item": "SPEC-03 correctness", "result": "pass"}, {"item": "SPEC-03 test strength", "result": "pass"},
+  {"item": "SPEC-04 correctness", "result": "pass"}, {"item": "SPEC-04 test strength", "result": "pass"},
+  {"item": "SPEC-05 correctness", "result": "pass"}, {"item": "SPEC-05 test strength", "result": "pass"},
+  {"item": "SPEC-06 correctness", "result": "pass"}, {"item": "SPEC-06 test strength", "result": "pass"},
+  {"item": "SPEC-07 correctness (type-only imports, unit-file coverage)", "result": "pass"}, {"item": "SPEC-07 test strength", "result": "pass"},
+  {"item": "scope", "result": "pass"}, {"item": "concision", "result": "pass"}, {"item": "clarity", "result": "pass"}
+ ],
+ "findings": [
+  {"fingerprint": "tests/bots/lineup.test.ts:error-order-not-pinned", "severity": "MINOR", "file": "tests/bots/lineup.test.ts", "line": 102,
+   "issue": "Spec 5 says the RangeErrors are checked in a fixed order, but each malformed case breaks only one invariant (except [], which also has zero users). If the user-count check were moved after the style check, or the shape checks after seatLineUp's size/preset checks, or the button check before seat resolution, no test would fail.",
+   "evidence": "Cases: [user(1),bot(3)], [bot(2),user(1)], [bot(1),bot(2)], [user(1),user(2)], null style/name with one user, 11 valid seats, preset 'Custom' with valid seats, bad button with valid seats. None combines two faults.",
+   "fix": "Add a few combined-fault cases: [bot(1) with style null, bot(2)] -> user-seat message; 11 seats with one bot style null -> style-and-name message; [] with preset 'Custom' -> numbering message; lineUpSessionConfig({...DEFAULT_SESSION_CONFIG, button: 0}, 'Mixed', []) -> numbering message."},
+  {"fingerprint": "src/bots/lineup.ts:user-seat-found-twice", "severity": "MINOR", "file": "src/bots/lineup.ts", "line": 107,
+   "issue": "lineUpSessionConfig finds the user seat again with seats.find(...) and a cast, after checkedUserSeat already found it inside resolveLineUpName.",
+   "evidence": "const userSeat = (seats.find((s) => s.kind === 'user') as LineUpSeat).seat;",
+   "fix": "Optional: read it from the built seats (sessionSeats.find) or accept the small repeat; there is no behaviour issue."}
+ ],
+ "summary": "Both functions match spec 5 and R-1/R-2. The name is compared only against the chosen preset (D-1), names are ignored (A-2), the button is checked after the seats and never clamped (A-4), inputs are not mutated, and only type imports are used. The acceptance tests cover AC#1 at user seat 1, AC#2 with every preset x size 2-10 x every user seat (162 combinations, count checked), AC#3 edit-then-revert, and AC#4 as an exact toEqual. The unit tests cover the default seat 5 case, Mixed edited into the Soft pattern, the Tough/Mixed heads-up case, the sit-and-go base with no stake key, and every RangeError message. tests/bots/lineup.test.ts on its own gives src/bots/lineup.ts 100% statements, branches, functions and lines (42/42, 46/46, 12/12, 33/33). Acceptance tests pass 4/4. The only findings are MINOR: the order of the error checks isn't pinned by any test, and the user seat is looked up twice."}

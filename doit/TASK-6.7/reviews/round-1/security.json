@@ -1,0 +1,8 @@
+{"reviewer": "security", "round": 1,
+ "findings": [
+  {"fingerprint": "src/bots/lineup.ts:seat-kind-not-runtime-checked", "severity": "MINOR", "file": "src/bots/lineup.ts", "line": 68,
+   "issue": "checkedUserSeat validates seat numbering, exactly one 'user' and non-null style/name for kind === 'bot', but a seat whose kind is neither 'user' nor 'bot' (or whose style is an unknown string) passes; lineUpSessionConfig then emits it as kind 'bot' with name possibly null. Seat count is also only bounded after an O(n) scan (seatLineUp rejects size > 10 after checkedUserSeat walks the array).",
+   "evidence": "Today the only caller is typed Game Config state (TASK-2.5/2.8), so no untrusted path reaches this; it would matter only if stored session data (E03) were passed in without the loader validating it first. No sink: names are copied as data, nothing is evaluated, base spread uses own-property copy (no prototype pollution), inputs are not mutated.",
+   "fix": "None needed now. When E03/TASK-13.6 adds the stored-data loader, validate kind, style membership and seats.length <= 10 there (as spec §8 already states); optionally make the bot check `s.kind !== 'user'` here."}
+ ],
+ "summary": "Pure, type-only-import module with no I/O, no evaluation, no randomness and no new dependencies. Inputs are not mutated; object spread of base cannot pollute prototypes; names are carried as inert strings. Malformed seats, sizes, presets and button fail closed with RangeError. One MINOR defence-in-depth note for the future stored-data path. No BLOCKER or MAJOR findings."}

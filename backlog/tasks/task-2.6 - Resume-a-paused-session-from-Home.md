@@ -4,7 +4,7 @@ title: Resume a paused session from Home
 status: To Do
 assignee: []
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-17T23:22:00Z'
+updated_date: '2026-11-22T16:11:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -49,6 +49,7 @@ Plan key: E02-S08 · Dream: limit-holdem-trainer
 - [ ] #4 Given a paused 9-player $10/$20 Custom session with button at seat 7 after hand 25, When it is resumed, Then the table shows the same game type, table size, stake, line-up name, bot names and styles in the same seats, stacks and hand count 25, and the next hand's button is the seat that follows seat 7 under the button rules [REQ-004.3]
 - [ ] #5 Given the app was closed in the middle of hand 11, When stored hand records and the style stats computed from them are read after resuming, Then no record of the abandoned hand exists and the stats equal those of hands 1 to 10 [REQ-004.6]
 - [ ] #6 Given a resumed session, When further hands complete, Then they are stored under the same session id with hand numbers continuing from 11 [REQ-004.2]
+- [ ] #7 Given a stored session whose seats include an unknown seat kind, an unknown bot style or a missing bot name, When it is loaded to resume, Then it is rejected with a clear error (not passed to resolveLineUpName/lineUpSessionConfig or the table), and Home stays usable
 <!-- AC:END -->
 
 ## Definition of Done
@@ -66,3 +67,9 @@ Plan key: E02-S08 · Dream: limit-holdem-trainer
 - [ ] #11 Story documentation is written and published to Backlog.md
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+AC added from TASK-6.7 security review MINOR (lineUpSessionConfig trusts seat kind/style)
+<!-- SECTION:NOTES:END -->

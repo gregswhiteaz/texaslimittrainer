@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-22T16:03:00Z'
+updated_date: '2026-11-22T16:09:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -74,3 +74,9 @@ Plan key: E06-S07 · Dream: limit-holdem-trainer
 
 Full spec: doit/TASK-6.7/spec.md
 <!-- SECTION:PLAN:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+Build: resolveLineUpName + lineUpSessionConfig in lineup.ts (type-only imports, RangeError per spec); 10k --lineup mixed 0 violations; gate PASS.
+<!-- SECTION:NOTES:END -->

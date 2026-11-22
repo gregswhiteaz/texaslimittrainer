@@ -125,6 +125,33 @@ describe('resolveLineUpName and lineUpSessionConfig', () => {
         'Table size must be a whole number from 2 to 10',
       ],
       ['Custom' as LineUpPreset, six, 'Unknown line-up preset: Custom'],
+      // Two rules broken at once: the earlier §5 check wins.
+      [
+        'Custom' as LineUpPreset,
+        [],
+        'Seats must be numbered 1 to the table size in ascending order',
+      ],
+      [
+        'Mixed',
+        [user(1), user(1), { ...bot(3), style: null }],
+        'Seats must be numbered 1 to the table size in ascending order',
+      ],
+      ['Mixed', [bot(1), { ...bot(2), style: null }], 'A line-up must have exactly one user seat'],
+      [
+        'Custom' as LineUpPreset,
+        [user(1), { ...bot(2), name: null }],
+        'Every bot seat must have a style and a name',
+      ],
+      [
+        'Mixed',
+        [user(1), { ...bot(2), style: null }, ...Array.from({ length: 9 }, (_, i) => bot(i + 3))],
+        'Every bot seat must have a style and a name',
+      ],
+      [
+        'Custom' as LineUpPreset,
+        [user(1), ...Array.from({ length: 10 }, (_, i) => bot(i + 2))],
+        'Table size must be a whole number from 2 to 10',
+      ],
     ];
     for (const [preset, seats, message] of cases) {
       expect(() => resolveLineUpName(preset, seats)).toThrow(new RangeError(message));
@@ -136,6 +163,15 @@ describe('resolveLineUpName and lineUpSessionConfig', () => {
       expect(() =>
         lineUpSessionConfig({ ...DEFAULT_SESSION_CONFIG, button }, 'Mixed', six),
       ).toThrow(new RangeError('Button must be a seat at the table'));
+    }
+    // Seats are resolved before the button is checked.
+    for (const [seats, message] of [
+      [[], 'Seats must be numbered 1 to the table size in ascending order'],
+      [[bot(1), bot(2)], 'A line-up must have exactly one user seat'],
+    ] as const) {
+      expect(() =>
+        lineUpSessionConfig({ ...DEFAULT_SESSION_CONFIG, button: 7 }, 'Mixed', seats),
+      ).toThrow(new RangeError(message));
     }
   });
 });
