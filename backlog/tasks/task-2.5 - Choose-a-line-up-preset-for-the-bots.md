@@ -4,7 +4,7 @@ title: Choose a line-up preset for the bots
 status: To Do
 assignee: []
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-17T23:22:00Z'
+updated_date: '2026-11-22T16:14:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -46,6 +46,7 @@ Plan key: E02-S05 · Dream: limit-holdem-trainer
 - [ ] #4 Given 2 players and the Tough preset, When the bot row is shown, Then the single bot is TAG [REQ-009.7]
 - [ ] #5 Given any preset at 10 players, When the bot rows are shown, Then no two rows share a display name [REQ-009.4]
 - [ ] #6 Given the Soft preset at 6 players, When the user chooses Start game, Then the table's bots have the names and styles listed on Game Config and the session's line-up name is Soft [REQ-009.1, REQ-009.6]
+- [ ] #7 Given Game Config at any table size from 2 to 10, When Start game builds the session with lineUpSessionConfig, Then the button passed is a seat at that table (1..players) so Start game never throws — e.g. heads-up with the default button 6
 <!-- AC:END -->
 
 ## Definition of Done
@@ -63,3 +64,9 @@ Plan key: E02-S05 · Dream: limit-holdem-trainer
 - [ ] #11 Story documentation is written and published to Backlog.md
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+AC added from TASK-6.7 follow-up (lineUpSessionConfig rejects an invalid button, A-4)
+<!-- SECTION:NOTES:END -->
