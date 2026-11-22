@@ -1,0 +1,77 @@
+{
+  "reviewer": "code",
+  "round": 1,
+  "rubric": [
+    {"item": "locked-test integrity (TASK-7.6, 6.6, 7.2, 6.10)", "result": "pass"},
+    {"item": "SPEC-01 correctness", "result": "pass"},
+    {"item": "SPEC-01 test strength", "result": "pass"},
+    {"item": "SPEC-02 correctness", "result": "pass"},
+    {"item": "SPEC-02 test strength", "result": "pass"},
+    {"item": "SPEC-03 correctness", "result": "pass"},
+    {"item": "SPEC-03 test strength", "result": "pass"},
+    {"item": "SPEC-04 correctness", "result": "pass"},
+    {"item": "SPEC-04 test strength", "result": "pass"},
+    {"item": "SPEC-05 correctness", "result": "pass"},
+    {"item": "SPEC-05 test strength", "result": "pass"},
+    {"item": "SPEC-06 correctness", "result": "pass"},
+    {"item": "SPEC-06 test strength", "result": "pass"},
+    {"item": "SPEC-07 correctness", "result": "pass"},
+    {"item": "SPEC-07 test strength", "result": "pass"},
+    {"item": "SPEC-08 correctness", "result": "pass"},
+    {"item": "SPEC-08 test strength", "result": "pass"},
+    {"item": "SPEC-09 correctness", "result": "pass"},
+    {"item": "SPEC-09 test strength", "result": "pass"},
+    {"item": "SPEC-09 time budget (<= 5 s)", "result": "fail"},
+    {"item": "SPEC-10 correctness (chart content)", "result": "pass"},
+    {"item": "SPEC-10 test strength", "result": "pass"},
+    {"item": "SPEC-11 correctness", "result": "pass"},
+    {"item": "SPEC-11 test strength", "result": "pass"},
+    {"item": "SPEC-12 correctness", "result": "pass"},
+    {"item": "SPEC-12 test strength", "result": "pass"},
+    {"item": "SPEC-13 correctness (pace harness on production worker)", "result": "pass"},
+    {"item": "SPEC-14 checks", "result": "pass"},
+    {"item": "SPEC-15 playtests", "result": "pass"},
+    {"item": "scope", "result": "pass"},
+    {"item": "concision", "result": "pass"},
+    {"item": "clarity", "result": "pass"}
+  ],
+  "findings": [
+    {
+      "fingerprint": "src/advice/preflop.ts:a3-fallback-not-limited-to-limpers",
+      "severity": "MINOR",
+      "file": "src/advice/preflop.ts",
+      "line": 96,
+      "issue": "chartSpotOf applies the A-3 'one seat later' fallback to ANY missing (position, situation) spot, not only a missing limpers spot as spec §5 rule 4 and the function's own doc comment say. For heads-up, SEATS_BEFORE_BUTTON has one entry, so named[length - 2] is undefined.",
+      "evidence": "`if (hasSpot) return { position, situation }; const named = SEATS_BEFORE_BUTTON[size]; return { position: named[named.length - 2] as Position, situation };`. Every other missing spot is unreachable today, so nothing breaks now. But if one ever became reachable, this would quietly read the wrong position's cell (or return an undefined position at heads-up) instead of chartCell throwing a clear error.",
+      "fix": "Restrict the fallback to limpers: `if (hasSpot || situation !== 'limpers') return { position, situation };` so any other missing spot still fails loudly in chartCell."
+    },
+    {
+      "fingerprint": "tests/playtest/all-sizes.acceptance.test.ts:ac11-over-5s-budget",
+      "severity": "MINOR",
+      "file": "tests/playtest/all-sizes.acceptance.test.ts",
+      "line": 57,
+      "issue": "SPEC-09 and §9 set every-push tests at 5 s or less. AC#11 took 5.8 s here even with the computeEquity memo, without coverage, on a 14-core Mac. CI 4-vCPU runners with coverage will be slower. The budget is logged, not asserted, so nothing fails.",
+      "evidence": "`npx vitest run tests/playtest/all-sizes.acceptance.test.ts ...` printed `AC#11: 27 line-up runs in 5.8 s` (test 5780 ms).",
+      "fix": "Either get it under 5 s, for example by re-deciding only a deterministic sample of actions per run (every action at sizes 2, 9 and 10 and the first N actions elsewhere, still asserting checked > 0), or have the judge or user accept the overrun against SPEC-09. The spec pins 30 hands per preset and size, so cutting hands needs a spec note."
+    },
+    {
+      "fingerprint": "tests/playtest/all-sizes.acceptance.test.ts:equity-memo-mock-scope",
+      "severity": "NIT",
+      "file": "tests/playtest/all-sizes.acceptance.test.ts",
+      "line": 15,
+      "issue": "The computeEquity memo (vi.mock) is sound. computeEquity is pure and seeded only from its canonical input (src/advice/equity.ts:338-353). EquityInput is plain number arrays, so the JSON.stringify key is exact, and the memo only stops identical inputs from being sampled twice. It applies to the whole file, though, so AC#9's 'default == explicit TAG' run pair also shares memoised results. If computeEquity ever stopped being deterministic, these two tests would not notice.",
+      "evidence": "vi.mock at file top level; AC#9 compares runPlaytest(options) with runPlaytest(options, undefined, { makePolicy: tag }).",
+      "fix": "Optional: add a one-line comment that equity determinism is covered by the equity tests and that this file only checks policy wiring. No code change is needed."
+    },
+    {
+      "fingerprint": "src/playtest/runner.ts:default-policy-factory-ignores-size",
+      "severity": "NIT",
+      "file": "src/playtest/runner.ts",
+      "line": 171,
+      "issue": "defaultPolicyFactory keeps a size parameter it ignores (`(size: number) => PolicyFactory = () => allTag`). The spec's §5 asks for this shape, so it is in spec, but the parameter is now vestigial.",
+      "evidence": "Only caller: runner.ts:216 `makePolicy = defaultPolicyFactory(seats.length)`.",
+      "fix": "Optional follow-up: export `allTag` as the default factory and drop the size argument. This is fine as is per spec."
+    }
+  ],
+  "summary": "Correct and well tested. Locked-test integrity: doit.py test-integrity exits 0 for TASK-7.6, 6.6, 7.2 and 6.10. The three approved edits are exactly as approved: lineup.acceptance AC#6 `it` -> `it.runIf(SLOW)` and note `toBeDefined` -> `toBeUndefined` (Q-4); preflop.acceptance sandbox list gets the 2 chart paths (Q-6); bot-results:116 'Random' -> 'TAG' (Q-7). No other locked file changed. The TASK-6.6 calling-station assertion-count warning predates this branch: the file is not in this diff. Seat mapping follows A-1. The preflop.test.ts table checks every seat and button at sizes 2-10, including empty seats before and wrap-around, and the 6-max order is unchanged. AC#4/#6/#7/#8 worked examples are asserted in table-sizes.acceptance, with cells looked up from the chart rather than hard-coded. A-3 is tested at 7 and 10 seats. Capped-street call/fold is checked at heads-up (BB) and 9-handed (UTG R->call, F->fold). Rock A-4 (chartSpotOf(view,'6-max')) is correct: every mapped 6-max spot exists in rock.json. SPEC-12 covers full-ring UTG+1 -> 6-max UTG in and out of range, and heads-up BB limpers checks. Unlocked tests replace assertions (A-2 mismatch errors, TAG-at-every-size, styled-not-random at 9 seats); none were simply deleted. Validator: parseChart accepts the three sizes, labels and messages are as specified, and the BB-limpers no-fold rule applies at every size. The content tests cover bands, nesting, borderline and alternative rules, justification minimums and no verbatim copies from six-max. Chart spot-check: all widths are inside the §5 bands. The grids match their justifications (FR UTG 77+/ATs+/KQs/AQo+ with AJo and 66 borderline; HU BTN raises 76.5% and limps about 12% of low connected or offsuit hands; HU BB defends 88%). The text reads as freshly written, and every per-spot justification is 30-59 words. Builder judgment on SPEC-02: agreed. Heads-up has no raise-and-calls spot because only one other player exists, so nobody can call a raise before the hero acts again. §5's heads-up list also omits it, and the test explicitly allows for this. SPEC-13: the pace harness uses src/ui/advice/advice.worker.ts, the test worker is deleted, no marker is left, and the Playwright 10-player check passes in Chromium (9.2 s). Playtests at size 2 and size 10 tough show 0 violations, TAG labels and no note. Findings: 2 MINOR (A-3 fallback not limited to limpers; AC#11 at 5.8 s against the 5 s budget) and 2 NIT. No BLOCKER or MAJOR."
+}

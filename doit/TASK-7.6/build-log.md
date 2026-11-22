@@ -27,3 +27,7 @@
 - `npm test`: 187 files (185 passed, 2 skipped); 679 tests: 665 passed, 14 skipped, 0 failed.
 - `TLH_SLOW_TESTS=1 npx vitest run tests/playtest/lineup.acceptance.test.ts`: 4/4 passed.
 - Default 6-max run `npm run -s playtest -- --hands 10000 --seed 42 --size 6 | shasum -a 256` = `442dbf55bd32d87a5e367d3c5b9be28ec9303c57174783eae5947134aa408fbc` (unchanged). A 9-seat run labels `Bot: Seat 1, TAG, …`.
+
+## Fix r1 (TASK-7.6)
+- Item 1: fixed — `src/advice/preflop.ts` `chartSpotOf` returns the viewer's own spot unless it is a missing `limpers` spot (`if (hasSpot || situation !== 'limpers')`). New test `tests/advice/preflop.test.ts` "remaps only a missing limpers spot" (heads-up chart at 6 seats: SB unopened and BTN raise-and-calls are not remapped); verified it fails without the guard (position undefined) and passes with it.
+- `npm run format`, lint, typecheck: clean. `npm test`: 187 files (185 passed, 2 skipped); 680 tests: 666 passed, 14 skipped, 0 failed.

@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-22T22:18:00Z'
+updated_date: '2026-11-22T22:44:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -93,4 +93,8 @@ AC added from TASK-3.13 (10-player pace proven with a test-only policy until 10-
 AC added from TASK-6.6 Q-1
 
 Build blocked on TASK-7.2's AC#6 sandbox file list; user approved adding the two chart paths (Q-6).
+
+Build: heads-up (6 spots) + full-ring (41 spots, 9 positions) authored charts; seat→chart mapping 2–10; random fallbacks and Line-up note removed; Rock maps its 6-max range; pace harness uses real advice worker; user-approved locked edits Q-4 (TASK-6.6), Q-6 (TASK-7.2), Q-7 (TASK-6.10); default label TAG at every size (winrate.ts, outside spec file list — Q-7). million --lineups 50.5 s local; --hands 900 hash now fee5dbb1…; 6-max default SHA unchanged; gate PASS.
+
+Review R1: 0 blocking; locked edits Q-4/Q-6/Q-7 verified exact; MINOR A-3 fallback too broad → fixing in-story; SPEC-09 5.8 s vs 5 s target accepted (sweep group, no coverage).
 <!-- SECTION:NOTES:END -->

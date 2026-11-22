@@ -242,4 +242,16 @@ describe('preflop advice', () => {
       situation: 'limpers',
     });
   });
+
+  it('remaps only a missing limpers spot', () => {
+    // The heads-up chart read at 6 seats has no SB unopened or BTN raise-and-calls spot; they are not moved to
+    // another position.
+    const sbUnopened = viewAfter(2, [f(4), f(5), f(6), f(1)]);
+    expect(chartSpotOf(sbUnopened, 'heads-up')).toEqual({ position: 'SB', situation: 'unopened' });
+    const btnRaiseAndCalls = viewAfter(1, [r(4, 8), c(5, 8), f(6)]);
+    expect(chartSpotOf(btnRaiseAndCalls, 'heads-up')).toEqual({
+      position: 'BTN',
+      situation: 'raise-and-calls',
+    });
+  });
 });

@@ -93,7 +93,7 @@ export function chartSpotOf(
   const hasSpot = APPLICABLE_SPOTS[size].some(
     (s) => s.position === position && s.situation === situation,
   );
-  if (hasSpot) return { position, situation };
+  if (hasSpot || situation !== 'limpers') return { position, situation };
   const named = SEATS_BEFORE_BUTTON[size];
   return { position: named[named.length - 2] as Position, situation };
 }

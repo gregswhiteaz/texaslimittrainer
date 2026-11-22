@@ -9,7 +9,7 @@
 
 ## Modified
 - `src/advice/preflop-chart.ts` — `ReferenceSize`/`Position` widened, `SEATS_BEFORE_BUTTON`, heads-up and full-ring `APPLICABLE_SPOTS`, `parseChart` accepts the three sizes.
-- `src/advice/preflop.ts` — `HEADS_UP_CHART`, `FULL_RING_CHART`, `PREFLOP_CHARTS`, `referenceSizeOf`, `chartSpotOf` (A-3), generalised `positionOf` (A-1), chart selection and the A-2 check in `recommendPreflop`.
+- `src/advice/preflop.ts` — `HEADS_UP_CHART`, `FULL_RING_CHART`, `PREFLOP_CHARTS`, `referenceSizeOf`, `chartSpotOf` (A-3, fallback only for a missing limpers spot), generalised `positionOf` (A-1), chart selection and the A-2 check in `recommendPreflop`.
 - `src/advice/ranges.ts` — A-5: `APPLICABLE_LINES` typed to the 6-max key.
 - `src/bots/rock.ts` — A-4: spot via `chartSpotOf(view, '6-max')`.
 - `src/playtest/runner.ts` — `defaultPolicyFactory` = TAG at every size; unused imports removed; doc comment.
@@ -18,7 +18,7 @@
 - `src/playtest/winrate.ts` — Q-7: default seats are labelled `TAG` at every size (the `Random` label and the now-unused size parameter dropped).
 - `e2e/support/pace-harness.tsx` — production advice worker (D-5).
 - `tests/advice/preflop.acceptance.test.ts` — LOCKED (TASK-7.2), Q-6 approved edit only: heads-up.json and full-ring.json added to the AC#6 sandbox file list.
-- `tests/advice/preflop.test.ts` — non-6 throws replaced by A-2 mismatch errors; new SPEC-11 test "maps every seat at sizes 2 to 10" (referenceSizeOf, A-6, every seat/button at 2–10 incl. empty seats, A-3 at 7 and 10).
+- `tests/advice/preflop.test.ts` — non-6 throws replaced by A-2 mismatch errors; new SPEC-11 test "maps every seat at sizes 2 to 10" (referenceSizeOf, A-6, every seat/button at 2–10 incl. empty seats, A-3 at 7 and 10); "remaps only a missing limpers spot" (fix r1).
 - `tests/advice/preflop-chart.test.ts` — `full-ring` is valid (6-max spot list misses exactly the full-ring-only spots); unknown size `9-max` still fails.
 - `tests/advice/grade.test.ts` — non-6 propagation case replaced by the A-2 mismatch error.
 - `tests/bots/tag.test.ts` — non-6 propagation case replaced by the A-2 mismatch error.
