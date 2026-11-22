@@ -1,4 +1,12 @@
-import type { Situation } from '../advice/preflop-chart';
+import { HAND_CLASSES, type HandClass } from '../advice/hand-class';
+import { SIX_MAX_CHART } from '../advice/preflop';
+import {
+  APPLICABLE_SPOTS,
+  chartCell,
+  type Position,
+  type PreflopChart,
+  type Situation,
+} from '../advice/preflop-chart';
 
 export type StyleName = 'TAG' | 'Calling station' | 'Maniac' | 'Rock';
 const STYLE_NAMES: readonly string[] = [
@@ -54,6 +62,17 @@ export interface BotStyleData {
   readonly mixedSpots: ReadonlyMap<SpotType, MixedSpot>;
   /** In file order; [] when the file has no deviations. */
   readonly deviations: readonly Deviation[];
+  /** In APPLICABLE_SPOTS['6-max'] order; null when the file has no starting range. */
+  readonly startingRange: readonly RangeSpot[] | null;
+}
+
+/** The hand classes a style plays preflop in one chart spot; every other class folds (or checks when free). */
+export interface RangeSpot {
+  readonly position: Position;
+  readonly situation: Situation;
+  /** In file order. */
+  readonly hands: ReadonlySet<HandClass>;
+  readonly justification: string;
 }
 
 export class StyleValidationError extends Error {
@@ -90,8 +109,13 @@ function echo(value: unknown): string {
 const isProbability = (p: unknown): p is number =>
   typeof p === 'number' && Number.isFinite(p) && p >= 0 && p <= 1;
 
-/** Validates authored JSON from `fileName`. Throws StyleValidationError listing every problem. */
-export function parseStyle(raw: unknown, fileName: string): BotStyleData {
+/** Validates authored JSON from `fileName`; a starting range is checked against the TAG `chart`.
+ *  Throws StyleValidationError listing every problem. */
+export function parseStyle(
+  raw: unknown,
+  fileName: string,
+  chart: PreflopChart = SIX_MAX_CHART,
+): BotStyleData {
   if (!isRecord(raw) || raw.format !== FORMAT || raw.version !== 1) {
     throw new StyleValidationError(fileName, [
       `${fileName}: expected format "${FORMAT}" version 1`,
@@ -210,13 +234,132 @@ export function parseStyle(raw: unknown, fileName: string): BotStyleData {
     }
   }
 
+  const startingRange = parseStartingRange(raw.startingRange, fileName, name, chart, problems);
+
   if (problems.length > 0) throw new StyleValidationError(fileName, problems);
   return {
     style: style as StyleName,
     description: raw.description as string,
     mixedSpots,
     deviations,
+    startingRange,
   };
+}
+
+const RANGE_POSITIONS: readonly Position[] = ['UTG', 'HJ', 'CO', 'BTN', 'SB', 'BB'];
+const SIX_MAX_SPOTS = APPLICABLE_SPOTS['6-max'];
+const spotKey = (position: Position, situation: Situation): string => `${position} ${situation}`;
+
+/** The TAG chart's non-fold classes in the spot. */
+function chartPlays(chart: PreflopChart, position: Position, situation: Situation): HandClass[] {
+  return HAND_CLASSES.filter((hc) => chartCell(chart, position, situation, hc).action !== 'fold');
+}
+
+/** Validates `startingRange` into `problems`; null when absent. Each spot's hands must be a narrower subset of the
+ *  chart's non-fold cells, and so must each position's union over its spots. */
+function parseStartingRange(
+  value: unknown,
+  fileName: string,
+  name: string,
+  chart: PreflopChart,
+  problems: string[],
+): RangeSpot[] | null {
+  if (value === undefined) {
+    if (name === 'Rock') problems.push(`${fileName}: style Rock has no starting range`);
+    return null;
+  }
+  if (!Array.isArray(value)) {
+    problems.push(`${fileName}: startingRange must be a list`);
+    return null;
+  }
+  /** Spot key → the parsed spot; `clean` when its hands are a string of known, unrepeated classes. */
+  const found = new Map<string, { spot: RangeSpot; clean: boolean }>();
+  for (const entry of value as unknown[]) {
+    const data = isRecord(entry) ? entry : {};
+    const id = SIX_MAX_SPOTS.find(
+      (s) => s.position === data.position && s.situation === data.situation,
+    );
+    if (id === undefined) {
+      problems.push(
+        `${fileName}: style ${name} starting range has unknown spot "${echo(data.position)}" "${echo(data.situation)}"`,
+      );
+      continue;
+    }
+    const key = spotKey(id.position, id.situation);
+    if (found.has(key)) {
+      problems.push(`${fileName}: style ${name} lists starting range spot ${key} twice`);
+      continue;
+    }
+    const where = `${fileName}: style ${name} starting range ${key}`;
+    const hands = new Set<HandClass>();
+    let clean = typeof data.hands === 'string';
+    if (typeof data.hands === 'string') {
+      for (const token of data.hands.split(/\s+/).filter((t) => t !== '')) {
+        if (!HAND_CLASSES.includes(token)) {
+          problems.push(`${where} has unknown hand class "${echo(token)}"`);
+          clean = false;
+        } else if (hands.has(token)) {
+          problems.push(`${where} lists ${token} twice`);
+          clean = false;
+        } else {
+          hands.add(token);
+        }
+      }
+    } else {
+      problems.push(`${where} hands must be a string of hand classes`);
+    }
+    if (wordCount(data.justification) < JUSTIFICATION_WORDS) {
+      problems.push(`${where} has no justification (at least ${JUSTIFICATION_WORDS} words)`);
+    }
+    if (clean) {
+      for (const hc of hands) {
+        if (chartCell(chart, id.position, id.situation, hc).action === 'fold') {
+          problems.push(`${where} has ${hc}, which the TAG chart folds`);
+        }
+      }
+      const plays = chartPlays(chart, id.position, id.situation).length;
+      if (hands.size >= plays) {
+        problems.push(
+          `${where} has ${hands.size} hand classes, not fewer than the TAG chart's ${plays}`,
+        );
+      }
+    }
+    found.set(key, {
+      spot: { ...id, hands, justification: String(data.justification) },
+      clean,
+    });
+  }
+  for (const id of SIX_MAX_SPOTS) {
+    const key = spotKey(id.position, id.situation);
+    if (!found.has(key)) {
+      problems.push(`${fileName}: style ${name} starting range is missing spot ${key}`);
+    }
+  }
+  for (const position of RANGE_POSITIONS) {
+    const ids = SIX_MAX_SPOTS.filter((s) => s.position === position);
+    const spots = ids.map((s) => found.get(spotKey(s.position, s.situation)));
+    if (spots.some((s) => s === undefined || !s.clean)) continue;
+    const range = new Set(spots.flatMap((s) => [...(s?.spot.hands ?? [])]));
+    const plays = new Set(ids.flatMap((s) => chartPlays(chart, s.position, s.situation)));
+    if (range.size >= plays.size) {
+      problems.push(
+        `${fileName}: style ${name} starting range for ${position} has ${range.size} hand classes, not fewer than the TAG chart's ${plays.size}`,
+      );
+    }
+  }
+  return SIX_MAX_SPOTS.flatMap((s) => {
+    const spot = found.get(spotKey(s.position, s.situation))?.spot;
+    return spot === undefined ? [] : [spot];
+  });
+}
+
+/** The style's range for the spot; undefined when the style has no range or no such spot. */
+export function startingRangeFor(
+  style: BotStyleData,
+  position: Position,
+  situation: Situation,
+): RangeSpot | undefined {
+  return style.startingRange?.find((s) => s.position === position && s.situation === situation);
 }
 
 /** One nextUint32 draw u: 'alternative' iff u < spot.alternative * 2**32, else 'recommended'. */

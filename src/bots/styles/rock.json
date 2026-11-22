@@ -1,0 +1,166 @@
+{
+  "format": "tlh-bot-style",
+  "version": 1,
+  "style": "Rock",
+  "description": "Rock (very tight) plays only a small set of strong starting hands and folds everything else before the flop, even many hands TAG would play. When it does play, it follows the trainer's own advice, so its raises usually mean a big pair or a strong ace. It checks its big blind when that is free rather than folding. Steal its blinds often, and give its bets and raises real respect.",
+  "mixedSpots": [],
+  "deviations": [],
+  "startingRange": [
+    {
+      "position": "UTG",
+      "situation": "unopened",
+      "hands": "AA AKs AQs AJs ATs AKo KK KQs AQo QQ JJ TT 99 88 77",
+      "justification": "First to act with five players behind, the Rock opens only pairs down to sevens and its best aces plus king-queen suited."
+    },
+    {
+      "position": "HJ",
+      "situation": "unopened",
+      "hands": "AA AKs AQs AJs ATs A9s AKo KK KQs KJs AQo KQo QQ AJo JJ TT 99 88 77 66",
+      "justification": "With one fewer player behind, the Rock adds sixes, a few suited aces and the strongest offsuit broadway hands to its opens."
+    },
+    {
+      "position": "CO",
+      "situation": "unopened",
+      "hands": "AA AKs AQs AJs ATs A9s A8s A5s AKo KK KQs KJs KTs AQo KQo QQ QJs AJo KJo JJ JTs ATo TT T9s 99 88 77 66 55",
+      "justification": "In the cutoff only three players remain, so the Rock opens some suited connectors and fives, still far fewer hands than TAG."
+    },
+    {
+      "position": "BTN",
+      "situation": "unopened",
+      "hands": "AA AKs AQs AJs ATs A9s A8s A7s A6s A5s A4s A3s A2s AKo KK KQs KJs KTs K9s AQo KQo QQ QJs QTs Q9s AJo KJo QJo JJ JTs J9s ATo KTo TT T9s A9o 99 98s 88 77 66 55 44 33 22",
+      "justification": "On the button the Rock acts last after the flop, so it opens every pair and suited ace but skips TAG's weaker offsuit steals."
+    },
+    {
+      "position": "SB",
+      "situation": "unopened",
+      "hands": "AA AKs AQs AJs ATs A9s AKo KK KQs KJs KTs AQo KQo QQ QJs AJo KJo JJ JTs ATo TT 99 88 77 66",
+      "justification": "From the small blind the Rock plays out of position against the big blind, so it raises only a cutoff-strength range and folds the rest."
+    },
+    {
+      "position": "HJ",
+      "situation": "limpers",
+      "hands": "AA AKs AQs AJs AKo KK KQs AQo QQ JJ TT 99 88",
+      "justification": "After limpers the Rock raises only hands that dominate typical limping ranges and does not join the pot with speculative hands."
+    },
+    {
+      "position": "CO",
+      "situation": "limpers",
+      "hands": "AA AKs AQs AJs ATs AKo KK KQs KJs AQo QQ AJo JJ TT 99 88 77 66",
+      "justification": "In the cutoff behind limpers the Rock isolates with strong aces and pairs and overlimps only small pairs that can flop a set."
+    },
+    {
+      "position": "BTN",
+      "situation": "limpers",
+      "hands": "AA AKs AQs AJs ATs AKo KK KQs KJs KTs AQo KQo QQ QJs AJo JJ TT 99 88 77 66 55 44",
+      "justification": "With position on every limper, the Rock raises its broadway hands and big pairs and limps behind with small pairs for set value."
+    },
+    {
+      "position": "SB",
+      "situation": "limpers",
+      "hands": "AA AKs AQs AJs AKo KK KQs AQo QQ JJ TT 99 88 77",
+      "justification": "The small blind will be out of position all hand, so the Rock completes or raises only with pairs and its strongest broadway hands."
+    },
+    {
+      "position": "BB",
+      "situation": "limpers",
+      "hands": "AA AKs AQs AJs AKo KK KQs AQo QQ JJ TT 99",
+      "justification": "In the big blind after limps the Rock checks for free with everything and raises only its premium pairs and best broadway hands."
+    },
+    {
+      "position": "UTG",
+      "situation": "raise",
+      "hands": "AA AKs AQs AKo KK QQ JJ",
+      "justification": "Facing a raise after limping first, the Rock continues only with big pairs and ace-king or ace-queen suited and folds the rest."
+    },
+    {
+      "position": "HJ",
+      "situation": "raise",
+      "hands": "AA AKs AQs AKo KK QQ JJ TT",
+      "justification": "Against a single early raise the Rock re-raises only premium pairs and big aces, folding the hands TAG would call with."
+    },
+    {
+      "position": "CO",
+      "situation": "raise",
+      "hands": "AA AKs AQs AJs AKo KK AQo QQ JJ TT",
+      "justification": "From the cutoff against one raise the Rock adds ace-jack suited and ace-queen offsuit and still folds every other hand."
+    },
+    {
+      "position": "BTN",
+      "situation": "raise",
+      "hands": "AA AKs AQs AJs AKo KK KQs AQo QQ JJ TT 99",
+      "justification": "On the button against one raise the Rock plays a slightly wider premium range because it keeps position for every later street."
+    },
+    {
+      "position": "UTG",
+      "situation": "raise-and-calls",
+      "hands": "AA AKs AQs AKo KK QQ JJ",
+      "justification": "With a raise and callers behind the first limp the Rock needs a premium hand, because several opponents already show interest."
+    },
+    {
+      "position": "HJ",
+      "situation": "raise-and-calls",
+      "hands": "AA AKs AQs AKo KK QQ JJ TT",
+      "justification": "Against a raise and callers the Rock continues with big pairs and its best aces and passes on the drawing hands TAG calls."
+    },
+    {
+      "position": "CO",
+      "situation": "raise-and-calls",
+      "hands": "AA AKs AQs AJs AKo KK QQ JJ TT 99 88",
+      "justification": "In the cutoff with a raise and callers, the pot is big enough for the Rock to call with medium pairs hoping to flop a set."
+    },
+    {
+      "position": "BTN",
+      "situation": "raise-and-calls",
+      "hands": "AA AKs AQs AJs AKo KK KQs AQo QQ JJ TT 99 88 77",
+      "justification": "On the button in a multiway raised pot, the Rock adds a few pairs and king-queen suited because position makes them easier to play."
+    },
+    {
+      "position": "UTG",
+      "situation": "re-raise",
+      "hands": "AA AKs AKo KK QQ",
+      "justification": "Facing a re-raise the Rock continues only with aces, kings, queens and ace-king, which keeps its range nearly impossible to bluff."
+    },
+    {
+      "position": "HJ",
+      "situation": "re-raise",
+      "hands": "AA AKs AKo KK QQ",
+      "justification": "From the hijack against a re-raise the Rock keeps the same five premium hands and folds everything else, even jacks."
+    },
+    {
+      "position": "CO",
+      "situation": "re-raise",
+      "hands": "AA AKs AKo KK QQ JJ",
+      "justification": "In the cutoff against a re-raise the Rock adds pocket jacks as a call, since later positions re-raise with wider ranges."
+    },
+    {
+      "position": "BTN",
+      "situation": "re-raise",
+      "hands": "AA AKs AQs AKo KK QQ JJ",
+      "justification": "On the button against a re-raise the Rock plays its premium pairs and two best suited aces, folding the hands TAG continues with."
+    },
+    {
+      "position": "SB",
+      "situation": "re-raise",
+      "hands": "AA AKs AKo KK QQ",
+      "justification": "In the small blind against a re-raise the Rock will be out of position, so it continues only with the five strongest hands."
+    },
+    {
+      "position": "BB",
+      "situation": "re-raise",
+      "hands": "AA AKs AKo KK QQ JJ",
+      "justification": "In the big blind against a re-raise the Rock has some chips invested already, so it adds jacks and otherwise folds."
+    },
+    {
+      "position": "SB",
+      "situation": "blind-defence",
+      "hands": "AA AKs AQs AJs AKo KK KQs AQo QQ JJ TT 99",
+      "justification": "Defending the small blind against a steal, the Rock re-raises its strong hands and folds the rest instead of calling out of position."
+    },
+    {
+      "position": "BB",
+      "situation": "blind-defence",
+      "hands": "AA AKs AQs AJs ATs A9s A8s A7s A6s A5s A4s A3s A2s AKo KK KQs KJs KTs K9s AQo KQo QQ QJs QTs AJo KJo JJ JTs J9s ATo TT T9s 99 98s 88 77 66 55 44 33 22",
+      "justification": "The big blind gets a good price against a single raise, so the Rock defends every pair, suited aces and connected broadway hands."
+    }
+  ]
+}

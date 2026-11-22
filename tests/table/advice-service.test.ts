@@ -4,6 +4,7 @@ import { recommend } from '../../src/advice/recommend';
 import { botRandom } from '../../src/engine/bot-random';
 import { decideCallingStation } from '../../src/bots/calling-station';
 import { decideManiac } from '../../src/bots/maniac';
+import { decideRock } from '../../src/bots/rock';
 import { decideTag } from '../../src/bots/tag';
 import { Xoshiro128 } from '../../src/engine/seeded-random';
 import { handReplayCode, playHand } from '../../src/playtest/runner';
@@ -101,13 +102,11 @@ describe('advice service', () => {
           ok: true,
           value: decideCallingStation(view, { random: botRandom(seed) }),
         });
-        for (const style of ['TAG', 'Rock'] as const) {
-          expect(handleAdviceRequest({ id: 2, kind: 'bot', view, style, seed })).toEqual({
-            id: 2,
-            ok: true,
-            value: decideTag(view, { random: botRandom(seed) }),
-          });
-        }
+        expect(handleAdviceRequest({ id: 2, kind: 'bot', view, style: 'TAG', seed })).toEqual({
+          id: 2,
+          ok: true,
+          value: decideTag(view, { random: botRandom(seed) }),
+        });
       }
     }
     // A postflop view with nothing owed: the Calling station checks.
@@ -126,6 +125,19 @@ describe('advice service', () => {
           id: 4,
           ok: true,
           value: decideManiac(view, { random: botRandom(seed) }),
+        });
+      }
+    }
+  });
+
+  it('default bot decision dispatches the Rock', () => {
+    const { preflop, flop } = views();
+    for (const view of [preflop, flop]) {
+      for (const seed of [0, 12345, 4294967295]) {
+        expect(handleAdviceRequest({ id: 5, kind: 'bot', view, style: 'Rock', seed })).toEqual({
+          id: 5,
+          ok: true,
+          value: decideRock(view),
         });
       }
     }

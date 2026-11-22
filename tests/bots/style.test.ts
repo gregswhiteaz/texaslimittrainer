@@ -4,11 +4,14 @@ import {
   drawMixed,
   findDeviation,
   parseStyle,
+  startingRangeFor,
   StyleValidationError,
   type MixedSpot,
 } from '../../src/bots/style';
+import { APPLICABLE_SPOTS } from '../../src/advice/preflop-chart';
 import { CALLING_STATION_STYLE } from '../../src/bots/calling-station';
 import { MANIAC_STYLE } from '../../src/bots/maniac';
+import { ROCK_STYLE } from '../../src/bots/rock';
 import { TAG_STYLE, decideTag } from '../../src/bots/tag';
 import type { PlayerView } from '../../src/engine/player-view';
 import { seededTagPolicy } from '../../src/playtest/policy';
@@ -325,6 +328,101 @@ describe('bot style files', () => {
       'x.json: style ? deviation preflop raise has no justification (at least 10 words)',
       'x.json: style ? has unsupported deviation "undefined" "undefined" to "undefined"',
     ]);
+  });
+
+  it('parseStyle validates starting ranges', () => {
+    const spots = APPLICABLE_SPOTS['6-max'];
+    const rangeEntry = (position: string, situation: string, overrides = {}) => ({
+      position,
+      situation,
+      hands: position === 'BB' && situation === 'limpers' ? 'AA KK' : 'AA',
+      justification: JUSTIFICATION,
+      ...overrides,
+    });
+    const range = (
+      change: (entry: Record<string, unknown>) => Record<string, unknown> = (e) => e,
+    ) => spots.map((s) => change(rangeEntry(s.position, s.situation)));
+    const isSpot = (e: Record<string, unknown>, position: string, situation: string) =>
+      e.position === position && e.situation === situation;
+    const UTG = 'x.json: style TAG starting range UTG unopened';
+
+    const parsed = parseStyle(file({ startingRange: range().reverse() }), 'x.json');
+    expect(parsed.startingRange?.map((s) => `${s.position} ${s.situation}`)).toEqual(
+      spots.map((s) => `${s.position} ${s.situation}`),
+    );
+    expect(parsed.startingRange?.map((s) => [...s.hands])).toEqual(
+      spots.map((s) => (s.position === 'BB' && s.situation === 'limpers' ? ['AA', 'KK'] : ['AA'])),
+    );
+    expect(parsed.startingRange?.[0]?.justification).toBe(JUSTIFICATION);
+
+    expect(problemsOf(file({ startingRange: {} }))).toEqual([
+      'x.json: startingRange must be a list',
+    ]);
+    expect(
+      problemsOf(
+        file({
+          startingRange: range((e) =>
+            isSpot(e, 'UTG', 'unopened') ? { ...e, situation: 'blind-defence' } : e,
+          ),
+        }),
+      ),
+    ).toEqual([
+      'x.json: style TAG starting range has unknown spot "UTG" "blind-defence"',
+      'x.json: style TAG starting range is missing spot UTG unopened',
+    ]);
+    expect(
+      problemsOf(file({ startingRange: [...range(), rangeEntry('HJ', 'raise', { hands: 'KK' })] })),
+    ).toEqual(['x.json: style TAG lists starting range spot HJ raise twice']);
+    const atUtg = (overrides: Record<string, unknown>) =>
+      problemsOf(
+        file({
+          startingRange: range((e) => (isSpot(e, 'UTG', 'unopened') ? { ...e, ...overrides } : e)),
+        }),
+      );
+    expect(atUtg({ hands: 5 })).toEqual([`${UTG} hands must be a string of hand classes`]);
+    expect(atUtg({ hands: 'AA AKx' })).toEqual([`${UTG} has unknown hand class "AKx"`]);
+    expect(atUtg({ hands: 'AA AA' })).toEqual([`${UTG} lists AA twice`]);
+    expect(atUtg({ justification: 'One two three four five six seven eight nine.' })).toEqual([
+      `${UTG} has no justification (at least 10 words)`,
+    ]);
+    const empty = parseStyle(
+      file({
+        startingRange: range((e) => (isSpot(e, 'UTG', 'unopened') ? { ...e, hands: '' } : e)),
+      }),
+      'x.json',
+    );
+    expect(startingRangeFor(empty, 'UTG', 'unopened')?.hands.size).toBe(0);
+
+    // Several problems are all listed, and untrusted text is cut to 20 characters.
+    const long = 'p'.repeat(30);
+    expect(
+      problemsOf(
+        file({
+          startingRange: [
+            ...range((e) =>
+              isSpot(e, 'UTG', 'unopened')
+                ? { ...e, hands: `AA ${'K'.repeat(30)} AA`, justification: '' }
+                : e,
+            ),
+            rangeEntry(long, 'unopened'),
+            7,
+          ],
+        }),
+      ),
+    ).toEqual([
+      `${UTG} has unknown hand class "${'K'.repeat(20)}..."`,
+      `${UTG} lists AA twice`,
+      `${UTG} has no justification (at least 10 words)`,
+      `x.json: style TAG starting range has unknown spot "${'p'.repeat(20)}..." "unopened"`,
+      'x.json: style TAG starting range has unknown spot "undefined" "undefined"',
+    ]);
+
+    expect(parseStyle(tagJson, 'tag.json').startingRange).toBeNull();
+    expect(parseStyle(callingStationJson, 'calling-station.json').startingRange).toBeNull();
+    expect(MANIAC_STYLE.startingRange).toBeNull();
+    expect(TAG_STYLE.startingRange).toBeNull();
+    expect(startingRangeFor(ROCK_STYLE, 'BB', 'limpers')?.hands.has('AA')).toBe(true);
+    expect(startingRangeFor(TAG_STYLE, 'UTG', 'unopened')).toBeUndefined();
   });
 
   it('drawMixed thresholds and when TAG draws', () => {
