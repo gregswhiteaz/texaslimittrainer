@@ -1,10 +1,11 @@
 ---
 id: TASK-6.15
 title: Replay any hand with every bot acting exactly as before
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-17T23:03:00Z'
-updated_date: '2026-11-22T18:28:00Z'
+updated_date: '2026-11-22T19:32:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -42,7 +43,6 @@ Plan key: E06-S15 · Dream: limit-holdem-trainer
 - [ ] #1 Given 1,000 recorded hands from a 6-max TAG playtest in which seat 1 follows a scripted user policy, When each hand is replayed with its replay code and seat 1's recorded actions, Then every bot action matches in order and amount [REQ-028.2]
 - [ ] #2 Given 1,000 recorded hands from a 6-max Mixed playtest in which seat 1 follows a scripted user policy, When each hand is replayed with its replay code and seat 1's recorded actions, Then every bot action of every style matches in order and amount [REQ-028.2]
 - [ ] #3 Given a recorded hand, When it is replayed with the same replay code but a different user action at the first decision, Then the replay still deals the same cards and every bot decision point reached identically before that action matches the original [REQ-028.1, REQ-028.2]
-- [ ] #4 Given a hand played in the app or replayed with --replay-code, When bots decide, Then they receive the same earlier-showdowns list they had when the hand was first played (the app session passes earlier showdowns like the playtest runner does since TASK-6.9)
 <!-- AC:END -->
 
 ## Definition of Done
@@ -61,8 +61,22 @@ Plan key: E06-S15 · Dream: limit-holdem-trainer
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
 
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. PlaytestSeams.userPolicy seam (seat 1 scripted user), scriptedPolicy(actions, then?).
+2. replayWithBots(record, lineUp, userPolicy): replays a hand letting bots decide again from the replay code (seatStylesPolicyFactory for replaced bots).
+3. recordStacks moved to the runner; CLI output unchanged.
+4. Acceptance: 1,000 TAG and 1,000 Mixed hands replay every bot action exactly; changed first user action keeps cards and earlier bot decisions.
+5. Former AC#4 moved to TASK-6.23 (depends on TASK-6.20).
+
+Full spec: doit/TASK-6.15/spec.md
+<!-- SECTION:PLAN:END -->
+
 ## Implementation Notes
 
 <!-- SECTION:NOTES:BEGIN -->
 AC added from TASK-6.9 follow-up (app session and replay pass no earlier showdowns)
+
+AC#4 (earlier showdowns on replay) moved to a follow-up task depending on spike TASK-6.20 (Q-1 auto-accepted: don't pre-empt the user's replay-context decision).
 <!-- SECTION:NOTES:END -->

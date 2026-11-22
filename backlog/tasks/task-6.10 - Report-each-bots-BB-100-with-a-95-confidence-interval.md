@@ -20,7 +20,7 @@ documentation:
 parent_task_id: TASK-6
 priority: high
 type: feature
-ordinal: 58000
+ordinal: 500
 ---
 
 ## Description

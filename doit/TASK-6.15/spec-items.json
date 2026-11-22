@@ -1,0 +1,56 @@
+[
+  {
+    "id": "SPEC-01",
+    "verifies": "AC#1, DoD#1",
+    "verification": "acceptance `tests/playtest/bot-replay.acceptance.test.ts::replaying 1,000 6-max TAG hands with the user's recorded actions reproduces every bot action`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-02",
+    "verifies": "AC#2, DoD#1",
+    "verification": "acceptance `tests/playtest/bot-replay.acceptance.test.ts::replaying 1,000 6-max Mixed hands with the user's recorded actions reproduces every bot action of every style`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-03",
+    "verifies": "AC#3, DoD#1",
+    "verification": "acceptance `tests/playtest/bot-replay.acceptance.test.ts::replaying with a different first user action deals the same cards and keeps every bot action before it`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-04",
+    "verifies": "AC#1, AC#2",
+    "verification": "unit `tests/playtest/runner.test.ts::userPolicy replaces only seat 1's policy`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-05",
+    "verifies": "AC#1, AC#3",
+    "verification": "unit `tests/playtest/policy.test.ts::scriptedPolicy returns recorded actions in order, then falls back or throws`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-06",
+    "verifies": "AC#1, AC#2",
+    "verification": "unit `tests/playtest/runner.test.ts::replayWithBots replays the record's table and reports a diverged user script`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-07",
+    "verifies": "DoD#6",
+    "verification": "command `npm run -s playtest -- --hands 10000 --seed 42 --size 6 | shasum -a 256 && npm run -s playtest -- --hands 10000 --seed 42 --size 6 --lineup mixed | tail -3`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-08",
+    "verifies": "DoD#1, DoD#2, DoD#3, DoD#4, DoD#5, DoD#10",
+    "verification": "command `npm run lint && npm run typecheck && npm test`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-09",
+    "verifies": "DoD#7, DoD#8, DoD#9, DoD#11, DoD#12",
+    "verification": "manual `grep -rn \"fetch(\\|XMLHttpRequest\\|WebSocket\" src/playtest` finds nothing; `backlog doc list --plain` shows the TASK-6.15 doc",
+    "status": "pending"
+  }
+]
