@@ -34,11 +34,14 @@ async function listFiles(args: string[]): Promise<string[]> {
     timeoutMs: TOOLCHAIN_TIMEOUT_MS - 20_000,
   });
   expect(result.exitCode, result.output).toBe(0);
-  return result.output
+  const lines = result.output
     .split('\n')
     .map((line) => line.trim())
-    .filter((line) => /^[\w./-]+\.test\.tsx?$/.test(line))
-    .sort();
+    .filter((line) => line !== '');
+  const files = lines.filter((line) => /^[\w./-]+\.test\.tsx?$/.test(line));
+  // Every non-empty line must be a test path, so no file is silently dropped.
+  expect(lines, 'unrecognised vitest list output').toEqual(files);
+  return files.sort();
 }
 
 /** A group script's filter arguments: `vitest run [--coverage] <args>` → `<args>`. */

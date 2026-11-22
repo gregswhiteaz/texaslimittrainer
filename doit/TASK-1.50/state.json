@@ -4,10 +4,10 @@
   "branch": "doit/TASK-1.50",
   "base_commit": "0e792fa285d3e677606a291f463d907fbb29924e",
   "started": "2026-11-21T20:13:52",
-  "review_round": 0,
+  "review_round": 1,
   "judge_round": 0,
   "sendbacks": 0,
-  "gate_runs": 5,
+  "gate_runs": 6,
   "questions": 6,
   "assumptions": 0,
   "escalations": 0,
@@ -15,7 +15,7 @@
   "locked_tests": {
     "tests/ci/branch-protection.acceptance.test.ts": "3687516d374756b04030ceffe4c1b34c5ea646b5420c393c9a4bf9010dadbf18",
     "tests/ci/ci-jobs.acceptance.test.ts": "c99ef9f76c1f62aa4fc15ba0725f7754a210e20ba6cda5e41a5a6274e265d037",
-    "tests/toolchain/test-groups.acceptance.test.ts": "559428eedb808b0779aea3a7632d6777ebaf09a96a3737fd4502fff264736668"
+    "tests/toolchain/test-groups.acceptance.test.ts": "51afe83bf4038a561366b51531acae63edfc2b5e96566fa2c29eb1db89cbd196"
   },
   "test_snapshot": {
     "tests/ci/ci-jobs.acceptance.test.ts": {
@@ -29,8 +29,8 @@
       "skips": 0
     },
     "tests/toolchain/test-groups.acceptance.test.ts": {
-      "sha": "559428eedb808b0779aea3a7632d6777ebaf09a96a3737fd4502fff264736668",
-      "asserts": 20,
+      "sha": "51afe83bf4038a561366b51531acae63edfc2b5e96566fa2c29eb1db89cbd196",
+      "asserts": 21,
       "skips": 0
     },
     "e2e/action-bar-limits.spec.ts": {
@@ -995,9 +995,18 @@
       "event": "unlock",
       "file": "tests/toolchain/test-groups.acceptance.test.ts",
       "reason": "CI run #165: GitHub Actions colours vitest output, so plain-text toContain failed; strip ANSI before matching (also makes the not.toContain check meaningful \u2014 strengthen)"
+    },
+    {
+      "t": "2026-11-21T21:15:56",
+      "event": "unlock",
+      "file": "tests/toolchain/test-groups.acceptance.test.ts",
+      "reason": "Code review R1 MINOR: partition check must fail on unparseable vitest list lines (strengthen)"
     }
   ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-1.50",
   "spec_sha256": "971f31348a705f1295396b8c055cc08ba438b4eb771a71cca0948201642aacbe",
-  "relock_pending": []
+  "relock_pending": [],
+  "review_findings": {
+    "1": 0
+  }
 }

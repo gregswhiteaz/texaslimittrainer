@@ -114,13 +114,14 @@ describe('tooling change detector', () => {
       'package-lock.json',
       'tests/ci/x.test.ts',
       'README.md',
+      'index.html',
       'tests/engine/x.perf.test.ts',
     ]) {
       const before = git('rev-parse', 'HEAD');
       const head = commit({ [path]: `// ${path}\n` });
       const result = push(before, head);
       expectDecision(result, true);
-      expect(result.lines.slice(0, -1), path).toEqual(['1 tooling file(s) changed', path]);
+      expect(result.lines.slice(0, -1), path).toEqual(['1 tooling file(s) changed', `  ${path}`]);
     }
 
     const beforeRename = git('rev-parse', 'HEAD');
@@ -129,7 +130,7 @@ describe('tooling change detector', () => {
     git('commit', '-m', 'rename');
     const renamed = push(beforeRename, git('rev-parse', 'HEAD'));
     expectDecision(renamed, true);
-    expect(renamed.lines).toContain('tools/a.js');
+    expect(renamed.lines).toContain('  tools/a.js');
 
     const scheduled = detect(['--event', 'schedule', '--base', '']);
     expectDecision(scheduled, true);
@@ -191,8 +192,24 @@ describe('tooling change detector', () => {
     const control = commit({ 'tools/x\n::error::y.js': '\n' });
     const controlResult = push(beforeControl, control);
     expectDecision(controlResult, true);
-    expect(controlResult.lines).toContain('tools/x?::error::y.js');
+    expect(controlResult.lines).toContain('  tools/x?::error::y.js');
     expect(controlResult.lines).not.toContain('::error::y.js');
+
+    // A perf test file named like a workflow command still counts, and is listed indented.
+    const beforeCommand = git('rev-parse', 'HEAD');
+    const command = commit({ '::error::x.perf.test.ts': '\n' });
+    const commandResult = push(beforeCommand, command);
+    expectDecision(commandResult, true);
+    expect(commandResult.lines).toEqual([
+      '1 tooling file(s) changed',
+      '  ::error::x.perf.test.ts',
+      'tooling=true',
+    ]);
+    expect(isToolingPath('::error::x.perf.test.ts')).toBe(true);
+    const workflowCommands = (lines: string[]) =>
+      lines.filter((line) => line.startsWith('::') && !line.startsWith('::warning::'));
+    expect(workflowCommands(commandResult.lines)).toEqual([]);
+    expect(workflowCommands(controlResult.lines)).toEqual([]);
   });
 
   it('every repo file a tooling test reads is a tooling path', () => {
@@ -207,6 +224,8 @@ describe('tooling change detector', () => {
       for (const [, path = ''] of source.matchAll(/join\(REPO_ROOT, '([^']+)'\)/g)) read.add(path);
       for (const [, path = ''] of source.matchAll(/readFileSync\(\s*'([^'/][^']*)'/g))
         read.add(path);
+      // A test that runs the build reads Vite's entry, `index.html`.
+      if (/\['run', 'build'/.test(source)) read.add('index.html');
     }
     const speedLimits = readFileSync(
       join(REPO_ROOT, 'tests/ci/speed-limits.acceptance.test.ts'),
@@ -219,6 +238,7 @@ describe('tooling change detector', () => {
     for (const [, path = ''] of configFiles.matchAll(/'([^']+)'/g)) read.add(path);
 
     expect(read).toContain('README.md');
+    expect(read).toContain('index.html');
     expect(read).toContain('tests/engine/hand-evaluator.perf.test.ts');
     expect(read).toContain('vite.config.ts');
     expect(read).toContain('src/engine/bot-random.ts');

@@ -65,3 +65,11 @@ After merge (A-2): record the first `main` run's wall time in story-doc.md, and 
 ## Live runs (orchestrator)
 - Run A1 #165 (44983160212, c24fd6f): FAIL — Tooling tests: test-groups.acceptance `toContain('Coverage enabled with v8')` failed because GitHub Actions colours vitest output. Fixed (b968549): sandbox output checks use `stripVTControlCharacters` (own test unlocked, strengthen — the `not.toContain('ERROR: Coverage')` check is now meaningful under colour too). Wall 247 s.
 - Run A2 #166 (44983750106, b968549): SUCCESS, all 7 jobs, wall 212 s (unit 73, shard1 136, shard2 107, tooling 108, e2e 210, checks 46, detect 20).
+- Run B #167 (44984056839, 10e6a4d, doit/-only change): SUCCESS; detector printed tooling=false; Tooling tests skipped; other 6 success; wall 229 s.
+
+## FIX round 1 (review MINORs)
+- 1 fixed: `tools/ci/tooling-changed.js` lists matched paths indented two spaces; test commits `::error::x.perf.test.ts`, asserts it counts as tooling and no stdout line other than `::warning::` starts with `::`.
+- 2 fixed: `index.html` added to `TOOLING_FILES` and the README list; SPEC-09 test adds `index.html` for tests that run `npm run build` and asserts it is in the read set; `index.html` added to the trigger loop.
+- 3 fixed: `listFiles` asserts every non-empty `vitest list --filesOnly` line is a test path (output checked locally: only paths and a trailing blank). ANSI stripping kept; all prior assertions kept.
+- NIT left as is.
+- `npm run format`: clean. eslint + tsc on touched files: OK. `npm test`: 164 files passed, 1 skipped; 575 tests passed, 8 skipped.

@@ -58,7 +58,7 @@ The tooling tests run only when a push or pull request changes a tooling file: a
 `tools/`, `.github/`, `tests/ci/`, `tests/git/`, `tests/toolchain/`, `tests/support/` or
 `e2e/cards.visual.spec.ts-snapshots/`; `package.json`, `package-lock.json`, `tsconfig.json`,
 `eslint.config.js`, `vite.config.ts`, `playwright.config.ts`, `.prettierrc.json`, `.prettierignore`,
-`.nvmrc`, `README.md` or `src/engine/bot-random.ts`; or any `*.perf.test.*` file. A push is compared
+`.nvmrc`, `README.md`, `index.html` or `src/engine/bot-random.ts`; or any `*.perf.test.*` file. A push is compared
 with the previous push (a new branch with where it left the default branch), and a pull request
 with its base. When the detector cannot tell what changed (an unknown event, a missing or unknown
 commit, a git error), it runs the tooling tests and prints a warning naming the reason; it never

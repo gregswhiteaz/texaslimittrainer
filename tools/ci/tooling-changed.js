@@ -3,7 +3,8 @@
 // change base cannot be determined it decides `tooling=true` and prints a `::warning::` line.
 // Usage: node tools/ci/tooling-changed.js --event <name> [--base <sha>] [--head <sha>]
 //        [--default-branch <name>]
-// Prints the reason, up to 20 matched paths and `tooling=true|false` as the last line; appends
+// Prints the reason, up to 20 matched paths (indented two spaces, so a file name can never start a
+// workflow-command line) and `tooling=true|false` as the last line; appends
 // `tooling=<v>` to $GITHUB_OUTPUT when set. Exit codes: 0 decided, 2 usage error.
 import { spawnSync } from 'node:child_process';
 import { appendFileSync } from 'node:fs';
@@ -32,6 +33,7 @@ export const TOOLING_FILES = [
   '.prettierignore',
   '.nvmrc',
   'README.md',
+  'index.html',
   'src/engine/bot-random.ts',
 ];
 
@@ -142,7 +144,10 @@ function parseOptions(argv) {
 /** @param {string[]} argv */
 function main(argv) {
   const decision = decide(parseOptions(argv));
-  const lines = [decision.reason, ...decision.matched.slice(0, MAX_LISTED).map(safe)];
+  const lines = [
+    decision.reason,
+    ...decision.matched.slice(0, MAX_LISTED).map((path) => `  ${safe(path)}`),
+  ];
   if (decision.matched.length > MAX_LISTED) {
     lines.push(`... and ${decision.matched.length - MAX_LISTED} more`);
   }
