@@ -4,14 +4,30 @@
   "branch": "doit/TASK-6.6",
   "base_commit": "551c270f9c36e72e001e796b97227ddd5cb90e73",
   "started": "2026-11-21T21:54:07",
-  "review_round": 1,
-  "judge_round": 0,
+  "review_round": 2,
+  "judge_round": 1,
   "sendbacks": 0,
   "gate_runs": 3,
   "questions": 3,
   "assumptions": 0,
   "escalations": 0,
-  "item_failures": {},
+  "item_failures": {
+    "SPEC-01": 0,
+    "SPEC-02": 0,
+    "SPEC-03": 0,
+    "SPEC-04": 0,
+    "SPEC-05": 0,
+    "SPEC-06": 0,
+    "SPEC-07": 0,
+    "SPEC-08": 0,
+    "SPEC-09": 0,
+    "SPEC-10": 0,
+    "SPEC-11": 0,
+    "SPEC-12": 0,
+    "SPEC-13": 0,
+    "SPEC-14": 0,
+    "SPEC-15": 0
+  },
   "locked_tests": {
     "tests/bots/lineup.acceptance.test.ts": "dae629a039958fd10faf8aca6af371f320fe0e0c9185ee8a8903688843e39c3a",
     "tests/playtest/lineup.acceptance.test.ts": "e362e92fd8fb792c2a0609e9d89d793b97eef7e872480001e4d5a0bc7d0b6383"
@@ -1007,11 +1023,16 @@
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-6.6",
   "spec_sha256": "3faa9b01f1e3e53df9f34419983e86a99ae31800498c98b6ec85721c9efad7f2",
   "review_findings": {
-    "1": 1
+    "1": 1,
+    "2": 0
   },
   "brief_history": {
     "tests/playtest/cli.test.ts:lineup-replay-policies-untested": [
       "review r1"
     ]
+  },
+  "doc_id": "doc-79",
+  "judge_results": {
+    "1": "PASS"
   }
 }

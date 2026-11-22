@@ -3,90 +3,90 @@
     "id": "SPEC-01",
     "verifies": "AC#1, DoD#1",
     "verification": "acceptance `tests/bots/lineup.acceptance.test.ts::AC#1 Mixed at 6 players with the user at seat 4`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-02",
     "verifies": "AC#2",
     "verification": "acceptance `tests/bots/lineup.acceptance.test.ts::AC#2 Tough at 6 players with the user at seat 4`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-03",
     "verifies": "AC#3",
     "verification": "acceptance `tests/bots/lineup.acceptance.test.ts::AC#3 every preset, size and user seat follows the preset rule`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-04",
     "verifies": "AC#4",
     "verification": "acceptance `tests/bots/lineup.acceptance.test.ts::AC#4 heads-up Tough seats a single TAG`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-05",
     "verifies": "AC#5",
     "verification": "acceptance `tests/bots/lineup.acceptance.test.ts::AC#5 no two bots share a display name`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-06",
     "verifies": "AC#3, DoD#4",
     "verification": "unit `tests/bots/lineup.test.ts::seatLineUp rejects bad input and matches the worked examples`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-07",
     "verifies": "DoD#2, DoD#4",
     "verification": "unit `tests/table/advice-service.test.ts::decideStyle matches each bot's own decision`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-08",
     "verifies": "AC#6, DoD#6",
     "verification": "unit `tests/playtest/policy.test.ts::lineUpPolicyFactory plays the preset at 6 seats and random moves otherwise`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-09",
     "verifies": "AC#6, DoD#6",
     "verification": "acceptance `tests/playtest/lineup.acceptance.test.ts::AC#6 tough line-up at 9 players seats the Maniac at seat 2 and plays 10,000 clean hands`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-10",
     "verifies": "AC#7",
     "verification": "acceptance `tests/playtest/lineup.acceptance.test.ts::AC#7 an unknown line-up name prints the valid names and exits non-zero`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-11",
     "verifies": "AC#8, DoD#6",
     "verification": "acceptance `tests/playtest/lineup.acceptance.test.ts::each preset plays 200 clean 6-max hands`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-12",
     "verifies": "AC#8, DoD#6",
     "verification": "acceptance `tests/playtest/lineup.acceptance.test.ts::AC#8 10,000-hand Maniac line-ups stay practical (slow, opt-in)`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-13",
     "verifies": "AC#7, DoD#4",
     "verification": "unit `tests/playtest/cli.test.ts::--lineup parsing, header lines and replay suffix`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-14",
     "verifies": "DoD#6",
     "verification": "command `npm run -s playtest -- --hands 10000 --seed 42 --size 6 | shasum -a 256`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-15",
     "verifies": "DoD#2, DoD#3, DoD#4, DoD#5, DoD#7, DoD#8, DoD#9, DoD#10, DoD#11, DoD#12",
     "verification": "command `npm run lint && npm run typecheck && npm test`",
-    "status": "pending"
+    "status": "pass"
   }
 ]
