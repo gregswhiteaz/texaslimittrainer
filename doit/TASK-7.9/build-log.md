@@ -17,3 +17,4 @@
 
 - `npm run e2e`: 164 passed, 12 skipped.
 - `doit.py gate TASK-7.9`: build #1 FAIL (changes.md backtick parsing), build #2 PASS (540 lines, 9 files).
+- FIX r1 (orchestrator): review MINOR comment in tests/advice/ranges.test.ts corrected; NIT docs wording (pot-odds and implied-odds rules).

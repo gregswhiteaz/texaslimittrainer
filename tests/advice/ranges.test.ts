@@ -485,7 +485,7 @@ describe('drawOuts', () => {
     expect(outs('9c 8d', '7h 6s 2c')).toEqual(sorted([...ofRank('5'), ...ofRank('T')]));
     // 2345 is completed by the ace below and the 6 above.
     expect(outs('2c 3d', '4h 5s Kc')).toEqual(sorted([...ofRank('6'), ...ofRank('A')]));
-    // An out already seen is not counted.
+    // A made straight has no straight-draw outs.
     expect(outs('9c 8d', '7h 6s Tc')).toEqual([]);
     expect(outs('9c 8d', '7h 6s 5c 2d')).toEqual([]);
   });

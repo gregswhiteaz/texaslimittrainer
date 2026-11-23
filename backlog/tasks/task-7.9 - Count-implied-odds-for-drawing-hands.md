@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-23T07:51:00Z'
+updated_date: '2026-11-23T08:17:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -82,4 +82,6 @@ Full spec: doit/TASK-7.9/spec.md
 
 <!-- SECTION:NOTES:BEGIN -->
 TASK-7.9 Q-4 (auto-accepted): AC#1/#3 example opponent range corrected {KsQd} → {AsKd}. With {KsQd} the three remaining aces also win (pair of aces beats kings), equity 27.3% = 12/44, so the example fired pot-odds-call. With {AsKd} an ace gives the opponent two pair; equity is exactly 9/44 = 20.5%. The Notes line 'only the 9 remaining hearts win' now holds for {AsKd}.
+
+Build: drawOuts + implied-odds-call rule, impliedRequiredEquityPct/outs fields; new 10k SHA 14d746f736d6afd3968e7ae7e833814d95dab94378c80c11dd59b1fd6ea72e48 (million 900 unchanged 4ff17256…); style bands all in (3 seeds); e2e 164 pass; gate PASS.
 <!-- SECTION:NOTES:END -->

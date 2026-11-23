@@ -101,7 +101,7 @@ The rules are checked in the order below and the first one that matches decides 
 - **Example:** six players at $4/$8. The small blind bets $4 into a $16 flop pot, so the pot is $20
   and required equity is 4 ÷ 24 = 16.7%. If the hero's equity against the hands that would call a
   raise is 50.1%, the advice is raise. If the flop already has four bets in, the raise is not legal,
-  so the same hand is called or folded by the pot-odds rules below.
+  so the same hand is called or folded by the pot-odds and implied-odds rules below.
 - **Why:** a raise puts more chips in when the hero is ahead of the hands that will keep paying.
   Just calling gives up the extra chips those hands would have put in.
 

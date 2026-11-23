@@ -1,0 +1,3 @@
+{"reviewer": "security", "round": 1,
+ "findings": [],
+ "summary": "No security findings. drawOuts(hole, board) reads only view.holeCards and view.board (hero's own PlayerView); payers counts only public folded/allIn flags on PublicPlayer, so no opponent hole cards or deck state leak into advice. impliedRequiredEquityPct is computed only when owed > 0, payers > 0 and stakes.bigBet > 0, so the denominator pot + call + bigBet*payers is strictly positive (no NaN/Infinity); otherwise null. New fields are number | null and number[] (Card = number), structured-clone safe through the advice worker (worker-host postMessage). No new dependencies, no randomness, no I/O, no new trust boundary; spec section 8 N/A is accurate."}
