@@ -18,3 +18,15 @@
 - `npm test` → 217 files passed | 3 skipped; 967 passed | 41 skipped (1008), 0 failed.
 - Playtest `--hands 10000 --seed 42 | shasum -a 256` → 1eb65ef2cbd611efa25a131801e52f97546fdeb40fea3efc841db8cf861238a5 (unchanged), invariant violations 0.
 - `npm run format`, `npm run lint`, `npm run typecheck` → clean.
+
+## FIX (review round 1)
+
+- Item 1 (range width never checked): fixed. Unit test `rangeWidthPct(AA, AKs, AKo)` ≈ 22/1326 × 100; AC#2 now asserts the typical UTG open-raise `widthPct` equals the default classes' summed `comboCount` / 1326 × 100 computed in the test, and that the view's dead cards remove combos from that range (the "before dead cards" rule).
+- Item 2 (n > 100 cap untested): fixed. `scaledWidthPct(20, 60, 250)` ≈ 60 and `(20, 0, 150)` ≈ 0; an estimate at 150 hands gives widthPct = PFR (35) and the same start as 100 hands.
+- Orchestrator MINOR (stat choice): fixed. Unit test covers limp, open-raise, call-raise, three-bet, call-three-bet (two views) and four-bet: widthPct matches the right stat and not the other (vpip 40 ≠ pfr 10, n = 50), d counted in the test.
+- Orchestrator MINOR (circular import): fixed. `basisText` and `OBSERVED_MIN_HANDS` live in explanations.ts (type-only imports); ranges.ts and explain.ts no longer import each other. explain.ts re-exports `basisText`; ranges.ts re-exports `OBSERVED_MIN_HANDS`.
+- Orchestrator MINOR (docs): fixed. Known-limits note in docs/advice/range-model.md and in the hand-order.json justification, pointing to TASK-7.29. No ordering or code change.
+- No assertion dropped or loosened.
+- `npx vitest run` on the three touched test files → 36/36 passed. `npm test` → 217 files passed | 3 skipped; 970 passed | 41 skipped (1011), 0 failed.
+- `npm run format`, `npm run lint`, `npm run typecheck` → clean.
+- Playtest `--hands 10000 --seed 42 | shasum -a 256` → 1eb65ef2cbd611efa25a131801e52f97546fdeb40fea3efc841db8cf861238a5 (unchanged).

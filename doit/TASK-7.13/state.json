@@ -4,21 +4,21 @@
   "branch": "doit/TASK-7.13",
   "base_commit": "f64f89cb9c393b65335a8f2e493c745fa210c537",
   "started": "2026-11-23T08:58:20",
-  "review_round": 0,
+  "review_round": 1,
   "judge_round": 0,
   "sendbacks": 0,
-  "gate_runs": 2,
+  "gate_runs": 4,
   "questions": 4,
   "assumptions": 8,
   "escalations": 0,
   "item_failures": {},
   "locked_tests": {
-    "tests/advice/observed-ranges.acceptance.test.ts": "80e1da20509b05d709d30d7df8157ff3aea92a311a25ccf8b9ae564420d23532"
+    "tests/advice/observed-ranges.acceptance.test.ts": "4355616d19b31c872cc31714adf2ace9736d4afae614075ab853bf2d0b8e31e7"
   },
   "test_snapshot": {
     "tests/advice/observed-ranges.acceptance.test.ts": {
-      "sha": "80e1da20509b05d709d30d7df8157ff3aea92a311a25ccf8b9ae564420d23532",
-      "asserts": 35,
+      "sha": "4355616d19b31c872cc31714adf2ace9736d4afae614075ab853bf2d0b8e31e7",
+      "asserts": 38,
       "skips": 0
     },
     "tests/advice/observed-ranges.test.ts": {
@@ -1312,7 +1312,26 @@
       "skips": 0
     }
   },
-  "history": [],
+  "history": [
+    {
+      "t": "2026-11-23T09:31:29",
+      "event": "unlock",
+      "file": "tests/advice/observed-ranges.acceptance.test.ts",
+      "reason": "Review R1 MAJORs: pin hand-computed width values and the n>100 cap (strengthen only)"
+    }
+  ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-7.13",
-  "spec_sha256": "856d0ee79e993c33fea765a4e1b9c495275d76f784934f7712ccfa943be84753"
+  "spec_sha256": "856d0ee79e993c33fea765a4e1b9c495275d76f784934f7712ccfa943be84753",
+  "review_findings": {
+    "1": 2
+  },
+  "relock_pending": [],
+  "brief_history": {
+    "tests/advice/observed-ranges.acceptance.test.ts:range-width-pct-never-checked-against-a-value": [
+      "review r1"
+    ],
+    "tests/advice/observed-ranges.acceptance.test.ts:hands-over-100-cap-untested": [
+      "review r1"
+    ]
+  }
 }

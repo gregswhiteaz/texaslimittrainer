@@ -3,12 +3,13 @@ File: /Users/gregwhite/Documents/claudeworkspaces/limitholdem/backlog/tasks/task
 Task TASK-7.13 - Adjust opponent ranges to their observed play after 30 hands
 ==================================================
 
-Status: ○ To Do
+Status: ◒ In Progress
 Priority: High
 Type: feature
 Ordinal: 72000
+Assignee: @claude
 Created: 2026-11-17 22:46 (UTC)
-Updated: 2026-11-23 09:25 (UTC)
+Updated: 2026-11-23 16:39 (UTC)
 Labels: dream-limit-holdem-trainer
 Milestone: m-1
 Parent: TASK-7 - Get trustworthy advice
@@ -33,7 +34,7 @@ Depends on (2 direct, 11 total):
 └─ TASK-7.12 - Enabler: shared style-stat functions for VPIP, PFR, Aggression, WTSD and W$SD [completed]
    └─ TASK-1.4 - Play a complete fixed-limit hand from blinds to showdown [completed] (shown above)
 
-Dependents (4 direct, 53 total):
+Dependents (5 direct, 54 total):
 ├─ TASK-7 - Get trustworthy advice [To Do]
 ├─ TASK-7.14 - Check advice against postflop golden spots on every test run [To Do]
 │  └─ TASK-7 - Get trustworthy advice [To Do] (shown above)
@@ -120,6 +121,7 @@ Dependents (4 direct, 53 total):
 │  │  │  └─ TASK-10 - Read the session report [To Do] (shown above)
 │  │  └─ TASK-11.1 - See my Major errors per 100 hands trend on the Statistics screen [To Do] (shown above)
 │  └─ TASK-7 - Get trustworthy advice [To Do] (shown above)
+├─ TASK-7.29 - Decide the hand order and re-raise scaling for observed-opponent ranges [To Do]
 └─ TASK-8.1 - Ask for a hint and see the recommended action with its numbers and reason [To Do]
    ├─ TASK-5.3 - Read every sit-and-go chip amount without a $ sign [To Do] (shown above)
    ├─ TASK-8 - Ask for a hint [To Do] (shown above)
@@ -180,7 +182,20 @@ Definition of Done:
 - [ ] #11 Story documentation is written and published to Backlog.md
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 
+Implementation Plan:
+--------------------------------------------------
+1. src/advice/ranges/hand-order.json: 169 classes by preflop equity vs random (seeded computeEquity), justification, load-time validation.
+2. Range scaling: width = d + (o − d)·min(n,100)/100 from 30 hands; strongest-width prefix, AA floor; PFR for raising lines, VPIP for calling/limping.
+3. observedOpponents advice input; estimateOpponentRanges basis/widthPct; PostflopRecommendation.opponentBasis; explanation lead clause when scaled.
+4. Tests (AC#1–#7), locked re-pin, docs; bots unchanged (SHA same).
+
+Full spec: doit/TASK-7.13/spec.md
+
 Implementation Notes:
 --------------------------------------------------
 AC added from TASK-7.10 follow-up (opponent-type template).
+
+Build: hand-order.json (169 classes by preflop equity vs random), observed-stat range scaling from 30 hands (AA floor), opponentBasis on postflop recs, explanation lead clause; block 1 (TASK-7.8 key list, TASK-7.2 sandbox list, non-array snapshot ignored) auto-accepted; playtest SHA unchanged; gate PASS.
+
+doit: parked — autopilot stopped by user (GitHub Actions spending limit reached, jobs not starting). Build 71f284b pushed; review R1 FIX was interrupted mid-run (working tree may hold partial test edits; re-run /doit TASK-7.13 to resume FIX round 1).
 

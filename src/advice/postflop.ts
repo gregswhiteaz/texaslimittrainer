@@ -1,7 +1,8 @@
 import type { Card } from '../engine/cards';
 import type { Action } from '../engine/hand';
 import type { PlayerView, PublicPlayer } from '../engine/player-view';
-import { basisText, explainPostflop } from './explain';
+import { explainPostflop } from './explain';
+import { basisText } from './explanations';
 import { computeEquity, type EquityInput, type EquityResult, type Range } from './equity';
 import {
   callingRange,

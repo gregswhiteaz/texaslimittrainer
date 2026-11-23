@@ -8,7 +8,9 @@ import {
   expandRange,
   HAND_ORDER,
   parseHandOrder,
+  rangeWidthPct,
   RangeValidationError,
+  scaledWidthPct,
   SIX_MAX_RANGES,
   strongestClasses,
   unseenCombos,
@@ -70,6 +72,35 @@ const LIMPED: Step[] = [
   [2, 'call', 2],
   [3, 'check'],
 ];
+
+/** UTG (4) opens, HJ (5) three-bets, UTG calls: flop, UTG to act against the three-bettor. */
+const THREE_BET: Step[] = [
+  [4, 'raise', 8],
+  [5, 'raise', 12],
+  [6, 'fold'],
+  [1, 'fold'],
+  [2, 'fold'],
+  [3, 'fold'],
+  [4, 'call', 4],
+];
+/** UTG (4) opens, HJ (5) three-bets, UTG four-bets, HJ calls: flop, UTG to act. */
+const FOUR_BET: Step[] = [
+  [4, 'raise', 8],
+  [5, 'raise', 12],
+  [6, 'fold'],
+  [1, 'fold'],
+  [2, 'fold'],
+  [3, 'fold'],
+  [4, 'raise', 16],
+  [5, 'call', 4],
+];
+
+/** Combos of `classes` as a percent of 1326, counted here rather than with rangeWidthPct. */
+const widthOf = (classes: Iterable<string>) => {
+  let combos = 0;
+  for (const hc of classes) combos += comboCount(hc);
+  return (combos / 1326) * 100;
+};
 
 /** Reports 50% for the hero; records every input. */
 function recordingEquity() {
@@ -171,6 +202,52 @@ describe('hand order', () => {
     expect(prefix).toEqual(HAND_ORDER.slice(0, prefix.length));
     expect(combos(prefix)).toBeGreaterThanOrEqual(165.75);
     expect(combos(prefix.slice(0, -1))).toBeLessThan(165.75);
+  });
+});
+
+describe('range width and scaling', () => {
+  it('counts combos of the classes as a percent of 1326', () => {
+    expect(rangeWidthPct(new Set(['AA', 'AKs', 'AKo']))).toBeCloseTo(
+      ((6 + 4 + 12) / 1326) * 100,
+      9,
+    );
+    expect(rangeWidthPct(new Set())).toBe(0);
+    expect(rangeWidthPct(new Set(HAND_CLASSES))).toBeCloseTo(100, 9);
+  });
+
+  it('caps the observed hands at 100', () => {
+    expect(scaledWidthPct(20, 60, 250)).toBeCloseTo(60, 9);
+    expect(scaledWidthPct(20, 0, 150)).toBeCloseTo(0, 9);
+    const view = toActView(MULTIWAY);
+    const at = (hands: number) =>
+      estimateOpponentRanges(view, [entry({ hands, vpip: 45, pfr: 35 })]).find((r) => r.seat === 4);
+    expect(at(150)?.widthPct).toBeCloseTo(35, 9);
+    expect(at(150)?.start).toEqual(at(100)?.start);
+    expect(at(150)?.basis.text).toBe('based on 150 hands of this opponent');
+  });
+
+  it('scales each line by its stat: PFR for raises, VPIP for calls', () => {
+    const afterCheck = (steps: Step[]): Step[] => [...steps, [4, 'check']];
+    const cases = [
+      [LIMPED, 4, 'limp', 'vpip'],
+      [MULTIWAY, 4, 'open-raise', 'pfr'],
+      [MULTIWAY, 6, 'call-raise', 'vpip'],
+      [THREE_BET, 5, 'three-bet', 'pfr'],
+      [afterCheck(THREE_BET), 4, 'call-three-bet', 'vpip'],
+      [FOUR_BET, 5, 'call-three-bet', 'vpip'],
+      [afterCheck(FOUR_BET), 4, 'four-bet', 'pfr'],
+    ] as const;
+    for (const [steps, seat, line, stat] of cases) {
+      const view = toActView([...steps]);
+      const obs = entry({ seat, hands: 50, vpip: 40, pfr: 10 });
+      const range = estimateOpponentRanges(view, [obs]).find((r) => r.seat === seat);
+      expect(range?.line, line).toBe(line);
+      const d = widthOf(defaultRange(SIX_MAX_RANGES, range?.position ?? 'BB', line).classes);
+      const other = stat === 'vpip' ? 'pfr' : 'vpip';
+      expect(range?.widthPct, line).toBeCloseTo(d + ((obs[stat] - d) * 50) / 100, 9);
+      expect(range?.widthPct, line).not.toBeCloseTo(d + ((obs[other] - d) * 50) / 100, 9);
+      expect(range?.basis.observedHands, line).toBe(50);
+    }
   });
 });
 

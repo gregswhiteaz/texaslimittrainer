@@ -122,6 +122,16 @@ describe('observed opponent ranges acceptance', () => {
       [RAISER, CALLER].map((seat): ObservedOpponent => ({ seat, hands: 30, ...stats })),
     );
     const [tight, loose] = snapshots.map((s) => estimateOpponentRanges(view, s));
+    // d counts the default range's combos before dead cards, as a percent of 1326.
+    const openClasses = defaultRange(SIX_MAX_RANGES, 'UTG', 'open-raise').classes;
+    let openCombos = 0;
+    for (const hc of openClasses) openCombos += comboCount(hc);
+    expect(expandRange(openClasses, deadOf(view)).length).toBeLessThan(openCombos);
+    expect(positionOf({ ...view, seat: RAISER })).toBe('UTG');
+    expect(rangeOf(estimateOpponentRanges(view), RAISER).widthPct).toBeCloseTo(
+      (openCombos / 1326) * 100,
+      9,
+    );
     for (const [seat, line, stat] of [
       [RAISER, 'open-raise', 'pfr'],
       [CALLER, 'call-raise', 'vpip'],

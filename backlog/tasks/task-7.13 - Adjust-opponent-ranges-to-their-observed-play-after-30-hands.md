@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-23T16:05:00Z'
+updated_date: '2026-11-23T16:39:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -83,4 +83,8 @@ Full spec: doit/TASK-7.13/spec.md
 
 <!-- SECTION:NOTES:BEGIN -->
 AC added from TASK-7.10 follow-up (opponent-type template).
+
+Build: hand-order.json (169 classes by preflop equity vs random), observed-stat range scaling from 30 hands (AA floor), opponentBasis on postflop recs, explanation lead clause; block 1 (TASK-7.8 key list, TASK-7.2 sandbox list, non-array snapshot ignored) auto-accepted; playtest SHA unchanged; gate PASS.
+
+doit: parked — autopilot stopped by user (GitHub Actions spending limit reached, jobs not starting). Build 71f284b pushed; review R1 FIX was interrupted mid-run (working tree may hold partial test edits; re-run /doit TASK-7.13 to resume FIX round 1).
 <!-- SECTION:NOTES:END -->

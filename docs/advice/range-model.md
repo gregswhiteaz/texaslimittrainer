@@ -131,6 +131,12 @@ Equal numbers keep the starting-hand grid order. AA (85.5%) is first and 32o (32
 file is checked when the app loads: it needs its format and version, a justification of at least
 50 words, all 169 classes once each, falling equities and AA first.
 
+**Known limits.** Equity against one random hand values offsuit high-card hands above suited
+connectors: Q2o (47.1%) ranks ahead of 76s (45.2%), although 76s plays better against the ranges
+real opponents hold. Scaling the `three-bet` and `four-bet` lines by PFR % also widens those
+re-raise ranges a lot, since an opponent's raise rate is far higher than their re-raise rate. A
+follow-up decision task (TASK-7.29) tracks whether to change the order or the re-raise scaling.
+
 Dead cards, narrowing after the flop and the safety rules then apply as for a default range.
 
 **Basis.** Each estimate and each postflop recommendation states, per live opponent, which range

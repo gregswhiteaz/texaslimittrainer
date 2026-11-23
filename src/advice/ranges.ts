@@ -8,7 +8,7 @@ import {
 } from '../engine/hand-evaluator';
 import type { PlayerView } from '../engine/player-view';
 import type { HoleCards } from './equity';
-import { basisText } from './explain';
+import { basisText, OBSERVED_MIN_HANDS } from './explanations';
 import { comboCount, HAND_CLASSES, handClassOf, type HandClass } from './hand-class';
 import { positionOf } from './preflop';
 import type { Position, ReferenceSize } from './preflop-chart';
@@ -292,7 +292,7 @@ export function parseHandOrder(raw: unknown): readonly HandClass[] {
 /** The 169 classes strongest first, from ranges/hand-order.json, validated at import. */
 export const HAND_ORDER: readonly HandClass[] = parseHandOrder(handOrder);
 
-export const OBSERVED_MIN_HANDS = 30;
+export { OBSERVED_MIN_HANDS };
 export const OBSERVED_FULL_HANDS = 100;
 export const ALL_COMBOS = 1326;
 

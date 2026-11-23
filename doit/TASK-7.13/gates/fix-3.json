@@ -1,0 +1,70 @@
+{
+  "task": "TASK-7.13",
+  "phase": "fix",
+  "run": 3,
+  "result": "FAIL",
+  "changed_lines": 1069,
+  "changed_files": [
+    "docs/advice/explanations.md",
+    "docs/advice/postflop-rules.md",
+    "docs/advice/range-model.md",
+    "src/advice/explain.ts",
+    "src/advice/explanations.ts",
+    "src/advice/postflop.ts",
+    "src/advice/ranges.ts",
+    "src/advice/ranges/hand-order.json",
+    "tests/advice/explain.test.ts",
+    "tests/advice/observed-ranges.acceptance.test.ts",
+    "tests/advice/observed-ranges.test.ts",
+    "tests/advice/postflop.acceptance.test.ts",
+    "tests/advice/preflop.acceptance.test.ts",
+    "tests/advice/value-bet.acceptance.test.ts"
+  ],
+  "checks": [
+    {
+      "name": "test command",
+      "status": "fail",
+      "detail": "$ npm test\nexit 127\n\n> tlh-trainer@0.0.0 test\n> vitest run --coverage\n\nsh: vitest: command not found\n"
+    },
+    {
+      "name": "lint command",
+      "status": "fail",
+      "detail": "$ npm run lint\nexit 127\n\n> tlh-trainer@0.0.0 lint\n> node tools/lint/sync-copies.js && eslint . --max-warnings 0 && prettier --check .\n\nsh: eslint: command not found\n"
+    },
+    {
+      "name": "typecheck command",
+      "status": "fail",
+      "detail": "$ npm run typecheck\nexit 127\n\n> tlh-trainer@0.0.0 typecheck\n> tsc -p tsconfig.json\n\nsh: tsc: command not found\n"
+    },
+    {
+      "name": "spec unchanged",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "name": "scope budget (lines)",
+      "status": "warn",
+      "detail": "1069 changed lines vs budget 900 (fail above 1800)"
+    },
+    {
+      "name": "scope budget (files)",
+      "status": "warn",
+      "detail": "14 files vs budget 13"
+    },
+    {
+      "name": "files outside spec",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "name": "all changes listed in changes.md",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "name": "test integrity",
+      "status": "pass",
+      "detail": ""
+    }
+  ]
+}

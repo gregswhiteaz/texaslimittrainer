@@ -1,20 +1,20 @@
 import {
   ADVICE_ING,
   CONCEPTS,
-  OBSERVED_BASIS,
+  OBSERVED_MIN_HANDS,
   OPPONENT_TYPE_LEAD,
   POSTFLOP_TEMPLATES,
   PREFLOP_CONTEXT,
   PREFLOP_SENTENCES,
   RANK_NAMES,
   SEAT_NAMES,
-  TYPICAL_PLAYER_BASIS,
   type PreflopSentenceKey,
 } from './explanations';
 import type { HandClass } from './hand-class';
 import type { PostflopRecommendation } from './postflop';
 import type { PreflopRecommendation } from './preflop';
-import { OBSERVED_MIN_HANDS } from './ranges';
+
+export { basisText } from './explanations';
 
 /** `${pct.toFixed(1)}%`. */
 export function formatPct(pct: number): string {
@@ -33,13 +33,6 @@ export function fillTemplate(template: string, values: Readonly<Record<string, s
     if (value === undefined) throw new Error(`Unknown template placeholder {${name}}`);
     return value;
   });
-}
-
-/** 'typical player' for null, else 'based on N hands of this opponent'. */
-export function basisText(observedHands: number | null): string {
-  return observedHands === null
-    ? TYPICAL_PLAYER_BASIS
-    : fillTemplate(OBSERVED_BASIS, { hands: String(observedHands) });
 }
 
 function rankName(rank: string) {

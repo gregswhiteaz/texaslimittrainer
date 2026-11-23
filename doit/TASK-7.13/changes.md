@@ -16,3 +16,14 @@
 - `docs/advice/postflop-rules.md` — TASK-7.13 "later work" note replaced.
 
 No new dependencies.
+
+## FIX (review round 1)
+
+- `src/advice/explanations.ts` — now holds `basisText` (fills the authored basis strings) and `OBSERVED_MIN_HANDS`, so neither ranges.ts nor explain.ts imports the other (breaks the ranges ↔ explain cycle, including via preflop.ts).
+- `src/advice/explain.ts` — `basisText` moved out (re-exported from explanations.ts); `OBSERVED_MIN_HANDS` read from explanations.ts instead of ranges.ts.
+- `src/advice/ranges.ts` — imports `basisText` and `OBSERVED_MIN_HANDS` from explanations.ts and re-exports `OBSERVED_MIN_HANDS`.
+- `src/advice/postflop.ts` — imports `basisText` from explanations.ts.
+- `src/advice/ranges/hand-order.json` — justification notes the known limits (Q2o above 76s; PFR scaling widens re-raise ranges) and the follow-up TASK-7.29. Order and equities unchanged.
+- `docs/advice/range-model.md` — "Known limits" paragraph with the same note.
+- `tests/advice/observed-ranges.acceptance.test.ts` — AC#2 pins the UTG open-raise typical `widthPct` to the default classes' combo count / 1326 × 100 counted in the test, on a view whose dead cards cut the default range.
+- `tests/advice/observed-ranges.test.ts` — `rangeWidthPct` against a hand-computed value, the min(n, 100) cap (formula and an estimate at 150 hands), and the PFR/VPIP stat choice for limp, open-raise, call-raise, three-bet, call-three-bet and four-bet.
