@@ -1,0 +1,102 @@
+{
+  "round": 2,
+  "test_suite": {
+    "command": "npm test",
+    "result": "PASS",
+    "passed": 970,
+    "failed": 0,
+    "notes": "Round 2 re-run at HEAD 056065c: exit 0, Test Files 217 passed | 3 skipped (220); Tests 970 passed | 41 skipped (1011); coverage thresholds met. Skips are the pre-existing opt-in slow tests."
+  },
+  "end_to_end": {
+    "command": "npm run -s playtest -- --hands 10000 --seed 42 (plus the spec section 10 judge scenario: a multiway flop recommendation with real equity, with and without a snapshot)",
+    "result": "PASS",
+    "expected": "Playtest stdout SHA-256 1eb65ef2cbd611efa25a131801e52f97546fdeb40fea3efc841db8cf861238a5 and 'Invariant violations: 0'; without a snapshot both opponents are 'typical player' and the explanation is unchanged; with a snapshot (seat 4 at 45 hands, seat 6 at 12) the bases read 'based on 45 hands of this opponent' / 'typical player' and the explanation opens with the opponent-type lead clause, still at most 3 sentences.",
+    "actual": "Round 2: playtest stdout SHA-256 1eb65ef2cbd611efa25a131801e52f97546fdeb40fea3efc841db8cf861238a5, 'Invariant violations: 0'. Judge scenario re-run: with snapshot bases [{4,45,'based on 45 hands of this opponent'},{6,null,'typical player'}], explanation opens with the opponent-type lead clause, 2 sentences, equity 45.8%. Matches round 1."
+  },
+  "integrity": {
+    "result": "PASS",
+    "notes": "Round 2: doit.py test-integrity TASK-7.13 exit 0. git diff 056065c..HEAD is empty (HEAD is 056065c); working-tree changes are only doit/TASK-7.13 bookkeeping (spec-items.json, state.json), no product or test code. Round-1 diff review stands: doit.py test-integrity TASK-7.13 exit 0 (no output). Diff against f64f89c reviewed: no test-input recognition, hard-coded expected values, early exits or mocks of the unit under test. Locked edits are the approved D-4 re-pin (postflop AC#1 adds opponentBasis) and the block-1 resolutions (value-bet AC#9 key list adds 'opponentBasis'; preflop AC#6 sandbox list adds hand-order.json), recorded in qa.md; range-model AC#8 is unchanged and handled via the recorded non-array spec amendment. Mutation checks in a scratch worktree (removing the n<=100 cap, open-raise using VPIP, threshold >30, dropping the AA floor, scaling the check line) each made the new tests fail."
+  },
+  "items": [
+    {
+      "spec": "SPEC-01",
+      "result": "PASS",
+      "evidence": "Round 2: code unchanged since round 1 (HEAD 056065c, no product diff); npm test re-run passes (970/0) and holdout re-run 8723 passes / 0 failures. Round 1: AC#1 test passes and asserts start/combos equal the no-snapshot result, equal expandRange(default open-raise classes, dead) and the typical basis. Holdout: on a different view (CO open, BTN call) 29 hands with VPIP/PFR 70 keeps the default start and 'typical player'; 30 hands switches to observed; hands 0 is typical."
+    },
+    {
+      "spec": "SPEC-02",
+      "result": "PASS",
+      "evidence": "Round 2: code unchanged since round 1 (HEAD 056065c, no product diff); npm test re-run passes (970/0) and holdout re-run 8723 passes / 0 failures. Round 1: AC#2 passes; it checks differing starts, widthPct = scaledWidthPct(d, o, 30) and start = expandRange(strongestClasses(width), dead) for raiser (PFR) and caller (VPIP), and pins typical d independently. Holdout: on another view the open-raiser width uses PFR and the caller width uses VPIP (formula to 1e-9), start is the strongest-width prefix, o = d still uses the prefix (A-8), width 100 gives every unseen combo, narrowed combos are a subset of start."
+    },
+    {
+      "spec": "SPEC-03",
+      "result": "PASS",
+      "evidence": "Round 2: code unchanged since round 1 (HEAD 056065c, no product diff); npm test re-run passes (970/0) and holdout re-run 8723 passes / 0 failures. Round 1: AC#3 passes (opponentBasis [{4,40,'based on 40 hands of this opponent'}], repeat call deep-equal). Holdout: 31 and 120 hands give 'based on 31/120 hands of this opponent'; gradeView carries the basis and propagates snapshot RangeErrors."
+    },
+    {
+      "spec": "SPEC-04",
+      "result": "PASS",
+      "evidence": "Round 2: code unchanged since round 1 (HEAD 056065c, no product diff); npm test re-run passes (970/0) and holdout re-run 8723 passes / 0 failures. Round 1: AC#4 passes (seats [4,6], texts ['based on 45 hands of this opponent','typical player']). Holdout: over 150 random six-max postflop spots the basis list has one entry per live opponent in ascending seat order with the mixed observed/typical split as expected; end-to-end scenario shows the same with real equity."
+    },
+    {
+      "spec": "SPEC-05",
+      "result": "PASS",
+      "evidence": "Round 2: code unchanged since round 1 (HEAD 056065c, no product diff); npm test re-run passes (970/0) and holdout re-run 8723 passes / 0 failures. Round 1: AC#5 passes (14, 20, 44, 60 to 9 dp). Holdout: scaledWidthPct(30,10,50)=20, (12,80,30)=32.4, cap at n=1000 gives o."
+    },
+    {
+      "spec": "SPEC-06",
+      "result": "PASS",
+      "evidence": "Round 2: code unchanged since round 1 (HEAD 056065c, no product diff); npm test re-run passes (970/0) and holdout re-run 8723 passes / 0 failures. Round 1: AC#6 passes (width 0, start = 6 AA combos, no ace dead). Holdout: strongestClasses(-5) = {AA}; with hero AcAd and Ah on board the zero-width AA range is fully blocked and falls back to every unseen combo while the basis stays observed (A-5). Note: for a CO open default the zero width comes out 3.6e-15 rather than exactly 0 (see J-1-02, LOW)."
+    },
+    {
+      "spec": "SPEC-07",
+      "result": "PASS",
+      "evidence": "Round 2: code unchanged since round 1 (HEAD 056065c, no product diff); npm test re-run passes (970/0) and holdout re-run 8723 passes / 0 failures. Round 1: AC#7 passes. Holdout: across pot-odds-call, pot-odds-fold, value-raise, value-bet and check-free outcomes (random spots plus an equity sweep facing a bet) the observed explanation starts with the exact lead text including the CONCEPTS definition, equals lead + lower-cased original, keeps the same 1-3 sentence count each ending in .!?; without a snapshot (or when only check-line opponents are observed) no 'opponent type' appears. Base-commit comparison: 123 spots of typical-path recommend output (actions and unseen modes, fixed and real equity) are byte-identical to f64f89c apart from the new opponentBasis key."
+    },
+    {
+      "spec": "SPEC-08",
+      "result": "PASS",
+      "evidence": "Round 2: code unchanged since round 1 (HEAD 056065c, no product diff); npm test re-run passes (970/0) and holdout re-run 8723 passes / 0 failures. Round 1: Unit 'hand order' tests pass. Holdout: recomputed all 169 class equities with the section 5 rule 7 procedure: 0 mismatches and the sorted order is identical to HAND_ORDER. Justification is 175 words. parseHandOrder rejects null, version 2, non-array hands, a reversed tie (AJo/66), duplicate AA and an Infinity equity, each as RangeValidationError listing the problems. strongestClasses: for prefixes k=1..59 an exact prefix width gives k classes and width+1e-6 gives k+1; across 0..100 the result is always the shortest reaching prefix and monotone; w>=100 gives 169."
+    },
+    {
+      "spec": "SPEC-09",
+      "result": "PASS",
+      "evidence": "Round 2: code unchanged since round 1 (HEAD 056065c, no product diff); npm test re-run passes (970/0) and holdout re-run 8723 passes / 0 failures. Round 1: Unit validation tests pass. Holdout: RangeError 'Invalid observed stats for seat 6' for hands Infinity, 40.0001, NaN, vpip -0.01, Infinity, '20' and pfr 100.5; invalid entry for a folded seat also rejected; duplicate seat -> 'Observed stats list seat 1 twice'; PFR > VPIP and 0/100 edges accepted; heads-up table with snapshot -> typical, widthPct null; BB check line stays typical."
+    },
+    {
+      "spec": "SPEC-10",
+      "result": "PASS",
+      "evidence": "Round 2: code unchanged since round 1 (HEAD 056065c, no product diff); npm test re-run passes (970/0) and holdout re-run 8723 passes / 0 failures. Round 1: Unit bots/unseen tests pass. Holdout: adviceOptions drops observedOpponents; unseen mode with an invalid snapshot does not throw and returns all 'typical player'; preflop recommend with a snapshot returns a chart rec without opponentBasis; recommend(view, ACTION_RANGE_ADVICE) typical bases."
+    },
+    {
+      "spec": "SPEC-11",
+      "result": "PASS",
+      "evidence": "Round 2 re-run: npm run -s playtest -- --hands 10000 --seed 42 -> SHA-256 1eb65ef2cbd611efa25a131801e52f97546fdeb40fea3efc841db8cf861238a5, Invariant violations: 0."
+    },
+    {
+      "spec": "SPEC-12",
+      "result": "PASS",
+      "evidence": "Round 2: code unchanged since round 1 (HEAD 056065c, no product diff); npm test re-run passes (970/0) and holdout re-run 8723 passes / 0 failures. Round 1: npm run lint exit 0, npm run typecheck exit 0, npm test exit 0 with coverage thresholds met. range-model, explanations and grade acceptance files untouched (git diff); only the approved re-pins changed in postflop/value-bet/preflop acceptance. No UI/browser or network code in the src diff (grep of added lines for fetch/http/WebSocket/react/document/window: none)."
+    },
+    {
+      "spec": "SPEC-13",
+      "result": "PASS",
+      "evidence": "Round 2: code unchanged since round 1 (HEAD 056065c, no product diff); npm test re-run passes (970/0) and holdout re-run 8723 passes / 0 failures. Round 1: range-model.md 'Adjusting to observed play' states the 30-hand threshold, formula with the AC#5 worked example, stat per line table with check not scaled and non-six-max not scaled, hand order method/location, prefix rule and AA floor, both basis texts, callers supply per decision and bots never do. explanations.md has an 'Opponent-type lead' section. Justification 175 words, original. backlog doc list shows no TASK-7.13 story doc yet; the spec assigns that to the later doit docs step, so not counted against the build."
+    },
+    {
+      "spec": "SPEC-14",
+      "result": "PASS",
+      "evidence": "git ls-remote origin refs/heads/doit/TASK-7.13 -> 056065c553f8b5e76f365ed2038599a19128020d (pushed, equals local HEAD). gh run list --branch doit/TASK-7.13 --limit 1 -> CI run 45246047077 completed success. gh run view 45246047077 --json headSha,conclusion -> headSha 056065c553f8b5e76f365ed2038599a19128020d, conclusion success; jobs: Lint/typecheck/build/playtest, Unit tests with coverage, Sweep shards 1 and 2, E2E (Chromium and WebKit), Detect tooling changes all success; Tooling tests skipped (no tooling change). Visual run 45246047220 same SHA success. DoD#3 N/A: tests/golden still passes inside the green npm test. DoD#7/#12 N/A: no UI code in the diff (round-1 grep, unchanged)."
+    }
+  ],
+  "findings": [
+    {
+      "id": "J-2-01",
+      "severity": "LOW",
+      "spec": "SPEC-06",
+      "expected_vs_actual": "Expected a zero scaled width to be reported as 0. Actual: for default widths other than the AC#6 case (e.g. a CO open-raiser at 100 hands, PFR 0) widthPct is 3.55e-15 due to floating-point in d + (o - d) * 100 / 100. The resulting range is still exactly AA, so behaviour is correct.",
+      "fix": "Optional: compute the width so that n >= 100 returns o exactly (e.g. weight w = min(n,100)/100 and d*(1-w) + o*w), keeping the formula's values."
+    }
+  ],
+  "summary": "Round 2: all 14 SPEC items PASS. SPEC-14 now passes: head 056065c is pushed and CI run 45246047077 for that SHA concluded success (Visual 45246047220 also success). Code unchanged since round 1; npm test (970 passed, 0 failed), playtest SHA (1eb65ef2...a238a5, 0 invariant violations), test-integrity and holdout checks re-run and pass. Only non-blocking finding: LOW J-2-01 (floating-point residue in a zero scaled width, behaviour still correct)."
+}

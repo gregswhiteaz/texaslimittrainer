@@ -1,0 +1,9 @@
+{"reviewer": "security", "round": 2,
+ "findings": [
+  {"fingerprint": "src/advice/ranges.ts:non-object-snapshot-entry-typeerror",
+   "severity": "MINOR", "file": "src/advice/ranges.ts", "line": 572,
+   "issue": "Carried from round 1 (optional, unchanged): observedBySeat destructures each entry without checking it is an object, so a null/undefined entry throws TypeError rather than the documented RangeError; seat is not type-checked (a non-SeatNumber seat is silently ignored by the Map lookup).",
+   "evidence": "Still no reachable path: the only caller is recommendPostflop's typed PostflopOptions.observedOpponents; no production code builds a snapshot yet, the worker AdviceRequest has no snapshot field, and adviceOptions whitelists equity/chart/opponentRanges. Fails closed (throws).",
+   "fix": "Optional: when session code that builds the snapshot lands, or if it ever crosses the worker boundary, add an object/null check and an integer 1..6 seat check, and validate it in AdviceRequest like id/seed."}
+ ],
+ "summary": "No BLOCKER or MAJOR findings. Round 1 had no blocking findings. Round-1 fix diff (71f284b..056065c) reviewed: basisText and OBSERVED_MIN_HANDS moved into explanations.ts to break the ranges<->explain import cycle. basisText now uses String.prototype.replace with String(observedHands) as the replacement. Its only input is a validated non-negative integer, so '$' replacement patterns cannot occur, and the output is plain text with no HTML sink. hand-order.json only changed its justification string; it is still a committed, bundled file validated at import by parseHandOrder, and the order and equities are unchanged. Snapshot validation, the bot boundary (adviceOptions whitelist; observedOpponents never reaches bots), hidden-information isolation and fail-closed behaviour are unchanged from round 1. No new dependencies, secrets, network, logging, file I/O or randomness."}
