@@ -104,6 +104,8 @@ AC added from TASK-3.9 security review (first reader of stored records).
 Build: tlh-trainer v2 'sessions' store (additive upgrade; hand + session in one strict transaction before deal); session-record.ts parse/restore (never holds a hand); restore validation (assertSessionConfig, assertChips, type guards, sparse seats, resolveSessionConfig, parseHandRecord cross-field); e2e 184 pass (+0.3 s); kill tests pass; both playtest hashes unchanged; gate PASS.
 
 Review R1: only blocking item is a stray byte-identical sync-conflict copy of doc-100 (backlog/docs/stories/doc-100 … 2.md) that the build commit picked up; removing it needs a backlog/ file delete, which this session is not permitted to do. Code itself: all SPEC items pass (reviewer round-tripped 3,540 hands).
+
+doit: parked — judge PASS 17/17 and docs done (doc-101), but build commit 71bece3 included a byte-identical iCloud sync-conflict copy 'backlog/docs/stories/doc-100 - TASK-3.9-Keep-a-permanent-record-of-every-completed-hand 2.md'; this session may not delete backlog/ files. User: git rm it on doit/TASK-3.10, then merge. See doit/TASK-3.10/.
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary
