@@ -1,10 +1,11 @@
 ---
 id: TASK-3.9
 title: Keep a permanent record of every completed hand
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-19T02:21:00Z'
+updated_date: '2026-11-23T11:43:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -73,6 +74,18 @@ Plan key: E03-S09 · Dream: limit-holdem-trainer
 - [ ] #11 Story documentation is written and published to Backlog.md
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. src/storage/: IndexedDB hand store (tlh-trainer v1, store hands, key [sessionId, handNumber]; add/get/count; parseHandRecord on read; strict durability).
+2. handRecord builder from CompletedHand + session id, hand number, bot ids (TableState.botIds/nextBotId; replacement gets new id), completedAt.
+3. useTableSession: write before deal (timer and Deal next wait for the write); onHandComplete via ref; failure stops dealing + console.error.
+4. Tests: fake-indexeddb unit; Playwright harness (delay/fail seams in e2e/support only); reload every push; real kill opt-in; 1,000 aged records.
+5. Docs.
+
+Full spec: doit/TASK-3.9/spec.md
+<!-- SECTION:PLAN:END -->
 
 ## Implementation Notes
 
