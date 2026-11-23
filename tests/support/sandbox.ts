@@ -21,6 +21,7 @@ const CONFIG_FILES = [
   'eslint.config.js',
   'tools/lint/headless-boundary.js',
   'tools/lint/type-stripping.js',
+  'tools/lint/sync-copies.js',
   '.prettierrc.json',
   '.prettierignore',
   'vite.config.ts',
