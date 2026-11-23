@@ -304,21 +304,65 @@ function hasFlushDraw(hole: HoleCards, board: readonly Card[]): boolean {
   return hole.some((h) => cards.filter((c) => cardSuit(c) === cardSuit(h)).length >= 4);
 }
 
+/** Bit r set when rank r is present. */
+function rankMask(cards: readonly Card[]): number {
+  let mask = 0;
+  for (const card of cards) mask |= 1 << cardRank(card);
+  return mask;
+}
+
 /**
- * Four consecutive ranks v..v+3, one from a hole card, that one more rank completes at either end. The ace
- * counts below the 2 only to complete 2345, so A234 and JQKA are not open-ended.
+ * The lowest v of four consecutive ranks v..v+3, one from a hole card, that one more rank completes at either end;
+ * -1 when none. The ace counts below the 2 only to complete 2345, so A234 and JQKA are not open-ended.
  */
-function hasOpenEnder(hole: HoleCards, board: readonly Card[]): boolean {
-  // Rank bit masks: bit r set when rank r is present.
-  let fromHole = 0;
-  for (const card of hole) fromHole |= 1 << cardRank(card);
-  let present = fromHole;
-  for (const card of board) present |= 1 << cardRank(card);
+function openEnderStart(hole: readonly Card[], board: readonly Card[]): number {
+  const fromHole = rankMask(hole);
+  const present = fromHole | rankMask(board);
   for (let v = 0; v + 4 <= 12; v++) {
     const run = 0b1111 << v;
-    if ((present & run) === run && (fromHole & run) !== 0) return true;
+    if ((present & run) === run && (fromHole & run) !== 0) return v;
+  }
+  return -1;
+}
+
+function hasOpenEnder(hole: HoleCards, board: readonly Card[]): boolean {
+  return openEnderStart(hole, board) >= 0;
+}
+
+/** Five consecutive ranks present, the ace also below the 2. */
+function hasStraight(cards: readonly Card[]): boolean {
+  const present = rankMask(cards);
+  // Bit 0 = ace low, bit r + 1 = rank r.
+  const extended = (present << 1) | (present >> 12);
+  for (let low = 0; low + 5 <= 14; low++) {
+    if (((extended >> low) & 0b11111) === 0b11111) return true;
   }
   return false;
+}
+
+/**
+ * Unseen cards that complete the hero's flush draw (exactly four cards of a suit, one from the hole) or open-ended
+ * straight draw (as in hasOpenEnder), ascending, no duplicates; [] on a 5-card board, without such a draw, or when
+ * the draw is already made. Pure; reads only its arguments.
+ */
+export function drawOuts(hole: readonly Card[], board: readonly Card[]): Card[] {
+  if (board.length >= 5) return [];
+  const cards = [...hole, ...board];
+  const seen = new Set(cards);
+  const outs = new Set<Card>();
+  for (let suit = 0; suit < 4; suit++) {
+    const ofSuit = cards.filter((c) => cardSuit(c) === suit).length;
+    if (ofSuit === 4 && hole.some((h) => cardSuit(h) === suit)) {
+      for (let rank = 0; rank < 13; rank++) outs.add(rank * 4 + suit);
+    }
+  }
+  const v = openEnderStart(hole, board);
+  if (v >= 0 && !hasStraight(cards)) {
+    for (const rank of [v === 0 ? 12 : v - 1, v + 4]) {
+      for (let suit = 0; suit < 4; suit++) outs.add(rank * 4 + suit);
+    }
+  }
+  return [...outs].filter((card) => !seen.has(card)).sort((a, b) => a - b);
 }
 
 /** Strong / Pair / Draw / Air on a board of 3, 4 or 5 cards (spec §5). */

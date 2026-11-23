@@ -174,7 +174,11 @@ function expectedRule(view: PlayerView, advice: PostflopRecommendation): string 
     Math.round(advice.equityVsCallingRangePct * 10) > VALUE_THRESHOLD_PCT * 10;
   if (advice.callAmount === 0) return value ? 'value-bet' : 'check-free';
   if (value) return 'value-raise';
-  return advice.equityPct >= advice.requiredEquityPct ? 'pot-odds-call' : 'pot-odds-fold';
+  if (advice.equityPct >= advice.requiredEquityPct) return 'pot-odds-call';
+  return advice.impliedRequiredEquityPct !== null &&
+    advice.equityPct >= advice.impliedRequiredEquityPct
+    ? 'implied-odds-call'
+    : 'pot-odds-fold';
 }
 
 describe('value bet and raise acceptance (TASK-7.8)', () => {
@@ -298,7 +302,12 @@ describe('value bet and raise acceptance (TASK-7.8)', () => {
         fc.property(realViews(), (view) => {
           const advice = recommendPostflop(view);
           expect(Object.keys(advice).sort()).toEqual(
-            [...TASK_7_3_KEYS, 'equityVsCallingRangePct'].sort(),
+            [
+              ...TASK_7_3_KEYS,
+              'equityVsCallingRangePct',
+              'impliedRequiredEquityPct',
+              'outs',
+            ].sort(),
           );
           expect(['fold', 'check', 'call', 'bet', 'raise']).toContain(advice.action);
           expect(advice.move.type).toBe(advice.action);

@@ -25,6 +25,26 @@ all match.
 - **Call amount.** The chips the hero must add to call. It is 0 when nothing is owed.
 - **Required equity.** The share of the final pot the hero is paying for:
   call amount ÷ (pot + call amount). It is 0 when nothing is owed.
+- **Draw and outs.** With a card still to come (on the flop or turn), the hero has a draw when
+  either of these holds:
+  - a flush draw: exactly four cards of one suit among the hero's two cards and the board, at least
+    one of them in the hero's hand. Its outs are the 9 unseen cards of that suit.
+  - an open-ended straight draw: four ranks in a row, at least one from the hero's hand, that one
+    more rank at either end turns into a straight. Its outs are the 8 unseen cards of those two
+    ranks. The ace sits below the 2 only to finish 2-3-4-5, so A-2-3-4 and J-Q-K-A have one end
+    and don't count.
+
+  A hand with both draws counts every out once (15). A draw already made into a flush or straight
+  has no outs. Gutshots (one rank missing inside the run) and backdoor draws (needing two more
+  cards) count no outs. Outs are not reduced when they might also improve an opponent. On the river
+  there are no outs.
+
+- **Implied required equity.** The price of a call when a draw that hits gets paid one more big bet
+  by each opponent still able to bet: call amount ÷ (pot + call amount + big bet × those
+  opponents). Those opponents are the live opponents who are not all in, since an all-in player has
+  no chips left to pay. The big bet is used on every street, because a draw that hits is paid on
+  the turn or river, where bets are big bets. It applies only when the hero owes chips, has outs,
+  still has chips after calling, and at least one such opponent remains.
 - **Range that would call.** The hands an opponent would continue with against a bet or raise:
   their current range (as above) with the Air hands removed, so their Strong, Pair and Draw hands
   stay. These are the same classes the range model keeps when a player calls or raises (see
@@ -36,7 +56,8 @@ all match.
   opponents' calling ranges overlap that no deal can be sampled, the plain equity is used instead.
 - **Value threshold.** 50%. A bet or raise is for value when the hands that call it lose more often
   than they win: above 50% equity against them, each chip they put in earns the hero money.
-- **Rounding.** Equity, equity against the range that would call and required equity are shown as
+- **Rounding.** Equity, equity against the range that would call, required equity and implied
+  required equity are shown as
   percentages with one decimal place, rounded half up. The rules compare these rounded numbers, so
   the advice always agrees with what the player sees.
 
@@ -96,10 +117,29 @@ The rules are checked in the order below and the first one that matches decides 
   not lose money over many hands. An exact tie is treated as a call, because a break-even call
   keeps the hero in the hand at no long-run cost.
 
+### Rule `implied-odds-call`
+
+- **Condition:** the hero owes chips, the value-raise and pot-odds-call rules do not apply, the
+  implied required equity applies, and the rounded equity is at least the rounded implied required
+  equity.
+- **Outcome:** call. Required equity is still shown as the plain pot-odds price, with the implied
+  required equity and the outs beside it.
+- **Example:** six players at $4/$8, on the turn. The board is Kh 8h 7c 2d and the hero holds
+  Ah5h, a flush draw with 9 outs: 2h 3h 4h 6h 7h 9h Th Jh Qh. The only opponent left holds AsKd and
+  bets $8, so the pot is $28. The hero wins with 9 of the 44 unseen river cards, equity 20.5%.
+  Required equity is 8 ÷ 36 = 22.2%, so pot odds alone say fold. One more big bet from the opponent
+  when a heart comes makes the implied required equity 8 ÷ 44 = 18.2%, so the advice is call. With
+  a $12 pot instead, required equity is 8 ÷ 20 = 40.0% and implied required equity 8 ÷ 28 = 28.6%;
+  20.5% falls short of both and the advice is fold.
+- **Why:** when a draw comes in, an opponent who is still in the hand usually puts in at least one
+  more bet, and the hero wins it. Those later chips are part of what the call buys, so a draw can
+  be worth calling at a price slightly worse than the pot alone offers. Only one big bet per
+  opponent is counted, which keeps the estimate modest.
+
 ### Rule `pot-odds-fold`
 
-- **Condition:** the hero owes chips, the value-raise rule does not apply, and the rounded equity
-  is below the rounded required equity.
+- **Condition:** the hero owes chips, the value-raise rule does not apply, the rounded equity is
+  below the rounded required equity, and the implied-odds rule does not apply.
 - **Outcome:** fold.
 - **Example:** same spot, but the hero's equity is 16.6%, a tenth of a point under the 16.7%
   needed. The advice is fold.
@@ -108,10 +148,9 @@ The rules are checked in the order below and the first one that matches decides 
 
 ## Not applied yet
 
-These rules use immediate pot odds and the value threshold only. They never bluff: a bet or raise
-is recommended only for value. Later work adds:
+These rules use pot odds, implied odds for flush and open-ended straight draws, and the value
+threshold only. They never bluff: a bet or raise is recommended only for value. Later work adds:
 
-- implied odds, counting chips won on later streets when a draw hits (TASK-7.9);
 - adjusting each opponent's range to their observed habits once 30 or more of their hands have
   been seen (TASK-7.13);
 - default ranges for heads-up and full-ring tables (TASK-7.6). Until then opponents at other

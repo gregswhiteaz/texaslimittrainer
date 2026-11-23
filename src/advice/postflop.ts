@@ -1,7 +1,8 @@
+import type { Card } from '../engine/cards';
 import type { Action } from '../engine/hand';
 import type { PlayerView, PublicPlayer } from '../engine/player-view';
 import { computeEquity, type EquityInput, type EquityResult, type Range } from './equity';
-import { callingRange, estimateOpponentRanges, unseenCombos } from './ranges';
+import { callingRange, drawOuts, estimateOpponentRanges, unseenCombos } from './ranges';
 import type { ExactOptions } from './recommend';
 
 export type PostflopAdvice = 'fold' | 'check' | 'call' | 'bet' | 'raise';
@@ -11,6 +12,7 @@ export const POSTFLOP_RULE_IDS = [
   'check-free',
   'value-raise',
   'pot-odds-call',
+  'implied-odds-call',
   'pot-odds-fold',
 ] as const;
 /** Bet or raise for value when the rounded equity against the range that would call is above this percent. */
@@ -41,6 +43,13 @@ export interface PostflopRecommendation {
   readonly equityMethod: 'exact' | 'sampled';
   /** Hero pot share against every live opponent's range that would call a bet/raise; percent, one decimal. */
   readonly equityVsCallingRangePct: number;
+  /**
+   * call ÷ (pot + call + bigBet × opponents not all in), percent one decimal; null unless something is owed, the
+   * hero has outs, chips stay behind after the call and an opponent not all in can pay later.
+   */
+  readonly impliedRequiredEquityPct: number | null;
+  /** drawOuts(holeCards, board): the outs counted; [] on the river or without a flush/open-ended draw. */
+  readonly outs: readonly Card[];
 }
 
 export interface PostflopOptions {
@@ -71,7 +80,8 @@ function withFallbacks(
 
 /**
  * Bet or raise when the rounded equity against the ranges that would call is above VALUE_THRESHOLD_PCT and the
- * move is legal; else check when free, else call when the rounded equity % reaches the rounded required %, else fold.
+ * move is legal; else check when free, else call when the rounded equity % reaches the rounded required %, else
+ * call when it reaches the rounded implied required % (a drawing hand), else fold.
  */
 export function recommendPostflop<O extends object = PostflopOptions>(
   view: PlayerView,
@@ -116,6 +126,12 @@ export function recommendPostflop<O extends object = PostflopOptions>(
   const result = withFallbacks(run, attempts);
   const equityPct = toPct(result.hero.equity);
   const requiredEquityPct = owed > 0 ? toPct(callAmount / (pot + callAmount)) : 0;
+  const outs = drawOuts(view.holeCards, view.board);
+  const payers = view.players.filter((p) => p.seat !== view.seat && !p.folded && !p.allIn).length;
+  const impliedRequiredEquityPct =
+    owed > 0 && outs.length > 0 && payers > 0 && hero.stack - callAmount > 0
+      ? toPct(callAmount / (pot + callAmount + view.stakes.bigBet * payers))
+      : null;
 
   let equityVsCallingRangePct: number;
   try {
@@ -146,6 +162,9 @@ export function recommendPostflop<O extends object = PostflopOptions>(
   } else if (equityPct >= requiredEquityPct) {
     ruleId = 'pot-odds-call';
     action = 'call';
+  } else if (impliedRequiredEquityPct !== null && equityPct >= impliedRequiredEquityPct) {
+    ruleId = 'implied-odds-call';
+    action = 'call';
   } else {
     ruleId = 'pot-odds-fold';
     action = 'fold';
@@ -167,5 +186,7 @@ export function recommendPostflop<O extends object = PostflopOptions>(
     opponents,
     equityMethod: result.method,
     equityVsCallingRangePct,
+    impliedRequiredEquityPct,
+    outs,
   };
 }

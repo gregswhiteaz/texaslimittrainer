@@ -4,6 +4,7 @@ import { recommendPostflop, toPct, VALUE_THRESHOLD_PCT } from '../../src/advice/
 import { recommendPreflop } from '../../src/advice/preflop';
 import { callingRange, estimateOpponentRanges, unseenCombos } from '../../src/advice/ranges';
 import { ACTION_RANGE_ADVICE, recommend } from '../../src/advice/recommend';
+import { parseCards, type Card } from '../../src/engine/cards';
 import { applyAction, createHand, type Action, type SeatNumber } from '../../src/engine/hand';
 import { playerView, type PlayerView } from '../../src/engine/player-view';
 
@@ -38,12 +39,16 @@ const HU_RIVER_BET: Step[] = [
   b(2, 8),
 ];
 
-function stateAfter(steps: Step[]) {
+function stateAfter(
+  steps: Step[],
+  deck: readonly Card[] = ORDERED_DECK,
+  stacks: Partial<Record<SeatNumber, number>> = {},
+) {
   let state = createHand({
     stakes: STAKES_4_8,
-    seats: [1, 2, 3, 4, 5, 6].map((seat) => ({ seat, stack: 160 })),
+    seats: ([1, 2, 3, 4, 5, 6] as const).map((seat) => ({ seat, stack: stacks[seat] ?? 160 })),
     button: 1,
-    deck: ORDERED_DECK,
+    deck,
   });
   for (const [seat, type, amount] of steps) {
     const action = (amount === undefined ? { seat, type } : { seat, type, amount }) as Action;
@@ -162,6 +167,115 @@ describe('rule pot-odds-fold', () => {
       expect(result).toMatchObject({ action: 'fold', ruleId: 'pot-odds-fold', equityPct });
       expect(result.move).toStrictEqual({ seat: 3, type: 'fold' });
     }
+  });
+});
+
+/** Hero (seat 3) holds `hero`; `board` fills the flop (13-15) and turn (17) deal positions. */
+function drawDeck(hero: string, board: string): Card[] {
+  const positions = [1, 7, 13, 14, 15, 17];
+  const placed = new Map(parseCards(`${hero} ${board}`).map((card, i) => [positions[i], card]));
+  const rest = ORDERED_DECK.filter((card) => ![...placed.values()].includes(card));
+  return ORDERED_DECK.map((_, i) => placed.get(i) ?? (rest.shift() as Card));
+}
+
+/** Ah5h on Kh 9h 2c: a flush draw with 9 outs. */
+const drawView = (steps: Step[], stacks: Partial<Record<SeatNumber, number>> = {}) =>
+  playerView(stateAfter(steps, drawDeck('Ah 5h', 'Kh 9h 2c'), stacks), 3);
+const HEARTS_OUTS = parseCards('2h 3h 4h 6h 7h 8h Th Jh Qh');
+
+describe('rule implied-odds-call', () => {
+  it('calls a flop draw at the implied price with two cards to come', () => {
+    // Pot 20, call 4, three opponents not all in: 4 / (24 + 3 x 8) = 8.3%.
+    const view = drawView(FLOP_BET);
+    for (const [equity, equityPct] of [
+      [0.083, 8.3],
+      [0.1, 10],
+      [0.166, 16.6],
+    ] as const) {
+      const result = adviseWithRuns(view, equity, 0.4);
+      expect(result).toMatchObject({
+        action: 'call',
+        ruleId: 'implied-odds-call',
+        equityPct,
+        requiredEquityPct: 16.7,
+        impliedRequiredEquityPct: 8.3,
+        outs: HEARTS_OUTS,
+      });
+      expect(result.move).toStrictEqual({ seat: 3, type: 'call', amount: 4 });
+    }
+    expect(adviseWith(view, 0.0824)).toMatchObject({
+      action: 'fold',
+      ruleId: 'pot-odds-fold',
+      equityPct: 8.2,
+      impliedRequiredEquityPct: 8.3,
+    });
+  });
+
+  it('leaves calls at the pot-odds price and value raises to the earlier rules', () => {
+    const view = drawView(FLOP_BET);
+    expect(adviseWithRuns(view, 0.2, 0.4)).toMatchObject({
+      action: 'call',
+      ruleId: 'pot-odds-call',
+      impliedRequiredEquityPct: 8.3,
+      outs: HEARTS_OUTS,
+    });
+    expect(adviseWithRuns(view, 0.1, 0.6)).toMatchObject({
+      action: 'raise',
+      ruleId: 'value-raise',
+      impliedRequiredEquityPct: 8.3,
+    });
+  });
+
+  it('does not apply without a draw', () => {
+    const result = adviseWith(viewAfter(FLOP_BET), 0.1);
+    expect(result).toMatchObject({
+      action: 'fold',
+      ruleId: 'pot-odds-fold',
+      impliedRequiredEquityPct: null,
+      outs: [],
+    });
+  });
+
+  it('does not apply when the call puts the hero all in', () => {
+    // Hero starts with 8: the 4 big blind, then the 4 call is the last chips.
+    const result = adviseWith(drawView(FLOP_BET, { 3: 8 }), 0.1);
+    expect(result).toMatchObject({
+      action: 'fold',
+      ruleId: 'pot-odds-fold',
+      callAmount: 4,
+      impliedRequiredEquityPct: null,
+      outs: HEARTS_OUTS,
+    });
+  });
+
+  it('counts only opponents who are not all in', () => {
+    // Seat 2 starts with 8 and is all in after its 4 flop bet heads-up: nobody left to pay.
+    const huBet: Step[] = [f(4), f(5), f(6), f(1), c(2, 2), k(3), b(2, 4)];
+    const alone = adviseWith(drawView(huBet, { 2: 8 }), 0.1);
+    expect(alone).toMatchObject({
+      action: 'fold',
+      ruleId: 'pot-odds-fold',
+      impliedRequiredEquityPct: null,
+      outs: HEARTS_OUTS,
+    });
+    // Seat 6 is all in after calling 4 preflop: two payers, 4 / (24 + 2 x 8) = 10.0%.
+    const oneAllIn = adviseWith(drawView(FLOP_BET, { 6: 4 }), 0.1);
+    expect(oneAllIn).toMatchObject({
+      action: 'call',
+      ruleId: 'implied-odds-call',
+      opponents: 3,
+      impliedRequiredEquityPct: 10,
+    });
+  });
+
+  it('lists the outs but has no implied price when nothing is owed', () => {
+    const result = adviseWithRuns(drawView(FLOP_CHECK), 0.3, 0.4);
+    expect(result).toMatchObject({
+      action: 'check',
+      ruleId: 'check-free',
+      impliedRequiredEquityPct: null,
+      outs: HEARTS_OUTS,
+    });
   });
 });
 

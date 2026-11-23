@@ -292,10 +292,10 @@ describe('determinism, plain data and types', () => {
     const equityFits = (r: PostflopRecommendation): EquityGradeInput => r;
     const preflop = chartFits(recommendPreflop(heroView([f(4), f(5), f(6), f(1), c(2, 2)])));
     const postflop = equityFits(
-      recommendPostflop(heroView(FLOP_BET), { equity: fixedEquity(0.1).fn }),
+      recommendPostflop(heroView(FLOP_BET), { equity: fixedEquity(0.08).fn }),
     );
     expect(gradeDecision(preflop, preflop.action).grade).toBe('correct');
-    expect(gradeDecision(postflop, 'call')).toMatchObject({ grade: 'minor', marginPts: 6.7 });
+    expect(gradeDecision(postflop, 'call')).toMatchObject({ grade: 'minor', marginPts: 8.7 });
     expect(GRADE_LABELS).toStrictEqual({
       correct: 'Correct',
       minor: 'Minor error',

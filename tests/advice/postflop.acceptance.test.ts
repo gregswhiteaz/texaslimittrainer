@@ -133,6 +133,8 @@ describe('postflop advice acceptance', () => {
       opponents: 3,
       equityMethod: 'sampled',
       equityVsCallingRangePct: 16.7,
+      impliedRequiredEquityPct: 8.3,
+      outs: parseCards('2h 3h 4h 6h 7h 8h Th Jh Qh'),
     });
     // Whole-range run, then the calling-range run (TASK-7.8).
     expect(spy.calls).toHaveLength(2);
@@ -151,7 +153,7 @@ describe('postflop advice acceptance', () => {
   });
 
   it('AC#2 equity 0.1 points below required recommends fold', () => {
-    const view = heroView(deckWith(spotDeck('Ah 5h', 'Kh 9h 2c')), FLOP_BET);
+    const view = heroView(deckWith(spotDeck('Ad 5c', 'Kh 9h 2c')), FLOP_BET);
     const result = recommendPostflop(view, { equity: fixedEquity(4 / 24 - 0.001).fn });
     expect(result).toMatchObject({
       action: 'fold',

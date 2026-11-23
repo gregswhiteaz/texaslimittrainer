@@ -10,6 +10,7 @@ import {
   classifyCombo,
   CONTINUE_CLASSES,
   defaultRange,
+  drawOuts,
   estimateOpponentRanges,
   expandRange,
   KEEP,
@@ -467,5 +468,60 @@ describe('callingRange', () => {
       const flipped = range.map(([a, b]) => [b, a] as const);
       expect(callingRange(flipped, board)).toEqual(expected.map(([a, b]) => [b, a]));
     }
+  });
+});
+
+describe('drawOuts', () => {
+  const outs = (hole: string, board: string) => drawOuts(parseCards(hole), parseCards(board));
+  const ofRank = (rank: string) => parseCards(`${rank}c ${rank}d ${rank}h ${rank}s`);
+  const sorted = (cards: readonly Card[]) => [...cards].sort((a, b) => a - b);
+
+  it('counts the 9 unseen cards of a flush draw, from one or two hole cards', () => {
+    expect(outs('Ah 5h', 'Kh 8h 7c 2d')).toEqual(parseCards('2h 3h 4h 6h 7h 9h Th Jh Qh'));
+    expect(outs('Ah 2c', 'Kh 8h 7h')).toEqual(parseCards('2h 3h 4h 5h 6h 9h Th Jh Qh'));
+  });
+
+  it('counts the 8 cards that complete an open-ended straight draw', () => {
+    expect(outs('9c 8d', '7h 6s 2c')).toEqual(sorted([...ofRank('5'), ...ofRank('T')]));
+    // 2345 is completed by the ace below and the 6 above.
+    expect(outs('2c 3d', '4h 5s Kc')).toEqual(sorted([...ofRank('6'), ...ofRank('A')]));
+    // An out already seen is not counted.
+    expect(outs('9c 8d', '7h 6s Tc')).toEqual([]);
+    expect(outs('9c 8d', '7h 6s 5c 2d')).toEqual([]);
+  });
+
+  it('counts the union of a combo draw once', () => {
+    const combo = outs('9h 8h', '7h 6c 2h');
+    expect(combo).toHaveLength(15);
+    expect(combo).toEqual(
+      sorted([
+        ...new Set([...parseCards('3h 4h 5h 6h Th Jh Qh Kh Ah'), ...ofRank('5'), ...ofRank('T')]),
+      ]),
+    );
+  });
+
+  it('counts no outs for a made draw', () => {
+    expect(outs('Ah 5h', 'Kh 8h 7h')).toEqual([]);
+    expect(outs('9c 8d', '7h 6s 5c')).toEqual([]);
+    // A made straight with a flush draw keeps only the flush outs.
+    expect(outs('9h 8h', '7h 6c 5h')).toEqual(parseCards('2h 3h 4h 6h Th Jh Qh Kh Ah'));
+  });
+
+  it('counts no outs for gutshots, one-ended runs, board-only flush draws or the river', () => {
+    expect(outs('9c 7d', '6h 5s 2c')).toEqual([]);
+    expect(outs('Ac 2d', '3h 4s 9c')).toEqual([]);
+    expect(outs('Jc Qd', 'Kh As 2c')).toEqual([]);
+    expect(outs('Ac 2d', 'Kh 8h 7h 3h')).toEqual([]);
+    expect(outs('Ah 5h', 'Kh 8h 7c 2d 3s')).toEqual([]);
+  });
+
+  it('returns ascending distinct unseen cards', () => {
+    const hole = parseCards('Td 9d');
+    const board = parseCards('8d 7c 2d');
+    const result = drawOuts(hole, board);
+    expect(result).toEqual(sorted(result));
+    expect(new Set(result).size).toBe(result.length);
+    for (const card of [...hole, ...board]) expect(result).not.toContain(card);
+    expect(result).toHaveLength(15);
   });
 });
