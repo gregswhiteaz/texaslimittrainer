@@ -4,7 +4,7 @@ title: Report each bot style's VPIP, PFR and aggression against its band
 status: To Do
 assignee: []
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-23T05:24:00Z'
+updated_date: '2026-11-23T06:13:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -77,4 +77,6 @@ AC added from TASK-6.5 follow-up
 From TASK-6.9: compose style-band checks with checkStep via composeChecks (src/playtest/runner.ts), not a new runner parameter.
 
 AC added from TASK-6.16 Q-1 (CLI band check deferred here)
+
+From TASK-6.16 judge: TAG aggression measured 64.1% on seed 555 (30k) vs 65 ceiling — watch the margin in the --check-styles re-check.
 <!-- SECTION:NOTES:END -->
