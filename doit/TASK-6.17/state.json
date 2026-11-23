@@ -5,13 +5,25 @@
   "base_commit": "01ed481709713f99f3e83d631a591b3dcfaf3cd0",
   "started": "2026-11-22T23:20:36",
   "review_round": 1,
-  "judge_round": 0,
+  "judge_round": 1,
   "sendbacks": 0,
   "gate_runs": 4,
   "questions": 4,
   "assumptions": 6,
   "escalations": 0,
-  "item_failures": {},
+  "item_failures": {
+    "SPEC-01": 0,
+    "SPEC-02": 0,
+    "SPEC-03": 0,
+    "SPEC-04": 0,
+    "SPEC-05": 0,
+    "SPEC-06": 0,
+    "SPEC-07": 0,
+    "SPEC-08": 0,
+    "SPEC-09": 0,
+    "SPEC-10": 0,
+    "SPEC-11": 0
+  },
   "locked_tests": {
     "tests/bots/calling-station-postflop.acceptance.test.ts": "4e58daec8b1cc117129b51986db7be477078f5cbb947c43340c310fdbdf50039",
     "tests/bots/rock-postflop.acceptance.test.ts": "e4becd16271cf36d06a3c1389f998d7ccf33340d6ebf24020b7b33c97da66e8b",
@@ -1225,5 +1237,9 @@
   "spec_sha256": "31bd054b2703ee6e10c2e6b85074c22c4c6fb5ceddb7cfaee8d853116ed782bc",
   "review_findings": {
     "1": 0
+  },
+  "doc_id": "doc-95",
+  "judge_results": {
+    "1": "PASS"
   }
 }

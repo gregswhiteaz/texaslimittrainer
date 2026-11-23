@@ -1,0 +1,87 @@
+{
+ "round": 1,
+ "test_suite": {
+  "command": "npm test",
+  "result": "PASS",
+  "passed": 737,
+  "failed": 0,
+  "notes": "201 files passed, 3 skipped; 30 opt-in tests skipped. lint and typecheck exit 0. Remaining test:slow list (12 files, 54 tests) with TLH_SLOW_TESTS=1 also passes, as does CI run 45128956384."
+ },
+ "end_to_end": {
+  "command": "TLH_SLOW_TESTS=1 npx vitest run tests/bots/style-bands.acceptance.test.ts; then SPEC-10 commands",
+  "result": "PASS",
+  "expected": "All three seeds pass with CS (45-65/3-10/10-25) and Maniac (50-75/35-60/65-85) lines inside their bands; 10k Mixed run 0 violations; default playtest SHA 2cbbafa7\u2026bb98",
+  "actual": "3/3 passed. CS AGG 15.3/14.8/15.8, Maniac AGG 79.3/77.4/78.9, VPIP/PFR inside bands; TAG/Rock unchanged in band. 10k Mixed: 0 violations, exit 0. Default SHA matches exactly. Repeat runs of a 3k Mixed playtest give identical output (replay determinism); bot-replay acceptance passes."
+ },
+ "integrity": {
+  "result": "PASS",
+  "notes": "doit.py test-integrity TASK-6.17 \u2192 clean (exit 0). Locked re-pins (Q-3): style-bands 5\u21925 expect() calls, rock-postflop 24\u219224, replacement 35\u219235, maniac.acceptance 103\u2192115 (adds Example H, a postflop call\u2192raise at u<0.6), cli.test 92\u219292; no new skips. Each re-pin restates the same behaviour at the new parameters and still fails if behaviour regresses (verified by mutants). test-integrity TASK-6.16 and TASK-6.8 clean. The TASK-6.4 WARN (calling-station.test.ts 20\u21927 assertions) is pre-existing: that file is byte-identical between base 01ed481 and HEAD (last touched by TASK-7.8 df4cd2e). Diff review: no input recognition, hard-coded expectations, early exits or mocks of the unit under test. Holdout fingerprints: Rock and TAG decisions identical to base; HEAD Maniac run with base maniac.json is identical to base Maniac (only the probability changed). Scope: 11 files (budget 11), 345 changed lines vs 320 budget (gate warn, under fail limit)."
+ },
+ "items": [
+  {
+   "spec": "SPEC-01",
+   "result": "PASS",
+   "evidence": "TLH_SLOW_TESTS=1 style-bands seed 42 \u2192 passed (150 s): TAG 22.2/16.4/63.8, Rock 10.2/8.8/47.8, Calling station 59.6/6.7/15.3, Maniac 56.1/53.3/79.3, 100,000 hands, 0 violations. Test asserts handsPlayed, violations and inclusive band bounds for all 4 styles; it would fail at base (CS aggression 51-53). Holdout independent REQ-045 counter at new seed 2026 \u00d7100k: 0 violations; TAG 22.3/16.3/63.5, CS (6,487 hands) 58.8/6.7/16.1, Maniac (4,217 hands) 55.4/52.7/78.2, Rock 10.0/8.6/47.4 \u2014 all in band."
+  },
+  {
+   "spec": "SPEC-02",
+   "result": "PASS",
+   "evidence": "Slow band test seed 7 \u2192 TAG 22.3/16.4/63.8, Rock 10.1/8.7/47.0, CS 58.7/6.5/14.8, Maniac 56.4/53.6/77.4; seed 1234 \u2192 TAG 22.2/16.2/63.4, Rock 10.0/8.5/45.4, CS 59.9/6.7/15.8, Maniac 57.3/54.3/78.9; both passed. Holdout seed 99 \u00d730k: 0 violations, TAG 22.3/16.5/64.2, CS (1,823 hands) 60.1/6.6/13.8, Maniac (1,382 hands) 56.4/54.1/78.1, Rock 10.3/8.9/47.2 \u2014 all in band."
+  },
+  {
+   "spec": "SPEC-03",
+   "result": "PASS",
+   "evidence": "backlog task view TASK-6.11 --plain lists AC#9 (100k --check-styles, seeds 42/7/1234, all four styles in band, exit 0, TASK-6.17 tuning) and AC#10 (nightly or on-demand CI workflow, deferred DoD#1 of TASK-6.17). No CLI/workflow code in the diff. SPEC-01/02 pass under the slow run."
+  },
+  {
+   "spec": "SPEC-04",
+   "result": "PASS",
+   "evidence": "Acceptance test passes; it asserts bet at 88.1 / check at 88.0 and 60.0, raise at 88.1 / call 4 at 88.0, check/call pass-through, fold draw = 1, demotion draws 0, recommend unchanged, 8s8c spot bets $4. Holdout on 400 random real postflop views (2-10 seats, short stacks) with BOT_EQUITY plus fixed seams 50/87.9/87.95/88/88.04/88.05/88.1/99: 0 failures over 1,201 bet/raise demotions and 888 kept; result always legal, identical with and without a generator, 0 draws on bet/raise advice, exactly 1 draw (u<0.5) on fold advice. Same holdout against base code \u2192 2,465 failures (it can fail). Calling-station draw-count fingerprint over 600 views identical to base (no RNG stream change). Mutants killed: >= instead of >, whole-range equity, always-call, fold-instead, raise-only, bar removed, bar only with generator, extra draw before bar, default style without bar, threshold 85/90. One surviving mutant (unrounded compare with +0.04 offset) is behaviourally equivalent at one-decimal inputs."
+  },
+  {
+   "spec": "SPEC-05",
+   "result": "PASS",
+   "evidence": "Acceptance test passes and asserts thresholdPct 88 + justification >= 10 words, description >= 15 words containing 'hardly ever bets on its own', Maniac postflop probabilities 0.6/0.6, new justification wording, Rock 75, TAG/Maniac null. Diff of calling-station.json/maniac.json matches spec text exactly. Mutants Maniac check\u2192bet 0.75, call\u2192raise 0.85, and old 'almost every time' wording each killed."
+  },
+  {
+   "spec": "SPEC-06",
+   "result": "PASS",
+   "evidence": "Acceptance test passes; asserts exact single problem string for 49.9 and \"88\" and the 9-word justification, plus round-trip parse equals CALLING_STATION_STYLE."
+  },
+  {
+   "spec": "SPEC-07",
+   "result": "PASS",
+   "evidence": "rock-postflop (3 tests) and rock.test.ts (3 tests) pass. Holdout fingerprint of decideRock over 600 random postflop views: HEAD f7bf9b08c907807e == base f7bf9b08c907807e; TAG fingerprint also identical. Helper is a verbatim move of the base rule (owed computed identically from the hero's streetContribution)."
+  },
+  {
+   "spec": "SPEC-08",
+   "result": "PASS",
+   "evidence": "CLI: --hands 17 --seed 42 --lineup mixed \u2192 'Bots replaced: 0'; --hands 18 \u2192 'Bots replaced: 1'. TLH_SLOW_TESTS=1 replacement.acceptance (3 tests incl. Replay-line reproduction and 10k replacement) and cli.test.ts pass. Re-pinned locator still throws if no style-changing replacement exists; expect() count unchanged (35)."
+  },
+  {
+   "spec": "SPEC-09",
+   "result": "PASS",
+   "evidence": "Local: lint exit 0, typecheck exit 0, npm test exit 0 \u2014 201 files passed/3 skipped, 737 tests passed/30 skipped; coverage all files 97.34% stmts, bots 99.7%. CI run 45128956384 on c550dfd: success (lint/typecheck/build/playtest, unit+coverage, both sweep shards, E2E Chromium+WebKit). No network code in diff."
+  },
+  {
+   "spec": "SPEC-10",
+   "result": "PASS",
+   "evidence": "npm run playtest -- --hands 10000 --lineup mixed --size 6 --seed 42 \u2192 exit 0, 'Hands played: 10000', 'Invariant violations: 0'. npm run -s playtest -- --hands 10000 --seed 42 | shasum -a 256 \u2192 2cbbafa79dfeb56a159349b949039132b89cb0e41e72a83784e579653ae4bb98 (matches)."
+  },
+  {
+   "spec": "SPEC-11",
+   "result": "PASS",
+   "evidence": "git diff --stat 01ed481..HEAD -- src/ui e2e \u2192 empty. backlog doc list --plain shows 'doc-95 - TASK-6.17: Keep Calling station and Maniac bots inside their style bands'."
+  }
+ ],
+ "findings": [
+  {
+   "id": "J-1-01",
+   "severity": "LOW",
+   "spec": "SPEC-02",
+   "expected_vs_actual": "Not a defect of this task: TAG postflop aggression sits 0.8-1.6 points under its 65% ceiling on every seed measured (63.4-64.2), the thinnest margin of any band now that CS and Maniac have 5+ points.",
+   "fix": "None required here; worth noting for TASK-6.11's --check-styles re-check."
+  }
+ ],
+ "summary": "All 11 SPEC items PASS. Slow band test passes on seeds 42/7/1234 and independent counts on new seeds 2026 (100k) and 99 (30k) put all four styles inside their bands with 0 violations. Calling station value bar verified on random real views (>88.0 rounded keeps, else legal check/call, no draw change vs base); Rock/TAG behaviour fingerprint-identical to base; Maniac differs from base only by the 0.6 probability. Default playtest SHA unchanged; replay deterministic; full suite, slow suite and CI green. No blocking findings."
+}
