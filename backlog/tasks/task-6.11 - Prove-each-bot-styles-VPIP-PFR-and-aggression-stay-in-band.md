@@ -1,10 +1,11 @@
 ---
 id: TASK-6.11
 title: Report each bot style's VPIP, PFR and aggression against its band
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-23T11:08:00Z'
+updated_date: '2026-11-23T14:18:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -69,6 +70,17 @@ Plan key: E06-S09 · Dream: limit-holdem-trainer
 - [ ] #11 Story documentation is written and published to Backlog.md
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. src/playtest/style-check.ts: STYLE_BANDS, per-style counting via shared style-stats, mixed-spot recorder (only with --check-styles).
+2. CLI: style block before Bot results on every run; --check-styles adds bands, mixed spots, pass/fail, exit 1.
+3. Opt-in slow 3×100k CLI test; dispatch-only style-bands.yml + test (no schedule/push).
+4. Record new default/million hashes; cli.test re-pins; docs.
+
+Full spec: doit/TASK-6.11/spec.md
+<!-- SECTION:PLAN:END -->
 
 ## Implementation Notes
 
