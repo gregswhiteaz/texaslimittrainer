@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-23T08:56:00Z'
+updated_date: '2026-11-23T16:05:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-0
@@ -94,6 +94,8 @@ Locked test tests/advice/postflop.acceptance.test.ts re-pinned for TASK-7.8 Q-3 
 Locked test re-pinned by TASK-7.9 Q-3 (auto-accepted; assertion count kept).
 
 Locked test re-pinned by TASK-7.10 Q-3 (explanation key; auto-accepted; count kept).
+
+Locked test re-pinned by TASK-7.13 Q-4 (opponentBasis key; count kept).
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary

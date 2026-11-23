@@ -1,10 +1,11 @@
 ---
 id: TASK-7.13
 title: Adjust opponent ranges to their observed play after 30 hands
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-23T09:25:00Z'
+updated_date: '2026-11-23T16:05:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -66,6 +67,17 @@ Plan key: E07-S09 · Dream: limit-holdem-trainer
 - [ ] #11 Story documentation is written and published to Backlog.md
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. src/advice/ranges/hand-order.json: 169 classes by preflop equity vs random (seeded computeEquity), justification, load-time validation.
+2. Range scaling: width = d + (o − d)·min(n,100)/100 from 30 hands; strongest-width prefix, AA floor; PFR for raising lines, VPIP for calling/limping.
+3. observedOpponents advice input; estimateOpponentRanges basis/widthPct; PostflopRecommendation.opponentBasis; explanation lead clause when scaled.
+4. Tests (AC#1–#7), locked re-pin, docs; bots unchanged (SHA same).
+
+Full spec: doit/TASK-7.13/spec.md
+<!-- SECTION:PLAN:END -->
 
 ## Implementation Notes
 

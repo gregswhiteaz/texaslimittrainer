@@ -1236,7 +1236,14 @@
       "skips": 0
     }
   },
-  "history": [],
+  "history": [
+    {
+      "t": "2026-11-23T09:05:11",
+      "event": "unlock",
+      "file": "tests/advice/postflop.acceptance.test.ts",
+      "reason": "TASK-7.13 Q-4 auto-accepted: opponentBasis key (count kept)"
+    }
+  ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-7.9",
   "spec_sha256": "9cf9e2c7288bb0d987fd68d3090c24f6562f2760e06ca6b1f1ef3c2da17b73af",
   "review_findings": {
@@ -1245,5 +1252,8 @@
   "doc_id": "doc-96",
   "judge_results": {
     "1": "PASS"
-  }
+  },
+  "relock_pending": [
+    "tests/advice/postflop.acceptance.test.ts"
+  ]
 }
