@@ -45,12 +45,14 @@ const handStore: HandStore =
   mode === 'real'
     ? real
     : {
-        add: (record) =>
+        add: (record, session) =>
           mode === 'fail'
             ? Promise.reject(new DOMException('full', 'QuotaExceededError'))
             : new Promise<void>((resolve) => setTimeout(resolve, delayMs))
-                .then(() => real.add(record))
+                .then(() => real.add(record, session))
                 .then(() => note(`saved:${record.handNumber}`)),
+        putSession: (session) => real.putSession(session),
+        getSession: (sessionId) => real.getSession(sessionId),
         get: (sessionId, handNumber) => real.get(sessionId, handNumber),
         count: () => real.count(),
       };

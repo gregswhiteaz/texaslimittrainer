@@ -2,8 +2,11 @@ import type { Card } from '../engine/cards';
 import { isReplayCode, type ReplayCode } from '../engine/deck';
 import type { ActionRecord, HandResult, SeatNumber, Stakes } from '../engine/hand';
 import type { EarlierShowdown } from '../engine/player-view';
+import type { SessionRecord } from './session-record';
 import {
   BOT_STYLES,
+  LINE_UPS,
+  isSeatName,
   tableStake,
   type BotStyle,
   type CompletedHand,
@@ -61,11 +64,18 @@ export interface HandRecordMeta {
   readonly completedAt: Date;
 }
 
-/** Add-only store of hand records: no update, put or delete (REQ-052.5/.6). */
+/** Add-only store of hand records: no update, put or delete (REQ-052.5/.6), plus one session record per
+ *  session that is replaced as the session goes on (REQ-052.3). */
 export interface HandStore {
-  /** Adds a new record; resolves when the transaction is complete (durable). Rejects with the IndexedDB
-   *  error (name 'ConstraintError') if (sessionId, handNumber) already exists; the stored record is unchanged. */
-  add(record: HandRecord): Promise<void>;
+  /** Adds a new record and, if given, puts `session`, in one transaction; resolves when it is complete
+   *  (durable). Rejects with the IndexedDB error (name 'ConstraintError') if (sessionId, handNumber) already
+   *  exists; then neither the stored record nor the stored session changes. */
+  add(record: HandRecord, session?: SessionRecord): Promise<void>;
+  /** Creates or replaces the session's record; resolves when the transaction is complete (durable). */
+  putSession(session: SessionRecord): Promise<void>;
+  /** The validated session record, or null if absent. Rejects with parseSessionRecord's RangeError if the
+   *  stored value is invalid. */
+  getSession(sessionId: string): Promise<SessionRecord | null>;
   /** The validated record, or null if absent. Rejects with parseHandRecord's RangeError if the stored value is invalid. */
   get(sessionId: string, handNumber: number): Promise<HandRecord | null>;
   count(): Promise<number>;
@@ -73,7 +83,6 @@ export interface HandStore {
 
 const SESSION_ID = /^[0-9a-f]{32}$/;
 const GAME_TYPES: readonly string[] = ['cash', 'sit-and-go'];
-const LINE_UPS: readonly string[] = ['Mixed', 'Tough', 'Soft', 'Custom'];
 const STREETS: readonly string[] = ['preflop', 'flop', 'turn', 'river'];
 const ACTION_TYPES: readonly string[] = [
   'small-blind',
@@ -89,7 +98,12 @@ function invalid(field: string): RangeError {
   return new RangeError(`Invalid hand record: ${field}`);
 }
 
-function isWhole(value: unknown, min: number, max = Number.MAX_SAFE_INTEGER): value is number {
+/** A safe integer in min..max (no coercion). */
+export function isWhole(
+  value: unknown,
+  min: number,
+  max = Number.MAX_SAFE_INTEGER,
+): value is number {
   return Number.isSafeInteger(value) && (value as number) >= min && (value as number) <= max;
 }
 
@@ -133,13 +147,21 @@ export function handRecord(hand: CompletedHand, meta: HandRecordMeta): HandRecor
 
 type Fields = Readonly<Record<string, unknown>>;
 
+/** A-5 bounds. */
+const MAX_ACTIONS = 400;
+const MAX_SEAT_ENTRIES = 10;
+
 function object(value: unknown, field: string): Fields {
   if (typeof value !== 'object' || value === null || Array.isArray(value)) throw invalid(field);
   return value as Fields;
 }
 
+/** A dense array of min..max entries; a hole is invalid as `<field>[i]`. */
 function array(value: unknown, field: string, min = 0, max = Infinity): readonly unknown[] {
   if (!Array.isArray(value) || value.length < min || value.length > max) throw invalid(field);
+  for (let i = 0; i < value.length; i++) {
+    if (!(i in value)) throw invalid(`${field}[${i}]`);
+  }
   return value;
 }
 
@@ -151,17 +173,40 @@ function oneOf(value: unknown, options: readonly unknown[], field: string): void
   if (!options.includes(value)) throw invalid(field);
 }
 
-function cards(value: unknown, field: string, min: number, max: number): void {
-  array(value, field, min, max).forEach((card, i) => whole(card, `${field}[${i}]`, 0, 51));
+function cards(value: unknown, field: string, min: number, max: number): readonly Card[] {
+  const list = array(value, field, min, max);
+  list.forEach((card, i) => whole(card, `${field}[${i}]`, 0, 51));
+  return list as readonly Card[];
 }
 
-function seatAmount(value: unknown, field: string): void {
+/** A whole seat 1..10 that is one of the record's seats. */
+function seatIn(value: unknown, seats: ReadonlySet<unknown>, field: string): void {
+  whole(value, field, 1, 10);
+  if (!seats.has(value)) throw invalid(field);
+}
+
+function seatAmount(value: unknown, field: string, seats: ReadonlySet<unknown>): void {
   const entry = object(value, field);
-  whole(entry.seat, `${field}.seat`, 1, 10);
+  seatIn(entry.seat, seats, `${field}.seat`);
   whole(entry.amount, `${field}.amount`, 0);
 }
 
-function checkSeats(value: unknown, userSeat: unknown): void {
+/** Each seat's one pair of hole cards: a pair is two different cards, and a seat shows the same pair (as a
+ *  set) every time it appears. */
+class HoleCards {
+  readonly pairs = new Map<unknown, readonly Card[]>();
+
+  add(seat: unknown, value: unknown, field: string): void {
+    const pair = cards(value, field, 2, 2);
+    if (pair[0] === pair[1]) throw invalid(field);
+    const known = this.pairs.get(seat);
+    if (known !== undefined && !pair.every((card) => known.includes(card))) throw invalid(field);
+    this.pairs.set(seat, pair);
+  }
+}
+
+/** The seat numbers; checks every seat entry. */
+function checkSeats(value: unknown, userSeat: unknown): ReadonlySet<unknown> {
   const seen = new Set<unknown>();
   let users = 0;
   array(value, 'seats', 2, 10).forEach((item, i) => {
@@ -173,7 +218,7 @@ function checkSeats(value: unknown, userSeat: unknown): void {
     oneOf(seat.kind, ['user', 'bot'], `${field}.kind`);
     const isUser = seat.kind === 'user';
     if (isUser ? seat.botId !== null : !isWhole(seat.botId, 1)) throw invalid(`${field}.botId`);
-    if (typeof seat.name !== 'string' || seat.name === '') throw invalid(`${field}.name`);
+    if (!isSeatName(seat.name)) throw invalid(`${field}.name`);
     if (isUser ? seat.style !== null : !BOT_STYLES.includes(seat.style as BotStyle)) {
       throw invalid(`${field}.style`);
     }
@@ -184,32 +229,35 @@ function checkSeats(value: unknown, userSeat: unknown): void {
     }
   });
   if (users !== 1) throw invalid('seats');
+  return seen;
 }
 
-function checkResult(value: unknown): void {
+function checkResult(value: unknown, seats: ReadonlySet<unknown>, holeCards: HoleCards): void {
   const result = object(value, 'result');
   oneOf(result.endedBy, ['fold', 'showdown'], 'result.endedBy');
-  array(result.showdown, 'result.showdown').forEach((item, i) => {
+  array(result.showdown, 'result.showdown', 0, MAX_SEAT_ENTRIES).forEach((item, i) => {
     const field = `result.showdown[${i}]`;
     const shown = object(item, field);
-    whole(shown.seat, `${field}.seat`, 1, 10);
-    cards(shown.holeCards, `${field}.holeCards`, 2, 2);
+    seatIn(shown.seat, seats, `${field}.seat`);
+    holeCards.add(shown.seat, shown.holeCards, `${field}.holeCards`);
     whole(shown.rank, `${field}.rank`, 0);
   });
-  array(result.awards, 'result.awards').forEach((item, i) => {
+  array(result.awards, 'result.awards', 0, MAX_SEAT_ENTRIES).forEach((item, i) => {
     const field = `result.awards[${i}]`;
     const award = object(item, field);
     whole(award.pot, `${field}.pot`, 0);
     whole(award.amount, `${field}.amount`, 0);
-    array(award.winners, `${field}.winners`).forEach((winner, w) =>
-      seatAmount(winner, `${field}.winners[${w}]`),
+    array(award.winners, `${field}.winners`, 0, MAX_SEAT_ENTRIES).forEach((winner, w) =>
+      seatAmount(winner, `${field}.winners[${w}]`, seats),
     );
   });
-  if (result.returned !== undefined) seatAmount(result.returned, 'result.returned');
+  if (result.returned !== undefined) seatAmount(result.returned, 'result.returned', seats);
 }
 
 /** Validates an untrusted stored value; returns it typed (not copied). Extra properties are ignored.
- *  RangeError('Invalid hand record: <field>') naming the first failing field. */
+ *  Besides each field's shape it checks the fields against each other: every seat named is a dealt-in seat,
+ *  each seat shows one pair (the user's is userHoleCards), no card appears twice, and the level matches the
+ *  game type. RangeError('Invalid hand record: <field>') naming the first failing field. */
 export function parseHandRecord(value: unknown): HandRecord {
   const record = object(value, 'record');
   if (typeof record.sessionId !== 'string' || !SESSION_ID.test(record.sessionId)) {
@@ -224,14 +272,14 @@ export function parseHandRecord(value: unknown): HandRecord {
   ) {
     throw invalid('completedAt');
   }
-  if (typeof record.replayCode !== 'string' || !isReplayCode(record.replayCode)) {
-    throw invalid('replayCode');
-  }
+  if (!isReplayCode(record.replayCode)) throw invalid('replayCode');
   oneOf(record.gameType, GAME_TYPES, 'gameType');
   const stake = object(record.stake, 'stake');
   whole(stake.smallBet, 'stake.smallBet', 1);
   whole(stake.bigBet, 'stake.bigBet', 1);
-  if (record.level !== null) whole(record.level, 'level', 1);
+  if (record.gameType === 'cash' ? record.level !== null : !isWhole(record.level, 1)) {
+    throw invalid('level');
+  }
   const stakes = object(record.stakes, 'stakes');
   for (const key of ['smallBlind', 'bigBlind', 'smallBet', 'bigBet']) {
     whole(stakes[key], `stakes.${key}`, 0);
@@ -239,27 +287,31 @@ export function parseHandRecord(value: unknown): HandRecord {
   oneOf(record.lineUp, LINE_UPS, 'lineUp');
   whole(record.button, 'button', 1, 10);
   whole(record.userSeat, 'userSeat', 1, 10);
-  checkSeats(record.seats, record.userSeat);
-  cards(record.userHoleCards, 'userHoleCards', 2, 2);
-  array(record.actions, 'actions').forEach((item, i) => {
+  const seats = checkSeats(record.seats, record.userSeat);
+  if (!seats.has(record.button)) throw invalid('button');
+  const holeCards = new HoleCards();
+  holeCards.add(record.userSeat, record.userHoleCards, 'userHoleCards');
+  array(record.actions, 'actions', 0, MAX_ACTIONS).forEach((item, i) => {
     const field = `actions[${i}]`;
     const action = object(item, field);
     oneOf(action.street, STREETS, `${field}.street`);
-    whole(action.seat, `${field}.seat`, 1, 10);
+    seatIn(action.seat, seats, `${field}.seat`);
     oneOf(action.type, ACTION_TYPES, `${field}.type`);
     whole(action.amount, `${field}.amount`, 0);
     whole(action.added, `${field}.added`, 0);
   });
-  cards(record.board, 'board', 0, 5);
+  const board = cards(record.board, 'board', 0, 5);
   if (record.shown !== null) {
     const shown = object(record.shown, 'shown');
-    array(shown.shown, 'shown.shown').forEach((item, i) => {
+    array(shown.shown, 'shown.shown', 0, MAX_SEAT_ENTRIES).forEach((item, i) => {
       const field = `shown.shown[${i}]`;
       const hand = object(item, field);
-      whole(hand.seat, `${field}.seat`, 1, 10);
-      cards(hand.holeCards, `${field}.holeCards`, 2, 2);
+      seatIn(hand.seat, seats, `${field}.seat`);
+      holeCards.add(hand.seat, hand.holeCards, `${field}.holeCards`);
     });
   }
-  checkResult(record.result);
+  checkResult(record.result, seats, holeCards);
+  const dealt = [...board, ...[...holeCards.pairs.values()].flat()];
+  if (new Set(dealt).size !== dealt.length) throw invalid('cards');
   return value as HandRecord;
 }

@@ -32,6 +32,25 @@ export function echoText(text: string): string {
   return text.length <= 10 ? text : `${text.slice(0, 10)}...`;
 }
 
+/** echoText for any value, without calling a hostile toString: primitives are echoed, others named by kind. */
+export function echoValue(value: unknown): string {
+  switch (typeof value) {
+    case 'string':
+    case 'number':
+    case 'boolean':
+    case 'bigint':
+    case 'undefined':
+      return echoText(String(value));
+    case 'function':
+      return '[function]';
+    case 'symbol':
+      return '[symbol]';
+    default:
+      if (value === null) return 'null';
+      return Array.isArray(value) ? '[array]' : '[object]';
+  }
+}
+
 export function parseCard(text: string): Card {
   if (typeof text !== 'string') {
     throw new RangeError(`Invalid card: expected a string, got ${typeof text}`);

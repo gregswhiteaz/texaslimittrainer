@@ -161,7 +161,7 @@ describe('hand record', () => {
     const store = openHandStore(factory, 'corrupt');
     await store.add(showdown);
     await new Promise<void>((resolve, reject) => {
-      const open = factory.open('corrupt', 1);
+      const open = factory.open('corrupt', 2);
       open.onsuccess = () => {
         const transaction = open.result.transaction('hands', 'readwrite');
         transaction.objectStore('hands').put({ ...showdown, handNumber: 2, board: [99] });

@@ -17,7 +17,8 @@ import {
   type SessionConfig,
   type TableState,
 } from '../../table/session';
-import { handRecord, type HandStore } from '../../table/hand-record';
+import type { HandStore } from '../../table/hand-record';
+import { handWrite, sessionRecord } from '../../table/session-record';
 import { sharedHandStore } from '../../storage/hand-store';
 import {
   sharedAdviceClient,
@@ -60,7 +61,8 @@ export function requestBotDecision(create: () => WorkerLike, turn: BotTurn): Pro
  * Holds the session and runs the deal step one macrotask later and each bot step botActionDelayMs(speed)
  * later (0 at Rapid, REQ-011.1); nothing runs on the user's turn.
  * Bot decisions are computed by the app-wide advice worker; replies after unmount or for an old turn are dropped.
- * After a hand its record is written to the hand store, and the next one is dealt NEXT_HAND_DELAY_MS later
+ * At mount the session's start record is put in the hand store. After a hand its record and the session's
+ * next-hand state are written together, and the next one is dealt NEXT_HAND_DELAY_MS later
  * (unless held) or once that write completes, whichever is later; a failed write deals nothing more (D-2).
  */
 export function useTableSession({
@@ -78,6 +80,18 @@ export function useTableSession({
   const [table, setTable] = useState(() => seatSession(config));
   const reported = useRef<number | null>(null);
   const [sessionId] = useState(newSessionId);
+  const [startedAt] = useState(() => new Date());
+  // The start record (A-3): written once per mount from the seated table; each hand's write waits for it.
+  // A failure is logged and does not stop dealing, as every hand's write puts the full session record.
+  const [initialTable] = useState(table);
+  const started = useRef<Promise<void> | null>(null);
+  useEffect(() => {
+    started.current ??= (handStore ?? sharedHandStore())
+      .putSession(sessionRecord(initialTable, { sessionId, startedAt, updatedAt: startedAt }))
+      .catch((error: unknown) => {
+        console.error('Session could not be saved', error);
+      });
+  }, [handStore, initialTable, sessionId, startedAt]);
   // Read through a ref so a new callback each render never restarts the next-hand timer (D-5).
   const callback = useRef(onHandComplete);
   useEffect(() => {
@@ -120,13 +134,15 @@ export function useTableSession({
       reported.current = table.handNumber;
       const done = completedHand(table);
       if (done !== null) {
-        const record = handRecord(done, {
+        const { record, session } = handWrite(table, {
           sessionId,
-          handNumber: table.handNumber,
-          config: table.config,
+          startedAt,
           completedAt: new Date(),
         });
-        write.current = (handStore ?? sharedHandStore()).add(record);
+        const store = handStore ?? sharedHandStore();
+        write.current = (started.current ?? Promise.resolve()).then(() =>
+          store.add(record, session),
+        );
         write.current.catch((error: unknown) => {
           console.error('Hand record could not be saved', error);
         });
@@ -152,7 +168,7 @@ export function useTableSession({
       };
     }
     return undefined;
-  }, [table, newCode, holdNextHand, createAdviceWorker, handStore, sessionId]);
+  }, [table, newCode, holdNextHand, createAdviceWorker, handStore, sessionId, startedAt]);
 
   const act = useCallback((action: Action) => {
     setTable((t) => (nextStep(t) === 'user' ? applyUserAction(t, action) : t));

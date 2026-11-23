@@ -1,4 +1,4 @@
-import { echoText, type Card } from './cards';
+import { echoValue, type Card } from './cards';
 import { evaluate, type HandRank } from './hand-evaluator';
 
 /** Seat number 1..10. Clockwise = increasing seat number, wrapping. */
@@ -142,6 +142,14 @@ function isObject(value: unknown): boolean {
   return typeof value === 'object' && value !== null;
 }
 
+/** Every index 0..length-1 holds a non-array object: `every` alone skips holes. */
+function isDenseObjects(values: readonly unknown[]): boolean {
+  for (let i = 0; i < values.length; i++) {
+    if (!(i in values) || !isObject(values[i]) || Array.isArray(values[i])) return false;
+  }
+  return true;
+}
+
 function validate(config: HandConfig): void {
   const { seats, stakes, deck, button } = config;
   if (seats.length < 2 || seats.length > 10) {
@@ -150,13 +158,30 @@ function validate(config: HandConfig): void {
   const seen = new Set<SeatNumber>();
   for (const { seat } of seats) {
     if (!Number.isInteger(seat) || seat < 1 || seat > 10) {
-      throw new RangeError(`Invalid seat: ${echoText(String(seat))}`);
+      throw new RangeError(`Invalid seat: ${echoValue(seat)}`);
     }
     if (seen.has(seat)) throw new RangeError(`Duplicate seat: ${seat}`);
     seen.add(seat);
   }
   if (!seen.has(button))
-    throw new RangeError(`Button must be a dealt-in seat: ${echoText(String(button))}`);
+    throw new RangeError(`Button must be a dealt-in seat: ${echoValue(button)}`);
+  const cards = new Set(deck);
+  if (
+    deck.length !== 52 ||
+    cards.size !== 52 ||
+    !deck.every((card) => Number.isInteger(card) && card >= 0 && card <= 51)
+  ) {
+    throw new RangeError('Deck must hold each of the 52 cards exactly once');
+  }
+  assertChips(stakes, seats);
+}
+
+/**
+ * The stake and stack rules of createHand (RangeError 'Invalid stakes', or a stack message). Stakes must be
+ * positive safe integers in order with 10 x minimumStack safe; every stack a safe integer of at least 1 and
+ * the stacks totalling at most Number.MAX_SAFE_INTEGER. Seat numbers are assumed already checked.
+ */
+export function assertChips(stakes: Stakes, seats: readonly SeatConfig[]): void {
   const amounts = [stakes.smallBlind, stakes.bigBlind, stakes.smallBet, stakes.bigBet];
   if (
     !amounts.every(isPositiveSafeInteger) ||
@@ -167,14 +192,6 @@ function validate(config: HandConfig): void {
     10 * minimumStack(stakes) > Number.MAX_SAFE_INTEGER
   ) {
     throw new RangeError('Invalid stakes');
-  }
-  const cards = new Set(deck);
-  if (
-    deck.length !== 52 ||
-    cards.size !== 52 ||
-    !deck.every((card) => Number.isInteger(card) && card >= 0 && card <= 51)
-  ) {
-    throw new RangeError('Deck must hold each of the 52 cards exactly once');
   }
   // Busted seats are left out by the caller; a stack below a blind posts it all-in (REQ-020.4).
   for (const { seat, stack } of seats) {
@@ -225,7 +242,7 @@ export function createHand(config: HandConfig): HandState {
     !isObject(rawStakes) ||
     !Array.isArray(rawSeats) ||
     !Array.isArray(rawDeck) ||
-    !rawSeats.every(isObject)
+    !isDenseObjects(rawSeats)
   ) {
     throw new RangeError('Invalid hand config');
   }

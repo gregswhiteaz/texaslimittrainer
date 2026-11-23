@@ -2,6 +2,7 @@ import type { Card } from '../engine/cards';
 import { shuffledDeck, type ReplayCode } from '../engine/deck';
 import {
   applyAction,
+  assertChips,
   createHand,
   legalActions,
   minimumStack,
@@ -83,6 +84,10 @@ export type GameType = 'cash' | 'sit-and-go';
 export type LineUpName = 'Mixed' | 'Tough' | 'Soft' | 'Custom';
 /** TASK-2.11 / TASK-3.18 widen: 'realistic'. */
 export type Speed = 'rapid';
+/** Every LineUpName. */
+export const LINE_UPS: readonly LineUpName[] = Object.freeze(['Mixed', 'Tough', 'Soft', 'Custom']);
+/** Every Speed. */
+export const SPEEDS: readonly Speed[] = Object.freeze(['rapid']);
 
 interface SessionConfigBase {
   /** 2..10 including the user (REQ-005.2); equals seats.length. */
@@ -242,10 +247,116 @@ export function botsClockwise(config: SessionConfig): readonly SessionSeat[] {
     .sort((a, b) => distance(a.seat) - distance(b.seat));
 }
 
-/** `input` merged over the first-use defaults; a sit-and-go drops the stake. Not validated (A-11). */
+const MAX_NAME_LENGTH = 40;
+
+function isWholeNumber(value: unknown): value is number {
+  return Number.isSafeInteger(value);
+}
+
+function isRecord(value: unknown): value is Readonly<Record<string, unknown>> {
+  return typeof value === 'object' && value !== null && !Array.isArray(value);
+}
+
+/** A string of 1 to 40 characters: the name rule for configs, session records and hand records (A-5). */
+export function isSeatName(value: unknown): value is string {
+  return typeof value === 'string' && value.length >= 1 && value.length <= MAX_NAME_LENGTH;
+}
+
+/** RangeError('Invalid session config: <field>') unless `value` is a valid SessionConfig: a known game type
+ *  (a cash stake that passes the engine's stake rules, else assertChips's RangeError; no stake in a
+ *  sit-and-go), players equal to the number of seats, dense ascending seats 1..10 with 1-40 character names,
+ *  exactly one user seat at userSeat with no style, a known style on every bot, a seated button, and a known
+ *  line-up and speed. Never coerces. */
+export function assertSessionConfig(value: unknown): asserts value is SessionConfig {
+  const fail = (field: string): never => {
+    throw new RangeError(`Invalid session config: ${field}`);
+  };
+  if (!isRecord(value)) return fail('config');
+  const config = value;
+  if (config.gameType === 'cash') {
+    const { stake } = config;
+    if (
+      !isRecord(stake) ||
+      typeof stake.smallBet !== 'number' ||
+      typeof stake.bigBet !== 'number'
+    ) {
+      return fail('stake');
+    }
+    // The engine's stake rules and message ('Invalid stakes'), so a restore reports what createHand would.
+    assertChips(stakesFor({ smallBet: stake.smallBet, bigBet: stake.bigBet }), []);
+  } else if (config.gameType === 'sit-and-go') {
+    if (Object.hasOwn(config, 'stake')) fail('stake');
+  } else {
+    fail('gameType');
+  }
+  const { seats } = config;
+  if (!Array.isArray(seats)) return fail('seats');
+  if (!TABLE_SIZES.includes(config.players as number) || config.players !== seats.length) {
+    fail('players');
+  }
+  if (!isWholeNumber(config.userSeat)) fail('userSeat');
+  let users = 0;
+  let previous = 0;
+  for (let i = 0; i < seats.length; i++) {
+    const field = `seats[${i}]`;
+    const item: unknown = seats[i];
+    if (!(i in seats) || !isRecord(item)) return fail(field);
+    if (!isWholeNumber(item.seat) || item.seat < 1 || item.seat > 10 || item.seat <= previous) {
+      fail(`${field}.seat`);
+    }
+    previous = item.seat as number;
+    if (!isSeatName(item.name)) fail(`${field}.name`);
+    if (item.kind === 'user') {
+      users += 1;
+      if (item.style !== null) fail(`${field}.style`);
+      if (item.seat !== config.userSeat) fail('userSeat');
+    } else if (item.kind === 'bot') {
+      if (!BOT_STYLES.includes(item.style as BotStyle)) fail(`${field}.style`);
+    } else {
+      fail(`${field}.kind`);
+    }
+  }
+  if (users !== 1) fail('seats');
+  if (
+    !isWholeNumber(config.button) ||
+    !seats.some((s: { seat: unknown }) => s.seat === config.button)
+  ) {
+    fail('button');
+  }
+  if (!LINE_UPS.includes(config.lineUp as LineUpName)) fail('lineUp');
+  if (!SPEEDS.includes(config.speed as Speed)) fail('speed');
+}
+
+/** `input` merged over the first-use defaults and made consistent, then validated (D-6). Given `players`
+ *  without `seats`, the table is reseated for that size (configForPlayers) before `userSeat`/`button` are
+ *  re-applied. Given `seats`, `players` defaults to their number, `userSeat` to the one user seat, and a
+ *  button that is not a seat to the seat after the user. A sit-and-go drops the stake. RangeError as
+ *  assertSessionConfig when the result is still inconsistent or unknown. */
 export function resolveSessionConfig(input: Partial<SessionConfig> = {}): SessionConfig {
-  const merged = { ...DEFAULT_SESSION_CONFIG, ...input };
-  return configForGameType(merged, merged.gameType, merged.stake);
+  const defaults: SessionConfig = DEFAULT_SESSION_CONFIG;
+  const stake = (input as Partial<CashSessionConfig>).stake ?? DEFAULT_SESSION_CONFIG.stake;
+  let merged = { ...defaults, ...input } as SessionConfig;
+  if (input.players !== undefined && input.seats === undefined) {
+    if (merged.players !== merged.seats.length) {
+      merged = configForPlayers(merged, merged.players);
+      if (input.userSeat !== undefined) merged = { ...merged, userSeat: input.userSeat };
+      if (input.button !== undefined) merged = { ...merged, button: input.button };
+    }
+  } else if (input.seats !== undefined) {
+    const { seats } = merged;
+    const users = seats.filter((s) => s.kind === 'user');
+    const userSeat =
+      input.userSeat ?? (users.length === 1 ? (users[0] as SessionSeat).seat : merged.userSeat);
+    let { button } = merged;
+    if (input.button === undefined && !seats.some((s) => s.seat === button)) {
+      const index = seats.findIndex((s) => s.seat === userSeat);
+      if (index >= 0) button = (seats[(index + 1) % seats.length] as SessionSeat).seat;
+    }
+    merged = { ...merged, players: input.players ?? seats.length, userSeat, button };
+  }
+  const config = configForGameType(merged, merged.gameType, stake);
+  assertSessionConfig(config);
+  return config;
 }
 
 export interface UserDecision {

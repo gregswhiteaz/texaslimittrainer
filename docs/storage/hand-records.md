@@ -10,17 +10,20 @@ changes or deletes them.
   `sharedHandStore`).
 - `src/ui/table/useTableSession.ts`: writes the record when a hand ends and holds the next deal until the
   write has finished.
+- The session record written with each hand (database version 2, store `sessions`) is described in
+  [sessions.md](sessions.md).
 
 ## Database
 
 | Item         | Value                                                                       |
 | ------------ | --------------------------------------------------------------------------- |
-| Database     | `tlh-trainer`, version `1` (the only version marker; no per-store versions) |
-| Object store | `hands` (the only store so far)                                             |
+| Database     | `tlh-trainer`, version `2` (the only version marker; no per-store versions) |
+| Object store | `hands` (and `sessions` since version 2, see sessions.md)                   |
 | Key          | `keyPath: ['sessionId', 'handNumber']` (compound, no auto-increment)        |
 | Indexes      | none besides the primary key                                                |
 
-The store is created in `onupgradeneeded` when `oldVersion < 1`. Later stores are added the same way with a
+The store is created in `onupgradeneeded` when `oldVersion < 1`; version 2 adds `sessions` when
+`oldVersion < 2` and leaves `hands` and its records untouched. Later stores are added the same way with a
 higher version and an `oldVersion` check. An open connection closes itself on `versionchange`.
 
 ## Record fields
@@ -60,7 +63,8 @@ for display. Records never hold the user's decision views or advice and grades
 
 ## Write before the next deal
 
-1. When a hand ends, `useTableSession` builds the record with `handRecord(…)` and starts `store.add(record)`,
+1. When a hand ends, `useTableSession` builds the record and the updated session record with `handWrite(…)`
+   and starts `store.add(record, session)` (one transaction over `hands` and `sessions`),
    then calls `onHandComplete` (exactly once per hand number, read through a ref so a new callback each render
    does not restart any timer).
 2. The auto-deal timer still starts at the result (`NEXT_HAND_DELAY_MS`, 1.5 s). When it fires, it waits for
@@ -73,8 +77,9 @@ event, so a committed record survives the browser process being killed.
 
 ## Immutability
 
-`HandStore` has only `add`, `get` and `count`; there is no put, update or delete. `add` of an existing
-`(sessionId, handNumber)` rejects with a `ConstraintError` and leaves the stored record unchanged. The hook
+For hand records `HandStore` has only `add`, `get` and `count`; there is no put, update or delete
+(`putSession`/`getSession` touch only the `sessions` store). `add` of an existing `(sessionId, handNumber)`
+rejects with a `ConstraintError` and leaves the stored record, and the session passed with it, unchanged. The hook
 never writes a duplicate: each table mount has a new session id and hand numbers only increase. Nothing
 deletes records automatically (no age or count limit).
 
@@ -91,6 +96,17 @@ Stored data is untrusted (it can be edited in DevTools). `HandStore.get` always 
 checks every field above and throws `RangeError('Invalid hand record: <field>')` naming the first bad field,
 for example `Invalid hand record: seats[2].botId`. It returns the stored value typed, without copying.
 
+Since TASK-3.10 it also checks the fields against each other and bounds every list:
+
+- Arrays must be dense: a hole is invalid (`actions[2]`).
+- Names are 1–40 characters. `actions` holds at most 400 entries; `shown.shown`, `result.showdown`,
+  `result.awards` and each `winners` at most 10.
+- `level` is null for cash and a whole number ≥ 1 for a sit-and-go.
+- `button` and every seat named in `actions`, `shown.shown`, `result.showdown`, award `winners` and
+  `result.returned` must be one of the record's `seats`.
+- Each seat shows one pair of two different cards; a seat named again must show the same pair, and the
+  user's pair is `userHoleCards`. No card appears twice across `board` and the seats' pairs (`cards`).
+
 ## Test seam
 
 `useTableSession` and `Table` take a `handStore` option (default `sharedHandStore()`, created lazily inside
@@ -99,7 +115,8 @@ the effect, so importing the hook in Node never touches IndexedDB). The e2e reco
 page timer before the real `add`, or one that always rejects. No delay or failure code ships in the app.
 
 Vitest uses `fake-indexeddb` (`new IDBFactory()` per test, passed to `openHandStore`). Playwright reads the
-real browser's `tlh-trainer/hands` directly (`e2e/support/hand-records.ts`).
+real browser's `tlh-trainer` stores directly at version 2 (`e2e/support/hand-records.ts`: `storedRecords`,
+`storedSessions`).
 
 ## Kill-the-browser check (opt-in)
 

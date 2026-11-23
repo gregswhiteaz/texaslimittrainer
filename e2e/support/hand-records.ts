@@ -1,19 +1,23 @@
 import { expect, type Page } from '@playwright/test';
 
-// Raw IndexedDB access to tlh-trainer/hands from the page, independent of src/storage (TASK-3.9), and a
+// Raw IndexedDB access to tlh-trainer from the page, independent of src/storage (TASK-3.9, TASK-3.10), and a
 // helper that plays the user's hands by folding.
 
-/** Runs in the page: every stored value in key order, after opening tlh-trainer v1 (creating `hands` as
- *  the app does if the database is new). */
-export function readStoredRecords(): Promise<unknown[]> {
+/** Runs in the page: every value in tlh-trainer's `store` ('hands' or 'sessions') in key order, after opening
+ *  the database at v2 (creating the stores as the app does if they are missing). */
+export function readStore(store: string): Promise<unknown[]> {
   return new Promise((resolve, reject) => {
-    const open = indexedDB.open('tlh-trainer', 1);
-    open.onupgradeneeded = () =>
-      open.result.createObjectStore('hands', { keyPath: ['sessionId', 'handNumber'] });
+    const open = indexedDB.open('tlh-trainer', 2);
+    open.onupgradeneeded = (event) => {
+      if (event.oldVersion < 1) {
+        open.result.createObjectStore('hands', { keyPath: ['sessionId', 'handNumber'] });
+      }
+      if (event.oldVersion < 2) open.result.createObjectStore('sessions', { keyPath: 'sessionId' });
+    };
     open.onerror = () => reject(open.error);
     open.onsuccess = () => {
       const db = open.result;
-      const request = db.transaction('hands', 'readonly').objectStore('hands').getAll();
+      const request = db.transaction(store, 'readonly').objectStore(store).getAll();
       request.onsuccess = () => {
         db.close();
         resolve(request.result);
@@ -23,12 +27,16 @@ export function readStoredRecords(): Promise<unknown[]> {
   });
 }
 
-/** Runs in the page: adds `records` straight into tlh-trainer/hands in one transaction. */
+/** Runs in the page: adds `records` straight into tlh-trainer/hands (v2) in one transaction. */
 export function seedStoredRecords(records: unknown[]): Promise<void> {
   return new Promise((resolve, reject) => {
-    const open = indexedDB.open('tlh-trainer', 1);
-    open.onupgradeneeded = () =>
-      open.result.createObjectStore('hands', { keyPath: ['sessionId', 'handNumber'] });
+    const open = indexedDB.open('tlh-trainer', 2);
+    open.onupgradeneeded = (event) => {
+      if (event.oldVersion < 1) {
+        open.result.createObjectStore('hands', { keyPath: ['sessionId', 'handNumber'] });
+      }
+      if (event.oldVersion < 2) open.result.createObjectStore('sessions', { keyPath: 'sessionId' });
+    };
     open.onerror = () => reject(open.error);
     open.onsuccess = () => {
       const db = open.result;
@@ -45,7 +53,10 @@ export function seedStoredRecords(records: unknown[]): Promise<void> {
 }
 
 export const storedRecords = (page: Page): Promise<Record<string, unknown>[]> =>
-  page.evaluate(readStoredRecords) as Promise<Record<string, unknown>[]>;
+  page.evaluate(readStore, 'hands') as Promise<Record<string, unknown>[]>;
+
+export const storedSessions = (page: Page): Promise<Record<string, unknown>[]> =>
+  page.evaluate(readStore, 'sessions') as Promise<Record<string, unknown>[]>;
 
 export const storedCount = async (page: Page): Promise<number> =>
   (await storedRecords(page)).length;
