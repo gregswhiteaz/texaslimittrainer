@@ -1,10 +1,11 @@
 ---
 id: TASK-3.10
 title: Save the session after every hand so it can be resumed
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-23T12:10:00Z'
+updated_date: '2026-11-23T12:48:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -70,6 +71,17 @@ Plan key: E03-S11 · Dream: limit-holdem-trainer
 - [ ] #11 Story documentation is written and published to Backlog.md
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. tlh-trainer v2: additive upgrade adds 'sessions' store; hand + session written in one strict transaction before the next deal.
+2. sessionRecord (next-hand state) / parseSessionRecord / restoreSession (hand always null; rejects hand/actions props).
+3. Restore validation: assertSessionConfig, assertChips (extracted from createHand), replay-code/seat/button type guards, sparse seats, resolveSessionConfig consistency, parseHandRecord cross-field checks.
+4. Tests: unit + every-push reload e2e; opt-in kill test; docs.
+
+Full spec: doit/TASK-3.10/spec.md
+<!-- SECTION:PLAN:END -->
 
 ## Implementation Notes
 
