@@ -64,7 +64,10 @@ describe('Home and Game Config acceptance', () => {
     expect(html).toMatch(/<h2[^>]*>Session<\/h2>/);
     expect(html).toMatch(/<h2[^>]*>Opponents<\/h2>/);
     const rows = [...html.matchAll(/<li>(.*?)<\/li>/g)].map(([, row = '']) =>
-      [...row.matchAll(/<span[^>]*>(.*?)<\/span>/g)].map(([, cell]) => cell),
+      [
+        ...row.matchAll(/<span[^>]*>(.*?)<\/span>/g),
+        ...row.matchAll(/<option[^>]*selected=""[^>]*>(.*?)<\/option>/g),
+      ].map(([, cell]) => cell),
     );
     expect(rows).toEqual([
       ['Seat 6', 'Ava', 'Tight-aggressive'],
@@ -76,7 +79,8 @@ describe('Home and Game Config acceptance', () => {
     ]);
     const buttons = [...html.matchAll(/<button[^>]*>(.*?)<\/button>/g)].map(([, label]) => label);
     expect(buttons).toEqual(['← Home', 'Cancel', 'Start game']);
-    expect(html.match(/<(input|select|textarea)[\s>]/g)).toEqual([
+    // TASK-2.8: the per-row style selects carry no id; the Session panel's selects do.
+    expect(html.match(/<(input|select(?= id=)|textarea)[\s>]/g)).toEqual([
       '<input ',
       '<input ',
       '<select ',

@@ -34,7 +34,10 @@ const dts = (html: string): string[] =>
   [...html.matchAll(/<dt>(.*?)<\/dt>/g)].map(([, dt = '']) => dt.replace(/<[^>]*>/g, ''));
 const seatRows = (html: string): string[][] =>
   [...html.matchAll(/<li>(.*?)<\/li>/g)].map(([, row = '']) =>
-    [...row.matchAll(/<span[^>]*>(.*?)<\/span>/g)].map(([, cell = '']) => cell),
+    [
+      ...row.matchAll(/<span[^>]*>(.*?)<\/span>/g),
+      ...row.matchAll(/<option[^>]*selected=""[^>]*>(.*?)<\/option>/g),
+    ].map(([, cell = '']) => cell),
   );
 const noteOf = (html: string): string[] =>
   [...html.matchAll(/<p id="config-players-note"[^>]*>(.*?)<\/p>/g)].map(([, t = '']) => t);

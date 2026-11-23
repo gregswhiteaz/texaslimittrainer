@@ -54,7 +54,10 @@ test('sit-and-go hides the stake selector and cash game brings back the chosen s
   await radio(page, 'Sit-and-go').check();
   await expect(radio(page, 'Sit-and-go')).toBeChecked();
   await expect(stakeSelect(page)).toHaveCount(0);
-  await expect(page.getByRole('combobox')).toHaveCount(1);
+  // TASK-2.8: the Session panel's selects; each Opponents row has its own style select.
+  await expect(
+    page.locator('section[aria-labelledby="config-session"]').getByRole('combobox'),
+  ).toHaveCount(1);
   const fields = await page.locator('.config-fields').innerText();
   expect(fields).not.toContain('Stakes (small bet / big bet)');
   expect(fields).not.toContain('Buy-in');

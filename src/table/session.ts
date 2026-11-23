@@ -30,6 +30,7 @@ import {
   replacementStyles,
   seatLineUp,
   type LineUpPreset,
+  type LineUpSeat,
 } from '../bots/lineup';
 
 export interface Stake {
@@ -171,6 +172,35 @@ export function configForLineUp(
 ): SessionConfig {
   const sized = configForPlayers(config, players);
   return lineUpSessionConfig(sized, preset, seatLineUp(preset, players, sized.userSeat));
+}
+
+/** REQ-009.2: the styles a bot seat can take, in Game Config option order. */
+export const BOT_STYLES: readonly BotStyle[] = Object.freeze([
+  'TAG',
+  'Calling station',
+  'Maniac',
+  'Rock',
+]);
+
+/** REQ-009.3/009.6: `config` with bot `seat` set to `style` and the line-up name re-resolved against `preset`
+ *  (Custom when any bot differs from the preset). Everything else is kept. RangeError on an unknown style, a
+ *  seat that is not a bot, or as lineUpSessionConfig. */
+export function configWithSeatStyle(
+  config: SessionConfig,
+  preset: LineUpPreset,
+  seat: number,
+  style: BotStyle,
+): SessionConfig {
+  if (!BOT_STYLES.includes(style)) throw new RangeError(`Unknown bot style: ${String(style)}`);
+  if (!config.seats.some((s) => s.seat === seat && s.kind === 'bot')) {
+    throw new RangeError(`Seat ${seat} is not a bot seat`);
+  }
+  const seats = config.seats.map((s): LineUpSeat =>
+    s.kind === 'user'
+      ? { seat: s.seat, kind: 'user', style: null, name: null }
+      : { seat: s.seat, kind: 'bot', style: s.seat === seat ? style : s.style, name: s.name },
+  );
+  return lineUpSessionConfig(config, preset, seats);
 }
 
 /** The bot seats in clockwise order, starting with the first bot clockwise from the user. */

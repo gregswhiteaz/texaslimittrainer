@@ -15,6 +15,9 @@ const stackOf = (page: Page, seat: number) =>
   page.locator(`li[data-seat="${seat}"] [data-part="stack"]`);
 const actionOf = (page: Page, seat: number) =>
   page.locator(`li[data-seat="${seat}"] [data-part="action"]`);
+// TASK-2.8: the Session panel's selects; each Opponents row has its own style select.
+const sessionComboboxes = (page: Page) =>
+  page.locator('section[aria-labelledby="config-session"]').getByRole('combobox');
 const selectedText = (page: Page) =>
   stakeSelect(page).evaluate((el: HTMLSelectElement) => el.selectedOptions[0]?.textContent);
 
@@ -47,7 +50,7 @@ test('stake list is the six stakes with $4 / $8 selected and the buy-in follows 
   await expect(
     buyInRow(page).locator('input, select, textarea, button, a, [contenteditable], [tabindex]'),
   ).toHaveCount(0);
-  await expect(page.getByRole('combobox')).toHaveCount(2);
+  await expect(sessionComboboxes(page)).toHaveCount(2);
 
   await button(page, 'Cancel').click();
   await page.getByRole('button', { name: /^New game/ }).click();
@@ -99,7 +102,7 @@ test('every stake keeps game config free of real-money controls and axe clean', 
       'Cancel',
       'Start game',
     ]);
-    await expect(page.getByRole('combobox')).toHaveCount(2);
+    await expect(sessionComboboxes(page)).toHaveCount(2);
     await expect(page.getByRole('link')).toHaveCount(0);
     await expect(page.getByRole('textbox')).toHaveCount(0);
     await expectNoSeriousAxeViolations(page);

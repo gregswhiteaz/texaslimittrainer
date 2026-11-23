@@ -71,10 +71,15 @@ async function openGameConfig(page: Page): Promise<void> {
   await expect(page.getByRole('heading', { level: 1, name: 'New game' })).toBeVisible();
 }
 
-/** Each Opponents row as "Seat n Name Style". */
+/** Each Opponents row as "Seat n Name Style" (TASK-2.8: the style is the row select's chosen option). */
 async function rowTexts(page: Page): Promise<string[]> {
   return opponents(page).evaluateAll((lis) =>
-    lis.map((li) => [...li.querySelectorAll('span')].map((s) => s.textContent ?? '').join(' ')),
+    lis.map((li) =>
+      [
+        ...[...li.querySelectorAll('span')].map((s) => s.textContent ?? ''),
+        li.querySelector('select')?.selectedOptions[0]?.textContent ?? '',
+      ].join(' '),
+    ),
   );
 }
 
@@ -98,9 +103,10 @@ test('first use selects Mixed and Start game with Soft seats exactly the listed 
   await expect(preset(page, 'Mixed')).not.toBeChecked();
   const listed = await opponents(page).evaluateAll((lis) =>
     lis.map((li) => {
-      const [seat = '', name = '', style = ''] = [...li.querySelectorAll('span')].map(
+      const [seat = '', name = ''] = [...li.querySelectorAll('span')].map(
         (s) => s.textContent ?? '',
       );
+      const style = li.querySelector('select')?.selectedOptions[0]?.textContent ?? '';
       return { seat: seat.replace('Seat ', ''), name, style };
     }),
   );

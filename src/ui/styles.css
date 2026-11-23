@@ -135,7 +135,8 @@ h1[tabindex='-1']:focus {
 }
 
 /* appearance: none so WebKit honours the 44 px height; the chevron replaces the native arrow. */
-.config-fields select {
+.config-fields select,
+.config-seats select {
   appearance: none;
   min-height: 44px;
   padding: 0 36px 0 12px;
@@ -237,6 +238,14 @@ h1[tabindex='-1']:focus {
 .config-seats .seat-name {
   flex: 1 1 120px;
   font-weight: 500;
+}
+
+.config-style {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: #a7aeb8;
 }
 
 .config-actions {

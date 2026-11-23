@@ -3,11 +3,13 @@ import { referenceSizeOf } from '../../advice/preflop';
 import type { ReferenceSize } from '../../advice/preflop-chart';
 import { LINE_UP_PRESETS, type LineUpPreset } from '../../bots/lineup';
 import {
+  BOT_STYLES,
   botsClockwise,
   buyIn,
   CASH_STAKES,
   configForGameType,
   configForLineUp,
+  configWithSeatStyle,
   DEFAULT_SESSION_CONFIG,
   type BotStyle,
   type GameType,
@@ -66,10 +68,13 @@ type Field = readonly [string, React.ReactNode, React.ReactNode];
 
 const isPreset = (name: string): name is LineUpPreset =>
   (LINE_UP_PRESETS as readonly string[]).includes(name);
+const isBotStyle = (value: string): value is BotStyle =>
+  (BOT_STYLES as readonly string[]).includes(value);
 
 /** Summary of `config` (TASK-2.1 D-6) plus the game-type (TASK-2.4 D-4), players (TASK-2.2 D-1), stake
- *  (TASK-2.3 D-1) and line-up (TASK-2.5) choices; Start game hands over the chosen size seated with the chosen
- *  line-up, the chosen game type, and the chosen stake for a cash game. */
+ *  (TASK-2.3 D-1), line-up (TASK-2.5) and per-seat style (TASK-2.8) choices; Start game hands over the chosen
+ *  size seated with the chosen line-up and seat edits, the chosen game type, and the chosen stake for a cash
+ *  game. */
 export function GameConfigScreen({
   config,
   onStart,
@@ -86,7 +91,12 @@ export function GameConfigScreen({
   const [preset, setPreset] = useState<LineUpPreset>(
     isPreset(config.lineUp) ? config.lineUp : 'Mixed',
   );
-  const seated = configForLineUp(config, players, preset);
+  // TASK-2.8 A-2: per-seat style edits; a preset or players change discards them.
+  const [edits, setEdits] = useState<Readonly<Record<number, BotStyle>>>({});
+  const seated = Object.entries(edits).reduce(
+    (c, [seat, style]) => configWithSeatStyle(c, preset, Number(seat), style),
+    configForLineUp(config, players, preset),
+  );
   const note = playersNote(players);
   const stack = buyIn(stake);
   const gameTypeChoice = (
@@ -113,7 +123,10 @@ export function GameConfigScreen({
         aria-describedby={note === null ? undefined : 'config-players-note'}
         onChange={(event) => {
           const chosen = Number(event.target.value);
-          if (TABLE_SIZES.includes(chosen)) setPlayers(chosen);
+          if (TABLE_SIZES.includes(chosen)) {
+            setPlayers(chosen);
+            setEdits({});
+          }
         }}
       >
         {TABLE_SIZES.map((n) => (
@@ -194,7 +207,10 @@ export function GameConfigScreen({
                   name="line-up"
                   value={value}
                   checked={preset === value}
-                  onChange={() => setPreset(value)}
+                  onChange={() => {
+                    setPreset(value);
+                    setEdits({});
+                  }}
                 />
                 {value}
               </label>
@@ -205,7 +221,23 @@ export function GameConfigScreen({
               <li key={s.seat}>
                 <span className="seat-label">Seat {s.seat}</span>
                 <span className="seat-name">{s.name}</span>
-                <span>{s.style !== null && STYLE_LABELS[s.style]}</span>
+                <label className="config-style">
+                  Style
+                  <select
+                    aria-label={`Style for ${s.name}`}
+                    value={s.style ?? undefined}
+                    onChange={(event) => {
+                      const chosen = event.target.value;
+                      if (isBotStyle(chosen)) setEdits({ ...edits, [s.seat]: chosen });
+                    }}
+                  >
+                    {BOT_STYLES.map((v) => (
+                      <option key={v} value={v}>
+                        {STYLE_LABELS[v]}
+                      </option>
+                    ))}
+                  </select>
+                </label>
               </li>
             ))}
             <li>

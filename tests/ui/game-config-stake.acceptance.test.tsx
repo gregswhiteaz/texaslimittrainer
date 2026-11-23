@@ -17,7 +17,8 @@ const render = (stake: Stake): string =>
     />,
   ).replace(/<!-- -->/g, '');
 
-const selects = (html: string): string[] => html.match(/<select[\s\S]*?<\/select>/g) ?? [];
+// TASK-2.8: the Session panel's selects (with an id); the per-row style selects carry none.
+const selects = (html: string): string[] => html.match(/<select id=[\s\S]*?<\/select>/g) ?? [];
 const optionTexts = (select: string): string[] =>
   [...select.matchAll(/<option[^>]*>(.*?)<\/option>/g)].map(([, t = '']) => t);
 const selectedTexts = (select: string): string[] =>

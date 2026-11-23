@@ -26,7 +26,10 @@ const checkedPresets = (html: string): string[] =>
     .map(valueOf);
 const seatRows = (html: string): string[][] =>
   [...html.matchAll(/<li>(.*?)<\/li>/g)].map(([, row = '']) =>
-    [...row.matchAll(/<span[^>]*>(.*?)<\/span>/g)].map(([, cell = '']) => cell),
+    [
+      ...row.matchAll(/<span[^>]*>(.*?)<\/span>/g),
+      ...row.matchAll(/<option[^>]*selected=""[^>]*>(.*?)<\/option>/g),
+    ].map(([, cell = '']) => cell),
   );
 const botRows = (html: string): string[][] => seatRows(html).filter((r) => r[0] !== 'You');
 
