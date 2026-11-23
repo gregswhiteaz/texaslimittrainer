@@ -55,11 +55,13 @@ export class StyleCheck {
   private readonly styleCounts = new Map<StyleName, StyleCounts>();
   private readonly mixedCounts = new Map<StyleName, Map<SpotType, MixedCounts>>();
   private steps: PreflopStep[] = [];
+  private readonly recordMixed: boolean;
 
   /** ActionHook: records (before, action) for preflop steps when recordMixed; always returns []. */
   readonly onAction: ActionHook;
 
   constructor(recordMixed: boolean) {
+    this.recordMixed = recordMixed;
     this.onAction = (step) => {
       if (recordMixed && step.before.street === 'preflop') {
         this.steps.push({ before: step.before, action: step.action });
@@ -92,7 +94,7 @@ export class StyleCheck {
     for (const [seat, style] of styleOf) {
       const total = this.styleCounts.get(style) ?? EMPTY_STYLE_COUNTS;
       this.styleCounts.set(style, addStyleCounts(total, handStyleCounts(statHand, seat)));
-      if (!this.mixedCounts.has(style)) {
+      if (this.recordMixed && !this.mixedCounts.has(style)) {
         const spots = SPOT_TYPES.filter((spot) => STYLE_DATA[style].mixedSpots.has(spot));
         if (spots.length > 0) {
           this.mixedCounts.set(

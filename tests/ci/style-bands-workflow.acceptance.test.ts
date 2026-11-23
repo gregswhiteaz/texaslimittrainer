@@ -1,5 +1,4 @@
-import { execFileSync } from 'node:child_process';
-import { readFileSync } from 'node:fs';
+import { readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { REPO_ROOT } from '../support/sandbox';
@@ -12,19 +11,6 @@ const pinned = (text: string, action: string) =>
   [...text.matchAll(new RegExp(`uses: (${action}@[0-9a-f]{40} # v[0-9.]+)$`, 'gm'))].map(
     (match) => match[1],
   );
-
-/** `path` as committed on main, or null when main isn't available (e.g. a shallow CI checkout). */
-function onMain(path: string): string | null {
-  try {
-    return execFileSync('git', ['show', `main:${path}`], {
-      cwd: REPO_ROOT,
-      encoding: 'utf8',
-      stdio: ['ignore', 'pipe', 'ignore'],
-    });
-  } catch {
-    return null;
-  }
-}
 
 describe('Style-band workflow', () => {
   it('the style-band workflow runs the three 100k --check-styles seeds on manual dispatch only', () => {
@@ -58,9 +44,16 @@ describe('Style-band workflow', () => {
     expect([...workflow.matchAll(/uses: /g)]).toHaveLength(2);
     expect(workflow).toContain('node-version-file: .nvmrc\n');
 
+    // The 100k style check never runs on push or schedule: no other workflow invokes it.
     for (const name of ['ci.yml', 'million.yml', 'million-lineups.yml']) {
-      const committed = onMain(`.github/workflows/${name}`);
-      if (committed !== null) expect(read(name), name).toBe(committed);
+      expect(read(name), name).not.toContain('--check-styles');
+      expect(read(name), name).not.toContain('style-bands');
     }
+    const workflows = readdirSync(join(REPO_ROOT, '.github/workflows')).filter((name) =>
+      /\.ya?ml$/.test(name),
+    );
+    expect(workflows.filter((name) => read(name).includes('--check-styles'))).toEqual([
+      'style-bands.yml',
+    ]);
   });
 });

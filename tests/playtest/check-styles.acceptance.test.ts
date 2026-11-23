@@ -29,7 +29,7 @@ import {
 import maniacJson from '../../src/bots/styles/maniac.json' with { type: 'json' };
 
 const SLOW = process.env.TLH_SLOW_TESTS === '1';
-const FAST_TIMEOUT_MS = 120_000;
+const FAST_TIMEOUT_MS = 30_000;
 const SLOW_TIMEOUT_MS = 1_200_000;
 const STYLE_LINE =
   /^Style: (TAG|Calling station|Maniac|Rock), (\d+) hands, VPIP (\d+\.\d)%, PFR (\d+\.\d)%, aggression (\d+\.\d%|—)$/;
@@ -44,6 +44,28 @@ function capture(argv: string[], seams?: PlaytestSeams, bands?: StyleBandTable) 
   const code = main(argv, { out: (t) => (out += t), err: (t) => (err += t) }, seams, bands);
   return { code, out, err, lines: out.split('\n') };
 }
+
+/** Plain (no seams, no bands) runs shared between tests; a determinism check still does a fresh run. */
+const shared = new Map<string, ReturnType<typeof capture>>();
+function sharedCapture(argv: string[]) {
+  const key = argv.join(' ');
+  let run = shared.get(key);
+  if (run === undefined) {
+    run = capture(argv);
+    shared.set(key, run);
+  }
+  return run;
+}
+const mixedArgv = (hands: number) => [
+  '--hands',
+  String(hands),
+  '--seed',
+  '42',
+  '--lineup',
+  'mixed',
+  '--size',
+  '6',
+];
 
 const linesStarting = (lines: readonly string[], prefix: string) =>
   lines.filter((line) => line.startsWith(prefix));
@@ -108,53 +130,169 @@ function seamFor(style: StyleName, policy: PolicyFactory): PlaytestSeams {
   };
 }
 
+function printsStyleStats(mixedHands: number, plainHands: number) {
+  const argv = mixedArgv(mixedHands);
+  const run = sharedCapture(argv);
+  expect(run.code).toBe(0);
+  expect(capture(argv).out).toBe(run.out);
+  const header = run.lines.indexOf(HEADER);
+  expect(header).toBeGreaterThan(run.lines.findIndex((line) => line.startsWith('Line-up: ')));
+  const block = run.lines.slice(header + 1, header + 5);
+  expect(block.map((line) => STYLE_LINE.exec(line)?.[1])).toEqual([
+    'TAG',
+    'Calling station',
+    'Maniac',
+    'Rock',
+  ]);
+  expect(run.lines[header + 5]).toMatch(/^Bot results: /);
+
+  const printed = printedStyles(run.lines);
+  const expected = tallyRun(mixedHands, 'Mixed');
+  expect([...printed.keys()].sort()).toEqual([...expected.keys()].sort());
+  for (const [style, c] of expected) {
+    const stats = styleStats(c);
+    expect(printed.get(style), style).toEqual({
+      hands: c.handsDealt,
+      vpip: roundStat(stats.vpip),
+      pfr: roundStat(stats.pfr),
+      aggression: roundStat(stats.aggression),
+    });
+  }
+
+  const plain = capture(['--hands', String(plainHands), '--seed', '42']);
+  expect(plain.code).toBe(0);
+  const tag = linesStarting(plain.lines, 'Style: ');
+  expect(tag).toHaveLength(1);
+  expect(tag[0]).toMatch(new RegExp(`^Style: TAG, ${plainHands * 6} hands, `));
+  const tagCounts = tallyRun(plainHands).get('TAG') as StyleCounts;
+  const tagStats = styleStats(tagCounts);
+  expect(printedStyles(plain.lines).get('TAG')).toEqual({
+    hands: plainHands * 6,
+    vpip: roundStat(tagStats.vpip),
+    pfr: roundStat(tagStats.pfr),
+    aggression: roundStat(tagStats.aggression),
+  });
+}
+
+function testManiacFails(hands: number) {
+  const style = parseStyle({ ...maniacJson, deviations: [] }, 'test-maniac.json');
+  const seams = seamFor(
+    'Maniac',
+    (code) => (view) =>
+      decideManiac(view, { random: botRandom(botDecisionSeed(code, view)), style }),
+  );
+  const argv = mixedArgv(hands);
+  const checked = capture([...argv, '--check-styles'], seams);
+  expect(checked.code).toBe(1);
+  expect(checked.lines).toContain('Invariant violations: 0');
+  expect(
+    checked.lines.some((line) =>
+      /^Outside band: Maniac VPIP \d+\.\d% \(band 50\.0-75\.0%\)$/.test(line),
+    ),
+  ).toBe(true);
+  expect(checked.lines).toContain('Style check: failed');
+
+  const plain = capture(argv, seams);
+  expect(plain.code).toBe(0);
+  expect(linesStarting(plain.lines, 'Outside band:')).toEqual([]);
+}
+
+function bandEdges(hands: number) {
+  const argv = ['--hands', String(hands), '--seed', '42', '--lineup', 'soft', '--size', '6'];
+  const printed = printedStyles(capture(argv).lines);
+  expect([...printed.keys()].sort()).toEqual(['Calling station', 'Rock']);
+  const exact = { ...STYLE_BANDS } as Record<StyleName, StyleBandTable[StyleName]>;
+  for (const [style, p] of printed) {
+    expect(p.aggression, style).not.toBeNull();
+    exact[style] = {
+      vpip: [p.vpip, p.vpip],
+      pfr: [p.pfr, p.pfr],
+      aggression: [p.aggression as number, p.aggression as number],
+    };
+  }
+  const edges = capture([...argv, '--check-styles'], undefined, exact);
+  expect(edges.code).toBe(0);
+  const lines = linesStarting(edges.lines, 'Style: ');
+  expect(lines).toHaveLength(2);
+  for (const line of lines) {
+    const m = CHECKED_LINE.exec(line);
+    expect(m, line).not.toBeNull();
+    const [, , , vpip, vLow, vHigh, pfr, pLow, pHigh, agg, aLow, aHigh] = m as RegExpExecArray;
+    expect([vLow, vHigh, pLow, pHigh, aLow, aHigh]).toEqual([vpip, vpip, pfr, pfr, agg, agg]);
+  }
+  expect(linesStarting(edges.lines, 'Mixed spot:')).toEqual([]);
+  const verdict = edges.lines.indexOf('Style check: passed');
+  expect(verdict).toBeGreaterThan(0);
+  expect(edges.lines[verdict + 1]).toMatch(/^Bot results: /);
+
+  const rock = printed.get('Rock') as Printed;
+  const above = Math.round((rock.vpip + 0.1) * 10) / 10;
+  const failing = capture([...argv, '--check-styles'], undefined, {
+    ...exact,
+    Rock: { ...exact.Rock, vpip: [above, 100] },
+  });
+  expect(failing.code).toBe(1);
+  expect(failing.lines).toContain(
+    `Outside band: Rock VPIP ${rock.vpip.toFixed(1)}% (band ${above.toFixed(1)}-100.0%)`,
+  );
+  expect(failing.lines).toContain('Style check: failed');
+}
+
+function mixedSpots(hands: number) {
+  const argv = mixedArgv(hands);
+  const checked = capture([...argv, '--check-styles']);
+  const mixed = linesStarting(checked.lines, 'Mixed spot:');
+  expect(mixed.map((line) => line.split(',')[0])).toEqual([
+    'Mixed spot: TAG preflop-unopened',
+    'Mixed spot: TAG preflop-limpers',
+    'Mixed spot: TAG preflop-raise',
+    'Mixed spot: TAG preflop-raise-and-calls',
+    'Mixed spot: TAG preflop-blind-defence',
+  ]);
+  for (const line of mixed) {
+    expect(line).toMatch(/^Mixed spot: TAG preflop-[a-z-]+, recommended \d+, alternative \d+$/);
+  }
+  const unopened = /recommended (\d+), alternative (\d+)$/.exec(mixed[0] as string);
+  expect(Number(unopened?.[1])).toBeGreaterThan(0);
+  expect(Number(unopened?.[2])).toBeGreaterThan(0);
+
+  const neverMixing = capture(
+    [...argv, '--check-styles'],
+    seamFor('TAG', () => (view) => decideTag(view)),
+  );
+  expect(neverMixing.code).toBe(1);
+  expect(
+    neverMixing.lines.some((line) =>
+      /^One action only: TAG preflop-unopened, recommended \d+, alternative 0$/.test(line),
+    ),
+  ).toBe(true);
+  expect(neverMixing.lines).toContain('Style check: failed');
+
+  expect(linesStarting(sharedCapture(argv).lines, 'Mixed spot:')).toEqual([]);
+}
+
+function maniacAggression(hands: number) {
+  const run = sharedCapture(mixedArgv(hands));
+  expect(run.code).toBe(0);
+  const printed = printedStyles(run.lines);
+  for (const style of ['TAG', 'Calling station', 'Maniac', 'Rock'] as const) {
+    expect(printed.get(style)?.aggression, style).toEqual(expect.any(Number));
+  }
+  const maniac = printed.get('Maniac')?.aggression as number;
+  expect(maniac).toBeGreaterThan(0);
+  expect(maniac).toBeLessThan(100);
+}
+
 describe('playtest style stats (--check-styles)', () => {
   it(
     "every playtest run prints each seated style's VPIP, PFR and aggression from the shared style-stat functions",
-    () => {
-      const argv = ['--hands', '500', '--seed', '42', '--lineup', 'mixed', '--size', '6'];
-      const run = capture(argv);
-      expect(run.code).toBe(0);
-      expect(capture(argv).out).toBe(run.out);
-      const header = run.lines.indexOf(HEADER);
-      expect(header).toBeGreaterThan(run.lines.findIndex((line) => line.startsWith('Line-up: ')));
-      const block = run.lines.slice(header + 1, header + 5);
-      expect(block.map((line) => STYLE_LINE.exec(line)?.[1])).toEqual([
-        'TAG',
-        'Calling station',
-        'Maniac',
-        'Rock',
-      ]);
-      expect(run.lines[header + 5]).toMatch(/^Bot results: /);
-
-      const printed = printedStyles(run.lines);
-      const expected = tallyRun(500, 'Mixed');
-      expect([...printed.keys()].sort()).toEqual([...expected.keys()].sort());
-      for (const [style, c] of expected) {
-        const stats = styleStats(c);
-        expect(printed.get(style), style).toEqual({
-          hands: c.handsDealt,
-          vpip: roundStat(stats.vpip),
-          pfr: roundStat(stats.pfr),
-          aggression: roundStat(stats.aggression),
-        });
-      }
-
-      const plain = capture(['--hands', '300', '--seed', '42']);
-      expect(plain.code).toBe(0);
-      const tag = linesStarting(plain.lines, 'Style: ');
-      expect(tag).toHaveLength(1);
-      expect(tag[0]).toMatch(/^Style: TAG, 1800 hands, /);
-      const tagCounts = tallyRun(300).get('TAG') as StyleCounts;
-      const tagStats = styleStats(tagCounts);
-      expect(printedStyles(plain.lines).get('TAG')).toEqual({
-        hands: 1800,
-        vpip: roundStat(tagStats.vpip),
-        pfr: roundStat(tagStats.pfr),
-        aggression: roundStat(tagStats.aggression),
-      });
-    },
+    () => printsStyleStats(300, 100),
     FAST_TIMEOUT_MS,
+  );
+  it.runIf(SLOW)(
+    "every playtest run prints each seated style's VPIP, PFR and aggression from the shared style-stat functions (original hand counts)",
+    () => printsStyleStats(500, 300),
+    SLOW_TIMEOUT_MS,
   );
 
   it('aggression of 2 preflop raises, 3 postflop bets, 1 postflop raise and 4 postflop calls is 50.0%', () => {
@@ -197,127 +335,46 @@ describe('playtest style stats (--check-styles)', () => {
 
   it(
     "a test style file that moves the Maniac's VPIP below its band fails --check-styles with style, stat, value and band",
-    () => {
-      const style = parseStyle({ ...maniacJson, deviations: [] }, 'test-maniac.json');
-      const seams = seamFor(
-        'Maniac',
-        (code) => (view) =>
-          decideManiac(view, { random: botRandom(botDecisionSeed(code, view)), style }),
-      );
-      const argv = ['--hands', '1000', '--seed', '42', '--lineup', 'mixed', '--size', '6'];
-      const checked = capture([...argv, '--check-styles'], seams);
-      expect(checked.code).toBe(1);
-      expect(checked.lines).toContain('Invariant violations: 0');
-      expect(
-        checked.lines.some((line) =>
-          /^Outside band: Maniac VPIP \d+\.\d% \(band 50\.0-75\.0%\)$/.test(line),
-        ),
-      ).toBe(true);
-      expect(checked.lines).toContain('Style check: failed');
-
-      const plain = capture(argv, seams);
-      expect(plain.code).toBe(0);
-      expect(linesStarting(plain.lines, 'Outside band:')).toEqual([]);
-    },
+    () => testManiacFails(300),
     FAST_TIMEOUT_MS,
+  );
+  it.runIf(SLOW)(
+    "a test style file that moves the Maniac's VPIP below its band fails --check-styles with style, stat, value and band (original hand counts)",
+    () => testManiacFails(1000),
+    SLOW_TIMEOUT_MS,
   );
 
   it(
     'band edges are inclusive and every stat prints with its band when all are inside',
-    () => {
-      const argv = ['--hands', '2000', '--seed', '42', '--lineup', 'soft', '--size', '6'];
-      const printed = printedStyles(capture(argv).lines);
-      expect([...printed.keys()].sort()).toEqual(['Calling station', 'Rock']);
-      const exact = { ...STYLE_BANDS } as Record<StyleName, StyleBandTable[StyleName]>;
-      for (const [style, p] of printed) {
-        expect(p.aggression, style).not.toBeNull();
-        exact[style] = {
-          vpip: [p.vpip, p.vpip],
-          pfr: [p.pfr, p.pfr],
-          aggression: [p.aggression as number, p.aggression as number],
-        };
-      }
-      const edges = capture([...argv, '--check-styles'], undefined, exact);
-      expect(edges.code).toBe(0);
-      const lines = linesStarting(edges.lines, 'Style: ');
-      expect(lines).toHaveLength(2);
-      for (const line of lines) {
-        const m = CHECKED_LINE.exec(line);
-        expect(m, line).not.toBeNull();
-        const [, , , vpip, vLow, vHigh, pfr, pLow, pHigh, agg, aLow, aHigh] = m as RegExpExecArray;
-        expect([vLow, vHigh, pLow, pHigh, aLow, aHigh]).toEqual([vpip, vpip, pfr, pfr, agg, agg]);
-      }
-      expect(linesStarting(edges.lines, 'Mixed spot:')).toEqual([]);
-      const verdict = edges.lines.indexOf('Style check: passed');
-      expect(verdict).toBeGreaterThan(0);
-      expect(edges.lines[verdict + 1]).toMatch(/^Bot results: /);
-
-      const rock = printed.get('Rock') as Printed;
-      const above = Math.round((rock.vpip + 0.1) * 10) / 10;
-      const failing = capture([...argv, '--check-styles'], undefined, {
-        ...exact,
-        Rock: { ...exact.Rock, vpip: [above, 100] },
-      });
-      expect(failing.code).toBe(1);
-      expect(failing.lines).toContain(
-        `Outside band: Rock VPIP ${rock.vpip.toFixed(1)}% (band ${above.toFixed(1)}-100.0%)`,
-      );
-      expect(failing.lines).toContain('Style check: failed');
-    },
+    () => bandEdges(300),
     FAST_TIMEOUT_MS,
+  );
+  it.runIf(SLOW)(
+    'band edges are inclusive and every stat prints with its band when all are inside (original hand counts)',
+    () => bandEdges(2000),
+    SLOW_TIMEOUT_MS,
   );
 
   it(
     "--check-styles lists each mixed spot's action counts and fails a spot that used one action",
-    () => {
-      const argv = ['--hands', '1000', '--seed', '42', '--lineup', 'mixed', '--size', '6'];
-      const checked = capture([...argv, '--check-styles']);
-      const mixed = linesStarting(checked.lines, 'Mixed spot:');
-      expect(mixed.map((line) => line.split(',')[0])).toEqual([
-        'Mixed spot: TAG preflop-unopened',
-        'Mixed spot: TAG preflop-limpers',
-        'Mixed spot: TAG preflop-raise',
-        'Mixed spot: TAG preflop-raise-and-calls',
-        'Mixed spot: TAG preflop-blind-defence',
-      ]);
-      for (const line of mixed) {
-        expect(line).toMatch(/^Mixed spot: TAG preflop-[a-z-]+, recommended \d+, alternative \d+$/);
-      }
-      const unopened = /recommended (\d+), alternative (\d+)$/.exec(mixed[0] as string);
-      expect(Number(unopened?.[1])).toBeGreaterThan(0);
-      expect(Number(unopened?.[2])).toBeGreaterThan(0);
-
-      const neverMixing = capture(
-        [...argv, '--check-styles'],
-        seamFor('TAG', () => (view) => decideTag(view)),
-      );
-      expect(neverMixing.code).toBe(1);
-      expect(
-        neverMixing.lines.some((line) =>
-          /^One action only: TAG preflop-unopened, recommended \d+, alternative 0$/.test(line),
-        ),
-      ).toBe(true);
-      expect(neverMixing.lines).toContain('Style check: failed');
-
-      expect(linesStarting(capture(argv).lines, 'Mixed spot:')).toEqual([]);
-    },
+    () => mixedSpots(300),
     FAST_TIMEOUT_MS,
+  );
+  it.runIf(SLOW)(
+    "--check-styles lists each mixed spot's action counts and fails a spot that used one action (original hand counts)",
+    () => mixedSpots(1000),
+    SLOW_TIMEOUT_MS,
   );
 
   it(
     "with postflop value betting the Maniac's aggression in a mixed line-up is below 100.0%",
-    () => {
-      const run = capture(['--hands', '2000', '--seed', '42', '--lineup', 'mixed', '--size', '6']);
-      expect(run.code).toBe(0);
-      const printed = printedStyles(run.lines);
-      for (const style of ['TAG', 'Calling station', 'Maniac', 'Rock'] as const) {
-        expect(printed.get(style)?.aggression, style).toEqual(expect.any(Number));
-      }
-      const maniac = printed.get('Maniac')?.aggression as number;
-      expect(maniac).toBeGreaterThan(0);
-      expect(maniac).toBeLessThan(100);
-    },
+    () => maniacAggression(300),
     FAST_TIMEOUT_MS,
+  );
+  it.runIf(SLOW)(
+    "with postflop value betting the Maniac's aggression in a mixed line-up is below 100.0% (original hand counts)",
+    () => maniacAggression(2000),
+    SLOW_TIMEOUT_MS,
   );
 
   it.runIf(SLOW)(
@@ -358,7 +415,12 @@ describe('playtest style stats (--check-styles)', () => {
             }
           }
         }
-        if (run.code !== 0) failures.push(...linesStarting(run.lines, 'Outside band:'));
+        if (run.code !== 0) {
+          failures.push(
+            `seed ${seed}: exit ${run.code}`,
+            ...linesStarting(run.lines, 'Outside band:'),
+          );
+        }
         failures.push(...linesStarting(run.lines, 'One action only:'));
         if (!run.lines.includes('Style check: passed')) failures.push(`seed ${seed}: not passed`);
       }

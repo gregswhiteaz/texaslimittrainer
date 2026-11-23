@@ -11,3 +11,10 @@
 - `docs/stats/style-stats.md` — short paragraph on the playtest CLI style block and `--check-styles`.
 
 No new dependencies.
+
+## FIX round 1
+
+- `tests/playtest/check-styles.acceptance.test.ts` — every-push tests at lower hand counts (SPEC-01 Mixed 300 + plain 100, SPEC-04/05 Soft/07 at 300, SPEC-10 reuses the shared Mixed 300 run); bodies take the hand count; original-count twins under TLH_SLOW_TESTS with the same assertions; FAST_TIMEOUT_MS 30 s; SPEC-11 records a non-zero exit as `seed N: exit X`.
+- `tests/ci/style-bands-workflow.acceptance.test.ts` — `git show main:` comparison replaced with shallow-checkout-safe checks: ci.yml, million.yml, million-lineups.yml contain no `--check-styles` or `style-bands`, and style-bands.yml is the only workflow invoking `--check-styles`.
+- `src/playtest/style-check.ts` — `StyleCheck(false)` no longer builds mixed-spot maps.
+- `tests/playtest/style-check.test.ts` — the recording-off case asserts no mixed-spot counts are kept (`mixed().size` 0).

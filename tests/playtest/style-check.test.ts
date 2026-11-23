@@ -245,11 +245,11 @@ describe('StyleCheck and the style report', () => {
     violating.add({ ...hand, lineUp: styles('TAG') });
     expect(mixedOf(violating).get('preflop-unopened')).toEqual({ recommended: 0, alternative: 0 });
 
-    // Without recording, nothing is buffered.
+    // Without recording, nothing is buffered and no mixed-spot counts are kept.
     const off = new StyleCheck(false);
     off.onAction(withType(step, move));
     off.add({ ...hand, lineUp: styles('TAG') });
-    expect(mixedOf(off).get('preflop-unopened')).toEqual({ recommended: 0, alternative: 0 });
+    expect(off.mixed().size).toBe(0);
 
     const counts = new Map<StyleName, StyleCounts>([['TAG', tagCounts(200)]]);
     const report = (c: MixedCounts) =>

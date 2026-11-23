@@ -28,3 +28,14 @@ Commands and results:
 - `npm test`: 215 files passed, 3 skipped; 947 tests passed, 36 skipped. Coverage all files 97.3% statements.
 - New fast acceptance tests take about 25 s standalone (spec target ≤ 15 s); under the parallel coverage run they take 11-44 s each, so their timeout is 120 s.
 - Scope: about 1,040 changed lines against a budget of 850 (warn band); most of it is test code.
+
+## FIX round 1 (2026-11-23)
+
+Spec amendment (orchestrator, auto-accepted): every-push hand counts lowered to SPEC-01 Mixed 300 + plain 100 ('Style: TAG, 600 hands'), SPEC-04 300, SPEC-05 Soft 300, SPEC-07 300, SPEC-10 sharing SPEC-01's Mixed 300 run; the original counts (500+300, 1000, 2000, 1000, 2000) run as TLH_SLOW_TESTS twins with identical assertions. SPEC-12's "ci.yml, million.yml, million-lineups.yml unchanged" is now checked by the judge's one-time `git diff --stat main`; the permanent test asserts the intent instead.
+
+- Brief 1 (speed MAJOR): fixed. Tests take a hand count; a shared cache serves plain runs (SPEC-01 still does a fresh second run for determinism). FAST_TIMEOUT_MS 30 s. Times without coverage (two runs): SPEC-01 2.42-2.44 s, SPEC-04 1.33-1.35 s, SPEC-05 2.96-2.98 s, SPEC-07 1.41-1.42 s, SPEC-10 0 ms (shared), file total 8.2-8.3 s. That is over the ~6 s target because Soft hands cost about 3.3 ms each (3 runs in SPEC-05). Soft 150 also gives numeric aggression for both styles (Calling station 29.2%, Rock 60.0%) and would save about 1.5 s, but I kept the recorded count of 300. Slow twins: `TLH_SLOW_TESTS=1 npx vitest run tests/playtest/check-styles.acceptance.test.ts -t "original hand counts"` gives 5 passed, 26.2 s. Maniac VPIP is still below 50 at 300 hands (SPEC-04 passes).
+- Brief 2 (workflow MAJOR): fixed. Removed the git call and `onMain`. Added 7 unconditional assertions in place of 3 conditional ones: for each of ci.yml, million.yml and million-lineups.yml, no `--check-styles` and no `style-bands`; and the set of workflows containing `--check-styles` equals ['style-bands.yml'].
+- Decision 3 (MINOR): fixed. SPEC-11 pushes `seed N: exit X` and the Outside band lines when a seed's exit is non-zero.
+- Decision 4 (NIT): fixed. StyleCheck stores recordMixed and skips building mixed-spot maps when it is false (an explicit field, because a parameter property breaks Node strip-only mode for `npm run playtest`). The unit test now asserts `mixed().size` is 0.
+
+Commands: `npm run format`, `npm run lint`, `npm run typecheck`: pass. `npx vitest run tests/playtest`: 23 files passed, 2 skipped; 94 tests passed, 25 skipped.

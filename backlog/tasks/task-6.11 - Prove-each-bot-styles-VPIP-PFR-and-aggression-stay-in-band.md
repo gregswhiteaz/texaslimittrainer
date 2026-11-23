@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-23T14:18:00Z'
+updated_date: '2026-11-23T14:47:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -98,4 +98,6 @@ From TASK-6.16 judge: TAG aggression measured 64.1% on seed 555 (30k) vs 65 ceil
 ACs added from TASK-6.17 Q-1/Q-2
 
 AC added from TASK-7.12 follow-up.
+
+Build: style stats block on every playtest; --check-styles (bands, mixed spots, exit 1); dispatch-only style-bands.yml; slow 3×100k all four styles pass; new 10k SHA 1eb65ef2cbd611efa25a131801e52f97546fdeb40fea3efc841db8cf861238a5; million 900 8cd39126ace1472977cf969244ba979f97f0586669efa613594d533ca64b59c4; gate PASS.
 <!-- SECTION:NOTES:END -->

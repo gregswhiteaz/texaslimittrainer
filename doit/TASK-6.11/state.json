@@ -4,26 +4,26 @@
   "branch": "doit/TASK-6.11",
   "base_commit": "07bf6ddddd328d93a31be95309498b967a9d88d3",
   "started": "2026-11-23T07:09:36",
-  "review_round": 0,
+  "review_round": 1,
   "judge_round": 0,
   "sendbacks": 0,
-  "gate_runs": 2,
+  "gate_runs": 4,
   "questions": 2,
   "assumptions": 10,
   "escalations": 0,
   "item_failures": {},
   "locked_tests": {
-    "tests/ci/style-bands-workflow.acceptance.test.ts": "5ee801fa07bf798b272f92a67628813ae12767b026c543b6889fe0043d6cedc5",
-    "tests/playtest/check-styles.acceptance.test.ts": "894ef943e78dffd7cb9ccef9774fa0cf81bc719e4442ebbba7c20d296140b9a9"
+    "tests/ci/style-bands-workflow.acceptance.test.ts": "004e15c847f22e975964ea2263b3735986c25d95d056cd14403d7675209c4432",
+    "tests/playtest/check-styles.acceptance.test.ts": "51a788b33ebd2daf6f5fe2626cf3d82860ec7ad3a5670b511488062c43f5c9e3"
   },
   "test_snapshot": {
     "tests/ci/style-bands-workflow.acceptance.test.ts": {
-      "sha": "5ee801fa07bf798b272f92a67628813ae12767b026c543b6889fe0043d6cedc5",
-      "asserts": 14,
+      "sha": "004e15c847f22e975964ea2263b3735986c25d95d056cd14403d7675209c4432",
+      "asserts": 16,
       "skips": 0
     },
     "tests/playtest/check-styles.acceptance.test.ts": {
-      "sha": "894ef943e78dffd7cb9ccef9774fa0cf81bc719e4442ebbba7c20d296140b9a9",
+      "sha": "51a788b33ebd2daf6f5fe2626cf3d82860ec7ad3a5670b511488062c43f5c9e3",
       "asserts": 50,
       "skips": 0
     },
@@ -1303,7 +1303,32 @@
       "skips": 0
     }
   },
-  "history": [],
+  "history": [
+    {
+      "t": "2026-11-23T07:50:21",
+      "event": "unlock",
+      "file": "tests/playtest/check-styles.acceptance.test.ts",
+      "reason": "Review R1 MAJORs: every-push speed (smaller runs + slow twins, same assertions); replace vacuous git-show-main check with a CI-robust equivalent (count kept)"
+    },
+    {
+      "t": "2026-11-23T07:50:21",
+      "event": "unlock",
+      "file": "tests/ci/style-bands-workflow.acceptance.test.ts",
+      "reason": "Review R1 MAJORs: every-push speed (smaller runs + slow twins, same assertions); replace vacuous git-show-main check with a CI-robust equivalent (count kept)"
+    }
+  ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-6.11",
-  "spec_sha256": "d12250055899630dee980bd962f52ba90dfe8dc067ef8000d852a004afd69afa"
+  "spec_sha256": "d12250055899630dee980bd962f52ba90dfe8dc067ef8000d852a004afd69afa",
+  "review_findings": {
+    "1": 2
+  },
+  "relock_pending": [],
+  "brief_history": {
+    "tests/playtest/check-styles.acceptance.test.ts:every-push-runs-too-slow": [
+      "review r1"
+    ],
+    "tests/ci/style-bands-workflow.acceptance.test.ts:git-show-main-comparison-vacuous-in-ci-and-blocks-future-edits": [
+      "review r1"
+    ]
+  }
 }
