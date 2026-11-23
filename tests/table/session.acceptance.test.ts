@@ -197,12 +197,12 @@ describe('table session acceptance', () => {
       expect(record.stakes).toEqual({ smallBlind: 2, bigBlind: 4, smallBet: 4, bigBet: 8 });
       expect(record.button).toBe(6);
       expect(record.seats).toEqual([
-        { seat: 1, name: 'Ava', kind: 'bot', style: 'TAG', startingStack: 160 },
-        { seat: 2, name: 'Ben', kind: 'bot', style: 'TAG', startingStack: 160 },
-        { seat: 3, name: 'Cal', kind: 'bot', style: 'TAG', startingStack: 160 },
-        { seat: 4, name: 'Dee', kind: 'bot', style: 'TAG', startingStack: 160 },
-        { seat: 5, name: 'You', kind: 'user', style: null, startingStack: 160 },
-        { seat: 6, name: 'Eli', kind: 'bot', style: 'TAG', startingStack: 160 },
+        { seat: 1, name: 'Ava', kind: 'bot', style: 'TAG', startingStack: 160, botId: 1 },
+        { seat: 2, name: 'Ben', kind: 'bot', style: 'TAG', startingStack: 160, botId: 2 },
+        { seat: 3, name: 'Cal', kind: 'bot', style: 'TAG', startingStack: 160, botId: 3 },
+        { seat: 4, name: 'Dee', kind: 'bot', style: 'TAG', startingStack: 160, botId: 4 },
+        { seat: 5, name: 'You', kind: 'user', style: null, startingStack: 160, botId: null },
+        { seat: 6, name: 'Eli', kind: 'bot', style: 'TAG', startingStack: 160, botId: 5 },
       ]);
       expect(record.userSeat).toBe(5);
       expect(record.userHoleCards).toEqual([...userPlayer(hand).holeCards]);

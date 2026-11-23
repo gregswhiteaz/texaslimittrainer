@@ -1,0 +1,9 @@
+{
+  "spec": "SPEC-17",
+  "reason": "Adding the required `botId` to `CompletedHand.seats` (spec §5, SPEC-17, A-1) breaks an earlier story's acceptance test that pins the seat objects with toEqual. A-2 names only the tests/support/table-scenarios.ts literal as a re-pin; this test is not named, so it is a locked-test failure beyond the spec's named re-pins. A non-acceptance unit test also needs the new field to typecheck.",
+  "evidence": "npx vitest run tests/table/session.acceptance.test.ts -> 'the completed hand is a plain-data record' FAILS: expected [Array(6)] to deeply equal [Array(6)] (lines 199-206 expect { seat, name, kind, style, startingStack } with no botId; actual seats now also carry botId 1,2,3,4,null,5). npx tsc -p tsconfig.json -> tests/stats/style-stats.test.ts(283,9) and (284,9): Property 'botId' is missing in the CompletedHand literal of 'a CompletedHand is accepted as a StatHand' (unit test, not acceptance). All other tests in tests/table pass (33 files, 97 tests).",
+  "options": [
+    "Recommended: re-pin tests/table/session.acceptance.test.ts:200-205 by adding botId to each expected seat (Ava 1, Ben 2, Cal 3, Dee 4, You null, Eli 5), and add botId: null / botId: 1 to the two seat literals in tests/stats/style-stats.test.ts:283-284. A pure mechanical re-pin of the new required field, the same kind as A-2.",
+    "Keep CompletedHand.seats unchanged and pass bot ids to handRecord through HandRecordMeta (e.g. meta.botIds from TableState) instead; changes spec §5 (CompletedHand.seats botId, SPEC-17's last sentence)."
+  ]
+}

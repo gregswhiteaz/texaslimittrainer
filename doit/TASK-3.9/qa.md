@@ -8,3 +8,7 @@
 
 ## Q-3 — New dev dependency fake-indexeddb 6.2.8 (Apache-2.0, no deps, Vitest only; free)
 **Answer: auto-accepted (recommended)** — no cost; dev-only.
+
+## Block 1 — CompletedHand.seats gains botId: locked tests/table/session.acceptance.test.ts (TASK-3.1) and unit tests/stats/style-stats.test.ts literal need the field
+Option 1 (recommended): re-pin both mechanically (acceptance expected seats Ava 1, Ben 2, Cal 3, Dee 4, You null, Eli 5; unit literal botId null / 1). Count kept.
+**Answer: auto-accepted (recommended)** — acceptance file unlocked under TASK-3.1.

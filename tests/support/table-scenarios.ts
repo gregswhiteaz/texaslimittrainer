@@ -13,6 +13,7 @@ import {
   USER_SEAT,
   applyUserAction,
   dealHand,
+  initialBotIds,
   resolveSessionConfig,
   seatSession,
   stakesFor,
@@ -85,6 +86,8 @@ function tableAt(hand: HandState): TableState {
     handNumber: 133,
     button: 6,
     nextBotName: 0,
+    botIds: initialBotIds(STORYBOARD_CONFIG.seats),
+    nextBotId: 6,
   };
 }
 

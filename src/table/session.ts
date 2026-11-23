@@ -268,12 +268,29 @@ export interface TableState {
   readonly button: SeatNumber;
   /** Position of the next replacement bot's name in the replacement-name sequence (0 at seating). */
   readonly nextBotName: number;
+  /** Per-session bot id of each bot seat (seat → id); the user seat has none. */
+  readonly botIds: Readonly<Record<number, number>>;
+  /** The id the next replacement bot gets. */
+  readonly nextBotId: number;
 }
 export type NextStep = 'deal' | 'bot' | 'user' | 'done';
+
+/** Bot ids 1..k for the bot seats in ascending seat order. */
+export function initialBotIds(seats: readonly SessionSeat[]): Readonly<Record<number, number>> {
+  const ids: Record<number, number> = {};
+  [...seats]
+    .filter((s) => s.kind === 'bot')
+    .sort((a, b) => a.seat - b.seat)
+    .forEach((s, index) => {
+      ids[s.seat] = index + 1;
+    });
+  return ids;
+}
 
 export function seatSession(input?: Partial<SessionConfig>): TableState {
   const config = resolveSessionConfig(input);
   const stack = startingStack(config);
+  const botIds = initialBotIds(config.seats);
   return {
     config,
     stakes: stakesFor(tableStake(config)),
@@ -285,6 +302,8 @@ export function seatSession(input?: Partial<SessionConfig>): TableState {
     handNumber: 1,
     button: config.button,
     nextBotName: 0,
+    botIds,
+    nextBotId: Object.keys(botIds).length + 1,
   };
 }
 
@@ -340,13 +359,15 @@ export function drawReplacementStyle(
 
 /** The session ready for the next deal: final stacks carried, button one seat on, hand number + 1. In cash a
  *  bot on $0 is replaced by a new bot (REQ-007.5): next unused replacement name, style drawn from the line-up
- *  with the finished hand's replay code, a fresh buy-in. Throws RangeError if that draw has no replay code. */
+ *  with the finished hand's replay code, a fresh buy-in and the next bot id. Throws RangeError if that draw has no replay code. */
 export function nextHand(table: TableState): TableState {
   const { hand, config } = table;
   if (nextStep(table) !== 'done' || hand === null) throw new RangeError('Not a next-hand step');
   const minimum = minimumStack(table.stakes);
   let seats = table.seats;
   let nextBotName = table.nextBotName;
+  let botIds = table.botIds;
+  let nextBotId = table.nextBotId;
   const stacks = hand.players.map(({ seat, stack }) => {
     const current = seats.find((s) => s.seat === seat) as SessionSeat;
     if (config.gameType === 'cash' && current.kind === 'bot') {
@@ -358,6 +379,8 @@ export function nextHand(table: TableState): TableState {
         seats.map((s) => s.name),
       );
       nextBotName = next;
+      botIds = { ...botIds, [seat]: nextBotId };
+      nextBotId += 1;
       seats = seats.map((s) => (s.seat === seat ? { seat, kind: 'bot', name, style } : s));
       return { seat, stack: buyIn(config.stake) };
     }
@@ -380,6 +403,8 @@ export function nextHand(table: TableState): TableState {
     replayCode: null,
     userDecisions: [],
     nextBotName,
+    botIds,
+    nextBotId,
   };
 }
 
@@ -444,7 +469,11 @@ export interface CompletedHand {
   readonly replayCode: ReplayCode;
   readonly stakes: Stakes;
   readonly button: SeatNumber;
-  readonly seats: readonly (SessionSeat & { readonly startingStack: number })[];
+  readonly seats: readonly (SessionSeat & {
+    readonly startingStack: number;
+    /** Per-session bot id (TableState.botIds); null for the user. */
+    readonly botId: number | null;
+  })[];
   readonly userSeat: SeatNumber;
   readonly userHoleCards: readonly [Card, Card];
   /** Blinds first, then every action in order, each tagged with its street and seat. */
@@ -472,7 +501,11 @@ export function completedHand(table: TableState): CompletedHand | null {
     replayCode,
     stakes: hand.stakes,
     button: hand.button,
-    seats: table.seats.map((s) => ({ ...s, startingStack: dealtIn(s.seat).startingStack })),
+    seats: table.seats.map((s) => ({
+      ...s,
+      startingStack: dealtIn(s.seat).startingStack,
+      botId: table.botIds[s.seat] ?? null,
+    })),
     userSeat,
     userHoleCards: [user.holeCards[0], user.holeCards[1]],
     actions: hand.actions,

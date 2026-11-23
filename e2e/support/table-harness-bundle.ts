@@ -7,6 +7,7 @@ const HARNESS_ENTRY = fileURLToPath(new URL('./table-harness.tsx', import.meta.u
 const SCENES_ENTRY = fileURLToPath(new URL('./table-scenes.tsx', import.meta.url));
 const ADVICE_ENTRY = fileURLToPath(new URL('./advice-harness.tsx', import.meta.url));
 const PACE_ENTRY = fileURLToPath(new URL('./pace-harness.tsx', import.meta.url));
+const RECORDS_ENTRY = fileURLToPath(new URL('./records-harness.tsx', import.meta.url));
 const HARNESS_HTML =
   '<!doctype html><html lang="en"><head><title>Table harness</title></head><body><div id="root"></div></body></html>';
 /** Harness pages are served at the app's origin, so workers can start (D-4). */
@@ -100,6 +101,11 @@ export function buildPaceHarness(): Promise<string> {
   return buildIife(PACE_ENTRY, 'TlhPaceHarness');
 }
 
+/** Builds the test-only hand-records harness (records-harness.tsx) as one IIFE script. */
+export function buildRecordsHarness(): Promise<string> {
+  return buildIife(RECORDS_ENTRY, 'TlhRecordsHarness');
+}
+
 /** Opens `html` at HARNESS_ORIGIN/__harness/<name>, fulfilled by the test instead of the server. */
 async function openHarnessPage(page: Page, name: string, html: string): Promise<void> {
   const url = `${HARNESS_ORIGIN}/__harness/${name}`;
@@ -127,6 +133,31 @@ export async function openPaceHarness(
   await openHarnessPage(page, 'pace', HARNESS_HTML);
   await page.evaluate(stubReplayWords, words);
   await page.addScriptTag({ content: bundle });
+}
+
+export interface RecordsHarnessOptions {
+  /** 'real' (default), 'delay' (each add waits delayMs of page time first) or 'fail' (each add rejects). */
+  readonly store?: 'real' | 'delay' | 'fail';
+  readonly delayMs?: number;
+  /** Re-render the Table with a new onHandComplete every 100 ms. */
+  readonly churn?: boolean;
+}
+
+/** Renders the records harness at the app's origin with every replay code pinned to `words`. */
+export async function openRecordsHarness(
+  page: Page,
+  bundle: string,
+  words: readonly number[],
+  { store = 'real', delayMs = 2000, churn = false }: RecordsHarnessOptions = {},
+): Promise<void> {
+  await page.addInitScript(stubReplayWords, words);
+  await openHarnessPage(
+    page,
+    'records',
+    `<!doctype html><html lang="en"><head><title>Records harness</title></head><body><div id="root" data-store="${store}" data-delay-ms="${delayMs}" data-churn="${churn ? '1' : '0'}"></div></body></html>`,
+  );
+  await page.addScriptTag({ content: bundle });
+  await page.getByRole('region', { name: 'Table' }).waitFor();
 }
 
 /**

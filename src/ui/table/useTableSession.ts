@@ -17,6 +17,8 @@ import {
   type SessionConfig,
   type TableState,
 } from '../../table/session';
+import { handRecord, type HandStore } from '../../table/hand-record';
+import { sharedHandStore } from '../../storage/hand-store';
 import {
   sharedAdviceClient,
   createAdviceWorker as createProductionWorker,
@@ -34,13 +36,22 @@ export interface TableSessionOptions {
    * (main.tsx and the e2e harnesses create it at load). Default: the production worker.
    */
   readonly createAdviceWorker?: () => WorkerLike;
+  /** Where each completed hand's record is written. Default: the app-wide IndexedDB store. */
+  readonly handStore?: HandStore;
+}
+
+/** A new session id: 32 lowercase hex characters from 16 CSPRNG bytes (A-8). */
+function newSessionId(): string {
+  const bytes = crypto.getRandomValues(new Uint8Array(16));
+  return Array.from(bytes, (byte) => byte.toString(16).padStart(2, '0')).join('');
 }
 
 /**
  * Holds the session and runs the deal step one macrotask later and each bot step botActionDelayMs(speed)
  * later (0 at Rapid, REQ-011.1); nothing runs on the user's turn.
  * Bot decisions are computed by the app-wide advice worker; replies after unmount or for an old turn are dropped.
- * After a hand the next one is dealt NEXT_HAND_DELAY_MS later unless held.
+ * After a hand its record is written to the hand store, and the next one is dealt NEXT_HAND_DELAY_MS later
+ * (unless held) or once that write completes, whichever is later; a failed write deals nothing more (D-2).
  */
 /**
  * Asks the app-wide advice worker for a bot decision. Never throws synchronously: a failure creating the
@@ -58,6 +69,7 @@ export function useTableSession({
   onHandComplete,
   holdNextHand = false,
   createAdviceWorker = createProductionWorker,
+  handStore,
 }: TableSessionOptions): {
   table: TableState;
   act: (action: Action) => void;
@@ -65,6 +77,13 @@ export function useTableSession({
 } {
   const [table, setTable] = useState(() => seatSession(config));
   const reported = useRef<number | null>(null);
+  const [sessionId] = useState(newSessionId);
+  // Read through a ref so a new callback each render never restarts the next-hand timer (D-5).
+  const callback = useRef(onHandComplete);
+  useEffect(() => {
+    callback.current = onHandComplete;
+  });
+  const write = useRef<Promise<void>>(Promise.resolve());
   useEffect(() => {
     const step = nextStep(table);
     if (step === 'deal') {
@@ -99,28 +118,56 @@ export function useTableSession({
     }
     if (step === 'done' && table.handNumber !== reported.current) {
       reported.current = table.handNumber;
-      const record = completedHand(table);
-      if (record !== null) onHandComplete?.(record);
+      const done = completedHand(table);
+      if (done !== null) {
+        const record = handRecord(done, {
+          sessionId,
+          handNumber: table.handNumber,
+          config: table.config,
+          completedAt: new Date(),
+        });
+        write.current = (handStore ?? sharedHandStore()).add(record);
+        write.current.catch((error: unknown) => {
+          console.error('Hand record could not be saved', error);
+        });
+        callback.current?.(done);
+      }
     }
     const delay = nextHandDelay(table, holdNextHand);
     if (delay !== null) {
+      let cancelled = false;
       const timer = setTimeout(() => {
-        const code = newCode();
-        setTable((t) => (nextStep(t) === 'done' ? dealHand(nextHand(t), code) : t));
+        write.current.then(
+          () => {
+            if (cancelled) return;
+            const code = newCode();
+            setTable((t) => (nextStep(t) === 'done' ? dealHand(nextHand(t), code) : t));
+          },
+          () => undefined,
+        );
       }, delay);
-      return () => clearTimeout(timer);
+      return () => {
+        cancelled = true;
+        clearTimeout(timer);
+      };
     }
     return undefined;
-  }, [table, newCode, onHandComplete, holdNextHand, createAdviceWorker]);
+  }, [table, newCode, holdNextHand, createAdviceWorker, handStore, sessionId]);
 
   const act = useCallback((action: Action) => {
     setTable((t) => (nextStep(t) === 'user' ? applyUserAction(t, action) : t));
   }, []);
 
-  /** Deals the next hand now, by the auto-deal's code path; a no-op unless the hand is done. */
+  /** Deals the next hand once its record is written, by the auto-deal's code path; a no-op unless the hand
+   *  is done, and never after a failed write. */
   const dealNext = useCallback(() => {
-    const code = newCode();
-    setTable((t) => (nextStep(t) === 'done' ? dealHand(nextHand(t), code) : t));
+    write.current.then(
+      () => {
+        const code = newCode();
+        setTable((t) => (nextStep(t) === 'done' ? dealHand(nextHand(t), code) : t));
+      },
+      () => undefined,
+    );
   }, [newCode]);
 
   return { table, act, dealNext };

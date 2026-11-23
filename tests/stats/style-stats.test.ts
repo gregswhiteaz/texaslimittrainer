@@ -280,8 +280,8 @@ describe('style stats units', () => {
       stakes: { smallBlind: 1, bigBlind: 2, smallBet: 2, bigBet: 4 },
       button: 6,
       seats: [
-        { seat: 5, name: 'You', kind: 'user', style: null, startingStack: 100 },
-        { seat: 6, name: 'Eli', kind: 'bot', style: 'TAG', startingStack: 100 },
+        { seat: 5, name: 'You', kind: 'user', style: null, startingStack: 100, botId: null },
+        { seat: 6, name: 'Eli', kind: 'bot', style: 'TAG', startingStack: 100, botId: 1 },
       ],
       userSeat: 5,
       userHoleCards: [1, 2],

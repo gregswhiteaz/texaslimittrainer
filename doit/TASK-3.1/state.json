@@ -404,6 +404,12 @@
       "event": "unlock",
       "file": "e2e/table.spec.ts",
       "reason": "TASK-2.5 Q-2 routine: Mixed default line-up on Game Config; keep every assertion"
+    },
+    {
+      "t": "2026-11-23T04:45:47",
+      "event": "unlock",
+      "file": "tests/table/session.acceptance.test.ts",
+      "reason": "TASK-3.9 block 1 option 1 auto-accepted: expected seats gain botId (Ava 1, Ben 2, Cal 3, Dee 4, You null, Eli 5); count kept"
     }
   ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-3.1",
@@ -418,6 +424,7 @@
   "relock_pending": [
     "e2e/table.spec.ts",
     "e2e/table.spec.ts",
-    "e2e/table.spec.ts"
+    "e2e/table.spec.ts",
+    "tests/table/session.acceptance.test.ts"
   ]
 }
