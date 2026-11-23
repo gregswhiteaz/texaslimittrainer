@@ -1,0 +1,69 @@
+{
+  "id": "TASK-1.55",
+  "title": "Make the onHandComplete-once e2e check wait for the callback",
+  "status": "To Do",
+  "archived": false,
+  "type": null,
+  "priority": "high",
+  "project": null,
+  "assignees": [],
+  "reporter": null,
+  "labels": [
+    "dream-limit-holdem-trainer",
+    "follow-up"
+  ],
+  "milestone": "m-1",
+  "parentTaskId": "TASK-1",
+  "acceptanceCriteriaCompleted": 0,
+  "acceptanceCriteriaCount": 2,
+  "references": [],
+  "modifiedFiles": [],
+  "ordinal": 227000,
+  "createdAt": "2026-11-23T15:30:00Z",
+  "updatedAt": null,
+  "dueDate": null,
+  "isReady": true,
+  "path": "backlog/tasks/task-1.55 - Make-the-onHandComplete-once-e2e-check-wait-for-the-callback.md",
+  "description": "Main CI #249 (run 45204245680) failed in WebKit: e2e/hand-records.spec.ts:230 'onHandComplete fires exactly once per hand even with the same replay code' read the harness log once right after the result appeared and saw 0 calls (expected 1). onHandComplete can land just after the real IndexedDB write resolves, so the immediate read races. Test-timing problem, not a product bug (TASK-3.9 owns the locked test).",
+  "dependencies": [],
+  "dependencyGraph": {
+    "root": "TASK-1.55",
+    "nodes": [
+      {
+        "id": "TASK-1.55",
+        "title": "Make the onHandComplete-once e2e check wait for the callback",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": 0,
+        "dependentDepth": 0
+      }
+    ],
+    "edges": []
+  },
+  "readiness": {
+    "isReady": true,
+    "isBlocked": false,
+    "blockingDependencies": [],
+    "missingDependencies": []
+  },
+  "documentation": [],
+  "subtasks": [],
+  "acceptanceCriteria": [
+    {
+      "index": 1,
+      "text": "Given the onHandComplete-once e2e test, When it checks the call count after each result, Then it waits with expect.poll (bounded) for exactly the expected count instead of reading once, keeping every exact-count assertion (no assertion dropped or loosened)",
+      "checked": false
+    },
+    {
+      "index": 2,
+      "text": "Given the fix, When the spec runs 20 times in WebKit and Chromium locally (--repeat-each), Then it passes every time",
+      "checked": false
+    }
+  ],
+  "definitionOfDone": [],
+  "implementationPlan": null,
+  "implementationNotes": null,
+  "comments": [],
+  "finalSummary": null
+}

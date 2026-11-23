@@ -1305,7 +1305,14 @@
       "skips": 0
     }
   },
-  "history": [],
+  "history": [
+    {
+      "t": "2026-11-23T08:30:25",
+      "event": "unlock",
+      "file": "e2e/hand-records.spec.ts",
+      "reason": "TASK-1.55 (red main fix story, overnight override): poll for exact onHandComplete counts instead of an immediate read; no assertion dropped"
+    }
+  ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-3.9",
   "spec_sha256": "4d057ec70ec933e54cf14be7a2eca561e10909ea099fa2d263ba7140f2bacda1",
   "review_findings": {
@@ -1314,5 +1321,8 @@
   "doc_id": "doc-100",
   "judge_results": {
     "1": "PASS"
-  }
+  },
+  "relock_pending": [
+    "e2e/hand-records.spec.ts"
+  ]
 }
