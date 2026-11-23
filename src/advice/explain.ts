@@ -1,4 +1,5 @@
 import {
+  ADVICE_ING,
   CONCEPTS,
   POSTFLOP_TEMPLATES,
   PREFLOP_CONTEXT,
@@ -9,7 +10,7 @@ import {
 } from './explanations';
 import type { HandClass } from './hand-class';
 import type { PostflopRecommendation } from './postflop';
-import type { PreflopAdvice, PreflopRecommendation } from './preflop';
+import type { PreflopRecommendation } from './preflop';
 
 /** `${pct.toFixed(1)}%`. */
 export function formatPct(pct: number): string {
@@ -41,13 +42,6 @@ export function handClassName(hc: HandClass): string {
   const low = rankName(hc.charAt(1));
   return `${high.one}-${low.one} ${hc.endsWith('s') ? 'suited' : 'offsuit'}`;
 }
-
-const ADVICE_ING: Readonly<Record<PreflopAdvice, string>> = {
-  raise: 'Raising',
-  call: 'Calling',
-  fold: 'Folding',
-  check: 'Checking',
-};
 
 export function explainPreflop(rec: Omit<PreflopRecommendation, 'explanation'>): string {
   const sentences = [

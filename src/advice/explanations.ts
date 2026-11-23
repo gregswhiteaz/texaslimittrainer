@@ -1,4 +1,5 @@
 import type { PostflopRuleId } from './postflop';
+import type { PreflopAdvice } from './preflop';
 import type { Position, Situation } from './preflop-chart';
 
 // Authored explanation text, written for this project (REQ-061.2). See docs/advice/explanations.md.
@@ -135,6 +136,13 @@ export const PREFLOP_SENTENCES: Readonly<Record<PreflopSentenceKey, string>> = {
   check: 'Check with {hand}: you see the flop for free.',
   alternative: '{alternativeIng} is also fine, because this hand is close to the line.',
   borderline: 'This hand is close to the line, so another choice is only a minor error.',
+};
+
+export const ADVICE_ING: Readonly<Record<PreflopAdvice, string>> = {
+  raise: 'Raising',
+  call: 'Calling',
+  fold: 'Folding',
+  check: 'Checking',
 };
 
 export const SEAT_NAMES: Readonly<Record<Position, string>> = {

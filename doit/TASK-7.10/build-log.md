@@ -10,3 +10,9 @@
 - npm test: 771 passed, 2 failed, 30 skipped (803). Both failures in locked tests/advice/preflop.acceptance.test.ts (TASK-7.2): AC#3 tripped on a hand-class literal in my explain.ts doc comment (fixed by rewording; AC#3 now passes); AC#6 fails because its fixed sandbox file list lacks src/advice/explain.ts and its imports (TS2307). This contradicts the spec, so I stopped: see blocked.json.
 - Block 1 resolved (orchestrator): TASK-7.2 sandbox list +8 files (explain.ts, explanations.ts, postflop.ts, equity.ts, ranges.ts, ranges/six-max.json, recommend.ts, engine/seeded-random.ts).
 - Spec note: APPLICABLE_SPOTS has 17 size×situation pairs (heads-up has no raise-and-calls), not 18; test compares to the set.
+
+## FIX (round 1)
+
+- 1 MINOR D-6 split — fixed: tests/advice/explanations.acceptance.test.ts runs the same AC#1–AC#5 assertions (incl. 6 rule ids + all 17 size×situation pairs coverage) via one shared sampleChecks(n): first 2,000 decisions every push, 10,000 under describe.runIf(TLH_SLOW_TESTS=1); file added to `npm run test:slow`. Times: default `npx vitest run tests/advice/explanations.acceptance.test.ts` 2.25 s wall (5 passed, 5 skipped); TLH_SLOW_TESTS=1 9.79 s wall (10 passed).
+- 2 NIT ADVICE_ING — fixed: moved verbatim to src/advice/explanations.ts (exported), explain.ts imports it.
+- npm run format clean; explain.test.ts + acceptance: 18 passed, 5 skipped.

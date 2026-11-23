@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-23T08:57:00Z'
+updated_date: '2026-11-23T09:10:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -81,3 +81,9 @@ Plan key: E07-S12 · Dream: limit-holdem-trainer
 
 Full spec: doit/TASK-7.10/spec.md
 <!-- SECTION:PLAN:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+Build: explanation field on every recommendation (authored concepts/templates, explain.ts); 10k sample acceptance 7.7 s local (no split); block 1 (TASK-7.2 sandbox list) auto-accepted; SHA unchanged; gate PASS.
+<!-- SECTION:NOTES:END -->

@@ -4,16 +4,16 @@
   "branch": "doit/TASK-7.10",
   "base_commit": "c45d053e6aaa7ed0339eb37ddad031577b868c34",
   "started": "2026-11-23T01:47:37",
-  "review_round": 0,
+  "review_round": 1,
   "judge_round": 0,
   "sendbacks": 0,
-  "gate_runs": 2,
+  "gate_runs": 4,
   "questions": 4,
   "assumptions": 6,
   "escalations": 0,
   "item_failures": {},
   "locked_tests": {
-    "tests/advice/explanations.acceptance.test.ts": "61076f95f1ae56e224421fba835b4a4a8d92e44c53834ed7bd6626265273d934"
+    "tests/advice/explanations.acceptance.test.ts": "3a2bf84366f7fefcb6a69371f339b897aceed275ee4be07a4445d9d1b02b723e"
   },
   "test_snapshot": {
     "tests/advice/explain.test.ts": {
@@ -22,8 +22,8 @@
       "skips": 0
     },
     "tests/advice/explanations.acceptance.test.ts": {
-      "sha": "61076f95f1ae56e224421fba835b4a4a8d92e44c53834ed7bd6626265273d934",
-      "asserts": 21,
+      "sha": "3a2bf84366f7fefcb6a69371f339b897aceed275ee4be07a4445d9d1b02b723e",
+      "asserts": 22,
       "skips": 0
     },
     "e2e/action-bar-limits.spec.ts": {
@@ -1232,7 +1232,18 @@
       "skips": 0
     }
   },
-  "history": [],
+  "history": [
+    {
+      "t": "2026-11-23T02:14:35",
+      "event": "unlock",
+      "file": "tests/advice/explanations.acceptance.test.ts",
+      "reason": "Review MINOR: apply spec D-6 split (2,000 every push + 10,000 under TLH_SLOW_TESTS); same assertions in both"
+    }
+  ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-7.10",
-  "spec_sha256": "8ee6c9950d15b5489f50cece15e32adde93f78c80b7d2612c975da6bc3bff7f7"
+  "spec_sha256": "8ee6c9950d15b5489f50cece15e32adde93f78c80b7d2612c975da6bc3bff7f7",
+  "review_findings": {
+    "1": 0
+  },
+  "relock_pending": []
 }

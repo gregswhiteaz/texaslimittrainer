@@ -9,7 +9,7 @@ import type { PlayerView } from '../../src/engine/player-view';
 import { handReplayCode, playHand } from '../../src/playtest/runner';
 import { lineUpPolicyFactory } from '../../src/playtest/policy';
 
-const SAMPLE_SIZE = 10_000;
+const SLOW = process.env.TLH_SLOW_TESTS === '1';
 const TIMEOUT = 120_000;
 const OPTIONS: RecommendOptions = { opponentRanges: 'actions', equity: BOT_EQUITY };
 
@@ -36,19 +36,21 @@ const sentencesOf = (text: string) => text.split(/(?<=[.!?])\s+/);
 const namesConcept = (sentence: string, terms: readonly string[]) =>
   new RegExp('\\b(' + terms.join('|') + ')\\b', 'i').test(sentence);
 
-describe('explanations on a 10,000-decision playtest sample', () => {
+// D-6 split: every push checks the first 2,000 decisions of the A-3 sample; the full 10,000 is opt-in
+// (TLH_SLOW_TESTS=1, npm run test:slow). Both run the same assertions.
+function sampleChecks(sampleSize: number) {
   let views: PlayerView[] = [];
   let advice: Recommendation[] = [];
 
   beforeAll(() => {
-    views = sampleViews(SAMPLE_SIZE);
+    views = sampleViews(sampleSize);
     advice = views.map((view) => recommend(view, OPTIONS));
   }, TIMEOUT);
 
   it(
     'AC#1 every explanation in a 10,000-decision playtest sample has at most three sentences',
     () => {
-      expect(advice).toHaveLength(SAMPLE_SIZE);
+      expect(advice).toHaveLength(sampleSize);
       const rules = new Set<string>();
       const spots = new Set<string>();
       for (const rec of advice) {
@@ -148,4 +150,11 @@ describe('explanations on a 10,000-decision playtest sample', () => {
     },
     TIMEOUT,
   );
-});
+}
+
+describe('explanations on the first 2,000 decisions of the playtest sample', () =>
+  sampleChecks(2_000));
+
+describe.runIf(SLOW)('explanations on a 10,000-decision playtest sample', () =>
+  sampleChecks(10_000),
+);
