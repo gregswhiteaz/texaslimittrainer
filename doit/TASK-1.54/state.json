@@ -4,14 +4,21 @@
   "branch": "doit/TASK-1.54",
   "base_commit": "b76a06aa93617f9ca0eb87e09b29ee1e1cd2639d",
   "started": "2026-11-23T06:45:06",
-  "review_round": 0,
-  "judge_round": 0,
+  "review_round": 1,
+  "judge_round": 1,
   "sendbacks": 0,
   "gate_runs": 2,
   "questions": 0,
   "assumptions": 0,
   "escalations": 0,
-  "item_failures": {},
+  "item_failures": {
+    "SPEC-01": 0,
+    "SPEC-02": 0,
+    "SPEC-03": 0,
+    "SPEC-04": 0,
+    "SPEC-05": 0,
+    "SPEC-06": 0
+  },
   "locked_tests": {
     "tests/toolchain/sync-copies.test.ts": "8a9c9db6429b57d2e14eecac9cdd43cfdf054bf4a9155eeea72861bd95afa4d2"
   },
@@ -1289,5 +1296,12 @@
   },
   "history": [],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-1.54",
-  "spec_sha256": "de6205a7a5ada08a997fc0b57d2d2ffc20026c2a97be1f3e0a240bc76260ede6"
+  "spec_sha256": "de6205a7a5ada08a997fc0b57d2d2ffc20026c2a97be1f3e0a240bc76260ede6",
+  "review_findings": {
+    "1": 0
+  },
+  "doc_id": "doc-101",
+  "judge_results": {
+    "1": "PASS"
+  }
 }

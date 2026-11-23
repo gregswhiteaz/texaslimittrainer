@@ -1,16 +1,18 @@
 ---
 id: TASK-1.54
 title: Stop file-sync conflict copies from reaching commits
-status: In Progress
+status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-23T13:44:00Z'
-updated_date: '2026-11-23T13:47:00Z'
+updated_date: '2026-11-23T14:02:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
 milestone: m-1
 dependencies: []
+documentation:
+  - doc-101
 parent_task_id: TASK-1
 priority: high
 ordinal: 225000
@@ -24,8 +26,8 @@ From TASK-3.10: iCloud 'name 2.ext' sync-conflict copies appeared in the working
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Given a file named like 'x 2.ts' or 'doc-100 … 2.md' appears in the working tree, When tests/lint or the CI check run, Then the run fails naming the file (or git ignores it via .gitignore), so it cannot be committed
-- [ ] #2 Given the guidance in docs, When a developer reads it, Then it says the repo must not live in an iCloud-synced folder (Desktop & Documents) and how to move it
+- [x] #1 Given a file named like 'x 2.ts' or 'doc-100 … 2.md' appears in the working tree, When tests/lint or the CI check run, Then the run fails naming the file (or git ignores it via .gitignore), so it cannot be committed
+- [x] #2 Given the guidance in docs, When a developer reads it, Then it says the repo must not live in an iCloud-synced folder (Desktop & Documents) and how to move it
 <!-- AC:END -->
 
 ## Implementation Plan
@@ -42,4 +44,14 @@ Full spec: doit/TASK-1.54/spec.md
 
 <!-- SECTION:NOTES:BEGIN -->
 No dependency: the guard protects every later commit; run it next so parked/following stories don't pick up sync copies.
+
+Build: .gitignore conflict-copy patterns; tools/lint/sync-copies.js first in npm run lint (CI every push, ~30 ms); README 'Where to keep the repo'; gate PASS.
+
+Judge R1 PASS 6/6 (temp-clone copies incl. nested dir, dotfile, x 10.md flagged by lint and ignored by git; no tracked file ignored; 6/7 mutants — symlink-follow untested, LOW).
 <!-- SECTION:NOTES:END -->
+
+## Final Summary
+
+<!-- SECTION:FINAL_SUMMARY:BEGIN -->
+Added a conflict-copy check (tools/lint/sync-copies.js) at the front of npm run lint, four .gitignore patterns so git add -A never stages 'name 2.ext' copies, and a README 'Where to keep the repo' section. Verified: SPEC-01..06 tests pass, npm test 936 passed, lint and typecheck clean, e2e probe fails lint and stays out of git. Assumptions to review: A-3 gitignore patterns could hide a legit file like 'foo 2.test.ts'. User actions: move the repo out of iCloud Desktop & Documents (.git/index 2 shows git internals are being copied too) and remove the stray doc-100 copy on the parked TASK-3.10 branch. Minor review notes (symlinked entry-point check, wide glob, raw stderr names) are infra below the value bar.
+<!-- SECTION:FINAL_SUMMARY:END -->
