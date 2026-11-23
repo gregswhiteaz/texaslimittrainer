@@ -203,6 +203,36 @@ export function configWithSeatStyle(
   return lineUpSessionConfig(config, preset, seats);
 }
 
+/** REQ-009.5: one style per bot seat, each BOT_STYLES[w % 4] for a fresh word w from `nextWord` (exactly
+ *  uniform since 2^32 is a multiple of 4), drawn in botsClockwise order. RangeError if a word is not an integer
+ *  in 0..2^32-1. */
+export function randomBotStyles(
+  config: SessionConfig,
+  nextWord: () => number,
+): Readonly<Record<number, BotStyle>> {
+  const styles: Record<number, BotStyle> = {};
+  for (const { seat } of botsClockwise(config)) {
+    const w = nextWord();
+    if (!Number.isInteger(w) || w < 0 || w > 0xffffffff) {
+      throw new RangeError(`Random word out of range: ${String(w)}`);
+    }
+    styles[seat] = BOT_STYLES[w % BOT_STYLES.length] as BotStyle;
+  }
+  return Object.freeze(styles);
+}
+
+/** `config` with every seat in `styles` set through configWithSeatStyle against `preset`. Throws as that does. */
+export function configWithSeatStyles(
+  config: SessionConfig,
+  preset: LineUpPreset,
+  styles: Readonly<Record<number, BotStyle>>,
+): SessionConfig {
+  return Object.entries(styles).reduce(
+    (c, [seat, style]) => configWithSeatStyle(c, preset, Number(seat), style),
+    config,
+  );
+}
+
 /** The bot seats in clockwise order, starting with the first bot clockwise from the user. */
 export function botsClockwise(config: SessionConfig): readonly SessionSeat[] {
   const distance = (seat: number): number =>

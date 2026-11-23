@@ -99,6 +99,7 @@ test('every stake keeps game config free of real-money controls and axe clean', 
     expect(await main.innerText()).not.toMatch(REAL_MONEY);
     expect(await page.getByRole('button').allInnerTexts()).toEqual([
       '← Home',
+      'Randomise line-up',
       'Cancel',
       'Start game',
     ]);

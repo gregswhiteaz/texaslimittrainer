@@ -9,8 +9,9 @@ import {
   CASH_STAKES,
   configForGameType,
   configForLineUp,
-  configWithSeatStyle,
+  configWithSeatStyles,
   DEFAULT_SESSION_CONFIG,
+  randomBotStyles,
   type BotStyle,
   type GameType,
   type SessionConfig,
@@ -70,6 +71,8 @@ const isPreset = (name: string): name is LineUpPreset =>
   (LINE_UP_PRESETS as readonly string[]).includes(name);
 const isBotStyle = (value: string): value is BotStyle =>
   (BOT_STYLES as readonly string[]).includes(value);
+// TASK-2.9 D-1: one 1-word CSPRNG draw per bot seat (never a 4-word replay-code request).
+const cryptoWord = (): number => globalThis.crypto.getRandomValues(new Uint32Array(1))[0] as number;
 
 /** Summary of `config` (TASK-2.1 D-6) plus the game-type (TASK-2.4 D-4), players (TASK-2.2 D-1), stake
  *  (TASK-2.3 D-1), line-up (TASK-2.5) and per-seat style (TASK-2.8) choices; Start game hands over the chosen
@@ -93,10 +96,8 @@ export function GameConfigScreen({
   );
   // TASK-2.8 A-2: per-seat style edits; a preset or players change discards them.
   const [edits, setEdits] = useState<Readonly<Record<number, BotStyle>>>({});
-  const seated = Object.entries(edits).reduce(
-    (c, [seat, style]) => configWithSeatStyle(c, preset, Number(seat), style),
-    configForLineUp(config, players, preset),
-  );
+  // TASK-2.9 A-1: a randomise replaces every edit; later row edits apply on top.
+  const seated = configWithSeatStyles(configForLineUp(config, players, preset), preset, edits);
   const note = playersNote(players);
   const stack = buyIn(stake);
   const gameTypeChoice = (
@@ -193,7 +194,16 @@ export function GameConfigScreen({
           </dl>
         </section>
         <section className="panel" aria-labelledby="config-opponents">
-          <h2 id="config-opponents">Opponents</h2>
+          <div className="config-opponents-header">
+            <h2 id="config-opponents">Opponents</h2>
+            <button
+              type="button"
+              className="button-outline"
+              onClick={() => setEdits(randomBotStyles(seated, cryptoWord))}
+            >
+              Randomise line-up
+            </button>
+          </div>
           <div
             role="radiogroup"
             aria-labelledby="config-lineup"

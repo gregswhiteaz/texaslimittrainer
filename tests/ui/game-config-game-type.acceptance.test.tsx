@@ -69,7 +69,7 @@ describe('Game Config game type acceptance', () => {
     expect(html).not.toContain('Buy-in');
     expect(rows(html)).toEqual(['Game type', 'Players at the table', 'Speed']);
     const buttons = [...html.matchAll(/<button[^>]*>(.*?)<\/button>/g)].map(([, t]) => t);
-    expect(buttons).toEqual(['← Home', 'Cancel', 'Start game']);
+    expect(buttons).toEqual(['← Home', 'Randomise line-up', 'Cancel', 'Start game']);
   });
 
   it('game type choice offers no real-money text or other inputs', () => {

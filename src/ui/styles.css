@@ -120,6 +120,19 @@ h1[tabindex='-1']:focus {
   font-weight: 600;
 }
 
+.config-opponents-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0 0 14px;
+}
+
+.config-opponents-header h2 {
+  margin: 0;
+}
+
 .config-fields {
   display: flex;
   flex-direction: column;

@@ -78,7 +78,7 @@ describe('Home and Game Config acceptance', () => {
       ['You', 'Seat 5'],
     ]);
     const buttons = [...html.matchAll(/<button[^>]*>(.*?)<\/button>/g)].map(([, label]) => label);
-    expect(buttons).toEqual(['← Home', 'Cancel', 'Start game']);
+    expect(buttons).toEqual(['← Home', 'Randomise line-up', 'Cancel', 'Start game']);
     // TASK-2.8: the per-row style selects carry no id; the Session panel's selects do.
     expect(html.match(/<(input|select(?= id=)|textarea)[\s>]/g)).toEqual([
       '<input ',
