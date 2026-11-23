@@ -1,6 +1,14 @@
 import { describe, expect, it } from 'vitest';
 import type { StyleName } from '../../src/bots/style';
 import { runPlaytest, type PlayedHand } from '../../src/playtest/runner';
+import {
+  addStyleCounts,
+  EMPTY_STYLE_COUNTS,
+  handStyleCounts,
+  styleStats as sharedStyleStats,
+  type StatHand,
+  type StyleCounts,
+} from '../../src/stats/style-stats';
 
 const SLOW = process.env.TLH_SLOW_TESTS === '1';
 const TEST_TIMEOUT_MS = 600_000;
@@ -21,23 +29,27 @@ const BANDS: Readonly<Partial<Record<StyleName, Bands>>> = {
   Maniac: { vpip: [50, 75], pfr: [35, 60], aggression: [65, 85] },
 };
 
-interface Counts {
-  dealt: number;
-  vpip: number;
-  pfr: number;
-  aggressive: number;
-  passive: number;
-}
+/** 0.1-percent rounding; a null (zero-denominator) stat fails the test. */
+const round = (value: number | null, label: string): number => {
+  expect(value, label).not.toBeNull();
+  return Math.round((value as number) * 10) / 10;
+};
 
-const pct = (part: number, whole: number): number => Math.round((part / whole) * 1000) / 10;
-
-/** REQ-045 stats per bot style (A-1, A-4): bot seats only, by their style at each hand; blinds never voluntary;
- *  aggression = postflop (bet + raise) / (bet + raise + call). */
+/** REQ-045 stats per bot style (A-1, A-4), from the shared src/stats/style-stats functions: bot seats only, by
+ *  their style at each hand. */
 function styleStats(
   seed: number,
 ): Map<StyleName, { vpip: number; pfr: number; aggression: number }> {
-  const counts = new Map<StyleName, Counts>();
+  const counts = new Map<StyleName, StyleCounts>();
   const onHand = (hand: PlayedHand): void => {
+    const { result } = hand.final;
+    if (result === null) return;
+    const statHand: StatHand = {
+      seats: hand.record.seats,
+      actions: hand.final.actions,
+      board: hand.final.board,
+      result,
+    };
     const styleOf = new Map<number, StyleName>();
     for (const seat of hand.lineUp ?? []) {
       if (seat.kind === 'bot' && seat.style !== null) styleOf.set(seat.seat, seat.style);
@@ -45,21 +57,8 @@ function styleStats(
     for (const { seat } of hand.record.seats) {
       const style = styleOf.get(seat);
       if (style === undefined) continue;
-      let c = counts.get(style);
-      if (c === undefined) {
-        c = { dealt: 0, vpip: 0, pfr: 0, aggressive: 0, passive: 0 };
-        counts.set(style, c);
-      }
-      c.dealt++;
-      const mine = hand.final.actions.filter((a) => a.seat === seat);
-      const preflop = mine.filter((a) => a.street === 'preflop');
-      if (preflop.some((a) => a.type === 'call' || a.type === 'raise')) c.vpip++;
-      if (preflop.some((a) => a.type === 'raise')) c.pfr++;
-      for (const a of mine) {
-        if (a.street === 'preflop') continue;
-        if (a.type === 'bet' || a.type === 'raise') c.aggressive++;
-        else if (a.type === 'call') c.passive++;
-      }
+      const total = counts.get(style) ?? EMPTY_STYLE_COUNTS;
+      counts.set(style, addStyleCounts(total, handStyleCounts(statHand, seat)));
     }
   };
   const summary = runPlaytest(
@@ -70,10 +69,11 @@ function styleStats(
   expect(summary.violations).toBe(0);
   const stats = new Map<StyleName, { vpip: number; pfr: number; aggression: number }>();
   for (const [style, c] of counts) {
+    const shared = sharedStyleStats(c);
     stats.set(style, {
-      vpip: pct(c.vpip, c.dealt),
-      pfr: pct(c.pfr, c.dealt),
-      aggression: pct(c.aggressive, c.aggressive + c.passive),
+      vpip: round(shared.vpip, `${style} vpip seed ${seed}`),
+      pfr: round(shared.pfr, `${style} pfr seed ${seed}`),
+      aggression: round(shared.aggression, `${style} aggression seed ${seed}`),
     });
   }
   return stats;

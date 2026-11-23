@@ -1,0 +1,61 @@
+{
+  "task": "TASK-7.12",
+  "phase": "fix",
+  "run": 2,
+  "result": "PASS",
+  "changed_lines": 983,
+  "changed_files": [
+    "docs/stats/style-stats.md",
+    "src/stats/style-stats.ts",
+    "tests/bots/style-bands.acceptance.test.ts",
+    "tests/stats/style-stats.acceptance.test.ts",
+    "tests/stats/style-stats.test.ts"
+  ],
+  "checks": [
+    {
+      "name": "test command",
+      "status": "pass",
+      "detail": "$ npm test\nexit 0\n-|-------------------\nAll files          |   97.53 |    96.19 |   95.15 |   97.72 |                   \n advice            |    99.9 |    98.59 |     100 |     100 |                   \n  equity.ts        |     100 |    96.19 |     100 |     100 | 118,124,229       \n  golden.ts        |     100 |    98.65 |     100 |     100 | 68,271            \n  ranges.ts        |     100 |    98.17 |     100 |     100 | 96,112,250        \n  recommend.ts     |    90.9 |       90 |     100 |     100 | 28                \n bots              |    99.7 |    97.55 |     100 |     100 |                   \n  ...ng-station.ts |     100 |    95.23 |     100 |     100 | 39                \n  rock.ts          |     100 |    94.73 |     100 |     100 | 26                \n  style.ts         |     100 |    97.31 |     100 |     100 | 151,163,384,452   \n  tag.ts           |   94.11 |    92.85 |     100 |     100 | 50                \n engine            |   99.88 |    95.29 |     100 |   99.86 |                   \n  ...-evaluator.ts |     100 |    80.18 |     100 |     100 | ...87-200,214-215 \n  hand.ts          |     100 |    99.51 |     100 |     100 | 350               \n  invariants.ts    |   99.68 |    97.31 |     100 |   99.62 | 387               \n playtest          |     100 |    99.27 |     100 |     100 |                   \n  cli.ts           |     100 |    99.37 |     100 |     100 | 267               \n  shards.ts        |     100 |    98.11 |     100 |     100 | 232,338           \n table             |     100 |     99.6 |     100 |     100 |                   \n  session.ts       |     100 |    98.88 |     100 |     100 | 405               \n ui                |   35.29 |    14.28 |   28.57 |    37.5 |                   \n  App.tsx          |   33.33 |    33.33 |      20 |   33.33 | 20-35             \n  ...adingFocus.ts |    37.5 |        0 |      50 |   42.85 | 10-13             \n ui/advice         |   94.54 |       95 |   92.85 |   95.83 |                   \n  advice-client.ts |   96.15 |    94.73 |   91.66 |   97.82 | 114               \n  advice.worker.ts |       0 |      100 |     100 |       0 | 3                 \n ui/config         |   69.49 |    68.18 |   54.54 |   73.58 |                   \n  ...figScreen.tsx |   69.49 |    68.18 |   54.54 |   73.58 | ...22,240-241,267 \n ui/table          |   46.93 |    65.88 |   51.06 |   52.94 |                   \n  ActionBar.tsx    |      75 |       50 |     100 |     100 | 19                \n  Table.tsx        |   73.68 |    90.74 |   68.42 |   77.77 | ...50-251,254-255 \n  ...bleSession.ts |      18 |       12 |   19.04 |      20 | ...13,117,122-123 \n-------------------|---------|----------|---------|---------|-------------------\n\n=============================== Coverage summary ===============================\nStatements   : 97.53% ( 3443/3530 )\nBranches     : 96.19% ( 2379/2473 )\nFunctions    : 95.15% ( 766/805 )\nLines        : 97.72% ( 2881/2948 )\n================================================================================\n"
+    },
+    {
+      "name": "lint command",
+      "status": "pass",
+      "detail": "$ npm run lint\nexit 0\n\n> tlh-trainer@0.0.0 lint\n> eslint . --max-warnings 0 && prettier --check .\n\nChecking formatting...\nAll matched files use Prettier code style!\n"
+    },
+    {
+      "name": "typecheck command",
+      "status": "pass",
+      "detail": "$ npm run typecheck\nexit 0\n\n> tlh-trainer@0.0.0 typecheck\n> tsc -p tsconfig.json\n\n"
+    },
+    {
+      "name": "spec unchanged",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "name": "scope budget (lines)",
+      "status": "warn",
+      "detail": "983 changed lines vs budget 560 (fail above 1120)"
+    },
+    {
+      "name": "scope budget (files)",
+      "status": "pass",
+      "detail": "5 files vs budget 5"
+    },
+    {
+      "name": "files outside spec",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "name": "all changes listed in changes.md",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "name": "test integrity",
+      "status": "pass",
+      "detail": ""
+    }
+  ]
+}
