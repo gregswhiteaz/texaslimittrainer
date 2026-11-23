@@ -4,14 +4,29 @@
   "branch": "doit/TASK-7.11",
   "base_commit": "ee1cf2fe54b2558cd18a3273f7333aba0dbb9f2f",
   "started": "2026-11-23T02:39:50",
-  "review_round": 1,
-  "judge_round": 0,
+  "review_round": 2,
+  "judge_round": 1,
   "sendbacks": 0,
   "gate_runs": 4,
   "questions": 2,
   "assumptions": 6,
   "escalations": 0,
-  "item_failures": {},
+  "item_failures": {
+    "SPEC-01": 0,
+    "SPEC-02": 0,
+    "SPEC-03": 0,
+    "SPEC-04": 0,
+    "SPEC-05": 0,
+    "SPEC-06": 0,
+    "SPEC-07": 0,
+    "SPEC-08": 0,
+    "SPEC-09": 0,
+    "SPEC-10": 0,
+    "SPEC-11": 0,
+    "SPEC-12": 0,
+    "SPEC-13": 0,
+    "SPEC-14": 0
+  },
   "locked_tests": {
     "tests/golden/preflop-spots.json": "358192fa85160c87aec8f7fdcdf5d643cf654fbbfa537265b91819df8b3db97b",
     "tests/golden/preflop.acceptance.test.ts": "a86780cba5a045eacf9ae18f3f132abb019b3ab7f193dbed08bcfda45b6186e4"
@@ -1265,7 +1280,8 @@
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-7.11",
   "spec_sha256": "9298abc5058797331e57ac51e8d1203ad8a7f6152dc286e7b748f19a0a2c14d8",
   "review_findings": {
-    "1": 5
+    "1": 5,
+    "2": 0
   },
   "brief_history": {
     "tests/golden/preflop-spots.json:hero-raised-then-folds-reraise-at-5-to-1": [
@@ -1284,5 +1300,9 @@
       "review r1"
     ]
   },
-  "relock_pending": []
+  "relock_pending": [],
+  "doc_id": "doc-98",
+  "judge_results": {
+    "1": "PASS"
+  }
 }

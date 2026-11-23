@@ -4,7 +4,7 @@ title: Check advice against postflop golden spots on every test run
 status: To Do
 assignee: []
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-18T20:12:00Z'
+updated_date: '2026-11-23T10:38:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -51,6 +51,9 @@ Plan key: E07-S15 · Dream: limit-holdem-trainer
 - [ ] #4 Given every postflop golden spot, When its explanation is checked, Then it quotes the equity % and required equity % the recommendation returns [REQ-037.4]
 - [ ] #5 Given the complete suite, When `npm test` runs, Then 100% of golden spots pass [REQ-039.4]
 - [ ] #6 Given the golden spot suite, When it runs, Then it includes graded examples at Correct, Minor error and Major error, preflop and postflop, each asserting the exact grade, rule id and margin
+- [ ] #7 Given preflop spot fr-btn-raise-88 (button holding 88 facing a hijack open, chart says call), When the spot set is extended, Then the chart cell is reviewed for call vs re-raise and the chart and spot agree on the chosen answer with a justification
+- [ ] #8 Given preflop spot fr-hj-raise-and-calls-ajs, When its justification is revised, Then it no longer overstates how often the opener holds weaker aces (the claim is about the caller's range)
+- [ ] #9 Given preflop spots fr-co-limpers-87s and fr-sb-unopened-65s (call cells whose suited neighbours fold), When the spot set is extended, Then each is replaced by a spot whose chart neighbours share its action, or the chart islands are reviewed and justified
 <!-- AC:END -->
 
 ## Definition of Done
@@ -74,4 +77,8 @@ Plan key: E07-S15 · Dream: limit-holdem-trainer
 
 <!-- SECTION:NOTES:BEGIN -->
 AC added from TASK-7.4 follow-up (doc-19).
+
+ACs added from TASK-7.11 review follow-ups.
+
+AC added from TASK-7.11 judge J-1-01.
 <!-- SECTION:NOTES:END -->

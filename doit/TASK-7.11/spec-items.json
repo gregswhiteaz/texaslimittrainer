@@ -3,84 +3,84 @@
     "id": "SPEC-01",
     "verifies": "AC#1",
     "verification": "acceptance `tests/golden/preflop.acceptance.test.ts::AC#1 every golden spot has a view, an action, at most one alternative and a justification`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-02",
     "verifies": "AC#1",
     "verification": "acceptance `tests/golden/preflop.acceptance.test.ts::AC#1 a spot missing a part fails validation naming the spot`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-03",
     "verifies": "AC#2",
     "verification": "acceptance `tests/golden/preflop.acceptance.test.ts::AC#2 npm test includes the golden-spot suite`; command `npm test 2>&1 | grep -E \"tests/golden/preflop.acceptance.test.ts\"`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-04",
     "verifies": "AC#3, DoD#4",
     "verification": "acceptance `tests/golden/preflop.acceptance.test.ts::AC#3 the advice engine agrees with golden spot <id>` and `::AC#3 a disagreement names the spot, the expected and the actual action`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-05",
     "verifies": "AC#4",
     "verification": "acceptance `tests/golden/preflop.acceptance.test.ts::AC#4 at least 100 spots covering every reference size and chart situation`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-06",
     "verifies": "AC#5",
     "verification": "acceptance `tests/golden/preflop.acceptance.test.ts::AC#5 a spot on a borderline chart cell is rejected as not clear-cut`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-07",
     "verifies": "AC#6",
     "verification": "acceptance `tests/golden/preflop.acceptance.test.ts::AC#6 every golden spot explanation has at most three sentences and names a listed concept`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-08",
     "verifies": "DoD#1, DoD#10",
     "verification": "acceptance `tests/golden/preflop.acceptance.test.ts::DoD#1 justifications are distinct and name their hand`; manual read of `tests/golden/preflop-spots.json`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-09",
     "verifies": "DoD#2",
     "verification": "unit `tests/golden/golden-spots.test.ts::golden spot validator`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-10",
     "verifies": "DoD#2",
     "verification": "unit `tests/golden/golden-spots.test.ts::golden spot views`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-11",
     "verifies": "DoD#7",
     "verification": "command `bash -c 'npm run -s playtest -- --hands 10000 --seed 42 | tee /dev/stderr | shasum -a 256'`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-12",
     "verifies": "DoD#2, DoD#3, DoD#5, DoD#6, DoD#9",
     "verification": "command `npm run lint && npm run typecheck && npm test`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-13",
     "verifies": "DoD#12, DoD#10",
     "verification": "manual read of `docs/advice/golden-spots.md` against this list; `backlog doc list --plain` shows the story doc",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-14",
     "verifies": "DoD#8, DoD#11, DoD#13",
     "verification": "manual `gh run list --branch doit/TASK-7.11 --limit 1` shows success",
-    "status": "pending"
+    "status": "pass"
   }
 ]

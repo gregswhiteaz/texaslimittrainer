@@ -1,0 +1,83 @@
+{
+  "reviewer": "code",
+  "round": 2,
+  "rubric": [
+    {"item": "SPEC-01 correctness", "result": "pass"},
+    {"item": "SPEC-01 test strength", "result": "pass"},
+    {"item": "SPEC-02 correctness", "result": "pass"},
+    {"item": "SPEC-02 test strength", "result": "pass"},
+    {"item": "SPEC-03 correctness", "result": "pass"},
+    {"item": "SPEC-03 test strength", "result": "pass"},
+    {"item": "SPEC-04 correctness", "result": "pass"},
+    {"item": "SPEC-04 test strength", "result": "pass"},
+    {"item": "SPEC-05 correctness", "result": "pass"},
+    {"item": "SPEC-05 test strength", "result": "pass"},
+    {"item": "SPEC-06 correctness", "result": "pass"},
+    {"item": "SPEC-06 test strength", "result": "pass"},
+    {"item": "SPEC-07 correctness", "result": "pass"},
+    {"item": "SPEC-07 test strength", "result": "pass"},
+    {"item": "SPEC-08 correctness (justifications correct and spot-specific; A-4 clear-cut selection)", "result": "pass"},
+    {"item": "SPEC-08 test strength", "result": "pass"},
+    {"item": "SPEC-09 correctness (incl. echo hardening)", "result": "pass"},
+    {"item": "SPEC-09 test strength (incl. {toString:0} test)", "result": "pass"},
+    {"item": "SPEC-10 correctness", "result": "pass"},
+    {"item": "SPEC-10 test strength", "result": "pass"},
+    {"item": "SPEC-11 correctness", "result": "pass"},
+    {"item": "SPEC-12 correctness", "result": "pass"},
+    {"item": "SPEC-13 correctness", "result": "pass"},
+    {"item": "SPEC-14 correctness", "result": "pass"},
+    {"item": "scope", "result": "pass"},
+    {"item": "concision", "result": "pass"},
+    {"item": "clarity", "result": "pass"}
+  ],
+  "round_1_followup": [
+    {"fingerprint": "tests/golden/preflop-spots.json:hero-raised-then-folds-reraise-at-5-to-1", "status": "fixed", "note": "hu-bb-re-raise-92o -> -aa (raise, cap), 6max-bb-re-raise-98o -> -aa (raise, cap), fr-bb-re-raise-87s -> -ajs (call). AA is R deep in each re-raise grid. AJs in full-ring BB re-raise is C with AQs, ATs, KJs and AJo all C. The AJs text argues from the real price (22-chip pot, one 4-chip bet), which is correct. No 'dominates' text for 98o remains."},
+    {"fingerprint": "tests/golden/preflop-spots.json:heads-up-folds-near-boundary", "status": "fixed", "note": "hu-btn-raise k7o (K8o, K6o, Q7o, K7s all C) and j9s (JTs, J8s, Q9s, T9s, J9o all C) are calls. hu-bb-blind-defence j6o (J7o, J5o, Q6o, T6o all C) is a call and aks (deep R) a raise. The 3:1 price (pot 12, call 4) in the texts is correct. Heads-up folds remain only in BTN unopened (72o, 83o), where all neighbours fold."},
+    {"fingerprint": "tests/golden/preflop-spots.json:sb-k9s-fold-vs-button-steal", "status": "fixed", "note": "The raiser is now UTG (before ['raise', 6x 'fold']). The 'dominated by bigger kings and aces' reasoning is now true."},
+    {"fingerprint": "tests/golden/preflop-spots.json:6max-btn-kts-call-on-boundary", "status": "fixed", "note": "Replaced by 6max-bb-blind-defence-kts against a button open. KJs, K9s, QTs, ATs and KTo are all C. 'Three and a half to one' (pot 14, call 4) is correct."},
+    {"fingerprint": "tests/golden/preflop-spots.json:72o-weakest-hand-heads-up", "status": "fixed", "note": "The text now says 'one of the weakest starting hands'."},
+    {"fingerprint": "tests/golden/preflop-spots.json:ako-vs-utg-overstated", "status": "fixed", "note": "Reworded. It now says AKo dominates AQ/AJ/KQ and is close to even against middle pairs."},
+    {"fingerprint": "tests/golden/preflop-spots.json:cold-call-small-pairs-raise-and-calls", "status": "fixed", "note": "33 -> AJs (HJ, MP open + LJ call) and A7s -> ATs (CO, LJ open + HJ call). See the MINOR on offsuit neighbours."},
+    {"fingerprint": "src/advice/golden.ts:third-copy-of-validator-helpers", "status": "open (MINOR, not in fix brief)"},
+    {"fingerprint": "src/advice/golden.ts:misleading-problem-for-bad-before-or-long-id", "status": "open (NIT, not in fix brief)"}
+  ],
+  "findings": [
+    {
+      "fingerprint": "tests/golden/preflop-spots.json:raise-and-calls-suited-ace-offsuit-neighbour-folds",
+      "severity": "MINOR",
+      "file": "tests/golden/preflop-spots.json",
+      "line": 996,
+      "issue": "fr-hj-raise-and-calls-ajs and fr-co-raise-and-calls-ats (line 1007) are calls whose suited neighbours all call (AQs/ATs/KJs and AJs/A9s/KTs). Their offsuit twins fold, though: AJo is F in full-ring HJ raise-and-calls and ATo is F in full-ring CO raise-and-calls. The build log lists only the suited neighbours. Under the strict A-4 reading I used for KTs/KTo in round 1, these calls do not have every neighbour calling. The suited/offsuit line is a natural poker boundary, and both calls are sound poker (suited aces play well in a multiway pot), so this is not a real close spot. Separately, the AJs text says AJs 'dominates the weaker aces ... a middle-position opener ... often hold'. A full-ring MP opening range holds few aces weaker than AJ, so that half of the claim is overstated. It is true of the caller.",
+      "evidence": "Full-ring HJ raise-and-calls grid: AJs C, AJo F. Full-ring CO raise-and-calls grid: ATs C, ATo F.",
+      "fix": "Optional: reword the AJs text so the domination claim is about the caller, for example 'dominates the weaker aces and broadway hands the caller often holds'. Leave the hands as they are."
+    },
+    {
+      "fingerprint": "tests/golden/preflop-spots.json:fr-btn-88-flat-vs-hijack",
+      "severity": "MINOR",
+      "file": "tests/golden/preflop-spots.json",
+      "line": 941,
+      "issue": "This spot was not sampled in round 1. fr-btn-raise-88 flat-calls 88 on the button against a hijack open and cites 'implied odds'. The chart's neighbours agree (99 C, 77 C), so it passes A-4. Still, many limit players re-raise 88 here to isolate and shut out the blinds, and the implied odds against one raiser in a limit pot are small. Calling is defensible but not obviously best. It is the weakest of the about 20 spots I newly read.",
+      "evidence": "before ['fold','fold','fold','fold','raise','fold']: HJ opens, CO folds, hero BTN. Full-ring BTN raise grid: TT R, 99 C, 88 C, 77 C, 66 F*/C.",
+      "fix": "Optional: give a clearer reason in the text (for example 'call to keep the pot small with a pair that is often only slightly ahead, and use position after the flop'), or swap in 99 with the same story."
+    },
+    {
+      "fingerprint": "tests/golden/preflop-spots.json:6max-raise-count-below-a3",
+      "severity": "NIT",
+      "file": "tests/golden/preflop-spots.json",
+      "line": 434,
+      "issue": "Removing 6max-btn-raise-kts leaves 6-max 'raise' with 6 spots and 6-max 'blind-defence' with 8. A-3 planned 7 each. Tests enforce only the floor, and the total (110) and the 42 for 6-max still match the docs, so nothing breaks.",
+      "evidence": "Counts: (6,'raise') 6, (6,'blind-defence') 8.",
+      "fix": "None needed. Optionally add a clear-cut 6-max raise fold or re-raise and drop one blind-defence spot."
+    },
+    {
+      "fingerprint": "src/advice/golden.ts:third-copy-of-validator-helpers",
+      "severity": "MINOR",
+      "file": "src/advice/golden.ts",
+      "line": 63,
+      "issue": "Carried over from round 1: isRecord and wordCount are still private copies of the helpers in preflop-chart.ts and ranges.ts. echo now differs from those copies, and the other copies still call String(value) on untrusted values.",
+      "evidence": "src/advice/golden.ts:63-85 compared with src/advice/preflop-chart.ts:97-108.",
+      "fix": "Follow-up task: share the helpers in one place, and give the other validators the hardened echo."
+    }
+  ],
+  "summary": "All five round-1 MAJORs and both orchestrator MINORs are fixed. I checked every replacement against its chart grid. All of them sit inside a uniform region: AA caps, AKs re-raises, and K7o, J9s, J6o, KTs and AJs (BB re-raise) call with every neighbour calling. The prices quoted in the texts (12 pot/4 call, 14/4, 22/4) are correct. K9s now folds to a UTG open. The 110 spots still cover every (size, situation) pair (17 pairs, 4 to 8 spots each) and all four actions (raise 48, call 36, fold 22, check 4). The locked spots file hash matches state.json. echo() now converts only strings and numbers. The new test would fail against the old String(value) code, which throws a TypeError on {toString:0}, and it asserts the exact <object>/<array>/<null>/<boolean>/number echoes. vitest tests/golden: 136 passed. The fix-4 gate passes (test, lint, typecheck). I also read about 20 spots not sampled in round 1 as a poker player (83o, K8o, A2o, K7o 6-max UTG, KJo/A9o/K9o against opens, QTs/JTs/QTo/KQs calling 3-bets, 22 fold, 94o/72o BB folds, T8o SB fold, 66/55/44/87s overlimps, 76s/65s/A5s completes, TT against UTG). None is wrong poker. TT and 66 sit next to borderline cells whose alternative is call, so they pass A-4. Remaining items are MINOR or NIT: suited-ace calls whose offsuit twin folds, a defensible but debatable 88 flat on the button, 6-max raise at 6 spots instead of A-3's 7, and the duplicated helpers. No BLOCKER or MAJOR."
+}
