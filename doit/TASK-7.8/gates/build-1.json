@@ -1,0 +1,98 @@
+{
+  "task": "TASK-7.8",
+  "phase": "build",
+  "run": 1,
+  "result": "PASS",
+  "changed_lines": 2405,
+  "changed_files": [
+    "docs/advice/postflop-rules.md",
+    "package.json",
+    "src/advice/equity.ts",
+    "src/advice/grade.ts",
+    "src/advice/postflop.ts",
+    "src/advice/ranges.ts",
+    "src/bots/calling-station.ts",
+    "src/bots/maniac.ts",
+    "src/bots/rock.ts",
+    "src/bots/tag.ts",
+    "tests/advice/equity.test.ts",
+    "tests/advice/grade.acceptance.test.ts",
+    "tests/advice/grade.test.ts",
+    "tests/advice/postflop-coverage.acceptance.test.ts",
+    "tests/advice/postflop-ranges.test.ts",
+    "tests/advice/postflop.acceptance.test.ts",
+    "tests/advice/postflop.test.ts",
+    "tests/advice/range-model.acceptance.test.ts",
+    "tests/advice/ranges.test.ts",
+    "tests/advice/value-bet.acceptance.test.ts",
+    "tests/bots/calling-station-draws.acceptance.test.ts",
+    "tests/bots/calling-station.acceptance.test.ts",
+    "tests/bots/calling-station.test.ts",
+    "tests/bots/maniac.acceptance.test.ts",
+    "tests/bots/maniac.test.ts",
+    "tests/bots/rock.test.ts",
+    "tests/bots/tag-mixing.acceptance.test.ts",
+    "tests/bots/tag-playtest.acceptance.test.ts",
+    "tests/bots/tag.acceptance.test.ts",
+    "tests/bots/tag.test.ts",
+    "tests/engine/invariants.perf.test.ts",
+    "tests/playtest/bot-results.acceptance.test.ts",
+    "tests/playtest/cli.test.ts",
+    "tests/playtest/games.acceptance.test.ts",
+    "tests/playtest/heads-up.acceptance.test.ts",
+    "tests/playtest/invariants.acceptance.test.ts",
+    "tests/playtest/playtest.acceptance.test.ts",
+    "tests/playtest/policy-lineup.acceptance.test.ts",
+    "tests/playtest/runner.acceptance.test.ts",
+    "tests/table/next-hand.acceptance.test.ts",
+    "tests/table/review.acceptance.test.ts",
+    "tests/ui/review-panel.acceptance.test.tsx"
+  ],
+  "checks": [
+    {
+      "name": "test command",
+      "status": "pass",
+      "detail": "$ npm test\nexit 0\n | Uncovered Line #s \n-------------------|---------|----------|---------|---------|-------------------\nAll files          |   97.31 |    95.86 |   94.74 |   97.52 |                   \n advice            |   99.88 |    98.42 |     100 |     100 |                   \n  equity.ts        |     100 |    96.19 |     100 |     100 | 118,124,229       \n  ranges.ts        |     100 |       98 |     100 |     100 | 96,112,250        \n  recommend.ts     |    90.9 |       90 |     100 |     100 | 28                \n bots              |   99.67 |    97.63 |     100 |     100 |                   \n  ...ng-station.ts |     100 |    94.73 |     100 |     100 | 32                \n  rock.ts          |     100 |    94.11 |     100 |     100 | 24                \n  style.ts         |     100 |    97.52 |     100 |     100 | 138,150,342       \n  tag.ts           |   94.11 |    92.85 |     100 |     100 | 50                \n engine            |   99.88 |    95.29 |     100 |   99.86 |                   \n  ...-evaluator.ts |     100 |    80.18 |     100 |     100 | ...87-200,214-215 \n  hand.ts          |     100 |    99.51 |     100 |     100 | 350               \n  invariants.ts    |   99.68 |    97.31 |     100 |   99.62 | 387               \n playtest          |     100 |    99.27 |     100 |     100 |                   \n  cli.ts           |     100 |    99.37 |     100 |     100 | 267               \n  shards.ts        |     100 |    98.11 |     100 |     100 | 232,338           \n table             |     100 |     99.6 |     100 |     100 |                   \n  session.ts       |     100 |    98.88 |     100 |     100 | 405               \n ui                |   35.29 |    14.28 |   28.57 |    37.5 |                   \n  App.tsx          |   33.33 |    33.33 |      20 |   33.33 | 20-35             \n  ...adingFocus.ts |    37.5 |        0 |      50 |   42.85 | 10-13             \n ui/advice         |   94.54 |       95 |   92.85 |   95.83 |                   \n  advice-client.ts |   96.15 |    94.73 |   91.66 |   97.82 | 114               \n  advice.worker.ts |       0 |      100 |     100 |       0 | 3                 \n ui/config         |   69.49 |    68.18 |   54.54 |   73.58 |                   \n  ...figScreen.tsx |   69.49 |    68.18 |   54.54 |   73.58 | ...22,240-241,267 \n ui/table          |   46.93 |    65.88 |   51.06 |   52.94 |                   \n  ActionBar.tsx    |      75 |       50 |     100 |     100 | 19                \n  Table.tsx        |   73.68 |    90.74 |   68.42 |   77.77 | ...50-251,254-255 \n  ...bleSession.ts |      18 |       12 |   19.04 |      20 | ...13,117,122-123 \n-------------------|---------|----------|---------|---------|-------------------\n\n=============================== Coverage summary ===============================\nStatements   : 97.31% ( 3159/3246 )\nBranches     : 95.86% ( 2112/2203 )\nFunctions    : 94.74% ( 703/742 )\nLines        : 97.52% ( 2643/2710 )\n================================================================================\n"
+    },
+    {
+      "name": "lint command",
+      "status": "pass",
+      "detail": "$ npm run lint\nexit 0\n\n> tlh-trainer@0.0.0 lint\n> eslint . --max-warnings 0 && prettier --check .\n\nChecking formatting...\nAll matched files use Prettier code style!\n"
+    },
+    {
+      "name": "typecheck command",
+      "status": "pass",
+      "detail": "$ npm run typecheck\nexit 0\n\n> tlh-trainer@0.0.0 typecheck\n> tsc -p tsconfig.json\n\n"
+    },
+    {
+      "name": "spec unchanged",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "name": "scope budget (lines)",
+      "status": "warn",
+      "detail": "2405 changed lines vs budget 1700 (fail above 3400)"
+    },
+    {
+      "name": "scope budget (files)",
+      "status": "warn",
+      "detail": "42 files vs budget 36"
+    },
+    {
+      "name": "files outside spec",
+      "status": "warn",
+      "detail": "package.json"
+    },
+    {
+      "name": "all changes listed in changes.md",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "name": "tests locked",
+      "status": "pass",
+      "detail": "1 acceptance test file(s) locked; 237 test files snapshotted"
+    }
+  ]
+}

@@ -13,6 +13,7 @@ import {
 import { formatBotResults, winRate } from '../../src/playtest/winrate';
 import { REPO_ROOT, sandboxEnv } from '../support/sandbox';
 
+const SLOW = process.env.TLH_SLOW_TESTS === '1';
 const TEST_TIMEOUT_MS = 120_000;
 const CASH_HEADER =
   'Bot results: BB/100 = big bets won per 100 hands (big bet $8), with 95% confidence interval';
@@ -84,67 +85,76 @@ function direct(results: readonly number[]) {
   return { m, s, n };
 }
 
+// The 2,000-hand runs are opt-in (TLH_SLOW_TESTS=1); every push runs the same checks on 1,000 hands.
+const RUNS = [
+  { hands: 2_000, test: it.runIf(SLOW), suffix: '' },
+  { hands: 1_000, test: it, suffix: ' (1,000 hands)' },
+];
+
 describe('per-bot BB/100 with a 95% confidence interval', () => {
-  it(
-    "every playtest run prints each bot's name, style, hands, BB/100 and 95% interval",
-    () => {
-      const run = capture(['--hands', '2000', '--seed', '42']);
-      expect(run.code).toBe(0);
-      const lines = run.out.split('\n');
-      const block = lines.indexOf(CASH_HEADER);
-      expect(block).toBeGreaterThan(lines.findIndex((l) => l.startsWith('Table: ')));
-      expect(lines[block + 7]).toBe('Hands played: 2000');
-      const pattern =
-        /^Bot: Seat (\d+), TAG, seat \1, 2000 hands, -?\d+\.\d\d BB\/100, 95% CI -?\d+\.\d\d to -?\d+\.\d\d$/;
-      const found = rows(run.out);
-      expect(found.map((r) => r.seat)).toEqual([1, 2, 3, 4, 5, 6]);
-      for (let i = 1; i <= 6; i++) expect(lines[block + i]).toMatch(pattern);
-      for (const r of found) {
-        expect(r.lower as number).toBeLessThanOrEqual(r.bb);
-        expect(r.bb).toBeLessThanOrEqual(r.upper as number);
-      }
-      expect(Math.abs(found.reduce((s, r) => s + r.bb, 0))).toBeLessThanOrEqual(0.03);
-
-      const nine = spawnSync(
-        'npm',
-        ['run', '-s', 'playtest', '--', '--hands', '500', '--seed', '9', '--size', '9'],
-        { cwd: REPO_ROOT, env: sandboxEnv(), encoding: 'utf8', timeout: TEST_TIMEOUT_MS },
-      );
-      expect(nine.status).toBe(0);
-      expect(nine.stdout).toContain(`${CASH_HEADER}\n`);
-      expect(rows(nine.stdout).map((r) => [r.name, r.style, r.seat])).toEqual(
-        Array.from({ length: 9 }, (_, i) => [`Seat ${i + 1}`, 'TAG', i + 1]),
-      );
-
-      const tough = capture([
-        '--hands',
-        '1000',
-        '--seed',
-        '42',
-        '--lineup',
-        'tough',
-        '--size',
-        '6',
-      ]);
-      expect(tough.code).toBe(0);
-      const toughRows = rows(tough.out);
-      expect(toughRows[0]).toMatchObject({ name: 'User', style: 'TAG', seat: 1, hands: 1000 });
-      const lineUp = tough.out.split('\n').find((l) => l.startsWith('Line-up: ')) as string;
-      for (const [, seat, name, style] of lineUp.matchAll(/seat (\d+) (\w+) \(([^)]+)\)/g)) {
-        expect(toughRows).toContainEqual(
-          expect.objectContaining({ seat: Number(seat), name, style }),
+  for (const { hands, test, suffix } of RUNS) {
+    test(
+      `every playtest run prints each bot's name, style, hands, BB/100 and 95% interval${suffix}`,
+      () => {
+        const run = capture(['--hands', String(hands), '--seed', '42']);
+        expect(run.code).toBe(0);
+        const lines = run.out.split('\n');
+        const block = lines.indexOf(CASH_HEADER);
+        expect(block).toBeGreaterThan(lines.findIndex((l) => l.startsWith('Table: ')));
+        expect(lines[block + 7]).toBe(`Hands played: ${hands}`);
+        const pattern = new RegExp(
+          `^Bot: Seat (\\d+), TAG, seat \\1, ${hands} hands, -?\\d+\\.\\d\\d BB\\/100, 95% CI -?\\d+\\.\\d\\d to -?\\d+\\.\\d\\d$`,
         );
-      }
+        const found = rows(run.out);
+        expect(found.map((r) => r.seat)).toEqual([1, 2, 3, 4, 5, 6]);
+        for (let i = 1; i <= 6; i++) expect(lines[block + i]).toMatch(pattern);
+        for (const r of found) {
+          expect(r.lower as number).toBeLessThanOrEqual(r.bb);
+          expect(r.bb).toBeLessThanOrEqual(r.upper as number);
+        }
+        expect(Math.abs(found.reduce((s, r) => s + r.bb, 0))).toBeLessThanOrEqual(0.03);
 
-      const sng = capture(['--game', 'sng', '--hands', '1000']);
-      expect(sng.code).toBe(0);
-      expect(sng.out).toContain(
-        'Bot results: BB/100 = big bets won per 100 hands (big bet 40 chips), with 95% confidence interval\n',
-      );
-      expect(rows(sng.out)).toHaveLength(6);
-    },
-    TEST_TIMEOUT_MS,
-  );
+        const nine = spawnSync(
+          'npm',
+          ['run', '-s', 'playtest', '--', '--hands', '500', '--seed', '9', '--size', '9'],
+          { cwd: REPO_ROOT, env: sandboxEnv(), encoding: 'utf8', timeout: TEST_TIMEOUT_MS },
+        );
+        expect(nine.status).toBe(0);
+        expect(nine.stdout).toContain(`${CASH_HEADER}\n`);
+        expect(rows(nine.stdout).map((r) => [r.name, r.style, r.seat])).toEqual(
+          Array.from({ length: 9 }, (_, i) => [`Seat ${i + 1}`, 'TAG', i + 1]),
+        );
+
+        const tough = capture([
+          '--hands',
+          '1000',
+          '--seed',
+          '42',
+          '--lineup',
+          'tough',
+          '--size',
+          '6',
+        ]);
+        expect(tough.code).toBe(0);
+        const toughRows = rows(tough.out);
+        expect(toughRows[0]).toMatchObject({ name: 'User', style: 'TAG', seat: 1, hands: 1000 });
+        const lineUp = tough.out.split('\n').find((l) => l.startsWith('Line-up: ')) as string;
+        for (const [, seat, name, style] of lineUp.matchAll(/seat (\d+) (\w+) \(([^)]+)\)/g)) {
+          expect(toughRows).toContainEqual(
+            expect.objectContaining({ seat: Number(seat), name, style }),
+          );
+        }
+
+        const sng = capture(['--game', 'sng', '--hands', '1000']);
+        expect(sng.code).toBe(0);
+        expect(sng.out).toContain(
+          'Bot results: BB/100 = big bets won per 100 hands (big bet 40 chips), with 95% confidence interval\n',
+        );
+        expect(rows(sng.out)).toHaveLength(6);
+      },
+      TEST_TIMEOUT_MS,
+    );
+  }
 
   it('a bot that won $80 over 100 hands at $4/$8 wins 10.00 BB/100', () => {
     const rate = winRate([80, ...Array<number>(99).fill(0)], 8);
@@ -180,97 +190,106 @@ describe('per-bot BB/100 with a 95% confidence interval', () => {
     );
   });
 
-  it(
-    'a busted bot and its replacement appear as separate rows with their own hands',
-    () => {
-      const argv = ['--hands', '2000', '--seed', '42', '--lineup', 'mixed'];
-      const run = capture(argv);
-      expect(run.code).toBe(0);
-      const replaced = Number(/^Bots replaced: (\d+)$/m.exec(run.out)?.[1]);
-      expect(replaced).toBeGreaterThan(0);
+  for (const { hands, test, suffix } of RUNS) {
+    test(
+      `a busted bot and its replacement appear as separate rows with their own hands${suffix}`,
+      () => {
+        const argv = ['--hands', String(hands), '--seed', '42', '--lineup', 'mixed'];
+        const run = capture(argv);
+        expect(run.code).toBe(0);
+        const replaced = Number(/^Bots replaced: (\d+)$/m.exec(run.out)?.[1]);
+        expect(replaced).toBeGreaterThan(0);
 
-      const results = new Map<
-        string,
-        { seat: number; name: string; style: string; xs: number[] }
-      >();
-      const departures: { seat: number; before: string; after: string }[] = [];
-      let previous: PlayedHand | undefined;
-      runPlaytest({ hands: 2000, seed: 42, size: 6, lineUp: 'Mixed' }, (hand) => {
-        for (const seat of hand.replaced ?? []) {
-          departures.push({
-            seat,
-            before: String(previous?.lineUp?.[seat - 1]?.name),
-            after: String(hand.lineUp?.[seat - 1]?.name),
-          });
-        }
-        previous = hand;
-        if (hand.final.result === null) return;
-        for (const p of hand.final.players) {
-          const s = hand.lineUp?.[p.seat - 1];
-          const name = s?.kind === 'user' ? 'User' : String(s?.name);
-          const style = s?.kind === 'user' ? 'TAG' : String(s?.style);
-          const key = `${p.seat}|${name}|${style}`;
-          const entry = results.get(key) ?? { seat: p.seat, name, style, xs: [] };
-          entry.xs.push(p.stack - p.startingStack);
-          results.set(key, entry);
-        }
-      });
-      expect(departures).toHaveLength(replaced);
-
-      // Rows by seat, then first hand (Map insertion order is first-hand order; sort is stable).
-      const expected = [...results.values()]
-        .sort((a, b) => a.seat - b.seat)
-        .map(({ seat, name, style, xs }) => {
-          const rate = winRate(xs, 8);
-          const f = (v: number) => (v.toFixed(2) === '-0.00' ? '0.00' : v.toFixed(2));
-          const ci = rate.lower === null ? 'n/a' : `${f(rate.lower)} to ${f(rate.upper as number)}`;
-          return `Bot: ${name}, ${style}, seat ${seat}, ${xs.length} hands, ${f(rate.bbPer100)} BB/100, 95% CI ${ci}`;
+        const results = new Map<
+          string,
+          { seat: number; name: string; style: string; xs: number[] }
+        >();
+        const departures: { seat: number; before: string; after: string }[] = [];
+        let previous: PlayedHand | undefined;
+        runPlaytest({ hands, seed: 42, size: 6, lineUp: 'Mixed' }, (hand) => {
+          for (const seat of hand.replaced ?? []) {
+            departures.push({
+              seat,
+              before: String(previous?.lineUp?.[seat - 1]?.name),
+              after: String(hand.lineUp?.[seat - 1]?.name),
+            });
+          }
+          previous = hand;
+          if (hand.final.result === null) return;
+          for (const p of hand.final.players) {
+            const s = hand.lineUp?.[p.seat - 1];
+            const name = s?.kind === 'user' ? 'User' : String(s?.name);
+            const style = s?.kind === 'user' ? 'TAG' : String(s?.style);
+            const key = `${p.seat}|${name}|${style}`;
+            const entry = results.get(key) ?? { seat: p.seat, name, style, xs: [] };
+            entry.xs.push(p.stack - p.startingStack);
+            results.set(key, entry);
+          }
         });
-      expect(botLines(run.out)).toEqual(expected);
+        expect(departures).toHaveLength(replaced);
 
-      const found = rows(run.out);
-      for (const { seat, before, after } of departures) {
-        expect(found.some((r) => r.seat === seat && r.name === before)).toBe(true);
-        expect(found.some((r) => r.seat === seat && r.name === after)).toBe(true);
-      }
-      for (let seat = 1; seat <= 6; seat++) {
-        const total = found.filter((r) => r.seat === seat).reduce((s, r) => s + r.hands, 0);
-        expect(total).toBe(2000);
-      }
-    },
-    TEST_TIMEOUT_MS,
-  );
+        // Rows by seat, then first hand (Map insertion order is first-hand order; sort is stable).
+        const expected = [...results.values()]
+          .sort((a, b) => a.seat - b.seat)
+          .map(({ seat, name, style, xs }) => {
+            const rate = winRate(xs, 8);
+            const f = (v: number) => (v.toFixed(2) === '-0.00' ? '0.00' : v.toFixed(2));
+            const ci =
+              rate.lower === null ? 'n/a' : `${f(rate.lower)} to ${f(rate.upper as number)}`;
+            return `Bot: ${name}, ${style}, seat ${seat}, ${xs.length} hands, ${f(rate.bbPer100)} BB/100, 95% CI ${ci}`;
+          });
+        expect(botLines(run.out)).toEqual(expected);
 
-  it(
-    'the bot block leaves every other report line unchanged and output deterministic',
-    () => {
-      const cases: [string[], PlaytestOptions, string | undefined][] = [
-        [['--hands', '2000', '--seed', '42'], { hands: 2000, seed: 42, size: 6 }, undefined],
-        [
-          ['--hands', '2000', '--seed', '42', '--lineup', 'mixed'],
-          { hands: 2000, seed: 42, size: 6, lineUp: 'Mixed' },
-          'mixed',
-        ],
-      ];
-      for (const [argv, options, lineUp] of cases) {
-        const first = capture(argv);
-        expect(capture(argv).out).toBe(first.out);
-        const rest = withoutBlock(first.out);
-        const header = rest.slice(0, rest.indexOf('Hands played: '));
-        let replaced = 0;
-        const summary = runPlaytest(options, (hand) => (replaced += hand.replaced?.length ?? 0));
-        expect(rest).toBe(
-          formatReport(header, summary, 'run', lineUp, lineUp === undefined ? undefined : replaced),
-        );
-        if (lineUp !== undefined) {
-          expect(first.out.endsWith(`Invariant violations: 0\nBots replaced: ${replaced}\n`)).toBe(
-            true,
-          );
+        const found = rows(run.out);
+        for (const { seat, before, after } of departures) {
+          expect(found.some((r) => r.seat === seat && r.name === before)).toBe(true);
+          expect(found.some((r) => r.seat === seat && r.name === after)).toBe(true);
         }
-      }
-    },
-    TEST_TIMEOUT_MS,
-  );
+        for (let seat = 1; seat <= 6; seat++) {
+          const total = found.filter((r) => r.seat === seat).reduce((s, r) => s + r.hands, 0);
+          expect(total).toBe(hands);
+        }
+      },
+      TEST_TIMEOUT_MS,
+    );
+
+    test(
+      `the bot block leaves every other report line unchanged and output deterministic${suffix}`,
+      () => {
+        const cases: [string[], PlaytestOptions, string | undefined][] = [
+          [['--hands', String(hands), '--seed', '42'], { hands, seed: 42, size: 6 }, undefined],
+          [
+            ['--hands', String(hands), '--seed', '42', '--lineup', 'mixed'],
+            { hands, seed: 42, size: 6, lineUp: 'Mixed' },
+            'mixed',
+          ],
+        ];
+        for (const [argv, options, lineUp] of cases) {
+          const first = capture(argv);
+          expect(capture(argv).out).toBe(first.out);
+          const rest = withoutBlock(first.out);
+          const header = rest.slice(0, rest.indexOf('Hands played: '));
+          let replaced = 0;
+          const summary = runPlaytest(options, (hand) => (replaced += hand.replaced?.length ?? 0));
+          expect(rest).toBe(
+            formatReport(
+              header,
+              summary,
+              'run',
+              lineUp,
+              lineUp === undefined ? undefined : replaced,
+            ),
+          );
+          if (lineUp !== undefined) {
+            expect(
+              first.out.endsWith(`Invariant violations: 0\nBots replaced: ${replaced}\n`),
+            ).toBe(true);
+          }
+        }
+      },
+      TEST_TIMEOUT_MS,
+    );
+  }
 
   it('a hand stopped by a violation counts toward no bot', () => {
     const run = capture(['--hands', '3', '--seed', '42'], { onAction: flagFirstActionOfHand(2) });

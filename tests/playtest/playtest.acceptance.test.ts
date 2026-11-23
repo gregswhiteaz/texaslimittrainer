@@ -4,6 +4,7 @@ import { main } from '../../src/playtest/cli';
 import { runPlaytest } from '../../src/playtest/runner';
 import { REPO_ROOT, sandboxEnv } from '../support/sandbox';
 
+const SLOW = process.env.TLH_SLOW_TESTS === '1';
 const TEST_TIMEOUT_MS = 120_000;
 
 interface Run {
@@ -59,48 +60,56 @@ const REPORT_LABELS = [
 const BAD_CODE_MESSAGE =
   'Error: --replay-code must be 32 lowercase hex characters (0-9, a-f), not all zeros.\n';
 
-describe('npm run playtest', () => {
-  it(
-    'AC#1 plays 10,000 hands at 6-max $4/$8 and reports zero violations',
-    () => {
-      const run = playtest(['--hands', '10000', '--seed', '42'], 60_000);
-      expect(run.status).toBe(0);
-      const lines = run.stdout.split('\n');
-      expect(lines[0]).toBe('TLH Trainer playtest');
-      expect(lines).toContain('Options: --hands 10000 --seed 42 --size 6');
-      expect(lines).toContain(
-        'Table: 6 players, cash $4/$8, stacks carry over, a busted seat rebuys for $160',
-      );
-      expect(lines).toContain('Hands played: 10000');
-      expect(lines).toContain('Invariant violations: 0');
-      const order = REPORT_LABELS.map((label) =>
-        lines.findIndex((line) => line.startsWith(`${label}: `)),
-      );
-      expect(order.every((index) => index > 0)).toBe(true);
-      expect(order).toEqual([...order].sort((a, b) => a - b));
-    },
-    TEST_TIMEOUT_MS,
-  );
+// The 10,000-hand runs are opt-in (TLH_SLOW_TESTS=1); every push runs the same checks on 1,000 hands.
+const RUNS = [
+  { hands: 10_000, test: it.runIf(SLOW), title: '10,000', suffix: '' },
+  { hands: 1_000, test: it, title: '1,000', suffix: ' (1,000 hands)' },
+];
 
-  it(
-    'AC#3 same seed and options give byte-identical output',
-    () => {
-      for (const args of [
-        ['--hands', '2000', '--seed', '42', '--size', '9'],
-        ['--hands', '10000', '--seed', '42'],
-      ]) {
-        const first = playtest(args);
-        const second = playtest(args);
-        expect(first.status).toBe(0);
-        expect(second.status).toBe(0);
-        expect(first.stdout).toContain('Hands played: ');
-        expect(second.stdout === first.stdout).toBe(true);
-      }
-      const argv = ['--hands', '500', '--seed', '9', '--size', '7'];
-      expect(capture(argv)).toEqual(capture(argv));
-    },
-    TEST_TIMEOUT_MS,
-  );
+describe('npm run playtest', () => {
+  for (const { hands, test, title, suffix } of RUNS) {
+    test(
+      `AC#1 plays ${title} hands at 6-max $4/$8 and reports zero violations`,
+      () => {
+        const run = playtest(['--hands', String(hands), '--seed', '42'], 60_000);
+        expect(run.status).toBe(0);
+        const lines = run.stdout.split('\n');
+        expect(lines[0]).toBe('TLH Trainer playtest');
+        expect(lines).toContain(`Options: --hands ${hands} --seed 42 --size 6`);
+        expect(lines).toContain(
+          'Table: 6 players, cash $4/$8, stacks carry over, a busted seat rebuys for $160',
+        );
+        expect(lines).toContain(`Hands played: ${hands}`);
+        expect(lines).toContain('Invariant violations: 0');
+        const order = REPORT_LABELS.map((label) =>
+          lines.findIndex((line) => line.startsWith(`${label}: `)),
+        );
+        expect(order.every((index) => index > 0)).toBe(true);
+        expect(order).toEqual([...order].sort((a, b) => a - b));
+      },
+      TEST_TIMEOUT_MS,
+    );
+
+    test(
+      `AC#3 same seed and options give byte-identical output${suffix}`,
+      () => {
+        for (const args of [
+          ['--hands', '2000', '--seed', '42', '--size', '9'],
+          ['--hands', String(hands), '--seed', '42'],
+        ]) {
+          const first = playtest(args);
+          const second = playtest(args);
+          expect(first.status).toBe(0);
+          expect(second.status).toBe(0);
+          expect(first.stdout).toContain('Hands played: ');
+          expect(second.stdout === first.stdout).toBe(true);
+        }
+        const argv = ['--hands', '500', '--seed', '9', '--size', '7'];
+        expect(capture(argv)).toEqual(capture(argv));
+      },
+      TEST_TIMEOUT_MS,
+    );
+  }
 
   it(
     'AC#4 seeds 42 and 43 deal different replay codes',

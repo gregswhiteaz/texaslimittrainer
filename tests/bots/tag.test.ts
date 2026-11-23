@@ -1,9 +1,9 @@
 import { readdirSync, readFileSync } from 'node:fs';
 import { join, posix } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import type { EquityInput, EquityResult } from '../../src/advice/equity';
+import { equityWithBudget, type EquityInput, type EquityResult } from '../../src/advice/equity';
 import { SIX_MAX_CHART } from '../../src/advice/preflop';
-import { decideTag, FREE_CHECK_EQUITY } from '../../src/bots/tag';
+import { BOT_EQUITY, BOT_EQUITY_BUDGET, decideTag } from '../../src/bots/tag';
 import { parseCards, type Card } from '../../src/engine/cards';
 import { applyAction, createHand, type Action, type SeatNumber } from '../../src/engine/hand';
 import { playerView } from '../../src/engine/player-view';
@@ -95,36 +95,35 @@ function boundaryProblems(file: string, text: string): string[] {
 }
 
 describe('TAG bot units', () => {
-  it('free-check stand-in and option pass-through', () => {
+  it('bot equity budget and option pass-through', () => {
     const [hero0, hero1, ...board] = parseCards('Ah 5h Kh 9h 2c') as [Card, Card, ...Card[]];
     const range = [parseCards('Qs Qd') as [Card, Card]];
-    expect(FREE_CHECK_EQUITY({ hero: [hero0, hero1], board, opponents: [range, range] })).toEqual({
-      hero: { win: 0, tie: 0, equity: 0 },
-      opponents: [
-        { win: 0, tie: 0, equity: 0 },
-        { win: 0, tie: 0, equity: 0 },
-      ],
-      method: 'exact',
-      trials: 0,
-    });
+    const input = { hero: [hero0, hero1] as const, board, opponents: [range] };
+    expect(BOT_EQUITY_BUDGET).toEqual({ exactLimit: 2_500, trials: 500 });
+    expect(BOT_EQUITY(input)).toEqual(equityWithBudget(input, BOT_EQUITY_BUDGET));
 
     const facing = playerView(stateAfter(FLOP_BET), 3);
     const strong = stubEquity(1);
     expect(decideTag(facing, { equity: strong.fn })).toStrictEqual({
       seat: 3,
-      type: 'call',
-      amount: 4,
+      type: 'raise',
+      amount: 8,
     });
-    expect(strong.calls).toHaveLength(1);
+    expect(strong.calls).toHaveLength(2);
     expect(decideTag(facing, { equity: stubEquity(0).fn })).toStrictEqual({
       seat: 3,
       type: 'fold',
     });
 
     const free = playerView(stateAfter(FLOP_FREE), 3);
-    const unused = stubEquity(0);
-    expect(decideTag(free, { equity: unused.fn })).toStrictEqual({ seat: 3, type: 'check' });
-    expect(unused.calls).toHaveLength(0);
+    const weak = stubEquity(0);
+    expect(decideTag(free, { equity: weak.fn })).toStrictEqual({ seat: 3, type: 'check' });
+    expect(weak.calls).toHaveLength(2);
+    expect(decideTag(free, { equity: stubEquity(1).fn })).toStrictEqual({
+      seat: 3,
+      type: 'bet',
+      amount: 4,
+    });
 
     const preflop = playerView(stateAfter([]), 4);
     const neverPreflop = stubEquity(1);

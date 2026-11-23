@@ -1,8 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { computeEquity, type EquityInput, type EquityResult } from '../../src/advice/equity';
 import { recommend } from '../../src/advice/recommend';
 import { MANIAC_STYLE, decideManiac } from '../../src/bots/maniac';
-import { FREE_CHECK_EQUITY, decideTag } from '../../src/bots/tag';
+import { BOT_EQUITY, decideTag } from '../../src/bots/tag';
 import { botDecisionSeed, botRandom } from '../../src/engine/bot-random';
 import type { Action } from '../../src/engine/hand';
 import type { PlayerView } from '../../src/engine/player-view';
@@ -12,17 +11,8 @@ import { runPlaytest } from '../../src/playtest/runner';
 const TEST_TIMEOUT_MS = 120_000;
 const SLOW = process.env.TLH_SLOW_TESTS === '1';
 
-/** computeEquity, memoized on its input: returns exactly computeEquity's result (A-6). */
-const memo = new Map<string, EquityResult>();
-function equity(input: EquityInput): EquityResult {
-  const key = JSON.stringify(input);
-  let result = memo.get(key);
-  if (result === undefined) {
-    result = computeEquity(input);
-    memo.set(key, result);
-  }
-  return result;
-}
+/** The bots' equity (TASK-7.8): what decideTag and decideManiac use without an equity option. */
+const equity = BOT_EQUITY;
 
 /** A stub generator returning `values` in turn (then 0) and counting calls. */
 function stub(...values: number[]) {
@@ -57,15 +47,7 @@ describe('Maniac decision', () => {
     'Maniac draws once only at deviating decisions',
     () => {
       const views = seatOneViews();
-      const advices = new Map(
-        views.map((v) => [
-          v,
-          recommend(
-            v,
-            v.street !== 'preflop' && owed(v) === 0 ? { equity: FREE_CHECK_EQUITY } : { equity },
-          ),
-        ]),
-      );
+      const advices = new Map(views.map((v) => [v, recommend(v, { equity })]));
       const advice = (v: PlayerView) => advices.get(v) as ReturnType<typeof recommend>;
       const check = views.filter((v) => owed(v) === 0 && advice(v).action === 'check');
       const call = views.filter((v) => owed(v) > 0 && advice(v).action === 'call');
@@ -129,9 +111,7 @@ describe('Maniac decision', () => {
     () => {
       const checkedTo = seatOneViews().filter(
         (v) =>
-          v.street !== 'preflop' &&
-          owed(v) === 0 &&
-          recommend(v, { equity: FREE_CHECK_EQUITY }).action === 'check',
+          v.street !== 'preflop' && owed(v) === 0 && recommend(v, { equity }).action === 'check',
       );
       expect(new Set(checkedTo.map((v) => v.street))).toEqual(new Set(['flop', 'turn', 'river']));
       for (const view of checkedTo) {

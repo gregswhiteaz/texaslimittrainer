@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-18T17:24:00Z'
+updated_date: '2026-11-23T04:18:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-0
@@ -90,6 +90,10 @@ AC#7 added 2026-11-18 from TASK-1.3 follow-up (validate with isReplayCode, fixed
 Build: src/playtest/{policy,runner,cli}.ts, tools/playtest/{main.ts,resolve-ts.js} (Node built-in TS, no new dep), npm run playtest, engines.node >=22.18.0; 10,000-hand seed-42 run: 0 violations; tests 128 passed; gate PASS.
 
 CI run 44357290247 (head ec5c4c3): success first push. Judge round 1: PASS 15/15; ~200k hands never exceeded 4 bets; 41 hostile argv cases exact; 11/13 mutants caught by tests (2 largestPot survivors → TASK-1.26). Follow-ups (Step 6a): created TASK-1.26 (largestPot + policy-lifetime tests, src/playtest headless lint); ACs added to TASK-1.8 (onAction hook, formatHand on violation), TASK-1.11 (--size 2), TASK-1.16 (word 2 for --game sng), TASK-6.9 (earlier showdowns via runner). Skipped: test variable rename NIT (cosmetic).
+
+Locked test tests/playtest/runner.acceptance.test.ts: heavy run moved to opt-in slow group for TASK-7.8 (D-7), smaller every-push version kept.
+
+Locked test tests/playtest/playtest.acceptance.test.ts: heavy run moved to opt-in slow group for TASK-7.8 (D-7), smaller every-push version kept.
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary

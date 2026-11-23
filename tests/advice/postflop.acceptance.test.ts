@@ -132,8 +132,10 @@ describe('postflop advice acceptance', () => {
       pot: 20,
       opponents: 3,
       equityMethod: 'sampled',
+      equityVsCallingRangePct: 16.7,
     });
-    expect(spy.calls).toHaveLength(1);
+    // Whole-range run, then the calling-range run (TASK-7.8).
+    expect(spy.calls).toHaveLength(2);
     const input = spy.calls[0] as EquityInput;
     expect(input.hero).toEqual(parseCards('Ah 5h'));
     expect(input.board).toEqual(parseCards('Kh 9h 2c'));
@@ -185,7 +187,7 @@ describe('postflop advice acceptance', () => {
           fc.pre(state.toAct !== null);
           const view = playerView(state, state.toAct as SeatNumber);
           const advice = recommendPostflop(view);
-          expect(['fold', 'check', 'call']).toContain(advice.action);
+          expect(['fold', 'check', 'call', 'bet', 'raise']).toContain(advice.action);
           expect(view.legalActions).toContainEqual(advice.move);
           expect(advice.move.type).toBe(advice.action);
           expect(POSTFLOP_RULE_IDS).toContain(advice.ruleId);
@@ -235,8 +237,8 @@ describe('postflop advice acceptance', () => {
     expect(
       ruleProblems(doc, unit.replaceAll(`describe('rule ${first}'`, ''), POSTFLOP_RULE_IDS),
     ).toEqual([`Rule ${first} has no unit test`]);
-    expect(ruleProblems(doc, unit, [...POSTFLOP_RULE_IDS, 'value-bet'])).toEqual([
-      'Rule value-bet is returned by the engine but not documented',
+    expect(ruleProblems(doc, unit, [...POSTFLOP_RULE_IDS, 'bluff'])).toEqual([
+      'Rule bluff is returned by the engine but not documented',
     ]);
     const extra = `${doc}\n### Rule \`slow-play\`\n`;
     expect(ruleProblems(extra, unit, POSTFLOP_RULE_IDS)).toEqual([

@@ -5,6 +5,7 @@ import { formatHand, main } from '../../src/playtest/cli';
 import { replayHand, runPlaytest, type PlayedHand } from '../../src/playtest/runner';
 import { REPO_ROOT, sandboxEnv } from '../support/sandbox';
 
+const SLOW = process.env.TLH_SLOW_TESTS === '1';
 const TEST_TIMEOUT_MS = 120_000;
 
 function collect(hands: number, seed: number, size: number) {
@@ -113,22 +114,28 @@ describe('playtest runner', () => {
     expect(out).toContain(block);
   });
 
-  it(
-    'AC#6 10,000 hands record no street with more than 4 bets',
-    () => {
-      let highest = 0;
-      let capped = 0;
-      const summary = runPlaytest({ hands: 10_000, seed: 42, size: 6 }, ({ final }) => {
-        for (const count of betCounts(final)) {
-          highest = Math.max(highest, count);
-          if (count === 4) capped++;
-        }
-      });
-      expect(highest).toBeLessThanOrEqual(4);
-      expect(capped).toBeGreaterThan(0);
-      expect(summary.cappedStreets).toBe(capped);
-      expect(summary.violations).toBe(0);
-    },
-    TEST_TIMEOUT_MS,
-  );
+  // The 10,000-hand run is opt-in (TLH_SLOW_TESTS=1); every push runs the same checks on 1,000 hands.
+  for (const { hands, test, title } of [
+    { hands: 10_000, test: it.runIf(SLOW), title: '10,000' },
+    { hands: 1_000, test: it, title: '1,000' },
+  ]) {
+    test(
+      `AC#6 ${title} hands record no street with more than 4 bets`,
+      () => {
+        let highest = 0;
+        let capped = 0;
+        const summary = runPlaytest({ hands, seed: 42, size: 6 }, ({ final }) => {
+          for (const count of betCounts(final)) {
+            highest = Math.max(highest, count);
+            if (count === 4) capped++;
+          }
+        });
+        expect(highest).toBeLessThanOrEqual(4);
+        expect(capped).toBeGreaterThan(0);
+        expect(summary.cappedStreets).toBe(capped);
+        expect(summary.violations).toBe(0);
+      },
+      TEST_TIMEOUT_MS,
+    );
+  }
 });

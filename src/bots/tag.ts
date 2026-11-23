@@ -1,6 +1,11 @@
 import type { Action } from '../engine/hand';
-import type { PlayerView, PublicPlayer, SeatPolicy } from '../engine/player-view';
-import type { EquityInput, EquityResult } from '../advice/equity';
+import type { PlayerView, SeatPolicy } from '../engine/player-view';
+import {
+  equityWithBudget,
+  type EquityBudget,
+  type EquityInput,
+  type EquityResult,
+} from '../advice/equity';
 import { adviceOptions, recommend, type RecommendOptions } from '../advice/recommend';
 import { drawMixed, parseStyle, type BotStyleData } from './style';
 // The JSON import stays last: the bots import-boundary test's regex can't read past its `with` clause.
@@ -17,10 +22,12 @@ export interface BotRandom {
 /** `random` is the bot's seeded generator (REQ-028.1); without it TAG never mixes. */
 export type TagOptions = RecommendOptions & { readonly random?: BotRandom };
 
-/** Equity stand-in for postflop decisions with nothing owed: rule check-free fires before equity is read. */
-export function FREE_CHECK_EQUITY(input: EquityInput): EquityResult {
-  const zero = { win: 0, tie: 0, equity: 0 };
-  return { hero: zero, opponents: input.opponents.map(() => zero), method: 'exact', trials: 0 };
+/** The bots' equity budget (TASK-7.8 Q-1): bots are opponents, not shown advice, so they sample less. */
+export const BOT_EQUITY_BUDGET: EquityBudget = { exactLimit: 2_500, trials: 500 };
+
+/** Bot equity: computeEquity's seeded engine at BOT_EQUITY_BUDGET. Deterministic. */
+export function BOT_EQUITY(input: EquityInput): EquityResult {
+  return equityWithBudget(input, BOT_EQUITY_BUDGET);
 }
 
 /**
@@ -29,13 +36,10 @@ export function FREE_CHECK_EQUITY(input: EquityInput): EquityResult {
  * Errors from recommend propagate.
  */
 export function decideTag(view: PlayerView, options: TagOptions = {}): Action {
-  const hero: PublicPlayer | undefined = view.players.find((p) => p.seat === view.seat);
-  const postflop = view.street === 'flop' || view.street === 'turn' || view.street === 'river';
-  if (postflop && hero !== undefined && view.currentBet - hero.streetContribution === 0) {
-    // Skips the equity run the free check never reads (the move is identical).
-    return recommend(view, { ...adviceOptions(options), equity: FREE_CHECK_EQUITY }).move;
-  }
-  const advice = recommend(view, adviceOptions(options));
+  const advice = recommend(view, {
+    ...adviceOptions(options),
+    equity: options.equity ?? BOT_EQUITY,
+  });
   if (options.random === undefined || advice.basis !== 'chart' || advice.alternative === null) {
     return advice.move;
   }

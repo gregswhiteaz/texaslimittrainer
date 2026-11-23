@@ -1,12 +1,20 @@
 import type { Action } from '../engine/hand';
 import type { PlayerView, PublicPlayer } from '../engine/player-view';
 import { computeEquity, type EquityInput, type EquityResult, type Range } from './equity';
-import { estimateOpponentRanges, unseenCombos } from './ranges';
+import { callingRange, estimateOpponentRanges, unseenCombos } from './ranges';
 import type { ExactOptions } from './recommend';
 
-export type PostflopAdvice = 'fold' | 'check' | 'call';
+export type PostflopAdvice = 'fold' | 'check' | 'call' | 'bet' | 'raise';
 /** Rule ids in evaluation order; each is documented in docs/advice/postflop-rules.md. */
-export const POSTFLOP_RULE_IDS = ['check-free', 'pot-odds-call', 'pot-odds-fold'] as const;
+export const POSTFLOP_RULE_IDS = [
+  'value-bet',
+  'check-free',
+  'value-raise',
+  'pot-odds-call',
+  'pot-odds-fold',
+] as const;
+/** Bet or raise for value when the rounded equity against the range that would call is above this percent. */
+export const VALUE_THRESHOLD_PCT = 50;
 export type PostflopRuleId = (typeof POSTFLOP_RULE_IDS)[number];
 
 export interface PostflopRecommendation {
@@ -29,7 +37,10 @@ export interface PostflopRecommendation {
   readonly pot: number;
   /** Live opponents the equity was computed against (1..9). */
   readonly opponents: number;
+  /** Method of the whole-range run (equityPct). */
   readonly equityMethod: 'exact' | 'sampled';
+  /** Hero pot share against every live opponent's range that would call a bet/raise; percent, one decimal. */
+  readonly equityVsCallingRangePct: number;
 }
 
 export interface PostflopOptions {
@@ -58,7 +69,10 @@ function withFallbacks(
   }
 }
 
-/** Check when free, else call when the rounded equity % reaches the rounded required %, else fold. */
+/**
+ * Bet or raise when the rounded equity against the ranges that would call is above VALUE_THRESHOLD_PCT and the
+ * move is legal; else check when free, else call when the rounded equity % reaches the rounded required %, else fold.
+ */
 export function recommendPostflop<O extends object = PostflopOptions>(
   view: PlayerView,
   options?: ExactOptions<O, PostflopOptions>,
@@ -87,29 +101,48 @@ export function recommendPostflop<O extends object = PostflopOptions>(
   const run = (opponents: readonly Range[]) =>
     equity({ hero: view.holeCards, board: view.board, opponents });
   const unseen = unseenCombos([...view.holeCards, ...view.board]);
-  let opponents: number;
-  let result: EquityResult;
+  let attempts: (readonly Range[])[];
   if (opponentRanges === 'unseen') {
-    const ranges = view.players.filter((p) => p.seat !== view.seat && !p.folded).map(() => unseen);
-    opponents = ranges.length;
-    result = run(ranges);
+    attempts = [view.players.filter((p) => p.seat !== view.seat && !p.folded).map(() => unseen)];
   } else {
     const estimated = estimateOpponentRanges(view);
-    opponents = estimated.length;
-    result = withFallbacks(run, [
+    attempts = [
       estimated.map((o) => o.combos),
       estimated.map((o) => o.start),
       estimated.map(() => unseen),
-    ]);
+    ];
   }
+  const opponents = (attempts[0] as readonly Range[]).length;
+  const result = withFallbacks(run, attempts);
   const equityPct = toPct(result.hero.equity);
   const requiredEquityPct = owed > 0 ? toPct(callAmount / (pot + callAmount)) : 0;
 
+  let equityVsCallingRangePct: number;
+  try {
+    const calling = attempts.map((ranges) => ranges.map((r) => callingRange(r, view.board)));
+    equityVsCallingRangePct = toPct(withFallbacks(run, calling).hero.equity);
+  } catch (error) {
+    // A-7: many overlapping calling ranges can defeat the sampler; fall back to the whole-range number.
+    if (!(error instanceof RangeError)) throw error;
+    equityVsCallingRangePct = equityPct;
+  }
+
+  const aggressive = view.legalActions.find((a) => a.type === 'bet' || a.type === 'raise');
+  const value =
+    aggressive !== undefined &&
+    Math.round(equityVsCallingRangePct * 10) > Math.round(VALUE_THRESHOLD_PCT * 10);
+
   let ruleId: PostflopRuleId;
   let action: PostflopAdvice;
-  if (owed === 0) {
+  if (owed === 0 && value) {
+    ruleId = 'value-bet';
+    action = (aggressive as Action).type as 'bet' | 'raise';
+  } else if (owed === 0) {
     ruleId = 'check-free';
     action = 'check';
+  } else if (value) {
+    ruleId = 'value-raise';
+    action = 'raise';
   } else if (equityPct >= requiredEquityPct) {
     ruleId = 'pot-odds-call';
     action = 'call';
@@ -133,5 +166,6 @@ export function recommendPostflop<O extends object = PostflopOptions>(
     pot,
     opponents,
     equityMethod: result.method,
+    equityVsCallingRangePct,
   };
 }

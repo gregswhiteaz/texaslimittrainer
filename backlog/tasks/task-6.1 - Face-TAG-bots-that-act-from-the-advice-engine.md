@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-23T03:44:00Z'
+updated_date: '2026-11-23T04:18:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-0
@@ -92,6 +92,8 @@ Build: src/bots/tag.ts (decideTag/tagPolicy via recommend; FREE_CHECK_EQUITY sta
 CI run 44381664524 (head e7cd337): success first push incl. Playtest (all-TAG at 6). Judge round 1: PASS 13/13; 250 preflop + 89 facing-bet + 91 free-check decisions equal recommend(view).move; 480 re-deals never changed TAG's action; other sizes byte-identical to base; A-4 fixes behaviour-neutral (797 advice outputs hash-identical). Follow-ups (Step 6a): created TASK-1.28 (type-stripping load test); ACs added to TASK-6.9 (betting line-up at 6 players), TASK-7.8 (remove FREE_CHECK_EQUITY), TASK-7.6 (TAG at all sizes), TASK-6.21 (lint rule replaces SPEC-09 scan, covers export-from/side-effect/dynamic imports). Skipped: NIT redundant type annotation.
 
 Locked test tests/bots/tag.acceptance.test.ts re-pinned for TASK-7.8 Q-3 (auto-accepted; value betting).
+
+Locked test tests/bots/tag-playtest.acceptance.test.ts: heavy run moved to opt-in slow group for TASK-7.8 (D-7), smaller every-push version kept.
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary

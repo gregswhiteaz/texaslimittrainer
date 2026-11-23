@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { recommend } from '../../src/advice/recommend';
 import { CALLING_STATION_STYLE, decideCallingStation } from '../../src/bots/calling-station';
 import { drawDeviation } from '../../src/bots/style';
-import { FREE_CHECK_EQUITY } from '../../src/bots/tag';
+import { BOT_EQUITY } from '../../src/bots/tag';
 import type { PlayerView } from '../../src/engine/player-view';
 import { randomMovePolicy, seatGenerator, seededTagPolicy } from '../../src/playtest/policy';
 import { runPlaytest } from '../../src/playtest/runner';
@@ -55,26 +55,21 @@ describe('Calling station decision', () => {
       expect(once.calls).toBe(1);
 
       const views = seatOneViews();
-      // Each view's advice, computed once. A postflop free check never reads equity, so the stand-in skips it there.
-      const advices = new Map(
-        views.map((v) => [
-          v,
-          recommend(
-            v,
-            v.street !== 'preflop' && owed(v) === 0 ? { equity: FREE_CHECK_EQUITY } : {},
-          ),
-        ]),
-      );
+      // Each view's advice at the bots' equity budget, computed once.
+      const advices = new Map(views.map((v) => [v, recommend(v, { equity: BOT_EQUITY })]));
       const advice = (v: PlayerView) => advices.get(v) as ReturnType<typeof recommend>;
       const fold = views.filter((v) => advice(v).action === 'fold');
-      const raise = views.filter((v) => advice(v).action === 'raise' && owed(v) > 0);
+      // Preflop: the style has no postflop raise deviation, and advice now raises postflop for value.
+      const raise = views.filter(
+        (v) => v.street === 'preflop' && advice(v).action === 'raise' && owed(v) > 0,
+      );
       const exampleA = raise[0] as PlayerView;
       const exampleC = fold[0] as PlayerView;
       const exampleB = fold[30] as PlayerView;
       expect(exampleB.street).toBe('flop');
       for (const view of [exampleA, exampleB, exampleC]) {
         const random = stub(4294967295);
-        expect(decideCallingStation(view, { random })).toEqual(recommend(view).move);
+        expect(decideCallingStation(view, { random })).toEqual(advice(view).move);
         expect(random.calls).toBe(1);
       }
       expect(decideCallingStation(exampleA, { random: stub(0) })).toEqual({
@@ -103,7 +98,7 @@ describe('Calling station decision', () => {
       ];
       for (const [view, extra] of zeroDraw) {
         const random = stub(0);
-        expect(decideCallingStation(view, { random, ...extra })).toEqual(recommend(view).move);
+        expect(decideCallingStation(view, { random, ...extra })).toEqual(advice(view).move);
         expect(random.calls).toBe(0);
       }
 

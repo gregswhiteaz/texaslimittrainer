@@ -70,11 +70,12 @@ describe('TASK-9.1 review panel', () => {
       ['Check'],
       ['Call $8'],
     ]);
+    // Advice since TASK-7.8 (value bets and raises).
     expect(items.map((b) => part(b, 'advice'))).toEqual([
       ['Raise to $8'],
-      ['Check'],
-      ['Check'],
-      ['Call $8'],
+      ['Bet $4'],
+      ['Bet $8'],
+      ['Raise to $16'],
     ]);
     for (const body of items) {
       expect(text(body)).toMatch(/You: .+ · Advice: .+$/);
@@ -85,9 +86,9 @@ describe('TASK-9.1 review panel', () => {
     for (const g of grades) expect(g).toHaveLength(1);
     expect(grades.map((g) => [g[0]?.[1], g[0]?.[2]])).toEqual([
       ['correct', 'Correct'],
+      ['correct', 'Correct'],
       ['minor', 'Minor error'],
-      ['correct', 'Correct'],
-      ['correct', 'Correct'],
+      ['major', 'Major error'],
     ]);
 
     const panelText = text(panel);

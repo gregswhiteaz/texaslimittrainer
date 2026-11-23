@@ -16,3 +16,8 @@ TASK-6.3 calling-station.acceptance; TASK-6.4 maniac.acceptance; TASK-7.4 grade.
 TASK-9.1 review.acceptance + review-panel.acceptance; TASK-3.4 next-hand.acceptance. Any further locked file that fails
 only on re-pinnable values is approved the same way (unlock under its owner, logged here).
 **Answer: auto-accepted (recommended)**
+
+## Block 1 resolution — D-7 applied (auto-accepted)
+Seven locked playtest acceptance files (full-suite coverage pushes their 10,000-hand runs past 120 s): run the 10,000-hand
+version only under TLH_SLOW_TESTS=1, keep a 1,000-hand every-push version with the same assertions and limits, add each file
+to `test:slow`. Files and owners in the task notes.

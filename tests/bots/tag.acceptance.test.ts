@@ -4,7 +4,7 @@ import { handClassOf } from '../../src/advice/hand-class';
 import { chartCell, type ChartAction } from '../../src/advice/preflop-chart';
 import { positionOf, recommendPreflop, situationOf, SIX_MAX_CHART } from '../../src/advice/preflop';
 import { recommend } from '../../src/advice/recommend';
-import { decideTag } from '../../src/bots/tag';
+import { BOT_EQUITY, decideTag } from '../../src/bots/tag';
 import { parseCards, type Card } from '../../src/engine/cards';
 import {
   applyAction,
@@ -160,8 +160,9 @@ describe('TAG bot acceptance', () => {
     'AC#2 postflop facing a bet TAG calls or folds as advised',
     () => {
       const topSet = viewAt(3, deckWith(fixedCards(3, 'Kc Kd', 'Kh 9h 2c')), [...PREFLOP, b(2, 4)]);
-      expect(recommend(topSet).move).toStrictEqual({ seat: 3, type: 'call', amount: 4 });
-      expect(decideTag(topSet)).toStrictEqual({ seat: 3, type: 'call', amount: 4 });
+      // TASK-7.8: top set is ahead of the hands that would call a raise, so the advice raises for value.
+      expect(recommend(topSet).move).toStrictEqual({ seat: 3, type: 'raise', amount: 8 });
+      expect(decideTag(topSet)).toStrictEqual({ seat: 3, type: 'raise', amount: 8 });
 
       const sevenHigh = viewAt(3, deckWith(fixedCards(3, '7c 3d', 'Kh Qs 9c 4h 2s')), [
         ...PREFLOP,
@@ -178,11 +179,12 @@ describe('TAG bot acceptance', () => {
       playAgainstRandom(60, 62, (view) => {
         if (view.street === 'preflop' || owes(view) === 0) return;
         const move = decideTag(view);
-        expect(move).toStrictEqual(recommend(view).move);
-        expect(['call', 'fold']).toContain(move.type);
+        // TAG plays the advice at the bots' equity budget (TASK-7.8).
+        expect(move).toStrictEqual(recommend(view, { equity: BOT_EQUITY }).move);
+        expect(['call', 'fold', 'raise']).toContain(move.type);
         seen.add(move.type);
       });
-      expect([...seen].sort()).toEqual(['call', 'fold']);
+      expect([...seen].sort()).toEqual(['call', 'fold', 'raise']);
     },
     TEST_TIMEOUT_MS,
   );
@@ -209,8 +211,9 @@ describe('TAG bot acceptance', () => {
         if (view.street === 'preflop' || owes(view) !== 0) return;
         free++;
         const move = decideTag(view);
-        expect(move).toStrictEqual({ seat: view.seat, type: 'check' });
-        expect(move).toStrictEqual(recommend(view).move);
+        // TASK-7.8: a free decision checks or bets for value.
+        expect(['check', 'bet']).toContain(move.type);
+        expect(move).toStrictEqual(recommend(view, { equity: BOT_EQUITY }).move);
       });
       expect(free).toBeGreaterThan(0);
     },

@@ -15,6 +15,7 @@ import {
 } from '../../src/playtest/runner';
 import { FAULTS } from '../support/faulty-engine';
 
+const SLOW = process.env.TLH_SLOW_TESTS === '1';
 const TEST_TIMEOUT_MS = 120_000;
 
 function capture(argv: string[], seams?: PlaytestSeams) {
@@ -56,52 +57,60 @@ const REPORT_LABELS = [
 /** Each hook call starts a new hand when `before` holds only the blinds. */
 const isFirstAction = (step: ActionStep) => step.before.actions.length === 2;
 
-describe('invariant checks in the playtest', () => {
-  it(
-    'AC#1 every applied action is checked and a clean run has zero violations',
-    () => {
-      for (let size = 3; size <= 10; size++) {
-        let calls = 0;
-        let mismatches = 0;
-        let previous: ActionStep | null = null;
-        const spy: ActionHook = (step) => {
-          calls++;
-          const chosenIn =
-            previous === null
-              ? isFirstAction(step)
-              : previous.result.ok && step.before === previous.result.state;
-          if (
-            !chosenIn ||
-            step.action.seat !== step.before.toAct ||
-            !step.result.ok ||
-            checkState(step.result.state).length > 0
-          ) {
-            mismatches++;
-          }
-          previous = step;
-          return checkStep(step);
-        };
-        const summary = runPlaytest(
-          { hands: 500, seed: 8, size },
-          () => {
-            previous = null;
-          },
-          { onAction: spy },
-        );
-        expect(calls, `size ${size}`).toBe(summary.playerActions);
-        expect(mismatches, `size ${size}`).toBe(0);
-        expect(summary.violations, `size ${size}`).toBe(0);
-        expect(summary.firstViolation).toBeNull();
-        expect(Object.keys(summary.violationCounts)).toEqual(INVARIANTS);
-        expect(Object.values(summary.violationCounts).every((n) => n === 0)).toBe(true);
-      }
+// The 10,000-hand run is opt-in (TLH_SLOW_TESTS=1); every push runs the same checks with 1,000 hands.
+const RUNS = [
+  { hands: 10_000, test: it.runIf(SLOW), suffix: '' },
+  { hands: 1_000, test: it, suffix: ' (1,000-hand clean run)' },
+];
 
-      const big = runPlaytest({ hands: 10_000, seed: 42, size: 6 });
-      expect(big.handsPlayed).toBe(10_000);
-      expect(big.violations).toBe(0);
-    },
-    TEST_TIMEOUT_MS,
-  );
+describe('invariant checks in the playtest', () => {
+  for (const { hands, test, suffix } of RUNS) {
+    test(
+      `AC#1 every applied action is checked and a clean run has zero violations${suffix}`,
+      () => {
+        for (let size = 3; size <= 10; size++) {
+          let calls = 0;
+          let mismatches = 0;
+          let previous: ActionStep | null = null;
+          const spy: ActionHook = (step) => {
+            calls++;
+            const chosenIn =
+              previous === null
+                ? isFirstAction(step)
+                : previous.result.ok && step.before === previous.result.state;
+            if (
+              !chosenIn ||
+              step.action.seat !== step.before.toAct ||
+              !step.result.ok ||
+              checkState(step.result.state).length > 0
+            ) {
+              mismatches++;
+            }
+            previous = step;
+            return checkStep(step);
+          };
+          const summary = runPlaytest(
+            { hands: 500, seed: 8, size },
+            () => {
+              previous = null;
+            },
+            { onAction: spy },
+          );
+          expect(calls, `size ${size}`).toBe(summary.playerActions);
+          expect(mismatches, `size ${size}`).toBe(0);
+          expect(summary.violations, `size ${size}`).toBe(0);
+          expect(summary.firstViolation).toBeNull();
+          expect(Object.keys(summary.violationCounts)).toEqual(INVARIANTS);
+          expect(Object.values(summary.violationCounts).every((n) => n === 0)).toBe(true);
+        }
+
+        const big = runPlaytest({ hands, seed: 42, size: 6 });
+        expect(big.handsPlayed).toBe(hands);
+        expect(big.violations).toBe(0);
+      },
+      TEST_TIMEOUT_MS,
+    );
+  }
 
   it(
     'AC#2 each injected engine fault is reported as its invariant',

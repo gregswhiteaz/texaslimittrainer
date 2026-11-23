@@ -35,7 +35,8 @@ describe('Calling station decision', () => {
   it(
     'seated Calling stations among seeded TAGs break no invariant',
     () => {
-      const summary = runPlaytest({ hands: 10_000, seed: 42, size: 6 }, undefined, {
+      // 1,000 hands (10,000 before TASK-7.8): bot equity now runs at every postflop decision.
+      const summary = runPlaytest({ hands: 1_000, seed: 42, size: 6 }, undefined, {
         makePolicy: (code, seat) =>
           seat === 2 || seat === 4
             ? (view) =>
@@ -43,7 +44,7 @@ describe('Calling station decision', () => {
             : seededTagPolicy(code),
       });
       expect(summary.violations).toBe(0);
-      expect(summary.handsPlayed).toBe(10_000);
+      expect(summary.handsPlayed).toBe(1_000);
     },
     TEST_TIMEOUT_MS,
   );

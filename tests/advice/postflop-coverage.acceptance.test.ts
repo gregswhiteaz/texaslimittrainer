@@ -78,7 +78,7 @@ describe('postflop advice coverage (TASK-7.22)', () => {
           if (view.players.some((p) => p.folded && p.seat !== view.seat)) foldedSeatRuns++;
 
           expect(advice.street).toBe(view.street);
-          expect(['fold', 'check', 'call']).toContain(advice.action);
+          expect(['fold', 'check', 'call', 'bet', 'raise']).toContain(advice.action);
           expect(view.legalActions).toContainEqual(advice.move);
           expect(advice.move.type).toBe(advice.action);
           expect(POSTFLOP_RULE_IDS).toContain(advice.ruleId);
@@ -92,12 +92,20 @@ describe('postflop advice coverage (TASK-7.22)', () => {
               toPct(advice.callAmount / (advice.pot + advice.callAmount)),
             );
           }
+          // TASK-7.8: the value rules come first when a bet or raise is legal.
+          const value =
+            view.legalActions.some((a) => a.type === 'bet' || a.type === 'raise') &&
+            advice.equityVsCallingRangePct > 50;
           const expectedRule =
             advice.callAmount === 0
-              ? 'check-free'
-              : advice.equityPct >= advice.requiredEquityPct
-                ? 'pot-odds-call'
-                : 'pot-odds-fold';
+              ? value
+                ? 'value-bet'
+                : 'check-free'
+              : value
+                ? 'value-raise'
+                : advice.equityPct >= advice.requiredEquityPct
+                  ? 'pot-odds-call'
+                  : 'pot-odds-fold';
           expect(advice.ruleId).toBe(expectedRule);
         },
       ),

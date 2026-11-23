@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest';
 import { runPlaytest, type PlayedHand } from '../../src/playtest/runner';
 import { REPO_ROOT, sandboxEnv } from '../support/sandbox';
 
+const SLOW = process.env.TLH_SLOW_TESTS === '1';
 const TEST_TIMEOUT_MS = 120_000;
 
 interface Run {
@@ -50,59 +51,70 @@ function headsUpProblem({ number, final }: PlayedHand): string | null {
   return null;
 }
 
+// The 10,000-hand runs are opt-in (TLH_SLOW_TESTS=1); every push runs the same checks on 1,000 hands
+// (AC#5 then passes `--hands 1000` instead of relying on the 10,000-hand default).
+const RUNS = [
+  { hands: 10_000, test: it.runIf(SLOW), title: '10,000', extra: [] as string[] },
+  { hands: 1_000, test: it, title: '1,000', extra: ['--hands', '1000'] },
+];
+
 describe('heads-up playtest', () => {
-  it(
-    'AC#4 10,000 seeded --size 2 hands are all heads-up with heads-up blinds and order and zero violations',
-    () => {
-      const problems: string[] = [];
-      let postflopHands = 0;
-      const summary = runPlaytest({ hands: 10000, seed: 42, size: 2 }, (hand) => {
-        const problem = headsUpProblem(hand);
-        if (problem !== null) problems.push(problem);
-        if (hand.final.actions.some((a) => a.street === 'flop')) postflopHands++;
-      });
-      expect(problems.slice(0, 5)).toEqual([]);
-      expect(postflopHands).toBeGreaterThan(0);
-      expect(summary.handsPlayed).toBe(10000);
-      expect(summary.violations).toBe(0);
+  for (const { hands, test, title, extra } of RUNS) {
+    test(
+      `AC#4 ${title} seeded --size 2 hands are all heads-up with heads-up blinds and order and zero violations`,
+      () => {
+        const problems: string[] = [];
+        let postflopHands = 0;
+        const summary = runPlaytest({ hands, seed: 42, size: 2 }, (hand) => {
+          const problem = headsUpProblem(hand);
+          if (problem !== null) problems.push(problem);
+          if (hand.final.actions.some((a) => a.street === 'flop')) postflopHands++;
+        });
+        expect(problems.slice(0, 5)).toEqual([]);
+        expect(postflopHands).toBeGreaterThan(0);
+        expect(summary.handsPlayed).toBe(hands);
+        expect(summary.violations).toBe(0);
 
-      const run = playtest(['--hands', '10000', '--size', '2', '--seed', '42']);
-      expect(run.status).toBe(0);
-      const out = lines(run.stdout);
-      expect(out).toContain('Options: --hands 10000 --seed 42 --size 2');
-      expect(out).toContain(TABLE_LINE);
-      expect(out).toContain('Hands played: 10000');
-      expect(out).toContain('Invariant violations: 0');
-    },
-    TEST_TIMEOUT_MS,
-  );
+        const run = playtest(['--hands', String(hands), '--size', '2', '--seed', '42']);
+        expect(run.status).toBe(0);
+        const out = lines(run.stdout);
+        expect(out).toContain(`Options: --hands ${hands} --seed 42 --size 2`);
+        expect(out).toContain(TABLE_LINE);
+        expect(out).toContain(`Hands played: ${hands}`);
+        expect(out).toContain('Invariant violations: 0');
+      },
+      TEST_TIMEOUT_MS,
+    );
 
-  it(
-    'AC#5 npm run playtest -- --size 2 plays heads-up hands and reports 0 violations',
-    () => {
-      const run = playtest(['--size', '2']);
-      expect(run.status).toBe(0);
-      const out = lines(run.stdout);
-      expect(out).toContain('Options: --hands 10000 --seed 42 --size 2');
-      expect(out).toContain(TABLE_LINE);
-      expect(out).toContain('Invariant violations: 0');
+    test(
+      `AC#5 npm run playtest -- ${[...extra, '--size', '2'].join(' ')} plays heads-up hands and reports 0 violations`,
+      () => {
+        const run = playtest([...extra, '--size', '2']);
+        expect(run.status).toBe(0);
+        const out = lines(run.stdout);
+        expect(out).toContain(`Options: --hands ${hands} --seed 42 --size 2`);
+        expect(out).toContain(TABLE_LINE);
+        expect(out).toContain('Invariant violations: 0');
 
-      const firstCode = out
-        .find((line) => line.startsWith('First replay code: '))
-        ?.slice('First replay code: '.length);
-      expect(firstCode).toMatch(/^[0-9a-f]{32}$/);
-      const replay = playtest([
-        '--replay-code',
-        firstCode as string,
-        '--size',
-        '2',
-        '--button',
-        '1',
-      ]);
-      expect(replay.status).toBe(0);
-      const preflop = lines(replay.stdout).find((line) => line.startsWith('Preflop: '));
-      expect(preflop).toMatch(/^Preflop: seat 1 posts small blind \$2, seat 2 posts big blind \$4/);
-    },
-    TEST_TIMEOUT_MS,
-  );
+        const firstCode = out
+          .find((line) => line.startsWith('First replay code: '))
+          ?.slice('First replay code: '.length);
+        expect(firstCode).toMatch(/^[0-9a-f]{32}$/);
+        const replay = playtest([
+          '--replay-code',
+          firstCode as string,
+          '--size',
+          '2',
+          '--button',
+          '1',
+        ]);
+        expect(replay.status).toBe(0);
+        const preflop = lines(replay.stdout).find((line) => line.startsWith('Preflop: '));
+        expect(preflop).toMatch(
+          /^Preflop: seat 1 posts small blind \$2, seat 2 posts big blind \$4/,
+        );
+      },
+      TEST_TIMEOUT_MS,
+    );
+  }
 });

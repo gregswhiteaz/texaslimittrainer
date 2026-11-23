@@ -2,7 +2,7 @@ import fc from 'fast-check';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import type { EquityInput, EquityResult } from '../../src/advice/equity';
 import { recommendPostflop } from '../../src/advice/postflop';
-import { estimateOpponentRanges, unseenCombos } from '../../src/advice/ranges';
+import { callingRange, estimateOpponentRanges, unseenCombos } from '../../src/advice/ranges';
 import { ACTION_RANGE_ADVICE, recommend } from '../../src/advice/recommend';
 import { parseCards, type Card } from '../../src/engine/cards';
 import {
@@ -158,14 +158,16 @@ describe('postflop advice with action ranges', () => {
       const once = failingEquity(1);
       const advice = recommendPostflop(view, { ...ACTION_RANGE_ADVICE, equity: once.fn });
       expect(advice.opponents).toBe(2);
+      // The whole-range run falls back to the starts; the calling-range run then succeeds first time.
       expect(once.calls.map((c) => c.opponents)).toEqual([
         estimated.map((o) => o.combos),
         estimated.map((o) => o.start),
+        estimated.map((o) => callingRange(o.combos, view.board)),
       ]);
 
       const twice = failingEquity(2);
       recommendPostflop(view, { ...ACTION_RANGE_ADVICE, equity: twice.fn });
-      expect(twice.calls).toHaveLength(3);
+      expect(twice.calls).toHaveLength(4);
       expect(twice.calls[2]?.opponents.map((r) => r.length)).toEqual([size, size]);
 
       const always = failingEquity(3);
@@ -289,10 +291,12 @@ describe('postflop advice with action ranges', () => {
       );
     }
     expect(byDefault.inputs).toEqual(unseen.inputs);
-    for (const input of byDefault.inputs) {
-      const size = unseenCombos([...input.hero, ...input.board]).length;
+    // Two runs per view: the whole unseen range, then the range that would call (TASK-7.8).
+    byDefault.inputs.forEach((input, i) => {
+      const all = unseenCombos([...input.hero, ...input.board]);
+      const size = i % 2 === 0 ? all.length : callingRange(all, input.board).length;
       for (const range of input.opponents) expect(range).toHaveLength(size);
-    }
+    });
     for (const view of views.slice(0, 10)) {
       expect(recommend(view)).toEqual(recommend(view, { opponentRanges: 'unseen' }));
     }

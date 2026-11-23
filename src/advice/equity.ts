@@ -1,6 +1,6 @@
 import { formatCard, type Card } from '../engine/cards';
 import { evaluate } from '../engine/hand-evaluator';
-import { fnv1a32, Xoshiro128 } from '../engine/seeded-random';
+import { Xoshiro128 } from '../engine/seeded-random';
 
 /** Two distinct cards. Order does not matter. */
 export type HoleCards = readonly [Card, Card];
@@ -96,18 +96,22 @@ export function canonicalise(input: EquityInput): CanonicalInput {
     }
   });
 
+  const seen = new Uint8Array(52 * 52);
   const ranges = opponents.map((range, i) => {
-    const seen = new Set<number>();
+    seen.fill(0);
     const live: HoleCards[] = [];
+    let sorted = true;
     for (const [a, b] of range) {
-      const lo = Math.min(a, b);
-      const hi = Math.max(a, b);
-      if (dead[lo] || dead[hi] || seen.has(lo * 52 + hi)) continue;
-      seen.add(lo * 52 + hi);
+      const lo = a < b ? a : b;
+      const hi = a < b ? b : a;
+      if (dead[lo] || dead[hi] || seen[lo * 52 + hi]) continue;
+      seen[lo * 52 + hi] = 1;
+      const last = live[live.length - 1];
+      if (last !== undefined && (last[0] > lo || (last[0] === lo && last[1] > hi))) sorted = false;
       live.push([lo, hi]);
     }
     if (live.length === 0) throw new RangeError(`Opponent ${i + 1} has no possible hand`);
-    live.sort((x, y) => x[0] - y[0] || x[1] - y[1]);
+    if (!sorted) live.sort((x, y) => x[0] - y[0] || x[1] - y[1]);
     return live;
   });
   const order = ranges.map((_, i) => i);
@@ -128,9 +132,35 @@ export function canonicalKey(c: CanonicalInput): string {
   return `equity-v1|h:${c.hero.join(',')}|b:${c.board.join(',')}|o:${opponents.join('/')}`;
 }
 
-/** @internal */
+/** @internal fnv1a32(canonicalKey(c)), hashed as it goes instead of building the key string. */
 export function deriveSeed(c: CanonicalInput): number {
-  return fnv1a32(canonicalKey(c));
+  let hash = 0x811c9dc5;
+  const text = (s: string) => {
+    for (let i = 0; i < s.length; i++) hash = Math.imul(hash ^ s.charCodeAt(i), 0x01000193);
+  };
+  // Cards are 0..51: one or two decimal digits.
+  const card = (n: number) => {
+    if (n >= 10) hash = Math.imul(hash ^ (48 + Math.floor(n / 10)), 0x01000193);
+    hash = Math.imul(hash ^ (48 + (n % 10)), 0x01000193);
+  };
+  const cards = (list: readonly Card[]) =>
+    list.forEach((n, i) => {
+      if (i > 0) text(',');
+      card(n);
+    });
+  text('equity-v1|h:');
+  cards(c.hero);
+  text('|b:');
+  cards(c.board);
+  text('|o:');
+  c.opponents.forEach((range, r) => {
+    if (r > 0) text('/');
+    range.forEach((combo, i) => {
+      if (i > 0) text(';');
+      cards(combo);
+    });
+  });
+  return hash >>> 0;
 }
 
 function choose(n: number, k: number): number {
@@ -270,7 +300,9 @@ export function exactEquity(c: CanonicalInput): EquityResult {
   };
   table.forEachDeal(0, () => {
     remaining.length = 0;
-    for (let card = 0; card < 52; card++) if (!table.dealt[card]) remaining.push(card);
+    // A river deal has no runout to enumerate, so it needs no deck.
+    if (need > 0)
+      for (let card = 0; card < 52; card++) if (!table.dealt[card]) remaining.push(card);
     runouts(0, 0);
     return false;
   });
@@ -285,8 +317,15 @@ export function sampledEquity(
   maxRejections = 100 * trials,
 ): EquityResult {
   const table = new Table(c);
-  const cards = new Set(c.opponents.flat(2));
-  if (cards.size < 2 * c.opponents.length) throw cannotDeal();
+  // Fewer distinct cards across all ranges than the opponents need: no deal is possible.
+  const inRanges = new Uint8Array(52);
+  for (const range of c.opponents) {
+    for (const [a, b] of range) {
+      inRanges[a] = 1;
+      inRanges[b] = 1;
+    }
+  }
+  if (inRanges.reduce((sum, x) => sum + x, 0) < 2 * c.opponents.length) throw cannotDeal();
   // If the budget runs out the deal is assumed possible; maxRejections then bounds the sampler.
   table.nodeLimit = FEASIBILITY_NODE_LIMIT;
   if (!table.forEachDeal(0, () => true)) throw cannotDeal();
@@ -295,7 +334,14 @@ export function sampledEquity(
   const opponents = c.opponents.length;
   const firstRunout = 7 - need;
   // Each range as flat (low, high) card pairs, for a fast inner loop.
-  const flat = c.opponents.map((range) => Uint8Array.from(range.flat()));
+  const flat = c.opponents.map((range) => {
+    const pairs = new Uint8Array(2 * range.length);
+    range.forEach(([a, b], i) => {
+      pairs[2 * i] = a;
+      pairs[2 * i + 1] = b;
+    });
+    return pairs;
+  });
   // Cards dealt in the current trial, so they can be returned to the deck before the next one.
   const marked = new Uint8Array(52);
   let markedCount = 0;
@@ -335,16 +381,25 @@ export function sampledEquity(
   return table.result('sampled');
 }
 
+/** Exact when estimateEvaluations ≤ exactLimit, otherwise sampled with `trials` accepted trials. */
+export interface EquityBudget {
+  readonly exactLimit: number;
+  readonly trials: number;
+}
+
 /**
  * Each player's chance of winning, tying and pot share. Exact when the estimated work is small,
  * otherwise sampled with a seed that depends only on the canonical input. Throws RangeError.
  */
 export function computeEquity(input: EquityInput): EquityResult {
+  return equityWithBudget(input, { exactLimit: EXACT_EVALUATION_LIMIT, trials: SAMPLE_TRIALS });
+}
+
+/** computeEquity with a custom exact limit and sample count; same validation, seed and output order. */
+export function equityWithBudget(input: EquityInput, budget: EquityBudget): EquityResult {
   const c = canonicalise(input);
   const result =
-    estimateEvaluations(c) <= EXACT_EVALUATION_LIMIT
-      ? exactEquity(c)
-      : sampledEquity(c, SAMPLE_TRIALS);
+    estimateEvaluations(c) <= budget.exactLimit ? exactEquity(c) : sampledEquity(c, budget.trials);
   const opponents = new Array<PlayerEquity>(c.order.length);
   c.order.forEach((inputIndex, i) => {
     opponents[inputIndex] = result.opponents[i] as PlayerEquity;

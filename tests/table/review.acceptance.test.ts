@@ -35,11 +35,12 @@ describe('TASK-9.1 review model', () => {
     expect(hand.userDecisions).toHaveLength(4);
     expect(opensReview(hand)).toBe(true);
     const entries = reviewEntries(hand);
+    // Advice since TASK-7.8 (value bets and raises).
     expect(summary(entries)).toEqual([
       ['Preflop', [], 'Raise to $8', 'Raise to $8'],
-      ['Flop', ['Ks', '9d', '4c'], 'Bet $4', 'Check'],
-      ['Turn', ['Ks', '9d', '4c', '2h'], 'Check', 'Check'],
-      ['River', ['Ks', '9d', '4c', '2h', '6s'], 'Call $8', 'Call $8'],
+      ['Flop', ['Ks', '9d', '4c'], 'Bet $4', 'Bet $4'],
+      ['Turn', ['Ks', '9d', '4c', '2h'], 'Check', 'Bet $8'],
+      ['River', ['Ks', '9d', '4c', '2h', '6s'], 'Call $8', 'Raise to $16'],
     ]);
     for (const entry of entries) expect(entry.userAction.seat).toBe(5);
   });
@@ -57,9 +58,9 @@ describe('TASK-9.1 review model', () => {
     });
     expect(entries.map((e) => e.gradeLabel)).toEqual([
       'Correct',
+      'Correct',
       'Minor error',
-      'Correct',
-      'Correct',
+      'Major error',
     ]);
   });
 

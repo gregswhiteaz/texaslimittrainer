@@ -189,15 +189,21 @@ describe('aggression deviation without calling-range equity is Minor', () => {
       expected,
     );
   });
+});
 
-  it('real postflop view: advice check, user bets', () => {
-    const result = gradeView(heroView(FLOP_CHECK), 'bet', { equity: fixedEquity(0.9).fn });
-    expect(result.recommendation).toMatchObject({ basis: 'equity', action: 'check' });
+describe('real postflop views carry calling-range equity', () => {
+  it('real postflop view: advice bet, user checks', () => {
+    const result = gradeView(heroView(FLOP_CHECK), 'check', { equity: fixedEquity(0.9).fn });
+    expect(result.recommendation).toMatchObject({
+      basis: 'equity',
+      action: 'bet',
+      equityVsCallingRangePct: 90,
+    });
     expect(result).toMatchObject({
-      grade: 'minor',
-      ruleId: 'aggression-no-range',
-      userAction: 'bet',
-      marginPts: null,
+      grade: 'major',
+      ruleId: 'aggression-margin',
+      userAction: 'check',
+      marginPts: 40,
     });
   });
 });
@@ -271,13 +277,13 @@ describe('determinism, plain data and types', () => {
     }
   });
 
-  it('gradeView calls the equity stub exactly once and repeats deep-equal', () => {
+  it('gradeView runs the equity stub twice (whole and calling range) and repeats deep-equal', () => {
     const view = heroView(FLOP_BET);
     const stub = fixedEquity(0.1);
     const first = gradeView(view, 'call', { equity: stub.fn });
-    expect(stub.calls).toHaveLength(1);
-    expect(gradeView(view, 'call', { equity: stub.fn })).toStrictEqual(first);
     expect(stub.calls).toHaveLength(2);
+    expect(gradeView(view, 'call', { equity: stub.fn })).toStrictEqual(first);
+    expect(stub.calls).toHaveLength(4);
     expect(JSON.parse(JSON.stringify(first))).toStrictEqual(first);
   });
 

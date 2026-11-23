@@ -2,7 +2,7 @@ import type { Action } from '../engine/hand';
 import type { PlayerView } from '../engine/player-view';
 import { adviceOptions, recommend, type RecommendOptions } from '../advice/recommend';
 import { drawDeviation, findDeviation, parseStyle, type BotStyleData } from './style';
-import { FREE_CHECK_EQUITY, type BotRandom } from './tag';
+import { BOT_EQUITY, type BotRandom } from './tag';
 // The JSON import stays last: the bots import-boundary test's regex can't read past its `with` clause.
 import callingStation from './styles/calling-station.json' with { type: 'json' };
 
@@ -31,11 +31,10 @@ export function decideCallingStation(
   const hero = view.players.find((p) => p.seat === view.seat);
   const owed = hero === undefined ? 0 : view.currentBet - hero.streetContribution;
   const street = view.street === 'preflop' ? 'preflop' : 'postflop';
-  if (street === 'postflop' && owed === 0) {
-    // Skips the equity run the free check never reads (the move is identical).
-    return recommend(view, { ...adviceOptions(options), equity: FREE_CHECK_EQUITY }).move;
-  }
-  const advice = recommend(view, adviceOptions(options));
+  const advice = recommend(view, {
+    ...adviceOptions(options),
+    equity: options.equity ?? BOT_EQUITY,
+  });
   if (options.random === undefined) return advice.move;
   const deviation = findDeviation(options.style ?? CALLING_STATION_STYLE, street, advice.action);
   if (deviation === undefined || !drawDeviation(deviation.probability, options.random)) {

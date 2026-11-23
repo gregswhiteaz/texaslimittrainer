@@ -235,8 +235,9 @@ describe('Calling station from its style file', () => {
       }
       expect(station).toBeGreaterThan(tagCalls(raise, 6004));
 
-      // Example A: raise[0], SB AQo over limpers, decided under handReplayCode(6004, 2).
-      const view = raise[0] as PlayerView;
+      // Example A: raise[1], SB AQo over limpers, decided under handReplayCode(6004, 2). (TASK-7.8: raise[0]
+      // is now a river value raise, where the station has no deviation.)
+      const view = raise[1] as PlayerView;
       const code = handReplayCode(6004, 2);
       expect(code).toBe('00000000000017740000000000000002');
       expect(handClassOf(view.holeCards)).toBe('AQo');
@@ -261,14 +262,14 @@ describe('Calling station from its style file', () => {
         amount: 8,
       });
 
-      // D-5 point 0: u >= the 0.6 threshold, both raise to 8.
+      // D-5 point 0 (TASK-7.8): a river value raise; the station has no postflop raise deviation, both raise to 16.
       const zero = at(raise, 6004, 0);
       expect(zero.code).toBe('00000000000017740000000000000001');
-      expect(zero.seed).toBe(3761756536);
-      expect(botRandom(zero.seed).nextUint32()).toBe(3312332681);
-      const raiseTo8 = { seat: 1, type: 'raise', amount: 8 };
-      expect(decideCallingStation(zero.view, { random: botRandom(zero.seed) })).toEqual(raiseTo8);
-      expect(decideTag(zero.view, { random: botRandom(zero.seed) })).toEqual(raiseTo8);
+      expect(zero.seed).toBe(1301852427);
+      expect(botRandom(zero.seed).nextUint32()).toBe(118782172);
+      const raiseTo16 = { seat: 1, type: 'raise', amount: 16 };
+      expect(decideCallingStation(zero.view, { random: botRandom(zero.seed) })).toEqual(raiseTo16);
+      expect(decideTag(zero.view, { random: botRandom(zero.seed) })).toEqual(raiseTo16);
     },
     TEST_TIMEOUT_MS,
   );
@@ -360,7 +361,8 @@ describe('Calling station from its style file', () => {
   it(
     'a Calling station seat in the worker plays the Calling station decision',
     () => {
-      const view = collect().raise[0] as PlayerView;
+      // Example A's view (raise[1] since TASK-7.8).
+      const view = collect().raise[1] as PlayerView;
       const request = { id: 1, kind: 'bot', view, seed: 3757549955 } as const;
       expect(handleAdviceRequest({ ...request, style: 'Calling station' })).toEqual({
         id: 1,

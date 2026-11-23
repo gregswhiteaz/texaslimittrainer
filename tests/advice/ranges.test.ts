@@ -6,10 +6,13 @@ import { recommendPostflop } from '../../src/advice/postflop';
 import type { Position } from '../../src/advice/preflop-chart';
 import { recommend } from '../../src/advice/recommend';
 import {
+  callingRange,
   classifyCombo,
+  CONTINUE_CLASSES,
   defaultRange,
   estimateOpponentRanges,
   expandRange,
+  KEEP,
   narrowRange,
   parseDefaultRanges,
   parseHandRange,
@@ -21,7 +24,7 @@ import {
 } from '../../src/advice/ranges';
 import { TAG_STYLE } from '../../src/bots/tag';
 import { botRandom } from '../../src/engine/bot-random';
-import { formatCard, parseCards } from '../../src/engine/cards';
+import { formatCard, parseCards, type Card } from '../../src/engine/cards';
 import {
   applyAction,
   createHand,
@@ -425,5 +428,44 @@ describe('range notation, lines and classifier', () => {
       recommend(view, { opponentRanges: 'actions' });
     };
     expect(typeChecks).toBeTypeOf('function');
+  });
+});
+
+describe('callingRange', () => {
+  const combos = (text: string): HoleCards[] =>
+    text.split(' ').map((pair) => parseCards(pair.replace(/(..)(..)/, '$1 $2')) as [Card, Card]);
+
+  it('keeps the Strong, Pair and Draw combos in input order and drops Air', () => {
+    expect([...CONTINUE_CLASSES].sort()).toEqual(
+      [...new Set([...KEEP.call, ...KEEP.raise])].sort(),
+    );
+    const board = parseCards('Ks 8d 7c');
+    const range = combos('KhKd 8h7h AhKh 9h9d 6h5h Th9h QhJh Ac2c');
+    expect(callingRange(range, board)).toEqual(combos('KhKd 8h7h AhKh 9h9d 6h5h Th9h'));
+    const reversed = [...range].reverse();
+    expect(callingRange(reversed, board)).toEqual(combos('Th9h 6h5h 9h9d AhKh 8h7h KhKd'));
+  });
+
+  it('keeps the whole range when every combo is Air (A-2)', () => {
+    const board = parseCards('Ks 8d 7c');
+    const air = combos('QhJh Ac2c');
+    expect(callingRange(air, board)).toBe(air);
+    expect(callingRange([], board)).toEqual([]);
+  });
+
+  it('matches filtering with classifyCombo across board changes', () => {
+    const boards = ['Ks 8d 7c', 'Ks 8d 7c 2h', 'Ks 8d 7c', 'Ah Ad 5s 5c 9h', '2c 3d 4h'].map((b) =>
+      parseCards(b),
+    );
+    for (const board of boards) {
+      const range = unseenCombos(board);
+      const expected = range.filter((combo) =>
+        CONTINUE_CLASSES.includes(classifyCombo(combo, board)),
+      );
+      expect(callingRange(range, board)).toEqual(expected);
+      // Card order inside a combo does not change its class.
+      const flipped = range.map(([a, b]) => [b, a] as const);
+      expect(callingRange(flipped, board)).toEqual(expected.map(([a, b]) => [b, a]));
+    }
   });
 });

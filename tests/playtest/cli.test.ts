@@ -123,7 +123,10 @@ describe('playtest CLI', () => {
       game: 'cash',
       stacks: [160, 160, 160, 160, 160, 160],
     });
-    expect(capture([])).toEqual(capture(['--hands', '10000', '--seed', '42', '--size', '6']));
+    // The --hands default is pinned by parseArgs([]) above; a full 10,000-hand run is too slow for a unit test.
+    expect(capture(['--hands', '300'])).toEqual(
+      capture(['--hands', '300', '--seed', '42', '--size', '6']),
+    );
     expect(capture(['--hands', '007', '--seed', '0042']).out).toContain(
       'Options: --hands 7 --seed 42 --size 6\n',
     );
@@ -596,10 +599,10 @@ describe('playtest CLI', () => {
 
 describe('replacement bots in the CLI', () => {
   it('Bots replaced: is printed only for --lineup cash runs', () => {
-    // Seed 42's first replacement (Mixed, 6 seats) takes effect at hand 57.
+    // Seed 42's first replacement (Mixed, 6 seats) takes effect at hand 16.
     for (const [hands, count] of [
-      ['56', 0],
-      ['57', 1],
+      ['15', 0],
+      ['16', 1],
     ] as const) {
       const mixed = capture(['--hands', hands, '--seed', '42', '--lineup', 'mixed']);
       expect(mixed.code).toBe(0);

@@ -20,16 +20,17 @@ describe('lineUpPolicyFactory', () => {
   it(
     'lineUpPolicyFactory plays the preset at every size',
     () => {
-      const tough = runPlaytest({ hands: 45, seed: 42, size: 6, lineUp: 'Tough' });
+      // 30 hands: seed 42's first Tough replacement (which the plain policy run doesn't make) comes after.
+      const tough = runPlaytest({ hands: 30, seed: 42, size: 6, lineUp: 'Tough' });
       const maniacAtSeat2: PolicyFactory = (code, seat) =>
         seat === 2
           ? (view) => decideManiac(view, { random: botRandom(botDecisionSeed(code, view)) })
           : seededTagPolicy(code);
       expect(tough).toEqual(
-        runPlaytest({ hands: 45, seed: 42, size: 6 }, undefined, { makePolicy: maniacAtSeat2 }),
+        runPlaytest({ hands: 30, seed: 42, size: 6 }, undefined, { makePolicy: maniacAtSeat2 }),
       );
       expect(tough.violations).toBe(0);
-      expect(tough).not.toEqual(runPlaytest({ hands: 45, seed: 42, size: 6 }));
+      expect(tough).not.toEqual(runPlaytest({ hands: 30, seed: 42, size: 6 }));
 
       // 9 seats: seat 2 plays the Maniac and the rest TAG in every hand (no random-move fallback).
       const nine = lineUpPolicyFactory('Tough', 9);

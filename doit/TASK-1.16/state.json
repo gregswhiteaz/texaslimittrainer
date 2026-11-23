@@ -803,6 +803,12 @@
       "event": "unlock",
       "file": "tests/playtest/games.acceptance.test.ts",
       "reason": "TASK-6.2 Q-4 (autopilot, recommended): pin the pre-6.2 pure TAG policy via makePolicy so the sng rules scenario is unchanged; assertions unchanged"
+    },
+    {
+      "t": "2026-11-22T21:18:43",
+      "event": "unlock",
+      "file": "tests/playtest/games.acceptance.test.ts",
+      "reason": "TASK-7.8 D-7/Q-1 (auto-accepted): 10,000-hand run opt-in slow (TLH_SLOW_TESTS) + 1,000-hand every-push version with the same assertions and limits"
     }
   ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-1.16",
@@ -821,6 +827,7 @@
     "1": "PASS"
   },
   "relock_pending": [
+    "tests/playtest/games.acceptance.test.ts",
     "tests/playtest/games.acceptance.test.ts"
   ]
 }

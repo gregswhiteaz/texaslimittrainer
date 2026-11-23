@@ -228,15 +228,16 @@ describe('Maniac from its style file', () => {
       expect(botRandom(d.seed).nextUint32()).toBe(4068788660);
       expect(maniacAt(d)).toEqual({ seat: 1, type: 'check' });
 
-      // Example E: check[7], big blind's option with JTo; u < 0.6 threshold, the Maniac raises to 8.
-      const e = at(check, 6401, 7);
-      expect(e.code).toBe('00000000000019010000000000000008');
+      // Example E: check[2] (check[7] before TASK-7.8), big blind's option with JTo; u < 0.6 threshold, the
+      // Maniac raises to 8.
+      const e = at(check, 6401, 2);
+      expect(e.code).toBe('00000000000019010000000000000003');
       expect(e.view.street).toBe('preflop');
       expect(handClassOf(e.view.holeCards)).toBe('JTo');
       expect(e.view.currentBet).toBe(4);
       expect(e.view.betCount).toBe(1);
-      expect(e.seed).toBe(1511878864);
-      expect(botRandom(e.seed).nextUint32()).toBe(1323660680);
+      expect(e.seed).toBe(3874910595);
+      expect(botRandom(e.seed).nextUint32()).toBe(841821234);
       expect(maniacAt(e)).toEqual({ seat: 1, type: 'raise', amount: 8 });
       expect(tagAt(e)).toEqual({ seat: 1, type: 'check' });
     },

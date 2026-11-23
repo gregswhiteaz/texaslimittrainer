@@ -4,7 +4,7 @@ import { handClassOf } from '../advice/hand-class';
 import { chartSpotOf } from '../advice/preflop';
 import { adviceOptions, recommend, type RecommendOptions } from '../advice/recommend';
 import { parseStyle, startingRangeFor, type BotStyleData } from './style';
-import { FREE_CHECK_EQUITY } from './tag';
+import { BOT_EQUITY } from './tag';
 // The JSON import stays last: the bots import-boundary test's regex can't read past its `with` clause.
 import rock from './styles/rock.json' with { type: 'json' };
 
@@ -22,12 +22,8 @@ export type RockOptions = RecommendOptions & { readonly style?: BotStyleData };
 export function decideRock(view: PlayerView, options: RockOptions = {}): Action {
   const hero = view.players.find((p) => p.seat === view.seat);
   const owed = hero === undefined ? 0 : view.currentBet - hero.streetContribution;
-  if (view.street !== 'preflop') {
-    return owed === 0
-      ? // Skips the equity run the free check never reads (the move is identical).
-        recommend(view, { ...adviceOptions(options), equity: FREE_CHECK_EQUITY }).move
-      : recommend(view, adviceOptions(options)).move;
-  }
+  const advice = { ...adviceOptions(options), equity: options.equity ?? BOT_EQUITY };
+  if (view.street !== 'preflop') return recommend(view, advice).move;
   const style = options.style ?? ROCK_STYLE;
   // The style's range is written for 6-max; other sizes map onto its positions (TASK-7.6 A-4).
   const { position, situation } = chartSpotOf(view, '6-max');
@@ -38,8 +34,7 @@ export function decideRock(view: PlayerView, options: RockOptions = {}): Action 
   if (spot === undefined) {
     throw new RangeError(`Style ${style.style} has no starting range for ${position} ${situation}`);
   }
-  if (spot.hands.has(handClassOf(view.holeCards)))
-    return recommend(view, adviceOptions(options)).move;
+  if (spot.hands.has(handClassOf(view.holeCards))) return recommend(view, advice).move;
   // Preflop the engine always offers fold when a bet is owed and check when none is.
   const type = owed > 0 ? 'fold' : 'check';
   return view.legalActions.find((a) => a.type === type) as Action;

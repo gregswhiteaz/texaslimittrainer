@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-21T05:20:00Z'
+updated_date: '2026-11-23T04:18:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -85,6 +85,8 @@ Autopilot: no asks; assumptions A-1..A-3 in spec.
 Build: heads-up blinds (button posts SB with 2 seats), 2–10 seats in engine and playtest CLI; heads-up acceptance tests incl. all 10k --size 2 hands checked; 6-max baseline identical; gate PASS
 
 Follow-ups (Step 6a): AC added to TASK-2.2 (heads-up position labels). Heads-up raise cap owned by TASK-1.12. Duplicate cli test checks not tracked.
+
+Locked test tests/playtest/heads-up.acceptance.test.ts: heavy run moved to opt-in slow group for TASK-7.8 (D-7), smaller every-push version kept.
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary

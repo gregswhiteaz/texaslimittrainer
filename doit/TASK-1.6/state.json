@@ -291,6 +291,18 @@
       "event": "unlock",
       "file": "tests/playtest/runner.acceptance.test.ts",
       "reason": "TASK-1.16 Q-4 (autopilot, recommended): all-in blinds (floor 1), cash stacks carry between hands, new Table/replay text; nothing removed or loosened"
+    },
+    {
+      "t": "2026-11-22T21:18:44",
+      "event": "unlock",
+      "file": "tests/playtest/runner.acceptance.test.ts",
+      "reason": "TASK-7.8 D-7/Q-1 (auto-accepted): 10,000-hand run opt-in slow (TLH_SLOW_TESTS) + 1,000-hand every-push version with the same assertions and limits"
+    },
+    {
+      "t": "2026-11-22T21:18:44",
+      "event": "unlock",
+      "file": "tests/playtest/playtest.acceptance.test.ts",
+      "reason": "TASK-7.8 D-7/Q-1 (auto-accepted): 10,000-hand run opt-in slow (TLH_SLOW_TESTS) + 1,000-hand every-push version with the same assertions and limits"
     }
   ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-1.6",
@@ -304,6 +316,8 @@
   },
   "relock_pending": [
     "tests/playtest/playtest.acceptance.test.ts",
-    "tests/playtest/runner.acceptance.test.ts"
+    "tests/playtest/runner.acceptance.test.ts",
+    "tests/playtest/runner.acceptance.test.ts",
+    "tests/playtest/playtest.acceptance.test.ts"
   ]
 }

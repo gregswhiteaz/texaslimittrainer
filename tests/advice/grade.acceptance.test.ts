@@ -283,7 +283,8 @@ describe('grade acceptance', () => {
       requiredEquityPct: 25,
     });
     expect(first).toMatchObject({ grade: 'major', ruleId: 'call-fold-margin', marginPts: 20 });
-    expect(stub.calls).toHaveLength(1);
+    // Whole-range run, then the calling-range run (TASK-7.8).
+    expect(stub.calls).toHaveLength(2);
 
     const end = play(turnState, [c(3, 8), f(6), f(1), k(2), k(3)]);
     expect(end.board).toEqual(parseCards('Kh 9h 2c 7d Qh'));

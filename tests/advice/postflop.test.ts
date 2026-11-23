@@ -1,8 +1,9 @@
 import { describe, expect, it } from 'vitest';
-import type { EquityInput, EquityResult } from '../../src/advice/equity';
-import { recommendPostflop, toPct } from '../../src/advice/postflop';
+import { computeEquity, type EquityInput, type EquityResult } from '../../src/advice/equity';
+import { recommendPostflop, toPct, VALUE_THRESHOLD_PCT } from '../../src/advice/postflop';
 import { recommendPreflop } from '../../src/advice/preflop';
-import { recommend } from '../../src/advice/recommend';
+import { callingRange, estimateOpponentRanges, unseenCombos } from '../../src/advice/ranges';
+import { ACTION_RANGE_ADVICE, recommend } from '../../src/advice/recommend';
 import { applyAction, createHand, type Action, type SeatNumber } from '../../src/engine/hand';
 import { playerView, type PlayerView } from '../../src/engine/player-view';
 
@@ -73,11 +74,31 @@ function fixedEquity(equity: number) {
 const adviseWith = (view: PlayerView, equity: number) =>
   recommendPostflop(view, { equity: fixedEquity(equity).fn });
 
+const result = (input: EquityInput, equity: number): EquityResult => ({
+  hero: { win: equity, tie: 0, equity },
+  opponents: input.opponents.map(() => ({ win: 0, tie: 0, equity: 0 })),
+  method: 'exact',
+  trials: 1,
+});
+
+/** `whole` for the first (whole-range) run, `calling` for every later run; records every input. */
+function twoRuns(whole: number, calling: number) {
+  const calls: EquityInput[] = [];
+  const fn = (input: EquityInput): EquityResult => {
+    calls.push(input);
+    return result(input, calls.length === 1 ? whole : calling);
+  };
+  return { fn, calls };
+}
+
+const adviseWithRuns = (view: PlayerView, whole: number, calling: number) =>
+  recommendPostflop(view, { equity: twoRuns(whole, calling).fn });
+
 describe('rule check-free', () => {
-  it('checks whenever nothing is owed, whatever the equity', () => {
+  it('checks when nothing is owed and the calling-range equity is not above 50%, whatever the equity', () => {
     const view = viewAfter(FLOP_CHECK);
     for (const equity of [0, 0.5, 1]) {
-      const result = adviseWith(view, equity);
+      const result = adviseWithRuns(view, equity, 0.5);
       expect(result).toMatchObject({
         action: 'check',
         ruleId: 'check-free',
@@ -85,6 +106,7 @@ describe('rule check-free', () => {
         callAmount: 0,
         pot: 16,
         equityPct: toPct(equity),
+        equityVsCallingRangePct: 50,
       });
       expect(result.move).toStrictEqual({ seat: 3, type: 'check' });
     }
@@ -95,7 +117,7 @@ describe('rule pot-odds-call', () => {
   it('calls when the rounded equity reaches the rounded required equity', () => {
     const flop = viewAfter(FLOP_BET);
     for (const equity of [0.1667, 0.5, 1]) {
-      const result = adviseWith(flop, equity);
+      const result = adviseWithRuns(flop, equity, 0.5);
       expect(result).toMatchObject({
         action: 'call',
         ruleId: 'pot-odds-call',
@@ -140,6 +162,164 @@ describe('rule pot-odds-fold', () => {
       expect(result).toMatchObject({ action: 'fold', ruleId: 'pot-odds-fold', equityPct });
       expect(result.move).toStrictEqual({ seat: 3, type: 'fold' });
     }
+  });
+});
+
+describe('rule value-bet', () => {
+  it('bets when nothing is owed and the rounded calling-range equity is above 50.0%', () => {
+    const view = viewAfter(FLOP_CHECK);
+    expect(VALUE_THRESHOLD_PCT).toBe(50);
+    for (const [calling, pct] of [
+      [0.501, 50.1],
+      [0.50051, 50.1],
+      [1, 100],
+    ] as const) {
+      const advice = adviseWithRuns(view, 0.2, calling);
+      expect(advice).toMatchObject({
+        action: 'bet',
+        ruleId: 'value-bet',
+        equityPct: 20,
+        equityVsCallingRangePct: pct,
+        requiredEquityPct: 0,
+      });
+      expect(advice.move).toStrictEqual({ seat: 3, type: 'bet', amount: 4 });
+    }
+    for (const [calling, pct] of [
+      [0.5, 50],
+      [0.50049, 50],
+      [0.3, 30],
+    ] as const) {
+      expect(adviseWithRuns(view, 0.9, calling)).toMatchObject({
+        action: 'check',
+        ruleId: 'check-free',
+        equityVsCallingRangePct: pct,
+      });
+    }
+  });
+
+  it('plays the legal raise when nothing is owed but only a raise is offered (A-4)', () => {
+    const free = viewAfter(FLOP_CHECK);
+    const raise = { seat: 3, type: 'raise', amount: 6 } as const;
+    const shortAllIn = {
+      ...free,
+      legalActions: free.legalActions.map((a) => (a.type === 'bet' ? raise : a)),
+    };
+    expect(adviseWithRuns(shortAllIn, 0.2, 0.6)).toMatchObject({
+      action: 'raise',
+      ruleId: 'value-bet',
+      move: raise,
+    });
+    const noAggression = {
+      ...free,
+      legalActions: free.legalActions.filter((a) => a.type !== 'bet'),
+    };
+    expect(adviseWithRuns(noAggression, 0.2, 0.9)).toMatchObject({
+      action: 'check',
+      ruleId: 'check-free',
+      equityVsCallingRangePct: 90,
+    });
+  });
+
+  it('runs one multiway equity against every live opponent’s calling range (A-1)', () => {
+    const view = viewAfter(RIVER_BET);
+    const spy = twoRuns(0.2, 0.7);
+    const advice = recommendPostflop(view, { equity: spy.fn });
+    expect(advice).toMatchObject({ opponents: 2, equityVsCallingRangePct: 70 });
+    expect(spy.calls).toHaveLength(2);
+    const unseen = unseenCombos([...view.holeCards, ...view.board]);
+    const calling = callingRange(unseen, view.board);
+    expect(calling.length).toBeLessThan(unseen.length);
+    expect(spy.calls[1]).toEqual({
+      hero: view.holeCards,
+      board: view.board,
+      opponents: [calling, calling],
+    });
+
+    const real = recommendPostflop(viewAfter(HU_RIVER_BET));
+    const huView = viewAfter(HU_RIVER_BET);
+    const huUnseen = unseenCombos([...huView.holeCards, ...huView.board]);
+    const expected = computeEquity({
+      hero: huView.holeCards,
+      board: huView.board,
+      opponents: [callingRange(huUnseen, huView.board)],
+    });
+    expect(real.equityVsCallingRangePct).toBe(toPct(expected.hero.equity));
+  });
+
+  it('falls back through the range chain, then to the whole-range equity (A-5, A-7)', () => {
+    const view = viewAfter(FLOP_CHECK);
+    const estimated = estimateOpponentRanges(view);
+    const calls: EquityInput[] = [];
+    // Whole-range run succeeds; the first calling-range attempt throws, the second succeeds.
+    const once = (input: EquityInput): EquityResult => {
+      calls.push(input);
+      if (calls.length === 2) throw new RangeError('no deal');
+      return result(input, calls.length === 1 ? 0.2 : 0.8);
+    };
+    expect(recommendPostflop(view, { ...ACTION_RANGE_ADVICE, equity: once })).toMatchObject({
+      action: 'bet',
+      ruleId: 'value-bet',
+      equityVsCallingRangePct: 80,
+    });
+    expect(calls.map((c) => c.opponents)).toEqual([
+      estimated.map((o) => o.combos),
+      estimated.map((o) => callingRange(o.combos, view.board)),
+      estimated.map((o) => callingRange(o.start, view.board)),
+    ]);
+
+    let runs = 0;
+    const callingAlwaysThrows = (input: EquityInput): EquityResult => {
+      if (++runs > 1) throw new RangeError('Sampling rejected too many deals');
+      return result(input, 0.6);
+    };
+    expect(
+      recommendPostflop(view, { ...ACTION_RANGE_ADVICE, equity: callingAlwaysThrows }),
+    ).toMatchObject({ equityPct: 60, equityVsCallingRangePct: 60, ruleId: 'value-bet' });
+    expect(runs).toBe(4);
+
+    const broken = (input: EquityInput): EquityResult => {
+      if (++runs > 5) throw new TypeError('broken');
+      return result(input, 0.6);
+    };
+    expect(() => recommendPostflop(view, { equity: broken })).toThrow('broken');
+  });
+});
+
+describe('rule value-raise', () => {
+  it('raises facing a bet when the rounded calling-range equity is above 50.0% and a raise is legal', () => {
+    const flop = viewAfter(FLOP_BET);
+    const advice = adviseWithRuns(flop, 0.1, 0.501);
+    expect(advice).toMatchObject({
+      action: 'raise',
+      ruleId: 'value-raise',
+      equityPct: 10,
+      equityVsCallingRangePct: 50.1,
+      requiredEquityPct: 16.7,
+      callAmount: 4,
+    });
+    expect(advice.move).toStrictEqual({ seat: 3, type: 'raise', amount: 8 });
+    expect(adviseWithRuns(flop, 0.3, 0.5)).toMatchObject({
+      action: 'call',
+      ruleId: 'pot-odds-call',
+    });
+    expect(adviseWithRuns(flop, 0.1, 0.5)).toMatchObject({
+      action: 'fold',
+      ruleId: 'pot-odds-fold',
+    });
+  });
+
+  it('falls back to pot odds when no raise is legal', () => {
+    const flop = viewAfter(FLOP_BET);
+    const capped = { ...flop, legalActions: flop.legalActions.filter((a) => a.type !== 'raise') };
+    expect(adviseWithRuns(capped, 0.9, 0.9)).toMatchObject({
+      action: 'call',
+      ruleId: 'pot-odds-call',
+      equityVsCallingRangePct: 90,
+    });
+    expect(adviseWithRuns(capped, 0.01, 0.9)).toMatchObject({
+      action: 'fold',
+      ruleId: 'pot-odds-fold',
+    });
   });
 });
 

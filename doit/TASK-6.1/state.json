@@ -339,6 +339,12 @@
       "event": "unlock",
       "file": "tests/bots/tag.acceptance.test.ts",
       "reason": "TASK-7.8 Q-3 (auto-accepted): value betting changes advice/bot results \u2014 re-pin expected values, keep every assertion and time limit"
+    },
+    {
+      "t": "2026-11-22T21:18:43",
+      "event": "unlock",
+      "file": "tests/bots/tag-playtest.acceptance.test.ts",
+      "reason": "TASK-7.8 D-7/Q-1 (auto-accepted): 10,000-hand run opt-in slow (TLH_SLOW_TESTS) + 1,000-hand every-push version with the same assertions and limits"
     }
   ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-6.1",
@@ -352,6 +358,7 @@
   },
   "relock_pending": [
     "tests/bots/tag-playtest.acceptance.test.ts",
-    "tests/bots/tag.acceptance.test.ts"
+    "tests/bots/tag.acceptance.test.ts",
+    "tests/bots/tag-playtest.acceptance.test.ts"
   ]
 }

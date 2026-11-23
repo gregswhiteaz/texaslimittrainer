@@ -42,7 +42,8 @@ export interface EquityGradeInput {
   readonly alternative: ActionType | null;
   readonly equityPct: number;
   readonly requiredEquityPct: number;
-  /** Equity against the range that would call, percent one decimal; absent/null until TASK-7.8. */
+  /** Equity against the range that would call, percent one decimal; always set by recommendPostflop (TASK-7.8),
+   *  absent/null only in hand-built inputs (graded aggression-no-range). */
   readonly equityVsCallingRangePct?: number | null;
 }
 

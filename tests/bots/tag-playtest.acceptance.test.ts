@@ -10,6 +10,7 @@ import { seededTagPolicy } from '../../src/playtest/policy';
 import { handReplayCode, runPlaytest } from '../../src/playtest/runner';
 import { REPO_ROOT, sandboxEnv } from '../support/sandbox';
 
+const SLOW = process.env.TLH_SLOW_TESTS === '1';
 const TEST_TIMEOUT_MS = 120_000;
 
 const spy = vi.hoisted(() => ({
@@ -42,57 +43,67 @@ function playtest(args: string[], timeout: number) {
   return { status: result.status, stdout: start < 0 ? '' : lines.slice(start).join('\n') };
 }
 
-describe('TAG bots in the playtest', () => {
-  it(
-    'AC#5 the default 10,000-hand playtest is all TAG, legal and clean',
-    () => {
-      const run = playtest(['--hands', '10000', '--seed', '42'], 60_000);
-      expect(run.status).toBe(0);
-      const lines = run.stdout.split('\n');
-      expect(lines).toContain('Hands played: 10000');
-      expect(lines).toContain('Invariant violations: 0');
-      let out = '';
-      let err = '';
-      const code = main(
-        ['--hands', '10000', '--seed', '42'],
-        { out: (t) => (out += t), err: (t) => (err += t) },
-        { makePolicy: (code) => seededTagPolicy(code) },
-      );
-      expect(code).toBe(0);
-      expect(err).toBe('');
-      expect(run.stdout === out).toBe(true);
+/** AC#5 checks for an n-hand seed-42 playtest. */
+function checkTagPlaytest(hands: number) {
+  const run = playtest(['--hands', String(hands), '--seed', '42'], 60_000);
+  expect(run.status).toBe(0);
+  const lines = run.stdout.split('\n');
+  expect(lines).toContain(`Hands played: ${hands}`);
+  expect(lines).toContain('Invariant violations: 0');
+  let out = '';
+  let err = '';
+  const code = main(
+    ['--hands', String(hands), '--seed', '42'],
+    { out: (t) => (out += t), err: (t) => (err += t) },
+    { makePolicy: (code) => seededTagPolicy(code) },
+  );
+  expect(code).toBe(0);
+  expect(err).toBe('');
+  expect(run.stdout === out).toBe(true);
 
-      let steps = 0;
-      let hand = 1;
-      const mismatches: string[] = [];
-      const summary = runPlaytest(
-        { hands: 10000, seed: 42, size: 6 },
-        () => {
-          hand++;
-        },
-        {
-          onAction: (step): readonly Violation[] => {
-            steps++;
-            const view = playerView(step.before, step.before.toAct as number);
-            const legal = view.legalActions.some(
-              (a) => JSON.stringify(a) === JSON.stringify(step.action),
-            );
-            const replayCode = handReplayCode(42, hand);
-            const seeded = decideTag(view, {
-              random: botRandom(botDecisionSeed(replayCode, view)),
-            });
-            if (!legal || JSON.stringify(step.action) !== JSON.stringify(seeded)) {
-              mismatches.push(JSON.stringify(step.action));
-            }
-            return checkStep(step);
-          },
-        },
-      );
-      expect(mismatches).toEqual([]);
-      expect(steps).toBe(summary.playerActions);
-      expect(summary.handsPlayed).toBe(10000);
-      expect(summary.violations).toBe(0);
+  let steps = 0;
+  let hand = 1;
+  const mismatches: string[] = [];
+  const summary = runPlaytest(
+    { hands, seed: 42, size: 6 },
+    () => {
+      hand++;
     },
+    {
+      onAction: (step): readonly Violation[] => {
+        steps++;
+        const view = playerView(step.before, step.before.toAct as number);
+        const legal = view.legalActions.some(
+          (a) => JSON.stringify(a) === JSON.stringify(step.action),
+        );
+        const replayCode = handReplayCode(42, hand);
+        const seeded = decideTag(view, {
+          random: botRandom(botDecisionSeed(replayCode, view)),
+        });
+        if (!legal || JSON.stringify(step.action) !== JSON.stringify(seeded)) {
+          mismatches.push(JSON.stringify(step.action));
+        }
+        return checkStep(step);
+      },
+    },
+  );
+  expect(mismatches).toEqual([]);
+  expect(steps).toBe(summary.playerActions);
+  expect(summary.handsPlayed).toBe(hands);
+  expect(summary.violations).toBe(0);
+}
+
+describe('TAG bots in the playtest', () => {
+  // The 10,000-hand run is opt-in (TLH_SLOW_TESTS=1); every push runs the same checks on 1,000 hands.
+  it.runIf(SLOW)(
+    'AC#5 the default 10,000-hand playtest is all TAG, legal and clean',
+    () => checkTagPlaytest(10_000),
+    TEST_TIMEOUT_MS,
+  );
+
+  it(
+    'AC#5 a 1,000-hand playtest is all TAG, legal and clean',
+    () => checkTagPlaytest(1_000),
     TEST_TIMEOUT_MS,
   );
 

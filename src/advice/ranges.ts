@@ -309,11 +309,14 @@ function hasFlushDraw(hole: HoleCards, board: readonly Card[]): boolean {
  * counts below the 2 only to complete 2345, so A234 and JQKA are not open-ended.
  */
 function hasOpenEnder(hole: HoleCards, board: readonly Card[]): boolean {
-  const present = new Set([...hole, ...board].map(cardRank));
-  const fromHole = new Set(hole.map(cardRank));
+  // Rank bit masks: bit r set when rank r is present.
+  let fromHole = 0;
+  for (const card of hole) fromHole |= 1 << cardRank(card);
+  let present = fromHole;
+  for (const card of board) present |= 1 << cardRank(card);
   for (let v = 0; v + 4 <= 12; v++) {
-    const run = [v, v + 1, v + 2, v + 3];
-    if (run.every((x) => present.has(x)) && run.some((x) => fromHole.has(x))) return true;
+    const run = 0b1111 << v;
+    if ((present & run) === run && (fromHole & run) !== 0) return true;
   }
   return false;
 }
@@ -343,6 +346,36 @@ export function narrowRange(
 ): HoleCards[] {
   const keep = KEEP[action];
   return range.filter((combo) => keep.includes(classifyCombo(combo, board)));
+}
+
+/** Classes an opponent continues with against a bet or raise: KEEP.call ∪ KEEP.raise (REQ-033.6). */
+export const CONTINUE_CLASSES: readonly StrengthClass[] = ['strong', 'pair', 'draw'];
+
+// Per-combo class for the last board seen (0 unknown, 1 continues, 2 air), keyed by low * 52 + high.
+const continueMemo = new Int8Array(52 * 52);
+let memoBoard = '';
+
+/** Combos of `range` whose class on `board` is in CONTINUE_CLASSES, input order; `range` itself if none (A-2). */
+export function callingRange(
+  range: readonly HoleCards[],
+  board: readonly Card[],
+): readonly HoleCards[] {
+  const boardKey = board.join(',');
+  if (boardKey !== memoBoard) {
+    continueMemo.fill(0);
+    memoBoard = boardKey;
+  }
+  const calling = range.filter((combo) => {
+    const [a, b] = combo;
+    const key = a < b ? a * 52 + b : b * 52 + a;
+    let mark = continueMemo[key] as number;
+    if (mark === 0) {
+      mark = CONTINUE_CLASSES.includes(classifyCombo(combo, board)) ? 1 : 2;
+      continueMemo[key] = mark;
+    }
+    return mark === 1;
+  });
+  return calling.length > 0 ? calling : range;
 }
 
 export interface OpponentRange {

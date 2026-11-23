@@ -5,7 +5,7 @@ import { HAND_CLASSES, handClassOf, type HandClass } from '../../src/advice/hand
 import { chartSpotOf } from '../../src/advice/preflop';
 import { decideRock, ROCK_STYLE } from '../../src/bots/rock';
 import { startingRangeFor } from '../../src/bots/style';
-import { TAG_STYLE } from '../../src/bots/tag';
+import { BOT_EQUITY, TAG_STYLE } from '../../src/bots/tag';
 import { RANK_CHARS, type Card } from '../../src/engine/cards';
 import { applyAction, createHand, type Action, type SeatNumber } from '../../src/engine/hand';
 import { playerView, type PlayerView } from '../../src/engine/player-view';
@@ -109,13 +109,22 @@ describe('Rock decision', () => {
       for (const view of facing) {
         expect(decideRock(view, { equity })).toEqual(recommend(view, { equity }).move);
       }
+      // Free checks now read equity too (TASK-7.8): the value rule may bet.
       const free = postflop.find((v) => owed(v) === 0) as PlayerView;
-      expect(decideRock(free)).toEqual(free.legalActions.find((a) => a.type === 'check'));
-      const noEquity = (): EquityResult => {
-        throw new Error('equity must not be computed when checking is free');
-      };
-      expect(decideRock(free, { equity: noEquity })).toEqual(
+      expect(decideRock(free)).toEqual(recommend(free, { equity: BOT_EQUITY }).move);
+      const fixed =
+        (pct: number) =>
+        (input: EquityInput): EquityResult => ({
+          hero: { win: pct, tie: 0, equity: pct },
+          opponents: input.opponents.map(() => ({ win: 0, tie: 0, equity: 0 })),
+          method: 'exact',
+          trials: 1,
+        });
+      expect(decideRock(free, { equity: fixed(0) })).toEqual(
         free.legalActions.find((a) => a.type === 'check'),
+      );
+      expect(decideRock(free, { equity: fixed(1) })).toEqual(
+        free.legalActions.find((a) => a.type === 'bet'),
       );
     },
     TEST_TIMEOUT_MS,

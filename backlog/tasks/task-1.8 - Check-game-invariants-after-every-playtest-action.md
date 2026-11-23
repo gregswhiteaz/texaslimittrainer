@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-18T18:15:00Z'
+updated_date: '2026-11-23T04:18:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-0
@@ -91,6 +91,8 @@ tests/ci/workflow.test.ts (TASK-1.7 acceptance test) is extended for AC#4 per sp
 Build: src/engine/invariants.ts (chips, legal-action, bet-cap, pot-eligibility, cards; 0.38 us/action), runner seams + per-invariant counts, CLI violation block (Q-1), CI Playtest step, faulty-engine test helper; 138 tests pass; ~1,320 lines vs 1,150 budget (warning); gate PASS.
 
 CI run 44365794015 (head c2295da): success first push; new Playtest step passed. Judge round 1: PASS 11/11; 2.76M clean actions with 0 false positives; own fault engines each caught by only their invariant; clean output byte-identical to TASK-1.6; 9 mutants caught. Follow-ups (Step 6a): created TASK-1.27 (message wording needs user approval, deal-order check, empty-history check, hang-instead-of-fail, describeAction reuse, L4 guard comment implied); ACs added to TASK-1.9, 1.10, 1.12, 1.16, 1.17, 6.9; src/playtest headless lint already TASK-1.26. Skipped: J-1-01 coverage-on timing (speed policy, CI reports only).
+
+Locked test tests/playtest/invariants.acceptance.test.ts: heavy run moved to opt-in slow group for TASK-7.8 (D-7), smaller every-push version kept.
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary

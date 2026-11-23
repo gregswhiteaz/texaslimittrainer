@@ -140,7 +140,8 @@ describe('next hand acceptance', () => {
           expect(after).toEqual(before);
         }
         if (k === 43 && i === 1) {
-          expect(stack).toBe(94);
+          // 30 since TASK-7.8 (bots bet for value); 94 before.
+          expect(stack).toBe(30);
           short = carried;
         }
       }
@@ -150,7 +151,7 @@ describe('next hand acceptance', () => {
     }
     expect(table.handNumber).toBe(61);
     expect(buttons).toEqual(Array.from({ length: 60 }, (_, i) => (i % 6) + 1));
-    expect(short).toBe(94);
+    expect(short).toBe(30);
   });
 
   it('the header counts each hand and the pot line reads the decided value after the award', () => {

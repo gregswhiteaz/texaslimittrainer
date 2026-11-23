@@ -6,14 +6,19 @@ import {
   canonicalise,
   canonicalKey,
   computeEquity,
+  deriveSeed,
+  equityWithBudget,
   EXACT_EVALUATION_LIMIT,
   estimateEvaluations,
+  SAMPLE_TRIALS,
   sampledEquity,
   type EquityInput,
   type HoleCards,
   type Range,
 } from '../../src/advice/equity';
+import { BOT_EQUITY, BOT_EQUITY_BUDGET } from '../../src/bots/tag';
 import { parseCards, type Card } from '../../src/engine/cards';
+import { fnv1a32 } from '../../src/engine/seeded-random';
 import { evaluate } from '../../src/engine/hand-evaluator';
 import { enumerateExact } from '../../tools/equity/generate-reference.js';
 import { REPO_ROOT } from '../support/sandbox';
@@ -264,5 +269,67 @@ describe('computeEquity', () => {
     timed([low, ...new Array<Range>(8).fill(broadway)], 'Sampling rejected too many deals');
     // 7 opponents can be dealt; the sampler's rejection cap still applies as before.
     timed(new Array<Range>(7).fill(broadway), 'Sampling rejected too many deals');
+  });
+});
+
+describe('equityWithBudget', () => {
+  const full = (hero: string, board: string, opponents = 1) => {
+    const known = parseCards(`${hero} ${board}`);
+    return input(hero, board, ...new Array<Range>(opponents).fill(everyCombo(known)));
+  };
+
+  it('with the default budget it is computeEquity', () => {
+    const budget = { exactLimit: EXACT_EVALUATION_LIMIT, trials: SAMPLE_TRIALS };
+    for (const x of [
+      input('Ah Kh', 'Qh 7h 2c 9s 3d', range('Qd Qc', 'Js Ts'), range('8s 8d')),
+      full('Ah 5h', 'Kh 9h 2c', 2),
+    ]) {
+      expect(equityWithBudget(x, budget)).toEqual(computeEquity(x));
+    }
+  });
+
+  it('samples with the given trials above the given exact limit, deterministically', () => {
+    const budget = { exactLimit: 2_500, trials: 500 };
+    const river = full('As Kc', 'Ks 8d 7c 2h 3s');
+    expect(estimateEvaluations(canonicalise(river))).toBeLessThanOrEqual(2_500);
+    expect(equityWithBudget(river, budget)).toEqual(computeEquity(river));
+
+    const turn = full('As Kc', 'Ks 8d 7c 2h');
+    expect(estimateEvaluations(canonicalise(turn))).toBeGreaterThan(2_500);
+    const sampled = equityWithBudget(turn, budget);
+    expect(sampled).toMatchObject({ method: 'sampled', trials: 500 });
+    expect(equityWithBudget(turn, budget)).toEqual(sampled);
+    expect(Math.abs(sampled.hero.equity - computeEquity(turn).hero.equity)).toBeLessThan(0.1);
+
+    // Opponents come back in input order.
+    const two = input(
+      'Ah Kh',
+      'Qh 7h 2c',
+      range('8s 8d'),
+      full('Ah Kh', 'Qh 7h 2c').opponents[0] as Range,
+    );
+    const result = equityWithBudget(two, budget);
+    const swapped = equityWithBudget({ ...two, opponents: [...two.opponents].reverse() }, budget);
+    expect(swapped.opponents).toEqual([...result.opponents].reverse());
+  });
+
+  it('BOT_EQUITY is equityWithBudget at the bot budget', () => {
+    expect(BOT_EQUITY_BUDGET).toEqual({ exactLimit: 2_500, trials: 500 });
+    const flop = full('Ah 5h', 'Kh 9h 2c', 3);
+    const result = BOT_EQUITY(flop);
+    expect(result).toEqual(equityWithBudget(flop, BOT_EQUITY_BUDGET));
+    expect(result).toMatchObject({ method: 'sampled', trials: 500 });
+    expect(BOT_EQUITY(flop)).toEqual(result);
+  });
+
+  it('deriveSeed hashes the canonical key', () => {
+    for (const x of [
+      input('As Ks', '', range('Qh Qd')),
+      input('2c 3c', 'Ah 7d Ts', range('Ks Qs', '4d 5d', 'Qs Ks'), range('Jc Jd')),
+      full('Ah 5h', 'Kh 9h 2c 7d', 2),
+    ]) {
+      const c = canonicalise(x);
+      expect(deriveSeed(c)).toBe(fnv1a32(canonicalKey(c)));
+    }
   });
 });

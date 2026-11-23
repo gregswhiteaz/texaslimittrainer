@@ -220,7 +220,8 @@ describe('TASK-7.5 opponent range model', () => {
     expect(view.street).toBe('flop');
     const spy = fixedEquity(0.5);
     recommend(view, { ...ACTION_RANGE_ADVICE, equity: spy.fn });
-    expect(spy.calls).toHaveLength(1);
+    // calls[0] is the whole-range run; the calling-range run follows (TASK-7.8).
+    expect(spy.calls).toHaveLength(2);
     const opponents = (spy.calls[0] as EquityInput).opponents;
     expect(opponents).toHaveLength(1);
 
