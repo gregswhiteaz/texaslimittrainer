@@ -1,10 +1,11 @@
 ---
 id: TASK-7.7
 title: Compute multiway and range-versus-range equity within 1.5 points
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-17T23:22:00Z'
+updated_date: '2026-11-23T02:58:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -61,3 +62,14 @@ Plan key: E07-S06 · Dream: limit-holdem-trainer
 - [ ] #11 Story documentation is written and published to Backlog.md
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. tools/equity/generate-multiway-reference.js: 120 seeded multiway / range-vs-range cases on 0/3/4/5-card boards, exhaustive or 2M-trial references, method recorded.
+2. Committed fixture tests/advice/fixtures/equity-multiway-reference.json.
+3. Acceptance: every result within 1.5 pts; ≥200 matchups with methods; reordered ranges give identical results.
+4. No src change expected (fix equity.ts only if a case fails).
+
+Full spec: doit/TASK-7.7/spec.md
+<!-- SECTION:PLAN:END -->
