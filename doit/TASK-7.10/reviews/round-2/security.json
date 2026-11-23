@@ -1,0 +1,3 @@
+{"reviewer": "security", "round": 2,
+ "findings": [],
+ "summary": "Round 1 had no findings. Changes since round 1 (eb92c41) add no new attack surface: ADVICE_ING moved unchanged from explain.ts to the authored-text module explanations.ts (a constant map keyed by the PreflopAdvice enum, type-only import, no new inputs); package.json test:slow gains one test path (developer-run script, no new dependency or install hook); the acceptance test split gates the 10k sweep behind the existing TLH_SLOW_TESTS env flag (test-only, a developer-controlled env var, no production path). No user, file, network or env input reaches any changed production code. No secrets, randomness, or dependency changes."}

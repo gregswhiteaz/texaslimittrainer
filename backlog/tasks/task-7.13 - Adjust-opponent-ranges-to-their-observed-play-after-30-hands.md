@@ -4,7 +4,7 @@ title: Adjust opponent ranges to their observed play after 30 hands
 status: To Do
 assignee: []
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-17T23:22:00Z'
+updated_date: '2026-11-23T09:25:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -48,6 +48,7 @@ Plan key: E07-S09 · Dream: limit-holdem-trainer
 - [ ] #4 Given a multiway pot with one opponent observed for 45 hands and one for 12, When a recommendation is computed, Then it returns the basis for each opponent: 'based on 45 hands of this opponent' and 'typical player' [REQ-035.4]
 - [ ] #5 Given a default raising range of width 20.0% and an opponent with 30 observed hands, When the scaling formula is applied with observed PFR 0%, 20% and 100%, Then the widths are 14.0%, 20.0% and 44.0%; and with 100 observed hands and PFR 60%, Then the width is 60.0% [REQ-035.2, REQ-035.6]
 - [ ] #6 Given a default raising range of width 20.0% and an opponent with 100 observed hands and PFR 0%, When the range is scaled, Then the scaled width is 0.0% and the range is the single strongest hand class AA (6 combos), never empty [REQ-035.6]
+- [ ] #7 Given a recommendation whose range rests on observed opponent habits, When its explanation is generated, Then it names and defines the 'opponent type' concept using the authored definition in src/advice/explanations.ts
 <!-- AC:END -->
 
 ## Definition of Done
@@ -65,3 +66,9 @@ Plan key: E07-S09 · Dream: limit-holdem-trainer
 - [ ] #11 Story documentation is written and published to Backlog.md
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+AC added from TASK-7.10 follow-up (opponent-type template).
+<!-- SECTION:NOTES:END -->

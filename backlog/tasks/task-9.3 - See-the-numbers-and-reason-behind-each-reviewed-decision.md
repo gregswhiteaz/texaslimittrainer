@@ -4,7 +4,7 @@ title: See the numbers and reason behind each reviewed decision
 status: To Do
 assignee: []
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-21T17:57:00Z'
+updated_date: '2026-11-23T09:25:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -52,6 +52,7 @@ Plan key: E09-S02 · Dream: limit-holdem-trainer
 - [ ] #5 Given a 4-decision hand at a table of 10 players, When the panel opens at a 1280 x 720 window, Then all 4 entries with their explanations can be read in the panel without horizontal scrolling [REQ-043.1]
 - [ ] #6 Given each user decision, When it is made, Then its review entry (grade, recommendation, equity, explanation, basis) is computed and stored at decision time off the main thread, replacing the hand-end recomputation in reviewEntries
 - [ ] #7 Given a review entry is computed during play, When grading runs, Then it goes through the advice worker's grade request (src/ui/advice) and never runs on the main thread
+- [ ] #8 Given a reviewed decision, When its numbers and reason are shown, Then the reason is the recommendation's explanation text (TASK-7.10) exactly as returned
 <!-- AC:END -->
 
 ## Definition of Done
@@ -76,4 +77,6 @@ Plan key: E09-S02 · Dream: limit-holdem-trainer
 AC added from TASK-9.1 follow-up (doc-26).
 
 AC added from TASK-3.6 follow-up (use the worker grade request)
+
+AC added from TASK-7.10 follow-up.
 <!-- SECTION:NOTES:END -->

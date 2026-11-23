@@ -4,7 +4,7 @@ title: Ask for a hint and see the recommended action with its numbers and reason
 status: To Do
 assignee: []
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-18T22:48:00Z'
+updated_date: '2026-11-23T09:33:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -56,6 +56,8 @@ Plan key: E08-S01 · Dream: limit-holdem-trainer
 - [ ] #8 Given a session in which the user opens Hint at 50 consecutive decisions and opens and hides it 10 times within one decision, When each hint is requested, Then the card is shown every time and no limit, counter or cost is shown [REQ-042.4]
 - [ ] #9 Given a hint request, When advice is computed, Then it runs off the main thread so the table UI stays responsive (REQ-055.6)
 - [ ] #10 Given the action bar, When it is enabled on the user's turn, Then it includes the Hint button, and when it is disabled the Hint button is absent or disabled
+- [ ] #11 Given a hint is shown, When the card renders, Then it shows the recommendation's explanation text (TASK-7.10) exactly as returned
+- [ ] #12 Given a check-free or value explanation where equity against all hands is above 50% but equity against the hands that would call is not, When the hint shows it, Then the sentence comparing to 50.0% names which equity it means (not a bare 'That')
 <!-- AC:END -->
 
 ## Definition of Done
@@ -80,4 +82,8 @@ Plan key: E08-S01 · Dream: limit-holdem-trainer
 AC added from TASK-7.3 follow-up (doc-17).
 
 AC added from TASK-3.2 follow-up (doc-22).
+
+AC added from TASK-7.10 follow-up.
+
+AC added from TASK-7.10 judge J-1-01 (value-rule copy clarity).
 <!-- SECTION:NOTES:END -->

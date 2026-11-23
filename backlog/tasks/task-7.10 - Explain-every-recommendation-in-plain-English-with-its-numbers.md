@@ -1,11 +1,11 @@
 ---
 id: TASK-7.10
 title: Explain every recommendation in plain English with its numbers
-status: In Progress
+status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-23T09:10:00Z'
+updated_date: '2026-11-23T09:33:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -18,6 +18,7 @@ references:
 documentation:
   - doc-1
   - doc-2
+  - doc-97
 parent_task_id: TASK-7
 priority: high
 type: feature
@@ -46,28 +47,28 @@ Plan key: E07-S12 · Dream: limit-holdem-trainer
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Given a seeded sample of 10,000 decision points from the playtest covering every rule id and chart situation, When explanations are generated, Then each has at most three sentences [REQ-037.1]
-- [ ] #2 Given the same sample, When explanations are checked, Then each names at least one concept from the concept list [REQ-037.2]
-- [ ] #3 Given the same sample, When explanations are checked, Then the sentence that first names each concept contains that concept's authored one-clause definition [REQ-037.3]
-- [ ] #4 Given a postflop recommendation that rests on equity, When its explanation is generated, Then it quotes the same equity % and required equity % that the recommendation returns [REQ-037.4]
-- [ ] #5 Given identical inputs, When the explanation is generated twice, Then the text is identical [REQ-036.1]
+- [x] #1 Given a seeded sample of 10,000 decision points from the playtest covering every rule id and chart situation, When explanations are generated, Then each has at most three sentences [REQ-037.1]
+- [x] #2 Given the same sample, When explanations are checked, Then each names at least one concept from the concept list [REQ-037.2]
+- [x] #3 Given the same sample, When explanations are checked, Then the sentence that first names each concept contains that concept's authored one-clause definition [REQ-037.3]
+- [x] #4 Given a postflop recommendation that rests on equity, When its explanation is generated, Then it quotes the same equity % and required equity % that the recommendation returns [REQ-037.4]
+- [x] #5 Given identical inputs, When the explanation is generated twice, Then the text is identical [REQ-036.1]
 <!-- AC:END -->
 
 ## Definition of Done
 <!-- DOD:BEGIN -->
-- [ ] #1 Explanation templates and concept definitions are original, written for this project [REQ-061.2]
-- [ ] #2 Every acceptance criterion has at least one automated test (unit, property or Playwright) that passes
-- [ ] #3 `npm run lint`, `npm run typecheck` and `npm test` pass with zero errors [REQ-059.1, REQ-059.4]
-- [ ] #4 The golden-spot suite passes 100% (applies from the story that creates the suite, E07-S14, onward) [REQ-039.4]
-- [ ] #5 Coverage thresholds hold: >= 90% engine/bots/advice/statistics, >= 70% overall [REQ-059.3]
-- [ ] #6 Engine, bots, advice and statistics code imports no UI or browser-only code [REQ-059.2]
-- [ ] #7 Stories that touch the engine, bots or advice: a 10,000-hand playtest reports zero invariant violations (applies once the playtest runner exists, E01-S07, onward) [REQ-056.1]
-- [ ] #8 Stories that add or change a screen: Playwright test of the screen flow in Chromium and WebKit, and axe reports zero serious or critical violations (axe tooling is provisioned in the toolchain story E01-S01) [REQ-057.1]
-- [ ] #9 No new network requests beyond the app's own files [REQ-058.1]
-- [ ] #10 Strategy-content stories: text is original and every chart, range or golden spot carries its justification [REQ-061.2]
-- [ ] #11 CI workflow is green on the story's branch (applies once the CI story E01-S02 is done; E01-S01 instead passes the same checks locally) [REQ-064.2]
-- [ ] #12 Story documentation is written and published to Backlog.md
-- [ ] #13 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
+- [x] #1 Explanation templates and concept definitions are original, written for this project [REQ-061.2]
+- [x] #2 Every acceptance criterion has at least one automated test (unit, property or Playwright) that passes
+- [x] #3 `npm run lint`, `npm run typecheck` and `npm test` pass with zero errors [REQ-059.1, REQ-059.4]
+- [x] #4 The golden-spot suite passes 100% (applies from the story that creates the suite, E07-S14, onward) [REQ-039.4]
+- [x] #5 Coverage thresholds hold: >= 90% engine/bots/advice/statistics, >= 70% overall [REQ-059.3]
+- [x] #6 Engine, bots, advice and statistics code imports no UI or browser-only code [REQ-059.2]
+- [x] #7 Stories that touch the engine, bots or advice: a 10,000-hand playtest reports zero invariant violations (applies once the playtest runner exists, E01-S07, onward) [REQ-056.1]
+- [x] #8 Stories that add or change a screen: Playwright test of the screen flow in Chromium and WebKit, and axe reports zero serious or critical violations (axe tooling is provisioned in the toolchain story E01-S01) [REQ-057.1]
+- [x] #9 No new network requests beyond the app's own files [REQ-058.1]
+- [x] #10 Strategy-content stories: text is original and every chart, range or golden spot carries its justification [REQ-061.2]
+- [x] #11 CI workflow is green on the story's branch (applies once the CI story E01-S02 is done; E01-S01 instead passes the same checks locally) [REQ-064.2]
+- [x] #12 Story documentation is written and published to Backlog.md
+- [x] #13 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
 
 ## Implementation Plan
@@ -86,4 +87,16 @@ Full spec: doit/TASK-7.10/spec.md
 
 <!-- SECTION:NOTES:BEGIN -->
 Build: explanation field on every recommendation (authored concepts/templates, explain.ts); 10k sample acceptance 7.7 s local (no split); block 1 (TASK-7.2 sandbox list) auto-accepted; SHA unchanged; gate PASS.
+
+Review R1: 0 blocking; MINOR (10k sample at 8 s threshold) fixed via D-6 split (2k every push 2.3 s; 10k slow 9.8 s; same checks); NIT ADVICE_ING moved; spec note: 17 pairs not 18.
+
+Follow-ups: ACs on TASK-7.13 (opponent-type template), TASK-8.1 (hint shows explanation), TASK-9.3 (review reason). Bluff concept: no advice rule recommends bluffs (none planned) — defined only; no task.
+
+Judge R1 PASS 12/12 (own splitter/matcher over 22,000 decisions on seed 4242: 0 failures; all 6 rules, 17 pairs; 7/7 mutants). J-1-01 copy clarity → AC on TASK-8.1.
 <!-- SECTION:NOTES:END -->
+
+## Final Summary
+
+<!-- SECTION:FINAL_SUMMARY:BEGIN -->
+Every recommendation now carries a plain-English explanation (max 3 sentences, defines the concept where first named, postflop quotes the equity and required equity returned; implied-odds also outs and implied price). Authored wording is in src/advice/explanations.ts (Q-1, review it). Verified: gate fix-4 PASS; sample test 2k every push ~2.25 s, 10k under TLH_SLOW_TESTS ~9.8 s; playtest SHA 14d746f7...2e48 unchanged (+0.1 s). Review R1 MINOR (sample time) fixed via D-6 split, NIT moved; R2 0 findings. Assumptions to review in doc-97: Q-1..Q-4, block 1 (TASK-7.2 sandbox +8 files), locked re-pins TASK-7.3/7.8, A-1..A-6; spec said 18 pairs, real 17. Follow-ups: bluff/opponent-type templates unused until later rules (opponent type: TASK-7.13); text shown by TASK-8.1 and TASK-9.3.
+<!-- SECTION:FINAL_SUMMARY:END -->

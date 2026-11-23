@@ -1,0 +1,26 @@
+{"reviewer": "code", "round": 2,
+ "rubric": [
+  {"item": "SPEC-01 correctness", "result": "pass"}, {"item": "SPEC-01 test strength", "result": "pass"},
+  {"item": "SPEC-02 correctness", "result": "pass"}, {"item": "SPEC-02 test strength", "result": "pass"},
+  {"item": "SPEC-03 correctness", "result": "pass"}, {"item": "SPEC-03 test strength", "result": "pass"},
+  {"item": "SPEC-04 correctness", "result": "pass"}, {"item": "SPEC-04 test strength", "result": "pass"},
+  {"item": "SPEC-05 correctness", "result": "pass"}, {"item": "SPEC-05 test strength", "result": "pass"},
+  {"item": "SPEC-06 correctness", "result": "pass"}, {"item": "SPEC-06 test strength", "result": "pass"},
+  {"item": "SPEC-07 correctness", "result": "pass"}, {"item": "SPEC-07 test strength", "result": "pass"},
+  {"item": "SPEC-08 correctness", "result": "pass"}, {"item": "SPEC-08 test strength", "result": "pass"},
+  {"item": "SPEC-09 correctness", "result": "pass"}, {"item": "SPEC-09 test strength", "result": "pass"},
+  {"item": "SPEC-10 correctness", "result": "pass"}, {"item": "SPEC-10 test strength", "result": "pass"},
+  {"item": "SPEC-11 correctness", "result": "pass"}, {"item": "SPEC-11 test strength", "result": "pass"},
+  {"item": "SPEC-12 correctness", "result": "pass"}, {"item": "SPEC-12 test strength", "result": "pass"},
+  {"item": "scope", "result": "pass"},
+  {"item": "concision", "result": "pass"},
+  {"item": "clarity", "result": "pass"}
+ ],
+ "findings": [
+  {"fingerprint": "tests/advice/explanations.acceptance.test.ts:ac1-title-says-10000-in-2k-variant", "severity": "NIT",
+   "file": "tests/advice/explanations.acceptance.test.ts", "line": 51,
+   "issue": "sampleChecks() is shared by both variants, but the AC#1 test title still says 'a 10,000-decision playtest sample'. In the 2,000-decision describe block, the reporter therefore prints a title that does not match the sample size.",
+   "evidence": "Running the file without TLH_SLOW_TESTS lists 'explanations on the first 2,000 decisions ... > AC#1 every explanation in a 10,000-decision playtest sample has at most three sentences'. The describe name gives the correct size, so the output is still understandable.",
+   "fix": "Optional: drop the size from the it() title (for example 'AC#1 every explanation in the sample has at most three sentences') or build it from sampleSize. If the title is kept verbatim on purpose to match the AC wording, leave it."}
+ ],
+ "summary": "Round-1 fixes verified. (1) Last round's MINOR tests/advice/explanations.acceptance.test.ts:sample-time-at-d6-threshold is fixed. The body is now one shared sampleChecks(sampleSize) holding the AC#1-AC#5 assertions unchanged; the only edit is toHaveLength(sampleSize). Both variants assert coverage of all 6 rule ids (POSTFLOP_RULE_IDS) and all 17 size-by-situation pairs (APPLICABLE_SPOTS). The 2,000 variant runs every push; the 10,000 variant is describe.runIf(TLH_SLOW_TESTS==='1'), and the file is appended to test:slow in package.json. sampleViews is deterministic (seed 7310, hands 1..k), so the 2,000 sample is exactly the first 2,000 decisions of the 10,000. No assertion was dropped or loosened. Timings measured here: default run 5 passed / 5 skipped, Duration 2.03 s (2.3 s wall); TLH_SLOW_TESTS=1 run 10 passed, Duration 9.77 s. Both pass, and the 2k sample still reaches full rule and spot coverage. (2) Last round's NIT src/advice/explain.ts:advice-ing-copy-outside-authored-module is fixed. ADVICE_ING was moved word for word to src/advice/explanations.ts:141 ('Raising', 'Calling', 'Folding', 'Checking'); explain.ts imports it and no longer imports the unused PreflopAdvice type. Its only use is explain.ts:56. Gate fix-4 shows test, lint, typecheck and test integrity passing. Nothing else in src/tests changed. One NIT remains (AC#1 title wording in the 2k variant). No BLOCKER or MAJOR."}
