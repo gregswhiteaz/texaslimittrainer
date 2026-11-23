@@ -16,15 +16,33 @@ export type RockOptions = RecommendOptions & { readonly style?: BotStyleData };
 
 /**
  * The Rock decision. Preflop, a hand class outside the style's starting range for the viewer's spot folds when a
- * bet is owed and checks when nothing is; inside the range, and on every later street, it plays the advice
- * engine's move. Throws RangeError when the style has no starting range; errors from the advice propagate.
+ * bet is owed and checks when nothing is; inside the range it plays the advice engine's move. After the flop it
+ * plays the advice, except that with a style `postflopValue` an advised bet or raise stands only when the equity
+ * against the calling range is above its threshold; otherwise it calls a bet or checks. Throws RangeError when the
+ * style has no starting range; errors from the advice propagate.
  */
 export function decideRock(view: PlayerView, options: RockOptions = {}): Action {
   const hero = view.players.find((p) => p.seat === view.seat);
   const owed = hero === undefined ? 0 : view.currentBet - hero.streetContribution;
   const advice = { ...adviceOptions(options), equity: options.equity ?? BOT_EQUITY };
-  if (view.street !== 'preflop') return recommend(view, advice).move;
   const style = options.style ?? ROCK_STYLE;
+  if (view.street !== 'preflop') {
+    const rec = recommend(view, advice);
+    const value = style.postflopValue;
+    if (
+      value === null ||
+      rec.basis !== 'equity' ||
+      (rec.action !== 'bet' && rec.action !== 'raise')
+    ) {
+      return rec.move;
+    }
+    if (Math.round(rec.equityVsCallingRangePct * 10) > Math.round(value.thresholdPct * 10)) {
+      return rec.move;
+    }
+    // The advice bets only when nothing is owed and raises only when a bet is, so check or call is legal.
+    const passive = owed > 0 ? 'call' : 'check';
+    return view.legalActions.find((a) => a.type === passive) as Action;
+  }
   // The style's range is written for 6-max; other sizes map onto its positions (TASK-7.6 A-4).
   const { position, situation } = chartSpotOf(view, '6-max');
   if (style.startingRange === null) {

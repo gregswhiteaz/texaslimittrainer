@@ -56,6 +56,12 @@ export interface Deviation {
   readonly justification: string;
 }
 
+/** A style's own postflop value bar: keep the advice's bet/raise only above thresholdPct (percent, one decimal). */
+export interface PostflopValue {
+  readonly thresholdPct: number;
+  readonly justification: string;
+}
+
 export interface BotStyleData {
   readonly style: StyleName;
   readonly description: string;
@@ -64,6 +70,8 @@ export interface BotStyleData {
   readonly deviations: readonly Deviation[];
   /** In APPLICABLE_SPOTS['6-max'] order; null when the file has no starting range. */
   readonly startingRange: readonly RangeSpot[] | null;
+  /** null when the file has no postflopValue block. */
+  readonly postflopValue: PostflopValue | null;
 }
 
 /** The hand classes a style plays preflop in one chart spot; every other class folds (or checks when free). */
@@ -91,6 +99,8 @@ const JUSTIFICATION_WORDS = 10;
 const ECHO_CHARS = 20;
 const ACTIONS = ['recommended', 'alternative'] as const;
 const SUM_TOLERANCE = 1e-9;
+const VALUE_MIN_PCT = 50;
+const VALUE_MAX_PCT = 100;
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null && !Array.isArray(value);
@@ -236,6 +246,34 @@ export function parseStyle(
 
   const startingRange = parseStartingRange(raw.startingRange, fileName, name, chart, problems);
 
+  let postflopValue: PostflopValue | null = null;
+  if (raw.postflopValue !== undefined) {
+    const where = `${fileName}: style ${name} postflopValue`;
+    const data = raw.postflopValue;
+    if (!isRecord(data)) {
+      problems.push(`${where} must be an object`);
+    } else {
+      const pct = data.thresholdPct;
+      const validPct =
+        typeof pct === 'number' &&
+        Number.isFinite(pct) &&
+        pct >= VALUE_MIN_PCT &&
+        pct <= VALUE_MAX_PCT;
+      if (!validPct) {
+        problems.push(
+          `${where} must have a thresholdPct from ${VALUE_MIN_PCT} to ${VALUE_MAX_PCT}`,
+        );
+      }
+      const justified = wordCount(data.justification) >= JUSTIFICATION_WORDS;
+      if (!justified) {
+        problems.push(`${where} has no justification (at least ${JUSTIFICATION_WORDS} words)`);
+      }
+      if (validPct && justified) {
+        postflopValue = { thresholdPct: pct, justification: data.justification as string };
+      }
+    }
+  }
+
   if (problems.length > 0) throw new StyleValidationError(fileName, problems);
   return {
     style: style as StyleName,
@@ -243,6 +281,7 @@ export function parseStyle(
     mixedSpots,
     deviations,
     startingRange,
+    postflopValue,
   };
 }
 

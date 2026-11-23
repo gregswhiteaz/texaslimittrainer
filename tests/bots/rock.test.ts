@@ -29,6 +29,19 @@ function equity(input: EquityInput): EquityResult {
 const owed = (view: PlayerView): number =>
   view.currentBet - (view.players.find((p) => p.seat === view.seat)?.streetContribution ?? 0);
 
+/** The advice's move, except that a bet or raise at or below the Rock's 75% value bar checks or calls (TASK-6.16). */
+function rockMove(view: PlayerView, eq: (input: EquityInput) => EquityResult): Action {
+  const rec = recommend(view, { equity: eq });
+  if (
+    rec.basis !== 'equity' ||
+    (rec.action !== 'bet' && rec.action !== 'raise') ||
+    Math.round(rec.equityVsCallingRangePct * 10) > 750
+  ) {
+    return rec.move;
+  }
+  return view.legalActions.find((a) => a.type === (owed(view) > 0 ? 'call' : 'check')) as Action;
+}
+
 /** Seat 1's views from the seed-65 random-move collection (A-6), with postflop views too. */
 function seatOneViews(): PlayerView[] {
   const views: PlayerView[] = [];
@@ -107,11 +120,11 @@ describe('Rock decision', () => {
       const facing = postflop.filter((v) => owed(v) > 0).slice(0, 3);
       expect(facing).toHaveLength(3);
       for (const view of facing) {
-        expect(decideRock(view, { equity })).toEqual(recommend(view, { equity }).move);
+        expect(decideRock(view, { equity })).toEqual(rockMove(view, equity));
       }
       // Free checks now read equity too (TASK-7.8): the value rule may bet.
       const free = postflop.find((v) => owed(v) === 0) as PlayerView;
-      expect(decideRock(free)).toEqual(recommend(free, { equity: BOT_EQUITY }).move);
+      expect(decideRock(free)).toEqual(rockMove(free, BOT_EQUITY));
       const fixed =
         (pct: number) =>
         (input: EquityInput): EquityResult => ({
