@@ -1,0 +1,91 @@
+{
+  "reviewer": "code",
+  "round": 1,
+  "rubric": [
+    {"item": "SPEC-01 correctness", "result": "pass"},
+    {"item": "SPEC-01 test strength", "result": "pass"},
+    {"item": "SPEC-02 correctness", "result": "pass"},
+    {"item": "SPEC-02 test strength", "result": "pass"},
+    {"item": "SPEC-03 correctness", "result": "pass"},
+    {"item": "SPEC-03 test strength", "result": "pass"},
+    {"item": "SPEC-04 correctness", "result": "pass"},
+    {"item": "SPEC-04 test strength", "result": "pass"},
+    {"item": "SPEC-05 correctness", "result": "pass"},
+    {"item": "SPEC-05 test strength", "result": "pass"},
+    {"item": "SPEC-06 correctness", "result": "pass"},
+    {"item": "SPEC-06 test strength", "result": "pass"},
+    {"item": "SPEC-07 correctness", "result": "pass"},
+    {"item": "SPEC-07 test strength", "result": "pass"},
+    {"item": "SPEC-08 correctness", "result": "pass"},
+    {"item": "SPEC-08 test strength", "result": "pass"},
+    {"item": "SPEC-09 correctness", "result": "pass"},
+    {"item": "SPEC-09 test strength", "result": "pass"},
+    {"item": "SPEC-10 correctness", "result": "pass"},
+    {"item": "SPEC-10 test strength", "result": "pass"},
+    {"item": "SPEC-11 correctness", "result": "pass"},
+    {"item": "SPEC-11 test strength", "result": "pass"},
+    {"item": "SPEC-12 correctness", "result": "pass"},
+    {"item": "SPEC-12 test strength", "result": "pass"},
+    {"item": "SPEC-13 correctness", "result": "pass"},
+    {"item": "SPEC-13 test strength", "result": "pass"},
+    {"item": "SPEC-14 correctness", "result": "pass"},
+    {"item": "SPEC-14 test strength", "result": "pass"},
+    {"item": "SPEC-15 correctness", "result": "pass"},
+    {"item": "SPEC-15 test strength", "result": "pass"},
+    {"item": "SPEC-16 correctness", "result": "pass"},
+    {"item": "SPEC-16 test strength", "result": "pass"},
+    {"item": "SPEC-17 correctness", "result": "pass"},
+    {"item": "SPEC-17 test strength", "result": "pass"},
+    {"item": "scope", "result": "fail"},
+    {"item": "concision", "result": "pass"},
+    {"item": "clarity", "result": "pass"}
+  ],
+  "findings": [
+    {
+      "fingerprint": "backlog/docs/stories/doc-100 - TASK-3.9-Keep-a-permanent-record-of-every-completed-hand 2.md:stray-duplicate-story-doc",
+      "severity": "MAJOR",
+      "file": "backlog/docs/stories/doc-100 - TASK-3.9-Keep-a-permanent-record-of-every-completed-hand 2.md",
+      "line": 1,
+      "issue": "The build commit (71bece3) added a byte-identical copy of the TASK-3.9 story doc with a ' 2' suffix (a Finder/iCloud-style duplicate). It is outside the spec, not in changes.md, and Backlog.md now lists doc-100 twice. The gate's file list does not count backlog/, so it was not caught there. (Build run 1 had a similar 'docs/storage/hand-records 2.md' that was removed; this one was not.)",
+      "evidence": "`diff` of the two files reports them identical; `backlog doc list --plain | grep doc-100` prints 'doc-100 - TASK-3.9: Keep a permanent record of every completed hand' twice; `git log` shows the file first appears in 71bece3 doit(TASK-3.10): build.",
+      "fix": "`git rm \"backlog/docs/stories/doc-100 - TASK-3.9-Keep-a-permanent-record-of-every-completed-hand 2.md\"`, then check that no other ' 2.*' files are in the tree (`git ls-files | grep ' 2\\.'`)."
+    },
+    {
+      "fingerprint": "src/table/session-record.ts:copied-parse-helpers",
+      "severity": "MINOR",
+      "file": "src/table/session-record.ts",
+      "line": 117,
+      "issue": "`object`, `whole` and `isoString` copy the logic of hand-record.ts's `object`/`whole` and its inline completedAt ISO round-trip check; they differ only in the error prefix. session.ts adds a third copy as `isRecord` plus `isWholeNumber` (a plain Number.isSafeInteger wrapper next to the now-exported `isWhole`). The spec's reuse list says to export helpers instead of copying them.",
+      "evidence": "hand-record.ts:154 `object(value, field)` and session-record.ts:117 `object(value, field)` have the same body; session.ts:252 `isWholeNumber` = `Number.isSafeInteger(value)`.",
+      "fix": "Export an `isIsoString(value)` predicate and `isPlainObject(value)` from one place (hand-record.ts, or session.ts so there is no import cycle) and have each module keep only its one-line `invalid(field)` throw. Drop `isWholeNumber` in favour of `isWhole(value, 1, 10)`-style checks, or move `isWhole` into session.ts and import it in hand-record.ts."
+    },
+    {
+      "fingerprint": "src/engine/hand.ts:validate-check-order-changed",
+      "severity": "NIT",
+      "file": "src/engine/hand.ts",
+      "line": 168,
+      "issue": "Pulling the stake and stack rules out into assertChips moved the deck check before the stake check. A config with both an invalid deck and invalid stakes now reports 'Deck must hold…' instead of 'Invalid stakes'. Users never see this: the app always deals from shuffledDeck, so the deck is always valid, and the existing engine suites and the 10,000-hand playtest (0 invariant violations) pass. It is still a small departure from D-7's 'unchanged'.",
+      "evidence": "Before: seats, button, stakes, deck, stacks. After: seats, button, deck, then assertChips (stakes, stacks).",
+      "fix": "Optional: mention it in the build log or docs. Or call assertChips's stake part before the deck check by splitting it out. Not worth the extra function unless a test depends on the order."
+    },
+    {
+      "fingerprint": "src/table/session-record.ts:redundant-done-check",
+      "severity": "NIT",
+      "file": "src/table/session-record.ts",
+      "line": 105,
+      "issue": "`nextStep(table) === 'done' ? completedHand(table) : null` repeats a check completedHand already makes: it returns null unless hand.result is set.",
+      "evidence": "session.ts:603: `if (hand === null || hand.result === null || replayCode === null) return null;`",
+      "fix": "`const done = completedHand(table);` and drop the nextStep import."
+    },
+    {
+      "fingerprint": "src/table/session.ts:needless-defaults-alias",
+      "severity": "NIT",
+      "file": "src/table/session.ts",
+      "line": 336,
+      "issue": "`const defaults: SessionConfig = DEFAULT_SESSION_CONFIG;` exists only to widen the type for one spread, and the next line reads DEFAULT_SESSION_CONFIG.stake directly. Two names for the same value make the function harder to read.",
+      "evidence": "session.ts:336-338",
+      "fix": "Spread `DEFAULT_SESSION_CONFIG as SessionConfig` inline, or use `defaults` on both lines."
+    }
+  ],
+  "summary": "The implementation meets every SPEC item. Independent checks: the new Vitest files and the updated hand-store and hand-record tests pass (23 tests). `e2e/session-records.spec.ts` and `e2e/hand-records.spec.ts` pass in Chromium and WebKit; the new spec takes about 1 s per browser, well under the 10 s estimate, so the every-push cost is negligible. The opt-in kill spec passes in Chromium and leaves no processes behind. The playtest with 10,000 hands and seed 42 reports 0 invariant violations. I also ran a round-trip in a scratch directory outside the repo, since deleted: 3,540 hands over 59 configs (2–10 players; Mixed, Tough and Soft line-ups plus Custom; cash and sit-and-go; random user actions; 17 bot replacements; 1,580 showdowns). Each hand went through handWrite, then a JSON or structuredClone copy, then parseHandRecord, parseSessionRecord and restoreSession. Nothing the app produces was rejected, and restoreSession(sessionRecord(nextHand(t))) deep-equalled nextHand(t) every time. The seated start records round-trip too. Atomicity: one strict transaction over hands and sessions. A ConstraintError aborts the session put, and SPEC-04 would catch a two-transaction version through both the spy and the unchanged-session check. The v1 to v2 upgrade adds sessions only when oldVersion < 2 and keeps the hand records (SPEC-14 tests this). An old tab is closed by the existing onversionchange handler, which this story leaves unchanged. Write order (A-3): the start put is guarded by a ref, so StrictMode writes it once. Its failure is caught and logged, and each hand's combined write is chained after it. Validators: assertSessionConfig follows §5.1, and each SPEC-07 case changes one field, so removing any rule would fail the test. Hostile `{toString}`/`[3]` values are rejected through strict equality or Number.isSafeInteger before any String() call, and echoValue never calls toString. Holes and non-object entries are rejected in all four places. The hand-record cross-field checks give exact field messages. The engine change only touches error paths, so dealt hands are unchanged; the only visible difference is the deck-before-stakes error order (NIT). One MAJOR: a stray duplicate of the TASK-3.9 story doc was committed and shows up twice in Backlog.md."
+}

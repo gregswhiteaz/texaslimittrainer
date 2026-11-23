@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-23T12:48:00Z'
+updated_date: '2026-11-23T13:20:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -99,4 +99,8 @@ AC added from TASK-1.9 follow-up (security review: restored HandState fields bec
 AC#11 added from TASK-1.13 follow-up (security review: action shape must be checked at load)
 
 AC added from TASK-3.9 security review (first reader of stored records).
+
+Build: tlh-trainer v2 'sessions' store (additive upgrade; hand + session in one strict transaction before deal); session-record.ts parse/restore (never holds a hand); restore validation (assertSessionConfig, assertChips, type guards, sparse seats, resolveSessionConfig, parseHandRecord cross-field); e2e 184 pass (+0.3 s); kill tests pass; both playtest hashes unchanged; gate PASS.
+
+Review R1: only blocking item is a stray byte-identical sync-conflict copy of doc-100 (backlog/docs/stories/doc-100 … 2.md) that the build commit picked up; removing it needs a backlog/ file delete, which this session is not permitted to do. Code itself: all SPEC items pass (reviewer round-tripped 3,540 hands).
 <!-- SECTION:NOTES:END -->

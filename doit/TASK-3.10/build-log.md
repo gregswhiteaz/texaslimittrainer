@@ -11,3 +11,8 @@
 - Every-push e2e time added: e2e/session-records.spec.ts = 1 test × 2 browsers: 0.9 s Chromium, 1.1 s WebKit (about 2 s summed, well under the ~10 s/browser estimate); full suite 36.0 s vs 35.7 s at TASK-3.9 → about +0.3 s wall.
 - Opt-in kill tests: TLH_SLOW_TESTS=1 npx playwright test e2e/session-kill.spec.ts e2e/hand-records-kill.spec.ts --project chromium → 2 passed (1.6 s and 1.8 s). No browser or server processes left running.
 - Gate: doit.py gate TASK-3.10 → build #2 PASS (1654 lines, 20 files).
+
+## FIX (judge J-1-01)
+
+- J-1-01: fixed. Added "a record whose seat kinds differ from the config's is rejected (REQ-025)" to `tests/table/session-restore.acceptance.test.ts`: swaps kind, botId and style between the user seat and a bot seat (each seat stays self-consistent, config unchanged) and expects parseSessionRecord and restoreSession to throw RangeError 'Invalid session record: seats[<i>].kind'. Swapping kind alone would still be caught by the botId check, so the whole identity is swapped. Mutation check: deleting the record-vs-config kind line in src/table/session-record.ts made this test fail (1 failed / 6 passed); source restored, no diff.
+- npm run format → clean. Gate: doit.py gate TASK-3.10 → fix #4 PASS (1677 lines, 20 files).

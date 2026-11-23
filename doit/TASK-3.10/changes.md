@@ -12,7 +12,7 @@
 - `e2e/support/records-harness.tsx` — wrapper store forwards the session to add and adds putSession / getSession.
 - `package.json` — `e2e/session-kill.spec.ts` appended to `e2e:slow` (A-7).
 - `tests/storage/session-records.acceptance.test.ts` — new acceptance: SPEC-01 (plus a sit-and-go round trip), SPEC-04, SPEC-05, SPEC-06.
-- `tests/table/session-restore.acceptance.test.ts` — new acceptance: SPEC-07 to SPEC-12.
+- `tests/table/session-restore.acceptance.test.ts` — new acceptance: SPEC-07 to SPEC-12; FIX J-1-01: a record with user and bot seat identities swapped (config unchanged) is rejected with RangeError (REQ-025).
 - `tests/table/hand-record-validation.acceptance.test.ts` — new acceptance: SPEC-13.
 - `tests/storage/hand-store.test.ts` — DB_VERSION 2 / SESSIONS_STORE tuple, VersionError probe at version 3 (also getSession/putSession), new v1→v2 upgrade test with session round-trip and validated getSession (SPEC-14), putSession strict-durability assertion.
 - `tests/table/hand-record.test.ts` — unit re-pin: the corrupt-value helper opens the test database at version 2 instead of 1 (opening at 1 after the store upgraded to 2 is a VersionError, so the test hung); no assertion changed.

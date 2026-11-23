@@ -4,20 +4,38 @@
   "branch": "doit/TASK-3.10",
   "base_commit": "b76a06aa93617f9ca0eb87e09b29ee1e1cd2639d",
   "started": "2026-11-23T05:40:48",
-  "review_round": 0,
-  "judge_round": 0,
+  "review_round": 1,
+  "judge_round": 1,
   "sendbacks": 0,
-  "gate_runs": 3,
+  "gate_runs": 5,
   "questions": 3,
   "assumptions": 8,
   "escalations": 0,
-  "item_failures": {},
+  "item_failures": {
+    "SPEC-01": 0,
+    "SPEC-02": 0,
+    "SPEC-03": 0,
+    "SPEC-04": 0,
+    "SPEC-05": 0,
+    "SPEC-06": 0,
+    "SPEC-07": 0,
+    "SPEC-08": 0,
+    "SPEC-09": 0,
+    "SPEC-10": 0,
+    "SPEC-11": 0,
+    "SPEC-12": 0,
+    "SPEC-13": 0,
+    "SPEC-14": 0,
+    "SPEC-15": 0,
+    "SPEC-16": 0,
+    "SPEC-17": 0
+  },
   "locked_tests": {
     "e2e/session-kill.spec.ts": "e4c2865fdf46072ef389718935542536aca2b2931a98f1593b5e92e670a4438b",
     "e2e/session-records.spec.ts": "79dbc13e1a22edc94a6c5c680c60f132028b92eb340ef3efe22542310bb74204",
     "tests/storage/session-records.acceptance.test.ts": "cdda1c85f3cdaddac6c5422c3b3fda23d5e2d178d99aed28611fb07ce0899a54",
     "tests/table/hand-record-validation.acceptance.test.ts": "b0da0c5c8b28acf87d8d65f0bd3f001433474d9a9b2cb15b24d7ca13ffba5eb8",
-    "tests/table/session-restore.acceptance.test.ts": "93e5c397edde355ae48e360700c65115a6d1c3af50a4abf146b27204265a5972"
+    "tests/table/session-restore.acceptance.test.ts": "77b5f21d52971f41d870e594ddc49e9e8544bf5260ef2170b9f28c73f7320cb5"
   },
   "test_snapshot": {
     "e2e/session-kill.spec.ts": {
@@ -41,8 +59,8 @@
       "skips": 0
     },
     "tests/table/session-restore.acceptance.test.ts": {
-      "sha": "93e5c397edde355ae48e360700c65115a6d1c3af50a4abf146b27204265a5972",
-      "asserts": 31,
+      "sha": "77b5f21d52971f41d870e594ddc49e9e8544bf5260ef2170b9f28c73f7320cb5",
+      "asserts": 34,
       "skips": 0
     },
     "e2e/action-bar-limits.spec.ts": {
@@ -1311,7 +1329,21 @@
       "skips": 0
     }
   },
-  "history": [],
+  "history": [
+    {
+      "t": "2026-11-23T06:35:13",
+      "event": "unlock",
+      "file": "tests/table/session-restore.acceptance.test.ts",
+      "reason": "Judge J-1-01: add REQ-025 seat-kind swap case (strengthen only)"
+    }
+  ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-3.10",
-  "spec_sha256": "6f0ff57715e2b57aa3e7661947dc26554f8178f0a700acc955ee844a78bbec84"
+  "spec_sha256": "6f0ff57715e2b57aa3e7661947dc26554f8178f0a700acc955ee844a78bbec84",
+  "review_findings": {
+    "1": 1
+  },
+  "judge_results": {
+    "1": "PASS"
+  },
+  "relock_pending": []
 }

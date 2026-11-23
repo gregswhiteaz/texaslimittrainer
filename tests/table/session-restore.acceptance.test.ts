@@ -19,7 +19,12 @@ import {
   type SessionSeat,
   type Stake,
 } from '../../src/table/session';
-import { restoreSession, sessionRecord, type SessionRecord } from '../../src/table/session-record';
+import {
+  parseSessionRecord,
+  restoreSession,
+  sessionRecord,
+  type SessionRecord,
+} from '../../src/table/session-record';
 import { KINGS_SHOWDOWN, SCENARIO_CODE } from '../support/table-scenarios';
 
 const AT = new Date('2026-11-23T10:00:00Z');
@@ -251,6 +256,24 @@ describe('session restore acceptance', () => {
         },
       ),
     );
+  });
+
+  it("a record whose seat kinds differ from the config's is rejected (REQ-025)", () => {
+    const user = RECORD.seats.findIndex((s) => s.kind === 'user');
+    const bot = RECORD.seats.findIndex((s) => s.kind === 'bot');
+    // Swap the whole bot identity so each seat stays self-consistent; only the config check can catch it.
+    const swapped = structuredClone(RECORD) as unknown as { seats: Json[] };
+    const userSeat = swapped.seats[user] as Json;
+    const botSeat = swapped.seats[bot] as Json;
+    for (const key of ['kind', 'botId', 'style']) {
+      [userSeat[key], botSeat[key]] = [botSeat[key], userSeat[key]];
+    }
+    expect(userSeat.kind).toBe('bot');
+    expect(botSeat.kind).toBe('user');
+    const first = Math.min(user, bot);
+    for (const run of [() => parseSessionRecord(swapped), () => restoreSession(swapped)]) {
+      expect(rangeError(run).message).toBe(`Invalid session record: seats[${first}].kind`);
+    }
   });
 
   it('a stored in-progress hand or action list is rejected and restore applies no action', () => {
