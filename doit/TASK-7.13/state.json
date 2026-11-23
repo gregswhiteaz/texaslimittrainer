@@ -1,6 +1,6 @@
 {
   "task": "TASK-7.13",
-  "stage": "build",
+  "stage": "done",
   "branch": "doit/TASK-7.13",
   "base_commit": "f64f89cb9c393b65335a8f2e493c745fa210c537",
   "started": "2026-11-23T08:58:20",
@@ -1353,5 +1353,6 @@
   "judge_results": {
     "1": "FAIL",
     "2": "PASS"
-  }
+  },
+  "doc_id": "doc-104"
 }

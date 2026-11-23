@@ -1,11 +1,11 @@
 ---
 id: TASK-7.13
 title: Adjust opponent ranges to their observed play after 30 hands
-status: In Progress
+status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-23T19:20:00Z'
+updated_date: '2026-11-23T19:21:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -17,6 +17,7 @@ references:
 documentation:
   - doc-1
   - doc-2
+  - doc-104
 parent_task_id: TASK-7
 priority: high
 type: feature
@@ -89,4 +90,15 @@ Build: hand-order.json (169 classes by preflop equity vs random), observed-stat 
 doit: parked — autopilot stopped by user (GitHub Actions spending limit reached, jobs not starting). Build 71f284b pushed; review R1 FIX was interrupted mid-run (working tree may hold partial test edits; re-run /doit TASK-7.13 to resume FIX round 1).
 
 Judge round 2 PASS (round 1 failed only SPEC-14: CI could not start due to a GitHub billing hold; head 056065c pushed, CI run 45246047077 green).
+
+Follow-ups: TASK-7.30 created (exact zero width, one template filler); TASK-3.12 AC added (snapshot entry validation); TASK-7.29 already open (hand order / re-raise scaling).
 <!-- SECTION:NOTES:END -->
+
+## Final Summary
+
+<!-- SECTION:FINAL_SUMMARY:BEGIN -->
+Adds observed-play range scaling to the advice engine. From 30 hands of an opponent, the preflop range is rebuilt at width d+(o-d)*min(n,100)/100 over a new authored hand order (169 classes by equity vs a random hand, AA floor). Postflop recommendations return opponentBasis per opponent ('typical player' / 'based on N hands of this opponent'), and the explanation gains an opponent-type lead clause. Bots never receive the snapshot, and the playtest SHA is unchanged. Nothing supplies a snapshot yet (TASK-8.1, TASK-9.3, TASK-3.12).
+Verification: npm test 970 passed, 0 failed; judge round 2 passed all 14 SPEC items. Round 1 failed only on a GitHub billing hold that stopped CI, and CI run 45246047077 on head 056065c is green. Holdout checks and mutation checks pass.
+Assumptions to review: A-1..A-8 in the story doc, especially the prefix rule for width, the check line left unscaled, and the explanation lead-clause copy. Three locked tests were re-pinned (postflop AC#1, value-bet AC#9, preflop AC#6) with counts kept.
+Risks and follow-ups: TASK-7.29 (hand order and re-raise scaling), snapshot-entry null check, zero-width float residue (3.55e-15), minor cleanup of basisText.
+<!-- SECTION:FINAL_SUMMARY:END -->
