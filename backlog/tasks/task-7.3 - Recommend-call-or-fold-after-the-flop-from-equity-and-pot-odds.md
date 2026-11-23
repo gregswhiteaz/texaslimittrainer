@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-23T03:44:00Z'
+updated_date: '2026-11-23T07:51:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-0
@@ -90,6 +90,8 @@ CI run 44376112966 (head b4840a5): success. Judge round 1: PASS 15/15; 160 real 
 Correction (from TASK-7.22, doc-54): A-4's example 0.1665 rounds the same without toPct's +1e-9 nudge; the inputs the nudge actually changes are 0.5005..0.5115 (now pinned by tests/advice/postflop-coverage.acceptance.test.ts).
 
 Locked test tests/advice/postflop.acceptance.test.ts re-pinned for TASK-7.8 Q-3 (auto-accepted; value betting).
+
+Locked test re-pinned by TASK-7.9 Q-3 (auto-accepted; assertion count kept).
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary

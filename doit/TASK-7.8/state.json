@@ -1219,7 +1219,14 @@
       "skips": 0
     }
   },
-  "history": [],
+  "history": [
+    {
+      "t": "2026-11-23T00:51:18",
+      "event": "unlock",
+      "file": "tests/advice/value-bet.acceptance.test.ts",
+      "reason": "TASK-7.9 Q-3 auto-accepted: AC#9 new keys + implied-odds branch (count kept)"
+    }
+  ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-7.8",
   "spec_sha256": "d6c982523c09da026329690603bd7cebe0ddb4c1de9a3b31586fad88f5f7a937",
   "review_findings": {
@@ -1228,5 +1235,8 @@
   "doc_id": "doc-93",
   "judge_results": {
     "1": "PASS"
-  }
+  },
+  "relock_pending": [
+    "tests/advice/value-bet.acceptance.test.ts"
+  ]
 }

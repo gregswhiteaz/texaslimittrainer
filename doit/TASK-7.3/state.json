@@ -319,6 +319,12 @@
       "event": "unlock",
       "file": "tests/advice/postflop.acceptance.test.ts",
       "reason": "TASK-7.8 Q-3 (auto-accepted): value betting changes advice/bot results \u2014 re-pin expected values, keep every assertion and time limit"
+    },
+    {
+      "t": "2026-11-23T00:51:18",
+      "event": "unlock",
+      "file": "tests/advice/postflop.acceptance.test.ts",
+      "reason": "TASK-7.9 Q-3 auto-accepted: new rec keys; AC#2 hero Ad5c (count kept)"
     }
   ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-7.3",
@@ -337,6 +343,7 @@
     "1": "PASS"
   },
   "relock_pending": [
+    "tests/advice/postflop.acceptance.test.ts",
     "tests/advice/postflop.acceptance.test.ts"
   ]
 }
