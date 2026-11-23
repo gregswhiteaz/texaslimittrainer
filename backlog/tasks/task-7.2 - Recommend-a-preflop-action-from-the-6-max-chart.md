@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-23T09:05:00Z'
+updated_date: '2026-11-23T16:14:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-0
@@ -96,6 +96,8 @@ Correction (TASK-7.19, 2026-11-19): the doc-14 review note that HJ always closes
 Locked test edited for TASK-7.6 Q-6 (user-approved): sandbox file list gains heads-up.json and full-ring.json.
 
 Locked test sandbox list extended by TASK-7.10 block 1 (auto-accepted; no assertion change).
+
+Locked test re-pinned by TASK-7.13 block 1 (auto-accepted; no assertion dropped).
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary

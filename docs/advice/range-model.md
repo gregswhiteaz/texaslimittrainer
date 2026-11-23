@@ -13,8 +13,8 @@ player's hole cards, a bot's style name or any of a bot's internal settings. The
 enforces this: passing a bot's style or options object into the advice functions is a compile
 error, and the advice code imports nothing from the bots, the table or the user interface.
 
-Every opponent is treated as a typical player. Adjusting a range to an opponent's observed habits,
-once 30 or more of their hands have been seen, is later work (TASK-7.13).
+Every opponent starts as a typical player. Once 30 or more of an opponent's hands have been seen,
+their preflop range is rebuilt from their observed habits (see "Adjusting to observed play" below).
 
 ## Starting range
 
@@ -87,6 +87,56 @@ chart. The data file holds the justification for each range.
 A class is turned into its two-card combinations, and every combination that uses one of the
 hero's cards or a board card is dropped. Cards shown at earlier showdowns are not dropped, because
 every hand is dealt from a fresh deck.
+
+## Adjusting to observed play
+
+The caller may pass a snapshot of each opponent's session stats with every decision: hands seen,
+VPIP % (how often they put chips in voluntarily before the flop) and PFR % (how often they raised
+before the flop). The advice reads it as part of its input, so the same decision with the same
+snapshot always gets the same advice. Only the player's hints and review can pass it; the bots
+never do, so their play does not change. Nothing passes a snapshot yet: the hint (TASK-8.1), the
+review (TASK-9.3) and the decision record (TASK-3.12) add it and show the basis on screen.
+
+**Threshold.** An opponent with fewer than 30 observed hands, or with no entry, keeps the default
+range. Entries for the hero, folded seats or seats not in the hand are ignored. Hands seen must be
+a whole number of at least 0, and VPIP and PFR must be between 0 and 100; anything else, or a seat
+listed twice, is an error.
+
+**Width.** From 30 hands on, the range width in percent of all 1,326 starting combinations is
+
+`width = d + (o − d) × min(n, 100) ÷ 100`
+
+where `d` is the width of the default range (its combinations before dead cards are removed, as a
+percent of 1,326), `o` is the observed stat and `n` is the hands seen. The observed habit counts
+for more as hands build up and fully from 100 hands. With `d` = 20 and 30 hands, an `o` of 0, 20 or
+100 gives 14.0, 20.0 or 44.0; with 100 hands and `o` = 60 the width is 60.0.
+
+| Preflop line                           | Observed stat `o` |
+| -------------------------------------- | ----------------- |
+| `open-raise`, `three-bet`, `four-bet`  | PFR %             |
+| `limp`, `call-raise`, `call-three-bet` | VPIP %            |
+| `check` (big blind, nobody raised)     | not scaled        |
+
+The `check` line is not a voluntary range, so it keeps its default. Tables that are not six-handed
+have no default range to scale yet, and the simpler "every unseen hand" mode ignores the snapshot.
+
+**Hand order.** The rebuilt range is the strongest `width` % of starting hands in the hand order
+stored in `src/advice/ranges/hand-order.json`: the shortest run of classes from the top of the
+order whose combinations reach `width ÷ 100 × 1,326`. It never holds fewer than AA, so a width of
+0 leaves the 6 combinations of a pair of aces, and a width of 100 or more holds every class. The
+order ranks all 169 classes by their all-in equity before the flop against one random hand,
+computed with the project's own calculator (the class's lowest-numbered combination against every
+unseen combination, 30,000 sampled deals seeded from the input) and rounded to one decimal place.
+Equal numbers keep the starting-hand grid order. AA (85.5%) is first and 32o (32.1%) is last. The
+file is checked when the app loads: it needs its format and version, a justification of at least
+50 words, all 169 classes once each, falling equities and AA first.
+
+Dead cards, narrowing after the flop and the safety rules then apply as for a default range.
+
+**Basis.** Each estimate and each postflop recommendation states, per live opponent, which range
+was used: `typical player`, or `based on N hands of this opponent` when the range was rebuilt. When
+any opponent's range was rebuilt, the explanation starts by naming the opponent type (see
+[explanations.md](explanations.md)).
 
 ## Narrowing after the flop
 

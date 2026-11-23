@@ -135,6 +135,11 @@ describe('postflop advice acceptance', () => {
       equityVsCallingRangePct: 16.7,
       impliedRequiredEquityPct: 8.3,
       outs: parseCards('2h 3h 4h 6h 7h 8h Th Jh Qh'),
+      opponentBasis: [1, 2, 6].map((seat) => ({
+        seat,
+        observedHands: null,
+        text: 'typical player',
+      })),
       explanation: expect.any(String),
     });
     // Whole-range run, then the calling-range run (TASK-7.8).

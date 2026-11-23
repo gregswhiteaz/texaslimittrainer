@@ -90,6 +90,13 @@ export const CONCEPTS: readonly Concept[] = [
   },
 ];
 
+/** Basis of an opponent's range: the default range, or one rebuilt from that opponent's observed stats. */
+export const TYPICAL_PLAYER_BASIS = 'typical player';
+export const OBSERVED_BASIS = 'based on {hands} hands of this opponent';
+/** Lead clause joined to the first sentence when any range rests on observed stats (keeps REQ-037's 3 sentences). */
+export const OPPONENT_TYPE_LEAD =
+  'Ranges here follow the opponent type, {def:opponent-type}, of each player you have watched for {minHands} or more hands; ';
+
 export type PostflopTemplateKey = PostflopRuleId | 'pot-odds-fold-implied';
 
 export const POSTFLOP_TEMPLATES: Readonly<Record<PostflopTemplateKey, string>> = {

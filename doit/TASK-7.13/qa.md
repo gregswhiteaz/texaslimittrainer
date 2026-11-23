@@ -11,3 +11,9 @@
 
 ## Q-4 — Locked re-pin tests/advice/postflop.acceptance.test.ts AC#1: add opponentBasis (typical player for seats 1, 2, 6); count unchanged
 **Answer: auto-accepted (recommended)**
+
+## Block 1 — three locked tests outside D-4
+(a) value-bet.acceptance AC#9 (TASK-7.8) key list adds 'opponentBasis' — re-pinned by orchestrator, count kept.
+(b) preflop.acceptance AC#6 (TASK-7.2) sandbox list adds src/advice/ranges/hand-order.json — orchestrator, no assertion change.
+(c) range-model.acceptance AC#8: recorded spec amendment — estimateOpponentRanges ignores an `observed` argument that is not an array (no locked edit).
+**Answer: auto-accepted (recommended)**

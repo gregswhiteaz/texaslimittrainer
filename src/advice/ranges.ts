@@ -8,10 +8,12 @@ import {
 } from '../engine/hand-evaluator';
 import type { PlayerView } from '../engine/player-view';
 import type { HoleCards } from './equity';
-import { handClassOf, type HandClass } from './hand-class';
+import { basisText } from './explain';
+import { comboCount, HAND_CLASSES, handClassOf, type HandClass } from './hand-class';
 import { positionOf } from './preflop';
 import type { Position, ReferenceSize } from './preflop-chart';
-// The JSON import stays last, like the chart's.
+// The JSON imports stay last, like the chart's.
+import handOrder from './ranges/hand-order.json' with { type: 'json' };
 import sixMax from './ranges/six-max.json' with { type: 'json' };
 
 export type PreflopLine =
@@ -232,6 +234,112 @@ export function defaultRange(
   return range;
 }
 
+const HAND_ORDER_FORMAT = 'tlh-hand-order';
+
+/** Validates the authored hand order (strongest first). Throws RangeValidationError listing every problem. */
+export function parseHandOrder(raw: unknown): readonly HandClass[] {
+  if (!isRecord(raw) || raw.format !== HAND_ORDER_FORMAT || raw.version !== 1) {
+    throw new RangeValidationError([
+      `Hand order: expected format "${HAND_ORDER_FORMAT}" version 1`,
+    ]);
+  }
+  const problems: string[] = [];
+  if (wordCount(raw.justification) < FILE_WORDS) {
+    problems.push(`Hand order: missing plain-English justification (at least ${FILE_WORDS} words)`);
+  }
+  const order: HandClass[] = [];
+  let previous: { readonly hc: HandClass; readonly pct: number } | null = null;
+  for (const entry of Array.isArray(raw.hands) ? (raw.hands as unknown[]) : []) {
+    if (
+      !Array.isArray(entry) ||
+      entry.length !== 2 ||
+      typeof entry[0] !== 'string' ||
+      typeof entry[1] !== 'number' ||
+      !Number.isFinite(entry[1])
+    ) {
+      problems.push(`Hand order: entry ${order.length + 1} is not [class, equity]`);
+      continue;
+    }
+    const [hc, pct] = entry as [string, number];
+    if (!HAND_CLASSES.includes(hc)) {
+      problems.push(`Hand order: unknown class "${echo(hc)}"`);
+      continue;
+    }
+    if (order.includes(hc)) {
+      problems.push(`Hand order: duplicate class ${hc}`);
+      continue;
+    }
+    if (
+      previous !== null &&
+      (pct > previous.pct ||
+        (pct === previous.pct && HAND_CLASSES.indexOf(hc) < HAND_CLASSES.indexOf(previous.hc)))
+    ) {
+      problems.push(`Hand order: ${hc} is out of order after ${previous.hc}`);
+    }
+    order.push(hc);
+    previous = { hc, pct };
+  }
+  for (const hc of HAND_CLASSES) {
+    if (!order.includes(hc)) problems.push(`Hand order: missing class ${hc}`);
+  }
+  // Grid order starts with AA, the strongest class.
+  const aces = HAND_CLASSES[0] as HandClass;
+  if (order[0] !== aces) problems.push(`Hand order: the first class must be ${aces}`);
+  if (problems.length > 0) throw new RangeValidationError(problems);
+  return order;
+}
+
+/** The 169 classes strongest first, from ranges/hand-order.json, validated at import. */
+export const HAND_ORDER: readonly HandClass[] = parseHandOrder(handOrder);
+
+export const OBSERVED_MIN_HANDS = 30;
+export const OBSERVED_FULL_HANDS = 100;
+export const ALL_COMBOS = 1326;
+
+/** A per-decision snapshot of one seat's session stats (REQ-036: part of the advice input). */
+export interface ObservedOpponent {
+  readonly seat: SeatNumber;
+  /** Hands observed this session: integer ≥ 0. */
+  readonly hands: number;
+  /** Percent 0..100. */
+  readonly vpip: number;
+  /** Percent 0..100. */
+  readonly pfr: number;
+}
+
+export interface OpponentBasis {
+  readonly seat: SeatNumber;
+  /** null = typical player. */
+  readonly observedHands: number | null;
+  /** 'typical player' | 'based on N hands of this opponent'. */
+  readonly text: string;
+}
+
+/** Combos of `classes` as a percent of all 1326 starting combos. */
+export function rangeWidthPct(classes: ReadonlySet<HandClass>): number {
+  let combos = 0;
+  for (const hc of classes) combos += comboCount(hc);
+  return (combos / ALL_COMBOS) * 100;
+}
+
+/** d + (o − d) × min(n, 100) ÷ 100: the default width moved toward the observed one. */
+export function scaledWidthPct(d: number, o: number, n: number): number {
+  return d + ((o - d) * Math.min(n, OBSERVED_FULL_HANDS)) / OBSERVED_FULL_HANDS;
+}
+
+/** The shortest HAND_ORDER prefix whose combos reach `widthPct` % of 1326, at least AA (A-1). */
+export function strongestClasses(widthPct: number): ReadonlySet<HandClass> {
+  const target = (widthPct / 100) * ALL_COMBOS - 1e-9;
+  const classes = new Set<HandClass>();
+  let combos = 0;
+  for (const hc of HAND_ORDER) {
+    if (classes.size > 0 && combos >= target) break;
+    classes.add(hc);
+    combos += comboCount(hc);
+  }
+  return classes;
+}
+
 const LINE_BY_ACTION: Readonly<Record<'call' | 'raise', readonly PreflopLine[]>> = {
   call: ['limp', 'call-raise', 'call-three-bet'],
   raise: ['open-raise', 'three-bet', 'four-bet'],
@@ -432,6 +540,10 @@ export interface OpponentRange {
   readonly start: readonly HoleCards[];
   /** After postflop narrowing. */
   readonly combos: readonly HoleCards[];
+  /** Whether the start range rests on this opponent's observed stats. */
+  readonly basis: OpponentBasis;
+  /** Width % of the classes `start` was built from; null without a default range. */
+  readonly widthPct: number | null;
 }
 
 const AGGRESSION: readonly NarrowingAction[] = ['raise', 'bet', 'call', 'check'];
@@ -441,11 +553,46 @@ const STREET_BOARDS = [
   ['river', 5],
 ] as const;
 
-/** One entry per live opponent (not folded, not the viewer), ascending seat. Reads only `view`. */
-export function estimateOpponentRanges(view: PlayerView): readonly OpponentRange[] {
+const OBSERVED_LINE_STAT: Readonly<Record<PreflopLine, 'vpip' | 'pfr' | null>> = {
+  check: null,
+  limp: 'vpip',
+  'open-raise': 'pfr',
+  'call-raise': 'vpip',
+  'three-bet': 'pfr',
+  'call-three-bet': 'vpip',
+  'four-bet': 'pfr',
+};
+
+const inPercent = (value: number) => Number.isFinite(value) && value >= 0 && value <= 100;
+
+/** The snapshot keyed by seat. Throws RangeError on invalid numbers or a repeated seat. */
+function observedBySeat(observed: readonly ObservedOpponent[]): Map<SeatNumber, ObservedOpponent> {
+  const bySeat = new Map<SeatNumber, ObservedOpponent>();
+  for (const entry of observed) {
+    const { seat, hands, vpip, pfr } = entry;
+    if (!Number.isInteger(hands) || hands < 0 || !inPercent(vpip) || !inPercent(pfr)) {
+      throw new RangeError(`Invalid observed stats for seat ${seat}`);
+    }
+    if (bySeat.has(seat)) throw new RangeError(`Observed stats list seat ${seat} twice`);
+    bySeat.set(seat, entry);
+  }
+  return bySeat;
+}
+
+/**
+ * One entry per live opponent (not folded, not the viewer), ascending seat. Reads only `view` and `observed`.
+ * From OBSERVED_MIN_HANDS observed hands, a six-max raising or calling range is rebuilt at the scaled width.
+ * A non-array `observed` is ignored; array entries are validated (RangeError).
+ */
+export function estimateOpponentRanges(
+  view: PlayerView,
+  observed: readonly ObservedOpponent[] = [],
+): readonly OpponentRange[] {
   if (view.board.length < 3 || view.board.length > 5) {
     throw new RangeError(`Range estimation needs a flop, turn or river view, got ${view.street}`);
   }
+  // A non-array snapshot (an untyped caller) is ignored: every opponent gets the default range.
+  const bySeat = observedBySeat(Array.isArray(observed) ? observed : []);
   const dead = [...view.holeCards, ...view.board];
   const sixMax = view.players.length === 6;
   return view.players
@@ -454,10 +601,21 @@ export function estimateOpponentRanges(view: PlayerView): readonly OpponentRange
       let position: Position | null = null;
       let line: PreflopLine | null = null;
       let start: HoleCards[] = [];
+      let widthPct: number | null = null;
+      let basis: OpponentBasis = { seat, observedHands: null, text: basisText(null) };
       if (sixMax) {
         position = positionOf({ ...view, seat });
         line = preflopLineOf(view, seat);
-        start = expandRange(defaultRange(SIX_MAX_RANGES, position, line).classes, dead);
+        let classes = defaultRange(SIX_MAX_RANGES, position, line).classes;
+        widthPct = rangeWidthPct(classes);
+        const obs = bySeat.get(seat);
+        const stat = OBSERVED_LINE_STAT[line];
+        if (obs !== undefined && stat !== null && obs.hands >= OBSERVED_MIN_HANDS) {
+          widthPct = scaledWidthPct(widthPct, obs[stat], obs.hands);
+          classes = strongestClasses(widthPct);
+          basis = { seat, observedHands: obs.hands, text: basisText(obs.hands) };
+        }
+        start = expandRange(classes, dead);
       }
       if (start.length === 0) start = unseenCombos(dead);
       let combos = start;
@@ -471,6 +629,6 @@ export function estimateOpponentRanges(view: PlayerView): readonly OpponentRange
         const narrowed = narrowRange(combos, view.board.slice(0, size), action);
         if (narrowed.length > 0) combos = narrowed;
       }
-      return { seat, position, line, start, combos };
+      return { seat, position, line, start, combos, basis, widthPct };
     });
 }

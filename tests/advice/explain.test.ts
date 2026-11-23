@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
+  basisText,
   explainPostflop,
   explainPreflop,
   fillTemplate,
@@ -47,6 +48,7 @@ const postflop = (fields: Partial<PostflopInput>): PostflopInput => ({
   equityVsCallingRangePct: 30,
   impliedRequiredEquityPct: null,
   outs: [],
+  opponentBasis: [],
   ...fields,
 });
 
@@ -98,6 +100,30 @@ describe('explanation helpers', () => {
     expect(() => fillTemplate('{toString}', {})).toThrow(
       new Error('Unknown template placeholder {toString}'),
     );
+  });
+});
+
+describe('opponent basis and the opponent-type lead', () => {
+  const OPPONENT_TYPE = 'the playing style an opponent has shown';
+  const observed = { seat: 4, observedHands: 40, text: 'based on 40 hands of this opponent' };
+  const typical = { seat: 5, observedHands: null, text: 'typical player' };
+
+  it('words the basis', () => {
+    expect(basisText(null)).toBe('typical player');
+    expect(basisText(40)).toBe('based on 40 hands of this opponent');
+  });
+
+  it('adds the lead clause when any range rests on observed stats', () => {
+    const plain = explainPostflop(postflop({ opponentBasis: [typical] }), 50);
+    expect(explainPostflop(postflop({}), 50)).toBe(plain);
+    expect(plain).not.toMatch(/opponent type/);
+    const led = explainPostflop(postflop({ opponentBasis: [observed, typical] }), 50);
+    expect(led).toBe(
+      `Ranges here follow the opponent type, ${OPPONENT_TYPE}, of each player you have watched for 30 or more hands; ` +
+        plain.charAt(0).toLowerCase() +
+        plain.slice(1),
+    );
+    expect(sentencesOf(led)).toHaveLength(sentencesOf(plain).length);
   });
 });
 
