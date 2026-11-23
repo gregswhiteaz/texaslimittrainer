@@ -148,7 +148,7 @@ describe('Rock decision', () => {
     () => {
       const rockSeats: readonly SeatNumber[] = [2, 4];
       const preflop: Action['type'][] = [];
-      const summary = runPlaytest({ hands: 1000, seed: 42, size: 6 }, undefined, {
+      const summary = runPlaytest({ hands: 300, seed: 42, size: 6 }, undefined, {
         makePolicy: (code, seat) => {
           if (!rockSeats.includes(seat)) return seededTagPolicy(code);
           return (view) => {

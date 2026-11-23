@@ -17,3 +17,4 @@
 - SPEC-09 `npm run playtest -- --hands 10000 --lineup mixed --size 6 --seed 42` → Hands played 10000, Invariant violations 0, exit 0.
 - `npm run format`; `npm run lint` (incl. prettier check) OK; `npm run typecheck` OK; `npm test`: 200 files passed / 3 skipped,
   734 tests passed / 30 skipped. Coverage 97.34% statements overall; bots 99.69% (rock.ts 100%, style.ts 100% lines).
+- FIX r1 (orchestrator): review MAJOR — tests/bots/rock.test.ts seated-Rocks playtest 1,000 → 300 hands (all expects kept; ~0.3 s), per TASK-1.52 unit-time rule.

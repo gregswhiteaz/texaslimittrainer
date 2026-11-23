@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-17T23:03:00Z'
-updated_date: '2026-11-23T05:25:00Z'
+updated_date: '2026-11-23T05:48:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -82,4 +82,6 @@ AC added from TASK-7.2 follow-up (doc-14).
 AC added from TASK-7.19 follow-up (doc-28).
 
 Dependency on TASK-7.8 added from TASK-6.3: postflop advice never bets/raises until value betting (REQ-033.2) lands, so postflop aggression (REQ-027.6) is 0% for every bot until then.
+
+Build: Rock postflopValue threshold 75 (style.ts reader, rock.ts rule, rock.json); slow 3×100k bands: TAG 22.2/16.2/63.0–63.3, Rock 9.9–10.1/8.4–8.8/46.9–47.2; SHA unchanged; gate PASS.
 <!-- SECTION:NOTES:END -->

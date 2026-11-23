@@ -7,7 +7,7 @@
 - `src/bots/styles/rock.json` — new `postflopValue` block (`thresholdPct: 75` + justification) and the A-2 description clause.
 - `tests/bots/rock-postflop.acceptance.test.ts` — new every-push acceptance tests for SPEC-04, SPEC-05, SPEC-06.
 - `tests/bots/style-bands.acceptance.test.ts` — new opt-in slow (TLH_SLOW_TESTS=1) 100,000-hand band test, seeds 42, 7, 1234 (SPEC-01, SPEC-02).
-- `tests/bots/rock.test.ts` — unit assertions for postflop views follow the new 75% bar (SPEC-07), via a `rockMove` helper.
+- `tests/bots/rock.test.ts` — unit assertions for postflop views follow the new 75% bar (SPEC-07), via a `rockMove` helper.  FIX r1: seated-Rocks run cut to 300 hands (review MAJOR, CI time).
 - `package.json` — `tests/bots/style-bands.acceptance.test.ts` appended to `test:slow`.
 
 No new dependencies.
