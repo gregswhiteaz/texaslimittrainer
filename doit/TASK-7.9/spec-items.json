@@ -3,72 +3,72 @@
     "id": "SPEC-01",
     "verifies": "AC#1",
     "verification": "acceptance `tests/advice/implied-odds.acceptance.test.ts::AC#1 Ah5h on Kh 8h 7c 2d calls on implied odds with 9 heart outs`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-02",
     "verifies": "AC#2",
     "verification": "acceptance `tests/advice/implied-odds.acceptance.test.ts::AC#2 equity equal to the implied price calls and 0.1 below folds`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-03",
     "verifies": "AC#3",
     "verification": "acceptance `tests/advice/implied-odds.acceptance.test.ts::AC#3 a 12 dollar pot folds the draw and lists its 9 outs`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-04",
     "verifies": "AC#4",
     "verification": "acceptance `tests/advice/implied-odds.acceptance.test.ts::AC#4 two opponents add two big bets to the implied price`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-05",
     "verifies": "AC#5",
     "verification": "acceptance `tests/advice/implied-odds.acceptance.test.ts::AC#5 a missed draw on the river gets no implied odds and no outs`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-06",
     "verifies": "AC#6",
     "verification": "acceptance `tests/advice/implied-odds.acceptance.test.ts::AC#6 implied-odds advice returns equity, required equity, rule id and outs`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-07",
     "verifies": "DoD#1, DoD#2",
     "verification": "unit `tests/advice/postflop.test.ts::rule implied-odds-call`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-08",
     "verifies": "DoD#2, DoD#10",
     "verification": "unit `tests/advice/ranges.test.ts::drawOuts`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-09",
     "verifies": "DoD#1, DoD#10, DoD#12",
     "verification": "acceptance `tests/advice/postflop.acceptance.test.ts::AC#5 every documented rule has a unit test and every engine rule is documented`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-10",
     "verifies": "DoD#7",
     "verification": "command `bash -c 'npm run -s playtest -- --hands 10000 --seed 42 | tee /dev/stderr | shasum -a 256'`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-11",
     "verifies": "DoD#3, DoD#5, DoD#6, DoD#9",
     "verification": "command `npm run lint && npm run typecheck && npm test`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-12",
     "verifies": "DoD#4, DoD#8, DoD#11, DoD#13",
     "verification": "manual `gh run list --branch doit/TASK-7.9 --limit 1` shows success",
-    "status": "pending"
+    "status": "pass"
   }
 ]
