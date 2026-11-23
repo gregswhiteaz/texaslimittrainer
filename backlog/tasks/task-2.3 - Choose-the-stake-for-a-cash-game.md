@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-23T00:03:00Z'
+updated_date: '2026-11-23T01:53:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -92,6 +92,10 @@ Judge R1 PASS 14/14 (real app driven in Chromium+WebKit at 5 stakes).
 Locked test(s) edited for TASK-2.2 Q-5 (user-approved): dropdown counts after adding the players select.
 
 Locked test edited for TASK-2.5 Q-4 (routine: counts/selectors for the new Line-up control).
+
+Locked test tests/ui/game-config-stake.acceptance.test.tsx edited for TASK-2.8 Q-2 (auto-accepted; row parsing/counts only).
+
+Locked test e2e/stake-choice.spec.ts edited for TASK-2.8 Q-2 (auto-accepted; row parsing/counts only).
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary

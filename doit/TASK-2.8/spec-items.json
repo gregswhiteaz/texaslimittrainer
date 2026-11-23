@@ -1,0 +1,86 @@
+[
+  {
+    "id": "SPEC-01",
+    "verifies": "AC#1, DoD#1",
+    "verification": "acceptance `tests/ui/game-config-seat-style.acceptance.test.tsx::every bot row offers exactly TAG, Calling station, Maniac and Rock with its own style selected`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-02",
+    "verifies": "AC#2, DoD#1",
+    "verification": "acceptance `tests/table/seat-style.acceptance.test.ts::changing the third bot row from Maniac to Rock keeps TAG, Calling station, Rock and TAG on the other rows`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-03",
+    "verifies": "AC#2, AC#5, DoD#1",
+    "verification": "acceptance `e2e/seat-style.spec.ts::changing one row's style changes only that row`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-04",
+    "verifies": "AC#3, DoD#1",
+    "verification": "acceptance `tests/table/seat-style.acceptance.test.ts::start game with seat 2 changed to Rock seats a Rock that plays the Rock policy and records the line-up Custom`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-05",
+    "verifies": "AC#4, DoD#1",
+    "verification": "acceptance `tests/table/seat-style.acceptance.test.ts::a seat changed to Rock and back to its tough style keeps the line-up name Tough`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-06",
+    "verifies": "AC#5, DoD#1",
+    "verification": "acceptance `tests/table/seat-style.acceptance.test.ts::seats changed to calling station, maniac or rock play their own policy rather than TAG`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-07",
+    "verifies": "AC#5, AC#1, DoD#1",
+    "verification": "acceptance `tests/ui/game-config-seat-style.acceptance.test.tsx::bot rows show the calling station, maniac and rock labels as the selected option`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-08",
+    "verifies": "AC#2, DoD#1",
+    "verification": "unit `tests/table/seat-style.test.ts::configWithSeatStyle changes one seat only and rejects user seats, missing seats and unknown styles`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-09",
+    "verifies": "AC#1, AC#2, AC#3, DoD#1, DoD#7, DoD#8",
+    "verification": "acceptance `e2e/seat-style.spec.ts::every row offers four styles and start game seats the edited bot as a Rock`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-10",
+    "verifies": "AC#4, DoD#1, DoD#7",
+    "verification": "acceptance `e2e/seat-style.spec.ts::changing a tough seat to rock and back starts the tough table`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-11",
+    "verifies": "DoD#1, DoD#7",
+    "verification": "integration `npm test && npm run e2e`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-12",
+    "verifies": "DoD#2, DoD#4, DoD#5",
+    "verification": "command `npm run lint && npm run typecheck && npm test`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-13",
+    "verifies": "DoD#10, DoD#11",
+    "verification": "manual CI run on branch `doit/TASK-2.8` and `backlog doc list --plain`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-14",
+    "verifies": "DoD#3, DoD#6, DoD#9, DoD#12",
+    "verification": "manual Judge confirms no `tests/advice/*golden*` suite, no service worker, no strategy content, and `git diff --stat main -- src/engine src/bots src/advice` is empty",
+    "status": "pending"
+  }
+]

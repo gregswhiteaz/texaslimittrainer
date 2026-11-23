@@ -1160,6 +1160,12 @@
       "event": "unlock",
       "file": "e2e/players-choice.spec.ts",
       "reason": "TASK-2.5 Q-2 routine: Mixed default line-up on Game Config; keep every assertion"
+    },
+    {
+      "t": "2026-11-22T18:53:07",
+      "event": "unlock",
+      "file": "tests/ui/game-config-players.acceptance.test.tsx",
+      "reason": "TASK-2.8 Q-2 (auto-accepted): per-row style select \u2014 read style from the selected option / scope control counts; no expected result changes"
     }
   ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-2.2",
@@ -1173,6 +1179,7 @@
   },
   "relock_pending": [
     "tests/ui/game-config-players.acceptance.test.tsx",
-    "e2e/players-choice.spec.ts"
+    "e2e/players-choice.spec.ts",
+    "tests/ui/game-config-players.acceptance.test.tsx"
   ]
 }

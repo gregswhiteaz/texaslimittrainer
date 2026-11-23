@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-23T00:00:00Z'
+updated_date: '2026-11-23T01:53:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -106,6 +106,8 @@ Judge R1 PASS 17/17 (242 browser checks on a production build, 0 failures; 18/19
 Locked test tests/ui/game-config-players.acceptance.test.tsx edited for TASK-2.5 (Q-2 routine).
 
 Locked test e2e/players-choice.spec.ts edited for TASK-2.5 (Q-2 routine).
+
+Locked test tests/ui/game-config-players.acceptance.test.tsx edited for TASK-2.8 Q-2 (auto-accepted; row parsing/counts only).
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary

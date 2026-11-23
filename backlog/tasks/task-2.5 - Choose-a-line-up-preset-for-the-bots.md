@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-23T01:42:00Z'
+updated_date: '2026-11-23T01:53:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -89,6 +89,10 @@ Build: Line-up radio group (Mixed/Tough/Soft), configForLineUp clockwise seating
 Review R1: 0 blocking; all 11 locked edits keep their expect counts; MINOR copied axe helper (6th copy) not tracked (test-harness, no failure path); NIT isPreset.
 
 Judge R1 PASS 15/15, no findings (all 27 preset×size rows in Chromium/WebKit; 7,322 model checks; 4/4 mutants). Pre-existing integrity ERRORs on TASK-2.1/3.1/3.2 owners exist at base too (from earlier approved unlocks), not this task.
+
+Locked test tests/ui/game-config-lineup.acceptance.test.tsx edited for TASK-2.8 Q-2 (auto-accepted; row parsing/counts only).
+
+Locked test e2e/lineup-choice.spec.ts edited for TASK-2.8 Q-2 (auto-accepted; row parsing/counts only).
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary

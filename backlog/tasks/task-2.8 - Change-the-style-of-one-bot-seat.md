@@ -1,10 +1,11 @@
 ---
 id: TASK-2.8
 title: Change the style of one bot seat
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-19T00:21:00Z'
+updated_date: '2026-11-23T01:53:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -60,6 +61,17 @@ Plan key: E02-S06 · Dream: limit-holdem-trainer
 - [ ] #11 Story documentation is written and published to Backlog.md
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. BOT_STYLES + configWithSeatStyle(config, preset, seat, style) in session.ts (resolves Custom/preset name via lineUpSessionConfig).
+2. Game Config: per-row 'Style' select (Tight-aggressive/Calling station/Maniac/Rock), edits kept in state, cleared on preset/size change; Start game uses the edited config.
+3. Proof bots play their own style policy at the table (model level).
+4. Q-2 locked-test edits (row parsing/counts); e2e seat-style spec with axe.
+
+Full spec: doit/TASK-2.8/spec.md
+<!-- SECTION:PLAN:END -->
 
 ## Implementation Notes
 
