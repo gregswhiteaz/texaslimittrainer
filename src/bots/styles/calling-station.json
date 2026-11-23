@@ -26,5 +26,9 @@
       "probability": 0.5,
       "justification": "Calling half the time when the pot odds say fold is the station's defining leak: it pays off value bets with weak pairs and missed draws, which the learner should exploit."
     }
-  ]
+  ],
+  "postflopValue": {
+    "thresholdPct": 88,
+    "justification": "After the flop the station bets or raises only when it expects to win nearly nine times in ten against the hands that would call, so it checks or calls with everything else and its postflop aggression stays inside its 10 to 25 percent band."
+  }
 }

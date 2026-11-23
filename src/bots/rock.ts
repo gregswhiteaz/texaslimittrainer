@@ -3,7 +3,7 @@ import type { PlayerView } from '../engine/player-view';
 import { handClassOf } from '../advice/hand-class';
 import { chartSpotOf } from '../advice/preflop';
 import { adviceOptions, recommend, type RecommendOptions } from '../advice/recommend';
-import { parseStyle, startingRangeFor, type BotStyleData } from './style';
+import { parseStyle, postflopValueMove, startingRangeFor, type BotStyleData } from './style';
 import { BOT_EQUITY } from './tag';
 // The JSON import stays last: the bots import-boundary test's regex can't read past its `with` clause.
 import rock from './styles/rock.json' with { type: 'json' };
@@ -28,20 +28,7 @@ export function decideRock(view: PlayerView, options: RockOptions = {}): Action 
   const style = options.style ?? ROCK_STYLE;
   if (view.street !== 'preflop') {
     const rec = recommend(view, advice);
-    const value = style.postflopValue;
-    if (
-      value === null ||
-      rec.basis !== 'equity' ||
-      (rec.action !== 'bet' && rec.action !== 'raise')
-    ) {
-      return rec.move;
-    }
-    if (Math.round(rec.equityVsCallingRangePct * 10) > Math.round(value.thresholdPct * 10)) {
-      return rec.move;
-    }
-    // The advice bets only when nothing is owed and raises only when a bet is, so check or call is legal.
-    const passive = owed > 0 ? 'call' : 'check';
-    return view.legalActions.find((a) => a.type === passive) as Action;
+    return postflopValueMove(style, view, rec) ?? rec.move;
   }
   // The style's range is written for 6-max; other sizes map onto its positions (TASK-7.6 A-4).
   const { position, situation } = chartSpotOf(view, '6-max');

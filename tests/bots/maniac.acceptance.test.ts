@@ -157,8 +157,8 @@ describe('Maniac from its style file', () => {
       { street: 'preflop', advice: 'fold', instead: 'raise', probability: 0.45 },
       { street: 'preflop', advice: 'call', instead: 'raise', probability: 0.6 },
       { street: 'preflop', advice: 'check', instead: 'raise', probability: 0.6 },
-      { street: 'postflop', advice: 'check', instead: 'bet', probability: 0.85 },
-      { street: 'postflop', advice: 'call', instead: 'raise', probability: 0.85 },
+      { street: 'postflop', advice: 'check', instead: 'bet', probability: 0.6 },
+      { street: 'postflop', advice: 'call', instead: 'raise', probability: 0.6 },
     ]);
     for (const deviation of MANIAC_STYLE.deviations) {
       expect(words(deviation.justification)).toBeGreaterThanOrEqual(10);
@@ -280,7 +280,7 @@ describe('Maniac from its style file', () => {
       expect(maniacAt(b)).toEqual({ seat: 1, type: 'raise', amount: 12 });
       expect(tagAt(b)).toEqual({ seat: 1, type: 'call', amount: 4 });
 
-      // Example C: call[1], turn with 7h Qh facing a bet of 8; u < 0.85 threshold, the Maniac raises to 16.
+      // Example C: call[1], turn with 7h Qh facing a bet of 8; u ≥ 0.6 threshold, the Maniac calls like TAG.
       const c = at(call, 6402, 1);
       expect(c.code).toBe('00000000000019020000000000000002');
       expect(c.view.street).toBe('turn');
@@ -291,7 +291,7 @@ describe('Maniac from its style file', () => {
       expect(botDecisionIndex(c.view)).toBe(2);
       expect(c.seed).toBe(3418715972);
       expect(botRandom(c.seed).nextUint32()).toBe(3612399516);
-      expect(maniacAt(c)).toEqual({ seat: 1, type: 'raise', amount: 16 });
+      expect(maniacAt(c)).toEqual({ seat: 1, type: 'call', amount: 8 });
       expect(tagAt(c)).toEqual({ seat: 1, type: 'call', amount: 8 });
     },
     TEST_TIMEOUT_MS,

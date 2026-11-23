@@ -151,8 +151,13 @@ describe('Rock postflop value bar (TASK-6.16)', () => {
     expect(ROCK_STYLE.description).toContain(
       'after the flop it bets or raises only with very strong hands',
     );
-    for (const style of [TAG_STYLE, MANIAC_STYLE, CALLING_STATION_STYLE]) {
-      expect(style.postflopValue).toBeNull();
+    // Since TASK-6.17 the Calling station has its own bar (88); TAG and the Maniac have none.
+    for (const [style, threshold] of [
+      [TAG_STYLE, null],
+      [MANIAC_STYLE, null],
+      [CALLING_STATION_STYLE, 88],
+    ] as const) {
+      expect(style.postflopValue?.thresholdPct ?? null).toBe(threshold);
     }
   });
 

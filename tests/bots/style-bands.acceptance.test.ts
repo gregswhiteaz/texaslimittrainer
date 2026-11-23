@@ -12,10 +12,13 @@ interface Bands {
   readonly pfr: Band;
   readonly aggression: Band;
 }
-/** REQ-027.1 (TAG) and REQ-027.4 (Rock), percent, bounds inclusive. */
+/** REQ-027.1 (TAG), REQ-027.2 (Calling station), REQ-027.3 (Maniac) and REQ-027.4 (Rock), percent, bounds
+ *  inclusive. */
 const BANDS: Readonly<Partial<Record<StyleName, Bands>>> = {
   TAG: { vpip: [18, 26], pfr: [14, 22], aggression: [45, 65] },
   Rock: { vpip: [8, 15], pfr: [6, 12], aggression: [35, 55] },
+  'Calling station': { vpip: [45, 65], pfr: [3, 10], aggression: [10, 25] },
+  Maniac: { vpip: [50, 75], pfr: [35, 60], aggression: [65, 85] },
 };
 
 interface Counts {
@@ -95,12 +98,12 @@ function expectInBands(seed: number): void {
 
 // Opt-in slow (TLH_SLOW_TESTS=1): about 2-3 minutes per seed.
 it.runIf(SLOW)(
-  'TAG and Rock are inside their style bands over 100,000 Mixed 6-max hands (seed 42)',
+  'every bot style is inside its style band over 100,000 Mixed 6-max hands (seed 42)',
   () => expectInBands(42),
   TEST_TIMEOUT_MS,
 );
 
-describe('TAG and Rock are inside their style bands over 100,000 Mixed 6-max hands (seeds 7 and 1234)', () => {
+describe('every bot style is inside its style band over 100,000 Mixed 6-max hands (seeds 7 and 1234)', () => {
   for (const seed of [7, 1234]) {
     it.runIf(SLOW)(`seed ${seed}`, () => expectInBands(seed), TEST_TIMEOUT_MS);
   }

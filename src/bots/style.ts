@@ -1,3 +1,5 @@
+import type { Action } from '../engine/hand';
+import type { PlayerView } from '../engine/player-view';
 import { HAND_CLASSES, type HandClass } from '../advice/hand-class';
 import { SIX_MAX_CHART } from '../advice/preflop';
 import {
@@ -7,6 +9,7 @@ import {
   type PreflopChart,
   type Situation,
 } from '../advice/preflop-chart';
+import type { Recommendation } from '../advice/recommend';
 
 export type StyleName = 'TAG' | 'Calling station' | 'Maniac' | 'Rock';
 const STYLE_NAMES: readonly string[] = [
@@ -421,4 +424,32 @@ export function findDeviation(
 /** One nextUint32 draw u: true iff u < probability * 2**32. */
 export function drawDeviation(probability: number, random: { nextUint32(): number }): boolean {
   return random.nextUint32() < probability * 2 ** 32;
+}
+
+/**
+ * Under `style.postflopValue`, the passive move (check when nothing is owed, else call) that replaces an advised
+ * postflop bet or raise whose rounded equity against the calling range is at or below the threshold; undefined
+ * when the advice stands (no bar, preflop/chart advice, any other action, or equity above the threshold).
+ */
+export function postflopValueMove(
+  style: BotStyleData,
+  view: PlayerView,
+  rec: Recommendation,
+): Action | undefined {
+  const value = style.postflopValue;
+  if (
+    value === null ||
+    rec.basis !== 'equity' ||
+    (rec.action !== 'bet' && rec.action !== 'raise')
+  ) {
+    return undefined;
+  }
+  if (Math.round(rec.equityVsCallingRangePct * 10) > Math.round(value.thresholdPct * 10)) {
+    return undefined;
+  }
+  // The advice bets only when nothing is owed and raises only when a bet is, so check or call is legal.
+  const hero = view.players.find((p) => p.seat === view.seat);
+  const owed = hero === undefined ? 0 : view.currentBet - hero.streetContribution;
+  const passive = owed > 0 ? 'call' : 'check';
+  return view.legalActions.find((a) => a.type === passive) as Action;
 }

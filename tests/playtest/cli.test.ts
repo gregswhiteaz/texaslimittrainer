@@ -599,10 +599,10 @@ describe('playtest CLI', () => {
 
 describe('replacement bots in the CLI', () => {
   it('Bots replaced: is printed only for --lineup cash runs', () => {
-    // Seed 42's first replacement (Mixed, 6 seats) takes effect at hand 16.
+    // Seed 42's first replacement (Mixed, 6 seats) takes effect at hand 18.
     for (const [hands, count] of [
-      ['15', 0],
-      ['16', 1],
+      ['17', 0],
+      ['18', 1],
     ] as const) {
       const mixed = capture(['--hands', hands, '--seed', '42', '--lineup', 'mixed']);
       expect(mixed.code).toBe(0);

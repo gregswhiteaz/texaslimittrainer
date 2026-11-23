@@ -144,7 +144,11 @@ describe('replacement bots in the playtest', () => {
     'a violation after a replacement prints a Replay line that reproduces the hand',
     () => {
       const { hands } = run('Mixed');
-      const firstReplaced = hands.find((hand) => (hand.replaced ?? []).length > 0) as PlayedHand;
+      // Only a replacement that changed a seat's style prints `--styles` (seed 42's first one redraws the same style).
+      const startStyles = styleSlugs(hands[0] as PlayedHand);
+      const firstReplaced = hands.find(
+        (hand) => (hand.replaced ?? []).length > 0 && styleSlugs(hand) !== startStyles,
+      ) as PlayedHand;
       const k = firstReplaced.number;
       const slugs = styleSlugs(firstReplaced);
 

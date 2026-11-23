@@ -30,14 +30,14 @@
       "street": "postflop",
       "advice": "check",
       "instead": "bet",
-      "probability": 0.85,
-      "justification": "Betting almost every time it is checked to, whatever it holds, is the Maniac's defining leak: its bets show no strength, so the learner should call down lighter."
+      "probability": 0.6,
+      "justification": "Betting more often than not when it is checked to, whatever it holds, is the Maniac's defining leak: its bets show little strength, so the learner should call down lighter, and the checks it keeps hold its postflop aggression inside its 65 to 85 percent band."
     },
     {
       "street": "postflop",
       "advice": "call",
       "instead": "raise",
-      "probability": 0.85,
+      "probability": 0.6,
       "justification": "Raising most bets it would call keeps the pot growing with drawing and medium hands, so the learner gets value by letting the Maniac raise into strong hands."
     }
   ]

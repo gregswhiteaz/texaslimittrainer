@@ -1,7 +1,13 @@
 import type { Action } from '../engine/hand';
 import type { PlayerView } from '../engine/player-view';
 import { adviceOptions, recommend, type RecommendOptions } from '../advice/recommend';
-import { drawDeviation, findDeviation, parseStyle, type BotStyleData } from './style';
+import {
+  drawDeviation,
+  findDeviation,
+  parseStyle,
+  postflopValueMove,
+  type BotStyleData,
+} from './style';
 import { BOT_EQUITY, type BotRandom } from './tag';
 // The JSON import stays last: the bots import-boundary test's regex can't read past its `with` clause.
 import callingStation from './styles/calling-station.json' with { type: 'json' };
@@ -22,7 +28,8 @@ export type CallingStationOptions = RecommendOptions & {
 /**
  * The Calling station decision: the advice engine's recommended move for `view`, except where the style has a
  * deviation for the advised action, where one draw from `random` decides whether to play passively instead: call
- * when a bet is owed, else check. Errors from recommend propagate.
+ * when a bet is owed, else check. After the flop a style `postflopValue` bar first turns an advised bet or raise at
+ * or below its threshold into a check or call (no draw). Errors from recommend propagate.
  */
 export function decideCallingStation(
   view: PlayerView,
@@ -35,8 +42,11 @@ export function decideCallingStation(
     ...adviceOptions(options),
     equity: options.equity ?? BOT_EQUITY,
   });
+  const style = options.style ?? CALLING_STATION_STYLE;
+  const demoted = postflopValueMove(style, view, advice);
+  if (demoted !== undefined) return demoted;
   if (options.random === undefined) return advice.move;
-  const deviation = findDeviation(options.style ?? CALLING_STATION_STYLE, street, advice.action);
+  const deviation = findDeviation(style, street, advice.action);
   if (deviation === undefined || !drawDeviation(deviation.probability, options.random)) {
     return advice.move;
   }
