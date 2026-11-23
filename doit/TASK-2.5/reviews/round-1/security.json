@@ -1,0 +1,3 @@
+{"reviewer": "security", "round": 1,
+ "findings": [],
+ "summary": "No findings. The line-up radio onChange calls setPreset with the closed-over constant from LINE_UP_PRESETS, not event.target.value, so a tampered DOM value attribute never reaches state. The initial preset taken from config.lineUp is narrowed by isPreset and falls back to Mixed. configForLineUp -> seatLineUp fails closed with a RangeError on an unknown preset, a bad size or a bad user seat. Preset labels and bot names render as React text children, with no dangerouslySetInnerHTML. The change adds no storage, network calls or dependencies. botsClockwise only reads in-memory config."}

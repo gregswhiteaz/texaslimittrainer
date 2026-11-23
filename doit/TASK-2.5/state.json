@@ -4,14 +4,30 @@
   "branch": "doit/TASK-2.5",
   "base_commit": "33b32c5d8586ec2cf3e9620231d9ac63f33eb7e6",
   "started": "2026-11-22T16:47:50",
-  "review_round": 0,
-  "judge_round": 0,
+  "review_round": 1,
+  "judge_round": 1,
   "sendbacks": 0,
   "gate_runs": 9,
-  "questions": 3,
-  "assumptions": 0,
+  "questions": 5,
+  "assumptions": 5,
   "escalations": 0,
-  "item_failures": {},
+  "item_failures": {
+    "SPEC-01": 0,
+    "SPEC-02": 0,
+    "SPEC-03": 0,
+    "SPEC-04": 0,
+    "SPEC-05": 0,
+    "SPEC-06": 0,
+    "SPEC-07": 0,
+    "SPEC-08": 0,
+    "SPEC-09": 0,
+    "SPEC-10": 0,
+    "SPEC-11": 0,
+    "SPEC-12": 0,
+    "SPEC-13": 0,
+    "SPEC-14": 0,
+    "SPEC-15": 0
+  },
   "locked_tests": {
     "e2e/lineup-choice.spec.ts": "a3f00b2c6929d40a6a38958a66b6287cead5c9025d4d8f5923ea1c57ad8be1cf",
     "tests/table/lineup-config.acceptance.test.ts": "3bf6ea62f8ea080fe44d166db91e518043113a8dbd96372f2c10871fcdd08f5b",
@@ -1146,5 +1162,12 @@
   },
   "history": [],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-2.5",
-  "spec_sha256": "1602321ceedaa511550a02eaa9e3b14299e363c597616a388f48a86ebcc1756a"
+  "spec_sha256": "1602321ceedaa511550a02eaa9e3b14299e363c597616a388f48a86ebcc1756a",
+  "review_findings": {
+    "1": 0
+  },
+  "doc_id": "doc-89",
+  "judge_results": {
+    "1": "PASS"
+  }
 }
