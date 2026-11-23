@@ -1,0 +1,11 @@
+{"reviewer": "code", "round": 1,
+ "rubric": [
+  {"item": "SPEC-01 correctness", "result": "pass"},
+  {"item": "SPEC-01 test strength", "result": "pass"},
+  {"item": "scope", "result": "pass"},
+  {"item": "concision", "result": "pass"},
+  {"item": "clarity", "result": "pass"}
+ ],
+ "findings": [],
+ "summary": "Diff to e2e/hand-records.spec.ts (11 lines, 1 file) matches spec section 5 exactly: the four immediate calls reads (lines 237, 245, 248, 251-252) are now bounded expect.poll with the same matchers and values (toHaveLength 1, 1, 2; toEqual [PINNED_CODE x3]). No assertion dropped or loosened: calls is append-only, so exact-length polls still fail on overshoot (a 0->2 jump never hits 1; an excess call makes the next exact poll or the toEqual fail). Default 5 s poll timeout, same as the existing storedCount poll; no timeout overrides. The one remaining immediate calls read (paused.calls toHaveLength(1), line 243) is safe: line 237 already waited for count 1, so it is a strict no-second-call check after the 1450 ms advance. renders read at 238 and the events reads (53, 65, 288) are unchanged as spec section 3 allows. No src/, e2e/support or config changes. The only other non-doit change is doit/TASK-3.9/state.json recording the locked-test unlock and relock_pending, which is workflow bookkeeping, not code scope creep. Gates build-1 and fix-2 PASS."
+}
