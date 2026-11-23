@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T23:03:00Z'
-updated_date: '2026-11-23T06:13:00Z'
+updated_date: '2026-11-23T06:34:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -89,6 +89,8 @@ Build: Rock postflopValue threshold 75 (style.ts reader, rock.ts rule, rock.json
 Review R1: MAJOR (seated-Rocks unit run CI time) fixed: 1,000→300 hands; R2: 0 findings.
 
 Judge R1 PASS 10/10 (own REQ-045 counter on seeds 2026@100k and 555@30k; Rock base 69.6% → 45–49%; 3,000 Rock decisions 0 mismatches; 13/15 mutants, 2 equivalent). Note for TASK-6.11: TAG aggression margin ~0.9 pt on seed 555.
+
+Locked test re-pinned by TASK-6.17 Q-3 (auto-accepted; assertion count kept).
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary

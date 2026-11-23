@@ -1071,6 +1071,12 @@
       "event": "unlock",
       "file": "tests/table/replace-bot.acceptance.test.ts",
       "reason": "Re-lock with the reviewed MINOR edits: an overlapping builder gate re-locked the pre-edit hashes"
+    },
+    {
+      "t": "2026-11-22T23:34:20",
+      "event": "unlock",
+      "file": "tests/playtest/replacement.acceptance.test.ts",
+      "reason": "TASK-6.17 Q-3 auto-accepted: firstReplaced = first style-changing replacement (count kept)"
     }
   ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-6.8",
@@ -1078,7 +1084,9 @@
   "review_findings": {
     "1": 0
   },
-  "relock_pending": [],
+  "relock_pending": [
+    "tests/playtest/replacement.acceptance.test.ts"
+  ],
   "judge_results": {
     "1": "PASS"
   }

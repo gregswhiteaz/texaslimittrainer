@@ -1,0 +1,68 @@
+[
+  {
+    "id": "SPEC-01",
+    "verifies": "AC#1, AC#2, AC#4, DoD#2",
+    "verification": "acceptance `tests/bots/style-bands.acceptance.test.ts::every bot style is inside its style band over 100,000 Mixed 6-max hands (seed 42)` (opt-in slow: `npm run test:slow`)",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-02",
+    "verifies": "AC#3, AC#4, DoD#2",
+    "verification": "acceptance `tests/bots/style-bands.acceptance.test.ts::every bot style is inside its style band over 100,000 Mixed 6-max hands (seeds 7 and 1234)` (opt-in slow; one `it` per seed, 600 s timeout each)",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-03",
+    "verifies": "AC#1, AC#2, AC#3, AC#4, DoD#1",
+    "verification": "manual Judge confirms that `backlog task view TASK-6.11 --plain` lists both follow-up ACs and that SPEC-01/02 pass under `npm run test:slow`.",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-04",
+    "verifies": "AC#1, AC#3, DoD#2, DoD#3",
+    "verification": "acceptance `tests/bots/calling-station-postflop.acceptance.test.ts::the Calling station bets or raises after the flop only above its 88% value bar`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-05",
+    "verifies": "AC#1, AC#2, DoD#10",
+    "verification": "acceptance `tests/bots/calling-station-postflop.acceptance.test.ts::the Calling station holds a justified 88% value bar and the Maniac bets or raises after the flop at 0.6`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-06",
+    "verifies": "AC#1, DoD#2",
+    "verification": "acceptance `tests/bots/calling-station-postflop.acceptance.test.ts::a bad Calling station postflopValue block is rejected with a clear problem`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-07",
+    "verifies": "DoD#2, DoD#3",
+    "verification": "acceptance `tests/bots/rock-postflop.acceptance.test.ts::the Rock bets or raises after the flop only above its 75% value bar`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-08",
+    "verifies": "DoD#2, DoD#3",
+    "verification": "acceptance `tests/playtest/replacement.acceptance.test.ts::a violation after a replacement prints a Replay line that reproduces the hand`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-09",
+    "verifies": "DoD#2, DoD#3, DoD#4, DoD#5, DoD#6, DoD#9, DoD#11",
+    "verification": "command `npm run lint && npm run typecheck && npm test`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-10",
+    "verifies": "DoD#7",
+    "verification": "command `npm run playtest -- --hands 10000 --lineup mixed --size 6 --seed 42 && npm run -s playtest -- --hands 10000 --seed 42 | shasum -a 256`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-11",
+    "verifies": "DoD#8, DoD#12, DoD#13",
+    "verification": "manual Judge confirms that `git diff --stat` touches no `src/ui/**` or `e2e/**` file and that the story doc is published (`backlog doc list --plain`).",
+    "status": "pending"
+  }
+]

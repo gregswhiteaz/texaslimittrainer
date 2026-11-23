@@ -986,6 +986,12 @@
       "event": "unlock",
       "file": "tests/bots/maniac.acceptance.test.ts",
       "reason": "TASK-7.8 Q-3 (auto-accepted): value betting changes advice/bot results \u2014 re-pin expected values, keep every assertion and time limit"
+    },
+    {
+      "t": "2026-11-22T23:34:20",
+      "event": "unlock",
+      "file": "tests/bots/maniac.acceptance.test.ts",
+      "reason": "TASK-6.17 Q-3 auto-accepted: Maniac postflop deviations 0.85\u21920.6 re-pin (count kept)"
     }
   ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-6.4",
@@ -1005,6 +1011,7 @@
     ]
   },
   "relock_pending": [
+    "tests/bots/maniac.acceptance.test.ts",
     "tests/bots/maniac.acceptance.test.ts"
   ]
 }

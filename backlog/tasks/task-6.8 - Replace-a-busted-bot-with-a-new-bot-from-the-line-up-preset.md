@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-22T17:55:00Z'
+updated_date: '2026-11-23T06:34:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -96,6 +96,8 @@ Note: tests/playtest/policy-lineup.acceptance.test.ts was not in TASK-1.52's loc
 Gate fix-6 FAIL was a lock-timing issue (overlapping builder gates re-locked pre-edit hashes); edits re-checked (no expect removed), re-unlocked, gate fix #7 PASS (6c7713b). Follow-ups: notes on TASK-3.21, TASK-4.7, TASK-3.14.
 
 Judge R1 PASS 14/14 (own 10k-draw tallies per preset/size, forced post-replacement violation replays with --styles, 12/13 mutants). Non-blocking: J-1-01 playtest restart-after-violation untested (A-4), J-1-02 replay Line-up line shows original names — not tracked (playtest display, no failure path).
+
+Locked test re-pinned by TASK-6.17 Q-3 (auto-accepted; assertion count kept).
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary

@@ -1224,7 +1224,20 @@
       "skips": 0
     }
   },
-  "history": [],
+  "history": [
+    {
+      "t": "2026-11-22T23:34:20",
+      "event": "unlock",
+      "file": "tests/bots/style-bands.acceptance.test.ts",
+      "reason": "TASK-6.17 Q-3 auto-accepted: add CS/Maniac bands / CS value bar 88 (count kept)"
+    },
+    {
+      "t": "2026-11-22T23:34:20",
+      "event": "unlock",
+      "file": "tests/bots/rock-postflop.acceptance.test.ts",
+      "reason": "TASK-6.17 Q-3 auto-accepted: add CS/Maniac bands / CS value bar 88 (count kept)"
+    }
+  ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-6.16",
   "spec_sha256": "5e08753d86c0f1ab96ad2f9ad435319f73d1d4cfd36ba948294499659de6946f",
   "review_findings": {
@@ -1234,5 +1247,9 @@
   "doc_id": "doc-94",
   "judge_results": {
     "1": "PASS"
-  }
+  },
+  "relock_pending": [
+    "tests/bots/style-bands.acceptance.test.ts",
+    "tests/bots/rock-postflop.acceptance.test.ts"
+  ]
 }

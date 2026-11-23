@@ -1,10 +1,11 @@
 ---
 id: TASK-6.17
 title: Keep Calling station and Maniac bots inside their style bands
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-17T23:03:00Z'
-updated_date: '2026-11-23T05:24:00Z'
+updated_date: '2026-11-23T06:34:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -61,6 +62,18 @@ Plan key: E06-S17 · Dream: limit-holdem-trainer
 - [ ] #12 Story documentation is written and published to Backlog.md
 - [ ] #13 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. Shared postflopValueMove helper in style.ts; Rock refactored onto it (no behaviour change).
+2. calling-station.json postflopValue thresholdPct 88; decideCallingStation applies it.
+3. maniac.json postflop deviations 0.85 → 0.6 (justification text updated).
+4. Extend opt-in slow style-bands test to all four styles; re-pin locked tests (6.16 ×2, 6.4, 6.8), counts kept.
+5. Default playtest SHA unchanged.
+
+Full spec: doit/TASK-6.17/spec.md
+<!-- SECTION:PLAN:END -->
 
 ## Implementation Notes
 

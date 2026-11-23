@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-23T03:44:00Z'
+updated_date: '2026-11-23T06:34:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -90,6 +90,8 @@ Recorded deviation (orchestrator, judge R1 fix): SPEC-08/A-8's 200-hand seated r
 Judge R2 PASS 11/11 (CI 44972930191 green; Test step 487 s vs 943 s; Maniac tests ~20.6 s on CI vs ~119 s; J-1-01 river mutant killed).
 
 Locked test tests/bots/maniac.acceptance.test.ts re-pinned for TASK-7.8 Q-3 (auto-accepted; value betting).
+
+Locked test re-pinned by TASK-6.17 Q-3 (auto-accepted; assertion count kept).
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary
