@@ -11,3 +11,7 @@
 
 ## Q-4 — Numbers quoted per rule (equity % + required % on every postflop; value rules add equity vs callers and 50%; implied-odds adds outs count and implied price; pot-odds-fold adds implied price when present; preflop no numbers)
 **Answer: auto-accepted (recommended)**
+
+## Block 1 — locked TASK-7.2 typecheck sandbox (tests/advice/preflop.acceptance.test.ts AC#6) lacks explain.ts and its imports
+Option 1 (recommended): unlock under TASK-7.2 and add the 8 files to the sandbox list; every assertion kept.
+**Answer: auto-accepted (recommended)** — applied by the orchestrator; 8/8 tests pass.

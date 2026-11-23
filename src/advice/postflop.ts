@@ -1,6 +1,7 @@
 import type { Card } from '../engine/cards';
 import type { Action } from '../engine/hand';
 import type { PlayerView, PublicPlayer } from '../engine/player-view';
+import { explainPostflop } from './explain';
 import { computeEquity, type EquityInput, type EquityResult, type Range } from './equity';
 import { callingRange, drawOuts, estimateOpponentRanges, unseenCombos } from './ranges';
 import type { ExactOptions } from './recommend';
@@ -50,6 +51,8 @@ export interface PostflopRecommendation {
   readonly impliedRequiredEquityPct: number | null;
   /** drawOuts(holeCards, board): the outs counted; [] on the river or without a flush/open-ended draw. */
   readonly outs: readonly Card[];
+  /** Plain-English reason, ≤ 3 sentences (REQ-037). */
+  readonly explanation: string;
 }
 
 export interface PostflopOptions {
@@ -172,8 +175,8 @@ export function recommendPostflop<O extends object = PostflopOptions>(
 
   const move = view.legalActions.find((a) => a.type === action);
   if (move === undefined) throw new Error(`No legal ${action} for seat ${view.seat}`);
-  return {
-    basis: 'equity',
+  const rec = {
+    basis: 'equity' as const,
     street,
     action,
     alternative: null,
@@ -189,4 +192,5 @@ export function recommendPostflop<O extends object = PostflopOptions>(
     impliedRequiredEquityPct,
     outs,
   };
+  return { ...rec, explanation: explainPostflop(rec, VALUE_THRESHOLD_PCT) };
 }

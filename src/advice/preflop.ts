@@ -3,6 +3,7 @@ import type { PlayerView, PublicPlayer } from '../engine/player-view';
 import fullRing from './charts/full-ring.json' with { type: 'json' };
 import headsUp from './charts/heads-up.json' with { type: 'json' };
 import sixMax from './charts/six-max.json' with { type: 'json' };
+import { explainPreflop } from './explain';
 import { handClassOf, type HandClass } from './hand-class';
 import {
   APPLICABLE_SPOTS,
@@ -46,6 +47,8 @@ export interface PreflopRecommendation {
   readonly alternative: PreflopAdvice | null;
   /** The element of view.legalActions whose type is `action`. */
   readonly move: Action;
+  /** Plain-English reason, ≤ 3 sentences (REQ-037). */
+  readonly explanation: string;
 }
 
 export interface PreflopOptions {
@@ -147,8 +150,8 @@ export function recommendPreflop(
   const alternative = cell.alternative === null ? null : legal(cell.alternative);
   const move = view.legalActions.find((a) => a.type === action);
   if (move === undefined) throw new Error(`No legal ${action} for seat ${view.seat}`);
-  return {
-    basis: 'chart',
+  const rec = {
+    basis: 'chart' as const,
     referenceSize: chart.referenceSize,
     position,
     situation,
@@ -159,4 +162,5 @@ export function recommendPreflop(
     alternative: alternative === action ? null : alternative,
     move,
   };
+  return { ...rec, explanation: explainPreflop(rec) };
 }

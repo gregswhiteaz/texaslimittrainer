@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-22T22:18:00Z'
+updated_date: '2026-11-23T09:05:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-0
@@ -94,6 +94,8 @@ CI run 44345626992 (head 5f18b57): success. Judge round 1: PASS 17/17; 136,890 e
 Correction (TASK-7.19, 2026-11-19): the doc-14 review note that HJ always closes the action in raise-and-calls is wrong. A player who limped after HJ may still be to act (e.g. UTG folds, HJ limps, CO limps, SB raises, BB calls). The chart text now says this.
 
 Locked test edited for TASK-7.6 Q-6 (user-approved): sandbox file list gains heads-up.json and full-ring.json.
+
+Locked test sandbox list extended by TASK-7.10 block 1 (auto-accepted; no assertion change).
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary

@@ -306,6 +306,14 @@ describe('preflop advice acceptance', () => {
         'src/advice/charts/six-max.json',
         'src/advice/charts/heads-up.json',
         'src/advice/charts/full-ring.json',
+        'src/advice/explain.ts',
+        'src/advice/explanations.ts',
+        'src/advice/postflop.ts',
+        'src/advice/equity.ts',
+        'src/advice/ranges.ts',
+        'src/advice/ranges/six-max.json',
+        'src/advice/recommend.ts',
+        'src/engine/seeded-random.ts',
       ]) {
         files[path] = readFileSync(join(REPO_ROOT, path), 'utf8');
       }

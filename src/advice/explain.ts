@@ -1,0 +1,93 @@
+import {
+  CONCEPTS,
+  POSTFLOP_TEMPLATES,
+  PREFLOP_CONTEXT,
+  PREFLOP_SENTENCES,
+  RANK_NAMES,
+  SEAT_NAMES,
+  type PreflopSentenceKey,
+} from './explanations';
+import type { HandClass } from './hand-class';
+import type { PostflopRecommendation } from './postflop';
+import type { PreflopAdvice, PreflopRecommendation } from './preflop';
+
+/** `${pct.toFixed(1)}%`. */
+export function formatPct(pct: number): string {
+  return `${pct.toFixed(1)}%`;
+}
+
+/** Replaces {key} from `values` and {def:<ConceptId>} with that concept's definition.
+ *  Throws Error(`Unknown template placeholder {<name>}`) for any other placeholder. */
+export function fillTemplate(template: string, values: Readonly<Record<string, string>>): string {
+  return template.replace(/\{([^{}]+)\}/g, (_, name: string) => {
+    const value = name.startsWith('def:')
+      ? CONCEPTS.find((c) => c.id === name.slice(4))?.definition
+      : Object.hasOwn(values, name)
+        ? values[name]
+        : undefined;
+    if (value === undefined) throw new Error(`Unknown template placeholder {${name}}`);
+    return value;
+  });
+}
+
+function rankName(rank: string) {
+  return RANK_NAMES[rank] as { readonly one: string; readonly many: string };
+}
+
+/** A pair → a pair of aces; suited → ace-king suited; offsuit → seven-two offsuit. */
+export function handClassName(hc: HandClass): string {
+  const high = rankName(hc.charAt(0));
+  if (hc.length === 2) return `a pair of ${high.many}`;
+  const low = rankName(hc.charAt(1));
+  return `${high.one}-${low.one} ${hc.endsWith('s') ? 'suited' : 'offsuit'}`;
+}
+
+const ADVICE_ING: Readonly<Record<PreflopAdvice, string>> = {
+  raise: 'Raising',
+  call: 'Calling',
+  fold: 'Folding',
+  check: 'Checking',
+};
+
+export function explainPreflop(rec: Omit<PreflopRecommendation, 'explanation'>): string {
+  const sentences = [
+    fillTemplate(PREFLOP_CONTEXT[rec.situation], { seat: SEAT_NAMES[rec.position] }),
+  ];
+  const key: PreflopSentenceKey =
+    rec.cell.action === 'raise' && rec.action === 'call' ? 'call-capped' : rec.action;
+  sentences.push(fillTemplate(PREFLOP_SENTENCES[key], { hand: handClassName(rec.handClass) }));
+  if (rec.alternative !== null) {
+    sentences.push(
+      fillTemplate(PREFLOP_SENTENCES.alternative, {
+        alternativeIng: ADVICE_ING[rec.alternative],
+      }),
+    );
+  } else if (rec.borderline) {
+    sentences.push(PREFLOP_SENTENCES.borderline);
+  }
+  return sentences.join(' ');
+}
+
+export function explainPostflop(
+  rec: Omit<PostflopRecommendation, 'explanation'>,
+  valueThresholdPct: number,
+): string {
+  const raise = rec.action === 'raise';
+  const values: Record<string, string> = {
+    equity: formatPct(rec.equityPct),
+    required: formatPct(rec.requiredEquityPct),
+    callingEquity: formatPct(rec.equityVsCallingRangePct),
+    threshold: formatPct(valueThresholdPct),
+    outs: String(rec.outs.length),
+    aggressive: raise ? 'raise' : 'bet',
+    aggressiveIng: raise ? 'raising' : 'betting',
+  };
+  if (rec.impliedRequiredEquityPct !== null) {
+    values.impliedRequired = formatPct(rec.impliedRequiredEquityPct);
+  }
+  const key =
+    rec.ruleId === 'pot-odds-fold' && rec.impliedRequiredEquityPct !== null
+      ? 'pot-odds-fold-implied'
+      : rec.ruleId;
+  return fillTemplate(POSTFLOP_TEMPLATES[key], values);
+}

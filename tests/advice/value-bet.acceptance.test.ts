@@ -307,6 +307,7 @@ describe('value bet and raise acceptance (TASK-7.8)', () => {
               'equityVsCallingRangePct',
               'impliedRequiredEquityPct',
               'outs',
+              'explanation',
             ].sort(),
           );
           expect(['fold', 'check', 'call', 'bet', 'raise']).toContain(advice.action);

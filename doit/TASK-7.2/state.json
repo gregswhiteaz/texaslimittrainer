@@ -261,6 +261,12 @@
       "event": "unlock",
       "file": "tests/advice/preflop.acceptance.test.ts",
       "reason": "TASK-7.6 Q-6 (user-approved): add the two new chart JSON paths to the AC#6 sandbox file list; no assertion change"
+    },
+    {
+      "t": "2026-11-23T02:05:07",
+      "event": "unlock",
+      "file": "tests/advice/preflop.acceptance.test.ts",
+      "reason": "TASK-7.10 blocked-1 option 1 auto-accepted: sandbox list gains explain.ts and its imports (no assertion change)"
     }
   ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-7.2",
@@ -279,6 +285,7 @@
     "1": "PASS"
   },
   "relock_pending": [
+    "tests/advice/preflop.acceptance.test.ts",
     "tests/advice/preflop.acceptance.test.ts"
   ]
 }
