@@ -32,7 +32,7 @@
 - `tests/advice/postflop-coverage.acceptance.test.ts` (TASK-7.22) — allowed actions and expected-rule derivation include the value rules.
 - `tests/bots/tag.acceptance.test.ts` (TASK-6.1) — top set raises; facing-bet moves may raise; free decisions check or bet; random-run comparisons use `BOT_EQUITY`.
 - `tests/bots/tag-mixing.acceptance.test.ts` (TASK-6.2) — advice compared at `BOT_EQUITY`.
-- `tests/bots/calling-station.acceptance.test.ts` (TASK-6.3) — Example A / worker view is `raise[1]` (same AQo view and pinned values); point 0 re-pinned (river value raise, both raise to 16).
+- `tests/bots/calling-station.acceptance.test.ts` (TASK-6.3) — Example A / worker view is `raise[1]` (same AQo view and pinned values); point 0 re-pinned (river value raise, both raise to 16); FIX R1: point 6 added (preflop HJ 77, u ≈ 0.79 >= 0.6, both keep the raise to 8).
 - `tests/bots/maniac.acceptance.test.ts` (TASK-6.4) — Example E is `check[2]` (JTo BB option) with its new code/seed/draw.
 - `tests/advice/grade.acceptance.test.ts` (TASK-7.4) — equity stub calls 1 → 2.
 - `tests/advice/range-model.acceptance.test.ts` (TASK-7.5) — spy calls 1 → 2.
@@ -42,7 +42,7 @@
 ## Tests (unlocked under D-7, Block 1) and config
 Each heavy run now has an opt-in version (`it.runIf(SLOW)`, `TLH_SLOW_TESTS=1`, original title, assertions and limits) and an every-push version at 1,000 hands with the same assertions (only hand-count-dependent values re-pinned).
 - `tests/bots/tag-playtest.acceptance.test.ts` (TASK-6.1) — AC#5 10,000 (slow) / 1,000 (every push).
-- `tests/playtest/games.acceptance.test.ts` (TASK-1.16) — AC#6/AC#7/AC#8 10,000 (slow) / 1,000; AC#8's CLI "Last replay code" is `…000003e8` at 1,000. AC#6's in-process mostly-random sit-and-go run stays at 10,000 hands in both versions (seed 42's first sit-and-go ends at hand 4,740; that run takes about 0.8 s); only its TAG CLI run scales.
+- `tests/playtest/games.acceptance.test.ts` (TASK-1.16) — AC#6/AC#7/AC#8 10,000 (slow) / 1,000; AC#8's CLI "Last replay code" is `…000003e8` at 1,000. AC#6's in-process mostly-random sit-and-go run stays at 10,000 hands in both versions (seed 42's first sit-and-go ends at hand 4,740; that run takes about 0.8 s); only its TAG CLI run scales. FIX R1: the every-push AC#6 title says "(10,000-hand in-process run, 1,000-hand CLI run)"; the in-process run is memoized and shared by both versions.
 - `tests/playtest/heads-up.acceptance.test.ts` (TASK-1.11) — AC#4 and AC#5 (default 10,000-hand CLI run) 10,000 (slow) / 1,000 (AC#5 passes `--hands 1000`).
 - `tests/playtest/invariants.acceptance.test.ts` (TASK-1.8) — AC#1 clean run 10,000 (slow) / 1,000.
 - `tests/playtest/runner.acceptance.test.ts` — AC#6 10,000 (slow) / 1,000.

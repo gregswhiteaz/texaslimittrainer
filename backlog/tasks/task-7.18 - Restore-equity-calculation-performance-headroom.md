@@ -4,7 +4,7 @@ title: Restore equity calculation performance headroom
 status: To Do
 assignee: []
 created_date: '2026-11-18T07:03:00Z'
-updated_date: '2026-11-18T19:10:00Z'
+updated_date: '2026-11-23T04:39:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -30,10 +30,13 @@ Follow-up from TASK-7.1: the full-ring equity scenarios run at about 88% of thei
 - [ ] #1 Given the full-speed equity command (EQUITY_PERF_SCALE=1) on the reference Mac, When it runs, Then every scenario's p95 is at most 75% of its target
 - [ ] #2 Given vite.config.ts, When tests run, Then the default per-test timeout applies everywhere except the tests that need longer, which set their own timeout
 - [ ] #3 Given postflop advice at a 10-seat flop with 9 opponents, When the advice latency test runs at real targets, Then p95 is at most 75 ms (currently 71.5 ms against 100 ms)
+- [ ] #4 Given a 9-opponent postflop spot, When the user's advice is computed with value betting (two equity runs: whole and calling range), Then p95 latency meets the 100 ms target (TASK-7.8 measured ~205 ms because the calling-range run exhausts the sampler's rejection budget before falling back)
 <!-- AC:END -->
 
 ## Implementation Notes
 
 <!-- SECTION:NOTES:BEGIN -->
 AC added from TASK-7.3 follow-up (doc-17).
+
+AC added from TASK-7.8 review MINOR (multiway user-advice latency)
 <!-- SECTION:NOTES:END -->

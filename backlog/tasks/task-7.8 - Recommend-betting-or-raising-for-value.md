@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-23T03:45:00Z'
+updated_date: '2026-11-23T04:34:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -91,4 +91,6 @@ AC added from TASK-7.3 follow-up (doc-17).
 AC added from TASK-6.1 follow-up (doc-18).
 
 AC added from TASK-7.4 follow-up (doc-19).
+
+Build: value-bet/value-raise rules + equityVsCallingRangePct; bots recommend with BOT_EQUITY (500 trials), free-check shortcut removed; 10k playtest 14.2 s, new default SHA 2cbbafa7…bb98, million --hands 900 hash 4ff17256…2e32; Q-3 re-pins; D-7 applied to 7 heavy playtest files (10k opt-in, 1k every push). Accepted deviation: games AC#6 in-process sng run stays at 10k (first sng completes at hand 4,740). gate PASS.
 <!-- SECTION:NOTES:END -->

@@ -270,6 +270,25 @@ describe('Calling station from its style file', () => {
       const raiseTo16 = { seat: 1, type: 'raise', amount: 16 };
       expect(decideCallingStation(zero.view, { random: botRandom(zero.seed) })).toEqual(raiseTo16);
       expect(decideTag(zero.view, { random: botRandom(zero.seed) })).toEqual(raiseTo16);
+
+      // D-5 point 6 (TASK-7.8): preflop HJ 77 unopened; u = 3382865500 / 2^32 ≈ 0.79 >= the 0.6 threshold,
+      // so the station keeps the raise and both raise to 8.
+      const six = at(raise, 6004, 6);
+      expect(six.code).toBe('00000000000017740000000000000007');
+      expect(six.view.street).toBe('preflop');
+      expect(handClassOf(six.view.holeCards)).toBe('77');
+      expect(recommend(six.view)).toMatchObject({
+        action: 'raise',
+        position: 'HJ',
+        situation: 'unopened',
+      });
+      expect(botDecisionIndex(six.view)).toBe(0);
+      expect(six.seed).toBe(1806309033);
+      expect(botRandom(six.seed).nextUint32()).toBe(3382865500);
+      expect(3382865500 / 2 ** 32).toBeGreaterThanOrEqual(0.6);
+      const raiseTo8 = { seat: 1, type: 'raise', amount: 8 };
+      expect(decideCallingStation(six.view, { random: botRandom(six.seed) })).toEqual(raiseTo8);
+      expect(decideTag(six.view, { random: botRandom(six.seed) })).toEqual(raiseTo8);
     },
     TEST_TIMEOUT_MS,
   );

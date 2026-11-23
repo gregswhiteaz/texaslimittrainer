@@ -970,6 +970,12 @@
       "event": "unlock",
       "file": "tests/bots/calling-station.acceptance.test.ts",
       "reason": "TASK-7.8 Q-3 (auto-accepted): value betting changes advice/bot results \u2014 re-pin expected values, keep every assertion and time limit"
+    },
+    {
+      "t": "2026-11-22T21:39:23",
+      "event": "unlock",
+      "file": "tests/bots/calling-station.acceptance.test.ts",
+      "reason": "TASK-7.8 review R1 MINOR: restore a preflop raise threshold point (strengthen)"
     }
   ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-6.3",
@@ -982,6 +988,7 @@
     "1": "PASS"
   },
   "relock_pending": [
+    "tests/bots/calling-station.acceptance.test.ts",
     "tests/bots/calling-station.acceptance.test.ts"
   ]
 }

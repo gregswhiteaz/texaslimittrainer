@@ -76,3 +76,8 @@
 - `TLH_SLOW_TESTS=1 npx vitest run <seven files>` (no coverage): **39/39 passed, 74.0 s wall.** Slow versions:
   tag-playtest AC#5 64.3 s; heads-up AC#4 43.7 s, AC#5 20.7 s; playtest AC#3 42.7 s, AC#1 15.8 s; games AC#7 36.4 s,
   AC#6 16.9 s; invariants AC#1 24.0 s; bot-results determinism 19.6 s, rows 8.1 s, replacement 5.9 s; runner AC#6 17.6 s.
+
+## FIX (code review R1)
+1. Fixed: `calling-station.acceptance` adds D-5 point 6 (code `…0007`, preflop HJ 77 unopened, seed 1806309033, draw 3382865500 ≈ 0.79 >= 0.6); station and TAG both raise to 8. Values measured with a temporary probe (deleted). All existing assertions kept.
+2. Fixed: `games.acceptance` every-push AC#6 title now ends "(10,000-hand in-process run, 1,000-hand CLI run)" (new `sngSuffix`); the in-process 10k sng run is memoized in `sngInProcess()` and shared by both versions. No assertion changed.
+- `npm run format` run; lint and typecheck clean. Two files: 10 passed, 3 skipped; `TLH_SLOW_TESTS=1` games: 7/7 passed. Full `npm test`: 199 files passed, 2 skipped; 731 tests passed, 27 skipped; exit 0.

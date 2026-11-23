@@ -59,29 +59,43 @@ function liveAfter(chips: Map<number, number>, from: number): number[] {
 
 // The 10,000-hand runs are opt-in (TLH_SLOW_TESTS=1); every push runs the same checks on 1,000 hands.
 const RUNS = [
-  { hands: 10_000, test: it.runIf(SLOW), suffix: '', lastCode: '000000000000002a0000000100002710' },
+  {
+    hands: 10_000,
+    test: it.runIf(SLOW),
+    suffix: '',
+    sngSuffix: '',
+    lastCode: '000000000000002a0000000100002710',
+  },
   {
     hands: 1_000,
     test: it,
     suffix: ' (1,000 hands)',
+    sngSuffix: ' (10,000-hand in-process run, 1,000-hand CLI run)',
     lastCode: '000000000000002a00000001000003e8',
   },
 ];
 
+let sngRun: ReturnType<typeof collect> | undefined;
+/** AC#6's in-process 10,000-hand sit-and-go run, the same in both versions: run once and shared. */
+function sngInProcess() {
+  sngRun ??= collect(10_000, 42, 6, 'sng', {
+    makePolicy: (code, seat) => {
+      const random = randomMovePolicy(seatGenerator(code, seat));
+      return (view) => (view.players.length === 6 ? tagPolicy(view) : random(view));
+    },
+  });
+  return sngRun;
+}
+
 describe('cash and sit-and-go playtest games', () => {
-  for (const { hands, test, suffix, lastCode } of RUNS) {
+  for (const { hands, test, suffix, sngSuffix, lastCode } of RUNS) {
     test(
-      `AC#6 sit-and-go playtest restarts at 1,500 chips, never refills busted seats and skips them${suffix}`,
+      `AC#6 sit-and-go playtest restarts at 1,500 chips, never refills busted seats and skips them${sngSuffix}`,
       () => {
         // The pre-TASK-6.2 default: pure TAG at 6 dealt-in seats, random-move otherwise (TASK-6.2 Q-4).
         // Seed 42's first sit-and-go ends at hand 4,740, so this cheap mostly-random run stays at
-        // 10,000 hands in both versions; only the TAG CLI run below scales with `hands`.
-        const { played, summary } = collect(10_000, 42, 6, 'sng', {
-          makePolicy: (code, seat) => {
-            const random = randomMovePolicy(seatGenerator(code, seat));
-            return (view) => (view.players.length === 6 ? tagPolicy(view) : random(view));
-          },
-        });
+        // 10,000 hands in both versions (run once, shared); only the TAG CLI run below scales with `hands`.
+        const { played, summary } = sngInProcess();
         expect(played).toHaveLength(10_000);
         const chips = new Map<number, number>();
         let fresh = true;
