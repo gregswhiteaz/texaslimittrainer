@@ -4,7 +4,7 @@ title: Keep Calling station and Maniac bots inside their style bands
 status: To Do
 assignee: []
 created_date: '2026-11-17T23:03:00Z'
-updated_date: '2026-11-21T23:16:00Z'
+updated_date: '2026-11-23T05:24:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -66,4 +66,6 @@ Plan key: E06-S17 · Dream: limit-holdem-trainer
 
 <!-- SECTION:NOTES:BEGIN -->
 Dependency on TASK-7.8 added from TASK-6.3: postflop advice never bets/raises until value betting (REQ-033.2) lands, so postflop aggression (REQ-027.6) is 0% for every bot until then.
+
+From TASK-6.16 measurements (100k Mixed, seeds 42/7/1234): Calling station aggression 51–53% vs 10–25% band; Maniac 84.1–84.9% vs 85 ceiling. Mixed line-up drifts to TAG over long runs (replacements) — CS got only 3–9k hands; size samples accordingly.
 <!-- SECTION:NOTES:END -->

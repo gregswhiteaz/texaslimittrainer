@@ -1,10 +1,11 @@
 ---
 id: TASK-6.16
 title: Keep TAG and Rock bots inside their style bands
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-17T23:03:00Z'
-updated_date: '2026-11-21T23:16:00Z'
+updated_date: '2026-11-23T05:25:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -61,6 +62,17 @@ Plan key: E06-S16 · Dream: limit-holdem-trainer
 - [ ] #11 Story documentation is written and published to Backlog.md
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. rock.json postflopValue.thresholdPct 75 (validated 50–100) + style.ts reader; decideRock keeps bet/raise only above 75.0% vs calling range, else check/call.
+2. Rock description clause; update rock.test unit assertion.
+3. Opt-in slow style-bands test: Mixed 6-max, 3 seeds × 100k, TAG and Rock inside REQ-027 bands.
+4. No chart/TAG change; playtest SHA unchanged.
+
+Full spec: doit/TASK-6.16/spec.md
+<!-- SECTION:PLAN:END -->
 
 ## Implementation Notes
 

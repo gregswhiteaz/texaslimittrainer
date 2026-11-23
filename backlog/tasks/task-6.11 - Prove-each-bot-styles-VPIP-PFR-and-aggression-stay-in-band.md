@@ -4,7 +4,7 @@ title: Report each bot style's VPIP, PFR and aggression against its band
 status: To Do
 assignee: []
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-22T18:28:00Z'
+updated_date: '2026-11-23T05:24:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -48,6 +48,7 @@ Plan key: E06-S09 · Dream: limit-holdem-trainer
 - [ ] #5 Given a test style file whose measured stats are all inside its bands, When the playtest runs with `--check-styles`, Then it prints each stat with its band and exits 0 [REQ-027.5]
 - [ ] #6 Given aggression is measured per style, When the report runs, Then it is measured after TASK-7.8 (postflop value betting) in mixed line-ups — a lone Maniac among TAGs reads 100% today because no bot bets postflop (TASK-6.4 finding)
 - [ ] #7 Given the Rock seated with a Maniac at the table, When its VPIP and PFR are reported, Then they are re-measured against the 8–15% / 6–12% band (TASK-6.5 prototype: 9.9% / 8.3%, close to the floors)
+- [ ] #8 Given `npm run playtest -- --hands 100000 --lineup mixed --size 6 --check-styles` with seeds 42, 7 and 1234, When it completes, Then TAG and Rock lines report inside their bands (TASK-6.16 tuned the Rock's postflop value bar to 75%)
 <!-- AC:END -->
 
 ## Definition of Done
@@ -74,4 +75,6 @@ AC added from TASK-6.4 follow-up
 AC added from TASK-6.5 follow-up
 
 From TASK-6.9: compose style-band checks with checkStep via composeChecks (src/playtest/runner.ts), not a new runner parameter.
+
+AC added from TASK-6.16 Q-1 (CLI band check deferred here)
 <!-- SECTION:NOTES:END -->
