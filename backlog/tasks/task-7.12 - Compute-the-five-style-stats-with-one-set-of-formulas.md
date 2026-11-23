@@ -1,10 +1,11 @@
 ---
 id: TASK-7.12
 title: 'Enabler: shared style-stat functions for VPIP, PFR, Aggression, WTSD and W$SD'
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-17T23:22:00Z'
+updated_date: '2026-11-23T10:49:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -62,3 +63,14 @@ Plan key: E07-S08 · Dream: limit-holdem-trainer
 - [ ] #11 Story documentation is written and published to Backlog.md
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. src/stats/style-stats.ts: handStyleCounts/addStyleCounts/styleCounts/styleStats over StatHand (CompletedHand fits; PlayedHand adapter); formatStat '—' for null.
+2. Acceptance (AC#1–#6) + unit tests (edges, 300 real playtest hands, CompletedHand typing).
+3. style-bands slow test uses the shared functions (Q-1).
+4. docs/stats/style-stats.md.
+
+Full spec: doit/TASK-7.12/spec.md
+<!-- SECTION:PLAN:END -->
