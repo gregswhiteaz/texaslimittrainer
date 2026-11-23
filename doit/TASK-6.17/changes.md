@@ -13,3 +13,6 @@
 - `tests/playtest/cli.test.ts` — unlocked pin: seed-42 first replacement now at hand 18 (17 → 0, 18 → 1).
 
 No new dependencies.
+
+## FIX round 1
+- `tests/bots/maniac.acceptance.test.ts` — Example A comment now says the 0.6 threshold; new Example H (call[2], river 7h Qh facing 8, draw 111952548 < 0.6 × 2^32) pins a postflop call → raise to 16 (strengthen only).

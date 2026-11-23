@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-17T23:03:00Z'
-updated_date: '2026-11-23T06:34:00Z'
+updated_date: '2026-11-23T06:54:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -81,4 +81,6 @@ Full spec: doit/TASK-6.17/spec.md
 Dependency on TASK-7.8 added from TASK-6.3: postflop advice never bets/raises until value betting (REQ-033.2) lands, so postflop aggression (REQ-027.6) is 0% for every bot until then.
 
 From TASK-6.16 measurements (100k Mixed, seeds 42/7/1234): Calling station aggression 51–53% vs 10–25% band; Maniac 84.1–84.9% vs 85 ceiling. Mixed line-up drifts to TAG over long runs (replacements) — CS got only 3–9k hands; size samples accordingly.
+
+Build: shared postflopValueMove; Calling station value bar 88; Maniac postflop deviations 0.6; slow 3×100k: all four styles in band (CS agg 14.8–15.8, Maniac 77.4–79.3); locked re-pins per Q-3; SHA unchanged; gate PASS.
 <!-- SECTION:NOTES:END -->

@@ -992,6 +992,12 @@
       "event": "unlock",
       "file": "tests/bots/maniac.acceptance.test.ts",
       "reason": "TASK-6.17 Q-3 auto-accepted: Maniac postflop deviations 0.85\u21920.6 re-pin (count kept)"
+    },
+    {
+      "t": "2026-11-22T23:59:16",
+      "event": "unlock",
+      "file": "tests/bots/maniac.acceptance.test.ts",
+      "reason": "TASK-6.17 review MINORs: fix stale 0.85 comment; add a postflop call\u2192raise example (strengthen only)"
     }
   ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-6.4",
@@ -1011,6 +1017,7 @@
     ]
   },
   "relock_pending": [
+    "tests/bots/maniac.acceptance.test.ts",
     "tests/bots/maniac.acceptance.test.ts",
     "tests/bots/maniac.acceptance.test.ts"
   ]

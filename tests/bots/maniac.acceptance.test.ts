@@ -207,7 +207,7 @@ describe('Maniac from its style file', () => {
       );
       expect(bets).toBeGreaterThan(tag);
 
-      // Example A: check[0], flop with 7h Qh, nothing bet; u < 0.85 threshold, the Maniac bets 4.
+      // Example A: check[0], flop with 7h Qh, nothing bet; u < 0.6 threshold, the Maniac bets 4.
       const a = at(check, 6401, 0);
       expect(a.code).toBe('00000000000019010000000000000001');
       expect(a.view.street).toBe('flop');
@@ -293,6 +293,21 @@ describe('Maniac from its style file', () => {
       expect(botRandom(c.seed).nextUint32()).toBe(3612399516);
       expect(maniacAt(c)).toEqual({ seat: 1, type: 'call', amount: 8 });
       expect(tagAt(c)).toEqual({ seat: 1, type: 'call', amount: 8 });
+
+      // Example H: call[2], river with 7h Qh facing a bet of 8; u < 0.6 threshold, the Maniac raises to 16.
+      const h = at(call, 6402, 2);
+      expect(h.code).toBe('00000000000019020000000000000003');
+      expect(h.view.street).toBe('river');
+      expect(h.view.holeCards.map(formatCard)).toEqual(['7h', 'Qh']);
+      expect(h.view.currentBet).toBe(8);
+      expect(h.view.betCount).toBe(1);
+      expect(owed(h.view)).toBe(8);
+      expect(botDecisionIndex(h.view)).toBe(3);
+      expect(h.seed).toBe(2239381735);
+      expect(botRandom(h.seed).nextUint32()).toBe(111952548);
+      expect(recommend(h.view, { equity }).action).toBe('call');
+      expect(maniacAt(h)).toEqual({ seat: 1, type: 'raise', amount: 16 });
+      expect(tagAt(h)).toEqual({ seat: 1, type: 'call', amount: 8 });
     },
     TEST_TIMEOUT_MS,
   );

@@ -16,3 +16,8 @@
 - `npm run -s playtest -- --hands 10000 --seed 42 | shasum -a 256` → `2cbbafa79dfeb56a159349b949039132b89cb0e41e72a83784e579653ae4bb98` (unchanged).
 - `npm run playtest -- --hands 10000 --lineup mixed --size 6 --seed 42` → Invariant violations: 0, Bots replaced: 44, exit 0.
 - `npm run format`, `npm run lint`, `npm run typecheck`: clean. `npm test`: 201 files passed, 3 skipped; 737 tests passed, 30 skipped; coverage thresholds held.
+
+## FIX round 1
+- Item 1: fixed — Example A comment "u < 0.85 threshold" → "u < 0.6 threshold".
+- Item 2: fixed — added Example H in the "advice is call" test: call[2] (code …0003), river 7h Qh owing 8, decision index 3, seed 2239381735, draw 111952548 (< 0.6 × 2^32); advice is call, Maniac raises to 16, TAG calls 8. No assertion removed or loosened.
+- `npx vitest run tests/bots/maniac.acceptance.test.ts`: 6/6 passed.
