@@ -1,10 +1,11 @@
 ---
 id: TASK-7.11
 title: Check advice against preflop golden spots on every test run
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-17T23:22:00Z'
+updated_date: '2026-11-23T09:45:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -66,3 +67,14 @@ Plan key: E07-S14 · Dream: limit-holdem-trainer
 - [ ] #12 Story documentation is written and published to Backlog.md
 - [ ] #13 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. src/advice/golden.ts: tlh-golden-spots v1 parser/validator (rebuilds PlayerView via engine; borderline rejection; justification checks).
+2. tests/golden/preflop-spots.json: ~110 hand-written preflop spots (HU 20, 6-max 42, full ring 48) with individual justifications.
+3. tests/golden/preflop.acceptance.test.ts runner in npm test (fails naming spot/expected/actual); unit tests.
+4. docs/advice/golden-spots.md.
+
+Full spec: doit/TASK-7.11/spec.md
+<!-- SECTION:PLAN:END -->
