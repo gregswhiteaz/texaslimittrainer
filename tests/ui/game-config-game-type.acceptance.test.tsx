@@ -26,14 +26,17 @@ const rows = (html: string): string[] =>
 const radios = (html: string): string[] => html.match(/<input[^>]*type="radio"[^>]*>/g) ?? [];
 const checkedValues = (html: string): string[] =>
   radios(html)
-    .filter((r) => r.includes('checked=""'))
+    .filter((r) => r.includes('name="game-type"') && r.includes('checked=""'))
     .map((r) => /value="([^"]*)"/.exec(r)?.[1] ?? '');
 
 describe('Game Config game type acceptance', () => {
   it('game type offers exactly Cash game and Sit-and-go with Cash game checked', () => {
     const html = render(DEFAULT_SESSION_CONFIG);
 
-    const groups = html.match(/<div[^>]*role="radiogroup"[^>]*>[\s\S]*?<\/div>/g) ?? [];
+    const groups =
+      html.match(
+        /<div[^>]*role="radiogroup"[^>]*aria-labelledby="config-game-type"[^>]*>[\s\S]*?<\/div>/g,
+      ) ?? [];
     expect(groups).toHaveLength(1);
     const group = groups[0] ?? '';
     expect(group).toMatch(/^<div[^>]*aria-labelledby="config-game-type"/);
@@ -75,7 +78,7 @@ describe('Game Config game type acceptance', () => {
 
       expect(strip(html)).not.toMatch(REAL_MONEY);
       const inputs = html.match(/<input[^>]*>/g) ?? [];
-      expect(inputs.map((i) => /type="radio"/.test(i))).toEqual([true, true]);
+      expect(inputs.map((i) => /type="radio"/.test(i))).toEqual([true, true, true, true, true]);
       expect(html).not.toMatch(/<(a|form|textarea)[\s>]/);
     }
   });

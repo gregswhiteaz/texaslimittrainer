@@ -67,11 +67,11 @@ describe('Home and Game Config acceptance', () => {
       [...row.matchAll(/<span[^>]*>(.*?)<\/span>/g)].map(([, cell]) => cell),
     );
     expect(rows).toEqual([
-      ['Seat 1', 'Ava', 'Tight-aggressive'],
-      ['Seat 2', 'Ben', 'Tight-aggressive'],
-      ['Seat 3', 'Cal', 'Tight-aggressive'],
-      ['Seat 4', 'Dee', 'Tight-aggressive'],
-      ['Seat 6', 'Eli', 'Tight-aggressive'],
+      ['Seat 6', 'Ava', 'Tight-aggressive'],
+      ['Seat 1', 'Ben', 'Calling station'],
+      ['Seat 2', 'Cal', 'Maniac'],
+      ['Seat 3', 'Dee', 'Rock'],
+      ['Seat 4', 'Eli', 'Tight-aggressive'],
       ['You', 'Seat 5'],
     ]);
     const buttons = [...html.matchAll(/<button[^>]*>(.*?)<\/button>/g)].map(([, label]) => label);
@@ -81,6 +81,9 @@ describe('Home and Game Config acceptance', () => {
       '<input ',
       '<select ',
       '<select ',
+      '<input ',
+      '<input ',
+      '<input ',
     ]);
     expect(html).not.toContain('aria-label="Table"');
   });

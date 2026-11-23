@@ -958,7 +958,14 @@
       "skips": 0
     }
   },
-  "history": [],
+  "history": [
+    {
+      "t": "2026-11-22T18:18:32",
+      "event": "unlock",
+      "file": "e2e/rapid-pace.spec.ts",
+      "reason": "TASK-2.5 Q-5 (auto-accepted): scripted-user helper folds only when a Fold button exists, else checks; no assertion change"
+    }
+  ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-3.27",
   "spec_sha256": "58be0b7d145ed65e9f86b226feae25a73e269ed9baaee1c54eab7d63f24c6e79",
   "review_findings": {
@@ -967,5 +974,8 @@
   "doc_id": "doc-75",
   "judge_results": {
     "1": "PASS"
-  }
+  },
+  "relock_pending": [
+    "e2e/rapid-pace.spec.ts"
+  ]
 }

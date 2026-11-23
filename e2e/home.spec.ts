@@ -11,7 +11,7 @@ import { expectToAct } from './support/table-locators';
 const ORIGIN = 'http://localhost:4173';
 /** TASK-3.1's pinned replay code words: 9e3779b9 00000001 00000002 00000003. */
 const WORDS = [0x9e3779b9, 1, 2, 3];
-const NAMES = ['Ava', 'Ben', 'Cal', 'Dee', 'Eli', 'You'];
+const NAMES = ['Ben', 'Cal', 'Dee', 'Eli', 'Ava', 'You'];
 const ASSET_LOGO = readFileSync(
   fileURLToPath(new URL('../src/assets/tlh-logo.jpg', import.meta.url)),
 );

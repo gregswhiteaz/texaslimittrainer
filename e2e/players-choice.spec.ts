@@ -122,11 +122,11 @@ test('each table size from 2 to 10 starts with that many players and the right a
   await playersSelect(page).selectOption({ label: '6 (6-max)' });
   await expectNote(page, 6);
   await expect(opponents(page)).toHaveText([
-    /^Seat 1\s*Ava/,
-    /^Seat 2\s*Ben/,
-    /^Seat 3\s*Cal/,
-    /^Seat 4\s*Dee/,
-    /^Seat 6\s*Eli/,
+    /^Seat 6\s*Ava/,
+    /^Seat 1\s*Ben/,
+    /^Seat 2\s*Cal/,
+    /^Seat 3\s*Dee/,
+    /^Seat 4\s*Eli/,
   ]);
 
   for (const [i, label] of LABELS.entries()) {

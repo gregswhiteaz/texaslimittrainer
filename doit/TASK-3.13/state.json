@@ -925,6 +925,12 @@
       "event": "unlock",
       "file": "e2e/rapid-pace.spec.ts",
       "reason": "TASK-3.27 Q-2 (user): strengthen-only \u2014 meterBotAction check order fixes a race; self-test exact start (2 blinds, seat 3 to act)"
+    },
+    {
+      "t": "2026-11-22T18:18:32",
+      "event": "unlock",
+      "file": "e2e/rapid-pace.spec.ts",
+      "reason": "TASK-2.5 Q-5 (auto-accepted): scripted-user helper folds only when a Fold button exists, else checks; no assertion change"
     }
   ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-3.13",
@@ -937,6 +943,7 @@
     "1": "PASS"
   },
   "relock_pending": [
+    "e2e/rapid-pace.spec.ts",
     "e2e/rapid-pace.spec.ts"
   ]
 }

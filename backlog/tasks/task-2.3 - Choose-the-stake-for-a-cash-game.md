@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-22T23:14:00Z'
+updated_date: '2026-11-23T00:03:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -90,6 +90,8 @@ Follow-ups (Step 6a): AC added to TASK-2.10 (validate stored stake). Sit-and-go 
 Judge R1 PASS 14/14 (real app driven in Chromium+WebKit at 5 stakes).
 
 Locked test(s) edited for TASK-2.2 Q-5 (user-approved): dropdown counts after adding the players select.
+
+Locked test edited for TASK-2.5 Q-4 (routine: counts/selectors for the new Line-up control).
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary

@@ -177,7 +177,8 @@ async function checkOrCall(page: Page): Promise<void> {
 /** The scripted user (A-2): Fold when it is enabled, otherwise Check. */
 async function foldElseCheck(page: Page): Promise<void> {
   const fold = yourActions(page).getByRole('button', { name: 'Fold', exact: true });
-  await clickAction(page, (await fold.isEnabled()) ? 'Fold' : 'Check');
+  const canFold = (await fold.count()) > 0 && (await fold.isEnabled());
+  await clickAction(page, canFold ? 'Fold' : 'Check');
 }
 
 /**

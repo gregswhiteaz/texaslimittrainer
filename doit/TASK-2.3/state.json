@@ -852,6 +852,12 @@
       "event": "unlock",
       "file": "e2e/stake-choice.spec.ts",
       "reason": "TASK-2.2 Q-5 (user-approved): Game Config gains a players <select>; update select/combobox counts and pick the stake select by id; no other expected value changes"
+    },
+    {
+      "t": "2026-11-22T17:03:13",
+      "event": "unlock",
+      "file": "tests/ui/game-config-stake.acceptance.test.tsx",
+      "reason": "TASK-2.5 Q-4 routine: new Line-up radio group \u2014 scope game-type radios by group/name and count the 3 extra radio inputs; keep every assertion"
     }
   ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-2.3",
@@ -866,6 +872,7 @@
   "relock_pending": [
     "tests/ui/game-config-stake.acceptance.test.tsx",
     "tests/ui/game-config-stake.acceptance.test.tsx",
-    "e2e/stake-choice.spec.ts"
+    "e2e/stake-choice.spec.ts",
+    "tests/ui/game-config-stake.acceptance.test.tsx"
   ]
 }

@@ -71,6 +71,9 @@ describe('Game Config stake acceptance', () => {
       expect((html.match(/<input[^>]*>/g) ?? []).map((i) => /type="radio"/.test(i))).toEqual([
         true,
         true,
+        true,
+        true,
+        true,
       ]);
     }
   });

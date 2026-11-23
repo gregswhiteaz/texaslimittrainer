@@ -11,6 +11,7 @@ import { BOT_NAMES } from '../../src/bots/lineup';
 
 const SIX_MAX_NOTE = 'Advice will be approximate (based on 6-max).';
 const FULL_RING_NOTE = 'Advice will be approximate (based on full ring).';
+const MIXED_LABELS = ['Tight-aggressive', 'Calling station', 'Maniac', 'Rock'];
 
 const render = (config: SessionConfig): string =>
   renderToString(
@@ -108,9 +109,9 @@ describe('Game Config players acceptance', () => {
     for (const n of TABLE_SIZES) {
       const html = render(configForPlayers(DEFAULT_SESSION_CONFIG, n));
       const userSeat = Math.min(5, n);
-      const botSeats = Array.from({ length: n }, (_, i) => i + 1).filter((s) => s !== userSeat);
+      const botSeats = Array.from({ length: n - 1 }, (_, i) => ((userSeat + i) % n) + 1);
       expect(seatRows(html)).toEqual([
-        ...botSeats.map((seat, i) => [`Seat ${seat}`, BOT_NAMES[i], 'Tight-aggressive']),
+        ...botSeats.map((seat, i) => [`Seat ${seat}`, BOT_NAMES[i], MIXED_LABELS[i % 4]]),
         ['You', `Seat ${userSeat}`],
       ]);
     }

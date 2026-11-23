@@ -5,8 +5,9 @@ import { stubReplayWords } from './support/table-harness-bundle';
 import { expectToAct } from './support/table-locators';
 
 const ORIGIN = 'http://localhost:4173';
-/** TASK-3.1's pinned replay code words: 9e3779b9 00000001 00000002 00000003. */
-const WORDS = [0x9e3779b9, 1, 2, 3];
+/** Pinned replay code words: 9e3779b9 00000001 00000002 000000b8. With Game Config's Mixed bots (TASK-2.5
+ *  Q-3) the user calls preflop, then the flop and turn are checked to the user. */
+const WORDS = [0x9e3779b9, 1, 2, 0xb8];
 const IDLE = ['Fold', 'Call', 'Raise'];
 
 async function openApp(page: Page): Promise<void> {

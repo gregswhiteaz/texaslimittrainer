@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-22T00:06:00Z'
+updated_date: '2026-11-23T01:18:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -91,6 +91,8 @@ Build: RAPID_BOT_DELAY_MS/botActionDelayMs; every-push unit + fake-clock guard (
 Judge R1 PASS 10/10 (re-ran e2e:slow: 6p max 17.7 ms, 10p max 50.3 ms, 200 hands 1,954/h; 400 ms mutant caught everywhere). Follow-ups: 10-seat real-bot pace → TASK-7.6 AC#10.
 
 Locked e2e/rapid-pace.spec.ts unlocked for TASK-3.27 Q-2 (user-approved strengthen-only race fix).
+
+Locked e2e/rapid-pace.spec.ts helper fixed for TASK-2.5 Q-5 (fold only when Fold exists).
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary

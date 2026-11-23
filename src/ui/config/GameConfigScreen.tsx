@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import { referenceSizeOf } from '../../advice/preflop';
 import type { ReferenceSize } from '../../advice/preflop-chart';
+import { LINE_UP_PRESETS, type LineUpPreset } from '../../bots/lineup';
 import {
+  botsClockwise,
   buyIn,
   CASH_STAKES,
   configForGameType,
-  configForPlayers,
+  configForLineUp,
   DEFAULT_SESSION_CONFIG,
   type BotStyle,
   type GameType,
@@ -62,9 +64,12 @@ const stakeKey = (stake: Stake): string => `${stake.smallBet}/${stake.bigBet}`;
 
 type Field = readonly [string, React.ReactNode, React.ReactNode];
 
-/** Summary of `config` (TASK-2.1 D-6) plus the game-type (TASK-2.4 D-4), players (TASK-2.2 D-1) and stake
- *  (TASK-2.3 D-1) choices; Start game hands over the chosen size's seats, the chosen game type, and the chosen
- *  stake for a cash game. */
+const isPreset = (name: string): name is LineUpPreset =>
+  (LINE_UP_PRESETS as readonly string[]).includes(name);
+
+/** Summary of `config` (TASK-2.1 D-6) plus the game-type (TASK-2.4 D-4), players (TASK-2.2 D-1), stake
+ *  (TASK-2.3 D-1) and line-up (TASK-2.5) choices; Start game hands over the chosen size seated with the chosen
+ *  line-up, the chosen game type, and the chosen stake for a cash game. */
 export function GameConfigScreen({
   config,
   onStart,
@@ -77,8 +82,11 @@ export function GameConfigScreen({
     config.gameType === 'cash' ? config.stake : DEFAULT_SESSION_CONFIG.stake,
   );
   const [players, setPlayers] = useState(config.players);
-  // A-1: the given config is kept as-is while its own size is chosen.
-  const seated = players === config.players ? config : configForPlayers(config, players);
+  // TASK-2.5 A-1: start at the config's preset, or Mixed when it has none.
+  const [preset, setPreset] = useState<LineUpPreset>(
+    isPreset(config.lineUp) ? config.lineUp : 'Mixed',
+  );
+  const seated = configForLineUp(config, players, preset);
   const note = playersNote(players);
   const stack = buyIn(stake);
   const gameTypeChoice = (
@@ -147,7 +155,7 @@ export function GameConfigScreen({
     ...(gameType === 'cash' ? cashFields : []),
     ['speed', 'Speed', SPEED_LABELS[config.speed]],
   ];
-  const bots = seated.seats.filter((s) => s.kind === 'bot');
+  const bots = botsClockwise(seated);
 
   return (
     <main className="screen">
@@ -173,6 +181,25 @@ export function GameConfigScreen({
         </section>
         <section className="panel" aria-labelledby="config-opponents">
           <h2 id="config-opponents">Opponents</h2>
+          <div
+            role="radiogroup"
+            aria-labelledby="config-lineup"
+            className="config-choice config-lineup"
+          >
+            <span id="config-lineup">Line-up</span>
+            {LINE_UP_PRESETS.map((value) => (
+              <label key={value}>
+                <input
+                  type="radio"
+                  name="line-up"
+                  value={value}
+                  checked={preset === value}
+                  onChange={() => setPreset(value)}
+                />
+                {value}
+              </label>
+            ))}
+          </div>
           <ul className="config-seats">
             {bots.map((s) => (
               <li key={s.seat}>

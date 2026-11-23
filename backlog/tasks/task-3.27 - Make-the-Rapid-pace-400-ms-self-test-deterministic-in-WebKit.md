@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-21T23:44:00Z'
-updated_date: '2026-11-22T00:36:00Z'
+updated_date: '2026-11-23T01:18:00Z'
 labels:
   - follow-up
   - dream-limit-holdem-trainer
@@ -49,6 +49,8 @@ AC#1 rewritten by the user (Q-1): the original hypothesis was refuted; real caus
 Build: meterBotAction check order fixed; self-test exact start (2 actions, seat 3 to act); 200/200 paused-clock runs; mutants M1/M2 caught; stress 30/30 fixed vs 7/30 old order fail; gate PASS.
 
 Judge R1 PASS 5/5 (old helper 2/30 fail vs fixed 30/30 under injected latency; guard old 30/30 dropped samples vs fixed 0; 200/200 repeat runs; CI 44966056187 green; M1/M2 caught). Follow-ups: none.
+
+Locked e2e/rapid-pace.spec.ts helper fixed for TASK-2.5 Q-5 (fold only when Fold exists).
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary

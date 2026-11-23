@@ -195,6 +195,20 @@ h1[tabindex='-1']:focus {
   font-size: 13px;
 }
 
+.config-lineup {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.config-lineup > span {
+  margin-right: 4px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
 .config-seats {
   margin: 0;
   padding: 0;

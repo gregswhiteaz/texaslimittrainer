@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-22T23:14:00Z'
+updated_date: '2026-11-23T00:03:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -103,6 +103,8 @@ Judge R1 PASS 15/15 (real app both browsers, keyboard; 9/9 mutants). J-1-02 → 
 Locked e2e test unlocked for TASK-1.52 Q-1 (user-approved; clock-advance only).
 
 Locked test(s) edited for TASK-2.2 Q-5 (user-approved): dropdown counts after adding the players select.
+
+Locked test edited for TASK-2.5 Q-4 (routine: counts/selectors for the new Line-up control).
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary

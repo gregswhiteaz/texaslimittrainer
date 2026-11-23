@@ -12,6 +12,8 @@ const ORIGIN = 'http://localhost:4173';
 /** Pinned replay code words for every test (A-11): 9e3779b9 00000001 00000002 00000003. */
 const WORDS = [0x9e3779b9, 1, 2, 3];
 const NAMES = ['Ava', 'Ben', 'Cal', 'Dee', 'Eli', 'You'];
+/** Game Config's Mixed line-up (TASK-2.5): Ava sits at seat 6, Ben–Eli at seats 1–4. */
+const MIXED_NAMES = ['Ben', 'Cal', 'Dee', 'Eli', 'Ava', 'You'];
 /** The idle (disabled) set plus the exact-amount labels (TASK-3.2 D-4). */
 const BUTTON_NAME = /^(Fold|Check|Call|Raise|Call \$\d+|Bet \$\d+|Raise to \$\d+|Leave table)$/;
 const BOARD_BY_STREET: Record<string, number> = { preflop: 0, flop: 3, turn: 4, river: 5 };
@@ -161,7 +163,7 @@ test('default table seats the user and five bots with $160 each', async ({ page 
   await openApp(page);
 
   await expect(tableSection(page)).toBeVisible();
-  expect(await seatRows(page)).toEqual(NAMES.map((name) => ({ name, stack: '$160' })));
+  expect(await seatRows(page)).toEqual(MIXED_NAMES.map((name) => ({ name, stack: '$160' })));
   expect(await actionCount(page)).toBe(0);
 
   await runFor1000(page);

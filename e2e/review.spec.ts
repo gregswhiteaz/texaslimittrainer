@@ -282,20 +282,26 @@ async function entries(page: Page): Promise<EntryText[]> {
 /** The pinned check/call hand of the spec (§5). */
 const PINNED_ENTRIES: EntryText[] = [
   { street: 'Preflop', cards: [], you: 'Call $4', advice: 'Fold', grade: 'Major error' },
-  { street: 'Flop', cards: ['Jd', '6h', '9h'], you: 'Check', advice: 'Check', grade: 'Correct' },
+  {
+    street: 'Flop',
+    cards: ['Jd', '6h', '9h'],
+    you: 'Call $4',
+    advice: 'Fold',
+    grade: 'Minor error',
+  },
   {
     street: 'Turn',
     cards: ['Jd', '6h', '9h', '3c'],
-    you: 'Check',
-    advice: 'Check',
-    grade: 'Correct',
+    you: 'Call $8',
+    advice: 'Fold',
+    grade: 'Major error',
   },
   {
     street: 'River',
     cards: ['Jd', '6h', '9h', '3c', '8s'],
-    you: 'Check',
-    advice: 'Check',
-    grade: 'Correct',
+    you: 'Call $8',
+    advice: 'Fold',
+    grade: 'Major error',
   },
 ];
 
@@ -337,7 +343,7 @@ test('after a played hand the review opens beside the table, holds the next hand
   await installPausedClock(page);
   await openApp(page, [WORDS]);
   await checkOrCallToResult(page);
-  await expect(winnerLines(page)).toContainText('Ben wins $10');
+  await expect(winnerLines(page)).toContainText('Cal wins $50');
 
   const panel = page.getByRole('complementary', { name: 'Hand #1 review' });
   await expect(panel).toBeVisible();
@@ -350,9 +356,9 @@ test('after a played hand the review opens beside the table, holds the next hand
   );
   expect(backgrounds).toEqual([
     'rgb(163, 21, 28)',
-    'rgb(47, 111, 224)',
-    'rgb(47, 111, 224)',
-    'rgb(47, 111, 224)',
+    'rgb(154, 91, 0)',
+    'rgb(163, 21, 28)',
+    'rgb(163, 21, 28)',
   ]);
   for (const badge of await badges.all()) await expect(badge).toBeVisible();
 
@@ -375,7 +381,7 @@ test('after a played hand the review opens beside the table, holds the next hand
   await expect(header(page)).toHaveText(`${HEADER}2`);
   expect(await draws(page)).toBe(2);
   expect(await dealerSeats(page)).toEqual(['1']);
-  expect(await seatStacks(page)).toEqual(['$158', '$164', '$156', '$160', '$156', '$160']);
+  expect(await seatStacks(page)).toEqual(['$158', '$184', '$156', '$160', '$136', '$160']);
   await expect(page.getByRole('status')).toHaveCount(0);
 
   expect(requests.length).toBeGreaterThan(0);

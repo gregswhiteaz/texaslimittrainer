@@ -23,7 +23,14 @@ import {
 import { botDecisionSeed, replacementGenerator } from '../engine/bot-random';
 import { isReplayCode } from '../engine/deck';
 import { tagPolicy } from '../bots/tag';
-import { BOT_NAMES, nextReplacementName, replacementStyles } from '../bots/lineup';
+import {
+  BOT_NAMES,
+  lineUpSessionConfig,
+  nextReplacementName,
+  replacementStyles,
+  seatLineUp,
+  type LineUpPreset,
+} from '../bots/lineup';
 
 export interface Stake {
   readonly smallBet: number;
@@ -152,6 +159,27 @@ export function configForPlayers(config: SessionConfig, players: number): Sessio
       : { seat, name: BOT_NAMES[bot++] as string, kind: 'bot', style: 'TAG' };
   });
   return { ...config, players, seats, userSeat, button: (userSeat % players) + 1 };
+}
+
+/** `config` seated for `players` with `preset`'s line-up (TASK-2.5 D-4): user at min(USER_SEAT, players),
+ *  button the seat after the user, bots from seatLineUp, lineUp = preset. Game type, stake and speed are kept.
+ *  RangeError on a bad size or an unknown preset. */
+export function configForLineUp(
+  config: SessionConfig,
+  players: number,
+  preset: LineUpPreset,
+): SessionConfig {
+  const sized = configForPlayers(config, players);
+  return lineUpSessionConfig(sized, preset, seatLineUp(preset, players, sized.userSeat));
+}
+
+/** The bot seats in clockwise order, starting with the first bot clockwise from the user. */
+export function botsClockwise(config: SessionConfig): readonly SessionSeat[] {
+  const distance = (seat: number): number =>
+    (seat - config.userSeat + config.players) % config.players;
+  return config.seats
+    .filter((s) => s.kind === 'bot')
+    .sort((a, b) => distance(a.seat) - distance(b.seat));
 }
 
 /** `input` merged over the first-use defaults; a sit-and-go drops the stake. Not validated (A-11). */
