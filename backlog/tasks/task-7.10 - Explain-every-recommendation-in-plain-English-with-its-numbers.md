@@ -1,10 +1,11 @@
 ---
 id: TASK-7.10
 title: Explain every recommendation in plain English with its numbers
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-17T23:22:00Z'
+updated_date: '2026-11-23T08:57:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -68,3 +69,15 @@ Plan key: E07-S12 · Dream: limit-holdem-trainer
 - [ ] #12 Story documentation is written and published to Backlog.md
 - [ ] #13 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. src/advice/explanations.ts: authored concepts (10 one-clause definitions) and templates per rule/situation.
+2. src/advice/explain.ts fills templates; preflop/postflop recommendations gain readonly explanation.
+3. Docs explanations.md; unit tests pin exact wording.
+4. explanations.acceptance: 10k seeded playtest decisions (split 2k/10k-slow if > 8 s); AC#1–#5.
+5. Locked re-pins 7.3/7.8 (explanation key); playtest SHA unchanged.
+
+Full spec: doit/TASK-7.10/spec.md
+<!-- SECTION:PLAN:END -->

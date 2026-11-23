@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-23T07:51:00Z'
+updated_date: '2026-11-23T08:56:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -100,6 +100,8 @@ Review R1: 0 blocking; MINOR 1–2 fixed in-story; MINOR 3 (9-opp latency) → A
 Judge R1 PASS 16/16 (own value rule matched 730 random views; postflop bets/raises per style: TAG 0→493/423, CS 0→646/475, Rock 0→81/55; 7/7 meaningful mutants). Follow-ups: AC on TASK-7.18 (9-opp latency), TASK-1.53 (shard balance).
 
 Locked test re-pinned by TASK-7.9 Q-3 (auto-accepted; assertion count kept).
+
+Locked test re-pinned by TASK-7.10 Q-3 (explanation key; auto-accepted; count kept).
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary

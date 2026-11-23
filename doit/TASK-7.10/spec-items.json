@@ -1,0 +1,74 @@
+[
+  {
+    "id": "SPEC-01",
+    "verifies": "AC#1",
+    "verification": "acceptance `tests/advice/explanations.acceptance.test.ts::AC#1 every explanation in a 10,000-decision playtest sample has at most three sentences` (if D-6 splits: the same assertions on the first 2,000 decisions every push, and on 10,000 under `TLH_SLOW_TESTS=1`)",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-02",
+    "verifies": "AC#2",
+    "verification": "acceptance `tests/advice/explanations.acceptance.test.ts::AC#2 every explanation names a concept from the list`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-03",
+    "verifies": "AC#3",
+    "verification": "acceptance `tests/advice/explanations.acceptance.test.ts::AC#3 the first sentence naming a concept contains its definition`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-04",
+    "verifies": "AC#4",
+    "verification": "acceptance `tests/advice/explanations.acceptance.test.ts::AC#4 postflop explanations quote the equity and required equity the advice returns`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-05",
+    "verifies": "AC#5",
+    "verification": "acceptance `tests/advice/explanations.acceptance.test.ts::AC#5 the same decision always gets the same explanation`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-06",
+    "verifies": "DoD#1, DoD#2, DoD#10",
+    "verification": "unit `tests/advice/explain.test.ts::explanation copy`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-07",
+    "verifies": "DoD#1, DoD#10",
+    "verification": "unit `tests/advice/explain.test.ts::authored explanation data`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-08",
+    "verifies": "DoD#2",
+    "verification": "unit `tests/advice/explain.test.ts::explanation helpers`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-09",
+    "verifies": "DoD#7",
+    "verification": "command `bash -c 'npm run -s playtest -- --hands 10000 --seed 42 | tee /dev/stderr | shasum -a 256'`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-10",
+    "verifies": "DoD#3, DoD#5, DoD#6, DoD#9",
+    "verification": "command `npm run lint && npm run typecheck && npm test`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-11",
+    "verifies": "DoD#1, DoD#10, DoD#12",
+    "verification": "manual `docs/advice/explanations.md` read against this list; `backlog doc list --plain` shows the story doc",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-12",
+    "verifies": "DoD#4, DoD#8, DoD#11, DoD#13",
+    "verification": "manual `gh run list --branch doit/TASK-7.10 --limit 1` shows success",
+    "status": "pending"
+  }
+]
