@@ -234,7 +234,7 @@ test('onHandComplete fires exactly once per hand even with the same replay code'
   await openRecordsHarness(page, bundle, WORDS, { churn: true });
 
   await playToResult(page, 1, fakeSlice(page));
-  expect((await harnessLog(page)).calls).toHaveLength(1);
+  await expect.poll(async () => (await harnessLog(page)).calls).toHaveLength(1);
   const renders = (await harnessLog(page)).renders;
   const resultAt = await eventAt(page, 'result');
   await runTo(page, resultAt + 1450);
@@ -242,14 +242,15 @@ test('onHandComplete fires exactly once per hand even with the same replay code'
   expect(paused.renders - renders).toBeGreaterThanOrEqual(10);
   expect(paused.calls).toHaveLength(1);
   await advanceToHand(page, 2, fakeSlice(page));
-  expect((await harnessLog(page)).calls).toHaveLength(1);
+  await expect.poll(async () => (await harnessLog(page)).calls).toHaveLength(1);
 
   await playToResult(page, 2, fakeSlice(page));
-  expect((await harnessLog(page)).calls).toHaveLength(2);
+  await expect.poll(async () => (await harnessLog(page)).calls).toHaveLength(2);
   await advanceToHand(page, 3, fakeSlice(page));
   await playToResult(page, 3, fakeSlice(page));
-  const { calls } = await harnessLog(page);
-  expect(calls).toEqual([PINNED_CODE, PINNED_CODE, PINNED_CODE]);
+  await expect
+    .poll(async () => (await harnessLog(page)).calls)
+    .toEqual([PINNED_CODE, PINNED_CODE, PINNED_CODE]);
 
   await expect.poll(() => storedCount(page)).toBe(3);
   const records = await storedRecords(page);
