@@ -1,0 +1,69 @@
+{
+  "id": "TASK-1.54",
+  "title": "Stop file-sync conflict copies from reaching commits",
+  "status": "To Do",
+  "archived": false,
+  "type": null,
+  "priority": "high",
+  "project": null,
+  "assignees": [],
+  "reporter": null,
+  "labels": [
+    "dream-limit-holdem-trainer",
+    "follow-up"
+  ],
+  "milestone": "m-1",
+  "parentTaskId": "TASK-1",
+  "acceptanceCriteriaCompleted": 0,
+  "acceptanceCriteriaCount": 2,
+  "references": [],
+  "modifiedFiles": [],
+  "ordinal": 225000,
+  "createdAt": "2026-11-23T13:44:00Z",
+  "updatedAt": "2026-11-23T13:45:00Z",
+  "dueDate": null,
+  "isReady": true,
+  "path": "backlog/tasks/task-1.54 - Stop-file-sync-conflict-copies-from-reaching-commits.md",
+  "description": "From TASK-3.10: iCloud 'name 2.ext' sync-conflict copies appeared in the working tree (the project lives under ~/Documents), broke typecheck and the gate, and one under backlog/ was committed by the doit commit step. Real failure. Options: move the repo out of an iCloud-synced folder (user action), ignore '* 2.*' patterns in .gitignore, and/or a repo check that fails on such files.",
+  "dependencies": [],
+  "dependencyGraph": {
+    "root": "TASK-1.54",
+    "nodes": [
+      {
+        "id": "TASK-1.54",
+        "title": "Stop file-sync conflict copies from reaching commits",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": 0,
+        "dependentDepth": 0
+      }
+    ],
+    "edges": []
+  },
+  "readiness": {
+    "isReady": true,
+    "isBlocked": false,
+    "blockingDependencies": [],
+    "missingDependencies": []
+  },
+  "documentation": [],
+  "subtasks": [],
+  "acceptanceCriteria": [
+    {
+      "index": 1,
+      "text": "Given a file named like 'x 2.ts' or 'doc-100 \u2026 2.md' appears in the working tree, When tests/lint or the CI check run, Then the run fails naming the file (or git ignores it via .gitignore), so it cannot be committed",
+      "checked": false
+    },
+    {
+      "index": 2,
+      "text": "Given the guidance in docs, When a developer reads it, Then it says the repo must not live in an iCloud-synced folder (Desktop & Documents) and how to move it",
+      "checked": false
+    }
+  ],
+  "definitionOfDone": [],
+  "implementationPlan": null,
+  "implementationNotes": "No dependency: the guard protects every later commit; run it next so parked/following stories don't pick up sync copies.",
+  "comments": [],
+  "finalSummary": null
+}
