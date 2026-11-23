@@ -3,84 +3,84 @@
     "id": "SPEC-01",
     "verifies": "AC#1, DoD#1",
     "verification": "acceptance `tests/stats/style-stats.acceptance.test.ts::AC#1 VPIP is 50% and PFR is 20% over 10 hands`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-02",
     "verifies": "AC#2, DoD#1",
     "verification": "acceptance `tests/stats/style-stats.acceptance.test.ts::AC#2 Aggression is 50% using flop, turn and river actions only`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-03",
     "verifies": "AC#3, DoD#1",
     "verification": "acceptance `tests/stats/style-stats.acceptance.test.ts::AC#3 WTSD is 25% when 2 of 8 flops reach showdown`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-04",
     "verifies": "AC#4, DoD#1",
     "verification": "acceptance `tests/stats/style-stats.acceptance.test.ts::AC#4 W$SD is 50% when one of two showdowns is a split pot`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-05",
     "verifies": "AC#5, DoD#1",
     "verification": "acceptance `tests/stats/style-stats.acceptance.test.ts::AC#5 a stat with a zero denominator shows \u2014`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-06",
     "verifies": "AC#6, DoD#1",
     "verification": "acceptance `tests/stats/style-stats.acceptance.test.ts::AC#6 posting a blind and folding is not VPIP`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-07",
     "verifies": "AC#3, AC#4, DoD#1",
     "verification": "unit `tests/stats/style-stats.test.ts::edge hands: all-in, runout, muck, returned bet, side pot, fold-out`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-08",
     "verifies": "AC#5, DoD#1",
     "verification": "unit `tests/stats/style-stats.test.ts::undealt seats, sums, purity and formatting`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-09",
     "verifies": "DoD#1, DoD#4",
     "verification": "unit `tests/stats/style-stats.test.ts::real playtest hands satisfy the count invariants`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-10",
     "verifies": "DoD#1, DoD#2",
     "verification": "unit `tests/stats/style-stats.test.ts::a CompletedHand is accepted as a StatHand`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-11",
     "verifies": "DoD#1, DoD#2",
     "verification": "command `TLH_SLOW_TESTS=1 npx vitest run tests/bots/style-bands.acceptance.test.ts -t \"seed 42\"`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-12",
     "verifies": "DoD#2, DoD#3, DoD#4, DoD#5, DoD#6, DoD#8",
     "verification": "command `npm run lint && npm run typecheck && npm test && npm run -s playtest -- --hands 10000 --seed 42`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-13",
     "verifies": "DoD#11",
     "verification": "manual read of `docs/stats/style-stats.md` against this list; `backlog doc list --plain` shows the story doc",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-14",
     "verifies": "DoD#7, DoD#9, DoD#10, DoD#12",
     "verification": "manual `gh run list --branch doit/TASK-7.12 --limit 1` shows success",
-    "status": "pending"
+    "status": "pass"
   }
 ]

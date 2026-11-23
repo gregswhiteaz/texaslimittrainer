@@ -9,3 +9,4 @@
 - npm test: 208 files passed, 3 skipped; 919 tests passed, 35 skipped.
 - Playtest: npm run -s playtest -- --hands 10000 --seed 42 | shasum -a 256 = 14d746f736d6afd3968e7ae7e833814d95dab94378c80c11dd59b1fd6ea72e48 (unchanged), Invariant violations: 0.
 - Gate (doit.py gate TASK-7.12): PASS (test, lint, typecheck ok; scope warn 983 vs 560 lines, mostly Prettier-expanded fixtures).
+- Judge J-1-01 (orchestrator): unit test adds formatStat(200/3) → '67%' (round-up case).

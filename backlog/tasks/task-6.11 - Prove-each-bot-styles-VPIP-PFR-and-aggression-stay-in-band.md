@@ -4,7 +4,7 @@ title: Report each bot style's VPIP, PFR and aggression against its band
 status: To Do
 assignee: []
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-23T06:34:00Z'
+updated_date: '2026-11-23T11:08:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -51,6 +51,7 @@ Plan key: E06-S09 · Dream: limit-holdem-trainer
 - [ ] #8 Given `npm run playtest -- --hands 100000 --lineup mixed --size 6 --check-styles` with seeds 42, 7 and 1234, When it completes, Then TAG and Rock lines report inside their bands (TASK-6.16 tuned the Rock's postflop value bar to 75%)
 - [ ] #9 Given `npm run playtest -- --hands 100000 --lineup mixed --size 6 --check-styles` with seeds 42, 7 and 1234, When it completes, Then all four styles (TAG, Rock, Calling station, Maniac) report inside their bands and the command exits 0 (TASK-6.17 tuning)
 - [ ] #10 Given the 100k --check-styles run, When CI is set up, Then it runs in a nightly or on-demand workflow (deferred DoD#1 of TASK-6.17)
+- [ ] #11 Given --check-styles, When it measures VPIP, PFR and aggression, Then it uses styleStats/styleCounts from src/stats/style-stats.ts (TASK-7.12), not a separate counter
 <!-- AC:END -->
 
 ## Definition of Done
@@ -83,4 +84,6 @@ AC added from TASK-6.16 Q-1 (CLI band check deferred here)
 From TASK-6.16 judge: TAG aggression measured 64.1% on seed 555 (30k) vs 65 ceiling — watch the margin in the --check-styles re-check.
 
 ACs added from TASK-6.17 Q-1/Q-2
+
+AC added from TASK-7.12 follow-up.
 <!-- SECTION:NOTES:END -->

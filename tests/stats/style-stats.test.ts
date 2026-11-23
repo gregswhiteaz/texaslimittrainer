@@ -226,6 +226,7 @@ describe('style stats units', () => {
     expect([a, b]).toEqual(before);
 
     expect(formatStat(100 / 3)).toBe('33%');
+    expect(formatStat(200 / 3)).toBe('67%');
     expect(formatStat(0)).toBe('0%');
     expect(formatStat(100)).toBe('100%');
   });
