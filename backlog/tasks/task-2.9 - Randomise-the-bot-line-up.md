@@ -1,10 +1,11 @@
 ---
 id: TASK-2.9
 title: Randomise the bot line-up
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-17T23:22:00Z'
+updated_date: '2026-11-23T02:28:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -58,3 +59,14 @@ Plan key: E02-S07 · Dream: limit-holdem-trainer
 - [ ] #11 Story documentation is written and published to Backlog.md
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. randomBotStyles(config, nextWord) (uniform word%4 per bot, clockwise) and configWithSeatStyles in session.ts.
+2. Game Config 'Randomise line-up' outline button beside Opponents; crypto.getRandomValues one 1-word call per seat on press; replaces edits.
+3. Tests: seeded 1,000-draw tabulation, Custom name, rows/table styles in browser (stubbed 1-word draws), axe.
+4. Q-3 locked button-list edits.
+
+Full spec: doit/TASK-2.9/spec.md
+<!-- SECTION:PLAN:END -->

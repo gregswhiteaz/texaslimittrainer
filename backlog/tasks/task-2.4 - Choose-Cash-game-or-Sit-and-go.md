@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-23T01:53:00Z'
+updated_date: '2026-11-23T02:28:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -107,6 +107,8 @@ Locked test(s) edited for TASK-2.2 Q-5 (user-approved): dropdown counts after ad
 Locked test edited for TASK-2.5 Q-4 (routine: counts/selectors for the new Line-up control).
 
 Locked test e2e/game-type-choice.spec.ts edited for TASK-2.8 Q-2 (auto-accepted; row parsing/counts only).
+
+Locked test tests/ui/game-config-game-type.acceptance.test.tsx edited for TASK-2.9 Q-3 (auto-accepted; button list).
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary

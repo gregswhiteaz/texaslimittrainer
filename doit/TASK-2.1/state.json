@@ -464,6 +464,12 @@
       "event": "unlock",
       "file": "tests/ui/home.acceptance.test.tsx",
       "reason": "TASK-2.8 Q-2 (auto-accepted): per-row style select \u2014 read style from the selected option / scope control counts; no expected result changes"
+    },
+    {
+      "t": "2026-11-22T19:28:23",
+      "event": "unlock",
+      "file": "tests/ui/home.acceptance.test.tsx",
+      "reason": "TASK-2.9 Q-3 (auto-accepted): Game Config gains a 'Randomise line-up' button \u2014 add it to the button list; no other expected value changes"
     }
   ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-2.1",
@@ -482,6 +488,7 @@
     "tests/ui/home.acceptance.test.tsx",
     "tests/ui/home.acceptance.test.tsx",
     "e2e/home.spec.ts",
+    "tests/ui/home.acceptance.test.tsx",
     "tests/ui/home.acceptance.test.tsx"
   ]
 }

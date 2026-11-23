@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-23T01:53:00Z'
+updated_date: '2026-11-23T02:28:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-0
@@ -105,6 +105,8 @@ Locked test tests/ui/home.acceptance.test.tsx edited for TASK-2.5 (Q-2 routine).
 Locked test e2e/home.spec.ts edited for TASK-2.5 (Q-2 routine).
 
 Locked test tests/ui/home.acceptance.test.tsx edited for TASK-2.8 Q-2 (auto-accepted; row parsing/counts only).
+
+Locked test tests/ui/home.acceptance.test.tsx edited for TASK-2.9 Q-3 (auto-accepted; button list).
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary
