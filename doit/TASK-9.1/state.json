@@ -502,6 +502,12 @@
       "event": "unlock",
       "file": "e2e/review.spec.ts",
       "reason": "TASK-1.52 Q-2 (user-approved): bound 400-slice play-to-end loops by real time; assertions unchanged"
+    },
+    {
+      "t": "2026-11-22T17:00:14",
+      "event": "unlock",
+      "file": "e2e/review.spec.ts",
+      "reason": "TASK-2.5 Q-3 user-approved expected values: Mixed default line-up on Game Config; keep every assertion"
     }
   ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-9.1",
@@ -515,6 +521,7 @@
   },
   "relock_pending": [
     "tests/table/review.acceptance.test.ts",
+    "e2e/review.spec.ts",
     "e2e/review.spec.ts",
     "e2e/review.spec.ts"
   ]

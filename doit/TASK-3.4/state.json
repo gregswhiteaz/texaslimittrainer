@@ -494,6 +494,12 @@
       "event": "unlock",
       "file": "tests/table/next-hand.acceptance.test.ts",
       "reason": "TASK-6.8 Q-4 (user-approved): busted bot replaced (Jay, $160); top-up count \u2192 only $0 bot / user <$96 change, $94 bot keeps $94"
+    },
+    {
+      "t": "2026-11-22T17:00:14",
+      "event": "unlock",
+      "file": "e2e/next-hand.spec.ts",
+      "reason": "TASK-2.5 Q-2 routine + Q-3 user-approved: Mixed default line-up on Game Config; keep every assertion"
     }
   ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-3.4",
@@ -515,6 +521,7 @@
     "tests/ui/hand-result.acceptance.test.tsx",
     "e2e/next-hand.spec.ts",
     "e2e/next-hand.spec.ts",
-    "tests/table/next-hand.acceptance.test.ts"
+    "tests/table/next-hand.acceptance.test.ts",
+    "e2e/next-hand.spec.ts"
   ]
 }

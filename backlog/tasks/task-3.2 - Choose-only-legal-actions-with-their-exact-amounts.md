@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-22T15:34:00Z'
+updated_date: '2026-11-23T00:00:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-0
@@ -90,6 +90,8 @@ CI run 44413273045 (head 9bfb87d): success first push. Judge round 1: PASS 18/18
 Locked e2e test unlocked for TASK-1.52 Q-1 (user-approved; clock-advance only).
 
 Locked e2e test unlocked for TASK-1.52 Q-2 (user-approved; clock-advance loop bound only).
+
+Locked test e2e/action-bar.spec.ts edited for TASK-2.5 (Q-3 user-approved re-pin).
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary

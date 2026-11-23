@@ -446,6 +446,18 @@
       "event": "unlock",
       "file": "tests/ui/home.acceptance.test.tsx",
       "reason": "TASK-2.2 Q-5 (user-approved): Game Config gains a players <select>; update select/combobox counts and pick the stake select by id; no other expected value changes"
+    },
+    {
+      "t": "2026-11-22T17:00:13",
+      "event": "unlock",
+      "file": "tests/ui/home.acceptance.test.tsx",
+      "reason": "TASK-2.5 Q-2 routine: Mixed default line-up on Game Config; keep every assertion"
+    },
+    {
+      "t": "2026-11-22T17:00:13",
+      "event": "unlock",
+      "file": "e2e/home.spec.ts",
+      "reason": "TASK-2.5 Q-2 routine: Mixed default line-up on Game Config; keep every assertion"
     }
   ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-2.1",
@@ -461,6 +473,8 @@
     "tests/ui/home.acceptance.test.tsx",
     "tests/ui/home.acceptance.test.tsx",
     "e2e/home.spec.ts",
-    "tests/ui/home.acceptance.test.tsx"
+    "tests/ui/home.acceptance.test.tsx",
+    "tests/ui/home.acceptance.test.tsx",
+    "e2e/home.spec.ts"
   ]
 }

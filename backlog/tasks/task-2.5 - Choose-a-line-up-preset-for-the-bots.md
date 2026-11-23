@@ -1,10 +1,11 @@
 ---
 id: TASK-2.5
 title: Choose a line-up preset for the bots
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-22T16:14:00Z'
+updated_date: '2026-11-23T00:00:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -64,6 +65,18 @@ Plan key: E02-S05 · Dream: limit-holdem-trainer
 - [ ] #11 Story documentation is written and published to Backlog.md
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. configForLineUp(config, players, preset) in session.ts: seatLineUp names/styles clockwise from the user, configForPlayers button, lineUpSessionConfig name.
+2. Game Config 'Line-up' radio group (Mixed/Tough/Soft, Mixed first) above the bot rows; rows rebuild on players/preset change.
+3. Start game seats exactly the listed bots with the resolved line-up name; DEFAULT_SESSION_CONFIG stays all-TAG.
+4. Approved locked-test edits: Q-2 routine (names/labels), Q-3 user-approved (action-bar re-pin; next-hand/review expected values).
+5. Run e2e:slow first; e2e Chromium/WebKit with axe.
+
+Full spec: doit/TASK-2.5/spec.md
+<!-- SECTION:PLAN:END -->
 
 ## Implementation Notes
 

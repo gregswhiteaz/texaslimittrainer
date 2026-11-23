@@ -1,0 +1,92 @@
+[
+  {
+    "id": "SPEC-01",
+    "verifies": "AC#1, DoD#1",
+    "verification": "acceptance `tests/ui/game-config-lineup.acceptance.test.tsx::a fresh game config selects Mixed and lists TAG, Calling station, Maniac, Rock, TAG clockwise from the user`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-02",
+    "verifies": "AC#2, DoD#1",
+    "verification": "acceptance `tests/ui/game-config-lineup.acceptance.test.tsx::tough at 9 players lists 8 rows with only the first bot clockwise a Maniac`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-03",
+    "verifies": "AC#3, DoD#1",
+    "verification": "acceptance `tests/table/lineup-config.acceptance.test.ts::switching from 6 to 4 players with Soft gives Calling station, Rock, Calling station`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-04",
+    "verifies": "AC#4, DoD#1",
+    "verification": "acceptance `tests/ui/game-config-lineup.acceptance.test.tsx::heads-up tough lists a single TAG bot`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-05",
+    "verifies": "AC#5, DoD#1",
+    "verification": "acceptance `tests/ui/game-config-lineup.acceptance.test.tsx::every preset at 10 players lists 9 rows with distinct names`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-06",
+    "verifies": "AC#6, DoD#1",
+    "verification": "acceptance `tests/table/lineup-config.acceptance.test.ts::start game with Soft at 6 seats the listed bots and records the line-up Soft`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-07",
+    "verifies": "AC#7, DoD#1",
+    "verification": "acceptance `tests/table/lineup-config.acceptance.test.ts::start game's button is a seat at every table size and preset`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-08",
+    "verifies": "AC#7, DoD#1",
+    "verification": "unit `tests/table/lineup-config.test.ts::configForLineUp keeps game type, stake and speed and rejects bad sizes and presets`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-09",
+    "verifies": "AC#1, AC#6, DoD#1, DoD#7, DoD#8",
+    "verification": "acceptance `e2e/lineup-choice.spec.ts::first use selects Mixed and Start game with Soft seats exactly the listed bots`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-10",
+    "verifies": "AC#2, AC#3, AC#4, DoD#1, DoD#7",
+    "verification": "acceptance `e2e/lineup-choice.spec.ts::the rows follow the preset and the players count`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-11",
+    "verifies": "DoD#1, DoD#7",
+    "verification": "integration `npm test && npm run e2e && npm run e2e:slow`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-12",
+    "verifies": "DoD#2, DoD#4, DoD#5",
+    "verification": "command `npm run lint && npm run typecheck && npm test`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-13",
+    "verifies": "DoD#6",
+    "verification": "command `npm run playtest -- --hands 10000 --seed 42 --lineup mixed && npm run playtest -- --hands 10000 --seed 42 --lineup tough && npm run playtest -- --hands 10000 --seed 42 --lineup soft`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-14",
+    "verifies": "DoD#10, DoD#11",
+    "verification": "manual CI run on branch `doit/TASK-2.5` and `backlog doc list --plain`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-15",
+    "verifies": "DoD#3, DoD#9, DoD#12",
+    "verification": "manual Judge confirms no `tests/advice/*golden*` suite and no service worker exist, and the diff adds no strategy content",
+    "status": "pending"
+  }
+]

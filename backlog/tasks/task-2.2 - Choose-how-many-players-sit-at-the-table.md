@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-22T23:41:00Z'
+updated_date: '2026-11-23T00:00:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -102,6 +102,10 @@ Build: players select (2–10) + approximate-advice note, configForPlayers seati
 Review R1: 0 blocking; Q-5 locked edits verified count/selection-only; MINOR copied axe helper (5 copies) — not tracked (test-harness, no failure path); 2 NITs.
 
 Judge R1 PASS 17/17 (242 browser checks on a production build, 0 failures; 18/19 mutants). J-1-01 MEDIUM (You row seat untested) fixed in-story with an e2e assertion that fails under the mutant; gate PASS. J-1-02 LOW: TASK-2.1 integrity counts one fewer expect in e2e/home.spec.ts from TASK-1.52 (import-line removal; not this task). Follow-up: AC on TASK-3.16 (10-seat layout).
+
+Locked test tests/ui/game-config-players.acceptance.test.tsx edited for TASK-2.5 (Q-2 routine).
+
+Locked test e2e/players-choice.spec.ts edited for TASK-2.5 (Q-2 routine).
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary

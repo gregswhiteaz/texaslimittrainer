@@ -1148,6 +1148,18 @@
       "event": "unlock",
       "file": "e2e/players-choice.spec.ts",
       "reason": "Judge J-1-01: assert the 'You \u00b7 Seat n' row follows the chosen size (strengthen)"
+    },
+    {
+      "t": "2026-11-22T17:00:13",
+      "event": "unlock",
+      "file": "tests/ui/game-config-players.acceptance.test.tsx",
+      "reason": "TASK-2.5 Q-2 routine: Mixed default line-up on Game Config; keep every assertion"
+    },
+    {
+      "t": "2026-11-22T17:00:13",
+      "event": "unlock",
+      "file": "e2e/players-choice.spec.ts",
+      "reason": "TASK-2.5 Q-2 routine: Mixed default line-up on Game Config; keep every assertion"
     }
   ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-2.2",
@@ -1159,5 +1171,8 @@
   "judge_results": {
     "1": "PASS"
   },
-  "relock_pending": []
+  "relock_pending": [
+    "tests/ui/game-config-players.acceptance.test.tsx",
+    "e2e/players-choice.spec.ts"
+  ]
 }
