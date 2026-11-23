@@ -101,6 +101,21 @@ describe('golden spot validator', () => {
     ).toBe(true);
   });
 
+  it('echoes non-text values by kind instead of converting them', () => {
+    expect(() => parseGoldenSpots(file(base({ before: [{ toString: 0 }] })))).toThrow(
+      GoldenSpotValidationError,
+    );
+    const stepOf = (step: unknown) =>
+      problemsOf(file(base({ before: [step] }))).find((p) => p.includes('is not legal'));
+    expect(stepOf({ toString: 0 })).toBe(
+      `${P}: missing player view (step 1 "<object>" is not legal)`,
+    );
+    expect(stepOf(['raise'])).toBe(`${P}: missing player view (step 1 "<array>" is not legal)`);
+    expect(stepOf(null)).toBe(`${P}: missing player view (step 1 "<null>" is not legal)`);
+    expect(stepOf(true)).toBe(`${P}: missing player view (step 1 "<boolean>" is not legal)`);
+    expect(stepOf(7)).toBe(`${P}: missing player view (step 1 "7" is not legal)`);
+  });
+
   it('rejects a position or situation that does not match the view', () => {
     expect(problemsOf(file(base({ position: 'CO' })))).toEqual([
       `${P}: position CO does not match the view (BTN)`,

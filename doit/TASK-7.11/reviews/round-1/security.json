@@ -1,0 +1,9 @@
+{"reviewer": "security", "round": 1,
+ "findings": [
+  {"fingerprint": "src/advice/golden.ts:echo-throws-on-object-toString",
+   "severity": "MINOR", "file": "src/advice/golden.ts", "line": 73,
+   "issue": "echo() calls String(value) on arbitrary JSON values. A JSON object with an own non-callable \"toString\" key (e.g. {\"toString\":0}) makes String() throw TypeError, so parseGoldenSpots throws a bare TypeError instead of GoldenSpotValidationError listing every problem. String() of a large array/object also builds the full string before the 20-char slice.",
+   "evidence": "tests/golden/preflop-spots.json (repo-authored) -> spots[i].before[k] = {\"toString\":0} -> replay() -> echo(step) -> String() throws 'Cannot convert object to primitive value' (verified in node). Same for action/alternative/position/situation. Outcome: test run fails closed with a less helpful message; no security impact since the file is repo-authored test data.",
+   "fix": "In echo(), use typeof value === 'string' ? value : JSON.stringify-or-typeof fallback inside try/catch (e.g. typeof value === 'string' || typeof value === 'number' ? String(value) : `<${Array.isArray(value) ? 'array' : typeof value}>`), then truncate."}
+ ],
+ "summary": "Parser treats the file as unknown and validates field by field; no eval, no dynamic code, no new dependencies, no network or secrets. Prototype keys are harmless: JSON.parse makes __proto__ an own key and all lookups are on known field names; isStats restricts seat keys by regex and values to finite numbers. Regexes are linear (constant concept terms, simple sentence split). Step replay is bounded by the hand reaching no toAct. Error echoes are truncated to 20 chars; ids capped at 60. Only finding: echo() can throw on objects with an own toString key (MINOR, fails closed). No BLOCKER or MAJOR."}

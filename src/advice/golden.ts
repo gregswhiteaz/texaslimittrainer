@@ -68,9 +68,19 @@ function wordCount(text: unknown): number {
   return typeof text === 'string' ? (text.match(/\p{L}+/gu) ?? []).length : 0;
 }
 
-/** Untrusted text for an error message: the first ECHO_CHARS characters, then '...' if cut. */
+/**
+ * Untrusted value for an error message: strings and numbers as text, other values as <array>,
+ * <null>, <object>, <boolean>; the first ECHO_CHARS characters, then '...' if cut.
+ */
 function echo(value: unknown): string {
-  const text = String(value);
+  const text =
+    typeof value === 'string' || typeof value === 'number'
+      ? String(value)
+      : Array.isArray(value)
+        ? '<array>'
+        : value === null
+          ? '<null>'
+          : `<${typeof value}>`;
   return text.length <= ECHO_CHARS ? text : `${text.slice(0, ECHO_CHARS)}...`;
 }
 

@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-23T09:45:00Z'
+updated_date: '2026-11-23T10:08:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -78,3 +78,9 @@ Plan key: E07-S14 · Dream: limit-holdem-trainer
 
 Full spec: doit/TASK-7.11/spec.md
 <!-- SECTION:PLAN:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+Build: golden.ts validator (v1 table+actions, engine-rebuilt PlayerView, borderline rejection), 110 hand-written preflop spots (HU 20, 6-max 42, FR 48) all agree with the engine first run; runner in npm test; SHA unchanged; gate PASS.
+<!-- SECTION:NOTES:END -->

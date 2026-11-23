@@ -1,0 +1,117 @@
+{
+  "reviewer": "code",
+  "round": 1,
+  "rubric": [
+    {"item": "SPEC-01 correctness", "result": "pass"},
+    {"item": "SPEC-01 test strength", "result": "pass"},
+    {"item": "SPEC-02 correctness", "result": "pass"},
+    {"item": "SPEC-02 test strength", "result": "pass"},
+    {"item": "SPEC-03 correctness", "result": "pass"},
+    {"item": "SPEC-03 test strength", "result": "pass"},
+    {"item": "SPEC-04 correctness", "result": "pass"},
+    {"item": "SPEC-04 test strength", "result": "pass"},
+    {"item": "SPEC-05 correctness", "result": "pass"},
+    {"item": "SPEC-05 test strength", "result": "pass"},
+    {"item": "SPEC-06 correctness", "result": "pass"},
+    {"item": "SPEC-06 test strength", "result": "pass"},
+    {"item": "SPEC-07 correctness", "result": "pass"},
+    {"item": "SPEC-07 test strength", "result": "pass"},
+    {"item": "SPEC-08 correctness (justifications correct and spot-specific; A-4 clear-cut selection)", "result": "fail"},
+    {"item": "SPEC-08 test strength", "result": "pass"},
+    {"item": "SPEC-09 correctness", "result": "pass"},
+    {"item": "SPEC-09 test strength", "result": "pass"},
+    {"item": "SPEC-10 correctness", "result": "pass"},
+    {"item": "SPEC-10 test strength", "result": "pass"},
+    {"item": "SPEC-11 correctness", "result": "pass"},
+    {"item": "SPEC-12 correctness", "result": "pass"},
+    {"item": "SPEC-13 correctness", "result": "pass"},
+    {"item": "SPEC-14 correctness", "result": "pass"},
+    {"item": "scope", "result": "pass"},
+    {"item": "concision", "result": "pass"},
+    {"item": "clarity", "result": "pass"}
+  ],
+  "findings": [
+    {
+      "fingerprint": "tests/golden/preflop-spots.json:hero-raised-then-folds-reraise-at-5-to-1",
+      "severity": "MAJOR",
+      "file": "tests/golden/preflop-spots.json",
+      "line": 171,
+      "issue": "Three 're-raise' fold spots have the hero raise a trash hand from the big blind over a limp, then fold to the limper's re-raise for one more small bet. They are not clear-cut folds, and their justifications get the poker wrong. hu-bb-re-raise-92o (line 171): the pot is 20 and the call is 4 (5:1, so it needs about 17%). 6max-bb-re-raise-98o (line 600) and fr-bb-re-raise-87s (line 1117): the pot is 22 and the call is 4 (5.5:1, so it needs about 15%). 98o and 87s have roughly 30-35% equity even against a strong limp-reraise range, and 92o has roughly 30% heads-up. Calling is clearly right in each case. The texts say 'its equity is too low for the price' (98o) and 'equity against that strong range is too low' (87s), which is false at these odds. '98o is an offsuit hand that the re-raiser dominates' misuses 'dominates' (98o shares no card with the premium hands that re-raise). The story also contradicts itself: the hero raised 92o/98o/87s over a limp one action earlier.",
+      "evidence": "before: hu ['call','raise','raise'] -> hero BB has 8 in, SB 12 in, call 4. 6max ['call','fold','fold','fold','fold','raise','raise'] and fr ['call',7x'fold','raise','raise'] -> pot 12+8+2=22, call 4. The chart's BB re-raise cells (93o/T2o/82o; T8o/97o/98s; 97s/86s/87o) all fold, so the spots match the engine but freeze advice a poker player would call.",
+      "fix": "Replace these three fold spots with BB re-raise spots where the hero did not choose to raise trash, or pick hands where the call or raise is clear, for example a premium hand that caps. If a BB re-raise fold is still needed for coverage, take it from a situation where the hero has not already put 2 bets in, and correct the justification to argue from the real price. Drop 'dominates' for 98o."
+    },
+    {
+      "fingerprint": "tests/golden/preflop-spots.json:heads-up-folds-near-boundary",
+      "severity": "MAJOR",
+      "file": "tests/golden/preflop-spots.json",
+      "line": 116,
+      "issue": "Several heads-up fold spots sit close to the real heads-up limit hold'em defend boundary and are not clear-cut (REQ-039.3, A-4). hu-btn-raise-93o (line 127) and hu-btn-raise-72o (line 116): the button completed and faces a big blind raise, getting 3:1 (pot 12, call 4) in position. 93o has roughly 33% equity against a wide heads-up raising range and 72o roughly 30%, against the 25% needed. Calling is at least close, and probably right for 93o. hu-bb-blind-defence-93o (line 215): the chart itself defends T3o and 93s next to it, so the cell is on the boundary that A-4 says to avoid. hu-bb-blind-defence-82o (line 204): 82s calls next to it, and heads-up big blinds defend very wide at 3:1. The justification for 93o ('its hand strength is below what the price requires') is not true at 3:1 against a button that raises most hands.",
+      "evidence": "Chart neighbours (heads-up BB blind-defence): 93o fold | T3o call, 93s call. 82o fold | 82s call. BTN raise: 93o, 72o fold, getting 3:1 in position.",
+      "fix": "Keep heads-up folds only for the very bottom hands (for example 32o or 42o in blind-defence) whose neighbours also fold, or replace these spots with heads-up calls or raises. The A-3 action mix needs only one fold overall, and many other sizes provide folds. Make sure no chart neighbour takes a different action (A-4)."
+    },
+    {
+      "fingerprint": "tests/golden/preflop-spots.json:sb-k9s-fold-vs-button-steal",
+      "severity": "MAJOR",
+      "file": "tests/golden/preflop-spots.json",
+      "line": 1150,
+      "issue": "fr-sb-blind-defence-k9s folds K9s in the small blind against a button open, saying it 'is dominated by the stronger kings and aces a raiser holds'. A button steal range is wide, and K9s is ahead of much of it. Against a button open, a small-blind re-raise with K9s is standard, so the fold is not clear-cut and the reasoning is wrong for this raiser. The chart cell does not depend on who raised, so the author chose the least clear raiser position.",
+      "evidence": "before: 6 folds (seats 4-9), then 'raise' by the button (seat 1); hero is SB.",
+      "fix": "Make the raiser an early seat (for example before ['raise', 'fold', 'fold', 'fold', 'fold', 'fold', 'fold'] so UTG opens), so 'dominated by the stronger kings and aces' is true. Otherwise pick a weaker hand against the button."
+    },
+    {
+      "fingerprint": "tests/golden/preflop-spots.json:6max-btn-kts-call-on-boundary",
+      "severity": "MAJOR",
+      "file": "tests/golden/preflop-spots.json",
+      "line": 435,
+      "issue": "6max-btn-raise-kts (call) sits between two different chart actions: KJs and ATs raise, while K9s and KTo fold. A-4 asks for 'calls with hands whose neighbouring cells in the chart also call', and this one has none. It is a near-boundary hand by the spec's own selection rule.",
+      "evidence": "Chart 6-max BTN raise: KTs call | KJs raise, ATs raise, K9s fold, KTo fold, QTs call.",
+      "fix": "Replace it with a button call whose neighbours also call (for example a medium pair, if the pairs around it call), or move the spot to a different raiser or situation where KTs and its neighbours all call."
+    },
+    {
+      "fingerprint": "tests/golden/preflop-spots.json:72o-weakest-hand-heads-up",
+      "severity": "MAJOR",
+      "file": "tests/golden/preflop-spots.json",
+      "line": 28,
+      "issue": "hu-btn-unopened-72o says '72o is the weakest starting hand'. That holds roughly multiway, but heads-up (the spot's context) 32o is the weakest hand by equity, and 72o beats several hands. The teaching text states something that is wrong in this spot.",
+      "evidence": "Justification: '72o is the weakest starting hand, with no pair, no flush help and almost no straight help. Even heads-up ...'",
+      "fix": "Say 'one of the weakest starting hands', or keep the claim and change the spot to 32o."
+    },
+    {
+      "fingerprint": "tests/golden/preflop-spots.json:ako-vs-utg-overstated",
+      "severity": "MINOR",
+      "file": "tests/golden/preflop-spots.json",
+      "line": 897,
+      "issue": "fr-lj-raise-ako says AKo 'dominates most of the hands that open early' and is 'well ahead of the raiser's range'. A full-ring UTG opening range (big pairs, AK, AQ, KQs) leaves AKo at about 50-55%. That is enough to re-raise, but it is not 'well ahead'.",
+      "evidence": "before ['raise','fold','fold']: UTG opens at a 9-seat table.",
+      "fix": "Reword it, for example: 'AKo is at least even with an early opening range and dominates its ace-queen and king-queen hands; re-raise to play heads-up with the initiative.'"
+    },
+    {
+      "fingerprint": "tests/golden/preflop-spots.json:cold-call-small-pairs-raise-and-calls",
+      "severity": "MINOR",
+      "file": "tests/golden/preflop-spots.json",
+      "line": 996,
+      "issue": "fr-hj-raise-and-calls-33 and fr-co-raise-and-calls-a7s (line 1007) cold-call two bets against a UTG raise with one caller. Classic limit advice treats small pairs and weak suited aces here as close or folds: about 2.75:1 direct odds, and limit implied odds are small. Their chart neighbours do agree (22/44 call; A6s/A8s call), so they pass the A-4 neighbour rule, but they are not obviously clear-cut, and 'the implied odds are good' oversells a one-caller pot.",
+      "evidence": "before ['raise','fold','call','fold'] (33) and ['raise','call','fold','fold','fold'] (A7s); the call costs 8 into 22.",
+      "fix": "Consider swapping in spots with two or more callers already in (a truly multiway pot), or larger pairs, so the call is unarguable."
+    },
+    {
+      "fingerprint": "src/advice/golden.ts:third-copy-of-validator-helpers",
+      "severity": "MINOR",
+      "file": "src/advice/golden.ts",
+      "line": 63,
+      "issue": "isRecord, wordCount and echo are copied word for word from src/advice/preflop-chart.ts:97-108, which already copies src/advice/ranges.ts:91-102. This makes a third private copy. The spec said to 'mirror' the chart validator style, so this is not scope creep, but the duplication keeps growing.",
+      "evidence": "Identical bodies in preflop-chart.ts, ranges.ts and golden.ts.",
+      "fix": "Optional: export the three helpers once (for example from preflop-chart.ts) and import them here. Otherwise leave as is and track the cleanup as a follow-up."
+    },
+    {
+      "fingerprint": "src/advice/golden.ts:misleading-problem-for-bad-before-or-long-id",
+      "severity": "NIT",
+      "file": "src/advice/golden.ts",
+      "line": 142,
+      "issue": "A non-array 'before' is reported as 'the steps do not reach a preflop decision', and an id longer than 60 characters is reported as 'missing id' (line 266). Both are allowed by §5, which has no dedicated message, but they would confuse an author.",
+      "evidence": "golden.ts:142 and :266.",
+      "fix": "Leave as is unless TASK-7.14 adds format messages. If it does, add 'before must be a list' and 'id longer than 60 characters'."
+    }
+  ],
+  "summary": "The code is correct and matches the spec. parseGoldenSpots rebuilds a real PlayerView in two passes (find the hero, then deal), rejects illegal or unreachable steps with the exact §5 messages, collects every problem, and checks the chart cell the engine actually reads (chartSpotOf) for borderline. checkGoldenSpot and its messages are exact. AC#3 is tested by changing a real engine-raise spot to fold (with and without an alternative) against the real recommend, plus a stub alternative. SPEC-06 uses a real borderline cell and a non-borderline control. Coverage of every (size, situation) pair is enforced. SPEC-09/10 unit tests assert exact problem texts, including the hero-not-on-button deal. Every-push cost is negligible: 135 tests in about 150 ms. Spot quality is the weak point. In a sample of about 40 spots, most are clear-cut and well reasoned. But three BB 're-raise' folds turn down 5:1+ prices with about 30% equity, with justifications that are wrong at that price. Several heads-up folds and the 6-max KTs call sit on or near the chart boundary, against A-4. One SB fold of K9s is set against a button steal with 'dominated' reasoning. One heads-up text misstates 72o as the weakest hand. The duplicated helpers follow the existing pattern (MINOR)."
+}

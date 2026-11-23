@@ -7,3 +7,9 @@
 - `docs/advice/golden-spots.md` — new: format and table constants, field rules, clear-cut rule, how to add a spot, how the suite runs, failure message, originality statement.
 
 No new dependencies.
+
+## FIX (round 1)
+
+- `tests/golden/preflop-spots.json` — replaced the near-boundary and wrongly argued spots named in the fix brief (see build-log FIX section), moved the UTG opener into fr-sb-blind-defence-k9s, reworded hu-btn-unopened-72o and fr-lj-raise-ako. Still 110 spots, same size/situation coverage.
+- `src/advice/golden.ts` — echo() now converts only strings and numbers with String(); arrays, null, objects and booleans show as <array>, <null>, <object>, <boolean>, so a hostile toString cannot throw a TypeError.
+- `tests/golden/golden-spots.test.ts` — new unit test: a {"toString":0} step gives a GoldenSpotValidationError, and each non-text kind is echoed by name.

@@ -33,7 +33,7 @@
       "before": [],
       "action": "fold",
       "alternative": null,
-      "justification": "72o is the weakest starting hand, with no pair, no flush help and almost no straight help. Even heads-up its equity against a big blind that defends is too low to add more chips, so fold the small blind."
+      "justification": "72o is one of the weakest starting hands, with no pair, no flush help and almost no straight help. Even heads-up its equity against a big blind that defends is too low to add more chips, so fold the small blind."
     },
     {
       "id": "hu-btn-unopened-83o",
@@ -113,26 +113,26 @@
       "justification": "A5o holds an ace, which is often the best high card heads-up, and the raise still leaves good pot odds on one more bet. It is not strong enough to re-raise, so call and play the flop in position."
     },
     {
-      "id": "hu-btn-raise-72o",
+      "id": "hu-btn-raise-k7o",
       "seats": 2,
       "position": "BTN",
       "situation": "raise",
-      "holeCards": "7s 2h",
+      "holeCards": "Kc 7d",
       "before": ["call", "raise"],
-      "action": "fold",
+      "action": "call",
       "alternative": null,
-      "justification": "Facing a raise after completing, 72o has too little equity to justify another bet, even with decent pot odds. Fold and save the chips for a hand that wins more often."
+      "justification": "The big blind raises a wide range heads-up, and K7o has more than enough equity against it at 3 to 1. Call and play the hand with position on every later street."
     },
     {
-      "id": "hu-btn-raise-93o",
+      "id": "hu-btn-raise-j9s",
       "seats": 2,
       "position": "BTN",
       "situation": "raise",
-      "holeCards": "9d 3s",
+      "holeCards": "Jd 9d",
       "before": ["call", "raise"],
-      "action": "fold",
+      "action": "call",
       "alternative": null,
-      "justification": "93o connects with few flops and is dominated by any nine or better the big blind raises with. The price is fair, but its hand strength is too low to call, so let it go."
+      "justification": "J9s makes pairs, straights and flushes, and you act last after the flop. One small bet for a pot of 12 chips gives good pot odds, so call rather than fold."
     },
     {
       "id": "hu-btn-re-raise-kk",
@@ -168,15 +168,15 @@
       "justification": "Even A2o holds an ace, which beats many of the hands a heads-up button re-raises with. The pot is large and you need only one more bet, so those pot odds justify a call but not a raise."
     },
     {
-      "id": "hu-bb-re-raise-92o",
+      "id": "hu-bb-re-raise-aa",
       "seats": 2,
       "position": "BB",
       "situation": "re-raise",
-      "holeCards": "9c 2h",
+      "holeCards": "As Ac",
       "before": ["call", "raise", "raise"],
-      "action": "fold",
+      "action": "raise",
       "alternative": null,
-      "justification": "92o has neither a high card nor a draw worth paying for, so its equity against a re-raise is poor. Fold and give up the bets already in instead of chasing them."
+      "justification": "The button's re-raise shows a strong hand, but AA is never behind before the flop. Raise again for value to put the most chips in while your hand strength is at its peak."
     },
     {
       "id": "hu-bb-blind-defence-aqo",
@@ -201,26 +201,26 @@
       "justification": "With a full bet already in, you need only one more bet and the pot odds are excellent. K5o holds a king, which is often best against a wide button range, so call rather than fold, but do not re-raise."
     },
     {
-      "id": "hu-bb-blind-defence-82o",
+      "id": "hu-bb-blind-defence-j6o",
       "seats": 2,
       "position": "BB",
       "situation": "blind-defence",
-      "holeCards": "8c 2d",
+      "holeCards": "Js 6c",
       "before": ["raise"],
-      "action": "fold",
+      "action": "call",
       "alternative": null,
-      "justification": "82o is among the worst hands and rarely makes a strong pair or a straight. Even with good pot odds its equity against the button's range is too low, so fold."
+      "justification": "A heads-up button raises most of its hands, and J6o has enough equity against that range at 3 to 1. Call to close the action instead of giving up the big blind you already posted."
     },
     {
-      "id": "hu-bb-blind-defence-93o",
+      "id": "hu-bb-blind-defence-aks",
       "seats": 2,
       "position": "BB",
       "situation": "blind-defence",
-      "holeCards": "9h 3d",
+      "holeCards": "Ac Kc",
       "before": ["raise"],
-      "action": "fold",
+      "action": "raise",
       "alternative": null,
-      "justification": "93o has a weak top card and little to draw to, so it loses too often after the flop. Folding is right even though you close the action, because its hand strength is below what the price requires."
+      "justification": "AKs is ahead of almost every hand a heads-up button raises with. Re-raise for value and take the initiative, which makes up for playing out of position after the flop."
     },
     {
       "id": "6max-utg-unopened-aa",
@@ -432,17 +432,6 @@
       "justification": "QQ is a premium pair that beats most of a single opener's range. Re-raise to isolate the raiser, and you will keep position on every street after the flop."
     },
     {
-      "id": "6max-btn-raise-kts",
-      "seats": 6,
-      "position": "BTN",
-      "situation": "raise",
-      "holeCards": "Kc Tc",
-      "before": ["fold", "raise", "fold"],
-      "action": "call",
-      "alternative": null,
-      "justification": "KTs is too weak to re-raise an opener but plays well after the flop with its flush and straight chances. Calling on the button keeps the pot small, and your position makes it easy to play."
-    },
-    {
       "id": "6max-btn-raise-k9o",
       "seats": 6,
       "position": "BTN",
@@ -597,15 +586,15 @@
       "justification": "JTs makes many straights and flushes, and with the pot already large you need only one more bet. The pot odds justify a call even out of position, but its hand strength is not enough to raise again."
     },
     {
-      "id": "6max-bb-re-raise-98o",
+      "id": "6max-bb-re-raise-aa",
       "seats": 6,
       "position": "BB",
       "situation": "re-raise",
-      "holeCards": "9c 8d",
+      "holeCards": "Ad Ac",
       "before": ["call", "fold", "fold", "fold", "fold", "raise", "raise"],
-      "action": "fold",
+      "action": "raise",
       "alternative": null,
-      "justification": "98o is an offsuit hand that the re-raiser dominates, and you will act first after the flop. Its equity is too low for the price, so fold instead of paying another bet out of position."
+      "justification": "A limper who re-raises usually holds a big pair or ace-king, and AA is ahead of all of them. Raise again for value, since your equity edge is largest now and you will be out of position on every later street."
     },
     {
       "id": "6max-sb-blind-defence-aks",
@@ -672,6 +661,17 @@
       "action": "call",
       "alternative": null,
       "justification": "T8s connects with many flops through straights and flushes, and the button opens a wide range. Closing the action with good pot odds, calling is right, though the hand is not strong enough to re-raise."
+    },
+    {
+      "id": "6max-bb-blind-defence-kts",
+      "seats": 6,
+      "position": "BB",
+      "situation": "blind-defence",
+      "holeCards": "Ks Ts",
+      "before": ["fold", "fold", "fold", "raise", "fold"],
+      "action": "call",
+      "alternative": null,
+      "justification": "Against a button steal KTs is ahead of much of the raiser's range, and you close the action getting three and a half to one. Those pot odds and its flush and straight chances make calling clear, even out of position."
     },
     {
       "id": "6max-bb-blind-defence-72o",
@@ -902,7 +902,7 @@
       "before": ["raise", "fold", "fold"],
       "action": "raise",
       "alternative": null,
-      "justification": "AKo dominates most of the hands that open early, and re-raising gets you heads-up with the initiative. Your hand strength is well ahead of the raiser's range, so raise."
+      "justification": "Against an early opener AKo dominates the ace-queen, ace-jack and king-queen hands in that range and is close to even against the middle pairs. Re-raise to get heads-up with the initiative and charge the hands it dominates."
     },
     {
       "id": "fr-hj-raise-k9s",
@@ -993,26 +993,26 @@
       "justification": "AKs is ahead of most hands that open and call, and it makes the nut flush when its suit comes. Re-raise for value to build the pot while your hand strength leads."
     },
     {
-      "id": "fr-hj-raise-and-calls-33",
+      "id": "fr-hj-raise-and-calls-ajs",
       "seats": 9,
       "position": "HJ",
       "situation": "raise-and-calls",
-      "holeCards": "3h 3d",
-      "before": ["raise", "fold", "call", "fold"],
+      "holeCards": "Ad Jd",
+      "before": ["fold", "fold", "raise", "call"],
       "action": "call",
       "alternative": null,
-      "justification": "33 almost always needs a set, and with a raise and a call already in the pot the implied odds are good. Call one more bet, since raising would only face better pairs."
+      "justification": "AJs dominates the weaker aces and broadway hands a middle-position opener and a caller often hold, and its suit adds flush outs in a multiway pot. Call rather than re-raise, since the bigger aces and pairs in the opener's range make a raise risky with players still to act behind you."
     },
     {
-      "id": "fr-co-raise-and-calls-a7s",
+      "id": "fr-co-raise-and-calls-ats",
       "seats": 9,
       "position": "CO",
       "situation": "raise-and-calls",
-      "holeCards": "As 7s",
-      "before": ["raise", "call", "fold", "fold", "fold"],
+      "holeCards": "Ac Tc",
+      "before": ["fold", "fold", "fold", "raise", "call"],
       "action": "call",
       "alternative": null,
-      "justification": "A7s makes the nut flush, and a multiway pot pays it off well when that happens. The pot odds and implied odds make calling right, though it is too weak to re-raise."
+      "justification": "ATs plays well in a multiway pot, where its flush and broadway straight outs pay off more often than its high card. Call with position on both players rather than re-raise, because a lojack opener still holds many aces that beat yours."
     },
     {
       "id": "fr-co-raise-and-calls-kjo",
@@ -1114,15 +1114,15 @@
       "justification": "QQ is ahead of most of the big blind's re-raising range. Raise again for value even out of position, since your hand strength is well ahead."
     },
     {
-      "id": "fr-bb-re-raise-87s",
+      "id": "fr-bb-re-raise-ajs",
       "seats": 9,
       "position": "BB",
       "situation": "re-raise",
-      "holeCards": "8d 7d",
+      "holeCards": "Ah Jh",
       "before": ["call", "fold", "fold", "fold", "fold", "fold", "fold", "fold", "raise", "raise"],
-      "action": "fold",
+      "action": "call",
       "alternative": null,
-      "justification": "87s is too weak to play a re-raised pot out of position against an early player. Its equity against that strong range is too low, so fold."
+      "justification": "The limper's re-raise points to big pairs and strong aces, so AJs is too often behind to raise again. One more small bet into a pot of 22 chips is a cheap price, and the pot odds plus your flush and top-pair outs make calling clear."
     },
     {
       "id": "fr-sb-blind-defence-kk",
@@ -1152,10 +1152,10 @@
       "position": "SB",
       "situation": "blind-defence",
       "holeCards": "Kd 9d",
-      "before": ["fold", "fold", "fold", "fold", "fold", "fold", "raise"],
+      "before": ["raise", "fold", "fold", "fold", "fold", "fold", "fold"],
       "action": "fold",
       "alternative": null,
-      "justification": "K9s is dominated by the stronger kings and aces a raiser holds, and calling leaves you out of position with the big blind still to act. Its equity is not enough, so fold."
+      "justification": "An under-the-gun raiser holds a strong range, and K9s is dominated by the bigger kings and aces in it. Calling leaves you out of position with the big blind still to act, and its equity is too low to re-raise, so fold."
     },
     {
       "id": "fr-sb-blind-defence-t8o",
