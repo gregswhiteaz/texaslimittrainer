@@ -3,96 +3,96 @@
     "id": "SPEC-01",
     "verifies": "AC#1",
     "verification": "acceptance `tests/advice/value-bet.acceptance.test.ts::AC#1 the range that would call drops the Air combos`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-02",
     "verifies": "AC#2",
     "verification": "acceptance `tests/advice/value-bet.acceptance.test.ts::AC#2 8s8c bets for value at 72.8%`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-03",
     "verifies": "AC#3",
     "verification": "acceptance `tests/advice/value-bet.acceptance.test.ts::AC#3 AsKc at 48.9% vs callers does not bet`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-04",
     "verifies": "AC#4",
     "verification": "acceptance `tests/advice/value-bet.acceptance.test.ts::AC#4 50.1% against callers bets`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-05",
     "verifies": "AC#5",
     "verification": "acceptance `tests/advice/value-bet.acceptance.test.ts::AC#5 exactly 50.0% against callers checks`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-06",
     "verifies": "AC#6",
     "verification": "acceptance `tests/advice/value-bet.acceptance.test.ts::AC#6 50.1% against callers raises`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-07",
     "verifies": "AC#7",
     "verification": "acceptance `tests/advice/value-bet.acceptance.test.ts::AC#7 capped street calls or folds by pot odds`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-08",
     "verifies": "AC#8",
     "verification": "acceptance `tests/advice/value-bet.acceptance.test.ts::AC#8 value advice returns calling-range equity, required equity and rule id`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-09",
     "verifies": "AC#9",
     "verification": "acceptance `tests/advice/value-bet.acceptance.test.ts::AC#9 recommendation keeps existing fields and adds calling-range equity`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-10",
     "verifies": "AC#11",
     "verification": "acceptance `tests/advice/value-bet.acceptance.test.ts::AC#11 real bet or raise deviations grade by aggression-margin`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-11",
     "verifies": "AC#10",
     "verification": "acceptance `tests/advice/value-bet.acceptance.test.ts::AC#10 bots drop the free-check stand-in and bet for value`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-12",
     "verifies": "AC#10, DoD#7",
     "verification": "command `bash -c 'time (npm run -s playtest -- --hands 10000 --seed 42 | tee /dev/stderr | shasum -a 256)'`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-13",
     "verifies": "DoD#1, DoD#10",
     "verification": "unit `tests/advice/postflop.test.ts::rule value-bet`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-14",
     "verifies": "DoD#2",
     "verification": "unit `tests/advice/ranges.test.ts::callingRange`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-15",
     "verifies": "DoD#3, DoD#5, DoD#6, DoD#9",
     "verification": "command `npm run lint && npm run typecheck && npm test`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-16",
     "verifies": "DoD#4, DoD#8, DoD#11, DoD#12, DoD#13",
     "verification": "manual `gh run list --branch doit/TASK-7.8 --limit 1` green; `backlog doc list --plain` shows the TASK-7.8 story doc",
-    "status": "pending"
+    "status": "pass"
   }
 ]
