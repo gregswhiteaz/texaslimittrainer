@@ -6,3 +6,8 @@
 - `npm test`: 193 files passed / 2 skipped; 694 tests passed / 14 skipped; coverage thresholds hold (all files 97.28% stmts).
 - `npm run e2e` x2: 156 passed / 12 skipped each run (Chromium + WebKit).
 - `npm run e2e:slow` not run: responsive-table and rapid-pace only click New game / Start game and never read Game Config rows or count selects.
+
+## FIX R1
+1. fixed — `e2e/seat-style.spec.ts`: all five one-shot `expect(await rowTexts(page)).toEqual(...)` checks now `await expect.poll(() => rowTexts(page)).toEqual(...)`; no assertion removed.
+2. fixed — new e2e test "changing the players count clears the style edits": Cal -> Rock, players 4 then 6, expects the unedited Mixed rows (Cal Maniac) and Mixed checked. Mutation proof: removing `setEdits({})` from the players handler failed the new test in Chromium and WebKit (2 failed, 6 passed); source restored byte-for-byte (empty git diff).
+- `npx playwright test e2e/seat-style.spec.ts` (chromium + webkit): 8 passed. `npm run format` run.

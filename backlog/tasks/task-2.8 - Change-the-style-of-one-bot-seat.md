@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-23T01:53:00Z'
+updated_date: '2026-11-23T02:11:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -16,6 +16,7 @@ references:
 documentation:
   - doc-1
   - doc-2
+  - doc-90
 parent_task_id: TASK-2
 priority: high
 type: feature
@@ -77,4 +78,12 @@ Full spec: doit/TASK-2.8/spec.md
 
 <!-- SECTION:NOTES:BEGIN -->
 AC added from TASK-3.3 follow-up (doc-24).
+
+Build: per-row Style select, configWithSeatStyle (Custom/preset name), edits cleared on preset/size change; Q-2 locked edits only (row parsing/counts); e2e 156 ×2; gate PASS.
 <!-- SECTION:NOTES:END -->
+
+## Final Summary
+
+<!-- SECTION:FINAL_SUMMARY:BEGIN -->
+Added a per-row style select (TAG, Calling station, Maniac, Rock) to Game Config; Start game passes the edited seats via configWithSeatStyle, naming the line-up Custom or the preset when all bots match. Edits reset on preset/players change. Verified: unit, model, render and Chromium+WebKit e2e tests, axe, full suites green; edited seats proven to play their own policy via handleAdviceRequest; review round 1 had 0 blocking (2 MINOR fixed). Last gate (fix-3) fails only the test-integrity assertion count in e2e/seat-style.spec.ts (20->19) and warns 653/650 lines. Assumptions to review: A-1 (AC 'seat 3' = bot row 3 = Cal at table seat 2), A-2 reset rule, A-5 Custom name not shown in UI. Follow-ups: find where Custom name becomes visible (TASK-11/TASK-3.9); per-seat Random out of scope (TASK-2.9).
+<!-- SECTION:FINAL_SUMMARY:END -->

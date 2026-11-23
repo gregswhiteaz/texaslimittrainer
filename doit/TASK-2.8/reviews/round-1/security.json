@@ -1,0 +1,3 @@
+{"reviewer": "security", "round": 1,
+ "findings": [],
+ "summary": "No findings. The only new untrusted input is the per-row style <select> value (DOM-tamperable). GameConfigScreen gates it with isBotStyle (membership in frozen BOT_STYLES) before it enters `edits` state, and configWithSeatStyle re-validates (RangeError on unknown style or non-bot seat) before lineUpSessionConfig, so no arbitrary string reaches SessionConfig or bot policy dispatch. The seat key comes from the rendered row (s.seat), not from user input. Labels and names render as JSX text (no dangerouslySetInnerHTML); aria-label is a plain attribute. Edits reset on preset/players change. No new storage, network, dependencies, randomness or secrets."}

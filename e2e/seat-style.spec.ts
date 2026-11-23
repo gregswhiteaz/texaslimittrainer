@@ -13,6 +13,7 @@ const styleSelect = (page: Page, name: string) =>
 const opponents = (page: Page) =>
   page.locator('section[aria-labelledby="config-opponents"] li').filter({ hasNotText: /^You/ });
 const header = (page: Page) => page.locator('.table-header-line');
+const playersSelect = (page: Page) => page.getByLabel('Players at the table');
 
 interface TimerWindow {
   __pausedTimers?: [typeof setTimeout, typeof clearTimeout];
@@ -134,24 +135,28 @@ test("changing one row's style changes only that row", async ({ page }) => {
   await openGameConfig(page);
 
   await styleSelect(page, 'Cal').selectOption({ label: 'Rock' });
-  expect(await rowTexts(page)).toEqual([
-    'Seat 6 Ava Tight-aggressive',
-    'Seat 1 Ben Calling station',
-    'Seat 2 Cal Rock',
-    'Seat 3 Dee Rock',
-    'Seat 4 Eli Tight-aggressive',
-  ]);
-  await expect(preset(page, 'Mixed')).toBeChecked();
-
-  for (const label of ['Calling station', 'Maniac', 'Rock']) {
-    await styleSelect(page, 'Ava').selectOption({ label });
-    expect(await rowTexts(page)).toEqual([
-      `Seat 6 Ava ${label}`,
+  await expect
+    .poll(() => rowTexts(page))
+    .toEqual([
+      'Seat 6 Ava Tight-aggressive',
       'Seat 1 Ben Calling station',
       'Seat 2 Cal Rock',
       'Seat 3 Dee Rock',
       'Seat 4 Eli Tight-aggressive',
     ]);
+  await expect(preset(page, 'Mixed')).toBeChecked();
+
+  for (const label of ['Calling station', 'Maniac', 'Rock']) {
+    await styleSelect(page, 'Ava').selectOption({ label });
+    await expect
+      .poll(() => rowTexts(page))
+      .toEqual([
+        `Seat 6 Ava ${label}`,
+        'Seat 1 Ben Calling station',
+        'Seat 2 Cal Rock',
+        'Seat 3 Dee Rock',
+        'Seat 4 Eli Tight-aggressive',
+      ]);
     await expect(preset(page, 'Mixed')).toBeChecked();
   }
 });
@@ -170,22 +175,24 @@ test('changing a tough seat to rock and back starts the tough table', async ({ p
   await styleSelect(page, 'Ben').selectOption({ label: 'Rock' });
   await expect(styleSelect(page, 'Ben')).toHaveValue('Rock');
   await styleSelect(page, 'Ben').selectOption({ label: 'Tight-aggressive' });
-  expect(await rowTexts(page)).toEqual(tough);
+  await expect.poll(() => rowTexts(page)).toEqual(tough);
 
   await styleSelect(page, 'Cal').selectOption({ label: 'Rock' });
   await preset(page, 'Mixed').check();
-  expect(await rowTexts(page)).toEqual([
-    'Seat 6 Ava Tight-aggressive',
-    'Seat 1 Ben Calling station',
-    'Seat 2 Cal Maniac',
-    'Seat 3 Dee Rock',
-    'Seat 4 Eli Tight-aggressive',
-  ]);
+  await expect
+    .poll(() => rowTexts(page))
+    .toEqual([
+      'Seat 6 Ava Tight-aggressive',
+      'Seat 1 Ben Calling station',
+      'Seat 2 Cal Maniac',
+      'Seat 3 Dee Rock',
+      'Seat 4 Eli Tight-aggressive',
+    ]);
 
   await preset(page, 'Tough').check();
   await styleSelect(page, 'Ben').selectOption({ label: 'Rock' });
   await styleSelect(page, 'Ben').selectOption({ label: 'Tight-aggressive' });
-  expect(await rowTexts(page)).toEqual(tough);
+  await expect.poll(() => rowTexts(page)).toEqual(tough);
 
   await button(page, 'Start game').click();
   await expect(header(page)).toHaveText('Cash · 6 players · $4/$8 · Hand #1');
@@ -196,4 +203,25 @@ test('changing a tough seat to rock and back starts the tough table', async ({ p
     '3 TAG',
     '4 TAG',
   ]);
+});
+
+test('changing the players count clears the style edits', async ({ page }) => {
+  await openGameConfig(page);
+
+  await styleSelect(page, 'Cal').selectOption({ label: 'Rock' });
+  await expect(styleSelect(page, 'Cal')).toHaveValue('Rock');
+  await playersSelect(page).selectOption('4');
+  await expect(opponents(page)).toHaveCount(3);
+  await playersSelect(page).selectOption('6');
+  await expect(opponents(page)).toHaveCount(5);
+  await expect
+    .poll(() => rowTexts(page))
+    .toEqual([
+      'Seat 6 Ava Tight-aggressive',
+      'Seat 1 Ben Calling station',
+      'Seat 2 Cal Maniac',
+      'Seat 3 Dee Rock',
+      'Seat 4 Eli Tight-aggressive',
+    ]);
+  await expect(preset(page, 'Mixed')).toBeChecked();
 });

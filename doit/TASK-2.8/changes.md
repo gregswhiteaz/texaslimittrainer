@@ -9,7 +9,7 @@
 - `tests/table/seat-style.test.ts` — SPEC-08 unit tests for `configWithSeatStyle` / `BOT_STYLES`.
 - `tests/table/seat-style.acceptance.test.ts` — SPEC-02, 04, 05, 06 (model rows, Custom/Tough names, edited seats play their own policy through `handleAdviceRequest`).
 - `tests/ui/game-config-seat-style.acceptance.test.tsx` — SPEC-01, 07 (render: four options, selected style, labels).
-- `e2e/seat-style.spec.ts` — SPEC-03, 09, 10 (browser flows, axe, same-origin requests).
+- `e2e/seat-style.spec.ts` — SPEC-03, 09, 10 (browser flows, axe, same-origin requests); FIX R1: row checks retry via `expect.poll`, plus a players-count-change test proving edits clear (A-2).
 
 ## Locked-test amendments (Q-2 routine; no expected values changed)
 - `tests/ui/home.acceptance.test.tsx` — row cells add the selected option text; the control list counts only selects with an id.
