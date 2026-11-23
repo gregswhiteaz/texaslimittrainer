@@ -1,0 +1,132 @@
+{
+  "round": 1,
+  "test_suite": {
+    "command": "npm test",
+    "result": "PASS",
+    "passed": 929,
+    "failed": 0,
+    "notes": "211 files passed, 3 skipped (opt-in slow); 35 tests skipped. Lint and typecheck pass. Coverage 97.36% lines overall, src/table 100%."
+  },
+  "end_to_end": {
+    "command": "npm run dev, start the default game, play two hands, read tlh-trainer/hands",
+    "result": "PASS",
+    "expected": "Two records with handNumber 1 and 2, the same sessionId, and completedAt times that match the clock",
+    "actual": "Two records with the same 32-hex sessionId, handNumbers 1 and 2, completedAt 12:32:55.733Z and 12:32:57.333Z (results seen at .738Z and .339Z), Mixed line-up, botIds 1-5 and null for You, and no page errors. Also: the full npm run e2e passes (123 passed), and the opt-in kill test passes."
+  },
+  "integrity": {
+    "result": "PASS",
+    "notes": "doit.py test-integrity exit 0. Locked tests are unchanged. tests/ui/table.acceptance.test.tsx is unchanged on this branch (last touched by TASK-3.3 b29d736). The re-pins in tests/table/session.acceptance.test.ts and tests/stats/style-stats.test.ts only add the new botId field (Block 1, accepted). The diff has no special-casing, hard-coded expected values or mocks of the unit under test. Delay and failure stores exist only in e2e/support. Mutants: 10 of 11 killed; callback-in-deps survives, masked by Table's own ref (see J-1-01). After mutants, git diff -- src e2e tests matches HEAD."
+  },
+  "items": [
+    {
+      "spec": "SPEC-01",
+      "result": "PASS",
+      "evidence": "acceptance test passes (Chromium+WebKit, full e2e). Independent real-app run, both browsers: 5 hands played (fold/call mix, different decks). Each record was readable before the next deal. The UI's hole cards, board and winner amounts match the record. Every record deep-equals a Node rebuild from its replay code and recorded actions. After reloading mid hand 6, all records are JSON-identical. A no-write mutant breaks this test."
+    },
+    {
+      "spec": "SPEC-02",
+      "result": "PASS",
+      "evidence": "Opt-in kill test was run once (TLH_SLOW_TESTS=1, chromium) and passed: SIGKILL hit at least one process, and after relaunch the store holds 12 records with hand 12 from the same session. The test can fail: it asserts a kill happened and that the record count after relaunch is 12."
+    },
+    {
+      "spec": "SPEC-03",
+      "result": "PASS",
+      "evidence": "acceptance passes. Holdout harness with a 5 s delayed store: at T+4900 the header is still Hand #1 with 0 records, and hand 2 is dealt between T+5000 and T+5200. With a 1 s delay, hand 2 is dealt at about T+1500, so the wait is max(1.5 s, write) and not the sum. An auto-deal-ignores-write mutant is killed. grep finds no delay code in src/storage or src/table/hand-record.ts, and nothing under src imports the harness."
+    },
+    {
+      "spec": "SPEC-04",
+      "result": "PASS",
+      "evidence": "integration test passes. A dealNext-ignores-write mutant is killed by this test. Holdout: with a failing store, clicking Deal next hand never deals; the same mutant is also killed by the holdout check."
+    },
+    {
+      "spec": "SPEC-05",
+      "result": "PASS",
+      "evidence": "Both tests pass. Holdout: under a fixed page clock of 2030-02-03T04:05:06.789Z the stored completedAt equals it exactly. Under a paused clock the completedAt of 5 real-app hands is within 100 ms of the fake time when each result appeared. A +02:00 Date is normalised to UTC. Dev-server run: completedAt is within 5 ms of the observed result time. A completedAt-epoch mutant is killed."
+    },
+    {
+      "spec": "SPEC-06",
+      "result": "PASS",
+      "evidence": "The test checks every AC#4 field against literal values. Holdout: records from 7 configurations (default, heads-up, 10-max, Mixed/Tough/Soft 9-max, sit-and-go; 60 hands each) round-trip through fake-indexeddb deep-equal, and each field matches the live hand. In the real app, each record equals an engine rebuild."
+    },
+    {
+      "spec": "SPEC-07",
+      "result": "PASS",
+      "evidence": "The test passes and compares actions in order plus style stats for 40 hands. Holdout: for all 7 configurations, actions equal the live ActionRecord list, and styleStats from the stored records equal the live values for every seat. In the real app, style stats from IndexedDB records equal the Node-rebuilt live hands for seats 1\u20136."
+    },
+    {
+      "spec": "SPEC-08",
+      "result": "PASS",
+      "evidence": "The test passes. A replacement-keeps-id mutant is killed. Holdout: random busts over 60-hand cash sessions forced replacements. No bot id was reused for a different seat or name, ids within a hand are unique, and sit-and-go never changes ids."
+    },
+    {
+      "spec": "SPEC-09",
+      "result": "PASS",
+      "evidence": "acceptance passes. Holdout (both browsers): after 2 more hands in a new session, Leave table and a reload, hand 1's record is JSON-identical."
+    },
+    {
+      "spec": "SPEC-10",
+      "result": "PASS",
+      "evidence": "The test passes. A put-not-add mutant is killed. Holdout: a second store on the same factory is also rejected with ConstraintError, and of two concurrent adds to the same key exactly one succeeds. The store's own keys are exactly add/count/get. In the real browser, a raw IndexedDB add of an existing key gives ConstraintError and the stored bytes are unchanged."
+    },
+    {
+      "spec": "SPEC-11",
+      "result": "PASS",
+      "evidence": "acceptance passes. Holdout (both browsers): 1,000 records from another session, 730+ days old, were seeded. After reload, 2 hands and Leave table there are 1,003 records, the seeded ones are JSON-identical, and there are 3 distinct session ids."
+    },
+    {
+      "spec": "SPEC-12",
+      "result": "PASS",
+      "evidence": "The unit test passes: 1,000 records, a new store, count 1,001, sample gets, get of a missing key returns null, and a VersionError on open rejects add and count. The strict-durability spy test also passes."
+    },
+    {
+      "spec": "SPEC-13",
+      "result": "PASS",
+      "evidence": "acceptance passes. A no-dedupe mutant is killed. Holdout with a churning parent: 4 hands give exactly 4 calls, with no extra calls over 2 s of re-renders after hand 4, and 4 records."
+    },
+    {
+      "spec": "SPEC-14",
+      "result": "PASS",
+      "evidence": "acceptance passes in both browsers, and the holdout check also passes (Hand #1 at T+1450, Hand #2 by T+1600). Note: the test passes even without the hook-level ref because Table's ref masks it. A mutant that breaks both Table's ref and the hook's ref is killed; see J-1-01."
+    },
+    {
+      "spec": "SPEC-15",
+      "result": "PASS",
+      "evidence": "integration passes. A failed-write-deals mutant is killed. Holdout: with a failing store, after 8 s of fake time and a Deal next hand click, the header is still Hand #1 and the result is shown. The console error is logged exactly once, there are no page errors or unhandled rejections, and Leave table is enabled."
+    },
+    {
+      "spec": "SPEC-16",
+      "result": "PASS",
+      "evidence": "The unit test passes: more than 60 fault cases, a corrupt stored value, and handRecord argument errors. A no-validate-on-read mutant is killed. Holdout: completedAt without milliseconds, a fractional level, 11 seats, 3 hole cards and a string handNumber are all rejected. Extra fields and null-prototype objects are accepted. All 420 real generated records validate, so there are no false rejections."
+    },
+    {
+      "spec": "SPEC-17",
+      "result": "PASS",
+      "evidence": "The unit test passes, and the holdout bot-id checks above pass."
+    },
+    {
+      "spec": "SPEC-18",
+      "result": "PASS",
+      "evidence": "npm run lint, typecheck and npm test pass: 929 passed, 35 skipped, 0 failed, 211 files. Coverage 97.36% lines overall; src/table 100%. The golden suite is included in npm test. Playtest 10,000/seed 42 reports Invariant violations: 0, and the output SHA-256 is 14d746f736d6afd3968e7ae7e833814d95dab94378c80c11dd59b1fd6ea72e48 (matches). Headless lint passes for src/table/hand-record.ts."
+    },
+    {
+      "spec": "SPEC-19",
+      "result": "PASS",
+      "evidence": "docs/storage/hand-records.md covers the database, store, key, every field with its type, write-before-deal timing, immutability/ConstraintError, failure (D-2), validation on read, the handStore seam and delay injection, and the kill-test command. backlog doc list shows doc-100 for TASK-3.9."
+    },
+    {
+      "spec": "SPEC-20",
+      "result": "PASS",
+      "evidence": "npm run e2e: 123 passed, 14 skipped (opt-in slow), 0 failed (Chromium+WebKit, including axe and the existing next-hand timing tests). CI run 45173123429 on b132781: conclusion success, all jobs green. No screen changes."
+    }
+  ],
+  "findings": [
+    {
+      "id": "J-1-01",
+      "severity": "LOW",
+      "spec": "SPEC-14",
+      "expected_vs_actual": "Expected: if useTableSession's own onHandComplete ref (D-5) were removed, a test would fail. Actual: putting onHandComplete back into the hook's effect dependencies passes every test, because Table already keeps a stable callback through its own ref. Behaviour seen through Table is correct, and the protection is real, but the hook-level guarantee is not tested on its own.",
+      "fix": "Optional: add a check that calls useTableSession directly (not through Table) with a new onHandComplete each render and asserts that the 1.5 s timer is not restarted."
+    }
+  ],
+  "summary": "All 20 SPEC items pass. npm test, lint and typecheck are green. Full e2e passes in both browsers, the opt-in kill test passes, the playtest SHA matches, and CI is green. Independent real-browser checks covered field-by-field records against the UI and an engine rebuild, delayed, failed and duplicate writes, aged-record retention, reload and churn. They agree with the spec. One LOW finding (J-1-01): the hook-level callback ref is masked by Table's ref in tests. No blocking findings."
+}

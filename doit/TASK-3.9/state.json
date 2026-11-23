@@ -5,13 +5,34 @@
   "base_commit": "034e0f2e13e6b7b8432cb1a47a0685e9307723dc",
   "started": "2026-11-23T04:34:04",
   "review_round": 1,
-  "judge_round": 0,
+  "judge_round": 1,
   "sendbacks": 0,
   "gate_runs": 4,
   "questions": 3,
   "assumptions": 10,
   "escalations": 0,
-  "item_failures": {},
+  "item_failures": {
+    "SPEC-01": 0,
+    "SPEC-02": 0,
+    "SPEC-03": 0,
+    "SPEC-04": 0,
+    "SPEC-05": 0,
+    "SPEC-06": 0,
+    "SPEC-07": 0,
+    "SPEC-08": 0,
+    "SPEC-09": 0,
+    "SPEC-10": 0,
+    "SPEC-11": 0,
+    "SPEC-12": 0,
+    "SPEC-13": 0,
+    "SPEC-14": 0,
+    "SPEC-15": 0,
+    "SPEC-16": 0,
+    "SPEC-17": 0,
+    "SPEC-18": 0,
+    "SPEC-19": 0,
+    "SPEC-20": 0
+  },
   "locked_tests": {
     "e2e/hand-records-kill.spec.ts": "de8a66a00f28af4ea05f9862ae66e356f534c3bfeb5a5099e045053500a4609e",
     "e2e/hand-records.spec.ts": "7639b2dbe901f88dd66e1c85a1b3537de7a248c1002d1f8fc443eb8cd9ee627b",
@@ -1289,5 +1310,9 @@
   "spec_sha256": "4d057ec70ec933e54cf14be7a2eca561e10909ea099fa2d263ba7140f2bacda1",
   "review_findings": {
     "1": 0
+  },
+  "doc_id": "doc-100",
+  "judge_results": {
+    "1": "PASS"
   }
 }
