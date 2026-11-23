@@ -963,6 +963,12 @@
       "event": "unlock",
       "file": "tests/bots/tag-seed-parity.acceptance.test.ts",
       "reason": "Code review R1 MINOR: record the seed the playtest policy actually used (strengthen)"
+    },
+    {
+      "t": "2026-11-22T20:44:51",
+      "event": "unlock",
+      "file": "tests/bots/tag-mixing.acceptance.test.ts",
+      "reason": "TASK-7.8 Q-3 (auto-accepted): value betting changes advice/bot results \u2014 re-pin expected values, keep every assertion and time limit"
     }
   ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-6.2",
@@ -970,7 +976,9 @@
   "review_findings": {
     "1": 0
   },
-  "relock_pending": [],
+  "relock_pending": [
+    "tests/bots/tag-mixing.acceptance.test.ts"
+  ],
   "doc_id": "doc-73",
   "judge_results": {
     "1": "PASS"

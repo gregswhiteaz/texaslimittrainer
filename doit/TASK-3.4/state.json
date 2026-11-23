@@ -500,6 +500,12 @@
       "event": "unlock",
       "file": "e2e/next-hand.spec.ts",
       "reason": "TASK-2.5 Q-2 routine + Q-3 user-approved: Mixed default line-up on Game Config; keep every assertion"
+    },
+    {
+      "t": "2026-11-22T20:44:53",
+      "event": "unlock",
+      "file": "tests/table/next-hand.acceptance.test.ts",
+      "reason": "TASK-7.8 Q-3 (auto-accepted): value betting changes advice/bot results \u2014 re-pin expected values, keep every assertion and time limit"
     }
   ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-3.4",
@@ -522,6 +528,7 @@
     "e2e/next-hand.spec.ts",
     "e2e/next-hand.spec.ts",
     "tests/table/next-hand.acceptance.test.ts",
-    "e2e/next-hand.spec.ts"
+    "e2e/next-hand.spec.ts",
+    "tests/table/next-hand.acceptance.test.ts"
   ]
 }

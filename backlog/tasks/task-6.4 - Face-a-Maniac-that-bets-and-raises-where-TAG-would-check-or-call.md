@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-22T01:58:00Z'
+updated_date: '2026-11-23T03:44:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -88,6 +88,8 @@ Judge R1 FAIL (CI timeout). Fix: Maniac tests ~37.8 s → ~14.4 s locally (memoi
 Recorded deviation (orchestrator, judge R1 fix): SPEC-08/A-8's 200-hand seated run moved to the opt-in slow group (TLH_SLOW_TESTS=1) per the user's standing rule after CI timed out; a 20-hand seated smoke run stays in every push.
 
 Judge R2 PASS 11/11 (CI 44972930191 green; Test step 487 s vs 943 s; Maniac tests ~20.6 s on CI vs ~119 s; J-1-01 river mutant killed).
+
+Locked test tests/bots/maniac.acceptance.test.ts re-pinned for TASK-7.8 Q-3 (auto-accepted; value betting).
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary

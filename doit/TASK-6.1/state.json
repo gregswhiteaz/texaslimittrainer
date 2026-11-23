@@ -333,6 +333,12 @@
       "event": "unlock",
       "file": "tests/bots/tag-playtest.acceptance.test.ts",
       "reason": "TASK-6.2 Q-3 (autopilot, recommended): TAG now mixes; assertions compare to the exact seeded decision (no widening)"
+    },
+    {
+      "t": "2026-11-22T20:44:51",
+      "event": "unlock",
+      "file": "tests/bots/tag.acceptance.test.ts",
+      "reason": "TASK-7.8 Q-3 (auto-accepted): value betting changes advice/bot results \u2014 re-pin expected values, keep every assertion and time limit"
     }
   ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-6.1",
@@ -345,6 +351,7 @@
     "1": "PASS"
   },
   "relock_pending": [
-    "tests/bots/tag-playtest.acceptance.test.ts"
+    "tests/bots/tag-playtest.acceptance.test.ts",
+    "tests/bots/tag.acceptance.test.ts"
   ]
 }

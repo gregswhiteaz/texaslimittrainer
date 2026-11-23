@@ -980,6 +980,12 @@
       "event": "unlock",
       "file": "tests/bots/maniac.acceptance.test.ts",
       "reason": "Judge J-1-02 (CI timeout): option 1 \u2014 collect() seat 1 uses decideTag with the shared equity memo instead of seededTagPolicy; identical actions; assertions unchanged"
+    },
+    {
+      "t": "2026-11-22T20:44:52",
+      "event": "unlock",
+      "file": "tests/bots/maniac.acceptance.test.ts",
+      "reason": "TASK-7.8 Q-3 (auto-accepted): value betting changes advice/bot results \u2014 re-pin expected values, keep every assertion and time limit"
     }
   ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-6.4",
@@ -998,5 +1004,7 @@
       "judge r1"
     ]
   },
-  "relock_pending": []
+  "relock_pending": [
+    "tests/bots/maniac.acceptance.test.ts"
+  ]
 }

@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-23T00:00:00Z'
+updated_date: '2026-11-23T03:44:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-0
@@ -97,6 +97,10 @@ CI run 44441353985: attempt 1 failed only at 'Install Playwright system dependen
 Locked e2e test unlocked for TASK-1.52 Q-2 (user-approved; clock-advance loop bound only).
 
 Locked test e2e/review.spec.ts edited for TASK-2.5 (Q-3 user-approved expected values).
+
+Locked test tests/table/review.acceptance.test.ts re-pinned for TASK-7.8 Q-3 (auto-accepted; value betting).
+
+Locked test tests/ui/review-panel.acceptance.test.tsx re-pinned for TASK-7.8 Q-3 (auto-accepted; value betting).
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary

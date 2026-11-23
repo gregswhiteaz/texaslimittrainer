@@ -508,6 +508,18 @@
       "event": "unlock",
       "file": "e2e/review.spec.ts",
       "reason": "TASK-2.5 Q-3 user-approved expected values: Mixed default line-up on Game Config; keep every assertion"
+    },
+    {
+      "t": "2026-11-22T20:44:52",
+      "event": "unlock",
+      "file": "tests/table/review.acceptance.test.ts",
+      "reason": "TASK-7.8 Q-3 (auto-accepted): value betting changes advice/bot results \u2014 re-pin expected values, keep every assertion and time limit"
+    },
+    {
+      "t": "2026-11-22T20:44:52",
+      "event": "unlock",
+      "file": "tests/ui/review-panel.acceptance.test.tsx",
+      "reason": "TASK-7.8 Q-3 (auto-accepted): value betting changes advice/bot results \u2014 re-pin expected values, keep every assertion and time limit"
     }
   ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-9.1",
@@ -523,6 +535,8 @@
     "tests/table/review.acceptance.test.ts",
     "e2e/review.spec.ts",
     "e2e/review.spec.ts",
-    "e2e/review.spec.ts"
+    "e2e/review.spec.ts",
+    "tests/table/review.acceptance.test.ts",
+    "tests/ui/review-panel.acceptance.test.tsx"
   ]
 }

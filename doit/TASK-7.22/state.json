@@ -666,7 +666,14 @@
       "skips": 0
     }
   },
-  "history": [],
+  "history": [
+    {
+      "t": "2026-11-22T20:44:51",
+      "event": "unlock",
+      "file": "tests/advice/postflop-coverage.acceptance.test.ts",
+      "reason": "TASK-7.8 Q-3 (auto-accepted): value betting changes advice/bot results \u2014 re-pin expected values, keep every assertion and time limit"
+    }
+  ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-7.22",
   "spec_sha256": "e095cc5316a9a53ca254149d4a168601470281aa924210598655fd426a7f5539",
   "review_findings": {
@@ -675,5 +682,8 @@
   "judge_results": {
     "1": "PASS"
   },
-  "doc_id": "doc-54"
+  "doc_id": "doc-54",
+  "relock_pending": [
+    "tests/advice/postflop-coverage.acceptance.test.ts"
+  ]
 }

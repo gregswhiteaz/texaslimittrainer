@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-22T21:18:00Z'
+updated_date: '2026-11-23T03:44:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -94,6 +94,8 @@ Build: 36 authored 6-max ranges + validator, classifier/narrowing, user-only ACT
 Review R1: MAJOR (ExactOptions bypass via bot-key-only variables) fixed with O & Allowed & never-extras; 2 MINOR test gaps fixed. R2: 0 findings (9/9 expected type errors; bots unchanged).
 
 Judge R1 PASS 16/16 (75,750 classifier pairs 0 mismatches; 14 extra type-ban cases; bots byte-identical vs base for mixed/tough/soft/sng; 12/12 mutants; 130+ hands played in the browser). J-1-01 LOW: Table.tsx using userReviewEntries is not guarded by a UI test — not tracked. Follow-up: TASK-7.25 (switch bots; needs user approval).
+
+Locked test tests/advice/range-model.acceptance.test.ts re-pinned for TASK-7.8 Q-3 (auto-accepted; value betting).
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary

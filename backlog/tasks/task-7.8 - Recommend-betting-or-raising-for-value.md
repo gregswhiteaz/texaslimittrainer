@@ -1,10 +1,11 @@
 ---
 id: TASK-7.8
 title: Recommend betting or raising for value
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-18T20:12:00Z'
+updated_date: '2026-11-23T03:45:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -70,6 +71,17 @@ Plan key: E07-S10 · Dream: limit-holdem-trainer
 - [ ] #12 Story documentation is written and published to Backlog.md
 - [ ] #13 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. callingRange (strong/pair/draw keep sets) + equity vs calling range; value-bet / value-raise rules at >50.0% (rounded tenths); capped street keeps pot-odds call/fold.
+2. Recommendation gains equityVsCallingRangePct and bet/raise outcomes; grade uses aggression-margin for real recommendations.
+3. Bots: recommend with BOT_EQUITY budget (500 trials); TAG FREE_CHECK_EQUITY shortcut removed/limited; 10k playtest ≤15 s.
+4. Q-3 locked re-pins; record new playtest/million hashes and CI shard times.
+
+Full spec: doit/TASK-7.8/spec.md
+<!-- SECTION:PLAN:END -->
 
 ## Implementation Notes
 

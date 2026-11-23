@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-21T23:32:00Z'
+updated_date: '2026-11-23T03:44:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -87,6 +87,8 @@ Build: deviations in style format; calling-station.json + decideCallingStation; 
 Follow-ups (Step 6a): TASK-6.16/6.17 now depend on TASK-7.8 (value betting) — aggression bands unreachable until then. Review MINOR (duplicate view collection in tests) is test plumbing, not tracked.
 
 Judge R1 PASS 11/11 (own seeds: fold-call 0.488, raise-call 0.598; all-station playtest VPIP 51.5%, PFR 4.5%; 7/7 mutants). Postflop aggression 0% → TASK-7.8/6.17.
+
+Locked test tests/bots/calling-station.acceptance.test.ts re-pinned for TASK-7.8 Q-3 (auto-accepted; value betting).
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary
