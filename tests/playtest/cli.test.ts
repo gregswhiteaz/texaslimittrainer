@@ -106,10 +106,11 @@ describe('playtest CLI', () => {
 
     expect(capture(['--help'])).toEqual({ code: 0, out: USAGE, err: '' });
     expect(USAGE).toBe(
-      'Usage: npm run playtest -- [--hands <1-1000000000>] [--seed <0-9007199254740991>] [--size <2-10>] [--game <cash|sng>] [--lineup <mixed|tough|soft>]\n' +
+      'Usage: npm run playtest -- [--hands <1-1000000000>] [--seed <0-9007199254740991>] [--size <2-10>] [--game <cash|sng>] [--lineup <mixed|tough|soft>] [--check-styles]\n' +
         '       npm run playtest -- --replay-code <32 lowercase hex characters> [--size <2-10>] [--button <seat>] [--game <cash|sng>] [--stacks <one stack per seat, comma-separated, 0 = empty seat>] [--lineup <mixed|tough|soft>] [--styles <style of each seat from 2 up, comma-separated: tag|calling-station|maniac|rock>]\n' +
         'Defaults: --hands 10000 --seed 42 --size 6 --button 1 --game cash; --stacks gives every seat $160 (cash) or 1500 (sng)\n' +
-        "--lineup: seat 1 plays the user (TAG) and seats 2 and up play the preset's styles; without it every seat plays TAG\n",
+        "--lineup: seat 1 plays the user (TAG) and seats 2 and up play the preset's styles; without it every seat plays TAG\n" +
+        "--check-styles: exit 1 unless every seated bot style's VPIP, PFR and aggression is inside its target band and every mixed spot used both actions\n",
     );
     expect(parseArgs([])).toEqual({
       kind: 'run',
@@ -536,14 +537,14 @@ describe('playtest CLI', () => {
     expect(small.code).toBe(0);
     expect(small.out).toContain(
       'Line-up: soft, seat 1 plays the user, seat 2 Ava (Calling station), seat 3 Ben (Rock)\n' +
-        'Bot results: ',
+        'Style stats: ',
     );
     expect(small.out).not.toContain('Line-up note:');
     const sng = capture(['--hands', '3', '--game', 'sng', '--lineup', 'soft']);
     expect(sng.out).toContain('Options: --hands 3 --seed 42 --size 6 --game sng --lineup soft\n');
     expect(sng.out).toContain(
       'Line-up: soft, seat 1 plays the user, seat 2 Ava (Calling station), seat 3 Ben (Rock), seat 4 Cal (Calling station), seat 5 Dee (Rock), seat 6 Eli (Calling station)\n' +
-        'Bot results: ',
+        'Style stats: ',
     );
     expect(sng.out).not.toContain('Line-up note:');
     const six = capture(['--hands', '3', '--lineup', 'mixed']);
@@ -594,6 +595,48 @@ describe('playtest CLI', () => {
       if (!capture(argv).out.includes(expected)) differing++;
     }
     expect(differing).toBeGreaterThan(0);
+  });
+
+  it('--check-styles is a value-less run flag echoed in the Options line', () => {
+    expect(parseArgs(['--check-styles'])).toEqual({
+      kind: 'run',
+      options: { hands: 10000, seed: 42, size: 6, game: 'cash' },
+      checkStyles: true,
+    });
+    expect(parseArgs(['--hands', '5', '--check-styles', '--lineup', 'soft'])).toEqual({
+      kind: 'run',
+      options: { hands: 5, seed: 42, size: 6, game: 'cash', lineUp: 'Soft' },
+      checkStyles: true,
+    });
+    expect(Object.keys(parseArgs(['--hands', '5']))).toEqual(['kind', 'options']);
+    for (const [argv, message] of [
+      [['--check-styles', '--check-styles'], 'Error: --check-styles given more than once.'],
+      [
+        ['--replay-code', VALID_CODE, '--check-styles'],
+        'Error: --check-styles is only valid without --replay-code.',
+      ],
+      [['--help', '--check-styles'], 'Error: --help cannot be combined with other options.'],
+      [['--check-styles', '--help'], 'Error: --help cannot be combined with other options.'],
+    ] as const) {
+      expect(parseArgs(argv)).toEqual({ kind: 'error', message });
+      expect(capture([...argv])).toEqual({ code: 2, out: '', err: `${message}\n${USAGE}` });
+    }
+    const usage = USAGE.split('\n');
+    expect(usage[0]).toMatch(/ \[--lineup <mixed\|tough\|soft>\] \[--check-styles\]$/);
+    expect(usage[4]).toBe(
+      "--check-styles: exit 1 unless every seated bot style's VPIP, PFR and aggression is inside its target band and every mixed spot used both actions",
+    );
+
+    const checked = capture(['--hands', '3', '--size', '3', '--lineup', 'soft', '--check-styles']);
+    expect(checked.out).toContain(
+      'Options: --hands 3 --seed 42 --size 3 --lineup soft --check-styles\n',
+    );
+    const lines = checked.out.split('\n');
+    const verdict = lines.findIndex((line) => line.startsWith('Style check: '));
+    expect(lines[verdict + 1]).toMatch(/^Bot results: /);
+    expect(capture(['--hands', '3', '--size', '3']).out).toContain(
+      'Options: --hands 3 --seed 42 --size 3\n',
+    );
   });
 });
 
