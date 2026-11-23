@@ -4,7 +4,7 @@ title: See opponents' cards in the review only when they were shown at showdown
 status: To Do
 assignee: []
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-17T23:22:00Z'
+updated_date: '2026-11-23T12:10:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -42,6 +42,7 @@ Plan key: E09-S04 · Dream: limit-holdem-trainer
 - [ ] #1 Given a showdown where Ben shows K♦ 7♣, When the panel opens, Then it shows Ben's K♦ 7♣ [REQ-043.6]
 - [ ] #2 Given a showdown where Dee mucks her losing hand, When the panel's text, accessible names and image titles are searched, Then Dee's hole cards appear nowhere [REQ-043.6]
 - [ ] #3 Given a hand that ends with every opponent folding, When the panel's text, accessible names and image titles are searched, Then no opponent's hole cards appear [REQ-043.6]
+- [ ] #4 Given stored hand records include the replay code, When the review shows opponents' cards, Then it reads only the record's shown/showdown cards and never deals cards from the replay code for display
 <!-- AC:END -->
 
 ## Definition of Done
@@ -59,3 +60,9 @@ Plan key: E09-S04 · Dream: limit-holdem-trainer
 - [ ] #11 Story documentation is written and published to Backlog.md
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+AC added from TASK-3.9 security review (replay code can rebuild mucked cards).
+<!-- SECTION:NOTES:END -->

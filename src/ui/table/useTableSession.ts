@@ -47,13 +47,6 @@ function newSessionId(): string {
 }
 
 /**
- * Holds the session and runs the deal step one macrotask later and each bot step botActionDelayMs(speed)
- * later (0 at Rapid, REQ-011.1); nothing runs on the user's turn.
- * Bot decisions are computed by the app-wide advice worker; replies after unmount or for an old turn are dropped.
- * After a hand its record is written to the hand store, and the next one is dealt NEXT_HAND_DELAY_MS later
- * (unless held) or once that write completes, whichever is later; a failed write deals nothing more (D-2).
- */
-/**
  * Asks the app-wide advice worker for a bot decision. Never throws synchronously: a failure creating the
  * worker or client rejects the promise, like any other advice failure.
  */
@@ -63,6 +56,13 @@ export function requestBotDecision(create: () => WorkerLike, turn: BotTurn): Pro
   );
 }
 
+/**
+ * Holds the session and runs the deal step one macrotask later and each bot step botActionDelayMs(speed)
+ * later (0 at Rapid, REQ-011.1); nothing runs on the user's turn.
+ * Bot decisions are computed by the app-wide advice worker; replies after unmount or for an old turn are dropped.
+ * After a hand its record is written to the hand store, and the next one is dealt NEXT_HAND_DELAY_MS later
+ * (unless held) or once that write completes, whichever is later; a failed write deals nothing more (D-2).
+ */
 export function useTableSession({
   config,
   newCode = newReplayCode,

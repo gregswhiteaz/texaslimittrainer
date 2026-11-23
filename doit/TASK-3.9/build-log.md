@@ -17,3 +17,10 @@
 - npm run e2e (Chromium + WebKit, full suite) → 182 passed / 14 skipped, 35.7 s wall (36 s incl. build). Existing timing tests (next-hand "28 slices then within 4", review Deal next hand) pass unchanged; no locked e2e re-pin needed.
 - Every-push e2e time added: e2e/hand-records.spec.ts = 9 tests × 2 browsers, 18 passed in 5.9 s wall alone (per-test 0.3–1.9 s, ~15 s summed). Full suite without it: 164 passed / 12 skipped in 33.4 s vs 35.7 s with it → about +2.3 s wall locally.
 - Opt-in kill test: TLH_SLOW_TESTS=1 npx playwright test e2e/hand-records-kill.spec.ts → chromium 1 passed (2.9 s run), webkit 1 skipped (by design). No browser or server processes left running.
+
+## FIX round 1
+- Item 1 (Code MINOR): fixed — new unit test in tests/storage/hand-store.test.ts spies on IDBDatabase.prototype.transaction (fake-indexeddb) and asserts (hands, readwrite, { durability: strict }); mutation check removing durability fails it (1 failed), reverted.
+- Item 2 (Security MINOR 1): fixed — docs/storage/hand-records.md now says records store the replay code (REQ-052.2) from which the full deck can be rebuilt; readers show only the user's and showdown cards and never deal from a stored replay code for display. spec.md untouched.
+- Item 3 (NIT): fixed — hook description comment moved directly above export function useTableSession.
+- npx vitest run tests/storage/hand-store.test.ts → 2 passed. npm run format → clean.
+- doit.py gate TASK-3.9 → PASS (test, lint, typecheck ok; scope warn 1700 lines / 18 files, under fail limit).

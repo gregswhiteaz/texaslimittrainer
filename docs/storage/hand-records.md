@@ -52,7 +52,10 @@ for the user. `botId` is a whole number unique within the session: at seating, b
 order, and a replacement bot gets the next unused number (`TableState.nextBotId`), so a bot is identified
 across sessions by `(sessionId, botId)`.
 
-Records never hold bots' unshown hole cards, the user's decision views, or advice and grades
+Records do not list bots' unshown hole cards, but they do store the replay code (required by REQ-052.2),
+from which the full deck, including every bot's hole cards, can be rebuilt. Screens that read records must
+show only the user's cards and cards shown at showdown, and must never deal cards from a stored replay code
+for display. Records never hold the user's decision views or advice and grades
 (`CompletedHand.userDecisions` is not stored). Extra fields from a later version are ignored on read.
 
 ## Write before the next deal

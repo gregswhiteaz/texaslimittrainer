@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-23T11:43:00Z'
+updated_date: '2026-11-23T12:06:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -95,4 +95,6 @@ AC added from TASK-3.1 follow-up (doc-21).
 AC added from TASK-3.4 follow-up (doc-25).
 
 AC added from TASK-9.1 follow-up (doc-26).
+
+Build: IndexedDB hand store (src/storage/hand-store.ts, tlh-trainer v1 'hands'), handRecord/parseHandRecord, write-before-deal in useTableSession (failure stops dealing), bot ids; block 1 (TASK-3.1 botId re-pin) auto-accepted; e2e 182 pass (+2.3 s); kill test passes (Chromium, opt-in); SHA unchanged; gate PASS.
 <!-- SECTION:NOTES:END -->

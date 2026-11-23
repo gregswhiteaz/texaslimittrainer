@@ -4,7 +4,7 @@ title: Save the session after every hand so it can be resumed
 status: To Do
 assignee: []
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-21T06:54:00Z'
+updated_date: '2026-11-23T12:10:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -52,6 +52,7 @@ Plan key: E03-S11 · Dream: limit-holdem-trainer
 - [ ] #9 Given an in-app Partial session config, When resolveSessionConfig merges it with defaults, Then the result always passes assertSessionConfig (e.g. players, seats, userSeat and button stay consistent), with a test for a partial override that would otherwise be inconsistent
 - [ ] #10 Given a saved session holding an in-progress hand (HandState, including allIn, stack and contribution fields), When it is restored, Then the state is validated (e.g. checkState) before any action is applied and an invalid state is rejected
 - [ ] #11 Given a saved session whose stored actions are replayed on restore, When an action is not a well-formed {seat, type, amount} object, Then restore rejects it before calling applyAction
+- [ ] #12 Given hand records are read back from IndexedDB, When parseHandRecord runs, Then it also rejects cross-field inconsistencies (seats in actions/showdown/awards not in the seat list, repeated cards, level not matching game type, unbounded name/array lengths)
 <!-- AC:END -->
 
 ## Definition of Done
@@ -84,4 +85,6 @@ AC added from TASK-2.18 follow-up (doc-50, TASK-2.1 review MINOR).
 AC added from TASK-1.9 follow-up (security review: restored HandState fields become untrusted)
 
 AC#11 added from TASK-1.13 follow-up (security review: action shape must be checked at load)
+
+AC added from TASK-3.9 security review (first reader of stored records).
 <!-- SECTION:NOTES:END -->

@@ -20,3 +20,8 @@
 - `docs/storage/hand-records.md` — new: database, record fields, write-before-deal ordering, immutability, failure, validation, test seam, kill test (SPEC-19).
 
 New dependency: fake-indexeddb 6.2.8 (dev only, Apache-2.0, no runtime dependencies) for fast IndexedDB tests in Node (D-3).
+
+## FIX round 1
+- `tests/storage/hand-store.test.ts` — new unit test spies on the fake IDBDatabase transaction and asserts the write uses readwrite with durability strict (removing it fails the test).
+- `docs/storage/hand-records.md` — privacy wording corrected: records store the replay code (REQ-052.2), from which the full deck can be rebuilt; screens show only the user's cards and showdown cards and never deal from a stored replay code for display.
+- `src/ui/table/useTableSession.ts` — hook description comment moved directly above useTableSession.

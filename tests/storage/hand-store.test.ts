@@ -1,5 +1,5 @@
-import { IDBFactory } from 'fake-indexeddb';
-import { describe, expect, it } from 'vitest';
+import { IDBDatabase, IDBFactory } from 'fake-indexeddb';
+import { describe, expect, it, vi } from 'vitest';
 import { DB_NAME, DB_VERSION, HANDS_STORE, openHandStore } from '../../src/storage/hand-store';
 import { handRecord, type HandRecord } from '../../src/table/hand-record';
 import { completedHand } from '../../src/table/session';
@@ -49,5 +49,16 @@ describe('hand store', () => {
       name: 'VersionError',
     });
     await expect(failed.count()).rejects.toMatchObject({ name: 'VersionError' });
+  });
+
+  it('writes each record in a strict-durability readwrite transaction', async () => {
+    const transaction = vi.spyOn(IDBDatabase.prototype, 'transaction');
+    try {
+      const store = openHandStore(new IDBFactory());
+      await store.add(record(NEW_SESSION, 1, new Date()));
+      expect(transaction).toHaveBeenCalledWith(HANDS_STORE, 'readwrite', { durability: 'strict' });
+    } finally {
+      transaction.mockRestore();
+    }
   });
 });
