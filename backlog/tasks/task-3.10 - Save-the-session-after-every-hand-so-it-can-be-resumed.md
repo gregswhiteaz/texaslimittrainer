@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-23T13:20:00Z'
+updated_date: '2026-11-23T13:44:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -16,6 +16,7 @@ references:
 documentation:
   - doc-1
   - doc-2
+  - doc-101
 parent_task_id: TASK-3
 priority: high
 type: chore
@@ -104,3 +105,9 @@ Build: tlh-trainer v2 'sessions' store (additive upgrade; hand + session in one 
 
 Review R1: only blocking item is a stray byte-identical sync-conflict copy of doc-100 (backlog/docs/stories/doc-100 … 2.md) that the build commit picked up; removing it needs a backlog/ file delete, which this session is not permitted to do. Code itself: all SPEC items pass (reviewer round-tripped 3,540 hands).
 <!-- SECTION:NOTES:END -->
+
+## Final Summary
+
+<!-- SECTION:FINAL_SUMMARY:BEGIN -->
+Added a sessions store (IndexedDB tlh-trainer v2) written at table start and, in one strict transaction with the hand record, after every completed hand; the stored state is the next-hand state so Resume (E02) can restore it with restoreSession. Added restore-side validation: assertSessionConfig, consistent resolveSessionConfig, parseSessionRecord (rejects any hand/actions), cross-field and bounded parseHandRecord, hostile-value-safe createHand/shuffledDeck. Verified: npm test 942 passed, e2e 184 passed (Chromium+WebKit), opt-in kill spec passed, playtest 0 invariant violations, CI green; judge round 1 PASS 17/17 (J-1-01 REQ-025 seat-kind swap test added and mutation-verified). Review assumptions A-1..A-8 in the story doc (rebuys always 0, level 1, start-write failure non-blocking, name/length bounds). Risks: handsPlayed up to MAX_SAFE_INTEGER fails closed later (LOW, untracked). STATUS: parked unmerged because the build commit included a byte-identical sync-conflict copy of the TASK-3.9 story doc (backlog/docs/stories/doc-100 ... 2.md); the user must delete it, then merge.
+<!-- SECTION:FINAL_SUMMARY:END -->
