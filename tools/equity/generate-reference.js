@@ -69,7 +69,7 @@ export function enumerateExact(evaluate, players, board) {
 }
 
 /** @param {number} card */
-function cardText(card) {
+export function cardText(card) {
   return RANKS.charAt(card >> 2) + SUITS.charAt(card & 3);
 }
 
@@ -77,7 +77,7 @@ function cardText(card) {
  * mulberry32, a published 32-bit generator. Returns floats in [0, 1).
  * @param {number} seed
  */
-function mulberry32(seed) {
+export function mulberry32(seed) {
   let state = seed >>> 0;
   return () => {
     state = (state + 0x6d2b79f5) >>> 0;
