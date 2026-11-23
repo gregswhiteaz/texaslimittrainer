@@ -1,11 +1,11 @@
 ---
 id: TASK-7.7
 title: Compute multiway and range-versus-range equity within 1.5 points
-status: In Progress
+status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-23T02:58:00Z'
+updated_date: '2026-11-23T03:20:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -16,6 +16,7 @@ references:
 documentation:
   - doc-1
   - doc-2
+  - doc-92
 parent_task_id: TASK-7
 priority: high
 type: feature
@@ -42,25 +43,25 @@ Plan key: E07-S06 · Dream: limit-holdem-trainer
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Given a stored set of at least 100 multiway and range-versus-range cases on boards of 0, 3, 4 and 5 cards with offline reference values, When the equity test suite runs, Then every result is within 1.5 percentage points of its reference [REQ-034.2]
-- [ ] #2 Given the heads-up and multiway reference sets, When the equity test suite runs, Then it contains at least 200 matchups and each reference value records whether it was exhaustive or high-sample [REQ-034.1, REQ-034.2]
-- [ ] #3 Given the same ranges listed in a different order, When equity is computed, Then the result is identical [REQ-034.3]
+- [x] #1 Given a stored set of at least 100 multiway and range-versus-range cases on boards of 0, 3, 4 and 5 cards with offline reference values, When the equity test suite runs, Then every result is within 1.5 percentage points of its reference [REQ-034.2]
+- [x] #2 Given the heads-up and multiway reference sets, When the equity test suite runs, Then it contains at least 200 matchups and each reference value records whether it was exhaustive or high-sample [REQ-034.1, REQ-034.2]
+- [x] #3 Given the same ranges listed in a different order, When equity is computed, Then the result is identical [REQ-034.3]
 <!-- AC:END -->
 
 ## Definition of Done
 <!-- DOD:BEGIN -->
-- [ ] #1 Every acceptance criterion has at least one automated test (unit, property or Playwright) that passes
-- [ ] #2 `npm run lint`, `npm run typecheck` and `npm test` pass with zero errors [REQ-059.1, REQ-059.4]
-- [ ] #3 The golden-spot suite passes 100% (applies from the story that creates the suite, E07-S14, onward) [REQ-039.4]
-- [ ] #4 Coverage thresholds hold: >= 90% engine/bots/advice/statistics, >= 70% overall [REQ-059.3]
-- [ ] #5 Engine, bots, advice and statistics code imports no UI or browser-only code [REQ-059.2]
-- [ ] #6 Stories that touch the engine, bots or advice: a 10,000-hand playtest reports zero invariant violations (applies once the playtest runner exists, E01-S07, onward) [REQ-056.1]
-- [ ] #7 Stories that add or change a screen: Playwright test of the screen flow in Chromium and WebKit, and axe reports zero serious or critical violations (axe tooling is provisioned in the toolchain story E01-S01) [REQ-057.1]
-- [ ] #8 No new network requests beyond the app's own files [REQ-058.1]
-- [ ] #9 Strategy-content stories: text is original and every chart, range or golden spot carries its justification [REQ-061.2]
-- [ ] #10 CI workflow is green on the story's branch (applies once the CI story E01-S02 is done; E01-S01 instead passes the same checks locally) [REQ-064.2]
-- [ ] #11 Story documentation is written and published to Backlog.md
-- [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
+- [x] #1 Every acceptance criterion has at least one automated test (unit, property or Playwright) that passes
+- [x] #2 `npm run lint`, `npm run typecheck` and `npm test` pass with zero errors [REQ-059.1, REQ-059.4]
+- [x] #3 The golden-spot suite passes 100% (applies from the story that creates the suite, E07-S14, onward) [REQ-039.4]
+- [x] #4 Coverage thresholds hold: >= 90% engine/bots/advice/statistics, >= 70% overall [REQ-059.3]
+- [x] #5 Engine, bots, advice and statistics code imports no UI or browser-only code [REQ-059.2]
+- [x] #6 Stories that touch the engine, bots or advice: a 10,000-hand playtest reports zero invariant violations (applies once the playtest runner exists, E01-S07, onward) [REQ-056.1]
+- [x] #7 Stories that add or change a screen: Playwright test of the screen flow in Chromium and WebKit, and axe reports zero serious or critical violations (axe tooling is provisioned in the toolchain story E01-S01) [REQ-057.1]
+- [x] #8 No new network requests beyond the app's own files [REQ-058.1]
+- [x] #9 Strategy-content stories: text is original and every chart, range or golden spot carries its justification [REQ-061.2]
+- [x] #10 CI workflow is green on the story's branch (applies once the CI story E01-S02 is done; E01-S01 instead passes the same checks locally) [REQ-064.2]
+- [x] #11 Story documentation is written and published to Backlog.md
+- [x] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
 
 ## Implementation Plan
@@ -73,3 +74,19 @@ Plan key: E07-S06 · Dream: limit-holdem-trainer
 
 Full spec: doit/TASK-7.7/spec.md
 <!-- SECTION:PLAN:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+Build: offline multiway/range-vs-range generator (120 cases, 84 exhaustive + 36 at 2M trials, 64 s, reproducible), committed fixture, acceptance tests (largest error 0.870 pp; reordering identical); no src change; gate PASS.
+
+Review R1: 0 blocking; fixture regenerated byte-identical by reviewer; MINORs (method-label check, 812 vs 750 lines) and NITs not tracked (test data, no failure path).
+
+Judge R1 PASS 7/7 (independent evaluator re-derived 59 fixture cases; 144 orderings bit-identical; 6/7 mutants, the uncaught one harmless; fixture regenerated byte-identical).
+<!-- SECTION:NOTES:END -->
+
+## Final Summary
+
+<!-- SECTION:FINAL_SUMMARY:BEGIN -->
+Added an offline multiway/range-vs-range reference generator and a 120-case fixture (84 exhaustive, 36 high-sample at 2M trials), plus every-push acceptance and unit tests; no src change. Why: proves computeEquity within 1.5 pp beyond heads-up. Verification: largest error 0.870 pp across 120 cases, 241 matchups total (>=200), reordering ranges gives identical results; npm test 707 passed; lint/typecheck pass; review R1 0 blocking. Regenerate: node tools/equity/generate-multiway-reference.js (64 s, reproducible). Assumptions A-1..A-7 to review (story doc). Risks: none; follow-ups: none.
+<!-- SECTION:FINAL_SUMMARY:END -->

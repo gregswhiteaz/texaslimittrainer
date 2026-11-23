@@ -4,14 +4,22 @@
   "branch": "doit/TASK-7.7",
   "base_commit": "0f9f11cfedf8580486f633f2d8096a031e45ecdb",
   "started": "2026-11-22T19:52:59",
-  "review_round": 0,
-  "judge_round": 0,
+  "review_round": 1,
+  "judge_round": 1,
   "sendbacks": 0,
   "gate_runs": 2,
   "questions": 0,
   "assumptions": 0,
   "escalations": 0,
-  "item_failures": {},
+  "item_failures": {
+    "SPEC-01": 0,
+    "SPEC-02": 0,
+    "SPEC-03": 0,
+    "SPEC-04": 0,
+    "SPEC-05": 0,
+    "SPEC-06": 0,
+    "SPEC-07": 0
+  },
   "locked_tests": {
     "tests/advice/equity-multiway.acceptance.test.ts": "eab25498c30205690e1e5f5b4a52c1f643277753f97b2e7c1a8a724c12bb467b"
   },
@@ -1199,5 +1207,12 @@
   },
   "history": [],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-7.7",
-  "spec_sha256": "1e80d623d4ac5c5164daaf56585a90201459fdd70b9bb057a2e275e570ba98d5"
+  "spec_sha256": "1e80d623d4ac5c5164daaf56585a90201459fdd70b9bb057a2e275e570ba98d5",
+  "review_findings": {
+    "1": 0
+  },
+  "doc_id": "doc-92",
+  "judge_results": {
+    "1": "PASS"
+  }
 }
