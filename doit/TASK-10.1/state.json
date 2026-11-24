@@ -5,13 +5,28 @@
   "base_commit": "321d93d5f74d80c67beec50bb0e2d11d692b55b7",
   "started": "2026-11-24T09:32:35",
   "review_round": 3,
-  "judge_round": 0,
+  "judge_round": 1,
   "sendbacks": 0,
   "gate_runs": 7,
   "questions": 3,
   "assumptions": 9,
   "escalations": 0,
-  "item_failures": {},
+  "item_failures": {
+    "SPEC-01": 0,
+    "SPEC-02": 0,
+    "SPEC-03": 0,
+    "SPEC-04": 0,
+    "SPEC-05": 0,
+    "SPEC-06": 0,
+    "SPEC-07": 0,
+    "SPEC-08": 0,
+    "SPEC-09": 0,
+    "SPEC-10": 0,
+    "SPEC-11": 0,
+    "SPEC-12": 0,
+    "SPEC-13": 0,
+    "SPEC-14": 0
+  },
   "locked_tests": {
     "e2e/bust-continue.spec.ts": "39ce8c6ad0563140298fabf57efdf0178f531c818f64d7bf31b80c25d9b268d4",
     "e2e/rebuy.spec.ts": "6f18d172138c94f659507e83b0d3b2f700d8107a78ffccbc420aceac4bb29dc7",
@@ -1647,5 +1662,8 @@
     "src/ui/App.tsx:ending-guard-never-reset-hangs-second-leave": [
       "review r2"
     ]
+  },
+  "judge_results": {
+    "1": "PASS"
   }
 }

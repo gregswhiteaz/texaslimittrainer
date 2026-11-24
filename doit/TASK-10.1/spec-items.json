@@ -3,84 +3,84 @@
     "id": "SPEC-01",
     "verifies": "AC#3, AC#4, DoD#1",
     "verification": "acceptance `tests/table/session-report.acceptance.test.ts::AC#3/AC#4 cash result, BB/100 and rebuys from the stored session`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-02",
     "verifies": "AC#3, AC#4, DoD#1, DoD#4",
     "verification": "unit `tests/table/session-report.acceptance.test.ts::rounding, zero, sit-and-go and 0-hand edges`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-03",
     "verifies": "AC#5, AC#7, DoD#1",
     "verification": "acceptance `tests/storage/session-end.acceptance.test.ts::AC#5/AC#7 ending saves the report, relaunch reads it, 0 hands stores nothing`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-04",
     "verifies": "AC#6, DoD#1",
     "verification": "acceptance `tests/storage/session-end.acceptance.test.ts::AC#6 a stored report is never rewritten and a second write is rejected`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-05",
     "verifies": "AC#3, AC#4, AC#8, DoD#7",
     "verification": "acceptance `tests/ui/report-screen.acceptance.test.tsx::Session report screen shows the header line and cash tiles`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-06",
     "verifies": "AC#5, DoD#4",
     "verification": "unit `tests/table/session-report.acceptance.test.ts::parseSessionReport rejects invalid stored reports`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-07",
     "verifies": "AC#1, AC#5, AC#9, DoD#7, DoD#8",
     "verification": "acceptance `e2e/session-report.spec.ts::Leave table between hands ends the session and opens its saved report`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-08",
     "verifies": "AC#2, DoD#7",
     "verification": "acceptance `e2e/rebuy.spec.ts::Leave table in the bust dialog ends the session and opens its Session Report` and `e2e/bust-continue.spec.ts::Leave table from the dialog opened by Continue opens the Session Report`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-09",
     "verifies": "AC#8, DoD#7",
     "verification": "acceptance `e2e/session-report.spec.ts::Leave table with the Hand Review open after hand 12 shows 12 hands`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-10",
     "verifies": "AC#3, AC#4, DoD#7",
     "verification": "acceptance `e2e/session-report.spec.ts::a seeded session shows Result, BB/100 and rebuys from its stored values`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-11",
     "verifies": "AC#7, DoD#7",
     "verification": "acceptance `e2e/session-report.spec.ts::a session with 0 completed hands ends without a report and is not stored`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-12",
     "verifies": "AC#5, DoD#1",
     "verification": "unit `tests/storage/session-end.acceptance.test.ts::a v2 database upgrades to v3 with its records intact`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-13",
     "verifies": "DoD#2, DoD#3, DoD#4, DoD#5, DoD#6, DoD#9, DoD#10, DoD#11, DoD#12",
     "verification": "command `npm run lint && npm run typecheck && npm test && npx vitest run tests/golden/ && npm run -s playtest -- --hands 10000 --seed 42 && npx playwright test`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-14",
     "verifies": "AC#5, DoD#7",
     "verification": "acceptance `e2e/session-report.spec.ts::Back to Home from the report opens Home without Resume`",
-    "status": "pending"
+    "status": "pass"
   }
 ]
