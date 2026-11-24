@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-24T20:12:00Z'
+updated_date: '2026-11-24T20:27:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -39,31 +39,31 @@ Plan key: E10-S05 · Dream: limit-holdem-trainer
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Given a hand in progress, When the user chooses Leave table, Then a dialog shows "Leave now? Your hand will be folded." and no action is taken for the user while it is open [REQ-004.7]
-- [ ] #2 Given the leave dialog during hand 25, When the user cancels, Then the dialog closes, the user still holds the same cards and stack and the hand continues with the same player to act [REQ-004.7]
-- [ ] #3 Given the leave dialog during hand 25 while the user holds cards, When the user confirms, Then the user's hand is folded, the remaining players play hand 25 to completion without user input and no hand 26 is dealt [REQ-004.7]
-- [ ] #4 Given the user confirmed leaving during hand 25, When hand 25 completes, Then hand 25's record is stored, the session ends and its Session Report opens showing hands played "25" [REQ-004.7, REQ-004.5]
-- [ ] #5 Given the user confirmed leaving while all-in during hand 25, When the hand completes, Then the user's cards stay in to showdown, any pot the user wins is awarded and included in the report's result [REQ-004.7]
-- [ ] #6 Given a cash session whose user confirms leaving during hand 1, When hand 1 completes, Then a report with hands played "1" is shown and stored [REQ-004.7]
-- [ ] #7 Given the leave dialog during hand 25 while a bot is to act and the user holds cards, When the user confirms, Then the user's hand is folded at once before that bot acts [REQ-004.8]
-- [ ] #8 Given the user confirmed leaving during hand 25, When hand 25's record and the session report are read, Then the forced fold has no grade and is not counted in Major errors /100, Minor errors /100, hint usage or any leak category [REQ-004.8]
-- [ ] #9 Given Leave table is chosen in the middle of a hand, When onLeave would run, Then the dialog 'Leave now? Your hand will be folded.' is shown first (REQ-004.7)
+- [x] #1 Given a hand in progress, When the user chooses Leave table, Then a dialog shows "Leave now? Your hand will be folded." and no action is taken for the user while it is open [REQ-004.7]
+- [x] #2 Given the leave dialog during hand 25, When the user cancels, Then the dialog closes, the user still holds the same cards and stack and the hand continues with the same player to act [REQ-004.7]
+- [x] #3 Given the leave dialog during hand 25 while the user holds cards, When the user confirms, Then the user's hand is folded, the remaining players play hand 25 to completion without user input and no hand 26 is dealt [REQ-004.7]
+- [x] #4 Given the user confirmed leaving during hand 25, When hand 25 completes, Then hand 25's record is stored, the session ends and its Session Report opens showing hands played "25" [REQ-004.7, REQ-004.5]
+- [x] #5 Given the user confirmed leaving while all-in during hand 25, When the hand completes, Then the user's cards stay in to showdown, any pot the user wins is awarded and included in the report's result [REQ-004.7]
+- [x] #6 Given a cash session whose user confirms leaving during hand 1, When hand 1 completes, Then a report with hands played "1" is shown and stored [REQ-004.7]
+- [x] #7 Given the leave dialog during hand 25 while a bot is to act and the user holds cards, When the user confirms, Then the user's hand is folded at once before that bot acts [REQ-004.8]
+- [x] #8 Given the user confirmed leaving during hand 25, When hand 25's record and the session report are read, Then the forced fold has no grade and is not counted in Major errors /100, Minor errors /100, hint usage or any leak category [REQ-004.8]
+- [x] #9 Given Leave table is chosen in the middle of a hand, When onLeave would run, Then the dialog 'Leave now? Your hand will be folded.' is shown first (REQ-004.7)
 <!-- AC:END -->
 
 ## Definition of Done
 <!-- DOD:BEGIN -->
-- [ ] #1 Every acceptance criterion has at least one automated test (unit, property or Playwright) that passes
-- [ ] #2 `npm run lint`, `npm run typecheck` and `npm test` pass with zero errors [REQ-059.1, REQ-059.4]
-- [ ] #3 The golden-spot suite passes 100% (applies from the story that creates the suite, E07-S14, onward) [REQ-039.4]
-- [ ] #4 Coverage thresholds hold: >= 90% engine/bots/advice/statistics, >= 70% overall [REQ-059.3]
-- [ ] #5 Engine, bots, advice and statistics code imports no UI or browser-only code [REQ-059.2]
-- [ ] #6 Stories that touch the engine, bots or advice: a 10,000-hand playtest reports zero invariant violations (applies once the playtest runner exists, E01-S07, onward) [REQ-056.1]
-- [ ] #7 Stories that add or change a screen: Playwright test of the screen flow in Chromium and WebKit, and axe reports zero serious or critical violations (axe tooling is provisioned in the toolchain story E01-S01) [REQ-057.1]
-- [ ] #8 No new network requests beyond the app's own files [REQ-058.1]
-- [ ] #9 Strategy-content stories: text is original and every chart, range or golden spot carries its justification [REQ-061.2]
-- [ ] #10 CI workflow is green on the story's branch (applies once the CI story E01-S02 is done; E01-S01 instead passes the same checks locally) [REQ-064.2]
-- [ ] #11 Story documentation is written and published to Backlog.md
-- [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
+- [x] #1 Every acceptance criterion has at least one automated test (unit, property or Playwright) that passes
+- [x] #2 `npm run lint`, `npm run typecheck` and `npm test` pass with zero errors [REQ-059.1, REQ-059.4]
+- [x] #3 The golden-spot suite passes 100% (applies from the story that creates the suite, E07-S14, onward) [REQ-039.4]
+- [x] #4 Coverage thresholds hold: >= 90% engine/bots/advice/statistics, >= 70% overall [REQ-059.3]
+- [x] #5 Engine, bots, advice and statistics code imports no UI or browser-only code [REQ-059.2]
+- [x] #6 Stories that touch the engine, bots or advice: a 10,000-hand playtest reports zero invariant violations (applies once the playtest runner exists, E01-S07, onward) [REQ-056.1]
+- [x] #7 Stories that add or change a screen: Playwright test of the screen flow in Chromium and WebKit, and axe reports zero serious or critical violations (axe tooling is provisioned in the toolchain story E01-S01) [REQ-057.1]
+- [x] #8 No new network requests beyond the app's own files [REQ-058.1]
+- [x] #9 Strategy-content stories: text is original and every chart, range or golden spot carries its justification [REQ-061.2]
+- [x] #10 CI workflow is green on the story's branch (applies once the CI story E01-S02 is done; E01-S01 instead passes the same checks locally) [REQ-064.2]
+- [x] #11 Story documentation is written and published to Backlog.md
+- [x] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
 
 ## Implementation Plan
@@ -84,4 +84,6 @@ Full spec: doit/TASK-10.2/spec.md
 AC added from TASK-3.3 follow-up (doc-24).
 
 Build: forceFold engine op (shared settle helper), LeaveDialog mid-hand confirm, forced-fold hand stored with forcedFold: true, session ends after the hand's write; locked D-5 edits + play-money unit fixture; npm test 1267 passed, Playwright 298 passed, playtest 0 violations; gate PASS.
+
+Judge r1 PASS 15/15; live Chromium+WebKit leave flows (my turn, bot turn, after fold, all-in, between hands); playtest byte-identical to main; CI 45479328751 green.
 <!-- SECTION:NOTES:END -->

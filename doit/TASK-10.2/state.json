@@ -5,13 +5,29 @@
   "base_commit": "b803707fa564578ede32fea059335ca3fbe2c53a",
   "started": "2026-11-24T12:32:56",
   "review_round": 1,
-  "judge_round": 0,
+  "judge_round": 1,
   "sendbacks": 0,
   "gate_runs": 2,
   "questions": 1,
   "assumptions": 7,
   "escalations": 0,
-  "item_failures": {},
+  "item_failures": {
+    "SPEC-01": 0,
+    "SPEC-02": 0,
+    "SPEC-03": 0,
+    "SPEC-04": 0,
+    "SPEC-05": 0,
+    "SPEC-06": 0,
+    "SPEC-07": 0,
+    "SPEC-08": 0,
+    "SPEC-09": 0,
+    "SPEC-10": 0,
+    "SPEC-11": 0,
+    "SPEC-12": 0,
+    "SPEC-13": 0,
+    "SPEC-14": 0,
+    "SPEC-15": 0
+  },
   "locked_tests": {
     "e2e/leave-mid-hand.spec.ts": "c8c9680b4de4b4d3fc3bf14df0bc25174145b8639abdd72de165b271570d5ee3",
     "e2e/play-money.spec.ts": "fe70fab2481553a6b7f00f1d4d36d3add0e0d3f3175a177f428a74a73df43fe3",
@@ -1697,5 +1713,8 @@
   "spec_sha256": "f6393c58d76cb055b7d024a7ac3a2d3306c937f0f389e052b1bc7dccf1748f69",
   "review_findings": {
     "1": 0
+  },
+  "judge_results": {
+    "1": "PASS"
   }
 }
