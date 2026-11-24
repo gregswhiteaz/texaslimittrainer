@@ -24,3 +24,6 @@
 - e2e/bust-continue.spec.ts: the replaced Continue-then-Leave test used to check that Resume reopens the dialog; the session is now ended, so it checks the Session Report instead (per D-4).
 - docs/storage/hand-records.md version line updated (outside the spec list).
 **Answer: auto-accepted (recommended)** — recorded deviations.
+
+## Orchestrator additions after review r1 (fix-brief.md)
+Items 1-3 by the builder (Leave/end ordering via the ending screen effect, pending-write e2e verified against the old code, buy-in tied to stake). Item 4 (strengthen-only NIT in hook-locked e2e/session-report.spec.ts) applied by the orchestrator after `unlock TASK-10.1` with reason.

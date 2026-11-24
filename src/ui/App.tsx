@@ -18,7 +18,7 @@ type Screen =
   | { readonly name: 'config' }
   | { readonly name: 'table'; readonly config: SessionConfig }
   | { readonly name: 'table'; readonly resume: ResumedSession }
-  | { readonly name: 'ending' }
+  | { readonly name: 'ending'; readonly sessionId: string }
   | { readonly name: 'report'; readonly report: SessionReport };
 
 /** undefined while Home's read is pending (A-4); reset on leaving Home so a return reads it again. */
@@ -37,6 +37,8 @@ export default function App(): React.JSX.Element {
   const [paused, setPaused] = useState<Paused>(undefined);
   // The shown Table's history key; null while another screen is shown. Set in the handlers that change screen.
   const tableKey = useRef<string | null>(null);
+  // The session this App has started ending, so StrictMode's second effect run does not end it twice.
+  const endingId = useRef<string | null>(null);
   const onHome = screen.name === 'home';
   useEffect(() => {
     if (!onHome) return undefined;
@@ -59,6 +61,27 @@ export default function App(): React.JSX.Element {
       cancelled = true;
     };
   }, [onHome]);
+
+  // Leave table ends the session here, after the Table has unmounted: every passive effect of earlier
+  // commits (including the one that queues the last hand's write) has run, so tableWritesSettled() covers
+  // every table write and endSession runs after all of them (A-4, A-5).
+  const leaving = screen.name === 'ending' ? screen.sessionId : null;
+  useEffect(() => {
+    if (leaving === null || endingId.current === leaving) return;
+    endingId.current = leaving;
+    tableWritesSettled()
+      .then(() => sharedHandStore().endSession(leaving, new Date()))
+      .then(
+        (report) =>
+          setScreen(
+            report === null ? { name: 'home', returned: true } : { name: 'report', report },
+          ),
+        (error: unknown) => {
+          console.error('Session could not be ended', error);
+          setScreen({ name: 'home', returned: true });
+        },
+      );
+  }, [leaving]);
 
   useEffect(() => {
     const onPopState = (event: PopStateEvent): void => {
@@ -91,24 +114,12 @@ export default function App(): React.JSX.Element {
     setScreen({ name: 'home', returned: true });
   };
 
-  /** Leave table: ends the session once its writes settle, then shows its report, or Home if it had no
-   *  completed hand or could not be ended (A-4, A-5). */
+  /** Leave table: shows the ending screen, whose effect ends the session once its writes settle, then shows
+   *  its report, or Home if it had no completed hand or could not be ended (A-4, A-5). */
   const leave = (sessionId: string): void => {
     if (tableKey.current === null) return;
     closeTable();
-    setScreen({ name: 'ending' });
-    tableWritesSettled()
-      .then(() => sharedHandStore().endSession(sessionId, new Date()))
-      .then(
-        (report) =>
-          setScreen(
-            report === null ? { name: 'home', returned: true } : { name: 'report', report },
-          ),
-        (error: unknown) => {
-          console.error('Session could not be ended', error);
-          setScreen({ name: 'home', returned: true });
-        },
-      );
+    setScreen({ name: 'ending', sessionId });
   };
 
   const resume = (record: SessionRecord): void => {

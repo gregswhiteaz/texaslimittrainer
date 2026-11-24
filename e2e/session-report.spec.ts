@@ -199,6 +199,8 @@ test('a seeded session shows Result, BB/100 and rebuys from its stored values', 
       await expect(reportHeading(page)).toBeFocused();
       await expect(headerLine(page)).toHaveText(`Cash · 6 players · $4/$8 · ${hands} hands`);
       await expect(tileValues(page)).toHaveText(tiles);
+      await page.clock.runFor(5000);
+      await expect(header(page)).toHaveCount(0);
       expect(await storedRecords(page)).toEqual([]);
       const [session] = (await storedSessions(page)) as [Json];
       expect(session.handsPlayed).toBe(hands);

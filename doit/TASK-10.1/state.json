@@ -7,7 +7,7 @@
   "review_round": 1,
   "judge_round": 0,
   "sendbacks": 0,
-  "gate_runs": 2,
+  "gate_runs": 5,
   "questions": 3,
   "assumptions": 9,
   "escalations": 0,
@@ -15,15 +15,15 @@
   "locked_tests": {
     "e2e/bust-continue.spec.ts": "39ce8c6ad0563140298fabf57efdf0178f531c818f64d7bf31b80c25d9b268d4",
     "e2e/rebuy.spec.ts": "6f18d172138c94f659507e83b0d3b2f700d8107a78ffccbc420aceac4bb29dc7",
-    "e2e/session-report.spec.ts": "6729f8bb35e664408c1d9fc2bb6f685481007ffb6e3b3f8268952e42084d2a73",
+    "e2e/session-report.spec.ts": "55040629e0d7736c2cc9e990f6d41b0b36ce0042ae87a77b6abadf56e4448cc6",
     "tests/storage/session-end.acceptance.test.ts": "b95a686f1c286b01f59b824eaa2d7705b613cf00af2ff20940f916516bdf1c34",
     "tests/table/session-report.acceptance.test.ts": "88ec41b6381cf6af76a9e004bafe15e8b6e5ed276f2b71ce850ba1fad47ff81b",
     "tests/ui/report-screen.acceptance.test.tsx": "2842e28bcf0425e7bd2508214529f6ca396de6f5aec97d5d2966a69907a78a27"
   },
   "test_snapshot": {
     "e2e/session-report.spec.ts": {
-      "sha": "6729f8bb35e664408c1d9fc2bb6f685481007ffb6e3b3f8268952e42084d2a73",
-      "asserts": 50,
+      "sha": "55040629e0d7736c2cc9e990f6d41b0b36ce0042ae87a77b6abadf56e4448cc6",
+      "asserts": 51,
       "skips": 0
     },
     "tests/storage/session-end.acceptance.test.ts": {
@@ -1627,10 +1627,18 @@
       "skips": 0
     }
   },
-  "history": [],
+  "history": [
+    {
+      "t": "2026-11-24T10:21:33",
+      "event": "unlock",
+      "file": "e2e/session-report.spec.ts",
+      "reason": "Review r1 NIT (strengthen only): advance the clock and assert no table before the SPEC-10 'unfinished hand not stored' check"
+    }
+  ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-10.1",
   "spec_sha256": "9a4abd69dd7c1c0285853f1755c23763895b157e11224dec1edbd7a273192889",
   "review_findings": {
     "1": 0
-  }
+  },
+  "relock_pending": []
 }

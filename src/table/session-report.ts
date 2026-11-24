@@ -148,6 +148,7 @@ export function parseSessionReport(value: unknown): SessionReport {
   } else {
     const cash = object(report.cash, 'cash');
     const amount = whole(cash.buyIn, 'cash.buyIn', 0);
+    if (amount !== buyIn({ smallBet, bigBet })) throw invalid('cash.buyIn');
     const rebuys = whole(cash.rebuys, 'cash.rebuys', 0, MAX_SESSION_COUNT);
     const finalStack = whole(cash.finalStack, 'cash.finalStack', 0);
     const result = finalStack - amount * (1 + rebuys);

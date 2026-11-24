@@ -1,18 +1,20 @@
 # TASK-10.1 changes
 
 ## Created
-- `src/table/session-report.ts` — headless `SessionReport`/`CashResult` types, `SessionEnder` interface, `sessionReport`, `bbPer100`, `parseSessionReport`, `signedDollars`, `signedTenths`, `reportView`.
+- `src/table/session-report.ts` — headless `SessionReport`/`CashResult` types, `SessionEnder` interface, `sessionReport`, `bbPer100`, `parseSessionReport`, `signedDollars`, `signedTenths`, `reportView`. Fix brief 3: `parseSessionReport` rejects `cash.buyIn` ≠ `buyIn(stake)`.
 - `src/ui/report/ReportScreen.tsx` — the Session Report screen (heading, header line, cash KPI tiles, Back to Home).
 - `tests/table/session-report.acceptance.test.ts` — SPEC-01, SPEC-02, SPEC-06.
 - `tests/storage/session-end.acceptance.test.ts` — SPEC-03, SPEC-04, SPEC-12.
 - `tests/ui/report-screen.acceptance.test.tsx` — SPEC-05.
 - `e2e/session-report.spec.ts` — SPEC-07, SPEC-09, SPEC-10, SPEC-11, SPEC-14.
 - `docs/storage/reports.md` — the reports store, fields, rules and tests.
+- `e2e/session-end-order.spec.ts` — fix brief 2: Leave clicked before the last hand's write is queued (grade replies held) still ends the session after that write.
+- `tests/table/session-report.test.ts` — fix brief 3: parseSessionReport rejects a cash buy-in other than 20 big bets.
 
 ## Modified
 - `src/storage/hand-store.ts` — DB version 3 with the `reports` store; `endSession` and `getReport`; `openHandStore`/`sharedHandStore` return `HandStore & SessionEnder`.
 - `src/table/table-view.ts` — export `GAME_LABEL` (no behaviour change).
-- `src/ui/App.tsx` — `ending` and `report` screens, the `leave(sessionId)` handler (Leave table ends the session); `goHome` shares `closeTable`.
+- `src/ui/App.tsx` — `ending` and `report` screens, the `leave(sessionId)` handler (Leave table ends the session); `goHome` shares `closeTable`. Fix brief 1: `endSession` runs from an effect of the `ending` screen, after the Table's final effects.
 - `src/ui/table/Table.tsx` — `onLeave` receives the session id.
 - `src/ui/table/TableScreen.tsx` — `onLeave` prop type takes the session id.
 - `src/ui/table/useTableSession.ts` — also returns `sessionId`.
