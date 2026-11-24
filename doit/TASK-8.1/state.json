@@ -4,7 +4,7 @@
   "branch": "doit/TASK-8.1",
   "base_commit": "dc7293210800f6c7e52057fb0e3a4f295de8403a",
   "started": "2026-11-24T02:44:03",
-  "review_round": 0,
+  "review_round": 1,
   "judge_round": 0,
   "sendbacks": 0,
   "gate_runs": 4,
@@ -1513,5 +1513,13 @@
   },
   "history": [],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-8.1",
-  "spec_sha256": "739b82423d2f0c16e105f59ab5b55ff146f1919323c8c7366925dd1afce20797"
+  "spec_sha256": "739b82423d2f0c16e105f59ab5b55ff146f1919323c8c7366925dd1afce20797",
+  "review_findings": {
+    "1": 1
+  },
+  "brief_history": {
+    "src/ui/table/useTableSession.ts:hook-observed-wiring-untested": [
+      "review r1"
+    ]
+  }
 }

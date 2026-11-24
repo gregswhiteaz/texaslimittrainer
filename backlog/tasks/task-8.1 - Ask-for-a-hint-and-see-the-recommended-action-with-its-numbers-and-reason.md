@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-24T09:52:00Z'
+updated_date: '2026-11-24T10:22:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -100,4 +100,6 @@ AC added from TASK-3.2 follow-up (doc-22).
 AC added from TASK-7.10 follow-up.
 
 AC added from TASK-7.10 judge J-1-01 (value-rule copy clarity).
+
+Build: observed counts per bot (outside TableState, restart on Resume), snapshot passed to applyUserAction and recommend, hint card, AC#12 wording; npm test 1197 passed, Playwright full suite green after TASK-3.1 allow-list edit; gate PASS. Blocks resolved: counts moved out of TableState (locked restore tests untouched); e2e/table.spec.ts allow-list gains Hint under TASK-3.1.
 <!-- SECTION:NOTES:END -->
