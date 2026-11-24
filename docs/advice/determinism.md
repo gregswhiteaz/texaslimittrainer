@@ -49,7 +49,7 @@ or without a result don't count, and a bot seat that was replaced (`--lineup` ca
 The report adds one line after the bot results:
 
 ```
-Advice check: 98012 decision points, 0 mismatches
+Advice check: 100113 decision points, 0 mismatches
 ```
 
 If the two computations ever differ, the run also prints

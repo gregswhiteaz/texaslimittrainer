@@ -3,84 +3,84 @@
     "id": "SPEC-01",
     "verifies": "AC#1",
     "verification": "acceptance `tests/playtest/check-advice.acceptance.test.ts::AC#1 check-advice recomputes every decision point with 0 mismatches`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-02",
     "verifies": "AC#2",
     "verification": "acceptance `tests/playtest/check-advice.acceptance.test.ts::AC#2 varying advice prints the first mismatch and exits non-zero`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-03",
     "verifies": "AC#3",
     "verification": "acceptance `tests/advice/determinism.acceptance.test.ts::AC#3 review uses the decision-time snapshot`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-04",
     "verifies": "AC#4",
     "verification": "acceptance `tests/advice/determinism.acceptance.test.ts::AC#4 hidden cards never change hint or grade`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-05",
     "verifies": "AC#5",
     "verification": "acceptance `tests/playtest/check-advice.acceptance.test.ts::AC#5 check-advice output is byte-identical across runs`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-06",
     "verifies": "AC#6",
     "verification": "acceptance `tests/advice/determinism.acceptance.test.ts::AC#6 stored recommendation regrades to a deep-equal GradeResult`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-07",
     "verifies": "AC#1, DoD#1",
     "verification": "acceptance `tests/playtest/check-advice.acceptance.test.ts::check-advice flag parsing and unchanged default output`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-08",
     "verifies": "AC#1, AC#2",
     "verification": "unit `tests/playtest/advice-check.test.ts::firstDifference`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-09",
     "verifies": "AC#1",
     "verification": "unit `tests/playtest/advice-check.test.ts::observed snapshot and isolated inputs`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-10",
     "verifies": "AC#3, AC#6",
     "verification": "unit `tests/table/decision-snapshot.test.ts::decision snapshot in session and worker`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-11",
     "verifies": "DoD#2, DoD#3, DoD#4, DoD#5, DoD#8",
     "verification": "command `npm run lint && npm run typecheck && npm test && npm run test:unit && npx vitest run tests/golden/`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-12",
     "verifies": "DoD#6, AC#1, AC#5",
     "verification": "command `npm run -s playtest -- --hands 10000 --seed 42 --check-advice && npm run test:slow`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-13",
     "verifies": "DoD#11, DoD#9",
     "verification": "manual read of `docs/advice/determinism.md`; `backlog doc list --plain` shows the story doc",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-14",
     "verifies": "DoD#7, DoD#10, DoD#12",
     "verification": "manual `gh run list --branch doit/TASK-7.15 --limit 1` shows success",
-    "status": "pending"
+    "status": "pass"
   }
 ]

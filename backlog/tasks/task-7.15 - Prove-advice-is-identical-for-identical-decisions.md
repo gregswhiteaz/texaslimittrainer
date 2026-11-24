@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-24T07:20:00Z'
+updated_date: '2026-11-24T08:10:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -47,28 +47,28 @@ Plan key: E07-S13 · Dream: limit-holdem-trainer
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Given `npm run playtest -- --hands 10000 --seed 42 --check-advice`, When it runs, Then it recomputes advice and grade at every decision point (at least 10,000), compares action, numbers, explanation, basis and grade with the first result, reports 0 mismatches and exits 0 [REQ-036.1, REQ-062.1]
-- [ ] #2 Given a test build whose advice output varies between calls, When the playtest runs with `--check-advice`, Then it prints the replay code and decision point of the first mismatch and exits non-zero [REQ-036.1]
-- [ ] #3 Given a decision point where a hint was computed during the hand, When the review entry is computed after the hand ends, Then the recommendation, equity %, required equity %, explanation and basis are identical even though the finished hand changed opponents' observed stats [REQ-036.2]
-- [ ] #4 Given a fixed decision point, When the other players' hole cards and the undealt cards are changed in 1,000 seeded variations, Then the hint and the grade of the user's action never change [REQ-025.2, REQ-025.3]
-- [ ] #5 Given the same seed and options including `--check-advice`, When the playtest is run twice, Then the outputs are byte-identical [REQ-062.4]
-- [ ] #6 Given a decision graded when a hint is shown and again in the review, When both grades are computed, Then gradeDecision on the stored recommendation gives a deep-equal GradeResult
+- [x] #1 Given `npm run playtest -- --hands 10000 --seed 42 --check-advice`, When it runs, Then it recomputes advice and grade at every decision point (at least 10,000), compares action, numbers, explanation, basis and grade with the first result, reports 0 mismatches and exits 0 [REQ-036.1, REQ-062.1]
+- [x] #2 Given a test build whose advice output varies between calls, When the playtest runs with `--check-advice`, Then it prints the replay code and decision point of the first mismatch and exits non-zero [REQ-036.1]
+- [x] #3 Given a decision point where a hint was computed during the hand, When the review entry is computed after the hand ends, Then the recommendation, equity %, required equity %, explanation and basis are identical even though the finished hand changed opponents' observed stats [REQ-036.2]
+- [x] #4 Given a fixed decision point, When the other players' hole cards and the undealt cards are changed in 1,000 seeded variations, Then the hint and the grade of the user's action never change [REQ-025.2, REQ-025.3]
+- [x] #5 Given the same seed and options including `--check-advice`, When the playtest is run twice, Then the outputs are byte-identical [REQ-062.4]
+- [x] #6 Given a decision graded when a hint is shown and again in the review, When both grades are computed, Then gradeDecision on the stored recommendation gives a deep-equal GradeResult
 <!-- AC:END -->
 
 ## Definition of Done
 <!-- DOD:BEGIN -->
-- [ ] #1 Every acceptance criterion has at least one automated test (unit, property or Playwright) that passes
-- [ ] #2 `npm run lint`, `npm run typecheck` and `npm test` pass with zero errors [REQ-059.1, REQ-059.4]
-- [ ] #3 The golden-spot suite passes 100% (applies from the story that creates the suite, E07-S14, onward) [REQ-039.4]
-- [ ] #4 Coverage thresholds hold: >= 90% engine/bots/advice/statistics, >= 70% overall [REQ-059.3]
-- [ ] #5 Engine, bots, advice and statistics code imports no UI or browser-only code [REQ-059.2]
-- [ ] #6 Stories that touch the engine, bots or advice: a 10,000-hand playtest reports zero invariant violations (applies once the playtest runner exists, E01-S07, onward) [REQ-056.1]
-- [ ] #7 Stories that add or change a screen: Playwright test of the screen flow in Chromium and WebKit, and axe reports zero serious or critical violations (axe tooling is provisioned in the toolchain story E01-S01) [REQ-057.1]
-- [ ] #8 No new network requests beyond the app's own files [REQ-058.1]
-- [ ] #9 Strategy-content stories: text is original and every chart, range or golden spot carries its justification [REQ-061.2]
-- [ ] #10 CI workflow is green on the story's branch (applies once the CI story E01-S02 is done; E01-S01 instead passes the same checks locally) [REQ-064.2]
-- [ ] #11 Story documentation is written and published to Backlog.md
-- [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
+- [x] #1 Every acceptance criterion has at least one automated test (unit, property or Playwright) that passes
+- [x] #2 `npm run lint`, `npm run typecheck` and `npm test` pass with zero errors [REQ-059.1, REQ-059.4]
+- [x] #3 The golden-spot suite passes 100% (applies from the story that creates the suite, E07-S14, onward) [REQ-039.4]
+- [x] #4 Coverage thresholds hold: >= 90% engine/bots/advice/statistics, >= 70% overall [REQ-059.3]
+- [x] #5 Engine, bots, advice and statistics code imports no UI or browser-only code [REQ-059.2]
+- [x] #6 Stories that touch the engine, bots or advice: a 10,000-hand playtest reports zero invariant violations (applies once the playtest runner exists, E01-S07, onward) [REQ-056.1]
+- [x] #7 Stories that add or change a screen: Playwright test of the screen flow in Chromium and WebKit, and axe reports zero serious or critical violations (axe tooling is provisioned in the toolchain story E01-S01) [REQ-057.1]
+- [x] #8 No new network requests beyond the app's own files [REQ-058.1]
+- [x] #9 Strategy-content stories: text is original and every chart, range or golden spot carries its justification [REQ-061.2]
+- [x] #10 CI workflow is green on the story's branch (applies once the CI story E01-S02 is done; E01-S01 instead passes the same checks locally) [REQ-064.2]
+- [x] #11 Story documentation is written and published to Backlog.md
+- [x] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
 
 ## Implementation Plan
@@ -89,4 +89,6 @@ Full spec: doit/TASK-7.15/spec.md
 AC added from TASK-7.4 follow-up (doc-19).
 
 Build: playtest --check-advice (advice-determinism violation), optional observed snapshot through UserDecision/worker/review, 1000-reshuffle determinism test; 10k --check-advice: 100113 decision points, 0 mismatches; npm test 1171 passed; gate PASS. Deviations in doit/TASK-7.15/fix-brief.md (300 s timeouts, second USAGE re-pin, optional hook view).
+
+Judge r1 PASS 14/14; 10k --check-advice: 100113 decision points, 0 mismatches, byte-identical across runs; plain playtest identical to main; test:slow 88 passed; CI 45347780392 green.
 <!-- SECTION:NOTES:END -->
