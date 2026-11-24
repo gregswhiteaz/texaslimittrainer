@@ -1,11 +1,11 @@
 ---
 id: TASK-7.14
 title: Check advice against postflop golden spots on every test run
-status: In Progress
+status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-24T06:30:00Z'
+updated_date: '2026-11-24T06:32:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -20,6 +20,7 @@ references:
 documentation:
   - doc-1
   - doc-2
+  - doc-111
 parent_task_id: TASK-7
 priority: high
 type: feature
@@ -98,4 +99,12 @@ AC added from TASK-7.11 judge J-1-01.
 Build: postflop golden spots (120, original justifications), clear-cut rule via gradeDecision, graded examples (9), full-ring BTN 99/88 vs single raise → raise (Q-1), preflop spots re-pinned under TASK-7.11 (4 spots, count 110 kept); npm test 1159 passed; gate PASS
 
 Judge r1 PASS 18/18; CI 45339470694 green on b857384; review took 3 rounds (justification text accuracy).
+
+Follow-ups: TASK-7.31 created (chart-consistent preflop lines, kings-full wording, grader throw reported). Not tracked: street-of-board index NIT (no behaviour change); margin re-recording self-enforces via the golden suite when TASK-7.26/7.28/7.18 land.
 <!-- SECTION:NOTES:END -->
+
+## Final Summary
+
+<!-- SECTION:FINAL_SUMMARY:BEGIN -->
+Added 120 authored postflop golden spots (45 flop, 40 turn, 35 river) and 9 graded examples, with a mechanical clear-cut validator (every other action must grade Major), bringing the suite to 230 spots. All of it runs in npm test and on CI (golden suite 282 tests, about 1.4 s). Also settled AC#7-9: full-ring BTN 99/88 vs a single raise is now raise (chart change), and two preflop spots were replaced. Verified: judge 18/18 PASS, npm test 1159 passed, lint and typecheck clean, playtest 0 violations, scratch mutations fail with the exact messages. Review took 3 rounds, all for factual accuracy of justification text (fixed). Please review: Q-1 chart change (user-facing advice) and the re-pin of the TASK-7.11 locked tests/golden/preflop-spots.json (both auto-accepted). Follow-ups: hero preflop lines in many spots contradict the chart (MINOR), 2 code NITs, one wording nit, and graded margins need re-recording when TASK-7.26, 7.28 and 7.18 land.
+<!-- SECTION:FINAL_SUMMARY:END -->
