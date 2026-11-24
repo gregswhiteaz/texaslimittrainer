@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-23T10:38:00Z'
+updated_date: '2026-11-24T05:37:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -90,6 +90,8 @@ Review R1: 5 MAJOR (non-clear-cut spots / wrong justifications) fixed — 11 spo
 Follow-ups: 2 ACs on TASK-7.14 (88 button call vs re-raise; AJs justification wording). Helper copies: infra below the value bar (not tracked).
 
 Judge R1 PASS 14/14 (own rebuild of all 110 views; broken spot fails npm test with exact message; 7/7 mutants; neighbour report 89/110 uniform, 2 call islands → AC on TASK-7.14).
+
+Locked tests/golden/preflop-spots.json unlocked for TASK-7.14 Q-1 / AC#7-9 (4 spots changed, count 110 kept).
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary

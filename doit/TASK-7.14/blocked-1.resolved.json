@@ -1,0 +1,9 @@
+{
+  "spec": "SPEC-07",
+  "reason": "tests/golden/preflop-spots.json is a locked test fixture of TASK-7.11 (doit/TASK-7.11/state.json locked_tests), and the edit was refused. The spec requires editing it for AC#7-9 (SPEC-07, SPEC-08, SPEC-09). After the Q-1 chart change, the locked tests/golden/preflop.acceptance.test.ts spot fr-btn-raise-88 fails (engine now says raise, file records call) until the file is updated.",
+  "evidence": "npx vitest run tests/golden/: 4 failures, all from this file: preflop.acceptance AC#3 fr-btn-raise-88 (expected call, got raise), suite.acceptance AC#7, AC#8 and AC#9. Everything else passes (npm test: 1155 passed, 4 failed). The replacement doit/TASK-7.14/preflop-spots.proposed.json parses with parseGoldenSpots, all 110 spots agree with the engine, and every justification names its hand and is distinct.",
+  "options": [
+    "Recommended: python3 /Users/gregwhite/.claude/skills/doit/scripts/doit.py unlock TASK-7.11 tests/golden/preflop-spots.json --reason \"TASK-7.14 Q-1, AC#7-9\", then copy doit/TASK-7.14/preflop-spots.proposed.json over tests/golden/preflop-spots.json (4 spots change: fr-btn-raise-88 action + justification, fr-hj-raise-and-calls-ajs justification, fr-co-limpers-87s -> fr-co-limpers-44, fr-sb-unopened-65s -> fr-sb-unopened-kjs) and delete the proposed file",
+    "Run a FIX round after the unlock and the builder applies the same edit"
+  ]
+}

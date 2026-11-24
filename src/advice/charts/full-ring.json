@@ -447,15 +447,15 @@
     {
       "position": "BTN",
       "situation": "raise",
-      "justification": "On the button only the blinds are behind, and we will have position for the rest of the hand. We re-raise a wider value range to isolate the raiser and call with a few pairs and suited broadway hands.",
+      "justification": "On the button only the blinds are behind, and we will have position for the rest of the hand. We re-raise a wider value range, down to nines and eights, to isolate the raiser, and call with sevens and the suited king-jack and queen-jack.",
       "grid": [
         "R    R    R    R    F    F    F    F    F    F    F    F    F",
         "R    R    R    C    F    F    F    F    F    F    F    F    F",
         "R    F    R    C    F    F    F    F    F    F    F    F    F",
         "R*/F F    F    R    F    F    F    F    F    F    F    F    F",
         "F    F    F    F    R    F    F    F    F    F    F    F    F",
-        "F    F    F    F    F    C    F    F    F    F    F    F    F",
-        "F    F    F    F    F    F    C    F    F    F    F    F    F",
+        "F    F    F    F    F    R    F    F    F    F    F    F    F",
+        "F    F    F    F    F    F    R    F    F    F    F    F    F",
         "F    F    F    F    F    F    F    C    F    F    F    F    F",
         "F    F    F    F    F    F    F    F    F*/C F    F    F    F",
         "F    F    F    F    F    F    F    F    F    F    F    F    F",

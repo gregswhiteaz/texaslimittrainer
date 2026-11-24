@@ -1275,6 +1275,12 @@
       "event": "unlock",
       "file": "tests/golden/preflop.acceptance.test.ts",
       "reason": "Review R1 MAJORs: replace non-clear-cut spots / fix wrong justifications (count and coverage kept)"
+    },
+    {
+      "t": "2026-11-23T22:37:46",
+      "event": "unlock",
+      "file": "tests/golden/preflop-spots.json",
+      "reason": "TASK-7.14 Q-1, AC#7-9: fr-btn-raise-88 call->raise, AJs justification, two borderline spots replaced; spot count 110 kept"
     }
   ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-7.11",
@@ -1300,7 +1306,9 @@
       "review r1"
     ]
   },
-  "relock_pending": [],
+  "relock_pending": [
+    "tests/golden/preflop-spots.json"
+  ],
   "doc_id": "doc-98",
   "judge_results": {
     "1": "PASS"

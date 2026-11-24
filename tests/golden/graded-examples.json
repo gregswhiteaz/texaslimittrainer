@@ -1,0 +1,127 @@
+{
+  "format": "tlh-graded-examples",
+  "version": 1,
+  "examples": [
+    {
+      "id": "graded-preflop-match-6max-btn-aa",
+      "seats": 6,
+      "holeCards": "Ah Ad",
+      "before": ["fold", "fold", "fold"],
+      "userAction": "raise",
+      "grade": "correct",
+      "ruleId": "match",
+      "marginPts": null,
+      "justification": "Raising pocket aces first in on the button is exactly what the chart recommends, so the grade is Correct by a match. Position and the strongest starting hand both point to the raise."
+    },
+    {
+      "id": "graded-preflop-alternative-fr-utg-ajo",
+      "seats": 9,
+      "holeCards": "As Jd",
+      "before": [],
+      "userAction": "fold",
+      "grade": "correct",
+      "ruleId": "alternative",
+      "marginPts": null,
+      "justification": "Ace-jack offsuit under the gun at a full table is a borderline open whose listed alternative is a fold. Folding is therefore Correct as the acceptable alternative, because with nine players behind its hand strength is easily dominated."
+    },
+    {
+      "id": "graded-preflop-borderline-fr-utg-ajo",
+      "seats": 9,
+      "holeCards": "Ac Jh",
+      "before": [],
+      "userAction": "call",
+      "grade": "minor",
+      "ruleId": "preflop-borderline",
+      "marginPts": null,
+      "justification": "Limping ace-jack offsuit under the gun matches neither the recommended raise nor the fold alternative. The cell is marked borderline, so the grader calls it a Minor error rather than a Major one, and in position terms it is a small leak."
+    },
+    {
+      "id": "graded-preflop-chart-6max-utg-72o",
+      "seats": 6,
+      "holeCards": "7c 2d",
+      "before": [],
+      "userAction": "call",
+      "grade": "major",
+      "ruleId": "preflop-chart",
+      "marginPts": null,
+      "justification": "Seven-deuce offsuit is a clear fold from the first position, and the chart cell is not borderline. Limping it is a Major error, since the hand has almost no equity against the players still to act."
+    },
+    {
+      "id": "graded-postflop-match-6max-turn-bb-set",
+      "seats": 6,
+      "holeCards": "5d 5c",
+      "board": "3d 8s 9d 5s",
+      "street": "turn",
+      "before": ["fold", "fold", "fold", "raise", "fold", "call", "bet", "call"],
+      "userAction": "bet",
+      "grade": "correct",
+      "ruleId": "match",
+      "marginPts": null,
+      "justification": "A set of fives that turned after we led the flop is far ahead of the button's calling range. Betting again is the recommended value bet, so the grade is Correct by a match."
+    },
+    {
+      "id": "graded-postflop-fold-minor-6max-flop-open-ender",
+      "seats": 6,
+      "holeCards": "5d 2h",
+      "board": "7s 3c 6h",
+      "street": "flop",
+      "before": ["fold", "fold", "raise", "call", "fold", "fold", "bet"],
+      "userAction": "fold",
+      "grade": "minor",
+      "ruleId": "call-fold-margin",
+      "marginPts": 4.6,
+      "justification": "Five-deuce has an open-ended straight draw, and its equity is a few points above what the pot odds ask. Folding gives up that small edge, so it is a Minor error because the margin is under ten points."
+    },
+    {
+      "id": "graded-postflop-fold-major-6max-turn-second-pair",
+      "seats": 6,
+      "holeCards": "Jc 7s",
+      "board": "Td Ac Jd 3h",
+      "street": "turn",
+      "before": ["fold", "fold", "fold", "raise", "fold", "call", "bet", "call", "check", "bet"],
+      "userAction": "fold",
+      "grade": "major",
+      "ruleId": "call-fold-margin",
+      "marginPts": 26.9,
+      "justification": "Second pair of jacks has far more equity than the pot odds require against the button's turn bet. Folding throws away a call that wins by well over ten points, which makes it a Major error."
+    },
+    {
+      "id": "graded-postflop-check-minor-6max-river-top-pair",
+      "seats": 6,
+      "holeCards": "Kh 6h",
+      "board": "9s Jh 5c Kc 8h",
+      "street": "river",
+      "before": [
+        "fold",
+        "fold",
+        "raise",
+        "raise",
+        "fold",
+        "fold",
+        "call",
+        "check",
+        "check",
+        "check",
+        "check"
+      ],
+      "userAction": "check",
+      "grade": "minor",
+      "ruleId": "aggression-margin",
+      "marginPts": 6.9,
+      "justification": "Top pair of kings with a weak kicker is only a thin value bet after a checked flop and turn, a few points above even against the hands that call. Checking misses that small gain, so it is a Minor error."
+    },
+    {
+      "id": "graded-postflop-check-major-6max-turn-trips",
+      "seats": 6,
+      "holeCards": "3c Ts",
+      "board": "Kd 3h 5c 3d",
+      "street": "turn",
+      "before": ["fold", "fold", "fold", "raise", "fold", "call", "bet", "call", "check"],
+      "userAction": "check",
+      "grade": "major",
+      "ruleId": "aggression-margin",
+      "marginPts": 29,
+      "justification": "Trip threes are far ahead of what the big blind would call a turn bet with after it led the flop and then checked. Checking passes up a clear value bet, a Major error because the margin from even is well over fifteen points."
+    }
+  ]
+}

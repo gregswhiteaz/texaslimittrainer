@@ -762,15 +762,15 @@
       "justification": "On the button only the blinds remain, and K4s holds a king plus flush potential. Raise to attack the blinds, since position on every later street helps a hand like this."
     },
     {
-      "id": "fr-sb-unopened-65s",
+      "id": "fr-sb-unopened-kjs",
       "seats": 9,
       "position": "SB",
       "situation": "unopened",
-      "holeCards": "6s 5s",
+      "holeCards": "Ks Js",
       "before": ["fold", "fold", "fold", "fold", "fold", "fold", "fold"],
-      "action": "call",
+      "action": "raise",
       "alternative": null,
-      "justification": "65s is too weak to raise into the big blind, but with half a bet already posted it completes cheaply. Its straight and flush chances give good implied odds against a single opponent."
+      "justification": "KJs is well ahead of a random big blind hand, so raising from the small blind takes the initiative and often wins the blinds at once. When called, its suited broadway cards make strong pairs and draws."
     },
     {
       "id": "fr-utg1-limpers-aks",
@@ -817,15 +817,15 @@
       "justification": "QQ is far ahead of two limpers, whose ranges rarely include stronger pairs. Raise for value and to thin the field before the flop, taking the initiative."
     },
     {
-      "id": "fr-co-limpers-87s",
+      "id": "fr-co-limpers-44",
       "seats": 9,
       "position": "CO",
       "situation": "limpers",
-      "holeCards": "8h 7h",
+      "holeCards": "4h 4d",
       "before": ["call", "fold", "fold", "fold", "fold"],
       "action": "call",
       "alternative": null,
-      "justification": "87s makes straights and flushes, and with a limper in the pot the price to see a flop is low. Overlimp for the implied odds, since raising would turn a speculative hand into a big pot."
+      "justification": "44 rarely wins unimproved, but behind a limper the price to see a flop is low and a set can win a big pot. Overlimp for the implied odds rather than raise a small pair that plays poorly against callers."
     },
     {
       "id": "fr-btn-limpers-aqo",
@@ -944,9 +944,9 @@
       "situation": "raise",
       "holeCards": "8s 8d",
       "before": ["fold", "fold", "fold", "fold", "raise", "fold"],
-      "action": "call",
+      "action": "raise",
       "alternative": null,
-      "justification": "88 is a medium pair that does well flopping a set, and the button keeps position after the flop. Call the single raise for those implied odds rather than re-raising a range that holds bigger pairs."
+      "justification": "88 is ahead of much of a hijack's opening range once the cutoff folds, and the button keeps position for the whole hand. Re-raise to isolate the opener and charge the blinds, taking the initiative instead of just calling."
     },
     {
       "id": "fr-mp-raise-and-calls-kk",
@@ -1001,7 +1001,7 @@
       "before": ["fold", "fold", "raise", "call"],
       "action": "call",
       "alternative": null,
-      "justification": "AJs dominates the weaker aces and broadway hands a middle-position opener and a caller often hold, and its suit adds flush outs in a multiway pot. Call rather than re-raise, since the bigger aces and pairs in the opener's range make a raise risky with players still to act behind you."
+      "justification": "AJs dominates many of the weaker aces and broadway hands a flat caller holds, and its suit adds flush outs in a multiway pot. Call rather than re-raise, since the opener's middle-position range holds enough bigger aces and pairs to make a raise risky with players still to act."
     },
     {
       "id": "fr-co-raise-and-calls-ats",
