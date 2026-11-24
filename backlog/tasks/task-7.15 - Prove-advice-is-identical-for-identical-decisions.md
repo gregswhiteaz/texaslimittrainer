@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-24T06:44:00Z'
+updated_date: '2026-11-24T07:20:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -87,4 +87,6 @@ Full spec: doit/TASK-7.15/spec.md
 
 <!-- SECTION:NOTES:BEGIN -->
 AC added from TASK-7.4 follow-up (doc-19).
+
+Build: playtest --check-advice (advice-determinism violation), optional observed snapshot through UserDecision/worker/review, 1000-reshuffle determinism test; 10k --check-advice: 100113 decision points, 0 mismatches; npm test 1171 passed; gate PASS. Deviations in doit/TASK-7.15/fix-brief.md (300 s timeouts, second USAGE re-pin, optional hook view).
 <!-- SECTION:NOTES:END -->
