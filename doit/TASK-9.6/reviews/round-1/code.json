@@ -1,0 +1,24 @@
+{"reviewer": "code", "round": 1,
+ "rubric": [
+  {"item": "SPEC-01 correctness", "result": "pass"}, {"item": "SPEC-01 test strength", "result": "pass"},
+  {"item": "SPEC-02 correctness", "result": "pass"}, {"item": "SPEC-02 test strength", "result": "pass"},
+  {"item": "SPEC-03 correctness", "result": "pass"}, {"item": "SPEC-03 test strength", "result": "pass"},
+  {"item": "SPEC-04 correctness", "result": "pass"}, {"item": "SPEC-04 test strength", "result": "pass"},
+  {"item": "SPEC-05 correctness", "result": "pass"}, {"item": "SPEC-05 test strength", "result": "pass"},
+  {"item": "SPEC-06 correctness", "result": "pass"}, {"item": "SPEC-06 test strength", "result": "pass"},
+  {"item": "SPEC-07 correctness", "result": "pass"}, {"item": "SPEC-07 test strength", "result": "pass"},
+  {"item": "SPEC-08 correctness", "result": "pass"}, {"item": "SPEC-08 test strength", "result": "pass"},
+  {"item": "SPEC-09 correctness", "result": "pass"}, {"item": "SPEC-09 test strength", "result": "pass"},
+  {"item": "scope", "result": "pass"}, {"item": "concision", "result": "pass"}, {"item": "clarity", "result": "pass"}
+ ],
+ "findings": [
+  {"fingerprint": "e2e/review-hinted.spec.ts:redundant-hinted-length-guard", "severity": "NIT", "file": "e2e/review-hinted.spec.ts", "line": 214,
+   "issue": "`hinted.length === 0 ||` is implied by `decisions.length < 2` (any hand with a user decision opens/hides Hint at index 0, so hinted is non-empty whenever decisions >= 1).",
+   "evidence": "playHand's callback returns true for index 0 unconditionally.",
+   "fix": "Optional: drop the `hinted.length === 0 ||` clause, or keep it as a readable guard."},
+  {"fingerprint": "src/ui/styles.css:river-tag-wrap-untested", "severity": "NIT", "file": "src/ui/styles.css", "line": 841,
+   "issue": "The river-entry-with-tag wrap (A-3) is covered only by the CSS rule; no test renders a 5-card river entry with a tag live. The spec accepts this (section 7).",
+   "evidence": "SPEC-05's overflow check runs on a flop-hinted hand.",
+   "fix": "None required; a follow-up could add an overflow check on a river-hinted live entry."}
+ ],
+ "summary": "ReviewPanel renders the verdict group and the hinted tag exactly as specified; CSS matches the spec values and .grade-badge has no other users. Fixture tests assert stored hinted flags and per-entry tag counts through the real hint state machine; AC#4 asserts hand.userDecisions.length >= 2 and >= 2 entries (fixture) and skips 1-decision hands then asserts entries.length >= 2 (live). The wrap change only alters layout when the row overflows; untagged rows have the same widths as before, and no locked test measures entry-top row geometry. Reviewer ran review-hinted, review, review-numbers, review-header and review-shown e2e specs: 24/24 pass in Chromium and WebKit. No BLOCKER/MAJOR."}

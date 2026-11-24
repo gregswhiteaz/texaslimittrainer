@@ -1,0 +1,3 @@
+{"reviewer": "security", "round": 1,
+ "findings": [],
+ "summary": "No new trust boundary. The only input is decision.hinted, which comes from a stored hand record and is checked to be a boolean when parsed (src/table/hand-record.ts:419, fails closed). It only decides whether a fixed 'hinted' text node is rendered as React text (no dangerouslySetInnerHTML, no interpolated attributes). The CSS changes are static. Tests and docs add no runtime surface. No new dependencies, secrets, network calls, randomness or unbounded input."}

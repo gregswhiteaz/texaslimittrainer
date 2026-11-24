@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-24T15:15:00Z'
+updated_date: '2026-11-24T15:30:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -78,4 +78,6 @@ Full spec: doit/TASK-9.6/spec.md
 
 <!-- SECTION:NOTES:BEGIN -->
 AC added from TASK-8.2 follow-up (doc-115).
+
+Build: 'hinted' tag after the grade badge for hinted stored decisions; entry top row wraps; npm test 1232 passed, Playwright 250 passed; gate PASS.
 <!-- SECTION:NOTES:END -->
