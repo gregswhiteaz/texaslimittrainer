@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-24T16:13:00Z'
+updated_date: '2026-11-24T16:26:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -44,29 +44,29 @@ Plan key: E09-S07 · Dream: limit-holdem-trainer
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Given auto-open is off and a hand in which the user's decisions were graded 1 Major error, 1 Minor error and 2 Correct, When the hand ends, Then the panel does not open, a badge reading "1 Major, 1 Minor" appears and the next hand is dealt 1.5 s after the result is shown [REQ-043.8, REQ-024.3]
-- [ ] #2 Given the badge is shown and the next hand has not been dealt, When the user clicks the badge, Then the panel opens for that hand and the next hand waits for Deal next hand [REQ-043.8, REQ-024.2]
-- [ ] #3 Given auto-open is on, When a hand with user decisions ends, Then the panel opens and no badge is shown [REQ-043.8]
-- [ ] #4 Given auto-open is off and every decision in the hand was graded Correct, When the hand ends, Then the badge reads "All correct" [REQ-043.11, REQ-057.3]
-- [ ] #5 Given auto-open is off and a badge is shown, When the next hand is dealt, Then the badge is no longer shown [REQ-043.11]
-- [ ] #6 Given auto-open is off, When a hand ends in which the user's single action was folding preflop, Then no badge is shown; and When a hand ends in which the user called $8 preflop and then folded preflop to a re-raise, Then a badge is shown for that hand [REQ-043.11, REQ-043.13]
-- [ ] #7 Given the auto-open setting, When a hand ends, Then the panel opens only if the setting is on and opensReview is true, and otherwise a summary badge built from the reviewEntries grades is shown
+- [x] #1 Given auto-open is off and a hand in which the user's decisions were graded 1 Major error, 1 Minor error and 2 Correct, When the hand ends, Then the panel does not open, a badge reading "1 Major, 1 Minor" appears and the next hand is dealt 1.5 s after the result is shown [REQ-043.8, REQ-024.3]
+- [x] #2 Given the badge is shown and the next hand has not been dealt, When the user clicks the badge, Then the panel opens for that hand and the next hand waits for Deal next hand [REQ-043.8, REQ-024.2]
+- [x] #3 Given auto-open is on, When a hand with user decisions ends, Then the panel opens and no badge is shown [REQ-043.8]
+- [x] #4 Given auto-open is off and every decision in the hand was graded Correct, When the hand ends, Then the badge reads "All correct" [REQ-043.11, REQ-057.3]
+- [x] #5 Given auto-open is off and a badge is shown, When the next hand is dealt, Then the badge is no longer shown [REQ-043.11]
+- [x] #6 Given auto-open is off, When a hand ends in which the user's single action was folding preflop, Then no badge is shown; and When a hand ends in which the user called $8 preflop and then folded preflop to a re-raise, Then a badge is shown for that hand [REQ-043.11, REQ-043.13]
+- [x] #7 Given the auto-open setting, When a hand ends, Then the panel opens only if the setting is on and opensReview is true, and otherwise a summary badge built from the reviewEntries grades is shown
 <!-- AC:END -->
 
 ## Definition of Done
 <!-- DOD:BEGIN -->
-- [ ] #1 Every acceptance criterion has at least one automated test (unit, property or Playwright) that passes
-- [ ] #2 `npm run lint`, `npm run typecheck` and `npm test` pass with zero errors [REQ-059.1, REQ-059.4]
-- [ ] #3 The golden-spot suite passes 100% (applies from the story that creates the suite, E07-S14, onward) [REQ-039.4]
-- [ ] #4 Coverage thresholds hold: >= 90% engine/bots/advice/statistics, >= 70% overall [REQ-059.3]
-- [ ] #5 Engine, bots, advice and statistics code imports no UI or browser-only code [REQ-059.2]
-- [ ] #6 Stories that touch the engine, bots or advice: a 10,000-hand playtest reports zero invariant violations (applies once the playtest runner exists, E01-S07, onward) [REQ-056.1]
-- [ ] #7 Stories that add or change a screen: Playwright test of the screen flow in Chromium and WebKit, and axe reports zero serious or critical violations (axe tooling is provisioned in the toolchain story E01-S01) [REQ-057.1]
-- [ ] #8 No new network requests beyond the app's own files [REQ-058.1]
-- [ ] #9 Strategy-content stories: text is original and every chart, range or golden spot carries its justification [REQ-061.2]
-- [ ] #10 CI workflow is green on the story's branch (applies once the CI story E01-S02 is done; E01-S01 instead passes the same checks locally) [REQ-064.2]
-- [ ] #11 Story documentation is written and published to Backlog.md
-- [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
+- [x] #1 Every acceptance criterion has at least one automated test (unit, property or Playwright) that passes
+- [x] #2 `npm run lint`, `npm run typecheck` and `npm test` pass with zero errors [REQ-059.1, REQ-059.4]
+- [x] #3 The golden-spot suite passes 100% (applies from the story that creates the suite, E07-S14, onward) [REQ-039.4]
+- [x] #4 Coverage thresholds hold: >= 90% engine/bots/advice/statistics, >= 70% overall [REQ-059.3]
+- [x] #5 Engine, bots, advice and statistics code imports no UI or browser-only code [REQ-059.2]
+- [x] #6 Stories that touch the engine, bots or advice: a 10,000-hand playtest reports zero invariant violations (applies once the playtest runner exists, E01-S07, onward) [REQ-056.1]
+- [x] #7 Stories that add or change a screen: Playwright test of the screen flow in Chromium and WebKit, and axe reports zero serious or critical violations (axe tooling is provisioned in the toolchain story E01-S01) [REQ-057.1]
+- [x] #8 No new network requests beyond the app's own files [REQ-058.1]
+- [x] #9 Strategy-content stories: text is original and every chart, range or golden spot carries its justification [REQ-061.2]
+- [x] #10 CI workflow is green on the story's branch (applies once the CI story E01-S02 is done; E01-S01 instead passes the same checks locally) [REQ-064.2]
+- [x] #11 Story documentation is written and published to Backlog.md
+- [x] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
 
 ## Implementation Plan
@@ -86,4 +86,6 @@ Full spec: doit/TASK-9.7/spec.md
 AC added from TASK-9.1 follow-up (doc-26).
 
 Build: autoOpenReview prop (default on, not persisted); with it off, a grade summary badge replaces auto-open and clicking it opens/holds the review; npm test 1237 passed, Playwright 258 passed; gate PASS. Badge clear on hand change done during render (lint rule) — recorded in qa.md.
+
+Judge r1 PASS 12/12; real app with auto-open off (temporary, reverted) and records harness in Chromium+WebKit; default-on unchanged; CI 45435650855 green.
 <!-- SECTION:NOTES:END -->
