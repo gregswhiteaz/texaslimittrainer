@@ -1,10 +1,11 @@
 ---
 id: TASK-7.15
 title: Prove advice is identical for identical decisions
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-18T20:12:00Z'
+updated_date: '2026-11-24T06:44:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -69,6 +70,18 @@ Plan key: E07-S13 · Dream: limit-holdem-trainer
 - [ ] #11 Story documentation is written and published to Backlog.md
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. Playtest --check-advice: at every decision point recompute user-facing advice (actions ranges + per-decision observed snapshot from the run's own hands) and the grade of the action taken; a mismatch is an 'advice-determinism' violation with replay code and decision point
+2. Optional observed snapshot carried by UserDecision / applyUserAction, the worker's recommend/grade requests and reviewEntries (unchanged when absent)
+3. Fixed-spot test: same advice and grade across 1000 reshuffles of hidden/undealt cards
+4. CLI text per Q-1; re-pin USAGE in tests/playtest/cli.test.ts
+5. 10,000-hand --check-advice runs in test:slow; 100-hand version every push
+
+Full spec: doit/TASK-7.15/spec.md
+<!-- SECTION:PLAN:END -->
 
 ## Implementation Notes
 
