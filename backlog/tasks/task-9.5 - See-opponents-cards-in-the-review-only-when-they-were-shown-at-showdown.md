@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-24T14:07:00Z'
+updated_date: '2026-11-24T14:23:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -77,4 +77,6 @@ Full spec: doit/TASK-9.5/spec.md
 
 <!-- SECTION:NOTES:BEGIN -->
 AC added from TASK-3.9 security review (replay code can rebuild mucked cards).
+
+Build: review 'Shown at showdown' list from CompletedHand.shown only (opponents, showdown order); hidden-info proofs; npm test 1228 passed, Playwright 246 passed; gate PASS. SPEC-04 search applied to opponent seats (user's cards are in the header) — recorded in qa.md.
 <!-- SECTION:NOTES:END -->
