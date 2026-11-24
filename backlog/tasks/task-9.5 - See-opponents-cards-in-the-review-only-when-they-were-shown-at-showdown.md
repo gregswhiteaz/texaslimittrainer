@@ -1,7 +1,7 @@
 ---
 id: TASK-9.5
 title: See opponents' cards in the review only when they were shown at showdown
-status: In Progress
+status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
@@ -17,6 +17,7 @@ references:
 documentation:
   - doc-1
   - doc-2
+  - doc-119
 parent_task_id: TASK-9
 priority: high
 type: feature
@@ -81,4 +82,12 @@ AC added from TASK-3.9 security review (replay code can rebuild mucked cards).
 Build: review 'Shown at showdown' list from CompletedHand.shown only (opponents, showdown order); hidden-info proofs; npm test 1228 passed, Playwright 246 passed; gate PASS. SPEC-04 search applied to opponent seats (user's cards are in the header) — recorded in qa.md.
 
 Judge r1 PASS 11/11; no hidden-card leak across 1,796 mucked/folded hands (unit) and 35 live reviews in Chromium+WebKit; CI 45414460393 green.
+
+Follow-ups: none tracked. reviewHeader rename (MINOR) and extra gap CSS (NIT) change no behaviour; live e2e 'opponent showed' assertion (NIT) is covered by the review-shown scene tests and the judge's 35-review holdout.
 <!-- SECTION:NOTES:END -->
+
+## Final Summary
+
+<!-- SECTION:FINAL_SUMMARY:BEGIN -->
+The Hand Review panel now lists, between header and decisions, each opponent who showed at showdown (e.g. 'Ben showed K♦ 7♣ · Pair of kings'). Cards come only from the finished hand's shown field (same as the stored record), so mucked and folded hands never reach the panel and nothing is dealt from the replay code. Verified: npm test 1228 pass; judge 11/11; 35 live reviews on Chromium and WebKit matched stored records with no hidden-card traces; review found 1 MINOR and 2 NITs, none blocking. Assumptions to review: Q-1 list wording/placement auto-accepted; SPEC-04 hidden-card search limited to opponent seats (user's cards always in header). Follow-ups: rename reviewHeader to reviewPanelData; make the live e2e assert an opponent showed; drop the extra .review-shown gap rule.
+<!-- SECTION:FINAL_SUMMARY:END -->
