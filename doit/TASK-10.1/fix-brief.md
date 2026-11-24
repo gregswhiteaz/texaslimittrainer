@@ -1,17 +1,13 @@
-# Fix brief — TASK-10.1 (orchestrator additions after review r1; no BLOCKER/MAJOR)
+# Fix brief — TASK-10.1 (review round 2)
 
-Fix exactly these. Strengthen only; never drop or loosen an assertion.
+Fix exactly these items. Nothing else: no MINOR/NIT changes, no refactors, no new features.
+Acceptance tests and the spec are locked. If an item is wrong or impossible, write blocked.json and stop.
 
-## 1. Leave can race the last hand's write (code review MINOR, src/ui/App.tsx:100)
-leave() captures the pending-writes chain during the click, but the last hand's write joins the chain in a React effect that runs slightly later. A Leave in that gap lets endSession run first; the late write then rewrites the session without endedAt (report + resumable session). Fix so endSession always runs after every table write, including one queued by the final effect (e.g. read tableWritesSettled() after the Table has unmounted / in an effect of the `ending` screen, or make the session write refuse to overwrite an ended session — pick the simplest that is provably ordered). No setState inside effects (lint rule).
+## 1. [MAJOR] src/ui/App.tsx:ending-guard-never-reset-hangs-second-leave (code review)
+- Where: src/ui/App.tsx:70
+- Problem: The StrictMode guard endingId keys on the session id and is never cleared. If endSession rejects (for example an IndexedDB failure), the app goes Home and the session is still stored without endedAt, so Home offers Resume. Resume reuses the same record.sessionId. Leave table then sets {name:'ending', sessionId} with that same id, the effect sees endingId.current === leaving and returns early, and the app stays on the blank aria-busy ending screen with no way out. The round-1 code called endSession on every Leave, so this hang is a regression.
+- Evidence: hand-store.ts ended(): an abort or error rejects and changes nothing, so the session stays resumable. App.resume() passes sessionId: record.sessionId. App.tsx:70 is `if (leaving === null || endingId.current === leaving) return;` and nothing resets endingId.
+- Expected fix: Key the guard on the ending screen object rather than the id: `const ending = screen.name === 'ending' ? screen : null`, store that object in the ref, and use [ending] as the dependency. StrictMode's re-run sees the same object, while each Leave creates a new one. A simpler option is to set endingId.current = null in both settle handlers. Add a unit or e2e case: make endSession fail once, Resume, Leave again, and expect the report or Home.
 
-## 2. Test the pending-write path (code review MINOR, e2e/session-report.spec.ts:58)
-Add an e2e that holds the last hand's write (hold the advice worker's grade reply or the hands add) until after Leave is clicked, then asserts: the report says 1 hand (the held hand is counted), the stored session has endedAt, and Home offers no Resume. Verify it fails if the ordering fix in item 1 is reverted (record in the build log), then restore.
 
-## 3. Stored report buy-in tied to the stake (security MINOR, src/table/session-report.ts:~168)
-parseSessionReport must reject a cash block whose buyIn ≠ buyIn(stake) (20 × bigBet): `throw invalid('cash.buyIn')`. Add a unit case.
-
-## 4. NIT e2e/session-report.spec.ts:187
-Advance the clock (page.clock.runFor(5000)) before the SPEC-10 "unfinished hand isn't stored" check, as SPEC-07/09 do.
-
-npm run format, lint, typecheck, npm test, the full Playwright suite, then the gate.
+Use the reviewer's preferred fix (key the guard on the ending screen object, dependency [ending]) and add the regression test: endSession fails once (e.g. reject the first transaction), the user resumes the same session from Home and leaves again, and the Session Report (or Home on a 0-hand session) appears — never a stuck busy screen. Verify the test fails against the current code, then restore. Keep e2e/session-end-order.spec.ts passing.

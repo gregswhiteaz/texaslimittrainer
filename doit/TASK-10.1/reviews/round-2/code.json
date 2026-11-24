@@ -1,0 +1,19 @@
+{"reviewer": "code", "round": 2,
+ "rubric": [
+  {"item": "fix-brief 1 (Leave/endSession ordering) correctness", "result": "fail"},
+  {"item": "fix-brief 2 (pending-write e2e) test strength", "result": "pass"},
+  {"item": "fix-brief 3 (stored buy-in tied to stake) correctness", "result": "pass"},
+  {"item": "fix-brief 3 test strength", "result": "pass"},
+  {"item": "fix-brief 4 (clock advance before unfinished-hand check)", "result": "pass"},
+  {"item": "scope", "result": "pass"},
+  {"item": "concision", "result": "pass"},
+  {"item": "clarity", "result": "pass"},
+  {"item": "round-1 blocking findings", "result": "pass"}
+ ],
+ "findings": [
+  {"fingerprint": "src/ui/App.tsx:ending-guard-never-reset-hangs-second-leave", "severity": "MAJOR", "file": "src/ui/App.tsx", "line": 70,
+   "issue": "The StrictMode guard endingId keys on the session id and is never cleared. If endSession rejects (for example an IndexedDB failure), the app goes Home and the session is still stored without endedAt, so Home offers Resume. Resume reuses the same record.sessionId. Leave table then sets {name:'ending', sessionId} with that same id, the effect sees endingId.current === leaving and returns early, and the app stays on the blank aria-busy ending screen with no way out. The round-1 code called endSession on every Leave, so this hang is a regression.",
+   "evidence": "hand-store.ts ended(): an abort or error rejects and changes nothing, so the session stays resumable. App.resume() passes sessionId: record.sessionId. App.tsx:70 is `if (leaving === null || endingId.current === leaving) return;` and nothing resets endingId.",
+   "fix": "Key the guard on the ending screen object rather than the id: `const ending = screen.name === 'ending' ? screen : null`, store that object in the ref, and use [ending] as the dependency. StrictMode's re-run sees the same object, while each Leave creates a new one. A simpler option is to set endingId.current = null in both settle handlers. Add a unit or e2e case: make endSession fail once, Resume, Leave again, and expect the report or Home."}
+ ],
+ "summary": "The ordering argument holds. Before React renders the 'ending' update it flushes the pending passive effects of earlier commits, so a Leave click in the gap cannot run first. The Table's last-hand effect therefore calls track() synchronously before the commit that unmounts the Table. In that commit, unmount cleanups run before App's passive mount effect, so tableWritesSettled() read in App's effect covers every table write. endSession cannot be skipped, and StrictMode cannot run it twice. It hangs only while the held write is pending, which is intended. One regression: the never-reset sessionId guard hangs a second Leave of the same session after a failed endSession (MAJOR). The new e2e holds the grade reply, so the write cannot finish before the click, and the build log records that it fails with App.tsx reverted. The buy-in check and its unit test, and the clock advance in session-report.spec.ts, are correct, and nothing was loosened."}

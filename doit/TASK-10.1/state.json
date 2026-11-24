@@ -4,7 +4,7 @@
   "branch": "doit/TASK-10.1",
   "base_commit": "321d93d5f74d80c67beec50bb0e2d11d692b55b7",
   "started": "2026-11-24T09:32:35",
-  "review_round": 1,
+  "review_round": 2,
   "judge_round": 0,
   "sendbacks": 0,
   "gate_runs": 5,
@@ -1638,7 +1638,13 @@
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-10.1",
   "spec_sha256": "9a4abd69dd7c1c0285853f1755c23763895b157e11224dec1edbd7a273192889",
   "review_findings": {
-    "1": 0
+    "1": 0,
+    "2": 1
   },
-  "relock_pending": []
+  "relock_pending": [],
+  "brief_history": {
+    "src/ui/App.tsx:ending-guard-never-reset-hangs-second-leave": [
+      "review r2"
+    ]
+  }
 }
