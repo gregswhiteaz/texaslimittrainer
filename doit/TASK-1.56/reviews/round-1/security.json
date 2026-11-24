@@ -1,0 +1,3 @@
+{"reviewer": "security", "round": 1,
+ "findings": [],
+ "summary": "Test-only change: two tests moved verbatim from tests/advice/postflop-ranges.test.ts into new tests/advice/postflop-ranges.property.test.ts, with unused imports dropped. No production code under src/ changed, no package.json/lockfile/CI workflow changes, no new dependencies, no secrets. The fast-check property keeps its fixed seed (7505); randomness here is test generation only and has no security or fairness role. No untrusted input reaches the changed code, so no reachable path exists. No findings."}

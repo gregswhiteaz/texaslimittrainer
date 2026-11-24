@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-24T01:43:00Z'
-updated_date: '2026-11-24T01:51:00Z'
+updated_date: '2026-11-24T01:54:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -40,3 +40,9 @@ CI's 'Unit tests with coverage' job timed out (30 s testTimeout) on tests/advice
 
 Full spec: doit/TASK-1.56/spec.md
 <!-- SECTION:PLAN:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+Build: heavy property block and default-advice test moved verbatim to tests/advice/postflop-ranges.property.test.ts (sweep job, no coverage); remaining coverage tests 174/142 ms locally; expect-line diff empty; gate PASS
+<!-- SECTION:NOTES:END -->
