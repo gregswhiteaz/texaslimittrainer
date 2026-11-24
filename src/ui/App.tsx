@@ -37,8 +37,9 @@ export default function App(): React.JSX.Element {
   const [paused, setPaused] = useState<Paused>(undefined);
   // The shown Table's history key; null while another screen is shown. Set in the handlers that change screen.
   const tableKey = useRef<string | null>(null);
-  // The session this App has started ending, so StrictMode's second effect run does not end it twice.
-  const endingId = useRef<string | null>(null);
+  // The ending screen this App has started ending, so StrictMode's second effect run (same object) does not
+  // end it twice, while each Leave table (a new object) does, even for a resumed session id.
+  const endingScreen = useRef<Extract<Screen, { name: 'ending' }> | null>(null);
   const onHome = screen.name === 'home';
   useEffect(() => {
     if (!onHome) return undefined;
@@ -65,12 +66,12 @@ export default function App(): React.JSX.Element {
   // Leave table ends the session here, after the Table has unmounted: every passive effect of earlier
   // commits (including the one that queues the last hand's write) has run, so tableWritesSettled() covers
   // every table write and endSession runs after all of them (A-4, A-5).
-  const leaving = screen.name === 'ending' ? screen.sessionId : null;
+  const ending = screen.name === 'ending' ? screen : null;
   useEffect(() => {
-    if (leaving === null || endingId.current === leaving) return;
-    endingId.current = leaving;
+    if (ending === null || endingScreen.current === ending) return;
+    endingScreen.current = ending;
     tableWritesSettled()
-      .then(() => sharedHandStore().endSession(leaving, new Date()))
+      .then(() => sharedHandStore().endSession(ending.sessionId, new Date()))
       .then(
         (report) =>
           setScreen(
@@ -81,7 +82,7 @@ export default function App(): React.JSX.Element {
           setScreen({ name: 'home', returned: true });
         },
       );
-  }, [leaving]);
+  }, [ending]);
 
   useEffect(() => {
     const onPopState = (event: PopStateEvent): void => {

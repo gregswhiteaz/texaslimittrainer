@@ -9,12 +9,13 @@
 - `e2e/session-report.spec.ts` — SPEC-07, SPEC-09, SPEC-10, SPEC-11, SPEC-14.
 - `docs/storage/reports.md` — the reports store, fields, rules and tests.
 - `e2e/session-end-order.spec.ts` — fix brief 2: Leave clicked before the last hand's write is queued (grade replies held) still ends the session after that write.
+- `e2e/session-end-retry.spec.ts` — fix brief r2 item 1: endSession fails once, the user resumes the same session and leaves again, and its Session Report shows.
 - `tests/table/session-report.test.ts` — fix brief 3: parseSessionReport rejects a cash buy-in other than 20 big bets.
 
 ## Modified
 - `src/storage/hand-store.ts` — DB version 3 with the `reports` store; `endSession` and `getReport`; `openHandStore`/`sharedHandStore` return `HandStore & SessionEnder`.
 - `src/table/table-view.ts` — export `GAME_LABEL` (no behaviour change).
-- `src/ui/App.tsx` — `ending` and `report` screens, the `leave(sessionId)` handler (Leave table ends the session); `goHome` shares `closeTable`. Fix brief 1: `endSession` runs from an effect of the `ending` screen, after the Table's final effects.
+- `src/ui/App.tsx` — `ending` and `report` screens, the `leave(sessionId)` handler (Leave table ends the session); `goHome` shares `closeTable`. Fix brief 1: `endSession` runs from an effect of the `ending` screen, after the Table's final effects. Fix brief r2 item 1: the StrictMode guard keys on the ending screen object (dependency `[ending]`), so a second Leave of the same resumed session ends it again.
 - `src/ui/table/Table.tsx` — `onLeave` receives the session id.
 - `src/ui/table/TableScreen.tsx` — `onLeave` prop type takes the session id.
 - `src/ui/table/useTableSession.ts` — also returns `sessionId`.
