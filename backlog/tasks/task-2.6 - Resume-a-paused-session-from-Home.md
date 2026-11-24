@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-24T01:37:00Z'
+updated_date: '2026-11-24T01:45:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -90,4 +90,6 @@ AC added from TASK-6.7 security review MINOR (lineUpSessionConfig trusts seat ki
 AC added from TASK-3.10 judge J-1-02.
 
 Build: findPausedSession + HandStore.pausedSession, endedAt (read-only), MAX_SESSION_COUNT cap, Home Resume entry with resumeSummary subtitle, App restore + resume option keeping the stored session id; npm test 994 passed, e2e 190 passed; gate PASS
+
+Review r1: 0 blocking (security MINOR next-bot-name-uncapped; code MINOR seed-sessions duplicate, NIT unreachable Error wrap). Paused before judge: branch CI 45306421540 fails only on tests/advice/postflop-ranges.test.ts timing out under coverage (not this story); resuming after fix story TASK-1.56 merges.
 <!-- SECTION:NOTES:END -->
