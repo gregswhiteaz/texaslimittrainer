@@ -1,9 +1,11 @@
 ---
 id: TASK-1.56
 title: Keep postflop-ranges unit tests inside the coverage-run time limit
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-24T01:43:00Z'
+updated_date: '2026-11-24T01:51:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -27,3 +29,14 @@ CI's 'Unit tests with coverage' job timed out (30 s testTimeout) on tests/advice
 - [ ] #2 Given the change, When the test file is compared with its previous version, Then no assertion is removed or loosened and the number of checked cases is unchanged
 - [ ] #3 Given three consecutive CI runs on the story branch, When they finish, Then 'Unit tests with coverage' passes in all three
 <!-- AC:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. Move the fast-check property block and the 'default advice stays on every unseen combo' test verbatim into tests/advice/postflop-ranges.property.test.ts (uncovered sweep job)
+2. Keep the scripted fallback + heads-up checks and the blocked-start test in postflop-ranges.test.ts under coverage
+3. Prove no expect/seed/case-count change by a sorted diff; coverage thresholds still met
+4. Push and get three consecutive green CI runs, reading durations from the logs
+
+Full spec: doit/TASK-1.56/spec.md
+<!-- SECTION:PLAN:END -->
