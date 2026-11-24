@@ -4,12 +4,14 @@ import { handClassOf } from '../advice/hand-class';
 import { chartSpotOf, referenceSizeOf, type PreflopAdvice } from '../advice/preflop';
 import { ACTION_RANGE_ADVICE, type RecommendOptions } from '../advice/recommend';
 import type { Card } from '../engine/cards';
+import type { ReplayCode } from '../engine/deck';
 import type { Action } from '../engine/hand';
 import type { PlayerView } from '../engine/player-view';
 import { actionLabel } from './action-bar';
 import type { HandRecordDecision } from './hand-record';
 import { opponentLines, type HintCardView } from './hint';
 import type { CompletedHand } from './session';
+import { positionName } from './table-view';
 
 export type ReviewStreet = 'preflop' | 'flop' | 'turn' | 'river';
 
@@ -139,4 +141,46 @@ export function storedReviewEntries(
       decision,
     };
   });
+}
+
+/** The review header's summary of the finished hand (TASK-9.4). */
+export interface ReviewSummary {
+  readonly handNumber: number;
+  readonly holeCards: readonly [Card, Card];
+  readonly position: string;
+  readonly net: number;
+  readonly resultText: string;
+  readonly replayCode: ReplayCode;
+}
+
+/** The user's net chips for the hand: award shares + returned − put in (A-2). */
+export function netResult(hand: CompletedHand): number {
+  const { userSeat, result } = hand;
+  let net = result.returned?.seat === userSeat ? result.returned.amount : 0;
+  for (const award of result.awards) {
+    for (const w of award.winners) if (w.seat === userSeat) net += w.amount;
+  }
+  for (const a of hand.actions) if (a.seat === userSeat) net -= a.added;
+  return net;
+}
+
+/** 'You won $<n>' (n > 0) | 'You lost $<-n>' (n < 0) | 'You broke even' (0). */
+export function resultText(net: number): string {
+  if (net > 0) return `You won $${net}`;
+  if (net < 0) return `You lost $${-net}`;
+  return 'You broke even';
+}
+
+/** The header summary; positionName's RangeError propagates (cannot happen for a completedHand). */
+export function reviewSummary(hand: CompletedHand, handNumber: number): ReviewSummary {
+  const seats = hand.seats.map((s) => s.seat).sort((a, b) => a - b);
+  const net = netResult(hand);
+  return {
+    handNumber,
+    holeCards: [hand.userHoleCards[0], hand.userHoleCards[1]],
+    position: positionName(hand.userSeat, seats, hand.button),
+    net,
+    resultText: resultText(net),
+    replayCode: hand.replayCode,
+  };
 }

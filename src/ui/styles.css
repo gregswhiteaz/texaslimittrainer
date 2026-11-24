@@ -726,8 +726,45 @@ h1[tabindex='-1']:focus {
 .review-head {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
   gap: 12px;
+}
+
+/* TASK-9.4: the heading, the result/cards/position subtitle and the small replay line. */
+.review-title {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.review-summary {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  color: #a7aeb8;
+  font-size: 14px;
+}
+
+.review-summary .table-cards {
+  gap: 4px;
+}
+
+.review-summary svg[data-card] {
+  width: 24px;
+  height: 34px;
+}
+
+.review-replay {
+  margin: 0;
+  color: #a7aeb8;
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
+
+.review-replay [data-part='replay-code'] {
+  font-family: ui-monospace, monospace;
 }
 
 .review-head h2 {

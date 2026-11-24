@@ -1,4 +1,4 @@
-import type { StoredReviewEntry } from '../../table/review';
+import type { ReviewSummary, StoredReviewEntry } from '../../table/review';
 import { PlayingCard } from '../cards/PlayingCard';
 import { useHeadingFocus } from '../useHeadingFocus';
 
@@ -6,16 +6,44 @@ export interface ReviewPanelProps {
   readonly handNumber: number;
   readonly entries: readonly StoredReviewEntry[];
   readonly onClose?: () => void;
+  /** The header's result, cards, position and replay line (TASK-9.4); none without it. */
+  readonly summary?: ReviewSummary | null;
 }
 
 /** The Hand Review panel (REQ-043): one graded entry per user decision, in order, read from the stored
  *  decisions; stored text is rendered as text only. */
-export function ReviewPanel({ handNumber, entries, onClose }: ReviewPanelProps): React.JSX.Element {
+export function ReviewPanel({
+  handNumber,
+  entries,
+  onClose,
+  summary = null,
+}: ReviewPanelProps): React.JSX.Element {
   const heading = useHeadingFocus(true);
   return (
     <aside className="review-panel" aria-labelledby="review-heading">
       <div className="review-head">
-        <h2 id="review-heading" ref={heading}>{`Hand #${handNumber} review`}</h2>
+        <div className="review-title">
+          <h2 id="review-heading" ref={heading}>{`Hand #${handNumber} review`}</h2>
+          {summary !== null && (
+            <>
+              <div className="review-summary" data-part="summary">
+                <span data-part="result">{summary.resultText}</span>
+                {' · '}
+                <span role="group" aria-label="Your hole cards" className="table-cards">
+                  {summary.holeCards.map((card) => (
+                    <PlayingCard key={card} card={card} />
+                  ))}
+                </span>
+                {' · '}
+                <span data-part="position">{summary.position}</span>
+              </div>
+              <p className="review-replay" data-part="replay">
+                {`Hand #${summary.handNumber} · Replay code `}
+                <span data-part="replay-code">{summary.replayCode}</span>
+              </p>
+            </>
+          )}
+        </div>
         <button type="button" className="review-close" aria-label="Close review" onClick={onClose}>
           <svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16">
             <path d="M3 3l10 10M13 3L3 13" stroke="currentColor" strokeWidth="2" />

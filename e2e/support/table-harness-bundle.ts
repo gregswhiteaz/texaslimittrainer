@@ -236,7 +236,8 @@ export type TableScene =
   | 'side-pot-river'
   | 'side-pot-showdown'
   | 'ten-seat-hint'
-  | 'ten-seat-review';
+  | 'ten-seat-review'
+  | 'review-header';
 
 /** Renders the scripted `scene` (see table-scenes.tsx) into a blank page. */
 export async function openTableScene(page: Page, bundle: string, scene: TableScene): Promise<void> {

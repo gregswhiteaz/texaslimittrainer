@@ -14,8 +14,20 @@ import {
   type HintCardView,
 } from '../../table/hint';
 import type { HandRecordDecision } from '../../table/hand-record';
-import { opensReview, storedReviewEntries, type StoredReviewEntry } from '../../table/review';
-import { buyIn, userBusted, type CompletedHand, type TableState } from '../../table/session';
+import {
+  opensReview,
+  reviewSummary,
+  storedReviewEntries,
+  type ReviewSummary,
+  type StoredReviewEntry,
+} from '../../table/review';
+import {
+  buyIn,
+  completedHand,
+  userBusted,
+  type CompletedHand,
+  type TableState,
+} from '../../table/session';
 import { tableView, type SeatView } from '../../table/table-view';
 import { playerView } from '../../engine/player-view';
 import {
@@ -184,6 +196,12 @@ function HandResult({ result }: { readonly result: HandResultView }): React.JSX.
   );
 }
 
+/** The review header's summary of the table's finished hand (A-1); null before the hand has a result. */
+function reviewHeader(table: TableState): ReviewSummary | null {
+  const hand = completedHand(table);
+  return hand === null ? null : reviewSummary(hand, table.handNumber);
+}
+
 /** Presentational table (D-7): everything shown comes from tableView. */
 export function TableView({
   table,
@@ -281,6 +299,7 @@ export function TableView({
             handNumber={table.handNumber}
             entries={review.entries}
             onClose={onCloseReview}
+            summary={reviewHeader(table)}
           />
         )}
       </div>

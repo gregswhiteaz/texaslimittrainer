@@ -330,6 +330,38 @@ export const CALL_THEN_FOLD: TableState = userTableAfter(
   '3:raise 4:fold 5:call 6:fold 1:fold 2:raise 3:call 5:fold 2:check 3:bet 2:fold',
 );
 
+/** Hand 133: the user (Ah 9s, cutoff) puts in $48 over 5 decisions and loses the $98 pot to Ben's kings. */
+export const REVIEW_LOST_48: TableState = {
+  ...userTableAfter(
+    REVIEW_DECK,
+    '3:fold 4:fold 5:raise 6:fold 1:fold 2:raise 5:raise 2:call 2:bet 5:raise 2:call 2:bet 5:raise 2:call 2:bet 5:call',
+  ),
+  handNumber: 133,
+};
+
+/** The user (Ah As, cutoff) puts in $16 and wins the whole $72 pot with aces: net +56. */
+export const REVIEW_WON_56: TableState = userTableAfter(
+  {
+    0: 'Qc',
+    6: 'Jd',
+    1: 'Kd',
+    7: '7c',
+    2: 'Tc',
+    8: 'Th',
+    3: '5c',
+    9: '5d',
+    4: 'Ah',
+    10: 'As',
+    13: 'Ks',
+    14: '9d',
+    15: '4c',
+    17: '2h',
+    19: '6s',
+  },
+  '3:raise 4:call 5:raise 6:fold 1:raise 2:call 3:call 4:fold 5:call' +
+    ' 1:check 2:check 3:check 5:check'.repeat(3),
+);
+
 /** The user's one decision is a preflop fold; Ben wins the blinds. */
 export const PREFLOP_FOLD_ONLY: TableState = userTableAfter(
   REVIEW_DECK,

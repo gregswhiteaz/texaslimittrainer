@@ -1,9 +1,30 @@
-# Hand Review entries (TASK-9.1, TASK-9.3)
+# Hand Review panel (TASK-9.1, TASK-9.3, TASK-9.4)
 
 After a hand in which the user made a decision (other than a lone preflop fold), the Hand Review panel opens beside
 the table with one entry per user decision, in order (REQ-043). Each entry shows the numbers and the reason behind
 the advice, in the hint card's own words (`docs/ui/hint.md`), so the review matches the hint the user could have
 seen at that decision (REQ-036.2).
+
+## Header
+
+The panel opens with the heading "Hand #N review". Under it a one-line subtitle (`data-part="summary"`, 14 px)
+sums up the hand, then a small replay line (12 px):
+
+| Part                    | Shows                                                                      | Example                                                    |
+| ----------------------- | -------------------------------------------------------------------------- | ---------------------------------------------------------- |
+| `result`                | the user's net result for the hand                                         | "You lost $48", "You won $56", "You broke even"            |
+| "Your hole cards" group | the user's two hole cards, drawn as small cards (24 × 34 px)               | A♥ 9♠                                                      |
+| `position`              | the user's position name, the same name the table shows on the user's seat | "Cutoff"                                                   |
+| `replay`                | the hand number and the hand's replay code (`replay-code`, monospace)      | "Hand #133 · Replay code 9e3779b9000000010000000200000003" |
+
+- **Net result.** The user's share of every pot award, plus any uncalled amount returned to the user, minus every
+  chip the user put in (blinds included). It always equals the user's final stack minus the starting stack.
+  Amounts use `$` in cash and sit-and-go alike.
+- **Replay code.** The same code the hand record stores as `replayCode` (REQ-013.5), so it can be quoted in a bug
+  report. It is shown only after the hand ends, inside the review panel; never during the hand (REQ-013.4).
+- **Source.** `reviewSummary(hand, handNumber)` in `src/table/review.ts`, built by `TableView` from the finished
+  hand in memory (`completedHand(table)`) and the table's hand number. Nothing is stored or graded again. If the
+  hand has no result yet, the panel shows no subtitle and no replay line.
 
 ## What an entry shows
 
