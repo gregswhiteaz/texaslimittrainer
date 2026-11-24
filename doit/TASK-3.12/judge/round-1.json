@@ -1,0 +1,92 @@
+{
+ "round": 1,
+ "test_suite": {
+  "command": "npm test",
+  "result": "PASS",
+  "passed": 1179,
+  "failed": 0,
+  "notes": "239 files passed, 3 skipped; 43 tests skipped (opt-in slow group). Lint, typecheck and tests/golden (282) pass."
+ },
+ "end_to_end": {
+  "command": "Real app (vite build + preview, Chromium via Playwright): New game > Start game, 10 hands played with a raise/call/call/fold rotation; hand records read from IndexedDB; each decision's view rebuilt from the stored replay code and actions and sent as a 'grade' request to the app's own built advice worker (assets/advice.worker-*.js). Also full e2e suite and the 10,000-hand playtest.",
+  "result": "PASS",
+  "expected": "Every stored decision entry equals what the hint worker returns for that decision; the Hand review panel grades match the stored grades; records parse; e2e suite green; playtest byte-identical to main with 0 violations and 0 advice mismatches",
+  "actual": "10 records, 44 decisions across preflop/flop/turn/river (correct/minor/major all seen). All 44 entries deep-equal the real worker's grade responses. The review panel opened for all 10 hands and its data-grade values equal the stored grades. parseHandRecord accepts every record and all hinted=false. npx playwright test: 214 passed, 16 skipped (chromium + webkit). Playtest identical to main, 0 violations; check-advice 100113 points, 0 mismatches."
+ },
+ "integrity": {
+  "result": "PASS",
+  "notes": "doit.py test-integrity exit 0. The product diff (ranges.ts, recommend.ts, advice-service.ts, hand-record.ts) has no test-input recognition, hard-coded expected values, early returns or overridden equality. Locked edits judged on substance: hand-records.acceptance only destructures decisions out and adds a length check (6), so the TASK-3.9 assertion is intact. The e2e oldRecord fixture gains one valid decisions entry with no assertion changed. hand-store.test reuses one graded decisions list for its 1,000 records; the records stay consistent with their actions and the test exercises the store, not advice. defaultTableAfter now routes user moves through applyUserAction, as the live app does."
+ },
+ "items": [
+  {
+   "spec": "SPEC-01",
+   "result": "PASS",
+   "evidence": "Acceptance test passes and deep-compares every stored entry with the worker 'grade' response. Holdout: REVIEW_FOUR stored via fake-indexeddb and read back gives 4 entries preflop/flop/turn/river, actions raise/bet/check/call, recommended raise/bet/bet/call, grades correct/correct/minor/correct (the approved Block 1 correction; these are exactly the worker's values). Entry 0 is chart with null numbers; entries 1-3 are equity with finite percents (72.7/0, 55.3/0, 48.2/19) and seat 2 in opponentBasis. Across 11 completed scripted scenarios (24 decisions), every stored entry strictly equals the worker's grade response, and get() returns the same JSON."
+  },
+  {
+   "spec": "SPEC-02",
+   "result": "PASS",
+   "evidence": "Acceptance test passes. Holdout: the flop decision with a 29-hand snapshot stores seat 2 basis {observedHands:null,text:'typical player'}, and with a 30-hand snapshot it stores observedHands 30. Snapshots naming a folded seat (1) or seat 10 (not at the table) are ignored: the result equals the no-snapshot advice (A-5)."
+  },
+  {
+   "spec": "SPEC-03",
+   "result": "PASS",
+   "evidence": "Acceptance test passes. Holdout: all REVIEW_FOUR entries have hinted false, and all 44 decisions from real-app play have hinted:false."
+  },
+  {
+   "spec": "SPEC-04",
+   "result": "PASS",
+   "evidence": "Acceptance test passes. Holdout: PREFLOP_FOLD_ONLY gives one chart entry that equals the worker's response. In the real app, hands where the user folded preflop stored 1 entry."
+  },
+  {
+   "spec": "SPEC-05",
+   "result": "PASS",
+   "evidence": "Acceptance test passes. Holdout: JSON round-trip strict-equals for every scenario; parseHandRecord accepts the JSON copies; grade keys are exactly grade/ruleId/marginPts. Turn entry (approved correction: margin check moved to entry 2) is aggression-margin with marginPts 5.3, equal to the worker's value."
+  },
+  {
+   "spec": "SPEC-06",
+   "result": "PASS",
+   "evidence": "Acceptance test covers the 8 listed inputs plus a valid entry followed by a null one, through estimateOpponentRanges, recommend, decisionRecord and the worker. Holdout: [[]], 'x', true, seat -1/Infinity/2^60/null/undefined/10.0000001, a missing seat, and a valid entry followed by 7 all throw RangeError on the flop view and through decisionRecord. The worker returns ok:false with name RangeError. Seats 10 and 1 are accepted. A duplicate seat still throws RangeError. A null entry on a preflop view does not throw (A-4)."
+  },
+  {
+   "spec": "SPEC-07",
+   "result": "PASS",
+   "evidence": "Unit test covers all listed cases with exact error fields. Holdout: 32 more mutations are rejected with the expected field. These include decisions as an object, null or 401 entries; a null or array entry; a missing action; blind types; amounts of -4, 1.5 or missing; an unknown basis; a null ruleId on an equity entry; requiredEquityPct -1; a string equityPct; a chart entry with opponentBasis or equityPct; 10 opponentBasis entries; observedHands -1 or 2.5; a non-object basis; a non-string explanation; grade null or 'great'; marginPts '3' or NaN; hinted missing or 1; a popped entry; an empty list; a street mismatch; an amount mismatch. These boundary values parse: explanation of 2000 characters, text of 200, marginPts null, percents 0 and 100. The 0-decision BB_WALK record parses."
+  },
+  {
+   "spec": "SPEC-08",
+   "result": "PASS",
+   "evidence": "Unit test passes; it mutates the result and its inputs and checks nothing is shared. Holdout: userAdviceOptions() === ACTION_RANGE_ADVICE; with a snapshot it returns {opponentRanges:'actions', observedOpponents: <same array>}; ACTION_RANGE_ADVICE is not mutated. The decision-snapshot and advice-service suites pass as part of npm test."
+  },
+  {
+   "spec": "SPEC-09",
+   "result": "PASS",
+   "evidence": "npm run lint, npm run typecheck: exit 0. npm test: 239 files passed / 3 skipped, 1179 tests passed / 43 skipped, coverage thresholds hold. tests/golden: 282/282 passed. src/advice changes import only advice and engine types, and the boundary test passes. No network APIs in the diff."
+  },
+  {
+   "spec": "SPEC-10",
+   "result": "PASS",
+   "evidence": "10,000-hand playtest with seed 42 on the branch and on main (0fef3bf worktree): output byte-identical (cmp), Invariant violations: 0. --check-advice: 100113 decision points, 0 mismatches, 0 violations, exit 0."
+  },
+  {
+   "spec": "SPEC-11",
+   "result": "PASS",
+   "evidence": "docs/storage/hand-records.md adds the decisions row, a Decision entries section with a field table, the grade shape and reason, the hinted default, the decision-time snapshot rule, the decisions validation rules, D-4, and the snapshot RangeError messages. The text is original. The story doc is not yet in backlog doc list; publishing it is the later doit docs step, so it is not counted against this round."
+  },
+  {
+   "spec": "SPEC-12",
+   "result": "PASS",
+   "evidence": "git diff main --stat -- src/ui shows no files (DoD#7/#12 N/A holds). CI run 45364289815 (CI) and 45364289795 (Visual) on 45edfbe succeeded; the earlier run 45363567362 on 3a1e98c also succeeded."
+  }
+ ],
+ "findings": [
+  {
+   "id": "J-1-01",
+   "severity": "LOW",
+   "spec": "SPEC-07",
+   "expected_vs_actual": "The STORYBOARD SHOWDOWN fixture plays the user's moves with play() instead of applyUserAction. handRecord on it builds a record with decisions [] while actions hold 4 user actions, and parseHandRecord rejects that record ('decisions'). No production path is affected: the only user-action path in src is applyUserAction, and all e2e runs pass. Only a future test that stores this fixture would hit it.",
+   "fix": "Optional: build storyboard user moves through applyUserAction (as defaultTableAfter now does) so every shared fixture yields a readable record."
+  }
+ ],
+ "summary": "All 12 SPEC items PASS. Stored decisions equal the hint worker's output in unit, holdout and real-app e2e checks (44/44 live decisions against the built worker). The review panel agrees with stored grades. Snapshot validation throws RangeError for every bad entry and seat checked. parseHandRecord rejects every malformed field tried with the right field path. Playtest is byte-identical to main with 0 violations and 0 advice mismatches; e2e 214 passed; CI green. One LOW test-fixture observation; nothing blocking."
+}

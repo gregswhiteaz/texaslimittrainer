@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-24T08:51:00Z'
+updated_date: '2026-11-24T09:37:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -44,28 +44,28 @@ Plan key: E03-S10 · Dream: limit-holdem-trainer
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Given a scripted hand in which the user made 4 decisions, When its record is read, Then it holds 4 decision entries in order, each with street, the user's action, recommended action, equity %, required equity %, basis, explanation and grade [REQ-052.2]
-- [ ] #2 Given a decision computed with an opponent's observed stats at 29 hands that reach 30 hands when the hand ends, When the record is read, Then its recommendation and numbers equal the advice computed from the decision-time snapshot [REQ-052.2]
-- [ ] #3 Given a decision made without asking for a hint, When the record is read, Then its hinted flag is false [REQ-052.2]
-- [ ] #4 Given a hand in which the user folded preflop at the first decision, When its record is read, Then it holds exactly 1 decision entry with its grade [REQ-052.2]
-- [ ] #5 Given a graded decision, When the hand record is saved, Then the stored grade data is decided and documented (full GradeResult or grade, ruleId and marginPts plus a recommendation reference) and round-trips through JSON unchanged
-- [ ] #6 Given an observed-stats snapshot built at a decision point that contains a null entry or a seat that is not a whole number from 1 to 10 (the table seat bound), When advice is computed from it, Then estimateOpponentRanges throws the documented RangeError (never a TypeError) and the bad seat is never silently ignored
+- [x] #1 Given a scripted hand in which the user made 4 decisions, When its record is read, Then it holds 4 decision entries in order, each with street, the user's action, recommended action, equity %, required equity %, basis, explanation and grade [REQ-052.2]
+- [x] #2 Given a decision computed with an opponent's observed stats at 29 hands that reach 30 hands when the hand ends, When the record is read, Then its recommendation and numbers equal the advice computed from the decision-time snapshot [REQ-052.2]
+- [x] #3 Given a decision made without asking for a hint, When the record is read, Then its hinted flag is false [REQ-052.2]
+- [x] #4 Given a hand in which the user folded preflop at the first decision, When its record is read, Then it holds exactly 1 decision entry with its grade [REQ-052.2]
+- [x] #5 Given a graded decision, When the hand record is saved, Then the stored grade data is decided and documented (full GradeResult or grade, ruleId and marginPts plus a recommendation reference) and round-trips through JSON unchanged
+- [x] #6 Given an observed-stats snapshot built at a decision point that contains a null entry or a seat that is not a whole number from 1 to 10 (the table seat bound), When advice is computed from it, Then estimateOpponentRanges throws the documented RangeError (never a TypeError) and the bad seat is never silently ignored
 <!-- AC:END -->
 
 ## Definition of Done
 <!-- DOD:BEGIN -->
-- [ ] #1 Every acceptance criterion has at least one automated test (unit, property or Playwright) that passes
-- [ ] #2 `npm run lint`, `npm run typecheck` and `npm test` pass with zero errors [REQ-059.1, REQ-059.4]
-- [ ] #3 The golden-spot suite passes 100% (applies from the story that creates the suite, E07-S14, onward) [REQ-039.4]
-- [ ] #4 Coverage thresholds hold: >= 90% engine/bots/advice/statistics, >= 70% overall [REQ-059.3]
-- [ ] #5 Engine, bots, advice and statistics code imports no UI or browser-only code [REQ-059.2]
-- [ ] #6 Stories that touch the engine, bots or advice: a 10,000-hand playtest reports zero invariant violations (applies once the playtest runner exists, E01-S07, onward) [REQ-056.1]
-- [ ] #7 Stories that add or change a screen: Playwright test of the screen flow in Chromium and WebKit, and axe reports zero serious or critical violations (axe tooling is provisioned in the toolchain story E01-S01) [REQ-057.1]
-- [ ] #8 No new network requests beyond the app's own files [REQ-058.1]
-- [ ] #9 Strategy-content stories: text is original and every chart, range or golden spot carries its justification [REQ-061.2]
-- [ ] #10 CI workflow is green on the story's branch (applies once the CI story E01-S02 is done; E01-S01 instead passes the same checks locally) [REQ-064.2]
-- [ ] #11 Story documentation is written and published to Backlog.md
-- [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
+- [x] #1 Every acceptance criterion has at least one automated test (unit, property or Playwright) that passes
+- [x] #2 `npm run lint`, `npm run typecheck` and `npm test` pass with zero errors [REQ-059.1, REQ-059.4]
+- [x] #3 The golden-spot suite passes 100% (applies from the story that creates the suite, E07-S14, onward) [REQ-039.4]
+- [x] #4 Coverage thresholds hold: >= 90% engine/bots/advice/statistics, >= 70% overall [REQ-059.3]
+- [x] #5 Engine, bots, advice and statistics code imports no UI or browser-only code [REQ-059.2]
+- [x] #6 Stories that touch the engine, bots or advice: a 10,000-hand playtest reports zero invariant violations (applies once the playtest runner exists, E01-S07, onward) [REQ-056.1]
+- [x] #7 Stories that add or change a screen: Playwright test of the screen flow in Chromium and WebKit, and axe reports zero serious or critical violations (axe tooling is provisioned in the toolchain story E01-S01) [REQ-057.1]
+- [x] #8 No new network requests beyond the app's own files [REQ-058.1]
+- [x] #9 Strategy-content stories: text is original and every chart, range or golden spot carries its justification [REQ-061.2]
+- [x] #10 CI workflow is green on the story's branch (applies once the CI story E01-S02 is done; E01-S01 instead passes the same checks locally) [REQ-064.2]
+- [x] #11 Story documentation is written and published to Backlog.md
+- [x] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
 
 ## Implementation Plan
@@ -90,4 +90,6 @@ AC added from TASK-7.13 follow-up (security MINOR non-object-snapshot-entry-type
 AC#6 reworded per TASK-3.12 Q-2 (auto-accepted): snapshot seats 1-10, matching the 10-seat table bound.
 
 Build: hand records store one decision entry per user decision (advice + grade = hint, ACTION_RANGE_ADVICE, decision-time snapshot), parseHandRecord validation incl. cross-check, observedBySeat rejects null entries and seats outside 1-10; npm test 1179 passed, 10k --check-advice 0 mismatches; gate PASS. Block 1 resolved (SPEC-01/05 expected values corrected to the hint's options).
+
+Judge r1 PASS 12/12; real app: 44 stored decisions equal the built advice worker; 10k playtest byte-identical to main; CI 45364289815 green.
 <!-- SECTION:NOTES:END -->
