@@ -74,7 +74,7 @@ describe('session report errors', () => {
     ]);
     expect(rates(8, 1)).toEqual(['8', '12.5', '0.0']);
     expect(rates(1500, 1)).toEqual(['1500', '0.1', '0.0']);
-    expect(Object.keys(report).slice(-2)).toEqual(['style', 'errors']);
+    expect(Object.keys(report).slice(-3)).toEqual(['style', 'errors', 'leakCounts']);
   });
 
   it('errors is present only when every hand carries decisions', () => {

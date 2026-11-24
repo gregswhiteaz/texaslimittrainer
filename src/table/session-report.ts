@@ -1,12 +1,18 @@
-import type { Grade } from '../advice/grade';
+import type { ActionType, Grade } from '../advice/grade';
 import type { SeatNumber } from '../engine/hand';
+import {
+  categoryCounts,
+  LEAK_CATEGORIES,
+  type CategoryCount,
+  type CategoryDecision,
+} from '../stats/leaks';
 import {
   addStyleCounts,
   handStyleCounts,
   type StatHand,
   type StyleCounts,
 } from '../stats/style-stats';
-import { isWhole } from './hand-record';
+import { isWhole, type HandRecordDecision } from './hand-record';
 import { buyIn, MAX_SESSION_COUNT, tableStake, type GameType, type Stake } from './session';
 import type { SessionRecord } from './session-record';
 import { GAME_LABEL } from './table-view';
@@ -46,12 +52,17 @@ export interface SessionReport {
   readonly style?: StyleCounts;
   /** Absent on reports without stored decision records (TASK-10.4 A-3, A-4). */
   readonly errors?: ErrorCounts;
+  /** Unhinted counts per postflop leak category; absent iff `errors` is absent (TASK-10.5 A-4, A-5). */
+  readonly leakCounts?: readonly CategoryCount[];
 }
 
 /** The part of a stored decision the report reads; HandRecordDecision satisfies it. */
 export interface ReportDecision {
   readonly grade: { readonly grade: Grade };
   readonly hinted: boolean;
+  /** Absent only in hand-built test data; such a decision is not classified (TASK-10.5 A-2). */
+  readonly street?: HandRecordDecision['street'];
+  readonly action?: { readonly type: ActionType };
 }
 
 /** A stored hand as the report needs it; HandRecord satisfies it. `decisions` absent → no `errors` (A-4). */
@@ -123,7 +134,8 @@ export function bbPer100(result: number, bigBet: number, hands: number): number 
 }
 
 /** The report of `session` ended at `endedAt`, with `style` summed over `hands` (absent when `hands` is
- *  omitted or empty) and `errors` counted from their decisions (absent unless every hand carries them). RangeError('Invalid session report: <field>') for 0 hands played or an invalid Date. */
+ *  omitted or empty), and `errors` and `leakCounts` counted from their decisions (absent unless every hand
+ *  carries them). RangeError('Invalid session report: <field>') for 0 hands played or an invalid Date. */
 export function sessionReport(
   session: SessionRecord,
   endedAt: Date,
@@ -161,15 +173,19 @@ export function sessionReport(
     .map((hand) => handStyleCounts(hand, hand.userSeat))
     .reduce((total, counts) => addStyleCounts(total, counts));
   if (!hands.every((hand) => hand.decisions !== undefined)) return { ...report, style };
+  const decisions = hands.flatMap((hand) => hand.decisions as readonly ReportDecision[]);
   const errors = { major: 0, minor: 0 };
-  for (const hand of hands) {
-    for (const { grade, hinted } of hand.decisions as readonly ReportDecision[]) {
-      if (hinted) continue;
-      if (grade.grade === 'major') errors.major++;
-      else if (grade.grade === 'minor') errors.minor++;
-    }
+  for (const { grade, hinted } of decisions) {
+    if (hinted) continue;
+    if (grade.grade === 'major') errors.major++;
+    else if (grade.grade === 'minor') errors.minor++;
   }
-  return { ...report, style, errors };
+  const leakCounts = categoryCounts(
+    decisions.filter(
+      (d): d is CategoryDecision => d.street !== undefined && d.action !== undefined,
+    ),
+  );
+  return { ...report, style, errors, leakCounts };
 }
 
 type Fields = Readonly<Record<string, unknown>>;
@@ -215,6 +231,24 @@ function parseErrors(value: unknown): void {
   whole(errors.minor, 'errors.minor', 0, Number.MAX_SAFE_INTEGER);
 }
 
+/** Validates stored leak counts: categories known and in strictly increasing LEAK_CATEGORIES order,
+ *  1 ≤ decisions, errors ≤ decisions, major ≤ errors. */
+function parseLeakCounts(value: unknown): void {
+  if (!Array.isArray(value)) throw invalid('leakCounts');
+  const order = LEAK_CATEGORIES.map((category) => category.id as string);
+  let previous = -1;
+  value.forEach((element: unknown, i) => {
+    const path = `leakCounts[${i}]`;
+    const count = object(element, path);
+    const index = typeof count.category === 'string' ? order.indexOf(count.category) : -1;
+    if (index <= previous) throw invalid(`${path}.category`);
+    previous = index;
+    const decisions = whole(count.decisions, `${path}.decisions`, 1, Number.MAX_SAFE_INTEGER);
+    const errors = whole(count.errors, `${path}.errors`, 0, decisions);
+    whole(count.major, `${path}.major`, 0, errors);
+  });
+}
+
 /** Validates an untrusted stored report; returns it typed, not copied. Unknown extra properties are ignored.
  *  RangeError('Invalid session report: <field>'). */
 export function parseSessionReport(value: unknown): SessionReport {
@@ -245,6 +279,7 @@ export function parseSessionReport(value: unknown): SessionReport {
   }
   if (report.style !== undefined) parseStyle(report.style, hands);
   if (report.errors !== undefined) parseErrors(report.errors);
+  if (report.leakCounts !== undefined) parseLeakCounts(report.leakCounts);
   return value as SessionReport;
 }
 

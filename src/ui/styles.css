@@ -146,7 +146,8 @@ h1[tabindex='-1']:focus {
   font-weight: 700;
 }
 
-.report-style {
+.report-style,
+.report-leaks {
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -156,7 +157,8 @@ h1[tabindex='-1']:focus {
   border-radius: 10px;
 }
 
-.report-style h2 {
+.report-style h2,
+.report-leaks h2 {
   margin: 0;
   font-size: 17px;
 }
@@ -193,6 +195,32 @@ h1[tabindex='-1']:focus {
 .report-style-label[data-label='no-data'] {
   color: #a7aeb8;
   font-weight: 400;
+}
+
+.report-leak-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 15px;
+}
+
+.report-leak {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.report-leak-evidence {
+  color: #ffb44c;
+}
+
+.report-leaks-none {
+  margin: 0;
+  font-size: 15px;
+  color: #a7aeb8;
 }
 
 .screen .report-home {

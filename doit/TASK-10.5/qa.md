@@ -8,3 +8,7 @@
 
 ## Spec Detective notes
 - A-1..A-8 accepted. Until TASK-10.8, every leak is listed in category order (A-3). No locked-test edits.
+
+## Build note
+tests/table/session-report-errors.test.ts (unlocked, TASK-10.4) checked the report's last two keys; it now checks the last three [style, errors, leakCounts]. No assertion dropped.
+**Answer: auto-accepted (recommended)** — recorded deviation.
