@@ -1,10 +1,11 @@
 ---
 id: TASK-9.2
 title: Continue to rebuy or leave when I bust with the review open
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-19T02:21:00Z'
+updated_date: '2026-11-24T11:39:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -65,6 +66,17 @@ Plan key: E09-S06 · Dream: limit-holdem-trainer
 - [ ] #11 Story documentation is written and published to Backlog.md
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. Table: on a held review where userBusted(table), the deal-next button reads Continue (same class, ref, position, onDealNext)
+2. Continue clears the review and the Out of chips dialog opens; Rebuy / Leave table behave as in TASK-3.11
+3. Re-pin locked bust-dialog acceptance test (TASK-3.11) to Continue
+4. Tests: render acceptance + e2e seeded bust with review open in Chromium and WebKit; docs
+
+Full spec: doit/TASK-9.2/spec.md
+<!-- SECTION:PLAN:END -->
 
 ## Implementation Notes
 

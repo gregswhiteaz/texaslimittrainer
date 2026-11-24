@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-24T04:20:00Z'
+updated_date: '2026-11-24T11:39:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -91,6 +91,8 @@ Judge r1 PASS 17/17; CI 45322832954 green.
 Follow-ups: TASK-3.21 AC added (rebuy cap) + note (docstring reflow, Escape comment); TASK-2.20 AC added (Back after reload+Resume, J-1-01). Already owned: real-play bust reach (TASK-3.21), Continue label (TASK-9.2), session end (TASK-10.1).
 
 Locked test tests/table/rebuy.acceptance.test.ts unlocked for TASK-3.21 Q-2 (top-up removal / sit-and-go stop re-pin, same expect count).
+
+Locked tests/ui/bust-dialog.acceptance.test.tsx unlocked for TASK-9.2 AC#1 (Continue label; expectation replaced, not loosened).
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary
