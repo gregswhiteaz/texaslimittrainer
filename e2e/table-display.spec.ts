@@ -192,18 +192,24 @@ test('the seat to act is highlighted in red and labelled', async ({ page }) => {
   await expectToAct(page, '5');
 });
 
-test('the header shows the session and Leave table returns to Home', async ({ page }) => {
+test('the header shows the session and Leave table during hand 1 ends it after that hand', async ({
+  page,
+}) => {
   await openApp(page);
   expect(await nextTurn(page)).toBe('user');
   await expect(page.locator('.table-header-line')).toHaveText('Cash · 6 players · $4/$8 · Hand #1');
   expect(await page.evaluate(() => window.__tableDisplayDraws)).toBe(1);
 
   await page.getByRole('button', { name: 'Leave table' }).click();
+  await page
+    .getByRole('dialog', { name: 'Leave now? Your hand will be folded.' })
+    .getByRole('button', { name: 'Confirm' })
+    .click();
 
-  const home = page.getByRole('heading', { level: 1, name: 'TLH Trainer' });
-  await expect(home).toBeVisible();
-  await expect(home).toBeFocused();
-  await expect(page.getByRole('button', { name: 'New game' })).toBeVisible();
+  const report = page.getByRole('heading', { level: 1, name: 'Session report' });
+  await expect(report).toBeVisible();
+  await expect(report).toBeFocused();
+  await expect(page.locator('.report-header-line')).toHaveText('Cash · 6 players · $4/$8 · 1 hand');
   await expect(tableSection(page)).toHaveCount(0);
   await page.waitForTimeout(1000);
   expect(await page.evaluate(() => window.__tableDisplayDraws)).toBe(1);

@@ -25,6 +25,7 @@ const UI_FILES = [
   { path: 'src/ui/config/EndSessionDialog.tsx', source: '<dialog ref={ref}>…</dialog>' },
   { path: 'src/ui/table/BustDialog.tsx', source: '<dialog\n  className="bust">…</dialog>' },
   { path: 'src/ui/table/HintCard.tsx', source: '<section aria-label="Hint">…</section>' },
+  { path: 'src/ui/table/LeaveDialog.tsx', source: '<dialog ref={dialog}>…</dialog>' },
 ];
 
 describe('realMoneyOffers', () => {
@@ -78,7 +79,7 @@ describe('appScreens', () => {
   it('finds the Screen union routes and the dialog components, sorted', () => {
     expect(appScreens(APP_SOURCE, UI_FILES)).toEqual({
       routes: ['config', 'ending', 'home', 'report', 'table'],
-      dialogs: ['BustDialog', 'EndSessionDialog'],
+      dialogs: ['BustDialog', 'EndSessionDialog', 'LeaveDialog'],
     });
     expect(unlistedScreens(appScreens(APP_SOURCE, UI_FILES), SCREEN_LIST)).toEqual([]);
   });
@@ -110,6 +111,7 @@ describe('appScreens', () => {
       'BustDialog',
       'ConfirmBox',
       'EndSessionDialog',
+      'LeaveDialog',
     ]);
   });
 

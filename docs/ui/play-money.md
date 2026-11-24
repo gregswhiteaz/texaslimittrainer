@@ -38,6 +38,7 @@ payment-provider hosts (Stripe, PayPal, Braintree, Adyen, Square, Klarna, …) a
 | `end-session-dialog` | dialog | `EndSessionDialog` |
 | `table`              | screen | `table`            |
 | `bust-dialog`        | dialog | `BustDialog`       |
+| `leave-dialog`       | dialog | `LeaveDialog`      |
 | `ending`             | screen | `ending`           |
 | `session-report`     | screen | `report`           |
 

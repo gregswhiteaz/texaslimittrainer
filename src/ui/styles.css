@@ -409,6 +409,12 @@ h1[tabindex='-1']:focus {
   cursor: pointer;
 }
 
+.table-home:disabled,
+.table-leave:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
 .table-ring {
   position: relative;
   margin-bottom: 12px;
@@ -1020,9 +1026,10 @@ h1[tabindex='-1']:focus {
 }
 
 /* Bust dialog (TASK-3.11, A-4): Rebuy / Leave table when the user's cash stack is $0. The end-session
-   dialog (TASK-2.7) shares its rules. */
+   dialog (TASK-2.7) and the Leave-now dialog (TASK-10.2) share its rules. */
 .bust-dialog,
-.end-session-dialog {
+.end-session-dialog,
+.leave-dialog {
   box-sizing: border-box;
   max-width: min(420px, calc(100vw - 32px));
   padding: 24px;
@@ -1033,12 +1040,14 @@ h1[tabindex='-1']:focus {
 }
 
 .bust-dialog::backdrop,
-.end-session-dialog::backdrop {
+.end-session-dialog::backdrop,
+.leave-dialog::backdrop {
   background: rgb(0 0 0 / 60%);
 }
 
 .bust-dialog h2,
-.end-session-dialog h2 {
+.end-session-dialog h2,
+.leave-dialog h2 {
   margin: 0 0 8px;
   font-size: 20px;
   font-weight: 700;
@@ -1051,14 +1060,16 @@ h1[tabindex='-1']:focus {
 }
 
 .bust-actions,
-.end-session-actions {
+.end-session-actions,
+.leave-actions {
   display: flex;
   gap: 12px;
   justify-content: flex-end;
 }
 
 .bust-rebuy,
-.end-session-confirm {
+.end-session-confirm,
+.leave-confirm {
   min-height: 52px;
   padding: 0 28px;
   background: #d7262e;
@@ -1072,7 +1083,8 @@ h1[tabindex='-1']:focus {
 }
 
 .bust-leave,
-.end-session-cancel {
+.end-session-cancel,
+.leave-cancel {
   min-height: 44px;
   padding: 0 14px;
   background: none;
@@ -1082,6 +1094,10 @@ h1[tabindex='-1']:focus {
   font: inherit;
   font-size: 14px;
   cursor: pointer;
+}
+
+.leave-dialog h2 {
+  margin-bottom: 20px;
 }
 
 .end-session-dialog .end-session-summary {

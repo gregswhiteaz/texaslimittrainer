@@ -10,6 +10,7 @@ export const SCREEN_LIST = [
   { id: 'end-session-dialog', kind: 'dialog', component: 'EndSessionDialog' },
   { id: 'table', kind: 'screen', route: 'table' },
   { id: 'bust-dialog', kind: 'dialog', component: 'BustDialog' },
+  { id: 'leave-dialog', kind: 'dialog', component: 'LeaveDialog' },
   { id: 'ending', kind: 'screen', route: 'ending' },
   { id: 'session-report', kind: 'screen', route: 'report' },
 ] as const satisfies readonly ScreenEntry[];

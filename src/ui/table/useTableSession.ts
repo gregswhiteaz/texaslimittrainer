@@ -9,6 +9,7 @@ import {
   completedHand,
   countObserved,
   dealHand,
+  foldUserToLeave,
   MAX_SESSION_COUNT,
   nextHand,
   nextHandDelay,
@@ -58,6 +59,10 @@ export interface TableSessionOptions {
   readonly handStore?: HandStore;
   /** A stored session to continue instead of seating `config`: no start record is written (A-6). */
   readonly resume?: ResumedSession;
+  /** While true no deal or bot step is scheduled, and a bot reply in flight is dropped (TASK-10.2 A-2). */
+  readonly paused?: boolean;
+  /** Called once, after leave() was called, the hand is done and its write has settled (either way). */
+  readonly onLeft?: () => void;
 }
 
 /** A restored table ready to deal, with the stored session's id and start time (D-4). */
@@ -139,6 +144,8 @@ export function requestDecisionGrade(
  * mount, a resumed one included (Q-3); each user action stores the snapshot built from them.
  * Each user decision is graded by the advice worker as soon as it is made (TASK-9.3 A-1); the hand's record is
  * written from those entries once they have all resolved, and a failed grade fails the write (A-3).
+ * leave() folds the user's hand at once (TASK-10.2), deals nothing more and calls onLeft once the hand is
+ * done and its write has settled.
  */
 export function useTableSession({
   config,
@@ -149,6 +156,8 @@ export function useTableSession({
   createAdviceWorker = createProductionWorker,
   handStore,
   resume,
+  paused = false,
+  onLeft,
 }: TableSessionOptions): {
   table: TableState;
   /** The stored session's id (32 lowercase hex). */
@@ -158,6 +167,10 @@ export function useTableSession({
   act: (action: Action, hinted?: boolean) => void;
   dealNext: () => void;
   rebuy: () => void;
+  /** True from leave() on. */
+  leaving: boolean;
+  /** Folds the user's hand (foldUserToLeave) and ends the session after it; a no-op if already leaving. */
+  leave: () => void;
 } {
   const [table, setTable] = useState(() => resume?.table ?? seatSession(config));
   const reported = useRef<number | null>(null);
@@ -182,10 +195,16 @@ export function useTableSession({
   // Read through a ref so a new callback each render never restarts the next-hand timer (D-5).
   const callback = useRef(onHandComplete);
   const gradedCallback = useRef(onHandGraded);
+  const leftCallback = useRef(onLeft);
   useEffect(() => {
     callback.current = onHandComplete;
     gradedCallback.current = onHandGraded;
+    leftCallback.current = onLeft;
   });
+  const [leaving, setLeaving] = useState(false);
+  // Read in callbacks; set with `leaving` in leave().
+  const leavingRef = useRef(false);
+  const left = useRef(false);
   const write = useRef<Promise<void>>(Promise.resolve());
   const grades = useRef<DecisionGrades>(NO_GRADES);
   useEffect(() => {
@@ -193,6 +212,7 @@ export function useTableSession({
       requestDecisionGrade(createAdviceWorker, d),
     );
     const step = nextStep(table);
+    if (paused && (step === 'deal' || step === 'bot')) return undefined;
     if (step === 'deal') {
       const timer = setTimeout(() => {
         // Drawn outside the updater so a doubled updater call cannot draw twice.
@@ -246,7 +266,19 @@ export function useTableSession({
         callback.current?.(done);
       }
     }
-    const delay = nextHandDelay(table, holdNextHand);
+    if (leaving && step === 'done') {
+      let cancelled = false;
+      const notify = (): void => {
+        if (cancelled || left.current) return;
+        left.current = true;
+        leftCallback.current?.();
+      };
+      write.current.then(notify, notify);
+      return () => {
+        cancelled = true;
+      };
+    }
+    const delay = nextHandDelay(table, holdNextHand || leaving);
     if (delay !== null) {
       let cancelled = false;
       const timer = setTimeout(() => {
@@ -265,7 +297,17 @@ export function useTableSession({
       };
     }
     return undefined;
-  }, [table, newCode, holdNextHand, createAdviceWorker, handStore, sessionId, startedAt]);
+  }, [
+    table,
+    newCode,
+    holdNextHand,
+    createAdviceWorker,
+    handStore,
+    sessionId,
+    startedAt,
+    paused,
+    leaving,
+  ]);
 
   const act = useCallback((action: Action, hinted?: boolean) => {
     setTable((t) =>
@@ -279,6 +321,7 @@ export function useTableSession({
   /** Deals the next hand once its record is written, by the auto-deal's code path; a no-op unless the hand
    *  is done, on a bust (A-3), and never after a failed write. */
   const dealNext = useCallback(() => {
+    if (leavingRef.current) return;
     write.current.then(
       () => {
         const code = newCode();
@@ -291,6 +334,7 @@ export function useTableSession({
   /** Rebuys and deals the next hand once the bust hand's record is written (A-2); a no-op unless the user is
    *  busted, and never after a failed write. */
   const rebuy = useCallback(() => {
+    if (leavingRef.current) return;
     write.current.then(
       () => {
         const code = newCode();
@@ -300,5 +344,12 @@ export function useTableSession({
     );
   }, [newCode]);
 
-  return { table, sessionId, observedCounts, act, dealNext, rebuy };
+  const leave = useCallback(() => {
+    if (leavingRef.current) return;
+    leavingRef.current = true;
+    setLeaving(true);
+    setTable((t) => foldUserToLeave(t));
+  }, []);
+
+  return { table, sessionId, observedCounts, act, dealNext, rebuy, leaving, leave };
 }

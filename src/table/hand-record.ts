@@ -96,6 +96,9 @@ export interface HandRecord {
   readonly actions: readonly ActionRecord[];
   /** One per user decision, in order. */
   readonly decisions: readonly HandRecordDecision[];
+  /** Present (true) only on a hand the user left mid-hand: the user's last non-blind action is a fold that is
+   *  not a decision (REQ-004.8). Absent otherwise. */
+  readonly forcedFold?: true;
   readonly board: readonly Card[];
   /** null for a fold-out. */
   readonly shown: EarlierShowdown | null;
@@ -130,6 +133,13 @@ export interface HandStore {
 }
 
 const SESSION_ID = /^[0-9a-f]{32}$/;
+/** The user's non-blind actions, in order. */
+function userMade(actions: readonly ActionRecord[], userSeat: unknown): ActionRecord[] {
+  return actions.filter(
+    (a) => a.seat === userSeat && a.type !== 'small-blind' && a.type !== 'big-blind',
+  );
+}
+
 const USER_ACTION_TYPES: readonly string[] = ['fold', 'check', 'call', 'bet', 'raise'];
 const GRADES: readonly string[] = Object.keys(GRADE_LABELS);
 const GAME_TYPES: readonly string[] = ['cash', 'sit-and-go'];
@@ -217,6 +227,8 @@ export function handRecord(
     throw invalid('decisions');
   }
   const stake = tableStake(config);
+  const made = userMade(hand.actions, hand.userSeat);
+  const forcedFold = made.length === hand.userDecisions.length + 1 && made.at(-1)?.type === 'fold';
   return {
     sessionId,
     handNumber,
@@ -243,6 +255,7 @@ export function handRecord(
     actions: structuredClone(hand.actions),
     decisions:
       decisions === undefined ? hand.userDecisions.map(decisionRecord) : structuredClone(decisions),
+    ...(forcedFold && { forcedFold: true }),
     board: [...hand.board],
     shown: structuredClone(hand.shown),
     result: structuredClone(hand.result),
@@ -419,22 +432,23 @@ function checkDecision(
   if (typeof decision.hinted !== 'boolean') throw invalid(`${field}.hinted`);
 }
 
-/** Checks every decision entry, then that entry i is the user's i-th non-blind action (A-3). `actions` must
- *  already be valid. */
+/** Checks every decision entry, then that entry i is the user's i-th non-blind action (A-3). With
+ *  `forcedFold` the made actions are the decisions plus one final fold (D-2). `actions` must already be valid. */
 function checkDecisions(
   value: unknown,
   actions: readonly ActionRecord[],
   userSeat: unknown,
   seats: ReadonlySet<unknown>,
+  forcedFold: boolean,
 ): void {
   const decisions = array(value, 'decisions', 0, MAX_ACTIONS);
   decisions.forEach((item, i) => checkDecision(item, `decisions[${i}]`, userSeat, seats));
-  const made = actions.filter(
-    (a) => a.seat === userSeat && a.type !== 'small-blind' && a.type !== 'big-blind',
-  );
-  if (made.length !== decisions.length) throw invalid('decisions');
-  made.forEach((record, i) => {
-    const decision = decisions[i] as HandRecordDecision;
+  const made = userMade(actions, userSeat);
+  if (made.length !== decisions.length + (forcedFold ? 1 : 0)) throw invalid('decisions');
+  if (forcedFold && made.at(-1)?.type !== 'fold') throw invalid('forcedFold');
+  decisions.forEach((item, i) => {
+    const record = made[i] as ActionRecord;
+    const decision = item as HandRecordDecision;
     if (decision.street !== record.street) throw invalid(`decisions[${i}].street`);
     const { type, amount = 0 } = decision.action as { type: string; amount?: number };
     if (type !== record.type || amount !== record.amount) throw invalid(`decisions[${i}].action`);
@@ -444,7 +458,7 @@ function checkDecisions(
 /** Validates an untrusted stored value; returns it typed (not copied). Extra properties are ignored.
  *  Besides each field's shape it checks the fields against each other: every seat named is a dealt-in seat,
  *  each seat shows one pair (the user's is userHoleCards), no card appears twice, the level matches the
- *  game type, and the decisions are the user's non-blind actions in order.
+ *  game type, and the decisions are the user's non-blind actions in order (plus a final fold iff forcedFold).
  *  RangeError('Invalid hand record: <field>') naming the first failing field. */
 export function parseHandRecord(value: unknown): HandRecord {
   const record = object(value, 'record');
@@ -488,11 +502,13 @@ export function parseHandRecord(value: unknown): HandRecord {
     whole(action.amount, `${field}.amount`, 0);
     whole(action.added, `${field}.added`, 0);
   });
+  if (record.forcedFold !== undefined && record.forcedFold !== true) throw invalid('forcedFold');
   checkDecisions(
     record.decisions,
     record.actions as readonly ActionRecord[],
     record.userSeat,
     seats,
+    record.forcedFold === true,
   );
   const board = cards(record.board, 'board', 0, 5);
   if (record.shown !== null) {

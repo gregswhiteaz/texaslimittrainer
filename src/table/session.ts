@@ -4,6 +4,7 @@ import {
   applyAction,
   assertChips,
   createHand,
+  forceFold,
   legalActions,
   type Action,
   type ActionRecord,
@@ -487,6 +488,22 @@ export function nextStep(table: TableState): NextStep {
   }
   if (hand.result !== null) return 'done';
   return hand.toAct === table.config.userSeat ? 'user' : 'bot';
+}
+
+/** A-1: true iff a hand is dealt and has no result (nextStep is 'user' or 'bot'). */
+export function handInProgress(table: TableState): boolean {
+  const step = nextStep(table);
+  return step === 'user' || step === 'bot';
+}
+
+/** REQ-004.8: `table` with the user's hand folded by forceFold when a hand is in progress and the user holds
+ *  cards and is not all-in; otherwise `table` itself (same object). userDecisions is never changed. */
+export function foldUserToLeave(table: TableState): TableState {
+  const { hand } = table;
+  if (hand === null || !handInProgress(table)) return table;
+  const user = hand.players.find((p) => p.seat === table.config.userSeat);
+  if (user === undefined || user.folded || user.allIn) return table;
+  return { ...table, hand: forceFold(hand, user.seat) };
 }
 
 export function dealHand(table: TableState, code: ReplayCode): TableState {

@@ -134,6 +134,13 @@ test('every listed screen and dialog shows only play money', async ({ page }) =>
   await expect(page.locator('#hint-card [data-part="hint-action"]')).toHaveText(/^Recommended: \S/);
   await checkPlayMoney(page, 'table');
 
+  await page.getByRole('button', { name: 'Leave table' }).click();
+  const leaveDialog = page.getByRole('dialog', { name: 'Leave now? Your hand will be folded.' });
+  await expect(leaveDialog).toBeVisible();
+  await checkPlayMoney(page, 'leave-dialog');
+  await leaveDialog.getByRole('button', { name: 'Cancel', exact: true }).click();
+  await expect(leaveDialog).toBeHidden();
+
   // A lone preflop fold opens no Hand Review (REQ-043.12), so the user checks or calls to the result.
   await playToResult(page, 14, fakeSlice(page), { play: 'call' });
   await expect(page.getByRole('complementary', { name: 'Hand #14 review' })).toBeVisible();

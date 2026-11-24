@@ -47,6 +47,7 @@ Values are plain structured-clone data. Cards are engine integers 0..51 (`src/en
 | `userHoleCards` | `[Card, Card]`                                   | The user's own hole cards                                                                                                       |
 | `actions`       | `{ street, seat, type, amount, added }[]`        | Blinds first, then every action in order (`ActionRecord`)                                                                       |
 | `decisions`     | decision entries (below), 0..400                 | One per user decision, in order (since TASK-3.12)                                                                               |
+| `forcedFold`    | `true`, optional                                 | Only on a hand the user left mid-hand (TASK-10.2): the user's last non-blind action is a fold that is not a decision            |
 | `board`         | `Card[]`, 0..5                                   | Community cards dealt                                                                                                           |
 | `shown`         | `{ shown: { seat, holeCards }[] }` \| null       | Hands shown at showdown; null for a fold-out                                                                                    |
 | `result`        | `{ endedBy, showdown, awards, returned? }`       | `HandResult`: shown hands with rank, pot awards (`{ pot, amount, winners: { seat, amount }[] }`), and any uncalled bet returned |
@@ -158,6 +159,16 @@ Since TASK-3.12 it also checks `decisions` (a missing field is invalid: records 
   or finite; `hinted` is a boolean.
 - The entries match the user's non-blind `actions` one to one, in order: same count (else `decisions`), and the
   same street (`decisions[i].street`), type and amount (`decisions[i].action`).
+
+Since TASK-10.2 a record may carry `forcedFold`. Leave table during a hand folds the user's hand at once, even
+out of turn; that fold is in `actions` but is not a decision, so it has no grade and no `decisions` entry.
+Error rates, hint usage and leaks read `decisions` only, so the forced fold never counts in them.
+
+- `forcedFold` is absent or exactly `true` (else `forcedFold`). It is written only when the user's non-blind
+  actions are the decisions plus one final fold, and left out of every other record, so earlier records are
+  unchanged and still valid (no database version change).
+- With `forcedFold`, the user's non-blind `actions` number the decisions plus one (else `decisions`), the last
+  of them is a `fold` (else `forcedFold`), and the entries match the actions before it as above.
 
 Error fields name the path, for example `Invalid hand record: decisions[2].grade.ruleId`.
 

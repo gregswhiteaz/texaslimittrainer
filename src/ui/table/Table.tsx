@@ -28,6 +28,7 @@ import {
 import {
   buyIn,
   completedHand,
+  handInProgress,
   userBusted,
   type CompletedHand,
   type TableState,
@@ -42,6 +43,7 @@ import { CardBack, PlayingCard } from '../cards/PlayingCard';
 import { ActionBar } from './ActionBar';
 import { BustDialog } from './BustDialog';
 import { HintCard, type HintStatus } from './HintCard';
+import { LeaveDialog } from './LeaveDialog';
 import { ReviewPanel } from './ReviewPanel';
 import { useTableSession, type TableSessionOptions } from './useTableSession';
 
@@ -86,6 +88,11 @@ export interface TableViewProps {
   readonly reviewBadge?: ReviewBadge | null;
   /** Opens the review from the badge. */
   readonly onOpenReview?: () => void;
+  /** Non-null while the Leave-now dialog is open (TASK-10.2). */
+  readonly leavePrompt?: { readonly onConfirm: () => void; readonly onCancel: () => void } | null;
+  /** A-4: header Home and Leave table disabled; no bust dialog, review panel, badge or Deal next. */
+  readonly leaving?: boolean;
+  readonly leaveRef?: React.Ref<HTMLButtonElement>;
 }
 
 function SeatMarkers({ seat }: { readonly seat: SeatView }): React.JSX.Element {
@@ -231,6 +238,9 @@ export function TableView({
   onHint,
   reviewBadge = null,
   onOpenReview,
+  leavePrompt = null,
+  leaving = false,
+  leaveRef,
 }: TableViewProps): React.JSX.Element {
   const model = tableView(table);
   const bar = userActionBar(table);
@@ -241,11 +251,17 @@ export function TableView({
         <p className="table-header-line">{model.header}</p>
         <div className="table-header-actions">
           {onHome && (
-            <button type="button" className="table-home" onClick={onHome}>
+            <button type="button" className="table-home" disabled={leaving} onClick={onHome}>
               Home
             </button>
           )}
-          <button type="button" className="table-leave" onClick={onLeave}>
+          <button
+            ref={leaveRef}
+            type="button"
+            className="table-leave"
+            disabled={leaving}
+            onClick={onLeave}
+          >
             Leave table
           </button>
         </div>
@@ -304,12 +320,12 @@ export function TableView({
             )}
             {result !== null && <HandResult result={result} />}
           </section>
-          {review !== null && result !== null && (
+          {!leaving && review !== null && result !== null && (
             <button type="button" className="deal-next" ref={dealNextRef} onClick={onDealNext}>
               {userBusted(table) ? 'Continue' : 'Deal next hand'}
             </button>
           )}
-          {reviewBadge !== null && review === null && result !== null && (
+          {!leaving && reviewBadge !== null && review === null && result !== null && (
             <button
               type="button"
               className="review-badge"
@@ -321,7 +337,7 @@ export function TableView({
             </button>
           )}
         </div>
-        {review?.open === true && review.entries !== null && (
+        {!leaving && review?.open === true && review.entries !== null && (
           <ReviewPanel
             handNumber={table.handNumber}
             entries={review.entries}
@@ -331,8 +347,11 @@ export function TableView({
         )}
       </div>
       {/* Not over a held review (A-3); Continue clears it and the dialog opens (TASK-9.2). */}
-      {table.config.gameType === 'cash' && userBusted(table) && review === null && (
+      {!leaving && table.config.gameType === 'cash' && userBusted(table) && review === null && (
         <BustDialog amount={buyIn(table.config.stake)} onRebuy={onRebuy} onLeave={onLeave} />
+      )}
+      {leavePrompt !== null && (
+        <LeaveDialog onConfirm={leavePrompt.onConfirm} onCancel={leavePrompt.onCancel} />
       )}
     </>
   );
@@ -383,12 +402,16 @@ export function Table({
     },
     [],
   );
-  const { table, sessionId, observedCounts, act, dealNext, rebuy } = useTableSession({
-    ...options,
-    onHandComplete,
-    onHandGraded,
-    holdNextHand: holdNextHand || review !== null,
-  });
+  const [prompting, setPrompting] = useState(false);
+  const { table, sessionId, observedCounts, act, dealNext, rebuy, leaving, leave } =
+    useTableSession({
+      ...options,
+      onHandComplete,
+      onHandGraded,
+      holdNextHand: holdNextHand || review !== null,
+      paused: prompting,
+      onLeft: () => onLeave(sessionId),
+    });
 
   const [hint, setHint] = useState(NO_HINT);
   const { createAdviceWorker = createProductionWorker } = options;
@@ -445,11 +468,32 @@ export function Table({
     setBadge(null);
   }, [badge]);
 
+  const leaveButton = useRef<HTMLButtonElement>(null);
+  // A-1, A-7: a hand in progress (as last rendered) asks first; between hands Leave table leaves at once.
+  const onLeaveClick = (): void => {
+    if (leaving) return;
+    if (handInProgress(table)) setPrompting(true);
+    else onLeave(sessionId);
+  };
+  const leavePrompt = prompting
+    ? {
+        onConfirm: () => {
+          setPrompting(false);
+          leave();
+        },
+        onCancel: () => {
+          setPrompting(false);
+          // WebKit does not focus a clicked button, so focus is set here (A-3).
+          leaveButton.current?.focus();
+        },
+      }
+    : null;
+
   return (
     <TableView
       table={table}
       onAct={onAct}
-      onLeave={() => onLeave(sessionId)}
+      onLeave={onLeaveClick}
       onHome={onHome}
       review={review}
       onDealNext={onDealNext}
@@ -460,6 +504,9 @@ export function Table({
       onHint={onHint}
       reviewBadge={badge?.entries ? summaryBadge(badge.entries.map((e) => e.grade)) : null}
       onOpenReview={openReview}
+      leavePrompt={leavePrompt}
+      leaving={leaving}
+      leaveRef={leaveButton}
     />
   );
 }

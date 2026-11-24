@@ -33,10 +33,25 @@ steps back off its history entry, so no further hand is dealt) and an empty busy
 for any hand write still running and then calls `endSession` ([reports.md](../storage/reports.md)). With at
 least one completed hand the Session report opens, its `Session report` heading focused: the header line
 (game, players, limits, hands) and the cash tiles Result, BB/100 and Rebuys, then `Back to Home`. With 0
-completed hands the session is deleted and Home opens with no report. In the middle of a hand, the unfinished
-hand is dropped as with the Home control (the Leave-now dialog comes with TASK-10.2). An ended session never
-shows in Resume. If the session cannot be ended, the error is logged and Home opens with the session still
-paused.
+completed hands the session is deleted and Home opens with no report. An ended session never shows in Resume.
+If the session cannot be ended, the error is logged and Home opens with the session still paused.
+
+**Leave table during a hand (TASK-10.2, REQ-004.7, REQ-004.8).** From the hand's deal until its result shows,
+Leave table first opens a modal dialog, `Leave now? Your hand will be folded.`, with `Cancel` (focused) and
+`Confirm`. Before the deal and once the result shows, Leave table ends the session at once, as above.
+
+- While the dialog is open, play is frozen: no bot acts and no hand is dealt. `Cancel` (or Escape) closes it,
+  returns focus to Leave table and the hand goes on with the same cards, stacks and player to act.
+- `Confirm` folds the user's hand at once, even when a bot is to act, unless the user is all-in (the cards stay
+  in to the showdown and the user is paid any pot won) or has already folded. The table shows the fold and the
+  bots play the hand out. Meanwhile Home and Leave table are disabled, and no Hand Review, review badge, Deal
+  next hand or bust dialog shows. No further hand is dealt.
+- The hand is graded and stored like any completed hand, and once its write has settled the session ends as
+  above, so its Session report counts it. If that write fails, the error is logged and the session still ends
+  with the hands that were stored.
+- The forced fold is not a decision: it has no grade and no entry in the hand record's `decisions`, so it never
+  counts in error rates, hint usage or leaks. The record carries `forcedFold: true`
+  ([hand-records.md](../storage/hand-records.md)).
 
 **The bust dialog (TASK-3.11).** When a cash hand ends with the user on $0, a modal `Out of chips` dialog
 offers `Rebuy` and `Leave table`, and the page behind it (the header's Home and Leave table included) is inert.

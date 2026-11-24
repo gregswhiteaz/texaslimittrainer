@@ -666,20 +666,62 @@ export function applyAction(state: HandState, action: Action): ApplyResult {
     actions: [...state.actions, { street, seat: actor.seat, type: action.type, amount, added }],
   };
 
+  return {
+    ok: true,
+    state: settle(next, players, (open) => clockwiseAfter(open, actor.seat)[0] as SeatNumber),
+  };
+}
+
+/**
+ * The step after an action: one seat left with cards → foldOut; betting closed → endRound; otherwise
+ * `next` with toAct = nextToAct(open seats, ascending).
+ */
+function settle(
+  next: HandState,
+  players: readonly PlayerState[],
+  nextToAct: (open: readonly SeatNumber[]) => SeatNumber,
+): HandState {
   const active = players.filter((p) => !p.folded);
-  if (active.length === 1) {
-    return { ok: true, state: foldOut(next, players, (active[0] as PlayerState).seat) };
-  }
+  if (active.length === 1) return foldOut(next, players, (active[0] as PlayerState).seat);
   const open = active.filter((p) => !p.allIn);
   if (
     open.every((p) => p.hasActed && p.streetContribution === next.currentBet) ||
     bettingOver(players)
   ) {
-    return { ok: true, state: endRound(next, players) };
+    return endRound(next, players);
   }
-  const toAct = clockwiseAfter(
-    open.map((p) => p.seat),
-    actor.seat,
-  )[0] as SeatNumber;
-  return { ok: true, state: { ...next, toAct } };
+  return { ...next, toAct: nextToAct(open.map((p) => p.seat)) };
+}
+
+/**
+ * REQ-004.8: folds `seat` now, whether or not it is to act and even when it could check. Same history entry
+ * and pot-eligibility change as a fold through applyAction, and hasActed true. Then the hand settles exactly
+ * as after applyAction; toAct is unchanged if another seat was to act. RangeError('Cannot force a fold: …')
+ * if the hand is complete, `seat` is not dealt in, has folded or is all-in. Never mutates `state`.
+ */
+export function forceFold(state: HandState, seat: SeatNumber): HandState {
+  if (state.result !== null) throw new RangeError('Cannot force a fold: the hand is complete');
+  const folder = state.players.find((p) => p.seat === seat);
+  if (folder === undefined)
+    throw new RangeError(`Cannot force a fold: seat ${seat} is not dealt in`);
+  if (folder.folded) throw new RangeError(`Cannot force a fold: seat ${seat} has folded`);
+  if (folder.allIn) throw new RangeError(`Cannot force a fold: seat ${seat} is all-in`);
+  const players = state.players.map((p): PlayerState =>
+    p.seat === seat ? { ...p, folded: true, hasActed: true } : p,
+  );
+  const street = state.street as Exclude<Street, 'showdown'>;
+  const next: HandState = {
+    ...state,
+    players,
+    pots: state.pots.map((pot) => ({
+      ...pot,
+      eligible: pot.eligible.filter((s) => s !== seat),
+    })),
+    actions: [...state.actions, { street, seat, type: 'fold', amount: 0, added: 0 }],
+  };
+  return settle(next, players, (open) =>
+    state.toAct === seat
+      ? (clockwiseAfter(open, seat)[0] as SeatNumber)
+      : (state.toAct as SeatNumber),
+  );
 }
