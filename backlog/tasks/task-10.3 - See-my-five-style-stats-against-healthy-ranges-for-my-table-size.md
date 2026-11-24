@@ -1,11 +1,11 @@
 ---
 id: TASK-10.3
 title: See my five style stats against healthy ranges for my table size
-status: In Progress
+status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-24T21:21:00Z'
+updated_date: '2026-11-24T21:22:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -18,6 +18,7 @@ references:
 documentation:
   - doc-1
   - doc-2
+  - doc-126
 parent_task_id: TASK-10
 priority: high
 type: feature
@@ -90,4 +91,12 @@ AC#2 narrowed per TASK-10.3 Q-2 (auto-accepted): bots measure WTSD ~94% (advice 
 Build: healthy-ranges.json (15 ranges, original justifications), style counts stored once on the report at session end, report style section (in range / too high / too low / not enough data, approximate sizes); slow 100k TAG check VPIP 22.2 PFR 16.2 Agg 63.1 W$SD 49.9 inside 6-max ranges; npm test 1283 passed, Playwright 300 passed; gate PASS.
 
 Judge r1 PASS 15/15; live 2/6/4/10-player reports in Chromium+WebKit match independent counts; slow 100k check passed; CI 45488461450 green.
+
+Follow-ups: TASK-7.32 (high) created at spec time (advised play folds ~3% postflop; WTSD vs bots). Not tracked: unbounded hand reads on end (only self-inflicted via own local storage), slow-test rounding/console.log and NITs (test-only).
 <!-- SECTION:NOTES:END -->
+
+## Final Summary
+
+<!-- SECTION:FINAL_SUMMARY:BEGIN -->
+Session Report now shows VPIP, PFR, Aggression, WTSD and W$SD against 15 authored healthy ranges (heads-up, 6-max, full ring), with in range / too high / too low / not enough data labels; 3, 4, 5, 7, 8 players are marked approximate. The user's style counts are stored once on the report at session end (optional field, no DB change); old reports show no section. Verified: judge round 1 passed 15/15; npm test 1283 passed, e2e 300 passed, lint and typecheck clean; opt-in 100,000-hand TAG check passed. Review: Q-1, Q-2, two locked TASK-10.1 test edits and A-1..A-11 (including copy) were auto-accepted, please review. Risk: AC#2 narrowed; bots show about 94% WTSD, so a user following the advice sees WTSD too high until TASK-7.32 lands. Minor notes: unbounded hand reads on end, slow-test rounding.
+<!-- SECTION:FINAL_SUMMARY:END -->
