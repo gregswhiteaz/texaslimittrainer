@@ -1317,6 +1317,12 @@
       "event": "unlock",
       "file": "tests/storage/hand-records.acceptance.test.ts",
       "reason": "TASK-3.12 Q-3: new decisions field \u2014 take decisions out of rest and check its length (one-line, no assertion dropped)"
+    },
+    {
+      "t": "2026-11-24T01:55:52",
+      "event": "unlock",
+      "file": "e2e/hand-records.spec.ts",
+      "reason": "TASK-3.12 Q-4: oldRecord() fixture gains the now-required decisions field (data only, no assertion change)"
     }
   ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-3.9",
@@ -1330,6 +1336,7 @@
   },
   "relock_pending": [
     "e2e/hand-records.spec.ts",
-    "tests/storage/hand-records.acceptance.test.ts"
+    "tests/storage/hand-records.acceptance.test.ts",
+    "e2e/hand-records.spec.ts"
   ]
 }

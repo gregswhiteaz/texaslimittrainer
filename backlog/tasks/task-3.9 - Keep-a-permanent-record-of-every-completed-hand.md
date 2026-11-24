@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-24T08:20:00Z'
+updated_date: '2026-11-24T08:55:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -106,6 +106,8 @@ Judge R1 PASS 20/20 (own Playwright + fake-indexeddb checks: every field vs UI a
 Locked e2e/hand-records.spec.ts made timing-robust by TASK-1.55 (expect.poll on exact counts; count kept).
 
 Locked test tests/storage/hand-records.acceptance.test.ts unlocked for TASK-3.12 Q-3 (decisions field, one-line change).
+
+Locked e2e/hand-records.spec.ts unlocked for TASK-3.12 Q-4 (oldRecord fixture gains decisions; no assertion change).
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary

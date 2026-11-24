@@ -1305,7 +1305,14 @@
       "skips": 0
     }
   },
-  "history": [],
+  "history": [
+    {
+      "t": "2026-11-24T01:55:53",
+      "event": "unlock",
+      "file": "e2e/hand-records.spec.ts",
+      "reason": "TASK-3.12 Q-4: oldRecord() fixture gains the now-required decisions field (data only, no assertion change)"
+    }
+  ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-1.55",
   "spec_sha256": "1cc1111b0c451f2175c554121552276e2e5c5f408b47aa7bd1e8cab5b190e4cc",
   "review_findings": {
@@ -1314,5 +1321,8 @@
   "doc_id": "doc-103",
   "judge_results": {
     "1": "PASS"
-  }
+  },
+  "relock_pending": [
+    "e2e/hand-records.spec.ts"
+  ]
 }

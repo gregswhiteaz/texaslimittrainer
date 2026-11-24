@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-24T08:21:00Z'
+updated_date: '2026-11-24T08:51:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -88,4 +88,6 @@ AC added from TASK-7.4 follow-up (doc-19).
 AC added from TASK-7.13 follow-up (security MINOR non-object-snapshot-entry-typeerror, doc-104).
 
 AC#6 reworded per TASK-3.12 Q-2 (auto-accepted): snapshot seats 1-10, matching the 10-seat table bound.
+
+Build: hand records store one decision entry per user decision (advice + grade = hint, ACTION_RANGE_ADVICE, decision-time snapshot), parseHandRecord validation incl. cross-check, observedBySeat rejects null entries and seats outside 1-10; npm test 1179 passed, 10k --check-advice 0 mismatches; gate PASS. Block 1 resolved (SPEC-01/05 expected values corrected to the hint's options).
 <!-- SECTION:NOTES:END -->

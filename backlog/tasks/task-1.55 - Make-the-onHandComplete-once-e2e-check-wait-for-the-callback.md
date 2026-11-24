@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-23T15:30:00Z'
-updated_date: '2026-11-23T15:48:00Z'
+updated_date: '2026-11-24T08:55:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -45,6 +45,8 @@ Full spec: doit/TASK-1.55/spec.md
 Build: 4 immediate onHandComplete count reads → expect.poll with the same exact checks; --repeat-each 20 both browsers 360/360; gate PASS.
 
 Judge R1 PASS 2/2 (200 ms delay mutant: base fails 10/10, branch passes 20/20; duplicate-call mutant still fails 6/6; 60/60 repeats).
+
+Locked e2e/hand-records.spec.ts unlocked for TASK-3.12 Q-4 (oldRecord fixture gains decisions; no assertion change).
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary

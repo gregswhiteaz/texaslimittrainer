@@ -1,0 +1,153 @@
+{
+ "reviewer": "code",
+ "round": 1,
+ "rubric": [
+  {
+   "item": "SPEC-01 correctness",
+   "result": "pass"
+  },
+  {
+   "item": "SPEC-01 test strength",
+   "result": "pass"
+  },
+  {
+   "item": "SPEC-02 correctness",
+   "result": "pass"
+  },
+  {
+   "item": "SPEC-02 test strength",
+   "result": "pass"
+  },
+  {
+   "item": "SPEC-03 correctness",
+   "result": "pass"
+  },
+  {
+   "item": "SPEC-03 test strength",
+   "result": "pass"
+  },
+  {
+   "item": "SPEC-04 correctness",
+   "result": "pass"
+  },
+  {
+   "item": "SPEC-04 test strength",
+   "result": "pass"
+  },
+  {
+   "item": "SPEC-05 correctness",
+   "result": "pass"
+  },
+  {
+   "item": "SPEC-05 test strength",
+   "result": "pass"
+  },
+  {
+   "item": "SPEC-06 correctness",
+   "result": "pass"
+  },
+  {
+   "item": "SPEC-06 test strength",
+   "result": "pass"
+  },
+  {
+   "item": "SPEC-07 correctness",
+   "result": "pass"
+  },
+  {
+   "item": "SPEC-07 test strength",
+   "result": "pass"
+  },
+  {
+   "item": "SPEC-08 correctness",
+   "result": "pass"
+  },
+  {
+   "item": "SPEC-08 test strength",
+   "result": "pass"
+  },
+  {
+   "item": "SPEC-09 correctness",
+   "result": "pass"
+  },
+  {
+   "item": "SPEC-09 test strength",
+   "result": "pass"
+  },
+  {
+   "item": "SPEC-10 correctness",
+   "result": "pass"
+  },
+  {
+   "item": "SPEC-10 test strength",
+   "result": "pass"
+  },
+  {
+   "item": "SPEC-11 correctness",
+   "result": "pass"
+  },
+  {
+   "item": "SPEC-11 test strength",
+   "result": "pass"
+  },
+  {
+   "item": "SPEC-12 correctness",
+   "result": "pass"
+  },
+  {
+   "item": "SPEC-12 test strength",
+   "result": "pass"
+  },
+  {
+   "item": "scope",
+   "result": "pass"
+  },
+  {
+   "item": "concision",
+   "result": "pass"
+  },
+  {
+   "item": "clarity",
+   "result": "pass"
+  }
+ ],
+ "findings": [
+  {
+   "fingerprint": "tests/table/decision-record.test.ts:cross-check-amount-untested",
+   "severity": "MINOR",
+   "file": "tests/table/decision-record.test.ts",
+   "line": 72,
+   "issue": "The A-3 cross-check compares street, type and amount, but no parse case changes only the amount. If `amount !== record.amount` were dropped from checkDecisions (src/table/hand-record.ts:424), every test would still pass. The other bound checks without a case (explanation over 2000, opponentBasis text 1..200, bad alternative, recommended.seat, non-array decisions, non-object entry) are also untested. The spec does not list these cases, so this is not a SPEC violation.",
+   "evidence": "faults list (lines 55-73) changes action.type on entry 3 but never action.amount; it has no case for explanation length, opponentBasis[j].text, alternative or recommended.",
+   "fix": "Add fault cases: `(at(d,1).action as Mutable).amount += 1` -> 'decisions[1].action'; `at(d,0).explanation = 'x'.repeat(2001)` -> 'decisions[0].explanation'; `at(d,1).alternative = 'shove'` -> 'decisions[1].alternative'; `(at(d,0).recommended as Mutable).seat = 2` -> 'decisions[0].recommended.seat'."
+  },
+  {
+   "fingerprint": "tests/table/decision-record.test.ts:recommended-not-tobe-tautology",
+   "severity": "MINOR",
+   "file": "tests/table/decision-record.test.ts",
+   "line": 91,
+   "issue": "`expect(entry.recommended).not.toBe(advice.move)` compares against a `move` from a separate gradeView call, so the two objects are always different and the check can't fail. Dropping the `{ ...advice.move }` copy in decisionRecord would not be caught. The `recommended.seat = 99` mutation later is not checked against anything either.",
+   "evidence": "`advice` comes from `gradeView(decision.view, ...)` on line 88, independent of the call inside decisionRecord.",
+   "fix": "Drop the tautological assertion, or spy on/stub the recommendation so the same `move` object is visible (for example call decisionRecord twice and assert `a.recommended !== b.recommended` while mutating `a.recommended` leaves `b` unchanged). The property is mostly moot because advice is freshly computed on each call."
+  },
+  {
+   "fingerprint": "src/table/hand-record.ts:decision-record-duplicated-branch-fields",
+   "severity": "NIT",
+   "file": "src/table/hand-record.ts",
+   "line": 179,
+   "issue": "`explanation`, `grade` and `hinted: false` are repeated in both branches of the ternary even though `common` exists for shared fields.",
+   "evidence": "Lines 179-181 and 191-193 are identical.",
+   "fix": "Move `explanation: advice.explanation, grade, hinted: false` into `common` (key order in the stored object does not matter to toEqual/parse)."
+  },
+  {
+   "fingerprint": "tests/support/table-scenarios.ts:default-table-after-trivial-wrapper",
+   "severity": "NIT",
+   "file": "tests/support/table-scenarios.ts",
+   "line": 152,
+   "issue": "defaultTableAfter is now a one-line pass-through to userTableAfter.",
+   "evidence": "`return userTableAfter(fixed, moves);`",
+   "fix": "Optionally call userTableAfter directly for KINGS_SHOWDOWN, AVA_UNCONTESTED and SPLIT_STRAIGHT and delete the wrapper."
+  }
+ ],
+ "summary": "All 12 SPEC items are implemented as specified, with the approved fix-brief correction for SPEC-01/05 (stored advice = worker grade path with ACTION_RANGE_ADVICE; recommended raise/bet/bet/call, grades correct/correct/minor/correct, entry 2 aggression-margin). SPEC-01 and SPEC-02 deep-compare every entry against an independent handleAdviceRequest('grade') call, which is strong. The SPEC-06 message checks are correct. All SPEC-07 listed cases are present. The D-3 locked edit in tests/storage/hand-records.acceptance.test.ts only adds `decisions` to the destructure plus `toHaveLength(6)`, and the rest toEqual is unchanged, so nothing was loosened. tests/storage/hand-store.test.ts keeps all assertions and only caches the decisions it grades (equivalent data). tests/support/table-scenarios.ts routes user moves through applyUserAction (same config/button 6/replay code), which adds userDecisions to three fixtures, and the full suite passes. Reviewer ran SPEC-10: 10,000-hand seed-42 playtest output is byte-identical to main (cmp) with 0 invariant violations; the --check-advice run exits 0 with 0 invariant violations. The targeted tests pass (8 files, 33 tests). No BLOCKER or MAJOR findings. The two MINOR findings are test-strength gaps outside the spec's listed cases."
+}

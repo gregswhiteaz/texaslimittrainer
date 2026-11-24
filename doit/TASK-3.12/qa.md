@@ -18,3 +18,7 @@
 ## Block 1 — SPEC-01/SPEC-05 expected values contradicted the stored = hint rule
 The expected REVIEW_FOUR values were copied from tests/table/review.acceptance.test.ts, which grades with default unseen options; the hint, the app review (src/table/review.ts:67) and the stored record all use ACTION_RANGE_ADVICE. Resolution (option 1): keep stored = hint; SPEC-01 expects recommended [raise, bet, bet, call] and grades [correct, correct, minor, correct]; SPEC-05 margin check moves to entry 2 (turn, aggression-margin, numeric margin equal to the worker result).
 **Answer: auto-accepted (recommended)** — recorded spec correction; listed for review.
+
+## Build note — locked e2e fixture (owners TASK-3.9, TASK-1.55)
+CI run 45359725866: e2e/hand-records.spec.ts oldRecord() seeds records without `decisions`, now rejected per Q-4. Fixture gains a `decisions` field consistent with its actions; no assertion changed. Unlocked under both owners.
+**Answer: auto-accepted (recommended)** — cross-story locked edit listed for review.
