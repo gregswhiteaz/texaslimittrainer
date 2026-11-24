@@ -3,96 +3,96 @@
     "id": "SPEC-01",
     "verifies": "AC#1, DoD#2",
     "verification": "acceptance `tests/stats/leaks.acceptance.test.ts::AC#1 classifies turn call, capped river call, river fold and flop bet`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-02",
     "verifies": "AC#2, DoD#1, DoD#2, DoD#10",
     "verification": "acceptance `tests/stats/leaks.acceptance.test.ts::AC#2 all 15 postflop categories have a title, evidence name and a one-sentence fix`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-03",
     "verifies": "AC#3, DoD#2",
     "verification": "acceptance `tests/stats/leaks.acceptance.test.ts::AC#3 4 of 10 turn calls graded as errors is a leak`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-04",
     "verifies": "AC#4, DoD#2",
     "verification": "acceptance `tests/stats/leaks.acceptance.test.ts::AC#4 7 river raises all Major is not a leak`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-05",
     "verifies": "AC#5, DoD#2",
     "verification": "acceptance `tests/stats/leaks.acceptance.test.ts::AC#5 3 of 10 flop bets is not a leak`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-06",
     "verifies": "AC#6, DoD#2",
     "verification": "acceptance `tests/stats/leaks.acceptance.test.ts::AC#6 hinted decisions count toward neither threshold`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-07",
     "verifies": "AC#7, DoD#2",
     "verification": "acceptance `tests/ui/report-leaks.acceptance.test.tsx::AC#7 a session with one leak shows its title, evidence and fix`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-08",
     "verifies": "AC#8, DoD#2",
     "verification": "acceptance `tests/ui/report-leaks.acceptance.test.tsx::AC#8 a session without leaks shows the no-leaks sentence`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-09",
     "verifies": "AC#2, DoD#2",
     "verification": "unit `tests/stats/leaks.test.ts::parseLeakCategories rejects malformed category data`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-10",
     "verifies": "AC#1, AC#6, DoD#2",
     "verification": "unit `tests/stats/leaks.test.ts::counts unhinted postflop decisions per category and applies the thresholds`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-11",
     "verifies": "AC#3, DoD#2",
     "verification": "unit `tests/table/session-report-leaks.test.ts::leakCounts is present exactly when errors is`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-12",
     "verifies": "DoD#2",
     "verification": "unit `tests/table/session-report-leaks.test.ts::parseSessionReport validates leakCounts`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-13",
     "verifies": "AC#8, DoD#8, DoD#9",
     "verification": "acceptance `e2e/report-leaks.spec.ts::Leave table shows the leaks section from the stored decisions`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-14",
     "verifies": "DoD#2, DoD#3, DoD#4, DoD#5, DoD#6, DoD#11",
     "verification": "command `npm run lint && npm run typecheck && npm test`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-15",
     "verifies": "DoD#1, DoD#10, DoD#12",
     "verification": "manual `docs/stats/leaks.md`, `docs/storage/reports.md` section \"leakCounts\" and `backlog doc list --plain` entry for TASK-10.5",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-16",
     "verifies": "DoD#7, DoD#13",
     "verification": "manual `git diff --stat main -- src/engine src/bots src/advice` is empty",
-    "status": "pending"
+    "status": "pass"
   }
 ]
