@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-24T22:50:00Z'
+updated_date: '2026-11-24T23:10:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -82,3 +82,9 @@ Plan key: E10-S06 · Dream: limit-holdem-trainer
 
 Full spec: doit/TASK-10.5/spec.md
 <!-- SECTION:PLAN:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+Build: leak-categories.json (approved copy), leakCounts stored once at session end, 'Biggest leaks this session' report section; npm test 1303 passed, Playwright 304 passed; gate PASS.
+<!-- SECTION:NOTES:END -->
