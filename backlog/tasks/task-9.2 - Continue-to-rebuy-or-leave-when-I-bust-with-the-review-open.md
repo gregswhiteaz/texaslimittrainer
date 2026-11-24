@@ -1,11 +1,11 @@
 ---
 id: TASK-9.2
 title: Continue to rebuy or leave when I bust with the review open
-status: In Progress
+status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-24T12:08:00Z'
+updated_date: '2026-11-24T12:09:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -17,6 +17,7 @@ references:
 documentation:
   - doc-1
   - doc-2
+  - doc-116
 parent_task_id: TASK-9
 priority: high
 type: feature
@@ -86,4 +87,12 @@ AC added from TASK-9.1 follow-up (doc-26).
 Build: held bust review button reads Continue (same element/handler), opens Out of chips dialog; locked TASK-3.11 test re-pinned; npm test 1206 passed, Playwright 232 passed; gate PASS.
 
 Judge r1 PASS 9/9; live Chromium+WebKit bust/Continue/Rebuy/Leave/Resume; CI 45389035315 green.
+
+Follow-ups: none new. Already owned: Leave ends session (TASK-10.1), stopped sit-and-go results (TASK-5.8). By design: Continue closes the review (A-3). Not tracked: duplicated seed builder NIT (test-only).
 <!-- SECTION:NOTES:END -->
+
+## Final Summary
+
+<!-- SECTION:FINAL_SUMMARY:BEGIN -->
+Continue label for a cash bust with the review held: the control under the table now reads Continue (also after Close review) instead of Deal next hand; it clears the review, deals nothing and opens the Out of chips dialog (Rebuy / Leave table). One-line change in Table.tsx plus tests and docs. Verified: npm test 1206 passed, golden and 10,000-hand playtest clean, new e2e in Chromium and WebKit, judge round 1 passed 9/9. Review: A-1..A-6 and the locked TASK-3.11 test edit (bust-dialog.acceptance) were auto-accepted. Follow-ups: dedupe A-5 seed builder (NIT); Leave table only pauses until TASK-10.1; Continue closes the review panel as the dialog opens (A-3); stopped sit-and-go keeps Deal next hand until TASK-5.8.
+<!-- SECTION:FINAL_SUMMARY:END -->
