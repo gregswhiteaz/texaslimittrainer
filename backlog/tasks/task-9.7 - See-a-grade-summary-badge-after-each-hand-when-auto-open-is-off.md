@@ -1,11 +1,11 @@
 ---
 id: TASK-9.7
 title: See a grade summary badge after each hand when auto-open is off
-status: In Progress
+status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-24T16:26:00Z'
+updated_date: '2026-11-24T16:27:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -16,6 +16,7 @@ references:
 documentation:
   - doc-1
   - doc-2
+  - doc-121
 parent_task_id: TASK-9
 priority: high
 type: feature
@@ -88,4 +89,12 @@ AC added from TASK-9.1 follow-up (doc-26).
 Build: autoOpenReview prop (default on, not persisted); with it off, a grade summary badge replaces auto-open and clicking it opens/holds the review; npm test 1237 passed, Playwright 258 passed; gate PASS. Badge clear on hand change done during render (lint rule) — recorded in qa.md.
 
 Judge r1 PASS 12/12; real app with auto-open off (temporary, reverted) and records harness in Chromium+WebKit; default-on unchanged; CI 45435650855 green.
+
+Follow-ups: TASK-12.6 AC added (stale review on badge/auto-deal race). Already owned: Settings toggle for auto-open (TASK-12.6).
 <!-- SECTION:NOTES:END -->
+
+## Final Summary
+
+<!-- SECTION:FINAL_SUMMARY:BEGIN -->
+With auto-open off, a reviewable hand now shows a grade badge (e.g. '1 Major, 1 Minor', 'All correct') instead of the panel. The next hand deals 1.5 s later, and clicking the badge opens that hand's panel and holds the next hand. A lone preflop fold shows no badge. Verified: judge round 1 passed 12/12, npm test 1237 passed, golden 282/282, playtest 0 violations, and Chromium and WebKit e2e. Review assumptions A-1..A-8 (badge copy, label, colour, placement) and the render-time clear deviation, all auto-accepted. Risks: the app cannot turn auto-open off until TASK-12.6 adds the Settings toggle. Code MINOR badge-click-races-auto-deal-render (J-1-02) is tracked as an AC on TASK-12.6.
+<!-- SECTION:FINAL_SUMMARY:END -->

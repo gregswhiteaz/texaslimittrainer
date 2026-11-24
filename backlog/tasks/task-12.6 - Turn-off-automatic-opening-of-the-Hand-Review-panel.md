@@ -4,7 +4,7 @@ title: Turn off automatic opening of the Hand Review panel
 status: To Do
 assignee: []
 created_date: '2026-11-17T22:47:00Z'
-updated_date: '2026-11-17T23:22:00Z'
+updated_date: '2026-11-24T16:27:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-2
@@ -43,6 +43,7 @@ Plan key: E12-S05 · Dream: limit-holdem-trainer
 - [ ] #2 Given the user turned auto-open off in Settings, When a hand in which the user made a decision other than folding preflop ends, Then the Hand Review panel does not open and the grade summary badge is shown [REQ-050.2]
 - [ ] #3 Given auto-open is off, When the app is closed and relaunched, Then the toggle is still off [REQ-050.2]
 - [ ] #4 Given auto-open is on and the overlay is opened during a hand, When the user turns it off, closes the overlay and the hand ends, Then the panel does not open for that hand [REQ-050.2, REQ-050.5]
+- [ ] #5 Given auto-open is off and the user clicks the grade badge just as the next hand's auto-deal renders, When the next hand starts, Then no review from an earlier hand is held (a held review whose hand number differs from the table's is dropped) and the next hand is not stalled
 <!-- AC:END -->
 
 ## Definition of Done
@@ -60,3 +61,9 @@ Plan key: E12-S05 · Dream: limit-holdem-trainer
 - [ ] #11 Story documentation is written and published to Backlog.md
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+AC added from TASK-9.7 follow-up (code review MINOR badge-click-races-auto-deal-render / judge J-1-02, doc-121): when the hand number changes, setReview(r => r && r.hand.handNumber !== table.handNumber ? null : r).
+<!-- SECTION:NOTES:END -->
