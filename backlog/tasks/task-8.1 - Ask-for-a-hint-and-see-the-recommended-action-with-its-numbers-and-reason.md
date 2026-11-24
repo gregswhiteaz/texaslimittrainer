@@ -1,11 +1,11 @@
 ---
 id: TASK-8.1
 title: Ask for a hint and see the recommended action with its numbers and reason
-status: In Progress
+status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-24T10:51:00Z'
+updated_date: '2026-11-24T10:52:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -19,6 +19,7 @@ references:
 documentation:
   - doc-1
   - doc-2
+  - doc-114
 parent_task_id: TASK-8
 priority: high
 type: feature
@@ -104,4 +105,12 @@ AC added from TASK-7.10 judge J-1-01 (value-rule copy clarity).
 Build: observed counts per bot (outside TableState, restart on Resume), snapshot passed to applyUserAction and recommend, hint card, AC#12 wording; npm test 1197 passed, Playwright full suite green after TASK-3.1 allow-list edit; gate PASS. Blocks resolved: counts moved out of TableState (locked restore tests untouched); e2e/table.spec.ts allow-list gains Hint under TASK-3.1.
 
 Judge r1 PASS 23/23; real app Chromium+WebKit (preflop/postflop cards, loading/error, layout, axe); CI 45376916865 green on c289b60.
+
+Follow-ups: TASK-8.6 created (observed counts across Resume). Not tracked: Table.onHint null-guard NIT (no behaviour change); AdviceClient.grade snapshot (no caller — stored decisions already carry snapshot-based grades, TASK-3.12/9.3).
 <!-- SECTION:NOTES:END -->
+
+## Final Summary
+
+<!-- SECTION:FINAL_SUMMARY:BEGIN -->
+Added the Hint / Hide hint toggle and a hint card on the Table screen. The card shows the recommended action, equity and required equity after the flop (or the chart basis before it), the explanation, and each opponent's basis. Advice runs in the worker. The session now builds a per-bot observed-stats snapshot, kept outside TableState (Block 1), and uses it for the hint and for each stored user decision. The value-rule sentence now names which equity it compares (AC#12). Verification: judge round 1 passed 23/23; npm test 1197 passed; golden 282/282; playtest 10,000 hands with 0 violations; CI green, including Chromium and WebKit e2e. Review took 2 rounds (r1 MAJOR: hook wiring untested, fixed with e2e/hint-observed.spec.ts). To review: assumptions A-1..A-10, auto-accepted Q-1 (hint copy), Q-2 (AC#12 wording), Q-3, Block 1 and Block 2 (an e2e/table.spec.ts allow-list edit under TASK-3.1). Risks and follow-ups: observed stats restart at 0 after Resume (a follow-up will persist them); NIT Table.onHint null guard; scope was 1800 lines / 25 files against 1300 / 20.
+<!-- SECTION:FINAL_SUMMARY:END -->
