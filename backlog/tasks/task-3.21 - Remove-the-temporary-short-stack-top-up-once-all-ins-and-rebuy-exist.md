@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-19T01:10:00Z'
-updated_date: '2026-11-24T04:21:00Z'
+updated_date: '2026-11-24T04:39:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -67,4 +67,6 @@ From TASK-2.4 review: tests/table/game-type.test.ts SPEC-08 test is named '...to
 From TASK-6.8: cash bots on $0 are now replaced (not topped up) and a bot on $1–$95 keeps its stack (proven by tests/table/replace-bot.acceptance.test.ts). Remaining here: the user seat and sit-and-go TEMPORARY top-up. TASK-3.4's next-hand acceptance test was already rewritten under TASK-6.8 Q-4 — start from that version.
 
 AC added from TASK-3.11 follow-up (security MINOR rebuy-count-unbounded-increment, doc-109). Also while in session.ts / BustDialog.tsx: reflow the nextHand docstring (code MINOR nextHand-doc-awkward-reflow) and add a one-line comment on BustDialog's Escape onKeyDown (Chromium closes a modal on a second Escape without a cancelable cancel event; NIT escape-keydown-unexplained).
+
+Build: top-up removed, sit-and-go stops at first bust ('stopped' step), rebuy cap, locked re-pins (TASK-3.4 next-hand 45/45 expects, TASK-3.11 rebuy 82/82); npm test 1013 passed; gate PASS. Recorded deviations in doit/TASK-3.21/fix-brief.md (A-4 browser-checked values $54/$124, 14th file type-only, Deal next hand click, axe timing).
 <!-- SECTION:NOTES:END -->

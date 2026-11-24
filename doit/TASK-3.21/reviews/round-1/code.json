@@ -1,0 +1,25 @@
+{"reviewer": "code", "round": 1,
+ "rubric": [
+  {"item": "SPEC-01 correctness", "result": "pass"}, {"item": "SPEC-01 test strength", "result": "pass"},
+  {"item": "SPEC-02 correctness", "result": "pass"}, {"item": "SPEC-02 test strength", "result": "pass"},
+  {"item": "SPEC-03 correctness", "result": "pass"}, {"item": "SPEC-03 test strength", "result": "pass"},
+  {"item": "SPEC-04 correctness", "result": "pass"}, {"item": "SPEC-04 test strength", "result": "pass"},
+  {"item": "SPEC-05 correctness", "result": "pass"}, {"item": "SPEC-05 test strength", "result": "pass"},
+  {"item": "SPEC-06 correctness", "result": "pass"}, {"item": "SPEC-06 test strength", "result": "pass"},
+  {"item": "SPEC-07 correctness", "result": "pass"}, {"item": "SPEC-07 test strength", "result": "pass"},
+  {"item": "SPEC-08 correctness", "result": "pass"}, {"item": "SPEC-08 test strength", "result": "pass"},
+  {"item": "SPEC-09 correctness", "result": "pass"}, {"item": "SPEC-09 test strength", "result": "pass"},
+  {"item": "SPEC-10 correctness", "result": "pass"}, {"item": "SPEC-10 test strength", "result": "pass"},
+  {"item": "SPEC-11 correctness", "result": "pass"}, {"item": "SPEC-11 test strength", "result": "pass"},
+  {"item": "scope", "result": "pass"}, {"item": "concision", "result": "pass"}, {"item": "clarity", "result": "pass"}],
+ "findings": [
+  {"fingerprint": "e2e/short-stack.spec.ts:unbounded-settled-loop", "severity": "MINOR", "file": "e2e/short-stack.spec.ts", "line": 41,
+   "issue": "settled() polls with for(;;) and real-time waitForTimeout(250) with no bound, so if bot moves keep arriving (or the count never stabilises) the test only ends at the Playwright test timeout with an unhelpful message.",
+   "evidence": "for (;;) { await page.waitForTimeout(250); const now = await actionCount(page); if (now === before) return; before = now; }",
+   "fix": "Bound the loop (e.g. 40 iterations) and throw Error('bot moves did not settle') after it, or use expect.poll on two equal consecutive reads with a timeout."},
+  {"fingerprint": "docs/storage/sessions.md:reflow-overlong-lines", "severity": "NIT", "file": "docs/storage/sessions.md", "line": 53,
+   "issue": "The edited paragraph keeps a 189-column line and adds a 119-column line while the rest of the paragraph wraps at about 110.",
+   "evidence": "awk length>110 reports lines 53 (189) and 54 (119).",
+   "fix": "Rewrap lines 51-55 at about 110 columns."}
+ ],
+ "summary": "All 11 SPEC items are implemented and pass (targeted vitest run: 6 files, 28 tests green; fix-2 gate PASS). The top-up branch, the minimum local and the minimumStack import are gone. sitAndGoStopped mirrors userBusted (A-6), and nextStep, dealHand, nextHandDelay and dealAfterDone guard on it. rebuy throws at MAX_SESSION_COUNT after the existing checks, rebuyAndDeal is a no-op at the cap, and MAX_SESSION_COUNT moved to session.ts and is re-exported. Locked re-pins, compared against merge base 2f72f88: next-hand.acceptance has 45 expects before and after, and rebuy.acceptance has 82 before and after; no skip, only or todo. Every change is one-for-one with spec section 5: expected values (160->95, 800->0, 1500->null, 'deal'->'stopped'), the retitle, the toppedUp->short rename, the marker/topUp assertions inverted to toBe(-1), near widened to the whole file with not.toContain/not.toMatch, and the dead else branch replaced by expect(before?.kind).toBe('bot'). Nothing was loosened: not.toThrow became a stricter startingStack equality. The recorded deviations hold up on substance. SPEC-03/07 drive bots through handleAdviceRequest as the app does, still pin hand 13 ending on $18, hand 14 starting on $18, all three all-in labels in order and a live Pots list of 2 or more lines, and pin the browser-checked $54/$124 winners. The 14th file is a type-only widening. game-type gaining one expect is the seat-on-0 case SPEC-10 asks for. Mutation reasoning: dropping any of the guards (dealAfterDone, nextHandDelay, rebuy cap, rebuyAndDeal cap) or restoring the top-up fails the new tests. No BLOCKER or MAJOR."}
