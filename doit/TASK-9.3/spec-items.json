@@ -1,0 +1,92 @@
+[
+  {
+    "id": "SPEC-01",
+    "verifies": "AC#1, AC#8, AC#9, DoD#1",
+    "verification": "acceptance `tests/ui/review-numbers.acceptance.test.tsx::four stored decisions show street, board, moves, grade, numbers and explanation`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-02",
+    "verifies": "AC#2, DoD#1",
+    "verification": "acceptance `tests/ui/review-numbers.acceptance.test.tsx::a preflop entry shows the chart basis instead of equity`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-03",
+    "verifies": "AC#3, DoD#1",
+    "verification": "acceptance `tests/ui/review-numbers.acceptance.test.tsx::basis lines show 40 observed hands and typical player`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-04",
+    "verifies": "AC#4, AC#9, DoD#1",
+    "verification": "acceptance `tests/ui/review-numbers.acceptance.test.tsx::the review repeats the flop hint after the count reaches 30`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-05",
+    "verifies": "AC#5, DoD#1, DoD#7",
+    "verification": "acceptance `e2e/review-numbers.spec.ts::a ten-seat review with four entries fits 1280 x 720 without horizontal scrolling`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-06",
+    "verifies": "AC#6, AC#7, DoD#1",
+    "verification": "unit `tests/table/decision-grades.test.ts::each decision is requested once when it appears`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-07",
+    "verifies": "AC#1, AC#6, AC#7, AC#8, DoD#1, DoD#7, DoD#8",
+    "verification": "acceptance `e2e/review-numbers.spec.ts::review entries show the grade replies the worker sent during the hand`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-08",
+    "verifies": "AC#9, DoD#1",
+    "verification": "acceptance `tests/ui/review-numbers.acceptance.test.tsx::stored text is rendered as plain text`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-09",
+    "verifies": "AC#6, AC#7, AC#9, DoD#1",
+    "verification": "acceptance `tests/ui/review-numbers.acceptance.test.tsx::the hand-end path reads stored decisions and never grades`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-10",
+    "verifies": "AC#9, DoD#1",
+    "verification": "unit `tests/table/decision-grades.test.ts::review model edges`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-11",
+    "verifies": "AC#6, AC#7, DoD#1",
+    "verification": "unit `tests/table/decision-grades.test.ts::the grade reply becomes the stored entry`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-12",
+    "verifies": "AC#1, AC#9, DoD#1",
+    "verification": "acceptance `tests/ui/review-panel.acceptance.test.tsx::the review panel lists 4 graded entries beside the table with Close and Deal next hand`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-13",
+    "verifies": "DoD#2, DoD#3, DoD#4, DoD#5, DoD#6, DoD#8",
+    "verification": "command `npm run lint && npm run typecheck && npm test && npx vitest run tests/golden/ && npm run -s playtest -- --hands 10000 --seed 42`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-14",
+    "verifies": "DoD#7, DoD#10",
+    "verification": "command `npm run e2e && npm run e2e:slow && gh run list --branch doit/TASK-9.3 --limit 1`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-15",
+    "verifies": "DoD#9, DoD#11, DoD#12",
+    "verification": "manual read the three docs; `backlog doc list --plain` lists the TASK-9.3 doc",
+    "status": "pending"
+  }
+]

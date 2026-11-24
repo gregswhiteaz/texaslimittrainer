@@ -1,10 +1,11 @@
 ---
 id: TASK-9.3
 title: See the numbers and reason behind each reviewed decision
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-24T09:39:00Z'
+updated_date: '2026-11-24T12:27:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -71,6 +72,18 @@ Plan key: E09-S02 · Dream: limit-holdem-trainer
 - [ ] #11 Story documentation is written and published to Backlog.md
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. Grade each user decision in the advice worker right after it is made (with its observed snapshot); AdviceClient.grade(view, action, observed?); per-hand tracking in src/table/decision-grades.ts
+2. decisionEntry(result, decision) shared by decisionRecord, the hand record and the review; record write waits for the hand's grades
+3. Review panel reads stored entries (storedReviewEntries) and shows the hint-card wording: chart line or equity/required equity, explanation, opponent ranges — plain text
+4. Storyboard SHOWDOWN fixture plays user moves via applyUserAction
+5. Re-pin locked review-panel acceptance (TASK-9.1) per qa.md conditions; unit/acceptance + e2e; re-run slow-group pace specs
+
+Full spec: doit/TASK-9.3/spec.md
+<!-- SECTION:PLAN:END -->
 
 ## Implementation Notes
 

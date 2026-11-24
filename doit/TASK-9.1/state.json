@@ -520,6 +520,12 @@
       "event": "unlock",
       "file": "tests/ui/review-panel.acceptance.test.tsx",
       "reason": "TASK-7.8 Q-3 (auto-accepted): value betting changes advice/bot results \u2014 re-pin expected values, keep every assertion and time limit"
+    },
+    {
+      "t": "2026-11-24T05:26:43",
+      "event": "unlock",
+      "file": "tests/ui/review-panel.acceptance.test.tsx",
+      "reason": "TASK-9.3 Q-1/A-8: review shows numbers/explanation/basis; re-pin entries and expected values to hint options; banned list replaced per qa.md (\u2026 kept); $ anchor kept on the You/Advice line"
     }
   ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-9.1",
@@ -537,6 +543,7 @@
     "e2e/review.spec.ts",
     "e2e/review.spec.ts",
     "tests/table/review.acceptance.test.ts",
+    "tests/ui/review-panel.acceptance.test.tsx",
     "tests/ui/review-panel.acceptance.test.tsx"
   ]
 }

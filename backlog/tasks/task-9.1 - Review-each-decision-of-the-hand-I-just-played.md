@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-23T03:44:00Z'
+updated_date: '2026-11-24T12:26:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-0
@@ -101,6 +101,8 @@ Locked test e2e/review.spec.ts edited for TASK-2.5 (Q-3 user-approved expected v
 Locked test tests/table/review.acceptance.test.ts re-pinned for TASK-7.8 Q-3 (auto-accepted; value betting).
 
 Locked test tests/ui/review-panel.acceptance.test.tsx re-pinned for TASK-7.8 Q-3 (auto-accepted; value betting).
+
+Locked tests/ui/review-panel.acceptance.test.tsx unlocked for TASK-9.3 (review now shows numbers; see doit/TASK-9.3/qa.md for the exact, non-loosening edits).
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary
