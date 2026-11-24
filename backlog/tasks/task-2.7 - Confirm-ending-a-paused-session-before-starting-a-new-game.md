@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-24T18:15:00Z'
+updated_date: '2026-11-24T18:31:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -76,3 +76,9 @@ Plan key: E02-S09 · Dream: limit-holdem-trainer
 
 Full spec: doit/TASK-2.7/spec.md
 <!-- SECTION:PLAN:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+Build: Start game re-reads storage; paused session → End your paused session? dialog in Game Config; Confirm ends it (and older unended sessions) then opens the Table; Cancel/Escape change nothing; npm test 1249 passed, Playwright green after the TASK-3.4 next-hand.spec context fix; gate PASS.
+<!-- SECTION:NOTES:END -->

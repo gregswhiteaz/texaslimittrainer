@@ -1,0 +1,8 @@
+{"reviewer": "security", "round": 1,
+ "findings": [
+  {"fingerprint": "src/storage/hand-store.ts:ended-no-recheck-in-transaction", "severity": "MINOR", "file": "src/storage/hand-store.ts", "line": 66,
+   "issue": "The isEnded filter in endPausedSessions (and the click-time pausedSession read for the confirmed id) runs outside the write transaction. ended() re-reads and re-parses the record but does not check isEnded again. If another tab ends a session between the getAll/click and ended(), ended() would put a new endedAt. Today the reports.add then fails with ConstraintError and the transaction aborts, so nothing changes. The only exposure is an ended record whose report is missing, which would get a new endedAt.",
+   "evidence": "stored session (other tab / stale read) -> endPausedSessions filter (outside txn) -> ended() put endedAt without isEnded check. Mitigated by the write-once report add aborting the txn.",
+   "fix": "Optional: in ended(), resolve without writing if isEnded(session) on the in-transaction read."}
+ ],
+ "summary": "No BLOCKER/MAJOR. Invalid stored values are skipped (parseSessionRecord in try/continue), and ended() parses them again inside its own transaction, aborting on failure. Ended records and the confirmed id are skipped. Deletion happens only when the in-transaction parsed record has handsPlayed 0, so stale or crafted state cannot steer it into deleting a session with hands. Per-record failures are collected without stopping the loop. The dialog renders the summary as a JSX text child (no innerHTML). No new dependencies, randomness, secrets or network."}

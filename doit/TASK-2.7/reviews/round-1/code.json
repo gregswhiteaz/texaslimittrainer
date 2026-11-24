@@ -1,0 +1,33 @@
+{"reviewer": "code", "round": 1,
+ "rubric": [
+  {"item": "SPEC-01 correctness", "result": "pass"}, {"item": "SPEC-01 test strength", "result": "pass"},
+  {"item": "SPEC-02 correctness", "result": "pass"}, {"item": "SPEC-02 test strength", "result": "pass"},
+  {"item": "SPEC-03 correctness", "result": "pass"}, {"item": "SPEC-03 test strength", "result": "pass"},
+  {"item": "SPEC-04 correctness", "result": "pass"}, {"item": "SPEC-04 test strength", "result": "pass"},
+  {"item": "SPEC-05 correctness", "result": "pass"}, {"item": "SPEC-05 test strength", "result": "pass"},
+  {"item": "SPEC-06 correctness", "result": "pass"}, {"item": "SPEC-06 test strength", "result": "pass"},
+  {"item": "SPEC-07 correctness", "result": "pass"}, {"item": "SPEC-07 test strength", "result": "pass"},
+  {"item": "SPEC-08 correctness", "result": "pass"}, {"item": "SPEC-08 test strength", "result": "pass"},
+  {"item": "SPEC-09 correctness", "result": "pass"}, {"item": "SPEC-09 test strength", "result": "pass"},
+  {"item": "SPEC-10 correctness", "result": "pass"}, {"item": "SPEC-10 test strength", "result": "pass"},
+  {"item": "SPEC-11 correctness", "result": "pass"}, {"item": "SPEC-11 test strength", "result": "pass"},
+  {"item": "scope", "result": "pass"}, {"item": "concision", "result": "pass"}, {"item": "clarity", "result": "pass"}
+ ],
+ "findings": [
+  {"fingerprint": "e2e/new-game-confirm.spec.ts:start-record-race-not-reliably-detected", "severity": "MINOR",
+   "file": "e2e/new-game-confirm.spec.ts", "line": 168,
+   "issue": "The implementation is correct (confirmEnd opens the Table only after endPausedSessions has fully resolved). But SPEC-08 does not reliably catch a regression where openTable runs before the end finishes. If the new start record (0 hands) lands before endPausedSessions' getAll, it is treated as an older unended 0-hand session and deleted. Hand 1's write then recreates it without endedAt, so 'exactly one unended' still holds. SPEC-03's poll for 2 stored sessions catches this only in some timings.",
+   "evidence": "App.tsx confirmEnd: openTable is in the .then after endPausedSessions (correct). SPEC-08 asserts only after playToResult(page, 1), and by then the hand-1 put would have recreated a deleted start record.",
+   "fix": "Optional: in SPEC-08, right after the header shows and before playing hand 1, poll storedSessions for a non-seeded session with handsPlayed 0 and no endedAt, then assert it keeps the same sessionId through hand 1."},
+  {"fingerprint": "src/ui/App.tsx:focus-lost-after-confirm-failure", "severity": "MINOR",
+   "file": "src/ui/App.tsx", "line": 196,
+   "issue": "On the A-5 failure path, setEndPrompt(null) unmounts the open dialog. No native close/onClose runs, so the Start-game focus restore in GameConfigScreen is skipped and focus falls to <body>. The spec does not state where focus goes here, so this is not a spec violation, but it is inconsistent with A-2's focus return.",
+   "evidence": "Focus is restored only in GameConfigScreen's onCancel wrapper (GameConfigScreen.tsx:282-285), which runs from the dialog's onClose. The reject branch of confirmEnd clears the prompt directly.",
+   "fix": "Close the dialog through the same path (for example, let the failure clear `ending` and call dialog.close()), or focus Start game when the prompt is cleared after a failure."},
+  {"fingerprint": "src/storage/hand-store.ts:defensive-error-wrap", "severity": "NIT",
+   "file": "src/storage/hand-store.ts", "line": 173,
+   "issue": "`error instanceof Error ? error : new Error(String(error))` guards a case that can't happen: ended() rejects only with DOMException or RangeError, and both are Errors.",
+   "evidence": "ended(...) rejects with the transaction error or a parseSessionRecord RangeError.",
+   "fix": "Keep it if the type narrowing is needed for `readonly Error[]`, otherwise push `error as Error`."}
+ ],
+ "summary": "Every SPEC item is implemented as specified. endPausedSessions reuses ended() once per session: the confirmed session first (a failure rejects, nothing changed), then the other valid unended sessions at their updatedAt, with failures collected and invalid records skipped. confirmEnd waits for the whole end before openTable, so the new start record cannot be ended or counted (AC#4). Cancel and Escape go through native close and call only setEndPrompt(null); storage is untouched and GameConfigScreen stays mounted with its values. Double-clicking Start game is handled by the request token, and Confirm is guarded by `ending` plus disabled buttons, with Escape prevented while ending. The only effect is the dialog's useLayoutEffect, which calls showModal/focus and sets no state. The TASK-3.4 next-hand.spec.ts edit only moves the second page into a fresh browser context, which is closed at the end; no assertion changed. The WebKit focus-return ref is small and commented. Tests assert the specified values; the new unit tests and lint pass locally. Two MINOR findings: SPEC-08 does not reliably catch a start-record race, and focus is lost after a confirm failure. No BLOCKER or MAJOR."}
