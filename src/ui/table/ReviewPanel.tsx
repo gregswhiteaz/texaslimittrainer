@@ -80,8 +80,15 @@ export function ReviewPanel({
                   ))}
                 </div>
               )}
-              <span data-part="grade" data-grade={entry.grade} className="grade-badge">
-                {entry.gradeLabel}
+              <span className="review-verdict">
+                <span data-part="grade" data-grade={entry.grade} className="grade-badge">
+                  {entry.gradeLabel}
+                </span>
+                {entry.decision.hinted && (
+                  <span data-part="hinted" className="hinted-tag">
+                    hinted
+                  </span>
+                )}
               </span>
             </div>
             <p data-part="moves">

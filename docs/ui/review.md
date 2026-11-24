@@ -1,4 +1,4 @@
-# Hand Review panel (TASK-9.1, TASK-9.3, TASK-9.4, TASK-9.5)
+# Hand Review panel (TASK-9.1, TASK-9.3, TASK-9.4, TASK-9.5, TASK-9.6)
 
 After a hand in which the user made a decision (other than a lone preflop fold), the Hand Review panel opens beside
 the table with one entry per user decision, in order (REQ-043). Each entry shows the numbers and the reason behind
@@ -48,18 +48,36 @@ opponent who turned their cards face up at showdown, in showdown order:
 
 ## What an entry shows
 
-| Part (`data-part`)        | Preflop                                                                 | Flop, turn, river                                                                                         |
-| ------------------------- | ----------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
-| `street`, board, `grade`  | "Preflop", no cards, the grade badge                                    | street name, the board at that decision, the badge                                                        |
-| `moves` (`you`, `advice`) | "You: Raise to $8 · Advice: Raise to $8"                                | same                                                                                                      |
-| `chart`                   | the chart basis, e.g. "From the 6-max chart: raise A9o from the cutoff" | absent                                                                                                    |
-| `equity`, `required`      | absent                                                                  | "Equity 37.1%" and "Required equity 11.8%"                                                                |
-| `explanation`             | the stored explanation, exactly as stored                               | same                                                                                                      |
-| "Opponent ranges" list    | one line per live opponent: "Ava: typical player"                       | one line per opponent the advice read: "Ben: based on 40 hands of this opponent" or "Eli: typical player" |
+| Part (`data-part`)        | Preflop                                                                  | Flop, turn, river                                                                                         |
+| ------------------------- | ------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------- |
+| `street`, board, `grade`  | "Preflop", no cards, the grade badge                                     | street name, the board at that decision, the badge                                                        |
+| `hinted`                  | a "hinted" tag after the badge, only if Hint was opened at this decision | same                                                                                                      |
+| `moves` (`you`, `advice`) | "You: Raise to $8 · Advice: Raise to $8"                                 | same                                                                                                      |
+| `chart`                   | the chart basis, e.g. "From the 6-max chart: raise A9o from the cutoff"  | absent                                                                                                    |
+| `equity`, `required`      | absent                                                                   | "Equity 37.1%" and "Required equity 11.8%"                                                                |
+| `explanation`             | the stored explanation, exactly as stored                                | same                                                                                                      |
+| "Opponent ranges" list    | one line per live opponent: "Ava: typical player"                        | one line per opponent the advice read: "Ben: based on 40 hands of this opponent" or "Eli: typical player" |
 
 Opponent lines are `<li data-opponent="<seat>">` items (not `data-seat`, which the table's own seat and winner
 lists use). Long explanations and many opponent lines wrap inside the 400 px panel; at 1280 × 720 the page scrolls
 vertically, never horizontally, even at a ten-seat table.
+
+## Hinted tag
+
+An entry whose decision was made with help shows a small outlined "hinted" tag right after its grade badge
+(REQ-040.2, REQ-043.5):
+
+- **When it shows.** Iff the stored decision's `hinted` flag is true (`HandRecordDecision.hinted`, TASK-8.2). The
+  flag is set when Hint was opened at that decision before acting, even if it was hidden again before acting.
+  Other entries of the same hand show no tag, and a hand with no hinted decision shows none.
+- **The grade still shows.** A hinted decision is graded as usual: a hinted Major error reads "Major error" and
+  "hinted". The tag is an outlined pill (`#d7dce3` text, `#a7aeb8` border), never a filled badge, so it is not
+  read as a fourth grade.
+- **Markup.** The badge and the tag sit together in `<span class="review-verdict">`:
+  `<span data-part="grade" …>Major error</span><span data-part="hinted" class="hinted-tag">hinted</span>`.
+- **Wrapping.** `.review-entry-top` wraps. When the street, the board and the verdict group don't fit on one line
+  (a river entry with a tag), the verdict group moves whole to a second line, still right-aligned, so the panel
+  never scrolls horizontally.
 
 ## Where it comes from
 
