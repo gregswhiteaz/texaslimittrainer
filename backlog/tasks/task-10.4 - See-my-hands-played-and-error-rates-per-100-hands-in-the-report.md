@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-24T21:58:00Z'
+updated_date: '2026-11-24T22:21:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -72,3 +72,9 @@ Plan key: E10-S02 · Dream: limit-holdem-trainer
 
 Full spec: doit/TASK-10.4/spec.md
 <!-- SECTION:PLAN:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+Build: report stores unhinted Major/Minor error counts once at session end; rate tiles (Hands played, Major/Minor errors /100); npm test 1291 passed, Playwright 302 passed; gate PASS.
+<!-- SECTION:NOTES:END -->
