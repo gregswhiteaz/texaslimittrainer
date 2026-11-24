@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-24T12:51:00Z'
+updated_date: '2026-11-24T13:08:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -46,31 +46,31 @@ Plan key: E09-S02 · Dream: limit-holdem-trainer
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Given a scripted hand in which the user made 4 decisions, When the panel opens, Then each entry shows street, board at that point, the user's action, the recommended action, the grade and the explanation, and each flop, turn and river entry shows equity % and required equity %, each equal to the decision entry stored in the hand record [REQ-043.1]
-- [ ] #2 Given a preflop decision holding A9o in the cutoff at 6-max, When the panel opens, Then its entry shows the chart basis "From the 6-max chart: raise A9o from the cutoff" and no equity % or required equity % [REQ-043.9]
-- [ ] #3 Given a flop decision against an opponent observed for 40 hands, When the panel opens, Then the entry shows the basis "based on 40 hands of this opponent"; and a preflop entry shows "typical player" [REQ-035.4]
-- [ ] #4 Given hint advice was requested through the advice worker at the user's flop decision and the opponent's observed hand count goes from 29 to 30 when the hand ends, When the panel opens, Then the flop entry's recommended action, equity %, required equity %, explanation and basis are identical to that hint result [REQ-036.2, REQ-043.1]
-- [ ] #5 Given a 4-decision hand at a table of 10 players, When the panel opens at a 1280 x 720 window, Then all 4 entries with their explanations can be read in the panel without horizontal scrolling [REQ-043.1]
-- [ ] #6 Given each user decision, When it is made, Then its review entry (grade, recommendation, equity, explanation, basis) is computed and stored at decision time off the main thread, replacing the hand-end recomputation in reviewEntries
-- [ ] #7 Given a review entry is computed during play, When grading runs, Then it goes through the advice worker's grade request (src/ui/advice) and never runs on the main thread
-- [ ] #8 Given a reviewed decision, When its numbers and reason are shown, Then the reason is the recommendation's explanation text (TASK-7.10) exactly as returned
-- [ ] #9 Given a stored hand record with decisions (TASK-3.12), When the review panel shows that hand, Then each entry's recommendation, numbers, explanation and grade come from the stored decision (not recomputed), stored text is rendered as plain text (never HTML), and the storyboard SHOWDOWN fixture plays the user's moves through applyUserAction so its record parses
+- [x] #1 Given a scripted hand in which the user made 4 decisions, When the panel opens, Then each entry shows street, board at that point, the user's action, the recommended action, the grade and the explanation, and each flop, turn and river entry shows equity % and required equity %, each equal to the decision entry stored in the hand record [REQ-043.1]
+- [x] #2 Given a preflop decision holding A9o in the cutoff at 6-max, When the panel opens, Then its entry shows the chart basis "From the 6-max chart: raise A9o from the cutoff" and no equity % or required equity % [REQ-043.9]
+- [x] #3 Given a flop decision against an opponent observed for 40 hands, When the panel opens, Then the entry shows the basis "based on 40 hands of this opponent"; and a preflop entry shows "typical player" [REQ-035.4]
+- [x] #4 Given hint advice was requested through the advice worker at the user's flop decision and the opponent's observed hand count goes from 29 to 30 when the hand ends, When the panel opens, Then the flop entry's recommended action, equity %, required equity %, explanation and basis are identical to that hint result [REQ-036.2, REQ-043.1]
+- [x] #5 Given a 4-decision hand at a table of 10 players, When the panel opens at a 1280 x 720 window, Then all 4 entries with their explanations can be read in the panel without horizontal scrolling [REQ-043.1]
+- [x] #6 Given each user decision, When it is made, Then its review entry (grade, recommendation, equity, explanation, basis) is computed and stored at decision time off the main thread, replacing the hand-end recomputation in reviewEntries
+- [x] #7 Given a review entry is computed during play, When grading runs, Then it goes through the advice worker's grade request (src/ui/advice) and never runs on the main thread
+- [x] #8 Given a reviewed decision, When its numbers and reason are shown, Then the reason is the recommendation's explanation text (TASK-7.10) exactly as returned
+- [x] #9 Given a stored hand record with decisions (TASK-3.12), When the review panel shows that hand, Then each entry's recommendation, numbers, explanation and grade come from the stored decision (not recomputed), stored text is rendered as plain text (never HTML), and the storyboard SHOWDOWN fixture plays the user's moves through applyUserAction so its record parses
 <!-- AC:END -->
 
 ## Definition of Done
 <!-- DOD:BEGIN -->
-- [ ] #1 Every acceptance criterion has at least one automated test (unit, property or Playwright) that passes
-- [ ] #2 `npm run lint`, `npm run typecheck` and `npm test` pass with zero errors [REQ-059.1, REQ-059.4]
-- [ ] #3 The golden-spot suite passes 100% (applies from the story that creates the suite, E07-S14, onward) [REQ-039.4]
-- [ ] #4 Coverage thresholds hold: >= 90% engine/bots/advice/statistics, >= 70% overall [REQ-059.3]
-- [ ] #5 Engine, bots, advice and statistics code imports no UI or browser-only code [REQ-059.2]
-- [ ] #6 Stories that touch the engine, bots or advice: a 10,000-hand playtest reports zero invariant violations (applies once the playtest runner exists, E01-S07, onward) [REQ-056.1]
-- [ ] #7 Stories that add or change a screen: Playwright test of the screen flow in Chromium and WebKit, and axe reports zero serious or critical violations (axe tooling is provisioned in the toolchain story E01-S01) [REQ-057.1]
-- [ ] #8 No new network requests beyond the app's own files [REQ-058.1]
-- [ ] #9 Strategy-content stories: text is original and every chart, range or golden spot carries its justification [REQ-061.2]
-- [ ] #10 CI workflow is green on the story's branch (applies once the CI story E01-S02 is done; E01-S01 instead passes the same checks locally) [REQ-064.2]
-- [ ] #11 Story documentation is written and published to Backlog.md
-- [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
+- [x] #1 Every acceptance criterion has at least one automated test (unit, property or Playwright) that passes
+- [x] #2 `npm run lint`, `npm run typecheck` and `npm test` pass with zero errors [REQ-059.1, REQ-059.4]
+- [x] #3 The golden-spot suite passes 100% (applies from the story that creates the suite, E07-S14, onward) [REQ-039.4]
+- [x] #4 Coverage thresholds hold: >= 90% engine/bots/advice/statistics, >= 70% overall [REQ-059.3]
+- [x] #5 Engine, bots, advice and statistics code imports no UI or browser-only code [REQ-059.2]
+- [x] #6 Stories that touch the engine, bots or advice: a 10,000-hand playtest reports zero invariant violations (applies once the playtest runner exists, E01-S07, onward) [REQ-056.1]
+- [x] #7 Stories that add or change a screen: Playwright test of the screen flow in Chromium and WebKit, and axe reports zero serious or critical violations (axe tooling is provisioned in the toolchain story E01-S01) [REQ-057.1]
+- [x] #8 No new network requests beyond the app's own files [REQ-058.1]
+- [x] #9 Strategy-content stories: text is original and every chart, range or golden spot carries its justification [REQ-061.2]
+- [x] #10 CI workflow is green on the story's branch (applies once the CI story E01-S02 is done; E01-S01 instead passes the same checks locally) [REQ-064.2]
+- [x] #11 Story documentation is written and published to Backlog.md
+- [x] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
 
 ## Implementation Plan
@@ -97,4 +97,6 @@ AC added from TASK-7.10 follow-up.
 AC added from TASK-3.12 follow-up (doc-113: E09 reads stored decisions; plain-text rendering; judge J-1-01 storyboard fixture).
 
 Build: decisions graded in the worker as they happen (decision-grades.ts), record + review use the stored entries; review shows chart line / equity numbers, explanation, opponent ranges (hint wording); SHOWDOWN fixture via applyUserAction; locked TASK-9.1 review-panel test re-pinned per qa.md; e2e/hint-observed one-shot probe replaced with a visible-wait; npm test 1215 passed, Playwright full suite green; gate PASS.
+
+Judge r1 PASS 15/15; live Chromium+WebKit: review = hint = stored record; no main-thread grading proven; e2e 236 + slow 17 passed; CI 45398230737 green.
 <!-- SECTION:NOTES:END -->
