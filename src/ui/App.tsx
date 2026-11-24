@@ -24,6 +24,15 @@ type Screen =
 /** undefined while Home's read is pending (A-4); reset on leaving Home so a return reads it again. */
 type Paused = { readonly record: SessionRecord; readonly summary: string } | null | undefined;
 
+/** TASK-2.7: the open end-session dialog of Game Config, for the paused session `sessionId`. */
+type EndPromptState = {
+  readonly config: SessionConfig;
+  readonly sessionId: string;
+  readonly summary: string;
+  readonly handsPlayed: number;
+  readonly ending: boolean;
+} | null;
+
 /** Opaque per-push keys for the Table's history entries: unique across loads of the page (D-2). */
 let tableEntries = 0;
 const newTableKey = (): string => `${performance.timeOrigin}:${++tableEntries}`;
@@ -35,6 +44,9 @@ const entryKey = (state: unknown): unknown =>
 export default function App(): React.JSX.Element {
   const [screen, setScreen] = useState<Screen>({ name: 'home', returned: false });
   const [paused, setPaused] = useState<Paused>(undefined);
+  const [endPrompt, setEndPrompt] = useState<EndPromptState>(null);
+  // D-2: bumped by every Start game and every leave of Game Config; a click-time read acts only if current.
+  const startRequest = useRef(0);
   // The shown Table's history key; null while another screen is shown. Set in the handlers that change screen.
   const tableKey = useRef<string | null>(null);
   // The ending screen this App has started ending, so StrictMode's second effect run (same object) does not
@@ -139,6 +151,60 @@ export default function App(): React.JSX.Element {
     });
   };
 
+  /** Start game: reads the paused session at click time (A-3). None → opens the Table; otherwise asks first. */
+  const startGame = (config: SessionConfig): void => {
+    const request = ++startRequest.current;
+    tableWritesSettled()
+      .then(() => sharedHandStore().pausedSession())
+      .then(
+        ({ session }) => {
+          if (request !== startRequest.current) return;
+          if (session === null) {
+            openTable({ name: 'table', config });
+            return;
+          }
+          setEndPrompt({
+            config,
+            sessionId: session.sessionId,
+            summary: resumeSummary(session),
+            handsPlayed: session.handsPlayed,
+            ending: false,
+          });
+        },
+        (error: unknown) => {
+          if (request !== startRequest.current) return;
+          console.error('Paused session could not be read', error);
+          openTable({ name: 'table', config });
+        },
+      );
+  };
+
+  /** End session and start: ends the paused session (and older unended ones, A-1) before the new Table writes
+   *  its start record, then opens it. A failure ending the paused session starts nothing (A-5). */
+  const confirmEnd = (): void => {
+    if (endPrompt === null || endPrompt.ending) return;
+    const prompt = endPrompt;
+    setEndPrompt({ ...prompt, ending: true });
+    tableWritesSettled()
+      .then(() => sharedHandStore().endPausedSessions(prompt.sessionId, new Date()))
+      .then(
+        ({ rejected }) => {
+          for (const error of rejected) console.error('Session could not be ended', error);
+          setEndPrompt(null);
+          openTable({ name: 'table', config: prompt.config });
+        },
+        (error: unknown) => {
+          console.error('Paused session could not be ended', error);
+          setEndPrompt(null);
+        },
+      );
+  };
+
+  const cancelEnd = (): void => {
+    if (endPrompt?.ending) return;
+    setEndPrompt(null);
+  };
+
   switch (screen.name) {
     case 'home':
       return (
@@ -156,8 +222,21 @@ export default function App(): React.JSX.Element {
       return (
         <GameConfigScreen
           config={DEFAULT_SESSION_CONFIG}
-          onCancel={() => setScreen({ name: 'home', returned: true })}
-          onStart={(config) => openTable({ name: 'table', config })}
+          onCancel={() => {
+            startRequest.current++;
+            setEndPrompt(null);
+            setScreen({ name: 'home', returned: true });
+          }}
+          onStart={startGame}
+          endPrompt={
+            endPrompt && {
+              summary: endPrompt.summary,
+              handsPlayed: endPrompt.handsPlayed,
+              ending: endPrompt.ending,
+              onConfirm: confirmEnd,
+              onCancel: cancelEnd,
+            }
+          }
         />
       );
     case 'table':

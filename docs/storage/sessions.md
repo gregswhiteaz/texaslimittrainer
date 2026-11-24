@@ -10,7 +10,8 @@ TASK-2.14) needs to deal the next hand. Home's Resume session entry (TASK-2.6) r
 - `src/table/session.ts`: `assertSessionConfig(…)`, the config rules shared by records and
   `resolveSessionConfig`.
 - `src/storage/hand-store.ts` (browser): the `sessions` store and `HandStore.add(record, session)`,
-  `putSession`, `getSession`, `pausedSession`.
+  `putSession`, `getSession`, `pausedSession`, and `endPausedSessions` ([reports.md](reports.md)).
+- `src/ui/config/EndSessionDialog.tsx`: the confirmation shown by Start game when a session is paused.
 - `src/ui/table/useTableSession.ts`: the start write and the per-hand write, and the `resume` option.
 - `src/ui/App.tsx` and `src/ui/home/HomeScreen.tsx`: the Resume session entry.
 
@@ -25,20 +26,20 @@ TASK-2.14) needs to deal the next hand. Home's Resume session entry (TASK-2.6) r
 
 ## Fields
 
-| Field         | Type                                   | Meaning                                                                                                                                   |
-| ------------- | -------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| `sessionId`   | string, 32 lowercase hex               | The table mount's id, the same as its hand records' `sessionId`                                                                           |
-| `startedAt`   | string, ISO-8601 UTC                   | When the table started                                                                                                                    |
-| `updatedAt`   | string, ISO-8601 UTC                   | The last write: the start time, then each completed hand's `completedAt`                                                                  |
-| `config`      | `SessionConfig`                        | The starting configuration as played: game type, players, stake (cash), line-up, seat names and styles, speed, user seat, starting button |
-| `handsPlayed` | integer 0..`MAX_SESSION_COUNT`         | Completed hands; 0 in the start record                                                                                                    |
-| `seats`       | seat entries (below), ascending seat   | The seats ready for the next hand                                                                                                         |
-| `button`      | seat 1..10                             | Dealer button of the next hand to be dealt                                                                                                |
-| `rebuys`      | integer 0..`MAX_SESSION_COUNT`         | The user's rebuys, stored with the next completed hand (TASK-3.11 A-1); bot replacements are not rebuys                                   |
-| `level`       | integer ≥ 1 \| null                    | null for cash; the sit-and-go level (1 until TASK-5.4)                                                                                    |
-| `nextBotName` | integer 0..`MAX_SESSION_COUNT`         | Position of the next replacement bot name (`TableState.nextBotName`)                                                                      |
-| `nextBotId`   | integer 1..`MAX_SESSION_COUNT`         | The id the next replacement bot gets (`TableState.nextBotId`)                                                                             |
-| `endedAt`     | string, ISO-8601 UTC \| null, optional | When the session was ended. Absent or null = not ended (paused). Written only by `endSession` (Leave table, [reports.md](reports.md))     |
+| Field         | Type                                   | Meaning                                                                                                                                                                    |
+| ------------- | -------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `sessionId`   | string, 32 lowercase hex               | The table mount's id, the same as its hand records' `sessionId`                                                                                                            |
+| `startedAt`   | string, ISO-8601 UTC                   | When the table started                                                                                                                                                     |
+| `updatedAt`   | string, ISO-8601 UTC                   | The last write: the start time, then each completed hand's `completedAt`                                                                                                   |
+| `config`      | `SessionConfig`                        | The starting configuration as played: game type, players, stake (cash), line-up, seat names and styles, speed, user seat, starting button                                  |
+| `handsPlayed` | integer 0..`MAX_SESSION_COUNT`         | Completed hands; 0 in the start record                                                                                                                                     |
+| `seats`       | seat entries (below), ascending seat   | The seats ready for the next hand                                                                                                                                          |
+| `button`      | seat 1..10                             | Dealer button of the next hand to be dealt                                                                                                                                 |
+| `rebuys`      | integer 0..`MAX_SESSION_COUNT`         | The user's rebuys, stored with the next completed hand (TASK-3.11 A-1); bot replacements are not rebuys                                                                    |
+| `level`       | integer ≥ 1 \| null                    | null for cash; the sit-and-go level (1 until TASK-5.4)                                                                                                                     |
+| `nextBotName` | integer 0..`MAX_SESSION_COUNT`         | Position of the next replacement bot name (`TableState.nextBotName`)                                                                                                       |
+| `nextBotId`   | integer 1..`MAX_SESSION_COUNT`         | The id the next replacement bot gets (`TableState.nextBotId`)                                                                                                              |
+| `endedAt`     | string, ISO-8601 UTC \| null, optional | When the session was ended. Absent or null = not ended (paused). Written only by `endSession` (Leave table) and `endPausedSessions` (Start game, [reports.md](reports.md)) |
 
 Seat entry: `{ seat, kind: 'user' | 'bot', botId, name, style, stack }`. `botId` and `style` are null for the
 user; a bot's `botId` is unique and below `nextBotId`. `name` is 1–40 characters. `stack` is the seat's chips
@@ -114,9 +115,9 @@ objects and arrays such as `{"toString":1}` or `[3]` are rejected without being 
 and passes them to `findPausedSession(values)`, which parses each one on its own. An invalid value goes into
 `rejected` (its RangeError) and is skipped, so one corrupt record cannot hide a valid session or break Home.
 Ended records (`endedAt` a string) are dropped. Of the rest, the paused session is the one with the latest
-`updatedAt`, then the latest `startedAt`, then the greatest `sessionId`. Older not-ended sessions are ignored
-(today every Start game leaves one behind; TASK-2.7 keeps it to one). `pausedSession()` rejects only if the
-database cannot be read, for example `VersionError`.
+`updatedAt`, then the latest `startedAt`, then the greatest `sessionId`. Older not-ended sessions (left by
+Start game before TASK-2.7) are ignored here, and ended by the next confirmed Start game (below).
+`pausedSession()` rejects only if the database cannot be read, for example `VersionError`.
 
 **Home.** While Home is shown, `App` runs `pausedSession()`. Each rejected value is logged as
 `console.error('Session record could not be read', error)`; a failed read is logged as
@@ -136,6 +137,16 @@ then continue as before.
 
 Leave table ends the session: `endSession` writes `endedAt` and adds its report, or deletes a session with 0
 completed hands (see [reports.md](reports.md)). An ended session never shows in Resume.
+
+**Start game with a paused session (TASK-2.7).** Start game on Game Config reads `pausedSession()` again at
+click time, after `tableWritesSettled()`. With no paused session the Table opens at once. Otherwise a modal
+`End your paused session?` dialog shows the session's summary line and either `Its Session Report will be
+saved.` or, with 0 hands, `It has no completed hands, so no report is saved.` `Cancel` (focused) or Escape
+closes it and changes nothing; Game Config keeps its values. `End session and start` runs
+`endPausedSessions(sessionId, now)` before the Table mounts (so before its start record), then opens the Table:
+afterwards the new session is the only one not ended. A read failure is logged
+(`Paused session could not be read`) and the game starts; a failure ending the paused session is logged
+(`Paused session could not be ended`), the dialog closes and no game starts.
 
 **A stored bust (TASK-3.11).** When a cash hand ends with the user on $0, `handWrite` stores that hand and a
 session with the user's stack 0 and the `rebuys` count from before the bust. No hand is dealt: `nextStep` is
@@ -191,6 +202,9 @@ the app makes every call reject with `VersionError` and dealing stops.
 - `e2e/history.spec.ts` (every push): browser Back and Forward, and a stored `nextBotName` above the cap.
 - `e2e/resume.spec.ts` (every push): reload in the middle of hand 3 and resume, a seeded 9-player session,
   and invalid stored sessions.
+- `tests/storage/end-paused.acceptance.test.ts`, `tests/ui/end-session-dialog.acceptance.test.tsx` and
+  `e2e/new-game-confirm.spec.ts` (every push): ending paused sessions from Start game, the dialog markup,
+  Cancel and Escape, Confirm, a 0-hand session and no dialog without a paused session.
 - `e2e/session-records.spec.ts` (every push): the start record, the record after hand 2 and a reload in the
   middle of hand 3.
 - `e2e/session-kill.spec.ts` (opt-in, Chromium): plays 10 hands, deals hand 11, sends SIGKILL to the browser

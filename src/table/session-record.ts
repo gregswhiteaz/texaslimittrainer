@@ -238,7 +238,7 @@ export function restoreSession(value: unknown): TableState {
   };
 }
 
-const isEnded = (record: SessionRecord): boolean =>
+export const isEnded = (record: SessionRecord): boolean =>
   record.endedAt !== undefined && record.endedAt !== null;
 
 /** Later updatedAt, then later startedAt, then greater sessionId (A-1). */

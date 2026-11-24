@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { referenceSizeOf } from '../../advice/preflop';
 import type { ReferenceSize } from '../../advice/preflop-chart';
 import { LINE_UP_PRESETS, type LineUpPreset } from '../../bots/lineup';
@@ -20,11 +20,14 @@ import {
   TABLE_SIZES,
 } from '../../table/session';
 import { useHeadingFocus } from '../useHeadingFocus';
+import { EndSessionDialog, type EndPrompt } from './EndSessionDialog';
 
 export interface GameConfigScreenProps {
   readonly config: SessionConfig;
   readonly onStart: (config: SessionConfig) => void;
   readonly onCancel: () => void;
+  /** TASK-2.7: while set, the dialog asking to end the paused session is shown. */
+  readonly endPrompt?: EndPrompt | null;
 }
 
 const GAME_TYPES: readonly GameType[] = ['cash', 'sit-and-go'];
@@ -82,8 +85,10 @@ export function GameConfigScreen({
   config,
   onStart,
   onCancel,
+  endPrompt,
 }: GameConfigScreenProps): React.JSX.Element {
   const heading = useHeadingFocus(true);
+  const start = useRef<HTMLButtonElement>(null);
   const [gameType, setGameType] = useState<GameType>(config.gameType);
   // A-7: a sit-and-go config carries no stake, so the hidden cash stake starts at the default.
   const [stake, setStake] = useState<Stake>(
@@ -262,6 +267,7 @@ export function GameConfigScreen({
           Cancel
         </button>
         <button
+          ref={start}
           type="button"
           className="button-primary"
           onClick={() => onStart(configForGameType(seated, gameType, stake))}
@@ -269,6 +275,16 @@ export function GameConfigScreen({
           Start game
         </button>
       </div>
+      {endPrompt && (
+        <EndSessionDialog
+          {...endPrompt}
+          // WebKit does not focus a clicked button, so the dialog cannot restore focus to it by itself (A-2).
+          onCancel={() => {
+            start.current?.focus();
+            endPrompt.onCancel();
+          }}
+        />
+      )}
     </main>
   );
 }

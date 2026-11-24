@@ -1,5 +1,10 @@
 import { parseHandRecord, type HandStore } from '../table/hand-record';
-import { findPausedSession, parseSessionRecord } from '../table/session-record';
+import {
+  findPausedSession,
+  isEnded,
+  parseSessionRecord,
+  type SessionRecord,
+} from '../table/session-record';
 import {
   parseSessionReport,
   sessionReport,
@@ -149,6 +154,26 @@ export function openHandStore(
     },
     async endSession(sessionId, endedAt) {
       return ended(await database(), sessionId, endedAt);
+    },
+    async endPausedSessions(sessionId, endedAt) {
+      const report = await ended(await database(), sessionId, endedAt);
+      const values: unknown[] = await requested((await readOnly(SESSIONS_STORE)).getAll());
+      const rejected: Error[] = [];
+      for (const value of values) {
+        let record: SessionRecord;
+        try {
+          record = parseSessionRecord(value);
+        } catch {
+          continue;
+        }
+        if (isEnded(record) || record.sessionId === sessionId) continue;
+        try {
+          await ended(await database(), record.sessionId, new Date(record.updatedAt));
+        } catch (error) {
+          rejected.push(error instanceof Error ? error : new Error(String(error)));
+        }
+      }
+      return { report, rejected };
     },
     async getReport(sessionId) {
       const value: unknown = await requested((await readOnly(REPORTS_STORE)).get(sessionId));

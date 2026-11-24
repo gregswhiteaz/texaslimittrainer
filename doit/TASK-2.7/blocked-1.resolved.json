@@ -1,0 +1,10 @@
+{
+  "spec": "SPEC-11",
+  "reason": "D-5 missed one locked e2e that clicks Start game with a valid unended session stored: e2e/next-hand.spec.ts (locked by TASK-3.4), test 'the result shows the winner, amount and hand name, and nothing of an uncontested winner'. It opens a second page in the SAME browser context (`page.context().newPage()`, line 244) after the first page started a game and played hand 1, so that session is stored and not ended. openApp(fresh) clicks New game then Start game; with TASK-2.7 the new 'End your paused session?' dialog correctly appears (AC#1) and no Table opens, so foldToResult(fresh) times out. Fails on Chromium and WebKit; every other test in the full suite passes (282 passed, 2 failed, 16 skipped).",
+  "evidence": "npm run build && npx playwright test: 2 failed: [chromium] and [webkit] e2e/next-hand.spec.ts:221 'Error: runUntil: condition not met after 180600 ms fake / 10000 ms real' at foldToResult (next-hand.spec.ts:161) called from next-hand.spec.ts:248. Locked by doit/TASK-3.4/state.json locked_tests['e2e/next-hand.spec.ts'].",
+  "options": [
+    "Recommended: edit the locked test (owner TASK-3.4) so the second page runs in a fresh context: take the `browser` fixture and use `const freshContext = await browser.newContext(); const fresh = await freshContext.newPage();` (closing it at the end). This keeps the test's intent (an uncontested winner on a new table) independent of stored sessions.",
+    "Alternative: keep the same-context page and, after `openApp(fresh)`, click `fresh.getByRole('button', { name: 'End session and start' })` before `foldToResult(fresh)` (the test then also exercises the TASK-2.7 dialog).",
+    "Not recommended: change the product to skip the dialog when the paused session belongs to another open tab (multi-tab coordination is out of scope)."
+  ]
+}

@@ -2,13 +2,14 @@
 
 Leave table ends the session (TASK-10.1, REQ-004.5). The app waits for any hand write still running, then one
 IndexedDB transaction writes `endedAt` on the [session record](sessions.md) and adds a Session Report record.
-The report is written once and never changed. The Session Report screen shows it.
+The report is written once and never changed. The Session Report screen shows it. A confirmed Start game with a
+paused session (TASK-2.7) also ends sessions, through `endPausedSessions`, without opening the screen.
 
 - `src/table/session-report.ts` (headless): the `SessionReport` and `CashResult` types, `sessionReport(…)`,
   `bbPer100(…)`, `parseSessionReport(…)`, `signedDollars(…)`, `signedTenths(…)`, `reportView(…)` and the
   `SessionEnder` interface.
-- `src/storage/hand-store.ts` (browser): the `reports` store, `endSession(sessionId, endedAt)` and
-  `getReport(sessionId)`.
+- `src/storage/hand-store.ts` (browser): the `reports` store, `endSession(sessionId, endedAt)`,
+  `endPausedSessions(sessionId, endedAt)` and `getReport(sessionId)`.
 - `src/ui/report/ReportScreen.tsx`: the Session Report screen. `src/ui/App.tsx`: Leave table (`leave`).
 
 ## Database
@@ -61,6 +62,14 @@ unfinished hand is not stored yet, so neither the rebuy nor its chips count.
   `endedAt`, and the report is added. If validation fails, or a report for the id already exists
   (`ConstraintError`), the transaction aborts and nothing changes. App logs
   `console.error('Session could not be ended', error)` and opens Home; the session stays paused.
+- **Ending from Start game (`endPausedSessions`, TASK-2.7).** First ends the confirmed paused session at
+  `endedAt` (now) exactly as `endSession`; if that rejects, the call rejects and nothing changed. Then it reads
+  every value in `sessions` and ends each other valid record that is not ended, one `endSession`-style
+  transaction each, at that record's own `updatedAt` (the time it was last played): a report is saved, or a
+  0-hand record is deleted. Invalid records are skipped and never touched. A failure on one of these older
+  sessions leaves it unchanged, is returned in `rejected` (App logs `Session could not be ended`) and does not
+  stop the others or the new game. It resolves `{ report, rejected }`, where `report` is the confirmed
+  session's report (null for 0 hands or an absent id).
 - **Write-once.** A report is only ever added. A second `endSession` for the same id is rejected, and the
   stored report and session stay as they were.
 - **Reading (`getReport`).** Stored values are untrusted: `parseSessionReport` checks every field, including
@@ -73,6 +82,8 @@ unfinished hand is not stored yet, so neither the rebuy nor its chips count.
   edges, sit-and-go, 0 hands and `parseSessionReport`.
 - `tests/storage/session-end.acceptance.test.ts` (`fake-indexeddb`): ending and reading after a relaunch,
   0 hands, write-once, a corrupt session and the v2 → v3 upgrade.
+- `tests/storage/end-paused.acceptance.test.ts` (`fake-indexeddb`): `endPausedSessions` with older, 0-hand,
+  ended and invalid sessions, and its failures.
 - `tests/ui/report-screen.acceptance.test.tsx`: the Session Report markup.
 - `e2e/session-report.spec.ts` (every push): Leave table between hands, Back to Home, Leave with the Hand
   Review open, seeded long sessions, and a 0-hand session. `e2e/rebuy.spec.ts` and

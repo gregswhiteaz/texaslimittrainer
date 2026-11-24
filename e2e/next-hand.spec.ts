@@ -220,6 +220,7 @@ async function expectNextDeal(page: Page, handNumber: number): Promise<void> {
 
 test('the result shows the winner, amount and hand name, and nothing of an uncontested winner', async ({
   page,
+  browser,
 }) => {
   const requests: string[] = [];
   page.on('request', (request) => requests.push(request.url()));
@@ -241,7 +242,10 @@ test('the result shows the winner, amount and hand name, and nothing of an uncon
   );
   await axeWithPausedClock(page);
 
-  const fresh = await page.context().newPage();
+  // A separate context keeps the fresh app's storage empty, so Start game opens the Table at
+  // once (TASK-2.7 asks to end a paused session that shares the same storage).
+  const freshContext = await browser.newContext();
+  const fresh = await freshContext.newPage();
   fresh.on('request', (request) => requests.push(request.url()));
   await installPausedClock(fresh);
   await openApp(fresh);
@@ -251,6 +255,7 @@ test('the result shows the winner, amount and hand name, and nothing of an uncon
   await expect(handOver(fresh)).not.toContainText(' · ');
   await expect(handOver(fresh).locator('svg')).toHaveCount(0);
   await axeWithPausedClock(fresh);
+  await freshContext.close();
 
   expect(requests.length).toBeGreaterThan(0);
   expect(requests.map((url) => new URL(url).origin)).toEqual(requests.map(() => ORIGIN));

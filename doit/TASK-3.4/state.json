@@ -518,6 +518,12 @@
       "event": "unlock",
       "file": "e2e/next-hand.spec.ts",
       "reason": "TASK-10.1 D-4: Leave table now ends the session and opens the Session Report (replace the interim pause expectation; nothing loosened)"
+    },
+    {
+      "t": "2026-11-24T11:28:08",
+      "event": "unlock",
+      "file": "e2e/next-hand.spec.ts",
+      "reason": "TASK-2.7: the second page shared the first page's storage, so Start game now (correctly) asks to end the paused session; give the fresh page its own browser context (test intent unchanged, no assertion changed)"
     }
   ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-3.4",
@@ -543,6 +549,7 @@
     "e2e/next-hand.spec.ts",
     "tests/table/next-hand.acceptance.test.ts",
     "tests/table/next-hand.acceptance.test.ts",
+    "e2e/next-hand.spec.ts",
     "e2e/next-hand.spec.ts"
   ]
 }

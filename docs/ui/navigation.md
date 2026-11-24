@@ -3,12 +3,12 @@
 The app has four screens, held in `App`'s state (`src/ui/App.tsx`). There are no URL routes, hash fragments
 or deep links: the URL stays `/` on every screen.
 
-| Screen         | Opened by                                                                                                    | Leaves to                                                                   |
-| -------------- | ------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------- |
-| Home           | app start; Cancel / ← Home; the Table's Home control or browser Back; Leave table with 0 hands; Back to Home | New game → Game Config; Resume session → Table                              |
-| Game Config    | New game                                                                                                     | Start game → Table; Cancel / ← Home → Home                                  |
-| Table          | Start game (a new session); Resume session                                                                   | Home control or browser Back → Home; Leave table → Session report (or Home) |
-| Session report | Leave table (after at least one completed hand)                                                              | Back to Home → Home                                                         |
+| Screen         | Opened by                                                                                                    | Leaves to                                                                      |
+| -------------- | ------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------ |
+| Home           | app start; Cancel / ← Home; the Table's Home control or browser Back; Leave table with 0 hands; Back to Home | New game → Game Config; Resume session → Table                                 |
+| Game Config    | New game                                                                                                     | Start game → Table (asks first if a session is paused); Cancel / ← Home → Home |
+| Table          | Start game (a new session); Resume session                                                                   | Home control or browser Back → Home; Leave table → Session report (or Home)    |
+| Session report | Leave table (after at least one completed hand)                                                              | Back to Home → Home                                                            |
 
 Each return to Home moves focus to Home's `TLH Trainer` heading.
 
@@ -48,6 +48,24 @@ control under the table reads `Continue` instead of `Deal next hand`, also after
 the review and opens the `Out of chips` dialog; nothing is dealt until Rebuy. In a sit-and-go the control still
 reads `Deal next hand` (`See results` comes with TASK-5.8).
 
+## Start game with a paused session (TASK-2.7, REQ-004.4)
+
+Start game checks storage first. If a session is paused (not ended), a modal `End your paused session?` dialog
+opens over Game Config, which stays as it was:
+
+- It reads `Starting a new game ends this paused session:`, the session's Home summary line (for example
+  `Cash · 6 players · $4/$8 · 4 hands · paused`), and `Its Session Report will be saved.` or, with 0 completed
+  hands, `It has no completed hands, so no report is saved.`
+- Buttons: `Cancel` (focused) and `End session and start`. Cancel or Escape closes the dialog, changes nothing
+  and returns focus to Start game.
+- `End session and start` ends the paused session (its report is saved; a 0-hand session is deleted), also
+  ends any older unended sessions ([reports.md](../storage/reports.md)), and then opens the Table for the new
+  game. No Session report screen is shown. While it runs, both buttons are disabled and Escape is ignored. If
+  the paused session cannot be ended, the error is logged, the dialog closes and no game starts.
+
+With no paused session, Start game opens the Table at once. New game, Resume session and Cancel / ← Home never
+ask and never end anything.
+
 ## Browser Back and Forward (TASK-2.14 D-2)
 
 Only opening the Table (Start game or Resume session) adds a history entry, `{ tlhTable: <key> }`, with a key
@@ -81,5 +99,8 @@ Home control            […, app, T1*, T2]    current entry is T2 → history.b
 - `e2e/history.spec.ts` (every push): Back and Forward on the Table, Back on Home and Game Config, and Back
   after a reload and Resume.
 - `e2e/home.spec.ts`: `history.length` is unchanged across New game, then Cancel or ← Home.
+- `tests/ui/end-session-dialog.acceptance.test.tsx`: the dialog markup, shown only with a prompt.
+- `e2e/new-game-confirm.spec.ts` (every push): the dialog, Cancel and Escape, Confirm, older sessions, a 0-hand
+  session, and Start game with no paused session.
 - `e2e/session-report.spec.ts` (every push): Leave table opens the Session report, Back to Home, and a 0-hand
   session opens Home.

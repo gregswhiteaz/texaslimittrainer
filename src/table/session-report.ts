@@ -35,6 +35,14 @@ export interface SessionReport {
   readonly cash: CashResult | null;
 }
 
+/** The result of SessionEnder.endPausedSessions. */
+export interface PausedSessionsEnd {
+  /** The confirmed session's report; null if it had 0 hands (deleted) or was absent. */
+  readonly report: SessionReport | null;
+  /** One error per older unended session that could not be ended (left unchanged). */
+  readonly rejected: readonly Error[];
+}
+
 export interface SessionEnder {
   /** Ends the stored session in one strict transaction over `sessions` and `reports`. Absent → resolves null,
    *  writes nothing. handsPlayed 0 → deletes the session record, resolves null. Otherwise puts the stored
@@ -42,6 +50,10 @@ export interface SessionEnder {
    *  changed) if the stored session fails parseSessionRecord (RangeError) or a report for the id exists
    *  (DOMException 'ConstraintError'). */
   endSession(sessionId: string, endedAt: Date): Promise<SessionReport | null>;
+  /** Ends `sessionId` at `endedAt` (as endSession), then every other valid unended stored session at its own
+   *  updatedAt, each in its own transaction. Rejects (nothing changed) only if ending `sessionId` fails;
+   *  failures ending the others are returned in `rejected`. Invalid stored values are skipped. */
+  endPausedSessions(sessionId: string, endedAt: Date): Promise<PausedSessionsEnd>;
   /** parseSessionReport of the stored value, or null if absent. */
   getReport(sessionId: string): Promise<SessionReport | null>;
 }
