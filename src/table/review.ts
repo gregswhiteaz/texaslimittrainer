@@ -43,6 +43,37 @@ export function opensReview(hand: CompletedHand): boolean {
   return rest.length > 0 || first.action.type !== 'fold' || first.view.street !== 'preflop';
 }
 
+export type AfterHandReview = 'panel' | 'badge' | 'none';
+
+/** What the table shows when `hand` ends (REQ-043.8/.11/.12/.13): the panel only with auto-open on. */
+export function afterHandReview(hand: CompletedHand, autoOpen: boolean): AfterHandReview {
+  if (!opensReview(hand)) return 'none';
+  return autoOpen ? 'panel' : 'badge';
+}
+
+/** The grade summary badge shown instead of the panel when auto-open is off (TASK-9.7). */
+export interface ReviewBadge {
+  /** "1 Major, 1 Minor" | "3 Major" | "1 Minor" | "All correct". */
+  readonly text: string;
+  readonly worst: Grade;
+  /** `Open hand review: ${text}`. */
+  readonly label: string;
+}
+
+/** The summary of a hand's grades, in any order. RangeError('A review badge needs at least one grade') if
+ *  empty. */
+export function reviewBadge(grades: readonly Grade[]): ReviewBadge {
+  if (grades.length === 0) throw new RangeError('A review badge needs at least one grade');
+  const major = grades.filter((g) => g === 'major').length;
+  const minor = grades.filter((g) => g === 'minor').length;
+  const parts: string[] = [];
+  if (major > 0) parts.push(`${major} Major`);
+  if (minor > 0) parts.push(`${minor} Minor`);
+  const text = parts.join(', ') || 'All correct';
+  const worst: Grade = major > 0 ? 'major' : minor > 0 ? 'minor' : 'correct';
+  return { text, worst, label: `Open hand review: ${text}` };
+}
+
 /** One entry per user decision, same order. Errors from gradeView propagate (A-5). */
 export function reviewEntries(
   hand: CompletedHand,

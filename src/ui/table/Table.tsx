@@ -15,10 +15,12 @@ import {
 } from '../../table/hint';
 import type { HandRecordDecision } from '../../table/hand-record';
 import {
-  opensReview,
+  afterHandReview,
+  reviewBadge as summaryBadge,
   reviewSummary,
   shownOpponents,
   storedReviewEntries,
+  type ReviewBadge,
   type ReviewSummary,
   type ShownOpponent,
   type StoredReviewEntry,
@@ -80,6 +82,10 @@ export interface TableViewProps {
   readonly hint?: { readonly status: HintStatus; readonly card: HintCardView | null } | null;
   /** Hint / Hide hint. */
   readonly onHint?: () => void;
+  /** The grade summary badge (auto-open off, TASK-9.7); shown only after the result with no held review. */
+  readonly reviewBadge?: ReviewBadge | null;
+  /** Opens the review from the badge. */
+  readonly onOpenReview?: () => void;
 }
 
 function SeatMarkers({ seat }: { readonly seat: SeatView }): React.JSX.Element {
@@ -223,6 +229,8 @@ export function TableView({
   onRebuy,
   hint = null,
   onHint,
+  reviewBadge = null,
+  onOpenReview,
 }: TableViewProps): React.JSX.Element {
   const model = tableView(table);
   const bar = userActionBar(table);
@@ -301,6 +309,17 @@ export function TableView({
               {userBusted(table) ? 'Continue' : 'Deal next hand'}
             </button>
           )}
+          {reviewBadge !== null && review === null && result !== null && (
+            <button
+              type="button"
+              className="review-badge"
+              data-worst={reviewBadge.worst}
+              aria-label={reviewBadge.label}
+              onClick={onOpenReview}
+            >
+              {reviewBadge.text}
+            </button>
+          )}
         </div>
         {review?.open === true && review.entries !== null && (
           <ReviewPanel
@@ -322,28 +341,44 @@ export function TableView({
 export type TableProps = TableSessionOptions & {
   readonly onLeave?: () => void;
   readonly onHome?: () => void;
+  /** Open the review by itself after a reviewed hand (REQ-050.2, default on); off shows a badge instead. */
+  readonly autoOpenReview?: boolean;
 };
+
+/** The badge's hand and its stored entries (null until graded). */
+interface BadgeState {
+  readonly hand: CompletedHand;
+  readonly entries: readonly StoredReviewEntry[] | null;
+}
 
 export function Table({
   onLeave = () => undefined,
   onHome,
   onHandComplete: external,
   holdNextHand = false,
+  autoOpenReview = true,
   ...options
 }: TableProps): React.JSX.Element {
   const [review, setReview] = useState<HeldReview | null>(null);
-  // Read through a ref so onHandComplete stays stable and never restarts the next-hand timer.
+  const [badge, setBadge] = useState<BadgeState | null>(null);
+  // Read through refs so onHandComplete stays stable and never restarts the next-hand timer.
   const externalRef = useRef(external);
+  const autoOpenRef = useRef(autoOpenReview);
   useEffect(() => {
     externalRef.current = external;
-  }, [external]);
+    autoOpenRef.current = autoOpenReview;
+  }, [external, autoOpenReview]);
   const onHandComplete = useCallback((hand: CompletedHand) => {
     externalRef.current?.(hand);
-    if (opensReview(hand)) setReview({ hand, entries: null, open: true });
+    const mode = afterHandReview(hand, autoOpenRef.current);
+    if (mode === 'panel') setReview({ hand, entries: null, open: true });
+    setBadge(mode === 'badge' ? { hand, entries: null } : null);
   }, []);
   const onHandGraded = useCallback(
     (hand: CompletedHand, decisions: readonly HandRecordDecision[]) => {
-      setReview((r) => reviewGraded(r, hand, storedReviewEntries(hand, decisions)));
+      const entries = storedReviewEntries(hand, decisions);
+      setReview((r) => reviewGraded(r, hand, entries));
+      setBadge((b) => (b?.hand === hand ? { ...b, entries } : b));
     },
     [],
   );
@@ -394,8 +429,20 @@ export function Table({
   }, []);
   const onDealNext = useCallback(() => {
     setReview(null);
+    setBadge(null);
     dealNext();
   }, [dealNext]);
+  // The badge never outlives its hand (A-6): cleared while rendering the next hand number.
+  const [badgeHandNumber, setBadgeHandNumber] = useState(table.handNumber);
+  if (badgeHandNumber !== table.handNumber) {
+    setBadgeHandNumber(table.handNumber);
+    setBadge(null);
+  }
+  const openReview = useCallback(() => {
+    if (badge === null || badge.entries === null) return;
+    setReview({ hand: badge.hand, entries: badge.entries, open: true });
+    setBadge(null);
+  }, [badge]);
 
   return (
     <TableView
@@ -410,6 +457,8 @@ export function Table({
       onRebuy={rebuy}
       hint={status === 'none' ? null : { status, card: hint.card }}
       onHint={onHint}
+      reviewBadge={badge?.entries ? summaryBadge(badge.entries.map((e) => e.grade)) : null}
+      onOpenReview={openReview}
     />
   );
 }

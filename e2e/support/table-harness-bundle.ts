@@ -141,6 +141,8 @@ export interface RecordsHarnessOptions {
   readonly delayMs?: number;
   /** Re-render the Table with a new onHandComplete every 100 ms. */
   readonly churn?: boolean;
+  /** Auto-open the review (default true); false renders the Table with autoOpenReview={false}. */
+  readonly autoOpen?: boolean;
 }
 
 /** Renders the records harness at the app's origin with every replay code pinned to `words`. */
@@ -148,13 +150,13 @@ export async function openRecordsHarness(
   page: Page,
   bundle: string,
   words: readonly number[],
-  { store = 'real', delayMs = 2000, churn = false }: RecordsHarnessOptions = {},
+  { store = 'real', delayMs = 2000, churn = false, autoOpen = true }: RecordsHarnessOptions = {},
 ): Promise<void> {
   await page.addInitScript(stubReplayWords, words);
   await openHarnessPage(
     page,
     'records',
-    `<!doctype html><html lang="en"><head><title>Records harness</title></head><body><div id="root" data-store="${store}" data-delay-ms="${delayMs}" data-churn="${churn ? '1' : '0'}"></div></body></html>`,
+    `<!doctype html><html lang="en"><head><title>Records harness</title></head><body><div id="root" data-store="${store}" data-delay-ms="${delayMs}" data-churn="${churn ? '1' : '0'}" data-auto-open="${autoOpen ? '1' : '0'}"></div></body></html>`,
   );
   await page.addScriptTag({ content: bundle });
   await page.getByRole('region', { name: 'Table' }).waitFor();

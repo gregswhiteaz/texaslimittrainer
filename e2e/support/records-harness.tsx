@@ -11,7 +11,8 @@ import { Table } from '../../src/ui/table/Table';
 // Test-only page (TASK-3.9 A-4): never imported by the app, built and injected by table-harness-bundle.ts.
 // #root's data-store picks the hand store: "real", "delay" (each add waits data-delay-ms on a page timer, so
 // under the paused clock, then calls the real add) or "fail" (each add rejects with QuotaExceededError).
-// data-churn="1" re-renders the Table with a new onHandComplete every 100 ms.
+// data-churn="1" re-renders the Table with a new onHandComplete every 100 ms. data-auto-open="0" renders the
+// Table with auto-open off (TASK-9.7).
 
 export interface RecordsHarnessLog {
   /** 'result' | 'header:<n>' | 'saved:<n>' | 'unhandled', with performance.now(). */
@@ -42,6 +43,7 @@ if (!root) throw new Error('Records harness needs a #root element');
 const mode = root.dataset.store ?? 'real';
 const delayMs = Number(root.dataset.delayMs ?? '2000');
 const churn = root.dataset.churn === '1';
+const autoOpen = root.dataset.autoOpen !== '0';
 
 const real = openHandStore();
 const handStore: HandStore =
@@ -85,7 +87,7 @@ function Harness(): React.JSX.Element {
     log.calls.push(hand.replayCode);
     log.observed.push(hand.userDecisions.map((d) => d.observed ?? null));
   };
-  return <Table handStore={handStore} onHandComplete={onHandComplete} />;
+  return <Table handStore={handStore} onHandComplete={onHandComplete} autoOpenReview={autoOpen} />;
 }
 
 sharedAdviceClient(() => new AdviceWorker());

@@ -1,4 +1,4 @@
-# Hand Review panel (TASK-9.1, TASK-9.3, TASK-9.4, TASK-9.5, TASK-9.6)
+# Hand Review panel (TASK-9.1, TASK-9.3, TASK-9.4, TASK-9.5, TASK-9.6, TASK-9.7)
 
 After a hand in which the user made a decision (other than a lone preflop fold), the Hand Review panel opens beside
 the table with one entry per user decision, in order (REQ-043). Each entry shows the numbers and the reason behind
@@ -78,6 +78,34 @@ An entry whose decision was made with help shows a small outlined "hinted" tag r
 - **Wrapping.** `.review-entry-top` wraps. When the street, the board and the verdict group don't fit on one line
   (a river entry with a tag), the verdict group moves whole to a second line, still right-aligned, so the panel
   never scrolls horizontally.
+
+## Grade summary badge (auto-open off)
+
+Whether the panel opens by itself is the auto-open setting (REQ-050.2). For now it is the `Table` prop
+`autoOpenReview` (default on) and is not saved anywhere; the app passes no value, so auto-open stays on. The
+Settings toggle and saving it are TASK-12.6. The setting is read when each hand ends, so a change applies from the
+next hand end.
+
+When a hand ends, `afterHandReview(hand, autoOpen)` (`src/table/review.ts`) decides what the table shows:
+
+| Hand                                                                              | Auto-open on | Auto-open off |
+| --------------------------------------------------------------------------------- | ------------ | ------------- |
+| No user decision, or a lone preflop fold                                          | nothing      | nothing       |
+| Any other hand with a user decision (including call or raise, then fold, preflop) | the panel    | the badge     |
+
+The badge is a button in the Deal next hand slot under the table. Its text counts the hand's stored grades
+(`reviewBadge`): `"<n> Major"` and `"<m> Minor"`, zero counts left out, joined by `", "`; with no errors it reads
+`All correct`. Correct grades are not counted. Examples: `1 Major, 1 Minor`, `3 Major`, `1 Minor`, `All correct`.
+Its accessible name is `Open hand review: <text>`.
+
+Its colour is the worst grade's badge colour (`data-worst`): major `#a3151c`, minor `#9a5b00`, correct `#2f6fe0`,
+with white text. The text always states the grades, so colour is never the only signal.
+
+Lifetime: the badge appears once the hand's grades are stored for the review (if grading fails there is no badge and
+no further deal). It shows only while the hand's result is on screen and no review is held, and it goes when the
+next hand is dealt. The badge never holds the next hand: without a click the next hand is dealt 1.5 s after the
+result. Clicking it opens the panel for that hand, held as with auto-open on, so the next hand waits for Deal next
+hand. When the user busts with auto-open off, nothing is held and the bust dialog opens over the badge.
 
 ## Where it comes from
 

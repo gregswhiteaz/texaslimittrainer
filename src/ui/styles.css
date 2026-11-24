@@ -710,6 +710,38 @@ h1[tabindex='-1']:focus {
   cursor: pointer;
 }
 
+/* Grade summary badge (auto-open off, TASK-9.7): the Deal next hand slot, coloured by the worst grade. */
+.review-badge {
+  display: block;
+  min-height: 44px;
+  margin: 12px auto 0;
+  padding: 0 20px;
+  color: #ffffff;
+  border: 0;
+  border-radius: 22px;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.review-badge[data-worst='major'] {
+  background: #a3151c;
+}
+
+.review-badge[data-worst='minor'] {
+  background: #9a5b00;
+}
+
+.review-badge[data-worst='correct'] {
+  background: #2f6fe0;
+}
+
+.review-badge:focus-visible {
+  outline: 3px solid #ffffff;
+  outline-offset: 2px;
+}
+
 .review-panel {
   flex: 0 0 400px;
   box-sizing: border-box;
