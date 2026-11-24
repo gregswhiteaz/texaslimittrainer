@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-24T12:09:00Z'
+updated_date: '2026-11-24T16:41:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -89,6 +89,8 @@ Build: held bust review button reads Continue (same element/handler), opens Out 
 Judge r1 PASS 9/9; live Chromium+WebKit bust/Continue/Rebuy/Leave/Resume; CI 45389035315 green.
 
 Follow-ups: none new. Already owned: Leave ends session (TASK-10.1), stopped sit-and-go results (TASK-5.8). By design: Continue closes the review (A-3). Not tracked: duplicated seed builder NIT (test-only).
+
+Locked e2e/bust-continue.spec.ts unlocked for TASK-10.1 D-4 (Leave table ends the session; expectation replaced, not loosened).
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary

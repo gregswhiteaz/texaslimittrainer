@@ -4,7 +4,7 @@ title: Open Statistics or go Home from the Session Report
 status: To Do
 assignee: []
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-17T23:22:00Z'
+updated_date: '2026-11-24T16:41:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -62,3 +62,9 @@ Plan key: E11-S07 · Dream: limit-holdem-trainer
 - [ ] #11 Story documentation is written and published to Backlog.md
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+TASK-10.1 Q-3 adds a Back to Home button on the Session Report; this task then only needs View statistics.
+<!-- SECTION:NOTES:END -->

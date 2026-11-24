@@ -1545,7 +1545,14 @@
       "skips": 0
     }
   },
-  "history": [],
+  "history": [
+    {
+      "t": "2026-11-24T09:41:41",
+      "event": "unlock",
+      "file": "e2e/bust-continue.spec.ts",
+      "reason": "TASK-10.1 D-4: Leave table now ends the session and opens the Session Report (replace the interim pause expectation; nothing loosened)"
+    }
+  ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-9.2",
   "spec_sha256": "baf948645662fc621fb8a613d98055ec28be6bdc13395d327f2c0b40af4f33fc",
   "review_findings": {
@@ -1554,5 +1561,8 @@
   "judge_results": {
     "1": "PASS"
   },
-  "doc_id": "doc-116"
+  "doc_id": "doc-116",
+  "relock_pending": [
+    "e2e/bust-continue.spec.ts"
+  ]
 }

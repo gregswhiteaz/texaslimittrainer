@@ -1,10 +1,11 @@
 ---
 id: TASK-10.1
 title: End the session with Leave table and see its saved report with my cash result
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-19T00:21:00Z'
+updated_date: '2026-11-24T16:42:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -73,6 +74,18 @@ Plan key: E10-S01 · Dream: limit-holdem-trainer
 - [ ] #11 Story documentation is written and published to Backlog.md
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. Storage: DB v3 adds a write-once reports store; endSession writes the report and the session's endedAt in one transaction; 0-hand sessions are removed with no report
+2. Report model from the stored session record: header line, cash block (Result, BB/100, Rebuys); sit-and-go shows the header only
+3. Leave table (also mid-hand, bust dialog, Continue) ends the session and opens the Session Report screen (h1 focused, Back to Home); busy state while ending; failure logs and opens Home
+4. Re-pin five locked e2e tests (TASK-3.11, 9.2, 2.6, 3.4, 2.14) to the new behaviour; move e2e storage helpers to v3
+5. Tests: unit, render, e2e report flows in Chromium and WebKit with axe
+
+Full spec: doit/TASK-10.1/spec.md
+<!-- SECTION:PLAN:END -->
 
 ## Implementation Notes
 

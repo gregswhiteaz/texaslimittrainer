@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T23:03:00Z'
-updated_date: '2026-11-24T03:18:00Z'
+updated_date: '2026-11-24T16:41:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -92,6 +92,8 @@ Build: Table header Home button, tableWritesSettled before Home's read, keyed Ta
 Judge r1 PASS 12/12; CI 45316910309 green on f560a64.
 
 Follow-ups: TASK-2.20 created (write-race test, clock-free history key, Forward-then-Back stale entry).
+
+Locked e2e/home-control.spec.ts unlocked for TASK-10.1 D-4 (Leave table ends the session; expectation replaced, not loosened).
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary

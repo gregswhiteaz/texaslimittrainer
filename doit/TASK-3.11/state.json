@@ -1439,6 +1439,12 @@
       "event": "unlock",
       "file": "tests/ui/bust-dialog.acceptance.test.tsx",
       "reason": "TASK-9.2 AC#1: held bust review button reads Continue; replace the Deal next hand expectation (stricter, nothing dropped)"
+    },
+    {
+      "t": "2026-11-24T09:41:40",
+      "event": "unlock",
+      "file": "e2e/rebuy.spec.ts",
+      "reason": "TASK-10.1 D-4: Leave table now ends the session and opens the Session Report (replace the interim pause expectation; nothing loosened)"
     }
   ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-3.11",
@@ -1452,6 +1458,7 @@
   "doc_id": "doc-109",
   "relock_pending": [
     "tests/table/rebuy.acceptance.test.ts",
-    "tests/ui/bust-dialog.acceptance.test.tsx"
+    "tests/ui/bust-dialog.acceptance.test.tsx",
+    "e2e/rebuy.spec.ts"
   ]
 }
