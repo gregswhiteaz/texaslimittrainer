@@ -1,0 +1,10 @@
+{"reviewer": "code", "round": 2,
+ "rubric": [
+  {"item": "SPEC-01..SPEC-12 correctness (unchanged since r1)", "result": "pass"},
+  {"item": "SPEC-01..SPEC-12 test strength", "result": "pass"},
+  {"item": "scope", "result": "pass"},
+  {"item": "concision", "result": "pass"},
+  {"item": "clarity", "result": "pass"}
+ ],
+ "findings": [],
+ "summary": "Round 2 diff (3a1e98c) touches only e2e/hand-records.spec.ts and tests/table/decision-record.test.ts. e2e oldRecord() only adds a `decisions` array: one chart entry for seat 5's preflop fold. That matches the record's single non-blind user action and passes parseHandRecord, which the test itself calls on every seeded record. No assertions changed. decision-record.test.ts adds rejection cases for: action.amount only (entries 0 and 3), explanation over 2000 characters, opponentBasis text empty and 201 characters, alternative 'limp', and recommended.seat. Each case asserts the specified field path. This resolves r1 MINOR cross-check-amount-untested. The vacuous not.toBe was removed. In its place, a real no-sharing check builds an entry from a cloned decision, mutates that clone's action and legalActions, and asserts the entry's JSON is unchanged. This resolves r1 MINOR recommended-not-tobe-tautology. No assertions were dropped or loosened. The reviewer re-ran decision-record.test.ts and it passes. Gate fix-5 is PASS; its scope warnings are within the fail threshold. The r1 NITs are unchanged and not re-raised."}
