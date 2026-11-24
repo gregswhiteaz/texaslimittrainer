@@ -1,10 +1,11 @@
 ---
 id: TASK-10.4
 title: See my hands played and error rates per 100 hands in the report
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-17T23:22:00Z'
+updated_date: '2026-11-24T21:58:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -60,3 +61,14 @@ Plan key: E10-S02 · Dream: limit-holdem-trainer
 - [ ] #11 Story documentation is written and published to Backlog.md
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. sessionReport counts the user's unhinted Major/Minor decisions from the session's hand records and stores optional errors {major, minor} once at session end
+2. rateTiles(): Hands played, Major errors /100, Minor errors /100 (one decimal, handsPlayed denominator)
+3. Report screen: rate tiles in their own row after the cash tiles; old reports without errors show none
+4. Tests: unit/acceptance per AC (incl. 200-hand session), render, e2e Chromium+WebKit with axe; docs
+
+Full spec: doit/TASK-10.4/spec.md
+<!-- SECTION:PLAN:END -->

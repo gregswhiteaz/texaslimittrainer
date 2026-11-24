@@ -1,0 +1,74 @@
+[
+  {
+    "id": "SPEC-01",
+    "verifies": "AC#1, DoD#1",
+    "verification": "acceptance `tests/ui/report-errors.acceptance.test.tsx::AC#1 shows hands played 200 and error rates 6.0 and 14.0`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-02",
+    "verifies": "AC#2, DoD#1",
+    "verification": "acceptance `tests/ui/report-errors.acceptance.test.tsx::AC#2 hinted Major errors are not counted`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-03",
+    "verifies": "AC#3, DoD#1",
+    "verification": "acceptance `tests/ui/report-errors.acceptance.test.tsx::AC#3 an all-correct session shows 0.0 for both rates`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-04",
+    "verifies": "AC#4, DoD#1",
+    "verification": "acceptance `tests/storage/session-end-errors.acceptance.test.ts::AC#4 a scripted 200-hand session's tiles equal the values recomputed from its stored hand records`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-05",
+    "verifies": "AC#2, DoD#2",
+    "verification": "unit `tests/table/session-report-errors.test.ts::counts only unhinted decisions and rounds half up`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-06",
+    "verifies": "AC#1, DoD#7",
+    "verification": "acceptance `tests/ui/report-errors.acceptance.test.tsx::the tiles are absent without errors and sit between the cash tiles and the style section`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-07",
+    "verifies": "DoD#2",
+    "verification": "unit `tests/table/session-report-errors.test.ts::errors is present only when every hand carries decisions`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-08",
+    "verifies": "DoD#2",
+    "verification": "unit `tests/table/session-report-errors.test.ts::parseSessionReport validates errors and accepts reports without it`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-09",
+    "verifies": "AC#1, DoD#7, DoD#8",
+    "verification": "acceptance `e2e/report-errors.spec.ts::Leave table shows hands played and error rates from the stored decisions`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-10",
+    "verifies": "DoD#2, DoD#3, DoD#4, DoD#5, DoD#10",
+    "verification": "command `npm run lint && npm run typecheck && npm test`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-11",
+    "verifies": "DoD#11",
+    "verification": "manual `docs/storage/reports.md` section \"errors\" and `backlog doc list --plain` entry for TASK-10.4",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-12",
+    "verifies": "DoD#6, DoD#9, DoD#12",
+    "verification": "manual `git diff --stat main -- src/engine src/bots src/advice` is empty",
+    "status": "pending"
+  }
+]
