@@ -165,7 +165,7 @@
       "board": "Ad 7d 8h",
       "before": ["fold", "fold", "raise", "call", "fold", "fold", "bet", "raise"],
       "action": "call",
-      "justification": "Second pair of sevens is behind an ace but ahead of the draws the button might be raising, and the pot lays more than eight to one. Those pot odds make calling clear, while a re-raise would only get action from better hands."
+      "justification": "Bottom pair of sevens is behind an ace but ahead of the draws the button might be raising, and the pot lays more than eight to one. Those pot odds make calling clear, while a re-raise would only get action from better hands."
     },
     {
       "id": "6max-flop-bb-call-t9o",
@@ -198,7 +198,7 @@
       "board": "8d Qd 4h",
       "before": ["call", "fold", "call", "call", "call", "check", "bet", "raise"],
       "action": "fold",
-      "justification": "Ace-three with only a backdoor straight chance cannot continue against a bet and a raise, because its equity in a five-way pot is close to nothing. Any ace that arrives may already be beaten, so fold and save the two small bets."
+      "justification": "Ace-three with only backdoor draws cannot continue against a bet and a raise, because its equity in a five-way pot is close to nothing. Any ace that arrives may already be beaten, so fold and save the two small bets."
     },
     {
       "id": "6max-flop-sb-fold-93o",
@@ -775,7 +775,7 @@
       "board": "6h Kc 8c 7c",
       "before": ["raise", "fold", "fold", "fold", "fold", "call", "check", "bet", "call", "bet"],
       "action": "call",
-      "justification": "Bottom pair of sevens and a gutshot to the nine give us enough equity to call the big blind's turn lead. Raising on a three-club board would be called mostly by kings and flushes, so call."
+      "justification": "Third pair of sevens and a gutshot to the nine give us enough equity to call the big blind's turn lead. Raising on a three-club board would be called mostly by kings and flushes, so call."
     },
     {
       "id": "6max-turn-bb-call-kqs",
@@ -804,7 +804,7 @@
         }
       },
       "action": "call",
-      "justification": "The king-high flush draw gives strong outs, and this button raises preflop so often that its opponent type includes many bluffs and weak aces. Calling the raise has the pot odds needed, while re-raising would build a pot we usually win only when the flush arrives."
+      "justification": "The nut flush draw gives strong outs, and this button raises preflop so often that its opponent type includes many bluffs and weak aces. Calling the raise has the pot odds needed, while re-raising would build a pot we usually win only when the flush arrives."
     },
     {
       "id": "6max-turn-co-fold-98o",
@@ -815,7 +815,7 @@
       "board": "Kc Qc 5c Td",
       "before": ["fold", "fold", "raise", "call", "fold", "fold", "check", "check", "check", "bet"],
       "action": "fold",
-      "justification": "Nine-eight has only a gutshot to the jack, and that card also makes a club flush for anyone holding one. With so little real equity against the button's turn bet, fold."
+      "justification": "Nine-eight has only a gutshot to the jack, and the board already shows three clubs, so even that card may not be good. With so little real equity against the button's turn bet, fold."
     },
     {
       "id": "6max-turn-btn-fold-64o",
@@ -980,7 +980,7 @@
       "board": "9h 4h Ks 9c",
       "before": ["raise", "fold", "fold", "fold", "fold", "call", "bet", "call", "bet", "raise"],
       "action": "raise",
-      "justification": "Trip nines are strong, and the under-the-gun raiser's turn raise often comes from a king or an overpair that we beat. Re-raise as a value bet, since only a set of kings or a nine with a better kicker is ahead."
+      "justification": "Trip nines are strong, and the under-the-gun raiser's turn raise often comes from a king or an overpair that we beat. Re-raise as a value bet, since only a set of kings, fours full or a nine with a better kicker is ahead."
     },
     {
       "id": "6max-turn-utg-call-q7o",
@@ -1118,7 +1118,7 @@
         "bet"
       ],
       "action": "call",
-      "justification": "Bottom pair of sevens with a king kicker is a reasonable bluff catcher after the flop checked around, and the big blind's turn bet is often a stab. Pot odds ask for less than one win in five, so call, but do not raise into its tens and queens."
+      "justification": "Third pair of sevens with a king kicker is a reasonable bluff catcher after the flop checked around, and the big blind's turn bet is often a stab. Pot odds ask for less than one win in five, so call, but do not raise into its tens and queens."
     },
     {
       "id": "fr-turn-hj-raise-86s",
@@ -1245,7 +1245,7 @@
         "call"
       ],
       "action": "bet",
-      "justification": "Trip aces with a jack kicker is a strong hand on this river, and the button has kept betting into us. Lead out as a value bet now, since checking risks the button checking behind with a hand that would call."
+      "justification": "Trip aces with a jack kicker is a strong hand on this river, and the button bet the turn after calling our flop bet. Lead out as a value bet now, since checking risks the button checking behind with a hand that would call."
     },
     {
       "id": "6max-river-sb-bet-j4o",
@@ -1405,7 +1405,7 @@
         "bet"
       ],
       "action": "call",
-      "justification": "A pair of sixes with a king kicker can beat the cutoff's missed clubs and ace-high hands that keep betting. Calling is right on pot odds, as the pot lays nearly seven to one, but a raise would only be called by better."
+      "justification": "A pair of sixes with a king kicker can beat the cutoff's bluffs, weaker pairs and ace-high hands that keep betting. Calling is right on pot odds, as the pot lays nearly seven to one, but a raise would only be called by better."
     },
     {
       "id": "6max-river-utg-fold-92o",
@@ -1498,7 +1498,7 @@
         "bet"
       ],
       "action": "raise",
-      "justification": "The river gave us trip threes, and the big blind has led every street with kings, jacks and draws that now trail. Raise for value, because our hand strength beats one pair and two pair alike."
+      "justification": "The river gave us trip threes, and the big blind has led every street with kings, jacks and draws that now trail. Raise for value, because our hand strength beats one pair and two pair alike, and a heart flush is too rare in this line to stop us."
     },
     {
       "id": "6max-river-sb-raise-53o",
@@ -1782,7 +1782,7 @@
         "check"
       ],
       "action": "check",
-      "justification": "Our wheel gutshot missed, leaving five-high with the board pair, and the raiser called our flop bet. Check and give up, because a river bluff rarely folds out the aces and pairs that called."
+      "justification": "Our wheel gutshot missed, leaving only the board's pair of sevens with an ace kicker, and the raiser called our flop bet. Check and give up, because a river bluff rarely folds out the aces and pairs that called."
     },
     {
       "id": "fr-river-bb-fold-t3o",

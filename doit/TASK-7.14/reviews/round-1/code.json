@@ -1,0 +1,97 @@
+{
+  "reviewer": "code",
+  "round": 1,
+  "rubric": [
+    {"item": "SPEC-01 correctness", "result": "pass"},
+    {"item": "SPEC-01 test strength", "result": "pass"},
+    {"item": "SPEC-02 correctness", "result": "pass"},
+    {"item": "SPEC-02 test strength", "result": "pass"},
+    {"item": "SPEC-03 correctness", "result": "pass"},
+    {"item": "SPEC-03 test strength", "result": "pass"},
+    {"item": "SPEC-04 correctness", "result": "pass"},
+    {"item": "SPEC-04 test strength", "result": "pass"},
+    {"item": "SPEC-05 correctness", "result": "pass"},
+    {"item": "SPEC-05 test strength", "result": "pass"},
+    {"item": "SPEC-06 correctness", "result": "fail", "note": "the exact grade, rule id and margin checks pass, but one graded example's justification is factually wrong (see the graded-examples finding)"},
+    {"item": "SPEC-06 test strength", "result": "pass"},
+    {"item": "SPEC-07 correctness", "result": "pass"},
+    {"item": "SPEC-07 test strength", "result": "pass"},
+    {"item": "SPEC-08 correctness", "result": "pass"},
+    {"item": "SPEC-08 test strength", "result": "pass"},
+    {"item": "SPEC-09 correctness", "result": "pass"},
+    {"item": "SPEC-09 test strength", "result": "pass"},
+    {"item": "SPEC-10 correctness", "result": "fail", "note": "ids and texts are distinct and original, and every recorded postflop action is sound, but several justifications misdescribe the hand (manual-review part of SPEC-10)"},
+    {"item": "SPEC-10 test strength", "result": "pass"},
+    {"item": "SPEC-11 correctness", "result": "pass"},
+    {"item": "SPEC-11 test strength", "result": "pass"},
+    {"item": "SPEC-12 correctness", "result": "pass"},
+    {"item": "SPEC-12 test strength", "result": "pass"},
+    {"item": "SPEC-13 correctness", "result": "pass"},
+    {"item": "SPEC-13 test strength", "result": "pass"},
+    {"item": "SPEC-14 correctness", "result": "pass", "note": "playtest 10000/seed 42: Invariant violations: 0 (14 s)"},
+    {"item": "SPEC-15 correctness", "result": "pass", "note": "gate lint/typecheck/npm test pass; golden.ts 99.6% lines from the two unit files alone"},
+    {"item": "SPEC-16 correctness", "result": "pass", "note": "npx vitest run tests/golden/: 282 tests, 1.1 s"},
+    {"item": "SPEC-17 correctness", "result": "pass"},
+    {"item": "SPEC-18 correctness", "result": "pass", "note": "CI not checked by this reviewer"},
+    {"item": "scope", "result": "pass", "note": "9 files as specified; 3354 lines vs a 3100 budget (gate warn only, mostly authored JSON). The cross-story preflop edit touches exactly the 4 approved spots (fr-btn-raise-88, fr-hj-raise-and-calls-ajs, fr-co-limpers-87s->44, fr-sb-unopened-65s->kjs); count stays 110. Chart change is only BTN raise 99/88 C->R plus its justification."},
+    {"item": "concision", "result": "pass"},
+    {"item": "clarity", "result": "pass"}
+  ],
+  "findings": [
+    {
+      "fingerprint": "tests/golden/postflop-spots.json:justifications-misname-made-hand",
+      "severity": "MAJOR",
+      "file": "tests/golden/postflop-spots.json",
+      "line": 160,
+      "issue": "Several authored justifications misdescribe the hero's hand. The recorded actions are still right, but SPEC-10 asks for justifications that are accurate and sound, and these are teaching texts.",
+      "evidence": "6max-flop-co-call-j7o (l.160): 'Second pair of sevens' on Ad 7d 8h; sevens are the bottom pair. 6max-turn-utg-call-t7s (l.770): 'Bottom pair of sevens' on 6h Kc 8c 7c; the 6 is lowest, so this is third pair. fr-turn-hj-call-k7o (l.1099): 'Bottom pair of sevens' on Td Qs 7c 4d; the 4 is lowest. 6max-turn-bb-call-k3s (l.792): 'The king-high flush draw' with Kc3c on 9c 9s Jd Ac; with the ace on board it is the nut flush draw. 6max-turn-co-fold-98o (l.810): 'that card also makes a club flush for anyone holding one' on Kc Qc 5c Td; three clubs are already on board, so the flush exists now and a jack doesn't create it. 6max-river-btn-call-k6o (l.1387): 'missed clubs' on a 6c Jc 3c flop; the flop was monotone and no club draw is left to miss.",
+      "fix": "Rewrite those texts (via the locked-file unlock path): j7o 'Bottom pair of sevens'; t7s and k7o 'Third pair of sevens' or 'A pair of sevens'; k3s 'The nut flush draw'; 98o drop the flush clause or say 'and the board already shows three clubs'; k6o replace 'missed clubs' with e.g. 'bluffs and weaker pairs'. Keep each text distinct and at least 15 words."
+    },
+    {
+      "fingerprint": "tests/golden/graded-examples.json:open-ender-is-a-gutshot",
+      "severity": "MAJOR",
+      "file": "tests/golden/graded-examples.json",
+      "line": 63,
+      "issue": "Graded example 'graded-postflop-fold-minor-6max-flop-open-ender' says 5d 2h on 7s 3c 6h has an open-ended straight draw. Only a 4 completes a straight (3-4-5-6-7 or 2-3-4-5-6), so it's a gutshot with 4 outs. The id and the justification both state the wrong draw.",
+      "evidence": "holeCards '5d 2h', board '7s 3c 6h': 4-5-6-7-8 needs both 4 and 8, so the 4 is the only one-card out. The justification reads 'Five-deuce has an open-ended straight draw'.",
+      "fix": "Change the text to a gutshot (e.g. 'Five-deuce has a gutshot to the four plus two small pair outs, and its equity is a few points above what the pot odds ask...') and rename the id (e.g. '...-flop-gutshot'). The pinned margin of 4.6 doesn't change. Alternatively, swap in hole cards that really are open-ended and re-pin the margin."
+    },
+    {
+      "fingerprint": "tests/golden/postflop-spots.json:hero-preflop-lines-contradict-chart",
+      "severity": "MINOR",
+      "file": "tests/golden/postflop-spots.json",
+      "line": 659,
+      "issue": "Many spots reach their postflop decision through hero preflop actions that the project's own chart would grade as Major errors. That undermines the spots' realism as teaching examples, and some justifications lean on those lines.",
+      "evidence": "UTG opens 92o (6max-turn-utg-check-92o, 6max-river-utg-fold-92o), 82o, T4o, K3o and K2o at 6-max. CO opens 72o (6max-river-co-check-72o) and 83o (6max-flop-co-check-83o). Full-ring UTG opens 94o (fr-turn-utg-bet-94o). BTN 3-bets 97o and 86o. BB just calls an SB raise with AA (6max-flop-bb-bet-aa l.39, 6max-flop-bb-raise-aa). HJ cold-calls UTG with T5o. BB defends Q5o, 92o and A3o (full ring) against UTG.",
+      "fix": "In a later data pass, choose hole cards or 'before' sequences so the hero's earlier actions are chart-consistent (e.g. make the weak-hand checks and folds come from the big blind's defence or limped pots, and have the AA hero 3-bet preflop). Or add a one-line note in docs/advice/golden-spots.md that preflop paths are chosen to reach the postflop decision, not to model correct preflop play."
+    },
+    {
+      "fingerprint": "tests/golden/postflop-spots.json:minor-imprecise-justifications",
+      "severity": "MINOR",
+      "file": "tests/golden/postflop-spots.json",
+      "line": 975,
+      "issue": "Some smaller inaccuracies and omissions in justification texts.",
+      "evidence": "6max-turn-bb-raise-92o (l.975): 'only a set of kings or a nine with a better kicker is ahead' leaves out 44 (fours full). 6max-flop-utg-fold-a3o (l.193): 'only a backdoor straight chance', but 3d on 8d Qd also gives a backdoor flush. 6max-river-co-bet-ajo (l.1227): 'the button has kept betting into us', but the hero bet the flop and the button bet only the turn. 6max-river-btn-raise-q3s (l.1481): raising trips on a 6h Kd 3h Jh 3c board, but the text ignores the possible flush ('beats one pair and two pair alike').",
+      "fix": "Tighten those sentences: add 'or fours full' to 92o; say 'only backdoor draws' for a3o; say 'the button bet the turn' for ajo; acknowledge the three-heart board for q3s."
+    },
+    {
+      "fingerprint": "src/advice/golden.ts:street-of-board-index-trick",
+      "severity": "NIT",
+      "file": "src/advice/golden.ts",
+      "line": 247,
+      "issue": "streetOfBoard maps board length to street with STREETS[Math.max(0, length - 2)]. It works, but the reader has to decode the arithmetic.",
+      "evidence": "length 0 -> index 0 (preflop), 3 -> 1 (flop), 4 -> 2, 5 -> 3; lengths 1 and 2 are unreachable.",
+      "fix": "Use an explicit lookup, e.g. const STREET_OF_BOARD = { 0: 'preflop', 3: 'flop', 4: 'turn', 5: 'river' } as const, or a short ternary."
+    },
+    {
+      "fingerprint": "src/advice/golden.ts:grade-throw-escapes-validation",
+      "severity": "NIT",
+      "file": "src/advice/golden.ts",
+      "line": 510,
+      "issue": "If advise returns a non-finite number, gradeDecision throws a RangeError from inside clearCutProblems. That error escapes parsePostflopGoldenSpots instead of being listed as a problem. The spec only requires catching throws from advise itself, and the real engine never returns NaN, so this has no practical impact.",
+      "evidence": "The try/catch wraps only advise(view, spot.observed); gradeDecision's finitePct throws RangeError.",
+      "fix": "Optional: move the clearCutProblems call inside the same try so its errors are reported as 'advice failed (...)'."
+    }
+  ],
+  "summary": "The code follows the spec closely. The board-aware dealing, the clear-cut rule reusing gradeDecision, the memoised A-1 advice, the widened checkGoldenSpot and the graded-example parser and check are all correct. Tests assert the exact §5 texts and would catch regressions. golden.ts has 99.6% unit coverage, the golden directory runs in 1.1 s, and the playtest shows 0 invariant violations. The cross-story preflop edit changes exactly the 4 approved spots (count 110 kept). I sampled the content against the engine's numbers: every recorded postflop action is what a strong limit player would take, and margins are well clear of 10/15 points. However, several justifications misname the made hand or draw (pair rank, nut-flush draw, a flush 'made' by a card, 'missed clubs'), and one graded example calls a gutshot an open-ended draw. Those are MAJOR content-accuracy fixes in locked files, so they need the unlock path. Many hero preflop lines are chart-inconsistent (MINOR)."
+}

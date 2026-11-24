@@ -4,23 +4,23 @@
   "branch": "doit/TASK-7.14",
   "base_commit": "b96e633c1b1aab42ad57361afaa49d0a80bd85f4",
   "started": "2026-11-23T22:01:24",
-  "review_round": 0,
+  "review_round": 1,
   "judge_round": 0,
   "sendbacks": 0,
-  "gate_runs": 2,
+  "gate_runs": 4,
   "questions": 1,
   "assumptions": 8,
   "escalations": 0,
   "item_failures": {},
   "locked_tests": {
-    "tests/golden/graded-examples.json": "f7401b9b22ca129d082c1211e0f8173a8623c80719956f41ea558b515c9b6408",
-    "tests/golden/postflop-spots.json": "ec66b61d75a13e076f12757f198d7ddcb80ae9f386dc4147cb9653106bfb84a3",
+    "tests/golden/graded-examples.json": "305d2a6911179fd4cf04ce3d570aaa9c19dca009127b28f7eea9e6dbcfd33ae4",
+    "tests/golden/postflop-spots.json": "51fcc4b6607a427f5cdc19472b064f41df7f0c2449a66f293228d129d6fcf25b",
     "tests/golden/postflop.acceptance.test.ts": "4469df95046d3de3d28cb2a2b4505f2cd8cbd39366d0414c9dc4b0e8cf4d7bda",
     "tests/golden/suite.acceptance.test.ts": "90198a895b0e5c2db04ab19899b52483647ecd159113cfd052edd4033387ff97"
   },
   "test_snapshot": {
     "tests/golden/graded-examples.json": {
-      "sha": "f7401b9b22ca129d082c1211e0f8173a8623c80719956f41ea558b515c9b6408",
+      "sha": "305d2a6911179fd4cf04ce3d570aaa9c19dca009127b28f7eea9e6dbcfd33ae4",
       "asserts": 0,
       "skips": 0
     },
@@ -30,7 +30,7 @@
       "skips": 0
     },
     "tests/golden/postflop-spots.json": {
-      "sha": "ec66b61d75a13e076f12757f198d7ddcb80ae9f386dc4147cb9653106bfb84a3",
+      "sha": "51fcc4b6607a427f5cdc19472b064f41df7f0c2449a66f293228d129d6fcf25b",
       "asserts": 0,
       "skips": 0
     },
@@ -1445,7 +1445,32 @@
       "skips": 0
     }
   },
-  "history": [],
+  "history": [
+    {
+      "t": "2026-11-23T22:53:53",
+      "event": "unlock",
+      "file": "tests/golden/postflop-spots.json",
+      "reason": "Review R1 MAJOR: justifications misname the made hand (text fixes only)"
+    },
+    {
+      "t": "2026-11-23T22:53:53",
+      "event": "unlock",
+      "file": "tests/golden/graded-examples.json",
+      "reason": "Review R1 MAJOR: open-ender is a gutshot (id + text fix; margin unchanged)"
+    }
+  ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-7.14",
-  "spec_sha256": "3e37eb15ba0185a5d131a58af1ca9397358db8bafed873052c6e271cf00aeb45"
+  "spec_sha256": "3e37eb15ba0185a5d131a58af1ca9397358db8bafed873052c6e271cf00aeb45",
+  "review_findings": {
+    "1": 2
+  },
+  "relock_pending": [],
+  "brief_history": {
+    "tests/golden/postflop-spots.json:justifications-misname-made-hand": [
+      "review r1"
+    ],
+    "tests/golden/graded-examples.json:open-ender-is-a-gutshot": [
+      "review r1"
+    ]
+  }
 }

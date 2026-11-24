@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-24T05:12:00Z'
+updated_date: '2026-11-24T05:47:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -94,4 +94,6 @@ AC added from TASK-7.4 follow-up (doc-19).
 ACs added from TASK-7.11 review follow-ups.
 
 AC added from TASK-7.11 judge J-1-01.
+
+Build: postflop golden spots (120, original justifications), clear-cut rule via gradeDecision, graded examples (9), full-ring BTN 99/88 vs single raise → raise (Q-1), preflop spots re-pinned under TASK-7.11 (4 spots, count 110 kept); npm test 1159 passed; gate PASS
 <!-- SECTION:NOTES:END -->

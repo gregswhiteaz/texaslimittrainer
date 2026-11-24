@@ -60,7 +60,7 @@
       "justification": "A set of fives that turned after we led the flop is far ahead of the button's calling range. Betting again is the recommended value bet, so the grade is Correct by a match."
     },
     {
-      "id": "graded-postflop-fold-minor-6max-flop-open-ender",
+      "id": "graded-postflop-fold-minor-6max-flop-gutshot",
       "seats": 6,
       "holeCards": "5d 2h",
       "board": "7s 3c 6h",
@@ -70,7 +70,7 @@
       "grade": "minor",
       "ruleId": "call-fold-margin",
       "marginPts": 4.6,
-      "justification": "Five-deuce has an open-ended straight draw, and its equity is a few points above what the pot odds ask. Folding gives up that small edge, so it is a Minor error because the margin is under ten points."
+      "justification": "Five-deuce has a gutshot to the four plus a few small pair outs, and its equity is a few points above what the pot odds ask. Folding gives up that small edge, so it is a Minor error because the margin is under ten points."
     },
     {
       "id": "graded-postflop-fold-major-6max-turn-second-pair",
