@@ -1,10 +1,11 @@
 ---
 id: TASK-9.5
 title: See opponents' cards in the review only when they were shown at showdown
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-23T12:10:00Z'
+updated_date: '2026-11-24T14:07:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -60,6 +61,17 @@ Plan key: E09-S04 · Dream: limit-holdem-trainer
 - [ ] #11 Story documentation is written and published to Backlog.md
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. review.ts: shown opponents from CompletedHand.shown only (showdown order, user excluded)
+2. ReviewPanel: list between header and decisions — 'Ben showed [cards] · Pair of kings'; TableView passes shown from completedHand(table)
+3. Fixture REVIEW_DEE_MUCKS; two table scenes
+4. Hidden-information proof: rendered text/labels/data-card searches, deep walk of panel props, shown-field substitution, no shuffledDeck/createHand/dealHand in review code; e2e scenes + live hand vs stored record
+
+Full spec: doit/TASK-9.5/spec.md
+<!-- SECTION:PLAN:END -->
 
 ## Implementation Notes
 
