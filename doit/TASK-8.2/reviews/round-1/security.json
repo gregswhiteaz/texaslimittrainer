@@ -1,0 +1,3 @@
+{"reviewer": "security", "round": 1,
+ "findings": [],
+ "summary": "No reachable vulnerability. The only untrusted-input path is the stored hand record read back by parseHandRecord. hand-record.ts:408 already rejects a non-boolean `hinted`, so it fails closed, and this change leaves that check as it was. On the write side, `hinted` comes from app state (hintedAt compares HintState.decision to table.hand by reference) and is forced to a boolean (`hinted === true`) in decisionRecord and useTableSession.act. Nothing new touches injection sinks, secrets, randomness, dependencies, file IO or unbounded input."}

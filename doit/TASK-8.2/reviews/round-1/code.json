@@ -1,0 +1,25 @@
+{"reviewer": "code", "round": 1,
+ "rubric": [
+  {"item": "SPEC-01 correctness", "result": "pass"}, {"item": "SPEC-01 test strength", "result": "pass"},
+  {"item": "SPEC-02 correctness", "result": "pass"}, {"item": "SPEC-02 test strength", "result": "pass"},
+  {"item": "SPEC-03 correctness", "result": "pass"}, {"item": "SPEC-03 test strength", "result": "pass"},
+  {"item": "SPEC-04 correctness", "result": "pass"}, {"item": "SPEC-04 test strength", "result": "pass"},
+  {"item": "SPEC-05 correctness", "result": "pass"}, {"item": "SPEC-05 test strength", "result": "pass"},
+  {"item": "SPEC-06 correctness", "result": "pass"}, {"item": "SPEC-06 test strength", "result": "pass"},
+  {"item": "SPEC-07 correctness", "result": "pass"}, {"item": "SPEC-07 test strength", "result": "pass"},
+  {"item": "SPEC-08 correctness", "result": "pass"}, {"item": "SPEC-08 test strength", "result": "pass"},
+  {"item": "SPEC-09 correctness", "result": "pass"}, {"item": "SPEC-09 test strength", "result": "pass"},
+  {"item": "SPEC-10 correctness", "result": "pass"}, {"item": "SPEC-10 test strength", "result": "pass"},
+  {"item": "scope", "result": "pass"}, {"item": "concision", "result": "pass"}, {"item": "clarity", "result": "pass"}
+ ],
+ "findings": [
+  {"fingerprint": "e2e/hinted.spec.ts:spec08-single-entry-check-may-be-vacuous", "severity": "NIT", "file": "e2e/hinted.spec.ts", "line": 143,
+   "issue": "SPEC-08's 'only one hinted entry' assertion only guards against a leak to later decisions if hand 1 has more than one user decision; the test does not assert that.",
+   "evidence": "Only decisions[0].hinted and filter(hinted).length===1 are asserted; there is no decisions.length >= 2. Leaks across decisions are still covered by SPEC-01 (turn/river false) and SPEC-07 (every other entry false), and hintedAt compares the HandState token, so it cannot match a later decision anyway.",
+   "fix": "Optionally add expect(decisions.length).toBeGreaterThanOrEqual(2) if hand 1 under WORDS reaches a second user decision."},
+  {"fingerprint": "src/ui/table/useTableSession.ts:redundant-hinted-true-coercion", "severity": "NIT", "file": "src/ui/table/useTableSession.ts", "line": 235,
+   "issue": "`hinted === true` is redundant: applyUserAction already defaults hinted to false when it gets undefined.",
+   "evidence": "applyUserAction(table, action, observed?, hinted = false) in src/table/session.ts:667-672; the spec's design asks for this form, so it is acceptable as is.",
+   "fix": "Optionally pass `hinted` directly."}
+ ],
+ "summary": "Every SPEC item is implemented as specified. hintedAt(hint, table.hand) runs in onAct before setHint(NO_HINT), and the deps are [act, hint, table.hand], so the flag reflects the current render's hint state. Because the check compares the HandState token by identity, a hint cannot carry over to a later decision even without the reset. applyUserAction spreads in hinted:true only when hinted, so an un-hinted decision keeps exactly {view, action[, observed]}; hint.test.ts asserts this with toEqual plus not.toHaveProperty('hinted') for both the 2-arg and the explicit-false calls. decisionRecord writes hinted === true in both branches. The tests would catch a broken implementation: SPEC-01/02/03 compare the full hinted array after an IndexedDB round trip, SPEC-04 deep-equals the hinted entry against the un-hinted record with only hinted changed, and SPEC-05 checks every card field and that the 30-hand control differs. The SPEC-05 change of hand line (raise, Ben calls and donk-bets) is justified, because a check line never uses observed stats, and the assertions are as the spec states. I re-ran the vitest files (9 pass) and e2e/hinted.spec.ts on chromium and webkit (4 pass). The gate's 11-files-versus-budget-10 warning matches the spec's own file list (it names 11 files). No BLOCKER or MAJOR findings."}
