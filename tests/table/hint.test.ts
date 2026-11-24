@@ -6,6 +6,7 @@ import { playerView, type PlayerView } from '../../src/engine/player-view';
 import {
   hintArrived,
   hintCard,
+  hintedAt,
   hintFailed,
   hintInput,
   NO_HINT,
@@ -15,7 +16,13 @@ import {
   type HintCardView,
   type HintState,
 } from '../../src/table/hint';
-import { configForGameType, type TableState } from '../../src/table/session';
+import { decisionRecord } from '../../src/table/hand-record';
+import {
+  applyUserAction,
+  configForGameType,
+  userActions,
+  type TableState,
+} from '../../src/table/session';
 import {
   CALL_ALL_IN,
   FLOP_BET,
@@ -108,6 +115,44 @@ describe('hint', () => {
     expect(shownHint(ready, a, false)).toBe('none');
     expect(shownHint(ready, null, true)).toBe('none');
     expect(shownHint(NO_HINT, a, true)).toBe('none');
+  });
+
+  it('hintedAt', () => {
+    const a = FLOP_BET.hand as HandState;
+    const b = RIVER.hand as HandState;
+    expect(hintedAt(NO_HINT, a)).toBe(false);
+    const opened = toggleHint(NO_HINT, a).state;
+    expect(hintedAt(opened, null)).toBe(false);
+    expect(hintedAt(opened, a)).toBe(true);
+    expect(hintedAt(opened, b)).toBe(false);
+    expect(hintedAt(hintFailed(opened, a), a)).toBe(true);
+    const ready = hintArrived(opened, a, CARD);
+    expect(hintedAt(ready, a)).toBe(true);
+    const hidden = toggleHint(ready, a).state;
+    expect(hidden.open).toBe(false);
+    expect(hintedAt(hidden, a)).toBe(true);
+    let cycled = NO_HINT;
+    for (let i = 0; i < 6; i++) cycled = toggleHint(cycled, a).state;
+    expect(cycled.open).toBe(false);
+    expect(hintedAt(cycled, a)).toBe(true);
+    expect(hintedAt(cycled, b)).toBe(false);
+
+    const call = userActions(FLOP_BET).find((x) => x.type === 'call') as Action;
+    const view = userView(FLOP_BET);
+    const hinted = applyUserAction(FLOP_BET, call, undefined, true).userDecisions.at(-1);
+    expect(hinted).toEqual({ view, action: call, hinted: true });
+    for (const plain of [
+      applyUserAction(FLOP_BET, call).userDecisions.at(-1),
+      applyUserAction(FLOP_BET, call, undefined, false).userDecisions.at(-1),
+    ]) {
+      expect(plain).toEqual({ view, action: call });
+      expect(plain).not.toHaveProperty('hinted');
+    }
+    expect(() => applyUserAction(PREFLOP, call, undefined, true)).toThrow(
+      new RangeError("Not the user's turn"),
+    );
+    expect(decisionRecord({ view, action: call, hinted: true }).hinted).toBe(true);
+    expect(decisionRecord({ view, action: call }).hinted).toBe(false);
   });
 
   it('hint input and request only on the user turn', async () => {

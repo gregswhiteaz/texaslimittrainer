@@ -89,6 +89,11 @@ export function hintFailed(state: HintState, decision: HandState): HintState {
   return state.decision === decision ? { ...state, failed: true } : state;
 }
 
+/** Whether the hint was opened at `decision` (the current table.hand), whether or not its card arrived (A-1). */
+export function hintedAt(state: HintState, decision: HandState | null): boolean {
+  return decision !== null && state.decision === decision;
+}
+
 /** What the table shows for `decision` (the current table.hand) while the action bar is (not) enabled. */
 export function shownHint(
   state: HintState,

@@ -371,6 +371,8 @@ export interface UserDecision {
   readonly action: Action;
   /** Observed-stat snapshot at this decision (TASK-8.1 supplies it); the review regrades with it. */
   readonly observed?: readonly ObservedOpponent[];
+  /** True iff the hint was opened at this decision before acting (TASK-8.2); absent otherwise. */
+  readonly hinted?: boolean;
 }
 export interface TableState {
   readonly config: SessionConfig;
@@ -660,12 +662,13 @@ export function stepBot(table: TableState, policy: SeatPolicy = tagPolicy): Tabl
   return applyBotDecision(table, turn, policy(turn.view));
 }
 
-/** Records the decision with a copy of `observed` when given (A-4). Throws RangeError if not the user's turn or
- *  the action is illegal. */
+/** Records the decision with a copy of `observed` when given (A-4) and `hinted: true` only when hinted
+ *  (TASK-8.2). Throws RangeError if not the user's turn or the action is illegal. */
 export function applyUserAction(
   table: TableState,
   action: Action,
   observed?: readonly ObservedOpponent[],
+  hinted = false,
 ): TableState {
   if (nextStep(table) !== 'user' || table.hand === null) {
     throw new RangeError("Not the user's turn");
@@ -678,9 +681,12 @@ export function applyUserAction(
     hand: applied.state,
     userDecisions: [
       ...table.userDecisions,
-      observed === undefined
-        ? { view, action }
-        : { view, action, observed: observed.map((o) => ({ ...o })) },
+      {
+        view,
+        action,
+        ...(observed === undefined ? {} : { observed: observed.map((o) => ({ ...o })) }),
+        ...(hinted ? { hinted: true } : {}),
+      },
     ],
   };
 }

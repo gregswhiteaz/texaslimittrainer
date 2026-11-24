@@ -10,6 +10,7 @@ import {
   type SeatNumber,
 } from '../../src/engine/hand';
 import { EMPTY_STYLE_COUNTS, type StyleCounts } from '../../src/stats/style-stats';
+import { hintedAt, NO_HINT, toggleHint } from '../../src/table/hint';
 import {
   DEFAULT_SESSION_CONFIG,
   USER_SEAT,
@@ -216,7 +217,8 @@ export const SPLIT_STRAIGHT: TableState = defaultTableAfter(
 /**
  * Default six seats at $160 (or `stacks[seat]`), hand 1, dealt from fixedDeck(fixed) and played through `moves`.
  * Moves of the user (seat 5) go through applyUserAction with `observed` as the decision's snapshot, so each
- * captures the user's view; every other move goes through play.
+ * captures the user's view; every other move goes through play. `hints[i]` is the number of Hint / Hide hint
+ * selections at the user's i-th decision (0-based), run through the real hint state machine before acting.
  */
 export function userTableAfter(
   fixed: Readonly<Record<number, string>>,
@@ -224,6 +226,7 @@ export function userTableAfter(
   button: SeatNumber = 6,
   stacks: Readonly<Record<number, number>> = {},
   observed?: readonly ObservedOpponent[],
+  hints: Readonly<Record<number, number>> = {},
 ): TableState {
   const session = seatSession({ button });
   const start: TableState = {
@@ -245,13 +248,17 @@ export function userTableAfter(
     if (hand.toAct !== USER_SEAT) throw new Error(`Seat ${hand.toAct} is to act, not ${seat}`);
     const action = legalActions(hand).find((a) => a.type === type);
     if (action === undefined) throw new Error(`Seat ${seat} cannot ${type}`);
-    table = applyUserAction(table, action, observed);
+    let hint = NO_HINT;
+    for (let i = 0; i < (hints[table.userDecisions.length] ?? 0); i++) {
+      hint = toggleHint(hint, hand).state;
+    }
+    table = applyUserAction(table, action, observed, hintedAt(hint, table.hand));
   }
   return table;
 }
 
 /** User Ah 9s, Ben Kd 7c; the board runs Ks 9d 4c, 2h, 6s. */
-const REVIEW_DECK = {
+export const REVIEW_DECK = {
   1: 'Kd',
   7: '7c',
   4: 'Ah',
@@ -324,7 +331,7 @@ export const CAPPED_FLOP: TableState = userTableAfter(
   '3:fold 4:fold 5:call 6:call 1:fold 2:check 2:check 5:bet 6:raise 2:fold 5:raise 6:raise',
 );
 
-const LIMP_THEN_BET = '3:fold 4:fold 5:call 6:fold 1:fold 2:check 2:bet';
+export const LIMP_THEN_BET = '3:fold 4:fold 5:call 6:fold 1:fold 2:check 2:bet';
 
 /** The user ($7) limps and faces a $4 flop bet holding $3 (Fold, Call all-in $3). */
 export const CALL_ALL_IN: TableState = userTableAfter({}, LIMP_THEN_BET, 6, { 5: 7 });

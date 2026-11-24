@@ -6,6 +6,7 @@ import {
   hintArrived,
   hintCard,
   hintFailed,
+  hintedAt,
   NO_HINT,
   requestHint,
   shownHint,
@@ -325,10 +326,11 @@ export function Table({
   }, [hint, table, observedCounts, createAdviceWorker]);
   const onAct = useCallback(
     (action: Action) => {
+      const hinted = hintedAt(hint, table.hand);
       setHint(NO_HINT);
-      act(action);
+      act(action, hinted);
     },
-    [act],
+    [act, hint, table.hand],
   );
   const bar = userActionBar(table);
   const status = shownHint(hint, table.hand, bar?.enabled === true);

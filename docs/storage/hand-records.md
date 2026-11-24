@@ -71,20 +71,20 @@ where `userAdviceOptions` (`src/advice/recommend.ts`) is the same function the a
 view and its decision-time snapshot gives exactly what a hint showed at that moment. Stats gathered later in the
 hand or session never change it. An error from the advice code (a bad snapshot) propagates out of `handRecord`.
 
-| Field               | Type                                             | Meaning                                                    |
-| ------------------- | ------------------------------------------------ | ---------------------------------------------------------- |
-| `street`            | `'preflop'` \| `'flop'` \| `'turn'` \| `'river'` | Street of the decision                                     |
-| `action`            | `{ seat, type, amount? }`                        | The user's action (`amount` for call, bet and raise)       |
-| `recommended`       | `{ seat, type, amount? }`                        | The recommended move                                       |
-| `alternative`       | action type \| null                              | A second action the advice also accepts                    |
-| `ruleId`            | postflop rule id \| null                         | The postflop rule; null preflop                            |
-| `basis`             | `'chart'` \| `'equity'`                          | `'chart'` preflop, `'equity'` postflop                     |
-| `equityPct`         | number 0..100 \| null                            | Hand equity; null for `'chart'`                            |
-| `requiredEquityPct` | number 0..100 \| null                            | Equity the price needs; null for `'chart'`                 |
-| `opponentBasis`     | `{ seat, observedHands, text }[]`                | How each opponent's range was read; `[]` for `'chart'`     |
-| `explanation`       | string, 1..2000                                  | The advice text                                            |
-| `grade`             | `{ grade, ruleId, marginPts }`                   | Grade (`correct`/`minor`/`major`), grading rule and margin |
-| `hinted`            | boolean                                          | Whether a hint was shown first; always false until E08     |
+| Field               | Type                                             | Meaning                                                                |
+| ------------------- | ------------------------------------------------ | ---------------------------------------------------------------------- |
+| `street`            | `'preflop'` \| `'flop'` \| `'turn'` \| `'river'` | Street of the decision                                                 |
+| `action`            | `{ seat, type, amount? }`                        | The user's action (`amount` for call, bet and raise)                   |
+| `recommended`       | `{ seat, type, amount? }`                        | The recommended move                                                   |
+| `alternative`       | action type \| null                              | A second action the advice also accepts                                |
+| `ruleId`            | postflop rule id \| null                         | The postflop rule; null preflop                                        |
+| `basis`             | `'chart'` \| `'equity'`                          | `'chart'` preflop, `'equity'` postflop                                 |
+| `equityPct`         | number 0..100 \| null                            | Hand equity; null for `'chart'`                                        |
+| `requiredEquityPct` | number 0..100 \| null                            | Equity the price needs; null for `'chart'`                             |
+| `opponentBasis`     | `{ seat, observedHands, text }[]`                | How each opponent's range was read; `[]` for `'chart'`                 |
+| `explanation`       | string, 1..2000                                  | The advice text                                                        |
+| `grade`             | `{ grade, ruleId, marginPts }`                   | Grade (`correct`/`minor`/`major`), grading rule and margin             |
+| `hinted`            | boolean                                          | True iff the hint was opened at this decision before acting (TASK-8.2) |
 
 The grade is stored as these three fields only, not the whole `GradeResult`: the recommendation it carries is
 already flattened into the entry, and the compact form keeps 100,000 records small (REQ-053). `marginPts` is the

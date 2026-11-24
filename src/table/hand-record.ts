@@ -65,7 +65,7 @@ export interface HandRecordDecision {
   readonly opponentBasis: readonly OpponentBasis[];
   readonly explanation: string;
   readonly grade: HandRecordGrade;
-  /** Whether a hint was shown before the decision; always false until hints exist (E08). */
+  /** True iff the hint was opened at this decision before acting (TASK-8.2). */
   readonly hinted: boolean;
 }
 
@@ -158,7 +158,12 @@ export function isWhole(
 
 /** The advice and grade of the hint path (same options as the advice worker) for one decision, as plain data
  *  sharing nothing with `decision`. Errors from the advice code propagate (RangeError). */
-export function decisionRecord({ view, action, observed }: UserDecision): HandRecordDecision {
+export function decisionRecord({
+  view,
+  action,
+  observed,
+  hinted,
+}: UserDecision): HandRecordDecision {
   const result = gradeView(view, action.type, userAdviceOptions(observed));
   const advice = result.recommendation;
   const grade = { grade: result.grade, ruleId: result.ruleId, marginPts: result.marginPts };
@@ -178,7 +183,7 @@ export function decisionRecord({ view, action, observed }: UserDecision): HandRe
         opponentBasis: [],
         explanation: advice.explanation,
         grade,
-        hinted: false,
+        hinted: hinted === true,
       }
     : {
         street: advice.street,
@@ -190,7 +195,7 @@ export function decisionRecord({ view, action, observed }: UserDecision): HandRe
         opponentBasis: advice.opponentBasis.map((b) => ({ ...b })),
         explanation: advice.explanation,
         grade,
-        hinted: false,
+        hinted: hinted === true,
       };
 }
 

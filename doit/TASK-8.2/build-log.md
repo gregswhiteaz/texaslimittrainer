@@ -1,0 +1,6 @@
+## BUILD (TASK-8.2)
+- Implemented `hinted` flag end to end: `hintedAt` (hint.ts), `UserDecision.hinted?` + 4th `applyUserAction` param (session.ts), `decisionRecord` writes it (hand-record.ts), `act(action, hinted?)` (useTableSession.ts), `Table.onAct` passes `hintedAt(hint, table.hand)`.
+- Test fixture: `userTableAfter(..., hints)` runs `toggleHint` N times before the user's i-th decision.
+- Judgment call (SPEC-05 / AC#6): with LIMP_THEN_BET Ben's preflop line is `check`, for which the range model never applies observed stats (`OBSERVED_LINE_STAT.check = null`, src/advice/ranges.ts:557), so the 30-hand control could not differ. §5 only fixes the flop decision, not the moves, so the AC#6 test uses REVIEW_DECK with the user raising, Ben calling (call-raise → VPIP applies), Ben donk-betting the flop and the user calling. SPEC-01..03 use HINT_FLOP_MOVES as written.
+- SPEC-04 deck: user 7c 2d, Ben Ac Kd, board Ah Ks Qd 9h 3s; preconditions asserted (major, call-fold-margin, gap >= 10).
+- Commands: `npm run lint` clean; `npm run typecheck` clean; `npm test` 246 files passed / 3 skipped, 1203 tests passed / 43 skipped (coverage thresholds hold); `npx vitest run tests/golden/` 282 passed; playtest 10,000 hands seed 42: 0 invariant violations; `npm run build && npx playwright test` 228 passed / 16 skipped (new e2e/hinted.spec.ts 4/4 on Chromium + WebKit).

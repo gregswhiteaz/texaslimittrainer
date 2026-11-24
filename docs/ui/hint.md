@@ -49,5 +49,23 @@ bot has at least one finished hand, ascending seat, `{ seat, hands, vpip, pfr }`
 hint, the hand record and the review agree. The range model uses an opponent's snapshot only from 30 hands on, at
 a six-player table, after the flop (see [range-model.md](../advice/range-model.md)).
 
-Code: `src/table/hint.ts` (input, request, state machine, card model), `src/ui/table/HintCard.tsx`,
-`src/ui/table/Table.tsx`, `src/ui/table/useTableSession.ts`, `src/table/session.ts`.
+## Hinted decisions (TASK-8.2)
+
+A decision is marked hinted when the user selected Hint at it before acting. The hand record's entry for that
+decision gets `hinted: true`; every other entry gets `hinted: false`.
+
+- Open: selecting Hint at a decision makes it hinted.
+- Hide: hiding the card again before acting keeps it hinted.
+- Several opens: one decision gives one entry, so opening and hiding the hint any number of times still gives
+  exactly one hinted entry.
+- Loading or failed: the user's request counts, not the reply. A decision is hinted even if the card was still
+  loading or the request failed when the user acted (A-1).
+- A hint at one decision never marks a later one: every action resets the hint.
+
+Hinted decisions are graded as usual. The stored advice equals what the card showed, because both use the
+decision-time observed-stats snapshot. `hintedAt(hint, table.hand)` reads the flag from the hint state when the
+user acts; `Table` passes it through `act(action, hinted)` to `applyUserAction`, which stores `hinted: true` on
+the `UserDecision` (and no `hinted` key otherwise), and `decisionRecord` writes it to the entry.
+
+Code: `src/table/hint.ts` (input, request, state machine, card model, `hintedAt`), `src/ui/table/HintCard.tsx`,
+`src/ui/table/Table.tsx`, `src/ui/table/useTableSession.ts`, `src/table/session.ts`, `src/table/hand-record.ts`.

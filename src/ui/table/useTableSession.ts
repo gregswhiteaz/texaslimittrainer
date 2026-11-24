@@ -125,7 +125,7 @@ export function useTableSession({
   table: TableState;
   /** The session's observed counts so far (read in event handlers, e.g. the hint request). */
   observedCounts: () => ObservedCounts;
-  act: (action: Action) => void;
+  act: (action: Action, hinted?: boolean) => void;
   dealNext: () => void;
   rebuy: () => void;
 } {
@@ -229,10 +229,10 @@ export function useTableSession({
     return undefined;
   }, [table, newCode, holdNextHand, createAdviceWorker, handStore, sessionId, startedAt]);
 
-  const act = useCallback((action: Action) => {
+  const act = useCallback((action: Action, hinted?: boolean) => {
     setTable((t) =>
       nextStep(t) === 'user'
-        ? applyUserAction(t, action, userObservedSnapshot(t, observed.current))
+        ? applyUserAction(t, action, userObservedSnapshot(t, observed.current), hinted === true)
         : t,
     );
   }, []);
