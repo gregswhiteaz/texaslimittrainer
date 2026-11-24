@@ -3,54 +3,54 @@
     "id": "SPEC-01",
     "verifies": "AC#1, AC#6, DoD#1",
     "verification": "acceptance `tests/ui/bust-continue.acceptance.test.tsx::a held bust review shows Continue and no Deal next hand`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-02",
     "verifies": "AC#4, DoD#1",
     "verification": "acceptance `tests/ui/bust-continue.acceptance.test.tsx::a held review with chips left or in a sit-and-go shows Deal next hand`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-03",
     "verifies": "AC#1, DoD#1",
     "verification": "acceptance `tests/ui/bust-continue.acceptance.test.tsx::the e2e seed busts the user after three reviewed decisions`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-04",
     "verifies": "AC#1, AC#2, AC#3, AC#6, DoD#1, DoD#7, DoD#8",
     "verification": "acceptance `e2e/bust-continue.spec.ts::a bust with the review open shows Continue, which opens the dialog, and Rebuy deals with $160`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-05",
     "verifies": "AC#5, DoD#1, DoD#7",
     "verification": "acceptance `e2e/bust-continue.spec.ts::Leave table from the dialog opened by Continue deals nothing more`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-06",
     "verifies": "AC#2",
     "verification": "acceptance `tests/table/rebuy.acceptance.test.ts::deal next hand on a bust deals nothing`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-07",
     "verifies": "AC#1, DoD#1",
     "verification": "acceptance `tests/ui/bust-dialog.acceptance.test.tsx::a bust shows the Rebuy and Leave table dialog over the result`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-08",
     "verifies": "DoD#2, DoD#3, DoD#4, DoD#5, DoD#6, DoD#8",
     "verification": "command `npm run lint && npm run typecheck && npm test && npx vitest run tests/golden/ && npm run -s playtest -- --hands 10000 --seed 42`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-09",
     "verifies": "DoD#9, DoD#10, DoD#11, DoD#12",
     "verification": "manual `gh run list --branch doit/TASK-9.2 --limit 1` shows success; read the doc paragraph",
-    "status": "pending"
+    "status": "pass"
   }
 ]
