@@ -1,11 +1,11 @@
 ---
 id: TASK-10.2
 title: Leave the table in the middle of a hand
-status: In Progress
+status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-24T20:27:00Z'
+updated_date: '2026-11-24T20:28:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -16,6 +16,7 @@ references:
 documentation:
   - doc-1
   - doc-2
+  - doc-125
 parent_task_id: TASK-10
 priority: high
 type: feature
@@ -86,4 +87,12 @@ AC added from TASK-3.3 follow-up (doc-24).
 Build: forceFold engine op (shared settle helper), LeaveDialog mid-hand confirm, forced-fold hand stored with forcedFold: true, session ends after the hand's write; locked D-5 edits + play-money unit fixture; npm test 1267 passed, Playwright 298 passed, playtest 0 violations; gate PASS.
 
 Judge r1 PASS 15/15; live Chromium+WebKit leave flows (my turn, bot turn, after fold, all-in, between hands); playtest byte-identical to main; CI 45479328751 green.
+
+Follow-ups: TASK-10.13 created (spike: forced-fold top bettor dead money vs refund; multi-fold invariant; bot-freeze e2e timing). Not tracked: NITs (redundant || leaving, helper placement, docs test list).
 <!-- SECTION:NOTES:END -->
+
+## Final Summary
+
+<!-- SECTION:FINAL_SUMMARY:BEGIN -->
+Leave table during a hand now opens a modal 'Leave now? Your hand will be folded.' (Cancel/Confirm). Play is frozen while it is open. Confirm folds the user at once (engine forceFold, not a graded decision), the bots finish the hand, it is stored with forcedFold:true, and the Session Report opens. Verified: judge round 1 PASS 15/15; 1267 unit tests, 282 golden, 298 Playwright (Chromium+WebKit), playtest byte-identical to main, CI green. Review: Q-1 (forcedFold record marker), A-3 dialog copy, three D-5 locked edits (TASK-2.15 x2, TASK-3.3) and the play-money unit fixture change were auto-accepted. Follow-ups: poker-rules question J-1-01 (top-bet forced fold refunds uncalled part; decision task), J-1-02 (multiple forced folds break pot eligibility; unreachable today), flaky-prone bot-freeze e2e timing, NITs.
+<!-- SECTION:FINAL_SUMMARY:END -->
