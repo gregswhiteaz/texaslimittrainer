@@ -1677,7 +1677,20 @@
       "skips": 0
     }
   },
-  "history": [],
+  "history": [
+    {
+      "t": "2026-11-24T12:44:14",
+      "event": "unlock",
+      "file": "tests/ui/screen-list.acceptance.test.ts",
+      "reason": "TASK-10.2 D-5: Leave table mid-hand now opens a confirm dialog (new LeaveDialog registered/visited; mid-hand leave confirms and expects the report); nothing loosened"
+    },
+    {
+      "t": "2026-11-24T12:44:14",
+      "event": "unlock",
+      "file": "e2e/play-money.spec.ts",
+      "reason": "TASK-10.2 D-5: Leave table mid-hand now opens a confirm dialog (new LeaveDialog registered/visited; mid-hand leave confirms and expects the report); nothing loosened"
+    }
+  ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-2.15",
   "spec_sha256": "f77fd42afc84404488a6e9abc85c63b0096d652e005d55bcdd58e4879038154a",
   "review_findings": {
@@ -1686,5 +1699,9 @@
   "judge_results": {
     "1": "PASS"
   },
-  "doc_id": "doc-124"
+  "doc_id": "doc-124",
+  "relock_pending": [
+    "tests/ui/screen-list.acceptance.test.ts",
+    "e2e/play-money.spec.ts"
+  ]
 }

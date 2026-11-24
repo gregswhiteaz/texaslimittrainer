@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-22T15:34:00Z'
+updated_date: '2026-11-24T19:44:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-0
@@ -102,6 +102,8 @@ CI run 44426860260 (head 202c194): success. Judge round 1: PASS 22/22, no blocki
 Locked e2e test unlocked for TASK-1.52 Q-1 (user-approved; clock-advance only).
 
 Locked e2e test unlocked for TASK-1.52 Q-2 (user-approved; clock-advance loop bound only).
+
+Locked e2e/table-display.spec.ts unlocked for TASK-10.2 D-5 (Leave mid-hand dialog; expectation updated, nothing loosened).
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary

@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T23:03:00Z'
-updated_date: '2026-11-24T19:27:00Z'
+updated_date: '2026-11-24T19:44:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -86,6 +86,10 @@ Build: screen list + play-money walk (all screens/dialogs, ~1 s per browser), De
 Judge r1 PASS 8/8; injected offers on every screen/dialog, new route/dialog and payment code/package all caught by name; no false positives on 200+ app strings; CI 45468942933 green.
 
 Follow-ups: TASK-12.1 and TASK-11.1 ACs added (register Settings/Statistics in the play-money screen list; JSX role detector). Not tracked (test plumbing, no failure): duplicated attribute list, 'real money' disclaimer NIT, package-lock.json scan (dist scan covers shipped code).
+
+Locked tests/ui/screen-list.acceptance.test.ts unlocked for TASK-10.2 D-5 (Leave mid-hand dialog; expectation updated, nothing loosened).
+
+Locked e2e/play-money.spec.ts unlocked for TASK-10.2 D-5 (Leave mid-hand dialog; expectation updated, nothing loosened).
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary

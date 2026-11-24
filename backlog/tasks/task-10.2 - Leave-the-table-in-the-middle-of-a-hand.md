@@ -1,10 +1,11 @@
 ---
 id: TASK-10.2
 title: Leave the table in the middle of a hand
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-19T00:21:00Z'
+updated_date: '2026-11-24T19:44:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -64,6 +65,18 @@ Plan key: E10-S05 · Dream: limit-holdem-trainer
 - [ ] #11 Story documentation is written and published to Backlog.md
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. Leave table during a dealt hand with no result opens a modal LeaveDialog (Cancel focused, Escape = Cancel) and freezes play
+2. Confirm: forceFold folds the user at once; bots play the hand out; it is graded and stored with forcedFold: true (no decision entry); then onLeave ends the session via TASK-10.1's path
+3. Between hands Leave behaves as before; header controls disabled while leaving
+4. Register LeaveDialog in the play-money screen list and walk; re-pin locked table-display mid-hand leave
+5. Tests: engine forceFold units, record parse with forcedFold, e2e Cancel/Confirm/all-in/already-folded flows in Chromium and WebKit with axe
+
+Full spec: doit/TASK-10.2/spec.md
+<!-- SECTION:PLAN:END -->
 
 ## Implementation Notes
 

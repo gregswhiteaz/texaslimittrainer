@@ -464,6 +464,12 @@
       "event": "unlock",
       "file": "e2e/table-display.spec.ts",
       "reason": "TASK-1.52 Q-2 (user-approved): bound 400-slice play-to-end loops by real time; assertions unchanged"
+    },
+    {
+      "t": "2026-11-24T12:44:14",
+      "event": "unlock",
+      "file": "e2e/table-display.spec.ts",
+      "reason": "TASK-10.2 D-5: Leave table mid-hand now opens a confirm dialog (new LeaveDialog registered/visited; mid-hand leave confirms and expects the report); nothing loosened"
     }
   ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-3.3",
@@ -473,6 +479,7 @@
     "2": 0
   },
   "relock_pending": [
+    "e2e/table-display.spec.ts",
     "e2e/table-display.spec.ts",
     "e2e/table-display.spec.ts"
   ],
