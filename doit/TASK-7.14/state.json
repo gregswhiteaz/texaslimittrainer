@@ -4,7 +4,7 @@
   "branch": "doit/TASK-7.14",
   "base_commit": "b96e633c1b1aab42ad57361afaa49d0a80bd85f4",
   "started": "2026-11-23T22:01:24",
-  "review_round": 1,
+  "review_round": 2,
   "judge_round": 0,
   "sendbacks": 0,
   "gate_runs": 4,
@@ -1457,20 +1457,32 @@
       "event": "unlock",
       "file": "tests/golden/graded-examples.json",
       "reason": "Review R1 MAJOR: open-ender is a gutshot (id + text fix; margin unchanged)"
+    },
+    {
+      "t": "2026-11-23T23:07:50",
+      "event": "unlock",
+      "file": "tests/golden/postflop-spots.json",
+      "reason": "Review R2 MAJOR: two remaining factual errors in justifications (text only)"
     }
   ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-7.14",
   "spec_sha256": "3e37eb15ba0185a5d131a58af1ca9397358db8bafed873052c6e271cf00aeb45",
   "review_findings": {
-    "1": 2
+    "1": 2,
+    "2": 1
   },
-  "relock_pending": [],
+  "relock_pending": [
+    "tests/golden/postflop-spots.json"
+  ],
   "brief_history": {
     "tests/golden/postflop-spots.json:justifications-misname-made-hand": [
       "review r1"
     ],
     "tests/golden/graded-examples.json:open-ender-is-a-gutshot": [
       "review r1"
+    ],
+    "tests/golden/postflop-spots.json:justifications-remaining-factual-errors": [
+      "review r2"
     ]
   }
 }

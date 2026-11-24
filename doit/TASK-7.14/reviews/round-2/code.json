@@ -1,0 +1,79 @@
+{
+  "reviewer": "code",
+  "round": 2,
+  "rubric": [
+    {"item": "SPEC-01 correctness", "result": "pass"},
+    {"item": "SPEC-01 test strength", "result": "pass"},
+    {"item": "SPEC-02 correctness", "result": "pass"},
+    {"item": "SPEC-02 test strength", "result": "pass"},
+    {"item": "SPEC-03 correctness", "result": "pass"},
+    {"item": "SPEC-03 test strength", "result": "pass"},
+    {"item": "SPEC-04 correctness", "result": "pass"},
+    {"item": "SPEC-04 test strength", "result": "pass"},
+    {"item": "SPEC-05 correctness", "result": "pass"},
+    {"item": "SPEC-05 test strength", "result": "pass"},
+    {"item": "SPEC-06 correctness", "result": "pass", "note": "the gutshot example is renamed and reworded; grade minor, ruleId call-fold-margin and marginPts 4.6 are unchanged. All 9 graded texts now match their boards"},
+    {"item": "SPEC-06 test strength", "result": "pass"},
+    {"item": "SPEC-07 correctness", "result": "pass"},
+    {"item": "SPEC-07 test strength", "result": "pass"},
+    {"item": "SPEC-08 correctness", "result": "pass"},
+    {"item": "SPEC-08 test strength", "result": "pass"},
+    {"item": "SPEC-09 correctness", "result": "pass"},
+    {"item": "SPEC-09 test strength", "result": "pass"},
+    {"item": "SPEC-10 correctness", "result": "fail", "note": "all 11 round-1 texts are fixed, but a full re-read of the 120 postflop justifications against their boards found two more factual errors (see finding)"},
+    {"item": "SPEC-10 test strength", "result": "pass"},
+    {"item": "SPEC-11 correctness", "result": "pass"},
+    {"item": "SPEC-11 test strength", "result": "pass"},
+    {"item": "SPEC-12 correctness", "result": "pass"},
+    {"item": "SPEC-12 test strength", "result": "pass"},
+    {"item": "SPEC-13 correctness", "result": "pass"},
+    {"item": "SPEC-13 test strength", "result": "pass"},
+    {"item": "SPEC-14 correctness", "result": "pass", "note": "no engine or chart change since round 1"},
+    {"item": "SPEC-15 correctness", "result": "pass", "note": "gate fix-4 PASS: lint, typecheck and npm test"},
+    {"item": "SPEC-16 correctness", "result": "pass", "note": "npx vitest run tests/golden/: 282 tests passed in 1.11 s"},
+    {"item": "SPEC-17 correctness", "result": "pass", "note": "no doc references the old open-ender id"},
+    {"item": "SPEC-18 correctness", "result": "pass", "note": "CI not checked by this reviewer"},
+    {"item": "scope", "result": "pass", "note": "fix commit 3bed3f4 changes only justification strings in postflop-spots.json (13 texts) and one id plus its text in graded-examples.json. No action, alternative, board, before, grade, ruleId or marginPts changed, and neither the acceptance tests nor src changed"},
+    {"item": "concision", "result": "pass"},
+    {"item": "clarity", "result": "pass"}
+  ],
+  "findings": [
+    {
+      "fingerprint": "tests/golden/postflop-spots.json:justifications-remaining-factual-errors",
+      "severity": "MAJOR",
+      "file": "tests/golden/postflop-spots.json",
+      "line": 612,
+      "issue": "Two justifications still state wrong poker facts. They are the same kind of error as round 1's made-hand finding, and the fix brief's 'check every justification' pass missed them. The recorded actions are still correct.",
+      "evidence": "6max-turn-btn-bet-94o (l.612): hero 9h 4s on Qc 6s 4d Qh holds queens and fours, but the text says 'the sixes and small pairs that call trail our hand'. Any six makes queens and sixes, and pocket fives make queens and fives, so both beat queens and fours. hu-river-bb-call-tt (l.1690): on Kc 9c Ah 5s 6c the river 6c is the third club, so the flop's two-club flush draws completed. The text says the button 'bets missed club draws', which is the opposite of what happened.",
+      "fix": "94o: replace the last clause with e.g. 'since the deuces, threes and weaker fours that call trail our hand', or 'since ace-high and smaller pairs like threes call'. Do not mention sixes or fives as hands that trail. tt: replace 'missed club draws' with e.g. 'missed straight draws, bluffs and weaker pairs', and optionally note that the river club completes some flushes. Keep each text distinct and at least 15 words. Change no action. Use the locked-file unlock path."
+    },
+    {
+      "fingerprint": "tests/golden/postflop-spots.json:hero-preflop-lines-contradict-chart",
+      "severity": "MINOR",
+      "file": "tests/golden/postflop-spots.json",
+      "line": 659,
+      "issue": "Carried over from round 1 and not in the fix brief. Many spots reach the decision through hero preflop actions that the project's chart would grade as Major errors.",
+      "evidence": "Unchanged since round 1, e.g. UTG opens 92o, 82o, K2o at 6-max, and the BB only calls an SB raise with AA (6max-flop-bb-bet-aa).",
+      "fix": "In a later data pass, choose chart-consistent preflop lines. Or add a one-line note in docs/advice/golden-spots.md that preflop paths are chosen only to reach the postflop decision."
+    },
+    {
+      "fingerprint": "src/advice/golden.ts:street-of-board-index-trick",
+      "severity": "NIT",
+      "file": "src/advice/golden.ts",
+      "line": 247,
+      "issue": "Carried over: STREETS[Math.max(0, length - 2)] makes the reader decode arithmetic.",
+      "evidence": "Unchanged since round 1.",
+      "fix": "Use an explicit lookup keyed by board length."
+    },
+    {
+      "fingerprint": "src/advice/golden.ts:grade-throw-escapes-validation",
+      "severity": "NIT",
+      "file": "src/advice/golden.ts",
+      "line": 510,
+      "issue": "Carried over: a RangeError from gradeDecision on non-finite advice escapes parsing instead of being listed as a problem.",
+      "evidence": "Unchanged since round 1. The real engine never returns NaN.",
+      "fix": "Optional: put the clearCutProblems call inside the same try."
+    }
+  ],
+  "summary": "Both round-1 MAJORs are fixed. All 6 misnamed hands in postflop-spots.json are corrected (j7o bottom pair, t7s and k7o third pair, k3s nut flush draw, 98o three clubs already on board, k6o no 'missed clubs'). The graded example is renamed to graded-postflop-fold-minor-6max-flop-gutshot and now says gutshot, with grade, ruleId and margin 4.6 unchanged. The orchestrator's MINOR text fixes also landed (92o adds fours full, a3o says backdoor draws, ajo says the button bet the turn, q3s mentions the heart flush), plus one more text (fr-river-bb-check-52o). The fix diff touches only justification strings and that one id: no recorded action, spot, board, line or assertion changed, and the locked acceptance tests and src are unchanged. The golden suite passes (282 tests, 1.1 s). I re-read all 120 postflop and 5 postflop graded justifications against a script-computed list of pair rank, flush and straight outs, and board texture for each spot. Two factual errors remain: 6max-turn-btn-bet-94o says sixes and small pairs trail queens and fours, but sixes and pocket fives beat it; hu-river-bb-call-tt says 'missed club draws' when the river completed the clubs. Both need a one-clause rewrite (MAJOR, same class as round 1). The rest is carried-over MINOR and NIT items."
+}
