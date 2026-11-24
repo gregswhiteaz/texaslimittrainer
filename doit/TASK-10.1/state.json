@@ -1,6 +1,6 @@
 {
   "task": "TASK-10.1",
-  "stage": "build",
+  "stage": "done",
   "branch": "doit/TASK-10.1",
   "base_commit": "321d93d5f74d80c67beec50bb0e2d11d692b55b7",
   "started": "2026-11-24T09:32:35",
@@ -1665,5 +1665,6 @@
   },
   "judge_results": {
     "1": "PASS"
-  }
+  },
+  "doc_id": "doc-122"
 }

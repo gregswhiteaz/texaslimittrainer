@@ -1,11 +1,11 @@
 ---
 id: TASK-10.1
 title: End the session with Leave table and see its saved report with my cash result
-status: In Progress
+status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-24T18:01:00Z'
+updated_date: '2026-11-24T18:02:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -19,6 +19,7 @@ references:
 documentation:
   - doc-1
   - doc-2
+  - doc-122
 parent_task_id: TASK-10
 priority: high
 type: feature
@@ -95,4 +96,12 @@ AC added from TASK-3.3 follow-up (doc-24).
 Build: DB v3 reports store (write-once) + endSession transaction; Session Report screen (Result/BB100/Rebuys, Back to Home); Leave table ends the session (also mid-hand, bust dialog, Continue); five locked e2e re-pinned per D-4; npm test 1244 passed, Playwright 268 passed; gate PASS.
 
 Judge r1 PASS 14/14; live Leave paths in Chromium+WebKit, report values match stored hand records, v2→v3 upgrade keeps data, ordering attacks held; CI 45453088617 green. Review took 3 rounds (orchestrator-added race fix, then its guard regression; both covered by e2e that fail on the old code).
+
+Follow-ups: none new. Already owned: mid-hand Leave dialog (TASK-10.2), record-based report sections (TASK-10.4), hint counts (TASK-10.7), View statistics (TASK-11.6). Not tracked: duplicated private validation helpers (refactor, no behaviour change).
 <!-- SECTION:NOTES:END -->
+
+## Final Summary
+
+<!-- SECTION:FINAL_SUMMARY:BEGIN -->
+Leave table (header and bust dialog) now ends the session: waits for the last hand write, then in one transaction saves endedAt and a write-once report (new reports store, DB v3), and opens the Session Report screen with header line, Result, BB/100 and Rebuys plus Back to Home. 0-hand sessions are deleted with no report. Verified: judge round 1 PASS 14/14, 3 review rounds (race fix for Leave vs last write, retry-after-failed-end hang fixed), 7 gate runs green. Review: Q-1..Q-3 (reports store v3, mid-hand Leave ends the session, Back to Home), five re-pinned locked e2e tests (D-4), build notes, assumptions A-1..A-9. Follow-ups: TASK-10.2 (mid-hand dialog), 10.4 (record-based sections), 11.6 (View statistics), 10.7 (hints), duplicated validation helpers in session-report.ts; scope over budget (1572 lines / 28 files vs 1300 / 23).
+<!-- SECTION:FINAL_SUMMARY:END -->
