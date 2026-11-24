@@ -12,7 +12,7 @@ export function TableScreen({
 }: {
   readonly config?: SessionConfig;
   readonly resume?: ResumedSession;
-  readonly onLeave?: () => void;
+  readonly onLeave?: (sessionId: string) => void;
   readonly onHome?: () => void;
 }): React.JSX.Element {
   const heading = useHeadingFocus(true);

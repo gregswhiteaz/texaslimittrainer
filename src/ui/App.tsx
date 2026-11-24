@@ -2,19 +2,24 @@ import { useEffect, useRef, useState } from 'react';
 import { sharedHandStore } from '../storage/hand-store';
 import { DEFAULT_SESSION_CONFIG, type SessionConfig } from '../table/session';
 import { restoreSession, type SessionRecord } from '../table/session-record';
+import type { SessionReport } from '../table/session-report';
 import { resumeSummary } from '../table/table-view';
 import { GameConfigScreen } from './config/GameConfigScreen';
 import { HomeScreen } from './home/HomeScreen';
+import { ReportScreen } from './report/ReportScreen';
 import { TableScreen } from './table/TableScreen';
 import { tableWritesSettled, type ResumedSession } from './table/useTableSession';
 
-/** In-app screens (A-1); changes store nothing (A-2). Only opening the Table adds a history entry, so
- *  browser Back on the Table pauses to Home (TASK-2.14 D-2); see docs/ui/navigation.md. */
+/** In-app screens (A-1); only Leave table stores something (it ends the session). Only opening the Table
+ *  adds a history entry, so browser Back on the Table pauses to Home (TASK-2.14 D-2); see
+ *  docs/ui/navigation.md. */
 type Screen =
   | { readonly name: 'home'; readonly returned: boolean }
   | { readonly name: 'config' }
   | { readonly name: 'table'; readonly config: SessionConfig }
-  | { readonly name: 'table'; readonly resume: ResumedSession };
+  | { readonly name: 'table'; readonly resume: ResumedSession }
+  | { readonly name: 'ending' }
+  | { readonly name: 'report'; readonly report: SessionReport };
 
 /** undefined while Home's read is pending (A-4); reset on leaving Home so a return reads it again. */
 type Paused = { readonly record: SessionRecord; readonly summary: string } | null | undefined;
@@ -73,12 +78,37 @@ export default function App(): React.JSX.Element {
     setScreen(table);
   };
 
-  /** The Home control and Leave table: pauses to Home, writing nothing (A-1). */
-  const goHome = (): void => {
+  /** Steps back off the Table's history entry and forgets it, so popstate and a second leave are ignored. */
+  const closeTable = (): void => {
     if (entryKey(history.state) === tableKey.current) history.back();
     tableKey.current = null;
     setPaused(undefined);
+  };
+
+  /** The Home control: pauses to Home, writing nothing (A-1). */
+  const goHome = (): void => {
+    closeTable();
     setScreen({ name: 'home', returned: true });
+  };
+
+  /** Leave table: ends the session once its writes settle, then shows its report, or Home if it had no
+   *  completed hand or could not be ended (A-4, A-5). */
+  const leave = (sessionId: string): void => {
+    if (tableKey.current === null) return;
+    closeTable();
+    setScreen({ name: 'ending' });
+    tableWritesSettled()
+      .then(() => sharedHandStore().endSession(sessionId, new Date()))
+      .then(
+        (report) =>
+          setScreen(
+            report === null ? { name: 'home', returned: true } : { name: 'report', report },
+          ),
+        (error: unknown) => {
+          console.error('Session could not be ended', error);
+          setScreen({ name: 'home', returned: true });
+        },
+      );
   };
 
   const resume = (record: SessionRecord): void => {
@@ -122,8 +152,17 @@ export default function App(): React.JSX.Element {
       return (
         <TableScreen
           {...('resume' in screen ? { resume: screen.resume } : { config: screen.config })}
-          onLeave={goHome}
+          onLeave={leave}
           onHome={goHome}
+        />
+      );
+    case 'ending':
+      return <main className="screen" aria-busy="true"></main>;
+    case 'report':
+      return (
+        <ReportScreen
+          report={screen.report}
+          onHome={() => setScreen({ name: 'home', returned: true })}
         />
       );
   }

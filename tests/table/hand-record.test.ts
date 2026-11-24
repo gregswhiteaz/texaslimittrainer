@@ -2,7 +2,7 @@ import { IDBFactory } from 'fake-indexeddb';
 import { describe, expect, it } from 'vitest';
 import { replayCodeFromWords } from '../../src/engine/deck';
 import type { HandState } from '../../src/engine/hand';
-import { openHandStore } from '../../src/storage/hand-store';
+import { DB_VERSION, openHandStore } from '../../src/storage/hand-store';
 import { handRecord, parseHandRecord, type HandRecord } from '../../src/table/hand-record';
 import {
   DEFAULT_SESSION_CONFIG,
@@ -161,7 +161,7 @@ describe('hand record', () => {
     const store = openHandStore(factory, 'corrupt');
     await store.add(showdown);
     await new Promise<void>((resolve, reject) => {
-      const open = factory.open('corrupt', 2);
+      const open = factory.open('corrupt', DB_VERSION);
       open.onsuccess = () => {
         const transaction = open.result.transaction('hands', 'readwrite');
         transaction.objectStore('hands').put({ ...showdown, handNumber: 2, board: [99] });

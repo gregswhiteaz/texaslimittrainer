@@ -59,7 +59,7 @@ export interface TableViewModel {
   readonly handOver: boolean;
 }
 
-const GAME_LABEL: Record<GameType, string> = { cash: 'Cash', 'sit-and-go': 'Sit-and-go' };
+export const GAME_LABEL: Record<GameType, string> = { cash: 'Cash', 'sit-and-go': 'Sit-and-go' };
 
 /** "$4/$8" for cash; plain chips such as "20/40" for a sit-and-go (REQ-008.7, D-2). */
 export function limitsText(config: SessionConfig): string {

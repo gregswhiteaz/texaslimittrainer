@@ -196,7 +196,7 @@ test('a session reloaded mid-hand resumes from Home at the same hand number unde
   expect(sessions[0]?.sessionId).toBe(session.sessionId);
   expect(sessions[0]?.startedAt).toBe(session.startedAt);
 
-  await button(page, 'Leave table').click();
+  await button(page, 'Home').click();
   await expect(resumeButton(page).locator('.menu-subtitle')).toHaveText(
     'Cash · 6 players · $4/$8 · 3 hands · paused',
   );

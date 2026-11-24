@@ -8,6 +8,7 @@ import {
   playToResult,
   seedStoredSessions,
   storedRecords,
+  storedReports,
   storedSessions,
 } from './support/hand-records';
 import { axeWithPausedClock, runUntil, runUntilMyTurn } from './support/paused-clock';
@@ -26,7 +27,8 @@ type Json = Record<string, unknown>;
 const fakeSlice = (page: Page) => () => page.clock.runFor(50);
 const menu = (page: Page) => page.getByRole('navigation', { name: 'Main menu' });
 const resumeButton = (page: Page) => page.getByRole('button', { name: /^Resume session/ });
-const homeHeading = (page: Page) => page.getByRole('heading', { level: 1, name: 'TLH Trainer' });
+const reportHeading = (page: Page) =>
+  page.getByRole('heading', { level: 1, name: 'Session report' });
 const bustDialog = (page: Page) => page.getByRole('dialog', { name: 'Out of chips' });
 const userSeat = (page: Page) => page.locator('li[data-user]');
 const headerFor = (hand: number) => `Cash · 6 players · $4/$8 · Hand #${hand}`;
@@ -132,34 +134,32 @@ test('Rebuy sets the stack to $160, deals the next hand and counts one rebuy', a
   expect((await storedSessions(page))[0]?.rebuys).toBe(1);
 });
 
-test('Leave table in the bust dialog deals nothing more and Resume reopens the dialog', async ({
+test('Leave table in the bust dialog ends the session and opens its Session Report', async ({
   page,
 }) => {
   await bustAtHand13(page);
   await expect.poll(async () => (await storedSessions(page))[0]?.handsPlayed).toBe(13);
-  const [before] = await storedSessions(page);
 
   await bustDialog(page).getByRole('button', { name: 'Leave table' }).click();
-  await expect(homeHeading(page)).toBeVisible();
-  await expect(homeHeading(page)).toBeFocused();
+  await expect(reportHeading(page)).toBeVisible();
+  await expect(reportHeading(page)).toBeFocused();
   await expect(page.getByRole('dialog')).toHaveCount(0);
+  await expect(page.locator('.report-header-line')).toHaveText(
+    'Cash · 6 players · $4/$8 · 13 hands',
+  );
+  await expect(page.locator('.report-kpi dt')).toHaveText(['Result', 'BB/100', 'Rebuys']);
+  await expect(page.locator('.report-kpi dd')).toHaveText(['-$160', '-153.8', '0']);
 
   await page.clock.runFor(5000);
   expect((await storedRecords(page)).map((r) => r.handNumber)).toEqual([13]);
   const sessions = await storedSessions(page);
   expect(sessions).toHaveLength(1);
-  expect(JSON.stringify(sessions[0])).toBe(JSON.stringify(before));
-  expect(sessions[0]).not.toHaveProperty('endedAt');
-
-  await resumeButton(page).click();
-  await expect(bustDialog(page)).toBeVisible();
-  await expect(header(page)).toHaveText(headerFor(14));
-  await page.clock.runFor(5000);
-  await expect(header(page)).toHaveText(headerFor(14));
-  await expect(bustDialog(page)).toBeVisible();
-  await expect(page.locator('[aria-label="Your cards"]')).toHaveCount(0);
-  await expect(handOver(page)).toHaveCount(0);
-  expect((await storedRecords(page)).map((r) => r.handNumber)).toEqual([13]);
+  expect(sessions[0]?.handsPlayed).toBe(13);
+  expect(typeof sessions[0]?.endedAt).toBe('string');
+  const reports = await storedReports(page);
+  expect(reports).toHaveLength(1);
+  expect(reports[0]?.endedAt).toBe(sessions[0]?.endedAt);
+  await expect(header(page)).toHaveCount(0);
 });
 
 test('no rebuy or add-chips control while the user has chips', async ({ page }) => {

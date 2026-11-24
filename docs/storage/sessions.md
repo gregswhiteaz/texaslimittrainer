@@ -18,7 +18,7 @@ TASK-2.14) needs to deal the next hand. Home's Resume session entry (TASK-2.6) r
 
 | Item         | Value                                                                |
 | ------------ | -------------------------------------------------------------------- |
-| Database     | `tlh-trainer`, version `2` (the only version marker)                 |
+| Database     | `tlh-trainer`, version `3` (the only version marker)                 |
 | Object store | `sessions` (next to `hands`, see [hand-records.md](hand-records.md)) |
 | Key          | `keyPath: 'sessionId'`; one record per session, replaced (`put`)     |
 | Indexes      | none (`pausedSession` reads every record with `getAll`)              |
@@ -38,7 +38,7 @@ TASK-2.14) needs to deal the next hand. Home's Resume session entry (TASK-2.6) r
 | `level`       | integer ≥ 1 \| null                    | null for cash; the sit-and-go level (1 until TASK-5.4)                                                                                    |
 | `nextBotName` | integer 0..`MAX_SESSION_COUNT`         | Position of the next replacement bot name (`TableState.nextBotName`)                                                                      |
 | `nextBotId`   | integer 1..`MAX_SESSION_COUNT`         | The id the next replacement bot gets (`TableState.nextBotId`)                                                                             |
-| `endedAt`     | string, ISO-8601 UTC \| null, optional | When the session was ended. Absent or null = not ended (paused). Written only by E10 (TASK-10.1); nothing writes it yet                   |
+| `endedAt`     | string, ISO-8601 UTC \| null, optional | When the session was ended. Absent or null = not ended (paused). Written only by `endSession` (Leave table, [reports.md](reports.md))     |
 
 Seat entry: `{ seat, kind: 'user' | 'bot', botId, name, style, stack }`. `botId` and `style` are null for the
 user; a bot's `botId` is unique and below `nextBotId`. `name` is 1–40 characters. `stack` is the seat's chips
@@ -134,23 +134,25 @@ button. The hand in progress when the app closed was never stored, so it is not 
 again and its record is written, under the same `sessionId`, only when that new hand completes. Hand numbers
 then continue as before.
 
-Leave table still just goes Home and the session stays paused until E10 ends it.
+Leave table ends the session: `endSession` writes `endedAt` and adds its report, or deletes a session with 0
+completed hands (see [reports.md](reports.md)). An ended session never shows in Resume.
 
 **A stored bust (TASK-3.11).** When a cash hand ends with the user on $0, `handWrite` stores that hand and a
 session with the user's stack 0 and the `rebuys` count from before the bust. No hand is dealt: `nextStep` is
 `'rebuy'`, `nextHandDelay` is null and `dealHand` throws `The user has no chips: rebuy first`. Resume restores
-that state and reopens the Rebuy / Leave table dialog without dealing. Rebuy sets the user's stack to the
+that state and reopens the Rebuy / Leave table dialog without dealing (Leave table in it ends the session). Rebuy sets the user's stack to the
 buy-in, adds 1 to `TableState.rebuys` and deals the next hand at once; nothing is written until that hand
 completes, so a close in between leaves the bust stored and the dialog returns on Resume (A-1).
 
 ## Pause from the Table
 
-The Table header's `Home` button (TASK-2.14, REQ-004.9), Leave table and browser Back on the Table all pause
-the session the same way; see [navigation.md](../ui/navigation.md).
+The Table header's `Home` button (TASK-2.14, REQ-004.9) and browser Back on the Table both pause the session
+the same way; see [navigation.md](../ui/navigation.md). Leave table ends it instead
+([reports.md](reports.md)). It also waits for `tableWritesSettled()` and drops an unfinished hand the same way.
 
 - **No write.** The stored record already is the paused state: the session ready for the next hand after the
   last completed hand. Choosing Home writes nothing, so the record, its `updatedAt` included, stays exactly as
-  it was. No `endedAt` is written and no report is created (there are only the `hands` and `sessions` stores).
+  it was. No `endedAt` is written and no report is created.
 - **Home waits for pending writes.** `useTableSession` keeps a module-level chain of every start-record put
   and hand write it issues. `tableWritesSettled()` resolves once all of them have settled and never rejects (a
   failure is already logged). Home's read runs `tableWritesSettled()` and then `pausedSession()`, so choosing
@@ -162,8 +164,9 @@ the session the same way; see [navigation.md](../ui/navigation.md).
 
 ## Upgrades
 
-Version 1 created `hands`; version 2 adds `sessions`. `onupgradeneeded` runs each missing step
-(`if (oldVersion < 1)`, `if (oldVersion < 2)`) and never touches existing stores or records. A later version
+Version 1 created `hands`; version 2 adds `sessions`; version 3 adds `reports` ([reports.md](reports.md)).
+`onupgradeneeded` runs each missing step (`if (oldVersion < 1)` … `if (oldVersion < 3)`) and never touches
+existing stores or records. A later version
 must append another `if (oldVersion < N)` step only. Formal migrations and per-store schema versions belong to
 E13 (REQ-054). A tab still open at version 1 closes its connection on `versionchange`; a database newer than
 the app makes every call reject with `VersionError` and dealing stops.
@@ -180,8 +183,8 @@ the app makes every call reject with `VersionError` and dealing stops.
   the bust state, Rebuy, two rebuys stored as 2, a stored bust restoring to the dialog, the `rebuys` cap and
   the dialog markup.
 - `e2e/rebuy.spec.ts` (every push): a seeded bust opens the dialog and deals nothing, Rebuy deals with $160
-  and stores `rebuys: 1`, Leave table then Resume reopens the dialog, and no rebuy control while the user has
-  chips.
+  and stores `rebuys: 1`, Leave table in the dialog opens the Session Report, and no rebuy control while the
+  user has chips.
 - `tests/ui/table-home.acceptance.test.tsx`: the header's Home button.
 - `e2e/home-control.spec.ts` (every push): Home between hands after hand 10, Resume, Home in the middle of
   hand 11 (no record, same stats, no `endedAt`), and resuming the abandoned hand.

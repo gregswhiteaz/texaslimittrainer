@@ -151,6 +151,8 @@ export function useTableSession({
   resume,
 }: TableSessionOptions): {
   table: TableState;
+  /** The stored session's id (32 lowercase hex). */
+  sessionId: string;
   /** The session's observed counts so far (read in event handlers, e.g. the hint request). */
   observedCounts: () => ObservedCounts;
   act: (action: Action, hinted?: boolean) => void;
@@ -298,5 +300,5 @@ export function useTableSession({
     );
   }, [newCode]);
 
-  return { table, observedCounts, act, dealNext, rebuy };
+  return { table, sessionId, observedCounts, act, dealNext, rebuy };
 }

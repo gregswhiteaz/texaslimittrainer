@@ -339,7 +339,8 @@ export function TableView({
 }
 
 export type TableProps = TableSessionOptions & {
-  readonly onLeave?: () => void;
+  /** Leave table (header and bust dialog), with the session's id. */
+  readonly onLeave?: (sessionId: string) => void;
   readonly onHome?: () => void;
   /** Open the review by itself after a reviewed hand (REQ-050.2, default on); off shows a badge instead. */
   readonly autoOpenReview?: boolean;
@@ -382,7 +383,7 @@ export function Table({
     },
     [],
   );
-  const { table, observedCounts, act, dealNext, rebuy } = useTableSession({
+  const { table, sessionId, observedCounts, act, dealNext, rebuy } = useTableSession({
     ...options,
     onHandComplete,
     onHandGraded,
@@ -448,7 +449,7 @@ export function Table({
     <TableView
       table={table}
       onAct={onAct}
-      onLeave={onLeave}
+      onLeave={() => onLeave(sessionId)}
       onHome={onHome}
       review={review}
       onDealNext={onDealNext}

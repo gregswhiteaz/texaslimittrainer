@@ -4,6 +4,7 @@ import {
   DB_NAME,
   DB_VERSION,
   HANDS_STORE,
+  REPORTS_STORE,
   SESSIONS_STORE,
   openHandStore,
 } from '../../src/storage/hand-store';
@@ -41,11 +42,12 @@ function record(sessionId: string, handNumber: number, completedAt: Date): HandR
 
 describe('hand store', () => {
   it('a new store keeps 1,000 old records', async () => {
-    expect([DB_NAME, DB_VERSION, HANDS_STORE, SESSIONS_STORE]).toEqual([
+    expect([DB_NAME, DB_VERSION, HANDS_STORE, SESSIONS_STORE, REPORTS_STORE]).toEqual([
       'tlh-trainer',
-      2,
+      3,
       'hands',
       'sessions',
+      'reports',
     ]);
     const factory = new IDBFactory();
     const now = Date.now();
@@ -65,9 +67,9 @@ describe('hand store', () => {
     expect(await later.get(OLD_SESSION, 1001)).toBeNull();
     expect(await later.get(NEW_SESSION, 2)).toBeNull();
 
-    // A newer database version cannot be opened at version 2: every call rejects.
+    // A newer database version cannot be opened at DB_VERSION: every call rejects.
     await new Promise<void>((resolve) => {
-      const open = factory.open('newer', 3);
+      const open = factory.open('newer', DB_VERSION + 1);
       open.onsuccess = () => {
         open.result.close();
         resolve();

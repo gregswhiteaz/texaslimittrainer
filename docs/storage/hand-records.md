@@ -17,7 +17,7 @@ changes or deletes them.
 
 | Item         | Value                                                                       |
 | ------------ | --------------------------------------------------------------------------- |
-| Database     | `tlh-trainer`, version `2` (the only version marker; no per-store versions) |
+| Database     | `tlh-trainer`, version `3` (the only version marker; no per-store versions) |
 | Object store | `hands` (and `sessions` since version 2, see sessions.md)                   |
 | Key          | `keyPath: ['sessionId', 'handNumber']` (compound, no auto-increment)        |
 | Indexes      | none besides the primary key                                                |

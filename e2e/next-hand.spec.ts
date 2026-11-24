@@ -289,8 +289,8 @@ test('leaving during the result deals no further hand', async ({ page }) => {
   await expect(handOver(page)).toBeVisible();
   await page.getByRole('button', { name: 'Leave table' }).click();
 
-  const home = page.getByRole('heading', { level: 1, name: 'TLH Trainer' });
-  await expect(home).toBeFocused();
+  const report = page.getByRole('heading', { level: 1, name: 'Session report' });
+  await expect(report).toBeFocused();
   await expect(tableSection(page)).toHaveCount(0);
   await slices(page, 60);
   expect(await draws(page)).toBe(1);

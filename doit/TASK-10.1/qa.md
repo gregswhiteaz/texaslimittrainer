@@ -18,3 +18,9 @@
 
 ## Spec Detective notes
 - A-1..A-9 accepted.
+
+## Build notes
+- tests/table/hand-record.test.ts (unlocked; TASK-3.9/3.10) opened the DB at literal version 2, which throws VersionError at v3: now opens at DB_VERSION. tests/storage/hand-store.test.ts "newer database" check moves from literal 3 to DB_VERSION + 1. No assertion changed.
+- e2e/bust-continue.spec.ts: the replaced Continue-then-Leave test used to check that Resume reopens the dialog; the session is now ended, so it checks the Session Report instead (per D-4).
+- docs/storage/hand-records.md version line updated (outside the spec list).
+**Answer: auto-accepted (recommended)** — recorded deviations.

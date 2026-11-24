@@ -7,6 +7,7 @@ import {
   playToResult,
   seedStoredSessions,
   storedRecords,
+  storedReports,
   storedSessions,
 } from './support/hand-records';
 import { axeWithPausedClock } from './support/paused-clock';
@@ -24,7 +25,8 @@ const STARTED = new Date('2026-11-24T10:00:00Z');
 const fakeSlice = (page: Page) => () => page.clock.runFor(50);
 const menu = (page: Page) => page.getByRole('navigation', { name: 'Main menu' });
 const resumeButton = (page: Page) => page.getByRole('button', { name: /^Resume session/ });
-const homeHeading = (page: Page) => page.getByRole('heading', { level: 1, name: 'TLH Trainer' });
+const reportHeading = (page: Page) =>
+  page.getByRole('heading', { level: 1, name: 'Session report' });
 const bustDialog = (page: Page) => page.getByRole('dialog', { name: 'Out of chips' });
 const reviewPanel = (page: Page) => page.getByRole('complementary');
 const continueButton = (page: Page) => page.getByRole('button', { name: 'Continue', exact: true });
@@ -112,24 +114,31 @@ test('a bust with the review open shows Continue, which opens the dialog, and Re
   expect(requests.map((url) => new URL(url).origin)).toEqual(requests.map(() => ORIGIN));
 });
 
-test('Leave table from the dialog opened by Continue deals nothing more', async ({ page }) => {
+test('Leave table from the dialog opened by Continue opens the Session Report', async ({
+  page,
+}) => {
   await bustWithReview(page);
   await expect.poll(async () => (await storedSessions(page))[0]?.handsPlayed).toBe(13);
-  const [before] = await storedSessions(page);
 
   await continueButton(page).click();
   await bustDialog(page).getByRole('button', { name: 'Leave table' }).click();
-  await expect(homeHeading(page)).toBeVisible();
+  await expect(reportHeading(page)).toBeVisible();
+  await expect(reportHeading(page)).toBeFocused();
   await expect(page.getByRole('dialog')).toHaveCount(0);
+  await expect(page.locator('.report-header-line')).toHaveText(
+    'Cash · 6 players · $4/$8 · 13 hands',
+  );
+  await expect(page.locator('.report-kpi dt')).toHaveText(['Result', 'BB/100', 'Rebuys']);
+  await expect(page.locator('.report-kpi dd')).toHaveText(['-$160', '-153.8', '0']);
 
   await page.clock.runFor(5000);
   expect((await storedRecords(page)).map((r) => r.handNumber)).toEqual([13]);
   const sessions = await storedSessions(page);
   expect(sessions).toHaveLength(1);
-  expect(JSON.stringify(sessions[0])).toBe(JSON.stringify(before));
-  expect(sessions[0]).not.toHaveProperty('endedAt');
-
-  await resumeButton(page).click();
-  await expect(bustDialog(page)).toBeVisible();
-  await expect(header(page)).toHaveText(headerFor(14));
+  expect(sessions[0]?.handsPlayed).toBe(13);
+  expect(typeof sessions[0]?.endedAt).toBe('string');
+  const reports = await storedReports(page);
+  expect(reports).toHaveLength(1);
+  expect(reports[0]?.endedAt).toBe(sessions[0]?.endedAt);
+  await expect(header(page)).toHaveCount(0);
 });
