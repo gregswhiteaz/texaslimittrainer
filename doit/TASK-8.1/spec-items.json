@@ -3,138 +3,138 @@
     "id": "SPEC-01",
     "verifies": "AC#4, DoD#1",
     "verification": "unit `tests/table/observed-snapshot.test.ts::snapshot counts every finished hand per bot`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-02",
     "verifies": "AC#4",
     "verification": "unit `tests/table/observed-snapshot.test.ts::replaced bot resets its observed hands`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-03",
     "verifies": "AC#2, DoD#1",
     "verification": "unit `tests/table/observed-snapshot.test.ts::decision snapshot equals hint snapshot`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-04",
     "verifies": "AC#1, AC#10",
     "verification": "acceptance `tests/ui/hint.acceptance.test.tsx::a Hint button is present on every enabled bar`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-05",
     "verifies": "AC#10",
     "verification": "acceptance `tests/ui/hint.acceptance.test.tsx::Hint is disabled or absent when the bar is idle`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-06",
     "verifies": "AC#2, AC#11",
     "verification": "acceptance `tests/ui/hint.acceptance.test.tsx::postflop hint shows the engine numbers, explanation and basis`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-07",
     "verifies": "AC#3, AC#11",
     "verification": "acceptance `tests/ui/hint.acceptance.test.tsx::preflop hint shows the chart basis instead of equity`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-08",
     "verifies": "AC#4",
     "verification": "acceptance `tests/ui/hint.acceptance.test.tsx::multiway basis shows 45 hands and typical player`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-09",
     "verifies": "AC#6",
     "verification": "acceptance `tests/ui/hint-toggle.acceptance.test.tsx::Hide hint hides the card and the button reads Hint`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-10",
     "verifies": "AC#7",
     "verification": "acceptance `tests/ui/hint.acceptance.test.tsx::acting hides the hint and the next decision starts closed`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-11",
     "verifies": "AC#8",
     "verification": "acceptance `tests/ui/hint-toggle.acceptance.test.tsx::the hint opens at 50 decisions and 10 times in one with no limit or cost`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-12",
     "verifies": "AC#6, AC#7, DoD#1",
     "verification": "unit `tests/table/hint.test.ts::hint state machine`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-13",
     "verifies": "AC#9, AC#2",
     "verification": "acceptance `tests/ui/hint-worker.acceptance.test.ts::hint requests go to the advice worker with the snapshot`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-14",
     "verifies": "AC#2, AC#3, AC#11",
     "verification": "unit `tests/table/hint.test.ts::hint card model`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-15",
     "verifies": "AC#12",
     "verification": "acceptance `tests/advice/value-copy.acceptance.test.ts::the 50% comparison names the calling-range equity`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-16",
     "verifies": "AC#3, DoD#9",
     "verification": "unit `tests/advice/explain.test.ts::chartBasisText`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-17",
     "verifies": "AC#5",
     "verification": "acceptance `e2e/hint.spec.ts::hint card never covers the action bar on a 10-seat table`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-18",
     "verifies": "AC#6, AC#7, AC#10, DoD#7",
     "verification": "acceptance `e2e/hint.spec.ts::Hint opens, hides and closes on an action`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-19",
     "verifies": "AC#9, AC#7",
     "verification": "acceptance `e2e/hint.spec.ts::a hint still computing never blocks the table or reappears after acting`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-20",
     "verifies": "AC#8",
     "verification": "acceptance `e2e/hint.spec.ts::hints are unlimited in the browser`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-21",
     "verifies": "DoD#2, DoD#3, DoD#4, DoD#5, DoD#10",
     "verification": "command `npm run lint && npm run typecheck && npm test && npx vitest run tests/golden/ && ! grep -rE \"from '\\.\\./(\\.\\./)?ui/|from 'react\" src/table/hint.ts src/advice src/stats && gh run list --branch doit/TASK-8.1 --limit 1`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-22",
     "verifies": "DoD#6",
     "verification": "command `npm run -s playtest -- --hands 10000 --seed 42`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-23",
     "verifies": "DoD#8, DoD#11, DoD#12",
     "verification": "manual `git diff main -- package.json` is empty; `grep -rn \"fetch(\" src/table/hint.ts src/ui/table` is empty; `backlog doc list --plain` shows the TASK-8.1 doc",
-    "status": "pending"
+    "status": "pass"
   }
 ]

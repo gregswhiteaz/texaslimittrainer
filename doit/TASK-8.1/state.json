@@ -5,13 +5,37 @@
   "base_commit": "dc7293210800f6c7e52057fb0e3a4f295de8403a",
   "started": "2026-11-24T02:44:03",
   "review_round": 2,
-  "judge_round": 0,
+  "judge_round": 1,
   "sendbacks": 0,
   "gate_runs": 6,
   "questions": 3,
   "assumptions": 10,
   "escalations": 0,
-  "item_failures": {},
+  "item_failures": {
+    "SPEC-01": 0,
+    "SPEC-02": 0,
+    "SPEC-03": 0,
+    "SPEC-04": 0,
+    "SPEC-05": 0,
+    "SPEC-06": 0,
+    "SPEC-07": 0,
+    "SPEC-08": 0,
+    "SPEC-09": 0,
+    "SPEC-10": 0,
+    "SPEC-11": 0,
+    "SPEC-12": 0,
+    "SPEC-13": 0,
+    "SPEC-14": 0,
+    "SPEC-15": 0,
+    "SPEC-16": 0,
+    "SPEC-17": 0,
+    "SPEC-18": 0,
+    "SPEC-19": 0,
+    "SPEC-20": 0,
+    "SPEC-21": 0,
+    "SPEC-22": 0,
+    "SPEC-23": 0
+  },
   "locked_tests": {
     "e2e/hint.spec.ts": "27badabfae2fcf166080cab2d2ab867d622de870f392a58ca7243b7ead9b7d53",
     "tests/advice/value-copy.acceptance.test.ts": "1c6cd256b2dbd35f3d585219f64bd8e2bb0575370d58a07dccd4368d3dee7b48",
@@ -1522,5 +1546,8 @@
     "src/ui/table/useTableSession.ts:hook-observed-wiring-untested": [
       "review r1"
     ]
+  },
+  "judge_results": {
+    "1": "PASS"
   }
 }
