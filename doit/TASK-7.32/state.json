@@ -1,0 +1,19 @@
+{
+  "task": "TASK-7.32",
+  "stage": "parked",
+  "branch": "doit/TASK-7.32",
+  "base_commit": "65771305b323cf99d005d035333598808c798461",
+  "started": "2026-11-24T14:29:05",
+  "review_round": 0,
+  "judge_round": 0,
+  "sendbacks": 0,
+  "gate_runs": 0,
+  "questions": 0,
+  "assumptions": 0,
+  "escalations": 1,
+  "item_failures": {},
+  "locked_tests": {},
+  "test_snapshot": {},
+  "history": [],
+  "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-7.32"
+}

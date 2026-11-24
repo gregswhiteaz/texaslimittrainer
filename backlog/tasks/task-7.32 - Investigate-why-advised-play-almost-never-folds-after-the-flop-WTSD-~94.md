@@ -1,9 +1,11 @@
 ---
 id: TASK-7.32
 title: Investigate why advised play almost never folds after the flop (WTSD ~94%)
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-24T20:47:00Z'
+updated_date: '2026-11-24T21:52:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -27,3 +29,9 @@ Found while specifying TASK-10.3: in 100,000-hand 6-max playtests (seeds 42 and 
 - [ ] #2 Given the fix, When a 100,000-hand 6-max all-TAG playtest runs (opt-in slow group), Then WTSD falls inside the authored 6-max healthy WTSD range from TASK-10.3 and VPIP, PFR, Aggression and W$SD stay inside theirs
 - [ ] #3 Given the fix, When the golden-spot suites run, Then they pass (re-pinning any spot only with a recorded justification)
 <!-- AC:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+doit: parked — investigation done (see doit/TASK-7.32/spec.md §1a): root cause is that all four bot styles request advice with the default 'unseen' (any two cards) range model, so they call ~98% of postflop bets; hints already use action ranges. Bots on action ranges alone give WTSD ~44% (just outside 30–42). The recommended full fix also amends REQ-033.1 (turn pot odds count one river big bet) and REQ-033.2 (value raise vs a bet needs >65%), re-baselines ~18 locked tests across 12 stories, and leaves the Mixed line-up REQ-027 style bands failing (Maniacs take over). That changes the requirements, so it needs the user's decision on Q-1..Q-3 (spec §11). Related ready story: TASK-7.25 (switch bots to action-based ranges).
+<!-- SECTION:NOTES:END -->
