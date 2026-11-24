@@ -1,12 +1,14 @@
 {
   "id": "TASK-2.6",
   "title": "Resume a paused session from Home",
-  "status": "To Do",
+  "status": "In Progress",
   "archived": false,
   "type": "feature",
   "priority": "high",
   "project": null,
-  "assignees": [],
+  "assignees": [
+    "@claude"
+  ],
   "reporter": null,
   "labels": [
     "dream-limit-holdem-trainer"
@@ -21,7 +23,7 @@
   "modifiedFiles": [],
   "ordinal": 65000,
   "createdAt": "2026-11-17T22:46:00Z",
-  "updatedAt": "2026-11-23T13:44:00Z",
+  "updatedAt": "2026-11-24T01:45:00Z",
   "dueDate": null,
   "isReady": true,
   "path": "backlog/tasks/task-2.6 - Resume-a-paused-session-from-Home.md",
@@ -36,7 +38,7 @@
       {
         "id": "TASK-2.6",
         "title": "Resume a paused session from Home",
-        "status": "To Do",
+        "status": "In Progress",
         "state": "resolved",
         "completed": false,
         "dependencyDepth": 0,
@@ -765,8 +767,8 @@
       "checked": false
     }
   ],
-  "implementationPlan": null,
-  "implementationNotes": "AC added from TASK-6.7 security review MINOR (lineUpSessionConfig trusts seat kind/style)\n\nAC added from TASK-3.10 judge J-1-02.",
+  "implementationPlan": "1. Session store: pausedSession() reads all sessions, skips invalid ones (logged), picks the latest not-ended (optional endedAt) session\n2. parseSessionRecord: cap handsPlayed/nextBotId at 1,000,000,000 (RangeError)\n3. Home: Resume session entry (second, secondary style) with subtitle 'Cash \u00b7 6 players \u00b7 $4/$8 \u00b7 132 hands \u00b7 paused'; data-paused loading|none|shown; hidden on read failure\n4. App: Resume restores the session (restoreSession) and opens the Table with a resume option keeping the stored session id; no new start record\n5. Tests: unit/acceptance for selection, caps, invalid records, AC#3 kill-at-hand-11 in fake-indexeddb; Playwright resume flow in Chromium and WebKit with axe\n\nFull spec: doit/TASK-2.6/spec.md",
+  "implementationNotes": "AC added from TASK-6.7 security review MINOR (lineUpSessionConfig trusts seat kind/style)\n\nAC added from TASK-3.10 judge J-1-02.\n\nBuild: findPausedSession + HandStore.pausedSession, endedAt (read-only), MAX_SESSION_COUNT cap, Home Resume entry with resumeSummary subtitle, App restore + resume option keeping the stored session id; npm test 994 passed, e2e 190 passed; gate PASS\n\nReview r1: 0 blocking (security MINOR next-bot-name-uncapped; code MINOR seed-sessions duplicate, NIT unreachable Error wrap). Paused before judge: branch CI 45306421540 fails only on tests/advice/postflop-ranges.test.ts timing out under coverage (not this story); resuming after fix story TASK-1.56 merges.",
   "comments": [],
   "finalSummary": null
 }

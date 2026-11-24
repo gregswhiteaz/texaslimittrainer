@@ -3,12 +3,13 @@ File: /Users/gregwhite/Documents/claudeworkspaces/limitholdem/backlog/tasks/task
 Task TASK-2.6 - Resume a paused session from Home
 ==================================================
 
-Status: ○ To Do
+Status: ◒ In Progress
 Priority: High
 Type: feature
 Ordinal: 65000
+Assignee: @claude
 Created: 2026-11-17 22:46 (UTC)
-Updated: 2026-11-23 13:44 (UTC)
+Updated: 2026-11-24 01:45 (UTC)
 Labels: dream-limit-holdem-trainer
 Milestone: m-1
 Parent: TASK-2 - Launch and set up a session
@@ -125,9 +126,23 @@ Definition of Done:
 - [ ] #11 Story documentation is written and published to Backlog.md
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 
+Implementation Plan:
+--------------------------------------------------
+1. Session store: pausedSession() reads all sessions, skips invalid ones (logged), picks the latest not-ended (optional endedAt) session
+2. parseSessionRecord: cap handsPlayed/nextBotId at 1,000,000,000 (RangeError)
+3. Home: Resume session entry (second, secondary style) with subtitle 'Cash · 6 players · $4/$8 · 132 hands · paused'; data-paused loading|none|shown; hidden on read failure
+4. App: Resume restores the session (restoreSession) and opens the Table with a resume option keeping the stored session id; no new start record
+5. Tests: unit/acceptance for selection, caps, invalid records, AC#3 kill-at-hand-11 in fake-indexeddb; Playwright resume flow in Chromium and WebKit with axe
+
+Full spec: doit/TASK-2.6/spec.md
+
 Implementation Notes:
 --------------------------------------------------
 AC added from TASK-6.7 security review MINOR (lineUpSessionConfig trusts seat kind/style)
 
 AC added from TASK-3.10 judge J-1-02.
+
+Build: findPausedSession + HandStore.pausedSession, endedAt (read-only), MAX_SESSION_COUNT cap, Home Resume entry with resumeSummary subtitle, App restore + resume option keeping the stored session id; npm test 994 passed, e2e 190 passed; gate PASS
+
+Review r1: 0 blocking (security MINOR next-bot-name-uncapped; code MINOR seed-sessions duplicate, NIT unreachable Error wrap). Paused before judge: branch CI 45306421540 fails only on tests/advice/postflop-ranges.test.ts timing out under coverage (not this story); resuming after fix story TASK-1.56 merges.
 

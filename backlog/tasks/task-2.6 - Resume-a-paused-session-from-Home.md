@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-24T01:45:00Z'
+updated_date: '2026-11-24T02:28:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -44,30 +44,30 @@ Plan key: E02-S08 · Dream: limit-holdem-trainer
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Given a paused 6-player $4/$8 cash session with 132 completed hands, When Home is shown, Then it shows Resume session with Cash, 6 players, $4/$8 and 132 hands [REQ-002.4]
-- [ ] #2 Given storage with no session or only ended sessions, When Home is shown, Then Resume session is not shown [REQ-002.5]
-- [ ] #3 Given 10 completed hands and the app closed in the middle of hand 11, When the app is relaunched and the user chooses Resume session, Then the Table deals a new hand numbered 11 with every stack equal to its value at the end of hand 10 [REQ-004.2]
-- [ ] #4 Given a paused 9-player $10/$20 Custom session with button at seat 7 after hand 25, When it is resumed, Then the table shows the same game type, table size, stake, line-up name, bot names and styles in the same seats, stacks and hand count 25, and the next hand's button is the seat that follows seat 7 under the button rules [REQ-004.3]
-- [ ] #5 Given the app was closed in the middle of hand 11, When stored hand records and the style stats computed from them are read after resuming, Then no record of the abandoned hand exists and the stats equal those of hands 1 to 10 [REQ-004.6]
-- [ ] #6 Given a resumed session, When further hands complete, Then they are stored under the same session id with hand numbers continuing from 11 [REQ-004.2]
-- [ ] #7 Given a stored session whose seats include an unknown seat kind, an unknown bot style or a missing bot name, When it is loaded to resume, Then it is rejected with a clear error (not passed to resolveLineUpName/lineUpSessionConfig or the table), and Home stays usable
-- [ ] #8 Given a stored session whose handsPlayed or nextBotId is at or near Number.MAX_SAFE_INTEGER, When Resume restores it, Then it is rejected with a RangeError (cap below MAX_SAFE_INTEGER) rather than producing an unsafe hand number
+- [x] #1 Given a paused 6-player $4/$8 cash session with 132 completed hands, When Home is shown, Then it shows Resume session with Cash, 6 players, $4/$8 and 132 hands [REQ-002.4]
+- [x] #2 Given storage with no session or only ended sessions, When Home is shown, Then Resume session is not shown [REQ-002.5]
+- [x] #3 Given 10 completed hands and the app closed in the middle of hand 11, When the app is relaunched and the user chooses Resume session, Then the Table deals a new hand numbered 11 with every stack equal to its value at the end of hand 10 [REQ-004.2]
+- [x] #4 Given a paused 9-player $10/$20 Custom session with button at seat 7 after hand 25, When it is resumed, Then the table shows the same game type, table size, stake, line-up name, bot names and styles in the same seats, stacks and hand count 25, and the next hand's button is the seat that follows seat 7 under the button rules [REQ-004.3]
+- [x] #5 Given the app was closed in the middle of hand 11, When stored hand records and the style stats computed from them are read after resuming, Then no record of the abandoned hand exists and the stats equal those of hands 1 to 10 [REQ-004.6]
+- [x] #6 Given a resumed session, When further hands complete, Then they are stored under the same session id with hand numbers continuing from 11 [REQ-004.2]
+- [x] #7 Given a stored session whose seats include an unknown seat kind, an unknown bot style or a missing bot name, When it is loaded to resume, Then it is rejected with a clear error (not passed to resolveLineUpName/lineUpSessionConfig or the table), and Home stays usable
+- [x] #8 Given a stored session whose handsPlayed or nextBotId is at or near Number.MAX_SAFE_INTEGER, When Resume restores it, Then it is rejected with a RangeError (cap below MAX_SAFE_INTEGER) rather than producing an unsafe hand number
 <!-- AC:END -->
 
 ## Definition of Done
 <!-- DOD:BEGIN -->
-- [ ] #1 Every acceptance criterion has at least one automated test (unit, property or Playwright) that passes
-- [ ] #2 `npm run lint`, `npm run typecheck` and `npm test` pass with zero errors [REQ-059.1, REQ-059.4]
-- [ ] #3 The golden-spot suite passes 100% (applies from the story that creates the suite, E07-S14, onward) [REQ-039.4]
-- [ ] #4 Coverage thresholds hold: >= 90% engine/bots/advice/statistics, >= 70% overall [REQ-059.3]
-- [ ] #5 Engine, bots, advice and statistics code imports no UI or browser-only code [REQ-059.2]
-- [ ] #6 Stories that touch the engine, bots or advice: a 10,000-hand playtest reports zero invariant violations (applies once the playtest runner exists, E01-S07, onward) [REQ-056.1]
-- [ ] #7 Stories that add or change a screen: Playwright test of the screen flow in Chromium and WebKit, and axe reports zero serious or critical violations (axe tooling is provisioned in the toolchain story E01-S01) [REQ-057.1]
-- [ ] #8 No new network requests beyond the app's own files [REQ-058.1]
-- [ ] #9 Strategy-content stories: text is original and every chart, range or golden spot carries its justification [REQ-061.2]
-- [ ] #10 CI workflow is green on the story's branch (applies once the CI story E01-S02 is done; E01-S01 instead passes the same checks locally) [REQ-064.2]
-- [ ] #11 Story documentation is written and published to Backlog.md
-- [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
+- [x] #1 Every acceptance criterion has at least one automated test (unit, property or Playwright) that passes
+- [x] #2 `npm run lint`, `npm run typecheck` and `npm test` pass with zero errors [REQ-059.1, REQ-059.4]
+- [x] #3 The golden-spot suite passes 100% (applies from the story that creates the suite, E07-S14, onward) [REQ-039.4]
+- [x] #4 Coverage thresholds hold: >= 90% engine/bots/advice/statistics, >= 70% overall [REQ-059.3]
+- [x] #5 Engine, bots, advice and statistics code imports no UI or browser-only code [REQ-059.2]
+- [x] #6 Stories that touch the engine, bots or advice: a 10,000-hand playtest reports zero invariant violations (applies once the playtest runner exists, E01-S07, onward) [REQ-056.1]
+- [x] #7 Stories that add or change a screen: Playwright test of the screen flow in Chromium and WebKit, and axe reports zero serious or critical violations (axe tooling is provisioned in the toolchain story E01-S01) [REQ-057.1]
+- [x] #8 No new network requests beyond the app's own files [REQ-058.1]
+- [x] #9 Strategy-content stories: text is original and every chart, range or golden spot carries its justification [REQ-061.2]
+- [x] #10 CI workflow is green on the story's branch (applies once the CI story E01-S02 is done; E01-S01 instead passes the same checks locally) [REQ-064.2]
+- [x] #11 Story documentation is written and published to Backlog.md
+- [x] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
 
 ## Implementation Plan
@@ -92,4 +92,6 @@ AC added from TASK-3.10 judge J-1-02.
 Build: findPausedSession + HandStore.pausedSession, endedAt (read-only), MAX_SESSION_COUNT cap, Home Resume entry with resumeSummary subtitle, App restore + resume option keeping the stored session id; npm test 994 passed, e2e 190 passed; gate PASS
 
 Review r1: 0 blocking (security MINOR next-bot-name-uncapped; code MINOR seed-sessions duplicate, NIT unreachable Error wrap). Paused before judge: branch CI 45306421540 fails only on tests/advice/postflop-ranges.test.ts timing out under coverage (not this story); resuming after fix story TASK-1.56 merges.
+
+Judge r1 PASS 16/16; CI 45310957352 green on 9d84cec.
 <!-- SECTION:NOTES:END -->
