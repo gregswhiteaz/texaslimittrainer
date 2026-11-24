@@ -1,11 +1,11 @@
 ---
 id: TASK-2.7
 title: Confirm ending a paused session before starting a new game
-status: In Progress
+status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-24T18:43:00Z'
+updated_date: '2026-11-24T18:44:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -17,6 +17,7 @@ references:
 documentation:
   - doc-1
   - doc-2
+  - doc-123
 parent_task_id: TASK-2
 priority: high
 type: feature
@@ -83,4 +84,12 @@ Full spec: doit/TASK-2.7/spec.md
 Build: Start game re-reads storage; paused session → End your paused session? dialog in Game Config; Confirm ends it (and older unended sessions) then opens the Table; Cancel/Escape change nothing; npm test 1249 passed, Playwright green after the TASK-3.4 next-hand.spec context fix; gate PASS.
 
 Judge r1 PASS 11/11; live Chromium+WebKit confirm/cancel/Escape/0-hand/older-sessions flows; exactly one unended session after a confirmed new game; CI 45461420886 green.
+
+Follow-ups: TASK-2.21 created (in-transaction recheck, focus after failure, early-open e2e). Not tracked: unreachable instanceof NIT.
 <!-- SECTION:NOTES:END -->
+
+## Final Summary
+
+<!-- SECTION:FINAL_SUMMARY:BEGIN -->
+Start game on Game Config now checks for a paused session and shows a modal 'End your paused session?' dialog. Confirm ends it (report saved, or deleted if 0 hands) via new store op endPausedSessions, which also ends older unended sessions at their own updatedAt, then opens the Table. Cancel/Escape change nothing. No paused session: starts at once. Verified: npm test 1249 pass, golden 282/282, playtest 0 violations, Playwright 284 pass on Chromium+WebKit, judge 11/11, CI green. Review for approval: dialog copy (Q-1), A-1 (older sessions ended / 0-hand removed), edit to locked TASK-3.4 next-hand.spec.ts (fresh browser context), WebKit focus-return ref. Follow-ups: SPEC-08 e2e is weak against early Table open; focus not returned to Start game after a failed Confirm; ended() lacks an in-transaction isEnded recheck (security MINOR); unreachable instanceof wrap (NIT). Story doc: doc-123.
+<!-- SECTION:FINAL_SUMMARY:END -->
