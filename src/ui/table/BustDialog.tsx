@@ -20,6 +20,7 @@ export function BustDialog({ amount, onRebuy, onLeave }: BustDialogProps): React
       className="bust-dialog"
       aria-labelledby="bust-heading"
       onCancel={(event) => event.preventDefault()}
+      // Chromium closes a modal on a second Escape without a cancelable cancel event, so stop the key itself.
       onKeyDown={(event) => {
         if (event.key === 'Escape') event.preventDefault();
       }}

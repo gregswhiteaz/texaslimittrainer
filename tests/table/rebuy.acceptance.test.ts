@@ -96,9 +96,9 @@ describe('rebuy acceptance', () => {
 
     const sitAndGo = withFinalStacks(BUST, SIT_AND_GO);
     expect(userBusted(sitAndGo)).toBe(false);
-    expect(nextHandDelay(sitAndGo)).toBe(1500);
-    expect(nextHand(sitAndGo).stacks[4]).toEqual({ seat: 5, stack: 800 });
-    expect(nextStep(nextHand(sitAndGo))).toBe('deal');
+    expect(nextHandDelay(sitAndGo)).toBeNull();
+    expect(nextHand(sitAndGo).stacks[4]).toEqual({ seat: 5, stack: 0 });
+    expect(nextStep(nextHand(sitAndGo))).toBe('stopped');
   });
 
   it('rebuy sets the user to the buy-in, deals the next hand and counts one rebuy', () => {
@@ -222,12 +222,12 @@ describe('rebuy acceptance', () => {
   it('no rebuy is possible while the user has chips', () => {
     const hasChips = new RangeError('No rebuy: the user has chips');
     const inHand = new RangeError('No rebuy during a hand');
-    const toppedUp = nextHand(withFinalStacks([160, 222, 160, 160, 95, 165]));
-    expect(toppedUp.stacks[4]).toEqual({ seat: 5, stack: 160 });
-    expect(toppedUp.rebuys).toBe(0);
+    const short = nextHand(withFinalStacks([160, 222, 160, 160, 95, 165]));
+    expect(short.stacks[4]).toEqual({ seat: 5, stack: 95 });
+    expect(short.rebuys).toBe(0);
     const between = [
       seatSession(),
-      toppedUp,
+      short,
       nextHand(withFinalStacks([160, 222, 160, 160, 1, 165])),
       nextHand(withFinalStacks(BUST, SIT_AND_GO)),
     ];

@@ -6,6 +6,7 @@ import {
   dealHand,
   nextHand,
   nextStep,
+  rebuy,
   stepBot,
   type TableState,
 } from '../../src/table/session';
@@ -38,8 +39,8 @@ export function playHand(table: TableState, code: ReplayCode): TableState {
   throw new Error('Hand did not finish');
 }
 
-/** Plays `hands` hands from `table` (ready to deal), hand n with `codeFor(n)`. Returns each completed
- *  hand's table, in order. */
+/** Plays `hands` hands from `table` (ready to deal), hand n with `codeFor(n)`, rebuying a busted user
+ *  before the deal. Returns each completed hand's table, in order. */
 export function playSession(
   table: TableState,
   hands: number,
@@ -48,6 +49,7 @@ export function playSession(
   const played: TableState[] = [];
   let next = table;
   for (let i = 0; i < hands; i++) {
+    if (nextStep(next) === 'rebuy') next = rebuy(next);
     const done = playHand(next, codeFor(next.handNumber));
     played.push(done);
     next = nextHand(done);

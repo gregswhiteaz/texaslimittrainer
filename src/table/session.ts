@@ -5,7 +5,6 @@ import {
   assertChips,
   createHand,
   legalActions,
-  minimumStack,
   type Action,
   type ActionRecord,
   type HandResult,
@@ -386,8 +385,13 @@ export interface TableState {
   /** The user's rebuys in this session (REQ-007.3). */
   readonly rebuys: number;
 }
-/** 'rebuy': no hand is dealt and the user is busted, so nothing is dealt until the user rebuys (D-4). */
-export type NextStep = 'deal' | 'bot' | 'user' | 'done' | 'rebuy';
+/** 'rebuy': no hand is dealt and the user is busted, so nothing is dealt until the user rebuys (D-4).
+ *  'stopped': a sit-and-go seat is on 0, so nothing more is dealt (TASK-3.21 D-1, until TASK-5.2/5.7). */
+export type NextStep = 'deal' | 'bot' | 'user' | 'done' | 'rebuy' | 'stopped';
+
+/** handsPlayed, nextBotId, nextBotName and rebuys are at most this, so hand numbers, bot ids, replacement-name
+ *  positions and rebuy counts stay safe integers (A-3). */
+export const MAX_SESSION_COUNT = 1_000_000_000;
 
 /** Bot ids 1..k for the bot seats in ascending seat order. */
 export function initialBotIds(seats: readonly SessionSeat[]): Readonly<Record<number, number>> {
@@ -433,8 +437,17 @@ export function userBusted(table: TableState): boolean {
   return hand.result !== null && hand.players.find((p) => p.seat === config.userSeat)?.stack === 0;
 }
 
+/** TASK-3.21 D-1: true iff the game is a sit-and-go and some seat has 0 chips between hands: the final stacks
+ *  of a finished hand, or the stacks before the deal when no hand is dealt. Always false mid-hand (A-6). */
+export function sitAndGoStopped(table: TableState): boolean {
+  const { config, hand } = table;
+  if (config.gameType !== 'sit-and-go') return false;
+  if (hand === null) return table.stacks.some((s) => s.stack === 0);
+  return hand.result !== null && hand.players.some((p) => p.stack === 0);
+}
+
 /** REQ-007.2: the busted user's stack set to the buy-in and one more rebuy counted; nothing else changes.
- *  RangeError if a hand is dealt or the user is not busted. */
+ *  RangeError if a hand is dealt, the user is not busted, or rebuys is already MAX_SESSION_COUNT. */
 export function rebuy(table: TableState): TableState {
   if (table.hand !== null) throw new RangeError('No rebuy during a hand');
   const { config } = table;
@@ -442,6 +455,8 @@ export function rebuy(table: TableState): TableState {
   if (config.gameType !== 'cash' || !userBusted(table)) {
     throw new RangeError('No rebuy: the user has chips');
   }
+  if (table.rebuys >= MAX_SESSION_COUNT)
+    throw new RangeError('No rebuy: the rebuy limit is reached');
   const { userSeat, stake } = config;
   return {
     ...table,
@@ -454,13 +469,17 @@ export function rebuy(table: TableState): TableState {
 
 export function nextStep(table: TableState): NextStep {
   const { hand } = table;
-  if (hand === null) return userBusted(table) ? 'rebuy' : 'deal';
+  if (hand === null) {
+    if (userBusted(table)) return 'rebuy';
+    return sitAndGoStopped(table) ? 'stopped' : 'deal';
+  }
   if (hand.result !== null) return 'done';
   return hand.toAct === table.config.userSeat ? 'user' : 'bot';
 }
 
 export function dealHand(table: TableState, code: ReplayCode): TableState {
   const step = nextStep(table);
+  if (step === 'stopped') throw new RangeError('The sit-and-go has stopped: a seat has no chips');
   if (step === 'rebuy') throw new RangeError('The user has no chips: rebuy first');
   if (step !== 'deal') throw new RangeError('Not a deal step');
   const hand = createHand({
@@ -486,10 +505,12 @@ export function botActionDelayMs(speed: Speed): number {
 /** REQ-024.3: the pause between a hand's result and the next deal. */
 export const NEXT_HAND_DELAY_MS = 1500;
 
-/** ms until the next hand is dealt: NEXT_HAND_DELAY_MS when the hand is done, not held and did not bust the
- *  user; else null. */
+/** ms until the next hand is dealt: NEXT_HAND_DELAY_MS when the hand is done, not held, did not bust the
+ *  user and did not stop the sit-and-go; else null. */
 export function nextHandDelay(table: TableState, hold = false): number | null {
-  return nextStep(table) === 'done' && !hold && !userBusted(table) ? NEXT_HAND_DELAY_MS : null;
+  return nextStep(table) === 'done' && !hold && !userBusted(table) && !sitAndGoStopped(table)
+    ? NEXT_HAND_DELAY_MS
+    : null;
 }
 
 /** REQ-007.5: a new bot's style, styles[replacementGenerator(code, seat).nextIntUnbiased(styles.length)] with
@@ -505,14 +526,14 @@ export function drawReplacementStyle(
   return styles[replacementGenerator(code, seat).nextIntUnbiased(styles.length)] as BotStyle;
 }
 
-/** The session ready for the next deal: final stacks carried, button one seat on, hand number + 1. In cash the
- *  user on $0 is carried at 0 (userBusted). In cash a
- *  bot on $0 is replaced by a new bot (REQ-007.5): next unused replacement name, style drawn from the line-up
- *  with the finished hand's replay code, a fresh buy-in and the next bot id. Throws RangeError if that draw has no replay code. */
+/** The session ready for the next deal: final stacks carried, button one seat on, hand number + 1.
+ *  Every seat keeps its chips (REQ-007.4). In cash a user on $0 waits at Rebuy (userBusted) and a bot on $0
+ *  is replaced by a new bot (REQ-007.5): next unused replacement name, style drawn from the line-up with the
+ *  finished hand's replay code, a fresh buy-in and the next bot id. A sit-and-go seat on 0 stops the
+ *  sit-and-go (sitAndGoStopped). Throws RangeError if a replacement draw has no replay code. */
 export function nextHand(table: TableState): TableState {
   const { hand, config } = table;
   if (nextStep(table) !== 'done' || hand === null) throw new RangeError('Not a next-hand step');
-  const minimum = minimumStack(table.stakes);
   let seats = table.seats;
   let nextBotName = table.nextBotName;
   let botIds = table.botIds;
@@ -533,14 +554,9 @@ export function nextHand(table: TableState): TableState {
       seats = seats.map((s) => (s.seat === seat ? { seat, kind: 'bot', name, style } : s));
       return { seat, stack: buyIn(config.stake) };
     }
-    // The busted cash user waits at Rebuy / Leave table on $0 (REQ-007.2).
-    if (config.gameType === 'cash' && stack === 0) return { seat, stack };
-    return {
-      seat,
-      // TEMPORARY (TASK-3.4 Q-4): tops seats below minimumStack back to 20 big bets (the cash buy-in; 800
-      // in a sit-and-go at 20/40) because the engine has no all-in yet. Removal is an acceptance criterion on TASK-1.16 / TASK-3.11 (whichever lands last).
-      stack: stack < minimum ? buyIn(tableStake(config)) : stack,
-    };
+    // Carried as is (REQ-007.4): a short seat plays its chips, a cash user on $0 waits at Rebuy / Leave table
+    // (REQ-007.2) and a sit-and-go seat on 0 stops the sit-and-go (D-1).
+    return { seat, stack };
   });
   const order = seats.map((s) => s.seat);
   const button = order[(order.indexOf(hand.button) + 1) % order.length] as SeatNumber;

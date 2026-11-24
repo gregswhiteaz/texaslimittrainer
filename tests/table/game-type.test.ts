@@ -46,7 +46,7 @@ describe('game type', () => {
     expect(headerText(DEFAULT_SESSION_CONFIG, 3)).toBe('Cash · 6 players · $4/$8 · Hand #3');
   });
 
-  it('sit-and-go resolves without a stake and tops up to its 1500 starting stack', () => {
+  it('sit-and-go resolves without a stake and never refills a short or busted seat', () => {
     const sng = resolveSessionConfig({ gameType: 'sit-and-go' });
     expect('stake' in sng).toBe(false);
     expect(resolveSessionConfig({})).toStrictEqual(DEFAULT_SESSION_CONFIG);
@@ -56,8 +56,6 @@ describe('game type', () => {
     expect(startingStack(DEFAULT_SESSION_CONFIG)).toBe(160);
     expect(Object.isFrozen(SIT_AND_GO_LEVEL_1)).toBe(true);
 
-    // Recorded deviation from A-3 (fix brief): the TEMPORARY top-up keeps the locked 20-big-bet rule, so a
-    // short sit-and-go seat refills to buyIn(20/40) = 800 while every seat still starts with 1,500.
     const done = playOut(seatSession({ gameType: 'sit-and-go' }));
     const hand = done.hand as HandState;
     const short = minimumStack(done.stakes) - 1;
@@ -69,9 +67,14 @@ describe('game type', () => {
       },
     };
     const next = nextHand(shortened);
-    expect(next.stacks.find((s) => s.seat === 1)?.stack).toBe(800);
+    expect(next.stacks.find((s) => s.seat === 1)?.stack).toBe(short);
     expect(next.stacks.filter((s) => s.seat !== 1).map((s) => s.stack)).toEqual(
       hand.players.filter((p) => p.seat !== 1).map((p) => p.stack),
     );
+    const busted = nextHand({
+      ...done,
+      hand: { ...hand, players: hand.players.map((p) => (p.seat === 1 ? { ...p, stack: 0 } : p)) },
+    });
+    expect(busted.stacks.find((s) => s.seat === 1)?.stack).toBe(0);
   });
 });

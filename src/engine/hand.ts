@@ -132,8 +132,8 @@ function isPositiveSafeInteger(value: number): boolean {
 /** Most bets per street: a bet and three raises; preflop the big blind is the first bet (REQ-016.2–016.4). */
 export const STREET_BET_CAP = 4;
 
-/** The most one player can put into a capped hand ($96 at $4/$8). Used by the session's TEMPORARY top-up
- *  (TASK-3.21) and the A-4 stakes bound. createHand's own floor is $1: a short stack posts an all-in blind. */
+/** The most one player can put into a capped hand ($96 at $4/$8). Bounds the A-4 stakes check. createHand's
+ *  own floor is $1: a short stack posts an all-in blind. */
 export function minimumStack(stakes: Stakes): number {
   return 8 * stakes.smallBet + 8 * stakes.bigBet;
 }

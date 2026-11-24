@@ -8,11 +8,13 @@ import {
   botTurn,
   completedHand,
   dealHand,
+  MAX_SESSION_COUNT,
   nextHand,
   nextHandDelay,
   nextStep,
   rebuy as rebuyTable,
   seatSession,
+  sitAndGoStopped,
   userBusted,
   type BotTurn,
   type CompletedHand,
@@ -59,14 +61,19 @@ function newSessionId(): string {
 }
 
 /** The deal after a done hand (auto-deal and Deal next hand): `t` unchanged unless the hand is done and the
- *  user is not busted (A-3). */
+ *  user is not busted (A-3) and the sit-and-go has not stopped (TASK-3.21 D-1). */
 export function dealAfterDone(t: TableState, code: ReplayCode): TableState {
-  return nextStep(t) === 'done' && !userBusted(t) ? dealHand(nextHand(t), code) : t;
+  return nextStep(t) === 'done' && !userBusted(t) && !sitAndGoStopped(t)
+    ? dealHand(nextHand(t), code)
+    : t;
 }
 
-/** Rebuy then deal (A-2): `t` unchanged unless the user is busted, after the bust hand or on a restored bust. */
+/** Rebuy then deal (A-2): `t` unchanged unless the user is busted, after the bust hand or on a restored bust,
+ *  and below the rebuy limit (TASK-3.21 A-2). */
 export function rebuyAndDeal(t: TableState, code: ReplayCode): TableState {
-  return userBusted(t) ? dealHand(rebuyTable(t.hand === null ? t : nextHand(t)), code) : t;
+  return userBusted(t) && t.rebuys < MAX_SESSION_COUNT
+    ? dealHand(rebuyTable(t.hand === null ? t : nextHand(t)), code)
+    : t;
 }
 
 const noop = (): void => undefined;

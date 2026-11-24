@@ -53,7 +53,7 @@ describe('next hand acceptance', () => {
       const done = playHand(seatSession(), code);
       const final = finalStacks(done);
       const next = nextHand(done);
-      expect(stackValues(next), `code ${i}`).toEqual(final.map((s) => (s < 96 ? 160 : s)));
+      expect(stackValues(next), `code ${i}`).toEqual(final);
       expect(final.every((s) => s >= 96)).toBe(true);
       expect(next.stacks.map((s) => s.seat)).toEqual([1, 2, 3, 4, 5, 6]);
       expect(next.button).toBe(1);
@@ -85,10 +85,14 @@ describe('next hand acceptance', () => {
     expect(fromThree.config.button).toBe(3);
   });
 
-  it('a seat below the minimum stack is handled before the next hand instead of a RangeError', () => {
+  it('a seat below the old $96 minimum plays its own chips in the next hand', () => {
     const short = nextHand(withFinalStacks([158, 222, 160, 160, 95, 165]));
-    expect(stackValues(short)).toEqual([158, 222, 160, 160, 160, 165]);
-    expect(() => dealHand(short, replayCodeFromWords([1, 1, 2, 3]))).not.toThrow();
+    expect(stackValues(short)).toEqual([158, 222, 160, 160, 95, 165]);
+    expect(
+      (dealHand(short, replayCodeFromWords([1, 1, 2, 3])).hand as HandState).players.map(
+        (p) => p.startingStack,
+      ),
+    ).toEqual([158, 222, 160, 160, 95, 165]);
 
     const edge = nextHand(withFinalStacks([0, 222, 160, 160, 96, 165]));
     expect(stackValues(edge)).toEqual([160, 222, 160, 160, 96, 165]);
@@ -104,12 +108,12 @@ describe('next hand acceptance', () => {
       'utf8',
     ).split('\n');
     const marker = lines.findIndex((line) => /TEMPORARY \(TASK-3\.4 Q-4\)/.test(line));
-    expect(marker).toBeGreaterThanOrEqual(0);
+    expect(marker).toBe(-1);
     const topUp = lines.findIndex((line) => /< minimum \? buyIn\(/.test(line));
-    expect(topUp).toBeGreaterThan(marker);
-    const near = lines.slice(Math.max(0, topUp - 3), topUp + 4).join('\n');
-    expect(near).toContain('TASK-1.16 / TASK-3.11');
-    expect(near).toMatch(/TEMPORARY \(TASK-3\.4 Q-4\)/);
+    expect(topUp).toBe(-1);
+    const near = lines.join('\n');
+    expect(near).not.toContain('TASK-1.16 / TASK-3.11');
+    expect(near).not.toMatch(/TEMPORARY \(TASK-3\.4 Q-4\)/);
   });
 
   it('sixty hands in a row carry stacks and never raise the minimum-stack error', () => {
@@ -133,7 +137,7 @@ describe('next hand acceptance', () => {
             expect(stack).toBe(0);
             expect(after?.name).not.toBe(before.name);
           } else {
-            expect(stack).toBeLessThan(96);
+            expect(before?.kind).toBe('bot');
           }
           added += carried - stack;
         } else {

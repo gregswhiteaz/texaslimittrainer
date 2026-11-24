@@ -37,7 +37,7 @@ const foldFirst: UserChoice = (table, index) => {
 
 interface Played {
   table: TableState;
-  steps: ('deal' | 'bot' | 'user' | 'rebuy')[];
+  steps: ('deal' | 'bot' | 'user' | 'rebuy' | 'stopped')[];
   botSteps: { before: HandState; after: HandState }[];
 }
 

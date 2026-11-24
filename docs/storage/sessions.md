@@ -49,9 +49,10 @@ and no replay code.
 ## The state stored: ready for the next hand
 
 The record is built from `nextHand(table)`, the state the next deal uses: final stacks carried, a busted cash
-bot already replaced (new `botId`, name, style and $160 at $4/$8), the TEMPORARY short-stack top-up applied
-and the button moved one seat. A cash user on $0 is carried at 0, not topped up (the bust state below). `handsPlayed` is the number of the hand just completed. So restoring needs no
-game logic: `restoreSession(sessionRecord(nextHand(t), meta))` deep-equals `nextHand(t)`.
+bot already replaced (new `botId`, name, style and $160 at $4/$8), every other seat on its own chips (no
+top-up) and the button moved one seat. A cash user on $0 is carried at 0, not topped up (the bust state below). `handsPlayed` is the number of the hand just completed. So restoring needs no
+game logic: `restoreSession(sessionRecord(nextHand(t), meta))` deep-equals `nextHand(t)`. A stopped sit-and-go's record
+keeps its seat on 0 and is rejected on read, so it is not resumable until TASK-5.2.
 
 ## When it is written
 

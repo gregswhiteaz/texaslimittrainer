@@ -2,6 +2,7 @@ import { assertChips, type SeatNumber } from '../engine/hand';
 import { handRecord, isWhole, type HandRecord } from './hand-record';
 import {
   BOT_STYLES,
+  MAX_SESSION_COUNT,
   assertSessionConfig,
   completedHand,
   isSeatName,
@@ -57,9 +58,7 @@ export interface SessionRecord {
   readonly endedAt?: string | null;
 }
 
-/** handsPlayed, nextBotId, nextBotName and rebuys are at most this, so hand numbers, bot ids, replacement-name
- *  positions and rebuy counts stay safe integers (A-3). */
-export const MAX_SESSION_COUNT = 1_000_000_000;
+export { MAX_SESSION_COUNT };
 
 export interface PausedSession {
   /** The paused session, already parsed; null if none. */
