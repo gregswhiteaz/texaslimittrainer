@@ -1,11 +1,11 @@
 ---
 id: TASK-7.15
 title: Prove advice is identical for identical decisions
-status: In Progress
+status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-24T08:10:00Z'
+updated_date: '2026-11-24T08:11:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -19,6 +19,7 @@ references:
 documentation:
   - doc-1
   - doc-2
+  - doc-112
 parent_task_id: TASK-7
 priority: high
 type: feature
@@ -91,4 +92,12 @@ AC added from TASK-7.4 follow-up (doc-19).
 Build: playtest --check-advice (advice-determinism violation), optional observed snapshot through UserDecision/worker/review, 1000-reshuffle determinism test; 10k --check-advice: 100113 decision points, 0 mismatches; npm test 1171 passed; gate PASS. Deviations in doit/TASK-7.15/fix-brief.md (300 s timeouts, second USAGE re-pin, optional hook view).
 
 Judge r1 PASS 14/14; 10k --check-advice: 100113 decision points, 0 mismatches, byte-identical across runs; plain playtest identical to main; test:slow 88 passed; CI 45347780392 green.
+
+Follow-ups: none new. Observed seat validation already owned by TASK-3.12 (AC from TASK-7.13). Not tracked: every-push AC#5 cost (sweep shard ~3 min on CI, no failure), startHand-when-flag-off NIT (no behaviour change). Docs example count corrected to 100113 (J-1-01).
 <!-- SECTION:NOTES:END -->
+
+## Final Summary
+
+<!-- SECTION:FINAL_SUMMARY:BEGIN -->
+Added --check-advice to the playtest CLI. It computes advice and grade twice at every decision point (all seats, with a per-decision observed-stat snapshot) and reports any difference with the replay code. Hint and review now share a decision-time observed snapshot (optional on UserDecision, applyUserAction and the advice worker), and hidden cards are proven irrelevant over 1,000 variations. Verification: judge round 1 passed 14/14. A 10,000-hand --check-advice run gave 100113 decision points and 0 mismatches. Output is byte-identical across runs and to main without the flag. Lint, typecheck, npm test, unit coverage, golden and test:slow are all green. Review these: Q-1 CLI text, assumptions A-1 to A-6, and the build deviations (300 s test timeouts, a second USAGE re-pin, optional hook view). Follow-ups: AC#3 is proven at the API level only (session wiring stays with TASK-8.1); the J-1-01 docs example count is being corrected; MINOR scope-budget-lines-exceeded (1048 vs 900) and ac5-every-push-is-the-cost-driver; NITs advice-check-built-when-flag-off and observed-seat-not-validated.
+<!-- SECTION:FINAL_SUMMARY:END -->
