@@ -1,10 +1,11 @@
 ---
 id: TASK-2.14
 title: Pause the session from the Table header Home control
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-17T23:03:00Z'
-updated_date: '2026-11-24T02:29:00Z'
+updated_date: '2026-11-24T02:41:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -64,6 +65,19 @@ Plan key: E02-S15 · Dream: limit-holdem-trainer
 - [ ] #11 Story documentation is written and published to Backlog.md
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. Table header: 'Home' text button before Leave table (only when onHome is passed); focus moves to Home's h1
+2. Home writes nothing: the stored session is the paused state; unmounting the Table abandons the hand in progress
+3. tableWritesSettled(): Home waits for in-flight table writes before reading the paused session (Home control, Leave table, Back)
+4. History: opening the Table pushes one keyed entry; Back on the Table pauses to Home; Forward never reopens it; in-app leave calls history.back(); docs/ui/navigation.md
+5. parseSessionRecord caps nextBotName at MAX_SESSION_COUNT
+6. Tests: unit/acceptance + Playwright pause flow (seeded hands 1-9, real hand 10, abandon hand 11) in Chromium and WebKit with axe
+
+Full spec: doit/TASK-2.14/spec.md
+<!-- SECTION:PLAN:END -->
 
 ## Implementation Notes
 
