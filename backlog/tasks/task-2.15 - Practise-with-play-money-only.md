@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-17T23:03:00Z'
-updated_date: '2026-11-24T18:57:00Z'
+updated_date: '2026-11-24T19:13:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -76,3 +76,9 @@ Plan key: E02-S14 · Dream: limit-holdem-trainer
 
 Full spec: doit/TASK-2.15/spec.md
 <!-- SECTION:PLAN:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+Build: screen list + play-money walk (all screens/dialogs, ~1 s per browser), Deposit fixture, dist/package.json payment scan, source-vs-list check; no src changes; npm test 1259 passed, Playwright 290 passed; gate PASS.
+<!-- SECTION:NOTES:END -->
