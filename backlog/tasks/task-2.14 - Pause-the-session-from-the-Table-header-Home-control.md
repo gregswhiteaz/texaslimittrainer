@@ -1,11 +1,11 @@
 ---
 id: TASK-2.14
 title: Pause the session from the Table header Home control
-status: In Progress
+status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T23:03:00Z'
-updated_date: '2026-11-24T03:17:00Z'
+updated_date: '2026-11-24T03:18:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -18,6 +18,7 @@ documentation:
   - doc-1
   - doc-2
   - doc-3
+  - doc-108
 parent_task_id: TASK-2
 priority: high
 type: feature
@@ -89,4 +90,12 @@ AC added from TASK-2.6 follow-up (security MINOR next-bot-name-uncapped, doc-107
 Build: Table header Home button, tableWritesSettled before Home's read, keyed Table history entry + popstate pause, nextBotName cap; npm test 997 passed, e2e 204 passed; gate PASS
 
 Judge r1 PASS 12/12; CI 45316910309 green on f560a64.
+
+Follow-ups: TASK-2.20 created (write-race test, clock-free history key, Forward-then-Back stale entry).
 <!-- SECTION:NOTES:END -->
+
+## Final Summary
+
+<!-- SECTION:FINAL_SUMMARY:BEGIN -->
+Added a Home control to the Table header (before Leave table). It pauses the session without ending it or writing anything, and Resume session on Home shows the hand count. Mid-hand abandonment drops the unfinished hand. Browser Back on the Table now pauses to Home (one history entry pushed per Table open). Home reads the paused session only after pending table writes settle. parseSessionRecord now caps nextBotName at MAX_SESSION_COUNT. Verified: npm test 997 passed; lint/typecheck clean; full Playwright 204 passed (Chromium+WebKit); new specs 42/42 over 3 repeats; judge round 1 PASS 12/12; no blocking review findings. Review: Q-1 (Home label/placement) and Q-2 (Back/Forward navigation, reverses TASK-2.1 A-2 for the Table) were auto-accepted; assumptions A-1..A-6 in doc-108. Follow-ups: no test for the pending-write race (MINOR); history key depends on performance.timeOrigin; Forward-after-Back leaves Home on a stale entry; Playwright fake clock fakes timeOrigin so only SPEC-07 case 5 runs on the real clock.
+<!-- SECTION:FINAL_SUMMARY:END -->
