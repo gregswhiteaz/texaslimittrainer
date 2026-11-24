@@ -821,6 +821,32 @@ h1[tabindex='-1']:focus {
   font-size: 15px;
 }
 
+.review-entry [data-part='chart'],
+.review-numbers {
+  margin: 0;
+  font-size: 14px;
+  overflow-wrap: anywhere;
+}
+
+.review-numbers {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  font-weight: 600;
+}
+
+.review-entry [data-part='explanation'],
+.review-opponents {
+  margin: 0;
+  color: #c9ced6;
+  font-size: 14px;
+  overflow-wrap: anywhere;
+}
+
+.review-opponents {
+  padding-left: 18px;
+}
+
 /* Bust dialog (TASK-3.11, A-4): Rebuy / Leave table when the user's cash stack is $0. */
 .bust-dialog {
   box-sizing: border-box;

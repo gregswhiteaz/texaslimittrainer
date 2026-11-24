@@ -27,8 +27,10 @@ Observed stats change as the session goes on, so the snapshot belongs to the dec
   (`UserDecision.observed`). Later changes to the caller's array don't reach the stored copy.
 - The advice worker's `recommend` and `grade` requests accept the same `observed` field. An invalid snapshot
   (for example a negative hand count) comes back as `ok: false` with a `RangeError`.
-- `reviewEntries` regrades each decision with that decision's own snapshot. The review therefore repeats the hint
-  even when the finished hand has already moved the opponent's stats.
+- Each decision is graded by the worker when it is made, with that decision's own snapshot, and the stored entry
+  is what the Hand Review shows (TASK-9.3). Nothing is worked out again at hand end, so the review repeats the
+  hint even when the finished hand has already moved the opponent's stats. `reviewEntries`, which regrades from
+  the snapshot, remains as the check used by tests.
 - A decision recorded without a snapshot has no `observed` key and is reviewed exactly as before.
 
 The app session doesn't supply snapshots yet; that is TASK-8.1.

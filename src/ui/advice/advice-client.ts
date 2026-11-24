@@ -23,7 +23,12 @@ type Payload =
       readonly view: PlayerView;
       readonly observed?: readonly ObservedOpponent[];
     }
-  | { readonly kind: 'grade'; readonly view: PlayerView; readonly userAction: ActionType };
+  | {
+      readonly kind: 'grade';
+      readonly view: PlayerView;
+      readonly userAction: ActionType;
+      readonly observed?: readonly ObservedOpponent[];
+    };
 
 interface Pending {
   readonly resolve: (value: AdviceValue) => void;
@@ -81,10 +86,17 @@ export class AdviceClient {
     ) as Promise<Recommendation>;
   }
 
-  grade(view: PlayerView, userAction: ActionType): Promise<GradeResult<Recommendation>> {
-    return this.#request({ kind: 'grade', view, userAction }) as Promise<
-      GradeResult<Recommendation>
-    >;
+  /** The user's decision graded with the user's advice; `observed` is sent only when given, as in recommend. */
+  grade(
+    view: PlayerView,
+    userAction: ActionType,
+    observed?: readonly ObservedOpponent[],
+  ): Promise<GradeResult<Recommendation>> {
+    return this.#request(
+      observed === undefined
+        ? { kind: 'grade', view, userAction }
+        : { kind: 'grade', view, userAction, observed },
+    ) as Promise<GradeResult<Recommendation>>;
   }
 
   /** Unless already failed: removes listeners, terminates the worker, rejects pending requests with Error('Advice client disposed'). */

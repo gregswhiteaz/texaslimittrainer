@@ -13,7 +13,8 @@ import {
   toggleHint,
   type HintCardView,
 } from '../../table/hint';
-import { opensReview, userReviewEntries, type ReviewEntry } from '../../table/review';
+import type { HandRecordDecision } from '../../table/hand-record';
+import { opensReview, storedReviewEntries, type StoredReviewEntry } from '../../table/review';
 import { buyIn, userBusted, type CompletedHand, type TableState } from '../../table/session';
 import { tableView, type SeatView } from '../../table/table-view';
 import { playerView } from '../../engine/player-view';
@@ -29,8 +30,23 @@ import { ReviewPanel } from './ReviewPanel';
 import { useTableSession, type TableSessionOptions } from './useTableSession';
 
 export interface ReviewState {
-  readonly entries: readonly ReviewEntry[];
+  /** null while the hand's grades are still being worked out (A-2): no panel is shown yet. */
+  readonly entries: readonly StoredReviewEntry[] | null;
   readonly open: boolean;
+}
+
+/** The review held for `hand`, the hand just played. */
+export interface HeldReview extends ReviewState {
+  readonly hand: CompletedHand;
+}
+
+/** `review` with `entries` iff it is still held for `hand`; else unchanged (a late result is ignored). */
+export function reviewGraded(
+  review: HeldReview | null,
+  hand: CompletedHand,
+  entries: readonly StoredReviewEntry[],
+): HeldReview | null {
+  return review?.hand === hand ? { ...review, entries } : review;
 }
 
 export interface TableViewProps {
@@ -260,7 +276,7 @@ export function TableView({
             </button>
           )}
         </div>
-        {review?.open === true && (
+        {review?.open === true && review.entries !== null && (
           <ReviewPanel
             handNumber={table.handNumber}
             entries={review.entries}
@@ -288,7 +304,7 @@ export function Table({
   holdNextHand = false,
   ...options
 }: TableProps): React.JSX.Element {
-  const [review, setReview] = useState<ReviewState | null>(null);
+  const [review, setReview] = useState<HeldReview | null>(null);
   // Read through a ref so onHandComplete stays stable and never restarts the next-hand timer.
   const externalRef = useRef(external);
   useEffect(() => {
@@ -296,11 +312,18 @@ export function Table({
   }, [external]);
   const onHandComplete = useCallback((hand: CompletedHand) => {
     externalRef.current?.(hand);
-    if (opensReview(hand)) setReview({ entries: userReviewEntries(hand), open: true });
+    if (opensReview(hand)) setReview({ hand, entries: null, open: true });
   }, []);
+  const onHandGraded = useCallback(
+    (hand: CompletedHand, decisions: readonly HandRecordDecision[]) => {
+      setReview((r) => reviewGraded(r, hand, storedReviewEntries(hand, decisions)));
+    },
+    [],
+  );
   const { table, observedCounts, act, dealNext, rebuy } = useTableSession({
     ...options,
     onHandComplete,
+    onHandGraded,
     holdNextHand: holdNextHand || review !== null,
   });
 

@@ -106,25 +106,53 @@ const STEPS = [
 ] as const;
 type StateName = (typeof STEPS)[number]['name'];
 
-function buildStoryboard(): { named: Record<StateName, TableState>; history: TableState[] } {
-  let hand = createHand({ stakes: STAKES, seats: STACKS, button: 6, deck: storyboardDeck() });
-  const history = [tableAt(hand)];
+/** Seat 5's moves go through applyUserAction with `observed` as each decision's snapshot (no hint), so the
+ *  states after a user move carry userDecisions; every other move goes through play. */
+function buildStoryboard(observed?: readonly ObservedOpponent[]): {
+  named: Record<StateName, TableState>;
+  history: TableState[];
+} {
+  let table = tableAt(
+    createHand({ stakes: STAKES, seats: STACKS, button: 6, deck: storyboardDeck() }),
+  );
+  const history = [table];
   const named = {} as Record<StateName, TableState>;
   for (const step of STEPS) {
     for (const move of step.moves.split(' ')) {
-      hand = play(hand, move);
-      history.push(tableAt(hand));
+      table = playMove(table, move, observed);
+      history.push(table);
     }
+    const hand = table.hand as HandState;
     if (hand.toAct !== step.toAct) throw new Error(`${step.name}: seat ${hand.toAct} is to act`);
-    named[step.name] = history.at(-1) as TableState;
+    named[step.name] = table;
   }
   return { named, history };
+}
+
+/** One `seat:type` move: the user's (seat 5) through applyUserAction with `observed`, any other through play. */
+function playMove(
+  table: TableState,
+  move: string,
+  observed?: readonly ObservedOpponent[],
+): TableState {
+  const hand = table.hand as HandState;
+  const [seat, type] = move.split(':');
+  if (Number(seat) !== USER_SEAT) return { ...table, hand: play(hand, move) };
+  if (hand.toAct !== USER_SEAT) throw new Error(`Seat ${hand.toAct} is to act, not ${seat}`);
+  const action = legalActions(hand).find((a) => a.type === type);
+  if (action === undefined) throw new Error(`Seat ${seat} cannot ${type}`);
+  return applyUserAction(table, action, observed);
 }
 
 const STORYBOARD = buildStoryboard();
 export const { PREFLOP, FLOP_BET, TURN_BET, RIVER, SHOWDOWN } = STORYBOARD.named;
 /** Every state of the storyboard hand from the blinds to SHOWDOWN, one per move. */
 export const STORYBOARD_HISTORY: readonly TableState[] = STORYBOARD.history;
+
+/** The storyboard SHOWDOWN state with `observed` as the snapshot of every user decision. */
+export function storyboardShowdown(observed?: readonly ObservedOpponent[]): TableState {
+  return buildStoryboard(observed).named.SHOWDOWN;
+}
 
 /** The storyboard's preflop decision: 3 and 4 fold, the user (seat 5, CO, A♥ 9♠) is to act in an unopened pot. */
 export const PREFLOP_DECISION = STORYBOARD_HISTORY[2] as TableState;
@@ -151,6 +179,26 @@ export const TEN_SEAT_FLOP: TableState = ((): TableState => {
     const legal = legalActions(hand);
     const action = legal.find((a) => a.type === 'check') ?? legal.find((a) => a.type === 'call');
     if (action === undefined) throw new Error('TEN_SEAT_FLOP: no check or call');
+    const applied = applyAction(hand, action);
+    if (!applied.ok) throw new Error(applied.error.message);
+    table = { ...table, hand: applied.state };
+  }
+})();
+
+/** Ten seats (user seat 5), pinned deal: every seat calls or checks on every street to a showdown; the user's
+ *  four decisions (preflop call, then flop, turn and river checks) are recorded without a snapshot. */
+export const TEN_SEAT_SHOWDOWN: TableState = ((): TableState => {
+  let table = dealHand(seatSession(configForPlayers(DEFAULT_SESSION_CONFIG, 10)), SCENARIO_CODE);
+  for (;;) {
+    const hand = table.hand as HandState;
+    if (hand.result !== null) return table;
+    const legal = legalActions(hand);
+    const action = legal.find((a) => a.type === 'check') ?? legal.find((a) => a.type === 'call');
+    if (action === undefined) throw new Error('TEN_SEAT_SHOWDOWN: no check or call');
+    if (hand.toAct === table.config.userSeat) {
+      table = applyUserAction(table, action);
+      continue;
+    }
     const applied = applyAction(hand, action);
     if (!applied.ok) throw new Error(applied.error.message);
     table = { ...table, hand: applied.state };

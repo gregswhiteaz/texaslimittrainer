@@ -23,8 +23,15 @@ import {
   type ObservedCounts,
   type SessionConfig,
   type TableState,
+  type UserDecision,
 } from '../../table/session';
-import type { HandStore } from '../../table/hand-record';
+import {
+  gradedDecisions,
+  NO_GRADES,
+  requestNewGrades,
+  type DecisionGrades,
+} from '../../table/decision-grades';
+import { decisionEntry, type HandRecordDecision, type HandStore } from '../../table/hand-record';
 import { handWrite, sessionRecord } from '../../table/session-record';
 import { sharedHandStore } from '../../storage/hand-store';
 import {
@@ -37,6 +44,9 @@ export interface TableSessionOptions {
   readonly config?: Partial<SessionConfig>;
   readonly newCode?: () => ReplayCode;
   readonly onHandComplete?: (hand: CompletedHand) => void;
+  /** Called once per completed hand with its graded entries, after every grade of the hand has resolved and
+   *  before its record is added (TASK-9.3). */
+  readonly onHandGraded?: (hand: CompletedHand, decisions: readonly HandRecordDecision[]) => void;
   /** While true no next hand is dealt; turning it off starts a fresh delay (E09 seam, A-3). */
   readonly holdNextHand?: boolean;
   /**
@@ -104,6 +114,21 @@ export function requestBotDecision(create: () => WorkerLike, turn: BotTurn): Pro
 }
 
 /**
+ * Asks the app-wide advice worker to grade the user's decision with its observed-stats snapshot and returns
+ * the stored entry. Never throws synchronously: a failure creating the worker or client rejects the promise.
+ */
+export function requestDecisionGrade(
+  create: () => WorkerLike,
+  decision: UserDecision,
+): Promise<HandRecordDecision> {
+  return Promise.resolve()
+    .then(() =>
+      sharedAdviceClient(create).grade(decision.view, decision.action.type, decision.observed),
+    )
+    .then((result) => decisionEntry(result, decision));
+}
+
+/**
  * Holds the session and runs the deal step one macrotask later and each bot step botActionDelayMs(speed)
  * later (0 at Rapid, REQ-011.1); nothing runs on the user's turn.
  * Bot decisions are computed by the app-wide advice worker; replies after unmount or for an old turn are dropped.
@@ -112,11 +137,14 @@ export function requestBotDecision(create: () => WorkerLike, turn: BotTurn): Pro
  * (unless held) or once that write completes, whichever is later; a failed write deals nothing more (D-2).
  * Each completed hand is also added to the session's observed counts (TASK-8.1), which start empty at every
  * mount, a resumed one included (Q-3); each user action stores the snapshot built from them.
+ * Each user decision is graded by the advice worker as soon as it is made (TASK-9.3 A-1); the hand's record is
+ * written from those entries once they have all resolved, and a failed grade fails the write (A-3).
  */
 export function useTableSession({
   config,
   newCode = newReplayCode,
   onHandComplete,
+  onHandGraded,
   holdNextHand = false,
   createAdviceWorker = createProductionWorker,
   handStore,
@@ -151,11 +179,17 @@ export function useTableSession({
   }, [handStore, initialTable, sessionId, startedAt]);
   // Read through a ref so a new callback each render never restarts the next-hand timer (D-5).
   const callback = useRef(onHandComplete);
+  const gradedCallback = useRef(onHandGraded);
   useEffect(() => {
     callback.current = onHandComplete;
+    gradedCallback.current = onHandGraded;
   });
   const write = useRef<Promise<void>>(Promise.resolve());
+  const grades = useRef<DecisionGrades>(NO_GRADES);
   useEffect(() => {
+    grades.current = requestNewGrades(grades.current, table, (d) =>
+      requestDecisionGrade(createAdviceWorker, d),
+    );
     const step = nextStep(table);
     if (step === 'deal') {
       const timer = setTimeout(() => {
@@ -191,15 +225,17 @@ export function useTableSession({
       reported.current = table.handNumber;
       const done = completedHand(table);
       if (done !== null) {
-        const { record, session } = handWrite(table, {
-          sessionId,
-          startedAt,
-          completedAt: new Date(),
-        });
+        const completedAt = new Date();
         const store = handStore ?? sharedHandStore();
-        write.current = (started.current ?? Promise.resolve()).then(() =>
-          store.add(record, session),
-        );
+        write.current = gradedDecisions(grades.current, table).then((decisions) => {
+          gradedCallback.current?.(done, decisions);
+          const { record, session } = handWrite(
+            table,
+            { sessionId, startedAt, completedAt },
+            decisions,
+          );
+          return (started.current ?? Promise.resolve()).then(() => store.add(record, session));
+        });
         write.current.catch((error: unknown) => {
           console.error('Hand record could not be saved', error);
         });

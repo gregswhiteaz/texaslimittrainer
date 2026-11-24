@@ -1,9 +1,11 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
+import { decisionRecord } from '../../src/table/hand-record';
 import type { HintCardView } from '../../src/table/hint';
-import type { TableState } from '../../src/table/session';
+import { storedReviewEntries } from '../../src/table/review';
+import { completedHand, type CompletedHand, type TableState } from '../../src/table/session';
 import css from '../../src/ui/styles.css?inline';
-import { TableView } from '../../src/ui/table/Table';
+import { TableView, type ReviewState } from '../../src/ui/table/Table';
 import {
   BET_ALL_IN,
   CALL_ALL_IN,
@@ -15,6 +17,7 @@ import {
   SIDE_POT_RIVER,
   SIDE_POT_SHOWDOWN,
   TEN_SEAT_FLOP,
+  TEN_SEAT_SHOWDOWN,
 } from '../../tests/support/table-scenarios';
 
 // Test-only page (D-8): never imported by the app, built and injected by table-harness-bundle.ts.
@@ -29,6 +32,7 @@ const SCENES: Partial<Record<string, TableState>> = {
   'side-pot-river': SIDE_POT_RIVER,
   'side-pot-showdown': SIDE_POT_SHOWDOWN,
   'ten-seat-hint': TEN_SEAT_FLOP,
+  'ten-seat-review': TEN_SEAT_SHOWDOWN,
 };
 /** A ready card as long as a real three-sentence one with nine opponent lines (layout only, SPEC-17). */
 const TEN_SEAT_CARD: HintCardView = {
@@ -45,11 +49,17 @@ const TEN_SEAT_CARD: HintCardView = {
 const HINTS: Partial<Record<string, { status: 'ready'; card: HintCardView }>> = {
   'ten-seat-hint': { status: 'ready', card: TEN_SEAT_CARD },
 };
+/** The open review of `table`'s finished hand, graded here in the page (about 1.2 s for ten seats). */
+function openReview(table: TableState): ReviewState {
+  const hand = completedHand(table) as CompletedHand;
+  return { entries: storedReviewEntries(hand, hand.userDecisions.map(decisionRecord)), open: true };
+}
 const root = document.getElementById('root');
 const table = SCENES[root?.dataset.scene ?? ''];
 const hint = HINTS[root?.dataset.scene ?? ''] ?? null;
 if (!root || table === undefined)
   throw new Error('Table scenes need #root with a known data-scene');
+const review = root.dataset.scene === 'ten-seat-review' ? openReview(table) : null;
 
 const style = document.createElement('style');
 style.textContent = css;
@@ -60,7 +70,16 @@ createRoot(root).render(
   <StrictMode>
     <main className="table-screen">
       <h1>Table scene</h1>
-      <TableView table={table} onAct={noop} onLeave={noop} hint={hint} onHint={noop} />
+      <TableView
+        table={table}
+        onAct={noop}
+        onLeave={noop}
+        hint={hint}
+        onHint={noop}
+        review={review}
+        onDealNext={noop}
+        onCloseReview={noop}
+      />
     </main>
   </StrictMode>,
 );

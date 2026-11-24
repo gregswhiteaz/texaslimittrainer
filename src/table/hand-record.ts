@@ -4,11 +4,12 @@ import {
   gradeView,
   type ActionType,
   type Grade,
+  type GradeResult,
   type GradeRuleId,
 } from '../advice/grade';
 import { POSTFLOP_RULE_IDS, type PostflopRuleId } from '../advice/postflop';
 import type { OpponentBasis } from '../advice/ranges';
-import { userAdviceOptions } from '../advice/recommend';
+import { userAdviceOptions, type Recommendation } from '../advice/recommend';
 import type { Card } from '../engine/cards';
 import { isReplayCode, type ReplayCode } from '../engine/deck';
 import type { Action, ActionRecord, HandResult, SeatNumber, Stakes } from '../engine/hand';
@@ -156,21 +157,20 @@ export function isWhole(
   return Number.isSafeInteger(value) && (value as number) >= min && (value as number) <= max;
 }
 
-/** The advice and grade of the hint path (same options as the advice worker) for one decision, as plain data
- *  sharing nothing with `decision`. Errors from the advice code propagate (RangeError). */
-export function decisionRecord({
-  view,
-  action,
-  observed,
-  hinted,
-}: UserDecision): HandRecordDecision {
-  const result = gradeView(view, action.type, userAdviceOptions(observed));
+/** The stored entry for one graded decision (a worker `grade` reply or gradeView), as plain data sharing
+ *  nothing with `result` or `decision`. */
+export function decisionEntry(
+  result: GradeResult<Recommendation>,
+  { action, hinted }: Pick<UserDecision, 'action' | 'hinted'>,
+): HandRecordDecision {
   const advice = result.recommendation;
-  const grade = { grade: result.grade, ruleId: result.ruleId, marginPts: result.marginPts };
   const common = {
     action: { ...action },
     recommended: { ...advice.move },
     alternative: advice.alternative,
+    explanation: advice.explanation,
+    grade: { grade: result.grade, ruleId: result.ruleId, marginPts: result.marginPts },
+    hinted: hinted === true,
   };
   return advice.basis === 'chart'
     ? {
@@ -181,9 +181,6 @@ export function decisionRecord({
         equityPct: null,
         requiredEquityPct: null,
         opponentBasis: [],
-        explanation: advice.explanation,
-        grade,
-        hinted: hinted === true,
       }
     : {
         street: advice.street,
@@ -193,19 +190,32 @@ export function decisionRecord({
         equityPct: advice.equityPct,
         requiredEquityPct: advice.requiredEquityPct,
         opponentBasis: advice.opponentBasis.map((b) => ({ ...b })),
-        explanation: advice.explanation,
-        grade,
-        hinted: hinted === true,
       };
 }
 
-/** Plain-data record; copies arrays/objects so the record shares nothing with live state.
- *  RangeError('Invalid hand record: <field>') on a bad sessionId, handNumber or invalid Date. */
-export function handRecord(hand: CompletedHand, meta: HandRecordMeta): HandRecord {
+/** The advice and grade of the hint path (same options as the advice worker) for one decision, as plain data
+ *  sharing nothing with `decision`. Errors from the advice code propagate (RangeError). */
+export function decisionRecord(decision: UserDecision): HandRecordDecision {
+  const { view, action, observed } = decision;
+  return decisionEntry(gradeView(view, action.type, userAdviceOptions(observed)), decision);
+}
+
+/** Plain-data record; copies arrays/objects so the record shares nothing with live state. `decisions`, when
+ *  given, are the hand's already graded entries (one per user decision, copied, no grading); without it each
+ *  decision is graded here (tests only). RangeError('Invalid hand record: <field>') on a bad sessionId,
+ *  handNumber, invalid Date or a `decisions` count that differs from the hand's decisions. */
+export function handRecord(
+  hand: CompletedHand,
+  meta: HandRecordMeta,
+  decisions?: readonly HandRecordDecision[],
+): HandRecord {
   const { sessionId, handNumber, config, completedAt } = meta;
   if (!SESSION_ID.test(sessionId)) throw invalid('sessionId');
   if (!isWhole(handNumber, 1)) throw invalid('handNumber');
   if (Number.isNaN(completedAt.getTime())) throw invalid('completedAt');
+  if (decisions !== undefined && decisions.length !== hand.userDecisions.length) {
+    throw invalid('decisions');
+  }
   const stake = tableStake(config);
   return {
     sessionId,
@@ -231,7 +241,8 @@ export function handRecord(hand: CompletedHand, meta: HandRecordMeta): HandRecor
       })),
     userHoleCards: [hand.userHoleCards[0], hand.userHoleCards[1]],
     actions: structuredClone(hand.actions),
-    decisions: hand.userDecisions.map(decisionRecord),
+    decisions:
+      decisions === undefined ? hand.userDecisions.map(decisionRecord) : structuredClone(decisions),
     board: [...hand.board],
     shown: structuredClone(hand.shown),
     result: structuredClone(hand.result),

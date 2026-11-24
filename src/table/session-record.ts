@@ -1,5 +1,5 @@
 import { assertChips, type SeatNumber } from '../engine/hand';
-import { handRecord, isWhole, type HandRecord } from './hand-record';
+import { handRecord, isWhole, type HandRecord, type HandRecordDecision } from './hand-record';
 import {
   BOT_STYLES,
   MAX_SESSION_COUNT,
@@ -115,21 +115,21 @@ export function sessionRecord(table: TableState, meta: SessionMeta): SessionReco
 }
 
 /** The finished hand's record and the session ready for the next hand (nextHand), written together (D-2).
- *  RangeError if the hand is not done. */
+ *  `decisions` are the hand's graded entries (handRecord). RangeError if the hand is not done. */
 export function handWrite(
   table: TableState,
   meta: { readonly sessionId: string; readonly startedAt: Date; readonly completedAt: Date },
+  decisions?: readonly HandRecordDecision[],
 ): { record: HandRecord; session: SessionRecord } {
   const done = nextStep(table) === 'done' ? completedHand(table) : null;
   if (done === null) throw new RangeError('Not a completed hand');
   const { sessionId, startedAt, completedAt } = meta;
   return {
-    record: handRecord(done, {
-      sessionId,
-      handNumber: table.handNumber,
-      config: table.config,
-      completedAt,
-    }),
+    record: handRecord(
+      done,
+      { sessionId, handNumber: table.handNumber, config: table.config, completedAt },
+      decisions,
+    ),
     session: sessionRecord(nextHand(table), { sessionId, startedAt, updatedAt: completedAt }),
   };
 }

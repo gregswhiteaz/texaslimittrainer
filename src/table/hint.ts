@@ -1,7 +1,7 @@
 import { basisText, chartBasisText, formatPct } from '../advice/explain';
 import type { ObservedOpponent } from '../advice/ranges';
 import type { Recommendation } from '../advice/recommend';
-import type { HandState } from '../engine/hand';
+import type { HandState, SeatNumber } from '../engine/hand';
 import { playerView, type PlayerView } from '../engine/player-view';
 import { actionLabel, isShortAllIn } from './action-bar';
 import { nextStep, userObservedSnapshot, type ObservedCounts, type TableState } from './session';
@@ -105,18 +105,27 @@ export function shownHint(
   return state.card === null ? 'loading' : 'ready';
 }
 
+/** The opponent lines of a hint or review entry: `basis` in order, or for a chart decision (`null`) every live
+ *  non-user seat of `view` with the typical-player basis. */
+export function opponentLines(
+  view: PlayerView,
+  basis: readonly { readonly seat: SeatNumber; readonly text: string }[] | null,
+  names: ReadonlyMap<number, string>,
+): HintCardView['opponents'] {
+  return (
+    basis ??
+    view.players
+      .filter((p) => p.seat !== view.seat && !p.folded)
+      .map(({ seat }) => ({ seat, text: basisText(null) }))
+  ).map(({ seat, text }) => ({ seat, name: names.get(seat) as string, basis: text }));
+}
+
 /** The card for `rec`, the advice for the user's `view` at `table`. */
 export function hintCard(rec: Recommendation, view: PlayerView, table: TableState): HintCardView {
   const unit = table.config.gameType === 'sit-and-go' ? 'chips' : 'dollars';
   const names = new Map(tableView(table).seats.map((s) => [s.seat, s.name]));
   const action = actionLabel(rec.move, { allIn: isShortAllIn(view, rec.move), unit });
-  const opponents = (
-    rec.basis === 'chart'
-      ? view.players
-          .filter((p) => p.seat !== view.seat && !p.folded)
-          .map(({ seat }) => ({ seat, text: basisText(null) }))
-      : rec.opponentBasis
-  ).map(({ seat, text }) => ({ seat, name: names.get(seat) as string, basis: text }));
+  const opponents = opponentLines(view, rec.basis === 'chart' ? null : rec.opponentBasis, names);
   return rec.basis === 'chart'
     ? {
         action,

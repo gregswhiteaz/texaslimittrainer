@@ -1,14 +1,15 @@
-import type { ReviewEntry } from '../../table/review';
+import type { StoredReviewEntry } from '../../table/review';
 import { PlayingCard } from '../cards/PlayingCard';
 import { useHeadingFocus } from '../useHeadingFocus';
 
 export interface ReviewPanelProps {
   readonly handNumber: number;
-  readonly entries: readonly ReviewEntry[];
+  readonly entries: readonly StoredReviewEntry[];
   readonly onClose?: () => void;
 }
 
-/** The Hand Review panel (REQ-043): one graded entry per user decision, in order. */
+/** The Hand Review panel (REQ-043): one graded entry per user decision, in order, read from the stored
+ *  decisions; stored text is rendered as text only. */
 export function ReviewPanel({ handNumber, entries, onClose }: ReviewPanelProps): React.JSX.Element {
   const heading = useHeadingFocus(true);
   return (
@@ -42,6 +43,21 @@ export function ReviewPanel({ handNumber, entries, onClose }: ReviewPanelProps):
               {' · '}
               <strong>Advice:</strong> <span data-part="advice">{entry.adviceText}</span>
             </p>
+            {entry.chartBasis !== null && <p data-part="chart">{entry.chartBasis}</p>}
+            {entry.equity !== null && entry.requiredEquity !== null && (
+              <p className="review-numbers">
+                <span data-part="equity">{`Equity ${entry.equity}`}</span>
+                <span data-part="required">{`Required equity ${entry.requiredEquity}`}</span>
+              </p>
+            )}
+            <p data-part="explanation">{entry.explanation}</p>
+            {entry.opponents.length > 0 && (
+              <ul aria-label="Opponent ranges" className="review-opponents">
+                {entry.opponents.map((o) => (
+                  <li key={o.seat} data-opponent={o.seat}>{`${o.name}: ${o.basis}`}</li>
+                ))}
+              </ul>
+            )}
           </li>
         ))}
       </ol>

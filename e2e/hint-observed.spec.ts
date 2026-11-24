@@ -75,7 +75,9 @@ test("the hint and the user's stored decisions carry the session's observed snap
   await checkOrCall(page);
   await playToResult(page, 1, fakeSlice, { play: 'call' });
   const deal = page.getByRole('button', { name: 'Deal next hand' });
-  if ((await deal.count()) > 0) await deal.click();
+  // Hand 1 always opens a review; wait for its Deal next hand control instead of probing once.
+  await expect(deal).toBeVisible();
+  await deal.click();
   await advanceToHand(page, 2, fakeSlice);
 
   // Hand 2: one entry per bot seat, ascending, each with the one finished hand; never the user's seat.

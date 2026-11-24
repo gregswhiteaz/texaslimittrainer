@@ -12,3 +12,7 @@
 
 ## Spec Detective notes
 - A-1..A-10 accepted. Re-run slow-group e2e (rapid-pace, responsive-table) and hand-records / bust-continue / worker-delay specs (SPEC-14), since grade requests now queue in the shared worker and record writes wait for grades.
+
+## Block 1 — e2e/hint-observed.spec.ts probed once for Deal next hand
+With grading off the main thread (AC#7), the button renders one task after the result, so a one-shot count() check missed it in Chromium. Replaced with `await expect(deal).toBeVisible(); await deal.click();` (stricter: hand 1 always opens a review). Not hook-locked by any task; orchestrator edit.
+**Answer: auto-accepted (recommended)** — listed for review.

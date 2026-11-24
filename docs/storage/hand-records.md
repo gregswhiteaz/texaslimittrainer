@@ -64,12 +64,18 @@ Extra fields from a later version are ignored on read.
 
 ### Decision entries
 
-`handRecord` builds one entry per `CompletedHand.userDecisions` item with `decisionRecord(decision)`. The entry
-is the advice the hint path gives for that decision: `gradeView(view, action.type, userAdviceOptions(observed))`,
-where `userAdviceOptions` (`src/advice/recommend.ts`) is the same function the advice worker uses for its
-`recommend` and `grade` requests. Advice is deterministic, so working it out at hand end from the decision's own
-view and its decision-time snapshot gives exactly what a hint showed at that moment. Stats gathered later in the
-hand or session never change it. An error from the advice code (a bad snapshot) propagates out of `handRecord`.
+Each entry is graded at the moment of the decision, off the main thread (TASK-9.3). Right after the user acts,
+`useTableSession` sends the advice worker one `grade` request with that decision's view, action and observed-stats
+snapshot (`requestDecisionGrade`, tracked per hand by `src/table/decision-grades.ts`). The worker answers with
+`gradeView(view, action.type, userAdviceOptions(observed))`, where `userAdviceOptions` (`src/advice/recommend.ts`)
+is also what the worker uses for `recommend`, the hint's request. `decisionEntry(result, decision)` turns the reply
+into the stored entry. At hand end `handWrite(table, meta, decisions)` passes these entries to
+`handRecord(hand, meta, decisions)`, which copies them and grades nothing; the Hand Review is built from the same
+entries (`docs/ui/review.md`). Stats gathered later in the hand or session never change an entry.
+
+`handRecord(hand, meta)` without `decisions` still grades each decision with `decisionRecord(decision)` (the
+same result on the calling thread); only tests use it. A `decisions` list whose length differs from the hand's
+decisions throws `RangeError('Invalid hand record: decisions')`.
 
 | Field               | Type                                             | Meaning                                                                |
 | ------------------- | ------------------------------------------------ | ---------------------------------------------------------------------- |
@@ -93,10 +99,11 @@ entry; a hand where the user never acted (bots fold out, big-blind walk) gives `
 
 ## Write before the next deal
 
-1. When a hand ends, `useTableSession` builds the record and the updated session record with `handWrite(…)`
-   and starts `store.add(record, session)` (one transaction over `hands` and `sessions`),
-   then calls `onHandComplete` (exactly once per hand number, read through a ref so a new callback each render
-   does not restart any timer).
+1. When a hand ends, `useTableSession` calls `onHandComplete` (exactly once per hand number, read through a ref
+   so a new callback each render does not restart any timer). The write waits for the hand's decision grades
+   (normally already back from the worker), calls `onHandGraded` with them, builds the record and the updated
+   session record with `handWrite(…)` and runs `store.add(record, session)` (one transaction over `hands` and
+   `sessions`). If a grade request failed, the write fails (see Write failure).
 2. The auto-deal timer still starts at the result (`NEXT_HAND_DELAY_MS`, 1.5 s). When it fires, it waits for
    the write and only then draws the next replay code and deals. "Deal next hand" waits for the write too.
 3. So the next hand is dealt at max(1.5 s after the result, write complete). A normal write takes a few
@@ -115,7 +122,8 @@ deletes records automatically (no age or count limit).
 
 ## Write failure
 
-If `add` rejects (for example `QuotaExceededError`, or IndexedDB cannot be opened), the app logs
+If `add` rejects (for example `QuotaExceededError`, or IndexedDB cannot be opened), or a decision's grade
+request failed (the advice worker failed), the app logs
 `console.error('Hand record could not be saved', error)` and deals no further hand: neither the auto-deal nor
 "Deal next hand". The result stays on screen and Leave table still works. A visible message and Retry arrive
 with TASK-13.3.

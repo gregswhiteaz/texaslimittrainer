@@ -1,7 +1,8 @@
 import { renderToString } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { completedHand, type CompletedHand } from '../../src/table/session';
-import { reviewEntries } from '../../src/table/review';
+import { decisionRecord } from '../../src/table/hand-record';
+import { storedReviewEntries } from '../../src/table/review';
 import { TableView, type ReviewState } from '../../src/ui/table/Table';
 import { REVIEW_FOUR } from '../support/table-scenarios';
 
@@ -25,7 +26,8 @@ const DEAL_NEXT = /<button type="button" class="deal-next"[^>]*>Deal next hand<\
 
 describe('TASK-9.1 review panel', () => {
   it('the review panel lists 4 graded entries beside the table with Close and Deal next hand', () => {
-    const entries = reviewEntries(completedHand(REVIEW_FOUR) as CompletedHand);
+    const hand = completedHand(REVIEW_FOUR) as CompletedHand;
+    const entries = storedReviewEntries(hand, hand.userDecisions.map(decisionRecord));
     const html = render({ entries, open: true });
 
     const sectionEnd = html.indexOf('</section>');
@@ -45,7 +47,8 @@ describe('TASK-9.1 review panel', () => {
     expect(panel.match(/<button[^>]*aria-label="Close review"/g)).toHaveLength(1);
 
     const list = /<ol aria-label="Decisions"[^>]*>(.*)<\/ol>/s.exec(panel)?.[1] ?? '';
-    const items = [...list.matchAll(/<li data-entry="\d+"[^>]*>(.*?)<\/li>/gs)].map(
+    // Each entry runs to the next entry or the list's end, so nested opponent items do not cut it short.
+    const items = [...list.matchAll(/<li data-entry="\d+"[^>]*>(.*?)(?=<li data-entry|$)/gs)].map(
       ([, body = '']) => body,
     );
     expect(items).toHaveLength(4);
@@ -70,15 +73,17 @@ describe('TASK-9.1 review panel', () => {
       ['Check'],
       ['Call $8'],
     ]);
-    // Advice since TASK-7.8 (value bets and raises).
+    // The stored advice: the hint's options (ACTION_RANGE_ADVICE), as in decision-record.acceptance (TASK-9.3).
     expect(items.map((b) => part(b, 'advice'))).toEqual([
       ['Raise to $8'],
       ['Bet $4'],
       ['Bet $8'],
-      ['Raise to $16'],
+      ['Call $8'],
     ]);
     for (const body of items) {
-      expect(text(body)).toMatch(/You: .+ · Advice: .+$/);
+      const moves = /<p data-part="moves"[^>]*>(.*?)<\/p>/s.exec(body)?.[1];
+      expect(moves).toBeDefined();
+      expect(text(moves ?? '')).toMatch(/You: .+ · Advice: .+$/);
     }
     const grades = items.map((b) => [
       ...b.matchAll(/<span data-part="grade" data-grade="(\w+)"[^>]*>(.*?)<\/span>/g),
@@ -88,11 +93,11 @@ describe('TASK-9.1 review panel', () => {
       ['correct', 'Correct'],
       ['correct', 'Correct'],
       ['minor', 'Minor error'],
-      ['major', 'Major error'],
+      ['correct', 'Correct'],
     ]);
 
     const panelText = text(panel);
-    for (const banned of ['%', 'equity', 'Equity', 'Why', 'explanation', 'basis', '…', 'TBD']) {
+    for (const banned of ['TBD', '…', 'undefined', 'null', '[object']) {
       expect(panelText).not.toContain(banned);
     }
 
