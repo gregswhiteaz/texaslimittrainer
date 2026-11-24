@@ -1,6 +1,6 @@
 {
   "task": "TASK-3.10",
-  "stage": "build",
+  "stage": "done",
   "branch": "doit/TASK-3.10",
   "base_commit": "b76a06aa93617f9ca0eb87e09b29ee1e1cd2639d",
   "started": "2026-11-23T05:40:48",
