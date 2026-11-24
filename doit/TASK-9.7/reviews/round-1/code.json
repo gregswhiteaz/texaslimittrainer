@@ -1,0 +1,24 @@
+{"reviewer": "code", "round": 1,
+ "rubric": [
+  {"item": "SPEC-01 correctness", "result": "pass"}, {"item": "SPEC-01 test strength", "result": "pass"},
+  {"item": "SPEC-02 correctness", "result": "pass"}, {"item": "SPEC-02 test strength", "result": "pass"},
+  {"item": "SPEC-03 correctness", "result": "pass"}, {"item": "SPEC-03 test strength", "result": "pass"},
+  {"item": "SPEC-04 correctness", "result": "pass"}, {"item": "SPEC-04 test strength", "result": "pass"},
+  {"item": "SPEC-05 correctness", "result": "pass"}, {"item": "SPEC-05 test strength", "result": "pass"},
+  {"item": "SPEC-06 correctness", "result": "pass"}, {"item": "SPEC-06 test strength", "result": "pass"},
+  {"item": "SPEC-07 correctness", "result": "pass"}, {"item": "SPEC-07 test strength", "result": "pass"},
+  {"item": "SPEC-08 correctness", "result": "pass"}, {"item": "SPEC-08 test strength", "result": "pass"},
+  {"item": "SPEC-09 correctness", "result": "pass"}, {"item": "SPEC-09 test strength", "result": "pass"},
+  {"item": "SPEC-10 correctness", "result": "pass"}, {"item": "SPEC-10 test strength", "result": "pass"},
+  {"item": "SPEC-11 correctness", "result": "pass"}, {"item": "SPEC-11 test strength", "result": "pass"},
+  {"item": "SPEC-12 correctness", "result": "pass"}, {"item": "SPEC-12 test strength", "result": "pass"},
+  {"item": "scope", "result": "pass"}, {"item": "concision", "result": "pass"}, {"item": "clarity", "result": "pass"}
+ ],
+ "findings": [
+  {"fingerprint": "src/ui/table/Table.tsx:badge-click-races-auto-deal-render",
+   "severity": "MINOR", "file": "src/ui/table/Table.tsx", "line": 441,
+   "issue": "openReview trusts the badge captured in its closure. If the 1.5 s timer has already queued setTable(dealAfterDone) at default priority and a click lands before that render commits, the click's discrete setReview({hand: n, open: true}) commits first. The deal then renders with a review held for hand n while hand n+1 is in play. The panel then shows hand n's entries under a 'Hand #n+1 review' heading (ReviewPanel takes handNumber from table), and the review holds the next hand. The window is about one scheduler task at exactly 1.5 s, so it is very unlikely, but it is the only path where a wrong-hand review can appear.",
+   "evidence": "useTableSession.ts:250-256 deals by setTable inside a timer/promise (non-discrete lane); Table.tsx:441-445 openReview sets review from closure `badge` with no check against the hand being shown; the render-phase clear at :436-440 clears only the badge, not a review already set.",
+   "fix": "In the render-phase hand-change block, also drop a review that belongs to an earlier hand, e.g. `setReview((r) => (r !== null && r.hand.handNumber !== table.handNumber ? null : r))`. A held review created with auto-open on always has the current hand number, so the default-on path is unchanged."}
+ ],
+ "summary": "All SPEC items are implemented as specified. afterHandReview/reviewBadge match D-1/A-2 exactly. Table reads the setting through a ref at hand end. The badge is filled only for the same hand object at grading, so it appears before the write-gated deal. It is cleared on click, on Deal next hand/Continue and on a hand-number change, and TableView renders it only while result !== null && review === null. The recorded deviation (clearing during render on a hand-number change instead of in a useEffect) is the React-documented 'adjust state on prop change' pattern. It is StrictMode-safe and better than the effect: it removes the one stale frame where the next hand's result renders before onHandComplete replaces the badge. Default-on path: mode 'panel' gives the same setReview as before, setBadge(null) is a no-op, and TableView without the new props renders byte-identical markup (asserted for three tables). The only difference is that storedReviewEntries is now computed outside the setReview updater (as the spec asks). It can only throw on mismatched decisions, which can't happen. Bust: no review is held, so the BustDialog opens modally over the badge (A-7). Rebuy/Continue/new hand clear it. Resume initialises badgeHandNumber from the resumed table. Clicking the badge sets a held review, which flips holdNextHand and cancels the pending timer and write.then deal through the effect cleanup. SPEC-07 checks this with runFor(5000). Tests assert exact values, use independent grade fixtures, and the e2e computes the expected text independently of src. The two vitest files pass locally, and gate fix-3 passes. One MINOR (a sub-frame click/auto-deal race); no BLOCKER or MAJOR."}

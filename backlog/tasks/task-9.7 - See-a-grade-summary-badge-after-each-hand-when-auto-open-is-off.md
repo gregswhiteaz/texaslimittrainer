@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-24T15:54:00Z'
+updated_date: '2026-11-24T16:13:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -84,4 +84,6 @@ Full spec: doit/TASK-9.7/spec.md
 
 <!-- SECTION:NOTES:BEGIN -->
 AC added from TASK-9.1 follow-up (doc-26).
+
+Build: autoOpenReview prop (default on, not persisted); with it off, a grade summary badge replaces auto-open and clicking it opens/holds the review; npm test 1237 passed, Playwright 258 passed; gate PASS. Badge clear on hand change done during render (lint rule) — recorded in qa.md.
 <!-- SECTION:NOTES:END -->

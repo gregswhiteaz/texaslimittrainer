@@ -1,0 +1,3 @@
+{"reviewer": "security", "round": 1,
+ "findings": [],
+ "summary": "No new trust boundary. Badge text and data-worst come from the closed Grade union of stored decisions (validated on parse in src/table/hand-record.ts), counted to integers and rendered as React text/attributes; no dangerouslySetInnerHTML, eval, storage, network, logging, randomness or new dependencies. autoOpenReview is a boolean prop not persisted. The e2e harness interpolates only test-controlled booleans/numbers into its HTML string (test-only, not shipped). No reachable exploit path found."}
