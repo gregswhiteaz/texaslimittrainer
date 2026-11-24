@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-24T03:31:00Z'
+updated_date: '2026-11-24T03:50:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -82,4 +82,6 @@ Full spec: doit/TASK-3.11/spec.md
 
 <!-- SECTION:NOTES:BEGIN -->
 TASK-3.4 Q-4 interim top-up to $160 must be removed once this and the other all-in/rebuy stories land: tracked as TASK-3.21.
+
+Build: user bust at $0 shows 'Out of chips' dialog (Rebuy $160 / Leave table), $0 user seat storable (cash), rebuys capped and stored with next hand; npm test 1007 passed, e2e 212 passed; gate PASS. Prior-story test type annotation widened (session.acceptance.test.ts, no assertion change).
 <!-- SECTION:NOTES:END -->
