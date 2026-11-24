@@ -5,9 +5,10 @@ import { chartSpotOf, referenceSizeOf, type PreflopAdvice } from '../advice/pref
 import { ACTION_RANGE_ADVICE, type RecommendOptions } from '../advice/recommend';
 import type { Card } from '../engine/cards';
 import type { ReplayCode } from '../engine/deck';
-import type { Action } from '../engine/hand';
+import type { Action, SeatNumber } from '../engine/hand';
 import type { PlayerView } from '../engine/player-view';
 import { actionLabel } from './action-bar';
+import { handName } from './hand-result';
 import type { HandRecordDecision } from './hand-record';
 import { opponentLines, type HintCardView } from './hint';
 import type { CompletedHand } from './session';
@@ -183,4 +184,30 @@ export function reviewSummary(hand: CompletedHand, handNumber: number): ReviewSu
     resultText: resultText(net),
     replayCode: hand.replayCode,
   };
+}
+
+/** An opponent's hand shown at showdown (TASK-9.5). */
+export interface ShownOpponent {
+  readonly seat: SeatNumber;
+  readonly name: string;
+  /** A copy of the shown cards. */
+  readonly holeCards: readonly [Card, Card];
+  readonly handName: string;
+}
+
+/** Opponents in hand.shown (showdown order), the user's seat left out; [] when hand.shown is null. Reads
+ *  nothing else that holds hole cards and never deals from the replay code (REQ-043.6). */
+export function shownOpponents(hand: CompletedHand): readonly ShownOpponent[] {
+  return (hand.shown?.shown ?? [])
+    .filter(({ seat }) => seat !== hand.userSeat)
+    .map(({ seat, holeCards: [c0, c1] }) => {
+      const sat = hand.seats.find((s) => s.seat === seat);
+      if (sat === undefined) throw new RangeError(`Seat ${seat} is not at the table`);
+      return {
+        seat,
+        name: sat.name,
+        holeCards: [c0, c1],
+        handName: handName([c0, c1, ...hand.board]),
+      };
+    });
 }

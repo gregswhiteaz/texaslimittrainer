@@ -791,6 +791,35 @@ h1[tabindex='-1']:focus {
   cursor: pointer;
 }
 
+/* TASK-9.5: opponents who showed at showdown, one line each. */
+.review-shown {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 14px;
+  color: #a7aeb8;
+}
+
+.review-shown li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+
+.review-shown .table-cards {
+  gap: 4px;
+}
+
+.review-shown svg[data-card] {
+  width: 24px;
+  height: 34px;
+}
+
 .review-entries {
   display: flex;
   flex-direction: column;

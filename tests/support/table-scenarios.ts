@@ -339,6 +339,13 @@ export const REVIEW_LOST_48: TableState = {
   handNumber: 133,
 };
 
+/** Board Ks 9d 4c 2h 6s: Ben (Kd 7c) bets the river and shows a pair of kings; Dee (5c 5d) and the user (Ah 9s)
+ *  call and muck. Ava (2c 3c), Cal (2d 3d) and Eli (2s 3h) fold preflop. */
+export const REVIEW_DEE_MUCKS: TableState = userTableAfter(
+  { ...REVIEW_DECK, 3: '5c', 9: '5d' },
+  '3:fold 4:call 5:raise 6:fold 1:fold 2:call 4:call 2:check 4:check 5:check 2:check 4:check 5:check 2:bet 4:call 5:call',
+);
+
 /** The user (Ah As, cutoff) puts in $16 and wins the whole $72 pot with aces: net +56. */
 export const REVIEW_WON_56: TableState = userTableAfter(
   {

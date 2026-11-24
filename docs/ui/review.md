@@ -1,4 +1,4 @@
-# Hand Review panel (TASK-9.1, TASK-9.3, TASK-9.4)
+# Hand Review panel (TASK-9.1, TASK-9.3, TASK-9.4, TASK-9.5)
 
 After a hand in which the user made a decision (other than a lone preflop fold), the Hand Review panel opens beside
 the table with one entry per user decision, in order (REQ-043). Each entry shows the numbers and the reason behind
@@ -25,6 +25,26 @@ sums up the hand, then a small replay line (12 px):
 - **Source.** `reviewSummary(hand, handNumber)` in `src/table/review.ts`, built by `TableView` from the finished
   hand in memory (`completedHand(table)`) and the table's hand number. Nothing is stored or graded again. If the
   hand has no result yet, the panel shows no subtitle and no replay line.
+
+## Shown hands
+
+Between the header and the decisions, a "Shown at showdown" list (`ul.review-shown`, 14 px) has one line for each
+opponent who turned their cards face up at showdown, in showdown order:
+
+> Ben showed K♦ 7♣ · Pair of kings
+
+- **Who is listed.** Only opponents whose hand was shown at showdown (casino show/muck order, TASK-1.15). The
+  user's own seat is left out even when the user showed; the user's cards are in the header. After a fold-out, or
+  when every opponent mucked, there is no list.
+- **Parts.** `<li data-review-shown="<seat>">` with the name (`review-shown-name`, "Ben showed"), the two cards
+  drawn as small cards (24 × 34 px) in a group named "Ben's shown cards", and the hand name (`review-shown-hand`,
+  the best five-card hand from the shown cards and the board, as the table's "Hand over" block names it).
+- **Source.** `shownOpponents(hand)` in `src/table/review.ts` reads only the finished hand's `shown` field
+  (`CompletedHand.shown`, the hands shown at showdown), the same data the hand record stores as `shown`. Nothing
+  else that holds hole cards is read.
+- **Never revealed.** Mucked and folded hands never appear in the panel: not in its text, its accessible names,
+  its card image labels or the data passed to it. There is no way to ask for them (REQ-043.6). The replay code is
+  never used to deal cards again for display.
 
 ## What an entry shows
 
@@ -66,3 +86,7 @@ further hand is dealt (the hand-record write-failure rule).
 
 Stored strings (the explanation and opponent basis text) are untrusted once read back from storage, so the panel
 renders them as React text nodes only, never as HTML.
+
+Opponents' hole cards are hidden information (REQ-025, REQ-043.6). The panel gets only the user's cards, the board
+and the hands shown at showdown; the full deal (every seat's hole cards, the deck, or a deck rebuilt from the replay
+code) never reaches it (TASK-9.5).

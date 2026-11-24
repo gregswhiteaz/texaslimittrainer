@@ -12,6 +12,8 @@ import {
   CAPPED_FLOP,
   FLOP_BET,
   RAISE_ALL_IN,
+  RAISE_TAKES_BLINDS,
+  REVIEW_DEE_MUCKS,
   REVIEW_LOST_48,
   SEAT_1_DEALT,
   SHOWN_HANDS,
@@ -35,6 +37,8 @@ const SCENES: Partial<Record<string, TableState>> = {
   'ten-seat-hint': TEN_SEAT_FLOP,
   'ten-seat-review': TEN_SEAT_SHOWDOWN,
   'review-header': REVIEW_LOST_48,
+  'review-shown': REVIEW_DEE_MUCKS,
+  'review-fold-out': RAISE_TAKES_BLINDS,
 };
 /** A ready card as long as a real three-sentence one with nine opponent lines (layout only, SPEC-17). */
 const TEN_SEAT_CARD: HintCardView = {
@@ -61,10 +65,8 @@ const table = SCENES[root?.dataset.scene ?? ''];
 const hint = HINTS[root?.dataset.scene ?? ''] ?? null;
 if (!root || table === undefined)
   throw new Error('Table scenes need #root with a known data-scene');
-const review =
-  root.dataset.scene === 'ten-seat-review' || root.dataset.scene === 'review-header'
-    ? openReview(table)
-    : null;
+const REVIEW_SCENES = ['ten-seat-review', 'review-header', 'review-shown', 'review-fold-out'];
+const review = REVIEW_SCENES.includes(root.dataset.scene ?? '') ? openReview(table) : null;
 
 const style = document.createElement('style');
 style.textContent = css;

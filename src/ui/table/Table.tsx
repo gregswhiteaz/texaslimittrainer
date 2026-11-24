@@ -17,8 +17,10 @@ import type { HandRecordDecision } from '../../table/hand-record';
 import {
   opensReview,
   reviewSummary,
+  shownOpponents,
   storedReviewEntries,
   type ReviewSummary,
+  type ShownOpponent,
   type StoredReviewEntry,
 } from '../../table/review';
 import {
@@ -196,10 +198,16 @@ function HandResult({ result }: { readonly result: HandResultView }): React.JSX.
   );
 }
 
-/** The review header's summary of the table's finished hand (A-1); null before the hand has a result. */
-function reviewHeader(table: TableState): ReviewSummary | null {
+/** The review header's summary (TASK-9.4) and the opponents shown at showdown (TASK-9.5) of the table's
+ *  finished hand; no summary and no shown hands before the hand has a result. */
+function reviewHeader(table: TableState): {
+  summary: ReviewSummary | null;
+  shown: readonly ShownOpponent[];
+} {
   const hand = completedHand(table);
-  return hand === null ? null : reviewSummary(hand, table.handNumber);
+  return hand === null
+    ? { summary: null, shown: [] }
+    : { summary: reviewSummary(hand, table.handNumber), shown: shownOpponents(hand) };
 }
 
 /** Presentational table (D-7): everything shown comes from tableView. */
@@ -299,7 +307,7 @@ export function TableView({
             handNumber={table.handNumber}
             entries={review.entries}
             onClose={onCloseReview}
-            summary={reviewHeader(table)}
+            {...reviewHeader(table)}
           />
         )}
       </div>

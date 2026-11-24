@@ -5,3 +5,7 @@
 
 ## Spec Detective notes
 - A-1..A-6 accepted. No locked-test edits needed (A-6 checked).
+
+## Build note — SPEC-04 search scope
+SPEC-04 literally searches the panel for cards of every seat not in record.shown.shown, which includes the user (who mucked in REVIEW_DEE_MUCKS) — but the header always shows the user's own cards. Search is applied to opponent seats only.
+**Answer: auto-accepted (recommended)** — recorded deviation.
