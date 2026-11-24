@@ -1,0 +1,92 @@
+[
+  {
+    "id": "SPEC-01",
+    "verifies": "AC#1, DoD#1, DoD#10",
+    "verification": "acceptance `tests/stats/healthy-ranges.acceptance.test.ts::AC#1 the data file holds 15 ranges, each low < high with a justification sentence`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-02",
+    "verifies": "AC#2",
+    "verification": "acceptance `tests/stats/healthy-ranges-tag.acceptance.test.ts::AC#2 TAG 6-max VPIP, PFR, Aggression and W$SD are inside the 6-max healthy ranges (100,000 hands, seed 42)`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-03",
+    "verifies": "AC#3, DoD#2",
+    "verification": "acceptance `tests/table/session-report-style.acceptance.test.ts::AC#3 the report stores the user's style counts from the session's hands`; acceptance `tests/ui/report-style.acceptance.test.tsx::AC#3 rows show VPIP 25.0%, PFR 18.0%, Aggression 55.0%, WTSD 30.0%, W$SD 50.0% with the 6-max ranges`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-04",
+    "verifies": "AC#4",
+    "verification": "acceptance `tests/stats/healthy-ranges.acceptance.test.ts::AC#4 VPIP 28.0 and 20.0 are in range, 28.1 too high, 19.9 too low`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-05",
+    "verifies": "AC#5",
+    "verification": "acceptance `tests/stats/healthy-ranges.acceptance.test.ts::AC#5 2 and 10 players use heads-up and full-ring ranges, not approximate`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-06",
+    "verifies": "AC#6, DoD#8",
+    "verification": "acceptance `tests/stats/healthy-ranges.acceptance.test.ts::AC#6 4 and 8 players use 6-max and full-ring ranges marked approximate`; acceptance `tests/ui/report-style.acceptance.test.tsx::AC#6 the approximate section heading names the reference size`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-07",
+    "verifies": "AC#7",
+    "verification": "acceptance `tests/stats/healthy-ranges.acceptance.test.ts::AC#7 a session without a flop shows WTSD and W$SD as \u2014 with not enough data`; acceptance `tests/ui/report-style.acceptance.test.tsx::AC#7 \u2014 rows render not enough data and no range label`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-08",
+    "verifies": "AC#1",
+    "verification": "unit `tests/stats/healthy-ranges.test.ts::parseHealthyRanges rejects each invalid file with its path`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-09",
+    "verifies": "AC#3, AC#4",
+    "verification": "unit `tests/stats/healthy-ranges.test.ts::statTenths rounds half up to tenths and returns null for a zero denominator`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-10",
+    "verifies": "AC#3",
+    "verification": "acceptance `tests/table/session-report-style.acceptance.test.ts::a forced fold counts as the user's fold`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-11",
+    "verifies": "AC#3",
+    "verification": "acceptance `tests/table/session-report-style.acceptance.test.ts::parseSessionReport validates style and accepts reports without it`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-12",
+    "verifies": "AC#3",
+    "verification": "acceptance `tests/ui/report-style.acceptance.test.tsx::the section is absent without style and sits before the only button`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-13",
+    "verifies": "AC#3",
+    "verification": "integration `tests/storage/session-end-style.test.ts::endSession stores style counts from the session's valid hand records`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-14",
+    "verifies": "AC#3, DoD#8, DoD#9",
+    "verification": "acceptance `e2e/report-style.spec.ts::Leave table shows my style against the 6-max healthy ranges`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-15",
+    "verifies": "DoD#3, DoD#4, DoD#5, DoD#6, DoD#7, DoD#11, DoD#12, DoD#13",
+    "verification": "command `npm run lint && npm run typecheck && npm test && npm run e2e`",
+    "status": "pending"
+  }
+]

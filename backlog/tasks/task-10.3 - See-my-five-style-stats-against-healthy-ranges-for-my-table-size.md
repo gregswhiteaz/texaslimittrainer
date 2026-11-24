@@ -1,10 +1,11 @@
 ---
 id: TASK-10.3
 title: See my five style stats against healthy ranges for my table size
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-17T23:22:00Z'
+updated_date: '2026-11-24T20:47:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -44,7 +45,7 @@ Plan key: E10-S04 · Dream: limit-holdem-trainer
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
 - [ ] #1 Given the healthy-range data file, When it is validated, Then it holds exactly 15 ranges (VPIP, PFR, Aggression, WTSD, W$SD at heads-up, 6-max and full ring), each with low < high and a non-empty justification sentence [REQ-046.1, REQ-046.2]
-- [ ] #2 Given a 100,000-hand 6-max playtest of TAG bots, When its VPIP, PFR, Aggression, WTSD and W$SD are computed, Then each falls inside the authored 6-max healthy range [REQ-046.1]
+- [ ] #2 Given a 100,000-hand 6-max playtest of TAG bots, When its VPIP, PFR, Aggression and W$SD are computed, Then each falls inside the authored 6-max healthy range; WTSD is authored as a realistic healthy range and is checked against the bots by TASK-7.32, which investigates why advised play almost never folds after the flop [REQ-046.1]
 - [ ] #3 Given a 6-max session of 100 hands whose stored hand records hold 25 hands with a voluntary preflop call or raise, 18 with a preflop raise, 11 postflop bets or raises and 9 postflop calls, 20 flops seen, 6 showdowns and 3 showdowns won, When its report is shown, Then the rows show VPIP 25.0%, PFR 18.0%, Aggression 55.0%, WTSD 30.0% and W$SD 50.0%, each next to the authored 6-max range for that stat [REQ-044.4]
 - [ ] #4 Given a healthy-range fixture whose 6-max VPIP range is 20-28, When sessions with VPIP 28.0, 20.0, 28.1 and 19.9 are reported, Then the VPIP label is "in range", "in range", "too high" and "too low" respectively [REQ-044.4, REQ-044.11]
 - [ ] #5 Given a 2-player session and a 10-player session, When their reports are shown, Then they use the heads-up and full-ring ranges respectively and are not marked approximate [REQ-044.4, REQ-046.1]
@@ -68,3 +69,21 @@ Plan key: E10-S04 · Dream: limit-holdem-trainer
 - [ ] #12 Story documentation is written and published to Backlog.md
 - [ ] #13 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. src/stats/healthy-ranges.json: 15 ranges (5 stats × heads-up/6-max/full ring) with original one-sentence justifications; validated on load
+2. endSession computes the user's style counts from the session's hand records and stores them once on the report (optional style field)
+3. Session Report section 'Your style vs healthy range (size[, approximate])': value, range and in range / too high / too low / not enough data
+4. Re-pin two TASK-10.1 locked tests to pass hand records
+5. Tests: unit/acceptance per AC, slow-group 100k-hand bot check (VPIP/PFR/Aggression/W$SD), e2e Chromium+WebKit with axe; docs
+
+Full spec: doit/TASK-10.3/spec.md
+<!-- SECTION:PLAN:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+AC#2 narrowed per TASK-10.3 Q-2 (auto-accepted): bots measure WTSD ~94% (advice folds ~3% postflop), so WTSD vs bots moves to TASK-7.32; realistic WTSD ranges are authored here.
+<!-- SECTION:NOTES:END -->

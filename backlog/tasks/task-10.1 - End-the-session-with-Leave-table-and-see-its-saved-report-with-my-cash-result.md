@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-24T18:02:00Z'
+updated_date: '2026-11-24T20:47:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -98,6 +98,8 @@ Build: DB v3 reports store (write-once) + endSession transaction; Session Report
 Judge r1 PASS 14/14; live Leave paths in Chromium+WebKit, report values match stored hand records, v2→v3 upgrade keeps data, ordering attacks held; CI 45453088617 green. Review took 3 rounds (orchestrator-added race fix, then its guard regression; both covered by e2e that fail on the old code).
 
 Follow-ups: none new. Already owned: mid-hand Leave dialog (TASK-10.2), record-based report sections (TASK-10.4), hint counts (TASK-10.7), View statistics (TASK-11.6). Not tracked: duplicated private validation helpers (refactor, no behaviour change).
+
+Locked tests/storage/session-end.acceptance.test.ts and e2e/session-report.spec.ts unlocked for TASK-10.3 Q-1 (pass hand records to sessionReport; no assertion loosened).
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary

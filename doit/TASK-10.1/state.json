@@ -1648,6 +1648,18 @@
       "event": "unlock",
       "file": "e2e/session-report.spec.ts",
       "reason": "Review r1 NIT (strengthen only): advance the clock and assert no table before the SPEC-10 'unfinished hand not stored' check"
+    },
+    {
+      "t": "2026-11-24T13:47:29",
+      "event": "unlock",
+      "file": "tests/storage/session-end.acceptance.test.ts",
+      "reason": "TASK-10.3 Q-1: sessionReport takes the session's stored hand records as a third argument (style counts); pass them in, no assertion loosened"
+    },
+    {
+      "t": "2026-11-24T13:47:29",
+      "event": "unlock",
+      "file": "e2e/session-report.spec.ts",
+      "reason": "TASK-10.3 Q-1: sessionReport takes the session's stored hand records as a third argument (style counts); pass them in, no assertion loosened"
     }
   ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-10.1",
@@ -1657,7 +1669,10 @@
     "2": 1,
     "3": 0
   },
-  "relock_pending": [],
+  "relock_pending": [
+    "tests/storage/session-end.acceptance.test.ts",
+    "e2e/session-report.spec.ts"
+  ],
   "brief_history": {
     "src/ui/App.tsx:ending-guard-never-reset-hangs-second-leave": [
       "review r2"
