@@ -1,0 +1,3 @@
+{"reviewer": "security", "round": 3,
+ "findings": [],
+ "summary": "Rounds 1-2 had no findings. Since round 2 (commit 1fa89a6 -> b5f8b7b) the only non-workflow change is two rewritten justification strings in tests/golden/postflop-spots.json (spots near lines 612 and 1690). This is repo-authored test data read only by the test-only golden parsers; no changes to src/, e2e/, package manifests, scripts or CI. No new dependencies, secrets, sinks or randomness changes. No reachable vulnerabilities."}

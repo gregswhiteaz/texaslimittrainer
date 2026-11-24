@@ -1,0 +1,176 @@
+{
+  "reviewer": "code",
+  "round": 3,
+  "rubric": [
+    {
+      "item": "SPEC-01 correctness",
+      "result": "pass"
+    },
+    {
+      "item": "SPEC-01 test strength",
+      "result": "pass"
+    },
+    {
+      "item": "SPEC-02 correctness",
+      "result": "pass"
+    },
+    {
+      "item": "SPEC-02 test strength",
+      "result": "pass"
+    },
+    {
+      "item": "SPEC-03 correctness",
+      "result": "pass"
+    },
+    {
+      "item": "SPEC-03 test strength",
+      "result": "pass"
+    },
+    {
+      "item": "SPEC-04 correctness",
+      "result": "pass"
+    },
+    {
+      "item": "SPEC-04 test strength",
+      "result": "pass"
+    },
+    {
+      "item": "SPEC-05 correctness",
+      "result": "pass"
+    },
+    {
+      "item": "SPEC-05 test strength",
+      "result": "pass"
+    },
+    {
+      "item": "SPEC-06 correctness",
+      "result": "pass"
+    },
+    {
+      "item": "SPEC-06 test strength",
+      "result": "pass"
+    },
+    {
+      "item": "SPEC-07 correctness",
+      "result": "pass"
+    },
+    {
+      "item": "SPEC-07 test strength",
+      "result": "pass"
+    },
+    {
+      "item": "SPEC-08 correctness",
+      "result": "pass"
+    },
+    {
+      "item": "SPEC-08 test strength",
+      "result": "pass"
+    },
+    {
+      "item": "SPEC-09 correctness",
+      "result": "pass"
+    },
+    {
+      "item": "SPEC-09 test strength",
+      "result": "pass"
+    },
+    {
+      "item": "SPEC-10 correctness",
+      "result": "pass",
+      "note": "round-2 MAJOR fixed: 94o now names deuces, threes and weaker fours (all trail queens and fours with a nine kicker); tt now says missed straight draws (QJ/QT/JT missed on Kc 9c Ah 5s 6c), bluffs and weaker pairs, and notes the river club completes some flushes"
+    },
+    {
+      "item": "SPEC-10 test strength",
+      "result": "pass"
+    },
+    {
+      "item": "SPEC-11 correctness",
+      "result": "pass"
+    },
+    {
+      "item": "SPEC-11 test strength",
+      "result": "pass"
+    },
+    {
+      "item": "SPEC-12 correctness",
+      "result": "pass"
+    },
+    {
+      "item": "SPEC-12 test strength",
+      "result": "pass"
+    },
+    {
+      "item": "SPEC-13 correctness",
+      "result": "pass"
+    },
+    {
+      "item": "SPEC-13 test strength",
+      "result": "pass"
+    },
+    {
+      "item": "SPEC-14 correctness",
+      "result": "pass"
+    },
+    {
+      "item": "SPEC-15 correctness",
+      "result": "pass",
+      "note": "gate fix-6 PASS"
+    },
+    {
+      "item": "SPEC-16 correctness",
+      "result": "pass",
+      "note": "npx vitest run tests/golden/: 282 passed in 1.12 s"
+    },
+    {
+      "item": "SPEC-17 correctness",
+      "result": "pass"
+    },
+    {
+      "item": "SPEC-18 correctness",
+      "result": "pass"
+    },
+    {
+      "item": "scope",
+      "result": "pass",
+      "note": "fix commit b5f8b7b changes only two justification strings in postflop-spots.json; no action, board, before, id or assertion changed; src and acceptance tests untouched; all four locked-file hashes match state.json"
+    },
+    {
+      "item": "concision",
+      "result": "pass"
+    },
+    {
+      "item": "clarity",
+      "result": "pass"
+    }
+  ],
+  "findings": [
+    {
+      "fingerprint": "tests/golden/postflop-spots.json:hero-preflop-lines-contradict-chart",
+      "severity": "MINOR",
+      "file": "tests/golden/postflop-spots.json",
+      "line": 659,
+      "issue": "Carried over from round 1 and not in the fix brief. Many spots reach the decision through hero preflop actions that the project's chart would grade as Major errors.",
+      "evidence": "Unchanged since round 1, e.g. UTG opens 92o, 82o, K2o at 6-max, and the BB only calls an SB raise with AA (6max-flop-bb-bet-aa).",
+      "fix": "In a later data pass, choose chart-consistent preflop lines. Or add a one-line note in docs/advice/golden-spots.md that preflop paths are chosen only to reach the postflop decision."
+    },
+    {
+      "fingerprint": "src/advice/golden.ts:street-of-board-index-trick",
+      "severity": "NIT",
+      "file": "src/advice/golden.ts",
+      "line": 247,
+      "issue": "Carried over: STREETS[Math.max(0, length - 2)] makes the reader decode arithmetic.",
+      "evidence": "Unchanged since round 1.",
+      "fix": "Use an explicit lookup keyed by board length."
+    },
+    {
+      "fingerprint": "src/advice/golden.ts:grade-throw-escapes-validation",
+      "severity": "NIT",
+      "file": "src/advice/golden.ts",
+      "line": 510,
+      "issue": "Carried over: a RangeError from gradeDecision on non-finite advice escapes parsing instead of being listed as a problem.",
+      "evidence": "Unchanged since round 1. The real engine never returns NaN.",
+      "fix": "Optional: put the clearCutProblems call inside the same try."
+    }
+  ],
+  "summary": "The round-2 MAJOR is fixed. 6max-turn-btn-bet-94o now says the deuces, threes and weaker fours that call trail our hand, which is correct for queens and fours with a nine kicker on Qc 6s 4d Qh. hu-river-bb-call-tt now says missed straight draws, bluffs and weaker pairs, and notes that the river club completes some flushes, which is correct for Kc 9c Ah 5s 6c. Commit b5f8b7b changes only those two strings. No action, spot, board, line or assertion changed, src and the acceptance tests are untouched, and the locked hashes match. The golden suite passes (282 tests). No BLOCKER or MAJOR remains. The carried-over MINOR (preflop lines that contradict the chart) and two NITs still stand."
+}
