@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-23T12:34:00Z'
+updated_date: '2026-11-23T15:30:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -102,6 +102,8 @@ Build: IndexedDB hand store (src/storage/hand-store.ts, tlh-trainer v1 'hands'),
 Review R1: 0 blocking; MINORs fixed in-story (strict durability test; docs wording on replay code); security MINORs → ACs on TASK-9.5 and TASK-3.10.
 
 Judge R1 PASS 20/20 (own Playwright + fake-indexeddb checks: every field vs UI and replay rebuild; stats from records = live over 420 hands; slow write deals at max(1.5 s, write); failed write stops dealing; 10/11 mutants — hook ref masked by Table ref, LOW, not tracked).
+
+Locked e2e/hand-records.spec.ts made timing-robust by TASK-1.55 (expect.poll on exact counts; count kept).
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary

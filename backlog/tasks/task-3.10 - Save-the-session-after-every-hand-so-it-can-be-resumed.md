@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-23T13:44:00Z'
+updated_date: '2026-11-24T00:54:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -16,7 +16,7 @@ references:
 documentation:
   - doc-1
   - doc-2
-  - doc-101
+  - doc-105
 parent_task_id: TASK-3
 priority: high
 type: chore
@@ -106,6 +106,8 @@ Build: tlh-trainer v2 'sessions' store (additive upgrade; hand + session in one 
 Review R1: only blocking item is a stray byte-identical sync-conflict copy of doc-100 (backlog/docs/stories/doc-100 … 2.md) that the build commit picked up; removing it needs a backlog/ file delete, which this session is not permitted to do. Code itself: all SPEC items pass (reviewer round-tripped 3,540 hands).
 
 doit: parked — judge PASS 17/17 and docs done (doc-101), but build commit 71bece3 included a byte-identical iCloud sync-conflict copy 'backlog/docs/stories/doc-100 - TASK-3.9-Keep-a-permanent-record-of-every-completed-hand 2.md'; this session may not delete backlog/ files. User: git rm it on doit/TASK-3.10, then merge. See doit/TASK-3.10/.
+
+Story doc renumbered doc-101 → doc-105: main's TASK-1.54 story doc took doc-101 while this branch was parked. Stray doc-100 copy removed in e1d513e.
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary

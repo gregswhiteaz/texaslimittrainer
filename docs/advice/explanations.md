@@ -23,8 +23,20 @@ gives its one-clause definition.
 | opponent type  | the playing style an opponent has shown                                         |
 | initiative     | being the last player to bet or raise                                           |
 
-No current rule bluffs or reads an opponent's observed habits (see `postflop-rules.md`, "Not applied yet"), so no
-template uses "bluff" or "opponent type" yet; both are defined here for later rules.
+No current rule bluffs (see `postflop-rules.md`, "Not applied yet"), so no template uses "bluff" yet; it is
+defined here for later rules.
+
+### Opponent-type lead
+
+When at least one opponent's range was rebuilt from 30 or more observed hands (see `range-model.md`, "Adjusting to
+observed play"), the postflop explanation starts with this clause, joined to the rule's first sentence, whose first
+letter becomes lower case:
+
+> Ranges here follow the opponent type, the playing style an opponent has shown, of each player you have watched for
+> 30 or more hands; your equity, …
+
+The clause keeps the explanation within three sentences and names and defines the concept in the first sentence.
+Without a rebuilt range the explanation is unchanged.
 
 ## Postflop: numbers quoted per rule
 

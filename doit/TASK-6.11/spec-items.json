@@ -1,0 +1,86 @@
+[
+  {
+    "id": "SPEC-01",
+    "verifies": "AC#1, AC#11",
+    "verification": "acceptance `tests/playtest/check-styles.acceptance.test.ts::every playtest run prints each seated style's VPIP, PFR and aggression from the shared style-stat functions`",
+    "status": "pass"
+  },
+  {
+    "id": "SPEC-02",
+    "verifies": "AC#11, AC#1",
+    "verification": "unit `tests/playtest/style-check.test.ts::StyleCheck counts bot seats by their hand's style with the shared style-stat functions`",
+    "status": "pass"
+  },
+  {
+    "id": "SPEC-03",
+    "verifies": "AC#3",
+    "verification": "acceptance `tests/playtest/check-styles.acceptance.test.ts::aggression of 2 preflop raises, 3 postflop bets, 1 postflop raise and 4 postflop calls is 50.0%`",
+    "status": "pass"
+  },
+  {
+    "id": "SPEC-04",
+    "verifies": "AC#2",
+    "verification": "acceptance `tests/playtest/check-styles.acceptance.test.ts::a test style file that moves the Maniac's VPIP below its band fails --check-styles with style, stat, value and band`",
+    "status": "pass"
+  },
+  {
+    "id": "SPEC-05",
+    "verifies": "AC#2, AC#5",
+    "verification": "acceptance `tests/playtest/check-styles.acceptance.test.ts::band edges are inclusive and every stat prints with its band when all are inside`",
+    "status": "pass"
+  },
+  {
+    "id": "SPEC-06",
+    "verifies": "AC#2, AC#5",
+    "verification": "unit `tests/playtest/style-check.test.ts::band check rounds to one decimal and treats both band edges as inside`",
+    "status": "pass"
+  },
+  {
+    "id": "SPEC-07",
+    "verifies": "AC#4",
+    "verification": "acceptance `tests/playtest/check-styles.acceptance.test.ts::--check-styles lists each mixed spot's action counts and fails a spot that used one action`",
+    "status": "pass"
+  },
+  {
+    "id": "SPEC-08",
+    "verifies": "AC#4",
+    "verification": "unit `tests/playtest/style-check.test.ts::mixed decisions are classified only in chart cells with an alternative in spots the style marks mixed`",
+    "status": "pass"
+  },
+  {
+    "id": "SPEC-09",
+    "verifies": "AC#2, AC#4",
+    "verification": "unit `tests/playtest/cli.test.ts::--check-styles is a value-less run flag echoed in the Options line`",
+    "status": "pass"
+  },
+  {
+    "id": "SPEC-10",
+    "verifies": "AC#6",
+    "verification": "acceptance `tests/playtest/check-styles.acceptance.test.ts::with postflop value betting the Maniac's aggression in a mixed line-up is below 100.0%`",
+    "status": "pass"
+  },
+  {
+    "id": "SPEC-11",
+    "verifies": "AC#7, AC#8, AC#9",
+    "verification": "acceptance `tests/playtest/check-styles.acceptance.test.ts::100,000 Mixed 6-max hands pass --check-styles on seeds 42, 7 and 1234` (opt-in slow, `npm run test:slow`)",
+    "status": "pass"
+  },
+  {
+    "id": "SPEC-12",
+    "verifies": "AC#10",
+    "verification": "acceptance `tests/ci/style-bands-workflow.acceptance.test.ts::the style-band workflow runs the three 100k --check-styles seeds on manual dispatch only`",
+    "status": "pass"
+  },
+  {
+    "id": "SPEC-13",
+    "verifies": "DoD#1, DoD#2, DoD#3, DoD#4, DoD#5, DoD#6, DoD#8, DoD#10",
+    "verification": "command `npm run lint && npm run typecheck && npm test && npm run playtest -- --hands 10000 --seed 42 && npm run playtest -- --hands 10000 --seed 42 --lineup mixed`",
+    "status": "pass"
+  },
+  {
+    "id": "SPEC-14",
+    "verifies": "DoD#7, DoD#9, DoD#11, DoD#12",
+    "verification": "manual Judge confirms that `git diff --stat main` touches no `src/ui/**`, `e2e/**` or `src/bots/styles/**` file, and that the story doc is published (`backlog doc list --plain`).",
+    "status": "pass"
+  }
+]

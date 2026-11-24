@@ -11,6 +11,25 @@ npm ci
 npx playwright install chromium webkit
 ```
 
+## Where to keep the repo
+
+The repo must not live in an iCloud-synced folder. With iCloud "Desktop & Documents" sync on,
+`~/Desktop` and `~/Documents` are synced, and iCloud drops conflict copies such as `foo 2.ts` or
+`src 2` into the working tree. They break typecheck and tests and can end up in commits.
+
+Move the clone to a folder that isn't synced, for example `~/Code`:
+
+```sh
+mkdir -p ~/Code
+mv ~/Documents/claudeworkspaces/limitholdem ~/Code/limitholdem
+```
+
+Then delete any conflict copies listed by `npm run lint` (it fails and names each one). `.gitignore`
+also keeps them out of `git add`.
+
+Alternatively, turn off "Desktop & Documents Folders" in System Settings → Apple Account → iCloud →
+iCloud Drive.
+
 ## Commands
 
 Every check runs with one command and exits non-zero on failure.
@@ -22,7 +41,7 @@ Every check runs with one command and exits non-zero on failure.
 | `npm run preview`          | Serve the built `dist/` locally                                                                 |
 | `npm test`                 | Run unit and property tests (Vitest) with coverage thresholds                                   |
 | `npm run e2e`              | Build, serve and smoke-test the app in Chromium and WebKit, with an axe scan                    |
-| `npm run lint`             | ESLint (including the headless-boundary rule) and Prettier check                                |
+| `npm run lint`             | File-sync conflict copy check, ESLint (including the headless-boundary rule) and Prettier check |
 | `npm run typecheck`        | TypeScript strict type check                                                                    |
 | `npm run format`           | Format all files with Prettier                                                                  |
 | `npm run playtest:million` | Play 1,000,000 cash hands over table sizes 2 to 10 in parallel shards and check every invariant |

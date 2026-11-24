@@ -149,10 +149,9 @@ The rules are checked in the order below and the first one that matches decides 
 ## Not applied yet
 
 These rules use pot odds, implied odds for flush and open-ended straight draws, and the value
-threshold only. They never bluff: a bet or raise is recommended only for value. Later work adds:
+threshold only. They never bluff: a bet or raise is recommended only for value. Opponent ranges
+follow observed habits once 30 or more hands are seen (see range-model.md). Later work adds:
 
-- adjusting each opponent's range to their observed habits once 30 or more of their hands have
-  been seen (TASK-7.13);
 - default ranges for heads-up and full-ring tables (TASK-7.6). Until then opponents at other
   table sizes start from every unseen hand and are narrowed by their actions after the flop;
 - action-based ranges for the bots' own decisions, which still use every unseen hand (TASK-7.25).

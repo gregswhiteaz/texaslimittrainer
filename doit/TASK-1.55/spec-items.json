@@ -1,0 +1,14 @@
+[
+  {
+    "id": "SPEC-01",
+    "verifies": "AC#1",
+    "verification": "acceptance `e2e/hand-records.spec.ts::onHandComplete fires exactly once per hand even with the same replay code`",
+    "status": "pass"
+  },
+  {
+    "id": "SPEC-02",
+    "verifies": "AC#2",
+    "verification": "command `npx playwright test e2e/hand-records.spec.ts --repeat-each 20 --project=chromium --project=webkit`",
+    "status": "pass"
+  }
+]

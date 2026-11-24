@@ -4,7 +4,7 @@ title: Resume a paused session from Home
 status: To Do
 assignee: []
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-22T16:11:00Z'
+updated_date: '2026-11-23T13:44:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -50,6 +50,7 @@ Plan key: E02-S08 · Dream: limit-holdem-trainer
 - [ ] #5 Given the app was closed in the middle of hand 11, When stored hand records and the style stats computed from them are read after resuming, Then no record of the abandoned hand exists and the stats equal those of hands 1 to 10 [REQ-004.6]
 - [ ] #6 Given a resumed session, When further hands complete, Then they are stored under the same session id with hand numbers continuing from 11 [REQ-004.2]
 - [ ] #7 Given a stored session whose seats include an unknown seat kind, an unknown bot style or a missing bot name, When it is loaded to resume, Then it is rejected with a clear error (not passed to resolveLineUpName/lineUpSessionConfig or the table), and Home stays usable
+- [ ] #8 Given a stored session whose handsPlayed or nextBotId is at or near Number.MAX_SAFE_INTEGER, When Resume restores it, Then it is rejected with a RangeError (cap below MAX_SAFE_INTEGER) rather than producing an unsafe hand number
 <!-- AC:END -->
 
 ## Definition of Done
@@ -72,4 +73,6 @@ Plan key: E02-S08 · Dream: limit-holdem-trainer
 
 <!-- SECTION:NOTES:BEGIN -->
 AC added from TASK-6.7 security review MINOR (lineUpSessionConfig trusts seat kind/style)
+
+AC added from TASK-3.10 judge J-1-02.
 <!-- SECTION:NOTES:END -->

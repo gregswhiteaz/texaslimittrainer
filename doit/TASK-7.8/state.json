@@ -1231,6 +1231,12 @@
       "event": "unlock",
       "file": "tests/advice/value-bet.acceptance.test.ts",
       "reason": "TASK-7.10 Q-3 auto-accepted: explanation key (count kept)"
+    },
+    {
+      "t": "2026-11-23T09:14:04",
+      "event": "unlock",
+      "file": "tests/advice/value-bet.acceptance.test.ts",
+      "reason": "TASK-7.13 block 1 auto-accepted: AC#9 key list adds opponentBasis (count kept)"
     }
   ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-7.8",
@@ -1243,6 +1249,7 @@
     "1": "PASS"
   },
   "relock_pending": [
+    "tests/advice/value-bet.acceptance.test.ts",
     "tests/advice/value-bet.acceptance.test.ts",
     "tests/advice/value-bet.acceptance.test.ts"
   ]

@@ -3,8 +3,9 @@ import type { StyleName } from '../bots/style';
 import { formatCard } from '../engine/cards';
 import { isReplayCode, type ReplayCode } from '../engine/deck';
 import type { ActionRecord, SeatNumber } from '../engine/hand';
-import { describeAction, INVARIANTS } from '../engine/invariants';
+import { checkStep, describeAction, INVARIANTS } from '../engine/invariants';
 import {
+  composeChecks,
   GAMES,
   playHand,
   recordStacks,
@@ -18,6 +19,7 @@ import {
   type PlaytestSummary,
 } from './runner';
 import { seatStylesPolicyFactory } from './policy';
+import { formatStyleReport, STYLE_BANDS, StyleCheck, type StyleBandTable } from './style-check';
 import { BotResults, formatBotResults } from './winrate';
 
 export interface CliIo {
@@ -25,7 +27,12 @@ export interface CliIo {
   readonly err: (text: string) => void;
 }
 export type ParsedArgs =
-  | { readonly kind: 'run'; readonly options: PlaytestOptions & { readonly game: GameType } }
+  | {
+      readonly kind: 'run';
+      readonly options: PlaytestOptions & { readonly game: GameType };
+      /** Present only when --check-styles is given. */
+      readonly checkStyles?: true;
+    }
   | {
       readonly kind: 'replay';
       readonly replayCode: ReplayCode;
@@ -42,10 +49,11 @@ export type ParsedArgs =
   | { readonly kind: 'error'; readonly message: string };
 
 export const USAGE =
-  'Usage: npm run playtest -- [--hands <1-1000000000>] [--seed <0-9007199254740991>] [--size <2-10>] [--game <cash|sng>] [--lineup <mixed|tough|soft>]\n' +
+  'Usage: npm run playtest -- [--hands <1-1000000000>] [--seed <0-9007199254740991>] [--size <2-10>] [--game <cash|sng>] [--lineup <mixed|tough|soft>] [--check-styles]\n' +
   '       npm run playtest -- --replay-code <32 lowercase hex characters> [--size <2-10>] [--button <seat>] [--game <cash|sng>] [--stacks <one stack per seat, comma-separated, 0 = empty seat>] [--lineup <mixed|tough|soft>] [--styles <style of each seat from 2 up, comma-separated: tag|calling-station|maniac|rock>]\n' +
   'Defaults: --hands 10000 --seed 42 --size 6 --button 1 --game cash; --stacks gives every seat $160 (cash) or 1500 (sng)\n' +
-  "--lineup: seat 1 plays the user (TAG) and seats 2 and up play the preset's styles; without it every seat plays TAG\n";
+  "--lineup: seat 1 plays the user (TAG) and seats 2 and up play the preset's styles; without it every seat plays TAG\n" +
+  "--check-styles: exit 1 unless every seated bot style's VPIP, PFR and aggression is inside its target band and every mixed spot used both actions\n";
 
 const VALUE_OPTIONS = [
   '--hands',
@@ -99,11 +107,17 @@ function parseStacks(text: string, size: number): number[] | undefined {
 export function parseArgs(argv: readonly string[]): ParsedArgs {
   const values = new Map<ValueOption, string>();
   let help = false;
+  let checkStyles = false;
   for (let i = 0; i < argv.length; i++) {
     const name = argv[i] as string;
     if (name === '--help') {
       if (help) return error('Error: --help given more than once.');
       help = true;
+      continue;
+    }
+    if (name === '--check-styles') {
+      if (checkStyles) return error('Error: --check-styles given more than once.');
+      checkStyles = true;
       continue;
     }
     const option = VALUE_OPTIONS.find((o) => o === name);
@@ -117,7 +131,7 @@ export function parseArgs(argv: readonly string[]): ParsedArgs {
     i++;
   }
   if (help) {
-    return values.size > 0
+    return values.size > 0 || checkStyles
       ? error('Error: --help cannot be combined with other options.')
       : { kind: 'help' };
   }
@@ -144,6 +158,7 @@ export function parseArgs(argv: readonly string[]): ParsedArgs {
   const size = whole('--size', 6, 2, 10);
   const replayCode = values.get('--replay-code');
   if (replayCode !== undefined) {
+    if (checkStyles) return error('Error: --check-styles is only valid without --replay-code.');
     if (values.has('--hands') || values.has('--seed')) {
       return error('Error: --replay-code cannot be combined with --hands or --seed.');
     }
@@ -188,7 +203,8 @@ export function parseArgs(argv: readonly string[]): ParsedArgs {
     return error('Error: --seed must be a whole number from 0 to 9007199254740991.');
   }
   if (size === undefined) return error(SIZE_ERROR);
-  return { kind: 'run', options: { hands, seed, size, game, ...withLineUp } };
+  const run = { kind: 'run', options: { hands, seed, size, game, ...withLineUp } } as const;
+  return checkStyles ? { ...run, checkStyles } : run;
 }
 
 /** `header` (whole lines) followed by the summary lines, then the violation block when there are
@@ -332,9 +348,14 @@ function lineUpLines(seats: readonly LineUpSeat[], name: string): string {
   return `Line-up: ${name}, seat 1 plays the user${bots.join('')}\n`;
 }
 
-/** Returns the exit code: 0 no violations, 1 violations, 2 usage error. Writes everything through io.
- *  seams are test seams; the entry never passes them. */
-export function main(argv: readonly string[], io: CliIo, seams: PlaytestSeams = {}): number {
+/** Returns the exit code: 0 clean, 1 violations or a failed --check-styles, 2 usage error. Writes everything
+ *  through io. seams and bands are test seams; the entry never passes them. */
+export function main(
+  argv: readonly string[],
+  io: CliIo,
+  seams: PlaytestSeams = {},
+  bands: StyleBandTable = STYLE_BANDS,
+): number {
   const parsed = parseArgs(argv);
   if (parsed.kind === 'error') {
     io.err(`${parsed.message}\n${USAGE}`);
@@ -358,21 +379,31 @@ export function main(argv: readonly string[], io: CliIo, seams: PlaytestSeams = 
   let header = 'TLH Trainer playtest\n';
   let summary: PlaytestSummary;
   let replaced: number | undefined;
+  let stylesPassed = true;
   if (parsed.kind === 'run') {
     const { hands, seed, size, game } = parsed.options;
+    const checking = parsed.checkStyles === true;
     const sng = game === 'sng' ? ' --game sng' : '';
-    header += `Options: --hands ${hands} --seed ${seed} --size ${size}${sng}${option}\n${table(size, game)}`;
+    const checkOption = checking ? ' --check-styles' : '';
+    header += `Options: --hands ${hands} --seed ${seed} --size ${size}${sng}${option}${checkOption}\n${table(size, game)}`;
     const bots = new BotResults(game);
+    const styles = new StyleCheck(checking);
     let count = 0;
     summary = runPlaytest(
       parsed.options,
       (hand) => {
         bots.add(hand);
+        styles.add(hand);
         count += hand.replaced?.length ?? 0;
       },
-      seams,
+      checking
+        ? { ...seams, onAction: composeChecks(seams.onAction ?? checkStep, styles.onAction) }
+        : seams,
     );
     if (preset !== undefined && game === 'cash') replaced = count;
+    const styleReport = formatStyleReport(styles.counts(), styles.mixed(), checking, bands);
+    stylesPassed = styleReport.passed;
+    header += styleReport.text;
     header += formatBotResults(bots.rows(), game);
   } else {
     const { replayCode, size, button, game, stacks, styles } = parsed;
@@ -388,5 +419,5 @@ export function main(argv: readonly string[], io: CliIo, seams: PlaytestSeams = 
     summary = summarize([hand]);
   }
   io.out(formatReport(header, summary, parsed.kind, lineUpName, replaced));
-  return summary.violations > 0 ? 1 : 0;
+  return summary.violations > 0 || !stylesPassed ? 1 : 0;
 }

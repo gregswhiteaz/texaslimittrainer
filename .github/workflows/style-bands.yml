@@ -1,0 +1,26 @@
+name: Bot style bands
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  style-bands:
+    name: 100,000 Mixed 6-max hands with --check-styles on seeds 42, 7 and 1234
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    steps:
+      - name: Check out
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Set up Node from .nvmrc
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
+      - name: Seed 42
+        run: npm run playtest -- --hands 100000 --lineup mixed --size 6 --check-styles --seed 42
+      - name: Seed 7
+        run: npm run playtest -- --hands 100000 --lineup mixed --size 6 --check-styles --seed 7
+      - name: Seed 1234
+        run: npm run playtest -- --hands 100000 --lineup mixed --size 6 --check-styles --seed 1234

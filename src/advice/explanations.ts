@@ -90,6 +90,22 @@ export const CONCEPTS: readonly Concept[] = [
   },
 ];
 
+/** Observed hands from which an opponent's range follows their stats; ranges.ts re-exports it. */
+export const OBSERVED_MIN_HANDS = 30;
+/** Basis of an opponent's range: the default range, or one rebuilt from that opponent's observed stats. */
+export const TYPICAL_PLAYER_BASIS = 'typical player';
+export const OBSERVED_BASIS = 'based on {hands} hands of this opponent';
+
+/** 'typical player' for null, else 'based on N hands of this opponent'. */
+export function basisText(observedHands: number | null): string {
+  return observedHands === null
+    ? TYPICAL_PLAYER_BASIS
+    : OBSERVED_BASIS.replace('{hands}', String(observedHands));
+}
+/** Lead clause joined to the first sentence when any range rests on observed stats (keeps REQ-037's 3 sentences). */
+export const OPPONENT_TYPE_LEAD =
+  'Ranges here follow the opponent type, {def:opponent-type}, of each player you have watched for {minHands} or more hands; ';
+
 export type PostflopTemplateKey = PostflopRuleId | 'pot-odds-fold-implied';
 
 export const POSTFLOP_TEMPLATES: Readonly<Record<PostflopTemplateKey, string>> = {

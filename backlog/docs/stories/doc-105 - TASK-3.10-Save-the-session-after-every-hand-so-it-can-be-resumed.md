@@ -1,13 +1,13 @@
 ---
-id: doc-101
+id: doc-105
 title: 'TASK-3.10: Save the session after every hand so it can be resumed'
 type: other
-created_date: '2026-11-23T13:44:00Z'
-updated_date: '2026-11-23T13:44:00Z'
+created_date: '2026-11-24T00:54:00Z'
+updated_date: '2026-11-24T00:54:00Z'
 ---
 # TASK-3.10: Save the session after every hand so it can be resumed
 
-Status: Built, judged PASS, PARKED UNMERGED (see "Review") · Completed: 2026-11-23 · Epic: TASK-3 — Play hands at the table · Milestone: m-1 · Requirements: REQ-052 (REQ-052.3) · Branch: doit/TASK-3.10
+Status: Done (judged PASS; merged 2026-11-24 after the stray doc-100 copy was removed). Renumbered from doc-101, whose ID collided with TASK-1.54's story doc on main · Completed: 2026-11-23 · Epic: TASK-3 — Play hands at the table · Milestone: m-1 · Requirements: REQ-052 (REQ-052.3) · Branch: doit/TASK-3.10
 
 ## What was asked
 The table keeps a session record in IndexedDB: created when the table starts, updated after every completed hand together with that hand's record, so a killed browser loses at most the hand in progress. The record holds what E02 Resume will read (config, seats with bot ids/names/styles/stacks, next button, hands played, rebuys, level, bot counters). The story also adds restore-side validation asked for by earlier security reviews (`assertSessionConfig`, self-consistent `resolveSessionConfig`, `parseSessionRecord`/`restoreSession`, safe `createHand`/`shuffledDeck` on hostile values, cross-field checks in `parseHandRecord`). The Resume screen is E02's. Spec: doit/TASK-3.10/spec.md.

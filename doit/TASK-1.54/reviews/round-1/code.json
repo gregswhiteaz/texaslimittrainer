@@ -1,0 +1,24 @@
+{"reviewer": "code", "round": 1,
+ "rubric": [
+  {"item": "SPEC-01 correctness", "result": "pass"}, {"item": "SPEC-01 test strength", "result": "pass"},
+  {"item": "SPEC-02 correctness", "result": "pass"}, {"item": "SPEC-02 test strength", "result": "pass"},
+  {"item": "SPEC-03 correctness", "result": "pass"}, {"item": "SPEC-03 test strength", "result": "pass"},
+  {"item": "SPEC-04 correctness", "result": "pass"}, {"item": "SPEC-04 test strength", "result": "pass"},
+  {"item": "SPEC-05 correctness", "result": "pass"}, {"item": "SPEC-05 test strength", "result": "pass"},
+  {"item": "SPEC-06 correctness", "result": "pass"}, {"item": "SPEC-06 test strength", "result": "pass"},
+  {"item": "scope", "result": "pass"}, {"item": "concision", "result": "pass"}, {"item": "clarity", "result": "pass"}],
+ "findings": [
+  {"fingerprint": "tools/lint/sync-copies.js:entry-check-fails-open-via-symlinked-path", "severity": "MINOR", "file": "tools/lint/sync-copies.js", "line": 46,
+   "issue": "The CLI entry-point guard compares import.meta.url (realpath) with pathToFileURL(process.argv[1]) (unresolved). Invoked through a symlinked absolute path, the guard is false, the script does nothing and exits 0, so the lint guard passes silently.",
+   "evidence": "Probe: tree with 'x 2.ts'; `node <symlink-to-repo>/tools/lint/sync-copies.js <tree>` exits 0 with no output, while `node tools/lint/sync-copies.js <tree>` exits 1 naming it. `npm run lint` uses a relative path resolved against the physical cwd, so the normal path is unaffected. The idiom is shared with 7 other tools/ scripts and was prescribed by the spec.",
+   "fix": "Optional: compare against realpathSync(process.argv[1]) (or accept as the project-wide idiom and leave it). Not required for this task."},
+  {"fingerprint": ".gitignore:glob-wider-than-matcher", "severity": "NIT", "file": ".gitignore", "line": 13,
+   "issue": "`* [0-9].*` also ignores names like `foo 2.test.ts` or `task-9 - 3.5bb-sizing.md` which the lint matcher (correctly) does not flag, so such a legit new file would be silently unstaged with no lint signal.",
+   "evidence": "Accepted trade-off in spec A-3; `git ls-files -ci --exclude-standard` is empty today and SPEC-05 test guards tracked files.",
+   "fix": "None needed now; if it bites, add a negation or narrow the pattern."},
+  {"fingerprint": "backlog/tasks/task-2.6:unrelated-backlog-edit-on-branch", "severity": "NIT", "file": "backlog/tasks/task-2.6 - Resume-a-paused-session-from-Home.md", "line": 53,
+   "issue": "Branch diff includes an AC#8 addition to TASK-2.6 (from TASK-3.10 judge), although spec 'Not doing' says no backlog/ file is touched.",
+   "evidence": "Came in with commit c51846f (spec commit, orchestrator bookkeeping via backlog CLI), not the build.",
+   "fix": "No builder action; orchestrator may note it in the PR or keep backlog bookkeeping in its own commit."}
+ ],
+ "summary": "All six SPEC items implemented as specified and each test would fail on a broken implementation (matcher table, walker dir-once/sort, CLI exit+stderr incl. negatives, sandbox npm run lint, gitignore check-ignore + ls-files -ci empty + no tracked basename matches, README phrases). Regex probes: 'x 10.md' matches, 'foo 2.test.ts' does not (correct: iCloud would name it 'foo.test 2.ts'). Walker skips .git/node_modules at any depth, doesn't follow symlinks (Dirent.isDirectory false), builds POSIX relative paths so Windows separators are irrelevant. Lint ordering is first in the chain. README accurate. Check runs in ~33 ms. Only MINOR/NIT findings."}

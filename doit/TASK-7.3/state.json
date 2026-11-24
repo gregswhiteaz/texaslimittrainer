@@ -331,6 +331,12 @@
       "event": "unlock",
       "file": "tests/advice/postflop.acceptance.test.ts",
       "reason": "TASK-7.10 Q-3 auto-accepted: explanation key (count kept)"
+    },
+    {
+      "t": "2026-11-23T09:05:11",
+      "event": "unlock",
+      "file": "tests/advice/postflop.acceptance.test.ts",
+      "reason": "TASK-7.13 Q-4 auto-accepted: opponentBasis key (count kept)"
     }
   ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-7.3",
@@ -349,6 +355,7 @@
     "1": "PASS"
   },
   "relock_pending": [
+    "tests/advice/postflop.acceptance.test.ts",
     "tests/advice/postflop.acceptance.test.ts",
     "tests/advice/postflop.acceptance.test.ts",
     "tests/advice/postflop.acceptance.test.ts"

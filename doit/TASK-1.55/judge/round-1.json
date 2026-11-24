@@ -1,0 +1,10 @@
+{"round": 1,
+ "test_suite": {"command": "npm test", "result": "PASS", "passed": 947, "failed": 0, "notes": "215 files passed, 3 skipped; 41 tests skipped (pre-existing). CI run 45208010636 on 2b874d6 completed success."},
+ "end_to_end": {"command": "npx playwright test e2e/hand-records.spec.ts --repeat-each 20 --project=chromium --project=webkit", "result": "PASS", "expected": "every run passes in both browsers", "actual": "360 passed, 0 failed (1.2m)"},
+ "integrity": {"result": "PASS", "notes": "doit.py test-integrity exit 0. Diff vs 13fc501 touches only e2e/hand-records.spec.ts (+ doit/backlog metadata); no src/ or harness changes. The four immediate calls reads became expect.poll with identical matchers (toHaveLength 1, 1, 2; toEqual 3x PINNED_CODE); the post-advance paused.calls toHaveLength(1) stays immediate. No hard-coding, mocks or loosened assertions."},
+ "items": [
+  {"spec": "SPEC-01", "result": "PASS", "evidence": "Diff matches spec section 5 exactly. Target test --repeat-each 30 in chromium+webkit: 60 passed. Mutant where product calls onHandComplete twice per hand: branch 6/6 failed (Expected length 1, Received 2), so exact counts still catch duplicates. Mutant where the callback fires ~200 ms real time late (worker timer, not affected by the fake clock): branch 20/20 passed; same mutant on base 13fc501 (temp worktree) 10/10 failed at the old immediate read on line 237, so the race is real and the poll fixes it. Unmutated base passes 10/10 locally, as expected for a CI-only race."},
+  {"spec": "SPEC-02", "result": "PASS", "evidence": "Spec command, repeat 20 x chromium+webkit over the whole hand-records spec: 360 passed, 0 failed."}
+ ],
+ "findings": [],
+ "summary": "Both items PASS. The test-only poll fix behaves as the spec says: it tolerates a late callback, still fails on a duplicate callback, and is stable in repeated runs. Full suite and CI are green. No blocking findings."}

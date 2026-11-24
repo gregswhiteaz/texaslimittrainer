@@ -1,0 +1,8 @@
+{"reviewer": "security", "round": 1,
+ "findings": [
+  {"fingerprint": "tools/lint/sync-copies.js:raw-filenames-to-stderr", "severity": "NIT", "file": "tools/lint/sync-copies.js", "line": 51,
+   "issue": "Matched file names are written to stderr verbatim, so a name holding terminal control sequences (ESC) would be passed to the developer's terminal.",
+   "evidence": "Directory entry name (local working tree) -> found[] -> process.stderr.write. Only someone who can already write files into the developer's checkout can do this, and the regex's '.' does not match newlines, so names with newlines are never reported. No meaningful attacker gain.",
+   "fix": "Optional: JSON.stringify each path or strip C0 control characters before printing. Not required."}
+ ],
+ "summary": "Clean. The walker uses readdirSync withFileTypes, and Dirent.isDirectory() is false for symlinks (lstat semantics), so it never follows symlinks out of the repo or into loops. It reads names only, never file contents. No shell: the CLI does no process spawning, and the tests call spawnSync with argv arrays (node and git), use mkdtempSync temp dirs and clean them up. The regex ^.+ \\d+(\\.[^.]+)?$ backtracks at most quadratically on a single basename (<=255 bytes), so there is no practical ReDoS. Output is one line per match and limited by the tree's size, and matched directories are not descended into. The .gitignore patterns only add ignores. There are no new dependencies, secrets, network access or randomness. No BLOCKER or MAJOR findings."}

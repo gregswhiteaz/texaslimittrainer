@@ -2,8 +2,16 @@ import type { Card } from '../engine/cards';
 import type { Action } from '../engine/hand';
 import type { PlayerView, PublicPlayer } from '../engine/player-view';
 import { explainPostflop } from './explain';
+import { basisText } from './explanations';
 import { computeEquity, type EquityInput, type EquityResult, type Range } from './equity';
-import { callingRange, drawOuts, estimateOpponentRanges, unseenCombos } from './ranges';
+import {
+  callingRange,
+  drawOuts,
+  estimateOpponentRanges,
+  unseenCombos,
+  type ObservedOpponent,
+  type OpponentBasis,
+} from './ranges';
 import type { ExactOptions } from './recommend';
 
 export type PostflopAdvice = 'fold' | 'check' | 'call' | 'bet' | 'raise';
@@ -51,6 +59,8 @@ export interface PostflopRecommendation {
   readonly impliedRequiredEquityPct: number | null;
   /** drawOuts(holeCards, board): the outs counted; [] on the river or without a flush/open-ended draw. */
   readonly outs: readonly Card[];
+  /** One per live opponent, ascending seat: whether its range rests on observed stats ('typical player' otherwise). */
+  readonly opponentBasis: readonly OpponentBasis[];
   /** Plain-English reason, ≤ 3 sentences (REQ-037). */
   readonly explanation: string;
 }
@@ -60,6 +70,8 @@ export interface PostflopOptions {
   readonly equity?: (input: EquityInput) => EquityResult;
   /** 'unseen' (default): every unseen combo. 'actions': estimateOpponentRanges (TASK-7.5). */
   readonly opponentRanges?: 'unseen' | 'actions';
+  /** Per-decision session stats of opponents; used only with 'actions'. Bots never pass it (REQ-029.2). */
+  readonly observedOpponents?: readonly ObservedOpponent[];
 }
 
 /** Percent with one decimal, half up: Math.round(fraction * 1000 + 1e-9) / 10. */
@@ -90,7 +102,11 @@ export function recommendPostflop<O extends object = PostflopOptions>(
   view: PlayerView,
   options?: ExactOptions<O, PostflopOptions>,
 ): PostflopRecommendation {
-  const { equity = computeEquity, opponentRanges = 'unseen' }: PostflopOptions = options ?? {};
+  const {
+    equity = computeEquity,
+    opponentRanges = 'unseen',
+    observedOpponents,
+  }: PostflopOptions = options ?? {};
   const street = view.street;
   if (street !== 'flop' && street !== 'turn' && street !== 'river') {
     throw new RangeError(`Postflop advice needs a flop, turn or river view, got ${street}`);
@@ -115,10 +131,14 @@ export function recommendPostflop<O extends object = PostflopOptions>(
     equity({ hero: view.holeCards, board: view.board, opponents });
   const unseen = unseenCombos([...view.holeCards, ...view.board]);
   let attempts: (readonly Range[])[];
+  let opponentBasis: readonly OpponentBasis[];
   if (opponentRanges === 'unseen') {
-    attempts = [view.players.filter((p) => p.seat !== view.seat && !p.folded).map(() => unseen)];
+    const live = view.players.filter((p) => p.seat !== view.seat && !p.folded);
+    attempts = [live.map(() => unseen)];
+    opponentBasis = live.map(({ seat }) => ({ seat, observedHands: null, text: basisText(null) }));
   } else {
-    const estimated = estimateOpponentRanges(view);
+    const estimated = estimateOpponentRanges(view, observedOpponents);
+    opponentBasis = estimated.map((o) => o.basis);
     attempts = [
       estimated.map((o) => o.combos),
       estimated.map((o) => o.start),
@@ -191,6 +211,7 @@ export function recommendPostflop<O extends object = PostflopOptions>(
     equityVsCallingRangePct,
     impliedRequiredEquityPct,
     outs,
+    opponentBasis,
   };
   return { ...rec, explanation: explainPostflop(rec, VALUE_THRESHOLD_PCT) };
 }

@@ -3,7 +3,7 @@ id: doc-83
 title: 'TASK-6.9: Prove the engine over 1,000,000 cash hands with every line-up preset'
 type: other
 created_date: '2026-11-22T18:27:00Z'
-updated_date: '2026-11-22T18:27:00Z'
+updated_date: '2026-11-24T00:51:00Z'
 ---
 # TASK-6.9: Prove the engine over 1,000,000 cash hands with every line-up preset
 
@@ -13,7 +13,7 @@ Status: Done (pending Judge) · Completed: 2026-11-22 · Epic: TASK-6 · Milesto
 Add a million-hand run that plays every line-up preset (Mixed, Tough, Soft) at every table size 2 to 10 with fixed seeds, reports hand counts per line-up, and exits 0 only with zero invariant violations. Run it from a workflow. Prove 100,000 6-max Mixed hands with style bots fit inside 60 minutes. Give bots the earlier showdowns, provide a way to compose style checks with `checkStep`, and prove a 6-player line-up exercises postflop betting and the cap. Spec: doit/TASK-6.9/spec.md.
 
 ## Not proven here (read first)
-- AC#3's live GitHub run of `million-lineups.yml` has NOT been done. Q-2 forbids dispatching because it costs Actions minutes, and GitHub can only dispatch workflows on the default branch. The rest of AC#3 is proven locally (full run, byte-identical re-run, workflow-file test). The live dispatch waits on the budget decision TASK-1.51.
+- AC#3's live GitHub run of `million-lineups.yml` was done on 2026-11-24 after TASK-1.51's budget decision (repo made public). See "Live run (TASK-1.51)" below.
 - Style bots play only in 6-seat hands (Q-3). At sizes 2-5 and 7-10 the shards run the preset's seats with the random-move fallback until TASK-7.6 AC#11.
 
 ## Assumptions made without asking — please review
@@ -91,3 +91,10 @@ Questions 3 (auto-accepted) · assumptions 7 · review rounds 1 · judge rounds:
 
 ## Lessons for the factory (proposals — not applied)
 - The spec's size estimates were low (794 changed lines vs 700 budget); count test files when budgeting. No other slowdowns recorded in the artifacts.
+
+## Live run (TASK-1.51)
+- Run: https://github.com/gregswhiteaz/texaslimittrainer/actions/runs/45298637739 (workflow_dispatch on main, head ee07177)
+- Job time: 13 min 41 s (00:37:20 to 00:51:01 UTC) against the 30-minute limit; conclusion success
+- 27 shards (Mixed, Tough, Soft x sizes 2-10): every shard reported `Invariant violations: 0`
+- Hands per line-up: Mixed size 2 37,038, sizes 3-10 37,037 each; Tough and Soft 37,037 at every size (1,000,000 total)
+- Combined: `Invariant violations: 0`; by invariant: chips 0, legal-action 0, bet-cap 0, pot-eligibility 0, cards 0

@@ -71,6 +71,14 @@ runPlaytest(options, (h) => {
 });
 ```
 
+### In the playtest CLI
+
+Every `npm run playtest` run (not replay mode) prints a `Style:` line per seated bot style with VPIP, PFR and
+aggression to one decimal, summed with `handStyleCounts`/`addStyleCounts` and computed with `styleStats`
+(`src/playtest/style-check.ts`). With `--check-styles` each value is compared with its REQ-027 band (inclusive,
+after rounding to 0.1), the mixed-spot action counts are listed, and the run exits 1 if a stat is outside its band
+or a mixed spot used only one action.
+
 ## Display
 
 `formatStat` shows `—` when the denominator is 0 (for example W$SD before any showdown) and otherwise the

@@ -1,6 +1,8 @@
 import {
   ADVICE_ING,
   CONCEPTS,
+  OBSERVED_MIN_HANDS,
+  OPPONENT_TYPE_LEAD,
   POSTFLOP_TEMPLATES,
   PREFLOP_CONTEXT,
   PREFLOP_SENTENCES,
@@ -11,6 +13,8 @@ import {
 import type { HandClass } from './hand-class';
 import type { PostflopRecommendation } from './postflop';
 import type { PreflopRecommendation } from './preflop';
+
+export { basisText } from './explanations';
 
 /** `${pct.toFixed(1)}%`. */
 export function formatPct(pct: number): string {
@@ -83,5 +87,8 @@ export function explainPostflop(
     rec.ruleId === 'pot-odds-fold' && rec.impliedRequiredEquityPct !== null
       ? 'pot-odds-fold-implied'
       : rec.ruleId;
-  return fillTemplate(POSTFLOP_TEMPLATES[key], values);
+  const text = fillTemplate(POSTFLOP_TEMPLATES[key], values);
+  if (rec.opponentBasis.every((b) => b.observedHands === null)) return text;
+  const lead = fillTemplate(OPPONENT_TYPE_LEAD, { minHands: String(OBSERVED_MIN_HANDS) });
+  return lead + text.charAt(0).toLowerCase() + text.slice(1);
 }
