@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-24T20:47:00Z'
+updated_date: '2026-11-24T21:05:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -86,4 +86,6 @@ Full spec: doit/TASK-10.3/spec.md
 
 <!-- SECTION:NOTES:BEGIN -->
 AC#2 narrowed per TASK-10.3 Q-2 (auto-accepted): bots measure WTSD ~94% (advice folds ~3% postflop), so WTSD vs bots moves to TASK-7.32; realistic WTSD ranges are authored here.
+
+Build: healthy-ranges.json (15 ranges, original justifications), style counts stored once on the report at session end, report style section (in range / too high / too low / not enough data, approximate sizes); slow 100k TAG check VPIP 22.2 PFR 16.2 Agg 63.1 W$SD 49.9 inside 6-max ranges; npm test 1283 passed, Playwright 300 passed; gate PASS.
 <!-- SECTION:NOTES:END -->
