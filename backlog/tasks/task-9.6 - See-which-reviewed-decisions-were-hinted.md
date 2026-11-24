@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-24T15:30:00Z'
+updated_date: '2026-11-24T15:43:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -43,26 +43,26 @@ Plan key: E09-S05 · Dream: limit-holdem-trainer
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Given a hand record whose flop decision has hinted = true and whose other decisions have hinted = false, When the panel opens, Then the flop entry shows a "hinted" tag and no other entry does [REQ-043.5, REQ-040.2]
-- [ ] #2 Given a hinted decision graded Major error, When the panel opens, Then its entry shows both "Major error" and "hinted" [REQ-040.2]
-- [ ] #3 Given a hand with no hinted decisions, When the panel opens, Then no "hinted" tag appears [REQ-043.5]
-- [ ] #4 Given a hand with at least two user decisions where Hint was opened and hidden at the first only, When the review shows the hand, Then only the first entry is tagged hinted and the test asserts the hand had 2+ decisions (from TASK-8.2 judge J-1-01)
+- [x] #1 Given a hand record whose flop decision has hinted = true and whose other decisions have hinted = false, When the panel opens, Then the flop entry shows a "hinted" tag and no other entry does [REQ-043.5, REQ-040.2]
+- [x] #2 Given a hinted decision graded Major error, When the panel opens, Then its entry shows both "Major error" and "hinted" [REQ-040.2]
+- [x] #3 Given a hand with no hinted decisions, When the panel opens, Then no "hinted" tag appears [REQ-043.5]
+- [x] #4 Given a hand with at least two user decisions where Hint was opened and hidden at the first only, When the review shows the hand, Then only the first entry is tagged hinted and the test asserts the hand had 2+ decisions (from TASK-8.2 judge J-1-01)
 <!-- AC:END -->
 
 ## Definition of Done
 <!-- DOD:BEGIN -->
-- [ ] #1 Every acceptance criterion has at least one automated test (unit, property or Playwright) that passes
-- [ ] #2 `npm run lint`, `npm run typecheck` and `npm test` pass with zero errors [REQ-059.1, REQ-059.4]
-- [ ] #3 The golden-spot suite passes 100% (applies from the story that creates the suite, E07-S14, onward) [REQ-039.4]
-- [ ] #4 Coverage thresholds hold: >= 90% engine/bots/advice/statistics, >= 70% overall [REQ-059.3]
-- [ ] #5 Engine, bots, advice and statistics code imports no UI or browser-only code [REQ-059.2]
-- [ ] #6 Stories that touch the engine, bots or advice: a 10,000-hand playtest reports zero invariant violations (applies once the playtest runner exists, E01-S07, onward) [REQ-056.1]
-- [ ] #7 Stories that add or change a screen: Playwright test of the screen flow in Chromium and WebKit, and axe reports zero serious or critical violations (axe tooling is provisioned in the toolchain story E01-S01) [REQ-057.1]
-- [ ] #8 No new network requests beyond the app's own files [REQ-058.1]
-- [ ] #9 Strategy-content stories: text is original and every chart, range or golden spot carries its justification [REQ-061.2]
-- [ ] #10 CI workflow is green on the story's branch (applies once the CI story E01-S02 is done; E01-S01 instead passes the same checks locally) [REQ-064.2]
-- [ ] #11 Story documentation is written and published to Backlog.md
-- [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
+- [x] #1 Every acceptance criterion has at least one automated test (unit, property or Playwright) that passes
+- [x] #2 `npm run lint`, `npm run typecheck` and `npm test` pass with zero errors [REQ-059.1, REQ-059.4]
+- [x] #3 The golden-spot suite passes 100% (applies from the story that creates the suite, E07-S14, onward) [REQ-039.4]
+- [x] #4 Coverage thresholds hold: >= 90% engine/bots/advice/statistics, >= 70% overall [REQ-059.3]
+- [x] #5 Engine, bots, advice and statistics code imports no UI or browser-only code [REQ-059.2]
+- [x] #6 Stories that touch the engine, bots or advice: a 10,000-hand playtest reports zero invariant violations (applies once the playtest runner exists, E01-S07, onward) [REQ-056.1]
+- [x] #7 Stories that add or change a screen: Playwright test of the screen flow in Chromium and WebKit, and axe reports zero serious or critical violations (axe tooling is provisioned in the toolchain story E01-S01) [REQ-057.1]
+- [x] #8 No new network requests beyond the app's own files [REQ-058.1]
+- [x] #9 Strategy-content stories: text is original and every chart, range or golden spot carries its justification [REQ-061.2]
+- [x] #10 CI workflow is green on the story's branch (applies once the CI story E01-S02 is done; E01-S01 instead passes the same checks locally) [REQ-064.2]
+- [x] #11 Story documentation is written and published to Backlog.md
+- [x] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
 
 ## Implementation Plan
@@ -80,4 +80,6 @@ Full spec: doit/TASK-9.6/spec.md
 AC added from TASK-8.2 follow-up (doc-115).
 
 Build: 'hinted' tag after the grade badge for hinted stored decisions; entry top row wraps; npm test 1232 passed, Playwright 250 passed; gate PASS.
+
+Judge r1 PASS 9/9; live hint plans in Chromium+WebKit matched stored hinted flags; playtest 0 violations; CI green.
 <!-- SECTION:NOTES:END -->

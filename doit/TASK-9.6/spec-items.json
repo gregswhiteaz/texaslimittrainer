@@ -3,54 +3,54 @@
     "id": "SPEC-01",
     "verifies": "AC#1, DoD#1",
     "verification": "acceptance `tests/ui/review-hinted.acceptance.test.tsx::only the flop entry, hinted at the flop, shows the hinted tag`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-02",
     "verifies": "AC#2, DoD#1",
     "verification": "acceptance `tests/ui/review-hinted.acceptance.test.tsx::a hinted Major error shows Major error and hinted`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-03",
     "verifies": "AC#3, DoD#1",
     "verification": "acceptance `tests/ui/review-hinted.acceptance.test.tsx::a hand with no hinted decision shows no hinted tag`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-04",
     "verifies": "AC#4, DoD#1",
     "verification": "acceptance `tests/ui/review-hinted.acceptance.test.tsx::hint opened and hidden at the first of several decisions tags only the first entry`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-05",
     "verifies": "AC#1, DoD#7, DoD#8",
     "verification": "acceptance `e2e/review-hinted.spec.ts::opening Hint at the flop tags only the flop entry in the review`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-06",
     "verifies": "AC#4, DoD#7",
     "verification": "acceptance `e2e/review-hinted.spec.ts::hint opened and hidden at the first decision tags only the first review entry`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-07",
     "verifies": "DoD#2, DoD#3, DoD#4, DoD#5, DoD#6, DoD#8",
     "verification": "command `npm run lint && npm run typecheck && npm test && npx vitest run tests/golden/ && npm run -s playtest -- --hands 10000 --seed 42`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-08",
     "verifies": "DoD#7, DoD#10",
     "verification": "command `npm run e2e && gh run list --branch doit/TASK-9.6 --limit 1`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-09",
     "verifies": "DoD#9, DoD#11, DoD#12",
     "verification": "manual read `docs/ui/review.md`; `backlog doc list --plain` lists the TASK-9.6 doc",
-    "status": "pending"
+    "status": "pass"
   }
 ]
