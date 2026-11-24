@@ -1,0 +1,73 @@
+{
+  "task": "TASK-2.6",
+  "phase": "fix",
+  "run": 3,
+  "result": "FAIL",
+  "changed_lines": 1234,
+  "changed_files": [
+    "docs/storage/sessions.md",
+    "e2e/resume.spec.ts",
+    "e2e/support/hand-records.ts",
+    "e2e/support/records-harness.tsx",
+    "src/storage/hand-store.ts",
+    "src/table/hand-record.ts",
+    "src/table/session-record.ts",
+    "src/table/table-view.ts",
+    "src/ui/App.tsx",
+    "src/ui/home/HomeScreen.tsx",
+    "src/ui/styles.css",
+    "src/ui/table/TableScreen.tsx",
+    "src/ui/table/useTableSession.ts",
+    "tests/storage/resume.acceptance.test.ts",
+    "tests/support/session-play.ts",
+    "tests/table/resume.acceptance.test.ts",
+    "tests/ui/home-resume.acceptance.test.tsx"
+  ],
+  "checks": [
+    {
+      "name": "test command",
+      "status": "fail",
+      "detail": "$ npm test\nexit 1\n\n> tlh-trainer@0.0.0 test\n> vitest run --coverage\n\n\n RUN  v5.1.0 /Users/gregwhite/Documents/claudeworkspaces/limitholdem\n      Coverage enabled with v8\n\n\n\u23af\u23af\u23af\u23af\u23af\u23af Unhandled Error \u23af\u23af\u23af\u23af\u23af\u23af\u23af\nError: The coverage report directory \"/Users/gregwhite/Documents/claudeworkspaces/limitholdem/coverage\" is already in use by another Vitest process (pid 56219). Running coverage for multiple Vitest processes in the same directory at the same time is not supported, because they would delete each other's reports.\nGive each run its own \"coverage.reportsDirectory\" (e.g. --coverage.reportsDirectory=coverage-56665) or run them sequentially.\n \u276f ReportsDirectoryLock.inUseError node_modules/vitest/dist/chunks/cli-api.COfZo8lK.js:7513:26\n \u276f ReportsDirectoryLock.acquire node_modules/vitest/dist/chunks/cli-api.COfZo8lK.js:7482:54\n \u276f V8CoverageProvider.clean node_modules/vitest/dist/chunks/cli-api.COfZo8lK.js:7066:3\n \u276f node_modules/vitest/dist/chunks/cli-api.COfZo8lK.js:13264:6\n \u276f node_modules/vitest/dist/chunks/cli-api.COfZo8lK.js:13262:5\n \u276f startVitest node_modules/vitest/dist/chunks/cli-api.COfZo8lK.js:14572:8\n \u276f start node_modules/vitest/dist/chunks/cac.BYbt0aJp.js:2382:15\n \u276f CAC.run node_modules/vitest/dist/chunks/cac.BYbt0aJp.js:2358:2\n\n\n\n\n"
+    },
+    {
+      "name": "lint command",
+      "status": "pass",
+      "detail": "$ npm run lint\nexit 0\n\n> tlh-trainer@0.0.0 lint\n> node tools/lint/sync-copies.js && eslint . --max-warnings 0 && prettier --check .\n\nChecking formatting...\nAll matched files use Prettier code style!\n"
+    },
+    {
+      "name": "typecheck command",
+      "status": "pass",
+      "detail": "$ npm run typecheck\nexit 0\n\n> tlh-trainer@0.0.0 typecheck\n> tsc -p tsconfig.json\n\n"
+    },
+    {
+      "name": "spec unchanged",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "name": "scope budget (lines)",
+      "status": "pass",
+      "detail": "1234 changed lines vs budget 1300 (fail above 2600)"
+    },
+    {
+      "name": "scope budget (files)",
+      "status": "pass",
+      "detail": "17 files vs budget 17"
+    },
+    {
+      "name": "files outside spec",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "name": "all changes listed in changes.md",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "name": "test integrity",
+      "status": "pass",
+      "detail": ""
+    }
+  ]
+}

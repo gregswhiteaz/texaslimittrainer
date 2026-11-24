@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-24T01:23:00Z'
+updated_date: '2026-11-24T01:37:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -88,4 +88,6 @@ Full spec: doit/TASK-2.6/spec.md
 AC added from TASK-6.7 security review MINOR (lineUpSessionConfig trusts seat kind/style)
 
 AC added from TASK-3.10 judge J-1-02.
+
+Build: findPausedSession + HandStore.pausedSession, endedAt (read-only), MAX_SESSION_COUNT cap, Home Resume entry with resumeSummary subtitle, App restore + resume option keeping the stored session id; npm test 994 passed, e2e 190 passed; gate PASS
 <!-- SECTION:NOTES:END -->
