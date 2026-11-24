@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-19T01:10:00Z'
-updated_date: '2026-11-24T04:39:00Z'
+updated_date: '2026-11-24T04:54:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -32,13 +32,13 @@ Promised to the user in TASK-3.4 Q-4. Until all-ins exist the engine refuses sta
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Given a seat below the old $96 minimum, When the next hand is dealt, Then its stack is not topped up — it plays its chips (or goes to Rebuy / bot replacement at $0) — and the interim top-up in nextHand is removed
-- [ ] #2 Given a seat that ends a hand with $95 at $4/$8, When the next hand is dealt, Then that seat starts the hand with $95, and a test proves it
-- [ ] #3 Given src/table/session.ts, When it is searched, Then the comment 'TEMPORARY (TASK-3.4 Q-4)' and the top-up code are gone, and TASK-3.4's SPEC-10/SPEC-11 tests are updated to the new rule
-- [ ] #4 Given the top-up is removed and the user is short, When the action bar is shown in the live app, Then the all-in labels from TASK-3.7 ('Call all-in $X', 'Bet all-in $X', 'Raise all-in to $X') appear, proven by an e2e test on the real session
-- [ ] #5 Given the top-up is removed, When a real all-in with unequal stacks happens in live play, Then the table shows the TASK-3.8 'Pots' list and the result shows 'Pot winners' lines, proven by an e2e test on the real session
-- [ ] #6 Given a sit-and-go seat busts or runs short, When the next hand is dealt, Then it is never refilled (no top-up of any amount), per REQ-008 — TASK-2.4 left the interim top-up refilling sng short stacks to 20 big bets (800 at 20/40)
-- [ ] #7 Given a stored busted cash session whose rebuys equals MAX_SESSION_COUNT, When the user chooses Rebuy, Then rebuy() refuses with a RangeError (or does not increment past the cap) and no record above the cap is ever written
+- [x] #1 Given a seat below the old $96 minimum, When the next hand is dealt, Then its stack is not topped up — it plays its chips (or goes to Rebuy / bot replacement at $0) — and the interim top-up in nextHand is removed
+- [x] #2 Given a seat that ends a hand with $95 at $4/$8, When the next hand is dealt, Then that seat starts the hand with $95, and a test proves it
+- [x] #3 Given src/table/session.ts, When it is searched, Then the comment 'TEMPORARY (TASK-3.4 Q-4)' and the top-up code are gone, and TASK-3.4's SPEC-10/SPEC-11 tests are updated to the new rule
+- [x] #4 Given the top-up is removed and the user is short, When the action bar is shown in the live app, Then the all-in labels from TASK-3.7 ('Call all-in $X', 'Bet all-in $X', 'Raise all-in to $X') appear, proven by an e2e test on the real session
+- [x] #5 Given the top-up is removed, When a real all-in with unequal stacks happens in live play, Then the table shows the TASK-3.8 'Pots' list and the result shows 'Pot winners' lines, proven by an e2e test on the real session
+- [x] #6 Given a sit-and-go seat busts or runs short, When the next hand is dealt, Then it is never refilled (no top-up of any amount), per REQ-008 — TASK-2.4 left the interim top-up refilling sng short stacks to 20 big bets (800 at 20/40)
+- [x] #7 Given a stored busted cash session whose rebuys equals MAX_SESSION_COUNT, When the user chooses Rebuy, Then rebuy() refuses with a RangeError (or does not increment past the cap) and no record above the cap is ever written
 <!-- AC:END -->
 
 ## Implementation Plan
@@ -69,4 +69,6 @@ From TASK-6.8: cash bots on $0 are now replaced (not topped up) and a bot on $1�
 AC added from TASK-3.11 follow-up (security MINOR rebuy-count-unbounded-increment, doc-109). Also while in session.ts / BustDialog.tsx: reflow the nextHand docstring (code MINOR nextHand-doc-awkward-reflow) and add a one-line comment on BustDialog's Escape onKeyDown (Chromium closes a modal on a second Escape without a cancelable cancel event; NIT escape-keydown-unexplained).
 
 Build: top-up removed, sit-and-go stops at first bust ('stopped' step), rebuy cap, locked re-pins (TASK-3.4 next-hand 45/45 expects, TASK-3.11 rebuy 82/82); npm test 1013 passed; gate PASS. Recorded deviations in doit/TASK-3.21/fix-brief.md (A-4 browser-checked values $54/$124, 14th file type-only, Deal next hand click, axe timing).
+
+Judge r1 PASS 11/11; CI 45328577616 green on b865507; playtest 10k seed 42 byte-identical to base.
 <!-- SECTION:NOTES:END -->
