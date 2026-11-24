@@ -9,7 +9,8 @@
   justification no longer says "call with a few pairs".
 - `tests/golden/postflop-spots.json` — new: 120 authored postflop spots (45 flop, 40 turn, 35 river; 86 6-max,
   18 heads-up, 16 full ring; 20 multiway; 4 with observed opponent stats). FIX r1: justification wording corrected
-  (made-hand / draw names) in 11 spots.
+  (made-hand / draw names) in 11 spots. FIX r2: `6max-turn-btn-bet-94o` trailing-hands clause and
+  `hu-river-bb-call-tt` missed-draws clause corrected.
 - `tests/golden/graded-examples.json` — new: 9 graded examples (A-6), all postflop ones on exact-enumeration spots. FIX r1:
   open-ender example renamed `graded-postflop-fold-minor-6max-flop-gutshot`, text says gutshot.
 - `tests/golden/postflop.acceptance.test.ts` — new acceptance tests (SPEC-01..05, SPEC-10).

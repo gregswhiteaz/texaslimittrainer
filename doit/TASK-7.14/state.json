@@ -7,14 +7,14 @@
   "review_round": 2,
   "judge_round": 0,
   "sendbacks": 0,
-  "gate_runs": 4,
+  "gate_runs": 6,
   "questions": 1,
   "assumptions": 8,
   "escalations": 0,
   "item_failures": {},
   "locked_tests": {
     "tests/golden/graded-examples.json": "305d2a6911179fd4cf04ce3d570aaa9c19dca009127b28f7eea9e6dbcfd33ae4",
-    "tests/golden/postflop-spots.json": "51fcc4b6607a427f5cdc19472b064f41df7f0c2449a66f293228d129d6fcf25b",
+    "tests/golden/postflop-spots.json": "edad48485a180de4cd1c457f84df8bc92a4bda3c364c880feb48e59067f5a660",
     "tests/golden/postflop.acceptance.test.ts": "4469df95046d3de3d28cb2a2b4505f2cd8cbd39366d0414c9dc4b0e8cf4d7bda",
     "tests/golden/suite.acceptance.test.ts": "90198a895b0e5c2db04ab19899b52483647ecd159113cfd052edd4033387ff97"
   },
@@ -30,7 +30,7 @@
       "skips": 0
     },
     "tests/golden/postflop-spots.json": {
-      "sha": "51fcc4b6607a427f5cdc19472b064f41df7f0c2449a66f293228d129d6fcf25b",
+      "sha": "edad48485a180de4cd1c457f84df8bc92a4bda3c364c880feb48e59067f5a660",
       "asserts": 0,
       "skips": 0
     },
@@ -1471,9 +1471,7 @@
     "1": 2,
     "2": 1
   },
-  "relock_pending": [
-    "tests/golden/postflop-spots.json"
-  ],
+  "relock_pending": [],
   "brief_history": {
     "tests/golden/postflop-spots.json:justifications-misname-made-hand": [
       "review r1"

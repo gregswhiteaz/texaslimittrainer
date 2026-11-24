@@ -609,7 +609,7 @@
       "board": "Qc 6s 4d Qh",
       "before": ["fold", "fold", "fold", "raise", "fold", "call", "check", "check", "check"],
       "action": "bet",
-      "justification": "Fours and queens is really a pair of fours with the board's queens, but the big blind has checked twice and holds few queens. Bet as a value bet, since the sixes and small pairs that call trail our hand."
+      "justification": "Fours and queens is really a pair of fours with the board's queens, but the big blind has checked twice and holds few queens. Bet as a value bet, since the deuces, threes and weaker fours that call trail our hand."
     },
     {
       "id": "6max-turn-utg-bet-k3o",
@@ -1687,7 +1687,7 @@
       "board": "Kc 9c Ah 5s 6c",
       "before": ["call", "check", "bet", "call", "check", "bet", "call", "check", "bet"],
       "action": "call",
-      "justification": "Pocket tens are under the ace and king, yet in a limped heads-up pot the button also bets missed club draws and weaker pairs here. With pot odds near one in six, calling one more big bet is the right price."
+      "justification": "Pocket tens are under the ace and king, yet in a limped heads-up pot the button also bets missed straight draws, bluffs and weaker pairs here, though the river club completes some flushes. With pot odds near one in six, calling one more big bet is the right price."
     },
     {
       "id": "hu-river-btn-fold-t7s",
