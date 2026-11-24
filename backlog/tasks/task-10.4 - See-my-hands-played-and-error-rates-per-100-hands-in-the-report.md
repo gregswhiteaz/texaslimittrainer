@@ -1,11 +1,11 @@
 ---
 id: TASK-10.4
 title: See my hands played and error rates per 100 hands in the report
-status: In Progress
+status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-24T22:38:00Z'
+updated_date: '2026-11-24T22:39:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -17,6 +17,7 @@ references:
 documentation:
   - doc-1
   - doc-2
+  - doc-127
 parent_task_id: TASK-10
 priority: high
 type: feature
@@ -79,4 +80,12 @@ Full spec: doit/TASK-10.4/spec.md
 Build: report stores unhinted Major/Minor error counts once at session end; rate tiles (Hands played, Major/Minor errors /100); npm test 1291 passed, Playwright 302 passed; gate PASS.
 
 Judge r1 PASS 12/12; live Chromium+WebKit report rates match independent recount (hinted excluded, forced fold adds no error); CI 45501129314 green.
+
+Follow-ups: none tracked. Unneeded cast (MINOR) and half-up boundary case (NIT) change no behaviour; rate-tile row vs storyboard (A-2) is listed for user review; SPEC-04 local runtime below the infra value bar.
 <!-- SECTION:NOTES:END -->
+
+## Final Summary
+
+<!-- SECTION:FINAL_SUMMARY:BEGIN -->
+Session Report now shows Hands played, Major errors /100 and Minor errors /100 tiles in a 'Volume and errors' list. Counts of unhinted Major/Minor decisions are stored once on the report as optional errors {major, minor} at session end; rates are derived at display with one decimal (half-up). Hinted decisions and forced folds are excluded. Verified: npm test 1291 pass, lint/typecheck clean, Chromium and WebKit e2e with axe, judge 12/12. Review: Q-1 (stored errors counts), A-1..A-6 (esp. A-2: tiles in their own row, not the storyboard's single row; A-3: old reports show no tiles). Follow-ups: unneeded cast (MINOR), half-up boundary test (NIT); SPEC-04 adds ~40 s to local npm test under coverage.
+<!-- SECTION:FINAL_SUMMARY:END -->
