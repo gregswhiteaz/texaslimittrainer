@@ -1,11 +1,11 @@
 ---
 id: TASK-3.11
 title: Rebuy or leave when my stack runs out
-status: In Progress
+status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-24T04:02:00Z'
+updated_date: '2026-11-24T04:03:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -17,6 +17,7 @@ references:
 documentation:
   - doc-1
   - doc-2
+  - doc-109
 parent_task_id: TASK-3
 priority: high
 type: feature
@@ -86,4 +87,12 @@ TASK-3.4 Q-4 interim top-up to $160 must be removed once this and the other all-
 Build: user bust at $0 shows 'Out of chips' dialog (Rebuy $160 / Leave table), $0 user seat storable (cash), rebuys capped and stored with next hand; npm test 1007 passed, e2e 212 passed; gate PASS. Prior-story test type annotation widened (session.acceptance.test.ts, no assertion change).
 
 Judge r1 PASS 17/17; CI 45322832954 green.
+
+Follow-ups: TASK-3.21 AC added (rebuy cap) + note (docstring reflow, Escape comment); TASK-2.20 AC added (Back after reload+Resume, J-1-01). Already owned: real-play bust reach (TASK-3.21), Continue label (TASK-9.2), session end (TASK-10.1).
 <!-- SECTION:NOTES:END -->
+
+## Final Summary
+
+<!-- SECTION:FINAL_SUMMARY:BEGIN -->
+Added the cash-game bust flow: when a hand leaves the user on $0 a modal 'Out of chips' dialog offers Rebuy ($160, rebuys +1, next hand dealt) or Leave table (pauses to Home), and nothing is dealt meanwhile. The session record now stores the user's $0 seat and the rebuys count, so Resume reopens the dialog. Verified: lint, typecheck and 1007 tests pass; 212 e2e pass in Chromium and WebKit with axe; judge round 1 passed 17/17. To review: Q-1 (persisted $0 user seat), Q-2 (dialog copy), the type-only edit to session.acceptance.test.ts and the re-pinned next-hand test, and assumptions A-1..A-6. Risks and follow-ups: the bust is reachable in real play only from exactly $96 until TASK-3.21; rebuy() count is not capped (MINOR); a docstring reflow and an Escape-handler comment (MINOR/NIT); Back-after-reload then Resume stays on the Table (J-1-01).
+<!-- SECTION:FINAL_SUMMARY:END -->
