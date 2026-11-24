@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-17T23:03:00Z'
-updated_date: '2026-11-24T02:41:00Z'
+updated_date: '2026-11-24T02:59:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -85,4 +85,6 @@ Full spec: doit/TASK-2.14/spec.md
 AC added from TASK-2.1 follow-up (doc-23).
 
 AC added from TASK-2.6 follow-up (security MINOR next-bot-name-uncapped, doc-107).
+
+Build: Table header Home button, tableWritesSettled before Home's read, keyed Table history entry + popstate pause, nextBotName cap; npm test 997 passed, e2e 204 passed; gate PASS
 <!-- SECTION:NOTES:END -->
