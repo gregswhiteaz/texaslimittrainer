@@ -1,0 +1,82 @@
+{
+ "round": 1,
+ "test_suite": {
+  "command": "npm test",
+  "result": "PASS",
+  "passed": 1221,
+  "failed": 0,
+  "notes": "251 files passed, 3 skipped (43 tests skipped, pre-existing opt-in). Exit 0 with coverage thresholds met. Lint and typecheck clean. tests/golden 282/282. playtest 10,000 hands seed 42: 0 invariant violations."
+ },
+ "end_to_end": {
+  "command": "npx playwright test e2e/review-header.spec.ts e2e/review.spec.ts e2e/review-numbers.spec.ts e2e/bust-continue.spec.ts e2e/showdown-shown.spec.ts, plus an independent live-app run (built app via preview, Chromium and WebKit, 6 hands each with mixed call/raise play)",
+  "result": "PASS",
+  "expected": "After each hand the review header shows 'You won $X' / 'You lost $X' / 'You broke even' equal to the user's stack at the result minus the stored record's starting stack, the user's seat cards, the seat's position label, and 'Hand #N · Replay code <record.replayCode>' in 12px. The code appears only inside the panel and is gone after Close and during the next hand.",
+  "actual": "Spec e2e: 20/20 passed. Live run: 24 reviewed hands, all matched. Positions covered: Cutoff, Hijack, Under the gun, Big blind, Small blind, Button. Results ranged from 'You lost $96' to 'You won $186'. The replay code equals the stored record's for each hand and appears exactly once on the page. After Close and in the next hand it is absent. No horizontal overflow. Only same-origin requests. In the scene screenshot (WebKit), the subtitle 'You lost $48 · A♥ 9♠ · Cutoff' fits on one line under the heading, with the replay line below it in small monospace text. The seat shows Stack $112 (= 160 − 48)."
+ },
+ "integrity": {
+  "result": "PASS",
+  "notes": "doit.py test-integrity TASK-9.4 exits 0 with no output. The diff from 75ef085 modifies no existing test files: only new tests and the two support files (new fixtures, a new scene). Product code has no special-casing of fixture values or the scenario code. netResult is a general sum over awards, returned and actions. No mocks of the unit under test."
+ },
+ "items": [
+  {
+   "spec": "SPEC-01",
+   "result": "PASS",
+   "evidence": "The acceptance test passes. It asserts the h2 text, that the summary comes directly after </h2>, the result/cards/position parts, the exact stripped text, and the banned strings. Holdout: rendered TableView over all 14 finished-hand fixtures plus 266 random hands. The result span always equals the stack-change wording. Separate ReviewPanel render: part order is heading, then summary, then replay, then Close; HTML in the position is escaped."
+  },
+  {
+   "spec": "SPEC-02",
+   "result": "PASS",
+   "evidence": "The acceptance test passes ('You won $56', Ah As, Cutoff). Holdout random sessions produced 99 wins, each matching the stack change."
+  },
+  {
+   "spec": "SPEC-03",
+   "result": "PASS",
+   "evidence": "The acceptance test passes. It asserts one replay element with class review-replay, the exact text, a code equal to handRecord's, absence when review is null/closed/entries null, and the CSS font-size comparisons. Holdout: for every fixture and random hand, the replay line text is 'Hand #N · Replay code <code>' and equals handRecord().replayCode. With the panel closed the markup has no code. A ReviewPanel without a summary or with summary null shows no summary and no replay line."
+  },
+  {
+   "spec": "SPEC-04",
+   "result": "PASS",
+   "evidence": "The unit tests pass (the fixture nets, net equal to stack change, the returned amount counted, the resultText cases). Holdout: netResult equals the final stack minus the starting stack for 14 fixtures and 266 random hands. These cover 2, 3, 6, 9 and 10 seats, cash and sit-and-go, and include 26 broke-even hands. resultText(0 and -0) gives 'You broke even'; ±1 and 1500 are worded correctly."
+  },
+  {
+   "spec": "SPEC-05",
+   "result": "PASS",
+   "evidence": "The unit test passes (full toEqual on the REVIEW_LOST_48 summary, plus SHOWN_HANDS Big blind and TEN_SEAT Cutoff equal to tableView's position). Holdout: position equals tableView's user-seat position for every fixture and random hand, heads-up included. holeCards equal userHoleCards, and replayCode and handNumber are passed through."
+  },
+  {
+   "spec": "SPEC-06",
+   "result": "PASS",
+   "evidence": "e2e/review-header.spec.ts live test passed in Chromium and WebKit. Independent holdout live run (unstubbed random codes, 6 hands × 2 browsers) matched the stored records, seat cards, seat position and stack change every time. Replay font is 12px. Requests are same-origin only."
+  },
+  {
+   "spec": "SPEC-07",
+   "result": "PASS",
+   "evidence": "The scene test passed in both browsers. Holdout scene check: the summary is a single line (height < 45px) and the cards are 24×34. The screenshot confirms the layout below the heading and above the entries, with no overflow."
+  },
+  {
+   "spec": "SPEC-08",
+   "result": "PASS",
+   "evidence": "lint, typecheck and npm test all exit 0. Golden 282/282. Playtest 10,000 hands: 0 invariant violations. No changes under src/engine, src/bots, src/advice or src/stats. No new network calls."
+  },
+  {
+   "spec": "SPEC-09",
+   "result": "PASS",
+   "evidence": "npm run e2e: 240 passed, 16 skipped (pre-existing), 0 failed, in Chromium and WebKit, including the locked review, review-numbers, bust-continue and showdown-shown specs. gh run list: CI 45406330309 and Visual 45406330219 on the review r1 commit both completed with success."
+  },
+  {
+   "spec": "SPEC-10",
+   "result": "PASS",
+   "evidence": "docs/ui/review.md has the retitled heading and a Header section covering the heading, the result / 'Your hole cards' / position parts, the net-result rule, and the replay line. It states the code is the record's replayCode and is shown only after the hand. No serviceWorker in src, so DoD#12 N/A holds. 'backlog doc list --plain' does not list a TASK-9.4 doc yet; in this workflow it is published at the docs step after judging (see J-1-01)."
+  }
+ ],
+ "findings": [
+  {
+   "id": "J-1-01",
+   "severity": "LOW",
+   "spec": "SPEC-10",
+   "expected_vs_actual": "Expected 'backlog doc list --plain' to list a TASK-9.4 story doc; actual: not listed yet (the latest TASK-9 doc is doc-117 for TASK-9.3).",
+   "fix": "Publish the TASK-9.4 story doc to Backlog.md at the docs step."
+  }
+ ],
+ "summary": "All 10 SPEC items PASS. Unit, acceptance and e2e suites are green. Independent property checks over 280 hands confirm the header's net result equals the stack change, its position equals the seat label, and its replay code equals the stored record's, in Chromium and WebKit. No tampering. One LOW finding: the Backlog doc is not yet published (docs step)."
+}
