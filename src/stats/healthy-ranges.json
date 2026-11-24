@@ -1,0 +1,87 @@
+{
+  "format": "tlh-healthy-ranges",
+  "version": 1,
+  "ranges": {
+    "heads-up": {
+      "vpip": {
+        "low": 65,
+        "high": 90,
+        "justification": "Heads-up you post a blind in every hand against a single opponent, so most starting hands are worth playing and folding much more than a third of them gives your blinds away."
+      },
+      "pfr": {
+        "low": 40,
+        "high": 75,
+        "justification": "With only one opponent the first raise often takes the pot straight away, so you should raise most hands you play from the button and a fair share from the big blind."
+      },
+      "aggression": {
+        "low": 50,
+        "high": 70,
+        "justification": "One opponent misses the flop most of the time, so your bets and raises should clearly outnumber your calls, while some calls with strong hands let a bluffer keep betting."
+      },
+      "wtsd": {
+        "low": 40,
+        "high": 55,
+        "justification": "Heads-up even ace-high often wins, so you should reach showdown in a large share of the flops you see, but not with every hand that misses."
+      },
+      "wsd": {
+        "low": 46,
+        "high": 56,
+        "justification": "Heads-up you should win about half of your showdowns, since a much higher rate means you fold too often and a much lower one means you call with too little."
+      }
+    },
+    "6-max": {
+      "vpip": {
+        "low": 20,
+        "high": 28,
+        "justification": "At six players about one hand in four is strong enough to play, because the blinds come round often but several opponents still act after you."
+      },
+      "pfr": {
+        "low": 14,
+        "high": 22,
+        "justification": "Most hands worth playing at six players are worth a raise, so your raising rate should sit only a few points below your VPIP."
+      },
+      "aggression": {
+        "low": 50,
+        "high": 66,
+        "justification": "In fixed limit the bettor wins the pot whenever everyone folds, so after the flop a solid player bets and raises more often than they call."
+      },
+      "wtsd": {
+        "low": 30,
+        "high": 42,
+        "justification": "At six players you should go to showdown with roughly a third of the flops you see, folding the hands that miss and cannot pay the price of a bet."
+      },
+      "wsd": {
+        "low": 47,
+        "high": 57,
+        "justification": "A sound six-player style wins about half of its showdowns or a little more, and a much lower rate means you call down with too many weak hands."
+      }
+    },
+    "full-ring": {
+      "vpip": {
+        "low": 13,
+        "high": 20,
+        "justification": "With nine or ten players someone behind you holds a strong hand more often, so only about one hand in six is worth playing."
+      },
+      "pfr": {
+        "low": 9,
+        "high": 16,
+        "justification": "At a full table you should still raise most of the hands you play, so your raising rate stays only a few points below your VPIP."
+      },
+      "aggression": {
+        "low": 50,
+        "high": 66,
+        "justification": "A full table does not change the value of betting first after the flop, so your bets and raises should still outnumber your calls."
+      },
+      "wtsd": {
+        "low": 28,
+        "high": 40,
+        "justification": "At a full table you see flops with stronger hands but against more opponents, so reaching showdown with about a third of your flops is a healthy balance."
+      },
+      "wsd": {
+        "low": 47,
+        "high": 57,
+        "justification": "Because you enter full-ring pots with stronger hands, you should win about half of the showdowns you reach or slightly more."
+      }
+    }
+  }
+}

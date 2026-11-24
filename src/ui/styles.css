@@ -143,6 +143,55 @@ h1[tabindex='-1']:focus {
   font-weight: 700;
 }
 
+.report-style {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+  background: #1a1d22;
+  border: 1px solid #343a43;
+  border-radius: 10px;
+}
+
+.report-style h2 {
+  margin: 0;
+  font-size: 17px;
+}
+
+.report-style-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 15px;
+}
+
+.report-style-name {
+  display: inline-block;
+  min-width: 96px;
+  font-weight: 700;
+}
+
+.report-style-range {
+  color: #a7aeb8;
+}
+
+.report-style-label[data-label='in-range'] {
+  color: #5fd38d;
+}
+
+.report-style-label[data-label='too-high'],
+.report-style-label[data-label='too-low'] {
+  color: #ffb44c;
+}
+
+.report-style-label[data-label='no-data'] {
+  color: #a7aeb8;
+  font-weight: 400;
+}
+
 .screen .report-home {
   align-self: flex-start;
   padding: 0 24px;

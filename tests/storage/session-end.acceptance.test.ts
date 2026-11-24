@@ -9,7 +9,7 @@ import {
   SESSIONS_STORE,
   openHandStore,
 } from '../../src/storage/hand-store';
-import type { HandStore } from '../../src/table/hand-record';
+import type { HandRecord, HandStore } from '../../src/table/hand-record';
 import { seatSession, type TableState } from '../../src/table/session';
 import { handWrite, sessionRecord } from '../../src/table/session-record';
 import { sessionReport } from '../../src/table/session-report';
@@ -65,7 +65,10 @@ describe('session end storage acceptance', () => {
     const ended = at(30);
 
     const report = await store.endSession(SESSION_A, ended);
-    expect(report).toEqual(sessionReport(stored as NonNullable<typeof stored>, ended));
+    const hands = await Promise.all([1, 2, 3].map(async (n) => store.get(SESSION_A, n)));
+    expect(report).toEqual(
+      sessionReport(stored as NonNullable<typeof stored>, ended, hands as HandRecord[]),
+    );
     expect(report?.handsPlayed).toBe(3);
 
     const relaunched = openHandStore(factory);

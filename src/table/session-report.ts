@@ -1,3 +1,10 @@
+import type { SeatNumber } from '../engine/hand';
+import {
+  addStyleCounts,
+  handStyleCounts,
+  type StatHand,
+  type StyleCounts,
+} from '../stats/style-stats';
 import { isWhole } from './hand-record';
 import { buyIn, MAX_SESSION_COUNT, tableStake, type GameType, type Stake } from './session';
 import type { SessionRecord } from './session-record';
@@ -33,7 +40,13 @@ export interface SessionReport {
   readonly handsPlayed: number;
   /** null iff sit-and-go (A-3). */
   readonly cash: CashResult | null;
+  /** The user's style counts over the session's stored hands. Absent on reports without stored hands
+   *  (TASK-10.3 A-4). */
+  readonly style?: StyleCounts;
 }
+
+/** A stored hand as the report needs it; HandRecord satisfies it. */
+export type ReportHand = StatHand & { readonly userSeat: SeatNumber };
 
 /** The result of SessionEnder.endPausedSessions. */
 export interface PausedSessionsEnd {
@@ -85,9 +98,13 @@ export function bbPer100(result: number, bigBet: number, hands: number): number 
   return tenths === 0 ? 0 : tenths / 10;
 }
 
-/** The report of `session` ended at `endedAt`. RangeError('Invalid session report: <field>') for 0 hands
- *  played or an invalid Date. */
-export function sessionReport(session: SessionRecord, endedAt: Date): SessionReport {
+/** The report of `session` ended at `endedAt`, with `style` summed over `hands` (absent when `hands` is
+ *  omitted or empty). RangeError('Invalid session report: <field>') for 0 hands played or an invalid Date. */
+export function sessionReport(
+  session: SessionRecord,
+  endedAt: Date,
+  hands: readonly ReportHand[] = [],
+): SessionReport {
   if (session.handsPlayed === 0) throw invalid('handsPlayed');
   if (Number.isNaN(endedAt.getTime())) throw invalid('endedAt');
   const { config, handsPlayed, rebuys } = session;
@@ -105,7 +122,7 @@ export function sessionReport(session: SessionRecord, endedAt: Date): SessionRep
       bbPer100: bbPer100(result, bigBet, handsPlayed),
     };
   }
-  return {
+  const report: SessionReport = {
     sessionId: session.sessionId,
     startedAt: session.startedAt,
     endedAt: endedAt.toISOString(),
@@ -115,6 +132,11 @@ export function sessionReport(session: SessionRecord, endedAt: Date): SessionRep
     handsPlayed,
     cash,
   };
+  if (hands.length === 0) return report;
+  const style = hands
+    .map((hand) => handStyleCounts(hand, hand.userSeat))
+    .reduce((total, counts) => addStyleCounts(total, counts));
+  return { ...report, style };
 }
 
 type Fields = Readonly<Record<string, unknown>>;
@@ -137,6 +159,21 @@ function isoString(value: unknown, field: string): void {
   ) {
     throw invalid(field);
   }
+}
+
+/** Validates stored style counts in StyleCounts field order; each inequality fails on its left-hand field. */
+function parseStyle(value: unknown, handsPlayed: number): void {
+  const style = object(value, 'style');
+  const count = (field: keyof StyleCounts, max = Number.MAX_SAFE_INTEGER): number =>
+    whole(style[field], `style.${field}`, 0, max);
+  const dealt = whole(style.handsDealt, 'style.handsDealt', 1, handsPlayed);
+  const voluntary = count('voluntary', dealt);
+  count('preflopRaised', voluntary);
+  count('postflopAggressive');
+  count('postflopCalls');
+  const sawFlop = count('sawFlop', dealt);
+  const showdowns = count('showdowns', sawFlop);
+  count('showdownsWon', showdowns);
 }
 
 /** Validates an untrusted stored report; returns it typed, not copied. Unknown extra properties are ignored.
@@ -167,6 +204,7 @@ export function parseSessionReport(value: unknown): SessionReport {
     if (cash.result !== result) throw invalid('cash.result');
     if (cash.bbPer100 !== bbPer100(result, bigBet, hands)) throw invalid('cash.bbPer100');
   }
+  if (report.style !== undefined) parseStyle(report.style, hands);
   return value as SessionReport;
 }
 

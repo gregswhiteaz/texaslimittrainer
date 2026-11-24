@@ -1,4 +1,4 @@
-import { parseHandRecord, type HandStore } from '../table/hand-record';
+import { parseHandRecord, type HandRecord, type HandStore } from '../table/hand-record';
 import {
   findPausedSession,
   isEnded,
@@ -62,10 +62,11 @@ function completed(transaction: IDBTransaction, request: IDBRequest): Promise<vo
 }
 
 /** Ends `sessionId` in `db` (SessionEnder.endSession): every step runs in request callbacks of one strict
- *  transaction, so a failure anywhere changes nothing. */
+ *  transaction, so a failure anywhere changes nothing. The report's style counts come from the session's
+ *  stored hand records; a missing or invalid record is skipped (TASK-10.3 A-7). */
 function ended(db: IDBDatabase, sessionId: string, endedAt: Date): Promise<SessionReport | null> {
   return new Promise((resolve, reject) => {
-    const transaction = db.transaction([SESSIONS_STORE, REPORTS_STORE], 'readwrite', {
+    const transaction = db.transaction([SESSIONS_STORE, REPORTS_STORE, HANDS_STORE], 'readwrite', {
       durability: 'strict',
     });
     const sessions = transaction.objectStore(SESSIONS_STORE);
@@ -76,19 +77,49 @@ function ended(db: IDBDatabase, sessionId: string, endedAt: Date): Promise<Sessi
     read.onsuccess = () => {
       const value: unknown = read.result;
       if (value === undefined) return;
+      let session: SessionRecord;
       try {
-        const session = parseSessionRecord(value);
-        if (session.handsPlayed === 0) {
-          sessions.delete(sessionId);
-          return;
-        }
-        report = sessionReport(session, endedAt);
+        session = parseSessionRecord(value);
       } catch (error) {
         failure = error;
         transaction.abort();
         return;
       }
-      sessions.put({ ...(value as object), endedAt: report.endedAt });
+      if (session.handsPlayed === 0) {
+        sessions.delete(sessionId);
+        return;
+      }
+      const hands = transaction.objectStore(HANDS_STORE);
+      const records: (HandRecord | null)[] = [];
+      let pending = session.handsPlayed;
+      for (let n = 1; n <= session.handsPlayed; n++) {
+        const get = hands.get([sessionId, n]);
+        get.onsuccess = () => {
+          try {
+            records[n - 1] = get.result === undefined ? null : parseHandRecord(get.result);
+          } catch {
+            records[n - 1] = null;
+          }
+          if (--pending === 0) write(value as object, session, records);
+        };
+        get.onerror = () => {
+          failed = get;
+        };
+      }
+    };
+    const write = (value: object, session: SessionRecord, records: (HandRecord | null)[]) => {
+      try {
+        report = sessionReport(
+          session,
+          endedAt,
+          records.filter((r) => r !== null),
+        );
+      } catch (error) {
+        failure = error;
+        transaction.abort();
+        return;
+      }
+      sessions.put({ ...value, endedAt: report.endedAt });
       const add = transaction.objectStore(REPORTS_STORE).add(report);
       add.onerror = () => {
         failed = add;

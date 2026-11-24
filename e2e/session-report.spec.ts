@@ -1,4 +1,5 @@
 import { expect, test, type Browser, type Page } from '@playwright/test';
+import type { HandRecord } from '../src/table/hand-record';
 import { DEFAULT_SESSION_CONFIG, seatSession, type TableState } from '../src/table/session';
 import { sessionRecord, type SessionRecord } from '../src/table/session-record';
 import { bbPer100, sessionReport, signedDollars, signedTenths } from '../src/table/session-report';
@@ -110,7 +111,13 @@ test('Leave table between hands ends the session and opens its saved report', as
   const endedAt = ended.endedAt as string;
   expect(new Date(endedAt).toISOString()).toBe(endedAt);
   const reports = await storedReports(page);
-  expect(reports).toEqual([sessionReport(ended as unknown as SessionRecord, new Date(endedAt))]);
+  expect(reports).toEqual([
+    sessionReport(
+      ended as unknown as SessionRecord,
+      new Date(endedAt),
+      (await storedRecords(page)) as unknown as HandRecord[],
+    ),
+  ]);
   await axeWithPausedClock(page);
 
   const json = JSON.stringify(reports);
