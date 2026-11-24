@@ -4,7 +4,7 @@ title: Migrate my stored data in order when a new version changes the schema
 status: To Do
 assignee: []
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-17T23:22:00Z'
+updated_date: '2026-11-24T09:39:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-2
@@ -51,6 +51,7 @@ Plan key: E13-S04 · Dream: limit-holdem-trainer
 - [ ] #3 Given the migrated fixture, When record counts and the style stats, BB/100 and error rates are recomputed, Then the counts are 1,000, 5 and 4 and every value equals the value computed before migration [REQ-054.2]
 - [ ] #4 Given stores already at the current version, When the app is launched, Then no migration step runs and Home opens [REQ-054.2]
 - [ ] #5 Given a test build whose migrations run while the splash is shown, When the app is launched with version 1 data, Then Home opens only after all steps have completed [REQ-054.2]
+- [ ] #6 Given a stored hand record written before TASK-3.12 (no decisions field), When the schema migration runs, Then the record gains a decisions list consistent with its actions (or is marked unreviewable) so parseHandRecord accepts it and no completed hand is lost from history or stats
 <!-- AC:END -->
 
 ## Definition of Done
@@ -68,3 +69,9 @@ Plan key: E13-S04 · Dream: limit-holdem-trainer
 - [ ] #11 Story documentation is written and published to Backlog.md
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+AC added from TASK-3.12 follow-up (doc-113, Q-4: such records are rejected on read until migrated).
+<!-- SECTION:NOTES:END -->

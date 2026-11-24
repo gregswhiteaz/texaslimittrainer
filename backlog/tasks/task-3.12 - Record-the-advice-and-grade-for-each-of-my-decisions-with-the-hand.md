@@ -1,11 +1,11 @@
 ---
 id: TASK-3.12
 title: Record the advice and grade for each of my decisions with the hand
-status: In Progress
+status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-24T09:37:00Z'
+updated_date: '2026-11-24T09:39:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -18,6 +18,7 @@ references:
 documentation:
   - doc-1
   - doc-2
+  - doc-113
 parent_task_id: TASK-3
 priority: high
 type: chore
@@ -92,4 +93,15 @@ AC#6 reworded per TASK-3.12 Q-2 (auto-accepted): snapshot seats 1-10, matching t
 Build: hand records store one decision entry per user decision (advice + grade = hint, ACTION_RANGE_ADVICE, decision-time snapshot), parseHandRecord validation incl. cross-check, observedBySeat rejects null entries and seats outside 1-10; npm test 1179 passed, 10k --check-advice 0 mismatches; gate PASS. Block 1 resolved (SPEC-01/05 expected values corrected to the hint's options).
 
 Judge r1 PASS 12/12; real app: 44 stored decisions equal the built advice worker; 10k playtest byte-identical to main; CI 45364289815 green.
+
+Follow-ups: TASK-9.3 AC added (review reads stored decisions, plain text, SHOWDOWN fixture); TASK-13.6 AC added (migrate pre-TASK-3.12 records). Already owned: snapshot supply (TASK-8.1). Not tracked: two code NITs (no behaviour change).
 <!-- SECTION:NOTES:END -->
+
+## Final Summary
+
+<!-- SECTION:FINAL_SUMMARY:BEGIN -->
+Each user decision is now stored in the hand record (`decisions`) with recommendation, rule id, equity %, required equity %, per-opponent basis, explanation, grade and a hinted flag (false by default). Advice is computed at hand end from each decision's stored view and decision-time snapshot with the same options as the hint worker, so stored = hint. parseHandRecord validates and cross-checks decisions against actions; estimateOpponentRanges now throws RangeError on bad snapshot entries (seats 1-10).
+Verification: judge round 1 PASS 12/12; npm test 1179 passed; playwright 214 passed; 44/44 live decisions equal the built advice worker; playtest 10,000 hands identical to main, 0 advice mismatches; CI green after fixing an e2e fixture.
+Review: Q-1..Q-4, assumptions A-1..A-7, the AC#6 reword (seats 1-10), the Block 1 expected-value correction and cross-story locked edits (TASK-3.9, TASK-1.55) were auto-accepted.
+Follow-ups: storyboard SHOWDOWN fixture lacks decisions (LOW); snapshots not supplied until TASK-8.1; E09 review should read stored decisions and render text as plain text; old records without decisions are rejected (REQ-054 migration). Full details in doc-113.
+<!-- SECTION:FINAL_SUMMARY:END -->

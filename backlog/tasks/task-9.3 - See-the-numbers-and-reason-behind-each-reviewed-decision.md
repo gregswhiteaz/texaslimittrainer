@@ -4,7 +4,7 @@ title: See the numbers and reason behind each reviewed decision
 status: To Do
 assignee: []
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-23T09:25:00Z'
+updated_date: '2026-11-24T09:39:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -53,6 +53,7 @@ Plan key: E09-S02 · Dream: limit-holdem-trainer
 - [ ] #6 Given each user decision, When it is made, Then its review entry (grade, recommendation, equity, explanation, basis) is computed and stored at decision time off the main thread, replacing the hand-end recomputation in reviewEntries
 - [ ] #7 Given a review entry is computed during play, When grading runs, Then it goes through the advice worker's grade request (src/ui/advice) and never runs on the main thread
 - [ ] #8 Given a reviewed decision, When its numbers and reason are shown, Then the reason is the recommendation's explanation text (TASK-7.10) exactly as returned
+- [ ] #9 Given a stored hand record with decisions (TASK-3.12), When the review panel shows that hand, Then each entry's recommendation, numbers, explanation and grade come from the stored decision (not recomputed), stored text is rendered as plain text (never HTML), and the storyboard SHOWDOWN fixture plays the user's moves through applyUserAction so its record parses
 <!-- AC:END -->
 
 ## Definition of Done
@@ -79,4 +80,6 @@ AC added from TASK-9.1 follow-up (doc-26).
 AC added from TASK-3.6 follow-up (use the worker grade request)
 
 AC added from TASK-7.10 follow-up.
+
+AC added from TASK-3.12 follow-up (doc-113: E09 reads stored decisions; plain-text rendering; judge J-1-01 storyboard fixture).
 <!-- SECTION:NOTES:END -->
