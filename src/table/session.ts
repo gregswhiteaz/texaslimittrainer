@@ -383,8 +383,11 @@ export interface TableState {
   readonly botIds: Readonly<Record<number, number>>;
   /** The id the next replacement bot gets. */
   readonly nextBotId: number;
+  /** The user's rebuys in this session (REQ-007.3). */
+  readonly rebuys: number;
 }
-export type NextStep = 'deal' | 'bot' | 'user' | 'done';
+/** 'rebuy': no hand is dealt and the user is busted, so nothing is dealt until the user rebuys (D-4). */
+export type NextStep = 'deal' | 'bot' | 'user' | 'done' | 'rebuy';
 
 /** Bot ids 1..k for the bot seats in ascending seat order. */
 export function initialBotIds(seats: readonly SessionSeat[]): Readonly<Record<number, number>> {
@@ -415,18 +418,51 @@ export function seatSession(input?: Partial<SessionConfig>): TableState {
     nextBotName: 0,
     botIds,
     nextBotId: Object.keys(botIds).length + 1,
+    rebuys: 0,
+  };
+}
+
+/** D-3: true iff the game is cash and the user has 0 chips between hands: the final stack of a finished hand,
+ *  or the stack before the deal when no hand is dealt. Always false mid-hand. */
+export function userBusted(table: TableState): boolean {
+  const { config, hand } = table;
+  if (config.gameType !== 'cash') return false;
+  if (hand === null) {
+    return table.stacks.find((s) => s.seat === config.userSeat)?.stack === 0;
+  }
+  return hand.result !== null && hand.players.find((p) => p.seat === config.userSeat)?.stack === 0;
+}
+
+/** REQ-007.2: the busted user's stack set to the buy-in and one more rebuy counted; nothing else changes.
+ *  RangeError if a hand is dealt or the user is not busted. */
+export function rebuy(table: TableState): TableState {
+  if (table.hand !== null) throw new RangeError('No rebuy during a hand');
+  const { config } = table;
+  // userBusted already implies cash; the gameType test narrows config for its stake.
+  if (config.gameType !== 'cash' || !userBusted(table)) {
+    throw new RangeError('No rebuy: the user has chips');
+  }
+  const { userSeat, stake } = config;
+  return {
+    ...table,
+    stacks: table.stacks.map((s) =>
+      s.seat === userSeat ? { seat: s.seat, stack: buyIn(stake) } : s,
+    ),
+    rebuys: table.rebuys + 1,
   };
 }
 
 export function nextStep(table: TableState): NextStep {
   const { hand } = table;
-  if (hand === null) return 'deal';
+  if (hand === null) return userBusted(table) ? 'rebuy' : 'deal';
   if (hand.result !== null) return 'done';
   return hand.toAct === table.config.userSeat ? 'user' : 'bot';
 }
 
 export function dealHand(table: TableState, code: ReplayCode): TableState {
-  if (nextStep(table) !== 'deal') throw new RangeError('Not a deal step');
+  const step = nextStep(table);
+  if (step === 'rebuy') throw new RangeError('The user has no chips: rebuy first');
+  if (step !== 'deal') throw new RangeError('Not a deal step');
   const hand = createHand({
     stakes: table.stakes,
     seats: table.stacks,
@@ -450,9 +486,10 @@ export function botActionDelayMs(speed: Speed): number {
 /** REQ-024.3: the pause between a hand's result and the next deal. */
 export const NEXT_HAND_DELAY_MS = 1500;
 
-/** ms until the next hand is dealt: NEXT_HAND_DELAY_MS when the hand is done and not held; else null. */
+/** ms until the next hand is dealt: NEXT_HAND_DELAY_MS when the hand is done, not held and did not bust the
+ *  user; else null. */
 export function nextHandDelay(table: TableState, hold = false): number | null {
-  return nextStep(table) === 'done' && !hold ? NEXT_HAND_DELAY_MS : null;
+  return nextStep(table) === 'done' && !hold && !userBusted(table) ? NEXT_HAND_DELAY_MS : null;
 }
 
 /** REQ-007.5: a new bot's style, styles[replacementGenerator(code, seat).nextIntUnbiased(styles.length)] with
@@ -468,7 +505,8 @@ export function drawReplacementStyle(
   return styles[replacementGenerator(code, seat).nextIntUnbiased(styles.length)] as BotStyle;
 }
 
-/** The session ready for the next deal: final stacks carried, button one seat on, hand number + 1. In cash a
+/** The session ready for the next deal: final stacks carried, button one seat on, hand number + 1. In cash the
+ *  user on $0 is carried at 0 (userBusted). In cash a
  *  bot on $0 is replaced by a new bot (REQ-007.5): next unused replacement name, style drawn from the line-up
  *  with the finished hand's replay code, a fresh buy-in and the next bot id. Throws RangeError if that draw has no replay code. */
 export function nextHand(table: TableState): TableState {
@@ -495,6 +533,8 @@ export function nextHand(table: TableState): TableState {
       seats = seats.map((s) => (s.seat === seat ? { seat, kind: 'bot', name, style } : s));
       return { seat, stack: buyIn(config.stake) };
     }
+    // The busted cash user waits at Rebuy / Leave table on $0 (REQ-007.2).
+    if (config.gameType === 'cash' && stack === 0) return { seat, stack };
     return {
       seat,
       // TEMPORARY (TASK-3.4 Q-4): tops seats below minimumStack back to 20 big bets (the cash buy-in; 800

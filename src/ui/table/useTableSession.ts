@@ -11,7 +11,9 @@ import {
   nextHand,
   nextHandDelay,
   nextStep,
+  rebuy as rebuyTable,
   seatSession,
+  userBusted,
   type BotTurn,
   type CompletedHand,
   type SessionConfig,
@@ -54,6 +56,17 @@ export interface ResumedSession {
 function newSessionId(): string {
   const bytes = crypto.getRandomValues(new Uint8Array(16));
   return Array.from(bytes, (byte) => byte.toString(16).padStart(2, '0')).join('');
+}
+
+/** The deal after a done hand (auto-deal and Deal next hand): `t` unchanged unless the hand is done and the
+ *  user is not busted (A-3). */
+export function dealAfterDone(t: TableState, code: ReplayCode): TableState {
+  return nextStep(t) === 'done' && !userBusted(t) ? dealHand(nextHand(t), code) : t;
+}
+
+/** Rebuy then deal (A-2): `t` unchanged unless the user is busted, after the bust hand or on a restored bust. */
+export function rebuyAndDeal(t: TableState, code: ReplayCode): TableState {
+  return userBusted(t) ? dealHand(rebuyTable(t.hand === null ? t : nextHand(t)), code) : t;
 }
 
 const noop = (): void => undefined;
@@ -100,6 +113,7 @@ export function useTableSession({
   table: TableState;
   act: (action: Action) => void;
   dealNext: () => void;
+  rebuy: () => void;
 } {
   const [table, setTable] = useState(() => resume?.table ?? seatSession(config));
   const reported = useRef<number | null>(null);
@@ -185,7 +199,7 @@ export function useTableSession({
           () => {
             if (cancelled) return;
             const code = newCode();
-            setTable((t) => (nextStep(t) === 'done' ? dealHand(nextHand(t), code) : t));
+            setTable((t) => dealAfterDone(t, code));
           },
           () => undefined,
         );
@@ -203,16 +217,28 @@ export function useTableSession({
   }, []);
 
   /** Deals the next hand once its record is written, by the auto-deal's code path; a no-op unless the hand
-   *  is done, and never after a failed write. */
+   *  is done, on a bust (A-3), and never after a failed write. */
   const dealNext = useCallback(() => {
     write.current.then(
       () => {
         const code = newCode();
-        setTable((t) => (nextStep(t) === 'done' ? dealHand(nextHand(t), code) : t));
+        setTable((t) => dealAfterDone(t, code));
       },
       () => undefined,
     );
   }, [newCode]);
 
-  return { table, act, dealNext };
+  /** Rebuys and deals the next hand once the bust hand's record is written (A-2); a no-op unless the user is
+   *  busted, and never after a failed write. */
+  const rebuy = useCallback(() => {
+    write.current.then(
+      () => {
+        const code = newCode();
+        setTable((t) => rebuyAndDeal(t, code));
+      },
+      () => undefined,
+    );
+  }, [newCode]);
+
+  return { table, act, dealNext, rebuy };
 }

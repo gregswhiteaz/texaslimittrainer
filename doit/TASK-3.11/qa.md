@@ -10,3 +10,7 @@
 - A-1..A-6 accepted as written.
 - tests/table/next-hand.test.ts:100-107 (unit, not locked) expects the user on $0 to become $160: re-pin it to the new rule (user stays at $0, no hand dealt) — replace the expected values, keep the number of checks.
 - TASK-3.21 (remove the temporary top-up) stays out of scope; the bust is reachable in real play only from exactly $96 until then, so ACs are proven with seeded short stacks.
+
+## Build note — prior-story acceptance test type edit
+tests/table/session.acceptance.test.ts: type annotation `steps` widened to include 'rebuy' (NextStep gained it per spec); no assertion changed; file was not hook-locked.
+**Answer: auto-accepted (recommended)** — listed for review.

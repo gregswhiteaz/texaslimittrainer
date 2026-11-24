@@ -34,7 +34,7 @@ TASK-2.14) needs to deal the next hand. Home's Resume session entry (TASK-2.6) r
 | `handsPlayed` | integer 0..`MAX_SESSION_COUNT`         | Completed hands; 0 in the start record                                                                                                    |
 | `seats`       | seat entries (below), ascending seat   | The seats ready for the next hand                                                                                                         |
 | `button`      | seat 1..10                             | Dealer button of the next hand to be dealt                                                                                                |
-| `rebuys`      | integer ≥ 0                            | Always 0 until TASK-3.11 adds the user's rebuy (bot replacements are not rebuys)                                                          |
+| `rebuys`      | integer 0..`MAX_SESSION_COUNT`         | The user's rebuys, stored with the next completed hand (TASK-3.11 A-1); bot replacements are not rebuys                                   |
 | `level`       | integer ≥ 1 \| null                    | null for cash; the sit-and-go level (1 until TASK-5.4)                                                                                    |
 | `nextBotName` | integer 0..`MAX_SESSION_COUNT`         | Position of the next replacement bot name (`TableState.nextBotName`)                                                                      |
 | `nextBotId`   | integer 1..`MAX_SESSION_COUNT`         | The id the next replacement bot gets (`TableState.nextBotId`)                                                                             |
@@ -42,14 +42,15 @@ TASK-2.14) needs to deal the next hand. Home's Resume session entry (TASK-2.6) r
 
 Seat entry: `{ seat, kind: 'user' | 'bot', botId, name, style, stack }`. `botId` and `style` are null for the
 user; a bot's `botId` is unique and below `nextBotId`. `name` is 1–40 characters. `stack` is the seat's chips
-before the next hand. The seat numbers and kinds always equal `config.seats`. The record holds no hole cards
+before the next hand: at least 1, except that the **user** seat of a cash session may hold 0, meaning busted
+and waiting at Rebuy / Leave table (TASK-3.11 D-1). The seat numbers and kinds always equal `config.seats`. The record holds no hole cards
 and no replay code.
 
 ## The state stored: ready for the next hand
 
 The record is built from `nextHand(table)`, the state the next deal uses: final stacks carried, a busted cash
 bot already replaced (new `botId`, name, style and $160 at $4/$8), the TEMPORARY short-stack top-up applied
-and the button moved one seat. `handsPlayed` is the number of the hand just completed. So restoring needs no
+and the button moved one seat. A cash user on $0 is carried at 0, not topped up (the bust state below). `handsPlayed` is the number of the hand just completed. So restoring needs no
 game logic: `restoreSession(sessionRecord(nextHand(t), meta))` deep-equals `nextHand(t)`.
 
 ## When it is written
@@ -87,16 +88,18 @@ building anything. In order it checks:
   characters, exactly one user seat equal to `userSeat` with no style, a known style on every bot, a seated
   `button`, and a known line-up and speed;
 - `endedAt`, if present and not null, as an ISO string that round-trips;
-- the counters, and `level` against the game type. `handsPlayed`, `nextBotId` and `nextBotName` are at most
+- the counters, and `level` against the game type. `handsPlayed`, `nextBotId`, `nextBotName` and `rebuys` are at most
   `MAX_SESSION_COUNT` (1,000,000,000), so the next hand number, every later bot id and every later
   replacement-name position stay far below `Number.MAX_SAFE_INTEGER`
-  (`Invalid session record: handsPlayed` / `nextBotId` / `nextBotName`). Without the `nextBotName` cap a
+  (`Invalid session record: handsPlayed` / `nextBotId` / `nextBotName` / `rebuys`). Without the `nextBotName` cap a
   record could restore and then crash `nextHand` at a later bot bust; now it is rejected when read, so Home
   logs it and shows no Resume entry for it (TASK-2.14);
 - `seats`: dense, the same seat numbers and kinds as `config.seats`, valid `botId`s, styles and names;
 - `button` is one of the seats;
 - the engine's `assertChips` on the stakes and stacks: every stack a safe integer of at least 1 and the
-  stacks totalling at most `Number.MAX_SAFE_INTEGER`, with `createHand`'s own messages.
+  stacks totalling at most `Number.MAX_SAFE_INTEGER`, with `createHand`'s own messages. The one exception is a
+  cash user seat with stack exactly `0` (D-1), which is left out of `assertChips`; a bot on 0, or the user on 0
+  in a sit-and-go, is still rejected (`Stack at seat <n> must be an integer of at least 1`).
 
 Every failure is a `RangeError` naming the field (`Invalid session record: <field>`,
 `Invalid session config: <field>`) or the engine's message. Checks use `Number.isSafeInteger` and `typeof`, so
@@ -132,6 +135,13 @@ then continue as before.
 
 Leave table still just goes Home and the session stays paused until E10 ends it.
 
+**A stored bust (TASK-3.11).** When a cash hand ends with the user on $0, `handWrite` stores that hand and a
+session with the user's stack 0 and the `rebuys` count from before the bust. No hand is dealt: `nextStep` is
+`'rebuy'`, `nextHandDelay` is null and `dealHand` throws `The user has no chips: rebuy first`. Resume restores
+that state and reopens the Rebuy / Leave table dialog without dealing. Rebuy sets the user's stack to the
+buy-in, adds 1 to `TableState.rebuys` and deals the next hand at once; nothing is written until that hand
+completes, so a close in between leaves the bust stored and the dialog returns on Resume (A-1).
+
 ## Pause from the Table
 
 The Table header's `Home` button (TASK-2.14, REQ-004.9), Leave table and browser Back on the Table all pause
@@ -165,6 +175,12 @@ the app makes every call reject with `VersionError` and dealing stops.
   `tests/ui/home-resume.acceptance.test.tsx`: the summary, the paused-session rule, a session closed in hand 11,
   rejected records and the Home entry.
 - `tests/table/session-cap.acceptance.test.ts`: the `nextBotName` cap.
+- `tests/table/rebuy.acceptance.test.ts`, `tests/table/rebuy.test.ts`, `tests/ui/bust-dialog.acceptance.test.tsx`:
+  the bust state, Rebuy, two rebuys stored as 2, a stored bust restoring to the dialog, the `rebuys` cap and
+  the dialog markup.
+- `e2e/rebuy.spec.ts` (every push): a seeded bust opens the dialog and deals nothing, Rebuy deals with $160
+  and stores `rebuys: 1`, Leave table then Resume reopens the dialog, and no rebuy control while the user has
+  chips.
 - `tests/ui/table-home.acceptance.test.tsx`: the header's Home button.
 - `e2e/home-control.spec.ts` (every push): Home between hands after hand 10, Resume, Home in the middle of
   hand 11 (no record, same stats, no `endedAt`), and resuming the abandoned hand.

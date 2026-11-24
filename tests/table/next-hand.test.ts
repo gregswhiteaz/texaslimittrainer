@@ -102,7 +102,7 @@ describe('busted seats', () => {
       const next = nextHand(withFinalStacks([160, 222, 160, 160, userStack, 165]));
       expect(next.seats).toEqual(KINGS_SHOWDOWN.seats);
       expect(next.seats[4]).toEqual({ seat: 5, name: 'You', kind: 'user', style: null });
-      expect(next.stacks[4]).toEqual({ seat: 5, stack: 160 });
+      expect(next.stacks[4]).toEqual({ seat: 5, stack: userStack === 0 ? 0 : 160 });
       expect(next.nextBotName).toBe(0);
     }
 

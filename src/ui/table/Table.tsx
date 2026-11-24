@@ -3,10 +3,11 @@ import type { Action } from '../../engine/hand';
 import { userActionBar } from '../../table/action-bar';
 import { handResultView, type HandResultView } from '../../table/hand-result';
 import { opensReview, userReviewEntries, type ReviewEntry } from '../../table/review';
-import type { CompletedHand, TableState } from '../../table/session';
+import { buyIn, userBusted, type CompletedHand, type TableState } from '../../table/session';
 import { tableView, type SeatView } from '../../table/table-view';
 import { CardBack, PlayingCard } from '../cards/PlayingCard';
 import { ActionBar } from './ActionBar';
+import { BustDialog } from './BustDialog';
 import { ReviewPanel } from './ReviewPanel';
 import { useTableSession, type TableSessionOptions } from './useTableSession';
 
@@ -26,6 +27,8 @@ export interface TableViewProps {
   readonly onDealNext?: () => void;
   readonly onCloseReview?: () => void;
   readonly dealNextRef?: React.Ref<HTMLButtonElement>;
+  /** Rebuy in the bust dialog (REQ-007.2). */
+  readonly onRebuy?: () => void;
 }
 
 function SeatMarkers({ seat }: { readonly seat: SeatView }): React.JSX.Element {
@@ -154,6 +157,7 @@ export function TableView({
   onDealNext,
   onCloseReview,
   dealNextRef,
+  onRebuy,
 }: TableViewProps): React.JSX.Element {
   const model = tableView(table);
   const bar = userActionBar(table);
@@ -226,6 +230,10 @@ export function TableView({
           />
         )}
       </div>
+      {/* Not over a held review (A-3); Deal next hand clears it and the dialog opens. */}
+      {table.config.gameType === 'cash' && userBusted(table) && review === null && (
+        <BustDialog amount={buyIn(table.config.stake)} onRebuy={onRebuy} onLeave={onLeave} />
+      )}
     </>
   );
 }
@@ -252,7 +260,7 @@ export function Table({
     externalRef.current?.(hand);
     if (opensReview(hand)) setReview({ entries: userReviewEntries(hand), open: true });
   }, []);
-  const { table, act, dealNext } = useTableSession({
+  const { table, act, dealNext, rebuy } = useTableSession({
     ...options,
     onHandComplete,
     holdNextHand: holdNextHand || review !== null,
@@ -279,6 +287,7 @@ export function Table({
       onDealNext={onDealNext}
       onCloseReview={closeReview}
       dealNextRef={dealNextButton}
+      onRebuy={rebuy}
     />
   );
 }

@@ -88,6 +88,7 @@ function tableAt(hand: HandState): TableState {
     nextBotName: 0,
     botIds: initialBotIds(STORYBOARD_CONFIG.seats),
     nextBotId: 6,
+    rebuys: 0,
   };
 }
 

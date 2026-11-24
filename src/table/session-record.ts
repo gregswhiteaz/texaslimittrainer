@@ -24,7 +24,8 @@ export interface SessionRecordSeat {
   readonly name: string;
   /** null iff kind === 'user'. */
   readonly style: BotStyle | null;
-  /** Chips before the next hand: a safe integer of at least 1. */
+  /** Chips before the next hand: a safe integer of at least 1, except 0 for the user seat of a cash session
+   *  waiting at Rebuy / Leave table (D-1). */
   readonly stack: number;
 }
 
@@ -45,7 +46,7 @@ export interface SessionRecord {
   readonly seats: readonly SessionRecordSeat[];
   /** Dealer button of the next hand to be dealt. */
   readonly button: SeatNumber;
-  /** Always 0 until TASK-3.11 adds the user's rebuy (A-1). */
+  /** The user's rebuys; 0..MAX_SESSION_COUNT, stored with the next completed hand (A-1). */
   readonly rebuys: number;
   /** null for cash; the sit-and-go level (1 until TASK-5.4). */
   readonly level: number | null;
@@ -56,8 +57,8 @@ export interface SessionRecord {
   readonly endedAt?: string | null;
 }
 
-/** handsPlayed, nextBotId and nextBotName are at most this, so hand numbers, bot ids and replacement-name
- *  positions stay safe integers (A-3). */
+/** handsPlayed, nextBotId, nextBotName and rebuys are at most this, so hand numbers, bot ids, replacement-name
+ *  positions and rebuy counts stay safe integers (A-3). */
 export const MAX_SESSION_COUNT = 1_000_000_000;
 
 export interface PausedSession {
@@ -107,7 +108,7 @@ export function sessionRecord(table: TableState, meta: SessionMeta): SessionReco
         stack: (table.stacks.find((s) => s.seat === seat) as { stack: number }).stack,
       })),
     button: table.button,
-    rebuys: 0,
+    rebuys: table.rebuys,
     level: config.gameType === 'sit-and-go' ? 1 : null,
     nextBotName: table.nextBotName,
     nextBotId: table.nextBotId,
@@ -174,7 +175,7 @@ export function parseSessionRecord(value: unknown): SessionRecord {
   const { config } = record;
   assertSessionConfig(config);
   whole(record.handsPlayed, 'handsPlayed', 0, MAX_SESSION_COUNT);
-  whole(record.rebuys, 'rebuys', 0);
+  whole(record.rebuys, 'rebuys', 0, MAX_SESSION_COUNT);
   whole(record.nextBotName, 'nextBotName', 0, MAX_SESSION_COUNT);
   whole(record.nextBotId, 'nextBotId', 1, MAX_SESSION_COUNT);
   const nextBotId = record.nextBotId as number;
@@ -203,10 +204,12 @@ export function parseSessionRecord(value: unknown): SessionRecord {
       if (!BOT_STYLES.includes(seat.style as BotStyle)) throw invalid(`${field}.style`);
     }
     if (!isSeatName(seat.name)) throw invalid(`${field}.name`);
-    // The stack rules are createHand's (assertChips below), with its messages.
+    // The stack rules are createHand's (assertChips below), with its messages. A cash user on 0 is busted,
+    // waiting at Rebuy / Leave table (D-1), and is the one seat left out.
+    if (config.gameType === 'cash' && seat.kind === 'user' && seat.stack === 0) continue;
     chips.push({ seat: expected.seat, stack: seat.stack as number });
   }
-  if (!chips.some(({ seat }) => seat === record.button)) throw invalid('button');
+  if (!config.seats.some(({ seat }) => seat === record.button)) throw invalid('button');
   assertChips(stakesFor(tableStake(config)), chips);
   return value as SessionRecord;
 }
@@ -232,6 +235,7 @@ export function restoreSession(value: unknown): TableState {
     nextBotName: record.nextBotName,
     botIds,
     nextBotId: record.nextBotId,
+    rebuys: record.rebuys,
   };
 }
 

@@ -746,3 +746,60 @@ h1[tabindex='-1']:focus {
   margin: 0;
   font-size: 15px;
 }
+
+/* Bust dialog (TASK-3.11, A-4): Rebuy / Leave table when the user's cash stack is $0. */
+.bust-dialog {
+  box-sizing: border-box;
+  max-width: min(420px, calc(100vw - 32px));
+  padding: 24px;
+  background: #1a1d22;
+  color: #f2f3f5;
+  border: 1px solid #343a43;
+  border-radius: 10px;
+}
+
+.bust-dialog::backdrop {
+  background: rgb(0 0 0 / 60%);
+}
+
+.bust-dialog h2 {
+  margin: 0 0 8px;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.bust-dialog p {
+  margin: 0 0 20px;
+  font-size: 15px;
+}
+
+.bust-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+}
+
+.bust-rebuy {
+  min-height: 52px;
+  padding: 0 28px;
+  background: #d7262e;
+  color: #ffffff;
+  border: 0;
+  border-radius: 10px;
+  font: inherit;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.bust-leave {
+  min-height: 44px;
+  padding: 0 14px;
+  background: none;
+  color: #f2f3f5;
+  border: 1px solid #4a515c;
+  border-radius: 8px;
+  font: inherit;
+  font-size: 14px;
+  cursor: pointer;
+}

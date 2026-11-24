@@ -28,6 +28,11 @@ The Table header shows `Home` before `Leave table` (a later Settings control wil
 Leave table does the same for now; ending a session (the Leave-now dialog and the Session Report) comes with
 E10 (TASK-10.1).
 
+**The bust dialog (TASK-3.11).** When a cash hand ends with the user on $0, a modal `Out of chips` dialog
+offers `Rebuy` and `Leave table`, and the page behind it (the header's Home and Leave table included) is inert.
+Escape is ignored. Leave table in the dialog pauses to Home exactly like the header's Leave table: nothing is
+written, and Resume session reopens the dialog. Browser Back at the dialog also pauses to Home.
+
 ## Browser Back and Forward (TASK-2.14 D-2)
 
 Only opening the Table (Start game or Resume session) adds a history entry, `{ tlhTable: <key> }`, with a key
