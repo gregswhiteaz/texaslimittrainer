@@ -1,11 +1,11 @@
 ---
 id: TASK-9.6
 title: See which reviewed decisions were hinted
-status: In Progress
+status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-24T15:43:00Z'
+updated_date: '2026-11-24T15:44:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -16,6 +16,7 @@ references:
 documentation:
   - doc-1
   - doc-2
+  - doc-120
 parent_task_id: TASK-9
 priority: high
 type: feature
@@ -82,4 +83,12 @@ AC added from TASK-8.2 follow-up (doc-115).
 Build: 'hinted' tag after the grade badge for hinted stored decisions; entry top row wraps; npm test 1232 passed, Playwright 250 passed; gate PASS.
 
 Judge r1 PASS 9/9; live hint plans in Chromium+WebKit matched stored hinted flags; playtest 0 violations; CI green.
+
+Follow-ups: none new. Already owned: G-2 hinted exclusion (TASK-11.1/11.3/11.11), report hint counts (TASK-10.7). Not tracked: two test-only NITs.
 <!-- SECTION:NOTES:END -->
+
+## Final Summary
+
+<!-- SECTION:FINAL_SUMMARY:BEGIN -->
+Review entries whose stored decision has hinted:true now show a 'hinted' tag beside the grade badge (grade still shown); top row wraps so tagged river entries don't overflow. Verified: npm test 1232 pass; Chromium+WebKit live flows (Hint at flop; Hint opened then hidden at first of 2+ decisions); judge round 1 PASS 9/9. Review assumptions A-2 (outlined-pill tag style) and A-3 (row wrapping). Follow-ups: hinted exclusion from G-2 rate (REQ-040.3) and Session Report hint counts (REQ-040.4) belong to the statistics/report stories; two code NITs (redundant e2e guard, untested river-wrap).
+<!-- SECTION:FINAL_SUMMARY:END -->
