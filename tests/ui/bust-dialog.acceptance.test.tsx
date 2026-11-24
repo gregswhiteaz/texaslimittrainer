@@ -60,10 +60,11 @@ describe('bust dialog acceptance', () => {
     expect(html).toMatch(/<div role="status" class="hand-result">/);
     expect(html).not.toContain('Deal next hand');
 
-    // A held review: no dialog until Deal next hand clears it (A-3).
+    // A held review: no dialog until Continue clears it (A-3, TASK-9.2).
     const held = render(done, HELD);
     expect(held).not.toMatch(/<dialog/);
-    expect(held).toContain('Deal next hand');
+    expect(held).toContain('>Continue</button>');
+    expect(held).not.toContain('Deal next hand');
 
     // The restored bust (no hand dealt).
     expectBustDialog(render(nextHand(done)), '$160');

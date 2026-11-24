@@ -33,6 +33,11 @@ offers `Rebuy` and `Leave table`, and the page behind it (the header's Home and 
 Escape is ignored. Leave table in the dialog pauses to Home exactly like the header's Leave table: nothing is
 written, and Resume session reopens the dialog. Browser Back at the dialog also pauses to Home.
 
+**Continue on a bust (TASK-9.2).** When the Hand Review is held on a cash hand that left the user on $0, the
+control under the table reads `Continue` instead of `Deal next hand`, also after Close review. Continue clears
+the review and opens the `Out of chips` dialog; nothing is dealt until Rebuy. In a sit-and-go the control still
+reads `Deal next hand` (`See results` comes with TASK-5.8).
+
 ## Browser Back and Forward (TASK-2.14 D-2)
 
 Only opening the Table (Start game or Resume session) adds a history entry, `{ tlhTable: <key> }`, with a key

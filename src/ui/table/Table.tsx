@@ -256,7 +256,7 @@ export function TableView({
           </section>
           {review !== null && result !== null && (
             <button type="button" className="deal-next" ref={dealNextRef} onClick={onDealNext}>
-              Deal next hand
+              {userBusted(table) ? 'Continue' : 'Deal next hand'}
             </button>
           )}
         </div>
@@ -268,7 +268,7 @@ export function TableView({
           />
         )}
       </div>
-      {/* Not over a held review (A-3); Deal next hand clears it and the dialog opens. */}
+      {/* Not over a held review (A-3); Continue clears it and the dialog opens (TASK-9.2). */}
       {table.config.gameType === 'cash' && userBusted(table) && review === null && (
         <BustDialog amount={buyIn(table.config.stake)} onRebuy={onRebuy} onLeave={onLeave} />
       )}
@@ -336,7 +336,8 @@ export function Table({
   const status = shownHint(hint, table.hand, bar?.enabled === true);
 
   const dealNextButton = useRef<HTMLButtonElement>(null);
-  // Deal next hand is already on screen while the review is held, so focus can move before Close unmounts.
+  // Deal next hand (Continue on a bust) is already on screen while the review is held, so focus can move
+  // before Close unmounts.
   const closeReview = useCallback(() => {
     setReview((r) => r && { ...r, open: false });
     dealNextButton.current?.focus();
