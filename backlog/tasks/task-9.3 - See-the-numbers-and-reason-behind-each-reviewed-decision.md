@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-24T12:27:00Z'
+updated_date: '2026-11-24T12:51:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -95,4 +95,6 @@ AC added from TASK-3.6 follow-up (use the worker grade request)
 AC added from TASK-7.10 follow-up.
 
 AC added from TASK-3.12 follow-up (doc-113: E09 reads stored decisions; plain-text rendering; judge J-1-01 storyboard fixture).
+
+Build: decisions graded in the worker as they happen (decision-grades.ts), record + review use the stored entries; review shows chart line / equity numbers, explanation, opponent ranges (hint wording); SHOWDOWN fixture via applyUserAction; locked TASK-9.1 review-panel test re-pinned per qa.md; e2e/hint-observed one-shot probe replaced with a visible-wait; npm test 1215 passed, Playwright full suite green; gate PASS.
 <!-- SECTION:NOTES:END -->
