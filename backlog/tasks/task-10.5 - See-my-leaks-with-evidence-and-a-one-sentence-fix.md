@@ -1,7 +1,7 @@
 ---
 id: TASK-10.5
 title: See my postflop leaks with evidence and a one-sentence fix
-status: In Progress
+status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
@@ -17,6 +17,7 @@ references:
 documentation:
   - doc-1
   - doc-2
+  - doc-128
 parent_task_id: TASK-10
 priority: high
 type: feature
@@ -89,4 +90,12 @@ Full spec: doit/TASK-10.5/spec.md
 Build: leak-categories.json (approved copy), leakCounts stored once at session end, 'Biggest leaks this session' report section; npm test 1303 passed, Playwright 304 passed; gate PASS.
 
 Judge r1 PASS 16/16; live Chromium+WebKit sessions: leaks section matches independent recount of unhinted postflop decisions; CI 45508686083 green.
+
+Follow-ups: TASK-10.14 created (three leak-text wording fixes, needs user approval). Already owned: ranking/top-3 (TASK-10.8), preflop categories (TASK-10.6).
 <!-- SECTION:NOTES:END -->
+
+## Final Summary
+
+<!-- SECTION:FINAL_SUMMARY:BEGIN -->
+Added the 'Biggest leaks this session' section to the Session Report: 15 postflop categories (street x facing bet x action) kept as validated data; leakCounts (unhinted decisions/errors/major per category) computed once at session end and stored write-once; a leak needs >=8 unhinted decisions and >=40% Minor/Major; each leak shows title, 'N of M <name> graded as errors' and a one-sentence fix. Verified: npm test 1303 pass, lint/typecheck pass, judge round 1 16/16 PASS incl. live Chromium+WebKit run matching an independent tally. Review assumptions: Q-1 (stored leakCounts), Q-2 (leak copy), A-1..A-8 and the unlocked TASK-10.4 key-order test edit were auto-accepted. Follow-ups: leak copy notes (turn fold vs call tension, 2 NITs), all leaks listed in category order until TASK-10.8 ranking/top-3, preflop categories TASK-10.6; scope 1228 lines/13 files vs 950/12.
+<!-- SECTION:FINAL_SUMMARY:END -->
