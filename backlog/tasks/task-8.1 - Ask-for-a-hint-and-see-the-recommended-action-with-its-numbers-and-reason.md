@@ -1,10 +1,11 @@
 ---
 id: TASK-8.1
 title: Ask for a hint and see the recommended action with its numbers and reason
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-23T09:33:00Z'
+updated_date: '2026-11-24T09:52:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -75,6 +76,19 @@ Plan key: E08-S01 · Dream: limit-holdem-trainer
 - [ ] #11 Story documentation is written and published to Backlog.md
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. Session tracks per-bot observed counts (by bot id) at each hand rollover; userObservedSnapshot(t) builds {seat, hands, vpip, pfr} for bot seats; act passes it to applyUserAction; restarts at 0 after Resume (Q-3)
+2. Advice client sends the snapshot with recommend
+3. Pure src/table/hint.ts builds the hint card model (action label, equity numbers, opponent ranges basis, preflop chart line)
+4. UI: Hint / Hide hint button beside the action group; hint card between table ring and action row (loading, error, reuse within a decision); hidden on any action
+5. AC#12 template wording; re-pin explain.test.ts strings
+6. Tests per AC incl. 1,000 seeded states, Playwright flow in Chromium and WebKit with axe
+
+Full spec: doit/TASK-8.1/spec.md
+<!-- SECTION:PLAN:END -->
 
 ## Implementation Notes
 
