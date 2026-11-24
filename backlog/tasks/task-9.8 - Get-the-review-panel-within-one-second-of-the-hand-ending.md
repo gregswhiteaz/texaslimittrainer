@@ -4,7 +4,7 @@ title: Get the review panel within one second of the hand ending
 status: To Do
 assignee: []
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-17T23:22:00Z'
+updated_date: '2026-11-24T13:09:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-2
@@ -39,6 +39,7 @@ Plan key: E09-S09 · Dream: limit-holdem-trainer
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
 - [ ] #1 Given the reference machine and 200 scripted hands with 1 to 8 user decisions at 2, 6 and 10 players, When the timing test runs, Then it reports the p95 time from hand end to visible panel and that p95 is at most 1.0 s [REQ-055.2]
+- [ ] #2 Given a 10-seat table where grade requests share the advice worker with bot moves, When a hand ends, Then the review panel appears within one second and bot moves during the hand are not delayed by more than 400 ms by queued grade requests (measured, slow group)
 <!-- AC:END -->
 
 ## Definition of Done
@@ -57,3 +58,9 @@ Plan key: E09-S09 · Dream: limit-holdem-trainer
 - [ ] #12 Story documentation is written and published to Backlog.md
 - [ ] #13 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+AC added from TASK-9.3 follow-up (doc-117: grade requests queue ahead of bot requests in the shared worker).
+<!-- SECTION:NOTES:END -->

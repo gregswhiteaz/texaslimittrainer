@@ -1,11 +1,11 @@
 ---
 id: TASK-9.3
 title: See the numbers and reason behind each reviewed decision
-status: In Progress
+status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-24T13:08:00Z'
+updated_date: '2026-11-24T13:09:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -18,6 +18,7 @@ references:
 documentation:
   - doc-1
   - doc-2
+  - doc-117
 parent_task_id: TASK-9
 priority: high
 type: feature
@@ -99,4 +100,12 @@ AC added from TASK-3.12 follow-up (doc-113: E09 reads stored decisions; plain-te
 Build: decisions graded in the worker as they happen (decision-grades.ts), record + review use the stored entries; review shows chart line / equity numbers, explanation, opponent ranges (hint wording); SHOWDOWN fixture via applyUserAction; locked TASK-9.1 review-panel test re-pinned per qa.md; e2e/hint-observed one-shot probe replaced with a visible-wait; npm test 1215 passed, Playwright full suite green; gate PASS.
 
 Judge r1 PASS 15/15; live Chromium+WebKit: review = hint = stored record; no main-thread grading proven; e2e 236 + slow 17 passed; CI 45398230737 green.
+
+Follow-ups: TASK-9.10 created (failed grade handling, pending-grades test); TASK-9.8 AC added (worker queue latency at 10 seats).
 <!-- SECTION:NOTES:END -->
+
+## Final Summary
+
+<!-- SECTION:FINAL_SUMMARY:BEGIN -->
+Hand Review entries now show chart basis (preflop) or Equity / Required equity (postflop), the explanation and per-opponent basis lines, read from stored decision entries. Each decision is graded at decision time by the advice worker (with its observed snapshot); the hand record and review use the same entries, no main-thread grading. Verified: npm test 1215 pass, judge round 1 15/15, e2e in Chromium and WebKit (review equals hint). Review: assumptions A-1..A-10, Q-1 wording, locked TASK-9.1 test edit, e2e/hint-observed Block 1 (all auto-accepted). Risks/follow-ups: unhandled rejection if a grade fails mid-hand; no test for the pending-grades state; grade requests queue ahead of bot requests (up to ~400 ms at 10 seats); scope 1417 lines / 21 files vs 1200 / 20.
+<!-- SECTION:FINAL_SUMMARY:END -->
