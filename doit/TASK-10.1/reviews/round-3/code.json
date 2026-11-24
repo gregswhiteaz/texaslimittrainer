@@ -1,0 +1,14 @@
+{"reviewer": "code", "round": 3,
+ "rubric": [
+  {"item": "round-2 MAJOR (ending guard never reset) fixed", "result": "pass"},
+  {"item": "StrictMode cannot end a session twice", "result": "pass"},
+  {"item": "every Leave runs endSession once", "result": "pass"},
+  {"item": "no path leaves the user stuck on the busy ending screen", "result": "pass"},
+  {"item": "Leave/endSession ordering argument still holds", "result": "pass"},
+  {"item": "e2e/session-end-retry.spec.ts test strength", "result": "pass"},
+  {"item": "scope", "result": "pass"},
+  {"item": "concision", "result": "pass"},
+  {"item": "clarity", "result": "pass"}
+ ],
+ "findings": [],
+ "summary": "The round-2 MAJOR src/ui/App.tsx:ending-guard-never-reset-hangs-second-leave is fixed. The ref now holds the 'ending' screen object and the effect depends on [ending]. A StrictMode re-run or re-render reuses the same state object, so the guard returns early. Each leave() makes a fresh object, so a Leave of a resumed session after a failed end (same sessionId) runs endSession again. A double click cannot create two ending objects, because leave() returns early once closeTable() has synchronously nulled tableKey. Nothing can hang. The single rejection handler on the final .then catches failures from both tableWritesSettled and endSession and goes Home. Success goes to the report, or Home on a null report. The effect has no cleanup, so an unrelated re-render cannot cancel the setScreen. The ordering argument is unchanged: the effect sits where it did and still awaits tableWritesSettled() before endSession, after the Table has unmounted. The new e2e makes the first read-write 'reports' transaction throw. It checks that the session stays resumable (no endedAt, no report, the error was logged, the failure counter is 1), then resumes, leaves, and checks the report, the same sessionId with endedAt, one report and no Resume. With the old id-keyed guard the report heading would never appear, so the test fails, and the build log says it failed on Chromium and WebKit with App.tsx at HEAD. The fix-7 gates pass: test, lint, typecheck and test integrity. The scope-budget warnings are unchanged from earlier rounds. No findings."}
