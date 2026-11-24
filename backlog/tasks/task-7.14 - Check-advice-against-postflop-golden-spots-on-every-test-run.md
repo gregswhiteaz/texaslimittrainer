@@ -1,10 +1,11 @@
 ---
 id: TASK-7.14
 title: Check advice against postflop golden spots on every test run
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-23T10:38:00Z'
+updated_date: '2026-11-24T05:12:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -72,6 +73,18 @@ Plan key: E07-S15 · Dream: limit-holdem-trainer
 - [ ] #12 Story documentation is written and published to Backlog.md
 - [ ] #13 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. Extend the golden-spot format (v1) with optional board/street; parsePostflopGoldenSpots; new tests/golden/postflop-spots.json (~120 spots, original justifications)
+2. Clear-cut rule: every legal non-recorded action grades Major under gradeDecision; advice as the app shows the user (actions ranges, observed stats when given)
+3. Graded examples file with exact grade, rule id and margin (exact-equity spots)
+4. Full-ring BTN vs single raise: 99/88 → raise (Q-1); replace two borderline full-ring preflop spots (A-7)
+5. Suite runs every push in the uncovered sweep job (~4 s); coverage job gets stubbed unit tests + one cheap spot
+
+Full spec: doit/TASK-7.14/spec.md
+<!-- SECTION:PLAN:END -->
 
 ## Implementation Notes
 

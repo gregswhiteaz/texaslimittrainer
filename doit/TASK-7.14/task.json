@@ -1,0 +1,468 @@
+{
+  "id": "TASK-7.14",
+  "title": "Check advice against postflop golden spots on every test run",
+  "status": "To Do",
+  "archived": false,
+  "type": "feature",
+  "priority": "high",
+  "project": null,
+  "assignees": [],
+  "reporter": null,
+  "labels": [
+    "dream-limit-holdem-trainer"
+  ],
+  "milestone": "m-1",
+  "parentTaskId": "TASK-7",
+  "acceptanceCriteriaCompleted": 0,
+  "acceptanceCriteriaCount": 9,
+  "references": [
+    "dreams/limit-holdem-trainer/requirements.md"
+  ],
+  "modifiedFiles": [],
+  "ordinal": 73000,
+  "createdAt": "2026-11-17T22:46:00Z",
+  "updatedAt": "2026-11-23T10:38:00Z",
+  "dueDate": null,
+  "isReady": true,
+  "path": "backlog/tasks/task-7.14 - Check-advice-against-postflop-golden-spots-on-every-test-run.md",
+  "description": "As a learner, I want the postflop advice checked on every test run against curated spots with agreed answers, so that I can trust the postflop advice and its grades.\n\nGolden-spot suite, part 2: at least 100 postflop spots across flop, turn and river, bringing the suite to at least 200, plus graded examples of each grade level. Clear-cut mechanically means call/fold spots at least 10 points from required equity and bet/check spots at least 15 points from 50% against the calling range. The suite runs in `npm test` and must pass 100%.\n\n## Requirements covered\n- REQ-037 (Must): Plain-English explanations \u2014 Every recommendation shall include an explanation of at most three sentences in plain English that names and briefly explains the poker concept behind it.\n- REQ-038 (Must): Grading rules \u2014 The grader shall grade each user decision Correct when it matches the recommendation or a listed acceptable alternative, Major error when the margin rules below mark it clearly wrong, and Minor error otherwise.\n- REQ-039 (Must): Golden spot suite \u2014 The project shall keep a golden-spot suite of at least 200 clear-cut decisions with justified recommended actions, and the automated test run shall fail if the advice engine disagrees with any of them.\n- REQ-061 (Should): Legal and content \u2014 TLH Trainer shall use play money only and shall contain only strategy text and data written for this project.\n\nCovers: REQ-037, REQ-038, REQ-039, REQ-061\n\nPlan key: E07-S15 \u00b7 Dream: limit-holdem-trainer",
+  "dependencies": [
+    "TASK-7.11",
+    "TASK-7.13",
+    "TASK-7.8",
+    "TASK-7.9",
+    "TASK-7.4"
+  ],
+  "dependencyGraph": {
+    "root": "TASK-7.14",
+    "nodes": [
+      {
+        "id": "TASK-7.14",
+        "title": "Check advice against postflop golden spots on every test run",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": 0,
+        "dependentDepth": 0
+      },
+      {
+        "id": "TASK-1.1",
+        "title": "Bootstrap the strict TypeScript project with one-command checks",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 6,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.2",
+        "title": "Rank showdown hands by real poker hand rankings",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 4,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.3",
+        "title": "Deal every hand from a seeded shuffle with a replay code",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 4,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.4",
+        "title": "Play a complete fixed-limit hand from blinds to showdown",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 3,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.5",
+        "title": "Give each deciding seat only its own view of the hand",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 4,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.7",
+        "title": "Run every check in GitHub Actions on each push and pull request",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 5,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-7",
+        "title": "Get trustworthy advice",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 1
+      },
+      {
+        "id": "TASK-7.1",
+        "title": "Compute a hand's equity against opponent hands",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 3,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-7.2",
+        "title": "Recommend a preflop action from the 6-max chart",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 3,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-7.3",
+        "title": "Recommend call or fold after the flop from equity and pot odds",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 2,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-7.4",
+        "title": "Grade a decision as Correct, Minor error or Major error",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 1,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-7.5",
+        "title": "Estimate each opponent's range from their actions in the hand",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 2,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-7.6",
+        "title": "Recommend preflop actions at heads-up and full-ring tables",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 2,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-7.8",
+        "title": "Recommend betting or raising for value",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 1,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-7.9",
+        "title": "Count implied odds for drawing hands",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 1,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-7.10",
+        "title": "Explain every recommendation in plain English with its numbers",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 2,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-7.11",
+        "title": "Check advice against preflop golden spots on every test run",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 1,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-7.12",
+        "title": "Enabler: shared style-stat functions for VPIP, PFR, Aggression, WTSD and W$SD",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 2,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-7.13",
+        "title": "Adjust opponent ranges to their observed play after 30 hands",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 1,
+        "dependentDepth": null
+      }
+    ],
+    "edges": [
+      {
+        "from": "TASK-1.2",
+        "to": "TASK-1.7"
+      },
+      {
+        "from": "TASK-1.3",
+        "to": "TASK-1.7"
+      },
+      {
+        "from": "TASK-1.4",
+        "to": "TASK-1.2"
+      },
+      {
+        "from": "TASK-1.4",
+        "to": "TASK-1.3"
+      },
+      {
+        "from": "TASK-1.5",
+        "to": "TASK-1.4"
+      },
+      {
+        "from": "TASK-1.7",
+        "to": "TASK-1.1"
+      },
+      {
+        "from": "TASK-7",
+        "to": "TASK-7.14"
+      },
+      {
+        "from": "TASK-7.1",
+        "to": "TASK-1.2"
+      },
+      {
+        "from": "TASK-7.2",
+        "to": "TASK-1.5"
+      },
+      {
+        "from": "TASK-7.3",
+        "to": "TASK-7.1"
+      },
+      {
+        "from": "TASK-7.3",
+        "to": "TASK-7.2"
+      },
+      {
+        "from": "TASK-7.4",
+        "to": "TASK-7.3"
+      },
+      {
+        "from": "TASK-7.5",
+        "to": "TASK-7.3"
+      },
+      {
+        "from": "TASK-7.6",
+        "to": "TASK-7.2"
+      },
+      {
+        "from": "TASK-7.8",
+        "to": "TASK-7.5"
+      },
+      {
+        "from": "TASK-7.9",
+        "to": "TASK-7.3"
+      },
+      {
+        "from": "TASK-7.10",
+        "to": "TASK-7.6"
+      },
+      {
+        "from": "TASK-7.10",
+        "to": "TASK-7.8"
+      },
+      {
+        "from": "TASK-7.10",
+        "to": "TASK-7.9"
+      },
+      {
+        "from": "TASK-7.11",
+        "to": "TASK-7.6"
+      },
+      {
+        "from": "TASK-7.11",
+        "to": "TASK-7.10"
+      },
+      {
+        "from": "TASK-7.12",
+        "to": "TASK-1.4"
+      },
+      {
+        "from": "TASK-7.13",
+        "to": "TASK-7.5"
+      },
+      {
+        "from": "TASK-7.13",
+        "to": "TASK-7.12"
+      },
+      {
+        "from": "TASK-7.14",
+        "to": "TASK-7.4"
+      },
+      {
+        "from": "TASK-7.14",
+        "to": "TASK-7.8"
+      },
+      {
+        "from": "TASK-7.14",
+        "to": "TASK-7.9"
+      },
+      {
+        "from": "TASK-7.14",
+        "to": "TASK-7.11"
+      },
+      {
+        "from": "TASK-7.14",
+        "to": "TASK-7.13"
+      }
+    ]
+  },
+  "readiness": {
+    "isReady": true,
+    "isBlocked": false,
+    "blockingDependencies": [],
+    "missingDependencies": []
+  },
+  "documentation": [
+    "doc-1",
+    "doc-2"
+  ],
+  "subtasks": [],
+  "acceptanceCriteria": [
+    {
+      "index": 1,
+      "text": "Given the golden-spot suite, When spots are counted, Then there are at least 100 postflop spots covering flop, turn and river and at least 200 spots in total [REQ-039.1]",
+      "checked": false
+    },
+    {
+      "index": 2,
+      "text": "Given a postflop call/fold spot within 10 points of required equity, or a bet/check spot within 15 points of 50% against the calling range, When the spot validator runs, Then it rejects the spot as not clear-cut [REQ-039.3]",
+      "checked": false
+    },
+    {
+      "index": 3,
+      "text": "Given the graded examples in the suite, When `npm test` runs, Then at least one preflop and one postflop example of each grade (Correct, Minor error, Major error) is graded as recorded [REQ-038.1, REQ-038.2, REQ-038.3, REQ-038.4]",
+      "checked": false
+    },
+    {
+      "index": 4,
+      "text": "Given every postflop golden spot, When its explanation is checked, Then it quotes the equity % and required equity % the recommendation returns [REQ-037.4]",
+      "checked": false
+    },
+    {
+      "index": 5,
+      "text": "Given the complete suite, When `npm test` runs, Then 100% of golden spots pass [REQ-039.4]",
+      "checked": false
+    },
+    {
+      "index": 6,
+      "text": "Given the golden spot suite, When it runs, Then it includes graded examples at Correct, Minor error and Major error, preflop and postflop, each asserting the exact grade, rule id and margin",
+      "checked": false
+    },
+    {
+      "index": 7,
+      "text": "Given preflop spot fr-btn-raise-88 (button holding 88 facing a hijack open, chart says call), When the spot set is extended, Then the chart cell is reviewed for call vs re-raise and the chart and spot agree on the chosen answer with a justification",
+      "checked": false
+    },
+    {
+      "index": 8,
+      "text": "Given preflop spot fr-hj-raise-and-calls-ajs, When its justification is revised, Then it no longer overstates how often the opener holds weaker aces (the claim is about the caller's range)",
+      "checked": false
+    },
+    {
+      "index": 9,
+      "text": "Given preflop spots fr-co-limpers-87s and fr-sb-unopened-65s (call cells whose suited neighbours fold), When the spot set is extended, Then each is replaced by a spot whose chart neighbours share its action, or the chart islands are reviewed and justified",
+      "checked": false
+    }
+  ],
+  "definitionOfDone": [
+    {
+      "index": 1,
+      "text": "Golden spots and their justifications are original, written for this project [REQ-061.2]",
+      "checked": false
+    },
+    {
+      "index": 2,
+      "text": "Every acceptance criterion has at least one automated test (unit, property or Playwright) that passes",
+      "checked": false
+    },
+    {
+      "index": 3,
+      "text": "`npm run lint`, `npm run typecheck` and `npm test` pass with zero errors [REQ-059.1, REQ-059.4]",
+      "checked": false
+    },
+    {
+      "index": 4,
+      "text": "The golden-spot suite passes 100% (applies from the story that creates the suite, E07-S14, onward) [REQ-039.4]",
+      "checked": false
+    },
+    {
+      "index": 5,
+      "text": "Coverage thresholds hold: >= 90% engine/bots/advice/statistics, >= 70% overall [REQ-059.3]",
+      "checked": false
+    },
+    {
+      "index": 6,
+      "text": "Engine, bots, advice and statistics code imports no UI or browser-only code [REQ-059.2]",
+      "checked": false
+    },
+    {
+      "index": 7,
+      "text": "Stories that touch the engine, bots or advice: a 10,000-hand playtest reports zero invariant violations (applies once the playtest runner exists, E01-S07, onward) [REQ-056.1]",
+      "checked": false
+    },
+    {
+      "index": 8,
+      "text": "Stories that add or change a screen: Playwright test of the screen flow in Chromium and WebKit, and axe reports zero serious or critical violations (axe tooling is provisioned in the toolchain story E01-S01) [REQ-057.1]",
+      "checked": false
+    },
+    {
+      "index": 9,
+      "text": "No new network requests beyond the app's own files [REQ-058.1]",
+      "checked": false
+    },
+    {
+      "index": 10,
+      "text": "Strategy-content stories: text is original and every chart, range or golden spot carries its justification [REQ-061.2]",
+      "checked": false
+    },
+    {
+      "index": 11,
+      "text": "CI workflow is green on the story's branch (applies once the CI story E01-S02 is done; E01-S01 instead passes the same checks locally) [REQ-064.2]",
+      "checked": false
+    },
+    {
+      "index": 12,
+      "text": "Story documentation is written and published to Backlog.md",
+      "checked": false
+    },
+    {
+      "index": 13,
+      "text": "Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled",
+      "checked": false
+    }
+  ],
+  "implementationPlan": null,
+  "implementationNotes": "AC added from TASK-7.4 follow-up (doc-19).\n\nACs added from TASK-7.11 review follow-ups.\n\nAC added from TASK-7.11 judge J-1-01.",
+  "comments": [],
+  "finalSummary": null
+}
