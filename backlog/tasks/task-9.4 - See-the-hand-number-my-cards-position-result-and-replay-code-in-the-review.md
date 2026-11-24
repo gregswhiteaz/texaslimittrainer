@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-24T13:21:00Z'
+updated_date: '2026-11-24T13:37:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -78,4 +78,6 @@ Full spec: doit/TASK-9.4/spec.md
 
 <!-- SECTION:NOTES:BEGIN -->
 AC added from TASK-9.1 follow-up (doc-26).
+
+Build: review header subtitle (net result, hole cards, position) and replay line; npm test 1221 passed, Playwright 240 passed; gate PASS.
 <!-- SECTION:NOTES:END -->
