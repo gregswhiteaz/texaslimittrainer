@@ -1,10 +1,11 @@
 ---
 id: TASK-10.5
 title: See my postflop leaks with evidence and a one-sentence fix
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-17T23:22:00Z'
+updated_date: '2026-11-24T22:50:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -70,3 +71,14 @@ Plan key: E10-S06 · Dream: limit-holdem-trainer
 - [ ] #12 Story documentation is written and published to Backlog.md
 - [ ] #13 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. src/stats/leak-categories.json: postflop leak categories with title, evidence name, one-sentence fix and justification; validated on load
+2. sessionReport stores optional leakCounts {category, decisions, errors, major} (unhinted) once at session end, present exactly when errors is
+3. Leak rule decisions >= 8 and errors >= 40%; report section 'Biggest leaks this session' with title, evidence, fix, or 'No leaks found' sentence
+4. Tests: unit/acceptance per AC, render, e2e Chromium+WebKit with axe; docs
+
+Full spec: doit/TASK-10.5/spec.md
+<!-- SECTION:PLAN:END -->
