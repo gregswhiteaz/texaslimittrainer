@@ -8,6 +8,7 @@ import {
   type SessionConfig,
   type TableState,
 } from './session';
+import type { SessionRecord } from './session-record';
 
 export interface SeatView {
   readonly seat: SeatNumber;
@@ -60,11 +61,21 @@ export interface TableViewModel {
 
 const GAME_LABEL: Record<GameType, string> = { cash: 'Cash', 'sit-and-go': 'Sit-and-go' };
 
-/** Cash limits in dollars; sit-and-go limits in plain chips (REQ-008.7, D-2). */
-export function headerText(config: SessionConfig, handNumber: number): string {
+/** "$4/$8" for cash; plain chips such as "20/40" for a sit-and-go (REQ-008.7, D-2). */
+export function limitsText(config: SessionConfig): string {
   const { smallBet, bigBet } = tableStake(config);
-  const limits = config.gameType === 'cash' ? `$${smallBet}/$${bigBet}` : `${smallBet}/${bigBet}`;
-  return `${GAME_LABEL[config.gameType]} · ${config.players} players · ${limits} · Hand #${handNumber}`;
+  return config.gameType === 'cash' ? `$${smallBet}/$${bigBet}` : `${smallBet}/${bigBet}`;
+}
+
+export function headerText(config: SessionConfig, handNumber: number): string {
+  return `${GAME_LABEL[config.gameType]} · ${config.players} players · ${limitsText(config)} · Hand #${handNumber}`;
+}
+
+/** Home's Resume subtitle: "Cash · 6 players · $4/$8 · 132 hands · paused"; "1 hand" for one (D-2). */
+export function resumeSummary(record: SessionRecord): string {
+  const { config, handsPlayed } = record;
+  const hands = handsPlayed === 1 ? '1 hand' : `${handsPlayed} hands`;
+  return `${GAME_LABEL[config.gameType]} · ${config.players} players · ${limitsText(config)} · ${hands} · paused`;
 }
 
 /** Past-tense text of one action record (D-3/Q-2). */

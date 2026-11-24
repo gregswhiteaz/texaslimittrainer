@@ -2,7 +2,7 @@ import type { Card } from '../engine/cards';
 import { isReplayCode, type ReplayCode } from '../engine/deck';
 import type { ActionRecord, HandResult, SeatNumber, Stakes } from '../engine/hand';
 import type { EarlierShowdown } from '../engine/player-view';
-import type { SessionRecord } from './session-record';
+import type { PausedSession, SessionRecord } from './session-record';
 import {
   BOT_STYLES,
   LINE_UPS,
@@ -76,6 +76,9 @@ export interface HandStore {
   /** The validated session record, or null if absent. Rejects with parseSessionRecord's RangeError if the
    *  stored value is invalid. */
   getSession(sessionId: string): Promise<SessionRecord | null>;
+  /** The paused session (findPausedSession over every stored session value). Rejects only if the database
+   *  cannot be read. */
+  pausedSession(): Promise<PausedSession>;
   /** The validated record, or null if absent. Rejects with parseHandRecord's RangeError if the stored value is invalid. */
   get(sessionId: string, handNumber: number): Promise<HandRecord | null>;
   count(): Promise<number>;

@@ -53,6 +53,7 @@ const handStore: HandStore =
                 .then(() => note(`saved:${record.handNumber}`)),
         putSession: (session) => real.putSession(session),
         getSession: (sessionId) => real.getSession(sessionId),
+        pausedSession: () => real.pausedSession(),
         get: (sessionId, handNumber) => real.get(sessionId, handNumber),
         count: () => real.count(),
       };

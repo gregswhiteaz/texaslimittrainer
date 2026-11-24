@@ -52,6 +52,31 @@ export function seedStoredRecords(records: unknown[]): Promise<void> {
   });
 }
 
+/** Runs in the page: puts `records` as they are into tlh-trainer/sessions (v2) in one transaction. */
+export function seedStoredSessions(records: unknown[]): Promise<void> {
+  return new Promise((resolve, reject) => {
+    const open = indexedDB.open('tlh-trainer', 2);
+    open.onupgradeneeded = (event) => {
+      if (event.oldVersion < 1) {
+        open.result.createObjectStore('hands', { keyPath: ['sessionId', 'handNumber'] });
+      }
+      if (event.oldVersion < 2) open.result.createObjectStore('sessions', { keyPath: 'sessionId' });
+    };
+    open.onerror = () => reject(open.error);
+    open.onsuccess = () => {
+      const db = open.result;
+      const transaction = db.transaction('sessions', 'readwrite');
+      const store = transaction.objectStore('sessions');
+      for (const record of records) store.put(record);
+      transaction.oncomplete = () => {
+        db.close();
+        resolve();
+      };
+      transaction.onerror = () => reject(transaction.error);
+    };
+  });
+}
+
 export const storedRecords = (page: Page): Promise<Record<string, unknown>[]> =>
   page.evaluate(readStore, 'hands') as Promise<Record<string, unknown>[]>;
 

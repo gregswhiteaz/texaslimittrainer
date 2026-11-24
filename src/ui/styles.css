@@ -59,17 +59,27 @@ h1[tabindex='-1']:focus {
   max-width: 508px;
 }
 
-.menu-primary {
+.menu-primary,
+.menu-secondary {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   gap: 4px;
   padding: 20px 24px;
+  border-radius: 10px;
+  text-align: left;
+}
+
+.menu-primary {
   background: #d7262e;
   color: #ffffff;
   border: 0;
-  border-radius: 10px;
-  text-align: left;
+}
+
+.menu-secondary {
+  background: #1a1d22;
+  color: #f2f3f5;
+  border: 1px solid #343a43;
 }
 
 .menu-title {
@@ -77,8 +87,16 @@ h1[tabindex='-1']:focus {
   font-weight: 600;
 }
 
+.menu-secondary .menu-title {
+  font-size: 18px;
+}
+
 .menu-subtitle {
   font-size: 14px;
+}
+
+.menu-secondary .menu-subtitle {
+  color: #a7aeb8;
 }
 
 .config-header {

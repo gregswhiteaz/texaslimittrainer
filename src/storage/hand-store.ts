@@ -1,5 +1,5 @@
 import { parseHandRecord, type HandStore } from '../table/hand-record';
-import { parseSessionRecord } from '../table/session-record';
+import { findPausedSession, parseSessionRecord } from '../table/session-record';
 
 export const DB_NAME = 'tlh-trainer';
 /** The only version marker until REQ-054 adds per-store schema versions. v2 added SESSIONS_STORE. */
@@ -76,6 +76,10 @@ export function openHandStore(factory: IDBFactory = indexedDB, name = DB_NAME): 
     async getSession(sessionId) {
       const value: unknown = await requested((await readOnly(SESSIONS_STORE)).get(sessionId));
       return value === undefined ? null : parseSessionRecord(value);
+    },
+    async pausedSession() {
+      const values: unknown[] = await requested((await readOnly(SESSIONS_STORE)).getAll());
+      return findPausedSession(values);
     },
     async get(sessionId, handNumber) {
       const value: unknown = await requested(

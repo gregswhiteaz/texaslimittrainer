@@ -39,6 +39,15 @@ export interface TableSessionOptions {
   readonly createAdviceWorker?: () => WorkerLike;
   /** Where each completed hand's record is written. Default: the app-wide IndexedDB store. */
   readonly handStore?: HandStore;
+  /** A stored session to continue instead of seating `config`: no start record is written (A-6). */
+  readonly resume?: ResumedSession;
+}
+
+/** A restored table ready to deal, with the stored session's id and start time (D-4). */
+export interface ResumedSession {
+  readonly table: TableState;
+  readonly sessionId: string;
+  readonly startedAt: Date;
 }
 
 /** A new session id: 32 lowercase hex characters from 16 CSPRNG bytes (A-8). */
@@ -61,8 +70,8 @@ export function requestBotDecision(create: () => WorkerLike, turn: BotTurn): Pro
  * Holds the session and runs the deal step one macrotask later and each bot step botActionDelayMs(speed)
  * later (0 at Rapid, REQ-011.1); nothing runs on the user's turn.
  * Bot decisions are computed by the app-wide advice worker; replies after unmount or for an old turn are dropped.
- * At mount the session's start record is put in the hand store. After a hand its record and the session's
- * next-hand state are written together, and the next one is dealt NEXT_HAND_DELAY_MS later
+ * At mount the session's start record is put in the hand store, unless the session is resumed. After a hand
+ * its record and the session's next-hand state are written together, and the next one is dealt NEXT_HAND_DELAY_MS later
  * (unless held) or once that write completes, whichever is later; a failed write deals nothing more (D-2).
  */
 export function useTableSession({
@@ -72,19 +81,21 @@ export function useTableSession({
   holdNextHand = false,
   createAdviceWorker = createProductionWorker,
   handStore,
+  resume,
 }: TableSessionOptions): {
   table: TableState;
   act: (action: Action) => void;
   dealNext: () => void;
 } {
-  const [table, setTable] = useState(() => seatSession(config));
+  const [table, setTable] = useState(() => resume?.table ?? seatSession(config));
   const reported = useRef<number | null>(null);
-  const [sessionId] = useState(newSessionId);
-  const [startedAt] = useState(() => new Date());
+  const [sessionId] = useState(() => resume?.sessionId ?? newSessionId());
+  const [startedAt] = useState(() => resume?.startedAt ?? new Date());
   // The start record (A-3): written once per mount from the seated table; each hand's write waits for it.
   // A failure is logged and does not stop dealing, as every hand's write puts the full session record.
+  // A resumed session is already stored ready for this hand, so nothing is written (A-6).
   const [initialTable] = useState(table);
-  const started = useRef<Promise<void> | null>(null);
+  const started = useRef<Promise<void> | null>(resume === undefined ? null : Promise.resolve());
   useEffect(() => {
     started.current ??= (handStore ?? sharedHandStore())
       .putSession(sessionRecord(initialTable, { sessionId, startedAt, updatedAt: startedAt }))
