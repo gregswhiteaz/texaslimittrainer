@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-24T11:39:00Z'
+updated_date: '2026-11-24T11:53:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -82,4 +82,6 @@ Full spec: doit/TASK-9.2/spec.md
 
 <!-- SECTION:NOTES:BEGIN -->
 AC added from TASK-9.1 follow-up (doc-26).
+
+Build: held bust review button reads Continue (same element/handler), opens Out of chips dialog; locked TASK-3.11 test re-pinned; npm test 1206 passed, Playwright 232 passed; gate PASS.
 <!-- SECTION:NOTES:END -->

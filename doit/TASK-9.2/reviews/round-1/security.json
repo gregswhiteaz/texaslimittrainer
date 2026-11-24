@@ -1,0 +1,3 @@
+{"reviewer": "security", "round": 1,
+ "findings": [],
+ "summary": "Production change is one JSX text node in src/ui/table/Table.tsx choosing between two static string literals based on userBusted(table); React escapes text, no untrusted input reaches it. No new dependencies, storage, randomness, or network. E2E stubs (stubReplayWords via addInitScript, seedStoredSessions) are test-only and run against the local dev server. Agrees with spec §8: no reachable trust boundary. No findings."}
