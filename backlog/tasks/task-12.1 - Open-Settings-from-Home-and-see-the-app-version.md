@@ -4,7 +4,7 @@ title: Open Settings from Home and see the app version
 status: To Do
 assignee: []
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-17T23:22:00Z'
+updated_date: '2026-11-24T19:27:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -48,6 +48,7 @@ Plan key: E12-S01 · Dream: limit-holdem-trainer
 - [ ] #2 Given a build whose app version is 1.2.0, When the Settings screen is shown, Then it shows "Version 1.2.0" [REQ-050.6]
 - [ ] #3 Given the Settings screen opened from Home, When the user chooses the back control, Then the Home screen opens [REQ-050.5]
 - [ ] #4 Given the Settings screen at 1280 x 720, When the user presses Tab repeatedly, Then focus reaches every Settings control, each is a native button, link or form field, each activates with Enter or Space, and each is at least 44 x 44 CSS px [REQ-057.2, REQ-057.4]
+- [ ] #5 Given the Settings screen and any Settings dialog are added, When the play-money check runs (e2e/play-money.spec.ts, tests/ui/screen-list.acceptance.test.ts), Then they are registered in e2e/support/screen-list.ts, visited by the walk, and the dialog detector also recognises role written as a JSX expression (e.g. role={'dialog'})
 <!-- AC:END -->
 
 ## Definition of Done
@@ -67,3 +68,9 @@ Plan key: E12-S01 · Dream: limit-holdem-trainer
 - [ ] #13 Story documentation is written and published to Backlog.md
 - [ ] #14 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+AC added from TASK-2.15 follow-up (doc-124).
+<!-- SECTION:NOTES:END -->

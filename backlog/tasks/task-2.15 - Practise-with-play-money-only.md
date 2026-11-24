@@ -1,11 +1,11 @@
 ---
 id: TASK-2.15
 title: Practise with play money only
-status: In Progress
+status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T23:03:00Z'
-updated_date: '2026-11-24T19:26:00Z'
+updated_date: '2026-11-24T19:27:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -18,6 +18,7 @@ documentation:
   - doc-1
   - doc-2
   - doc-3
+  - doc-124
 parent_task_id: TASK-2
 priority: high
 type: feature
@@ -83,4 +84,12 @@ Full spec: doit/TASK-2.15/spec.md
 Build: screen list + play-money walk (all screens/dialogs, ~1 s per browser), Deposit fixture, dist/package.json payment scan, source-vs-list check; no src changes; npm test 1259 passed, Playwright 290 passed; gate PASS.
 
 Judge r1 PASS 8/8; injected offers on every screen/dialog, new route/dialog and payment code/package all caught by name; no false positives on 200+ app strings; CI 45468942933 green.
+
+Follow-ups: TASK-12.1 and TASK-11.1 ACs added (register Settings/Statistics in the play-money screen list; JSX role detector). Not tracked (test plumbing, no failure): duplicated attribute list, 'real money' disclaimer NIT, package-lock.json scan (dist scan covers shipped code).
 <!-- SECTION:NOTES:END -->
+
+## Final Summary
+
+<!-- SECTION:FINAL_SUMMARY:BEGIN -->
+Added a play-money check, test-only with no src change. An e2e walk visits every screen and dialog (home, config, end-session dialog, table, bust dialog, ending, report) in Chromium and WebKit and fails on any deposit, payment, purchase, cash-out or real-money offer. A Vitest comparison fails when an App screen or dialog is missing from e2e/support/screen-list.ts. A scan of dist/ and package.json finds no payment library, Payment Request API or provider URL. A Deposit fixture proves the failure names the screen. Verified: npm test 1259 passed, e2e 6/6, judge round 1 PASS 8/8, with mutation proof per screen. Review these assumptions: A-1 phrase list and A-2..A-8, plus the hand-14 call deviation (all auto-accepted). Follow-ups: the dialog detector misses role={'dialog'}, the attribute list is duplicated, 'real money' would flag a future disclaimer, package-lock.json is not scanned, and Statistics and Settings must be registered by E11 and E12.
+<!-- SECTION:FINAL_SUMMARY:END -->

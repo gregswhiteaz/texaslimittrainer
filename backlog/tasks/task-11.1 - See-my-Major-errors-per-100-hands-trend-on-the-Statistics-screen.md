@@ -4,7 +4,7 @@ title: See my Major errors per 100 hands trend on the Statistics screen
 status: To Do
 assignee: []
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-17T23:22:00Z'
+updated_date: '2026-11-24T19:27:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -57,6 +57,7 @@ Plan key: E11-S01 · Dream: limit-holdem-trainer
 - [ ] #6 Given 320 stored hands, When the Statistics screen opens at per-500 grouping, Then it shows 'Play 180 more hands to see your first trend point.' instead of a chart; and Given 499 stored hands, Then it shows 'Play 1 more hand to see your first trend point.' [REQ-048.7, REQ-048.14]
 - [ ] #7 Given no stored hands, When the Statistics screen opens at per-500 grouping, Then it shows 'Play your first hand to see trends.' instead of a chart, no 'Play <n> more hands' message, and totals of 0 hands over 0 sessions [REQ-048.10, REQ-048.7, REQ-048.6]
 - [ ] #8 Given 1,840 stored hands over 9 sessions, When the Statistics screen opens with no filter applied, Then it shows a total of 1,840 hands over 9 sessions [REQ-048.6]
+- [ ] #9 Given the Statistics screen is added, When the play-money check runs, Then it is registered in e2e/support/screen-list.ts and visited by the play-money walk
 <!-- AC:END -->
 
 ## Definition of Done
@@ -76,3 +77,9 @@ Plan key: E11-S01 · Dream: limit-holdem-trainer
 - [ ] #13 Story documentation is written and published to Backlog.md
 - [ ] #14 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+AC added from TASK-2.15 follow-up (doc-124).
+<!-- SECTION:NOTES:END -->
