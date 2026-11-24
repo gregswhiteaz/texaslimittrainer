@@ -1,0 +1,117 @@
+{
+ "round": 1,
+ "test_suite": {
+  "command": "npm run lint && npm run typecheck && npm test",
+  "result": "PASS",
+  "passed": 1007,
+  "failed": 0,
+  "notes": "229 test files passed, 3 skipped; 41 tests skipped (opt-in slow suites). Coverage thresholds met."
+ },
+ "end_to_end": {
+  "command": "npm run build && npm run e2e (incl. e2e/rebuy.spec.ts) + judge holdout flows against npm run preview in Chromium and WebKit",
+  "result": "PASS",
+  "expected": "Seeded $4 user busts in hand 13 -> modal 'Out of chips' with Rebuy/Leave table, nothing dealt; Rebuy -> hand 14 at $160, stored rebuys 1 after it completes; Leave table -> Home, session unchanged; Resume reopens the dialog without dealing",
+  "actual": "All observed as specified in both browsers: 212/212 e2e pass; holdout 12/12 (plus 1 expected-fail control documenting a pre-existing Back-after-reload quirk outside this change)"
+ },
+ "integrity": {
+  "result": "PASS",
+  "notes": "doit.py test-integrity exit 0. Diff reviewed: no test-input recognition, hard-coded values, early returns or mocks. Only prior-test edits: next-hand.test.ts expected value re-pinned per spec (same check count) and session.acceptance.test.ts steps type widened with 'rebuy' (type-only, recorded deviation, acceptable). Button validation now reads config.seats instead of the chips list - equivalent set, needed because the user's 0 seat is excluded from chips."
+ },
+ "items": [
+  {
+   "spec": "SPEC-01",
+   "result": "PASS",
+   "evidence": "tests/table/rebuy.acceptance.test.ts 'a cash hand that leaves the user on $0...' passes; asserts userBusted true, nextHandDelay null (hold true/false), nextHand keeps 0 with other seats, nextStep 'rebuy', dealHand throws the exact RangeError; user on 1 and sit-and-go on 0 keep 1500. Holdout: rebuys preserved through nextHand; user on 50 still topped to 160, user on 96 carried; a real played hand from $4 that busts gives nextHandDelay null -> PASS."
+  },
+  {
+   "spec": "SPEC-02",
+   "result": "PASS",
+   "evidence": "Acceptance test passes: stacks [160,222,160,160,160,165], rebuys 0->1, all else deep-equal, dealt startingStack 160, $10/$20 gives 400. Holdout: 3-player $2/$4 table with userSeat 3 rebuys to $80 and the dialog reads $80; rebuy is pure; rebuys 7 -> 8 -> PASS."
+  },
+  {
+   "spec": "SPEC-03",
+   "result": "PASS",
+   "evidence": "Acceptance test stores via fake-indexeddb: bust records 0 then 1 with user stack 0, final record rebuys 2, restoreSession rebuys 2. Holdout: real played bust -> handWrite/add -> getSession user stack 0 -> restore -> rebuyAndDeal -> play -> stored rebuys 1, handsPlayed 2 -> PASS."
+  },
+  {
+   "spec": "SPEC-04",
+   "result": "PASS",
+   "evidence": "Acceptance test passes: record round-trips, restored deep-equals nextHand(t), nextStep 'rebuy', bot-on-0 and sit-and-go user-on-0 rejected with the engine message; A-6 seed busts with pinned words. Holdout: user stack -1/0.5/'0'/null/NaN rejected, user+bot both on 0 rejected (seat 3 message), busted user on the button accepted and restores to 'rebuy', findPausedSession returns the busted session -> PASS."
+  },
+  {
+   "spec": "SPEC-05",
+   "result": "PASS",
+   "evidence": "Acceptance test passes: rebuy throws 'No rebuy: the user has chips' for seated/top-up/$1/sit-and-go tables and 'No rebuy during a hand' for any dealt hand; rebuys stays 0; 95 top-up leaves rebuys 0. Holdout: rebuyAndDeal/dealAfterDone no-op mid-hand and when seated -> PASS."
+  },
+  {
+   "spec": "SPEC-06",
+   "result": "PASS",
+   "evidence": "tests/ui/bust-dialog.acceptance.test.tsx passes: exact dialog markup, heading, D-2 body with $160 and $400, buttons [Rebuy, Leave table], status still present, held review shows Deal next hand and no dialog, restored table shows dialog. Holdout render at $2/$4 -> '$80' -> PASS."
+  },
+  {
+   "spec": "SPEC-07",
+   "result": "PASS",
+   "evidence": "Acceptance test: dealAfterDone on the done bust returns the same object, nextStep stays 'done'; non-bust deals next hand. Holdout: same updater no-op on mid-hand/seated -> PASS."
+  },
+  {
+   "spec": "SPEC-08",
+   "result": "PASS",
+   "evidence": "rebuy.test.ts passes: true for done cash user 0 and hand===null user 0; false seated, mid-hand, all-in mid-hand with 0 behind, sit-and-go. Holdout: non-default userSeat 3 busted; bot on 0 between hands not a user bust -> PASS."
+  },
+  {
+   "spec": "SPEC-09",
+   "result": "PASS",
+   "evidence": "rebuy.test.ts: accepts 0,1,1e9; rejects 1e9+1,-1,1.5,'2',{} with 'Invalid session record: rebuys'; sessionRecord writes table.rebuys. Holdout: missing rebuys rejected; cap round-trips; findPausedSession skips rebuys above cap -> PASS."
+  },
+  {
+   "spec": "SPEC-10",
+   "result": "PASS",
+   "evidence": "Render test iterates seated, all storyboard states, FLOP_BET, KINGS_SHOWDOWN, final 1 and 95, topped-up, held review, sit-and-go on 0 (done and next) asserting no <dialog, no bust-, no rebuy/add chips/top up/buy in text -> PASS. Holdout: KINGS_SHOWDOWN has no dialog -> PASS."
+  },
+  {
+   "spec": "SPEC-11",
+   "result": "PASS",
+   "evidence": "e2e/rebuy.spec.ts test 1 passes in Chromium and WebKit (dialog named Out of chips, Rebuy focused, $0 seat, Hand #13 after 5 s, one record, session handsPlayed 13/user 0/rebuys 0, Escape ignored, axe, same-origin). Holdout real app: dialog matches :modal, Tab focus stays in the dialog, header Leave table not clickable behind it, both buttons >= 44 px, D-2 text exact, no page errors -> PASS."
+  },
+  {
+   "spec": "SPEC-12",
+   "result": "PASS",
+   "evidence": "e2e test 2 passes both browsers. Holdout: double-click Rebuy counts once (stored rebuys 1 after hand 14); Leave -> Resume -> Rebuy from the restored bust deals hand 14 with startingStack 160, stores rebuys 1, then hand 15 auto-deals -> PASS."
+  },
+  {
+   "spec": "SPEC-13",
+   "result": "PASS",
+   "evidence": "e2e test 3 passes both browsers. Holdout: reload at the dialog -> Resume reopens it, nothing dealt after 5 s; browser Back at the dialog pauses to Home, session unchanged (user 0, rebuys 0), Resume reopens; A-1: Rebuy then header Home before hand 14 completes -> stored rebuys 0 / user 0, Resume reopens dialog, second Rebuy counts once -> PASS."
+  },
+  {
+   "spec": "SPEC-14",
+   "result": "PASS",
+   "evidence": "e2e test 4 passes both browsers (no rebuy/add chips button, no dialog at first turn, result, next deal) -> PASS."
+  },
+  {
+   "spec": "SPEC-15",
+   "result": "PASS",
+   "evidence": "npm run lint && typecheck && npm test exit 0: 229 files passed / 3 skipped, 1007 tests passed / 41 skipped (opt-in slow), coverage all 95.66% lines, table 99.32%, session.ts 99.52%; git diff --stat main -- src/engine src/bots src/advice empty; session.ts/session-record.ts imports unchanged (no ui/storage) -> PASS."
+  },
+  {
+   "spec": "SPEC-16",
+   "result": "PASS",
+   "evidence": "npm run build && npm run e2e: 212 passed, 16 skipped, 0 failed (Chromium+WebKit). gh run list: CI 45322832954 and Visual 45322833066 on review r1 commit success -> PASS."
+  },
+  {
+   "spec": "SPEC-17",
+   "result": "PASS",
+   "evidence": "docs/storage/sessions.md: rebuys row 0..MAX_SESSION_COUNT with A-1, user 0 seat note, carried-not-topped-up, validation exception + cap, stored bust/Resume paragraph, new tests listed; docs/ui/navigation.md: dialog Leave table pauses to Home like the header. Backlog story doc is published by the later docs step (not yet expected) -> PASS."
+  }
+ ],
+ "findings": [
+  {
+   "id": "J-1-01",
+   "severity": "LOW",
+   "spec": "SPEC-13",
+   "expected_vs_actual": "Pre-existing, not introduced by this change (App.tsx untouched): after a page reload at the Table and a fresh Resume, browser Back stays on the Table instead of pausing to Home. Without a reload, Back at the bust dialog pauses to Home as documented.",
+   "fix": "Out of scope; consider a follow-up task for TASK-2.14's Back handling after reload."
+  }
+ ],
+ "summary": "All 17 SPEC items PASS. Unit/acceptance suite, full Playwright suite (Chromium+WebKit) and CI are green; holdout checks (boundary records, non-default seat/stake, double Rebuy, reload/Back/Home at the dialog, A-1 resume after unrecorded rebuy, modal focus/inertness) all pass. No blocking findings; one LOW pre-existing observation."
+}

@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-24T03:50:00Z'
+updated_date: '2026-11-24T04:02:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -43,27 +43,27 @@ Plan key: E03-S08 · Dream: limit-holdem-trainer
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Given the user's stack is $0 at the end of a $4/$8 cash hand, When the result is shown, Then a dialog offers Rebuy and Leave table and no next hand is dealt while the dialog is open, even after 1.5 s [REQ-007.2]
-- [ ] #2 Given the bust dialog, When the user chooses Rebuy, Then the user's stack is $160, the next hand is dealt and the session's rebuy count increases by 1 [REQ-007.3]
-- [ ] #3 Given a user who rebought twice in a session, When the session record is read after the next completed hand, Then its rebuy count is 2 [REQ-007.3]
-- [ ] #4 Given the bust dialog, When the user chooses Leave table, Then the dialog closes and no further hand is dealt, even after 1.5 s [REQ-007.2]
-- [ ] #5 Given the user's stack is $1 or more, When the Table screen is shown at any moment, Then no rebuy or add-chips control is offered [REQ-007.4]
+- [x] #1 Given the user's stack is $0 at the end of a $4/$8 cash hand, When the result is shown, Then a dialog offers Rebuy and Leave table and no next hand is dealt while the dialog is open, even after 1.5 s [REQ-007.2]
+- [x] #2 Given the bust dialog, When the user chooses Rebuy, Then the user's stack is $160, the next hand is dealt and the session's rebuy count increases by 1 [REQ-007.3]
+- [x] #3 Given a user who rebought twice in a session, When the session record is read after the next completed hand, Then its rebuy count is 2 [REQ-007.3]
+- [x] #4 Given the bust dialog, When the user chooses Leave table, Then the dialog closes and no further hand is dealt, even after 1.5 s [REQ-007.2]
+- [x] #5 Given the user's stack is $1 or more, When the Table screen is shown at any moment, Then no rebuy or add-chips control is offered [REQ-007.4]
 <!-- AC:END -->
 
 ## Definition of Done
 <!-- DOD:BEGIN -->
-- [ ] #1 Every acceptance criterion has at least one automated test (unit, property or Playwright) that passes
-- [ ] #2 `npm run lint`, `npm run typecheck` and `npm test` pass with zero errors [REQ-059.1, REQ-059.4]
-- [ ] #3 The golden-spot suite passes 100% (applies from the story that creates the suite, E07-S14, onward) [REQ-039.4]
-- [ ] #4 Coverage thresholds hold: >= 90% engine/bots/advice/statistics, >= 70% overall [REQ-059.3]
-- [ ] #5 Engine, bots, advice and statistics code imports no UI or browser-only code [REQ-059.2]
-- [ ] #6 Stories that touch the engine, bots or advice: a 10,000-hand playtest reports zero invariant violations (applies once the playtest runner exists, E01-S07, onward) [REQ-056.1]
-- [ ] #7 Stories that add or change a screen: Playwright test of the screen flow in Chromium and WebKit, and axe reports zero serious or critical violations (axe tooling is provisioned in the toolchain story E01-S01) [REQ-057.1]
-- [ ] #8 No new network requests beyond the app's own files [REQ-058.1]
-- [ ] #9 Strategy-content stories: text is original and every chart, range or golden spot carries its justification [REQ-061.2]
-- [ ] #10 CI workflow is green on the story's branch (applies once the CI story E01-S02 is done; E01-S01 instead passes the same checks locally) [REQ-064.2]
-- [ ] #11 Story documentation is written and published to Backlog.md
-- [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
+- [x] #1 Every acceptance criterion has at least one automated test (unit, property or Playwright) that passes
+- [x] #2 `npm run lint`, `npm run typecheck` and `npm test` pass with zero errors [REQ-059.1, REQ-059.4]
+- [x] #3 The golden-spot suite passes 100% (applies from the story that creates the suite, E07-S14, onward) [REQ-039.4]
+- [x] #4 Coverage thresholds hold: >= 90% engine/bots/advice/statistics, >= 70% overall [REQ-059.3]
+- [x] #5 Engine, bots, advice and statistics code imports no UI or browser-only code [REQ-059.2]
+- [x] #6 Stories that touch the engine, bots or advice: a 10,000-hand playtest reports zero invariant violations (applies once the playtest runner exists, E01-S07, onward) [REQ-056.1]
+- [x] #7 Stories that add or change a screen: Playwright test of the screen flow in Chromium and WebKit, and axe reports zero serious or critical violations (axe tooling is provisioned in the toolchain story E01-S01) [REQ-057.1]
+- [x] #8 No new network requests beyond the app's own files [REQ-058.1]
+- [x] #9 Strategy-content stories: text is original and every chart, range or golden spot carries its justification [REQ-061.2]
+- [x] #10 CI workflow is green on the story's branch (applies once the CI story E01-S02 is done; E01-S01 instead passes the same checks locally) [REQ-064.2]
+- [x] #11 Story documentation is written and published to Backlog.md
+- [x] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
 
 ## Implementation Plan
@@ -84,4 +84,6 @@ Full spec: doit/TASK-3.11/spec.md
 TASK-3.4 Q-4 interim top-up to $160 must be removed once this and the other all-in/rebuy stories land: tracked as TASK-3.21.
 
 Build: user bust at $0 shows 'Out of chips' dialog (Rebuy $160 / Leave table), $0 user seat storable (cash), rebuys capped and stored with next hand; npm test 1007 passed, e2e 212 passed; gate PASS. Prior-story test type annotation widened (session.acceptance.test.ts, no assertion change).
+
+Judge r1 PASS 17/17; CI 45322832954 green.
 <!-- SECTION:NOTES:END -->

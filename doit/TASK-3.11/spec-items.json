@@ -3,102 +3,102 @@
     "id": "SPEC-01",
     "verifies": "AC#1, DoD#1",
     "verification": "acceptance `tests/table/rebuy.acceptance.test.ts::a cash hand that leaves the user on $0 stops dealing until the user chooses`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-02",
     "verifies": "AC#2, DoD#1",
     "verification": "acceptance `tests/table/rebuy.acceptance.test.ts::rebuy sets the user to the buy-in, deals the next hand and counts one rebuy`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-03",
     "verifies": "AC#3, DoD#1",
     "verification": "acceptance `tests/table/rebuy.acceptance.test.ts::a user who rebought twice has rebuys 2 in the session record after the next completed hand`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-04",
     "verifies": "AC#1, AC#4, DoD#1",
     "verification": "acceptance `tests/table/rebuy.acceptance.test.ts::a stored cash bust restores with the user on $0 waiting to rebuy`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-05",
     "verifies": "AC#5, DoD#1",
     "verification": "acceptance `tests/table/rebuy.acceptance.test.ts::no rebuy is possible while the user has chips`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-06",
     "verifies": "AC#1, DoD#1",
     "verification": "acceptance `tests/ui/bust-dialog.acceptance.test.tsx::a bust shows the Rebuy and Leave table dialog over the result`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-07",
     "verifies": "AC#1, DoD#1",
     "verification": "acceptance `tests/table/rebuy.acceptance.test.ts::deal next hand on a bust deals nothing`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-08",
     "verifies": "AC#1, AC#5",
     "verification": "unit `tests/table/rebuy.test.ts::userBusted is true only for a cash user on $0 between hands`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-09",
     "verifies": "AC#3",
     "verification": "unit `tests/table/rebuy.test.ts::rebuys is written from the table and capped at MAX_SESSION_COUNT`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-10",
     "verifies": "AC#5, DoD#1",
     "verification": "acceptance `tests/ui/bust-dialog.acceptance.test.tsx::no rebuy or add-chips control while the user has chips`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-11",
     "verifies": "AC#1, DoD#7, DoD#8",
     "verification": "acceptance `e2e/rebuy.spec.ts::a bust opens the Rebuy and Leave table dialog and no hand is dealt after 1.5 s`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-12",
     "verifies": "AC#2, AC#3, DoD#7",
     "verification": "acceptance `e2e/rebuy.spec.ts::Rebuy sets the stack to $160, deals the next hand and counts one rebuy`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-13",
     "verifies": "AC#4, DoD#7",
     "verification": "acceptance `e2e/rebuy.spec.ts::Leave table in the bust dialog deals nothing more and Resume reopens the dialog`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-14",
     "verifies": "AC#5, DoD#7",
     "verification": "acceptance `e2e/rebuy.spec.ts::no rebuy or add-chips control while the user has chips`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-15",
     "verifies": "DoD#1, DoD#2, DoD#3, DoD#4, DoD#5, DoD#6",
     "verification": "command `npm run lint && npm run typecheck && npm test && git diff --stat main -- src/engine src/bots src/advice`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-16",
     "verifies": "DoD#7, DoD#8, DoD#9, DoD#10, DoD#12",
     "verification": "command `npm run build && npm run e2e && gh run list --branch doit/TASK-3.11 --limit 1`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-17",
     "verifies": "DoD#11",
     "verification": "manual read of `docs/storage/sessions.md` and `docs/ui/navigation.md` against this list; `backlog doc list --plain` shows the story doc",
-    "status": "pending"
+    "status": "pass"
   }
 ]
