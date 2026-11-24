@@ -1,0 +1,68 @@
+[
+  {
+    "id": "SPEC-01",
+    "verifies": "AC#1, DoD#1, DoD#7, DoD#8",
+    "verification": "acceptance `e2e/new-game-confirm.spec.ts::Start game with a paused session asks first and starts nothing`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-02",
+    "verifies": "AC#3, DoD#1, DoD#7",
+    "verification": "acceptance `e2e/new-game-confirm.spec.ts::Cancel and Escape keep the paused session and the chosen values`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-03",
+    "verifies": "AC#2, DoD#1, DoD#7",
+    "verification": "acceptance `e2e/new-game-confirm.spec.ts::Confirm ends the paused session, saves its report and starts the new game`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-04",
+    "verifies": "AC#2, AC#4, DoD#1",
+    "verification": "acceptance `tests/storage/end-paused.acceptance.test.ts::ends the confirmed session now and older unended sessions at their updatedAt`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-05",
+    "verifies": "AC#2, DoD#1",
+    "verification": "acceptance `tests/storage/end-paused.acceptance.test.ts::a failure ending the confirmed session changes nothing`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-06",
+    "verifies": "AC#4, DoD#1",
+    "verification": "acceptance `tests/storage/end-paused.acceptance.test.ts::a failure ending an older session is returned and the others still end`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-07",
+    "verifies": "AC#1, DoD#1",
+    "verification": "unit `tests/ui/end-session-dialog.acceptance.test.tsx::renders the dialog only with a prompt`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-08",
+    "verifies": "AC#4, DoD#1, DoD#7",
+    "verification": "acceptance `e2e/new-game-confirm.spec.ts::after a confirmed new game only the new session is not ended`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-09",
+    "verifies": "AC#2, DoD#1, DoD#7",
+    "verification": "acceptance `e2e/new-game-confirm.spec.ts::a 0-hand paused session is discarded on Confirm`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-10",
+    "verifies": "AC#5, DoD#1, DoD#7",
+    "verification": "acceptance `e2e/new-game-confirm.spec.ts::with no paused session Start game starts at once`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-11",
+    "verifies": "DoD#2, DoD#3, DoD#4, DoD#5, DoD#6, DoD#8, DoD#9, DoD#10, DoD#11, DoD#12",
+    "verification": "command `npm run lint && npm run typecheck && npm test && npx vitest run tests/golden/ && npm run -s playtest -- --hands 10000 --seed 42 && npx playwright test`",
+    "status": "pending"
+  }
+]

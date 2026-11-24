@@ -1,0 +1,692 @@
+{
+  "id": "TASK-2.7",
+  "title": "Confirm ending a paused session before starting a new game",
+  "status": "To Do",
+  "archived": false,
+  "type": "feature",
+  "priority": "high",
+  "project": null,
+  "assignees": [],
+  "reporter": null,
+  "labels": [
+    "dream-limit-holdem-trainer"
+  ],
+  "milestone": "m-1",
+  "parentTaskId": "TASK-2",
+  "acceptanceCriteriaCompleted": 0,
+  "acceptanceCriteriaCount": 5,
+  "references": [
+    "dreams/limit-holdem-trainer/requirements.md"
+  ],
+  "modifiedFiles": [],
+  "ordinal": 71000,
+  "createdAt": "2026-11-17T22:46:00Z",
+  "updatedAt": "2026-11-17T23:22:00Z",
+  "dueDate": null,
+  "isReady": true,
+  "path": "backlog/tasks/task-2.7 - Confirm-ending-a-paused-session-before-starting-a-new-game.md",
+  "description": "As a learner, I want to be asked before a new game ends my paused session, so that I never lose a paused session by accident.\n\nAt most one paused session exists. When the user chooses Start game on Game Config while a paused session exists, a dialog asks the user to confirm ending the paused session. Confirm ends the paused session through the same session-end operation as Leave table (E10 saves its Session Report; a 0-hand session is discarded, REQ-044.8) and then starts the new session. Cancel closes the dialog and changes nothing: the paused session stays as stored and no new session starts. The confirmation is asked on Start game, not on New game, so cancelling Game Config never ends the paused session.\n\n## Requirements covered\n- REQ-004 (Must): Pause, resume and end a session \u2014 When the user goes Home or closes the app during a session, TLH Trainer shall keep that session as a paused session that can be resumed at the start of the next hand; when the user chooses Leave table, it shall end the session and open the Session Report.\n\nCovers: REQ-004\n\n## Notes\nReport saving belongs to E10's session-end operation (E10-S01, REQ-044.7); this story calls it.\n\nPlan key: E02-S09 \u00b7 Dream: limit-holdem-trainer",
+  "dependencies": [
+    "TASK-2.6",
+    "TASK-10.1"
+  ],
+  "dependencyGraph": {
+    "root": "TASK-2.7",
+    "nodes": [
+      {
+        "id": "TASK-2.7",
+        "title": "Confirm ending a paused session before starting a new game",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": 0,
+        "dependentDepth": 0
+      },
+      {
+        "id": "TASK-1.1",
+        "title": "Bootstrap the strict TypeScript project with one-command checks",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 4,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.2",
+        "title": "Rank showdown hands by real poker hand rankings",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 5,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.3",
+        "title": "Deal every hand from a seeded shuffle with a replay code",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 5,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.4",
+        "title": "Play a complete fixed-limit hand from blinds to showdown",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 4,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.5",
+        "title": "Give each deciding seat only its own view of the hand",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 4,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.6",
+        "title": "Run seeded bot-only hands from the command line",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 5,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.7",
+        "title": "Run every check in GitHub Actions on each push and pull request",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 5,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.8",
+        "title": "Check game invariants after every playtest action",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 4,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.9",
+        "title": "Let a short-stacked player call all-in",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 5,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.10",
+        "title": "Split the pot into side pots for unequal all-ins",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 4,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.15",
+        "title": "Show and muck cards at showdown in casino order",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 3,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-2",
+        "title": "Launch and set up a session",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 1
+      },
+      {
+        "id": "TASK-2.1",
+        "title": "Start a game from Home through Game Config",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 2,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-2.6",
+        "title": "Resume a paused session from Home",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 1,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-3.1",
+        "title": "Play a complete hand against TAG bots at a default 6-max table in the browser",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 3,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-3.3",
+        "title": "See every seat, the board, the pot and the button at a glance",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 2,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-3.4",
+        "title": "See who won each hand and get the next hand dealt automatically",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 3,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-3.5",
+        "title": "Read big-index cards drawn in code",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 3,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-3.9",
+        "title": "Keep a permanent record of every completed hand",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 2,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-3.10",
+        "title": "Save the session after every hand so it can be resumed",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 2,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-3.11",
+        "title": "Rebuy or leave when my stack runs out",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 2,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-6.1",
+        "title": "Face TAG bots that act from the advice engine",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 4,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-6.2",
+        "title": "Vary TAG's play in mixed spots from its style data file",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 6,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-6.3",
+        "title": "Face a Calling station that calls where TAG would fold or raise",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 5,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-6.4",
+        "title": "Face a Maniac that bets and raises where TAG would check or call",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 5,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-6.5",
+        "title": "Face a Rock that folds every hand outside a narrow starting range",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 5,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-6.6",
+        "title": "Seat bots by line-up preset with unique names",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 4,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-6.7",
+        "title": "Record an edited line-up as Custom",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 3,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-6.8",
+        "title": "Replace a busted bot with a new bot from the line-up preset",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 3,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-6.18",
+        "title": "Draw bot randomness only from the replay code and seat",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 7,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-7.1",
+        "title": "Compute a hand's equity against opponent hands",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 6,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-7.2",
+        "title": "Recommend a preflop action from the 6-max chart",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 5,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-7.3",
+        "title": "Recommend call or fold after the flop from equity and pot odds",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 5,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-7.12",
+        "title": "Enabler: shared style-stat functions for VPIP, PFR, Aggression, WTSD and W$SD",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 3,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-10.1",
+        "title": "End the session with Leave table and see its saved report with my cash result",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 1,
+        "dependentDepth": null
+      }
+    ],
+    "edges": [
+      {
+        "from": "TASK-1.2",
+        "to": "TASK-1.7"
+      },
+      {
+        "from": "TASK-1.3",
+        "to": "TASK-1.7"
+      },
+      {
+        "from": "TASK-1.4",
+        "to": "TASK-1.2"
+      },
+      {
+        "from": "TASK-1.4",
+        "to": "TASK-1.3"
+      },
+      {
+        "from": "TASK-1.5",
+        "to": "TASK-1.4"
+      },
+      {
+        "from": "TASK-1.6",
+        "to": "TASK-1.5"
+      },
+      {
+        "from": "TASK-1.7",
+        "to": "TASK-1.1"
+      },
+      {
+        "from": "TASK-1.8",
+        "to": "TASK-1.6"
+      },
+      {
+        "from": "TASK-1.8",
+        "to": "TASK-1.7"
+      },
+      {
+        "from": "TASK-1.9",
+        "to": "TASK-1.8"
+      },
+      {
+        "from": "TASK-1.10",
+        "to": "TASK-1.9"
+      },
+      {
+        "from": "TASK-1.15",
+        "to": "TASK-1.8"
+      },
+      {
+        "from": "TASK-1.15",
+        "to": "TASK-1.10"
+      },
+      {
+        "from": "TASK-2",
+        "to": "TASK-2.7"
+      },
+      {
+        "from": "TASK-2.1",
+        "to": "TASK-3.1"
+      },
+      {
+        "from": "TASK-2.6",
+        "to": "TASK-2.1"
+      },
+      {
+        "from": "TASK-2.6",
+        "to": "TASK-3.10"
+      },
+      {
+        "from": "TASK-2.7",
+        "to": "TASK-2.6"
+      },
+      {
+        "from": "TASK-2.7",
+        "to": "TASK-10.1"
+      },
+      {
+        "from": "TASK-3.1",
+        "to": "TASK-1.5"
+      },
+      {
+        "from": "TASK-3.1",
+        "to": "TASK-3.5"
+      },
+      {
+        "from": "TASK-3.1",
+        "to": "TASK-6.1"
+      },
+      {
+        "from": "TASK-3.3",
+        "to": "TASK-3.1"
+      },
+      {
+        "from": "TASK-3.3",
+        "to": "TASK-3.5"
+      },
+      {
+        "from": "TASK-3.4",
+        "to": "TASK-3.3"
+      },
+      {
+        "from": "TASK-3.5",
+        "to": "TASK-1.1"
+      },
+      {
+        "from": "TASK-3.9",
+        "to": "TASK-1.15"
+      },
+      {
+        "from": "TASK-3.9",
+        "to": "TASK-3.4"
+      },
+      {
+        "from": "TASK-3.9",
+        "to": "TASK-6.7"
+      },
+      {
+        "from": "TASK-3.9",
+        "to": "TASK-6.8"
+      },
+      {
+        "from": "TASK-3.9",
+        "to": "TASK-7.12"
+      },
+      {
+        "from": "TASK-3.10",
+        "to": "TASK-3.9"
+      },
+      {
+        "from": "TASK-3.11",
+        "to": "TASK-3.4"
+      },
+      {
+        "from": "TASK-3.11",
+        "to": "TASK-3.10"
+      },
+      {
+        "from": "TASK-6.1",
+        "to": "TASK-1.6"
+      },
+      {
+        "from": "TASK-6.1",
+        "to": "TASK-7.2"
+      },
+      {
+        "from": "TASK-6.1",
+        "to": "TASK-7.3"
+      },
+      {
+        "from": "TASK-6.2",
+        "to": "TASK-6.18"
+      },
+      {
+        "from": "TASK-6.3",
+        "to": "TASK-6.2"
+      },
+      {
+        "from": "TASK-6.4",
+        "to": "TASK-6.2"
+      },
+      {
+        "from": "TASK-6.5",
+        "to": "TASK-6.2"
+      },
+      {
+        "from": "TASK-6.6",
+        "to": "TASK-6.3"
+      },
+      {
+        "from": "TASK-6.6",
+        "to": "TASK-6.4"
+      },
+      {
+        "from": "TASK-6.6",
+        "to": "TASK-6.5"
+      },
+      {
+        "from": "TASK-6.7",
+        "to": "TASK-6.6"
+      },
+      {
+        "from": "TASK-6.8",
+        "to": "TASK-6.7"
+      },
+      {
+        "from": "TASK-6.18",
+        "to": "TASK-6.1"
+      },
+      {
+        "from": "TASK-7.1",
+        "to": "TASK-1.2"
+      },
+      {
+        "from": "TASK-7.2",
+        "to": "TASK-1.5"
+      },
+      {
+        "from": "TASK-7.3",
+        "to": "TASK-7.1"
+      },
+      {
+        "from": "TASK-7.3",
+        "to": "TASK-7.2"
+      },
+      {
+        "from": "TASK-7.12",
+        "to": "TASK-1.4"
+      },
+      {
+        "from": "TASK-10.1",
+        "to": "TASK-3.3"
+      },
+      {
+        "from": "TASK-10.1",
+        "to": "TASK-3.9"
+      },
+      {
+        "from": "TASK-10.1",
+        "to": "TASK-3.10"
+      },
+      {
+        "from": "TASK-10.1",
+        "to": "TASK-3.11"
+      }
+    ]
+  },
+  "readiness": {
+    "isReady": true,
+    "isBlocked": false,
+    "blockingDependencies": [],
+    "missingDependencies": []
+  },
+  "documentation": [
+    "doc-1",
+    "doc-2"
+  ],
+  "subtasks": [],
+  "acceptanceCriteria": [
+    {
+      "index": 1,
+      "text": "Given a paused session exists, When the user chooses Start game on Game Config, Then a dialog asks the user to confirm ending the paused session and no new session has started [REQ-004.4]",
+      "checked": false
+    },
+    {
+      "index": 2,
+      "text": "Given the confirmation dialog, When the user confirms, Then the paused session is ended, its Session Report is saved and the new session starts [REQ-004.4]",
+      "checked": false
+    },
+    {
+      "index": 3,
+      "text": "Given the confirmation dialog, When the user cancels, Then the paused session is stored unchanged, no new session exists and Game Config still shows the chosen values [REQ-004.4]",
+      "checked": false
+    },
+    {
+      "index": 4,
+      "text": "Given a paused session and a confirmed new game, When storage is read after the new game's first hand, Then exactly one session is not ended and it is the new one [REQ-004.1]",
+      "checked": false
+    },
+    {
+      "index": 5,
+      "text": "Given no paused session exists, When the user chooses Start game, Then no confirmation dialog is shown and the session starts [REQ-004.4]",
+      "checked": false
+    }
+  ],
+  "definitionOfDone": [
+    {
+      "index": 1,
+      "text": "Every acceptance criterion has at least one automated test (unit, property or Playwright) that passes",
+      "checked": false
+    },
+    {
+      "index": 2,
+      "text": "`npm run lint`, `npm run typecheck` and `npm test` pass with zero errors [REQ-059.1, REQ-059.4]",
+      "checked": false
+    },
+    {
+      "index": 3,
+      "text": "The golden-spot suite passes 100% (applies from the story that creates the suite, E07-S14, onward) [REQ-039.4]",
+      "checked": false
+    },
+    {
+      "index": 4,
+      "text": "Coverage thresholds hold: >= 90% engine/bots/advice/statistics, >= 70% overall [REQ-059.3]",
+      "checked": false
+    },
+    {
+      "index": 5,
+      "text": "Engine, bots, advice and statistics code imports no UI or browser-only code [REQ-059.2]",
+      "checked": false
+    },
+    {
+      "index": 6,
+      "text": "Stories that touch the engine, bots or advice: a 10,000-hand playtest reports zero invariant violations (applies once the playtest runner exists, E01-S07, onward) [REQ-056.1]",
+      "checked": false
+    },
+    {
+      "index": 7,
+      "text": "Stories that add or change a screen: Playwright test of the screen flow in Chromium and WebKit, and axe reports zero serious or critical violations (axe tooling is provisioned in the toolchain story E01-S01) [REQ-057.1]",
+      "checked": false
+    },
+    {
+      "index": 8,
+      "text": "No new network requests beyond the app's own files [REQ-058.1]",
+      "checked": false
+    },
+    {
+      "index": 9,
+      "text": "Strategy-content stories: text is original and every chart, range or golden spot carries its justification [REQ-061.2]",
+      "checked": false
+    },
+    {
+      "index": 10,
+      "text": "CI workflow is green on the story's branch (applies once the CI story E01-S02 is done; E01-S01 instead passes the same checks locally) [REQ-064.2]",
+      "checked": false
+    },
+    {
+      "index": 11,
+      "text": "Story documentation is written and published to Backlog.md",
+      "checked": false
+    },
+    {
+      "index": 12,
+      "text": "Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled",
+      "checked": false
+    }
+  ],
+  "implementationPlan": null,
+  "implementationNotes": null,
+  "comments": [],
+  "finalSummary": null
+}

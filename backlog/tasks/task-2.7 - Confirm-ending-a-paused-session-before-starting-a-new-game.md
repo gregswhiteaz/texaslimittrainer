@@ -1,10 +1,11 @@
 ---
 id: TASK-2.7
 title: Confirm ending a paused session before starting a new game
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-17T23:22:00Z'
+updated_date: '2026-11-24T18:15:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -64,3 +65,14 @@ Plan key: E02-S09 · Dream: limit-holdem-trainer
 - [ ] #11 Story documentation is written and published to Backlog.md
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. Start game re-reads storage at click time (after tableWritesSettled); no paused session → Table opens as today
+2. Paused session → confirmation dialog inside Game Config (endPrompt prop; values kept); Cancel/Escape change nothing
+3. Confirm → endPausedSessions: confirmed session ended now (report saved, or removed if 0 hands); other valid unended sessions ended at their updatedAt; then the Table opens; exactly one session not ended afterwards
+4. Tests: unit/store, render, e2e confirm/cancel/no-dialog flows in Chromium and WebKit with axe
+
+Full spec: doit/TASK-2.7/spec.md
+<!-- SECTION:PLAN:END -->
