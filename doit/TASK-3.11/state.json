@@ -1427,7 +1427,14 @@
       "skips": 0
     }
   },
-  "history": [],
+  "history": [
+    {
+      "t": "2026-11-23T21:20:58",
+      "event": "unlock",
+      "file": "tests/table/rebuy.acceptance.test.ts",
+      "reason": "TASK-3.21 Q-2: top-up removed and sit-and-go stops at first bust; re-pin expected values one-for-one, same expect count"
+    }
+  ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-3.11",
   "spec_sha256": "300b9dcf9c16b538bf370f6f7c8e0b67e90948ae04db841165d1b01b0252b438",
   "review_findings": {
@@ -1436,5 +1443,8 @@
   "judge_results": {
     "1": "PASS"
   },
-  "doc_id": "doc-109"
+  "doc_id": "doc-109",
+  "relock_pending": [
+    "tests/table/rebuy.acceptance.test.ts"
+  ]
 }

@@ -1,10 +1,11 @@
 ---
 id: TASK-3.21
 title: Remove the temporary short-stack top-up once all-ins and rebuy exist
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-19T01:10:00Z'
-updated_date: '2026-11-24T04:03:00Z'
+updated_date: '2026-11-24T04:21:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -39,6 +40,18 @@ Promised to the user in TASK-3.4 Q-4. Until all-ins exist the engine refuses sta
 - [ ] #6 Given a sit-and-go seat busts or runs short, When the next hand is dealt, Then it is never refilled (no top-up of any amount), per REQ-008 — TASK-2.4 left the interim top-up refilling sng short stacks to 20 big bets (800 at 20/40)
 - [ ] #7 Given a stored busted cash session whose rebuys equals MAX_SESSION_COUNT, When the user chooses Rebuy, Then rebuy() refuses with a RangeError (or does not increment past the cap) and no record above the cap is ever written
 <!-- AC:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. Remove the TEMPORARY short-stack top-up in nextHand (cash short stacks play on with all-ins; $0 user gets the bust dialog)
+2. Sit-and-go first bust: sitAndGoStopped + 'stopped' step — no further hand, last result stays, Leave table works
+3. rebuy(): RangeError at MAX_SESSION_COUNT (moved to session.ts, re-exported); rebuyAndDeal no-op at the cap
+4. Re-pin locked next-hand.acceptance (TASK-3.4) and rebuy.acceptance (TASK-3.11) one-for-one; re-pin unit next-hand.test and game-type.test; playSession rebuys a busted user
+5. Docstring reflow, BustDialog Escape comment, engine/docs wording; e2e seeded short-stack hand with all-in buttons and side pots
+
+Full spec: doit/TASK-3.21/spec.md
+<!-- SECTION:PLAN:END -->
 
 ## Implementation Notes
 

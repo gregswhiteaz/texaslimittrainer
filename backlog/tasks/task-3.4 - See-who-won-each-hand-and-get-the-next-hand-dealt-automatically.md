@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-23T03:44:00Z'
+updated_date: '2026-11-24T04:20:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-0
@@ -104,6 +104,8 @@ Locked test edited for TASK-6.8 Q-4 (user-approved): bots are replaced, not topp
 Locked test e2e/next-hand.spec.ts edited for TASK-2.5 (Q-2 routine + Q-3 user-approved).
 
 Locked test tests/table/next-hand.acceptance.test.ts re-pinned for TASK-7.8 Q-3 (auto-accepted; value betting).
+
+Locked test tests/table/next-hand.acceptance.test.ts unlocked for TASK-3.21 Q-2 (top-up removal re-pin, same expect count).
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary

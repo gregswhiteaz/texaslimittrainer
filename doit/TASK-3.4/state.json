@@ -506,6 +506,12 @@
       "event": "unlock",
       "file": "tests/table/next-hand.acceptance.test.ts",
       "reason": "TASK-7.8 Q-3 (auto-accepted): value betting changes advice/bot results \u2014 re-pin expected values, keep every assertion and time limit"
+    },
+    {
+      "t": "2026-11-23T21:20:58",
+      "event": "unlock",
+      "file": "tests/table/next-hand.acceptance.test.ts",
+      "reason": "TASK-3.21 Q-2: top-up removed; re-pin expected values one-for-one, same expect count"
     }
   ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-3.4",
@@ -529,6 +535,7 @@
     "e2e/next-hand.spec.ts",
     "tests/table/next-hand.acceptance.test.ts",
     "e2e/next-hand.spec.ts",
+    "tests/table/next-hand.acceptance.test.ts",
     "tests/table/next-hand.acceptance.test.ts"
   ]
 }
