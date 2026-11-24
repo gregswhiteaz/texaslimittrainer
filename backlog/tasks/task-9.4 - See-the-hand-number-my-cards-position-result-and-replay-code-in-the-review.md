@@ -1,10 +1,11 @@
 ---
 id: TASK-9.4
 title: See the hand number, my cards, position, result and replay code in the review
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-19T02:21:00Z'
+updated_date: '2026-11-24T13:21:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -61,6 +62,17 @@ Plan key: E09-S03 · Dream: limit-holdem-trainer
 - [ ] #11 Story documentation is written and published to Backlog.md
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. review.ts: ReviewSummary, netResult (awards + returned − added), resultText, reviewSummary(hand, handNumber)
+2. ReviewPanel: subtitle 'You lost $48 · [A♥][9♠] · Cutoff' (24×34 cards) and 12px 'Hand #N · Replay code …' under the unchanged heading; TableView builds the summary from completedHand(table)
+3. Fixtures REVIEW_LOST_48 / REVIEW_WON_56; e2e scene review-header
+4. Tests: unit, render acceptance, e2e (scene + live app vs stored record) in Chromium and WebKit with axe
+
+Full spec: doit/TASK-9.4/spec.md
+<!-- SECTION:PLAN:END -->
 
 ## Implementation Notes
 
