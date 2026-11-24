@@ -1,11 +1,11 @@
 ---
 id: TASK-8.2
 title: Mark a decision as hinted when I open the hint
-status: In Progress
+status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-24T11:28:00Z'
+updated_date: '2026-11-24T11:29:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -17,6 +17,7 @@ references:
 documentation:
   - doc-1
   - doc-2
+  - doc-115
 parent_task_id: TASK-8
 priority: high
 type: feature
@@ -86,4 +87,12 @@ Full spec: doit/TASK-8.2/spec.md
 Build: hintedAt + act(action, hinted) → UserDecision.hinted (only when true) → decisionRecord hinted; npm test 1203 passed, Playwright 228 passed; gate PASS. SPEC-05 uses a different REVIEW_DECK line (Ben check line never uses observed stats) — recorded in qa.md.
 
 Judge r1 PASS 10/10; live IndexedDB checks in Chromium+WebKit; CI 45383603636 green.
+
+Follow-ups: TASK-9.6 AC added (2+ decisions, only the hinted one tagged). Not tracked: redundant hinted===true NIT (no behaviour change).
 <!-- SECTION:NOTES:END -->
+
+## Final Summary
+
+<!-- SECTION:FINAL_SUMMARY:BEGIN -->
+Hint opened at a decision now stores hinted:true on that decision's hand-record entry only (survives hide and repeat opens, also set if the card was loading or failed). Grading and stored advice are unchanged: advice equals the card via the shared observed-stats snapshot. Verified: 1203 tests, lint, typecheck, golden 282/282, 10,000-hand playtest 0 violations, e2e on Chromium and WebKit, judge 10/10, CI green. Review: A-1..A-5 and the SPEC-05 hand-line deviation (auto-accepted). Follow-ups: strengthen SPEC-08 e2e to assert 2+ decisions; drop redundant hinted===true. Review tag is TASK-9.6, hint-usage reporting E10, G-2 exclusion E11.
+<!-- SECTION:FINAL_SUMMARY:END -->

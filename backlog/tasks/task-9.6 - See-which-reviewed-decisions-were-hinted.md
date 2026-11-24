@@ -4,7 +4,7 @@ title: See which reviewed decisions were hinted
 status: To Do
 assignee: []
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-17T23:22:00Z'
+updated_date: '2026-11-24T11:29:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -45,6 +45,7 @@ Plan key: E09-S05 · Dream: limit-holdem-trainer
 - [ ] #1 Given a hand record whose flop decision has hinted = true and whose other decisions have hinted = false, When the panel opens, Then the flop entry shows a "hinted" tag and no other entry does [REQ-043.5, REQ-040.2]
 - [ ] #2 Given a hinted decision graded Major error, When the panel opens, Then its entry shows both "Major error" and "hinted" [REQ-040.2]
 - [ ] #3 Given a hand with no hinted decisions, When the panel opens, Then no "hinted" tag appears [REQ-043.5]
+- [ ] #4 Given a hand with at least two user decisions where Hint was opened and hidden at the first only, When the review shows the hand, Then only the first entry is tagged hinted and the test asserts the hand had 2+ decisions (from TASK-8.2 judge J-1-01)
 <!-- AC:END -->
 
 ## Definition of Done
@@ -62,3 +63,9 @@ Plan key: E09-S05 · Dream: limit-holdem-trainer
 - [ ] #11 Story documentation is written and published to Backlog.md
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+AC added from TASK-8.2 follow-up (doc-115).
+<!-- SECTION:NOTES:END -->
