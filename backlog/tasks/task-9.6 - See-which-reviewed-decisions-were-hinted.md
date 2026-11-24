@@ -1,10 +1,11 @@
 ---
 id: TASK-9.6
 title: See which reviewed decisions were hinted
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-24T11:29:00Z'
+updated_date: '2026-11-24T15:15:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -63,6 +64,15 @@ Plan key: E09-S05 · Dream: limit-holdem-trainer
 - [ ] #11 Story documentation is written and published to Backlog.md
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. ReviewPanel: 'hinted' tag after the grade badge when entry.decision.hinted (right-aligned group; entry top row wraps)
+2. Tests: acceptance with fixtures through the real hint state machine (flop hint, open+hide at first of 4 decisions, hinted major error); e2e cross-epic flow (Hint at flop → review flop entry tagged) and the 2+-decision live check, Chromium and WebKit with axe; docs
+
+Full spec: doit/TASK-9.6/spec.md
+<!-- SECTION:PLAN:END -->
 
 ## Implementation Notes
 
