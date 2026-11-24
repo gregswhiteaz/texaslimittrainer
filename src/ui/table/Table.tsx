@@ -2,12 +2,28 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import type { Action } from '../../engine/hand';
 import { userActionBar } from '../../table/action-bar';
 import { handResultView, type HandResultView } from '../../table/hand-result';
+import {
+  hintArrived,
+  hintCard,
+  hintFailed,
+  NO_HINT,
+  requestHint,
+  shownHint,
+  toggleHint,
+  type HintCardView,
+} from '../../table/hint';
 import { opensReview, userReviewEntries, type ReviewEntry } from '../../table/review';
 import { buyIn, userBusted, type CompletedHand, type TableState } from '../../table/session';
 import { tableView, type SeatView } from '../../table/table-view';
+import { playerView } from '../../engine/player-view';
+import {
+  sharedAdviceClient,
+  createAdviceWorker as createProductionWorker,
+} from '../advice/advice-client';
 import { CardBack, PlayingCard } from '../cards/PlayingCard';
 import { ActionBar } from './ActionBar';
 import { BustDialog } from './BustDialog';
+import { HintCard, type HintStatus } from './HintCard';
 import { ReviewPanel } from './ReviewPanel';
 import { useTableSession, type TableSessionOptions } from './useTableSession';
 
@@ -29,6 +45,10 @@ export interface TableViewProps {
   readonly dealNextRef?: React.Ref<HTMLButtonElement>;
   /** Rebuy in the bust dialog (REQ-007.2). */
   readonly onRebuy?: () => void;
+  /** The hint shown above the action row; null or absent while closed (TASK-8.1). */
+  readonly hint?: { readonly status: HintStatus; readonly card: HintCardView | null } | null;
+  /** Hint / Hide hint. */
+  readonly onHint?: () => void;
 }
 
 function SeatMarkers({ seat }: { readonly seat: SeatView }): React.JSX.Element {
@@ -158,6 +178,8 @@ export function TableView({
   onCloseReview,
   dealNextRef,
   onRebuy,
+  hint = null,
+  onHint,
 }: TableViewProps): React.JSX.Element {
   const model = tableView(table);
   const bar = userActionBar(table);
@@ -213,7 +235,22 @@ export function TableView({
                 ))}
               </ul>
             </div>
-            {bar !== null && <ActionBar model={bar} onAct={onAct} />}
+            {hint !== null && <HintCard status={hint.status} card={hint.card} />}
+            {bar !== null && (
+              <div className="action-row">
+                <ActionBar model={bar} onAct={onAct} />
+                <button
+                  type="button"
+                  className="hint-toggle"
+                  aria-expanded={hint !== null}
+                  aria-controls="hint-card"
+                  disabled={!bar.enabled}
+                  onClick={onHint}
+                >
+                  {hint === null ? 'Hint' : 'Hide hint'}
+                </button>
+              </div>
+            )}
             {result !== null && <HandResult result={result} />}
           </section>
           {review !== null && result !== null && (
@@ -260,11 +297,41 @@ export function Table({
     externalRef.current?.(hand);
     if (opensReview(hand)) setReview({ entries: userReviewEntries(hand), open: true });
   }, []);
-  const { table, act, dealNext, rebuy } = useTableSession({
+  const { table, observedCounts, act, dealNext, rebuy } = useTableSession({
     ...options,
     onHandComplete,
     holdNextHand: holdNextHand || review !== null,
   });
+
+  const [hint, setHint] = useState(NO_HINT);
+  const { createAdviceWorker = createProductionWorker } = options;
+  const onHint = useCallback(() => {
+    const decision = table.hand;
+    if (decision === null) return;
+    const toggled = toggleHint(hint, decision);
+    setHint(toggled.state);
+    if (!toggled.request) return;
+    const view = playerView(decision, table.config.userSeat);
+    // Never throws synchronously: a failure creating the worker rejects like any advice failure (A-6).
+    Promise.resolve()
+      .then(() => requestHint(sharedAdviceClient(createAdviceWorker), table, observedCounts()))
+      .then(
+        (rec) => setHint((s) => hintArrived(s, decision, hintCard(rec, view, table))),
+        (error: unknown) => {
+          console.error('Hint could not be worked out', error);
+          setHint((s) => hintFailed(s, decision));
+        },
+      );
+  }, [hint, table, observedCounts, createAdviceWorker]);
+  const onAct = useCallback(
+    (action: Action) => {
+      setHint(NO_HINT);
+      act(action);
+    },
+    [act],
+  );
+  const bar = userActionBar(table);
+  const status = shownHint(hint, table.hand, bar?.enabled === true);
 
   const dealNextButton = useRef<HTMLButtonElement>(null);
   // Deal next hand is already on screen while the review is held, so focus can move before Close unmounts.
@@ -280,7 +347,7 @@ export function Table({
   return (
     <TableView
       table={table}
-      onAct={act}
+      onAct={onAct}
       onLeave={onLeave}
       onHome={onHome}
       review={review}
@@ -288,6 +355,8 @@ export function Table({
       onCloseReview={closeReview}
       dealNextRef={dealNextButton}
       onRebuy={rebuy}
+      hint={status === 'none' ? null : { status, card: hint.card }}
+      onHint={onHint}
     />
   );
 }

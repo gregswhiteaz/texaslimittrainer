@@ -7,13 +7,1510 @@
   "review_round": 0,
   "judge_round": 0,
   "sendbacks": 0,
-  "gate_runs": 0,
+  "gate_runs": 4,
   "questions": 3,
   "assumptions": 10,
   "escalations": 0,
   "item_failures": {},
-  "locked_tests": {},
-  "test_snapshot": {},
+  "locked_tests": {
+    "e2e/hint.spec.ts": "27badabfae2fcf166080cab2d2ab867d622de870f392a58ca7243b7ead9b7d53",
+    "tests/advice/value-copy.acceptance.test.ts": "1c6cd256b2dbd35f3d585219f64bd8e2bb0575370d58a07dccd4368d3dee7b48",
+    "tests/ui/hint-toggle.acceptance.test.tsx": "997ec7a188fd1a715f05ed27254a2059cce936791a37b32e465f01e260d3a6be",
+    "tests/ui/hint-worker.acceptance.test.ts": "62f10ca3a20972fef017ba4e1b685f6571404e83dad6244be084e16ac917d98b",
+    "tests/ui/hint.acceptance.test.tsx": "52dd6202cca097284775a54dc66a41dcaa2b89212b92e7b8feb7d0e51252817c"
+  },
+  "test_snapshot": {
+    "e2e/hint.spec.ts": {
+      "sha": "27badabfae2fcf166080cab2d2ab867d622de870f392a58ca7243b7ead9b7d53",
+      "asserts": 32,
+      "skips": 0
+    },
+    "tests/advice/value-copy.acceptance.test.ts": {
+      "sha": "1c6cd256b2dbd35f3d585219f64bd8e2bb0575370d58a07dccd4368d3dee7b48",
+      "asserts": 7,
+      "skips": 0
+    },
+    "tests/table/hint.test.ts": {
+      "sha": "7d5166bcc39263c1332d14d77e04939bb92774022a9e01d3bbc94a67376c3223",
+      "asserts": 30,
+      "skips": 0
+    },
+    "tests/table/observed-snapshot.test.ts": {
+      "sha": "9fb7fdce01b97db1e554be685ab054919fb94447fed55c20e22aaac15875b1a3",
+      "asserts": 14,
+      "skips": 0
+    },
+    "tests/ui/hint-toggle.acceptance.test.tsx": {
+      "sha": "997ec7a188fd1a715f05ed27254a2059cce936791a37b32e465f01e260d3a6be",
+      "asserts": 18,
+      "skips": 0
+    },
+    "tests/ui/hint-worker.acceptance.test.ts": {
+      "sha": "62f10ca3a20972fef017ba4e1b685f6571404e83dad6244be084e16ac917d98b",
+      "asserts": 7,
+      "skips": 0
+    },
+    "tests/ui/hint.acceptance.test.tsx": {
+      "sha": "52dd6202cca097284775a54dc66a41dcaa2b89212b92e7b8feb7d0e51252817c",
+      "asserts": 43,
+      "skips": 0
+    },
+    "e2e/action-bar-limits.spec.ts": {
+      "sha": "df5131e8dd2ed62b743b91e594e8fc4e1686db291784245eaef03ba92957c880",
+      "asserts": 11,
+      "skips": 0
+    },
+    "e2e/action-bar.spec.ts": {
+      "sha": "a1b16551f85177c3ee6870cff62716ad6149a0fbe427df18d6bde2e247b9adab",
+      "asserts": 29,
+      "skips": 0
+    },
+    "e2e/axe-helper.spec.ts": {
+      "sha": "fac8886c55d45c226d9dd62c5c6247987fdf4f35edc5f798a6253e62cb77cbf1",
+      "asserts": 2,
+      "skips": 0
+    },
+    "e2e/card-gallery-open.spec.ts": {
+      "sha": "db9b51c19ae077c09a8ad0a87a6e1e4899ce02d26f105d4747e47e1e701fe56a",
+      "asserts": 2,
+      "skips": 0
+    },
+    "e2e/cards.spec.ts": {
+      "sha": "b0795419a08b87bc8fc6f15a357bef2b0e17936506b2ac0e8017c88a7ef40d5f",
+      "asserts": 30,
+      "skips": 0
+    },
+    "e2e/cards.visual.spec.ts": {
+      "sha": "46b3ea7d7996992bd4524459accdaa8cbd1a226a33e37ca23fbe228492833065",
+      "asserts": 1,
+      "skips": 1
+    },
+    "e2e/game-type-choice.spec.ts": {
+      "sha": "11ac1cc3639f2a221bc54160f003efa286151bd4ffbce44ae6374cad0aa8b42b",
+      "asserts": 29,
+      "skips": 0
+    },
+    "e2e/hand-records-kill.spec.ts": {
+      "sha": "de8a66a00f28af4ea05f9862ae66e356f534c3bfeb5a5099e045053500a4609e",
+      "asserts": 6,
+      "skips": 1
+    },
+    "e2e/hand-records.spec.ts": {
+      "sha": "8eaccd8e64fa3f064c80ceee369310e21186d5434f4c5d880a92837bbd9b06da",
+      "asserts": 43,
+      "skips": 0
+    },
+    "e2e/history.spec.ts": {
+      "sha": "d6778fef31c52fe5cd61f9328bd4f09746fa907766770f670074a6209d7f0702",
+      "asserts": 35,
+      "skips": 0
+    },
+    "e2e/home-control.spec.ts": {
+      "sha": "aa41a74a0595e439be7b275ae306439a5bc1d543e932b8240549ab7879fd69cd",
+      "asserts": 38,
+      "skips": 0
+    },
+    "e2e/home-first-load.spec.ts": {
+      "sha": "da031a78db3f7082668e9012672bbaa8829e166839e35a22e0ecc734e6fc0f8c",
+      "asserts": 2,
+      "skips": 0
+    },
+    "e2e/home.spec.ts": {
+      "sha": "7998dc26fbd23f0e8a25acca234bd34a6a0ac926c606d095962504ec5838ac00",
+      "asserts": 52,
+      "skips": 0
+    },
+    "e2e/lineup-choice.spec.ts": {
+      "sha": "b0f71327928fa38caaedb7b5bd0db11f08311e8cab39cedb7b5322b95313ca00",
+      "asserts": 26,
+      "skips": 0
+    },
+    "e2e/next-hand.spec.ts": {
+      "sha": "9f91fd2321995ffdc11e9c30fc4a57baf23bbf3a93ee15fe593afd3499a27b7e",
+      "asserts": 41,
+      "skips": 0
+    },
+    "e2e/players-choice.spec.ts": {
+      "sha": "0e4c2188b4486f70cccd86165705d0aff966209bb10c3eb54068689062e4c622",
+      "asserts": 31,
+      "skips": 0
+    },
+    "e2e/randomise-lineup.spec.ts": {
+      "sha": "7fd8bab344639518ee788da49620f98a43728557085f77d1e8470371bd0e2a4d",
+      "asserts": 20,
+      "skips": 0
+    },
+    "e2e/rapid-pace.spec.ts": {
+      "sha": "50c77a3efdfdcbbd915df83811d1aead1dd3d56b098f1bbeb07972be0602e185",
+      "asserts": 23,
+      "skips": 6
+    },
+    "e2e/rebuy.spec.ts": {
+      "sha": "c45404860a70c2ae1768cfc8b8cbfa4c517b94196f98c1311708594925b727b1",
+      "asserts": 44,
+      "skips": 0
+    },
+    "e2e/replay-seed.spec.ts": {
+      "sha": "0b0abd7f192b86d992c417c4837e7124c771bdd072cb5e7ea6562a2dbf80085f",
+      "asserts": 8,
+      "skips": 0
+    },
+    "e2e/responsive-table.spec.ts": {
+      "sha": "f4c56cf99f5bf73a8f9ae7100fc97fb6bc97aad2c88be2e877a9f547a5045bc6",
+      "asserts": 28,
+      "skips": 5
+    },
+    "e2e/resume.spec.ts": {
+      "sha": "c1127c2e8f34d43bda3f3bd976285dd2302944016d751c456f8f22dcd6da1c75",
+      "asserts": 43,
+      "skips": 0
+    },
+    "e2e/review.spec.ts": {
+      "sha": "a15ff716ed973ff02813943db69246df5c3afafbff47fb87d81744013a8a16fc",
+      "asserts": 60,
+      "skips": 0
+    },
+    "e2e/seat-style.spec.ts": {
+      "sha": "79f3f0f42f9bc389b8b16eb20a4ce7c82f5425c33775f8c48cb74aa8009f7649",
+      "asserts": 25,
+      "skips": 0
+    },
+    "e2e/session-kill.spec.ts": {
+      "sha": "e4c2865fdf46072ef389718935542536aca2b2931a98f1593b5e92e670a4438b",
+      "asserts": 8,
+      "skips": 1
+    },
+    "e2e/session-records.spec.ts": {
+      "sha": "79dbc13e1a22edc94a6c5c680c60f132028b92eb340ef3efe22542310bb74204",
+      "asserts": 19,
+      "skips": 0
+    },
+    "e2e/short-stack.spec.ts": {
+      "sha": "73dc6080e7e292830b67cc8bb99cb66e726259a8fd737b5e9734a57f2afff841",
+      "asserts": 14,
+      "skips": 0
+    },
+    "e2e/showdown-shown.spec.ts": {
+      "sha": "7e29b6bab0c11bf401079a76a0fc3b679c566d10e01a5624948b2fc04b0db045",
+      "asserts": 8,
+      "skips": 0
+    },
+    "e2e/side-pots.spec.ts": {
+      "sha": "dcc830bd2873be238f9b7e76d4760728a8217112bc261e19d6444b2e6b9a3b89",
+      "asserts": 11,
+      "skips": 0
+    },
+    "e2e/smoke.spec.ts": {
+      "sha": "052090b55bd1662345a948b679cf410cef655940d1cd5a0afd3313163741fe6b",
+      "asserts": 6,
+      "skips": 0
+    },
+    "e2e/stake-choice.spec.ts": {
+      "sha": "12ca954d16c02f4182abf60469f7abbe57eed7a4c500aaa055947a3110389b3c",
+      "asserts": 27,
+      "skips": 0
+    },
+    "e2e/table-display.spec.ts": {
+      "sha": "054fa84feec0080bd2f1db633ff4f76db320f2733b28c3aa96d69711355a537d",
+      "asserts": 53,
+      "skips": 0
+    },
+    "e2e/table.spec.ts": {
+      "sha": "5161609cab9dea05335912233b1993ac44b9629b7b64fc435158a728e91869b8",
+      "asserts": 54,
+      "skips": 0
+    },
+    "e2e/worker-delay-hand.spec.ts": {
+      "sha": "8744b8f1f7e645f1c214bc6daea07f20cb3b87804e94f11cff0c73f7d713ad43",
+      "asserts": 8,
+      "skips": 0
+    },
+    "e2e/worker-delay.spec.ts": {
+      "sha": "385262cf93936ed5a4f533641777507925ea5808aa03abbb46caa62ad0a89413",
+      "asserts": 8,
+      "skips": 0
+    },
+    "tests/advice/chart-print.acceptance.test.ts": {
+      "sha": "b6dcfeef6b7e40db2bd27159b89e6a950a07614584f495898af39dadd8d335d8",
+      "asserts": 19,
+      "skips": 0
+    },
+    "tests/advice/determinism.acceptance.test.ts": {
+      "sha": "b1974c30e79ad8779223d462673dcc47393ecd9d1f3742d7a0d7a1a450c56b77",
+      "asserts": 25,
+      "skips": 0
+    },
+    "tests/advice/equity-multiway-reference.test.ts": {
+      "sha": "fd52f46676b843543152c5511466aedb92fd53d34a3c904e7f2231e816895235",
+      "asserts": 17,
+      "skips": 0
+    },
+    "tests/advice/equity-multiway.acceptance.test.ts": {
+      "sha": "eab25498c30205690e1e5f5b4a52c1f643277753f97b2e7c1a8a724c12bb467b",
+      "asserts": 22,
+      "skips": 0
+    },
+    "tests/advice/equity-reference.test.ts": {
+      "sha": "c76372709dd5891c5e574aa872d5f7de2d40e7fdd003568c10f0d3df3bd3a9ee",
+      "asserts": 20,
+      "skips": 0
+    },
+    "tests/advice/equity.acceptance.test.ts": {
+      "sha": "7afc27b5796603714bde04e5803157c4d9f7c44299c498512486240405137011",
+      "asserts": 24,
+      "skips": 0
+    },
+    "tests/advice/equity.perf.test.ts": {
+      "sha": "f3aea31fc31b33d36c53c4281a478bbed36502625cefd987cb840d903e561470",
+      "asserts": 2,
+      "skips": 0
+    },
+    "tests/advice/equity.test.ts": {
+      "sha": "c2670133ddf1125add154d90e30f2b34e11fb5a41c0653b9da29c9ae985c22c1",
+      "asserts": 49,
+      "skips": 0
+    },
+    "tests/advice/explain.test.ts": {
+      "sha": "2580cd66063c6b6bcbd07bdd178c77c1f62ae8a6e939ba3bdaa0fd9f5b1900d0",
+      "asserts": 54,
+      "skips": 0
+    },
+    "tests/advice/explanations.acceptance.test.ts": {
+      "sha": "3a2bf84366f7fefcb6a69371f339b897aceed275ee4be07a4445d9d1b02b723e",
+      "asserts": 22,
+      "skips": 0
+    },
+    "tests/advice/fixtures/equity-multiway-reference.json": {
+      "sha": "6297ea774128cfd99e0860126aa3bcee503557c2a229a01d3124e7f4d652e5d2",
+      "asserts": 0,
+      "skips": 0
+    },
+    "tests/advice/fixtures/equity-reference.json": {
+      "sha": "181f35c6e31ae3376060292d05788e57f1b201178bb1cfd10127b87a3390fa86",
+      "asserts": 0,
+      "skips": 0
+    },
+    "tests/advice/grade-hardening.acceptance.test.ts": {
+      "sha": "213892f985b5a3ffdc01595cde756617520ef7e219dc9999c2a42094f577b863",
+      "asserts": 7,
+      "skips": 0
+    },
+    "tests/advice/grade.acceptance.test.ts": {
+      "sha": "806f58a529819c8a1ebbb5f7245d1c8bacf8cf05dc91d2349e52a818f03d64a2",
+      "asserts": 38,
+      "skips": 0
+    },
+    "tests/advice/grade.test.ts": {
+      "sha": "c3c92377ac4a925b94cf3af16b8b13daa361c8820b6749a29f40b0d5ec9e2114",
+      "asserts": 37,
+      "skips": 0
+    },
+    "tests/advice/hand-class.test.ts": {
+      "sha": "c893e91a89f5904563fa784fbb9b7bd650035bb67452ec12a02f7a6e017849a7",
+      "asserts": 18,
+      "skips": 0
+    },
+    "tests/advice/implied-odds.acceptance.test.ts": {
+      "sha": "c915c03376dc0fad4c26a50b255b7e9fcdaa3b6eb315e800a1ea0d1e57c558a2",
+      "asserts": 25,
+      "skips": 0
+    },
+    "tests/advice/observed-ranges.acceptance.test.ts": {
+      "sha": "4355616d19b31c872cc31714adf2ace9736d4afae614075ab853bf2d0b8e31e7",
+      "asserts": 38,
+      "skips": 0
+    },
+    "tests/advice/observed-ranges.test.ts": {
+      "sha": "6f7e2d731ab6512647b37f40ac6be5c3a13e99f83d1578d4922107c1bd2c0638",
+      "asserts": 51,
+      "skips": 0
+    },
+    "tests/advice/postflop-coverage.acceptance.test.ts": {
+      "sha": "5ca6e7b93d7e95c3ce34af7fe7c1d980e1cfb18f55a55570174cc11f36972607",
+      "asserts": 16,
+      "skips": 0
+    },
+    "tests/advice/postflop-ranges.property.test.ts": {
+      "sha": "b648e998e39a74e5f40bfbed0c85cac14f8fd7040eaa50fc9dd3c244da728ddb",
+      "asserts": 10,
+      "skips": 0
+    },
+    "tests/advice/postflop-ranges.test.ts": {
+      "sha": "cb8dc40ec6cb3b34c604b462e64922024eea631c8bcd7d83e97a847d584d978b",
+      "asserts": 21,
+      "skips": 0
+    },
+    "tests/advice/postflop.acceptance.test.ts": {
+      "sha": "41bc8d96e08bdfe5e5e3cc9b8635a6347c9c439c48358acb17b19f62224b0321",
+      "asserts": 35,
+      "skips": 0
+    },
+    "tests/advice/postflop.perf.test.ts": {
+      "sha": "08e598aa192a13d86206a9f42139b9984d4fa9c15120b53ff124c1f7cc6d07ce",
+      "asserts": 3,
+      "skips": 0
+    },
+    "tests/advice/postflop.test.ts": {
+      "sha": "7717606f6bb848bbf3967a11972b71087b1cf01cecb2dcbf53488dd24471fa1b",
+      "asserts": 62,
+      "skips": 0
+    },
+    "tests/advice/preflop-chart-edges.acceptance.test.ts": {
+      "sha": "2307616efa248789f182b29d738db923933102df9370aad5c84a46d52f175f2b",
+      "asserts": 12,
+      "skips": 0
+    },
+    "tests/advice/preflop-chart.test.ts": {
+      "sha": "5969b293028509753cb4431493253cb8a52672d0d59643bc1206f9467efa03db",
+      "asserts": 31,
+      "skips": 0
+    },
+    "tests/advice/preflop.acceptance.test.ts": {
+      "sha": "85f7b53ae469b8e29d64ce73897350ca8eb07c73c85eaa6b646bb8652b281fb9",
+      "asserts": 46,
+      "skips": 0
+    },
+    "tests/advice/preflop.test.ts": {
+      "sha": "0e6c529b6d4fab2e50b4fa9fe299ac3e46be5056ee3862035bb309b36a289739",
+      "asserts": 39,
+      "skips": 0
+    },
+    "tests/advice/range-model.acceptance.test.ts": {
+      "sha": "696752bf6092dafd0bcf6add43db848c671536c58565864426fb989a024d1b3d",
+      "asserts": 55,
+      "skips": 0
+    },
+    "tests/advice/ranges.test.ts": {
+      "sha": "ff061a78113b49b19a1afce5dc4365701ca9c7c8e388c0769086099344525716",
+      "asserts": 111,
+      "skips": 0
+    },
+    "tests/advice/reference-charts.test.ts": {
+      "sha": "6bfe7112136d804ff04ece2451c16fcafdf9c1480bce8e7f591a8003ca1df826",
+      "asserts": 18,
+      "skips": 0
+    },
+    "tests/advice/six-max-chart.acceptance.test.ts": {
+      "sha": "59e568f27d89ad08b37a6037c843246b8c69acbf9fd844eefa80b3b037832dfd",
+      "asserts": 18,
+      "skips": 0
+    },
+    "tests/advice/six-max-chart.test.ts": {
+      "sha": "7eada5188a0bb4de08fe5e13b62eda44ae3ad0bec982a4d3916abd06a29e97a5",
+      "asserts": 15,
+      "skips": 0
+    },
+    "tests/advice/table-sizes.acceptance.test.ts": {
+      "sha": "4ca31ee530a580bb0031ee793bdc17f36b0e04c333878a80127b8ba008ed3988",
+      "asserts": 42,
+      "skips": 0
+    },
+    "tests/advice/value-bet.acceptance.test.ts": {
+      "sha": "fafb3433c84c878389f4130cf82a1de5f985c1aeca5a9e6f7da1669209b1a8dd",
+      "asserts": 56,
+      "skips": 0
+    },
+    "tests/bots/bot-random.acceptance.test.ts": {
+      "sha": "380434ae883e932d5c7483dab9766ec65bb58f5ba9addb1fbc2b5a22a67ba541",
+      "asserts": 21,
+      "skips": 0
+    },
+    "tests/bots/calling-station-draws.acceptance.test.ts": {
+      "sha": "a12eb802e044332e283f2e3d620ffd525c218fb7237a73ad07d4db9c993194c4",
+      "asserts": 18,
+      "skips": 0
+    },
+    "tests/bots/calling-station-postflop.acceptance.test.ts": {
+      "sha": "4e58daec8b1cc117129b51986db7be477078f5cbb947c43340c310fdbdf50039",
+      "asserts": 33,
+      "skips": 0
+    },
+    "tests/bots/calling-station.acceptance.test.ts": {
+      "sha": "2204abbaf5f544de6ec7c2964c8b4aa56fbfbede470da4a61ad28205be294877",
+      "asserts": 74,
+      "skips": 0
+    },
+    "tests/bots/calling-station.test.ts": {
+      "sha": "c8a46f22c68d3c4130eeb0c1d2b32a22e399d61b560e508f59bdfe33ab64452d",
+      "asserts": 7,
+      "skips": 0
+    },
+    "tests/bots/lineup-name.acceptance.test.ts": {
+      "sha": "5b841e5e894564b41fd162389bc07ddddfed4bcfd83a39b615846b2077799a54",
+      "asserts": 11,
+      "skips": 0
+    },
+    "tests/bots/lineup.acceptance.test.ts": {
+      "sha": "dae629a039958fd10faf8aca6af371f320fe0e0c9185ee8a8903688843e39c3a",
+      "asserts": 19,
+      "skips": 0
+    },
+    "tests/bots/lineup.test.ts": {
+      "sha": "ab13aeec8b266594392988df41163bffcf1cc750c6f2e2a4fcded47bbdd65b20",
+      "asserts": 49,
+      "skips": 0
+    },
+    "tests/bots/maniac.acceptance.test.ts": {
+      "sha": "6ca510377466bf775b6a85bddb18ef0d4fde22a58bbdbec7ce7736ef12d032ae",
+      "asserts": 115,
+      "skips": 0
+    },
+    "tests/bots/maniac.test.ts": {
+      "sha": "034ed67ee93ae98b86a388ad4dd3a202842ee98a45b4a85c4bf1187298571214",
+      "asserts": 15,
+      "skips": 0
+    },
+    "tests/bots/random.test.ts": {
+      "sha": "5d2e7e70171b901897b89b4f140b7f3ab9109c5474615bb3baf3c92b001bc766",
+      "asserts": 19,
+      "skips": 0
+    },
+    "tests/bots/replacement.acceptance.test.ts": {
+      "sha": "460bd1f83c84381972390ad339af8454b8beb05a397b5d401e3a040b69440b68",
+      "asserts": 17,
+      "skips": 0
+    },
+    "tests/bots/rock-postflop.acceptance.test.ts": {
+      "sha": "e4becd16271cf36d06a3c1389f998d7ccf33340d6ebf24020b7b33c97da66e8b",
+      "asserts": 24,
+      "skips": 0
+    },
+    "tests/bots/rock.acceptance.test.ts": {
+      "sha": "3d2087b8e0e151ef6a452b37d78a6c4473a039a7ea20904189caed9329a4460a",
+      "asserts": 74,
+      "skips": 0
+    },
+    "tests/bots/rock.test.ts": {
+      "sha": "b1520f05dbba62e68c330063753555221cdcc4bb2da299a13ff7ba45f1cee0e4",
+      "asserts": 21,
+      "skips": 0
+    },
+    "tests/bots/style-bands.acceptance.test.ts": {
+      "sha": "810613d5abe2b208135b7c4bb154807d9ae2ae99333658b0791c27b9fa3b3e13",
+      "asserts": 6,
+      "skips": 0
+    },
+    "tests/bots/style.test.ts": {
+      "sha": "6c4a836594bc11b59a22d5ec2c26dd68d53c9cfa3ab217c6371bf79ea023e124",
+      "asserts": 72,
+      "skips": 0
+    },
+    "tests/bots/tag-mixing.acceptance.test.ts": {
+      "sha": "ab954b297438524357552f79d13835ec233dcc127174e266dd481750b3924c0d",
+      "asserts": 40,
+      "skips": 0
+    },
+    "tests/bots/tag-playtest.acceptance.test.ts": {
+      "sha": "0f7ca8e4a0b7b7cc573c23d6f01b6d32328bb75772c167d46526d1d2b0447f6b",
+      "asserts": 15,
+      "skips": 0
+    },
+    "tests/bots/tag-seed-parity.acceptance.test.ts": {
+      "sha": "fbe8f58b9ea7dccbaa0263a213e15491f29df8cfb3b3ef397baf38532e7aa2bf",
+      "asserts": 7,
+      "skips": 0
+    },
+    "tests/bots/tag.acceptance.test.ts": {
+      "sha": "e07759412c4b2f52168c6347effd30b1bcdf1bca1c630d6ad05415830974c2c2",
+      "asserts": 34,
+      "skips": 0
+    },
+    "tests/bots/tag.test.ts": {
+      "sha": "6f07637cd9b78ea3c07520dc960ee723d46419bcaa3b888e450f7f206497516c",
+      "asserts": 17,
+      "skips": 0
+    },
+    "tests/ci/apt-archives-cache.test.ts": {
+      "sha": "ee78aa0e15ebb3116c7d064f6e48bed4fd6ae93e6320f711dd2ccdeba94a89e8",
+      "asserts": 25,
+      "skips": 0
+    },
+    "tests/ci/apt-archives.acceptance.test.ts": {
+      "sha": "460f3e35bd32012be2c32caf3dfdc9351ca18afed1f1ea34e1c34063ff9a1cf7",
+      "asserts": 36,
+      "skips": 0
+    },
+    "tests/ci/apt-archives.test.ts": {
+      "sha": "2a95fb48da0131c3ac8dbd92700c73790bce4606627e5a180c62dbde769f2382",
+      "asserts": 7,
+      "skips": 0
+    },
+    "tests/ci/apt-lock.dpkg.acceptance.test.ts": {
+      "sha": "82ec8029cccf6d75ed92e6ef3dde3f49c88ea82d6e71b3567e026901cc0cd839",
+      "asserts": 17,
+      "skips": 0
+    },
+    "tests/ci/apt-lock.hardening.test.ts": {
+      "sha": "da54d21838d994a86b583b7d2b826a2e1fdb9d0e3c4865fd49a2e2d28334da85",
+      "asserts": 20,
+      "skips": 0
+    },
+    "tests/ci/apt-lock.test.ts": {
+      "sha": "728ff5315b2ccf572a248f7ceac5e5424204b4ec8483451eebebb9b75d09ba58",
+      "asserts": 37,
+      "skips": 0
+    },
+    "tests/ci/apt-network.test.ts": {
+      "sha": "974f544a695e1fe39b308c675f0a019043570a841376c4a8488fd43bc61a95e0",
+      "asserts": 14,
+      "skips": 0
+    },
+    "tests/ci/branch-protection.acceptance.test.ts": {
+      "sha": "3687516d374756b04030ceffe4c1b34c5ea646b5420c393c9a4bf9010dadbf18",
+      "asserts": 3,
+      "skips": 0
+    },
+    "tests/ci/ci-jobs.acceptance.test.ts": {
+      "sha": "c99ef9f76c1f62aa4fc15ba0725f7754a210e20ba6cda5e41a5a6274e265d037",
+      "asserts": 39,
+      "skips": 0
+    },
+    "tests/ci/dependabot.acceptance.test.ts": {
+      "sha": "bfbed69d1ff1b01053dc2fa5dad33329d7e149c4059f3beb4bc7e67754a00eac",
+      "asserts": 15,
+      "skips": 0
+    },
+    "tests/ci/fixtures/flaky-command.js": {
+      "sha": "db3239c93bb4d1d6d88ebc6369b27b251da6eeb13d27246bd2426170c1fcb4ad",
+      "asserts": 0,
+      "skips": 0
+    },
+    "tests/ci/million-lineups-workflow.acceptance.test.ts": {
+      "sha": "60c83c0ca08788dbff4036efaf251434cbe157f62e4b7b4f7f3a4a37dd313439",
+      "asserts": 14,
+      "skips": 0
+    },
+    "tests/ci/million-workflow.acceptance.test.ts": {
+      "sha": "fbb543be9c5b4d67b71d309f252dd16b2f5c09e6d78ddbf9484691c1ef2de08d",
+      "asserts": 14,
+      "skips": 0
+    },
+    "tests/ci/retry.reap.test.ts": {
+      "sha": "0f92e1d3fc21e65305bfaaadc1b879e164de2c111a3a68940896313d8dc4ad5d",
+      "asserts": 29,
+      "skips": 0
+    },
+    "tests/ci/retry.sudo.test.ts": {
+      "sha": "ad19bde7979ec5e93b542959066cd4fd619773ee82547fd9ae7da1d46a09a81b",
+      "asserts": 35,
+      "skips": 0
+    },
+    "tests/ci/retry.test.ts": {
+      "sha": "1efc0df5635f586397c347a783f0aa3a441c2f6ffc8998f258e7e9fde00c5557",
+      "asserts": 27,
+      "skips": 0
+    },
+    "tests/ci/speed-limits.acceptance.test.ts": {
+      "sha": "21ef88e374e0b48c18bca5f10089c00bbb135b4de7646c123b2de720d010e66c",
+      "asserts": 7,
+      "skips": 0
+    },
+    "tests/ci/style-bands-workflow.acceptance.test.ts": {
+      "sha": "004e15c847f22e975964ea2263b3735986c25d95d056cd14403d7675209c4432",
+      "asserts": 16,
+      "skips": 0
+    },
+    "tests/ci/tooling-changed.test.ts": {
+      "sha": "4ba8482be800c8fa5dfa59b9cf23057cff68333e84744f3aff7e32f0f160d30c",
+      "asserts": 28,
+      "skips": 0
+    },
+    "tests/ci/visual-workflow.test.ts": {
+      "sha": "24af6cfc850680893ebbf9ca9cf01d4e9d7e36eac0c1568798fbd2a7ed9e01ab",
+      "asserts": 18,
+      "skips": 0
+    },
+    "tests/ci/workflow.test.ts": {
+      "sha": "c304e56359ed19b2d530b434663086982ccde6937e798a541867421890dcdf83",
+      "asserts": 41,
+      "skips": 0
+    },
+    "tests/engine/all-in-blinds.test.ts": {
+      "sha": "d61a309209a15f2841418e4b5a6374e4887a85b615772922456acaea554db54f",
+      "asserts": 23,
+      "skips": 0
+    },
+    "tests/engine/all-in-invariants.acceptance.test.ts": {
+      "sha": "26d7be28a29e07f1c98afc2cb0cb5d32122705cc88991f33aab5662490c88686",
+      "asserts": 10,
+      "skips": 0
+    },
+    "tests/engine/all-in.acceptance.test.ts": {
+      "sha": "84f8638f687584ab036d9b6897ce2163b5fbd71e178be8e91767683d9cdc206a",
+      "asserts": 64,
+      "skips": 0
+    },
+    "tests/engine/bet-cap.acceptance.test.ts": {
+      "sha": "bf9b2a5325f3896973942fd4ac70c698871a0ba65342badc1d8659bc84322722",
+      "asserts": 32,
+      "skips": 0
+    },
+    "tests/engine/button-blinds.acceptance.test.ts": {
+      "sha": "834a4154da2ff06e7561aadad9ce2a51a79fa26dd334b5e0968201875a5bc8e6",
+      "asserts": 62,
+      "skips": 0
+    },
+    "tests/engine/cards.test.ts": {
+      "sha": "513343e7b707736edce1d3dee467a7b7307cb9b1eea80719d81c9007e8d85638",
+      "asserts": 21,
+      "skips": 0
+    },
+    "tests/engine/check-deal.test.ts": {
+      "sha": "eaca96fbcca8b51b873c2d8088511098003f7601de8bc9145c826fffc28c43ac",
+      "asserts": 17,
+      "skips": 0
+    },
+    "tests/engine/chip-safety.acceptance.test.ts": {
+      "sha": "a03f49465e1ba5493200c0f90fd2ab4d7078d846eb7471a6fa47b32b0a5eb1ca",
+      "asserts": 17,
+      "skips": 0
+    },
+    "tests/engine/deck.acceptance.test.ts": {
+      "sha": "b988ced68990dd66700fb075315f6c46cdb7ea054533a1509b567a313f4b7162",
+      "asserts": 24,
+      "skips": 0
+    },
+    "tests/engine/deck.test.ts": {
+      "sha": "6a0ff79916d65cb47395e6abbf4b9852652994a3f204cf489aef74a6f0a3dbf8",
+      "asserts": 17,
+      "skips": 0
+    },
+    "tests/engine/fold-out.acceptance.test.ts": {
+      "sha": "113dbba9399f9e87a2b7202da4e79d0d1025c680038f038083fe04a221010660",
+      "asserts": 11,
+      "skips": 0
+    },
+    "tests/engine/hand-evaluator.acceptance.test.ts": {
+      "sha": "899d53b4064b733bb3d09106a8402c029dcaf8eb39fed12ec1cd45f088ae853e",
+      "asserts": 38,
+      "skips": 0
+    },
+    "tests/engine/hand-evaluator.perf.test.ts": {
+      "sha": "5ad2fa52085109d2e450e60e5dbfc6ccd9e35e0d74a6be6921af7e6c8a196769",
+      "asserts": 5,
+      "skips": 0
+    },
+    "tests/engine/hand-evaluator.property.test.ts": {
+      "sha": "7499de49cd024fb4b47c42b94586a42246a91cb326461846c50818b92fb301ef",
+      "asserts": 9,
+      "skips": 0
+    },
+    "tests/engine/hand-evaluator.test.ts": {
+      "sha": "2c8555e6e019cc031e9f96d7315d93034fe7f5550b28fc36ce9e56d74487adc1",
+      "asserts": 21,
+      "skips": 0
+    },
+    "tests/engine/hand.acceptance.test.ts": {
+      "sha": "c09afbf05f2929c6b662efbd0371c21c2ff6b89b4d7fe44b89d13d477a6aea1e",
+      "asserts": 86,
+      "skips": 0
+    },
+    "tests/engine/hand.property.test.ts": {
+      "sha": "12d1b18728c6e7d37317caf67d29469fc0fb51044168ad55c2a8d3dd70653bfc",
+      "asserts": 9,
+      "skips": 0
+    },
+    "tests/engine/hand.test.ts": {
+      "sha": "7070db08ba60e7edbea1101b0dee984dc96a9b058c5e28072739a57791e5c35f",
+      "asserts": 68,
+      "skips": 0
+    },
+    "tests/engine/heads-up.acceptance.test.ts": {
+      "sha": "3ebd65c9420c78d26a6e62f17e3506ffc4939b532d16c429f9702f76fc024263",
+      "asserts": 27,
+      "skips": 0
+    },
+    "tests/engine/illegal-actions.acceptance.test.ts": {
+      "sha": "102ff00cfadedfeeb5e3aedef728b2e5bfddd3c463b428619923be499b82d12a",
+      "asserts": 40,
+      "skips": 0
+    },
+    "tests/engine/input-guards.acceptance.test.ts": {
+      "sha": "4b8a2699ba108d30264d740b94f4b1cd7d255c367a36469342db0405eebf0ec7",
+      "asserts": 24,
+      "skips": 0
+    },
+    "tests/engine/input-hardening.acceptance.test.ts": {
+      "sha": "193861a146de91e0bb607aa8e69080263c9448b3f8f1ec85b625d88d7d2120e8",
+      "asserts": 30,
+      "skips": 0
+    },
+    "tests/engine/invariant-messages.acceptance.test.ts": {
+      "sha": "2b99af957b410e16ae34feeca2995f35f5aba7468b2c0c93d61339e36b4f74af",
+      "asserts": 21,
+      "skips": 0
+    },
+    "tests/engine/invariants.perf.test.ts": {
+      "sha": "52e71d7fa243d90a0cfc2d488a9e7d622c5914ae6aa787e42c711804c3978f39",
+      "asserts": 3,
+      "skips": 0
+    },
+    "tests/engine/invariants.test.ts": {
+      "sha": "f46acb1bf3581fec972dd0308be49aa946fdfdfcad8bd9ec76a2b76c4293f117",
+      "asserts": 23,
+      "skips": 0
+    },
+    "tests/engine/player-view.acceptance.test.ts": {
+      "sha": "80607675608a1154ff89017d64adf5c57714aafc6c65974e458627e43e1289e8",
+      "asserts": 15,
+      "skips": 0
+    },
+    "tests/engine/player-view.property.test.ts": {
+      "sha": "7f288a9507a34923e728f41a8c21718483150ff1a278d6e09ebfa90caf691b0d",
+      "asserts": 6,
+      "skips": 0
+    },
+    "tests/engine/player-view.test.ts": {
+      "sha": "d1683af144c6814656902544a91ecc555610a872892f9c47014e802010288646",
+      "asserts": 26,
+      "skips": 0
+    },
+    "tests/engine/reference-ranking.ts": {
+      "sha": "b08f68c01bf3657ca7d5240390871ab3a2268e78ec4b9549eeca4d31e8789aa9",
+      "asserts": 0,
+      "skips": 0
+    },
+    "tests/engine/review-gaps.acceptance.test.ts": {
+      "sha": "545b82899a1200d4731f9983c00c98c504ce99b281be865afc16a2cf24eb2a1d",
+      "asserts": 30,
+      "skips": 0
+    },
+    "tests/engine/seeded-random.test.ts": {
+      "sha": "a48dfb26380eb16fa1906777bee3e0d90be4e0f74bbbc272c34f4e8439404d3e",
+      "asserts": 31,
+      "skips": 0
+    },
+    "tests/engine/short-all-in.acceptance.test.ts": {
+      "sha": "087c9326498b3c6642765ed15d1c026d2699248722aceece17f552aa63f4026f",
+      "asserts": 56,
+      "skips": 0
+    },
+    "tests/engine/short-all-in.property.test.ts": {
+      "sha": "54a2e687a2b97e90482fab745d53d9ffa3a34a38e3667bc972960f95be822572",
+      "asserts": 4,
+      "skips": 0
+    },
+    "tests/engine/short-all-in.test.ts": {
+      "sha": "88856e82711e78335c7d79215f48d453a8699e4661d2567cd7fd42fe71af6350",
+      "asserts": 33,
+      "skips": 0
+    },
+    "tests/engine/showdown-order.acceptance.test.ts": {
+      "sha": "177e63f012d6d6a078a3c5e4c9ec8c99e5ee6c8bd0e4a83b8714cf1ba64aa333",
+      "asserts": 32,
+      "skips": 0
+    },
+    "tests/engine/showdown-order.property.test.ts": {
+      "sha": "2f8248d661aad8553baf6754bbc9a4890e2098ba6b8f58d1705342b60aea5404",
+      "asserts": 4,
+      "skips": 0
+    },
+    "tests/engine/showdown-order.test.ts": {
+      "sha": "ece5f063fbc45c26965868a3cf5eeb1978b37769db49ff5a78138ddb05a5a613",
+      "asserts": 12,
+      "skips": 0
+    },
+    "tests/engine/side-pot-invariants.acceptance.test.ts": {
+      "sha": "5d6fe19396a56acd27d64c44ec96ad37f68760bf224dc71f8759fb6225a0b535",
+      "asserts": 9,
+      "skips": 0
+    },
+    "tests/engine/side-pots.acceptance.test.ts": {
+      "sha": "388d43d91970a015c56b375f5bc6e9370d1a136c639a6aef2cd222bdfc5f6d11",
+      "asserts": 36,
+      "skips": 0
+    },
+    "tests/engine/side-pots.property.test.ts": {
+      "sha": "8e289afba4b5e0c471b44c4896b600f9b1cac428e2c9dfb2a6391987181efce5",
+      "asserts": 2,
+      "skips": 0
+    },
+    "tests/git/prune-merged-branches-hardening.acceptance.test.ts": {
+      "sha": "5564aa1b12605648c9c834fe26f60559b4db432462817e7b6c597b5e9e12e027",
+      "asserts": 12,
+      "skips": 0
+    },
+    "tests/git/prune-merged-branches-lease.test.ts": {
+      "sha": "3557677cce7adae7a65f45582b18f60c0a35d423dd9a520269a555ee0361f55f",
+      "asserts": 4,
+      "skips": 0
+    },
+    "tests/git/prune-merged-branches.acceptance.test.ts": {
+      "sha": "d0ef8c2425cdb5cb011dfc86deb34238b85f8156e96c7d5c328371ec0d9a8baa",
+      "asserts": 35,
+      "skips": 0
+    },
+    "tests/git/prune-merged-branches.test.ts": {
+      "sha": "d062109b311702539f6c098a0f0d17b7529c53388e4896e159310ba6b326ae97",
+      "asserts": 7,
+      "skips": 0
+    },
+    "tests/golden/golden-spots.test.ts": {
+      "sha": "421541f0abb1d3820612cbc2454d1ef29723c86b24bbe3b8344141be48b08681",
+      "asserts": 66,
+      "skips": 0
+    },
+    "tests/golden/graded-examples.json": {
+      "sha": "305d2a6911179fd4cf04ce3d570aaa9c19dca009127b28f7eea9e6dbcfd33ae4",
+      "asserts": 0,
+      "skips": 0
+    },
+    "tests/golden/postflop-golden.test.ts": {
+      "sha": "fc5d0274c95f13afc09bd97dd743ac0e12b9c711f07d9dcce73ae1a56160a6ad",
+      "asserts": 81,
+      "skips": 0
+    },
+    "tests/golden/postflop-spots.json": {
+      "sha": "edad48485a180de4cd1c457f84df8bc92a4bda3c364c880feb48e59067f5a660",
+      "asserts": 0,
+      "skips": 0
+    },
+    "tests/golden/postflop.acceptance.test.ts": {
+      "sha": "4469df95046d3de3d28cb2a2b4505f2cd8cbd39366d0414c9dc4b0e8cf4d7bda",
+      "asserts": 29,
+      "skips": 0
+    },
+    "tests/golden/preflop-spots.json": {
+      "sha": "c70afbf5a1062a33ab838b6a2891399ceab60c020de3887bcc739aa1227083ac",
+      "asserts": 0,
+      "skips": 0
+    },
+    "tests/golden/preflop.acceptance.test.ts": {
+      "sha": "a86780cba5a045eacf9ae18f3f132abb019b3ab7f193dbed08bcfda45b6186e4",
+      "asserts": 30,
+      "skips": 0
+    },
+    "tests/golden/suite.acceptance.test.ts": {
+      "sha": "90198a895b0e5c2db04ab19899b52483647ecd159113cfd052edd4033387ff97",
+      "asserts": 30,
+      "skips": 0
+    },
+    "tests/playtest/advice-check.test.ts": {
+      "sha": "d8b53451dc7da6106b6acdbbb3bd379dd93a4324727bb7f18ee55b032474b810",
+      "asserts": 44,
+      "skips": 0
+    },
+    "tests/playtest/all-sizes.acceptance.test.ts": {
+      "sha": "48d0373f1a0946e81de60635367b2c13d9663c92f76225b94e228052457fadde",
+      "asserts": 10,
+      "skips": 0
+    },
+    "tests/playtest/bot-replay.acceptance.test.ts": {
+      "sha": "f05c497a8d5c447488f39df1c0f11478f507b2de81427e3888c74af0dd3775c0",
+      "asserts": 17,
+      "skips": 0
+    },
+    "tests/playtest/bot-results.acceptance.test.ts": {
+      "sha": "7311f64f814bd0fa1a931e288a7e3713cf7515aeb54bd6b29d6a9ada1da7a148",
+      "asserts": 45,
+      "skips": 0
+    },
+    "tests/playtest/check-advice.acceptance.test.ts": {
+      "sha": "84577918e9a006b359617d4ce726275bf3f3b5f4946e1661954711a902e64d5e",
+      "asserts": 30,
+      "skips": 0
+    },
+    "tests/playtest/check-styles.acceptance.test.ts": {
+      "sha": "51a788b33ebd2daf6f5fe2626cf3d82860ec7ad3a5670b511488062c43f5c9e3",
+      "asserts": 50,
+      "skips": 0
+    },
+    "tests/playtest/cli.test.ts": {
+      "sha": "092175f0160a697469d0deeddacecf13db345e27e4bd795b425f1380fc81ce17",
+      "asserts": 102,
+      "skips": 0
+    },
+    "tests/playtest/games.acceptance.test.ts": {
+      "sha": "098ad165af6bd980fdc405a5dd16036640c62320ea0ece16489cf6225709179d",
+      "asserts": 61,
+      "skips": 0
+    },
+    "tests/playtest/heads-up.acceptance.test.ts": {
+      "sha": "5cf04c4a5a1b95e0c0b514187e9a71905fa0c60a710ae1db08c9e37482a8e137",
+      "asserts": 16,
+      "skips": 0
+    },
+    "tests/playtest/invariants.acceptance.test.ts": {
+      "sha": "e90f7a47422889e496bfecdf9358acab3e8aefac03c309e01fba1d47be1d1f70",
+      "asserts": 41,
+      "skips": 0
+    },
+    "tests/playtest/lineup-throughput.acceptance.test.ts": {
+      "sha": "583513146d2409929d2065c65a4c66d6e77cd5018b1983fc45b10fff0f5ead4f",
+      "asserts": 5,
+      "skips": 0
+    },
+    "tests/playtest/lineup.acceptance.test.ts": {
+      "sha": "8dcf98ce9ea07a6db68830ecd8c84348088ad2a5381bff857fcbc336010237ef",
+      "asserts": 23,
+      "skips": 0
+    },
+    "tests/playtest/million-lineups.acceptance.test.ts": {
+      "sha": "092655347e27d2b471a7d2b37d7449df669b14889738c5902adfb561285653a3",
+      "asserts": 25,
+      "skips": 0
+    },
+    "tests/playtest/million.acceptance.test.ts": {
+      "sha": "c96d67cacdd9df62a93e61559b6d9b236553557b568485f6c46ea99e34eb271a",
+      "asserts": 33,
+      "skips": 0
+    },
+    "tests/playtest/playtest.acceptance.test.ts": {
+      "sha": "3005bb6b7e8300cd75d816b89e3e59d8b3539179ea3aeeb3f135d3c3d386e18c",
+      "asserts": 34,
+      "skips": 0
+    },
+    "tests/playtest/policy-lineup.acceptance.test.ts": {
+      "sha": "619f30225b04338f5a464a657d0f3f7d9136b7dc56e9d2f6ceeded98365d30e9",
+      "asserts": 9,
+      "skips": 0
+    },
+    "tests/playtest/policy.test.ts": {
+      "sha": "937c2cbd892272b6298783aa15be9bc31c6eb3040e891c1b09defdd7fe6d55a7",
+      "asserts": 27,
+      "skips": 0
+    },
+    "tests/playtest/replacement.acceptance.test.ts": {
+      "sha": "c73bf9040d1bc7cd822f17568ce5d11a9ff0ddf2c54238ebd544c5157988dc48",
+      "asserts": 35,
+      "skips": 0
+    },
+    "tests/playtest/runner.acceptance.test.ts": {
+      "sha": "921a8baef9aba148e69c5da67a799f2f763a5bb9e906537201ea28e29842e2bb",
+      "asserts": 27,
+      "skips": 0
+    },
+    "tests/playtest/runner.test.ts": {
+      "sha": "34048d1d7310a4b17e440a0838cf80953254c3fda6a5c95f835bba793ac1f768",
+      "asserts": 128,
+      "skips": 0
+    },
+    "tests/playtest/shards.test.ts": {
+      "sha": "d4dc15ff16ca5c18f3abf00ba7be5dab8aa639763a1e36c6de8699ae893bb33f",
+      "asserts": 75,
+      "skips": 0
+    },
+    "tests/playtest/style-bots.acceptance.test.ts": {
+      "sha": "ff195e22a06b375eb88cacc83538cdb5a22689dcc751f89500cd524ea1028905",
+      "asserts": 36,
+      "skips": 0
+    },
+    "tests/playtest/style-check.test.ts": {
+      "sha": "bc8e917f2e616501f9e2518be73a856b5046c30f48f790b84e9b729ec4d84cdf",
+      "asserts": 40,
+      "skips": 0
+    },
+    "tests/playtest/summary.acceptance.test.ts": {
+      "sha": "008e1b7853e1b7f25df826cfd19cc2cfa3ef98e981bac91b8dc3a836624a6d04",
+      "asserts": 7,
+      "skips": 0
+    },
+    "tests/playtest/throughput.acceptance.test.ts": {
+      "sha": "cfb968b1cc9fdad3614954559c125827736311f4507f1be567c76b712a3e7b09",
+      "asserts": 5,
+      "skips": 0
+    },
+    "tests/playtest/type-stripping.acceptance.test.ts": {
+      "sha": "33c8d15da02365e3273ccb46b2fee0ccf26884dccef55e03a0ee81ea1cb80577",
+      "asserts": 6,
+      "skips": 0
+    },
+    "tests/playtest/winrate.test.ts": {
+      "sha": "cdedd41d4b43ff1a19b6f489dc22daafdc04095286bb5991a35533ee74bc1c14",
+      "asserts": 19,
+      "skips": 0
+    },
+    "tests/stats/style-stats.acceptance.test.ts": {
+      "sha": "d9900365727e07fd0350831dc8e382cfe5538f4c48ef3a954b923eebe5bb20f6",
+      "asserts": 46,
+      "skips": 0
+    },
+    "tests/stats/style-stats.test.ts": {
+      "sha": "d914398acc7a1d1ef021fbe13d58adff329c04caf7dc030b73d09534df66d753",
+      "asserts": 30,
+      "skips": 0
+    },
+    "tests/storage/hand-records.acceptance.test.ts": {
+      "sha": "3bb6f00c06070c0e4ea6430e5ca014361e946406f203968bf7baf10942d1d608",
+      "asserts": 22,
+      "skips": 0
+    },
+    "tests/storage/hand-store.test.ts": {
+      "sha": "674a0b26a833d3ab7b6b72584f4393aaa25e750ef6786c14f838230e5716c878",
+      "asserts": 16,
+      "skips": 0
+    },
+    "tests/storage/resume.acceptance.test.ts": {
+      "sha": "fe6032b6ba4f61f71c6b40cd7798ddbfed2205c7e39cec9014b7193f94d75e9b",
+      "asserts": 40,
+      "skips": 0
+    },
+    "tests/storage/session-records.acceptance.test.ts": {
+      "sha": "cdda1c85f3cdaddac6c5422c3b3fda23d5e2d178d99aed28611fb07ce0899a54",
+      "asserts": 37,
+      "skips": 0
+    },
+    "tests/support/cpu-clock.acceptance.test.ts": {
+      "sha": "87a6249d690f3deee142ce65bf0d6c194cea7f70b80cba3bb494391295536dec",
+      "asserts": 4,
+      "skips": 0
+    },
+    "tests/support/faulty-engine.ts": {
+      "sha": "9b391597e080c2c522cf2afb19ade8174be60da0d15dcc806d647d67402dbac1",
+      "asserts": 0,
+      "skips": 0
+    },
+    "tests/support/process-group-cli.ts": {
+      "sha": "5b9deacaa65e4bfe116c37f6cf1d3bf002fe2d0d1cfb772255936b524ca19465",
+      "asserts": 0,
+      "skips": 0
+    },
+    "tests/support/process-group.test.ts": {
+      "sha": "a657ccb9a407d44f1db69fd7b82c9c5ba69194989fcb995dafbb65a6825dd203",
+      "asserts": 8,
+      "skips": 0
+    },
+    "tests/support/process-group.ts": {
+      "sha": "25a3170a31bed080aae76ea36346f2793c5bf9c077a8f9a0c2c45090858f586a",
+      "asserts": 0,
+      "skips": 0
+    },
+    "tests/support/sandbox-timeout.acceptance.test.ts": {
+      "sha": "41ab930ea2bfb3c0a63a017560e6acad3c094c3528865a52d78dcfae17471b66",
+      "asserts": 10,
+      "skips": 0
+    },
+    "tests/support/sandbox.ts": {
+      "sha": "19d88ba31b72e11d6922624c1447b58e7203393b62534e83c7d7effd6f0a5a03",
+      "asserts": 0,
+      "skips": 0
+    },
+    "tests/support/session-play.ts": {
+      "sha": "925f335d9d1ccc91d0f31aa9bcff0c016a4c48d55d97adc8892c83f1f6553edb",
+      "asserts": 0,
+      "skips": 0
+    },
+    "tests/support/speed.test.ts": {
+      "sha": "0a4a046ebdbb40e5ca59be281994a2f2a098affc464741b41b29cca6d82f97c7",
+      "asserts": 6,
+      "skips": 0
+    },
+    "tests/support/speed.ts": {
+      "sha": "17bb435c0b8f5a757e0d113c75cab67718c0cb2ba9e3e71277d65e12dc32d5aa",
+      "asserts": 0,
+      "skips": 0
+    },
+    "tests/support/table-scenarios.ts": {
+      "sha": "1f3bad7978d50574ac59d6c11351ec90acfbdbb94f41bd95b854f27da2f4036e",
+      "asserts": 0,
+      "skips": 0
+    },
+    "tests/table/action-bar-limits.acceptance.test.ts": {
+      "sha": "8629f5397abae76647bf35a41e27c063f76ec55ea05bd66ca3b82fa96dc1700c",
+      "asserts": 22,
+      "skips": 0
+    },
+    "tests/table/action-bar.acceptance.test.ts": {
+      "sha": "9b418b4b2986ab43b7394f9f759f3390c883586db937b6694fbf2a265ec9e329",
+      "asserts": 10,
+      "skips": 0
+    },
+    "tests/table/action-bar.test.ts": {
+      "sha": "48ace9f8cbc6c8a8cfeda02bcd84a77b8e1bd1fcb43e98c90aca0f2cf1708480",
+      "asserts": 37,
+      "skips": 0
+    },
+    "tests/table/advice-service.test.ts": {
+      "sha": "f8ccc006c98e6bed9a70942bfb2a310c0f1ff5d7e4b947b27e512a85441a570a",
+      "asserts": 23,
+      "skips": 0
+    },
+    "tests/table/bot-seed.acceptance.test.ts": {
+      "sha": "92a7e1ff70d5cc0e94016faf37d8ea20e3986e86ce834a7f5104d6d39589b1af",
+      "asserts": 17,
+      "skips": 0
+    },
+    "tests/table/bot-turn.test.ts": {
+      "sha": "146d506c1858c33e3bd886f46cee5d736181e3c4bb6da2806b208ebbd80e03b1",
+      "asserts": 19,
+      "skips": 0
+    },
+    "tests/table/decision-record.acceptance.test.ts": {
+      "sha": "c6b91ebcaab3ba2c42405ad8f24a69c5d6d5838a8b616ceb9916b98c4f0bdc02",
+      "asserts": 40,
+      "skips": 0
+    },
+    "tests/table/decision-record.test.ts": {
+      "sha": "6bc28c4f044694c68a7a8bcb95eecee0c7d06e8de3b7a053b8523001aad4a2bf",
+      "asserts": 22,
+      "skips": 0
+    },
+    "tests/table/decision-snapshot.test.ts": {
+      "sha": "2028ce4975ef6a51933e3ea96debfbcba85213fb093d29a5b7008d3e1b554647",
+      "asserts": 9,
+      "skips": 0
+    },
+    "tests/table/game-type.acceptance.test.ts": {
+      "sha": "086401b17a66466e037cfe3cf15ca5f7f5c44f107a0dc47594f4e1996c7c52f1",
+      "asserts": 16,
+      "skips": 0
+    },
+    "tests/table/game-type.test.ts": {
+      "sha": "208044bffe794cd0472325261a049872143cf1be740f3aa62b20d1f9d8e2e33e",
+      "asserts": 12,
+      "skips": 0
+    },
+    "tests/table/hand-record-validation.acceptance.test.ts": {
+      "sha": "b0da0c5c8b28acf87d8d65f0bd3f001433474d9a9b2cb15b24d7ca13ffba5eb8",
+      "asserts": 12,
+      "skips": 0
+    },
+    "tests/table/hand-record.test.ts": {
+      "sha": "36055719f5839a59c1d33b2ba889213460ffbcd99b2a49a870f8a574fd44e61c",
+      "asserts": 32,
+      "skips": 0
+    },
+    "tests/table/hand-result-edges.acceptance.test.ts": {
+      "sha": "8aa8333921ff2ee221eedd35254973bfb034dd855198b03c41ef0b8266c4eb69",
+      "asserts": 3,
+      "skips": 0
+    },
+    "tests/table/hand-result-uncalled.acceptance.test.ts": {
+      "sha": "cd6f31ad0cf0d4901da9e03ffdd823ffd02751dbaf111b72b8f58f8254b6d08b",
+      "asserts": 8,
+      "skips": 0
+    },
+    "tests/table/hand-result.test.ts": {
+      "sha": "6f1188c80d6ef88e509f5460ed639173879c50d8b69d10450db9450f14186870",
+      "asserts": 19,
+      "skips": 0
+    },
+    "tests/table/lineup-config.acceptance.test.ts": {
+      "sha": "3bf6ea62f8ea080fe44d166db91e518043113a8dbd96372f2c10871fcdd08f5b",
+      "asserts": 16,
+      "skips": 0
+    },
+    "tests/table/lineup-config.test.ts": {
+      "sha": "ac1202b74a0a9c247bec14e4b3fc4df5a3f6483938e8dfaa5850aeb354ceaf7f",
+      "asserts": 17,
+      "skips": 0
+    },
+    "tests/table/next-hand.acceptance.test.ts": {
+      "sha": "e193a9861b810e27a092a36c339db2e5f63ae34d66d491f6b9d28458ebf73e15",
+      "asserts": 45,
+      "skips": 0
+    },
+    "tests/table/next-hand.test.ts": {
+      "sha": "5758b34b6ec5319fe73f3cbf7a30a158a6e4d20ca72a28115225edbe991cdd5e",
+      "asserts": 32,
+      "skips": 0
+    },
+    "tests/table/pace.acceptance.test.ts": {
+      "sha": "2e74951a108a2cf7abab14ed362961d8b0d228f6b4e0eb99b749f46f48fe96b3",
+      "asserts": 8,
+      "skips": 0
+    },
+    "tests/table/pace.test.ts": {
+      "sha": "4f5013d56c546705004b0f7c1b7765e2f1e7cf8c5629ce8a813157ba66e63eb4",
+      "asserts": 4,
+      "skips": 0
+    },
+    "tests/table/randomise-lineup.acceptance.test.ts": {
+      "sha": "1225d4f4e368777997e42e356a34a0b430b356f84a0a20b05b75f17cdf9190e5",
+      "asserts": 18,
+      "skips": 0
+    },
+    "tests/table/randomise-lineup.test.ts": {
+      "sha": "54352b8e17d641830fcd926db38f005d6a8bff6c92d7a99742cfa2bc03e6a8d1",
+      "asserts": 14,
+      "skips": 0
+    },
+    "tests/table/rebuy.acceptance.test.ts": {
+      "sha": "c9583f4772ef1862b2b79d5a6fb060ad113b44748072f5cd632ad4455bc9e28b",
+      "asserts": 82,
+      "skips": 0
+    },
+    "tests/table/rebuy.test.ts": {
+      "sha": "2a826ff21d0c85396c38f09f9b96674b7f321e2d8705cf6ba501c604d9561ad4",
+      "asserts": 18,
+      "skips": 0
+    },
+    "tests/table/replace-bot.acceptance.test.ts": {
+      "sha": "97fff80c898affb3cebe753d504eb3396412f5968711bca7d424db2a3935dd2b",
+      "asserts": 28,
+      "skips": 0
+    },
+    "tests/table/resume.acceptance.test.ts": {
+      "sha": "b4c5bb41bf2b22b99dd8b8d40ea86cef7189e23af5b0b573de50e19386ec06d2",
+      "asserts": 57,
+      "skips": 0
+    },
+    "tests/table/review.acceptance.test.ts": {
+      "sha": "83adfae80654b9d2d1005af5ce69a8d4d438c4646f4d25de0ae01d8a7b7db1f3",
+      "asserts": 21,
+      "skips": 0
+    },
+    "tests/table/review.test.ts": {
+      "sha": "9dda43bdaa2bda6d358f9a6977b87f492fee25b8c832d67693ed39e9586a0349",
+      "asserts": 10,
+      "skips": 0
+    },
+    "tests/table/seat-style.acceptance.test.ts": {
+      "sha": "ea5a883d4451ff21649772d54828228a6b9acc248d85ad9782214d2742502641",
+      "asserts": 21,
+      "skips": 0
+    },
+    "tests/table/seat-style.test.ts": {
+      "sha": "e6125969edea2d158e8c423c410905f8aba2ed95bbd500d4a65c85a83d01b500",
+      "asserts": 19,
+      "skips": 0
+    },
+    "tests/table/session-cap.acceptance.test.ts": {
+      "sha": "0134bd3515c7d60648aefcf1e2582b61c927473491ca1e2644a9491854001e3a",
+      "asserts": 18,
+      "skips": 0
+    },
+    "tests/table/session-config.acceptance.test.ts": {
+      "sha": "7316baf85f5614c7c5b20452a3e3f2233b07dbc4e8ca1b019301bf788f248360",
+      "asserts": 9,
+      "skips": 0
+    },
+    "tests/table/session-config.test.ts": {
+      "sha": "575922df6f7e9626c317cfb982d11bdd757af9b9e66312c1caea32de1851eca0",
+      "asserts": 23,
+      "skips": 0
+    },
+    "tests/table/session-restore.acceptance.test.ts": {
+      "sha": "77b5f21d52971f41d870e594ddc49e9e8544bf5260ef2170b9f28c73f7320cb5",
+      "asserts": 34,
+      "skips": 0
+    },
+    "tests/table/session-stacks.acceptance.test.ts": {
+      "sha": "f72ffc69155e082135c2bdfdfe68c578c4111267dd6d630c6ea32f2bd60df62e",
+      "asserts": 1,
+      "skips": 0
+    },
+    "tests/table/session.acceptance.test.ts": {
+      "sha": "6bb4d91ca0c3e4d6060737b87a22e1866f940df1a57e25676d19ee5ddcc85a1f",
+      "asserts": 59,
+      "skips": 0
+    },
+    "tests/table/session.test.ts": {
+      "sha": "14bcef546dd4fce078b0050feac47080816f19976ffd1acba323c8b8f77d8dac",
+      "asserts": 15,
+      "skips": 0
+    },
+    "tests/table/short-stack.acceptance.test.ts": {
+      "sha": "714abbf1a5c384f8e1448982b67cff98965bdaf97aff4cf153495670432770fd",
+      "asserts": 59,
+      "skips": 0
+    },
+    "tests/table/side-pots.test.ts": {
+      "sha": "3f5d7eb06309294294f791a97a033e9491685708152fb5a872efd144ddde8f46",
+      "asserts": 25,
+      "skips": 0
+    },
+    "tests/table/stakes.acceptance.test.ts": {
+      "sha": "c48a4ea2538dcf8519b53900184fd6e5539a13acd7b6787d50e29c581e831b14",
+      "asserts": 13,
+      "skips": 0
+    },
+    "tests/table/table-size.acceptance.test.ts": {
+      "sha": "6ce26efa6870c66ac38e4d60391a2107df798ba60b9e0feeaa0286c57a160bab",
+      "asserts": 39,
+      "skips": 0
+    },
+    "tests/table/table-view.test.ts": {
+      "sha": "ea2152bfae3b804cc49f0170b8d7a7eb0b2bafe309bbd56010e053540dc6f640",
+      "asserts": 60,
+      "skips": 0
+    },
+    "tests/toolchain/bot-determinism.test.ts": {
+      "sha": "79816909ef87a545e83f012fe3dd03e3c9f3c9912f4208aeded2d15e3c480a2f",
+      "asserts": 11,
+      "skips": 0
+    },
+    "tests/toolchain/boundary.property.test.ts": {
+      "sha": "fac3eccaeb87838390df011e51b3370286a1f1a77cecdae3e04764631d0a32bf",
+      "asserts": 6,
+      "skips": 0
+    },
+    "tests/toolchain/boundary.test.ts": {
+      "sha": "469d9c2a27e5dc7c68783db76c2707e3fc75cdd93f7fe767f406f9734dbae572",
+      "asserts": 8,
+      "skips": 0
+    },
+    "tests/toolchain/build.test.ts": {
+      "sha": "b2ab2335d769dc7490129d06e3d6a41e86307f1effa226066c72de88d1e75f24",
+      "asserts": 4,
+      "skips": 0
+    },
+    "tests/toolchain/coverage.test.ts": {
+      "sha": "b29635ef7b0d17a47fecacf7d2d04140080d48c72d17653c150fb6d9c039f983",
+      "asserts": 11,
+      "skips": 0
+    },
+    "tests/toolchain/headless-lint-dirs.acceptance.test.ts": {
+      "sha": "f298fe3ba5061688f5bc426a0f0bfe734a2889e8bb61477010cb7576c0906b75",
+      "asserts": 6,
+      "skips": 0
+    },
+    "tests/toolchain/lint.test.ts": {
+      "sha": "fd630f668d01409729d2a7c58a5e8cbf2a7ae3dbf82b756b61d5f568586981ba",
+      "asserts": 6,
+      "skips": 0
+    },
+    "tests/toolchain/sync-copies.test.ts": {
+      "sha": "8a9c9db6429b57d2e14eecac9cdd43cfdf054bf4a9155eeea72861bd95afa4d2",
+      "asserts": 27,
+      "skips": 0
+    },
+    "tests/toolchain/test-command.test.ts": {
+      "sha": "d3ac8c091ec592d12cb45e23361870660f73594556777ccf9bd4f2b146b624e6",
+      "asserts": 8,
+      "skips": 0
+    },
+    "tests/toolchain/test-groups.acceptance.test.ts": {
+      "sha": "51afe83bf4038a561366b51531acae63edfc2b5e96566fa2c29eb1db89cbd196",
+      "asserts": 21,
+      "skips": 0
+    },
+    "tests/toolchain/type-stripping-lint.acceptance.test.ts": {
+      "sha": "e66e817ad57ccf35ed6ba829d1c1e13b0589785485ff062edc34200ff87cd093",
+      "asserts": 4,
+      "skips": 0
+    },
+    "tests/toolchain/typecheck.test.ts": {
+      "sha": "b6d8be168555d2abd103c089d323c0555641402b96bca3ef84172ef444eccf17",
+      "asserts": 6,
+      "skips": 0
+    },
+    "tests/ui/action-bar-limits.acceptance.test.tsx": {
+      "sha": "3b8dd71d79e62231946b556ea349ca9009f107212181d35a134b7a7e8877182d",
+      "asserts": 28,
+      "skips": 0
+    },
+    "tests/ui/action-bar.acceptance.test.tsx": {
+      "sha": "e5e5e732ca921bba052bac1a8415c951e9abc9e0d1d56b684e87fdf1a5075a90",
+      "asserts": 20,
+      "skips": 0
+    },
+    "tests/ui/advice-robustness.test.ts": {
+      "sha": "6b91ee9c40b72f1650211745100ec9e0acc6bfabb1149909a475da660b51c77c",
+      "asserts": 5,
+      "skips": 0
+    },
+    "tests/ui/advice-worker.acceptance.test.ts": {
+      "sha": "0f7102db934c9afa967dd58d286771d4be3e506eb13e143cca91283104f8cadf",
+      "asserts": 19,
+      "skips": 0
+    },
+    "tests/ui/bust-dialog.acceptance.test.tsx": {
+      "sha": "21370d7a743c831415f1764a8e61bdcdaf0a454c50e9da6dfbb837ac32ff2ebb",
+      "asserts": 14,
+      "skips": 0
+    },
+    "tests/ui/card-art.test.ts": {
+      "sha": "33b6d730e9b1228139b1230f1e84cc24d1acb59cb774cf7dbb3dec986eff85a2",
+      "asserts": 19,
+      "skips": 0
+    },
+    "tests/ui/game-config-game-type.acceptance.test.tsx": {
+      "sha": "9eea5497f33ef3300bf3c6e2f8d9803f63384bedfc943117f016689cc8baef0c",
+      "asserts": 19,
+      "skips": 0
+    },
+    "tests/ui/game-config-lineup.acceptance.test.tsx": {
+      "sha": "0cb6bbbc6f1d10d0f3a923ff2b8a5305f1a39be12e281edf6091e75bf0879c22",
+      "asserts": 19,
+      "skips": 0
+    },
+    "tests/ui/game-config-players.acceptance.test.tsx": {
+      "sha": "fab0ebf85a96e7c3221030e6931b86688947603cc69969818087dc072c0d2bf1",
+      "asserts": 22,
+      "skips": 0
+    },
+    "tests/ui/game-config-randomise.acceptance.test.tsx": {
+      "sha": "9367f8f75d314d3c6b9835d3e198f6e275c717d16643df10f75a303b0240690d",
+      "asserts": 8,
+      "skips": 0
+    },
+    "tests/ui/game-config-seat-style.acceptance.test.tsx": {
+      "sha": "3f26fc68d106f95d02f001ea2d7609ef5e65285ddff7165f9c16ebd5bae27fc0",
+      "asserts": 12,
+      "skips": 0
+    },
+    "tests/ui/game-config-stake.acceptance.test.tsx": {
+      "sha": "57af86f07c2628d733cf6c7b9e2e734d7365d12af3ecf579fcacad96489aa66a",
+      "asserts": 17,
+      "skips": 0
+    },
+    "tests/ui/hand-result-shown.acceptance.test.tsx": {
+      "sha": "92c8bfa26fd568115899b9017e2c47edae2e68806f04caf7d4d6ac0a1575d08b",
+      "asserts": 18,
+      "skips": 0
+    },
+    "tests/ui/hand-result.acceptance.test.tsx": {
+      "sha": "d4f4567455da055e45d078b16bf7a958ffc7a0c211e8f7ec78a3a3f0b6fcb6ac",
+      "asserts": 30,
+      "skips": 0
+    },
+    "tests/ui/home-resume.acceptance.test.tsx": {
+      "sha": "402c0c4a4a634b0226aa3487b49618cda2c39d5266175b2c157ef5e86748e272",
+      "asserts": 12,
+      "skips": 0
+    },
+    "tests/ui/home.acceptance.test.tsx": {
+      "sha": "08b2712860d9ff1c80cb9a824cc4e21e116b2410e7d401dfbf8b296c832acf86",
+      "asserts": 18,
+      "skips": 0
+    },
+    "tests/ui/playing-card.acceptance.test.tsx": {
+      "sha": "cd2cb4885f402fd0a9e1e17edbf3092d3bc0d22b6c074bfea8c824c6df23b37a",
+      "asserts": 25,
+      "skips": 0
+    },
+    "tests/ui/review-panel.acceptance.test.tsx": {
+      "sha": "ffeb2d19cd36a3a580889ff0f364a3724b067e1cade5e8add9c206261bc9b111",
+      "asserts": 24,
+      "skips": 0
+    },
+    "tests/ui/side-pots.acceptance.test.tsx": {
+      "sha": "2fef7bf2dce092bb9c6a279d25e85d4c96138fe9c81e5c45cf1ee28cb60567e0",
+      "asserts": 28,
+      "skips": 0
+    },
+    "tests/ui/table-display.acceptance.test.tsx": {
+      "sha": "467925921b15034198b3f2b5f388b9081d8826046003ba58ae34d114ca17d5db",
+      "asserts": 60,
+      "skips": 0
+    },
+    "tests/ui/table-home.acceptance.test.tsx": {
+      "sha": "c2281818ee4ee0853480c48c64745cb9613869e897a63ca6ccf4328435dd23d8",
+      "asserts": 9,
+      "skips": 0
+    },
+    "tests/ui/table.acceptance.test.tsx": {
+      "sha": "5f8021d3e24e73a819663840417aa8fb78136ba06aa68df46a541e331699c5b3",
+      "asserts": 9,
+      "skips": 0
+    },
+    "tests/ui/user-seat-cards.acceptance.test.tsx": {
+      "sha": "83d166cabdf9e0f7ac0406b8d63329be2d94d73989e4081ee69d127a1bfb2ac4",
+      "asserts": 5,
+      "skips": 0
+    },
+    "tests/ui/user-shown-cards.acceptance.test.tsx": {
+      "sha": "e7410f22862e95cd1625b66648f53934252d059a850d39e9eece1c02e8d2be97",
+      "asserts": 7,
+      "skips": 0
+    },
+    "tests/unit/app.test.tsx": {
+      "sha": "ee698f5ebdf153c406c4588334d5f6cd6774a5ec96e4cb1ed5039bcbc87fdfcb",
+      "asserts": 5,
+      "skips": 0
+    }
+  },
   "history": [],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-8.1",
   "spec_sha256": "739b82423d2f0c16e105f59ab5b55ff146f1919323c8c7366925dd1afce20797"

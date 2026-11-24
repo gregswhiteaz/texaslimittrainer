@@ -1,0 +1,10 @@
+{
+  "spec": "SPEC-04",
+  "reason": "AC#1/AC#10/REQ-022.2 put a Hint button next to the action bar on the live Table. The hook-locked e2e/table.spec.ts (locked by TASK-3.1) asserts that every button on the Table harness page has a name from a fixed list that has no 'Hint' (BUTTON_NAME at e2e/table.spec.ts:18, checked by expectNoBuyInControl at :155-159). Spec section 11 checked tests/ui/table.acceptance.test.tsx from TASK-3.1 but missed this e2e file. A spec-conformant Table fails it in both browsers.",
+  "evidence": "`npm run build && npx playwright test`: 220 passed, 16 skipped, 2 failed: [chromium] and [webkit] e2e/table.spec.ts:175 'stake $10/$20 starts every stack at $400 with no buy-in control' - 'Expected pattern: /^(Fold|Check|Call|Raise|Call \\$\\d+|Bet \\$\\d+|Raise to \\$\\d+|Leave table)$/ Received string: \"Hint\"' at expectNoBuyInControl (e2e/table.spec.ts:158), called from :188. The harness (e2e/support/table-harness.tsx) renders the real <Table>. Every other suite is green: npm test 245 files / 1197 passed / 43 skipped; test:unit green with thresholds; golden 282 passed; playtest 10,000 hands 0 invariant violations; e2e/hint.spec.ts 8/8 in Chromium and WebKit. Locked test not edited.",
+  "options": [
+    "Recommended: unlock e2e/table.spec.ts (owner TASK-3.1) and add Hint to the allowed names, e.g. BUTTON_NAME gains '|Hint' (and 'Hide hint' is not needed, no card is opened there). The test's purpose - no buy-in input or control - is unchanged; add it to the spec's 'Hook-locked tests the build must edit' list.",
+    "Render the Hint button only when Table is given an opt-in prop and leave it off in e2e/support/table-harness.tsx. Not recommended: it shapes the app around one test, and the harness would no longer show the real table.",
+    "Hide the Hint button until the first user turn. Not recommended: the stake test checks again after the first turn (:188), so it still fails, and AC#10 accepts disabled or absent only when the bar is not enabled."
+  ]
+}

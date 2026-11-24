@@ -15,7 +15,8 @@ const NAMES = ['Ava', 'Ben', 'Cal', 'Dee', 'Eli', 'You'];
 /** Game Config's Mixed line-up (TASK-2.5): Ava sits at seat 6, Ben–Eli at seats 1–4. */
 const MIXED_NAMES = ['Ben', 'Cal', 'Dee', 'Eli', 'Ava', 'You'];
 /** The idle (disabled) set plus the exact-amount labels (TASK-3.2 D-4). */
-const BUTTON_NAME = /^(Fold|Check|Call|Raise|Call \$\d+|Bet \$\d+|Raise to \$\d+|Leave table)$/;
+const BUTTON_NAME =
+  /^(Fold|Check|Call|Raise|Call \$\d+|Bet \$\d+|Raise to \$\d+|Leave table|Hint)$/;
 const BOARD_BY_STREET: Record<string, number> = { preflop: 0, flop: 3, turn: 4, river: 5 };
 
 interface CountChange {

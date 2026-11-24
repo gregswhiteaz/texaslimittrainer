@@ -1,4 +1,5 @@
 import type { ActionType, GradeResult } from '../../advice/grade';
+import type { ObservedOpponent } from '../../advice/ranges';
 import type { Recommendation } from '../../advice/recommend';
 import type { Action } from '../../engine/hand';
 import type { PlayerView } from '../../engine/player-view';
@@ -17,7 +18,11 @@ type Payload =
       readonly style: BotStyle;
       readonly seed: number;
     }
-  | { readonly kind: 'recommend'; readonly view: PlayerView }
+  | {
+      readonly kind: 'recommend';
+      readonly view: PlayerView;
+      readonly observed?: readonly ObservedOpponent[];
+    }
   | { readonly kind: 'grade'; readonly view: PlayerView; readonly userAction: ActionType };
 
 interface Pending {
@@ -69,8 +74,11 @@ export class AdviceClient {
     return this.#request({ kind: 'bot', view, style, seed }) as Promise<Action>;
   }
 
-  recommend(view: PlayerView): Promise<Recommendation> {
-    return this.#request({ kind: 'recommend', view }) as Promise<Recommendation>;
+  /** The user's advice; `observed` (the observed-stats snapshot) is sent only when given (D-4). */
+  recommend(view: PlayerView, observed?: readonly ObservedOpponent[]): Promise<Recommendation> {
+    return this.#request(
+      observed === undefined ? { kind: 'recommend', view } : { kind: 'recommend', view, observed },
+    ) as Promise<Recommendation>;
   }
 
   grade(view: PlayerView, userAction: ActionType): Promise<GradeResult<Recommendation>> {

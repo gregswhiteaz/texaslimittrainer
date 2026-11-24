@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-23T11:45:00Z'
+updated_date: '2026-11-24T10:13:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-0
@@ -97,6 +97,8 @@ Locked e2e test unlocked for TASK-1.52 Q-2 (user-approved; clock-advance loop bo
 Locked test e2e/table.spec.ts edited for TASK-2.5 (Q-2 routine).
 
 Locked test re-pinned by TASK-3.9 block 1 (botId on CompletedHand seats; auto-accepted; count kept).
+
+Locked e2e/table.spec.ts unlocked for TASK-8.1 (BUTTON_NAME allow-list gains Hint; no assertion change).
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary

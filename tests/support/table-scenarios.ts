@@ -9,10 +9,12 @@ import {
   type HandState,
   type SeatNumber,
 } from '../../src/engine/hand';
+import { EMPTY_STYLE_COUNTS, type StyleCounts } from '../../src/stats/style-stats';
 import {
   DEFAULT_SESSION_CONFIG,
   USER_SEAT,
   applyUserAction,
+  configForPlayers,
   dealHand,
   initialBotIds,
   resolveSessionConfig,
@@ -122,6 +124,37 @@ const STORYBOARD = buildStoryboard();
 export const { PREFLOP, FLOP_BET, TURN_BET, RIVER, SHOWDOWN } = STORYBOARD.named;
 /** Every state of the storyboard hand from the blinds to SHOWDOWN, one per move. */
 export const STORYBOARD_HISTORY: readonly TableState[] = STORYBOARD.history;
+
+/** The storyboard's preflop decision: 3 and 4 fold, the user (seat 5, CO, A♥ 9♠) is to act in an unopened pot. */
+export const PREFLOP_DECISION = STORYBOARD_HISTORY[2] as TableState;
+/** The storyboard's turn decision: Ben (seat 2) checks the turn to the user. */
+export const TURN_DECISION = STORYBOARD_HISTORY[10] as TableState;
+
+/** Observed counts of `handsDealt` hands with `voluntary` VPIP and `preflopRaised` PFR hands (other counts 0). */
+export function observedStyle(
+  handsDealt: number,
+  voluntary: number,
+  preflopRaised: number,
+): StyleCounts {
+  return { ...EMPTY_STYLE_COUNTS, handsDealt, voluntary, preflopRaised };
+}
+
+/** Ten seats (user seat 5), pinned deal: every seat calls or checks preflop, then the flop is checked to the
+ *  user, so nine opponents are live. */
+export const TEN_SEAT_FLOP: TableState = ((): TableState => {
+  let table = dealHand(seatSession(configForPlayers(DEFAULT_SESSION_CONFIG, 10)), SCENARIO_CODE);
+  const user = table.config.userSeat;
+  for (;;) {
+    const hand = table.hand as HandState;
+    if (hand.street === 'flop' && hand.toAct === user) return table;
+    const legal = legalActions(hand);
+    const action = legal.find((a) => a.type === 'check') ?? legal.find((a) => a.type === 'call');
+    if (action === undefined) throw new Error('TEN_SEAT_FLOP: no check or call');
+    const applied = applyAction(hand, action);
+    if (!applied.ok) throw new Error(applied.error.message);
+    table = { ...table, hand: applied.state };
+  }
+})();
 
 /** Six seats with the user at seat 1 (the small blind, as button is 6); bots TAG. */
 export const SEAT_1_CONFIG: SessionConfig = resolveSessionConfig({

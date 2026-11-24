@@ -550,6 +550,80 @@ h1[tabindex='-1']:focus {
   cursor: not-allowed;
 }
 
+/* Hint (TASK-8.1): the card sits in normal flow above the action row, so it never covers it (A-10). */
+.action-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+}
+
+.hint-toggle {
+  min-height: 52px;
+  min-width: 100px;
+  padding: 0 16px;
+  background: #1a1d22;
+  color: #ff6b70;
+  border: 2px solid #d7262e;
+  border-radius: 10px;
+  font: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.hint-toggle:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.hint-card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-width: 640px;
+  margin: 0 auto 12px;
+  padding: 14px 18px;
+  background: #1a1d22;
+  color: #f2f3f5;
+  border: 1px solid #d7262e;
+  border-radius: 10px;
+}
+
+.hint-card p,
+.hint-card ul {
+  margin: 0;
+}
+
+.hint-card-title {
+  margin: 0;
+  color: #ff6b70;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.hint-card [data-part='hint-action'] {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.hint-numbers {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  font-weight: 600;
+}
+
+.hint-card [data-part='hint-explanation'],
+.hint-card ul {
+  color: #c9ced6;
+  font-size: 14px;
+}
+
+.hint-card ul {
+  padding-left: 18px;
+}
+
 .hand-result {
   display: flex;
   align-items: center;

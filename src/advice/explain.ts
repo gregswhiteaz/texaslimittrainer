@@ -1,5 +1,8 @@
 import {
   ADVICE_ING,
+  CHART_BASIS,
+  CHART_NAMES,
+  CHART_POSITIONS,
   CONCEPTS,
   OBSERVED_MIN_HANDS,
   OPPONENT_TYPE_LEAD,
@@ -64,6 +67,18 @@ export function explainPreflop(rec: Omit<PreflopRecommendation, 'explanation'>):
     sentences.push(PREFLOP_SENTENCES.borderline);
   }
   return sentences.join(' ');
+}
+
+/** The preflop hint's chart basis, e.g. 'From the 6-max chart: raise A9o from the cutoff'. */
+export function chartBasisText(
+  rec: Pick<PreflopRecommendation, 'referenceSize' | 'action' | 'handClass' | 'position'>,
+): string {
+  return fillTemplate(CHART_BASIS, {
+    chart: CHART_NAMES[rec.referenceSize],
+    action: rec.action,
+    hand: rec.handClass,
+    position: CHART_POSITIONS[rec.position],
+  });
 }
 
 export function explainPostflop(

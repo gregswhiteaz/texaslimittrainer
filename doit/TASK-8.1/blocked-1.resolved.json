@@ -1,0 +1,10 @@
+{
+  "spec": "SPEC-01",
+  "reason": "D-2 (observedCounts on TableState, added by nextHand) plus Q-3 / section 7 (restoreSession leaves observedCounts absent) contradicts three hook-locked acceptance tests that assert a restored session deep-equals nextHand(table). Spec section 11 says no locked test needs to change; these three were missed. Any spec-conformant implementation fails them.",
+  "evidence": "With nextHand adding observedCounts (src/table/session.ts), `npx vitest run tests/table/rebuy.acceptance.test.ts tests/table/resume.acceptance.test.ts tests/table/session-restore.acceptance.test.ts` fails 3 tests with 'expected { …(13) } to deeply equal { …(14) }' (the extra key is observedCounts): (1) tests/table/session-restore.acceptance.test.ts:106 `expect(restoreSession(structuredClone(RECORD))).toEqual(nextHand(KINGS_SHOWDOWN))` - locked by TASK-3.10; (2) tests/table/resume.acceptance.test.ts:135 `expect(restored).toEqual(expected)` where expected comes from nextHand - locked by TASK-2.6; (3) tests/table/rebuy.acceptance.test.ts:183 `expect(restored).toEqual(next)` with next = nextHand(...) - locked by TASK-3.11. sessionRecord/restoreSession do not carry observedCounts (Q-3), so restore can never equal nextHand once a hand has finished.",
+  "options": [
+    "Recommended: amend the three locked tests (owners TASK-3.10, TASK-2.6, TASK-3.11) to compare without observed counts, e.g. `const { observedCounts: _, ...rest } = nextHand(...)` then `expect(restored).toEqual(rest)`, and add a line to the spec's 'Hook-locked tests the build must edit' list. Keeps D-2 and Q-3 as approved.",
+    "Change D-2 to its alternative: keep the per-bot counts outside TableState (state/ref in useTableSession, updated where nextHand is called) and pass them to userObservedSnapshot(table, counts); nextHand and the locked tests stay unchanged. Spreads the counting into the hook and the e2e/unit helpers.",
+    "Reverse Q-3: persist observedCounts in the session record so restore reproduces them (the locked tests then pass unchanged). Needs user approval: changes the stored format and the approved Q-3 answer."
+  ]
+}

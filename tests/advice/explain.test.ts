@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
   basisText,
+  chartBasisText,
   explainPostflop,
   explainPreflop,
   fillTemplate,
@@ -8,6 +9,8 @@ import {
   handClassName,
 } from '../../src/advice/explain';
 import {
+  CHART_NAMES,
+  CHART_POSITIONS,
   CONCEPTS,
   POSTFLOP_TEMPLATES,
   PREFLOP_CONTEXT,
@@ -155,7 +158,7 @@ describe('explanation copy', () => {
         50,
       ),
     ).toBe(
-      'Your equity, your share of the pot if the hand were played out to the end, is 78.9% against all their hands and 72.8% against the hands that would call a bet. That is above 50.0%, so betting is a value bet, a bet that worse hands will call. Checking would be free, with 0.0% equity required, but betting wins more.',
+      'Your equity, your share of the pot if the hand were played out to the end, is 78.9% against all their hands and 72.8% against the hands that would call a bet. Your equity against the hands that would call is above 50.0%, so betting is a value bet, a bet that worse hands will call. Checking would be free, with 0.0% equity required, but betting wins more.',
     );
   });
 
@@ -172,7 +175,7 @@ describe('explanation copy', () => {
         50,
       ),
     ).toBe(
-      `Your equity, ${EQUITY}, is 60.0% against all their hands and 55.5% against the hands that would call a raise. That is above 50.0%, so raising is a value bet, ${VALUE_BET}. Checking would be free, with 0.0% equity required, but raising wins more.`,
+      `Your equity, ${EQUITY}, is 60.0% against all their hands and 55.5% against the hands that would call a raise. Your equity against the hands that would call is above 50.0%, so raising is a value bet, ${VALUE_BET}. Checking would be free, with 0.0% equity required, but raising wins more.`,
     );
   });
 
@@ -189,7 +192,7 @@ describe('explanation copy', () => {
         50,
       ),
     ).toBe(
-      `Your equity, ${EQUITY}, is 40.1% against all their hands and 33.3% against the hands that would call a bet. That is not above 50.0%, so a bet would not be a value bet, ${VALUE_BET}. Checking is free, with 0.0% equity required, so check.`,
+      `Your equity, ${EQUITY}, is 40.1% against all their hands and 33.3% against the hands that would call a bet. Your equity against the hands that would call is not above 50.0%, so a bet would not be a value bet, ${VALUE_BET}. Checking is free, with 0.0% equity required, so check.`,
     );
     expect(
       explainPostflop(
@@ -203,7 +206,7 @@ describe('explanation copy', () => {
         50,
       ),
     ).toBe(
-      `Your equity, ${EQUITY}, is 70.0% against all their hands and 61.2% against the hands that would call a raise. That is above 50.0%, so raising is a value bet, ${VALUE_BET}. Pot odds, ${POT_ODDS}, ask only for 16.7% to call, but raising wins more.`,
+      `Your equity, ${EQUITY}, is 70.0% against all their hands and 61.2% against the hands that would call a raise. Your equity against the hands that would call is above 50.0%, so raising is a value bet, ${VALUE_BET}. Pot odds, ${POT_ODDS}, ask only for 16.7% to call, but raising wins more.`,
     );
     expect(explainPostflop(postflop({}), 50)).toBe(
       `Your equity, ${EQUITY}, is 30.0%. Pot odds, ${POT_ODDS}, ask for 16.7%, and you have at least that, so calling earns chips over time.`,
@@ -387,5 +390,48 @@ describe('authored explanation data', () => {
         if (first !== undefined) expect(first).toContain(concept.definition);
       }
     }
+  });
+});
+
+describe('chart basis', () => {
+  it('chartBasisText', () => {
+    const positions: Record<Position, string> = {
+      UTG: 'an early seat (UTG)',
+      'UTG+1': 'an early seat (UTG+1)',
+      MP: 'a middle seat (MP)',
+      LJ: 'the lojack',
+      HJ: 'the hijack',
+      CO: 'the cutoff',
+      BTN: 'the button',
+      SB: 'the small blind',
+      BB: 'the big blind',
+    };
+    expect(Object.keys(CHART_POSITIONS).sort()).toEqual(Object.keys(positions).sort());
+    expect(Object.keys(CHART_POSITIONS).sort()).toEqual(Object.keys(SEAT_NAMES).sort());
+    expect(Object.keys(CHART_NAMES).sort()).toEqual(['6-max', 'full-ring', 'heads-up']);
+    for (const [position, name] of Object.entries(positions) as [Position, string][]) {
+      expect(
+        chartBasisText({ referenceSize: '6-max', action: 'raise', handClass: 'A9o', position }),
+      ).toBe(`From the 6-max chart: raise A9o from ${name}`);
+    }
+    expect(
+      chartBasisText({
+        referenceSize: 'heads-up',
+        action: 'call',
+        handClass: 'T8s',
+        position: 'BB',
+      }),
+    ).toBe('From the heads-up chart: call T8s from the big blind');
+    expect(
+      chartBasisText({
+        referenceSize: 'full-ring',
+        action: 'fold',
+        handClass: '72o',
+        position: 'UTG+1',
+      }),
+    ).toBe('From the full-ring chart: fold 72o from an early seat (UTG+1)');
+    expect(
+      chartBasisText({ referenceSize: '6-max', action: 'check', handClass: 'AA', position: 'BB' }),
+    ).toBe('From the 6-max chart: check AA from the big blind');
   });
 });

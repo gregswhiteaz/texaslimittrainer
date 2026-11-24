@@ -1,5 +1,6 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
+import type { HintCardView } from '../../src/table/hint';
 import type { TableState } from '../../src/table/session';
 import css from '../../src/ui/styles.css?inline';
 import { TableView } from '../../src/ui/table/Table';
@@ -13,6 +14,7 @@ import {
   SHOWN_HANDS,
   SIDE_POT_RIVER,
   SIDE_POT_SHOWDOWN,
+  TEN_SEAT_FLOP,
 } from '../../tests/support/table-scenarios';
 
 // Test-only page (D-8): never imported by the app, built and injected by table-harness-bundle.ts.
@@ -26,9 +28,26 @@ const SCENES: Partial<Record<string, TableState>> = {
   'bet-all-in': BET_ALL_IN,
   'side-pot-river': SIDE_POT_RIVER,
   'side-pot-showdown': SIDE_POT_SHOWDOWN,
+  'ten-seat-hint': TEN_SEAT_FLOP,
+};
+/** A ready card as long as a real three-sentence one with nine opponent lines (layout only, SPEC-17). */
+const TEN_SEAT_CARD: HintCardView = {
+  action: 'Check',
+  chartBasis: null,
+  equity: '14.8%',
+  requiredEquity: '0.0%',
+  explanation:
+    'Your equity, your share of the pot if the hand were played out to the end, is 14.8% against all their hands and 9.6% against the hands that would call a bet. Your equity against the hands that would call is not above 50.0%, so a bet would not be a value bet, a bet that worse hands will call. Checking is free, with 0.0% equity required, so check.',
+  opponents: TEN_SEAT_FLOP.seats
+    .filter((s) => s.kind === 'bot')
+    .map((s) => ({ seat: s.seat, name: s.name, basis: 'typical player' })),
+};
+const HINTS: Partial<Record<string, { status: 'ready'; card: HintCardView }>> = {
+  'ten-seat-hint': { status: 'ready', card: TEN_SEAT_CARD },
 };
 const root = document.getElementById('root');
 const table = SCENES[root?.dataset.scene ?? ''];
+const hint = HINTS[root?.dataset.scene ?? ''] ?? null;
 if (!root || table === undefined)
   throw new Error('Table scenes need #root with a known data-scene');
 
@@ -41,7 +60,7 @@ createRoot(root).render(
   <StrictMode>
     <main className="table-screen">
       <h1>Table scene</h1>
-      <TableView table={table} onAct={noop} onLeave={noop} />
+      <TableView table={table} onAct={noop} onLeave={noop} hint={hint} onHint={noop} />
     </main>
   </StrictMode>,
 );

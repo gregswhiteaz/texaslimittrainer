@@ -23,6 +23,13 @@ import {
 import { botDecisionSeed, replacementGenerator } from '../engine/bot-random';
 import { isReplayCode } from '../engine/deck';
 import type { ObservedOpponent } from '../advice/ranges';
+import {
+  addStyleCounts,
+  EMPTY_STYLE_COUNTS,
+  handStyleCounts,
+  styleStats,
+  type StyleCounts,
+} from '../stats/style-stats';
 import { tagPolicy } from '../bots/tag';
 import {
   BOT_NAMES,
@@ -576,6 +583,43 @@ export function nextHand(table: TableState): TableState {
     botIds,
     nextBotId,
   };
+}
+
+/** Style counts of the finished hands this session, by per-session bot id (TASK-8.1, D-2 alternative). Held by
+ *  the table's session hook, not on TableState, and not persisted (Q-3). A missing id means 0 hands. */
+export type ObservedCounts = Readonly<Record<number, StyleCounts>>;
+
+/** `counts` plus the finished hand, for each dealt-in bot by the id it had in that hand, so a bot replaced
+ *  after it busts keeps its own count (A-2). */
+export function countObserved(counts: ObservedCounts, done: CompletedHand): ObservedCounts {
+  const next: Record<number, StyleCounts> = { ...counts };
+  for (const { seat, botId } of done.seats) {
+    if (botId === null) continue;
+    next[botId] = addStyleCounts(next[botId] ?? EMPTY_STYLE_COUNTS, handStyleCounts(done, seat));
+  }
+  return next;
+}
+
+/** The user's observed-stats snapshot (TASK-8.1 A-1): one entry per bot seat whose current bot has finished at
+ *  least one hand in `counts`, ascending seat, with its unrounded VPIP and PFR. Never the user's seat. */
+export function userObservedSnapshot(
+  table: TableState,
+  counts: ObservedCounts,
+): ObservedOpponent[] {
+  const snapshot: ObservedOpponent[] = [];
+  for (const { seat } of table.seats) {
+    const id = table.botIds[seat];
+    const c = id === undefined ? undefined : counts[id];
+    if (c === undefined || c.handsDealt < 1) continue;
+    const stats = styleStats(c);
+    snapshot.push({
+      seat,
+      hands: c.handsDealt,
+      vpip: stats.vpip as number,
+      pfr: stats.pfr as number,
+    });
+  }
+  return snapshot;
 }
 
 /**

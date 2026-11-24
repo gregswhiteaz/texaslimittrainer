@@ -52,6 +52,10 @@ Every postflop explanation quotes the equity % and the required equity % (`0.0%`
 | `implied-odds-call` | the number of outs and the implied required equity %                               |
 | `pot-odds-fold`     | the implied required equity % when there is one (a drawing hand still short of it) |
 
+In `value-bet`, `check-free` and `value-raise` the second sentence names the equity it compares with the 50.0%
+line (TASK-8.1, AC#12): "Your equity against the hands that would call is (not) above 50.0%, so …". Earlier text
+began that sentence with a bare "That is", which could be read as the equity against all their hands.
+
 ## Preflop
 
 Preflop advice comes from the charts, so preflop explanations quote no numbers. The first sentence comes from the
@@ -59,6 +63,15 @@ chart situation (unopened, limpers, raise, raise and calls, re-raise, blind defe
 gives the action with the hand's name (for example "a pair of aces", "ace-king suited"), noting when a chart raise
 becomes a call because no more raises are allowed. A third sentence follows when the cell has an acceptable
 alternative or is borderline.
+
+### Chart basis on a preflop hint
+
+A preflop hint card shows where the advice comes from instead of equity numbers (REQ-042.6). `chartBasisText(rec)`
+fills `CHART_BASIS` = "From the {chart} chart: {action} {hand} from {position}", for example "From the 6-max
+chart: raise A9o from the cutoff". `{chart}` is heads-up, 6-max or full-ring (`CHART_NAMES`), `{action}` the
+chart advice made legal, `{hand}` the hand class, and `{position}` comes from `CHART_POSITIONS` (the button, the
+small blind, the big blind, the cutoff, the hijack, the lojack, a middle seat (MP), an early seat (UTG), an early
+seat (UTG+1)).
 
 ## Not in the explanation
 

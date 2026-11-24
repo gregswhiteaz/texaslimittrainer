@@ -7,6 +7,7 @@ import {
   botActionDelayMs,
   botTurn,
   completedHand,
+  countObserved,
   dealHand,
   MAX_SESSION_COUNT,
   nextHand,
@@ -16,8 +17,10 @@ import {
   seatSession,
   sitAndGoStopped,
   userBusted,
+  userObservedSnapshot,
   type BotTurn,
   type CompletedHand,
+  type ObservedCounts,
   type SessionConfig,
   type TableState,
 } from '../../table/session';
@@ -107,6 +110,8 @@ export function requestBotDecision(create: () => WorkerLike, turn: BotTurn): Pro
  * At mount the session's start record is put in the hand store, unless the session is resumed. After a hand
  * its record and the session's next-hand state are written together, and the next one is dealt NEXT_HAND_DELAY_MS later
  * (unless held) or once that write completes, whichever is later; a failed write deals nothing more (D-2).
+ * Each completed hand is also added to the session's observed counts (TASK-8.1), which start empty at every
+ * mount, a resumed one included (Q-3); each user action stores the snapshot built from them.
  */
 export function useTableSession({
   config,
@@ -118,12 +123,16 @@ export function useTableSession({
   resume,
 }: TableSessionOptions): {
   table: TableState;
+  /** The session's observed counts so far (read in event handlers, e.g. the hint request). */
+  observedCounts: () => ObservedCounts;
   act: (action: Action) => void;
   dealNext: () => void;
   rebuy: () => void;
 } {
   const [table, setTable] = useState(() => resume?.table ?? seatSession(config));
   const reported = useRef<number | null>(null);
+  // Read only in callbacks and updaters, so a ref: the counts never change what is rendered.
+  const observed = useRef<ObservedCounts>({});
   const [sessionId] = useState(() => resume?.sessionId ?? newSessionId());
   const [startedAt] = useState(() => resume?.startedAt ?? new Date());
   // The start record (A-3): written once per mount from the seated table; each hand's write waits for it.
@@ -195,6 +204,7 @@ export function useTableSession({
           console.error('Hand record could not be saved', error);
         });
         track(write.current);
+        observed.current = countObserved(observed.current, done);
         callback.current?.(done);
       }
     }
@@ -220,8 +230,13 @@ export function useTableSession({
   }, [table, newCode, holdNextHand, createAdviceWorker, handStore, sessionId, startedAt]);
 
   const act = useCallback((action: Action) => {
-    setTable((t) => (nextStep(t) === 'user' ? applyUserAction(t, action) : t));
+    setTable((t) =>
+      nextStep(t) === 'user'
+        ? applyUserAction(t, action, userObservedSnapshot(t, observed.current))
+        : t,
+    );
   }, []);
+  const observedCounts = useCallback(() => observed.current, []);
 
   /** Deals the next hand once its record is written, by the auto-deal's code path; a no-op unless the hand
    *  is done, on a bust (A-3), and never after a failed write. */
@@ -247,5 +262,5 @@ export function useTableSession({
     );
   }, [newCode]);
 
-  return { table, act, dealNext, rebuy };
+  return { table, observedCounts, act, dealNext, rebuy };
 }

@@ -1,6 +1,6 @@
 import type { PostflopRuleId } from './postflop';
 import type { PreflopAdvice } from './preflop';
-import type { Position, Situation } from './preflop-chart';
+import type { Position, ReferenceSize, Situation } from './preflop-chart';
 
 // Authored explanation text, written for this project (REQ-061.2). See docs/advice/explanations.md.
 
@@ -110,11 +110,11 @@ export type PostflopTemplateKey = PostflopRuleId | 'pot-odds-fold-implied';
 
 export const POSTFLOP_TEMPLATES: Readonly<Record<PostflopTemplateKey, string>> = {
   'value-bet':
-    'Your equity, {def:equity}, is {equity} against all their hands and {callingEquity} against the hands that would call a {aggressive}. That is above {threshold}, so {aggressiveIng} is a value bet, {def:value-bet}. Checking would be free, with {required} equity required, but {aggressiveIng} wins more.',
+    'Your equity, {def:equity}, is {equity} against all their hands and {callingEquity} against the hands that would call a {aggressive}. Your equity against the hands that would call is above {threshold}, so {aggressiveIng} is a value bet, {def:value-bet}. Checking would be free, with {required} equity required, but {aggressiveIng} wins more.',
   'check-free':
-    'Your equity, {def:equity}, is {equity} against all their hands and {callingEquity} against the hands that would call a bet. That is not above {threshold}, so a bet would not be a value bet, {def:value-bet}. Checking is free, with {required} equity required, so check.',
+    'Your equity, {def:equity}, is {equity} against all their hands and {callingEquity} against the hands that would call a bet. Your equity against the hands that would call is not above {threshold}, so a bet would not be a value bet, {def:value-bet}. Checking is free, with {required} equity required, so check.',
   'value-raise':
-    'Your equity, {def:equity}, is {equity} against all their hands and {callingEquity} against the hands that would call a raise. That is above {threshold}, so raising is a value bet, {def:value-bet}. Pot odds, {def:pot-odds}, ask only for {required} to call, but raising wins more.',
+    'Your equity, {def:equity}, is {equity} against all their hands and {callingEquity} against the hands that would call a raise. Your equity against the hands that would call is above {threshold}, so raising is a value bet, {def:value-bet}. Pot odds, {def:pot-odds}, ask only for {required} to call, but raising wins more.',
   'pot-odds-call':
     'Your equity, {def:equity}, is {equity}. Pot odds, {def:pot-odds}, ask for {required}, and you have at least that, so calling earns chips over time.',
   'implied-odds-call':
@@ -171,6 +171,27 @@ export const SEAT_NAMES: Readonly<Record<Position, string>> = {
   MP: 'in a middle seat (MP)',
   UTG: 'in an early seat (UTG)',
   'UTG+1': 'in an early seat (UTG+1)',
+};
+
+/** Chart basis line of a preflop hint (TASK-8.1): which chart, its advice, the hand class and the position. */
+export const CHART_BASIS = 'From the {chart} chart: {action} {hand} from {position}';
+
+export const CHART_NAMES: Readonly<Record<ReferenceSize, string>> = {
+  'heads-up': 'heads-up',
+  '6-max': '6-max',
+  'full-ring': 'full-ring',
+};
+
+export const CHART_POSITIONS: Readonly<Record<Position, string>> = {
+  BTN: 'the button',
+  SB: 'the small blind',
+  BB: 'the big blind',
+  CO: 'the cutoff',
+  HJ: 'the hijack',
+  LJ: 'the lojack',
+  MP: 'a middle seat (MP)',
+  UTG: 'an early seat (UTG)',
+  'UTG+1': 'an early seat (UTG+1)',
 };
 
 /** Keyed by RANK_CHARS character: singular and plural names. */
