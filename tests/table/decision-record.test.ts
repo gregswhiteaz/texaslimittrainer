@@ -66,6 +66,27 @@ describe('decision record', () => {
         'decisions[1].opponentBasis[0].seat',
       ],
       [(d) => (at(d, 0).explanation = ''), 'decisions[0].explanation'],
+      [(d) => (at(d, 0).explanation = 'x'.repeat(2001)), 'decisions[0].explanation'],
+      [
+        (d) => (((at(d, 1).opponentBasis as Mutable[])[0] as Mutable).text = ''),
+        'decisions[1].opponentBasis[0].text',
+      ],
+      [
+        (d) => (((at(d, 1).opponentBasis as Mutable[])[0] as Mutable).text = 'x'.repeat(201)),
+        'decisions[1].opponentBasis[0].text',
+      ],
+      [(d) => (at(d, 0).alternative = 'limp'), 'decisions[0].alternative'],
+      [(d) => ((at(d, 0).recommended as Mutable).seat = 2), 'decisions[0].recommended.seat'],
+      [
+        (d) =>
+          ((at(d, 0).action as Mutable).amount = Number((at(d, 0).action as Mutable).amount) + 4),
+        'decisions[0].action',
+      ],
+      [
+        (d) =>
+          ((at(d, 3).action as Mutable).amount = Number((at(d, 3).action as Mutable).amount) + 4),
+        'decisions[3].action',
+      ],
       [(d) => d.push(structuredClone(at(d, 3))), 'decisions'],
       [(d) => ((at(d, 3).action as Mutable).type = 'fold'), 'decisions[3].action'],
       [(d) => d.splice(1, 2, at(d, 2), at(d, 1)), 'decisions[1].street'],
@@ -88,7 +109,6 @@ describe('decision record', () => {
       const result = gradeView(decision.view, decision.action.type, ACTION_RANGE_ADVICE);
       const advice = result.recommendation;
       expect(entry.recommended).toEqual(advice.move);
-      expect(entry.recommended).not.toBe(advice.move);
       expect(entry.action).toEqual(decision.action);
       expect(entry.action).not.toBe(decision.action);
       expect(entry.grade).toEqual({
@@ -116,6 +136,16 @@ describe('decision record', () => {
       expect(decision.view).toEqual(view);
       expect(decisionRecord(decision)).toEqual(decisionRecord(decision));
       expect(decisionRecord(decision).action.type).toBe(decision.action.type);
+
+      const input = structuredClone(decision);
+      const kept = decisionRecord(input);
+      const keptJson = JSON.stringify(kept);
+      for (const move of [input.action, ...input.view.legalActions] as Mutable[]) {
+        move.seat = 99;
+        move.type = 'check';
+        move.amount = 999;
+      }
+      expect(JSON.stringify(kept)).toBe(keptJson);
     }
 
     const observed = [{ seat: 2, hands: 40, vpip: 20, pfr: 10 }];

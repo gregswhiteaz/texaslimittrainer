@@ -190,6 +190,22 @@ function oldRecord(handNumber: number, now: number): Record<string, unknown> {
       fold(6),
       fold(1),
     ],
+    decisions: [
+      {
+        street: 'preflop',
+        action: { seat: 5, type: 'fold' },
+        recommended: { seat: 5, type: 'fold' },
+        alternative: null,
+        ruleId: null,
+        basis: 'chart',
+        equityPct: null,
+        requiredEquityPct: null,
+        opponentBasis: [],
+        explanation: 'Fold: this hand is not in the opening chart from this seat.',
+        grade: { grade: 'correct', ruleId: 'match', marginPts: null },
+        hinted: false,
+      },
+    ],
     board: [],
     shown: null,
     result: {

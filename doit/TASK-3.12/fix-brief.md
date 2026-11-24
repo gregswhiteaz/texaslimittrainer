@@ -1,13 +1,14 @@
-# Fix brief — TASK-3.12 (build block 1, resume BUILD)
+# Fix brief — TASK-3.12 (branch CI red after review r1)
 
-The locked spec stays; this brief records an approved correction. Judge on substance.
+Fix exactly these items.
 
-## 1. Correct SPEC-01 / SPEC-05 expected values (stored advice = hint, ACTION_RANGE_ADVICE)
-- SPEC-01 (REVIEW_FOUR): recommended [raise, bet, bet, call]; grades [correct, correct, minor, correct]. Compute the expected values independently in the test through the worker's grade path (handleAdviceRequest grade), not by calling decisionRecord.
-- SPEC-05: assert the margin-graded entry on entry 2 (turn): ruleId aggression-margin with a numeric marginPts equal to the worker's result.
+## 1. [BLOCKER] e2e/hand-records.spec.ts oldRecord() lacks the now-required decisions field
+- CI run 45359725866, E2E job, both browsers: `RangeError: Invalid hand record: decisions` at e2e/hand-records.spec.ts:210 (parseHandRecord on the 1,000 seeded "2 years ago" records).
+- The file is unlocked under TASK-3.9 and TASK-1.55 (reason "TASK-3.12 Q-4"). Give oldRecord() a `decisions` field consistent with its actions (if the user seat has no non-blind action, `[]`; otherwise one valid entry per user decision). Change fixture data only; no assertion changes.
+- Then run the FULL Playwright suite locally (`npm run build && npx playwright test`), not just vitest, and fix any other e2e fixture that seeds hand records without decisions the same way (list each in the build log; if another one is hook-locked, write blocked.json naming file and owner instead).
 
-## 2. Finish the remaining build work
-- tests/table/decision-record.test.ts (SPEC-07, SPEC-08), docs/storage/hand-records.md update.
-- List the two out-of-list files already changed (tests/support/table-scenarios.ts, tests/storage/hand-store.test.ts) in changes.md with the reason.
-- npm run format, lint, typecheck, full npm test (0 failures), 10,000-hand playtest (0 invariant violations), then the gate.
-Never drop or loosen an assertion.
+## 2. Orchestrator additions (strengthen only; code review MINORs)
+- tests/table/decision-record.test.ts: add parse cases that change only `action.amount`, an explanation over 2000 characters, opponentBasis text out of bounds, a bad `alternative`, and a bad `recommended.seat` — each must be rejected with the specified field path.
+- Replace the vacuous `expect(entry.recommended).not.toBe(advice.move)` with a real no-sharing check (e.g. mutate the input advice after building and assert the entry is unchanged).
+
+Never drop or loosen an assertion. npm run format, lint, typecheck, npm test, the full e2e suite, then the gate.

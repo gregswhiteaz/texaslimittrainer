@@ -8,8 +8,9 @@
 - `tests/storage/hand-records.acceptance.test.ts` — D-3: destructure `decisions` out of `rest` and assert its length (6).
 - `tests/storage/hand-store.test.ts` (outside the spec's file list, test speed) — grades KINGS_SHOWDOWN's decisions once and reuses them for the 1,000 records (without this the test went from about 0.1 s to 11.5 s, which risks CI's 30 s coverage timeout).
 - `tests/table/decision-record.acceptance.test.ts` (new) — SPEC-01..06 acceptance tests; SPEC-01/SPEC-05 expected values per the approved correction in fix-brief item 1 (hint-path values; SPEC-05 margin check on entry 2, turn).
-- `tests/table/decision-record.test.ts` (new) — SPEC-07 (parseHandRecord decision validation) and SPEC-08 (decisionRecord copies the hint-path advice and shares nothing).
+- `tests/table/decision-record.test.ts` (new) — SPEC-07 (parseHandRecord decision validation, incl. action.amount-only change, long explanation, opponentBasis text bounds, bad alternative, bad recommended.seat) and SPEC-08 (decisionRecord copies the hint-path advice and shares nothing, checked by mutating the cloned input's action and legalActions after building).
 - `docs/storage/hand-records.md` — `decisions` field and entry table, grade shape, `hinted` default, decision-time snapshot rule, and the new validation rules (SPEC-11).
 - `doit/TASK-3.12/blocked-1.resolved.json` — the earlier SPEC-01/SPEC-05 block (renamed when resolved).
+- `e2e/hand-records.spec.ts` (unlocked, owners TASK-3.9/TASK-1.55, TASK-3.12 Q-4) — fixture data only: `oldRecord()` gains a `decisions` entry for the user's preflop fold, which parseHandRecord now requires.
 
 No new dependencies.

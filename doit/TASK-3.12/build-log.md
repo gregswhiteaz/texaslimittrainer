@@ -9,3 +9,9 @@
 - Item 2: fixed. Wrote tests/table/decision-record.test.ts (SPEC-07: all listed faults, unmodified and 0-decision BB_WALK records parse; SPEC-08: copies, no sharing, equals ACTION_RANGE_ADVICE grade path, userAdviceOptions(undefined) === ACTION_RANGE_ADVICE). Updated docs/storage/hand-records.md. Listed the two out-of-list files in changes.md with reasons.
 - Commands: npm run format (clean), npm run lint (0 errors), npm run typecheck (0 errors), npm test: 239 files passed / 3 skipped, 1179 tests passed / 43 skipped, 0 failures; npx vitest run tests/golden/: 282/282 passed; new decision-record files: 8/8 passed (under 100 ms each).
 - npm run -s playtest -- --hands 10000 --seed 42 --check-advice: 10000 hands, Invariant violations: 0, Advice check 100113 decision points, 0 mismatches. Byte-identical-to-main comparison not run (no src/engine or bot code changed).
+
+## FIX (CI red after review r1)
+- Item 1: fixed — `e2e/hand-records.spec.ts` oldRecord() now has one chart `decisions` entry for the user's preflop fold (seat 5); fixture data only, no assertion changes. Full Playwright run found no other fixture seeding records without decisions (home-control.spec.ts seeds records built by handWrite/handRecord, which include decisions).
+- Item 2a: fixed — tests/table/decision-record.test.ts adds rejection cases: action.amount only (decisions[0], decisions[3] -> decisions[i].action), explanation 2001 chars, opponentBasis text '' and 201 chars, alternative 'limp', recommended.seat 2.
+- Item 2b: fixed — removed vacuous `not.toBe(advice.move)`; now builds an entry from a cloned decision, mutates the clone's action and every view.legalActions entry, and asserts the entry's JSON is unchanged (verified: making `recommended` share advice.move fails the test).
+- Commands: npm run format, lint (clean), typecheck (clean), npm test: 239 files passed / 3 skipped, 1179 tests passed / 43 skipped; npm run build && npx playwright test: 214 passed, 16 skipped.
