@@ -1,0 +1,50 @@
+[
+  {
+    "id": "SPEC-01",
+    "verifies": "AC#1, DoD#1, DoD#8",
+    "verification": "acceptance `e2e/play-money.spec.ts::every listed screen and dialog shows only play money`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-02",
+    "verifies": "AC#2, DoD#1",
+    "verification": "acceptance `tests/ui/screen-list.acceptance.test.ts::the screen list names every App screen and every dialog component`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-03",
+    "verifies": "AC#2, DoD#1",
+    "verification": "unit `tests/ui/play-money.test.ts::unlistedScreens names an unlisted screen, an unlisted dialog and a stale entry`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-04",
+    "verifies": "AC#3, DoD#1",
+    "verification": "acceptance `e2e/play-money.spec.ts::the built bundle and package.json carry no payment library, Payment Request API or payment-provider URL`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-05",
+    "verifies": "AC#3, DoD#1",
+    "verification": "unit `tests/ui/play-money.test.ts::paymentFindings flags the Payment Request API, a provider URL and a payment library`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-06",
+    "verifies": "AC#4, DoD#1",
+    "verification": "acceptance `e2e/play-money.spec.ts::a fixture screen with a Deposit control fails the check and names it`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-07",
+    "verifies": "AC#1, AC#4, DoD#1",
+    "verification": "unit `tests/ui/play-money.test.ts::realMoneyOffers flags real-money offers and not play-money vocabulary`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-08",
+    "verifies": "DoD#2, DoD#3, DoD#4, DoD#5, DoD#6, DoD#7, DoD#9, DoD#10, DoD#11, DoD#12",
+    "verification": "command `npm run lint && npm run typecheck && npm test && npm run -s playtest -- --hands 10000 --seed 42 && npx playwright test e2e/play-money.spec.ts`",
+    "status": "pending"
+  }
+]

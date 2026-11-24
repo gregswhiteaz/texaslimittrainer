@@ -1,10 +1,11 @@
 ---
 id: TASK-2.15
 title: Practise with play money only
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-17T23:03:00Z'
-updated_date: '2026-11-17T23:22:00Z'
+updated_date: '2026-11-24T18:57:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -65,3 +66,13 @@ Plan key: E02-S14 · Dream: limit-holdem-trainer
 - [ ] #11 Story documentation is written and published to Backlog.md
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. e2e/support/screen-list.ts (home, game-config, end-session-dialog, table, bust-dialog, ending, session-report) and play-money.ts matchers (real-money phrase list, whole words, poker words never flagged alone)
+2. e2e/play-money.spec.ts: one walk per browser through every listed screen/dialog (bust seed), Deposit fixture fails naming its screen, dist + package.json payment scan
+3. tests/ui/screen-list.acceptance.test.ts: app routes (Screen type) and dialog components vs the list, failing by name both ways; unit tests for matchers; docs
+
+Full spec: doit/TASK-2.15/spec.md
+<!-- SECTION:PLAN:END -->
