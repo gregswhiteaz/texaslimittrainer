@@ -1,10 +1,11 @@
 ---
 id: TASK-2.6
 title: Resume a paused session from Home
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-23T13:44:00Z'
+updated_date: '2026-11-24T01:23:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -68,6 +69,18 @@ Plan key: E02-S08 · Dream: limit-holdem-trainer
 - [ ] #11 Story documentation is written and published to Backlog.md
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. Session store: pausedSession() reads all sessions, skips invalid ones (logged), picks the latest not-ended (optional endedAt) session
+2. parseSessionRecord: cap handsPlayed/nextBotId at 1,000,000,000 (RangeError)
+3. Home: Resume session entry (second, secondary style) with subtitle 'Cash · 6 players · $4/$8 · 132 hands · paused'; data-paused loading|none|shown; hidden on read failure
+4. App: Resume restores the session (restoreSession) and opens the Table with a resume option keeping the stored session id; no new start record
+5. Tests: unit/acceptance for selection, caps, invalid records, AC#3 kill-at-hand-11 in fake-indexeddb; Playwright resume flow in Chromium and WebKit with axe
+
+Full spec: doit/TASK-2.6/spec.md
+<!-- SECTION:PLAN:END -->
 
 ## Implementation Notes
 
