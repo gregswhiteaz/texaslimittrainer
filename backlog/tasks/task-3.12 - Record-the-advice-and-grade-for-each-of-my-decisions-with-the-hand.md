@@ -1,10 +1,11 @@
 ---
 id: TASK-3.12
 title: Record the advice and grade for each of my decisions with the hand
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-23T19:21:00Z'
+updated_date: '2026-11-24T08:21:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -48,7 +49,7 @@ Plan key: E03-S10 · Dream: limit-holdem-trainer
 - [ ] #3 Given a decision made without asking for a hint, When the record is read, Then its hinted flag is false [REQ-052.2]
 - [ ] #4 Given a hand in which the user folded preflop at the first decision, When its record is read, Then it holds exactly 1 decision entry with its grade [REQ-052.2]
 - [ ] #5 Given a graded decision, When the hand record is saved, Then the stored grade data is decided and documented (full GradeResult or grade, ruleId and marginPts plus a recommendation reference) and round-trips through JSON unchanged
-- [ ] #6 Given an observed-stats snapshot built at a decision point that contains a null entry or a seat that is not a whole number from 1 to 6, When advice is computed from it, Then estimateOpponentRanges throws the documented RangeError (never a TypeError) and the bad seat is never silently ignored
+- [ ] #6 Given an observed-stats snapshot built at a decision point that contains a null entry or a seat that is not a whole number from 1 to 10 (the table seat bound), When advice is computed from it, Then estimateOpponentRanges throws the documented RangeError (never a TypeError) and the bad seat is never silently ignored
 <!-- AC:END -->
 
 ## Definition of Done
@@ -67,10 +68,24 @@ Plan key: E03-S10 · Dream: limit-holdem-trainer
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
 
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. Hand record gains a decisions list: one compact entry per user decision (street, action, recommendation, rule, basis, equity numbers, per-opponent basis, explanation, grade, hinted), computed at hand end from each decision's view and decision-time snapshot with the hint worker's options (userAdviceOptions shared)
+2. parseHandRecord validates decisions (cross-checked against the user's non-blind actions, size limits); records without decisions are rejected
+3. observedBySeat: null entry or seat outside 1-10 → RangeError
+4. One-line re-pin of locked hand-records acceptance test (TASK-3.9)
+5. Tests for each AC incl. the 29→30-hand snapshot case
+
+Full spec: doit/TASK-3.12/spec.md
+<!-- SECTION:PLAN:END -->
+
 ## Implementation Notes
 
 <!-- SECTION:NOTES:BEGIN -->
 AC added from TASK-7.4 follow-up (doc-19).
 
 AC added from TASK-7.13 follow-up (security MINOR non-object-snapshot-entry-typeerror, doc-104).
+
+AC#6 reworded per TASK-3.12 Q-2 (auto-accepted): snapshot seats 1-10, matching the 10-seat table bound.
 <!-- SECTION:NOTES:END -->

@@ -1311,6 +1311,12 @@
       "event": "unlock",
       "file": "e2e/hand-records.spec.ts",
       "reason": "TASK-1.55 (red main fix story, overnight override): poll for exact onHandComplete counts instead of an immediate read; no assertion dropped"
+    },
+    {
+      "t": "2026-11-24T01:20:56",
+      "event": "unlock",
+      "file": "tests/storage/hand-records.acceptance.test.ts",
+      "reason": "TASK-3.12 Q-3: new decisions field \u2014 take decisions out of rest and check its length (one-line, no assertion dropped)"
     }
   ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-3.9",
@@ -1323,6 +1329,7 @@
     "1": "PASS"
   },
   "relock_pending": [
-    "e2e/hand-records.spec.ts"
+    "e2e/hand-records.spec.ts",
+    "tests/storage/hand-records.acceptance.test.ts"
   ]
 }

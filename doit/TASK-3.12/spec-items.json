@@ -1,0 +1,74 @@
+[
+  {
+    "id": "SPEC-01",
+    "verifies": "AC#1",
+    "verification": "acceptance `tests/table/decision-record.acceptance.test.ts::four decisions are stored in order with recommendation, numbers, explanation and grade`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-02",
+    "verifies": "AC#2",
+    "verification": "acceptance `tests/table/decision-record.acceptance.test.ts::advice uses the decision-time snapshot of 29 hands, not 30`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-03",
+    "verifies": "AC#3",
+    "verification": "acceptance `tests/table/decision-record.acceptance.test.ts::a decision made without a hint has hinted false`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-04",
+    "verifies": "AC#4",
+    "verification": "acceptance `tests/table/decision-record.acceptance.test.ts::a preflop fold at the first decision stores exactly one graded entry`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-05",
+    "verifies": "AC#5",
+    "verification": "acceptance `tests/table/decision-record.acceptance.test.ts::stored grade data is the decided shape and round-trips through JSON`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-06",
+    "verifies": "AC#6",
+    "verification": "acceptance `tests/table/decision-record.acceptance.test.ts::a null snapshot entry or bad seat throws RangeError, never TypeError`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-07",
+    "verifies": "AC#5, DoD#1",
+    "verification": "unit `tests/table/decision-record.test.ts::parseHandRecord rejects bad decision entries`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-08",
+    "verifies": "AC#1, AC#5",
+    "verification": "unit `tests/table/decision-record.test.ts::decisionRecord copies the advice of the hint path`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-09",
+    "verifies": "DoD#2, DoD#3, DoD#4, DoD#5, DoD#8",
+    "verification": "command `npm run lint && npm run typecheck && npm test && npx vitest run tests/golden/`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-10",
+    "verifies": "DoD#6",
+    "verification": "command `npm run -s playtest -- --hands 10000 --seed 42 --check-advice`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-11",
+    "verifies": "DoD#9, DoD#11",
+    "verification": "manual read of `docs/storage/hand-records.md`; `backlog doc list --plain` shows the story doc",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-12",
+    "verifies": "DoD#7, DoD#10, DoD#12",
+    "verification": "manual `gh run list --branch doit/TASK-3.12 --limit 1` shows success",
+    "status": "pending"
+  }
+]

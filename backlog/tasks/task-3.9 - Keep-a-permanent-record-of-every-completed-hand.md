@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-23T15:30:00Z'
+updated_date: '2026-11-24T08:20:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -104,6 +104,8 @@ Review R1: 0 blocking; MINORs fixed in-story (strict durability test; docs wordi
 Judge R1 PASS 20/20 (own Playwright + fake-indexeddb checks: every field vs UI and replay rebuild; stats from records = live over 420 hands; slow write deals at max(1.5 s, write); failed write stops dealing; 10/11 mutants — hook ref masked by Table ref, LOW, not tracked).
 
 Locked e2e/hand-records.spec.ts made timing-robust by TASK-1.55 (expect.poll on exact counts; count kept).
+
+Locked test tests/storage/hand-records.acceptance.test.ts unlocked for TASK-3.12 Q-3 (decisions field, one-line change).
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary
