@@ -1,10 +1,11 @@
 ---
 id: TASK-3.11
 title: Rebuy or leave when my stack runs out
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-19T01:10:00Z'
+updated_date: '2026-11-24T03:31:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -64,6 +65,18 @@ Plan key: E03-S08 · Dream: limit-holdem-trainer
 - [ ] #11 Story documentation is written and published to Backlog.md
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. Session: when the user's cash stack is $0 after a hand, deal nothing and expose a bust state (new branch before the temporary top-up line)
+2. Session record: allow the user seat at $0 (cash only); cap rebuys at MAX_SESSION_COUNT; Resume reopens the dialog
+3. UI: native <dialog> 'Out of chips' with Rebuy (focused) and Leave table; Rebuy adds $160 (buyIn) and deals at once; Leave table pauses to Home
+4. Rebuy count stored with the next completed hand's write
+5. Tests: unit/acceptance with seeded short stacks; re-pin next-hand.test.ts $0 case; Playwright bust flow in Chromium and WebKit with axe
+
+Full spec: doit/TASK-3.11/spec.md
+<!-- SECTION:PLAN:END -->
 
 ## Implementation Notes
 
