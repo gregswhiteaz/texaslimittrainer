@@ -3,7 +3,13 @@ import type { PlayerView } from '../engine/player-view';
 import type { Xoshiro128 } from '../engine/seeded-random';
 import { botRandom, isBotSeed } from '../engine/bot-random';
 import { decideStyle } from '../bots/decide';
-import { ACTION_RANGE_ADVICE, recommend, type Recommendation } from '../advice/recommend';
+import type { ObservedOpponent } from '../advice/ranges';
+import {
+  ACTION_RANGE_ADVICE,
+  recommend,
+  type Recommendation,
+  type RecommendOptions,
+} from '../advice/recommend';
 import { gradeView, type ActionType, type GradeResult } from '../advice/grade';
 import type { BotStyle } from './session';
 
@@ -20,12 +26,19 @@ export type AdviceRequest =
       /** Unsigned 32-bit seed of the bot's generator (botRandom). */
       readonly seed: number;
     }
-  | { readonly id: number; readonly kind: 'recommend'; readonly view: PlayerView }
+  | {
+      readonly id: number;
+      readonly kind: 'recommend';
+      readonly view: PlayerView;
+      /** Observed-stat snapshot at this decision; validated by the range code (RangeError). */
+      readonly observed?: readonly ObservedOpponent[];
+    }
   | {
       readonly id: number;
       readonly kind: 'grade';
       readonly view: PlayerView;
       readonly userAction: ActionType;
+      readonly observed?: readonly ObservedOpponent[];
     };
 export type AdviceValue = Action | Recommendation | GradeResult<Recommendation>;
 export type AdviceResponse =
@@ -41,6 +54,11 @@ export interface AdviceDeps {
 }
 
 const decideBotDefault = decideStyle;
+
+const userOptions = (observed: readonly ObservedOpponent[] | undefined): RecommendOptions =>
+  observed === undefined
+    ? ACTION_RANGE_ADVICE
+    : { ...ACTION_RANGE_ADVICE, observedOpponents: observed };
 
 /** Never throws: every error (malformed request, unknown kind or thrown by advice code) becomes ok:false. */
 export function handleAdviceRequest(
@@ -62,12 +80,12 @@ export function handleAdviceRequest(
         return { id, ok: true, value: decideBot(request.view, request.style, random) };
       }
       case 'recommend':
-        return { id, ok: true, value: recommend(request.view, ACTION_RANGE_ADVICE) };
+        return { id, ok: true, value: recommend(request.view, userOptions(request.observed)) };
       case 'grade':
         return {
           id,
           ok: true,
-          value: gradeView(request.view, request.userAction, ACTION_RANGE_ADVICE),
+          value: gradeView(request.view, request.userAction, userOptions(request.observed)),
         };
       default: {
         const kind = (request as { kind: unknown }).kind;

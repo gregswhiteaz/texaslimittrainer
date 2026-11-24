@@ -39,10 +39,15 @@ export function reviewEntries(
   hand: CompletedHand,
   options?: RecommendOptions,
 ): readonly ReviewEntry[] {
-  return hand.userDecisions.map(({ view, action }) => {
+  return hand.userDecisions.map(({ view, action, observed }) => {
     // A decision is only ever captured on a betting street.
     const street = view.street as ReviewStreet;
-    const result = gradeView(view, action.type, options);
+    // The decision-time snapshot, so the review repeats the hint after later hands change the stats (A-5).
+    const result = gradeView(
+      view,
+      action.type,
+      observed === undefined ? options : { ...options, observedOpponents: observed },
+    );
     return {
       street,
       streetLabel: STREET_LABELS[street],

@@ -25,6 +25,7 @@ import {
   playerView,
   showdownOf,
   type EarlierShowdown,
+  type PlayerView,
   type SeatPolicy,
 } from '../engine/player-view';
 import { drawReplacementStyle } from '../table/session';
@@ -90,12 +91,13 @@ export interface HandSetup {
 }
 /** Makes the policy for one seat of one hand. Default: defaultPolicyFactory(seats dealt in). */
 export type PolicyFactory = (code: ReplayCode, seat: SeatNumber) => SeatPolicy;
-/** Called after every applied player action; returns the violations it found ([] when clean). */
-export type ActionHook = (step: ActionStep) => readonly Violation[];
+/** Called after every applied player action with the exact view the policy decided on; returns the violations it
+ *  found ([] when clean). playHand always passes the view. */
+export type ActionHook = (step: ActionStep, view?: PlayerView) => readonly Violation[];
 
 /** One hook that runs `hooks` in order and returns all their violations, e.g. composeChecks(checkStep, styleCheck). */
 export function composeChecks(...hooks: readonly ActionHook[]): ActionHook {
-  return (step) => hooks.flatMap((hook) => hook(step));
+  return (step, view) => hooks.flatMap((hook) => hook(step, view));
 }
 export interface PlaytestEngine {
   readonly createHand: (config: HandConfig) => HandState;
@@ -236,10 +238,11 @@ export function playHand(
   let actionNumber = 0;
   while (dealViolations.length === 0 && state.toAct !== null) {
     const policy = policies.get(state.toAct) as SeatPolicy;
-    const action = policy(playerView(state, state.toAct, earlierShowdowns));
+    const view = playerView(state, state.toAct, earlierShowdowns);
+    const action = policy(view);
     const result = engine.applyAction(state, action);
     actionNumber++;
-    let found = onAction({ before: state, action, result });
+    let found = onAction({ before: state, action, result }, view);
     if (found.length > 0 || !result.ok) {
       if (found.length === 0 && !result.ok) {
         found = [

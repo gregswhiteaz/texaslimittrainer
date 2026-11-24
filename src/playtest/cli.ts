@@ -4,9 +4,11 @@ import { formatCard } from '../engine/cards';
 import { isReplayCode, type ReplayCode } from '../engine/deck';
 import type { ActionRecord, SeatNumber } from '../engine/hand';
 import { checkStep, describeAction, INVARIANTS } from '../engine/invariants';
+import { AdviceCheck, userAdvice, type AdviseFn } from './advice-check';
 import {
   composeChecks,
   GAMES,
+  handReplayCode,
   playHand,
   recordStacks,
   runPlaytest,
@@ -32,6 +34,8 @@ export type ParsedArgs =
       readonly options: PlaytestOptions & { readonly game: GameType };
       /** Present only when --check-styles is given. */
       readonly checkStyles?: true;
+      /** Present only when --check-advice is given. */
+      readonly checkAdvice?: true;
     }
   | {
       readonly kind: 'replay';
@@ -49,11 +53,12 @@ export type ParsedArgs =
   | { readonly kind: 'error'; readonly message: string };
 
 export const USAGE =
-  'Usage: npm run playtest -- [--hands <1-1000000000>] [--seed <0-9007199254740991>] [--size <2-10>] [--game <cash|sng>] [--lineup <mixed|tough|soft>] [--check-styles]\n' +
+  'Usage: npm run playtest -- [--hands <1-1000000000>] [--seed <0-9007199254740991>] [--size <2-10>] [--game <cash|sng>] [--lineup <mixed|tough|soft>] [--check-styles] [--check-advice]\n' +
   '       npm run playtest -- --replay-code <32 lowercase hex characters> [--size <2-10>] [--button <seat>] [--game <cash|sng>] [--stacks <one stack per seat, comma-separated, 0 = empty seat>] [--lineup <mixed|tough|soft>] [--styles <style of each seat from 2 up, comma-separated: tag|calling-station|maniac|rock>]\n' +
   'Defaults: --hands 10000 --seed 42 --size 6 --button 1 --game cash; --stacks gives every seat $160 (cash) or 1500 (sng)\n' +
   "--lineup: seat 1 plays the user (TAG) and seats 2 and up play the preset's styles; without it every seat plays TAG\n" +
-  "--check-styles: exit 1 unless every seated bot style's VPIP, PFR and aggression is inside its target band and every mixed spot used both actions\n";
+  "--check-styles: exit 1 unless every seated bot style's VPIP, PFR and aggression is inside its target band and every mixed spot used both actions\n" +
+  '--check-advice: recompute the advice and grade at every decision point and exit 1 if any recomputation differs from the first\n';
 
 const VALUE_OPTIONS = [
   '--hands',
@@ -108,6 +113,7 @@ export function parseArgs(argv: readonly string[]): ParsedArgs {
   const values = new Map<ValueOption, string>();
   let help = false;
   let checkStyles = false;
+  let checkAdvice = false;
   for (let i = 0; i < argv.length; i++) {
     const name = argv[i] as string;
     if (name === '--help') {
@@ -118,6 +124,11 @@ export function parseArgs(argv: readonly string[]): ParsedArgs {
     if (name === '--check-styles') {
       if (checkStyles) return error('Error: --check-styles given more than once.');
       checkStyles = true;
+      continue;
+    }
+    if (name === '--check-advice') {
+      if (checkAdvice) return error('Error: --check-advice given more than once.');
+      checkAdvice = true;
       continue;
     }
     const option = VALUE_OPTIONS.find((o) => o === name);
@@ -131,7 +142,7 @@ export function parseArgs(argv: readonly string[]): ParsedArgs {
     i++;
   }
   if (help) {
-    return values.size > 0 || checkStyles
+    return values.size > 0 || checkStyles || checkAdvice
       ? error('Error: --help cannot be combined with other options.')
       : { kind: 'help' };
   }
@@ -159,6 +170,7 @@ export function parseArgs(argv: readonly string[]): ParsedArgs {
   const replayCode = values.get('--replay-code');
   if (replayCode !== undefined) {
     if (checkStyles) return error('Error: --check-styles is only valid without --replay-code.');
+    if (checkAdvice) return error('Error: --check-advice is only valid without --replay-code.');
     if (values.has('--hands') || values.has('--seed')) {
       return error('Error: --replay-code cannot be combined with --hands or --seed.');
     }
@@ -204,7 +216,11 @@ export function parseArgs(argv: readonly string[]): ParsedArgs {
   }
   if (size === undefined) return error(SIZE_ERROR);
   const run = { kind: 'run', options: { hands, seed, size, game, ...withLineUp } } as const;
-  return checkStyles ? { ...run, checkStyles } : run;
+  return {
+    ...run,
+    ...(checkStyles ? { checkStyles } : {}),
+    ...(checkAdvice ? { checkAdvice } : {}),
+  };
 }
 
 /** `header` (whole lines) followed by the summary lines, then the violation block when there are
@@ -348,13 +364,14 @@ function lineUpLines(seats: readonly LineUpSeat[], name: string): string {
   return `Line-up: ${name}, seat 1 plays the user${bots.join('')}\n`;
 }
 
-/** Returns the exit code: 0 clean, 1 violations or a failed --check-styles, 2 usage error. Writes everything
- *  through io. seams and bands are test seams; the entry never passes them. */
+/** Returns the exit code: 0 clean, 1 violations (advice mismatches included) or a failed --check-styles, 2 usage
+ *  error. Writes everything through io. seams, bands and advise are test seams; the entry never passes them. */
 export function main(
   argv: readonly string[],
   io: CliIo,
   seams: PlaytestSeams = {},
   bands: StyleBandTable = STYLE_BANDS,
+  advise: AdviseFn = userAdvice,
 ): number {
   const parsed = parseArgs(argv);
   if (parsed.kind === 'error') {
@@ -383,21 +400,33 @@ export function main(
   if (parsed.kind === 'run') {
     const { hands, seed, size, game } = parsed.options;
     const checking = parsed.checkStyles === true;
+    const checkingAdvice = parsed.checkAdvice === true;
     const sng = game === 'sng' ? ' --game sng' : '';
-    const checkOption = checking ? ' --check-styles' : '';
+    const checkOption =
+      (checking ? ' --check-styles' : '') + (checkingAdvice ? ' --check-advice' : '');
     header += `Options: --hands ${hands} --seed ${seed} --size ${size}${sng}${option}${checkOption}\n${table(size, game)}`;
     const bots = new BotResults(game);
     const styles = new StyleCheck(checking);
+    const advice = new AdviceCheck(advise);
+    advice.startHand(1, handReplayCode(seed, 1, game));
+    const hooks = [
+      ...(checking ? [styles.onAction] : []),
+      ...(checkingAdvice ? [advice.onAction] : []),
+    ];
     let count = 0;
     summary = runPlaytest(
       parsed.options,
       (hand) => {
         bots.add(hand);
         styles.add(hand);
+        if (checkingAdvice) {
+          advice.add(hand);
+          advice.startHand(hand.number + 1, handReplayCode(seed, hand.number + 1, game));
+        }
         count += hand.replaced?.length ?? 0;
       },
-      checking
-        ? { ...seams, onAction: composeChecks(seams.onAction ?? checkStep, styles.onAction) }
+      hooks.length > 0
+        ? { ...seams, onAction: composeChecks(seams.onAction ?? checkStep, ...hooks) }
         : seams,
     );
     if (preset !== undefined && game === 'cash') replaced = count;
@@ -405,6 +434,13 @@ export function main(
     stylesPassed = styleReport.passed;
     header += styleReport.text;
     header += formatBotResults(bots.rows(), game);
+    if (checkingAdvice) {
+      header += `Advice check: ${advice.decisions} decision points, ${advice.mismatches} mismatches\n`;
+      const first = advice.firstMismatch;
+      if (first !== null) {
+        header += `First advice mismatch: hand ${first.handNumber}, replay code ${first.replayCode}, player action ${first.actionNumber} (${describeAction(first.action)}), ${first.path} differs\n`;
+      }
+    }
   } else {
     const { replayCode, size, button, game, stacks, styles } = parsed;
     const seats = preset === undefined ? undefined : seatsAt(size, styles);

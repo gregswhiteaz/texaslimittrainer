@@ -106,11 +106,12 @@ describe('playtest CLI', () => {
 
     expect(capture(['--help'])).toEqual({ code: 0, out: USAGE, err: '' });
     expect(USAGE).toBe(
-      'Usage: npm run playtest -- [--hands <1-1000000000>] [--seed <0-9007199254740991>] [--size <2-10>] [--game <cash|sng>] [--lineup <mixed|tough|soft>] [--check-styles]\n' +
+      'Usage: npm run playtest -- [--hands <1-1000000000>] [--seed <0-9007199254740991>] [--size <2-10>] [--game <cash|sng>] [--lineup <mixed|tough|soft>] [--check-styles] [--check-advice]\n' +
         '       npm run playtest -- --replay-code <32 lowercase hex characters> [--size <2-10>] [--button <seat>] [--game <cash|sng>] [--stacks <one stack per seat, comma-separated, 0 = empty seat>] [--lineup <mixed|tough|soft>] [--styles <style of each seat from 2 up, comma-separated: tag|calling-station|maniac|rock>]\n' +
         'Defaults: --hands 10000 --seed 42 --size 6 --button 1 --game cash; --stacks gives every seat $160 (cash) or 1500 (sng)\n' +
         "--lineup: seat 1 plays the user (TAG) and seats 2 and up play the preset's styles; without it every seat plays TAG\n" +
-        "--check-styles: exit 1 unless every seated bot style's VPIP, PFR and aggression is inside its target band and every mixed spot used both actions\n",
+        "--check-styles: exit 1 unless every seated bot style's VPIP, PFR and aggression is inside its target band and every mixed spot used both actions\n" +
+        '--check-advice: recompute the advice and grade at every decision point and exit 1 if any recomputation differs from the first\n',
     );
     expect(parseArgs([])).toEqual({
       kind: 'run',
@@ -622,7 +623,9 @@ describe('playtest CLI', () => {
       expect(capture([...argv])).toEqual({ code: 2, out: '', err: `${message}\n${USAGE}` });
     }
     const usage = USAGE.split('\n');
-    expect(usage[0]).toMatch(/ \[--lineup <mixed\|tough\|soft>\] \[--check-styles\]$/);
+    expect(usage[0]).toMatch(
+      / \[--lineup <mixed\|tough\|soft>\] \[--check-styles\] \[--check-advice\]$/,
+    );
     expect(usage[4]).toBe(
       "--check-styles: exit 1 unless every seated bot style's VPIP, PFR and aggression is inside its target band and every mixed spot used both actions",
     );

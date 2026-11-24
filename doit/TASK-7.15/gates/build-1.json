@@ -1,0 +1,64 @@
+{
+  "task": "TASK-7.15",
+  "phase": "build",
+  "run": 1,
+  "result": "FAIL",
+  "changed_lines": 1048,
+  "changed_files": [
+    "docs/advice/determinism.md",
+    "package.json",
+    "src/playtest/advice-check.ts",
+    "src/playtest/cli.ts",
+    "src/playtest/runner.ts",
+    "src/table/advice-service.ts",
+    "src/table/review.ts",
+    "src/table/session.ts",
+    "tests/advice/determinism.acceptance.test.ts",
+    "tests/playtest/advice-check.test.ts",
+    "tests/playtest/check-advice.acceptance.test.ts",
+    "tests/playtest/cli.test.ts",
+    "tests/table/decision-snapshot.test.ts"
+  ],
+  "checks": [
+    {
+      "name": "test command",
+      "status": "fail",
+      "detail": "$ npm test\nexit 1\ntests/golden/postflop.acceptance.test.ts > postflop golden spots > AC#5 the advice engine agrees with golden spot hu-river-btn-fold-t7s 0ms\n \u2713 tests/golden/postflop.acceptance.test.ts > postflop golden spots > AC#5 the advice engine agrees with golden spot hu-river-bb-raise-k9o 0ms\n \u2713 tests/golden/postflop.acceptance.test.ts > postflop golden spots > AC#5 the advice engine agrees with golden spot hu-river-btn-call-t5s 0ms\n \u2713 tests/golden/postflop.acceptance.test.ts > postflop golden spots > AC#5 the advice engine agrees with golden spot hu-river-btn-call-85o 0ms\n \u2713 tests/golden/postflop.acceptance.test.ts > postflop golden spots > AC#5 the advice engine agrees with golden spot fr-river-utg-bet-kjo 0ms\n \u2713 tests/golden/postflop.acceptance.test.ts > postflop golden spots > AC#5 the advice engine agrees with golden spot fr-river-bb-check-52o 0ms\n \u2713 tests/golden/postflop.acceptance.test.ts > postflop golden spots > AC#5 the advice engine agrees with golden spot fr-river-bb-fold-t3o 0ms\n \u2713 tests/golden/postflop.acceptance.test.ts > postflop golden spots > AC#5 the advice engine agrees with golden spot fr-river-utg-call-t5o 0ms\n \u2713 tests/golden/postflop.acceptance.test.ts > postflop golden spots > AC#5 the advice engine agrees with golden spot fr-river-utg-fold-ato 0ms\n \u2713 tests/golden/postflop.acceptance.test.ts > postflop golden spots > AC#5 a disagreement names the spot, the expected and the actual action 0ms\n \u2713 tests/golden/postflop.acceptance.test.ts > postflop golden spots > AC#4 every postflop explanation quotes the equity and required equity it returns 6ms\n \u2713 tests/golden/postflop.acceptance.test.ts > postflop golden spots > DoD#1 golden ids and justifications are distinct across files 0ms\n \u2713 tests/playtest/check-advice.acceptance.test.ts > --check-advice acceptance > AC#5 check-advice output is byte-identical across runs 113391ms\n \u2193 tests/playtest/check-advice.acceptance.test.ts > --check-advice acceptance > AC#5 check-advice output is byte-identical across runs (10,000 hands)\n \u2713 tests/playtest/check-advice.acceptance.test.ts > --check-advice acceptance > check-advice flag parsing and unchanged default output 751ms\n \u2713 tests/bots/maniac.acceptance.test.ts > Maniac from its style file > a Maniac seat in the worker plays the Maniac decision 49714ms\n\n Test Files  1 failed | 236 passed | 3 skipped (240)\n      Tests  1 failed | 1170 passed | 43 skipped (1214)\n   Start at  00:01:20\n   Duration  171.49s (tests 97%, import 2%)\n\n\n\u23af\u23af\u23af\u23af\u23af\u23af\u23af Failed Tests 1 \u23af\u23af\u23af\u23af\u23af\u23af\u23af\n\n FAIL  tests/advice/determinism.acceptance.test.ts > advice determinism acceptance > AC#4 hidden cards never change hint or grade\nError: Test timed out in 120000ms.\nIf this is a long-running test, pass a timeout value as the last argument or configure it globally with \"testTimeout\".\n \u276f tests/advice/determinism.acceptance.test.ts:160:3\n    158|   });\n    159|\n    160|   it(\n       |   ^\n    161|     'AC#4 hidden cards never change hint or grade',\n    162|     () => {\n\n\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af[1/1]\u23af\n\n"
+    },
+    {
+      "name": "lint command",
+      "status": "pass",
+      "detail": "$ npm run lint\nexit 0\n\n> tlh-trainer@0.0.0 lint\n> node tools/lint/sync-copies.js && eslint . --max-warnings 0 && prettier --check .\n\nChecking formatting...\nAll matched files use Prettier code style!\n"
+    },
+    {
+      "name": "typecheck command",
+      "status": "pass",
+      "detail": "$ npm run typecheck\nexit 0\n\n> tlh-trainer@0.0.0 typecheck\n> tsc -p tsconfig.json\n\n"
+    },
+    {
+      "name": "spec unchanged",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "name": "scope budget (lines)",
+      "status": "warn",
+      "detail": "1048 changed lines vs budget 900 (fail above 1800)"
+    },
+    {
+      "name": "scope budget (files)",
+      "status": "pass",
+      "detail": "13 files vs budget 13"
+    },
+    {
+      "name": "files outside spec",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "name": "all changes listed in changes.md",
+      "status": "pass",
+      "detail": ""
+    }
+  ]
+}

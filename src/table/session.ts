@@ -22,6 +22,7 @@ import {
 } from '../engine/player-view';
 import { botDecisionSeed, replacementGenerator } from '../engine/bot-random';
 import { isReplayCode } from '../engine/deck';
+import type { ObservedOpponent } from '../advice/ranges';
 import { tagPolicy } from '../bots/tag';
 import {
   BOT_NAMES,
@@ -361,6 +362,8 @@ export function resolveSessionConfig(input: Partial<SessionConfig> = {}): Sessio
 export interface UserDecision {
   readonly view: PlayerView;
   readonly action: Action;
+  /** Observed-stat snapshot at this decision (TASK-8.1 supplies it); the review regrades with it. */
+  readonly observed?: readonly ObservedOpponent[];
 }
 export interface TableState {
   readonly config: SessionConfig;
@@ -613,7 +616,13 @@ export function stepBot(table: TableState, policy: SeatPolicy = tagPolicy): Tabl
   return applyBotDecision(table, turn, policy(turn.view));
 }
 
-export function applyUserAction(table: TableState, action: Action): TableState {
+/** Records the decision with a copy of `observed` when given (A-4). Throws RangeError if not the user's turn or
+ *  the action is illegal. */
+export function applyUserAction(
+  table: TableState,
+  action: Action,
+  observed?: readonly ObservedOpponent[],
+): TableState {
   if (nextStep(table) !== 'user' || table.hand === null) {
     throw new RangeError("Not the user's turn");
   }
@@ -623,7 +632,12 @@ export function applyUserAction(table: TableState, action: Action): TableState {
   return {
     ...table,
     hand: applied.state,
-    userDecisions: [...table.userDecisions, { view, action }],
+    userDecisions: [
+      ...table.userDecisions,
+      observed === undefined
+        ? { view, action }
+        : { view, action, observed: observed.map((o) => ({ ...o })) },
+    ],
   };
 }
 
