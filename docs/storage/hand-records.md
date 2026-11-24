@@ -46,6 +46,7 @@ Values are plain structured-clone data. Cards are engine integers 0..51 (`src/en
 | `seats`         | array of seat entries (below), ascending seat    | Every dealt-in seat                                                                                                             |
 | `userHoleCards` | `[Card, Card]`                                   | The user's own hole cards                                                                                                       |
 | `actions`       | `{ street, seat, type, amount, added }[]`        | Blinds first, then every action in order (`ActionRecord`)                                                                       |
+| `decisions`     | decision entries (below), 0..400                 | One per user decision, in order (since TASK-3.12)                                                                               |
 | `board`         | `Card[]`, 0..5                                   | Community cards dealt                                                                                                           |
 | `shown`         | `{ shown: { seat, holeCards }[] }` \| null       | Hands shown at showdown; null for a fold-out                                                                                    |
 | `result`        | `{ endedBy, showdown, awards, returned? }`       | `HandResult`: shown hands with rank, pot awards (`{ pot, amount, winners: { seat, amount }[] }`), and any uncalled bet returned |
@@ -58,8 +59,37 @@ across sessions by `(sessionId, botId)`.
 Records do not list bots' unshown hole cards, but they do store the replay code (required by REQ-052.2),
 from which the full deck, including every bot's hole cards, can be rebuilt. Screens that read records must
 show only the user's cards and cards shown at showdown, and must never deal cards from a stored replay code
-for display. Records never hold the user's decision views or advice and grades
-(`CompletedHand.userDecisions` is not stored). Extra fields from a later version are ignored on read.
+for display. Records never hold the user's decision views (`PlayerView`) or the observed-stats snapshots.
+Extra fields from a later version are ignored on read.
+
+### Decision entries
+
+`handRecord` builds one entry per `CompletedHand.userDecisions` item with `decisionRecord(decision)`. The entry
+is the advice the hint path gives for that decision: `gradeView(view, action.type, userAdviceOptions(observed))`,
+where `userAdviceOptions` (`src/advice/recommend.ts`) is the same function the advice worker uses for its
+`recommend` and `grade` requests. Advice is deterministic, so working it out at hand end from the decision's own
+view and its decision-time snapshot gives exactly what a hint showed at that moment. Stats gathered later in the
+hand or session never change it. An error from the advice code (a bad snapshot) propagates out of `handRecord`.
+
+| Field               | Type                                             | Meaning                                                    |
+| ------------------- | ------------------------------------------------ | ---------------------------------------------------------- |
+| `street`            | `'preflop'` \| `'flop'` \| `'turn'` \| `'river'` | Street of the decision                                     |
+| `action`            | `{ seat, type, amount? }`                        | The user's action (`amount` for call, bet and raise)       |
+| `recommended`       | `{ seat, type, amount? }`                        | The recommended move                                       |
+| `alternative`       | action type \| null                              | A second action the advice also accepts                    |
+| `ruleId`            | postflop rule id \| null                         | The postflop rule; null preflop                            |
+| `basis`             | `'chart'` \| `'equity'`                          | `'chart'` preflop, `'equity'` postflop                     |
+| `equityPct`         | number 0..100 \| null                            | Hand equity; null for `'chart'`                            |
+| `requiredEquityPct` | number 0..100 \| null                            | Equity the price needs; null for `'chart'`                 |
+| `opponentBasis`     | `{ seat, observedHands, text }[]`                | How each opponent's range was read; `[]` for `'chart'`     |
+| `explanation`       | string, 1..2000                                  | The advice text                                            |
+| `grade`             | `{ grade, ruleId, marginPts }`                   | Grade (`correct`/`minor`/`major`), grading rule and margin |
+| `hinted`            | boolean                                          | Whether a hint was shown first; always false until E08     |
+
+The grade is stored as these three fields only, not the whole `GradeResult`: the recommendation it carries is
+already flattened into the entry, and the compact form keeps 100,000 records small (REQ-053). `marginPts` is the
+equity margin for the margin rules and null otherwise. A preflop fold that ends the user's hand gives exactly one
+entry; a hand where the user never acted (bots fold out, big-blind walk) gives `[]`.
 
 ## Write before the next deal
 
@@ -106,6 +136,27 @@ Since TASK-3.10 it also checks the fields against each other and bounds every li
   `result.returned` must be one of the record's `seats`.
 - Each seat shows one pair of two different cards; a seat named again must show the same pair, and the
   user's pair is `userHoleCards`. No card appears twice across `board` and the seats' pairs (`cards`).
+
+Since TASK-3.12 it also checks `decisions` (a missing field is invalid: records from earlier builds fail with
+`Invalid hand record: decisions` and are not migrated or deleted):
+
+- At most 400 entries. `street` is a street; `action` and `recommended` are the user's seat with a known type
+  and a whole amount ≥ 0 for call, bet and raise; `alternative` is null or a known type.
+- For `basis: 'chart'`, `ruleId`, `equityPct` and `requiredEquityPct` are null and `opponentBasis` is empty. For
+  `'equity'`, `ruleId` is a postflop rule id, both percents are finite 0..100, and `opponentBasis` has at most
+  9 entries, each naming one of the record's seats, with `observedHands` null or whole ≥ 0 and `text` of 1–200
+  characters.
+- `explanation` is 1–2000 characters; `grade.grade` and `grade.ruleId` are known values; `marginPts` is null
+  or finite; `hinted` is a boolean.
+- The entries match the user's non-blind `actions` one to one, in order: same count (else `decisions`), and the
+  same street (`decisions[i].street`), type and amount (`decisions[i].action`).
+
+Error fields name the path, for example `Invalid hand record: decisions[2].grade.ruleId`.
+
+The observed-stats snapshot is checked where it is read (`estimateOpponentRanges`): an entry that is not an
+object throws `RangeError('Invalid observed stats entry <i>')`, and a seat that is not a whole number 1..10
+throws `RangeError('Invalid observed stats seat <seat>')`. The worker returns these as `ok: false` with a
+`RangeError`.
 
 ## Test seam
 

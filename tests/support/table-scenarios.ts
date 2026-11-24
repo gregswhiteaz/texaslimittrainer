@@ -1,4 +1,5 @@
 // Scripted table states shared by the Vitest tests and the e2e scene harness (no test-runner imports).
+import type { ObservedOpponent } from '../../src/advice/ranges';
 import { parseCard, type Card } from '../../src/engine/cards';
 import { replayCodeFromWords } from '../../src/engine/deck';
 import {
@@ -146,16 +147,10 @@ export function fixedDeck(fixed: Readonly<Record<number, string>>): Card[] {
   return Array.from({ length: 52 }, (_, index) => placed.get(index) ?? (rest.shift() as Card));
 }
 
-/** Default six seats at $160, button 6, hand 1, dealt from fixedDeck(fixed) and played through `moves`. */
+/** Default six seats at $160, button 6, hand 1, dealt from fixedDeck(fixed) and played through `moves`; the
+ *  user's moves are recorded as decisions, as in a live session. */
 function defaultTableAfter(fixed: Readonly<Record<number, string>>, moves: string): TableState {
-  const table = seatSession();
-  const hand = createHand({
-    stakes: table.stakes,
-    seats: table.stacks,
-    button: 6,
-    deck: fixedDeck(fixed),
-  });
-  return { ...table, hand: play(hand, moves), replayCode: SCENARIO_CODE };
+  return userTableAfter(fixed, moves);
 }
 
 /** Ben (seat 2, Kd 7c) wins the $122 pot at showdown with a pair of kings over You (Ah 9s). */
@@ -187,14 +182,15 @@ export const SPLIT_STRAIGHT: TableState = defaultTableAfter(
 
 /**
  * Default six seats at $160 (or `stacks[seat]`), hand 1, dealt from fixedDeck(fixed) and played through `moves`.
- * Moves of the user (seat 5) go through applyUserAction, so each captures the user's view; every other move goes
- * through play.
+ * Moves of the user (seat 5) go through applyUserAction with `observed` as the decision's snapshot, so each
+ * captures the user's view; every other move goes through play.
  */
 export function userTableAfter(
   fixed: Readonly<Record<number, string>>,
   moves: string,
   button: SeatNumber = 6,
   stacks: Readonly<Record<number, number>> = {},
+  observed?: readonly ObservedOpponent[],
 ): TableState {
   const session = seatSession({ button });
   const start: TableState = {
@@ -216,7 +212,7 @@ export function userTableAfter(
     if (hand.toAct !== USER_SEAT) throw new Error(`Seat ${hand.toAct} is to act, not ${seat}`);
     const action = legalActions(hand).find((a) => a.type === type);
     if (action === undefined) throw new Error(`Seat ${seat} cannot ${type}`);
-    table = applyUserAction(table, action);
+    table = applyUserAction(table, action, observed);
   }
   return table;
 }

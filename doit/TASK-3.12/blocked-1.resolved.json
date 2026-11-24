@@ -1,0 +1,10 @@
+{
+  "spec": "SPEC-01",
+  "reason": "SPEC-01 and SPEC-05 contradict the spec's own invariant (§5 Rules: every stored entry equals the worker 'grade' response, i.e. gradeView with userAdviceOptions = ACTION_RANGE_ADVICE). Under those options REVIEW_FOUR's river decision is recommended 'call' and graded correct/'match' (marginPts null), not 'raise'/major. The worked example (raise/bet/bet/raise, correct/correct/minor/major) was copied from tests/table/review.acceptance.test.ts, which grades with the default 'unseen' options (reviewEntries calls gradeView(view, type) with no options). SPEC-05 likewise requires entry 3's grade.ruleId to be call-fold-margin/aggression-margin with numeric marginPts, which the hint path does not produce.",
+  "evidence": "Probe of completedHand(REVIEW_FOUR).userDecisions: with ACTION_RANGE_ADVICE -> preflop raise: raise correct match null; flop bet: bet correct match null; turn check: bet minor aggression-margin 5.3; river call: call correct match null. With default options -> river: raise major aggression-margin 15.2, turn: bet minor aggression-margin 11.5. tests/table/decision-record.acceptance.test.ts (written to the spec) fails exactly these two assertions: 'four decisions ...' (recommended types [raise,bet,bet,call] vs expected [...,raise]) and 'stored grade data ...' (entry 3 ruleId 'match'). All other acceptance cases (SPEC-02/03/04/06) pass.",
+  "options": [
+    "Recommended: keep hint = record (ACTION_RANGE_ADVICE). Amend SPEC-01 expected values for REVIEW_FOUR to recommended [raise, bet, bet, call] and grades [correct, correct, minor, correct]; amend SPEC-05 so the margin check uses entry 2 (turn: aggression-margin, numeric marginPts, equal to the worker GradeResult).",
+    "Store advice with default 'unseen' options to match the review panel and the worked example; this breaks the stated invariant that stored values equal what a hint showed (and AC#2's snapshot rule, since 'unseen' ignores snapshots).",
+    "Keep ACTION_RANGE_ADVICE but pick or add a different scripted scenario whose hint-path grades include a major error with a margin rule."
+  ]
+}

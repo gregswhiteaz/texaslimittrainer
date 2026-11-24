@@ -8,7 +8,7 @@ import {
   openHandStore,
 } from '../../src/storage/hand-store';
 import { handRecord, type HandRecord } from '../../src/table/hand-record';
-import { completedHand, nextHand } from '../../src/table/session';
+import { completedHand, nextHand, type CompletedHand } from '../../src/table/session';
 import { sessionRecord, type SessionRecord } from '../../src/table/session-record';
 import { KINGS_SHOWDOWN } from '../support/table-scenarios';
 
@@ -21,10 +21,22 @@ function session(sessionId: string): SessionRecord {
   return sessionRecord(nextHand(KINGS_SHOWDOWN), { sessionId, startedAt: at, updatedAt: at });
 }
 
+const KINGS = completedHand(KINGS_SHOWDOWN);
+if (KINGS === null) throw new Error('Hand not complete');
+const KINGS_DECISIONS = handRecord(KINGS, {
+  sessionId: OLD_SESSION,
+  handNumber: 1,
+  config: KINGS_SHOWDOWN.config,
+  completedAt: new Date(0),
+}).decisions;
+
+/** The KINGS_SHOWDOWN record; its decisions are graded once (advice is deterministic) to keep 1,000 records fast. */
 function record(sessionId: string, handNumber: number, completedAt: Date): HandRecord {
-  const hand = completedHand(KINGS_SHOWDOWN);
-  if (hand === null) throw new Error('Hand not complete');
-  return handRecord(hand, { sessionId, handNumber, config: KINGS_SHOWDOWN.config, completedAt });
+  const meta = { sessionId, handNumber, config: KINGS_SHOWDOWN.config, completedAt };
+  return {
+    ...handRecord({ ...(KINGS as CompletedHand), userDecisions: [] }, meta),
+    decisions: structuredClone(KINGS_DECISIONS),
+  };
 }
 
 describe('hand store', () => {

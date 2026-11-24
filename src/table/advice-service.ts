@@ -4,12 +4,7 @@ import type { Xoshiro128 } from '../engine/seeded-random';
 import { botRandom, isBotSeed } from '../engine/bot-random';
 import { decideStyle } from '../bots/decide';
 import type { ObservedOpponent } from '../advice/ranges';
-import {
-  ACTION_RANGE_ADVICE,
-  recommend,
-  type Recommendation,
-  type RecommendOptions,
-} from '../advice/recommend';
+import { recommend, userAdviceOptions, type Recommendation } from '../advice/recommend';
 import { gradeView, type ActionType, type GradeResult } from '../advice/grade';
 import type { BotStyle } from './session';
 
@@ -55,11 +50,6 @@ export interface AdviceDeps {
 
 const decideBotDefault = decideStyle;
 
-const userOptions = (observed: readonly ObservedOpponent[] | undefined): RecommendOptions =>
-  observed === undefined
-    ? ACTION_RANGE_ADVICE
-    : { ...ACTION_RANGE_ADVICE, observedOpponents: observed };
-
 /** Never throws: every error (malformed request, unknown kind or thrown by advice code) becomes ok:false. */
 export function handleAdviceRequest(
   request: AdviceRequest,
@@ -80,12 +70,16 @@ export function handleAdviceRequest(
         return { id, ok: true, value: decideBot(request.view, request.style, random) };
       }
       case 'recommend':
-        return { id, ok: true, value: recommend(request.view, userOptions(request.observed)) };
+        return {
+          id,
+          ok: true,
+          value: recommend(request.view, userAdviceOptions(request.observed)),
+        };
       case 'grade':
         return {
           id,
           ok: true,
-          value: gradeView(request.view, request.userAction, userOptions(request.observed)),
+          value: gradeView(request.view, request.userAction, userAdviceOptions(request.observed)),
         };
       default: {
         const kind = (request as { kind: unknown }).kind;

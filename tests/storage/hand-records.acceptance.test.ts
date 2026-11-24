@@ -70,8 +70,9 @@ describe('hand records acceptance', () => {
     const at = new Date('2026-11-17T14:32:05Z');
     const stored = await storedRecord(recordOf(KINGS_SHOWDOWN, 7, at));
     expect(stored).not.toBeNull();
-    const { actions, ...rest } = stored as HandRecord;
+    const { actions, decisions, ...rest } = stored as HandRecord;
     expect(actions).toHaveLength(19);
+    expect(decisions).toHaveLength(6);
     expect(rest).toEqual({
       sessionId: '0123456789abcdef0123456789abcdef',
       handNumber: 7,

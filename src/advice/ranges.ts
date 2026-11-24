@@ -565,16 +565,27 @@ const OBSERVED_LINE_STAT: Readonly<Record<PreflopLine, 'vpip' | 'pfr' | null>> =
 
 const inPercent = (value: number) => Number.isFinite(value) && value >= 0 && value <= 100;
 
-/** The snapshot keyed by seat. Throws RangeError on invalid numbers or a repeated seat. */
+/** Highest seat number at a table. */
+const MAX_SEAT = 10;
+
+/** The snapshot keyed by seat. Throws RangeError on a non-object entry, a seat that is not a whole number
+ *  1..MAX_SEAT, invalid numbers or a repeated seat. */
 function observedBySeat(observed: readonly ObservedOpponent[]): Map<SeatNumber, ObservedOpponent> {
   const bySeat = new Map<SeatNumber, ObservedOpponent>();
-  for (const entry of observed) {
-    const { seat, hands, vpip, pfr } = entry;
+  for (let i = 0; i < observed.length; i++) {
+    const entry: unknown = observed[i];
+    if (typeof entry !== 'object' || entry === null || Array.isArray(entry)) {
+      throw new RangeError(`Invalid observed stats entry ${i}`);
+    }
+    const { seat, hands, vpip, pfr } = entry as ObservedOpponent;
+    if (!Number.isSafeInteger(seat) || seat < 1 || seat > MAX_SEAT) {
+      throw new RangeError(`Invalid observed stats seat ${String(seat)}`);
+    }
     if (!Number.isInteger(hands) || hands < 0 || !inPercent(vpip) || !inPercent(pfr)) {
       throw new RangeError(`Invalid observed stats for seat ${seat}`);
     }
     if (bySeat.has(seat)) throw new RangeError(`Observed stats list seat ${seat} twice`);
-    bySeat.set(seat, entry);
+    bySeat.set(seat, entry as ObservedOpponent);
   }
   return bySeat;
 }

@@ -1,6 +1,17 @@
+import {
+  GRADE_LABELS,
+  GRADE_RULE_IDS,
+  gradeView,
+  type ActionType,
+  type Grade,
+  type GradeRuleId,
+} from '../advice/grade';
+import { POSTFLOP_RULE_IDS, type PostflopRuleId } from '../advice/postflop';
+import type { OpponentBasis } from '../advice/ranges';
+import { userAdviceOptions } from '../advice/recommend';
 import type { Card } from '../engine/cards';
 import { isReplayCode, type ReplayCode } from '../engine/deck';
-import type { ActionRecord, HandResult, SeatNumber, Stakes } from '../engine/hand';
+import type { Action, ActionRecord, HandResult, SeatNumber, Stakes } from '../engine/hand';
 import type { EarlierShowdown } from '../engine/player-view';
 import type { PausedSession, SessionRecord } from './session-record';
 import {
@@ -14,6 +25,7 @@ import {
   type LineUpName,
   type SessionConfig,
   type Stake,
+  type UserDecision,
 } from './session';
 
 export interface HandRecordSeat {
@@ -25,6 +37,36 @@ export interface HandRecordSeat {
   /** null iff kind === 'user'. */
   readonly style: BotStyle | null;
   readonly startingStack: number;
+}
+
+export interface HandRecordGrade {
+  readonly grade: Grade;
+  readonly ruleId: GradeRuleId;
+  /** As GradeResult.marginPts. */
+  readonly marginPts: number | null;
+}
+
+/** One user decision with the advice and grade a hint gave at that moment (REQ-052.2). */
+export interface HandRecordDecision {
+  readonly street: 'preflop' | 'flop' | 'turn' | 'river';
+  /** The user's action. */
+  readonly action: Action;
+  /** The recommendation's move. */
+  readonly recommended: Action;
+  readonly alternative: ActionType | null;
+  /** null preflop. */
+  readonly ruleId: PostflopRuleId | null;
+  readonly basis: 'chart' | 'equity';
+  /** null iff basis is 'chart'. */
+  readonly equityPct: number | null;
+  /** null iff basis is 'chart'. */
+  readonly requiredEquityPct: number | null;
+  /** [] for 'chart'. */
+  readonly opponentBasis: readonly OpponentBasis[];
+  readonly explanation: string;
+  readonly grade: HandRecordGrade;
+  /** Whether a hint was shown before the decision; always false until hints exist (E08). */
+  readonly hinted: boolean;
 }
 
 /** One completed hand as stored in IndexedDB (REQ-052.2). Satisfies StatHand. */
@@ -51,6 +93,8 @@ export interface HandRecord {
   readonly userHoleCards: readonly [Card, Card];
   /** Blinds first, then every action in order. */
   readonly actions: readonly ActionRecord[];
+  /** One per user decision, in order. */
+  readonly decisions: readonly HandRecordDecision[];
   readonly board: readonly Card[];
   /** null for a fold-out. */
   readonly shown: EarlierShowdown | null;
@@ -85,6 +129,8 @@ export interface HandStore {
 }
 
 const SESSION_ID = /^[0-9a-f]{32}$/;
+const USER_ACTION_TYPES: readonly string[] = ['fold', 'check', 'call', 'bet', 'raise'];
+const GRADES: readonly string[] = Object.keys(GRADE_LABELS);
 const GAME_TYPES: readonly string[] = ['cash', 'sit-and-go'];
 const STREETS: readonly string[] = ['preflop', 'flop', 'turn', 'river'];
 const ACTION_TYPES: readonly string[] = [
@@ -108,6 +154,44 @@ export function isWhole(
   max = Number.MAX_SAFE_INTEGER,
 ): value is number {
   return Number.isSafeInteger(value) && (value as number) >= min && (value as number) <= max;
+}
+
+/** The advice and grade of the hint path (same options as the advice worker) for one decision, as plain data
+ *  sharing nothing with `decision`. Errors from the advice code propagate (RangeError). */
+export function decisionRecord({ view, action, observed }: UserDecision): HandRecordDecision {
+  const result = gradeView(view, action.type, userAdviceOptions(observed));
+  const advice = result.recommendation;
+  const grade = { grade: result.grade, ruleId: result.ruleId, marginPts: result.marginPts };
+  const common = {
+    action: { ...action },
+    recommended: { ...advice.move },
+    alternative: advice.alternative,
+  };
+  return advice.basis === 'chart'
+    ? {
+        street: 'preflop',
+        ...common,
+        ruleId: null,
+        basis: 'chart',
+        equityPct: null,
+        requiredEquityPct: null,
+        opponentBasis: [],
+        explanation: advice.explanation,
+        grade,
+        hinted: false,
+      }
+    : {
+        street: advice.street,
+        ...common,
+        ruleId: advice.ruleId,
+        basis: 'equity',
+        equityPct: advice.equityPct,
+        requiredEquityPct: advice.requiredEquityPct,
+        opponentBasis: advice.opponentBasis.map((b) => ({ ...b })),
+        explanation: advice.explanation,
+        grade,
+        hinted: false,
+      };
 }
 
 /** Plain-data record; copies arrays/objects so the record shares nothing with live state.
@@ -142,6 +226,7 @@ export function handRecord(hand: CompletedHand, meta: HandRecordMeta): HandRecor
       })),
     userHoleCards: [hand.userHoleCards[0], hand.userHoleCards[1]],
     actions: structuredClone(hand.actions),
+    decisions: hand.userDecisions.map(decisionRecord),
     board: [...hand.board],
     shown: structuredClone(hand.shown),
     result: structuredClone(hand.result),
@@ -257,10 +342,94 @@ function checkResult(value: unknown, seats: ReadonlySet<unknown>, holeCards: Hol
   if (result.returned !== undefined) seatAmount(result.returned, 'result.returned', seats);
 }
 
+function text(value: unknown, field: string, max: number): void {
+  if (typeof value !== 'string' || value.length < 1 || value.length > max) throw invalid(field);
+}
+
+function percent(value: unknown, field: string): void {
+  if (typeof value !== 'number' || !Number.isFinite(value) || value < 0 || value > 100) {
+    throw invalid(field);
+  }
+}
+
+/** An Action of the user: fold/check, or call/bet/raise with a whole amount. */
+function userAction(value: unknown, userSeat: unknown, field: string): Fields {
+  const action = object(value, field);
+  if (action.seat !== userSeat) throw invalid(`${field}.seat`);
+  oneOf(action.type, USER_ACTION_TYPES, `${field}.type`);
+  if (action.type !== 'fold' && action.type !== 'check') whole(action.amount, `${field}.amount`, 0);
+  return action;
+}
+
+function checkDecision(
+  item: unknown,
+  field: string,
+  userSeat: unknown,
+  seats: ReadonlySet<unknown>,
+): void {
+  const decision = object(item, field);
+  oneOf(decision.street, STREETS, `${field}.street`);
+  userAction(decision.action, userSeat, `${field}.action`);
+  userAction(decision.recommended, userSeat, `${field}.recommended`);
+  if (decision.alternative !== null) {
+    oneOf(decision.alternative, USER_ACTION_TYPES, `${field}.alternative`);
+  }
+  oneOf(decision.basis, ['chart', 'equity'], `${field}.basis`);
+  if (decision.basis === 'chart') {
+    for (const key of ['ruleId', 'equityPct', 'requiredEquityPct']) {
+      if (decision[key] !== null) throw invalid(`${field}.${key}`);
+    }
+    array(decision.opponentBasis, `${field}.opponentBasis`, 0, 0);
+  } else {
+    oneOf(decision.ruleId, POSTFLOP_RULE_IDS, `${field}.ruleId`);
+    percent(decision.equityPct, `${field}.equityPct`);
+    percent(decision.requiredEquityPct, `${field}.requiredEquityPct`);
+    array(decision.opponentBasis, `${field}.opponentBasis`, 0, 9).forEach((entry, j) => {
+      const at = `${field}.opponentBasis[${j}]`;
+      const basis = object(entry, at);
+      seatIn(basis.seat, seats, `${at}.seat`);
+      if (basis.observedHands !== null) whole(basis.observedHands, `${at}.observedHands`, 0);
+      text(basis.text, `${at}.text`, 200);
+    });
+  }
+  text(decision.explanation, `${field}.explanation`, 2000);
+  const grade = object(decision.grade, `${field}.grade`);
+  oneOf(grade.grade, GRADES, `${field}.grade.grade`);
+  oneOf(grade.ruleId, GRADE_RULE_IDS, `${field}.grade.ruleId`);
+  const margin = grade.marginPts;
+  if (margin !== null && (typeof margin !== 'number' || !Number.isFinite(margin))) {
+    throw invalid(`${field}.grade.marginPts`);
+  }
+  if (typeof decision.hinted !== 'boolean') throw invalid(`${field}.hinted`);
+}
+
+/** Checks every decision entry, then that entry i is the user's i-th non-blind action (A-3). `actions` must
+ *  already be valid. */
+function checkDecisions(
+  value: unknown,
+  actions: readonly ActionRecord[],
+  userSeat: unknown,
+  seats: ReadonlySet<unknown>,
+): void {
+  const decisions = array(value, 'decisions', 0, MAX_ACTIONS);
+  decisions.forEach((item, i) => checkDecision(item, `decisions[${i}]`, userSeat, seats));
+  const made = actions.filter(
+    (a) => a.seat === userSeat && a.type !== 'small-blind' && a.type !== 'big-blind',
+  );
+  if (made.length !== decisions.length) throw invalid('decisions');
+  made.forEach((record, i) => {
+    const decision = decisions[i] as HandRecordDecision;
+    if (decision.street !== record.street) throw invalid(`decisions[${i}].street`);
+    const { type, amount = 0 } = decision.action as { type: string; amount?: number };
+    if (type !== record.type || amount !== record.amount) throw invalid(`decisions[${i}].action`);
+  });
+}
+
 /** Validates an untrusted stored value; returns it typed (not copied). Extra properties are ignored.
  *  Besides each field's shape it checks the fields against each other: every seat named is a dealt-in seat,
- *  each seat shows one pair (the user's is userHoleCards), no card appears twice, and the level matches the
- *  game type. RangeError('Invalid hand record: <field>') naming the first failing field. */
+ *  each seat shows one pair (the user's is userHoleCards), no card appears twice, the level matches the
+ *  game type, and the decisions are the user's non-blind actions in order.
+ *  RangeError('Invalid hand record: <field>') naming the first failing field. */
 export function parseHandRecord(value: unknown): HandRecord {
   const record = object(value, 'record');
   if (typeof record.sessionId !== 'string' || !SESSION_ID.test(record.sessionId)) {
@@ -303,6 +472,12 @@ export function parseHandRecord(value: unknown): HandRecord {
     whole(action.amount, `${field}.amount`, 0);
     whole(action.added, `${field}.added`, 0);
   });
+  checkDecisions(
+    record.decisions,
+    record.actions as readonly ActionRecord[],
+    record.userSeat,
+    seats,
+  );
   const board = cards(record.board, 'board', 0, 5);
   if (record.shown !== null) {
     const shown = object(record.shown, 'shown');
