@@ -1,11 +1,11 @@
 ---
 id: TASK-2.6
 title: Resume a paused session from Home
-status: In Progress
+status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-24T02:28:00Z'
+updated_date: '2026-11-24T02:29:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -17,6 +17,7 @@ references:
 documentation:
   - doc-1
   - doc-2
+  - doc-107
 parent_task_id: TASK-2
 priority: high
 type: feature
@@ -94,4 +95,12 @@ Build: findPausedSession + HandStore.pausedSession, endedAt (read-only), MAX_SES
 Review r1: 0 blocking (security MINOR next-bot-name-uncapped; code MINOR seed-sessions duplicate, NIT unreachable Error wrap). Paused before judge: branch CI 45306421540 fails only on tests/advice/postflop-ranges.test.ts timing out under coverage (not this story); resuming after fix story TASK-1.56 merges.
 
 Judge r1 PASS 16/16; CI 45310957352 green on 9d84cec.
+
+Follow-ups: TASK-2.14 AC added (nextBotName cap). Already owned: SNG level in Resume subtitle (TASK-5.6 AC#1-2), Leave table ends session/endedAt (TASK-10.1 AC#9), one unended session (TASK-2.7 AC#4). Not tracked (test harness, below value bar): duplicated e2e seed helper, unreachable Error wrap.
 <!-- SECTION:NOTES:END -->
+
+## Final Summary
+
+<!-- SECTION:FINAL_SUMMARY:BEGIN -->
+Home now shows 'Resume session' (game type, table size, stake, hands played) only while a stored, valid, not-ended session exists. Choosing it restores the table under the same session id and deals the next hand from the end-of-last-hand stacks; the abandoned hand is never counted or stored. Stored sessions are validated per record: unknown seat kind/style, missing bot name, and handsPlayed/nextBotId above 1e9 are rejected with RangeError and Home stays usable. Verified: judge round 1 PASS 16/16, 995 tests pass, coverage 96.8%, Playwright resume.spec 6/6 (Chromium+WebKit, axe), manual preview scenario. Review to assume: Q-1 (optional endedAt, read-only) and Q-2 (subtitle copy) auto-accepted, plus A-1..A-9 in the story doc. Risks/follow-ups: Leave table only pauses until TASK-10.1; unended sessions accumulate until TASK-2.7; nextBotName is uncapped (security MINOR); minor e2e helper duplication.
+<!-- SECTION:FINAL_SUMMARY:END -->

@@ -4,7 +4,7 @@ title: Pause the session from the Table header Home control
 status: To Do
 assignee: []
 created_date: '2026-11-17T23:03:00Z'
-updated_date: '2026-11-18T23:20:00Z'
+updated_date: '2026-11-24T02:29:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -46,6 +46,7 @@ Plan key: E02-S15 · Dream: limit-holdem-trainer
 - [ ] #4 Given hand 11 was abandoned with the Home control, When the user resumes, Then a new hand 11 is dealt with every stack equal to its value at the end of hand 10 [REQ-004.9, REQ-004.2]
 - [ ] #5 Given hand 11 was abandoned with the Home control, When stored hand records and the style stats computed from them are read, Then no record of the abandoned hand exists and the stats equal those of hands 1 to 10 [REQ-004.9, REQ-004.6]
 - [ ] #6 Given the Home control on the Table header and paused sessions, When the user presses the browser Back or Forward button on Home, Game Config or the Table, Then the behaviour is decided, documented and covered by a test (e.g. history entries per screen, Back from the Table pauses to Home)
+- [ ] #7 Given a stored session whose nextBotName is above MAX_SESSION_COUNT (1,000,000,000), When it is read for Resume, Then parseSessionRecord rejects it with RangeError 'Invalid session record: nextBotName' and Home stays usable (no mid-session crash on a later bot bust)
 <!-- AC:END -->
 
 ## Definition of Done
@@ -68,4 +69,6 @@ Plan key: E02-S15 · Dream: limit-holdem-trainer
 
 <!-- SECTION:NOTES:BEGIN -->
 AC added from TASK-2.1 follow-up (doc-23).
+
+AC added from TASK-2.6 follow-up (security MINOR next-bot-name-uncapped, doc-107).
 <!-- SECTION:NOTES:END -->
