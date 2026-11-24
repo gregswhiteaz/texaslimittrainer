@@ -49,13 +49,15 @@ export interface SessionRecord {
   readonly rebuys: number;
   /** null for cash; the sit-and-go level (1 until TASK-5.4). */
   readonly level: number | null;
+  /** Position of the next replacement name; 0..MAX_SESSION_COUNT (AC#7). */
   readonly nextBotName: number;
   readonly nextBotId: number;
   /** ISO-8601 UTC: when the session was ended; absent or null while not ended. Written only by E10 (D-1). */
   readonly endedAt?: string | null;
 }
 
-/** handsPlayed and nextBotId are at most this, so hand numbers and bot ids stay safe integers (A-3). */
+/** handsPlayed, nextBotId and nextBotName are at most this, so hand numbers, bot ids and replacement-name
+ *  positions stay safe integers (A-3). */
 export const MAX_SESSION_COUNT = 1_000_000_000;
 
 export interface PausedSession {
@@ -173,7 +175,7 @@ export function parseSessionRecord(value: unknown): SessionRecord {
   assertSessionConfig(config);
   whole(record.handsPlayed, 'handsPlayed', 0, MAX_SESSION_COUNT);
   whole(record.rebuys, 'rebuys', 0);
-  whole(record.nextBotName, 'nextBotName', 0);
+  whole(record.nextBotName, 'nextBotName', 0, MAX_SESSION_COUNT);
   whole(record.nextBotId, 'nextBotId', 1, MAX_SESSION_COUNT);
   const nextBotId = record.nextBotId as number;
   if (config.gameType === 'cash' ? record.level !== null : !isWhole(record.level, 1)) {

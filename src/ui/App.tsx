@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { sharedHandStore } from '../storage/hand-store';
 import { DEFAULT_SESSION_CONFIG, type SessionConfig } from '../table/session';
 import { restoreSession, type SessionRecord } from '../table/session-record';
@@ -6,9 +6,10 @@ import { resumeSummary } from '../table/table-view';
 import { GameConfigScreen } from './config/GameConfigScreen';
 import { HomeScreen } from './home/HomeScreen';
 import { TableScreen } from './table/TableScreen';
-import type { ResumedSession } from './table/useTableSession';
+import { tableWritesSettled, type ResumedSession } from './table/useTableSession';
 
-/** In-app screens (A-1); changes add no history entries and store nothing (A-2). */
+/** In-app screens (A-1); changes store nothing (A-2). Only opening the Table adds a history entry, so
+ *  browser Back on the Table pauses to Home (TASK-2.14 D-2); see docs/ui/navigation.md. */
 type Screen =
   | { readonly name: 'home'; readonly returned: boolean }
   | { readonly name: 'config' }
@@ -18,15 +19,25 @@ type Screen =
 /** undefined while Home's read is pending (A-4); reset on leaving Home so a return reads it again. */
 type Paused = { readonly record: SessionRecord; readonly summary: string } | null | undefined;
 
+/** Opaque per-push keys for the Table's history entries: unique across loads of the page (D-2). */
+let tableEntries = 0;
+const newTableKey = (): string => `${performance.timeOrigin}:${++tableEntries}`;
+const entryKey = (state: unknown): unknown =>
+  typeof state === 'object' && state !== null
+    ? (state as { tlhTable?: unknown }).tlhTable
+    : undefined;
+
 export default function App(): React.JSX.Element {
   const [screen, setScreen] = useState<Screen>({ name: 'home', returned: false });
   const [paused, setPaused] = useState<Paused>(undefined);
+  // The shown Table's history key; null while another screen is shown. Set in the handlers that change screen.
+  const tableKey = useRef<string | null>(null);
   const onHome = screen.name === 'home';
   useEffect(() => {
     if (!onHome) return undefined;
     let cancelled = false;
-    sharedHandStore()
-      .pausedSession()
+    tableWritesSettled()
+      .then(() => sharedHandStore().pausedSession())
       .then(
         ({ session, rejected }) => {
           if (cancelled) return;
@@ -44,6 +55,32 @@ export default function App(): React.JSX.Element {
     };
   }, [onHome]);
 
+  useEffect(() => {
+    const onPopState = (event: PopStateEvent): void => {
+      if (tableKey.current === null || entryKey(event.state) === tableKey.current) return;
+      tableKey.current = null;
+      setPaused(undefined);
+      setScreen({ name: 'home', returned: true });
+    };
+    window.addEventListener('popstate', onPopState);
+    return () => window.removeEventListener('popstate', onPopState);
+  }, []);
+
+  const openTable = (table: Extract<Screen, { name: 'table' }>): void => {
+    const key = newTableKey();
+    history.pushState({ tlhTable: key }, '');
+    tableKey.current = key;
+    setScreen(table);
+  };
+
+  /** The Home control and Leave table: pauses to Home, writing nothing (A-1). */
+  const goHome = (): void => {
+    if (entryKey(history.state) === tableKey.current) history.back();
+    tableKey.current = null;
+    setPaused(undefined);
+    setScreen({ name: 'home', returned: true });
+  };
+
   const resume = (record: SessionRecord): void => {
     let table;
     try {
@@ -54,7 +91,7 @@ export default function App(): React.JSX.Element {
       return;
     }
     setPaused(undefined);
-    setScreen({
+    openTable({
       name: 'table',
       resume: { table, sessionId: record.sessionId, startedAt: new Date(record.startedAt) },
     });
@@ -78,14 +115,15 @@ export default function App(): React.JSX.Element {
         <GameConfigScreen
           config={DEFAULT_SESSION_CONFIG}
           onCancel={() => setScreen({ name: 'home', returned: true })}
-          onStart={(config) => setScreen({ name: 'table', config })}
+          onStart={(config) => openTable({ name: 'table', config })}
         />
       );
     case 'table':
       return (
         <TableScreen
           {...('resume' in screen ? { resume: screen.resume } : { config: screen.config })}
-          onLeave={() => setScreen({ name: 'home', returned: true })}
+          onLeave={goHome}
+          onHome={goHome}
         />
       );
   }

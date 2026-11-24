@@ -336,6 +336,12 @@ h1[tabindex='-1']:focus {
   font-weight: 600;
 }
 
+.table-header-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.table-home,
 .table-leave {
   min-height: 44px;
   padding: 0 14px;

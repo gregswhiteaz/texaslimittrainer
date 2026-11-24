@@ -36,7 +36,7 @@ TASK-2.14) needs to deal the next hand. Home's Resume session entry (TASK-2.6) r
 | `button`      | seat 1..10                             | Dealer button of the next hand to be dealt                                                                                                |
 | `rebuys`      | integer ≥ 0                            | Always 0 until TASK-3.11 adds the user's rebuy (bot replacements are not rebuys)                                                          |
 | `level`       | integer ≥ 1 \| null                    | null for cash; the sit-and-go level (1 until TASK-5.4)                                                                                    |
-| `nextBotName` | integer ≥ 0                            | Position of the next replacement bot name (`TableState.nextBotName`)                                                                      |
+| `nextBotName` | integer 0..`MAX_SESSION_COUNT`         | Position of the next replacement bot name (`TableState.nextBotName`)                                                                      |
 | `nextBotId`   | integer 1..`MAX_SESSION_COUNT`         | The id the next replacement bot gets (`TableState.nextBotId`)                                                                             |
 | `endedAt`     | string, ISO-8601 UTC \| null, optional | When the session was ended. Absent or null = not ended (paused). Written only by E10 (TASK-10.1); nothing writes it yet                   |
 
@@ -87,9 +87,12 @@ building anything. In order it checks:
   characters, exactly one user seat equal to `userSeat` with no style, a known style on every bot, a seated
   `button`, and a known line-up and speed;
 - `endedAt`, if present and not null, as an ISO string that round-trips;
-- the counters, and `level` against the game type. `handsPlayed` and `nextBotId` are at most
-  `MAX_SESSION_COUNT` (1,000,000,000), so the next hand number and every later bot id stay far below
-  `Number.MAX_SAFE_INTEGER` (`Invalid session record: handsPlayed` / `nextBotId`);
+- the counters, and `level` against the game type. `handsPlayed`, `nextBotId` and `nextBotName` are at most
+  `MAX_SESSION_COUNT` (1,000,000,000), so the next hand number, every later bot id and every later
+  replacement-name position stay far below `Number.MAX_SAFE_INTEGER`
+  (`Invalid session record: handsPlayed` / `nextBotId` / `nextBotName`). Without the `nextBotName` cap a
+  record could restore and then crash `nextHand` at a later bot bust; now it is rejected when read, so Home
+  logs it and shows no Resume entry for it (TASK-2.14);
 - `seats`: dense, the same seat numbers and kinds as `config.seats`, valid `botId`s, styles and names;
 - `button` is one of the seats;
 - the engine's `assertChips` on the stakes and stacks: every stack a safe integer of at least 1 and the
@@ -129,6 +132,23 @@ then continue as before.
 
 Leave table still just goes Home and the session stays paused until E10 ends it.
 
+## Pause from the Table
+
+The Table header's `Home` button (TASK-2.14, REQ-004.9), Leave table and browser Back on the Table all pause
+the session the same way; see [navigation.md](../ui/navigation.md).
+
+- **No write.** The stored record already is the paused state: the session ready for the next hand after the
+  last completed hand. Choosing Home writes nothing, so the record, its `updatedAt` included, stays exactly as
+  it was. No `endedAt` is written and no report is created (there are only the `hands` and `sessions` stores).
+- **Home waits for pending writes.** `useTableSession` keeps a module-level chain of every start-record put
+  and hand write it issues. `tableWritesSettled()` resolves once all of them have settled and never rejects (a
+  failure is already logged). Home's read runs `tableWritesSettled()` and then `pausedSession()`, so choosing
+  Home right after a hand ends still shows that hand in the count.
+- **An unfinished hand is dropped,** as when the app is closed. Leaving unmounts the Table: its deal and bot
+  timers are cleared and late advice-worker replies are ignored. No write is ever issued for a hand in
+  progress, so `hands` and the stats keep only completed hands. Resume deals the same hand number again from
+  the stored stacks and button, with a new replay code.
+
 ## Upgrades
 
 Version 1 created `hands`; version 2 adds `sessions`. `onupgradeneeded` runs each missing step
@@ -144,6 +164,11 @@ the app makes every call reject with `VersionError` and dealing stops.
 - `tests/table/resume.acceptance.test.ts`, `tests/storage/resume.acceptance.test.ts`,
   `tests/ui/home-resume.acceptance.test.tsx`: the summary, the paused-session rule, a session closed in hand 11,
   rejected records and the Home entry.
+- `tests/table/session-cap.acceptance.test.ts`: the `nextBotName` cap.
+- `tests/ui/table-home.acceptance.test.tsx`: the header's Home button.
+- `e2e/home-control.spec.ts` (every push): Home between hands after hand 10, Resume, Home in the middle of
+  hand 11 (no record, same stats, no `endedAt`), and resuming the abandoned hand.
+- `e2e/history.spec.ts` (every push): browser Back and Forward, and a stored `nextBotName` above the cap.
 - `e2e/resume.spec.ts` (every push): reload in the middle of hand 3 and resume, a seeded 9-player session,
   and invalid stored sessions.
 - `e2e/session-records.spec.ts` (every push): the start record, the record after hand 2 and a reload in the

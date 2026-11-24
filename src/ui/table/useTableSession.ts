@@ -56,6 +56,20 @@ function newSessionId(): string {
   return Array.from(bytes, (byte) => byte.toString(16).padStart(2, '0')).join('');
 }
 
+const noop = (): void => undefined;
+let pending: Promise<void> = Promise.resolve();
+
+/** Adds `write` to the chain tableWritesSettled waits for; its rejection is swallowed there. */
+function track(write: Promise<unknown>): void {
+  pending = Promise.all([pending, write.then(noop, noop)]).then(noop);
+}
+
+/** Resolves once every start-record put and hand write issued so far by any table has settled. Never
+ *  rejects (failures are already logged). Home awaits it before reading the paused session (A-2). */
+export function tableWritesSettled(): Promise<void> {
+  return pending;
+}
+
 /**
  * Asks the app-wide advice worker for a bot decision. Never throws synchronously: a failure creating the
  * worker or client rejects the promise, like any other advice failure.
@@ -97,11 +111,13 @@ export function useTableSession({
   const [initialTable] = useState(table);
   const started = useRef<Promise<void> | null>(resume === undefined ? null : Promise.resolve());
   useEffect(() => {
-    started.current ??= (handStore ?? sharedHandStore())
+    if (started.current !== null) return;
+    started.current = (handStore ?? sharedHandStore())
       .putSession(sessionRecord(initialTable, { sessionId, startedAt, updatedAt: startedAt }))
       .catch((error: unknown) => {
         console.error('Session could not be saved', error);
       });
+    track(started.current);
   }, [handStore, initialTable, sessionId, startedAt]);
   // Read through a ref so a new callback each render never restarts the next-hand timer (D-5).
   const callback = useRef(onHandComplete);
@@ -157,6 +173,7 @@ export function useTableSession({
         write.current.catch((error: unknown) => {
           console.error('Hand record could not be saved', error);
         });
+        track(write.current);
         callback.current?.(done);
       }
     }

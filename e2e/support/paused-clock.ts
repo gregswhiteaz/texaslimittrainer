@@ -1,4 +1,5 @@
 import type { Page } from '@playwright/test';
+import { expectNoSeriousAxeViolations } from './axe';
 
 /**
  * Under a paused clock: runs 50 ms fake slices until `check` returns a truthy value, and returns it. Each
@@ -77,4 +78,49 @@ export function delayWorkerReplies(ms: number): void {
     }
   }
   window.Worker = DelayedWorker;
+}
+
+interface TimerWindow {
+  __pausedTimers?: [typeof setTimeout, typeof clearTimeout];
+}
+
+/** Runs in the page: real timers from a Web Worker (untouched by the fake clock) for axe. */
+function useWorkerTimers(): void {
+  const source =
+    'const t = new Map(); onmessage = ({ data: [id, ms] }) => { if (ms === null) { clearTimeout(t.get(id)); t.delete(id); } else t.set(id, setTimeout(() => { t.delete(id); postMessage(id); }, ms)); };';
+  const worker = new Worker(URL.createObjectURL(new Blob([source], { type: 'text/javascript' })));
+  const callbacks = new Map<number, () => void>();
+  let next = 1;
+  worker.onmessage = ({ data }: MessageEvent<number>) => {
+    const callback = callbacks.get(data);
+    callbacks.delete(data);
+    callback?.();
+  };
+  (window as TimerWindow).__pausedTimers = [window.setTimeout, window.clearTimeout];
+  window.setTimeout = ((callback: (...args: unknown[]) => void, ms = 0, ...args: unknown[]) => {
+    const id = next++;
+    callbacks.set(id, () => callback(...args));
+    worker.postMessage([id, Number(ms) || 0]);
+    return id;
+  }) as typeof setTimeout;
+  window.clearTimeout = ((id: number) => {
+    callbacks.delete(id);
+    worker.postMessage([id, null]);
+  }) as typeof clearTimeout;
+}
+
+function restorePausedTimers(): void {
+  const timers = (window as TimerWindow).__pausedTimers;
+  if (timers) [window.setTimeout, window.clearTimeout] = timers;
+}
+
+/** axe needs running timers; under the paused clock it gets worker timers for the duration of the scan.
+ *  Run it only where nothing is due (Home, or the user's turn). Copied from e2e/resume.spec.ts (locked). */
+export async function axeWithPausedClock(page: Page): Promise<void> {
+  await page.evaluate(useWorkerTimers);
+  try {
+    await expectNoSeriousAxeViolations(page);
+  } finally {
+    await page.evaluate(restorePausedTimers);
+  }
 }

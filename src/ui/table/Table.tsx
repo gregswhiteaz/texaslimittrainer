@@ -19,6 +19,8 @@ export interface TableViewProps {
   readonly table: TableState;
   readonly onAct: (action: Action) => void;
   readonly onLeave: () => void;
+  /** Pauses to Home (REQ-004.9). The Home button is rendered only when given (A-6). */
+  readonly onHome?: () => void;
   /** Non-null while a reviewed hand is held (A-3). Optional: earlier callers render as before. */
   readonly review?: ReviewState | null;
   readonly onDealNext?: () => void;
@@ -147,6 +149,7 @@ export function TableView({
   table,
   onAct,
   onLeave,
+  onHome,
   review = null,
   onDealNext,
   onCloseReview,
@@ -159,9 +162,16 @@ export function TableView({
     <>
       <header className="table-header">
         <p className="table-header-line">{model.header}</p>
-        <button type="button" className="table-leave" onClick={onLeave}>
-          Leave table
-        </button>
+        <div className="table-header-actions">
+          {onHome && (
+            <button type="button" className="table-home" onClick={onHome}>
+              Home
+            </button>
+          )}
+          <button type="button" className="table-leave" onClick={onLeave}>
+            Leave table
+          </button>
+        </div>
       </header>
       <div className="table-layout">
         <div className="table-main">
@@ -220,10 +230,14 @@ export function TableView({
   );
 }
 
-export type TableProps = TableSessionOptions & { readonly onLeave?: () => void };
+export type TableProps = TableSessionOptions & {
+  readonly onLeave?: () => void;
+  readonly onHome?: () => void;
+};
 
 export function Table({
   onLeave = () => undefined,
+  onHome,
   onHandComplete: external,
   holdNextHand = false,
   ...options
@@ -260,6 +274,7 @@ export function Table({
       table={table}
       onAct={act}
       onLeave={onLeave}
+      onHome={onHome}
       review={review}
       onDealNext={onDealNext}
       onCloseReview={closeReview}
