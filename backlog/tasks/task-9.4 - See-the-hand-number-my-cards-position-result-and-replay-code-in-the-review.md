@@ -1,11 +1,11 @@
 ---
 id: TASK-9.4
 title: See the hand number, my cards, position, result and replay code in the review
-status: In Progress
+status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-24T13:54:00Z'
+updated_date: '2026-11-24T13:55:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -17,6 +17,7 @@ references:
 documentation:
   - doc-1
   - doc-2
+  - doc-118
 parent_task_id: TASK-9
 priority: high
 type: feature
@@ -82,4 +83,12 @@ AC added from TASK-9.1 follow-up (doc-26).
 Build: review header subtitle (net result, hole cards, position) and replay line; npm test 1221 passed, Playwright 240 passed; gate PASS.
 
 Judge r1 PASS 10/10; live 12 reviews in Chromium+WebKit matched stack change, seat label and stored replay code; CI green.
+
+Follow-ups: none new. Already owned: sit-and-go chips wording (TASK-5.3). Not tracked: one-use helper MINOR and extra CSS gap NIT (no behaviour change).
 <!-- SECTION:NOTES:END -->
+
+## Final Summary
+
+<!-- SECTION:FINAL_SUMMARY:BEGIN -->
+Hand Review header now shows net result, your hole cards, position, hand number and replay code (src/table/review.ts, ReviewPanel, TableView, styles, docs). Verified: judge round 1 passed 10/10, suite and e2e (Chromium, WebKit) green, 2 gates PASS, no blocking review findings. Review: 6 assumptions (A-1..A-6) and auto-accepted header copy Q-1..Q-3. Follow-ups: sit-and-go shows $ until TASK-5.3; one-use reviewHeader helper (MINOR) and extra gap CSS rule (NIT).
+<!-- SECTION:FINAL_SUMMARY:END -->
