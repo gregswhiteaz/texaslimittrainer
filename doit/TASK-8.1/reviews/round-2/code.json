@@ -1,0 +1,20 @@
+{"reviewer": "code", "round": 2,
+ "rubric": [
+  {"item": "SPEC-01..SPEC-23 correctness (unchanged since r1)", "result": "pass"},
+  {"item": "SPEC-03 test strength (r1 MAJOR hook-observed-wiring-untested)", "result": "pass"},
+  {"item": "SPEC-01, SPEC-02, SPEC-04..SPEC-20 test strength (unchanged since r1)", "result": "pass"},
+  {"item": "records-harness change only adds logging", "result": "pass"},
+  {"item": "scope", "result": "pass"},
+  {"item": "concision", "result": "pass"},
+  {"item": "clarity", "result": "pass"}
+ ],
+ "findings": [
+  {"fingerprint": "src/ui/table/Table.tsx:onhint-null-guard",
+   "severity": "NIT",
+   "file": "src/ui/table/Table.tsx",
+   "line": 637,
+   "issue": "Carried from r1, not changed: `if (decision === null) return;` is only there to narrow the type.",
+   "evidence": "The Hint toggle is disabled whenever there is no hand.",
+   "fix": "Fine to leave as is."}
+ ],
+ "summary": "The r1 MAJOR is fixed. e2e/hint-observed.spec.ts wraps Worker.prototype.postMessage to record the `observed` of each recommend request. It asserts [] in hand 1. In hand 2 it asserts one entry per bot seat, in ascending order, each with hands === 1. Through the new records-harness log it also asserts that every stored user decision equals [] in hand 1 and equals the hand-2 hint payload in hand 2. Each of the three wiring points is covered: removing the counting at line 207 leaves the hand-2 hint at []; dropping act's third argument stores null, which fails toEqual([]); passing {} to the hint sends no list, which fails both equality checks. This matches the builder's mutation results in build-log.md. The records-harness diff adds one `observed` field to the log type, initialises it, and pushes to it in onHandComplete. Behaviour is otherwise unchanged. The reviewer re-ran the spec: 2/2 passed (Chromium and WebKit). Gate fix-6 has no failures."}
