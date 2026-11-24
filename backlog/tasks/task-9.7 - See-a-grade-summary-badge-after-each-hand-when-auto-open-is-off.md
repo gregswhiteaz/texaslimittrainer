@@ -1,10 +1,11 @@
 ---
 id: TASK-9.7
 title: See a grade summary badge after each hand when auto-open is off
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-19T02:21:00Z'
+updated_date: '2026-11-24T15:54:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -67,6 +68,17 @@ Plan key: E09-S07 · Dream: limit-holdem-trainer
 - [ ] #11 Story documentation is written and published to Backlog.md
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. review.ts: afterHandReview(hand, autoOpen) → panel|badge|none; reviewBadge(grades) → text/worst/label
+2. Table: autoOpenReview prop (default true, not persisted until TASK-12.6); with it off, show a grade summary badge button where Deal next hand goes once grades are ready; clicking opens and holds the review
+3. Records harness option autoOpen:false
+4. Tests: unit, render acceptance, e2e (badge timing vs auto-deal, click → held panel, lone preflop fold → none, default on unchanged, axe)
+
+Full spec: doit/TASK-9.7/spec.md
+<!-- SECTION:PLAN:END -->
 
 ## Implementation Notes
 

@@ -1,0 +1,74 @@
+[
+  {
+    "id": "SPEC-01",
+    "verifies": "AC#1, AC#4, AC#7, DoD#1",
+    "verification": "acceptance `tests/table/review-badge.acceptance.test.ts::the badge counts Major and Minor errors and reads All correct without errors`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-02",
+    "verifies": "AC#3, AC#6, AC#7, DoD#1",
+    "verification": "acceptance `tests/table/review-badge.acceptance.test.ts::the panel opens only with auto-open on, otherwise a badge, never after a lone preflop fold`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-03",
+    "verifies": "AC#6, DoD#1",
+    "verification": "acceptance `tests/table/review-badge.acceptance.test.ts::calling then folding preflop shows a badge, a lone preflop fold does not`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-04",
+    "verifies": "AC#1, AC#4, AC#3, DoD#1, DoD#7",
+    "verification": "acceptance `tests/ui/review-badge.acceptance.test.tsx::the badge button shows its summary after the result and never beside a held review`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-05",
+    "verifies": "AC#4, DoD#1",
+    "verification": "acceptance `tests/ui/review-badge.acceptance.test.tsx::the badge always states its grades in text`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-06",
+    "verifies": "AC#1, AC#5, DoD#7, DoD#8",
+    "verification": "acceptance `e2e/review-badge.spec.ts::with auto-open off a badge replaces the panel and the next hand deals after 1.5 s`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-07",
+    "verifies": "AC#2, DoD#7",
+    "verification": "acceptance `e2e/review-badge.spec.ts::clicking the badge opens the review for that hand and waits for Deal next hand`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-08",
+    "verifies": "AC#6, DoD#7",
+    "verification": "acceptance `e2e/review-badge.spec.ts::a lone preflop fold shows no badge`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-09",
+    "verifies": "AC#3, DoD#7",
+    "verification": "acceptance `e2e/review-badge.spec.ts::with auto-open on the panel opens and no badge is shown`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-10",
+    "verifies": "DoD#2, DoD#3, DoD#4, DoD#5, DoD#6, DoD#8",
+    "verification": "command `npm run lint && npm run typecheck && npm test && npx vitest run tests/golden/ && npm run -s playtest -- --hands 10000 --seed 42`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-11",
+    "verifies": "DoD#7, DoD#10",
+    "verification": "command `npm run e2e && gh run list --branch doit/TASK-9.7 --limit 1`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-12",
+    "verifies": "DoD#9, DoD#11, DoD#12",
+    "verification": "manual read `docs/ui/review.md`; `backlog doc list --plain` lists the TASK-9.7 doc",
+    "status": "pending"
+  }
+]
