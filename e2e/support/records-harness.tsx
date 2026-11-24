@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client';
 import AdviceWorker from '../../src/ui/advice/advice.worker.ts?worker&inline';
 import { sharedAdviceClient } from '../../src/ui/advice/advice-client';
 import { openHandStore } from '../../src/storage/hand-store';
+import type { ObservedOpponent } from '../../src/advice/ranges';
 import type { HandStore } from '../../src/table/hand-record';
 import type { CompletedHand } from '../../src/table/session';
 import { Table } from '../../src/ui/table/Table';
@@ -17,6 +18,8 @@ export interface RecordsHarnessLog {
   events: { event: string; at: number }[];
   /** replayCode of each onHandComplete call, in order. */
   calls: string[];
+  /** Per onHandComplete call, each user decision's stored observed snapshot (null if it has none). */
+  observed: (readonly ObservedOpponent[] | null)[][];
   /** Parent renders. */
   renders: number;
 }
@@ -27,7 +30,7 @@ declare global {
   }
 }
 
-const log: RecordsHarnessLog = { events: [], calls: [], renders: 0 };
+const log: RecordsHarnessLog = { events: [], calls: [], observed: [], renders: 0 };
 window.__records = log;
 const note = (event: string): void => {
   log.events.push({ event, at: performance.now() });
@@ -80,6 +83,7 @@ function Harness(): React.JSX.Element {
   // A new function on every render.
   const onHandComplete = (hand: CompletedHand): void => {
     log.calls.push(hand.replayCode);
+    log.observed.push(hand.userDecisions.map((d) => d.observed ?? null));
   };
   return <Table handStore={handStore} onHandComplete={onHandComplete} />;
 }

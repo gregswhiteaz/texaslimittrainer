@@ -25,6 +25,8 @@ Status: build complete except one hook-locked e2e test that conflicts with the s
 - `e2e/hint.spec.ts` (new) — SPEC-17 … SPEC-20.
 - `e2e/support/table-scenes.tsx` — `ten-seat-hint` scene (TEN_SEAT_FLOP with a ready card); scenes pass `hint` / `onHint`.
 - `e2e/support/table-harness-bundle.ts` — `'ten-seat-hint'` added to `TableScene`.
+- `e2e/hint-observed.spec.ts` (new, fix r1 item 1) — live-session check: the recommend message's `observed` (empty in hand 1; one `hands: 1` entry per bot seat, ascending, in hand 2) and each stored user decision's snapshot equal to it. In a new file because `e2e/hint.spec.ts` is hook-locked.
+- `e2e/support/records-harness.tsx` — the harness log gains `observed`: each completed hand's user-decision snapshots (from `onHandComplete`).
 
 ## Docs
 - `docs/ui/hint.md` (new) — the hint button, card, behaviour and observed snapshot.
