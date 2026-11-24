@@ -1,0 +1,16 @@
+{"reviewer": "code", "round": 1,
+ "rubric": [
+  {"item": "SPEC-01 correctness", "result": "pass"},
+  {"item": "SPEC-01 test strength", "result": "pass"},
+  {"item": "SPEC-02 correctness", "result": "pass"},
+  {"item": "SPEC-02 test strength", "result": "pass"},
+  {"item": "SPEC-03 correctness", "result": "pass"},
+  {"item": "SPEC-03 test strength", "result": "pass"},
+  {"item": "SPEC-04 correctness", "result": "pass"},
+  {"item": "SPEC-04 test strength", "result": "pass"},
+  {"item": "scope", "result": "pass"},
+  {"item": "concision", "result": "pass"},
+  {"item": "clarity", "result": "pass"}
+ ],
+ "findings": [],
+ "summary": "Pure test relocation, verified mechanically against base be5c673. Old lines 105-146 (property block) are byte-identical to postflop-ranges.property.test.ts:23-64. Old 259-303 (default-advice test) are identical to property file 66-110, apart from the it/closing-brace boundary. The kept fallback + heads-up body (old 148-200) is identical to postflop-ranges.test.ts:102-154. The expect( count is 30 before and after (21 kept + 9 moved). The SPEC-03 diff of expect/numRuns/_STEPS/views.length/slice/handReplayCode lines prints nothing, so seed 7505, numRuns 60, the three step-size tuples, 200 views and slice(0, 10) are unchanged. No .skip/.only/.todo and no per-test timeout were added. STAKES_4_8 and ALL_CARDS are copied verbatim (A-4). vitest reports 2 files and 4 tests passing (47 ms, 42 ms, 1708 ms, 1629 ms without coverage). CI wiring: `vitest list` with the test:sweeps filters selects postflop-ranges.property.test.ts, and with the test:unit filters it selects only postflop-ranges.test.ts. ci.yml's sweeps job runs `npm run test:sweeps -- --shard=N/2`, so the moved file runs in one sweep shard, without coverage. vite.config include `tests/**/*.test.{ts,tsx}` matches the new file. ESLint (--max-warnings 0) is clean on both files, so no unused imports remain. Only the two test files changed outside doit/ and backlog/; no src, vite.config, package.json or ci.yml edits. SPEC-01/02/04 CI-duration and 3-run evidence is for the judge to read from CI logs; the local evidence (gate build-2 PASS, test:unit exit 0, lines 92.65%) agrees with it."}

@@ -1,0 +1,26 @@
+[
+  {
+    "id": "SPEC-01",
+    "verifies": "AC#1",
+    "verification": "command `gh run view <run-id> --log | grep 'Unit tests with coverage' | grep 'postflop-ranges.test.ts'` on each of the three AC#3 runs; every line shows \u2713 and \u226410000ms",
+    "status": "pass"
+  },
+  {
+    "id": "SPEC-02",
+    "verifies": "AC#1",
+    "verification": "command `gh run view <run-id> --log | grep 'Sweep tests' | grep 'postflop-ranges.property.test.ts'` on each of the three AC#3 runs; both tests \u2713 with \u226410000ms",
+    "status": "pass"
+  },
+  {
+    "id": "SPEC-03",
+    "verifies": "AC#2",
+    "verification": "command `diff <(git show main:tests/advice/postflop-ranges.test.ts | grep -E 'expect\\(|numRuns|_STEPS, [0-9]|views.length < 200|slice\\(0, 10\\)|handReplayCode' | sed 's/^ *//' | sort) <(cat tests/advice/postflop-ranges.test.ts tests/advice/postflop-ranges.property.test.ts | grep -E 'expect\\(|numRuns|_STEPS, [0-9]|views.length < 200|slice\\(0, 10\\)|handReplayCode' | sed 's/^ *//' | sort) && npx vitest run tests/advice/postflop-ranges.test.ts tests/advice/postflop-ranges.property.test.ts` \u2014 diff prints nothing; vitest reports 2 files and 4 tests passed (old file: `actions mode falls back on scripted lines and heads-up`, `a fully blocked start \u2026`; new file: `actions mode is total and deterministic`, `default advice stays on every unseen combo`)",
+    "status": "pass"
+  },
+  {
+    "id": "SPEC-04",
+    "verifies": "AC#3",
+    "verification": "command `gh run list --branch doit/TASK-1.56 --workflow CI --limit 3 --json databaseId,conclusion` plus `gh run view <id> --json jobs` for each attempt; 'Unit tests with coverage' conclusion = success in 3 consecutive attempts. Local precheck: `npm run test:unit` exits 0",
+    "status": "pass"
+  }
+]

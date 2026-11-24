@@ -1,0 +1,58 @@
+{
+  "task": "TASK-1.56",
+  "phase": "build",
+  "run": 1,
+  "result": "PASS",
+  "changed_lines": 208,
+  "changed_files": [
+    "tests/advice/postflop-ranges.property.test.ts",
+    "tests/advice/postflop-ranges.test.ts"
+  ],
+  "checks": [
+    {
+      "name": "test command",
+      "status": "pass",
+      "detail": "$ npm run test:unit && npx vitest run tests/advice/postflop-ranges.property.test.ts\nexit 0\n |   97.56 |                   \n  hand-store.ts    |      90 |    68.75 |    82.6 |   97.56 | 96                \n table             |   89.43 |    85.12 |   95.42 |   94.96 |                   \n  action-bar.ts    |     100 |    96.29 |     100 |     100 | 80                \n  hand-record.ts   |   95.74 |     92.4 |     100 |     100 | ...85-203,291,315 \n  hand-result.ts   |     100 |    93.54 |     100 |     100 | 126,146           \n  review.ts        |      90 |       80 |     100 |     100 | 33                \n  ...ion-record.ts |   62.79 |    59.09 |   73.33 |   77.27 | ...65,183,200-209 \n  session.ts       |   86.69 |    80.79 |   94.73 |   93.29 | ...40-343,352-353 \n  table-view.ts    |   98.94 |    98.79 |     100 |     100 | 191               \n ui                |   35.29 |    14.28 |   28.57 |    37.5 |                   \n  App.tsx          |   33.33 |    33.33 |      20 |   33.33 | 20-35             \n  ...adingFocus.ts |    37.5 |        0 |      50 |   42.85 | 10-13             \n ui/advice         |   63.63 |       40 |   64.28 |   68.75 |                   \n  advice-client.ts |    67.3 |     42.1 |      75 |   71.73 | 37-48,77,114      \n  advice.worker.ts |       0 |      100 |     100 |       0 | 3                 \n  worker-host.ts   |       0 |        0 |       0 |       0 | 18                \n ui/cards          |   93.54 |       40 |   66.66 |   93.54 |                   \n  PlayingCard.tsx  |      80 |       40 |      50 |      80 | 103-104           \n ui/config         |   16.94 |        0 |       0 |   18.86 |                   \n  ...figScreen.tsx |   16.94 |        0 |       0 |   18.86 | ...3,71,73,86-267 \n ui/table          |    1.57 |        0 |    3.38 |    1.76 |                   \n  ActionBar.tsx    |       0 |        0 |       0 |       0 | 11-19             \n  ReviewPanel.tsx  |       0 |        0 |       0 |       0 | 13-32             \n  Table.tsx        |       0 |        0 |       0 |       0 | 30-258            \n  TableScreen.tsx  |       0 |      100 |       0 |       0 | 12-13             \n  ...bleSession.ts |    2.53 |        0 |    6.06 |    2.94 | 46-47,80-189      \n-------------------|---------|----------|---------|---------|-------------------\n\n=============================== Coverage summary ===============================\nStatements   : 91.72% ( 3793/4135 )\nBranches     : 88.68% ( 2562/2889 )\nFunctions    : 87.92% ( 808/919 )\nLines        : 92.65% ( 3202/3456 )\n================================================================================\n\n RUN  v5.1.0 /Users/gregwhite/Documents/claudeworkspaces/limitholdem\n\n \u2713 tests/advice/postflop-ranges.property.test.ts > postflop advice with action ranges > actions mode is total and deterministic 1712ms\n \u2713 tests/advice/postflop-ranges.property.test.ts > postflop advice with action ranges > default advice stays on every unseen combo 1624ms\n\n Test Files  1 passed (1)\n      Tests  2 passed (2)\n   Start at  18:53:37\n   Duration  3.47s (tests 98%, import 2%, transform 1%)\n\n"
+    },
+    {
+      "name": "lint command",
+      "status": "pass",
+      "detail": "$ npm run lint\nexit 0\n\n> tlh-trainer@0.0.0 lint\n> node tools/lint/sync-copies.js && eslint . --max-warnings 0 && prettier --check .\n\nChecking formatting...\nAll matched files use Prettier code style!\n"
+    },
+    {
+      "name": "typecheck command",
+      "status": "pass",
+      "detail": "$ npm run typecheck\nexit 0\n\n> tlh-trainer@0.0.0 typecheck\n> tsc -p tsconfig.json\n\n"
+    },
+    {
+      "name": "spec unchanged",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "name": "scope budget (lines)",
+      "status": "pass",
+      "detail": "208 changed lines vs budget 260 (fail above 520)"
+    },
+    {
+      "name": "scope budget (files)",
+      "status": "pass",
+      "detail": "2 files vs budget 2"
+    },
+    {
+      "name": "files outside spec",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "name": "all changes listed in changes.md",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "name": "tests locked",
+      "status": "pass",
+      "detail": "0 acceptance test file(s) locked; 265 test files snapshotted"
+    }
+  ]
+}
