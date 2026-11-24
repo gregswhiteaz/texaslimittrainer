@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-24T16:42:00Z'
+updated_date: '2026-11-24T17:05:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -91,4 +91,6 @@ Full spec: doit/TASK-10.1/spec.md
 
 <!-- SECTION:NOTES:BEGIN -->
 AC added from TASK-3.3 follow-up (doc-24).
+
+Build: DB v3 reports store (write-once) + endSession transaction; Session Report screen (Result/BB100/Rebuys, Back to Home); Leave table ends the session (also mid-hand, bust dialog, Continue); five locked e2e re-pinned per D-4; npm test 1244 passed, Playwright 268 passed; gate PASS.
 <!-- SECTION:NOTES:END -->
