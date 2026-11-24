@@ -1,10 +1,11 @@
 ---
 id: TASK-8.2
 title: Mark a decision as hinted when I open the hint
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-17T23:22:00Z'
+updated_date: '2026-11-24T11:01:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -67,3 +68,14 @@ Plan key: E08-S02 · Dream: limit-holdem-trainer
 - [ ] #11 Story documentation is written and published to Backlog.md
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. hintedAt(hint, hand) in src/table/hint.ts reads the existing per-decision hint state
+2. act(action, hinted?) → applyUserAction(table, action, observed?, hinted) sets UserDecision.hinted only when true
+3. decisionRecord writes hinted: decision.hinted === true (format unchanged)
+4. Tests: acceptance per AC with the real hint state machine, hintedAt units, e2e/hinted.spec.ts reading stored records
+
+Full spec: doit/TASK-8.2/spec.md
+<!-- SECTION:PLAN:END -->

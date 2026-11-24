@@ -1,0 +1,62 @@
+[
+  {
+    "id": "SPEC-01",
+    "verifies": "AC#1, AC#3, DoD#1",
+    "verification": "acceptance `tests/table/hinted.acceptance.test.ts::hint opened at the flop marks only the flop entry hinted`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-02",
+    "verifies": "AC#2, DoD#1",
+    "verification": "acceptance `tests/table/hinted.acceptance.test.ts::a hint hidden again before acting still marks the decision hinted`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-03",
+    "verifies": "AC#4, DoD#1",
+    "verification": "acceptance `tests/table/hinted.acceptance.test.ts::opening the hint three times at one decision gives one hinted entry`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-04",
+    "verifies": "AC#5, DoD#1",
+    "verification": "acceptance `tests/table/hinted.acceptance.test.ts::a hinted call 10 points short is still graded Major error`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-05",
+    "verifies": "AC#6, DoD#1",
+    "verification": "acceptance `tests/table/hinted.acceptance.test.ts::stored advice of a hinted decision equals the hint card after the opponent reaches 30 hands`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-06",
+    "verifies": "AC#1, AC#2, AC#4, DoD#1",
+    "verification": "unit `tests/table/hint.test.ts::hintedAt`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-07",
+    "verifies": "AC#1, AC#3, DoD#1",
+    "verification": "acceptance `e2e/hinted.spec.ts::opening Hint at the flop stores only the flop decision as hinted`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-08",
+    "verifies": "AC#2, AC#4, DoD#1",
+    "verification": "acceptance `e2e/hinted.spec.ts::a hint opened three times and hidden again marks one decision hinted`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-09",
+    "verifies": "DoD#2, DoD#3, DoD#4, DoD#5, DoD#6, DoD#8",
+    "verification": "command `npm run lint && npm run typecheck && npm test && npx vitest run tests/golden/ && npm run -s playtest -- --hands 10000 --seed 42`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-10",
+    "verifies": "DoD#7, DoD#9, DoD#10, DoD#11, DoD#12",
+    "verification": "manual `gh run list --branch doit/TASK-8.2 --limit 1` shows success; read both docs",
+    "status": "pending"
+  }
+]
