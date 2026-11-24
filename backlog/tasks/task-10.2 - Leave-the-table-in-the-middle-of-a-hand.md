@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-24T19:44:00Z'
+updated_date: '2026-11-24T20:12:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -82,4 +82,6 @@ Full spec: doit/TASK-10.2/spec.md
 
 <!-- SECTION:NOTES:BEGIN -->
 AC added from TASK-3.3 follow-up (doc-24).
+
+Build: forceFold engine op (shared settle helper), LeaveDialog mid-hand confirm, forced-fold hand stored with forcedFold: true, session ends after the hand's write; locked D-5 edits + play-money unit fixture; npm test 1267 passed, Playwright 298 passed, playtest 0 violations; gate PASS.
 <!-- SECTION:NOTES:END -->
