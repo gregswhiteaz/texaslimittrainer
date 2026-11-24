@@ -4,7 +4,7 @@ title: Leave a busted bot's seat empty for the rest of the sit-and-go
 status: To Do
 assignee: []
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-17T23:22:00Z'
+updated_date: '2026-11-24T04:56:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-2
@@ -50,6 +50,7 @@ Plan key: E05-S04 · Dream: limit-holdem-trainer
 - [ ] #4 Given the empty seat is the seat the button would move to, When the next hand is dealt, Then the button and blinds move past the empty seat to occupied seats [REQ-008.4]
 - [ ] #5 Given `npm run playtest -- --game sng --size 6 --hands 10000 --seed 42`, When it runs, Then no sit-and-go ever seats a bot after its first hand, each sit-and-go ends when one player holds all 9,000 chips, and zero invariant violations are reported [REQ-008.4]
 - [ ] #6 Given a 9-seat sit-and-go in which 3 bots have busted and the user is the seat two after the big blind among the 6 players dealt in, When the user's preflop decision is classified for leaks, Then the empty seats are skipped and the decision falls in the middle position group, as at a 6-player table [REQ-047.6, REQ-008.4]
+- [ ] #7 Given a sit-and-go where a seat reached $0 (today the interim 'stopped' step from TASK-3.21), When the next hand is due, Then play continues with that seat empty, the 'stopped' step and sitAndGoStopped interim are removed, no 'Deal next hand' button is left that does nothing, and the stored record is resumable (Home logs no 'Session record could not be read' for it)
 <!-- AC:END -->
 
 ## Definition of Done
@@ -67,3 +68,9 @@ Plan key: E05-S04 · Dream: limit-holdem-trainer
 - [ ] #11 Story documentation is written and published to Backlog.md
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+AC added from TASK-3.21 follow-up (interim sit-and-go stop, doc-110).
+<!-- SECTION:NOTES:END -->

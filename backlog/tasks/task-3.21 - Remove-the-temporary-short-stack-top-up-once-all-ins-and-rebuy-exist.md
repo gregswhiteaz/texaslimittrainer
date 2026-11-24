@@ -1,11 +1,11 @@
 ---
 id: TASK-3.21
 title: Remove the temporary short-stack top-up once all-ins and rebuy exist
-status: In Progress
+status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-19T01:10:00Z'
-updated_date: '2026-11-24T04:54:00Z'
+updated_date: '2026-11-24T04:56:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -18,6 +18,8 @@ dependencies:
 references:
   - doc-25
   - src/table/session.ts
+documentation:
+  - doc-110
 parent_task_id: TASK-3
 priority: high
 type: chore
@@ -71,4 +73,15 @@ AC added from TASK-3.11 follow-up (security MINOR rebuy-count-unbounded-incremen
 Build: top-up removed, sit-and-go stops at first bust ('stopped' step), rebuy cap, locked re-pins (TASK-3.4 next-hand 45/45 expects, TASK-3.11 rebuy 82/82); npm test 1013 passed; gate PASS. Recorded deviations in doit/TASK-3.21/fix-brief.md (A-4 browser-checked values $54/$124, 14th file type-only, Deal next hand click, axe timing).
 
 Judge r1 PASS 11/11; CI 45328577616 green on b865507; playtest 10k seed 42 byte-identical to base.
+
+Follow-ups: TASK-5.2 AC added (replace interim 'stopped' step; resumable record; no dead Deal next hand). Not tracked: unbounded settled() loop in e2e/short-stack.spec.ts (test harness, no failure), docs long lines (cosmetic).
 <!-- SECTION:NOTES:END -->
+
+## Final Summary
+
+<!-- SECTION:FINAL_SUMMARY:BEGIN -->
+Removed the temporary short-stack top-up in nextHand: every seat now plays its own chips (a cash user on $95 stays on $95, a $0 cash user goes to Rebuy, a $0 cash bot is replaced). A sit-and-go is never refilled and, as an interim, stops at its first bust (no empty seats until TASK-5.2, no finish until TASK-5.7). rebuy() now refuses at MAX_SESSION_COUNT and the UI does nothing there. Review follow-ups done (nextHand docstring, BustDialog Escape comment).
+Verification: judge round 1 passed 11/11. npm test 1013 passed, lint and typecheck clean, CI green. The new e2e passes in Chromium and WebKit (all-in labels, Pots list, Pot winners on a real session). Playtest 10,000 hands is byte-identical to base.
+To review: A-1..A-6, auto-accepted Q-1 (sit-and-go stop) and Q-2 (two cross-story locked re-pins: TASK-3.4 next-hand.acceptance and TASK-3.11 rebuy.acceptance), and the build deviations (hand-14 pot $54 not $62, 14th file, Deal next hand click).
+Risks and follow-ups: a stopped sit-and-go is not resumable and logs 'Session record could not be read' on each Home load, and Deal next hand does nothing while the review is held (TASK-5.2/5.7). Minor: unbounded settled() loop in e2e/short-stack.spec.ts, and long lines in docs/storage/sessions.md.
+<!-- SECTION:FINAL_SUMMARY:END -->
