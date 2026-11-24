@@ -122,7 +122,8 @@ h1[tabindex='-1']:focus {
   margin: 0;
 }
 
-.report-kpi {
+.report-kpi,
+.report-rate {
   display: flex;
   flex-direction: column;
   gap: 4px;
@@ -132,12 +133,14 @@ h1[tabindex='-1']:focus {
   border-radius: 10px;
 }
 
-.report-kpi dt {
+.report-kpi dt,
+.report-rate dt {
   font-size: 13px;
   color: #a7aeb8;
 }
 
-.report-kpi dd {
+.report-kpi dd,
+.report-rate dd {
   margin: 0;
   font-size: 26px;
   font-weight: 700;

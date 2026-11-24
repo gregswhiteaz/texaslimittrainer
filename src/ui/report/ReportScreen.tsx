@@ -1,6 +1,6 @@
 import { styleSection, type RangeLabel } from '../../stats/healthy-ranges';
 import type { StyleCounts } from '../../stats/style-stats';
-import { reportView, type SessionReport } from '../../table/session-report';
+import { rateTiles, reportView, type SessionReport } from '../../table/session-report';
 import { useHeadingFocus } from '../useHeadingFocus';
 
 const LABEL_KEYS: Readonly<Record<RangeLabel, string>> = {
@@ -38,8 +38,8 @@ function StyleSection({
   );
 }
 
-/** The Session Report of an ended session (A-7): header line, cash KPI tiles, the style section when the
- *  report has style counts, and Back to Home (D-3). */
+/** The Session Report of an ended session (A-7): header line, cash KPI tiles, the hands played and error-rate
+ *  tiles when the report has error counts, the style section when it has style counts, and Back to Home (D-3). */
 export function ReportScreen({
   report,
   onHome,
@@ -49,6 +49,7 @@ export function ReportScreen({
 }): React.JSX.Element {
   const heading = useHeadingFocus(true);
   const { header, tiles } = reportView(report);
+  const rates = rateTiles(report);
   return (
     <main className="screen report-screen">
       <header className="report-header">
@@ -59,6 +60,16 @@ export function ReportScreen({
         <dl className="report-kpis" aria-label="Result">
           {tiles.map(({ key, label, value }) => (
             <div key={key} className="report-kpi" data-kpi={key}>
+              <dt>{label}</dt>
+              <dd>{value}</dd>
+            </div>
+          ))}
+        </dl>
+      )}
+      {rates.length > 0 && (
+        <dl className="report-kpis report-rates" aria-label="Volume and errors">
+          {rates.map(({ key, label, value }) => (
+            <div key={key} className="report-rate" data-rate={key}>
               <dt>{label}</dt>
               <dd>{value}</dd>
             </div>
