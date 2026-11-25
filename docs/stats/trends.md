@@ -154,6 +154,23 @@ All / All.
 
 Dates read `D Mon YYYY` in fixed English (`dayText`), independent of the browser locale.
 
+## Filter: line-up (TASK-11.7)
+
+A fourth select, **Line-up** (`#stats-line-up`), sits between Game type and Group by in `.stats-filters`. Its
+options are All (`all`, the default), Mixed, Tough, Soft and Custom, whose values are the stored `LineUpName`s.
+
+- It is the `lineUp` field of `TrendFilter` (`LineUpFilter`), applied in `filterTrendData`. A missing `lineUp`
+  means All, so `ALL_TRENDS` (`lineUp: 'all'`) and an older `{tableSize, gameType}` literal both return `data`
+  itself when the other filters are All.
+- A hand matches by its own stored `lineUp` (`HandRecord.lineUp`, copied by `trendHand`), not by the session
+  record. Every hand of a session carries the same name. Custom is one bucket: any table where a bot's style was
+  changed from the preset. A `TrendHand` without `lineUp` (synthetic input only) matches only All.
+- It combines with Table size and Game type by AND and works under every grouping. The totals line, both charts
+  and their messages come from the matching hands, so a line-up with no hands shows `Play your first hand to see
+trends.` and `0 hands over 0 sessions`.
+- The G-2 target is still computed from every stored hand.
+- The selection is not remembered: every opening of Statistics starts at Line-up All.
+
 ## Tests
 
 - `tests/stats/trends.test.ts`, `tests/stats/trends.acceptance.test.ts`: ordering, grouping, counts, texts,
@@ -183,3 +200,7 @@ Dates read `D Mon YYYY` in fixed English (`dayText`), independent of the browser
   per-day points (one session past midnight) recomputed from the records, grouping under a filter, a 12-hand
   session, the zero-hand message, the storyboard, and per-session BB/100 equal to each cash session's report.
   `e2e/statistics-grouping.spec.ts`: the App flow in a fixed time zone with axe and same-origin requests.
+- `tests/stats/trend-lineup.acceptance.test.tsx`: the Line-up options, default and position, Custom totals and
+  points recomputed from the records, Mixed with 6-max together, the Soft empty state under every grouping and the
+  G-2 target under every line-up. `e2e/statistics-lineup.spec.ts`: the App flow with axe, reset on reopening and
+  same-origin requests.

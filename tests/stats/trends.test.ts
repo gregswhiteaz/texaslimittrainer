@@ -534,4 +534,42 @@ describe('trend grouping', () => {
       'aria-label="Major errors per 100 hands, one point per day: 50.0, 50.0, 0.0"',
     );
   });
+
+  it('line-up filter keeps matching hands and carries lineUp from records', () => {
+    const source = {
+      sessionId: A,
+      handNumber: 1,
+      completedAt: '2026-11-01T00:00:00.000Z',
+      decisions: [],
+    };
+    expect(trendHand({ ...source, lineUp: 'Tough' }).lineUp).toBe('Tough');
+    expect('lineUp' in trendHand(source)).toBe(false);
+
+    const cash = { net: 4, bigBet: 8 };
+    const tough1: TrendHand = { ...hand(A, 1, '2026-11-01T00:00:01.000Z'), cash, lineUp: 'Tough' };
+    const custom: TrendHand = { ...hand(B, 1, '2026-11-01T00:00:02.000Z'), cash, lineUp: 'Custom' };
+    const bare: TrendHand = hand(C, 1, '2026-11-01T00:00:03.000Z');
+    const toughSng: TrendHand = { ...hand(B, 2, '2026-11-01T00:00:04.000Z'), lineUp: 'Tough' };
+    const tough2: TrendHand = { ...hand(A, 2, '2026-11-01T00:00:05.000Z'), cash, lineUp: 'Tough' };
+    const data: TrendData = {
+      hands: [tough2, custom, bare, toughSng, tough1],
+      sessionStarts: new Map([[A, '2026-11-01T00:00:00.000Z']]),
+    };
+
+    expect(filterTrendData(data, ALL_TRENDS)).toBe(data);
+    expect(filterTrendData(data, { tableSize: 'all', gameType: 'all' })).toBe(data);
+
+    const tough = filterTrendData(data, { tableSize: 'all', gameType: 'all', lineUp: 'Tough' });
+    expect(tough.hands).toEqual([tough2, toughSng, tough1]);
+    expect(tough.sessionStarts).toBe(data.sessionStarts);
+    for (const lineUp of ['Mixed', 'Tough', 'Soft', 'Custom'] as const) {
+      const kept = filterTrendData(data, { ...ALL_TRENDS, lineUp }).hands;
+      expect(kept).not.toContain(bare);
+      expect(kept.every((h) => h.lineUp === lineUp)).toBe(true);
+    }
+    expect(filterTrendData(data, { ...ALL_TRENDS, gameType: 'sit-and-go' }).hands).toContain(bare);
+    expect(
+      filterTrendData(data, { tableSize: 'all', gameType: 'cash', lineUp: 'Tough' }).hands,
+    ).toEqual([tough2, tough1]);
+  });
 });

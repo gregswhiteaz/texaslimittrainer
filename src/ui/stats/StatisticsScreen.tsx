@@ -9,6 +9,8 @@ import {
   GAME_TYPE_OPTIONS,
   GROUPING_LABEL,
   GROUPING_OPTIONS,
+  LINE_UP_LABEL,
+  LINE_UP_OPTIONS,
   LOAD_FAILED_MESSAGE,
   NO_CASH_MESSAGE,
   NO_HANDS_MESSAGE,
@@ -24,6 +26,7 @@ import {
   pointLabel,
   type Bb100Point,
   type GameTypeFilter,
+  type LineUpFilter,
   type StatisticsView,
   type TableSizeFilter,
   type TrendFilter,
@@ -191,6 +194,22 @@ export function StatisticsScreen({
               }
             >
               {GAME_TYPE_OPTIONS.map(([id, label]) => (
+                <option key={id} value={id}>
+                  {label}
+                </option>
+              ))}
+            </select>
+          </label>
+          <label>
+            {LINE_UP_LABEL}
+            <select
+              id="stats-line-up"
+              value={filter.lineUp ?? 'all'}
+              onChange={(e) =>
+                onFilterChange?.({ ...filter, lineUp: e.target.value as LineUpFilter })
+              }
+            >
+              {LINE_UP_OPTIONS.map(([id, label]) => (
                 <option key={id} value={id}>
                   {label}
                 </option>

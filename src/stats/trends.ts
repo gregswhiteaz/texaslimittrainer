@@ -3,12 +3,12 @@ import { referenceSizeOf } from '../advice/preflop';
 import type { ReferenceSize } from '../advice/preflop-chart';
 import type { ActionRecord, HandResult, SeatNumber } from '../engine/hand';
 import { netResult } from '../table/review';
-import type { GameType } from '../table/session';
+import type { GameType, LineUpName } from '../table/session';
 import { bbPer100, signedTenths } from '../table/session-report';
 
 // TASK-11.1: the Statistics screen's Major-error trend over the stored hands (REQ-048). TASK-11.2: the cash-only
 // BB/100 trend. TASK-11.3: the G-2 target line on the Major-error trend. TASK-11.4: the table size and game type
-// filters. TASK-11.5: grouping per session or per local day. See docs/stats/trends.md.
+// filters. TASK-11.5: grouping per session or per local day. TASK-11.7: the line-up filter. See docs/stats/trends.md.
 
 export const GROUP_SIZE = 500;
 /** Hands in the G-2 baseline (REQ-048.9). */
@@ -25,6 +25,8 @@ export interface TrendHand {
   readonly cash?: CashSummary;
   /** Dealt-in seats in the hand (record.seats.length), 2–10. */
   readonly dealtIn?: number;
+  /** The hand record's line-up name; absent only in synthetic input (A-2). */
+  readonly lineUp?: LineUpName;
 }
 
 export interface CashSummary {
@@ -49,6 +51,7 @@ export interface TrendSource {
   readonly actions?: readonly ActionRecord[];
   readonly result?: HandResult;
   readonly seats?: readonly unknown[];
+  readonly lineUp?: LineUpName;
 }
 
 export interface TrendData {
@@ -123,6 +126,7 @@ export function trendHand(record: TrendSource): TrendHand {
     completedAt,
     unhintedMajors,
     ...(record.seats && { dealtIn: record.seats.length }),
+    ...(record.lineUp && { lineUp: record.lineUp }),
   };
   if (record.gameType !== 'cash') return base;
   // parseHandRecord guarantees a cash record carries these fields.
@@ -135,15 +139,19 @@ export function trendHand(record: TrendSource): TrendHand {
 
 export type TableSizeFilter = 'all' | ReferenceSize;
 export type GameTypeFilter = 'all' | GameType;
+export type LineUpFilter = 'all' | LineUpName;
 
 export interface TrendFilter {
   readonly tableSize: TableSizeFilter;
   readonly gameType: GameTypeFilter;
+  /** Absent means All (A-3). */
+  readonly lineUp?: LineUpFilter;
 }
 
-export const ALL_TRENDS: TrendFilter = { tableSize: 'all', gameType: 'all' };
+export const ALL_TRENDS: TrendFilter = { tableSize: 'all', gameType: 'all', lineUp: 'all' };
 export const TABLE_SIZE_LABEL = 'Table size';
 export const GAME_TYPE_LABEL = 'Game type';
+export const LINE_UP_LABEL = 'Line-up';
 export const TABLE_SIZE_OPTIONS: readonly (readonly [TableSizeFilter, string])[] = [
   ['all', 'All'],
   ['heads-up', 'Heads-up'],
@@ -154,6 +162,13 @@ export const GAME_TYPE_OPTIONS: readonly (readonly [GameTypeFilter, string])[] =
   ['all', 'All'],
   ['cash', 'Cash'],
   ['sit-and-go', 'Sit-and-go'],
+];
+export const LINE_UP_OPTIONS: readonly (readonly [LineUpFilter, string])[] = [
+  ['all', 'All'],
+  ['Mixed', 'Mixed'],
+  ['Tough', 'Tough'],
+  ['Soft', 'Soft'],
+  ['Custom', 'Custom'],
 ];
 
 export type TrendGrouping = 'hands' | 'session' | 'day';
@@ -170,12 +185,14 @@ export type TrendGroup =
   | { readonly kind: 'session'; readonly number: number; readonly day: string }
   | { readonly kind: 'day'; readonly day: string };
 
-/** The hands matching `filter` in input order, keeping sessionStarts; `data` itself when the filter is All / All.
+/** The hands matching `filter` in input order, keeping sessionStarts; `data` itself when every filter is All.
  *  A hand's table size is its session's: the largest dealtIn among the session's hands, through referenceSizeOf
- *  (D-2). A session with no known dealtIn, or one outside 2–10, matches only All. */
+ *  (D-2). A session with no known dealtIn, or one outside 2–10, matches only All. A hand matches a named line-up
+ *  by its own stored lineUp; a hand without one matches only All. */
 export function filterTrendData(data: TrendData, filter: TrendFilter): TrendData {
   const { tableSize, gameType } = filter;
-  if (tableSize === 'all' && gameType === 'all') return data;
+  const lineUp = filter.lineUp ?? 'all';
+  if (tableSize === 'all' && gameType === 'all' && lineUp === 'all') return data;
   const sizeOf = new Map<string, number>();
   if (tableSize !== 'all') {
     for (const { sessionId, dealtIn } of data.hands) {
@@ -191,7 +208,10 @@ export function filterTrendData(data: TrendData, filter: TrendFilter): TrendData
   const typeMatches = (hand: TrendHand): boolean =>
     gameType === 'all' || (hand.cash !== undefined) === (gameType === 'cash');
   return {
-    hands: data.hands.filter((h) => typeMatches(h) && sizeMatches(h.sessionId)),
+    hands: data.hands.filter(
+      (h) =>
+        typeMatches(h) && sizeMatches(h.sessionId) && (lineUp === 'all' || h.lineUp === lineUp),
+    ),
     sessionStarts: data.sessionStarts,
   };
 }
