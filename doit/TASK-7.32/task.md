@@ -3,10 +3,12 @@ File: /Users/gregwhite/Documents/claudeworkspaces/limitholdem/backlog/tasks/task
 Task TASK-7.32 - Investigate why advised play almost never folds after the flop (WTSD ~94%)
 ==================================================
 
-Status: ○ To Do
+Status: ◒ In Progress
 Priority: High
 Ordinal: 237000
+Assignee: @claude
 Created: 2026-11-24 20:47 (UTC)
+Updated: 2026-11-24 21:52 (UTC)
 Labels: dream-limit-holdem-trainer, follow-up
 Milestone: m-1
 Parent: TASK-7 - Get trustworthy advice
@@ -85,4 +87,8 @@ Acceptance Criteria:
 Definition of Done:
 --------------------------------------------------
 No Definition of Done items defined
+
+Implementation Notes:
+--------------------------------------------------
+doit: parked — investigation done (see doit/TASK-7.32/spec.md §1a): root cause is that all four bot styles request advice with the default 'unseen' (any two cards) range model, so they call ~98% of postflop bets; hints already use action ranges. Bots on action ranges alone give WTSD ~44% (just outside 30–42). The recommended full fix also amends REQ-033.1 (turn pot odds count one river big bet) and REQ-033.2 (value raise vs a bet needs >65%), re-baselines ~18 locked tests across 12 stories, and leaves the Mixed line-up REQ-027 style bands failing (Maniacs take over). That changes the requirements, so it needs the user's decision on Q-1..Q-3 (spec §11). Related ready story: TASK-7.25 (switch bots to action-based ranges).
 

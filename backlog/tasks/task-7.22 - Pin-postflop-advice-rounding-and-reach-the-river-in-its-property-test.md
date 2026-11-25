@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-18T19:10:00Z'
-updated_date: '2026-11-23T03:44:00Z'
+updated_date: '2026-11-25T00:07:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -53,6 +53,8 @@ Judge R1 PASS 3/3; nudge removal caught only by the new test; coverage checks pr
 Follow-ups (Step 6a): stale A-4 rationale corrected by a note on TASK-7.3 (docs-only, no task).
 
 Locked test tests/advice/postflop-coverage.acceptance.test.ts re-pinned for TASK-7.8 Q-3 (auto-accepted; value betting).
+
+Locked test(s) unlocked for TASK-7.32 Q-1 (user-approved advice/bot fix; expected values re-pinned one-for-one).
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary

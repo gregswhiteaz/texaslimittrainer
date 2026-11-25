@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-24T18:28:00Z'
+updated_date: '2026-11-25T00:07:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-0
@@ -110,6 +110,8 @@ Locked test tests/table/next-hand.acceptance.test.ts unlocked for TASK-3.21 Q-2 
 Locked e2e/next-hand.spec.ts unlocked for TASK-10.1 D-4 (Leave table ends the session; expectation replaced, not loosened).
 
 Locked e2e/next-hand.spec.ts unlocked for TASK-2.7 (second page uses its own browser context; no assertion changed).
+
+Locked test(s) unlocked for TASK-7.32 Q-1 (user-approved advice/bot fix; expected values re-pinned one-for-one).
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary

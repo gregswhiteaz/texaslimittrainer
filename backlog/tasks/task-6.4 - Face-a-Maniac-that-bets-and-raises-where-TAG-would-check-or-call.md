@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-23T06:34:00Z'
+updated_date: '2026-11-25T00:07:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -92,6 +92,8 @@ Judge R2 PASS 11/11 (CI 44972930191 green; Test step 487 s vs 943 s; Maniac test
 Locked test tests/bots/maniac.acceptance.test.ts re-pinned for TASK-7.8 Q-3 (auto-accepted; value betting).
 
 Locked test re-pinned by TASK-6.17 Q-3 (auto-accepted; assertion count kept).
+
+Locked test(s) unlocked for TASK-7.32 Q-1 (user-approved advice/bot fix; expected values re-pinned one-for-one).
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary

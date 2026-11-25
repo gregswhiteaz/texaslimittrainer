@@ -1079,7 +1079,14 @@
       "skips": 0
     }
   },
-  "history": [],
+  "history": [
+    {
+      "t": "2026-11-24T17:07:47",
+      "event": "unlock",
+      "file": "tests/playtest/style-bots.acceptance.test.ts",
+      "reason": "TASK-7.32 Q-1 (user-approved fix): bots on action ranges, turn price counts the river bet, 65% value-raise vs a bet; re-pin expected values one-for-one, keep check counts"
+    }
+  ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-6.9",
   "spec_sha256": "ba910d1233d294fb562e3fad8964d1d849e7017f133edab562cee742dbd82c66",
   "review_findings": {
@@ -1088,5 +1095,8 @@
   "doc_id": "doc-83",
   "judge_results": {
     "1": "PASS"
-  }
+  },
+  "relock_pending": [
+    "tests/playtest/style-bots.acceptance.test.ts"
+  ]
 }

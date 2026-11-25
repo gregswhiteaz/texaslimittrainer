@@ -969,6 +969,12 @@
       "event": "unlock",
       "file": "tests/bots/tag-mixing.acceptance.test.ts",
       "reason": "TASK-7.8 Q-3 (auto-accepted): value betting changes advice/bot results \u2014 re-pin expected values, keep every assertion and time limit"
+    },
+    {
+      "t": "2026-11-24T17:07:47",
+      "event": "unlock",
+      "file": "tests/bots/tag-mixing.acceptance.test.ts",
+      "reason": "TASK-7.32 Q-1 (user-approved fix): bots on action ranges, turn price counts the river bet, 65% value-raise vs a bet; re-pin expected values one-for-one, keep check counts"
     }
   ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-6.2",
@@ -977,6 +983,7 @@
     "1": 0
   },
   "relock_pending": [
+    "tests/bots/tag-mixing.acceptance.test.ts",
     "tests/bots/tag-mixing.acceptance.test.ts"
   ],
   "doc_id": "doc-73",

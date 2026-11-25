@@ -1430,7 +1430,20 @@
       "skips": 0
     }
   },
-  "history": [],
+  "history": [
+    {
+      "t": "2026-11-24T17:07:47",
+      "event": "unlock",
+      "file": "tests/table/short-stack.acceptance.test.ts",
+      "reason": "TASK-7.32 Q-1 (user-approved fix): bots on action ranges, turn price counts the river bet, 65% value-raise vs a bet; re-pin expected values one-for-one, keep check counts"
+    },
+    {
+      "t": "2026-11-24T17:07:47",
+      "event": "unlock",
+      "file": "e2e/short-stack.spec.ts",
+      "reason": "TASK-7.32 Q-1 (user-approved fix): bots on action ranges, turn price counts the river bet, 65% value-raise vs a bet; re-pin expected values one-for-one, keep check counts"
+    }
+  ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-3.21",
   "spec_sha256": "6c7e1741c6de01053dd02998b0890433dd70609c0085319bd2bdf27800aa9154",
   "review_findings": {
@@ -1439,5 +1452,9 @@
   "judge_results": {
     "1": "PASS"
   },
-  "doc_id": "doc-110"
+  "doc_id": "doc-110",
+  "relock_pending": [
+    "tests/table/short-stack.acceptance.test.ts",
+    "e2e/short-stack.spec.ts"
+  ]
 }

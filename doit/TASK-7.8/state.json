@@ -1237,6 +1237,12 @@
       "event": "unlock",
       "file": "tests/advice/value-bet.acceptance.test.ts",
       "reason": "TASK-7.13 block 1 auto-accepted: AC#9 key list adds opponentBasis (count kept)"
+    },
+    {
+      "t": "2026-11-24T17:07:47",
+      "event": "unlock",
+      "file": "tests/advice/value-bet.acceptance.test.ts",
+      "reason": "TASK-7.32 Q-1 (user-approved fix): bots on action ranges, turn price counts the river bet, 65% value-raise vs a bet; re-pin expected values one-for-one, keep check counts"
     }
   ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-7.8",
@@ -1249,6 +1255,7 @@
     "1": "PASS"
   },
   "relock_pending": [
+    "tests/advice/value-bet.acceptance.test.ts",
     "tests/advice/value-bet.acceptance.test.ts",
     "tests/advice/value-bet.acceptance.test.ts",
     "tests/advice/value-bet.acceptance.test.ts"

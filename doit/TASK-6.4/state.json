@@ -998,6 +998,12 @@
       "event": "unlock",
       "file": "tests/bots/maniac.acceptance.test.ts",
       "reason": "TASK-6.17 review MINORs: fix stale 0.85 comment; add a postflop call\u2192raise example (strengthen only)"
+    },
+    {
+      "t": "2026-11-24T17:07:47",
+      "event": "unlock",
+      "file": "tests/bots/maniac.acceptance.test.ts",
+      "reason": "TASK-7.32 Q-1 (user-approved fix): bots on action ranges, turn price counts the river bet, 65% value-raise vs a bet; re-pin expected values one-for-one, keep check counts"
     }
   ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-6.4",
@@ -1017,6 +1023,7 @@
     ]
   },
   "relock_pending": [
+    "tests/bots/maniac.acceptance.test.ts",
     "tests/bots/maniac.acceptance.test.ts",
     "tests/bots/maniac.acceptance.test.ts",
     "tests/bots/maniac.acceptance.test.ts"

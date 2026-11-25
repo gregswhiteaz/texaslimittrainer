@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-23T04:18:00Z'
+updated_date: '2026-11-25T00:07:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -109,6 +109,8 @@ Follow-ups (Step 6a): AC added to TASK-5.4 (multi-restart sng coverage). Session
 Judge R1 PASS 18/18; deviations Q-5/Q-6 accepted on substance; 15/15 mutants caught. J-1-01 LOW (playtest Largest pot counts returned chips — deliberate since TASK-1.9 SPEC-14) not tracked.
 
 Locked test tests/playtest/games.acceptance.test.ts: heavy run moved to opt-in slow group for TASK-7.8 (D-7), smaller every-push version kept.
+
+Locked test(s) unlocked for TASK-7.32 Q-1 (user-approved advice/bot fix; expected values re-pinned one-for-one).
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary

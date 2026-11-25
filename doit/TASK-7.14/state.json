@@ -1482,6 +1482,18 @@
       "event": "unlock",
       "file": "tests/golden/postflop-spots.json",
       "reason": "Review R2 MAJOR: two remaining factual errors in justifications (text only)"
+    },
+    {
+      "t": "2026-11-24T17:07:47",
+      "event": "unlock",
+      "file": "tests/golden/postflop-spots.json",
+      "reason": "TASK-7.32 Q-1 (user-approved fix): bots on action ranges, turn price counts the river bet, 65% value-raise vs a bet; re-pin expected values one-for-one, keep check counts"
+    },
+    {
+      "t": "2026-11-24T17:07:47",
+      "event": "unlock",
+      "file": "tests/golden/graded-examples.json",
+      "reason": "TASK-7.32 Q-1 (user-approved fix): bots on action ranges, turn price counts the river bet, 65% value-raise vs a bet; re-pin expected values one-for-one, keep check counts"
     }
   ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-7.14",
@@ -1491,7 +1503,10 @@
     "2": 1,
     "3": 0
   },
-  "relock_pending": [],
+  "relock_pending": [
+    "tests/golden/postflop-spots.json",
+    "tests/golden/graded-examples.json"
+  ],
   "brief_history": {
     "tests/golden/postflop-spots.json:justifications-misname-made-hand": [
       "review r1"

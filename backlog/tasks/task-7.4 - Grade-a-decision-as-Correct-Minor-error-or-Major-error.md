@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-23T03:44:00Z'
+updated_date: '2026-11-25T00:07:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-0
@@ -89,6 +89,8 @@ Build: src/advice/grade.ts (GradeResult + GRADE_LABELS; gradeDecision pure, grad
 CI run 44387183018 (head 98578d6): success. Judge round 1: PASS 17/17, no findings; ~19k real-game grades and 20k random recommendations matched an independent REQ-038 oracle; 336 hidden-card shuffles grade-identical; 2,483 aggression-vs-check/call spots graded Minor (Q-2); 9 mutants caught. Follow-ups (Step 6a): created TASK-7.23 (non-finite equity throws, -15 wrong-way test, test name); ACs added to TASK-7.8 (aggression-margin for real recs), TASK-7.14 (graded golden spots), TASK-7.15 (hint vs review grade equality), TASK-3.12 (stored grade data).
 
 Locked test tests/advice/grade.acceptance.test.ts re-pinned for TASK-7.8 Q-3 (auto-accepted; value betting).
+
+Locked test(s) unlocked for TASK-7.32 Q-1 (user-approved advice/bot fix; expected values re-pinned one-for-one).
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary

@@ -337,6 +337,12 @@
       "event": "unlock",
       "file": "tests/advice/postflop.acceptance.test.ts",
       "reason": "TASK-7.13 Q-4 auto-accepted: opponentBasis key (count kept)"
+    },
+    {
+      "t": "2026-11-24T17:07:46",
+      "event": "unlock",
+      "file": "tests/advice/postflop.acceptance.test.ts",
+      "reason": "TASK-7.32 Q-1 (user-approved fix): bots on action ranges, turn price counts the river bet, 65% value-raise vs a bet; re-pin expected values one-for-one, keep check counts"
     }
   ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-7.3",
@@ -355,6 +361,7 @@
     "1": "PASS"
   },
   "relock_pending": [
+    "tests/advice/postflop.acceptance.test.ts",
     "tests/advice/postflop.acceptance.test.ts",
     "tests/advice/postflop.acceptance.test.ts",
     "tests/advice/postflop.acceptance.test.ts",

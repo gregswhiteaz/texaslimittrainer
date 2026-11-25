@@ -1,6 +1,6 @@
 # Spec: TASK-7.32 — Investigate why advised play almost never folds after the flop (WTSD ~94%)
 
-Status: DRAFT
+Status: READY (approved 2026-11-24)
 Task: TASK-7.32 · Parent/epic: TASK-7 · Requirements: REQ-033 (033.1, 033.2, 033.7), REQ-035, REQ-029.2, REQ-027, REQ-045 · Dream: limit-holdem-trainer
 
 ## 1. Summary
@@ -13,7 +13,7 @@ This story switches the bots to the action-range model, as TASK-7.5 planned
 (`doit/TASK-7.5/spec.md:12`). It also adds two advice-rule changes so that all-TAG play lands inside every 6-max
 healthy range: a turn call counts the river big bet in its price, and a raise for value needs more than 65% equity
 against the calling range. The cost is a re-baseline of bot-driven and advice-pinned tests, and a knock-on effect in
-the Mixed line-up (Q-1, Q-2).
+the Mixed line-up, deferred to TASK-6.25 (approved via Q-1 and Q-2).
 
 ## 1a. Investigation (AC#1)
 All numbers come from scratch scripts that have since been deleted. They ran on the real `runPlaytest` with
@@ -103,13 +103,13 @@ bets. It cannot be avoided inside this story's approach.
   - Advice rule change 2: the value-raise threshold is 65% when a bet is owed. The value-bet threshold stays 50%.
   - The explanation copy and grading follow both changes.
   - Docs: `docs/advice/postflop-rules.md`, `docs/advice/range-model.md`, a `docs/advice/golden-spots.md` re-pin
-    log, and REQ-033.1/033.2 amended in `dreams/limit-holdem-trainer/requirements.md` (after Q-1).
+    log, and REQ-033.1/033.2 amended in `dreams/limit-holdem-trainer/requirements.md` (approved by Q-1), with a changelog row.
   - Re-baselining every test the change moves (§5 "Locked tests"), including golden spots with a recorded
     justification for each.
   - A new acceptance file: a fast all-TAG folding check in the normal suite, and the 100,000-hand five-stat check in
     the opt-in slow group.
 - Not doing:
-  - Rebalancing the Mixed, Tough or Soft line-ups or the style JSON files to restore REQ-027 bands (Q-2; follow-up).
+  - Rebalancing the Mixed, Tough or Soft line-ups or the style JSON files to restore REQ-027 bands (Q-2: follow-up TASK-6.25).
   - Changing healthy ranges (`src/stats/healthy-ranges.json`), REQ-027 bands, KEEP narrowing (REQ-035.5), default
     ranges, implied odds (REQ-033.7), preflop advice, or the equity engine and its bot budget.
   - Bots reading observed stats (REQ-029.2 stays).
@@ -161,9 +161,9 @@ bets. It cannot be avoided inside this story's approach.
 ## 4. Decisions
 | ID | Decision | Alternatives considered | Rationale | Material? | Approved by |
 |---|---|---|---|---|---|
-| D-1 | Fix approach: bots on `'actions'`, plus the turn price, plus a value-raise threshold of 65. | (b) bots on `'actions'` only; (c) rule changes only, bots stay `'unseen'`; flop or flop+turn price; VR 60/70 | §1a: only this family meets all five ranges. (b) misses WTSD (44); (c) cannot move WTSD because unseen equity is ~64%. VR 65 is the middle of the working band (60 is on the edge, 70 also works). | yes | [NEEDS CLARIFICATION: Q-1] |
-| D-2 | Mixed line-up REQ-027 drift is deferred to a follow-up story. | fix here; leave bots on `'unseen'` outside all-TAG | §1a knock-on: inherent to bots folding to bets. | yes | [NEEDS CLARIFICATION: Q-2] |
-| D-3 | New explanation wording for the turn price and the value-raise threshold. | no copy change (the shown number would not match the sentence) | User-visible text. | yes | [NEEDS CLARIFICATION: Q-3] |
+| D-1 | Fix approach: bots on `'actions'`, plus the turn price, plus a value-raise threshold of 65. | (b) bots on `'actions'` only; (c) rule changes only, bots stay `'unseen'`; flop or flop+turn price; VR 60/70 | §1a: only this family meets all five ranges. (b) misses WTSD (44); (c) cannot move WTSD because unseen equity is ~64%. VR 65 is the middle of the working band (60 is on the edge, 70 also works). | yes | User via Q-1 (2026-11-24) |
+| D-2 | Mixed line-up REQ-027 drift is deferred to a follow-up story. | fix here; leave bots on `'unseen'` outside all-TAG | §1a knock-on: inherent to bots folding to bets. | yes | User via Q-2 (2026-11-24): follow-up TASK-6.25 |
+| D-3 | New explanation wording for the turn price and the value-raise threshold. | no copy change (the shown number would not match the sentence) | User-visible text. | yes | User via Q-3 (2026-11-24): inline clause |
 | D-4 | Golden spots that stop being clear-cut are replaced with new clear-cut spots in the same street, size and action. Each is logged with its old id, new id and reason under "Changes from TASK-7.32 (WTSD fix)". | delete them; loosen the clear-cut rule | AC#3 allows re-pinning only with a recorded justification. Keeps coverage counts (`docs/advice/golden-spots.md:176-178`). | no | n/a |
 
 ## 5. Design
@@ -176,12 +176,12 @@ bets. It cannot be avoided inside this story's approach.
 - `src/advice/postflop.ts` — `VALUE_RAISE_THRESHOLD_PCT = 65`; turn price; `valueThresholdPct` and
   `requiredCountsRiverBet` fields
 - `src/advice/explain.ts` — pass the applied threshold; turn-price wording
-- `src/advice/explanations.ts` — template text for the turn price (Q-3)
+- `src/advice/explanations.ts` — template text for the turn price (Q-3 inline clause)
 - `src/advice/grade.ts` — `aggression-margin` from `valueThresholdPct ?? 50`
 - `docs/advice/postflop-rules.md` — the new rules with worked examples; the investigation summary
 - `docs/advice/range-model.md` — bots now use action ranges with the typical-player basis
 - `docs/advice/golden-spots.md` — the re-pin log for TASK-7.32
-- `dreams/limit-holdem-trainer/requirements.md` — amend REQ-033.1/REQ-033.2 and add a changelog row (only after Q-1)
+- `dreams/limit-holdem-trainer/requirements.md` — amend REQ-033.1/REQ-033.2 and add a changelog row (approved by Q-1)
 - `package.json` — add `tests/advice/postflop-folding.acceptance.test.ts` to `test:slow`
 - `tests/advice/postflop-folding.acceptance.test.ts` — new: SPEC-02, 03, 04, 06, 07, 08
 - `tests/advice/postflop.test.ts` — unit updates for the turn price and VR (unlocked)
@@ -222,12 +222,15 @@ bets. It cannot be avoided inside this story's approach.
 - **Rule order:** unchanged (`value-bet`, `check-free`, `value-raise`, `pot-odds-call`, `implied-odds-call`,
   `pot-odds-fold`).
 - **Explanation:** `explainPostflop(rec, rec.valueThresholdPct)`. When `requiredCountsRiverBet`, the pot-odds
-  sentence names the river bet (Q-3 wording). It still has at most 3 sentences (REQ-037).
+  sentence names the river bet with the Q-3 inline clause: "Pot odds, {def:pot-odds}, counting the big bet you will
+  likely face on the river, ask for {required}". The value-raise sentence shows `{threshold}` = 65.0%. It still has at most 3 sentences (REQ-037).
 - **Grading:** in `aggression-margin`, use `distance = |tenths(vsCalling) − tenths(valueThresholdPct ?? 50)|`. The
   Major threshold (15 points) and every other grading rule are unchanged.
 
 ### Locked tests the build must edit (hook-locked; owner from `doit/*/state.json`)
-Prototype run of the normal suite: 25 failures in 18 files. The locked ones:
+Prototype run of the normal suite: 25 failures in 18 files. All locked files below are unlocked under their owners
+with reason "TASK-7.32 Q-1" (`doit/TASK-7.32/qa.md`); edits replace values one-for-one and keep check counts. The
+locked ones:
 - `tests/advice/grade.acceptance.test.ts` (TASK-7.4): AC#7, a turn call/fold margin pinned with the old price.
 - `tests/advice/implied-odds.acceptance.test.ts` (TASK-7.9): AC#1, AC#3, AC#4 (turn spots; the pinned required %
   changes, e.g. $12 pot: 40.0% → 44.4%).
@@ -249,11 +252,12 @@ Prototype run of the normal suite: 25 failures in 18 files. The locked ones:
 - `tests/playtest/games.acceptance.test.ts` (TASK-1.16): AC#6 sit-and-go (pinned run values).
 - `tests/table/next-hand.acceptance.test.ts` (TASK-3.4): a pinned 60-hand sequence (hand 5 seat 5 now folds).
 - `tests/table/short-stack.acceptance.test.ts` (TASK-3.21): the "e2e seed" pinned seats and pots.
-- Possible: `tests/playtest/check-styles.acceptance.test.ts` (TASK-6.11) failed with bots-on-actions alone and
+- `tests/playtest/check-styles.acceptance.test.ts` (TASK-6.11, unlocked for this story): failed with bots-on-actions alone and
   passed with the full prototype. Re-check it.
 - Slow group (TLH_SLOW_TESTS=1): `tests/bots/style-bands.acceptance.test.ts` (TASK-6.16, TASK-6.17) **will fail**
-  (Q-2). Results for the other slow files are in the Open questions note.
-- E2E with seeded hands may move, e.g. `e2e/short-stack.spec.ts` (TASK-3.21, same seed as the unit test above). The
+  and is accepted as failing until TASK-6.25 lands (Q-2); so is the manual `style-bands.yml` workflow. The build must
+  NOT edit that test; it records the failure in the build notes. Every other slow file must pass (see the note in §11).
+- E2E with seeded hands may move, e.g. `e2e/short-stack.spec.ts` (TASK-3.21, unlocked for this story; same seed as the unit test above). The
   build must run `npm run e2e` and re-baseline only seeds whose bot actions changed.
 - Unlocked: `tests/advice/postflop.test.ts` (3 rule tests), `tests/bots/maniac.test.ts`, `tests/bots/rock.test.ts`.
 
@@ -377,7 +381,7 @@ observed stats or style labels (REQ-029.2, REQ-035.3; SPEC-02).
 - Run command: `npm run playtest -- --hands 10000 --seed 42 --size 6`
 - New tests: `tests/advice/postflop-folding.acceptance.test.ts` → SPEC-02, 03, 04, 06, 07, 08. Updates to
   `tests/advice/postflop.test.ts` → SPEC-05.
-- Also run: `npm run test:slow` (SPEC-08, throughput, and the known style-bands failure per Q-2) and `npm run e2e`.
+- Also run: `npm run test:slow` (SPEC-08, throughput, and the style-bands failure accepted per Q-2 until TASK-6.25) and `npm run e2e`.
 - End-to-end for the Judge:
   1. `npm run -s playtest -- --hands 10000 --seed 42 --size 6`: the summary shows far fewer "Ended at showdown"
      than today's run.
@@ -387,24 +391,8 @@ observed stats or style labels (REQ-029.2, REQ-035.3; SPEC-02).
      raised price and names the river bet.
 
 ## 11. Open questions
-- [NEEDS CLARIFICATION: Q-1 — Approve the fix approach D-1? It changes advice the user sees. Turn calls cost more:
-  required equity on the turn counts one river big bet, amending REQ-033.1. Raising for value needs more than 65%
-  against callers, amending REQ-033.2 (betting stays above 50%). Bots switch to action ranges. Recommended: approve.
-  It is the only measured variant inside all five ranges (100k: 22.2/16.2/64.3/40.4/51.5), and the hints already
-  use action ranges. Alternatives: (b) bots on action ranges only, with no advice-rule change (WTSD ~44, so AC#2
-  fails unless the 6-max WTSD range is widened to 30–46); (c) VR 70 instead of 65 (also inside: 64.3/40.5).]
-- [NEEDS CLARIFICATION: Q-2 — The Mixed line-up drifts out of the REQ-027 bands, because bots now fold to the
-  Maniac's bets and Maniacs take over the replaced seats. Seed 42 at 10k hands: TAG PFR 12.0 and Aggression 34.8,
-  Rock VPIP 7.6 and Aggression 31.8. How should this be handled? Recommended: (a) create a follow-up story (high
-  priority) "Keep every bot style inside its band in the Mixed line-up now that bots read opponents' actions". This
-  story accepts that the slow-only locked `tests/bots/style-bands.acceptance.test.ts` and the manual `style-bands.yml`
-  workflow fail until then, recorded in the build notes. Alternatives: (b) rebalance in this story (the approach is
-  unknown and scope would roughly double); (c) choose Q-1(b) — it drifts too, so this does not help.]
-- [NEEDS CLARIFICATION: Q-3 — Wording for the turn price in the hint and review explanations. Recommended: in the
-  pot-odds sentences, replace "Pot odds, {def:pot-odds}, ask for {required}" with "Pot odds, {def:pot-odds},
-  counting the big bet you will likely face on the river, ask for {required}" when `requiredCountsRiverBet`. The
-  value-raise sentence keeps its template with `{threshold}` = 65.0%. Alternative: a separate fourth sentence
-  (exceeds REQ-037's 3-sentence limit in fold-implied cases).]
+None open. Q-1 (full fix, VR 65), Q-2 (follow-up TASK-6.25; style-bands slow test and workflow accepted as failing)
+and Q-3 (inline river-bet clause) were answered by the user on 2026-11-24 (`doit/TASK-7.32/qa.md`).
 - Note: a partial slow-group run on the prototype (79 tests done, stopped early) also failed
   `tests/playtest/games.acceptance.test.ts` AC#6 10,000-hand variant (TASK-1.16, already listed) and
   `tests/bots/maniac.test.ts` (unlocked, already listed). The remaining slow files were not observed; the build must

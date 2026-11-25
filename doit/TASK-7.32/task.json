@@ -1,12 +1,14 @@
 {
   "id": "TASK-7.32",
   "title": "Investigate why advised play almost never folds after the flop (WTSD ~94%)",
-  "status": "To Do",
+  "status": "In Progress",
   "archived": false,
   "type": null,
   "priority": "high",
   "project": null,
-  "assignees": [],
+  "assignees": [
+    "@claude"
+  ],
   "reporter": null,
   "labels": [
     "dream-limit-holdem-trainer",
@@ -20,7 +22,7 @@
   "modifiedFiles": [],
   "ordinal": 237000,
   "createdAt": "2026-11-24T20:47:00Z",
-  "updatedAt": null,
+  "updatedAt": "2026-11-24T21:52:00Z",
   "dueDate": null,
   "isReady": true,
   "path": "backlog/tasks/task-7.32 - Investigate-why-advised-play-almost-never-folds-after-the-flop-WTSD-~94.md",
@@ -34,7 +36,7 @@
       {
         "id": "TASK-7.32",
         "title": "Investigate why advised play almost never folds after the flop (WTSD ~94%)",
-        "status": "To Do",
+        "status": "In Progress",
         "state": "resolved",
         "completed": false,
         "dependencyDepth": 0,
@@ -623,7 +625,7 @@
   ],
   "definitionOfDone": [],
   "implementationPlan": null,
-  "implementationNotes": null,
+  "implementationNotes": "doit: parked \u2014 investigation done (see doit/TASK-7.32/spec.md \u00a71a): root cause is that all four bot styles request advice with the default 'unseen' (any two cards) range model, so they call ~98% of postflop bets; hints already use action ranges. Bots on action ranges alone give WTSD ~44% (just outside 30\u201342). The recommended full fix also amends REQ-033.1 (turn pot odds count one river big bet) and REQ-033.2 (value raise vs a bet needs >65%), re-baselines ~18 locked tests across 12 stories, and leaves the Mixed line-up REQ-027 style bands failing (Maniacs take over). That changes the requirements, so it needs the user's decision on Q-1..Q-3 (spec \u00a711). Related ready story: TASK-7.25 (switch bots to action-based ranges).",
   "comments": [],
   "finalSummary": null
 }

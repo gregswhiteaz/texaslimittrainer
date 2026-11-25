@@ -672,6 +672,12 @@
       "event": "unlock",
       "file": "tests/advice/postflop-coverage.acceptance.test.ts",
       "reason": "TASK-7.8 Q-3 (auto-accepted): value betting changes advice/bot results \u2014 re-pin expected values, keep every assertion and time limit"
+    },
+    {
+      "t": "2026-11-24T17:07:47",
+      "event": "unlock",
+      "file": "tests/advice/postflop-coverage.acceptance.test.ts",
+      "reason": "TASK-7.32 Q-1 (user-approved fix): bots on action ranges, turn price counts the river bet, 65% value-raise vs a bet; re-pin expected values one-for-one, keep check counts"
     }
   ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-7.22",
@@ -684,6 +690,7 @@
   },
   "doc_id": "doc-54",
   "relock_pending": [
+    "tests/advice/postflop-coverage.acceptance.test.ts",
     "tests/advice/postflop-coverage.acceptance.test.ts"
   ]
 }

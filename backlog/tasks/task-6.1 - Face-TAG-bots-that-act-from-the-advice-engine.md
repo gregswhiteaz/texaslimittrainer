@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-23T04:18:00Z'
+updated_date: '2026-11-25T00:07:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-0
@@ -94,6 +94,8 @@ CI run 44381664524 (head e7cd337): success first push incl. Playtest (all-TAG at
 Locked test tests/bots/tag.acceptance.test.ts re-pinned for TASK-7.8 Q-3 (auto-accepted; value betting).
 
 Locked test tests/bots/tag-playtest.acceptance.test.ts: heavy run moved to opt-in slow group for TASK-7.8 (D-7), smaller every-push version kept.
+
+Locked test(s) unlocked for TASK-7.32 Q-1 (user-approved advice/bot fix; expected values re-pinned one-for-one).
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary

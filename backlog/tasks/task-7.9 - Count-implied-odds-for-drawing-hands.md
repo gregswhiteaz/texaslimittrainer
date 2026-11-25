@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-23T08:38:00Z'
+updated_date: '2026-11-25T00:07:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -89,6 +89,8 @@ Build: drawOuts + implied-odds-call rule, impliedRequiredEquityPct/outs fields; 
 Review R1: 0 blocking; comment MINOR + docs NIT fixed in-story; board-only straight-draw MINOR → follow-up TASK-7.28.
 
 Judge R1 PASS 12/12 (own rule matched 4,000 random views incl. 1,150 implied calls; own outs counter matched 120,000 deals; 16/16 mutants). Follow-up TASK-7.28 (board-only straight draws; made-flush straight outs). New 10k SHA 14d746f7…2e48.
+
+Locked test(s) unlocked for TASK-7.32 Q-1 (user-approved advice/bot fix; expected values re-pinned one-for-one).
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary

@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-19T01:10:00Z'
-updated_date: '2026-11-24T04:56:00Z'
+updated_date: '2026-11-25T00:07:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -75,6 +75,8 @@ Build: top-up removed, sit-and-go stops at first bust ('stopped' step), rebuy ca
 Judge r1 PASS 11/11; CI 45328577616 green on b865507; playtest 10k seed 42 byte-identical to base.
 
 Follow-ups: TASK-5.2 AC added (replace interim 'stopped' step; resumable record; no dead Deal next hand). Not tracked: unbounded settled() loop in e2e/short-stack.spec.ts (test harness, no failure), docs long lines (cosmetic).
+
+Locked test(s) unlocked for TASK-7.32 Q-1 (user-approved advice/bot fix; expected values re-pinned one-for-one).
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary

@@ -1330,6 +1330,12 @@
       "event": "unlock",
       "file": "tests/ci/style-bands-workflow.acceptance.test.ts",
       "reason": "Review R1 MAJORs: every-push speed (smaller runs + slow twins, same assertions); replace vacuous git-show-main check with a CI-robust equivalent (count kept)"
+    },
+    {
+      "t": "2026-11-24T17:07:47",
+      "event": "unlock",
+      "file": "tests/playtest/check-styles.acceptance.test.ts",
+      "reason": "TASK-7.32 Q-1 (user-approved fix): bots on action ranges, turn price counts the river bet, 65% value-raise vs a bet; re-pin expected values one-for-one, keep check counts"
     }
   ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-6.11",
@@ -1338,7 +1344,9 @@
     "1": 2,
     "2": 0
   },
-  "relock_pending": [],
+  "relock_pending": [
+    "tests/playtest/check-styles.acceptance.test.ts"
+  ],
   "brief_history": {
     "tests/playtest/check-styles.acceptance.test.ts:every-push-runs-too-slow": [
       "review r1"

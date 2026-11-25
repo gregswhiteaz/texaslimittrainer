@@ -524,6 +524,12 @@
       "event": "unlock",
       "file": "e2e/next-hand.spec.ts",
       "reason": "TASK-2.7: the second page shared the first page's storage, so Start game now (correctly) asks to end the paused session; give the fresh page its own browser context (test intent unchanged, no assertion changed)"
+    },
+    {
+      "t": "2026-11-24T17:07:47",
+      "event": "unlock",
+      "file": "tests/table/next-hand.acceptance.test.ts",
+      "reason": "TASK-7.32 Q-1 (user-approved fix): bots on action ranges, turn price counts the river bet, 65% value-raise vs a bet; re-pin expected values one-for-one, keep check counts"
     }
   ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-3.4",
@@ -550,6 +556,7 @@
     "tests/table/next-hand.acceptance.test.ts",
     "tests/table/next-hand.acceptance.test.ts",
     "e2e/next-hand.spec.ts",
-    "e2e/next-hand.spec.ts"
+    "e2e/next-hand.spec.ts",
+    "tests/table/next-hand.acceptance.test.ts"
   ]
 }

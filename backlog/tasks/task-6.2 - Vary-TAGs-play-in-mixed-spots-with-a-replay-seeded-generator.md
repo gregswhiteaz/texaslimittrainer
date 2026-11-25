@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-23T03:44:00Z'
+updated_date: '2026-11-25T00:07:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -98,6 +98,8 @@ Review R1: 0 blocking; MINOR (parity test records the policy's actual seed; wron
 Judge R1 PASS 13/13 (own 4,000-code mixing check 25.47%; 3,000-hand all-TAG playtest every action = seeded decision; Q-4 pinned policy reproduces the pre-6.2 sng run byte-for-byte). Follow-up: TASK-6.22 (headless stepBot seeded).
 
 Locked test tests/bots/tag-mixing.acceptance.test.ts re-pinned for TASK-7.8 Q-3 (auto-accepted; value betting).
+
+Locked test(s) unlocked for TASK-7.32 Q-1 (user-approved advice/bot fix; expected values re-pinned one-for-one).
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary

@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-24T20:47:00Z'
-updated_date: '2026-11-24T21:52:00Z'
+updated_date: '2026-11-25T00:08:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -29,6 +29,18 @@ Found while specifying TASK-10.3: in 100,000-hand 6-max playtests (seeds 42 and 
 - [ ] #2 Given the fix, When a 100,000-hand 6-max all-TAG playtest runs (opt-in slow group), Then WTSD falls inside the authored 6-max healthy WTSD range from TASK-10.3 and VPIP, PFR, Aggression and W$SD stay inside theirs
 - [ ] #3 Given the fix, When the golden-spot suites run, Then they pass (re-pinning any spot only with a recorded justification)
 <!-- AC:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. Bots request postflop advice with action-based opponent ranges (BOT_ADVICE), like the hints
+2. Turn required equity counts one river big bet when an opponent can still bet (amend REQ-033.1); value raise facing a bet needs >65% (amend REQ-033.2; betting stays >50%); grading margin from the threshold that applied
+3. Explanation: inline river-bet clause; value-raise sentence shows 65.0%
+4. Re-pin locked advice/bot/golden/table tests one-for-one (unlocked under owners); replace turn golden spots that stop being clear-cut, logged
+5. Fast 2,000-hand five-stat check in the normal suite; 100k check in test:slow; style-bands slow test expected to fail until TASK-6.25
+
+Full spec: doit/TASK-7.32/spec.md
+<!-- SECTION:PLAN:END -->
 
 ## Implementation Notes
 
