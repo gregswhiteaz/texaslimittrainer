@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-25T08:23:00Z'
+updated_date: '2026-11-25T08:41:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -95,4 +95,6 @@ Full spec: doit/TASK-11.1/spec.md
 
 <!-- SECTION:NOTES:BEGIN -->
 AC added from TASK-2.15 follow-up (doc-124).
+
+Build: Statistics screen (Home entry, totals, hand-written SVG chart of unhinted Majors per 100 hands per 500 hands, empty / not-enough / load-failure states), pure src/stats/trends.ts, store trendData(); play-money registration; locked Home/route/play-money/resume tests re-pinned (Q-4, Block 1). npm test 1346 pass; full Playwright 304 pass + resume fixed; slow store read and speed check pass (opt-in). gate PASS.
 <!-- SECTION:NOTES:END -->
