@@ -1,10 +1,11 @@
 ---
 id: TASK-11.3
 title: See the G-2 target line on my Major-error trend
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-17T23:22:00Z'
+updated_date: '2026-11-25T10:47:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -61,3 +62,13 @@ Plan key: E11-S06 · Dream: limit-holdem-trainer
 - [ ] #11 Story documentation is written and published to Backlog.md
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. g2Target: half the unhinted Major rate of the first 1,000 stored hands (bbPer100(m,2,1000)), null below 1,000 hands; computed from all hands even when a view is filtered
+2. Major chart draws a dashed target line with the approved caption and aria-label suffix; scale includes the target
+3. Tests (filters proven via statisticsView(filtered, all)), e2e, docs
+
+Full spec: doit/TASK-11.3/spec.md
+<!-- SECTION:PLAN:END -->

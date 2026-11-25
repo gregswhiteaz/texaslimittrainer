@@ -4,7 +4,7 @@ title: Filter my trends by table size and game type
 status: To Do
 assignee: []
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-25T09:09:00Z'
+updated_date: '2026-11-25T10:47:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -47,6 +47,7 @@ Plan key: E11-S03 · Dream: limit-holdem-trainer
 - [ ] #4 Given 1,840 hands over 9 sessions of which 700 hands over 3 sessions are heads-up, When the table size filter is Heads-up, Then the totals read 700 hands over 3 sessions [REQ-048.6, REQ-048.2]
 - [ ] #5 Given 300 heads-up hands among 3,000 stored hands, When the table size filter is Heads-up, Then the screen shows 'Play 200 more hands to see your first trend point.' instead of a chart [REQ-048.7, REQ-048.2]
 - [ ] #6 Given the game-type filter set to Sit-and-go or All, When the BB/100 chart is shown, Then it uses TASK-11.2's cash-only BB/100 functions (no-cash message for Sit-and-go; cash hands only for All)
+- [ ] #7 Given any table-size or game-type filter, When the Major-error chart is shown, Then its G-2 target line is computed from all stored hands (statisticsView(filtered, all)), not from the filtered set
 <!-- AC:END -->
 
 ## Definition of Done
@@ -69,4 +70,6 @@ Plan key: E11-S03 · Dream: limit-holdem-trainer
 
 <!-- SECTION:NOTES:BEGIN -->
 AC added from TASK-11.2 Q-1: TASK-11.2 implements the filter cases as pure functions; this story wires the select to them.
+
+AC added from TASK-11.3 Q-1.
 <!-- SECTION:NOTES:END -->

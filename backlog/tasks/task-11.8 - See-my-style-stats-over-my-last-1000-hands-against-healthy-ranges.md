@@ -4,7 +4,7 @@ title: See my style stats over my last 1,000 hands against healthy ranges
 status: To Do
 assignee: []
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-17T23:22:00Z'
+updated_date: '2026-11-25T10:47:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-2
@@ -50,6 +50,7 @@ Plan key: E11-S09 · Dream: limit-holdem-trainer
 - [ ] #5 Given 6-max hands in which the user never saw the flop, When the style section is shown, Then WTSD and W$SD show '—', are not counted as in range, and the count reads at most '3 of 5 in range (goal: 4)' [REQ-049.2]
 - [ ] #6 Given a seeded data set and each combination of game type and line-up filter at 6-max, When the style section is shown, Then every value and the in-range count equal values recomputed from the most recent 1,000 matching hand records [REQ-049.1, REQ-049.2]
 - [ ] #7 Given zero hands in the current filter, When the style section is shown, Then all five stats show '—' and it reads '0 of 5 in range (goal: 4)' [REQ-049.1, REQ-049.2]
+- [ ] #8 Given any line-up filter, When the Major-error chart is shown, Then its G-2 target line is computed from all stored hands (statisticsView(filtered, all)), not from the filtered set
 <!-- AC:END -->
 
 ## Definition of Done
@@ -67,3 +68,9 @@ Plan key: E11-S09 · Dream: limit-holdem-trainer
 - [ ] #11 Story documentation is written and published to Backlog.md
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+AC added from TASK-11.3 Q-1.
+<!-- SECTION:NOTES:END -->
