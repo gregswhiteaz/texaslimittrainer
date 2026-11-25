@@ -5,13 +5,24 @@
   "base_commit": "79b793c41d89c285f34a1b3012000043a79d4de7",
   "started": "2026-11-24T14:29:05",
   "review_round": 1,
-  "judge_round": 0,
+  "judge_round": 1,
   "sendbacks": 0,
   "gate_runs": 3,
   "questions": 3,
   "assumptions": 6,
   "escalations": 1,
-  "item_failures": {},
+  "item_failures": {
+    "SPEC-01": 2,
+    "SPEC-02": 0,
+    "SPEC-03": 0,
+    "SPEC-04": 0,
+    "SPEC-05": 0,
+    "SPEC-06": 0,
+    "SPEC-07": 0,
+    "SPEC-08": 0,
+    "SPEC-09": 0,
+    "SPEC-10": 0
+  },
   "locked_tests": {
     "tests/advice/postflop-folding.acceptance.test.ts": "80c32ccfd8986cd2d4d34d8c5e614b2886e4bddc974d1a2e0b311881bd9756a8"
   },
@@ -1777,5 +1788,8 @@
   "spec_sha256": "2daa7e751166582c1edbccdda6ecfd6ac13cd2c37cb8ae309028291b8d35e2f7",
   "review_findings": {
     "1": 0
+  },
+  "judge_results": {
+    "1": "FAIL"
   }
 }

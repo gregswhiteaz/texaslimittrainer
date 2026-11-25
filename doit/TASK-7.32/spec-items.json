@@ -3,60 +3,60 @@
     "id": "SPEC-01",
     "verifies": "AC#1",
     "verification": "manual `docs/advice/postflop-rules.md` section present with the numbers above; `backlog task view TASK-7.32 --plain` notes reference it",
-    "status": "pending"
+    "status": "fail"
   },
   {
     "id": "SPEC-02",
     "verifies": "AC#2",
     "verification": "acceptance `tests/advice/postflop-folding.acceptance.test.ts::bots use action ranges with the typical-player basis`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-03",
     "verifies": "AC#2",
     "verification": "acceptance `tests/advice/postflop-folding.acceptance.test.ts::the turn price counts one river big bet`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-04",
     "verifies": "AC#2",
     "verification": "acceptance `tests/advice/postflop-folding.acceptance.test.ts::value raise needs more than 65 percent and value bet more than 50`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-05",
     "verifies": "AC#2",
     "verification": "unit `tests/advice/postflop.test.ts::explanations name the river bet and the 65 percent raise threshold`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-06",
     "verifies": "AC#3",
     "verification": "acceptance `tests/advice/postflop-folding.acceptance.test.ts::grading uses the price and threshold that applied`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-07",
     "verifies": "AC#2",
     "verification": "acceptance `tests/advice/postflop-folding.acceptance.test.ts::2,000 all-TAG hands reach showdown far less often than before`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-08",
     "verifies": "AC#2",
     "verification": "acceptance `tests/advice/postflop-folding.acceptance.test.ts::AC#2 TAG 6-max all five style stats are inside the 6-max healthy ranges (100,000 hands, seed 42)`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-09",
     "verifies": "AC#3",
     "verification": "command `npx vitest run tests/golden && git diff --stat main -- tests/golden/preflop-spots.json`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-10",
     "verifies": "AC#3",
     "verification": "command `npm test && npm run lint && npm run typecheck`",
-    "status": "pending"
+    "status": "pass"
   }
 ]
