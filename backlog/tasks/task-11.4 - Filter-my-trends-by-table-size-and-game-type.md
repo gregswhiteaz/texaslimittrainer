@@ -1,11 +1,11 @@
 ---
 id: TASK-11.4
 title: Filter my trends by table size and game type
-status: In Progress
+status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-25T12:32:00Z'
+updated_date: '2026-11-25T12:33:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -16,6 +16,7 @@ references:
 documentation:
   - doc-1
   - doc-2
+  - doc-137
 parent_task_id: TASK-11
 priority: high
 type: feature
@@ -91,4 +92,12 @@ AC added from TASK-11.3 follow-up (doc-136).
 Build: filterTrendData (table size from the session's largest dealt-in count via referenceSizeOf; game type by cash summary); Table size / Game type selects once loaded, not remembered; App recomputes statisticsView(filtered, all). npm test 1370 pass; statistics e2e 16 pass; gate PASS.
 
 Judge r1 PASS 13/13: production preview Chromium/WebKit, 2,780 hands over 7 sessions out of time order — all 12 filter combinations matched an independent computation; G-2 target stayed the all-hands 6.8 under every filter (closes the review MINOR); shrinking sit-and-go stayed 6-max; reset to All/All; full e2e 316 pass. CI 45612253462 green.
+
+Follow-ups: TASK-11.13 ACs (App all-hands wiring test, unknown filter values, unreachable guard).
 <!-- SECTION:NOTES:END -->
+
+## Final Summary
+
+<!-- SECTION:FINAL_SUMMARY:BEGIN -->
+Added Table size (All/Heads-up/6-max/Full ring) and Game type (All/Cash/Sit-and-go) selects to Statistics. They recompute totals, the Major chart, BB/100 and their messages from matching hands. The G-2 target still uses all stored hands, and BB/100 stays cash-only. Table size is the session's largest dealt-in count through referenceSizeOf. Verified: 1,370 tests, lint and typecheck pass; e2e 316 passed in Chromium and WebKit with axe; judge round 1 PASS 13/13. Review: no blocking findings. Please review Q-1 (filter not remembered), Q-2 (sit-and-go size = largest dealt-in count) and A-1..A-5. Risks/follow-ups: no repo test pins App's all-hands argument to statisticsView (MINOR); unreachable guard in App.tsx; locked screen-list parser stops at the first semicolon even in a comment; scope 648 vs 640 lines; storyboard Group by differs from REQ-048.1 (TASK-11.5).
+<!-- SECTION:FINAL_SUMMARY:END -->
