@@ -1,0 +1,3 @@
+{"reviewer": "security", "round": 1,
+ "findings": [],
+ "summary": "No security findings. The only new untrusted-ish inputs are the stored record's lineUp (already validated against LINE_UPS by parseHandRecord before it reaches trendHand) and the select value (options fixed by LINE_UP_OPTIONS; React-controlled). Both are used only in a strict equality comparison in filterTrendData and rendered as React text; there is no HTML/eval/storage/network sink, no new dependency, no secrets, no randomness. A tampered select value would simply match no hands (fails closed to an empty view). Filtering adds one comparison per hand, so no new resource-exhaustion path."}

@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-25T14:35:00Z'
+updated_date: '2026-11-25T14:54:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -79,4 +79,6 @@ Full spec: doit/TASK-11.7/spec.md
 
 <!-- SECTION:NOTES:BEGIN -->
 AC added (moved from TASK-11.8, where TASK-11.3 Q-1 put it by mistake).
+
+Build: Line-up select (All/Mixed/Tough/Soft/Custom) between Game type and Group by; filters hands by stored lineUp, combines with other filters and groupings; G-2 target from all hands; App unchanged. npm test 1389 pass; statistics/report e2e 26 pass; gate PASS.
 <!-- SECTION:NOTES:END -->
