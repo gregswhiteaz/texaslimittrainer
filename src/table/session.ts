@@ -21,7 +21,7 @@ import {
   type PlayerView,
   type SeatPolicy,
 } from '../engine/player-view';
-import { botDecisionSeed } from '../engine/bot-random';
+import { botDecisionSeed, botRandom } from '../engine/bot-random';
 import type { ObservedOpponent } from '../advice/ranges';
 import {
   addStyleCounts,
@@ -30,7 +30,7 @@ import {
   styleStats,
   type StyleCounts,
 } from '../stats/style-stats';
-import { tagPolicy } from '../bots/tag';
+import { decideTag } from '../bots/tag';
 import {
   BOT_NAMES,
   lineUpSessionConfig,
@@ -656,10 +656,15 @@ export function applyBotDecision(table: TableState, turn: BotTurn, action: Actio
   return { ...table, hand: applied.state };
 }
 
-/** One bot action through `policy` on the bot's own view. */
-export function stepBot(table: TableState, policy: SeatPolicy = tagPolicy): TableState {
+/** One bot action on the bot's own view: `policy` when given, else the seeded TAG decision
+ *  `decideTag(view, { random: botRandom(botDecisionSeed(replayCode, view)) })`, as the app worker decides a TAG seat. */
+export function stepBot(table: TableState, policy?: SeatPolicy): TableState {
   const turn = botTurn(table);
-  return applyBotDecision(table, turn, policy(turn.view));
+  const action =
+    policy === undefined
+      ? decideTag(turn.view, { random: botRandom(turn.seed) })
+      : policy(turn.view);
+  return applyBotDecision(table, turn, action);
 }
 
 /** Records the decision with a copy of `observed` when given (A-4) and `hinted: true` only when hinted

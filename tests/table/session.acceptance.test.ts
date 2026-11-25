@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { decideTag } from '../../src/bots/tag';
+import { botDecisionSeed, botRandom } from '../../src/engine/bot-random';
 import { replayCodeFromWords, type ReplayCode } from '../../src/engine/deck';
 import { legalActions, type Action, type HandState } from '../../src/engine/hand';
 import { playerView, showdownOf } from '../../src/engine/player-view';
@@ -174,7 +175,8 @@ describe('table session acceptance', () => {
       for (const { before, after } of botSteps) {
         const seat = before.toAct as number;
         expect(seat).not.toBe(USER_SEAT);
-        const expected = decideTag(playerView(before, seat));
+        const view = playerView(before, seat);
+        const expected = decideTag(view, { random: botRandom(botDecisionSeed(code, view)) });
         const record = after.actions[after.actions.length - 1];
         expect(after.actions).toHaveLength(before.actions.length + 1);
         expect(record?.seat).toBe(seat);
