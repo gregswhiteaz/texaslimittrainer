@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-25T06:10:00Z'
+updated_date: '2026-11-25T06:28:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -81,3 +81,9 @@ Plan key: E10-S12 · Dream: limit-holdem-trainer
 
 Full spec: doit/TASK-10.6/spec.md
 <!-- SECTION:PLAN:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+Build: 16 preflop leak categories appended (approved text); unhinted preflop decisions classified by position group (from stored button) and open/raise/call/fold; counted in the existing write-once leakCounts; TASK-10.5 AC#2 re-pinned to the postflop subset plus a 16-preflop-id check (D-3). npm test 1322 pass; report e2e 14 pass; gate PASS.
+<!-- SECTION:NOTES:END -->
