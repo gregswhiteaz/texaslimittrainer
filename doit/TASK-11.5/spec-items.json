@@ -3,90 +3,90 @@
     "id": "SPEC-01",
     "verifies": "AC#1, DoD#1",
     "verification": "acceptance `tests/stats/trend-grouping.acceptance.test.tsx::AC#1 lists Every 500 hands, Session and Day with Every 500 hands selected`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-02",
     "verifies": "AC#2, DoD#1",
     "verification": "acceptance `tests/stats/trend-grouping.acceptance.test.tsx::AC#2 per session plots 9 points recomputed from each session's records`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-03",
     "verifies": "AC#3, DoD#1",
     "verification": "acceptance `tests/stats/trend-grouping.acceptance.test.tsx::AC#3 per day plots 4 points and counts each hand on its completion date`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-04",
     "verifies": "AC#4, DoD#1",
     "verification": "acceptance `tests/stats/trend-grouping.acceptance.test.tsx::AC#4 per day under 6-max uses only 6-max hands and keeps the filter`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-05",
     "verifies": "AC#5, DoD#1",
     "verification": "acceptance `tests/stats/trend-grouping.acceptance.test.tsx::AC#5 one 12-hand session plots one point with no play-more message`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-06",
     "verifies": "AC#6, DoD#1",
     "verification": "acceptance `tests/stats/trend-grouping.acceptance.test.tsx::AC#6 zero hands show the first-hand message under Session and Day`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-07",
     "verifies": "AC#7, DoD#1",
     "verification": "acceptance `tests/stats/trend-grouping.acceptance.test.tsx::AC#7 the storyboard's Group by default is Every 500 hands`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-08",
     "verifies": "AC#8, DoD#1",
     "verification": "acceptance `tests/stats/trend-grouping.acceptance.test.tsx::AC#8 per-session BB/100 equals each cash session's report BB/100`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-09",
     "verifies": "AC#8",
     "verification": "acceptance `tests/stats/trend-grouping.acceptance.test.tsx::Session and Day BB/100 plot from the first cash hand`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-10",
     "verifies": "AC#1, DoD#2",
     "verification": "unit `tests/stats/trends.test.ts::default grouping matches the per-500 view and texts`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-11",
     "verifies": "AC#2, AC#3",
     "verification": "unit `tests/stats/trends.test.ts::session and day grouping helpers and texts`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-12",
     "verifies": "AC#1, AC#3, AC#4, DoD#7, DoD#8",
     "verification": "acceptance `e2e/statistics-grouping.spec.ts::Statistics groups the trends per session and per day`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-13",
     "verifies": "DoD#2, DoD#4, DoD#5, DoD#10",
     "verification": "command `npm run lint && npm run typecheck && npm test`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-14",
     "verifies": "DoD#11",
     "verification": "manual `docs/stats/trends.md` Grouping section and the TASK-11.5 entry in `backlog doc list --plain`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-15",
     "verifies": "DoD#3, DoD#6, DoD#9, DoD#12",
     "verification": "command `npm test` (golden-spot suite included); `git diff --stat main -- src/engine src/bots src/advice` is empty",
-    "status": "pending"
+    "status": "pass"
   }
 ]
