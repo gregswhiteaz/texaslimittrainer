@@ -1,13 +1,18 @@
 import {
+  ALL_TRENDS,
   BB100_GOAL,
   BB100_NOTE,
   BB100_TITLE,
   CHART_NOTE,
   CHART_TITLE,
   G2_CAPTION,
+  GAME_TYPE_LABEL,
+  GAME_TYPE_OPTIONS,
   LOAD_FAILED_MESSAGE,
   NO_CASH_MESSAGE,
   NO_HANDS_MESSAGE,
+  TABLE_SIZE_LABEL,
+  TABLE_SIZE_OPTIONS,
   bb100ChartLabel,
   bb100PointLabel,
   chartLabel,
@@ -15,7 +20,10 @@ import {
   moreHandsMessage,
   pointLabel,
   type Bb100Point,
+  type GameTypeFilter,
   type StatisticsView,
+  type TableSizeFilter,
+  type TrendFilter,
   type TrendPoint,
 } from '../../stats/trends';
 import { useHeadingFocus } from '../useHeadingFocus';
@@ -24,6 +32,9 @@ export interface StatisticsScreenProps {
   /** undefined while the read is pending (A-10); null if it failed (D-7). */
   readonly view: StatisticsView | undefined | null;
   readonly onHome: () => void;
+  /** The applied filter (TASK-11.4); All / All by default. */
+  readonly filter?: TrendFilter;
+  readonly onFilterChange?: (filter: TrendFilter) => void;
 }
 
 const round = (n: number): number => Math.round(n * 10) / 10;
@@ -117,7 +128,12 @@ function Bb100Trend({ points }: { readonly points: readonly Bb100Point[] }) {
   );
 }
 
-export function StatisticsScreen({ view, onHome }: StatisticsScreenProps): React.JSX.Element {
+export function StatisticsScreen({
+  view,
+  onHome,
+  filter = ALL_TRENDS,
+  onFilterChange,
+}: StatisticsScreenProps): React.JSX.Element {
   const heading = useHeadingFocus(true);
   const chart = view?.chart;
   const bb100 = view?.bb100;
@@ -130,6 +146,42 @@ export function StatisticsScreen({ view, onHome }: StatisticsScreenProps): React
         <h1 ref={heading}>Statistics</h1>
         {view && <p className="stats-totals">{view.totals}</p>}
       </header>
+      {view && (
+        <div className="stats-filters">
+          <label>
+            {TABLE_SIZE_LABEL}
+            <select
+              id="stats-table-size"
+              value={filter.tableSize}
+              onChange={(e) =>
+                onFilterChange?.({ ...filter, tableSize: e.target.value as TableSizeFilter })
+              }
+            >
+              {TABLE_SIZE_OPTIONS.map(([id, label]) => (
+                <option key={id} value={id}>
+                  {label}
+                </option>
+              ))}
+            </select>
+          </label>
+          <label>
+            {GAME_TYPE_LABEL}
+            <select
+              id="stats-game-type"
+              value={filter.gameType}
+              onChange={(e) =>
+                onFilterChange?.({ ...filter, gameType: e.target.value as GameTypeFilter })
+              }
+            >
+              {GAME_TYPE_OPTIONS.map(([id, label]) => (
+                <option key={id} value={id}>
+                  {label}
+                </option>
+              ))}
+            </select>
+          </label>
+        </div>
+      )}
       <section
         className="panel stats-chart"
         aria-labelledby="stats-major-title"

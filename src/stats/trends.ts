@@ -1,11 +1,14 @@
 import type { Grade } from '../advice/grade';
+import { referenceSizeOf } from '../advice/preflop';
+import type { ReferenceSize } from '../advice/preflop-chart';
 import type { ActionRecord, HandResult, SeatNumber } from '../engine/hand';
 import { netResult } from '../table/review';
 import type { GameType } from '../table/session';
 import { bbPer100, signedTenths } from '../table/session-report';
 
 // TASK-11.1: the Statistics screen's Major-error trend over the stored hands (REQ-048). TASK-11.2: the cash-only
-// BB/100 trend. TASK-11.3: the G-2 target line on the Major-error trend. See docs/stats/trends.md.
+// BB/100 trend. TASK-11.3: the G-2 target line on the Major-error trend. TASK-11.4: the table size and game type
+// filters. See docs/stats/trends.md.
 
 export const GROUP_SIZE = 500;
 /** Hands in the G-2 baseline (REQ-048.9). */
@@ -20,6 +23,8 @@ export interface TrendHand {
   readonly unhintedMajors: number;
   /** Present iff the hand is a cash-game hand. */
   readonly cash?: CashSummary;
+  /** Dealt-in seats in the hand (record.seats.length), 2–10. */
+  readonly dealtIn?: number;
 }
 
 export interface CashSummary {
@@ -43,6 +48,7 @@ export interface TrendSource {
   readonly userSeat?: SeatNumber;
   readonly actions?: readonly ActionRecord[];
   readonly result?: HandResult;
+  readonly seats?: readonly unknown[];
 }
 
 export interface TrendData {
@@ -107,13 +113,69 @@ export function trendHand(record: TrendSource): TrendHand {
     if (!hinted && grade.grade === 'major') unhintedMajors++;
   }
   const { sessionId, handNumber, completedAt } = record;
-  if (record.gameType !== 'cash') return { sessionId, handNumber, completedAt, unhintedMajors };
+  const base = {
+    sessionId,
+    handNumber,
+    completedAt,
+    unhintedMajors,
+    ...(record.seats && { dealtIn: record.seats.length }),
+  };
+  if (record.gameType !== 'cash') return base;
   // parseHandRecord guarantees a cash record carries these fields.
   const cashHand = record as Required<
     Pick<TrendSource, 'stake' | 'userSeat' | 'actions' | 'result'>
   >;
   const cash = { net: netResult(cashHand), bigBet: cashHand.stake.bigBet };
-  return { sessionId, handNumber, completedAt, unhintedMajors, cash };
+  return { ...base, cash };
+}
+
+export type TableSizeFilter = 'all' | ReferenceSize;
+export type GameTypeFilter = 'all' | GameType;
+
+export interface TrendFilter {
+  readonly tableSize: TableSizeFilter;
+  readonly gameType: GameTypeFilter;
+}
+
+export const ALL_TRENDS: TrendFilter = { tableSize: 'all', gameType: 'all' };
+export const TABLE_SIZE_LABEL = 'Table size';
+export const GAME_TYPE_LABEL = 'Game type';
+export const TABLE_SIZE_OPTIONS: readonly (readonly [TableSizeFilter, string])[] = [
+  ['all', 'All'],
+  ['heads-up', 'Heads-up'],
+  ['6-max', '6-max'],
+  ['full-ring', 'Full ring'],
+];
+export const GAME_TYPE_OPTIONS: readonly (readonly [GameTypeFilter, string])[] = [
+  ['all', 'All'],
+  ['cash', 'Cash'],
+  ['sit-and-go', 'Sit-and-go'],
+];
+
+/** The hands matching `filter` in input order, keeping sessionStarts; `data` itself when the filter is All / All.
+ *  A hand's table size is its session's: the largest dealtIn among the session's hands, through referenceSizeOf
+ *  (D-2). A session with no known dealtIn, or one outside 2–10, matches only All. */
+export function filterTrendData(data: TrendData, filter: TrendFilter): TrendData {
+  const { tableSize, gameType } = filter;
+  if (tableSize === 'all' && gameType === 'all') return data;
+  const sizeOf = new Map<string, number>();
+  if (tableSize !== 'all') {
+    for (const { sessionId, dealtIn } of data.hands) {
+      if (dealtIn !== undefined)
+        sizeOf.set(sessionId, Math.max(dealtIn, sizeOf.get(sessionId) ?? 0));
+    }
+  }
+  const sizeMatches = (sessionId: string): boolean => {
+    if (tableSize === 'all') return true;
+    const size = sizeOf.get(sessionId);
+    return size !== undefined && size >= 2 && size <= 10 && referenceSizeOf(size) === tableSize;
+  };
+  const typeMatches = (hand: TrendHand): boolean =>
+    gameType === 'all' || (hand.cash !== undefined) === (gameType === 'cash');
+  return {
+    hands: data.hands.filter((h) => typeMatches(h) && sizeMatches(h.sessionId)),
+    sessionStarts: data.sessionStarts,
+  };
 }
 
 /** By session start (its record's startedAt, else its earliest completedAt), then sessionId, then hand number. */

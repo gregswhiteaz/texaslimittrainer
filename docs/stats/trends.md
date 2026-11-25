@@ -18,7 +18,8 @@ and the advice engine is not called.
 `TrendHand { sessionId, handNumber, completedAt, unhintedMajors }`. `unhintedMajors` counts the hand's decision
 records graded Major that were not hinted. A fold forced by Leave table has no decision record, so it never
 counts (REQ-004.8). A cash-game hand also carries `cash { net, bigBet }` (TASK-11.2, below); a sit-and-go hand
-has no `cash` key. Later stories add fields (game type, table size, line-up) here.
+has no `cash` key. A hand read through `trendHand` also carries `dealtIn`, its dealt-in seat count
+(`record.seats.length`, TASK-11.4). Later stories add fields (line-up) here.
 
 ## Ordering and grouping
 
@@ -94,6 +95,28 @@ Once 1,000 hands are stored, the Major-error chart gets a dashed amber target li
   The y scale is `max(1, values, target)` so the line stays inside the plot. The SVG label gains
   `. Dashed target line at 3.1`. Without a target the chart markup is unchanged.
 
+## Filters: table size and game type (TASK-11.4)
+
+Two labelled selects sit between the header and the first chart card (`.stats-filters`, 44 px targets, shown only
+once the data has loaded):
+
+| Select     | Options (value)                                                              | Default |
+| ---------- | ---------------------------------------------------------------------------- | ------- |
+| Table size | All (`all`), Heads-up (`heads-up`), 6-max (`6-max`), Full ring (`full-ring`) | All     |
+| Game type  | All (`all`), Cash (`cash`), Sit-and-go (`sit-and-go`)                        | All     |
+
+- `filterTrendData(data, filter)` in `src/stats/trends.ts` keeps the matching hands in input order, with
+  `sessionStarts` unchanged; it returns `data` itself for All / All. Both filters apply together (AND).
+- Table size is the session's, not the hand's: the largest `dealtIn` among the session's stored hands, mapped
+  through `referenceSizeOf` (REQ-005.4: 2 → Heads-up, 3–7 → 6-max, 8–10 → Full ring). A sit-and-go that started
+  6-handed stays 6-max after players bust down to heads-up. Hands without `dealtIn` match only All.
+- Game type: Cash iff the hand has `cash`, otherwise Sit-and-go.
+- The App keeps the loaded `TrendData` and recomputes `statisticsView(filterTrendData(data, filter), data)` on
+  every change. So the totals line, both charts and their messages (including `Play your first hand to see
+trends.` and `0 hands over 0 sessions` when nothing matches) come from the matching hands, while the G-2 target
+  comes from every stored hand. The BB/100 chart stays cash-only, so Sit-and-go shows `No cash-game hands yet.`
+- The selection is not remembered: every opening of Statistics starts at All / All.
+
 ## Tests
 
 - `tests/stats/trends.test.ts`, `tests/stats/trends.acceptance.test.ts`: ordering, grouping, counts, texts,
@@ -113,6 +136,9 @@ Once 1,000 hands are stored, the Major-error chart gets a dashed amber target li
   target line for 1,000 seeded hands.
 - `tests/stats/g2-target.acceptance.test.tsx`: the 999/1,000 threshold, the 3.1 target recomputed from the
   records, and the target under game-type, table-size and line-up filters (`statisticsView(filtered, all)`).
+- `tests/stats/trend-filters.acceptance.test.tsx`: the filter options and defaults, table size by session size,
+  sit-and-go points, totals, play-more and no-hands messages, cash-only BB/100 and the G-2 target under every
+  filter. `e2e/statistics-filters.spec.ts`: changing both selects in the browser, axe, same-origin requests.
 - Opt-in (`TLH_SLOW_TESTS=1`): `tests/storage/trend-data-3000.acceptance.test.ts` (`npm run test:slow`) reads
   3,000 stored hands through the store; `e2e/statistics-speed.spec.ts` (`npm run e2e:slow`) checks the 6th point
   of 3,000 stored hands shows within 1,000 ms of clicking Statistics. The 100,000-hand target is TASK-11.12.

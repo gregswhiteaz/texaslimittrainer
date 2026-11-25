@@ -2,6 +2,7 @@ import { createElement } from 'react';
 import { renderToString } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import {
+  ALL_TRENDS,
   BB100_GOAL,
   BB100_NOTE,
   G2_CAPTION,
@@ -11,6 +12,7 @@ import {
   moreCashHandsMessage,
   chartLabel,
   countText,
+  filterTrendData,
   g2Target,
   moreHandsMessage,
   orderHands,
@@ -18,7 +20,10 @@ import {
   statisticsView,
   totalsLine,
   trendHand,
+  type GameTypeFilter,
   type StatisticsView,
+  type TableSizeFilter,
+  type TrendData,
   type TrendHand,
 } from '../../src/stats/trends';
 import { netResult } from '../../src/table/review';
@@ -334,5 +339,49 @@ describe('G-2 target', () => {
     );
     expect(none).not.toContain('stats-target');
     expect(none).not.toContain('stats-goal');
+  });
+});
+
+describe('trend filters', () => {
+  it('filters trend data by table size and game type', () => {
+    const [cashRecord] = cashPool(CASH_STAKES[2] as (typeof CASH_STAKES)[number], 1, 9);
+    const [sngRecord] = sitAndGoPool(1, 2);
+    const cashHand = trendHand(cashRecord as NonNullable<typeof cashRecord>);
+    expect(cashHand.dealtIn).toBe(9);
+    expect(trendHand(sngRecord as NonNullable<typeof sngRecord>).dealtIn).toBe(2);
+
+    const at = '2026-11-01T00:00:00.000Z';
+    const dealt = (sessionId: string, handNumber: number, dealtIn: number, cash = false) => ({
+      ...hand(sessionId, handNumber, at),
+      dealtIn,
+      ...(cash && { cash: cashHand.cash }),
+    });
+    // A: a sit-and-go dealing 6 then 2 seats (6-max). B: heads-up, cash and sit-and-go hands. C: no dealtIn.
+    // D: full-ring cash. E: an impossible size of 11 that matches no size.
+    const hands: TrendHand[] = [
+      dealt(B, 2, 2, true),
+      dealt(A, 2, 2),
+      hand(C, 1, at),
+      dealt(A, 1, 6),
+      dealt('d'.repeat(32), 1, 9, true),
+      dealt(B, 1, 2),
+      dealt('e'.repeat(32), 1, 11),
+    ];
+    const sessionStarts = new Map([[A, at]]);
+    const data: TrendData = { hands, sessionStarts };
+    const keep = (tableSize: TableSizeFilter, gameType: GameTypeFilter): string[] => {
+      const filtered = filterTrendData(data, { tableSize, gameType });
+      expect(filtered.sessionStarts).toBe(sessionStarts);
+      return filtered.hands.map((h) => `${h.sessionId[0]}${h.handNumber}`);
+    };
+
+    expect(filterTrendData(data, ALL_TRENDS)).toBe(data);
+    expect(keep('6-max', 'all')).toEqual(['a2', 'a1']);
+    expect(keep('heads-up', 'all')).toEqual(['b2', 'b1']);
+    expect(keep('full-ring', 'all')).toEqual(['d1']);
+    expect(keep('heads-up', 'cash')).toEqual(['b2']);
+    expect(keep('heads-up', 'sit-and-go')).toEqual(['b1']);
+    expect(keep('all', 'cash')).toEqual(['b2', 'd1']);
+    expect(keep('all', 'sit-and-go')).toEqual(['a2', 'c1', 'a1', 'b1', 'e1']);
   });
 });
