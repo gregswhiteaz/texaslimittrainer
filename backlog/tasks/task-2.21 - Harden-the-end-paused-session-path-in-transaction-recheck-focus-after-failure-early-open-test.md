@@ -7,7 +7,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-24T18:44:00Z'
-updated_date: '2026-11-25T20:19:00Z'
+updated_date: '2026-11-25T20:39:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -43,3 +43,9 @@ Follow-up from TASK-2.7 (doc-123). (1) ended() checks 'already ended' only befor
 
 Full spec: doit/TASK-2.21/spec.md
 <!-- SECTION:PLAN:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+Build: in-transaction already-ended recheck (ConstraintError, no write); focus returns to Start game after a failed end; hold helper takes a scope; each new test fails without its fix (recorded). Full e2e 375 pass; gate PASS.
+<!-- SECTION:NOTES:END -->

@@ -1,0 +1,29 @@
+{"reviewer": "code", "round": 1,
+ "rubric": [
+  {"item": "SPEC-01 correctness", "result": "pass"},
+  {"item": "SPEC-01 test strength", "result": "pass"},
+  {"item": "SPEC-02 correctness", "result": "pass"},
+  {"item": "SPEC-02 test strength", "result": "pass"},
+  {"item": "SPEC-03 correctness", "result": "pass"},
+  {"item": "SPEC-03 test strength", "result": "pass"},
+  {"item": "SPEC-04 correctness", "result": "pass"},
+  {"item": "SPEC-04 test strength", "result": "pass"},
+  {"item": "SPEC-05 correctness", "result": "pass"},
+  {"item": "SPEC-05 test strength", "result": "pass"},
+  {"item": "scope", "result": "pass"},
+  {"item": "concision", "result": "pass"},
+  {"item": "clarity", "result": "pass"}
+ ],
+ "findings": [
+  {"fingerprint": "tests/storage/end-recheck.acceptance.test.ts:double-endsession-call-per-case", "severity": "MINOR",
+   "file": "tests/storage/end-recheck.acceptance.test.ts", "line": 97,
+   "issue": "Each case calls endSession twice, once for the ConstraintError name check and again only to check instanceof DOMException. The second call does a second end attempt that the spec does not ask for, and it is not obvious why it is there.",
+   "evidence": "Lines 97-104: two `openHandStore(factory).endSession(value.sessionId, NOW)` calls with different matchers.",
+   "fix": "Use one call, e.g. `const error = await openHandStore(factory).endSession(...).catch((e: unknown) => e); expect(error, label).toBeInstanceOf(DOMException); expect(error, label).toMatchObject({ name: 'ConstraintError' });`, or add a comment saying the repeat is intentional."},
+  {"fingerprint": "e2e/end-session-hardening.spec.ts:session-id-cast", "severity": "NIT",
+   "file": "e2e/end-session-hardening.spec.ts", "line": 140,
+   "issue": "`started?.sessionId as string` casts away a possible undefined, even though the poll just above has already shown that exactly one entry exists.",
+   "evidence": "const [started] = await fresh(); const id = started?.sessionId as string;",
+   "fix": "Assert `expect(started).toBeDefined()` and then use `started!.sessionId`, or keep the cast. This is a matter of preference."}
+ ],
+ "summary": "Every SPEC item is implemented as the spec says. ended() rechecks isEnded inside its strict transaction, after the parse and before the 0-hand delete and every write, and aborts with ConstraintError. This covers endSession and the confirmed id in endPausedSessions, where the abort rejects before any later session is touched (SPEC-02 checks C stays unended). The GameConfigScreen layout effect does nothing on the first render (prompted=false). On success App clears the prompt and opens the Table in the same update, so Config unmounts and the effect never runs. On failure the prompt is cleared while Config stays mounted, so the effect focuses Start game. On Cancel/Escape it focuses Start game again, which does no harm. The hold-writes default scope is still 'sessions'; armSessionsHold always sets the scope, so arming twice cannot leave a stale scope behind. pause-history passes on chromium and webkit. The locked TASK-10.1/2.7 files have no diff against base and pass, including session-end AC#6. Mutation spot-check: with the recheck disabled, both new vitest tests fail (the promise resolves instead of rejecting), and the 0-hand case would also catch the check being moved below the delete. SPEC-03 fails without the focus effect (focus goes to body), and SPEC-04 fails if the Table opens before the held transaction commits (the header shows while held). npx playwright test passed 26/26 for end-session-hardening, pause-history and new-game-confirm on both projects. Line count is 347 against a budget of 330 (gate warning only). No BLOCKER or MAJOR findings."}
