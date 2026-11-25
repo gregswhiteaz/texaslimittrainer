@@ -1,0 +1,16 @@
+{"reviewer": "code", "round": 2,
+ "rubric": [
+  {"item": "SPEC-01 correctness", "result": "pass"},
+  {"item": "SPEC-01 test strength", "result": "pass"},
+  {"item": "SPEC-02 correctness", "result": "pass"},
+  {"item": "SPEC-02 test strength", "result": "pass"},
+  {"item": "SPEC-03 correctness", "result": "pass"},
+  {"item": "SPEC-03 test strength", "result": "pass"},
+  {"item": "SPEC-04 correctness", "result": "pass"},
+  {"item": "SPEC-04 test strength", "result": "pass"},
+  {"item": "scope", "result": "pass"},
+  {"item": "concision", "result": "pass"},
+  {"item": "clarity", "result": "pass"}
+ ],
+ "findings": [],
+ "summary": "Round-1 MAJOR tools/lint/headless-boundary.js:non-normalized-engine-path-bypass is fixed. I linted each specifier in-process with ESLint on src/bots/x.ts. These are now rejected: '../engine/./hand', '../engine/hand/../hand', '../engine//hand', '..//engine/hand', '.././engine/hand', '../engine/cards/../hand' and './../engine/hand'. '../engine/hand/.' is not rejected, but tsc reports TS2307 for it because it cannot resolve, so it is not a bypass. Ordinary relative imports ('./helpers', './a/b', '../bots/x') still pass. The new sandbox probes (dot-segment, double-slash, parent-segment, side-effect-dot) would fail if the pattern were removed. bot-boundary.acceptance.test.ts passes 3/3 in 1.3 s. Gate fix-5 passes. No new findings."}
