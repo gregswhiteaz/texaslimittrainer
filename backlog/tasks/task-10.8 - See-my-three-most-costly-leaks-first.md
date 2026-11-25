@@ -1,10 +1,11 @@
 ---
 id: TASK-10.8
 title: See my three most costly leaks first
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-17T23:22:00Z'
+updated_date: '2026-11-25T07:38:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -59,3 +60,13 @@ Plan key: E10-S07 · Dream: limit-holdem-trainer
 - [ ] #11 Story documentation is written and published to Backlog.md
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. sessionLeaks ranks qualifying leaks by Major count, then error rate (exact integer compare), then more errors, then category data order
+2. Cap at 3 shown leaks; no new text, same markup; computed at display time from stored leakCounts (no persisted change)
+3. Acceptance + unit tests; docs/stats/leaks.md
+
+Full spec: doit/TASK-10.8/spec.md
+<!-- SECTION:PLAN:END -->
