@@ -1,0 +1,44 @@
+[
+  {
+    "id": "SPEC-01",
+    "verifies": "AC#1",
+    "verification": "acceptance `tests/bots/style-bands.acceptance.test.ts::every bot style is inside its style band over 100,000 Mixed 6-max hands (seed 42)`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-02",
+    "verifies": "AC#2",
+    "verification": "command `for s in 42 7 1234; do npm run playtest -- --hands 100000 --lineup mixed --size 6 --check-styles --seed $s | grep -x 'Style check: passed' || exit 1; done` (then manual: `gh workflow run style-bands.yml --ref doit/TASK-6.25` once the branch is pushed, and the run succeeds)",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-03",
+    "verifies": "AC#3",
+    "verification": "acceptance `tests/playtest/check-styles.acceptance.test.ts::playtest style stats (--check-styles) 100,000 Mixed 6-max hands pass --check-styles on seeds 42, 7 and 1234`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-04",
+    "verifies": "AC#1, AC#3",
+    "verification": "acceptance `tests/playtest/mixed-composition.acceptance.test.ts::a busted bot is replaced by a new bot of the same style and the Mixed line-up keeps its styles`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-05",
+    "verifies": "AC#1, AC#3",
+    "verification": "acceptance `tests/bots/maniac.acceptance.test.ts::the Maniac style file holds its deviation parameters and a description`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-06",
+    "verifies": "AC#1",
+    "verification": "command `test \"$(npm run playtest --silent -- --hands 2000 --seed 42 | shasum -a 256 | cut -d' ' -f1)\" = d9800984fb821e281de45532b56823c2d60ff08afcc30a23171ee335de1bb8a3`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-07",
+    "verifies": "AC#1",
+    "verification": "manual `grep -n \"REQ-007.5\\|REQ-007.7\\|REQ-007.8\\|1.11\" dreams/limit-holdem-trainer/requirements.md; grep -n \"TASK-6.25\" docs/advice/postflop-rules.md`",
+    "status": "pending"
+  }
+]

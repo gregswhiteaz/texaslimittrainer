@@ -1077,6 +1077,24 @@
       "event": "unlock",
       "file": "tests/playtest/replacement.acceptance.test.ts",
       "reason": "TASK-6.17 Q-3 auto-accepted: firstReplaced = first style-changing replacement (count kept)"
+    },
+    {
+      "t": "2026-11-24T21:20:42",
+      "event": "unlock",
+      "file": "tests/bots/replacement.acceptance.test.ts",
+      "reason": "TASK-6.25 Q-1/Q-2 (auto-accepted recommended): busted bot keeps its style; Maniac/Rock retune; re-pin values one-for-one, keep check counts"
+    },
+    {
+      "t": "2026-11-24T21:20:42",
+      "event": "unlock",
+      "file": "tests/playtest/replacement.acceptance.test.ts",
+      "reason": "TASK-6.25 Q-1/Q-2 (auto-accepted recommended): busted bot keeps its style; Maniac/Rock retune; re-pin values one-for-one, keep check counts"
+    },
+    {
+      "t": "2026-11-24T21:20:42",
+      "event": "unlock",
+      "file": "tests/table/replace-bot.acceptance.test.ts",
+      "reason": "TASK-6.25 Q-1/Q-2 (auto-accepted recommended): busted bot keeps its style; Maniac/Rock retune; re-pin values one-for-one, keep check counts"
     }
   ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-6.8",
@@ -1085,7 +1103,10 @@
     "1": 0
   },
   "relock_pending": [
-    "tests/playtest/replacement.acceptance.test.ts"
+    "tests/playtest/replacement.acceptance.test.ts",
+    "tests/bots/replacement.acceptance.test.ts",
+    "tests/playtest/replacement.acceptance.test.ts",
+    "tests/table/replace-bot.acceptance.test.ts"
   ],
   "judge_results": {
     "1": "PASS"

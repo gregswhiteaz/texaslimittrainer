@@ -1232,7 +1232,26 @@
       "skips": 0
     }
   },
-  "history": [],
+  "history": [
+    {
+      "t": "2026-11-24T21:20:42",
+      "event": "unlock",
+      "file": "tests/bots/calling-station-postflop.acceptance.test.ts",
+      "reason": "TASK-6.25 Q-1/Q-2 (auto-accepted recommended): busted bot keeps its style; Maniac/Rock retune; re-pin values one-for-one, keep check counts"
+    },
+    {
+      "t": "2026-11-24T21:20:42",
+      "event": "unlock",
+      "file": "tests/bots/rock-postflop.acceptance.test.ts",
+      "reason": "TASK-6.25 Q-1/Q-2 (auto-accepted recommended): busted bot keeps its style; Maniac/Rock retune; re-pin values one-for-one, keep check counts"
+    },
+    {
+      "t": "2026-11-24T21:20:42",
+      "event": "unlock",
+      "file": "tests/playtest/replacement.acceptance.test.ts",
+      "reason": "TASK-6.25 Q-1/Q-2 (auto-accepted recommended): busted bot keeps its style; Maniac/Rock retune; re-pin values one-for-one, keep check counts"
+    }
+  ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-6.17",
   "spec_sha256": "31bd054b2703ee6e10c2e6b85074c22c4c6fb5ceddb7cfaee8d853116ed782bc",
   "review_findings": {
@@ -1241,5 +1260,10 @@
   "doc_id": "doc-95",
   "judge_results": {
     "1": "PASS"
-  }
+  },
+  "relock_pending": [
+    "tests/bots/calling-station-postflop.acceptance.test.ts",
+    "tests/bots/rock-postflop.acceptance.test.ts",
+    "tests/playtest/replacement.acceptance.test.ts"
+  ]
 }

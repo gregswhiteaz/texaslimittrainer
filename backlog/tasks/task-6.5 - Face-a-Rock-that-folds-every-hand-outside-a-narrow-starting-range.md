@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-22T02:51:00Z'
+updated_date: '2026-11-25T04:20:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -92,6 +92,8 @@ Review R1: 0 blocking; MINOR+NIT fixed in-story (strengthen-only); gate PASS.
 Follow-ups (Step 6a): AC added to TASK-6.11 (re-measure Rock with a Maniac); postflop aggression already tracked via TASK-7.8 deps.
 
 Judge R1 PASS 11/11 (own 10k Rock playtests VPIP 9.4–10.2%, PFR 8.2–8.7%; 14/14 mutants; other bots fingerprint unchanged; Rock tests ~2.7 s on CI).
+
+Locked test(s) unlocked for TASK-6.25 (busted bot keeps its style; Maniac/Rock retune); expected values re-pinned one-for-one.
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary

@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-25T00:07:00Z'
+updated_date: '2026-11-25T04:20:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -94,6 +94,8 @@ Locked test tests/bots/maniac.acceptance.test.ts re-pinned for TASK-7.8 Q-3 (aut
 Locked test re-pinned by TASK-6.17 Q-3 (auto-accepted; assertion count kept).
 
 Locked test(s) unlocked for TASK-7.32 Q-1 (user-approved advice/bot fix; expected values re-pinned one-for-one).
+
+Locked test(s) unlocked for TASK-6.25 (busted bot keeps its style; Maniac/Rock retune); expected values re-pinned one-for-one.
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary

@@ -3,10 +3,11 @@ id: TASK-6.25
 title: >-
   Keep every bot style inside its band in the Mixed line-up now that bots read
   opponents' actions
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-25T00:07:00Z'
-updated_date: '2026-11-25T00:55:00Z'
+updated_date: '2026-11-25T04:21:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -30,6 +31,18 @@ Follow-up from TASK-7.32 (user Q-2). Once bots use action-based ranges and fold 
 - [ ] #2 Given the fix, When the manual style-bands.yml workflow is dispatched, Then it passes
 - [ ] #3 Given the Mixed line-up with bots on action ranges, When tests/playtest/check-styles.acceptance.test.ts's slow 100,000-hand Mixed check runs (seeds 42, 7, 1234), Then it passes
 <!-- AC:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. A busted bot is replaced by a new bot of the same style (presets and Custom); amend REQ-007.5, retire REQ-007.7/007.8; delete the random style draw
+2. Maniac retune: postflop call->raise 0.2, new postflop fold->call 0.8
+3. Rock retune: value bar 75 -> 80, wider ranges after a raise
+4. Re-pin locked bot/replacement tests one-for-one; new fast mixed-composition acceptance test
+5. Slow style-bands and check-styles 100k Mixed checks pass on seeds 42/7/1234; all-TAG playtest output unchanged
+
+Full spec: doit/TASK-6.25/spec.md
+<!-- SECTION:PLAN:END -->
 
 ## Implementation Notes
 

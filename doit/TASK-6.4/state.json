@@ -1004,6 +1004,12 @@
       "event": "unlock",
       "file": "tests/bots/maniac.acceptance.test.ts",
       "reason": "TASK-7.32 Q-1 (user-approved fix): bots on action ranges, turn price counts the river bet, 65% value-raise vs a bet; re-pin expected values one-for-one, keep check counts"
+    },
+    {
+      "t": "2026-11-24T21:20:42",
+      "event": "unlock",
+      "file": "tests/bots/maniac.acceptance.test.ts",
+      "reason": "TASK-6.25 Q-1/Q-2 (auto-accepted recommended): busted bot keeps its style; Maniac/Rock retune; re-pin values one-for-one, keep check counts"
     }
   ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-6.4",
@@ -1023,6 +1029,7 @@
     ]
   },
   "relock_pending": [
+    "tests/bots/maniac.acceptance.test.ts",
     "tests/bots/maniac.acceptance.test.ts",
     "tests/bots/maniac.acceptance.test.ts",
     "tests/bots/maniac.acceptance.test.ts",

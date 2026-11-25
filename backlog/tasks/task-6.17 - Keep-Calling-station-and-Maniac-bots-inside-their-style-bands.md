@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T23:03:00Z'
-updated_date: '2026-11-23T07:31:00Z'
+updated_date: '2026-11-25T04:20:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -88,6 +88,8 @@ Build: shared postflopValueMove; Calling station value bar 88; Maniac postflop d
 Review R1: 0 blocking; MINORs fixed in-story (maniac.acceptance comment 0.6; Example H postflop call→raise, TASK-6.4 unlock strengthen-only).
 
 Judge R1 PASS 11/11 (own REQ-045 counts on seeds 2026@100k and 99@30k: all four styles in band; CS value-bar 0 failures over 400 views; Rock/TAG decision hashes unchanged; 14/15 mutants, 1 equivalent).
+
+Locked test(s) unlocked for TASK-6.25 (busted bot keeps its style; Maniac/Rock retune); expected values re-pinned one-for-one.
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary

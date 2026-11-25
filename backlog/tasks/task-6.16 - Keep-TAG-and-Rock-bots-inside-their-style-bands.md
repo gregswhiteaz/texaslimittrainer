@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T23:03:00Z'
-updated_date: '2026-11-23T10:49:00Z'
+updated_date: '2026-11-25T04:20:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -93,6 +93,8 @@ Judge R1 PASS 10/10 (own REQ-045 counter on seeds 2026@100k and 555@30k; Rock ba
 Locked test re-pinned by TASK-6.17 Q-3 (auto-accepted; assertion count kept).
 
 Locked style-bands test switched to shared style-stat functions by TASK-7.12 Q-1 (auto-accepted; count kept).
+
+Locked test(s) unlocked for TASK-6.25 (busted bot keeps its style; Maniac/Rock retune); expected values re-pinned one-for-one.
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary

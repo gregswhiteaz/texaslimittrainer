@@ -990,6 +990,12 @@
       "event": "unlock",
       "file": "tests/bots/rock.acceptance.test.ts",
       "reason": "Code review R1 MINOR: SPEC-05 sweep builds each modified style through parseStyle (strengthen)"
+    },
+    {
+      "t": "2026-11-24T21:20:42",
+      "event": "unlock",
+      "file": "tests/bots/rock.acceptance.test.ts",
+      "reason": "TASK-6.25 Q-1/Q-2 (auto-accepted recommended): busted bot keeps its style; Maniac/Rock retune; re-pin values one-for-one, keep check counts"
     }
   ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-6.5",
@@ -997,7 +1003,9 @@
   "review_findings": {
     "1": 0
   },
-  "relock_pending": [],
+  "relock_pending": [
+    "tests/bots/rock.acceptance.test.ts"
+  ],
   "doc_id": "doc-77",
   "judge_results": {
     "1": "PASS"
