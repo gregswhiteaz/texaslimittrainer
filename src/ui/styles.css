@@ -230,6 +230,13 @@ h1[tabindex='-1']:focus {
   color: #a7aeb8;
 }
 
+.report-actions {
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
 .screen .report-home {
   align-self: flex-start;
   padding: 0 24px;

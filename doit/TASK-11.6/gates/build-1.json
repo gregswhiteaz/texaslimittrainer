@@ -1,0 +1,62 @@
+{
+  "task": "TASK-11.6",
+  "phase": "build",
+  "run": 1,
+  "result": "PASS",
+  "changed_lines": 313,
+  "changed_files": [
+    "docs/ui/navigation.md",
+    "e2e/report-navigation.spec.ts",
+    "src/ui/App.tsx",
+    "src/ui/report/ReportScreen.tsx",
+    "src/ui/styles.css",
+    "tests/ui/report-navigation.acceptance.test.tsx"
+  ],
+  "checks": [
+    {
+      "name": "test command",
+      "status": "pass",
+      "detail": "$ npm test\nexit 0\n ...87-200,214-215 \n  hand.ts          |     100 |    99.09 |     100 |     100 | 367,723           \n  invariants.ts    |   99.68 |    97.31 |     100 |   99.62 | 387               \n playtest          |     100 |    99.28 |     100 |     100 |                   \n  cli.ts           |     100 |     99.5 |     100 |     100 | 299               \n  shards.ts        |     100 |    98.11 |     100 |     100 | 232,338           \n  style-check.ts   |     100 |    98.43 |     100 |     100 | 119               \n stats             |     100 |    99.07 |     100 |     100 |                   \n  leaks.ts         |     100 |    98.63 |     100 |     100 | 206-209           \n  trends.ts        |     100 |    98.97 |     100 |     100 | 220               \n storage           |   94.11 |    89.18 |    87.5 |   95.04 |                   \n  hand-store.ts    |   94.11 |    89.18 |    87.5 |   95.04 | ...19-121,130,252 \n table             |   98.68 |    97.65 |     100 |   99.53 |                   \n  ...ion-record.ts |   90.82 |    86.36 |     100 |   96.47 | 167,182,200       \n  session.ts       |    98.6 |    96.94 |     100 |   99.57 | 289               \n ui                |   19.35 |     5.88 |    4.54 |   22.22 |                   \n  App.tsx          |   18.36 |     6.25 |    2.38 |   21.09 | ...61-262,271-337 \n  ...adingFocus.ts |    37.5 |        0 |      50 |   42.85 | 10-13             \n ui/advice         |   94.54 |    95.83 |   92.85 |   95.83 |                   \n  advice-client.ts |   96.15 |    95.65 |   91.66 |   97.82 | 134               \n  advice.worker.ts |       0 |      100 |     100 |       0 | 3                 \n ui/config         |   61.33 |    52.77 |   46.42 |   66.66 |                   \n  ...ionDialog.tsx |   30.76 |    16.66 |      20 |      40 | 26-28,36-58       \n  ...figScreen.tsx |   67.74 |    70.83 |   52.17 |   71.42 | ...45-246,273-284 \n ui/stats          |   91.17 |      100 |   85.71 |   88.88 |                   \n  ...icsScreen.tsx |   91.17 |      100 |   85.71 |   88.88 | 174,190,205       \n ui/table          |   39.05 |    60.61 |   38.53 |   43.45 |                   \n  ActionBar.tsx    |      75 |       50 |     100 |     100 | 19                \n  BustDialog.tsx   |   33.33 |        0 |      25 |   42.85 | 14-15,22-25       \n  HintCard.tsx     |     100 |    91.66 |     100 |     100 | 23                \n  LeaveDialog.tsx  |   44.44 |        0 |   33.33 |      50 | 15-17,32          \n  Table.tsx        |   46.53 |    76.57 |   40.54 |   52.22 | ...76,481-487,505 \n  ...bleSession.ts |   27.85 |    30.55 |   24.52 |   29.66 | ...37-343,348-351 \n-------------------|---------|----------|---------|---------|-------------------\n\n=============================== Coverage summary ===============================\nStatements   : 93.68% ( 5253/5607 )\nBranches     : 93.72% ( 3749/4000 )\nFunctions    : 89.64% ( 1151/1284 )\nLines        : 94.02% ( 4393/4672 )\n================================================================================\n"
+    },
+    {
+      "name": "lint command",
+      "status": "pass",
+      "detail": "$ npm run lint\nexit 0\n\n> tlh-trainer@0.0.0 lint\n> node tools/lint/sync-copies.js && eslint . --max-warnings 0 && prettier --check .\n\nChecking formatting...\nAll matched files use Prettier code style!\n"
+    },
+    {
+      "name": "typecheck command",
+      "status": "pass",
+      "detail": "$ npm run typecheck\nexit 0\n\n> tlh-trainer@0.0.0 typecheck\n> tsc -p tsconfig.json\n\n"
+    },
+    {
+      "name": "spec unchanged",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "name": "scope budget (lines)",
+      "status": "warn",
+      "detail": "313 changed lines vs budget 230 (fail above 460)"
+    },
+    {
+      "name": "scope budget (files)",
+      "status": "pass",
+      "detail": "6 files vs budget 6"
+    },
+    {
+      "name": "files outside spec",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "name": "all changes listed in changes.md",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "name": "tests locked",
+      "status": "pass",
+      "detail": "2 acceptance test file(s) locked; 380 test files snapshotted"
+    }
+  ]
+}

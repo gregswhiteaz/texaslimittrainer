@@ -70,13 +70,16 @@ function LeaksSection({
 
 /** The Session Report of an ended session (A-7): header line, cash KPI tiles, the hands played and error-rate
  *  tiles and the hint-usage tile when the report has them, the style section when it has style counts, the leaks section when it
- *  has leak counts, and Back to Home (D-3). */
+ *  has leak counts, and the actions row: View statistics when `onStatistics` is given (TASK-11.6 D-3), then Back
+ *  to Home (D-3). */
 export function ReportScreen({
   report,
   onHome,
+  onStatistics,
 }: {
   readonly report: SessionReport;
   readonly onHome?: () => void;
+  readonly onStatistics?: () => void;
 }): React.JSX.Element {
   const heading = useHeadingFocus(true);
   const { header, tiles } = reportView(report);
@@ -118,9 +121,16 @@ export function ReportScreen({
         <StyleSection players={report.players} counts={report.style} />
       )}
       {report.leakCounts !== undefined && <LeaksSection counts={report.leakCounts} />}
-      <button type="button" className="report-home" onClick={onHome}>
-        Back to Home
-      </button>
+      <div className="report-actions">
+        {onStatistics !== undefined && (
+          <button type="button" className="button-outline" onClick={onStatistics}>
+            View statistics
+          </button>
+        )}
+        <button type="button" className="report-home" onClick={onHome}>
+          Back to Home
+        </button>
+      </div>
     </main>
   );
 }

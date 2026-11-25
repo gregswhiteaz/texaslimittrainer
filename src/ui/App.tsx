@@ -255,6 +255,13 @@ export default function App(): React.JSX.Element {
     setEndPrompt(null);
   };
 
+  /** Every way into Statistics (Home, the Session report) opens it with the default filters and grouping
+   *  (TASK-11.4 D-5, TASK-11.6 D-2). */
+  const openStatistics = (): void => {
+    setPaused(undefined);
+    setScreen({ name: 'stats', view: undefined, filter: ALL_TRENDS, grouping: DEFAULT_GROUPING });
+  };
+
   switch (screen.name) {
     case 'home':
       return (
@@ -266,15 +273,7 @@ export default function App(): React.JSX.Element {
           }}
           paused={paused && { summary: paused.summary }}
           onResume={paused ? () => resume(paused.record) : undefined}
-          onStatistics={() => {
-            setPaused(undefined);
-            setScreen({
-              name: 'stats',
-              view: undefined,
-              filter: ALL_TRENDS,
-              grouping: DEFAULT_GROUPING,
-            });
-          }}
+          onStatistics={openStatistics}
         />
       );
     case 'config':
@@ -313,6 +312,7 @@ export default function App(): React.JSX.Element {
         <ReportScreen
           report={screen.report}
           onHome={() => setScreen({ name: 'home', returned: true })}
+          onStatistics={openStatistics}
         />
       );
     case 'stats':

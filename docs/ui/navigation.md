@@ -8,8 +8,8 @@ or deep links: the URL stays `/` on every screen.
 | Home           | app start; Cancel / ← Home; the Table's Home control or browser Back; Leave table with 0 hands; Back to Home | New game → Game Config; Resume session → Table; Statistics → Statistics        |
 | Game Config    | New game                                                                                                     | Start game → Table (asks first if a session is paused); Cancel / ← Home → Home |
 | Table          | Start game (a new session); Resume session                                                                   | Home control or browser Back → Home; Leave table → Session report (or Home)    |
-| Session report | Leave table (after at least one completed hand)                                                              | Back to Home → Home                                                            |
-| Statistics     | Statistics on Home                                                                                           | ← Home → Home                                                                  |
+| Session report | Leave table (after at least one completed hand)                                                              | View statistics → Statistics; Back to Home → Home                              |
+| Statistics     | Statistics on Home; View statistics on the Session report                                                    | ← Home → Home                                                                  |
 
 Each return to Home moves focus to Home's `TLH Trainer` heading.
 
@@ -17,6 +17,12 @@ Each return to Home moves focus to Home's `TLH Trainer` heading.
 shown). It opens the Statistics screen with its `Statistics` heading focused; `← Home` returns to Home. The
 screen reads the stored hands each time it opens, after any hand write still running, and writes nothing. See
 [trends.md](../stats/trends.md).
+
+**From the Session report (TASK-11.6).** The report ends with a right-aligned row: `View statistics` (outlined),
+then `Back to Home`. Opening Statistics from the report resets the filters and grouping like Home's entry (All /
+All / Every 500 hands), and its totals include the session that just ended. Leaving the report writes nothing,
+because the report was saved before it was shown. There is no way back from Statistics to the report: `← Home`
+returns to Home, which shows no Resume for the ended session.
 
 ## The Home control (REQ-004.9)
 
