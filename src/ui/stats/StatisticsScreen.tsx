@@ -1,21 +1,24 @@
 import {
   ALL_TRENDS,
   BB100_GOAL,
-  BB100_NOTE,
   BB100_TITLE,
-  CHART_NOTE,
   CHART_TITLE,
+  DEFAULT_GROUPING,
   G2_CAPTION,
   GAME_TYPE_LABEL,
   GAME_TYPE_OPTIONS,
+  GROUPING_LABEL,
+  GROUPING_OPTIONS,
   LOAD_FAILED_MESSAGE,
   NO_CASH_MESSAGE,
   NO_HANDS_MESSAGE,
   TABLE_SIZE_LABEL,
   TABLE_SIZE_OPTIONS,
   bb100ChartLabel,
+  bb100Note,
   bb100PointLabel,
   chartLabel,
+  chartNote,
   moreCashHandsMessage,
   moreHandsMessage,
   pointLabel,
@@ -24,6 +27,7 @@ import {
   type StatisticsView,
   type TableSizeFilter,
   type TrendFilter,
+  type TrendGrouping,
   type TrendPoint,
 } from '../../stats/trends';
 import { useHeadingFocus } from '../useHeadingFocus';
@@ -35,6 +39,9 @@ export interface StatisticsScreenProps {
   /** The applied filter (TASK-11.4); All / All by default. */
   readonly filter?: TrendFilter;
   readonly onFilterChange?: (filter: TrendFilter) => void;
+  /** The applied grouping (TASK-11.5); Every 500 hands by default. */
+  readonly grouping?: TrendGrouping;
+  readonly onGroupingChange?: (grouping: TrendGrouping) => void;
 }
 
 const round = (n: number): number => Math.round(n * 10) / 10;
@@ -48,9 +55,11 @@ const xOf = (i: number, count: number): number =>
 function MajorErrorTrend({
   points,
   target,
+  grouping,
 }: {
   readonly points: readonly TrendPoint[];
   readonly target: number | null;
+  readonly grouping: TrendGrouping;
 }) {
   const yMax = Math.max(1, ...points.map((p) => p.majorPer100), target ?? 0);
   const xy = points.map((p, i) => ({
@@ -66,7 +75,7 @@ function MajorErrorTrend({
         className="stats-trend"
         viewBox="0 0 400 160"
         role="img"
-        aria-label={chartLabel(points, target)}
+        aria-label={chartLabel(points, target, grouping)}
       >
         <line x1="0" y1="150" x2="400" y2="150" className="stats-baseline" />
         {ty !== null && (
@@ -79,14 +88,20 @@ function MajorErrorTrend({
           </circle>
         ))}
       </svg>
-      <p className="stats-note">{CHART_NOTE}</p>
+      <p className="stats-note">{chartNote(grouping)}</p>
     </>
   );
 }
 
 /** The same plot with 0 kept inside it: hi = max(1, values), lo = min(−1, values), and a dashed break-even
  *  line at 0 (TASK-11.2 A-5). */
-function Bb100Trend({ points }: { readonly points: readonly Bb100Point[] }) {
+function Bb100Trend({
+  points,
+  grouping,
+}: {
+  readonly points: readonly Bb100Point[];
+  readonly grouping: TrendGrouping;
+}) {
   const hi = Math.max(1, ...points.map((p) => p.bb100));
   const lo = Math.min(-1, ...points.map((p) => p.bb100));
   const yOf = (v: number): number => round(150 - ((v - lo) / (hi - lo)) * 140);
@@ -99,7 +114,7 @@ function Bb100Trend({ points }: { readonly points: readonly Bb100Point[] }) {
         className="stats-trend"
         viewBox="0 0 400 160"
         role="img"
-        aria-label={bb100ChartLabel(points)}
+        aria-label={bb100ChartLabel(points, grouping)}
       >
         <line
           x1="0"
@@ -123,7 +138,7 @@ function Bb100Trend({ points }: { readonly points: readonly Bb100Point[] }) {
           </circle>
         ))}
       </svg>
-      <p className="stats-note">{BB100_NOTE}</p>
+      <p className="stats-note">{bb100Note(grouping)}</p>
     </>
   );
 }
@@ -133,6 +148,8 @@ export function StatisticsScreen({
   onHome,
   filter = ALL_TRENDS,
   onFilterChange,
+  grouping = DEFAULT_GROUPING,
+  onGroupingChange,
 }: StatisticsScreenProps): React.JSX.Element {
   const heading = useHeadingFocus(true);
   const chart = view?.chart;
@@ -180,6 +197,20 @@ export function StatisticsScreen({
               ))}
             </select>
           </label>
+          <label>
+            {GROUPING_LABEL}
+            <select
+              id="stats-group-by"
+              value={grouping}
+              onChange={(e) => onGroupingChange?.(e.target.value as TrendGrouping)}
+            >
+              {GROUPING_OPTIONS.map(([id, label]) => (
+                <option key={id} value={id}>
+                  {label}
+                </option>
+              ))}
+            </select>
+          </label>
         </div>
       )}
       <section
@@ -194,7 +225,11 @@ export function StatisticsScreen({
           <p className="stats-message">{moreHandsMessage(chart.needed)}</p>
         )}
         {chart?.kind === 'points' && (
-          <MajorErrorTrend points={chart.points} target={view?.g2Target ?? null} />
+          <MajorErrorTrend
+            points={chart.points}
+            target={view?.g2Target ?? null}
+            grouping={grouping}
+          />
         )}
       </section>
       <section
@@ -207,7 +242,7 @@ export function StatisticsScreen({
         {bb100?.kind === 'more-cash' && (
           <p className="stats-bb100-message">{moreCashHandsMessage(bb100.needed)}</p>
         )}
-        {bb100?.kind === 'points' && <Bb100Trend points={bb100.points} />}
+        {bb100?.kind === 'points' && <Bb100Trend points={bb100.points} grouping={grouping} />}
       </section>
     </main>
   );

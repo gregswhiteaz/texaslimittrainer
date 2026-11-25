@@ -8,7 +8,7 @@ import { bbPer100, signedTenths } from '../table/session-report';
 
 // TASK-11.1: the Statistics screen's Major-error trend over the stored hands (REQ-048). TASK-11.2: the cash-only
 // BB/100 trend. TASK-11.3: the G-2 target line on the Major-error trend. TASK-11.4: the table size and game type
-// filters. See docs/stats/trends.md.
+// filters. TASK-11.5: grouping per session or per local day. See docs/stats/trends.md.
 
 export const GROUP_SIZE = 500;
 /** Hands in the G-2 baseline (REQ-048.9). */
@@ -66,6 +66,8 @@ export interface TrendPoint {
   readonly firstHand: number;
   readonly lastHand: number;
   readonly majorPer100: number;
+  /** Present only under Session or Day grouping. */
+  readonly group?: TrendGroup;
 }
 
 export type MajorErrorChart =
@@ -78,6 +80,8 @@ export interface Bb100Point {
   readonly firstHand: number;
   readonly lastHand: number;
   readonly bb100: number;
+  /** Present only under Session or Day grouping, the same value as that group's Major point. */
+  readonly group?: TrendGroup;
 }
 
 export type Bb100Chart =
@@ -152,6 +156,20 @@ export const GAME_TYPE_OPTIONS: readonly (readonly [GameTypeFilter, string])[] =
   ['sit-and-go', 'Sit-and-go'],
 ];
 
+export type TrendGrouping = 'hands' | 'session' | 'day';
+export const DEFAULT_GROUPING: TrendGrouping = 'hands';
+export const GROUPING_LABEL = 'Group by';
+export const GROUPING_OPTIONS: readonly (readonly [TrendGrouping, string])[] = [
+  ['hands', 'Every 500 hands'],
+  ['session', 'Session'],
+  ['day', 'Day'],
+];
+
+/** A Session or Day point's group. day: 'YYYY-MM-DD' in local time; for a session, its start's local day. */
+export type TrendGroup =
+  | { readonly kind: 'session'; readonly number: number; readonly day: string }
+  | { readonly kind: 'day'; readonly day: string };
+
 /** The hands matching `filter` in input order, keeping sessionStarts; `data` itself when the filter is All / All.
  *  A hand's table size is its session's: the largest dealtIn among the session's hands, through referenceSizeOf
  *  (D-2). A session with no known dealtIn, or one outside 2–10, matches only All. */
@@ -178,8 +196,8 @@ export function filterTrendData(data: TrendData, filter: TrendFilter): TrendData
   };
 }
 
-/** By session start (its record's startedAt, else its earliest completedAt), then sessionId, then hand number. */
-export function orderHands(data: TrendData): readonly TrendHand[] {
+/** A session's start in ms: its record's startedAt, else its earliest completedAt. */
+function sessionStartTimes(data: TrendData): (sessionId: string) => number {
   const starts = new Map<string, number>();
   for (const [sessionId, startedAt] of data.sessionStarts) {
     starts.set(sessionId, Date.parse(startedAt));
@@ -190,8 +208,12 @@ export function orderHands(data: TrendData): readonly TrendHand[] {
     const at = Date.parse(hand.completedAt);
     earliest.set(hand.sessionId, Math.min(at, earliest.get(hand.sessionId) ?? at));
   }
-  const start = (sessionId: string): number =>
-    starts.get(sessionId) ?? (earliest.get(sessionId) as number);
+  return (sessionId) => starts.get(sessionId) ?? (earliest.get(sessionId) as number);
+}
+
+/** By session start (its record's startedAt, else its earliest completedAt), then sessionId, then hand number. */
+export function orderHands(data: TrendData): readonly TrendHand[] {
+  const start = sessionStartTimes(data);
   return [...data.hands].sort(
     (a, b) =>
       start(a.sessionId) - start(b.sessionId) ||
@@ -246,6 +268,95 @@ export function bb100Points(ordered: readonly TrendHand[]): readonly Bb100Point[
   return points;
 }
 
+const pad2 = (n: number): string => String(n).padStart(2, '0');
+
+/** The local calendar day of `at` (ISO string or epoch ms) as 'YYYY-MM-DD', in the viewing device's time zone. */
+export function localDay(at: string | number): string {
+  const d = new Date(at);
+  return `${d.getFullYear()}-${pad2(d.getMonth() + 1)}-${pad2(d.getDate())}`;
+}
+
+const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+/** '2026-11-05' → '5 Nov 2026', independent of the browser locale. */
+export function dayText(day: string): string {
+  const [year, month, date] = day.split('-');
+  return `${Number(date)} ${MONTHS[Number(month) - 1]} ${year}`;
+}
+
+interface HandGroup {
+  readonly group: TrendGroup;
+  readonly hands: readonly TrendHand[];
+}
+
+/** `ordered` split into sessions (runs of one sessionId, numbered 1…k) or into local completion days (ascending,
+ *  keeping `ordered` order within a day). */
+function groupHands(
+  ordered: readonly TrendHand[],
+  grouping: 'session' | 'day',
+  start: (sessionId: string) => number,
+): readonly HandGroup[] {
+  if (grouping === 'session') {
+    const groups: { group: TrendGroup; hands: TrendHand[] }[] = [];
+    let current: TrendHand[] | undefined;
+    let sessionId: string | undefined;
+    for (const hand of ordered) {
+      if (hand.sessionId !== sessionId) {
+        sessionId = hand.sessionId;
+        current = [];
+        const day = localDay(start(sessionId));
+        groups.push({ group: { kind: 'session', number: groups.length + 1, day }, hands: current });
+      }
+      (current as TrendHand[]).push(hand);
+    }
+    return groups;
+  }
+  const days = new Map<string, TrendHand[]>();
+  for (const hand of ordered) {
+    const day = localDay(hand.completedAt);
+    const bucket = days.get(day);
+    if (bucket === undefined) days.set(day, [hand]);
+    else bucket.push(hand);
+  }
+  return [...days.keys()]
+    .sort()
+    .map((day) => ({ group: { kind: 'day', day }, hands: days.get(day) as TrendHand[] }));
+}
+
+/** One Major point per group, positioned in the groups' concatenated hands. */
+function groupedMajorPoints(groups: readonly HandGroup[]): readonly TrendPoint[] {
+  let pos = 0;
+  return groups.map(({ group, hands }) => {
+    const majors = hands.reduce((sum, h) => sum + h.unhintedMajors, 0);
+    const point = {
+      firstHand: pos + 1,
+      lastHand: pos + hands.length,
+      majorPer100: bbPer100(majors, 1, hands.length),
+      group,
+    };
+    pos += hands.length;
+    return point;
+  });
+}
+
+/** One BB/100 point per group with a cash hand, positioned in the groups' concatenated cash hands. */
+function groupedBb100Points(groups: readonly HandGroup[]): readonly Bb100Point[] {
+  const points: Bb100Point[] = [];
+  let pos = 0;
+  for (const { group, hands } of groups) {
+    const cash = hands.filter((h) => h.cash !== undefined);
+    if (cash.length === 0) continue;
+    points.push({
+      firstHand: pos + 1,
+      lastHand: pos + cash.length,
+      bb100: bb100Value(cash),
+      group,
+    });
+    pos += cash.length;
+  }
+  return points;
+}
+
 /** Half the unhinted Major errors per 100 hands over the first G2_BASELINE_HANDS of `ordered` (all stored hands in
  *  orderHands order), rounded to tenths; null when there are fewer than G2_BASELINE_HANDS hands. */
 export function g2Target(ordered: readonly TrendHand[]): number | null {
@@ -256,25 +367,41 @@ export function g2Target(ordered: readonly TrendHand[]): number | null {
 }
 
 /** `data` drives the totals and charts; `all` (every stored hand, default `data`) drives the G-2 target, so a
- *  filter never moves it. */
-export function statisticsView(data: TrendData, all: TrendData = data): StatisticsView {
+ *  filter never moves it. Session and Day groupings plot every group from the first hand on (REQ-048.10). */
+export function statisticsView(
+  data: TrendData,
+  all: TrendData = data,
+  grouping: TrendGrouping = DEFAULT_GROUPING,
+): StatisticsView {
   const hands = data.hands.length;
   const sessions = new Set(data.hands.map((h) => h.sessionId)).size;
   let ordered: readonly TrendHand[] | undefined;
   const order = (): readonly TrendHand[] => (ordered ??= orderHands(data));
-  const chart: MajorErrorChart =
-    hands === 0
-      ? { kind: 'no-hands' }
-      : hands < GROUP_SIZE
-        ? { kind: 'more-hands', needed: GROUP_SIZE - hands }
-        : { kind: 'points', points: majorErrorPoints(order()) };
   const cashHands = data.hands.filter((h) => h.cash !== undefined).length;
-  const bb100: Bb100Chart =
-    cashHands === 0
-      ? { kind: 'no-cash' }
-      : cashHands < GROUP_SIZE
-        ? { kind: 'more-cash', needed: GROUP_SIZE - cashHands }
-        : { kind: 'points', points: bb100Points(order()) };
+  let chart: MajorErrorChart;
+  let bb100: Bb100Chart;
+  if (grouping === 'hands') {
+    chart =
+      hands === 0
+        ? { kind: 'no-hands' }
+        : hands < GROUP_SIZE
+          ? { kind: 'more-hands', needed: GROUP_SIZE - hands }
+          : { kind: 'points', points: majorErrorPoints(order()) };
+    bb100 =
+      cashHands === 0
+        ? { kind: 'no-cash' }
+        : cashHands < GROUP_SIZE
+          ? { kind: 'more-cash', needed: GROUP_SIZE - cashHands }
+          : { kind: 'points', points: bb100Points(order()) };
+  } else {
+    const groups = hands === 0 ? [] : groupHands(order(), grouping, sessionStartTimes(data));
+    chart =
+      hands === 0 ? { kind: 'no-hands' } : { kind: 'points', points: groupedMajorPoints(groups) };
+    bb100 =
+      cashHands === 0
+        ? { kind: 'no-cash' }
+        : { kind: 'points', points: groupedBb100Points(groups) };
+  }
   const target =
     all.hands.length < G2_BASELINE_HANDS
       ? null
@@ -297,15 +424,39 @@ export function moreHandsMessage(needed: number): string {
   return `Play ${counted(needed, 'more hand')} to see your first trend point.`;
 }
 
+const groupText = (group: TrendGroup): string =>
+  group.kind === 'session'
+    ? `Session ${countText(group.number)}, ${dayText(group.day)}`
+    : dayText(group.day);
+
+/** What one point stands for in the chart labels. */
+const perPoint = (grouping: TrendGrouping, hands: string): string =>
+  grouping === 'hands' ? `${GROUP_SIZE} ${hands}` : grouping;
+
+export function chartNote(grouping: TrendGrouping): string {
+  return grouping === 'hands' ? CHART_NOTE : `Each point is one ${grouping}. Lower is better.`;
+}
+
+export function bb100Note(grouping: TrendGrouping): string {
+  return grouping === 'hands'
+    ? BB100_NOTE
+    : `Each point is one ${grouping}'s cash hands. Above the dashed line means you are winning.`;
+}
+
 export function pointLabel(point: TrendPoint): string {
+  if (point.group) return `${groupText(point.group)}: ${point.majorPer100.toFixed(1)}`;
   return `Hands ${countText(point.firstHand)}–${countText(point.lastHand)}: ${point.majorPer100.toFixed(1)}`;
 }
 
 /** With a target, the label also names the dashed line's value. */
-export function chartLabel(points: readonly TrendPoint[], target: number | null = null): string {
+export function chartLabel(
+  points: readonly TrendPoint[],
+  target: number | null = null,
+  grouping: TrendGrouping = DEFAULT_GROUPING,
+): string {
   const values = points.map((p) => p.majorPer100.toFixed(1)).join(', ');
   const line = target === null ? '' : `. Dashed target line at ${target.toFixed(1)}`;
-  return `${CHART_TITLE}, one point per ${GROUP_SIZE} hands: ${values}${line}`;
+  return `${CHART_TITLE}, one point per ${perPoint(grouping, 'hands')}: ${values}${line}`;
 }
 
 export function moreCashHandsMessage(needed: number): string {
@@ -313,10 +464,14 @@ export function moreCashHandsMessage(needed: number): string {
 }
 
 export function bb100PointLabel(point: Bb100Point): string {
+  if (point.group) return `${groupText(point.group)}: ${signedTenths(point.bb100)}`;
   return `Cash hands ${countText(point.firstHand)}–${countText(point.lastHand)}: ${signedTenths(point.bb100)}`;
 }
 
-export function bb100ChartLabel(points: readonly Bb100Point[]): string {
+export function bb100ChartLabel(
+  points: readonly Bb100Point[],
+  grouping: TrendGrouping = DEFAULT_GROUPING,
+): string {
   const values = points.map((p) => signedTenths(p.bb100)).join(', ');
-  return `${BB100_TITLE}, one point per ${GROUP_SIZE} cash hands: ${values}`;
+  return `${BB100_TITLE}, one point per ${perPoint(grouping, 'cash hands')}: ${values}`;
 }

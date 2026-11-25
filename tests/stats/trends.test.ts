@@ -5,10 +5,15 @@ import {
   ALL_TRENDS,
   BB100_GOAL,
   BB100_NOTE,
+  CHART_NOTE,
   G2_CAPTION,
   bb100ChartLabel,
+  bb100Note,
   bb100PointLabel,
   bb100Value,
+  chartNote,
+  dayText,
+  localDay,
   moreCashHandsMessage,
   chartLabel,
   countText,
@@ -383,5 +388,150 @@ describe('trend filters', () => {
     expect(keep('heads-up', 'sit-and-go')).toEqual(['b1']);
     expect(keep('all', 'cash')).toEqual(['b2', 'd1']);
     expect(keep('all', 'sit-and-go')).toEqual(['a2', 'c1', 'a1', 'b1', 'e1']);
+  });
+});
+
+describe('trend grouping', () => {
+  it('default grouping matches the per-500 view and texts', () => {
+    const [cashRecord] = cashPool(CASH_STAKES[2] as (typeof CASH_STAKES)[number], 1);
+    const cash = trendHand(cashRecord as NonNullable<typeof cashRecord>).cash;
+    const hands = Array.from({ length: 1200 }, (_, i) => ({
+      ...hand(
+        i < 700 ? A : B,
+        (i % 700) + 1,
+        `2026-11-0${i < 700 ? 1 : 2}T10:00:00.000Z`,
+        i % 9 ? 0 : 1,
+      ),
+      ...(i % 2 === 0 && { cash }),
+    }));
+    const all: TrendData = { hands, sessionStarts: new Map([[A, '2026-11-01T09:00:00.000Z']]) };
+    const data: TrendData = { ...all, hands: hands.slice(0, 1100) };
+    const view = statisticsView(data);
+    expect(statisticsView(data, data)).toEqual(view);
+    expect(statisticsView(data, data, 'hands')).toEqual(view);
+    expect(statisticsView(data, all, 'hands')).toEqual(statisticsView(data, all));
+    expect(view.chart.kind).toBe('points');
+    expect(view.bb100.kind).toBe('points');
+    const points = view.chart.kind === 'points' ? view.chart.points : [];
+    const bb100 = view.bb100.kind === 'points' ? view.bb100.points : [];
+    for (const p of points)
+      expect(Object.keys(p)).toEqual(['firstHand', 'lastHand', 'majorPer100']);
+    for (const p of bb100) expect(Object.keys(p)).toEqual(['firstHand', 'lastHand', 'bb100']);
+
+    expect(chartNote('hands')).toBe(CHART_NOTE);
+    expect(bb100Note('hands')).toBe(BB100_NOTE);
+    const p = { firstHand: 501, lastHand: 1000, majorPer100: 1.8 };
+    expect(pointLabel(p)).toBe('Hands 501–1,000: 1.8');
+    expect(chartLabel([p], 0.9)).toBe(
+      'Major errors per 100 hands, one point per 500 hands: 1.8. Dashed target line at 0.9',
+    );
+    const b = { firstHand: 1, lastHand: 500, bb100: -0.8 };
+    expect(bb100PointLabel(b)).toBe('Cash hands 1–500: -0.8');
+    expect(bb100ChartLabel([b])).toBe(
+      'Big bets won per 100 hands, one point per 500 cash hands: -0.8',
+    );
+  });
+
+  it('session and day grouping helpers and texts', () => {
+    expect(localDay(new Date(2026, 10, 5, 0, 0, 0).toISOString())).toBe('2026-11-05');
+    expect(localDay(new Date(2026, 10, 4, 23, 59, 59, 999).toISOString())).toBe('2026-11-04');
+    expect(localDay(new Date(2027, 0, 31, 12).getTime())).toBe('2027-01-31');
+    expect(dayText('2026-11-05')).toBe('5 Nov 2026');
+    expect(dayText('2027-01-31')).toBe('31 Jan 2027');
+
+    const at = (day: number, hour: number): string => new Date(2026, 10, day, hour).toISOString();
+    // A has no session record: its earliest completedAt (10 Nov) places it first. B and C share a start on
+    // 11 Nov and order by sessionId. B's second hand completes on 12 Nov.
+    const hands = [
+      hand(C, 1, at(11, 20), 1),
+      hand(B, 2, at(12, 1)),
+      hand(A, 2, at(10, 9), 1),
+      hand(B, 1, at(11, 18)),
+      hand(A, 1, at(10, 8)),
+    ];
+    const data: TrendData = {
+      hands,
+      sessionStarts: new Map([
+        [C, at(11, 17)],
+        [B, at(11, 17)],
+      ]),
+    };
+    const bySession = statisticsView(data, data, 'session');
+    expect(bySession.chart).toEqual({
+      kind: 'points',
+      points: [
+        {
+          firstHand: 1,
+          lastHand: 2,
+          majorPer100: 50,
+          group: { kind: 'session', number: 1, day: '2026-11-10' },
+        },
+        {
+          firstHand: 3,
+          lastHand: 4,
+          majorPer100: 0,
+          group: { kind: 'session', number: 2, day: '2026-11-11' },
+        },
+        {
+          firstHand: 5,
+          lastHand: 5,
+          majorPer100: 100,
+          group: { kind: 'session', number: 3, day: '2026-11-11' },
+        },
+      ],
+    });
+    expect(bySession.bb100).toEqual({ kind: 'no-cash' });
+    const byDay = statisticsView(data, data, 'day');
+    expect(byDay.chart).toEqual({
+      kind: 'points',
+      points: [
+        { firstHand: 1, lastHand: 2, majorPer100: 50, group: { kind: 'day', day: '2026-11-10' } },
+        { firstHand: 3, lastHand: 4, majorPer100: 50, group: { kind: 'day', day: '2026-11-11' } },
+        { firstHand: 5, lastHand: 5, majorPer100: 0, group: { kind: 'day', day: '2026-11-12' } },
+      ],
+    });
+
+    const session = { kind: 'session', number: 3, day: '2026-11-10' } as const;
+    const day = { kind: 'day', day: '2026-11-10' } as const;
+    expect(pointLabel({ firstHand: 1, lastHand: 9, majorPer100: 4.2, group: session })).toBe(
+      'Session 3, 10 Nov 2026: 4.2',
+    );
+    expect(pointLabel({ firstHand: 1, lastHand: 9, majorPer100: 4.2, group: day })).toBe(
+      '10 Nov 2026: 4.2',
+    );
+    expect(bb100PointLabel({ firstHand: 1, lastHand: 9, bb100: 1.5, group: session })).toBe(
+      'Session 3, 10 Nov 2026: +1.5',
+    );
+    expect(bb100PointLabel({ firstHand: 1, lastHand: 9, bb100: -0.8, group: day })).toBe(
+      '10 Nov 2026: -0.8',
+    );
+    const majors = [{ firstHand: 1, lastHand: 9, majorPer100: 4.2, group: day }];
+    expect(chartLabel(majors, null, 'session')).toBe(
+      'Major errors per 100 hands, one point per session: 4.2',
+    );
+    expect(chartLabel(majors, 3.1, 'day')).toBe(
+      'Major errors per 100 hands, one point per day: 4.2. Dashed target line at 3.1',
+    );
+    const bbs = [{ firstHand: 1, lastHand: 9, bb100: 1.5, group: day }];
+    expect(bb100ChartLabel(bbs, 'session')).toBe(
+      'Big bets won per 100 hands, one point per session: +1.5',
+    );
+    expect(bb100ChartLabel(bbs, 'day')).toBe('Big bets won per 100 hands, one point per day: +1.5');
+    expect(chartNote('session')).toBe('Each point is one session. Lower is better.');
+    expect(chartNote('day')).toBe('Each point is one day. Lower is better.');
+    expect(bb100Note('session')).toBe(
+      "Each point is one session's cash hands. Above the dashed line means you are winning.",
+    );
+    expect(bb100Note('day')).toBe(
+      "Each point is one day's cash hands. Above the dashed line means you are winning.",
+    );
+
+    const html = renderToString(
+      createElement(StatisticsScreen, { view: byDay, onHome: () => undefined, grouping: 'day' }),
+    ).replace(/<!-- -->/g, '');
+    expect(html).toContain('<p class="stats-note">Each point is one day. Lower is better.</p>');
+    expect(html).toContain(
+      'aria-label="Major errors per 100 hands, one point per day: 50.0, 50.0, 0.0"',
+    );
   });
 });

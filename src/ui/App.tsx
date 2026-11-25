@@ -1,11 +1,13 @@
 import { useEffect, useRef, useState } from 'react';
 import {
   ALL_TRENDS,
+  DEFAULT_GROUPING,
   filterTrendData,
   statisticsView,
   type StatisticsView,
   type TrendData,
   type TrendFilter,
+  type TrendGrouping,
 } from '../stats/trends';
 import { sharedHandStore } from '../storage/hand-store';
 import { DEFAULT_SESSION_CONFIG, type SessionConfig } from '../table/session';
@@ -30,12 +32,14 @@ type Screen =
   | { readonly name: 'ending'; readonly sessionId: string }
   | { readonly name: 'report'; readonly report: SessionReport }
   // view: undefined while the read is pending, null if it failed (TASK-11.1 A-10, D-7). data: every stored hand
-  // once read, and view is computed from its hands matching filter (TASK-11.4 D-4).
+  // once read, and view is computed from its hands matching filter (TASK-11.4 D-4), grouped by grouping
+  // (TASK-11.5).
   | {
       readonly name: 'stats';
       readonly view: StatisticsView | undefined | null;
       readonly data?: TrendData;
       readonly filter: TrendFilter;
+      readonly grouping: TrendGrouping;
     };
 
 /** undefined while Home's read is pending (A-4); reset on leaving Home so a return reads it again. */
@@ -101,13 +105,19 @@ export default function App(): React.JSX.Element {
       .then(
         (data) => {
           if (!cancelled) {
-            setScreen({ name: 'stats', data, filter: ALL_TRENDS, view: statisticsView(data) });
+            setScreen({
+              name: 'stats',
+              data,
+              filter: ALL_TRENDS,
+              grouping: DEFAULT_GROUPING,
+              view: statisticsView(data),
+            });
           }
         },
         (error: unknown) => {
           if (cancelled) return;
           console.error('Statistics could not be read', error);
-          setScreen({ name: 'stats', filter: ALL_TRENDS, view: null });
+          setScreen({ name: 'stats', filter: ALL_TRENDS, grouping: DEFAULT_GROUPING, view: null });
         },
       );
     return () => {
@@ -258,7 +268,12 @@ export default function App(): React.JSX.Element {
           onResume={paused ? () => resume(paused.record) : undefined}
           onStatistics={() => {
             setPaused(undefined);
-            setScreen({ name: 'stats', view: undefined, filter: ALL_TRENDS });
+            setScreen({
+              name: 'stats',
+              view: undefined,
+              filter: ALL_TRENDS,
+              grouping: DEFAULT_GROUPING,
+            });
           }}
         />
       );
@@ -312,7 +327,17 @@ export default function App(): React.JSX.Element {
             setScreen({
               ...screen,
               filter,
-              view: statisticsView(filterTrendData(data, filter), data),
+              view: statisticsView(filterTrendData(data, filter), data, screen.grouping),
+            });
+          }}
+          grouping={screen.grouping}
+          onGroupingChange={(grouping) => {
+            const { data } = screen;
+            if (data === undefined) return;
+            setScreen({
+              ...screen,
+              grouping,
+              view: statisticsView(filterTrendData(data, screen.filter), data, grouping),
             });
           }}
         />

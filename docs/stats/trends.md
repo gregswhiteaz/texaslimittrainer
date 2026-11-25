@@ -117,6 +117,43 @@ trends.` and `0 hands over 0 sessions` when nothing matches) come from the match
   comes from every stored hand. The BB/100 chart stays cash-only, so Sit-and-go shows `No cash-game hands yet.`
 - The selection is not remembered: every opening of Statistics starts at All / All.
 
+## Grouping: every 500 hands, session or day (TASK-11.5)
+
+A third select, **Group by**, follows Game type in `.stats-filters`. Its options, in REQ-048.1 order, are Every 500
+hands (`hands`, the default), Session (`session`) and Day (`day`). The Stats storyboard's old `Every 100 hands`
+default was corrected to Every 500 hands. The grouping applies to both trend charts and keeps the filters, and a
+filter change keeps the grouping: the App recomputes `statisticsView(filterTrendData(data, filter), data,
+grouping)`. Grouping and filters are not remembered: every opening of Statistics starts at Every 500 hands and
+All / All.
+
+- Every 500 hands: exactly the behaviour above. Its points carry no `group` key.
+- Session: one point per session in the filter that has a stored hand, in session start order (`orderHands`: the
+  session record's `startedAt`, else its earliest `completedAt`). Sessions are numbered 1…k within the current
+  filter, and the label's date is the start's local day.
+- Day: one point per local calendar day on which a hand in the filter was completed, ascending. Each hand counts on
+  the local date of its own `completedAt`, so a session that runs past midnight is split across two days. "Local"
+  is the time zone of the device viewing Statistics (`localDay`, plain `Date` getters). Records store UTC only.
+- No minimum group size (REQ-048.10): a 12-hand session is a point. With no hands in the filter the Major card
+  shows `Play your first hand to see trends.`
+- Values use the same formulas: Major is `bbPer100(unhinted Majors, 1, n)` per group, BB/100 is `bb100Value` of the
+  group's cash hands. A group without cash hands has no BB/100 point. With no cash hands the card shows
+  `No cash-game hands yet.`, otherwise Session and Day plot from the first cash hand: the `Play n more cash hands`
+  message is per-500 only (Q-1).
+- Points under Session and Day carry `group` (`{kind:'session',number,day}` or `{kind:'day',day}`). `firstHand` and
+  `lastHand` are positions in the groups' concatenated hands (cash hands for BB/100).
+- The G-2 target is unchanged: computed from all stored hands, shown whenever the Major chart has points.
+
+| Item              | Session                                                                                | Day                                                                                |
+| ----------------- | -------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- |
+| Major point title | `Session 3, 10 Nov 2026: 4.2`                                                          | `10 Nov 2026: 4.2`                                                                 |
+| BB/100 title      | `Session 3, 10 Nov 2026: +1.5`                                                         | `10 Nov 2026: -0.8`                                                                |
+| Major label       | `Major errors per 100 hands, one point per session: …`                                 | `…, one point per day: …`                                                          |
+| BB/100 label      | `Big bets won per 100 hands, one point per session: …`                                 | `…, one point per day: …`                                                          |
+| Major note        | `Each point is one session. Lower is better.`                                          | `Each point is one day. Lower is better.`                                          |
+| BB/100 note       | `Each point is one session's cash hands. Above the dashed line means you are winning.` | `Each point is one day's cash hands. Above the dashed line means you are winning.` |
+
+Dates read `D Mon YYYY` in fixed English (`dayText`), independent of the browser locale.
+
 ## Tests
 
 - `tests/stats/trends.test.ts`, `tests/stats/trends.acceptance.test.ts`: ordering, grouping, counts, texts,
@@ -142,3 +179,7 @@ trends.` and `0 hands over 0 sessions` when nothing matches) come from the match
 - Opt-in (`TLH_SLOW_TESTS=1`): `tests/storage/trend-data-3000.acceptance.test.ts` (`npm run test:slow`) reads
   3,000 stored hands through the store; `e2e/statistics-speed.spec.ts` (`npm run e2e:slow`) checks the 6th point
   of 3,000 stored hands shows within 1,000 ms of clicking Statistics. The 100,000-hand target is TASK-11.12.
+- `tests/stats/trend-grouping.acceptance.test.tsx`: the Group by options and default, 9 per-session points and 4
+  per-day points (one session past midnight) recomputed from the records, grouping under a filter, a 12-hand
+  session, the zero-hand message, the storyboard, and per-session BB/100 equal to each cash session's report.
+  `e2e/statistics-grouping.spec.ts`: the App flow in a fixed time zone with axe and same-origin requests.
