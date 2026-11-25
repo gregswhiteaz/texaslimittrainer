@@ -1,11 +1,11 @@
 ---
 id: TASK-11.6
 title: Open Statistics or go Home from the Session Report
-status: In Progress
+status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-25T14:21:00Z'
+updated_date: '2026-11-25T14:22:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -17,6 +17,7 @@ references:
 documentation:
   - doc-1
   - doc-2
+  - doc-139
 parent_task_id: TASK-11
 priority: high
 type: feature
@@ -83,4 +84,12 @@ TASK-10.1 Q-3 adds a Back to Home button on the Session Report; this task then o
 Build: optional onStatistics on ReportScreen; 'View statistics' before 'Back to Home' in a right-aligned row; one App openStatistics() for Home and the report. Report/Statistics/Home e2e 44 pass; gate PASS.
 
 Judge r1 PASS 8/8: production preview Chromium/WebKit — played sessions; View statistics opens All/All/Every 500 hands with totals including the session just ended (matched IndexedDB count); Back to Home and ← Home show no Resume; filters reset after earlier non-default visits; axe clean. CI 45630090023 green (incl. Linux WebKit).
+
+Follow-ups: TASK-11.15 (WebKit Tab-order robustness, redundant unit block).
 <!-- SECTION:NOTES:END -->
+
+## Final Summary
+
+<!-- SECTION:FINAL_SUMMARY:BEGIN -->
+Added a View statistics button to the Session Report, in a right-aligned row before Back to Home. It opens Statistics with default filters, and the totals include the session that just ended. Back to Home is unchanged. One shared openStatistics() in App, and an optional onStatistics prop so no locked test was edited. Verified: npm test 1383 passed, 94% coverage, e2e in Chromium and WebKit, CI green, judge PASS 8/8. Assumptions A-1..A-3 and Q-1/Q-2 need review. Follow-ups: fix the WebKit Alt+Tab comment and test (J-1-01), and remove a redundant placement block in the new unit test.
+<!-- SECTION:FINAL_SUMMARY:END -->
