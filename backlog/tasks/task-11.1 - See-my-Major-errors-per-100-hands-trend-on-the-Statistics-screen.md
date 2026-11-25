@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-25T08:41:00Z'
+updated_date: '2026-11-25T08:56:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -50,33 +50,33 @@ Plan key: E11-S01 · Dream: limit-holdem-trainer
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Given the Home screen, When the user chooses Statistics, Then the Statistics screen opens; and When the user chooses Home on it, Then the Home screen opens [REQ-002.3]
-- [ ] #2 Given a seeded data set of 3,000 stored hands across 9 sessions, When the Statistics screen opens, Then the Major-error chart is grouped per 500 hands and plots 6 points, each equal to the unhinted Major errors per 100 hands recomputed from the stored hand records of that group [REQ-048.1]
-- [ ] #3 Given a 500-hand group containing 5 unhinted and 5 hinted Major errors, When its point is plotted, Then its value is 1.0 [REQ-040.3, REQ-048.1]
-- [ ] #4 Given a 500-hand group in which the only non-Correct decision record is a forced fold after Leave table, When its point is plotted, Then its value is 0.0 [REQ-004.8, REQ-048.1]
-- [ ] #5 Given 1,200 stored hands, When the chart is shown per 500 hands, Then it plots exactly 2 points (hands 1-500 and 501-1,000) and the remaining 200 hands form no point [REQ-048.11, REQ-048.1]
-- [ ] #6 Given 320 stored hands, When the Statistics screen opens at per-500 grouping, Then it shows 'Play 180 more hands to see your first trend point.' instead of a chart; and Given 499 stored hands, Then it shows 'Play 1 more hand to see your first trend point.' [REQ-048.7, REQ-048.14]
-- [ ] #7 Given no stored hands, When the Statistics screen opens at per-500 grouping, Then it shows 'Play your first hand to see trends.' instead of a chart, no 'Play <n> more hands' message, and totals of 0 hands over 0 sessions [REQ-048.10, REQ-048.7, REQ-048.6]
-- [ ] #8 Given 1,840 stored hands over 9 sessions, When the Statistics screen opens with no filter applied, Then it shows a total of 1,840 hands over 9 sessions [REQ-048.6]
-- [ ] #9 Given the Statistics screen is added, When the play-money check runs, Then it is registered in e2e/support/screen-list.ts and visited by the play-money walk
+- [x] #1 Given the Home screen, When the user chooses Statistics, Then the Statistics screen opens; and When the user chooses Home on it, Then the Home screen opens [REQ-002.3]
+- [x] #2 Given a seeded data set of 3,000 stored hands across 9 sessions, When the Statistics screen opens, Then the Major-error chart is grouped per 500 hands and plots 6 points, each equal to the unhinted Major errors per 100 hands recomputed from the stored hand records of that group [REQ-048.1]
+- [x] #3 Given a 500-hand group containing 5 unhinted and 5 hinted Major errors, When its point is plotted, Then its value is 1.0 [REQ-040.3, REQ-048.1]
+- [x] #4 Given a 500-hand group in which the only non-Correct decision record is a forced fold after Leave table, When its point is plotted, Then its value is 0.0 [REQ-004.8, REQ-048.1]
+- [x] #5 Given 1,200 stored hands, When the chart is shown per 500 hands, Then it plots exactly 2 points (hands 1-500 and 501-1,000) and the remaining 200 hands form no point [REQ-048.11, REQ-048.1]
+- [x] #6 Given 320 stored hands, When the Statistics screen opens at per-500 grouping, Then it shows 'Play 180 more hands to see your first trend point.' instead of a chart; and Given 499 stored hands, Then it shows 'Play 1 more hand to see your first trend point.' [REQ-048.7, REQ-048.14]
+- [x] #7 Given no stored hands, When the Statistics screen opens at per-500 grouping, Then it shows 'Play your first hand to see trends.' instead of a chart, no 'Play <n> more hands' message, and totals of 0 hands over 0 sessions [REQ-048.10, REQ-048.7, REQ-048.6]
+- [x] #8 Given 1,840 stored hands over 9 sessions, When the Statistics screen opens with no filter applied, Then it shows a total of 1,840 hands over 9 sessions [REQ-048.6]
+- [x] #9 Given the Statistics screen is added, When the play-money check runs, Then it is registered in e2e/support/screen-list.ts and visited by the play-money walk
 <!-- AC:END -->
 
 ## Definition of Done
 <!-- DOD:BEGIN -->
-- [ ] #1 axe reports zero serious or critical violations on the Statistics screen with data and in the empty state ('Play your first hand to see trends.'), in Chromium and WebKit [REQ-057.1]
-- [ ] #2 The Statistics screen offers no deposit, payment, purchase, cash-out, real-money wager or real-money conversion [REQ-061.1]
-- [ ] #3 Every acceptance criterion has at least one automated test (unit, property or Playwright) that passes
-- [ ] #4 `npm run lint`, `npm run typecheck` and `npm test` pass with zero errors [REQ-059.1, REQ-059.4]
-- [ ] #5 The golden-spot suite passes 100% (applies from the story that creates the suite, E07-S14, onward) [REQ-039.4]
-- [ ] #6 Coverage thresholds hold: >= 90% engine/bots/advice/statistics, >= 70% overall [REQ-059.3]
-- [ ] #7 Engine, bots, advice and statistics code imports no UI or browser-only code [REQ-059.2]
-- [ ] #8 Stories that touch the engine, bots or advice: a 10,000-hand playtest reports zero invariant violations (applies once the playtest runner exists, E01-S07, onward) [REQ-056.1]
-- [ ] #9 Stories that add or change a screen: Playwright test of the screen flow in Chromium and WebKit, and axe reports zero serious or critical violations (axe tooling is provisioned in the toolchain story E01-S01) [REQ-057.1]
-- [ ] #10 No new network requests beyond the app's own files [REQ-058.1]
-- [ ] #11 Strategy-content stories: text is original and every chart, range or golden spot carries its justification [REQ-061.2]
-- [ ] #12 CI workflow is green on the story's branch (applies once the CI story E01-S02 is done; E01-S01 instead passes the same checks locally) [REQ-064.2]
-- [ ] #13 Story documentation is written and published to Backlog.md
-- [ ] #14 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
+- [x] #1 axe reports zero serious or critical violations on the Statistics screen with data and in the empty state ('Play your first hand to see trends.'), in Chromium and WebKit [REQ-057.1]
+- [x] #2 The Statistics screen offers no deposit, payment, purchase, cash-out, real-money wager or real-money conversion [REQ-061.1]
+- [x] #3 Every acceptance criterion has at least one automated test (unit, property or Playwright) that passes
+- [x] #4 `npm run lint`, `npm run typecheck` and `npm test` pass with zero errors [REQ-059.1, REQ-059.4]
+- [x] #5 The golden-spot suite passes 100% (applies from the story that creates the suite, E07-S14, onward) [REQ-039.4]
+- [x] #6 Coverage thresholds hold: >= 90% engine/bots/advice/statistics, >= 70% overall [REQ-059.3]
+- [x] #7 Engine, bots, advice and statistics code imports no UI or browser-only code [REQ-059.2]
+- [x] #8 Stories that touch the engine, bots or advice: a 10,000-hand playtest reports zero invariant violations (applies once the playtest runner exists, E01-S07, onward) [REQ-056.1]
+- [x] #9 Stories that add or change a screen: Playwright test of the screen flow in Chromium and WebKit, and axe reports zero serious or critical violations (axe tooling is provisioned in the toolchain story E01-S01) [REQ-057.1]
+- [x] #10 No new network requests beyond the app's own files [REQ-058.1]
+- [x] #11 Strategy-content stories: text is original and every chart, range or golden spot carries its justification [REQ-061.2]
+- [x] #12 CI workflow is green on the story's branch (applies once the CI story E01-S02 is done; E01-S01 instead passes the same checks locally) [REQ-064.2]
+- [x] #13 Story documentation is written and published to Backlog.md
+- [x] #14 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
 
 ## Implementation Plan
@@ -97,4 +97,6 @@ Full spec: doit/TASK-11.1/spec.md
 AC added from TASK-2.15 follow-up (doc-124).
 
 Build: Statistics screen (Home entry, totals, hand-written SVG chart of unhinted Majors per 100 hands per 500 hands, empty / not-enough / load-failure states), pure src/stats/trends.ts, store trendData(); play-money registration; locked Home/route/play-money/resume tests re-pinned (Q-4, Block 1). npm test 1346 pass; full Playwright 304 pass + resume fixed; slow store read and speed check pass (opt-in). gate PASS.
+
+Judge r1 PASS 20/20: production preview, Chromium and WebKit — 1,200 shuffled seeded hands over 5 sessions showed 1,200 hands over 5 sessions and points 17.8, 16.8 matching an independent computation; 0/320/499/500 messages, load failure, focus and axe checked. CI 45578835504 green.
 <!-- SECTION:NOTES:END -->

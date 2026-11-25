@@ -3,120 +3,120 @@
     "id": "SPEC-01",
     "verifies": "AC#1, DoD#9",
     "verification": "acceptance `e2e/statistics.spec.ts::Statistics opens from Home and Home returns`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-02",
     "verifies": "AC#1",
     "verification": "acceptance `tests/ui/home-statistics.acceptance.test.tsx::home offers Statistics after New game and Resume session`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-03",
     "verifies": "AC#2, DoD#3",
     "verification": "acceptance `tests/stats/trend-view.acceptance.test.tsx::AC#2 3,000 hands over 9 sessions plot 6 points recomputed from the hand records`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-20",
     "verifies": "AC#2",
     "verification": "integration `TLH_SLOW_TESTS=1 npx vitest run tests/storage/trend-data-3000.acceptance.test.ts`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-04",
     "verifies": "AC#3",
     "verification": "acceptance `tests/stats/trends.acceptance.test.ts::AC#3 a group with 5 unhinted and 5 hinted Majors plots 1.0`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-05",
     "verifies": "AC#4",
     "verification": "acceptance `tests/stats/trends.acceptance.test.ts::AC#4 a group whose only non-Correct event is a forced fold plots 0.0`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-06",
     "verifies": "AC#5",
     "verification": "acceptance `tests/stats/trends.acceptance.test.ts::AC#5 1,200 hands plot exactly 2 points and the last 200 form none`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-07",
     "verifies": "AC#6",
     "verification": "acceptance `tests/ui/statistics.acceptance.test.tsx::AC#6 320 and 499 hands show the play-more message instead of a chart`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-08",
     "verifies": "AC#7",
     "verification": "acceptance `tests/ui/statistics.acceptance.test.tsx::AC#7 no hands shows the first-hand message and 0 totals`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-09",
     "verifies": "AC#8",
     "verification": "acceptance `tests/ui/statistics.acceptance.test.tsx::AC#8 1,840 hands over 9 sessions are totalled`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-10",
     "verifies": "AC#7, AC#8, DoD#1, DoD#9, DoD#10",
     "verification": "acceptance `e2e/statistics.spec.ts::Statistics shows totals and the trend from stored hands, and the empty state, with no axe violations`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-11",
     "verifies": "AC#9, DoD#2",
     "verification": "acceptance `e2e/play-money.spec.ts::every listed screen and dialog shows only play money`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-12",
     "verifies": "AC#9",
     "verification": "acceptance `tests/ui/screen-list.acceptance.test.ts::the screen list names every App screen and every dialog component`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-13",
     "verifies": "AC#2, AC#8, DoD#6",
     "verification": "unit `tests/stats/trends.test.ts::orders, groups, counts and words the trend view`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-14",
     "verifies": "AC#2, DoD#6",
     "verification": "unit `tests/storage/trend-data.test.ts::trendData reads valid hands and sessions and skips invalid values`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-15",
     "verifies": "AC#1, DoD#1",
     "verification": "unit `tests/ui/statistics.acceptance.test.tsx::loading and read-failure states`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-16",
     "verifies": "AC#2",
     "verification": "integration `TLH_SLOW_TESTS=1 npx playwright test e2e/statistics-speed.spec.ts`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-17",
     "verifies": "DoD#3, DoD#4, DoD#6, DoD#7, DoD#12",
     "verification": "command `npm run lint && npm run typecheck && npm test && npm run e2e`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-18",
     "verifies": "DoD#13",
     "verification": "manual `docs/stats/trends.md`, `docs/ui/navigation.md` and `backlog doc list --plain` entry for TASK-11.1",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-19",
     "verifies": "DoD#5, DoD#8, DoD#11, DoD#14",
     "verification": "manual `git diff --stat main -- src/engine src/bots src/advice` is empty",
-    "status": "pending"
+    "status": "pass"
   }
 ]

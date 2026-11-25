@@ -5,13 +5,34 @@
   "base_commit": "a1488a27d73e23bdf04d9760fbba04d0ea6a6e9e",
   "started": "2026-11-25T01:16:11",
   "review_round": 1,
-  "judge_round": 0,
+  "judge_round": 1,
   "sendbacks": 0,
   "gate_runs": 1,
   "questions": 4,
   "assumptions": 12,
   "escalations": 0,
-  "item_failures": {},
+  "item_failures": {
+    "SPEC-01": 0,
+    "SPEC-02": 0,
+    "SPEC-03": 0,
+    "SPEC-20": 0,
+    "SPEC-04": 0,
+    "SPEC-05": 0,
+    "SPEC-06": 0,
+    "SPEC-07": 0,
+    "SPEC-08": 0,
+    "SPEC-09": 0,
+    "SPEC-10": 0,
+    "SPEC-11": 0,
+    "SPEC-12": 0,
+    "SPEC-13": 0,
+    "SPEC-14": 0,
+    "SPEC-15": 0,
+    "SPEC-16": 0,
+    "SPEC-17": 0,
+    "SPEC-18": 0,
+    "SPEC-19": 0
+  },
   "locked_tests": {
     "e2e/play-money.spec.ts": "c4e646c1d1ccc00a6346b636b243fd43776750d141c128272539e1d2ebe9c05a",
     "e2e/statistics.spec.ts": "2c9b4a772231bc874e01644bf806c0a0518bf877ced0eb7bf8e93040f99d0d7a",
@@ -1878,5 +1899,8 @@
   "spec_sha256": "471c198692f5ed2ba45622ffdcb25d642f38a54cba2b5b662883905ed55450f3",
   "review_findings": {
     "1": 0
+  },
+  "judge_results": {
+    "1": "PASS"
   }
 }
