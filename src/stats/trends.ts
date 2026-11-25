@@ -5,9 +5,11 @@ import type { GameType } from '../table/session';
 import { bbPer100, signedTenths } from '../table/session-report';
 
 // TASK-11.1: the Statistics screen's Major-error trend over the stored hands (REQ-048). TASK-11.2: the cash-only
-// BB/100 trend. See docs/stats/trends.md.
+// BB/100 trend. TASK-11.3: the G-2 target line on the Major-error trend. See docs/stats/trends.md.
 
 export const GROUP_SIZE = 500;
+/** Hands in the G-2 baseline (REQ-048.9). */
+export const G2_BASELINE_HANDS = 1000;
 
 /** One stored hand as the trends need it. */
 export interface TrendHand {
@@ -83,6 +85,8 @@ export interface StatisticsView {
   readonly totals: string;
   readonly chart: MajorErrorChart;
   readonly bb100: Bb100Chart;
+  /** Half the G-2 baseline rate over every stored hand; null below G2_BASELINE_HANDS stored hands. */
+  readonly g2Target: number | null;
 }
 
 export const NO_HANDS_MESSAGE = 'Play your first hand to see trends.';
@@ -94,6 +98,7 @@ export const BB100_TITLE = 'Big bets won per 100 hands';
 export const BB100_GOAL = 'Dashed line: break-even';
 export const BB100_NOTE =
   'Each point is 500 cash hands. Above the dashed line means you are winning.';
+export const G2_CAPTION = 'Dashed line: half your first-1,000 rate (G-2)';
 
 /** The hand's unhinted Major decisions; a forced fold has no decision entry, so it never counts (REQ-004.8). */
 export function trendHand(record: TrendSource): TrendHand {
@@ -179,7 +184,18 @@ export function bb100Points(ordered: readonly TrendHand[]): readonly Bb100Point[
   return points;
 }
 
-export function statisticsView(data: TrendData): StatisticsView {
+/** Half the unhinted Major errors per 100 hands over the first G2_BASELINE_HANDS of `ordered` (all stored hands in
+ *  orderHands order), rounded to tenths; null when there are fewer than G2_BASELINE_HANDS hands. */
+export function g2Target(ordered: readonly TrendHand[]): number | null {
+  if (ordered.length < G2_BASELINE_HANDS) return null;
+  let majors = 0;
+  for (let i = 0; i < G2_BASELINE_HANDS; i++) majors += (ordered[i] as TrendHand).unhintedMajors;
+  return bbPer100(majors, 2, G2_BASELINE_HANDS);
+}
+
+/** `data` drives the totals and charts; `all` (every stored hand, default `data`) drives the G-2 target, so a
+ *  filter never moves it. */
+export function statisticsView(data: TrendData, all: TrendData = data): StatisticsView {
   const hands = data.hands.length;
   const sessions = new Set(data.hands.map((h) => h.sessionId)).size;
   let ordered: readonly TrendHand[] | undefined;
@@ -197,7 +213,11 @@ export function statisticsView(data: TrendData): StatisticsView {
       : cashHands < GROUP_SIZE
         ? { kind: 'more-cash', needed: GROUP_SIZE - cashHands }
         : { kind: 'points', points: bb100Points(order()) };
-  return { hands, sessions, totals: totalsLine(hands, sessions), chart, bb100 };
+  const target =
+    all.hands.length < G2_BASELINE_HANDS
+      ? null
+      : g2Target(all === data ? order() : orderHands(all));
+  return { hands, sessions, totals: totalsLine(hands, sessions), chart, bb100, g2Target: target };
 }
 
 /** A whole count with comma thousands separators, independent of the browser locale (A-7). */
@@ -219,9 +239,11 @@ export function pointLabel(point: TrendPoint): string {
   return `Hands ${countText(point.firstHand)}–${countText(point.lastHand)}: ${point.majorPer100.toFixed(1)}`;
 }
 
-export function chartLabel(points: readonly TrendPoint[]): string {
+/** With a target, the label also names the dashed line's value. */
+export function chartLabel(points: readonly TrendPoint[], target: number | null = null): string {
   const values = points.map((p) => p.majorPer100.toFixed(1)).join(', ');
-  return `${CHART_TITLE}, one point per ${GROUP_SIZE} hands: ${values}`;
+  const line = target === null ? '' : `. Dashed target line at ${target.toFixed(1)}`;
+  return `${CHART_TITLE}, one point per ${GROUP_SIZE} hands: ${values}${line}`;
 }
 
 export function moreCashHandsMessage(needed: number): string {

@@ -74,6 +74,26 @@ A second chart card, `Big bets won per 100 hands`, plots cash-game hands only. S
   title reads `Cash hands 501–1,000: +2.7` (values as on the report tile: `+2.7`, `-1.3`, `0.0`).
 - Markers: `p.stats-bb100-message`, `circle[data-bb100-point]`, `line.stats-break-even`, `h2#stats-bb100-title`.
 
+## G-2 target line (TASK-11.3)
+
+Once 1,000 hands are stored, the Major-error chart gets a dashed amber target line at half the G-2 baseline
+(REQ-048.3, REQ-048.9).
+
+- Baseline: the unhinted Major errors over the user's first 1,000 hands (`G2_BASELINE_HANDS`) in the order above
+  (session start, then hand number). Hinted Majors and forced folds count 0, and hands after the 1,000th never
+  change it.
+- Target: `g2Target(ordered)` = `bbPer100(m, 2, 1000)`, i.e. m ÷ 20 rounded half away from zero to one decimal
+  (62 → 3.1, 63 → 3.2, 0 → 0). The line is drawn at this rounded value. `null` below 1,000 hands.
+- Threshold: every stored hand counts (any game type, table size or line-up, hinted or not, forced folds
+  included). With 999 or fewer stored hands there is no line and no caption.
+- Filters: `statisticsView(data, all = data)` puts the target in `view.g2Target`, computed from `all`, while
+  the totals and both charts come from `data`. A filter (TASK-11.4, TASK-11.8) must pass the filtered hands as
+  `data` and every stored hand as `all`, so the target never moves with a filter.
+- Display: only when the chart plots points. The caption `Dashed line: half your first-1,000 rate (G-2)`
+  (`p.stats-goal`) sits above the SVG; the line is `line.stats-target` (`stroke-dasharray="6 5"`, x 0–400).
+  The y scale is `max(1, values, target)` so the line stays inside the plot. The SVG label gains
+  `. Dashed target line at 3.1`. Without a target the chart markup is unchanged.
+
 ## Tests
 
 - `tests/stats/trends.test.ts`, `tests/stats/trends.acceptance.test.ts`: ordering, grouping, counts, texts,
@@ -89,7 +109,10 @@ A second chart card, `Big bets won per 100 hands`, plots cash-game hands only. S
   entry markup.
 - `e2e/statistics.spec.ts` (every push, Chromium and WebKit): Home → Statistics → Home, the empty state and
   1,840 seeded hands, axe, same-origin requests. `e2e/statistics-bb100.spec.ts`: the BB/100 card for 1,000 cash
-  and 500 sit-and-go seeded hands, and the no-cash state.
+  and 500 sit-and-go seeded hands, and the no-cash state. `e2e/statistics-target.spec.ts`: the G-2 caption and
+  target line for 1,000 seeded hands.
+- `tests/stats/g2-target.acceptance.test.tsx`: the 999/1,000 threshold, the 3.1 target recomputed from the
+  records, and the target under game-type, table-size and line-up filters (`statisticsView(filtered, all)`).
 - Opt-in (`TLH_SLOW_TESTS=1`): `tests/storage/trend-data-3000.acceptance.test.ts` (`npm run test:slow`) reads
   3,000 stored hands through the store; `e2e/statistics-speed.spec.ts` (`npm run e2e:slow`) checks the 6th point
   of 3,000 stored hands shows within 1,000 ms of clicking Statistics. The 100,000-hand target is TASK-11.12.

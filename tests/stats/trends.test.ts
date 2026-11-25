@@ -4,12 +4,14 @@ import { describe, expect, it } from 'vitest';
 import {
   BB100_GOAL,
   BB100_NOTE,
+  G2_CAPTION,
   bb100ChartLabel,
   bb100PointLabel,
   bb100Value,
   moreCashHandsMessage,
   chartLabel,
   countText,
+  g2Target,
   moreHandsMessage,
   orderHands,
   pointLabel,
@@ -119,6 +121,7 @@ describe('trends', () => {
       totals: '0 hands over 0 sessions',
       chart: { kind: 'no-hands' },
       bb100: { kind: 'no-cash' },
+      g2Target: null,
     });
     expect(statisticsView({ hands: handsOf(1), sessionStarts: new Map() }).chart).toEqual({
       kind: 'more-hands',
@@ -234,6 +237,7 @@ describe('trends', () => {
             bb100,
           })),
         },
+        g2Target: null,
       };
       return renderToString(createElement(StatisticsScreen, { view, onHome: () => undefined }));
     };
@@ -246,5 +250,89 @@ describe('trends', () => {
     expect(zero).toContain('y1="80"');
     expect(zero).toMatch(/<circle data-bb100-point="" cx="200" cy="80"/);
     expect(zero).toContain('<title>Cash hands 1–500: 0.0</title>');
+  });
+});
+
+describe('G-2 target', () => {
+  /** `n` hands in session A with `majors` unhinted Majors spread one per hand from hand `from` (1-based). */
+  const withMajors = (n: number, majors: number, from = 1): TrendHand[] =>
+    handsOf(
+      n,
+      Array.from({ length: majors }, (_, i) => from + i),
+    );
+
+  const majorSvg = (values: readonly number[], target: number | null): string => {
+    const view: StatisticsView = {
+      hands: 0,
+      sessions: 0,
+      totals: '',
+      chart: {
+        kind: 'points',
+        points: values.map((majorPer100, i) => ({
+          firstHand: 500 * i + 1,
+          lastHand: 500 * i + 500,
+          majorPer100,
+        })),
+      },
+      bb100: { kind: 'no-cash' },
+      g2Target: target,
+    };
+    const html = renderToString(createElement(StatisticsScreen, { view, onHome: () => undefined }));
+    return html.slice(0, html.indexOf('aria-labelledby="stats-bb100-title"'));
+  };
+
+  it('computes the G-2 target, its label and line geometry', () => {
+    expect(g2Target(withMajors(999, 62))).toBeNull();
+    expect(g2Target(withMajors(1000, 62))).toBe(3.1);
+    expect(g2Target(withMajors(1000, 63))).toBe(3.2);
+    expect(g2Target(withMajors(1000, 0))).toBe(0);
+    const later = withMajors(1200, 62).map((h, i) => (i >= 1000 ? { ...h, unhintedMajors: 3 } : h));
+    expect(g2Target(later)).toBe(3.1);
+
+    const data = { hands: withMajors(1000, 62), sessionStarts: new Map<string, string>() };
+    expect(statisticsView(data)).toEqual(statisticsView(data, data));
+    expect(statisticsView(data).g2Target).toBe(3.1);
+    const few = { hands: data.hands.slice(0, 500), sessionStarts: new Map<string, string>() };
+    expect(statisticsView(few).g2Target).toBeNull();
+    expect(statisticsView(few, data).g2Target).toBe(3.1);
+    expect(statisticsView(data, few).g2Target).toBeNull();
+
+    expect(G2_CAPTION).toBe('Dashed line: half your first-1,000 rate (G-2)');
+    const points = [
+      { firstHand: 1, lastHand: 500, majorPer100: 6.2 },
+      { firstHand: 501, lastHand: 1000, majorPer100: 6.2 },
+    ];
+    expect(chartLabel(points)).toBe(
+      'Major errors per 100 hands, one point per 500 hands: 6.2, 6.2',
+    );
+    expect(chartLabel(points, null)).toBe(chartLabel(points));
+    expect(chartLabel(points, 3.1)).toBe(
+      'Major errors per 100 hands, one point per 500 hands: 6.2, 6.2. Dashed target line at 3.1',
+    );
+    expect(chartLabel(points, 0)).toMatch(/\. Dashed target line at 0\.0$/);
+
+    const line = (ty: number): string =>
+      `<line x1="0" y1="${ty}" x2="400" y2="${ty}" stroke-dasharray="6 5" class="stats-target"></line>`;
+    const both = majorSvg([6.2, 6.2], 3.1);
+    expect(both).toContain(line(80));
+    expect(both).toMatch(/<circle data-point="" cx="10" cy="10"/);
+    expect(both).toContain(`<p class="stats-goal">${G2_CAPTION}</p><svg`);
+    const above = majorSvg([1], 3.1);
+    expect(above).toContain(line(10));
+    expect(above).toMatch(/<circle data-point="" cx="200" cy="104.8"/);
+    expect(majorSvg([6.2, 6.2], 0)).toContain(line(150));
+
+    // Without a target the markup is exactly what it was before TASK-11.3.
+    const none = majorSvg([2, 1], null);
+    expect(none).toContain(
+      '<svg class="stats-trend" viewBox="0 0 400 160" role="img" aria-label="Major errors per 100 hands, one point per 500 hands: 2.0, 1.0">' +
+        '<line x1="0" y1="150" x2="400" y2="150" class="stats-baseline"></line>' +
+        '<polyline points="10,10 390,80" class="stats-line"></polyline>' +
+        '<circle data-point="" cx="10" cy="10" r="5" class="stats-dot"><title>Hands 1–500: 2.0</title></circle>' +
+        '<circle data-point="" cx="390" cy="80" r="5" class="stats-dot"><title>Hands 501–1,000: 1.0</title></circle>' +
+        '</svg><p class="stats-note">Each point is 500 hands. Lower is better.</p>',
+    );
+    expect(none).not.toContain('stats-target');
+    expect(none).not.toContain('stats-goal');
   });
 });

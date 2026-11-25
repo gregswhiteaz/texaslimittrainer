@@ -4,6 +4,7 @@ import {
   BB100_TITLE,
   CHART_NOTE,
   CHART_TITLE,
+  G2_CAPTION,
   LOAD_FAILED_MESSAGE,
   NO_CASH_MESSAGE,
   NO_HANDS_MESSAGE,
@@ -31,18 +32,35 @@ const round = (n: number): number => Math.round(n * 10) / 10;
 const xOf = (i: number, count: number): number =>
   count === 1 ? 200 : round(10 + (i * 380) / (count - 1));
 
-/** The storyboard's 400×160 plot: baseline y=150, top y=10 (A-9). */
-function MajorErrorTrend({ points }: { readonly points: readonly TrendPoint[] }) {
-  const yMax = Math.max(1, ...points.map((p) => p.majorPer100));
+/** The storyboard's 400×160 plot: baseline y=150, top y=10 (A-9). A non-null G-2 target adds a caption and a
+ *  dashed line, kept inside the plot (TASK-11.3 A-4). */
+function MajorErrorTrend({
+  points,
+  target,
+}: {
+  readonly points: readonly TrendPoint[];
+  readonly target: number | null;
+}) {
+  const yMax = Math.max(1, ...points.map((p) => p.majorPer100), target ?? 0);
   const xy = points.map((p, i) => ({
     point: p,
     x: xOf(i, points.length),
     y: round(150 - (p.majorPer100 / yMax) * 140),
   }));
+  const ty = target === null ? null : round(150 - (target / yMax) * 140);
   return (
     <>
-      <svg className="stats-trend" viewBox="0 0 400 160" role="img" aria-label={chartLabel(points)}>
+      {target !== null && <p className="stats-goal">{G2_CAPTION}</p>}
+      <svg
+        className="stats-trend"
+        viewBox="0 0 400 160"
+        role="img"
+        aria-label={chartLabel(points, target)}
+      >
         <line x1="0" y1="150" x2="400" y2="150" className="stats-baseline" />
+        {ty !== null && (
+          <line x1="0" y1={ty} x2="400" y2={ty} strokeDasharray="6 5" className="stats-target" />
+        )}
         <polyline points={xy.map(({ x, y }) => `${x},${y}`).join(' ')} className="stats-line" />
         {xy.map(({ point, x, y }) => (
           <circle key={point.firstHand} data-point="" cx={x} cy={y} r="5" className="stats-dot">
@@ -123,7 +141,9 @@ export function StatisticsScreen({ view, onHome }: StatisticsScreenProps): React
         {chart?.kind === 'more-hands' && (
           <p className="stats-message">{moreHandsMessage(chart.needed)}</p>
         )}
-        {chart?.kind === 'points' && <MajorErrorTrend points={chart.points} />}
+        {chart?.kind === 'points' && (
+          <MajorErrorTrend points={chart.points} target={view?.g2Target ?? null} />
+        )}
       </section>
       <section
         className="panel stats-chart"

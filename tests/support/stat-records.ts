@@ -45,7 +45,11 @@ export const TEMPLATE_DECISIONS = TEMPLATE.decisions.length;
 const completedAt = (session: StatSession, handNumber: number): Date =>
   new Date(session.startedAt.getTime() + handNumber * 1000);
 
-function graded(record: HandRecord, grades: (decision: number) => DecisionGrade): HandRecord {
+/** `record` with decision i graded `grades(i)`. */
+export function withGrades(
+  record: HandRecord,
+  grades: (decision: number) => DecisionGrade,
+): HandRecord {
   return {
     ...record,
     decisions: record.decisions.map((d, i) => {
@@ -85,7 +89,7 @@ export function statRecords(
         handNumber: n,
         completedAt: completedAt(session, n).toISOString(),
       };
-      records.push(graded(clone, (d) => gradeFor(s, n, d)));
+      records.push(withGrades(clone, (d) => gradeFor(s, n, d)));
     }
     return storedSession(session);
   });
@@ -125,7 +129,7 @@ export function forcedFoldRecord(sessionId: string, handNumber: number, at: Date
   });
   while (nextStep(table) === 'bot') table = stepBot(table);
   const { record } = handWrite(table, { sessionId, startedAt: at, completedAt: at });
-  return graded(record, () => ({ grade: 'correct', hinted: false }));
+  return withGrades(record, () => ({ grade: 'correct', hinted: false }));
 }
 
 const poolCode = (hand: number): ReplayCode => replayCodeFromWords([0x2c1b3a, hand, 11, 5]);
@@ -135,14 +139,14 @@ function playedRecords(table: TableState, hands: number): HandRecord[] {
   return playSession(table, hands, poolCode).map((done) => handWrite(done, TEMPLATE_META).record);
 }
 
-/** `hands` real cash hands played at `stake`. */
-export function cashPool(stake: Stake, hands: number): HandRecord[] {
-  return playedRecords(seatSession({ gameType: 'cash', stake }), hands);
+/** `hands` real cash hands played at `stake` with `players` seated. */
+export function cashPool(stake: Stake, hands: number, players = 6): HandRecord[] {
+  return playedRecords(seatSession({ gameType: 'cash', stake, players }), hands);
 }
 
-/** `hands` real sit-and-go hands (level 1). */
-export function sitAndGoPool(hands: number): HandRecord[] {
-  return playedRecords(seatSession({ gameType: 'sit-and-go' }), hands);
+/** `hands` real sit-and-go hands (level 1) with `players` seated. */
+export function sitAndGoPool(hands: number, players = 6): HandRecord[] {
+  return playedRecords(seatSession({ gameType: 'sit-and-go', players }), hands);
 }
 
 /** `session.hands` clones of `pool`'s records (cycling) as hands 1… of `session`, and its session record. */

@@ -1266,7 +1266,8 @@ h1[tabindex='-1']:focus {
   fill: #6ea8ff;
 }
 
-.stats-break-even {
+.stats-break-even,
+.stats-target {
   stroke: #f0a030;
   stroke-width: 1.5;
 }
