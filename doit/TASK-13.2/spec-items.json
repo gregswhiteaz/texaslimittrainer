@@ -3,66 +3,66 @@
     "id": "SPEC-01",
     "verifies": "AC#1, DoD#1, DoD#8",
     "verification": "acceptance `e2e/persistent-storage.spec.ts::a first launch in Chromium asks once and stores the browser's answer`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-02",
     "verifies": "AC#2, DoD#1",
     "verification": "acceptance `e2e/persistent-storage.spec.ts::a refused request is stored as not granted`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-03",
     "verifies": "AC#3, DoD#1",
     "verification": "acceptance `e2e/persistent-storage.spec.ts::a missing or failing persistent-storage API is stored as not granted and Home opens`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-04",
     "verifies": "AC#4, DoD#1",
     "verification": "acceptance `e2e/persistent-storage.spec.ts::a relaunch does not ask again and keeps the stored result`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-05",
     "verifies": "AC#1, AC#2, AC#3, AC#4",
     "verification": "unit `tests/storage/persistent-storage.test.ts::asks only when no valid record exists and stores granted only for true`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-06",
     "verifies": "AC#3",
     "verification": "unit `tests/storage/persistent-storage.test.ts::read and write failures resolve null and are logged`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-07",
     "verifies": "AC#3",
     "verification": "unit `tests/storage/persistent-storage.test.ts::browserPersist calls storage.persist as a method or is undefined`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-08",
     "verifies": "AC#4, DoD#4",
     "verification": "unit `tests/storage/persistent-storage.test.ts::version 5 adds an empty meta store and keeps v4 records`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-09",
     "verifies": "DoD#2, DoD#3, DoD#4, DoD#5, DoD#10",
     "verification": "command `npm run lint && npm run typecheck && npm test && npm run e2e`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-10",
     "verifies": "DoD#11",
     "verification": "manual `docs/storage/persistent-storage.md` and the `backlog doc list --plain` entry for TASK-13.2",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-11",
     "verifies": "DoD#6, DoD#7, DoD#9, DoD#12",
     "verification": "manual `git diff --stat main -- src/engine src/bots src/advice src/stats src/ui` is empty",
-    "status": "pending"
+    "status": "pass"
   }
 ]
