@@ -6,8 +6,8 @@
 - `src/ui/styles.css` — `.stats-target` shares the `.stats-break-even` stroke rule.
 
 ## Tests
-- `tests/support/stat-records.ts` — private `graded` renamed and exported as `withGrades`; optional `players` (default 6, unchanged) on `cashPool` and `sitAndGoPool`.
-- `tests/stats/g2-target.acceptance.test.tsx` — new: AC#1–AC#5 (SPEC-01..SPEC-05), module and `renderToString` level.
+- `tests/support/stat-records.ts` — private `graded` renamed and exported as `withGrades`; optional `players` (default 6, unchanged) on `cashPool` and `sitAndGoPool`; optional `preset` on `cashPool` seats the pool through `configForLineUp` (FIX r1).
+- `tests/stats/g2-target.acceptance.test.tsx` — new: AC#1–AC#5 (SPEC-01..SPEC-05), module and `renderToString` level. FIX r1: AC#3/AC#5 feed records sorted by sessionId (not chronological); the 9-max cash pool is seated with the Tough preset so AC#5's line-up filter covers Custom and Tough.
 - `tests/stats/trends.test.ts` — the two `g2Target: null` edits and the SPEC-06 unit case.
 - `e2e/statistics-target.spec.ts` — new Playwright flow (SPEC-07), Chromium + WebKit, axe, same-origin.
 

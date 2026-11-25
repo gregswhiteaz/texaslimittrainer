@@ -29,7 +29,7 @@ const STAKE = CASH_STAKES.find((s) => s.bigBet === 8) as Stake;
 // 24 really played hands in total (A-6), cloned to the counts each test needs.
 const POOL = {
   cash6: cashPool(STAKE, 8),
-  cash9: cashPool(STAKE, 8, 9),
+  cash9: cashPool(STAKE, 8, 9, 'Tough'),
   sng2: sitAndGoPool(8, 2),
 };
 
@@ -47,6 +47,12 @@ const dataOf = ({ records, sessions }: Stored): TrendData => ({
   hands: records.map((r) => trendHand(parseHandRecord(r))),
   sessionStarts: new Map(sessions.map((s) => [s.sessionId, s.startedAt])),
 });
+
+/** `records` by sessionId, then hand number: not chronological, so a target taken in input order differs. */
+const bySessionId = (records: readonly HandRecord[]): HandRecord[] =>
+  [...records].sort((a, b) =>
+    a.sessionId < b.sessionId ? -1 : a.sessionId > b.sessionId ? 1 : a.handNumber - b.handNumber,
+  );
 
 /** Markup with React's text separators removed. */
 const render = (view: StatisticsView): string =>
@@ -196,7 +202,7 @@ describe('G-2 target line acceptance', () => {
     expect(count(0, 1000, true)).toBe(20);
     expect(count(1000, 1500, false)).toBe(40);
 
-    const target = statisticsView(dataOf(stored)).g2Target;
+    const target = statisticsView(dataOf({ ...stored, records: bySessionId(records) })).g2Target;
     expect(target).toBe(3.1);
     expect(target).toBe(expectedTarget(stored));
   });
@@ -260,8 +266,10 @@ describe('G-2 target line acceptance', () => {
     expect(stored.records).toHaveLength(1700);
     expect(expectedTarget(stored)).toBe(3.1);
 
-    const all = dataOf(stored);
+    const shuffled = bySessionId(stored.records);
+    const all = dataOf({ ...stored, records: shuffled });
     const lineUps = [...new Set(stored.records.map((r) => r.lineUp))];
+    expect([...lineUps].sort()).toEqual(['Custom', 'Tough']);
     const filters: [string, (r: HandRecord) => boolean][] = [
       ['All', () => true],
       ['Cash', (r) => r.gameType === 'cash'],
@@ -276,7 +284,7 @@ describe('G-2 target line acceptance', () => {
     ];
     const sizes: Record<string, number> = {};
     for (const [name, keep] of filters) {
-      const filtered = stored.records.filter(keep);
+      const filtered = shuffled.filter(keep);
       sizes[name] = filtered.length;
       const view = statisticsView(dataOf({ ...stored, records: filtered }), all);
       expect(view.g2Target, name).toBe(3.1);
@@ -295,6 +303,8 @@ describe('G-2 target line acceptance', () => {
       'Heads-up': 600,
       '6-max': 600,
       'Full ring': 500,
+      Custom: 1200,
+      Tough: 500,
     });
   });
 });

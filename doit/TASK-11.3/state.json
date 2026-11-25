@@ -7,14 +7,14 @@
   "review_round": 1,
   "judge_round": 0,
   "sendbacks": 0,
-  "gate_runs": 2,
+  "gate_runs": 4,
   "questions": 2,
   "assumptions": 6,
   "escalations": 0,
   "item_failures": {},
   "locked_tests": {
     "e2e/statistics-target.spec.ts": "1ce8f42d49d59baa57ca60f6474be5953473ee3bce5a57e43acb6e6aeaa36479",
-    "tests/stats/g2-target.acceptance.test.tsx": "ee0294defe55d899ff760177cef7e2bb238646815d93afc39b6176fe01deb6d4"
+    "tests/stats/g2-target.acceptance.test.tsx": "98fe109c20db0495008ff4f89aeda952dd9b4e6a61595188c43b5fe3dff7d8d8"
   },
   "test_snapshot": {
     "e2e/statistics-target.spec.ts": {
@@ -23,8 +23,8 @@
       "skips": 0
     },
     "tests/stats/g2-target.acceptance.test.tsx": {
-      "sha": "ee0294defe55d899ff760177cef7e2bb238646815d93afc39b6176fe01deb6d4",
-      "asserts": 46,
+      "sha": "98fe109c20db0495008ff4f89aeda952dd9b4e6a61595188c43b5fe3dff7d8d8",
+      "asserts": 47,
       "skips": 0
     },
     "e2e/action-bar-limits.spec.ts": {
@@ -1901,9 +1901,7 @@
   "review_findings": {
     "1": 1
   },
-  "relock_pending": [
-    "tests/stats/g2-target.acceptance.test.tsx"
-  ],
+  "relock_pending": [],
   "brief_history": {
     "tests/stats/g2-target.acceptance.test.tsx:baseline-order-unverified-fixtures-already-chronological": [
       "review r1"

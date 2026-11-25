@@ -1,7 +1,10 @@
 import type { Grade } from '../../src/advice/grade';
+import type { LineUpPreset } from '../../src/bots/lineup';
 import { replayCodeFromWords, type ReplayCode } from '../../src/engine/deck';
 import type { HandRecord } from '../../src/table/hand-record';
 import {
+  configForLineUp,
+  DEFAULT_SESSION_CONFIG,
   foldUserToLeave,
   nextStep,
   seatSession,
@@ -139,9 +142,18 @@ function playedRecords(table: TableState, hands: number): HandRecord[] {
   return playSession(table, hands, poolCode).map((done) => handWrite(done, TEMPLATE_META).record);
 }
 
-/** `hands` real cash hands played at `stake` with `players` seated. */
-export function cashPool(stake: Stake, hands: number, players = 6): HandRecord[] {
-  return playedRecords(seatSession({ gameType: 'cash', stake, players }), hands);
+/** `hands` real cash hands played at `stake` with `players` seated, with `preset`'s line-up when given. */
+export function cashPool(
+  stake: Stake,
+  hands: number,
+  players = 6,
+  preset?: LineUpPreset,
+): HandRecord[] {
+  const config =
+    preset === undefined
+      ? { gameType: 'cash' as const, stake, players }
+      : configForLineUp({ ...DEFAULT_SESSION_CONFIG, stake }, players, preset);
+  return playedRecords(seatSession(config), hands);
 }
 
 /** `hands` real sit-and-go hands (level 1) with `players` seated. */

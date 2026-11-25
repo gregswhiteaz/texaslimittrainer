@@ -9,3 +9,7 @@
 - Docs: `docs/stats/trends.md` G-2 section.
 - Runs: `npx vitest run tests/stats/g2-target.acceptance.test.tsx` 5/5; `tests/stats/trends.test.ts` 5/5; `npm run lint` clean; `npm run typecheck` clean; `npm test` 296 files passed, 5 skipped; 1361 tests passed, 46 skipped; coverage all files 93.77% lines, `src/stats/trends.ts` 100% lines; `npm run build && npx playwright test e2e/statistics.spec.ts e2e/statistics-bb100.spec.ts e2e/play-money.spec.ts e2e/statistics-target.spec.ts` 14 passed (Chromium + WebKit, axe).
 - No locked test edited.
+
+## FIX r1
+- Item 1 (baseline-order-unverified): fixed. AC#3 and AC#5 now pass records sorted by sessionId to `statisticsView` (AC#5 for both `all` and the filtered data). Mutation check: `g2Target(all.hands)` in src/stats/trends.ts fails AC#3 (3.5 vs 3.1) and AC#5 (143.5 vs 3.1); restored.
+- Caller-requested MINOR (line-up-filter-vacuous): `cashPool` takes an optional preset (via `configForLineUp`); the 9-max pool is seated Tough, and AC#5 asserts line-ups Custom (1,200) and Tough (500).
