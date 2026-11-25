@@ -1,0 +1,14 @@
+{"reviewer": "security", "round": 1,
+ "findings": [
+  {"fingerprint": "src/ui/stats/StatisticsScreen.tsx:unbounded-point-spread",
+   "severity": "MINOR", "file": "src/ui/stats/StatisticsScreen.tsx", "line": 64,
+   "issue": "Under Session/Day grouping the point count is the number of sessions or distinct local days, not hands/500. Math.max/Math.min(...points.map(...)) at lines 64, 105-106 spread one argument per point, and one <circle><title> is rendered per point. With a very large number of sessions or days (on the order of 100k+), the spread throws RangeError during render. There is no error boundary, so the Statistics screen would be left blank or stuck.",
+   "evidence": "Hand/session records in the app's own IndexedDB (written only by the app; tampering needs same-origin access such as devtools or a separate XSS) -> trendData -> statisticsView(grouping='session'|'day') -> groupedMajorPoints/groupedBb100Points (one point per group) -> MajorErrorTrend/Bb100Trend Math.max(1, ...points) -> RangeError. Real play cannot reach this volume, so there is no realistic attacker path.",
+   "fix": "Optional: compute the extremes with a reduce loop instead of spreading. A cap or downsample on rendered points is not needed for this task."},
+  {"fingerprint": "src/stats/trends.ts:extended-year-day-text",
+   "severity": "NIT", "file": "src/stats/trends.ts", "line": 283,
+   "issue": "parseHandRecord/parseSessionRecord accept any round-tripping ISO string, including extended years ('+275760-...' or '-000001-...'). For a negative year, localDay gives e.g. '-1-12-31'. dayText's split('-') then misreads it, giving garbled text like '12 Jan ', and the lexical sort of day keys puts 5-digit or negative years out of order. Nothing throws: Date values are already validated, so getFullYear etc. never return NaN.",
+   "evidence": "Tampered completedAt/startedAt in IndexedDB -> localDay -> dayText -> point <title> text. Text only, rendered through React, so there is no injection.",
+   "fix": "None required. Optionally parse with a regex anchored to the last two '-' separators, if this ever matters."}
+ ],
+ "summary": "No BLOCKER or MAJOR. The only new input is the Group by select: fixed options, cast to TrendGrouping. Even a devtools-forced unknown value falls into the day branch without throwing. Dates come from records already validated by toISOString round-trip, so localDay/dayText never see NaN. All strings render as React text or attributes, with no HTML sinks. Distinct days or sessions are bounded by real play. The only residual edge is a spread RangeError at an extreme, tampered-only point count (MINOR). No new dependencies, network, secrets or randomness."}

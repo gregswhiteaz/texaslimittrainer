@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-25T12:46:00Z'
+updated_date: '2026-11-25T13:07:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -84,4 +84,6 @@ Full spec: doit/TASK-11.5/spec.md
 AC added from TASK-11.1 follow-up (doc-134): storyboard shows Every 100 hands; TASK-11.1 followed REQ-048.1 (500).
 
 AC added from TASK-11.2 Q-1: per-session BB/100 value is implemented in TASK-11.2; this story wires the grouping UI.
+
+Build: Group by (Every 500 hands default / Session / Day) drives both charts; per-session BB/100 via bb100Value; Day by local date of completedAt; storyboard aligned to REQ-048.1; reset on each opening. npm test 1381 pass; statistics e2e 18 pass (incl. America/New_York time-zone run); gate PASS.
 <!-- SECTION:NOTES:END -->
