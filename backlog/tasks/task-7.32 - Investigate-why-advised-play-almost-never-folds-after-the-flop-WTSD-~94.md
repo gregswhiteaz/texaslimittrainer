@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-24T20:47:00Z'
-updated_date: '2026-11-25T01:36:00Z'
+updated_date: '2026-11-25T01:40:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -25,9 +25,9 @@ Found while specifying TASK-10.3: in 100,000-hand 6-max playtests (seeds 42 and 
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Given the 6-max all-TAG playtest, When the cause of the ~94% WTSD is investigated, Then the root cause is written up with evidence (which rules/thresholds produce the calls) and the fix approach is recorded
-- [ ] #2 Given the fix, When a 100,000-hand 6-max all-TAG playtest runs (opt-in slow group), Then WTSD falls inside the authored 6-max healthy WTSD range from TASK-10.3 and VPIP, PFR, Aggression and W$SD stay inside theirs
-- [ ] #3 Given the fix, When the golden-spot suites run, Then they pass (re-pinning any spot only with a recorded justification)
+- [x] #1 Given the 6-max all-TAG playtest, When the cause of the ~94% WTSD is investigated, Then the root cause is written up with evidence (which rules/thresholds produce the calls) and the fix approach is recorded
+- [x] #2 Given the fix, When a 100,000-hand 6-max all-TAG playtest runs (opt-in slow group), Then WTSD falls inside the authored 6-max healthy WTSD range from TASK-10.3 and VPIP, PFR, Aggression and W$SD stay inside theirs
+- [x] #3 Given the fix, When the golden-spot suites run, Then they pass (re-pinning any spot only with a recorded justification)
 <!-- AC:END -->
 
 ## Implementation Plan
@@ -50,4 +50,6 @@ doit: parked — investigation done (see doit/TASK-7.32/spec.md §1a): root caus
 Build: bots on action ranges (BOT_ADVICE), turn price counts one river big bet, value raise vs a bet >65%, inline river clause; REQ-033.1/033.2 amended (changelog 1.10); locked re-baselines one-for-one (qa.md); 13 golden spots replaced and logged; 100k all-TAG 6-max: 22.2/16.2/64.3/40.4/51.5 inside healthy ranges; style-bands + check-styles slow Mixed checks accepted failing until TASK-6.25; gate PASS.
 
 Investigation write-up (SPEC-01, AC#1): docs/advice/postflop-rules.md#why-bots-almost-never-folded-task-732 — section "Why bots almost never folded (TASK-7.32)": root cause (bots requested advice with 'unseen' ranges, calling ~98% of postflop bets), measurements, and the chosen fix (Q-1). Judge J-1-02: games.acceptance AC#6 input seed changed 42 → 7 (seed 42 no longer finishes a sit-and-go within 10,000 hands); recorded on TASK-1.16.
+
+Judge r2 PASS (r1 FAIL only on SPEC-01 missing doc link, fixed by note). Base vs HEAD 2,000 hands: WTSD 94.2 → 41.2; 100k all-TAG 6-max 22.2/16.2/64.3/40.4/51.5; npm test 1309 pass; Playwright 304 pass; slow group: only the 4 accepted Mixed checks fail (TASK-6.25).
 <!-- SECTION:NOTES:END -->

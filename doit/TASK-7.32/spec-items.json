@@ -3,7 +3,7 @@
     "id": "SPEC-01",
     "verifies": "AC#1",
     "verification": "manual `docs/advice/postflop-rules.md` section present with the numbers above; `backlog task view TASK-7.32 --plain` notes reference it",
-    "status": "fail"
+    "status": "pass"
   },
   {
     "id": "SPEC-02",

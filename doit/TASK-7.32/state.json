@@ -5,14 +5,14 @@
   "base_commit": "79b793c41d89c285f34a1b3012000043a79d4de7",
   "started": "2026-11-24T14:29:05",
   "review_round": 1,
-  "judge_round": 1,
+  "judge_round": 2,
   "sendbacks": 0,
   "gate_runs": 3,
   "questions": 3,
   "assumptions": 6,
   "escalations": 1,
   "item_failures": {
-    "SPEC-01": 2,
+    "SPEC-01": 0,
     "SPEC-02": 0,
     "SPEC-03": 0,
     "SPEC-04": 0,
@@ -1790,6 +1790,7 @@
     "1": 0
   },
   "judge_results": {
-    "1": "FAIL"
+    "1": "FAIL",
+    "2": "PASS"
   }
 }

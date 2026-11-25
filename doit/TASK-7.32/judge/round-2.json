@@ -1,0 +1,83 @@
+{
+ "round": 2,
+ "test_suite": {
+  "command": "npm test",
+  "result": "PASS",
+  "passed": 1309,
+  "failed": 0,
+  "notes": "280 files passed, 4 skipped (45 opt-in slow tests skipped). Identical to round 1. Long suites (golden, Playwright, test:slow, 100k) not re-run: no product, test or doc file changed since c4210bb; round-1 results carried forward."
+ },
+ "end_to_end": {
+  "command": "npm run -s playtest -- --hands 10000 --seed 42 --size 6 (HEAD vs base 79b793c); TLH_SLOW_TESTS=1 npx vitest run tests/advice/postflop-folding.acceptance.test.ts (alone); real app via Playwright (New game, play to turn, open Hint)",
+  "result": "PASS",
+  "expected": "Far fewer hands ending at showdown than before, 0 violations; all five 100k stats logged inside the 6-max ranges; a turn call hint names the river bet; a value raise facing a bet cites 65.0%",
+  "actual": "Playtest: Ended at showdown 4,368 (base) -> 1,907 (HEAD), Ended by fold 5,632 -> 8,093, Invariant violations 0, aggression 63.5% -> 64.5%. 100k seed 42 alone (151.6 s): VPIP 22.2 (20-28), PFR 16.2 (14-22), Aggression 64.3 (50-66), WTSD 40.4 (30-42), W$SD 51.5 (47-57). Real app, 41 postflop hints: turn 'Call $8' hints read '... Pot odds, ..., counting the big bet you will likely face on the river, ask for 27.6%, and you have at least that, so calling earns chips over time.' (and 30.8% with implied-odds clause); every 'Raise' facing a bet (7, flop/turn/river) said 'above 65.0%'; 12 flop/river facing-bet hints had no river clause; every hint <= 3 sentences.",
+  "notes": "Carried forward from round 1; no product code changed since c4210bb."
+ },
+ "integrity": {
+  "result": "PASS",
+  "notes": "doit.py test-integrity TASK-7.32: exit 0, no errors or warnings. git diff c4210bb..HEAD --name-only: only backlog/tasks/task-7.32 ... .md (notes + updated_date) and doit/TASK-7.32/{judge/round-1.json, judge/verdict-1.json, spec-items.json, state.json}. Round-1 source diff review stands."
+ },
+ "items": [
+  {
+   "spec": "SPEC-01",
+   "result": "PASS",
+   "evidence": "`backlog task view TASK-7.32 --plain` Implementation Notes now contain 'Investigation write-up (SPEC-01, AC#1): docs/advice/postflop-rules.md#why-bots-almost-never-folded-task-732' with root cause, measurements and chosen fix (Q-1). Holdout check: the link's anchor resolves to the heading '## Why bots almost never folded (TASK-7.32)' (line 179). The section holds 94.2, 98.0%, 63.5/65.3/67.8 vs 11.4/13.2/9.6, 44.5, 100k 22.2/16.2/64.3/40.4/51.5, rule ids (value-raise, pot-odds-call, pot-odds-fold, implied-odds-call) and a '**Fix.**' paragraph (action ranges with typical-player basis, turn call counts river big bet, value raise >65%)."
+  },
+  {
+   "spec": "SPEC-02",
+   "result": "PASS",
+   "evidence": "Carried forward from round 1 (no product code, tests or docs changed since c4210bb: git diff c4210bb..HEAD touches only the TASK-7.32 backlog task file and doit/TASK-7.32/**). Round 1: Acceptance test passes and asserts unseen=call vs actions=fold on the same view for all four bots. Root cause independently confirmed on base vs HEAD (2,000 all-TAG hands): seed 42 WTSD 94.2 -> 41.2, seed 7 94.1 -> 41.2, 0 violations. Holdout on a different spot (66 on A-K-9-3, heads-up turn bet): unseen says call, actions says fold, all four bots return the actions move; explicit opponentRanges 'unseen' still overrides for TAG and Rock; BOT_ADVICE strict-equals {opponentRanges:'actions'}."
+  },
+  {
+   "spec": "SPEC-03",
+   "result": "PASS",
+   "evidence": "Carried forward from round 1 (no product code, tests or docs changed since c4210bb: git diff c4210bb..HEAD touches only the TASK-7.32 backlog task file and doit/TASK-7.32/**). Round 1: Acceptance test passes (26.7 / 23.1 / 18.2, flop and river classic). Holdout: heads-up turn pot 34 call 8 -> 27.6 = (8+8)/(34+8+16), flag true; stack-after-call 0/1/7/8/9 gives R = 0/1/7/8/8 with the matching price and flag false only at 0; villain all in on the turn bet -> classic 8/(pot+8), flag false; turn with nothing owed -> required 0, flag false."
+  },
+  {
+   "spec": "SPEC-04",
+   "result": "PASS",
+   "evidence": "Carried forward from round 1 (no product code, tests or docs changed since c4210bb: git diff c4210bb..HEAD touches only the TASK-7.32 backlog task file and doit/TASK-7.32/**). Round 1: Acceptance test passes. Holdout on flop, turn and river facing a bet: calling-range 64.9/65.0/65.04 -> not value-raise (call), 65.05/65.1/90 -> value-raise, valueThresholdPct 65 throughout; nothing owed 50.0 -> check-free, 50.1 and 60 -> value-bet, threshold 50."
+  },
+  {
+   "spec": "SPEC-05",
+   "result": "PASS",
+   "evidence": "Carried forward from round 1 (no product code, tests or docs changed since c4210bb: git diff c4210bb..HEAD touches only the TASK-7.32 backlog task file and doit/TASK-7.32/**). Round 1: Unit test passes and checks the exact Q-3 sentence. Holdout: turn pot-odds-fold, pot-odds-call, pot-odds-fold-implied and implied-odds-call texts all carry 'counting the big bet you will likely face on the river, ask for 27.6%', each <= 3 sentences; value-raise shows 65.0% (flop and turn), value-bet shows 50.0% and not 65.0%. 30 flop/river spots below 50% calling equity give byte-identical action, required % and explanation on base and HEAD. Real app confirmed the same wording."
+  },
+  {
+   "spec": "SPEC-06",
+   "result": "PASS",
+   "evidence": "Carried forward from round 1 (no product code, tests or docs changed since c4210bb: git diff c4210bb..HEAD touches only the TASK-7.32 backlog task file and doit/TASK-7.32/**). Round 1: Acceptance test passes. Holdout gradeDecision: threshold 65 with vsCalling 60 -> minor 5.0; 50.1 -> minor 14.9; 50.0 -> major 15.0; 65.0 -> 0.0; field absent or null with 60 -> 10.0, with 65 -> major 15.0; advice raise at 80 vs threshold 65, user calls -> major 15. gradeView on a real turn spot: call vs fold margin = required - equity (call-fold-margin); turn spot with calling-range 70 and user call -> aggression-margin minor 5.0."
+  },
+  {
+   "spec": "SPEC-07",
+   "result": "PASS",
+   "evidence": "Carried forward from round 1 (no product code, tests or docs changed since c4210bb: git diff c4210bb..HEAD touches only the TASK-7.32 backlog task file and doit/TASK-7.32/**). Round 1: Fast test passes: WTSD 41.2 (band 30-50), VPIP/PFR inside the healthy ranges; 3.1 s run alone (17 s under full-suite parallel load). Holdout seed 7 at 2,000 hands: VPIP 22.8, PFR 16.6, WTSD 41.2, 0 violations."
+  },
+  {
+   "spec": "SPEC-08",
+   "result": "PASS",
+   "evidence": "Carried forward from round 1 (no product code, tests or docs changed since c4210bb: git diff c4210bb..HEAD touches only the TASK-7.32 backlog task file and doit/TASK-7.32/**). Round 1: Run alone with TLH_SLOW_TESTS=1: VPIP 22.2, PFR 16.2, Aggression 64.3, WTSD 40.4, W$SD 51.5, all inside HEALTHY_RANGES['6-max'], logged in the specified format; bounds read from HEALTHY_RANGES; listed in npm run test:slow (also passed there). Holdout seed 7 at 10,000 hands: 22.4 / 16.3 / 64.7 / 40.9 / 51.8, all inside."
+  },
+  {
+   "spec": "SPEC-09",
+   "result": "PASS",
+   "evidence": "Carried forward from round 1 (no product code, tests or docs changed since c4210bb: git diff c4210bb..HEAD touches only the TASK-7.32 backlog task file and doit/TASK-7.32/**). Round 1: npx vitest run tests/golden: 282/282 passed; git diff --stat main -- tests/golden/preflop-spots.json empty. postflop-spots.json still 120 spots with an identical street/seats/action histogram; the 13 changed spots and the graded-example margin change all appear under 'Changes from TASK-7.32 (WTSD fix)' with old id, new id and a reason."
+  },
+  {
+   "spec": "SPEC-10",
+   "result": "PASS",
+   "evidence": "Carried forward from round 1 (no product code, tests or docs changed since c4210bb: git diff c4210bb..HEAD touches only the TASK-7.32 backlog task file and doit/TASK-7.32/**). Round 1: npm test 1309 passed / 0 failed; lint and typecheck clean; full Playwright 304 passed; locked edits listed in changes.md/qa.md with reasons and their check counts kept."
+  }
+ ],
+ "findings": [
+  {
+   "id": "J-2-01",
+   "severity": "LOW",
+   "spec": "SPEC-10",
+   "expected_vs_actual": "Carried from J-1-02: games.acceptance AC#6 changes its input seed (42 -> 7) rather than a value; check count kept. Now recorded in the TASK-7.32 notes.",
+   "fix": "None required."
+  }
+ ],
+ "summary": "J-1-01 is resolved. The TASK-7.32 implementation notes now link to the 'Why bots almost never folded (TASK-7.32)' section of docs/advice/postflop-rules.md. The anchor resolves, and the section holds the required numbers, rule ids and chosen fix. Only task-tracking files changed since review, so the round-1 PASS results for SPEC-02..10 and end-to-end carry forward. The npm test sanity run gave 1309 passed and 0 failed, and the integrity check is clean. No blocking findings."
+}
