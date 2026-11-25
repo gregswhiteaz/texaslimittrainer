@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-25T06:55:00Z'
+updated_date: '2026-11-25T07:14:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -73,3 +73,9 @@ Plan key: E10-S03 · Dream: limit-holdem-trainer
 
 Full spec: doit/TASK-10.7/spec.md
 <!-- SECTION:PLAN:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+Build: new optional write-once report field hints {hinted, decisions} counted at session end and validated on read; 4th 'Hints used' tile; key-order unit checks in session-report-errors/leaks tests moved to slice(-4) (not locked). npm test 1329 pass; report e2e 18 pass; gate PASS.
+<!-- SECTION:NOTES:END -->
