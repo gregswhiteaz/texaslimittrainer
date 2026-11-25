@@ -4,7 +4,7 @@ title: Choose the default speed for new sessions in Settings
 status: To Do
 assignee: []
 created_date: '2026-11-17T22:47:00Z'
-updated_date: '2026-11-25T15:55:00Z'
+updated_date: '2026-11-25T16:54:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-2
@@ -46,6 +46,7 @@ Plan key: E12-S04 · Dream: limit-holdem-trainer
 - [ ] #4 Given a session running at Rapid, When the user sets Default speed to Realistic in the Settings overlay and closes it, Then the running session stays at Rapid and the next Game Config pre-selects Realistic [REQ-050.1, REQ-050.5]
 - [ ] #5 Given the last session was started at Realistic and Default speed is Rapid in Settings, When Game Config opens, Then Rapid is pre-selected [REQ-050.1, REQ-012.3]
 - [ ] #6 Given the settings store created by TASK-12.1, When the default speed is chosen in Settings, Then it is written through a validated write API next to readSettings() and read back on the next launch
+- [ ] #7 Given the Settings screen controls, When a control's change event fires, Then a component-level test (event-capable renderer) shows the handler is called with the merged record, and not at all while settings are loading
 <!-- AC:END -->
 
 ## Definition of Done
@@ -68,4 +69,6 @@ Plan key: E12-S04 · Dream: limit-holdem-trainer
 
 <!-- SECTION:NOTES:BEGIN -->
 AC added from TASK-12.1 follow-up (doc-141): store exists with defaults but nothing writes or reads it yet.
+
+AC added from TASK-12.2 follow-up (doc-142).
 <!-- SECTION:NOTES:END -->

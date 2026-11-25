@@ -1,11 +1,11 @@
 ---
 id: TASK-12.2
 title: Hide opponent style labels at the table
-status: In Progress
+status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-25T16:53:00Z'
+updated_date: '2026-11-25T16:54:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -17,6 +17,7 @@ references:
 documentation:
   - doc-1
   - doc-2
+  - doc-142
 parent_task_id: TASK-12
 priority: high
 type: feature
@@ -87,4 +88,12 @@ AC added from TASK-3.3 follow-up (doc-24).
 Build: writeSettings (validated whole-record write); App reads settings at launch and saves each change; Display checkbox 'Show opponent styles at the table' (44x44 input); Table hides bot style labels when off. Locked e2e/settings.spec.ts re-pinned (control list; Tab order from the heading, Block 1). Full e2e 338 pass + settings fixed; gate PASS.
 
 Judge r1 PASS 12/12, no findings: production preview Chromium/WebKit — toggle by keyboard and mouse persists across reload; labels and separators hidden for every bot; applies on Resume; invalid records fall back to defaults and are repaired; other non-default fields preserved; checkbox disabled while the read is held back; full e2e 340 pass. CI 45656465611 green.
+
+Follow-ups: TASK-12.5 AC (component-level onChange test); TASK-12.9 note (surface failed settings saves).
 <!-- SECTION:NOTES:END -->
+
+## Final Summary
+
+<!-- SECTION:FINAL_SUMMARY:BEGIN -->
+Added a native 'Show opponent styles at the table' checkbox to Settings (on by default). Off hides every bot's style label and separator at the table, keeping name and stack. The choice is saved at once with the new writeSettings (first settings write API, reused by TASK-12.5 and TASK-2.11) and read back at launch. Verified: npm test 1402 passed, e2e 340 passed on Chromium and WebKit, CI green, judge PASS 12/12; review r1 MAJOR (disabled-until-loaded guard untested) fixed in r2. Review: A-1 to A-8, Q-2 (checkbox input itself 44x44) and the locked settings.spec.ts Tab-order edit. Risks: failed saves are only logged; no test observes onChange calling withOpponentStyles; scope 619 vs 600 lines.
+<!-- SECTION:FINAL_SUMMARY:END -->

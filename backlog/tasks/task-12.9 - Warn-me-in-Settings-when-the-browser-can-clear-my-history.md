@@ -4,7 +4,7 @@ title: Warn me in Settings when the browser can clear my history
 status: To Do
 assignee: []
 created_date: '2026-11-17T22:47:00Z'
-updated_date: '2026-11-17T23:22:00Z'
+updated_date: '2026-11-25T16:54:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-2
@@ -64,3 +64,9 @@ Plan key: E12-S09 · Dream: limit-holdem-trainer
 - [ ] #12 Story documentation is written and published to Backlog.md
 - [ ] #13 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+From TASK-12.2 (doc-142): settings saves currently only log failures (console.error 'Settings could not be saved'); this story should surface them.
+<!-- SECTION:NOTES:END -->
