@@ -3,24 +3,24 @@
     "id": "SPEC-01",
     "verifies": "AC#1",
     "verification": "acceptance `tests/toolchain/bot-boundary.acceptance.test.ts::bot code that imports engine internals fails npm run lint, naming each file`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-02",
     "verifies": "AC#3",
     "verification": "acceptance `tests/toolchain/bot-boundary.acceptance.test.ts::re-exports, side-effect, dynamic and package imports in bot code fail npm run lint`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-03",
     "verifies": "AC#2",
     "verification": "acceptance `tests/toolchain/bot-boundary.acceptance.test.ts::PlayerView-boundary type imports pass and only src/bots is restricted`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-04",
     "verifies": "AC#3",
     "verification": "command `! grep -nE \"boundaryProblems|ENGINE_TYPES|PlayerView-boundary types\" tests/bots/tag.test.ts && test -z \"$(git diff --stat main -- src)\" && npm run lint && npm run typecheck && npm test`",
-    "status": "pending"
+    "status": "pass"
   }
 ]

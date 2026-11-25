@@ -5,13 +5,18 @@
   "base_commit": "94950c85d8ae6ff158015675a271091523819dec",
   "started": "2026-11-25T15:01:46",
   "review_round": 2,
-  "judge_round": 0,
+  "judge_round": 1,
   "sendbacks": 0,
   "gate_runs": 5,
   "questions": 0,
   "assumptions": 4,
   "escalations": 0,
-  "item_failures": {},
+  "item_failures": {
+    "SPEC-01": 0,
+    "SPEC-02": 0,
+    "SPEC-03": 0,
+    "SPEC-04": 0
+  },
   "locked_tests": {
     "tests/toolchain/bot-boundary.acceptance.test.ts": "ee7b9bf02e16d87c91474da3ebf1236d19bdf107874125bd6f05a55abcd447ac"
   },
@@ -2051,5 +2056,8 @@
     "tools/lint/headless-boundary.js:non-normalized-engine-path-bypass": [
       "review r1"
     ]
+  },
+  "judge_results": {
+    "1": "PASS"
   }
 }
