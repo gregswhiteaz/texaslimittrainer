@@ -120,7 +120,8 @@ Config, Statistics, Settings and the Session report add no entries; Back on the 
 
 - **Back on the Table** pauses to Home, exactly like the Home control.
 - **Forward never reopens the Table.** Use Resume session. Forward onto the Table entry this page load pushed
-  last steps straight back off it, so Home stays and one Back leaves the app.
+  last steps straight back off it, so Home stays and one Back leaves the app (within one page load; after a reload
+  the earlier load's Table entry stays, see below).
 - **Back on Home or Game Config** leaves the app, to whatever page came before it. A session that was started
   stays paused, as when the app is closed.
 - Leaving the Table in the app (Home control or Leave table) steps back off its entry, so the entry does not

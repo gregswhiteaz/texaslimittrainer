@@ -7,3 +7,4 @@
 - `docs/ui/navigation.md` — Back/Forward section: random key, Forward step-off, revised example, reload note, Home waits for table writes, test list adds `e2e/pause-history.spec.ts`.
 
 No new dependencies.
+- `docs/ui/navigation.md` — Forward bullet qualified for the reload case (judge J-1-01; orchestrator docs fix)
