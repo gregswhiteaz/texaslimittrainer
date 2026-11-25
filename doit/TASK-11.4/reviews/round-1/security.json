@@ -1,0 +1,8 @@
+{"reviewer": "security", "round": 1,
+ "findings": [
+  {"fingerprint": "src/stats/trends.ts:unknown-filter-value-not-rejected", "severity": "NIT", "file": "src/stats/trends.ts", "line": 172,
+   "issue": "filterTrendData does not reject filter values outside the option ids. A DOM-edited option value (cast with `as GameTypeFilter`) such as 'x' makes typeMatches treat it as non-cash and shows sit-and-go hands; an unknown tableSize matches no session. Nothing throws and the screen stays usable; only the local user can do this to their own view.",
+   "evidence": "DevTools-edited <option value> -> e.target.value as GameTypeFilter -> onFilterChange -> filterTrendData typeMatches: (hand.cash !== undefined) === ('x' === 'cash') -> sit-and-go hands shown",
+   "fix": "Optional: map an unrecognised value to 'all' (or ignore the change) by checking it against TABLE_SIZE_OPTIONS / GAME_TYPE_OPTIONS ids before calling onFilterChange."}
+ ],
+ "summary": "No reachable vulnerabilities. Tampered seat counts cannot throw: dealtIn is seats.length (an integer), and the 2-10 range check runs before referenceSizeOf, which is the only throwing call. Tampered session ids are only used as keys in a Map, so there is no prototype pollution, and they flow into React text, so there is no HTML sink. Filtering is synchronous and linear in hand count, and a failed read still gives view null with the select row hidden. Unknown select values do not throw (NIT only). No new dependencies, network calls, secrets or randomness."}

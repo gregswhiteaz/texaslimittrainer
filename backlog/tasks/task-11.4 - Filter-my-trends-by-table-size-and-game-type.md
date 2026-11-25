@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-25T11:55:00Z'
+updated_date: '2026-11-25T12:15:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -87,4 +87,6 @@ AC added from TASK-11.2 Q-1: TASK-11.2 implements the filter cases as pure funct
 AC added from TASK-11.3 Q-1.
 
 AC added from TASK-11.3 follow-up (doc-136).
+
+Build: filterTrendData (table size from the session's largest dealt-in count via referenceSizeOf; game type by cash summary); Table size / Game type selects once loaded, not remembered; App recomputes statisticsView(filtered, all). npm test 1370 pass; statistics e2e 16 pass; gate PASS.
 <!-- SECTION:NOTES:END -->
