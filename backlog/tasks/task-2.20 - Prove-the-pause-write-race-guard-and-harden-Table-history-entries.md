@@ -1,10 +1,11 @@
 ---
 id: TASK-2.20
 title: Prove the pause write-race guard and harden Table history entries
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-24T03:18:00Z'
-updated_date: '2026-11-24T04:03:00Z'
+updated_date: '2026-11-25T19:33:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -31,6 +32,17 @@ Follow-up from TASK-2.14 (doc-108). No test exercises tableWritesSettled(): remo
 - [ ] #3 Given Back then Forward on the Table, When the user presses Back on Home, Then one Back leaves the app (no visible no-op step), with a Chromium and WebKit test
 - [ ] #4 Given a page reload on the Table followed by Resume (real clock, Chromium and WebKit), When the user presses browser Back, Then Home opens (from TASK-3.11 judge J-1-01, where Back stayed on the Table)
 <!-- AC:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. Table history key becomes a random 32-hex id (fixes duplicate keys after reload under a faked clock)
+2. Landing on a Table entry pushed this page load while no Table is shown steps off it once
+3. Race test: hold the start-record write with a test-only init script, finish hand 1, choose Home/Back; Home must show the right hand count (fails without the guard)
+4. Locked e2e/history.spec.ts case (5) runs under the paused clock; docs
+
+Full spec: doit/TASK-2.20/spec.md
+<!-- SECTION:PLAN:END -->
 
 ## Implementation Notes
 

@@ -1421,6 +1421,12 @@
       "event": "unlock",
       "file": "e2e/home-control.spec.ts",
       "reason": "TASK-13.2 Q-1 (auto-accepted): DB v5 adds a meta store; re-pin DB version and store names / open version, keep every check"
+    },
+    {
+      "t": "2026-11-25T12:33:10",
+      "event": "unlock",
+      "file": "e2e/history.spec.ts",
+      "reason": "TASK-2.20 AC#2 (auto-accepted): case (5) runs under the paused clock (drop pausedClock:false and its timeOrigin comment); no assertion removed"
     }
   ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-2.14",
@@ -1435,6 +1441,7 @@
   "relock_pending": [
     "e2e/home-control.spec.ts",
     "e2e/home-control.spec.ts",
-    "e2e/home-control.spec.ts"
+    "e2e/home-control.spec.ts",
+    "e2e/history.spec.ts"
   ]
 }
