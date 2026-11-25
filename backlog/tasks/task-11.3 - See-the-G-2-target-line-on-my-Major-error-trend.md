@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-25T11:10:00Z'
+updated_date: '2026-11-25T11:41:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -40,27 +40,27 @@ Plan key: E11-S06 · Dream: limit-holdem-trainer
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Given 999 stored hands of any game type, When the Major-error chart is shown, Then no target line is drawn [REQ-048.3, REQ-048.9]
-- [ ] #2 Given 1,000 stored hands whose decisions include 62 unhinted Major errors, When the Major-error chart is shown, Then a dashed target line is drawn at 3.1 [REQ-048.3, REQ-048.9]
-- [ ] #3 Given the first 1,000 hands contain 62 unhinted and 20 hinted Major errors, When the target is computed, Then it is 3.1 [REQ-040.3, REQ-048.9]
-- [ ] #4 Given 1,000 stored hands of which 400 are sit-and-go hands and 60 contain a hinted decision, When the chart is shown with game type filter Cash (600 hands in the filter), Then the target line is drawn [REQ-048.3, REQ-048.9]
-- [ ] #5 Given the first 1,000 hands were 600 cash 6-max and 400 sit-and-go heads-up hands with a baseline of 6.2, When the filter is set to any table size, game type or line-up, Then the target line stays at 3.1 [REQ-048.9]
+- [x] #1 Given 999 stored hands of any game type, When the Major-error chart is shown, Then no target line is drawn [REQ-048.3, REQ-048.9]
+- [x] #2 Given 1,000 stored hands whose decisions include 62 unhinted Major errors, When the Major-error chart is shown, Then a dashed target line is drawn at 3.1 [REQ-048.3, REQ-048.9]
+- [x] #3 Given the first 1,000 hands contain 62 unhinted and 20 hinted Major errors, When the target is computed, Then it is 3.1 [REQ-040.3, REQ-048.9]
+- [x] #4 Given 1,000 stored hands of which 400 are sit-and-go hands and 60 contain a hinted decision, When the chart is shown with game type filter Cash (600 hands in the filter), Then the target line is drawn [REQ-048.3, REQ-048.9]
+- [x] #5 Given the first 1,000 hands were 600 cash 6-max and 400 sit-and-go heads-up hands with a baseline of 6.2, When the filter is set to any table size, game type or line-up, Then the target line stays at 3.1 [REQ-048.9]
 <!-- AC:END -->
 
 ## Definition of Done
 <!-- DOD:BEGIN -->
-- [ ] #1 Every acceptance criterion has at least one automated test (unit, property or Playwright) that passes
-- [ ] #2 `npm run lint`, `npm run typecheck` and `npm test` pass with zero errors [REQ-059.1, REQ-059.4]
-- [ ] #3 The golden-spot suite passes 100% (applies from the story that creates the suite, E07-S14, onward) [REQ-039.4]
-- [ ] #4 Coverage thresholds hold: >= 90% engine/bots/advice/statistics, >= 70% overall [REQ-059.3]
-- [ ] #5 Engine, bots, advice and statistics code imports no UI or browser-only code [REQ-059.2]
-- [ ] #6 Stories that touch the engine, bots or advice: a 10,000-hand playtest reports zero invariant violations (applies once the playtest runner exists, E01-S07, onward) [REQ-056.1]
-- [ ] #7 Stories that add or change a screen: Playwright test of the screen flow in Chromium and WebKit, and axe reports zero serious or critical violations (axe tooling is provisioned in the toolchain story E01-S01) [REQ-057.1]
-- [ ] #8 No new network requests beyond the app's own files [REQ-058.1]
-- [ ] #9 Strategy-content stories: text is original and every chart, range or golden spot carries its justification [REQ-061.2]
-- [ ] #10 CI workflow is green on the story's branch (applies once the CI story E01-S02 is done; E01-S01 instead passes the same checks locally) [REQ-064.2]
-- [ ] #11 Story documentation is written and published to Backlog.md
-- [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
+- [x] #1 Every acceptance criterion has at least one automated test (unit, property or Playwright) that passes
+- [x] #2 `npm run lint`, `npm run typecheck` and `npm test` pass with zero errors [REQ-059.1, REQ-059.4]
+- [x] #3 The golden-spot suite passes 100% (applies from the story that creates the suite, E07-S14, onward) [REQ-039.4]
+- [x] #4 Coverage thresholds hold: >= 90% engine/bots/advice/statistics, >= 70% overall [REQ-059.3]
+- [x] #5 Engine, bots, advice and statistics code imports no UI or browser-only code [REQ-059.2]
+- [x] #6 Stories that touch the engine, bots or advice: a 10,000-hand playtest reports zero invariant violations (applies once the playtest runner exists, E01-S07, onward) [REQ-056.1]
+- [x] #7 Stories that add or change a screen: Playwright test of the screen flow in Chromium and WebKit, and axe reports zero serious or critical violations (axe tooling is provisioned in the toolchain story E01-S01) [REQ-057.1]
+- [x] #8 No new network requests beyond the app's own files [REQ-058.1]
+- [x] #9 Strategy-content stories: text is original and every chart, range or golden spot carries its justification [REQ-061.2]
+- [x] #10 CI workflow is green on the story's branch (applies once the CI story E01-S02 is done; E01-S01 instead passes the same checks locally) [REQ-064.2]
+- [x] #11 Story documentation is written and published to Backlog.md
+- [x] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
 
 ## Implementation Plan
@@ -77,4 +77,6 @@ Full spec: doit/TASK-11.3/spec.md
 
 <!-- SECTION:NOTES:BEGIN -->
 Build: g2Target (first 1,000 stored hands, bbPer100(m,2,1000), null below 1,000; always from all hands); dashed target line with approved caption and aria suffix; scale includes target; null-target markup unchanged. npm test 1361 pass; statistics e2e 14 pass; gate PASS.
+
+Judge r1 PASS 10/10: production preview Chromium/WebKit, 1,300 hands seeded out of time order — target 6.2 from 123 unhinted Majors in the first 1,000 hands, line at the computed y, exact caption and aria-label; 999 hands show no line. Review r1 MAJOR (order not tested) fixed in r2. CI 45605151334 green.
 <!-- SECTION:NOTES:END -->
