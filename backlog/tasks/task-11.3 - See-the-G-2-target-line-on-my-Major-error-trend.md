@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-25T10:47:00Z'
+updated_date: '2026-11-25T11:10:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -72,3 +72,9 @@ Plan key: E11-S06 · Dream: limit-holdem-trainer
 
 Full spec: doit/TASK-11.3/spec.md
 <!-- SECTION:PLAN:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+Build: g2Target (first 1,000 stored hands, bbPer100(m,2,1000), null below 1,000; always from all hands); dashed target line with approved caption and aria suffix; scale includes target; null-target markup unchanged. npm test 1361 pass; statistics e2e 14 pass; gate PASS.
+<!-- SECTION:NOTES:END -->

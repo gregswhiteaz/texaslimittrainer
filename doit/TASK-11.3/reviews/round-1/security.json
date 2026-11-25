@@ -1,0 +1,3 @@
+{"reviewer": "security", "round": 1,
+ "findings": [],
+ "summary": "No security findings. The only input is stored hand records from local IndexedDB. trendData() has already validated them with parseHandRecord, and the new g2Target() reads only the numeric unhintedMajors over a fixed 1,000-hand prefix. That loop is bounded, so unbounded input can't exhaust resources. The new output is a number written to SVG attributes through toFixed and React props, plus a constant caption. React escapes both, and the change has no dangerouslySetInnerHTML, no dynamic markup, no new dependencies, no network, no secrets and no randomness."}

@@ -4,7 +4,7 @@
   "branch": "doit/TASK-11.3",
   "base_commit": "a91dc7c3eb26e776440444dc6f7a849a9f2f2579",
   "started": "2026-11-25T03:42:23",
-  "review_round": 0,
+  "review_round": 1,
   "judge_round": 0,
   "sendbacks": 0,
   "gate_runs": 2,
@@ -1888,7 +1888,25 @@
       "skips": 0
     }
   },
-  "history": [],
+  "history": [
+    {
+      "t": "2026-11-25T04:12:39",
+      "event": "unlock",
+      "file": "tests/stats/g2-target.acceptance.test.tsx",
+      "reason": "Review r1 MAJOR: strengthen \u2014 feed AC#3/AC#5 records in non-chronological order; seat one pool with a preset line-up (MINOR)"
+    }
+  ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-11.3",
-  "spec_sha256": "d7903488e5b194f11f280035d00e8304025a9e1bd63fe9f9048b527b8287a02a"
+  "spec_sha256": "d7903488e5b194f11f280035d00e8304025a9e1bd63fe9f9048b527b8287a02a",
+  "review_findings": {
+    "1": 1
+  },
+  "relock_pending": [
+    "tests/stats/g2-target.acceptance.test.tsx"
+  ],
+  "brief_history": {
+    "tests/stats/g2-target.acceptance.test.tsx:baseline-order-unverified-fixtures-already-chronological": [
+      "review r1"
+    ]
+  }
 }
