@@ -1409,6 +1409,12 @@
       "event": "unlock",
       "file": "e2e/home-control.spec.ts",
       "reason": "TASK-10.1 D-4: Leave table now ends the session and opens the Session Report (replace the interim pause expectation; nothing loosened)"
+    },
+    {
+      "t": "2026-11-25T08:34:03",
+      "event": "unlock",
+      "file": "e2e/home-control.spec.ts",
+      "reason": "TASK-12.1 Q-1 (auto-accepted): DB v4 adds a settings store; re-pin DB version and store names, keep every check"
     }
   ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-2.14",
@@ -1421,6 +1427,7 @@
   },
   "doc_id": "doc-108",
   "relock_pending": [
+    "e2e/home-control.spec.ts",
     "e2e/home-control.spec.ts"
   ]
 }

@@ -17,7 +17,8 @@ type Screen =
   | { readonly name: 'table'; readonly resume: ResumedSession }
   | { readonly name: 'ending'; readonly sessionId: string }
   | { readonly name: 'report'; readonly report: SessionReport }
-  | { readonly name: 'stats'; readonly view: StatisticsView | undefined | null };
+  | { readonly name: 'stats'; readonly view: StatisticsView | undefined | null }
+  | { readonly name: 'settings' };
 
 type Other = { readonly name: 'not-a-screen' };
 `;
@@ -79,7 +80,7 @@ describe('realMoneyOffers', () => {
 describe('appScreens', () => {
   it('finds the Screen union routes and the dialog components, sorted', () => {
     expect(appScreens(APP_SOURCE, UI_FILES)).toEqual({
-      routes: ['config', 'ending', 'home', 'report', 'stats', 'table'],
+      routes: ['config', 'ending', 'home', 'report', 'settings', 'stats', 'table'],
       dialogs: ['BustDialog', 'EndSessionDialog', 'LeaveDialog'],
     });
     expect(unlistedScreens(appScreens(APP_SOURCE, UI_FILES), SCREEN_LIST)).toEqual([]);
@@ -87,21 +88,21 @@ describe('appScreens', () => {
 
   it('unlistedScreens names an unlisted screen, an unlisted dialog and a stale entry', () => {
     const app = APP_SOURCE.replace(
-      "| { readonly name: 'stats'; readonly view: StatisticsView | undefined | null };",
-      "| { readonly name: 'stats'; readonly view: StatisticsView | undefined | null }\n  | { readonly name: 'settings' };",
+      "| { readonly name: 'settings' };",
+      "| { readonly name: 'settings' }\n  | { readonly name: 'help' };",
     );
     const files = [
       ...UI_FILES,
-      { path: 'src/ui/settings/SettingsDialog.tsx', source: '<dialog open>…</dialog>' },
+      { path: 'src/ui/help/HelpDialog.tsx', source: '<dialog open>…</dialog>' },
     ];
     const list: readonly ScreenEntry[] = [
       ...SCREEN_LIST,
       { id: 'old', kind: 'screen', route: 'gone' },
     ];
     expect(unlistedScreens(appScreens(app, files), list)).toEqual([
-      'dialog SettingsDialog is not in the screen list',
+      'dialog HelpDialog is not in the screen list',
+      'screen help is not in the screen list',
       'screen list entry old matches no screen or dialog in the app',
-      'screen settings is not in the screen list',
     ]);
 
     const confirm = {

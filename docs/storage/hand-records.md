@@ -15,16 +15,17 @@ changes or deletes them.
 
 ## Database
 
-| Item         | Value                                                                       |
-| ------------ | --------------------------------------------------------------------------- |
-| Database     | `tlh-trainer`, version `3` (the only version marker; no per-store versions) |
-| Object store | `hands` (and `sessions` since version 2, see sessions.md)                   |
-| Key          | `keyPath: ['sessionId', 'handNumber']` (compound, no auto-increment)        |
-| Indexes      | none besides the primary key                                                |
+| Item         | Value                                                                           |
+| ------------ | ------------------------------------------------------------------------------- |
+| Database     | `tlh-trainer`, version `4` (the only version marker; no per-store versions)     |
+| Object store | `hands` (and `sessions` since version 2, `reports` since 3, `settings` since 4) |
+| Key          | `keyPath: ['sessionId', 'handNumber']` (compound, no auto-increment)            |
+| Indexes      | none besides the primary key                                                    |
 
 The store is created in `onupgradeneeded` when `oldVersion < 1`; version 2 adds `sessions` when
-`oldVersion < 2` and leaves `hands` and its records untouched. Later stores are added the same way with a
-higher version and an `oldVersion` check. An open connection closes itself on `versionchange`.
+`oldVersion < 2` and leaves `hands` and its records untouched. Version 3 adds `reports` and version 4 adds
+`settings` with its default record ([settings.md](settings.md)) the same way. Later stores are added the same
+way with a higher version and an `oldVersion` check. An open connection closes itself on `versionchange`.
 
 ## Record fields
 

@@ -19,3 +19,7 @@ Options: keep 0.0.0, release numbering is E13 [Recommended]; bump to 0.1.0 now.
 ## Q-5 — Locked tests from earlier stories (needed for AC#1, AC#5)
 Unlocked with reason "TASK-12.1 Q-5": e2e/home.spec.ts (TASK-2.1); e2e/resume.spec.ts (TASK-2.6); tests/ui/screen-list.acceptance.test.ts (TASK-2.15, TASK-11.1); e2e/play-money.spec.ts (TASK-2.15, TASK-10.2, TASK-11.1). e2e/support/hand-records.ts and e2e/support/play-money.ts are not hook-locked. Update expected values; keep every check.
 **Answer: auto-accepted (recommended)**.
+
+## Block 1 — two more locked tests pin DB v3 / three stores
+tests/storage/session-end.acceptance.test.ts (TASK-10.1): DB_VERSION 3 → 4, store names gain 'settings'. e2e/home-control.spec.ts (TASK-2.14): store names gain 'settings' (and its doc comment). Direct consequence of Q-1.
+**Answer: auto-accepted (recommended)** — unlocked under owners; orchestrator edit; every check kept.

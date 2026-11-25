@@ -1,8 +1,11 @@
 import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vitest/config';
+import pkg from './package.json' with { type: 'json' };
 
 export default defineConfig({
   plugins: [react()],
+  // Only the version string is inlined, never the rest of package.json (TASK-12.1 A-4).
+  define: { __APP_VERSION__: JSON.stringify(pkg.version) },
   test: {
     include: ['src/**/*.test.{ts,tsx}', 'tests/**/*.test.{ts,tsx}'],
     environment: 'node',

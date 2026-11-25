@@ -10,6 +10,8 @@ export interface HomeScreenProps {
   readonly onResume?: () => void;
   /** When given, the Statistics entry is shown last (TASK-11.1 A-4). */
   readonly onStatistics?: () => void;
+  /** When given, the Settings entry is shown last (TASK-12.1 A-1). */
+  readonly onSettings?: () => void;
 }
 
 export function HomeScreen({
@@ -18,6 +20,7 @@ export function HomeScreen({
   paused,
   onResume,
   onStatistics,
+  onSettings,
 }: HomeScreenProps): React.JSX.Element {
   const heading = useHeadingFocus(focusHeading);
   return (
@@ -45,6 +48,12 @@ export function HomeScreen({
           <button type="button" className="menu-secondary" onClick={onStatistics}>
             <span className="menu-title">Statistics</span>
             <span className="menu-subtitle">Your progress across sessions</span>
+          </button>
+        )}
+        {onSettings && (
+          <button type="button" className="menu-secondary" onClick={onSettings}>
+            <span className="menu-title">Settings</span>
+            <span className="menu-subtitle">Speed, display, reset data</span>
           </button>
         )}
       </nav>

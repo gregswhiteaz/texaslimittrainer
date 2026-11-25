@@ -17,6 +17,7 @@ import { resumeSummary } from '../table/table-view';
 import { GameConfigScreen } from './config/GameConfigScreen';
 import { HomeScreen } from './home/HomeScreen';
 import { ReportScreen } from './report/ReportScreen';
+import { SettingsScreen } from './settings/SettingsScreen';
 import { StatisticsScreen } from './stats/StatisticsScreen';
 import { TableScreen } from './table/TableScreen';
 import { tableWritesSettled, type ResumedSession } from './table/useTableSession';
@@ -40,7 +41,8 @@ type Screen =
       readonly data?: TrendData;
       readonly filter: TrendFilter;
       readonly grouping: TrendGrouping;
-    };
+    }
+  | { readonly name: 'settings' };
 
 /** undefined while Home's read is pending (A-4); reset on leaving Home so a return reads it again. */
 type Paused = { readonly record: SessionRecord; readonly summary: string } | null | undefined;
@@ -274,6 +276,10 @@ export default function App(): React.JSX.Element {
           paused={paused && { summary: paused.summary }}
           onResume={paused ? () => resume(paused.record) : undefined}
           onStatistics={openStatistics}
+          onSettings={() => {
+            setPaused(undefined);
+            setScreen({ name: 'settings' });
+          }}
         />
       );
     case 'config':
@@ -342,5 +348,7 @@ export default function App(): React.JSX.Element {
           }}
         />
       );
+    case 'settings':
+      return <SettingsScreen onHome={() => setScreen({ name: 'home', returned: true })} />;
   }
 }

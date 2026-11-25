@@ -18,7 +18,7 @@ it('the screen list names every App screen and every dialog component', () => {
   const missing = unlistedScreens(found, SCREEN_LIST);
   expect(missing, missing.join('\n')).toEqual([]);
   expect(found).toEqual({
-    routes: ['config', 'ending', 'home', 'report', 'stats', 'table'],
+    routes: ['config', 'ending', 'home', 'report', 'settings', 'stats', 'table'],
     dialogs: ['BustDialog', 'EndSessionDialog', 'LeaveDialog'],
   });
 });

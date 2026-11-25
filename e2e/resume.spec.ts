@@ -148,9 +148,10 @@ function ninePlayerAfter25(): SessionRecord {
 async function expectNoResume(page: Page): Promise<void> {
   await expect(menu(page)).toHaveAttribute('data-paused', 'none');
   await expect(resumeButton(page)).toHaveCount(0);
-  // TASK-11.1: Home also lists Statistics.
-  await expect(menu(page).getByRole('button')).toHaveCount(2);
-  await expect(menu(page).getByRole('button').last()).toHaveAccessibleName(/^Statistics/);
+  // TASK-11.1: Home also lists Statistics. TASK-12.1: and Settings, last.
+  await expect(menu(page).getByRole('button')).toHaveCount(3);
+  await expect(menu(page).getByRole('button').last()).toHaveAccessibleName(/^Settings/);
+  await expect(menu(page).getByRole('button').nth(1)).toHaveAccessibleName(/^Statistics/);
 }
 
 test('a session reloaded mid-hand resumes from Home at the same hand number under the same session id', async ({
@@ -175,9 +176,10 @@ test('a session reloaded mid-hand resumes from Home at the same hand number unde
   await page.reload();
   await expect(menu(page)).toHaveAttribute('data-paused', 'shown');
   const entries = menu(page).getByRole('button');
-  // TASK-11.1: Home also lists Statistics, after Resume session.
-  await expect(entries).toHaveCount(3);
-  await expect(entries.last()).toHaveAccessibleName(/^Statistics/);
+  // TASK-11.1: Home also lists Statistics, after Resume session. TASK-12.1: Settings comes last.
+  await expect(entries).toHaveCount(4);
+  await expect(entries.last()).toHaveAccessibleName(/^Settings/);
+  await expect(entries.nth(2)).toHaveAccessibleName(/^Statistics/);
   await expect(entries.nth(0)).toHaveText(/^New game/);
   await expect(entries.nth(1)).toHaveAccessibleName(/^Resume session/);
   await expect(entries.nth(1).locator('.menu-subtitle')).toHaveText(

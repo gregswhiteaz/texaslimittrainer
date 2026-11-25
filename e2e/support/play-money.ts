@@ -51,7 +51,8 @@ function screenType(appSource: string): string {
   return appSource.slice(start);
 }
 
-const DIALOG = /<dialog\b|role=["']?(alert)?dialog\b/;
+/** `<dialog>`, or a `role` of dialog/alertdialog written as a string or a JSX expression (`role={'dialog'}`). */
+const DIALOG = /<dialog\b|role=\{?\s*["'`]?(alert)?dialog\b/;
 
 /** App routes (the `name` literals of App.tsx's Screen union) and dialog components (by file basename). */
 export function appScreens(

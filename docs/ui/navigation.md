@@ -1,15 +1,16 @@
 # Navigation: screens, the Home control and browser Back/Forward
 
-The app has five screens, held in `App`'s state (`src/ui/App.tsx`). There are no URL routes, hash fragments
+The app has six screens (plus the busy screen shown while a session ends), held in `App`'s state (`src/ui/App.tsx`). There are no URL routes, hash fragments
 or deep links: the URL stays `/` on every screen.
 
-| Screen         | Opened by                                                                                                    | Leaves to                                                                      |
-| -------------- | ------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------ |
-| Home           | app start; Cancel / ← Home; the Table's Home control or browser Back; Leave table with 0 hands; Back to Home | New game → Game Config; Resume session → Table; Statistics → Statistics        |
-| Game Config    | New game                                                                                                     | Start game → Table (asks first if a session is paused); Cancel / ← Home → Home |
-| Table          | Start game (a new session); Resume session                                                                   | Home control or browser Back → Home; Leave table → Session report (or Home)    |
-| Session report | Leave table (after at least one completed hand)                                                              | View statistics → Statistics; Back to Home → Home                              |
-| Statistics     | Statistics on Home; View statistics on the Session report                                                    | ← Home → Home                                                                  |
+| Screen         | Opened by                                                                                                    | Leaves to                                                                                    |
+| -------------- | ------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------- |
+| Home           | app start; Cancel / ← Home; the Table's Home control or browser Back; Leave table with 0 hands; Back to Home | New game → Game Config; Resume session → Table; Statistics → Statistics; Settings → Settings |
+| Game Config    | New game                                                                                                     | Start game → Table (asks first if a session is paused); Cancel / ← Home → Home               |
+| Table          | Start game (a new session); Resume session                                                                   | Home control or browser Back → Home; Leave table → Session report (or Home)                  |
+| Session report | Leave table (after at least one completed hand)                                                              | View statistics → Statistics; Back to Home → Home                                            |
+| Statistics     | Statistics on Home; View statistics on the Session report                                                    | ← Home → Home                                                                                |
+| Settings       | Settings on Home                                                                                             | ← Home → Home                                                                                |
 
 Each return to Home moves focus to Home's `TLH Trainer` heading.
 
@@ -17,6 +18,14 @@ Each return to Home moves focus to Home's `TLH Trainer` heading.
 shown). It opens the Statistics screen with its `Statistics` heading focused; `← Home` returns to Home. The
 screen reads the stored hands each time it opens, after any hand write still running, and writes nothing. See
 [trends.md](../stats/trends.md).
+
+**Settings (TASK-12.1).** Home's Main menu always ends with `Settings`, after Statistics. It opens the Settings
+screen with its `Settings` heading focused: `← Home`, then the sections Play, Display and Your data (Your data
+says that hands, sessions and statistics are stored only in this browser, with no backup), then
+`Version <x>`, where `<x>` is `package.json`'s `version` inlined at build time (`__APP_VERSION__` in
+`vite.config.ts`, read as `APP_VERSION` from `src/ui/app-version.ts`). `← Home` returns to Home. Settings adds
+no history entry and, in this slice, has no controls and reads or writes nothing; the settings record it will
+use is described in [settings.md](../storage/settings.md).
 
 **From the Session report (TASK-11.6).** The report ends with a right-aligned row: `View statistics` (outlined),
 then `Back to Home`. Opening Statistics from the report resets the filters and grouping like Home's entry (All /
@@ -97,7 +106,7 @@ ask and never end anything.
 
 Only opening the Table (Start game or Resume session) adds a history entry, `{ tlhTable: <key> }`, with a key
 unique to that opening (`performance.timeOrigin` and a counter; nothing else is stored in history). Home, Game
-Config, Statistics and the Session report add no entries; Back on the Session report leaves the app.
+Config, Statistics, Settings and the Session report add no entries; Back on the Session report leaves the app.
 
 - **Back on the Table** pauses to Home, exactly like the Home control.
 - **Forward never reopens the Table.** Use Resume session.
@@ -132,3 +141,7 @@ Home control            […, app, T1*, T2]    current entry is T2 → history.b
 - `e2e/session-report.spec.ts` (every push): Leave table opens the Session report, Back to Home, and a 0-hand
   session opens Home.
 - `e2e/statistics.spec.ts` (every push): Home → Statistics → Home, with focus on each heading.
+- `tests/ui/home-settings.acceptance.test.tsx`, `tests/ui/settings.acceptance.test.tsx`: the Settings entry
+  and the Settings screen markup and version line.
+- `e2e/settings.spec.ts` (every push): Home → Settings → Home, Tab reach, Enter/Space, 44x44 targets, axe and
+  the version line.

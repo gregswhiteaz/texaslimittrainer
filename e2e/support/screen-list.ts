@@ -14,6 +14,7 @@ export const SCREEN_LIST = [
   { id: 'ending', kind: 'screen', route: 'ending' },
   { id: 'session-report', kind: 'screen', route: 'report' },
   { id: 'statistics', kind: 'screen', route: 'stats' },
+  { id: 'settings', kind: 'screen', route: 'settings' },
 ] as const satisfies readonly ScreenEntry[];
 
 export type ScreenId = (typeof SCREEN_LIST)[number]['id'];

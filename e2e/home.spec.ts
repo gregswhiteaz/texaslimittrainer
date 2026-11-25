@@ -87,9 +87,10 @@ test('launch opens Home with the TLH logo and the name TLH Trainer', async ({ pa
   const box = await logo.boundingBox();
   expect(box && { width: box.width, height: box.height }).toEqual({ width: 64, height: 64 });
   const menu = page.getByRole('navigation', { name: 'Main menu' });
-  await expect(menu.getByRole('button')).toHaveCount(2);
+  await expect(menu.getByRole('button')).toHaveCount(3);
   await expect(menu.getByRole('button', { name: /^New game/ })).toBeVisible();
   await expect(menu.getByRole('button', { name: /^Statistics/ })).toBeVisible();
+  await expect(menu.getByRole('button', { name: /^Settings/ })).toBeVisible();
   await expect(tableSection(page)).toHaveCount(0);
 });
 

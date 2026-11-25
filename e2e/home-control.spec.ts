@@ -104,13 +104,13 @@ async function expectPausedHome(page: Page, hands: number): Promise<void> {
   );
 }
 
-/** Exactly one stored session, equal to `expected` and not ended, and no store besides hands, reports and sessions. */
+/** Exactly one stored session, equal to `expected` and not ended, and no store besides hands, reports, sessions and settings (TASK-12.1). */
 async function expectSessionUnchanged(page: Page, expected: Json): Promise<void> {
   const sessions = await storedSessions(page);
   expect(sessions).toHaveLength(1);
   expect(sessions[0]).toEqual(expected);
   expect(sessions[0]).not.toHaveProperty('endedAt');
-  expect(await page.evaluate(storeNames)).toEqual(['hands', 'reports', 'sessions']);
+  expect(await page.evaluate(storeNames)).toEqual(['hands', 'reports', 'sessions', 'settings']);
 }
 
 test.describe.serial('the Home control pauses the session', () => {

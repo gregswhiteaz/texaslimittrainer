@@ -12,14 +12,18 @@ import {
   type SessionEnder,
   type SessionReport,
 } from '../table/session-report';
+import { DEFAULT_SETTINGS, parseSettings, type SettingsReader } from '../table/settings';
 
 export const DB_NAME = 'tlh-trainer';
 /** The only version marker until REQ-054 adds per-store schema versions. v2 added SESSIONS_STORE, v3
- *  REPORTS_STORE. */
-export const DB_VERSION = 3;
+ *  REPORTS_STORE, v4 SETTINGS_STORE. */
+export const DB_VERSION = 4;
 export const HANDS_STORE = 'hands';
 export const SESSIONS_STORE = 'sessions';
 export const REPORTS_STORE = 'reports';
+export const SETTINGS_STORE = 'settings';
+/** The out-of-line key of the one settings record in SETTINGS_STORE. */
+export const SETTINGS_KEY = 'settings';
 
 function opened(factory: IDBFactory, name: string): Promise<IDBDatabase> {
   return new Promise((resolve, reject) => {
@@ -34,6 +38,9 @@ function opened(factory: IDBFactory, name: string): Promise<IDBDatabase> {
       }
       if (event.oldVersion < 3) {
         request.result.createObjectStore(REPORTS_STORE, { keyPath: 'sessionId' });
+      }
+      if (event.oldVersion < 4) {
+        request.result.createObjectStore(SETTINGS_STORE).put({ ...DEFAULT_SETTINGS }, SETTINGS_KEY);
       }
     };
     request.onsuccess = () => {
@@ -167,12 +174,13 @@ async function trendData(db: IDBDatabase): Promise<TrendData> {
 /**
  * An IndexedDB HandStore: add-only hand records, one replaceable record per session and one write-once report
  * per ended session. The database opens on the first call; if opening fails, every call rejects with that
- * error. Records are validated by parseHandRecord / parseSessionRecord / parseSessionReport when read.
+ * error. Records are validated by parseHandRecord / parseSessionRecord / parseSessionReport / parseSettings when
+ * read.
  */
 export function openHandStore(
   factory: IDBFactory = indexedDB,
   name = DB_NAME,
-): HandStore & SessionEnder & TrendReader {
+): HandStore & SessionEnder & TrendReader & SettingsReader {
   let db: Promise<IDBDatabase> | null = null;
   const database = (): Promise<IDBDatabase> => (db ??= opened(factory, name));
   const readOnly = async (store: string): Promise<IDBObjectStore> =>
@@ -242,12 +250,16 @@ export function openHandStore(
     async trendData() {
       return trendData(await database());
     },
+    async readSettings() {
+      const value: unknown = await requested((await readOnly(SETTINGS_STORE)).get(SETTINGS_KEY));
+      return value === undefined ? DEFAULT_SETTINGS : parseSettings(value);
+    },
   };
 }
 
-let shared: (HandStore & SessionEnder & TrendReader) | null = null;
+let shared: (HandStore & SessionEnder & TrendReader & SettingsReader) | null = null;
 
 /** The app-wide store, created on first call (never at module load). */
-export function sharedHandStore(): HandStore & SessionEnder & TrendReader {
+export function sharedHandStore(): HandStore & SessionEnder & TrendReader & SettingsReader {
   return (shared ??= openHandStore());
 }

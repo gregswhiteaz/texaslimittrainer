@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-24T20:47:00Z'
+updated_date: '2026-11-25T15:34:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -100,6 +100,8 @@ Judge r1 PASS 14/14; live Leave paths in Chromium+WebKit, report values match st
 Follow-ups: none new. Already owned: mid-hand Leave dialog (TASK-10.2), record-based report sections (TASK-10.4), hint counts (TASK-10.7), View statistics (TASK-11.6). Not tracked: duplicated private validation helpers (refactor, no behaviour change).
 
 Locked tests/storage/session-end.acceptance.test.ts and e2e/session-report.spec.ts unlocked for TASK-10.3 Q-1 (pass hand records to sessionReport; no assertion loosened).
+
+Locked test unlocked for TASK-12.1 Q-1 (DB v4 settings store); DB version and store names re-pinned.
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary

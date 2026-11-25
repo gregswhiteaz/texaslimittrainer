@@ -1293,3 +1293,38 @@ h1[tabindex='-1']:focus {
   stroke: #f0a030;
   stroke-width: 1.5;
 }
+
+.settings-screen {
+  gap: 24px;
+}
+
+.settings-header {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.settings-section {
+  background: #1a1d22;
+  border: 1px solid #343a43;
+  border-radius: 10px;
+  padding: 24px;
+}
+
+.settings-section h2 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.settings-section p {
+  margin: 14px 0 0;
+  font-size: 14px;
+}
+
+.settings-version {
+  margin: 0;
+  font-size: 14px;
+  color: #a7aeb8;
+}

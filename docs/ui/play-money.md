@@ -41,10 +41,14 @@ payment-provider hosts (Stripe, PayPal, Braintree, Adyen, Square, Klarna, …) a
 | `leave-dialog`       | dialog | `LeaveDialog`      |
 | `ending`             | screen | `ending`           |
 | `session-report`     | screen | `report`           |
+| `statistics`         | screen | `stats`            |
+| `settings`           | screen | `settings`         |
 
 `tests/ui/screen-list.acceptance.test.ts` compares the list with the source: every `name: '<x>'` in the
 `Screen` union of `src/ui/App.tsx` is a route, and every `src/ui/**/*.tsx` file (tests excluded) with a
-`<dialog>` or `role="dialog"` / `role="alertdialog"` is a dialog component, named by its file. The test fails
+`<dialog>` or `role="dialog"` / `role="alertdialog"` is a dialog component, named by its file. The role may
+also be written as a JSX expression with any quote, such as `role={'dialog'}`, `role={"alertdialog"}` or
+``role={`dialog`}`` (TASK-12.1); `role={'dialogue-panel'}` is not a dialog. The test fails
 with `screen <route> is not in the screen list`, `dialog <Component> is not in the screen list`, or
 `screen list entry <id> matches no screen or dialog in the app` for an entry whose screen is gone.
 
@@ -57,7 +61,8 @@ with `screen <route> is not in the screen list`, `dialog <Component> is not in t
 
 ## Running it
 
-- `npx vitest run tests/ui/screen-list.acceptance.test.ts tests/ui/play-money.test.ts` (also part of
+- `npx vitest run tests/ui/screen-list.acceptance.test.ts tests/ui/play-money.test.ts
+tests/ui/dialog-detector.acceptance.test.ts` (also part of
   `npm test`)
 - `npx playwright test e2e/play-money.spec.ts` (also part of `npm run e2e`, which CI runs on every push): the
   walk, the Deposit fixture and the bundle scan, in Chromium and WebKit.

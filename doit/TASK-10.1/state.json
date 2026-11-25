@@ -1660,6 +1660,12 @@
       "event": "unlock",
       "file": "e2e/session-report.spec.ts",
       "reason": "TASK-10.3 Q-1: sessionReport takes the session's stored hand records as a third argument (style counts); pass them in, no assertion loosened"
+    },
+    {
+      "t": "2026-11-25T08:34:03",
+      "event": "unlock",
+      "file": "tests/storage/session-end.acceptance.test.ts",
+      "reason": "TASK-12.1 Q-1 (auto-accepted): DB v4 adds a settings store; re-pin DB version and store names, keep every check"
     }
   ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-10.1",
@@ -1671,7 +1677,8 @@
   },
   "relock_pending": [
     "tests/storage/session-end.acceptance.test.ts",
-    "e2e/session-report.spec.ts"
+    "e2e/session-report.spec.ts",
+    "tests/storage/session-end.acceptance.test.ts"
   ],
   "brief_history": {
     "src/ui/App.tsx:ending-guard-never-reset-hangs-second-leave": [

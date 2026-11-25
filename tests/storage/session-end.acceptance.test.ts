@@ -164,7 +164,7 @@ describe('session end storage acceptance', () => {
     });
 
     const store = openHandStore(factory);
-    expect(DB_VERSION).toBe(3);
+    expect(DB_VERSION).toBe(4); // TASK-12.1 Q-1: v4 adds the settings store.
     expect(await store.count()).toBe(1);
     const names = await new Promise<string[]>((resolve) => {
       const open = factory.open(DB_NAME);
@@ -174,7 +174,7 @@ describe('session end storage acceptance', () => {
         resolve(list);
       };
     });
-    expect(names).toEqual(['hands', 'reports', 'sessions']);
+    expect(names).toEqual(['hands', 'reports', 'sessions', 'settings']);
     expect(JSON.stringify(await all(factory, HANDS_STORE))).toBe(JSON.stringify([record]));
     expect(JSON.stringify(await all(factory, SESSIONS_STORE))).toBe(JSON.stringify([session]));
 

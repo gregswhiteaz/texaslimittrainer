@@ -1,0 +1,9 @@
+{
+  "spec": "SPEC-11",
+  "reason": "DB version 4 with a new 'settings' store (D-1, SPEC-11/12) contradicts two locked acceptance tests of earlier tasks that are not in the Q-5 unlock list. Both need expected-value updates only (no check removed): DB_VERSION 3 -> 4 and the store list gaining 'settings'.",
+  "evidence": "1) tests/storage/session-end.acceptance.test.ts:167 `expect(DB_VERSION).toBe(3)` and :177 `expect(names).toEqual(['hands', 'reports', 'sessions'])` (owner TASK-10.1, locked in doit/TASK-10.1/state.json) — fails in npm test (1 failed / 1396 passed). 2) e2e/home-control.spec.ts:113 `expect(await page.evaluate(storeNames)).toEqual(['hands', 'reports', 'sessions'])` in expectSessionUnchanged (owner TASK-2.14, locked in doit/TASK-2.14/state.json) — fails at :136 in Chromium and WebKit, received adds 'settings'; 8 later serial tests did not run. Everything else passes: lint, typecheck, npm test otherwise green, Playwright 322 passed incl. e2e/settings.spec.ts 6/6. The implementation is complete; only these two locked edits remain.",
+  "options": [
+    "Unlock both files (reason 'TASK-12.1 Q-5 follow-up') and update expected values: session-end.acceptance.test.ts DB_VERSION toBe(4) and names ['hands','reports','sessions','settings']; home-control.spec.ts storeNames ['hands','reports','sessions','settings'] (and its doc comment 'no store besides hands, reports, sessions and settings'). Every check kept.",
+    "Defer the settings store to a later story (reverses approved D-1/Q-1) so the DB stays at v3."
+  ]
+}

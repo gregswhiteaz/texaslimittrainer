@@ -19,7 +19,7 @@ TASK-2.14) needs to deal the next hand. Home's Resume session entry (TASK-2.6) r
 
 | Item         | Value                                                                |
 | ------------ | -------------------------------------------------------------------- |
-| Database     | `tlh-trainer`, version `3` (the only version marker)                 |
+| Database     | `tlh-trainer`, version `4` (the only version marker)                 |
 | Object store | `sessions` (next to `hands`, see [hand-records.md](hand-records.md)) |
 | Key          | `keyPath: 'sessionId'`; one record per session, replaced (`put`)     |
 | Indexes      | none (`pausedSession` reads every record with `getAll`)              |
@@ -175,8 +175,9 @@ the same way; see [navigation.md](../ui/navigation.md). Leave table ends it inst
 
 ## Upgrades
 
-Version 1 created `hands`; version 2 adds `sessions`; version 3 adds `reports` ([reports.md](reports.md)).
-`onupgradeneeded` runs each missing step (`if (oldVersion < 1)` … `if (oldVersion < 3)`) and never touches
+Version 1 created `hands`; version 2 adds `sessions`; version 3 adds `reports` ([reports.md](reports.md));
+version 4 adds `settings` ([settings.md](settings.md)). `onupgradeneeded` runs each missing step
+(`if (oldVersion < 1)` … `if (oldVersion < 4)`) and never touches
 existing stores or records. A later version
 must append another `if (oldVersion < N)` step only. Formal migrations and per-store schema versions belong to
 E13 (REQ-054). A tab still open at version 1 closes its connection on `versionchange`; a database newer than

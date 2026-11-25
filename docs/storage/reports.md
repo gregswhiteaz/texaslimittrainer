@@ -16,7 +16,7 @@ paused session (TASK-2.7) also ends sessions, through `endPausedSessions`, witho
 
 | Item         | Value                                                               |
 | ------------ | ------------------------------------------------------------------- |
-| Database     | `tlh-trainer`, version `3` (version 3 adds `reports`)               |
+| Database     | `tlh-trainer`, version `4` (version 3 adds `reports`)               |
 | Object store | `reports` (next to `hands` and `sessions`)                          |
 | Key          | `keyPath: 'sessionId'`; one record per ended session, added (`add`) |
 | Indexes      | none                                                                |
