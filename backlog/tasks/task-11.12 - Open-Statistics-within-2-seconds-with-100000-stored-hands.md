@@ -4,7 +4,7 @@ title: Open Statistics within 2 seconds with 100,000 stored hands
 status: To Do
 assignee: []
 created_date: '2026-11-17T22:47:00Z'
-updated_date: '2026-11-25T08:57:00Z'
+updated_date: '2026-11-25T13:37:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-2
@@ -49,6 +49,7 @@ Plan key: E11-S12 · Dream: limit-holdem-trainer
 - [ ] #1 Given 100,000 seeded stored hands over 400 sessions, When the Statistics screen is opened 200 times, Then the p95 time from choosing Statistics to all charts, the style section and totals being rendered is 2.0 s or less [REQ-055.5, REQ-053.1]
 - [ ] #2 Given 100,000 seeded stored hands, When the plotted values are compared with values recomputed from the full hand records, Then they are equal for every grouping and filter [REQ-055.5]
 - [ ] #3 Given 100,000 stored hands, When Statistics opens, Then the trend read does not load and validate every full hand record in one pass (cursor or stored per-hand summaries) and meets the 2 s target
+- [ ] #4 Given ~100,000 sessions or days under Session/Day grouping, When Statistics draws the charts, Then the scale is computed without spreading all points into Math.max/min (no RangeError, screen not blank)
 <!-- AC:END -->
 
 ## Definition of Done
@@ -72,4 +73,6 @@ Plan key: E11-S12 · Dream: limit-holdem-trainer
 
 <!-- SECTION:NOTES:BEGIN -->
 AC added from TASK-11.1 follow-up (doc-134): trendData() currently reads and validates every record with getAll — fine at 3,000, likely too slow at 100,000.
+
+AC added from TASK-11.5 follow-up (doc-138): StatisticsScreen.tsx lines ~64 and ~105-106 spread points into Math.max/min.
 <!-- SECTION:NOTES:END -->

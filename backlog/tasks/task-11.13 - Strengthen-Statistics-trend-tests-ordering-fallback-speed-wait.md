@@ -4,7 +4,7 @@ title: Strengthen Statistics trend tests (ordering, fallback, speed wait)
 status: To Do
 assignee: []
 created_date: '2026-11-25T08:57:00Z'
-updated_date: '2026-11-25T12:33:00Z'
+updated_date: '2026-11-25T13:37:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -31,10 +31,13 @@ Follow-up from TASK-11.1 code review (doc-134). The AC#2 view test feeds hands a
 - [ ] #3 Given the test support and the opt-in speed check, When read, Then TEMPLATE_DECISIONS is gone and the timer stops when the 6th point is visible
 - [ ] #4 Given 1,000+ stored hands and any Table size / Game type filter, When the App renders Statistics, Then a repo test proves the G-2 target is computed from all stored hands (App passes all hands to statisticsView)
 - [ ] #5 Given a filter select value that is not a known option id, When it changes, Then it is treated as All; and the unreachable data===undefined guard in App.tsx is removed
+- [ ] #6 Given the Vitest day-grouping tests, When they run on a UTC machine (CI), Then they run in a pinned non-UTC time zone so a UTC-date day key fails npm test
 <!-- AC:END -->
 
 ## Implementation Notes
 
 <!-- SECTION:NOTES:BEGIN -->
 ACs added from TASK-11.4 follow-ups (doc-137).
+
+AC added from TASK-11.5 follow-up (doc-138).
 <!-- SECTION:NOTES:END -->

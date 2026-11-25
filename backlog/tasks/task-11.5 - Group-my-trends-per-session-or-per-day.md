@@ -1,11 +1,11 @@
 ---
 id: TASK-11.5
 title: Group my trends per session or per day
-status: In Progress
+status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-25T13:36:00Z'
+updated_date: '2026-11-25T13:37:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -18,6 +18,7 @@ references:
 documentation:
   - doc-1
   - doc-2
+  - doc-138
 parent_task_id: TASK-11
 priority: high
 type: feature
@@ -88,4 +89,12 @@ AC added from TASK-11.2 Q-1: per-session BB/100 value is implemented in TASK-11.
 Build: Group by (Every 500 hands default / Session / Day) drives both charts; per-session BB/100 via bb100Value; Day by local date of completedAt; storyboard aligned to REQ-048.1; reset on each opening. npm test 1381 pass; statistics e2e 18 pass (incl. America/New_York time-zone run); gate PASS.
 
 Judge r1 PASS 15/15: production preview Chromium/WebKit in Pacific/Kiritimati — two played cash sessions each matched their Session Report BB/100; seeded out-of-order data incl. a midnight-crossing session matched an independent computation across 7 filters under Session and Day; G-2 target unchanged; reset to Every 500 hands. CI 45620662930 green.
+
+Follow-ups: TASK-11.13 AC (pinned non-UTC TZ for day tests), TASK-11.12 AC (no Math.max/min spread at scale).
 <!-- SECTION:NOTES:END -->
+
+## Final Summary
+
+<!-- SECTION:FINAL_SUMMARY:BEGIN -->
+Added a Group by select (Every 500 hands default, Session, Day) to Statistics. Session and Day re-group both trend charts from the first hand (one point per session or local day), keep the table size and game type filters, and reset on every opening. BB/100 plots from the first cash hand under Session/Day (Q-1). The G-2 target still uses all hands. Storyboard default fixed. Verified: npm test 1381 passed, stats 100% lines, lint and typecheck clean, 18/18 statistics e2e in Chromium and WebKit, judge round 1 PASS 15/15. Review: assumptions A-1..A-6 in the story doc (local day uses the viewing device's time zone). Follow-ups: pin a non-UTC zone in Vitest day tests; replace Math.max/min spreads with loops. Diff 982 lines vs 760 budget (about 650 tests).
+<!-- SECTION:FINAL_SUMMARY:END -->
