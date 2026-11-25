@@ -1195,3 +1195,66 @@ h1[tabindex='-1']:focus {
   opacity: 0.45;
   cursor: not-allowed;
 }
+
+.stats-screen {
+  gap: 24px;
+}
+
+.stats-header {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.stats-totals {
+  margin: 0;
+  font-size: 14px;
+  color: #a7aeb8;
+}
+
+.stats-chart {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 20px;
+}
+
+.stats-chart h2 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.stats-message,
+.stats-note {
+  margin: 0;
+  font-size: 13px;
+  color: #c9ced6;
+}
+
+.stats-message {
+  font-size: 14px;
+}
+
+.stats-trend {
+  width: 100%;
+  height: 180px;
+}
+
+.stats-baseline {
+  stroke: #343a43;
+  stroke-width: 1;
+}
+
+.stats-line {
+  fill: none;
+  stroke: #6ea8ff;
+  stroke-width: 3;
+  stroke-linejoin: round;
+}
+
+.stats-dot {
+  fill: #6ea8ff;
+}

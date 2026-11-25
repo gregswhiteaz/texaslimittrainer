@@ -1,3 +1,4 @@
+import { trendHand, type TrendData, type TrendHand, type TrendReader } from '../stats/trends';
 import { parseHandRecord, type HandRecord, type HandStore } from '../table/hand-record';
 import {
   findPausedSession,
@@ -135,6 +136,34 @@ function ended(db: IDBDatabase, sessionId: string, endedAt: Date): Promise<Sessi
   });
 }
 
+/** Every valid stored hand as a TrendHand and every valid session's startedAt, from one read-only transaction;
+ *  invalid values are skipped (TASK-11.1 A-3). */
+async function trendData(db: IDBDatabase): Promise<TrendData> {
+  const transaction = db.transaction([HANDS_STORE, SESSIONS_STORE], 'readonly');
+  const [handValues, sessionValues] = await Promise.all([
+    requested<unknown[]>(transaction.objectStore(HANDS_STORE).getAll()),
+    requested<unknown[]>(transaction.objectStore(SESSIONS_STORE).getAll()),
+  ]);
+  const hands: TrendHand[] = [];
+  for (const value of handValues) {
+    try {
+      hands.push(trendHand(parseHandRecord(value)));
+    } catch {
+      // Skipped (A-3).
+    }
+  }
+  const sessionStarts = new Map<string, string>();
+  for (const value of sessionValues) {
+    try {
+      const { sessionId, startedAt } = parseSessionRecord(value);
+      sessionStarts.set(sessionId, startedAt);
+    } catch {
+      // Skipped (A-3).
+    }
+  }
+  return { hands, sessionStarts };
+}
+
 /**
  * An IndexedDB HandStore: add-only hand records, one replaceable record per session and one write-once report
  * per ended session. The database opens on the first call; if opening fails, every call rejects with that
@@ -143,7 +172,7 @@ function ended(db: IDBDatabase, sessionId: string, endedAt: Date): Promise<Sessi
 export function openHandStore(
   factory: IDBFactory = indexedDB,
   name = DB_NAME,
-): HandStore & SessionEnder {
+): HandStore & SessionEnder & TrendReader {
   let db: Promise<IDBDatabase> | null = null;
   const database = (): Promise<IDBDatabase> => (db ??= opened(factory, name));
   const readOnly = async (store: string): Promise<IDBObjectStore> =>
@@ -210,12 +239,15 @@ export function openHandStore(
       const value: unknown = await requested((await readOnly(REPORTS_STORE)).get(sessionId));
       return value === undefined ? null : parseSessionReport(value);
     },
+    async trendData() {
+      return trendData(await database());
+    },
   };
 }
 
-let shared: (HandStore & SessionEnder) | null = null;
+let shared: (HandStore & SessionEnder & TrendReader) | null = null;
 
 /** The app-wide store, created on first call (never at module load). */
-export function sharedHandStore(): HandStore & SessionEnder {
+export function sharedHandStore(): HandStore & SessionEnder & TrendReader {
   return (shared ??= openHandStore());
 }

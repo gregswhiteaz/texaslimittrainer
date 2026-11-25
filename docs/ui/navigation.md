@@ -1,16 +1,22 @@
 # Navigation: screens, the Home control and browser Back/Forward
 
-The app has four screens, held in `App`'s state (`src/ui/App.tsx`). There are no URL routes, hash fragments
+The app has five screens, held in `App`'s state (`src/ui/App.tsx`). There are no URL routes, hash fragments
 or deep links: the URL stays `/` on every screen.
 
 | Screen         | Opened by                                                                                                    | Leaves to                                                                      |
 | -------------- | ------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------ |
-| Home           | app start; Cancel / ← Home; the Table's Home control or browser Back; Leave table with 0 hands; Back to Home | New game → Game Config; Resume session → Table                                 |
+| Home           | app start; Cancel / ← Home; the Table's Home control or browser Back; Leave table with 0 hands; Back to Home | New game → Game Config; Resume session → Table; Statistics → Statistics        |
 | Game Config    | New game                                                                                                     | Start game → Table (asks first if a session is paused); Cancel / ← Home → Home |
 | Table          | Start game (a new session); Resume session                                                                   | Home control or browser Back → Home; Leave table → Session report (or Home)    |
 | Session report | Leave table (after at least one completed hand)                                                              | Back to Home → Home                                                            |
+| Statistics     | Statistics on Home                                                                                           | ← Home → Home                                                                  |
 
 Each return to Home moves focus to Home's `TLH Trainer` heading.
+
+**Statistics (TASK-11.1).** Home's Main menu always ends with `Statistics` (after Resume session when one is
+shown). It opens the Statistics screen with its `Statistics` heading focused; `← Home` returns to Home. The
+screen reads the stored hands each time it opens, after any hand write still running, and writes nothing. See
+[trends.md](../stats/trends.md).
 
 ## The Home control (REQ-004.9)
 
@@ -85,7 +91,7 @@ ask and never end anything.
 
 Only opening the Table (Start game or Resume session) adds a history entry, `{ tlhTable: <key> }`, with a key
 unique to that opening (`performance.timeOrigin` and a counter; nothing else is stored in history). Home, Game
-Config and the Session report add no entries; Back on the Session report leaves the app.
+Config, Statistics and the Session report add no entries; Back on the Session report leaves the app.
 
 - **Back on the Table** pauses to Home, exactly like the Home control.
 - **Forward never reopens the Table.** Use Resume session.
@@ -119,3 +125,4 @@ Home control            […, app, T1*, T2]    current entry is T2 → history.b
   session, and Start game with no paused session.
 - `e2e/session-report.spec.ts` (every push): Leave table opens the Session report, Back to Home, and a 0-hand
   session opens Home.
+- `e2e/statistics.spec.ts` (every push): Home → Statistics → Home, with focus on each heading.

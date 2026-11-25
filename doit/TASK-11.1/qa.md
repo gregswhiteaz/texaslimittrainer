@@ -18,3 +18,7 @@ Unlocked: e2e/home.spec.ts (TASK-2.1); tests/ui/screen-list.acceptance.test.ts (
 
 ## Orchestrator note — test cost
 The AC#2 3,000-hand check must not slow the normal suite/CI coverage job (TASK-1.56 history; user rule: scale checks opt-in). Prove AC#2's grouping/values in the normal suite through the pure trends module on 3,000 TrendHand summaries (fast), plus a store-level trendData() test on a small set. A store-level 3,000-record read goes in the opt-in slow group with the speed check, unless it runs in under ~5 s under coverage.
+
+## Block 1 — e2e/resume.spec.ts (TASK-2.6, locked) counts Home menu buttons
+Statistics adds one Home entry, so the counts move 1 → 2 and 2 → 3; a check that the last entry is Statistics is added. Same rule as Q-4.
+**Answer: auto-accepted (recommended)** — unlocked under TASK-2.6; orchestrator edit; every check kept.

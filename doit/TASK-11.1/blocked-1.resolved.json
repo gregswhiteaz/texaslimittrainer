@@ -1,0 +1,9 @@
+{
+  "spec": "SPEC-01",
+  "reason": "e2e/resume.spec.ts (locked acceptance test, owner TASK-2.6; not in the Q-4 unlock list) asserts the exact number of Main-menu buttons on Home. A-4/AC#1 make App always show the Statistics entry, so those counts are now one higher and 3 resume tests fail in Chromium and WebKit. No other test needs changing.",
+  "evidence": "npx playwright test: 6 failed, all in e2e/resume.spec.ts (tests at :154, :208, :255, both browsers). Line 151 in expectNoResume: `await expect(menu(page).getByRole('button')).toHaveCount(1);` -> receives 2 (New game, Statistics). Line 176: `const entries = menu(page).getByRole('button'); await expect(entries).toHaveCount(2);` -> receives 3 (New game, Resume session, Statistics). The rest of the build is complete: npm test (1,346 passed), lint, typecheck, every other Playwright test (incl. statistics.spec, home.spec, the play-money walk and axe), and both opt-in slow checks pass.",
+  "options": [
+    "Unlock e2e/resume.spec.ts (owner TASK-2.6) under the same Q-4 rule (update expected values, keep every check): line 151 toHaveCount(1) -> toHaveCount(2) plus a check that the second button is Statistics; line 176 toHaveCount(2) -> toHaveCount(3) plus a check that entries.nth(2) is Statistics. Existing nth(0)/nth(1) checks stay unchanged. [Recommended]",
+    "Hide the Statistics entry while a paused-session check is involved (contradicts AC#1 / A-4; not recommended)."
+  ]
+}

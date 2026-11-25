@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { statisticsView, type StatisticsView } from '../stats/trends';
 import { sharedHandStore } from '../storage/hand-store';
 import { DEFAULT_SESSION_CONFIG, type SessionConfig } from '../table/session';
 import { restoreSession, type SessionRecord } from '../table/session-record';
@@ -7,6 +8,7 @@ import { resumeSummary } from '../table/table-view';
 import { GameConfigScreen } from './config/GameConfigScreen';
 import { HomeScreen } from './home/HomeScreen';
 import { ReportScreen } from './report/ReportScreen';
+import { StatisticsScreen } from './stats/StatisticsScreen';
 import { TableScreen } from './table/TableScreen';
 import { tableWritesSettled, type ResumedSession } from './table/useTableSession';
 
@@ -19,7 +21,9 @@ type Screen =
   | { readonly name: 'table'; readonly config: SessionConfig }
   | { readonly name: 'table'; readonly resume: ResumedSession }
   | { readonly name: 'ending'; readonly sessionId: string }
-  | { readonly name: 'report'; readonly report: SessionReport };
+  | { readonly name: 'report'; readonly report: SessionReport }
+  // view: undefined while the read is pending, null if it failed (TASK-11.1 A-10, D-7).
+  | { readonly name: 'stats'; readonly view: StatisticsView | undefined | null };
 
 /** undefined while Home's read is pending (A-4); reset on leaving Home so a return reads it again. */
 type Paused = { readonly record: SessionRecord; readonly summary: string } | null | undefined;
@@ -74,6 +78,27 @@ export default function App(): React.JSX.Element {
       cancelled = true;
     };
   }, [onHome]);
+
+  const onStats = screen.name === 'stats';
+  useEffect(() => {
+    if (!onStats) return undefined;
+    let cancelled = false;
+    tableWritesSettled()
+      .then(() => sharedHandStore().trendData())
+      .then(
+        (data) => {
+          if (!cancelled) setScreen({ name: 'stats', view: statisticsView(data) });
+        },
+        (error: unknown) => {
+          if (cancelled) return;
+          console.error('Statistics could not be read', error);
+          setScreen({ name: 'stats', view: null });
+        },
+      );
+    return () => {
+      cancelled = true;
+    };
+  }, [onStats]);
 
   // Leave table ends the session here, after the Table has unmounted: every passive effect of earlier
   // commits (including the one that queues the last hand's write) has run, so tableWritesSettled() covers
@@ -216,6 +241,10 @@ export default function App(): React.JSX.Element {
           }}
           paused={paused && { summary: paused.summary }}
           onResume={paused ? () => resume(paused.record) : undefined}
+          onStatistics={() => {
+            setPaused(undefined);
+            setScreen({ name: 'stats', view: undefined });
+          }}
         />
       );
     case 'config':
@@ -253,6 +282,13 @@ export default function App(): React.JSX.Element {
       return (
         <ReportScreen
           report={screen.report}
+          onHome={() => setScreen({ name: 'home', returned: true })}
+        />
+      );
+    case 'stats':
+      return (
+        <StatisticsScreen
+          view={screen.view}
           onHome={() => setScreen({ name: 'home', returned: true })}
         />
       );

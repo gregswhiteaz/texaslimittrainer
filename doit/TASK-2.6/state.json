@@ -1388,6 +1388,12 @@
       "event": "unlock",
       "file": "e2e/resume.spec.ts",
       "reason": "TASK-10.1 D-4: Leave table now ends the session and opens the Session Report (replace the interim pause expectation; nothing loosened)"
+    },
+    {
+      "t": "2026-11-25T01:38:05",
+      "event": "unlock",
+      "file": "e2e/resume.spec.ts",
+      "reason": "TASK-11.1 Q-4 (auto-accepted): Home menu gains Statistics; button counts 1->2 and 2->3, add check that the last entry is Statistics"
     }
   ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-2.6",
@@ -1400,6 +1406,7 @@
   },
   "doc_id": "doc-107",
   "relock_pending": [
+    "e2e/resume.spec.ts",
     "e2e/resume.spec.ts"
   ]
 }

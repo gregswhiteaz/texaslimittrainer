@@ -104,6 +104,12 @@ test('every listed screen and dialog shows only play money', async ({ page }) =>
   );
   await checkPlayMoney(page, 'home');
 
+  await page.getByRole('button', { name: /^Statistics/ }).click();
+  await expect(page.getByRole('heading', { level: 1, name: 'Statistics' })).toBeVisible();
+  await expect(page.locator('.stats-message')).toHaveText('Play your first hand to see trends.');
+  await checkPlayMoney(page, 'statistics');
+  await page.getByRole('button', { name: '← Home' }).click();
+
   await page.getByRole('button', { name: /^New game/ }).click();
   await expect(page.getByRole('heading', { level: 1, name: 'New game' })).toBeVisible();
   await checkPlayMoney(page, 'game-config');

@@ -148,7 +148,9 @@ function ninePlayerAfter25(): SessionRecord {
 async function expectNoResume(page: Page): Promise<void> {
   await expect(menu(page)).toHaveAttribute('data-paused', 'none');
   await expect(resumeButton(page)).toHaveCount(0);
-  await expect(menu(page).getByRole('button')).toHaveCount(1);
+  // TASK-11.1: Home also lists Statistics.
+  await expect(menu(page).getByRole('button')).toHaveCount(2);
+  await expect(menu(page).getByRole('button').last()).toHaveAccessibleName(/^Statistics/);
 }
 
 test('a session reloaded mid-hand resumes from Home at the same hand number under the same session id', async ({
@@ -173,7 +175,9 @@ test('a session reloaded mid-hand resumes from Home at the same hand number unde
   await page.reload();
   await expect(menu(page)).toHaveAttribute('data-paused', 'shown');
   const entries = menu(page).getByRole('button');
-  await expect(entries).toHaveCount(2);
+  // TASK-11.1: Home also lists Statistics, after Resume session.
+  await expect(entries).toHaveCount(3);
+  await expect(entries.last()).toHaveAccessibleName(/^Statistics/);
   await expect(entries.nth(0)).toHaveText(/^New game/);
   await expect(entries.nth(1)).toHaveAccessibleName(/^Resume session/);
   await expect(entries.nth(1).locator('.menu-subtitle')).toHaveText(

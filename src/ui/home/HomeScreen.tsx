@@ -8,6 +8,8 @@ export interface HomeScreenProps {
   /** undefined: still loading or not provided; null: no paused session; else the entry's subtitle. */
   readonly paused?: { readonly summary: string } | null;
   readonly onResume?: () => void;
+  /** When given, the Statistics entry is shown last (TASK-11.1 A-4). */
+  readonly onStatistics?: () => void;
 }
 
 export function HomeScreen({
@@ -15,6 +17,7 @@ export function HomeScreen({
   focusHeading = false,
   paused,
   onResume,
+  onStatistics,
 }: HomeScreenProps): React.JSX.Element {
   const heading = useHeadingFocus(focusHeading);
   return (
@@ -36,6 +39,12 @@ export function HomeScreen({
           <button type="button" className="menu-secondary" onClick={onResume}>
             <span className="menu-title">Resume session</span>
             <span className="menu-subtitle">{paused.summary}</span>
+          </button>
+        )}
+        {onStatistics && (
+          <button type="button" className="menu-secondary" onClick={onStatistics}>
+            <span className="menu-title">Statistics</span>
+            <span className="menu-subtitle">Your progress across sessions</span>
           </button>
         )}
       </nav>

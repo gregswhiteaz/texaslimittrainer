@@ -13,6 +13,7 @@ export const SCREEN_LIST = [
   { id: 'leave-dialog', kind: 'dialog', component: 'LeaveDialog' },
   { id: 'ending', kind: 'screen', route: 'ending' },
   { id: 'session-report', kind: 'screen', route: 'report' },
+  { id: 'statistics', kind: 'screen', route: 'stats' },
 ] as const satisfies readonly ScreenEntry[];
 
 export type ScreenId = (typeof SCREEN_LIST)[number]['id'];

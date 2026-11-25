@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-24T16:41:00Z'
+updated_date: '2026-11-25T08:38:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -99,6 +99,8 @@ Judge r1 PASS 16/16; CI 45310957352 green on 9d84cec.
 Follow-ups: TASK-2.14 AC added (nextBotName cap). Already owned: SNG level in Resume subtitle (TASK-5.6 AC#1-2), Leave table ends session/endedAt (TASK-10.1 AC#9), one unended session (TASK-2.7 AC#4). Not tracked (test harness, below value bar): duplicated e2e seed helper, unreachable Error wrap.
 
 Locked e2e/resume.spec.ts unlocked for TASK-10.1 D-4 (Leave table ends the session; expectation replaced, not loosened).
+
+Locked e2e/resume.spec.ts unlocked for TASK-11.1 Q-4 (Home menu gains Statistics; counts re-pinned, check added).
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary
