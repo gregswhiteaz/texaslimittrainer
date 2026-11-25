@@ -1,0 +1,3 @@
+{"reviewer": "security", "round": 1,
+ "findings": [],
+ "summary": "The change is UI navigation only: an optional onStatistics callback on ReportScreen that renders a static-label button, a shared openStatistics() handler in App.tsx that sets in-memory screen state to constants (ALL_TRENDS, DEFAULT_GROUPING), and a CSS rule. No untrusted input is read, nothing is rendered as HTML, and nothing is stored, fetched or requested. No new dependencies. This matches spec section 8. No reachable path to any sink, so there are no findings."}

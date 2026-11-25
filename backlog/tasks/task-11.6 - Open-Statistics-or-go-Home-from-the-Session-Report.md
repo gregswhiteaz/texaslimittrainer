@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-25T13:47:00Z'
+updated_date: '2026-11-25T14:02:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -79,4 +79,6 @@ Full spec: doit/TASK-11.6/spec.md
 
 <!-- SECTION:NOTES:BEGIN -->
 TASK-10.1 Q-3 adds a Back to Home button on the Session Report; this task then only needs View statistics.
+
+Build: optional onStatistics on ReportScreen; 'View statistics' before 'Back to Home' in a right-aligned row; one App openStatistics() for Home and the report. Report/Statistics/Home e2e 44 pass; gate PASS.
 <!-- SECTION:NOTES:END -->
