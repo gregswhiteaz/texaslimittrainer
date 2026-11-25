@@ -1,10 +1,11 @@
 ---
 id: TASK-6.21
 title: Keep bots on SeatPolicy with a lint boundary
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-18T07:03:00Z'
-updated_date: '2026-11-18T19:40:00Z'
+updated_date: '2026-11-25T22:05:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -32,6 +33,16 @@ Follow-up from TASK-1.5. The PlayerView boundary is enforced by types only; a ca
 - [ ] #2 Given code under src/bots imports only PlayerView, SeatPolicy and other src/engine/player-view.ts types, When npm run lint runs, Then it passes
 - [ ] #3 Given src/bots code that reaches engine runtime code through export-from, a side-effect import or a dynamic import(), When npm run lint runs, Then it fails; and the SPEC-09 source-scan test in tests/bots/tag.test.ts is replaced by this rule
 <!-- AC:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. Lint boundary for src/bots: only type imports from player-view and Action/SeatNumber/Street from hand; other engine modules and packages banned; side-effect engine imports banned
+2. Acceptance tests (sandbox lint probes + in-process ESLint); replace the SPEC-09 source scan in tag.test.ts
+3. No src change; playtest byte-identical
+
+Full spec: doit/TASK-6.21/spec.md
+<!-- SECTION:PLAN:END -->
 
 ## Implementation Notes
 
