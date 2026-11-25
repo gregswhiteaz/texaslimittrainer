@@ -1,0 +1,19 @@
+{"reviewer": "code", "round": 1,
+ "rubric": [
+  {"item": "SPEC-01 correctness", "result": "pass"},
+  {"item": "SPEC-01 test strength", "result": "pass"},
+  {"item": "SPEC-02 correctness", "result": "pass"},
+  {"item": "SPEC-02 test strength", "result": "pass"},
+  {"item": "SPEC-03 correctness", "result": "pass"},
+  {"item": "SPEC-03 test strength", "result": "pass"},
+  {"item": "scope", "result": "pass"},
+  {"item": "concision", "result": "pass"},
+  {"item": "clarity", "result": "pass"}
+ ],
+ "findings": [
+  {"fingerprint": "e2e/config-phone-width.spec.ts:boundingbox-null-fallback", "severity": "NIT", "file": "e2e/config-phone-width.spec.ts", "line": 52,
+   "issue": "Null boundingBox is mapped to sentinel objects ({x:-1,...} / {width:0,height:0}) so the following assertions fail indirectly; the failure message then reports a misleading position/size rather than 'element has no box'.",
+   "evidence": "const box = (await part.boundingBox()) ?? { x: -1, y: 0, width: 0, height: 0 }; toBeVisible() is asserted just before, so the null path is practically unreachable.",
+   "fix": "Optional: use a non-null assertion or expect(box).not.toBeNull() for a clearer failure. Not required."}
+ ],
+ "summary": "CSS diff is exactly D-1 (flex-wrap: wrap on .config-seats li, margin-left: auto on .config-style); .config-seats/.config-style are used only by GameConfigScreen.tsx, so no other screen is affected. On desktop .seat-name (flex 1 1 120px) absorbs free space, so the auto margin resolves to 0 and rows are unchanged; the 6 Game Config e2e specs (incl. locked ones at 1280x720) pass 30/30 on chromium+webkit. Mutation check: running the new spec against base-commit CSS in a scratch worktree fails all 4 tests (both specs, chromium AND webkit) with 'overflow at 320px' / 'Ava right at 320px'. Gates pass (scope lines warn: 71 vs budget 70, trivial). No BLOCKER/MAJOR."}

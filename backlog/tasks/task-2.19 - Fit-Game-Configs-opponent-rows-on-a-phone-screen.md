@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-23T02:46:00Z'
-updated_date: '2026-11-25T18:51:00Z'
+updated_date: '2026-11-25T19:06:00Z'
 labels:
   - follow-up
   - bug
@@ -39,3 +39,9 @@ Follow-up from TASK-2.9 judge (J-1-02, doc-91). Since TASK-2.8 added a Style sel
 
 Full spec: doit/TASK-2.19/spec.md
 <!-- SECTION:PLAN:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+Build: CSS-only — bot rows wrap with the Style control right-aligned on narrow screens; new e2e at 320/375 px (fails without the fix). Game Config e2e 30 pass; gate PASS.
+<!-- SECTION:NOTES:END -->
