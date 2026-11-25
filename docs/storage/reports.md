@@ -78,8 +78,8 @@ category data order (the 15 postflop categories first, then the 16 preflop ones)
 how many of those were graded Minor or Major, and how many were graded Major. Categories with no unhinted
 decision are left out, so it is `[]` when the session had no unhinted decision in any category (a big blind
 check is in none). Like `errors`, it is read from the stored decision records (their `street`, `action.type`, `grade`
-and `hinted`) when the session ends; a preflop decision's position group and whether someone raised before it
-come from the hand record's `seats`, `button` and `actions`, and is present exactly when `errors` is. Whether a category is a leak, its
+and `hinted`) when the session ends, and is present exactly when `errors` is. A preflop decision's position group
+and whether someone raised before it come from the hand record's `seats`, `button` and `actions`. Whether a category is a leak, its
 evidence and its text are worked out from these counts and the current category data when the report is shown;
 `major` is kept for ranking leaks (TASK-10.8). Reports stored before TASK-10.5 have no `leakCounts`; they are
 not back-filled and the screen shows no leaks section for them. Reports stored before TASK-10.6 hold postflop

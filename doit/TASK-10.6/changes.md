@@ -12,3 +12,4 @@
 - `docs/storage/reports.md` — modified: `leakCounts` holds postflop then preflop ids in data order.
 
 No new dependencies.
+- `docs/storage/reports.md` — split the leakCounts sentence (review MINOR / judge J-1-01; orchestrator docs fix)
