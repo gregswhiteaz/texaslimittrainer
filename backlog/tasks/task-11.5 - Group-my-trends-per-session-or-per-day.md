@@ -1,10 +1,11 @@
 ---
 id: TASK-11.5
 title: Group my trends per session or per day
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-25T09:09:00Z'
+updated_date: '2026-11-25T12:46:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -65,6 +66,17 @@ Plan key: E11-S02 · Dream: limit-holdem-trainer
 - [ ] #11 Story documentation is written and published to Backlog.md
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. Grouping option (Every 500 hands default / Session / Day) passed to statisticsView; Major and BB/100 charts both follow it
+2. Session points by session start; Day points by local calendar date of completedAt; per-session BB/100 via bb100Value equals the session report
+3. Group by select in the filter row, reset on each opening; approved titles, notes and aria-labels; G-2 target unchanged
+4. Storyboard Group by aligned to REQ-048.1; tests with out-of-order input and a time-zone e2e through the real App
+
+Full spec: doit/TASK-11.5/spec.md
+<!-- SECTION:PLAN:END -->
 
 ## Implementation Notes
 
