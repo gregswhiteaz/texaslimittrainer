@@ -85,7 +85,7 @@ describe('session report leak counts', () => {
       { category: 'flop-not-facing-a-bet-bet', decisions: 2, errors: 1, major: 0 },
       { category: 'turn-facing-a-bet-call', decisions: 1, errors: 0, major: 0 },
     ]);
-    expect(Object.keys(report).slice(-3)).toEqual(['style', 'errors', 'leakCounts']);
+    expect(Object.keys(report).slice(-4)).toEqual(['style', 'errors', 'leakCounts', 'hints']);
   });
 
   it('parseSessionReport validates leakCounts', () => {

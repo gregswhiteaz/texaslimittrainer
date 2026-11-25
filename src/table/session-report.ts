@@ -54,6 +54,8 @@ export interface SessionReport {
   readonly errors?: ErrorCounts;
   /** Unhinted counts per leak category (postflop, then preflop); absent iff `errors` is absent (TASK-10.5 A-4, A-5). */
   readonly leakCounts?: readonly CategoryCount[];
+  /** Absent iff `errors` is absent (TASK-10.7 A-3). */
+  readonly hints?: HintCounts;
 }
 
 /** The part of a stored decision the report reads; HandRecordDecision satisfies it. */
@@ -77,6 +79,14 @@ export type ReportHand = StatHand & {
 export interface ErrorCounts {
   readonly major: number;
   readonly minor: number;
+}
+
+/** The user's decisions in the session and how many were hinted (REQ-044.3, REQ-040.4). */
+export interface HintCounts {
+  /** Decision records with hinted true; 0 ≤ hinted ≤ decisions. */
+  readonly hinted: number;
+  /** All of the user's decision records in the session's stored hands; ≥ 0. */
+  readonly decisions: number;
 }
 
 /** The result of SessionEnder.endPausedSessions. */
@@ -114,6 +124,12 @@ export interface RateTile {
   readonly value: string;
 }
 
+export interface HintTile {
+  readonly label: 'Hints used';
+  /** "40 of 320 decisions (12.5%)", "1 of 1 decision (100.0%)", "0 of 0 decisions (0.0%)". */
+  readonly value: string;
+}
+
 export interface ReportView {
   /** "Cash · 6 players · $4/$8 · 214 hands" */
   readonly header: string;
@@ -136,7 +152,7 @@ export function bbPer100(result: number, bigBet: number, hands: number): number 
 }
 
 /** The report of `session` ended at `endedAt`, with `style` summed over `hands` (absent when `hands` is
- *  omitted or empty), and `errors` and `leakCounts` counted from their decisions (absent unless every hand
+ *  omitted or empty), and `errors`, `leakCounts` and `hints` counted from their decisions (absent unless every hand
  *  carries them). RangeError('Invalid session report: <field>') for 0 hands played or an invalid Date. */
 export function sessionReport(
   session: SessionRecord,
@@ -187,7 +203,8 @@ export function sessionReport(
       handCategoryDecisions({ ...hand, decisions: hand.decisions as readonly ReportDecision[] }),
     ),
   );
-  return { ...report, style, errors, leakCounts };
+  const hints = { hinted: decisions.filter((d) => d.hinted).length, decisions: decisions.length };
+  return { ...report, style, errors, leakCounts, hints };
 }
 
 type Fields = Readonly<Record<string, unknown>>;
@@ -251,6 +268,12 @@ function parseLeakCounts(value: unknown): void {
   });
 }
 
+function parseHints(value: unknown): void {
+  const hints = object(value, 'hints');
+  const decisions = whole(hints.decisions, 'hints.decisions', 0, Number.MAX_SAFE_INTEGER);
+  whole(hints.hinted, 'hints.hinted', 0, decisions);
+}
+
 /** Validates an untrusted stored report; returns it typed, not copied. Unknown extra properties are ignored.
  *  RangeError('Invalid session report: <field>'). */
 export function parseSessionReport(value: unknown): SessionReport {
@@ -282,6 +305,7 @@ export function parseSessionReport(value: unknown): SessionReport {
   if (report.style !== undefined) parseStyle(report.style, hands);
   if (report.errors !== undefined) parseErrors(report.errors);
   if (report.leakCounts !== undefined) parseLeakCounts(report.leakCounts);
+  if (report.hints !== undefined) parseHints(report.hints);
   return value as SessionReport;
 }
 
@@ -329,4 +353,13 @@ export function rateTiles(report: SessionReport): readonly RateTile[] {
     { key: 'major', label: 'Major errors /100', value: rate(errors.major) },
     { key: 'minor', label: 'Minor errors /100', value: rate(errors.minor) },
   ];
+}
+
+/** The hint-usage tile (TASK-10.7 D-2), or null for a report without `hints`. */
+export function hintTile(report: SessionReport): HintTile | null {
+  if (report.hints === undefined) return null;
+  const { hinted, decisions } = report.hints;
+  const pct = decisions === 0 ? '0.0' : bbPer100(hinted, 1, decisions).toFixed(1);
+  const noun = decisions === 1 ? 'decision' : 'decisions';
+  return { label: 'Hints used', value: `${hinted} of ${decisions} ${noun} (${pct}%)` };
 }

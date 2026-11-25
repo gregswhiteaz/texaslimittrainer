@@ -1,7 +1,7 @@
 import { styleSection, type RangeLabel } from '../../stats/healthy-ranges';
 import { sessionLeaks, type CategoryCount } from '../../stats/leaks';
 import type { StyleCounts } from '../../stats/style-stats';
-import { rateTiles, reportView, type SessionReport } from '../../table/session-report';
+import { hintTile, rateTiles, reportView, type SessionReport } from '../../table/session-report';
 import { useHeadingFocus } from '../useHeadingFocus';
 
 const LABEL_KEYS: Readonly<Record<RangeLabel, string>> = {
@@ -69,7 +69,7 @@ function LeaksSection({
 }
 
 /** The Session Report of an ended session (A-7): header line, cash KPI tiles, the hands played and error-rate
- *  tiles when the report has error counts, the style section when it has style counts, the leaks section when it
+ *  tiles and the hint-usage tile when the report has them, the style section when it has style counts, the leaks section when it
  *  has leak counts, and Back to Home (D-3). */
 export function ReportScreen({
   report,
@@ -81,6 +81,7 @@ export function ReportScreen({
   const heading = useHeadingFocus(true);
   const { header, tiles } = reportView(report);
   const rates = rateTiles(report);
+  const hint = hintTile(report);
   return (
     <main className="screen report-screen">
       <header className="report-header">
@@ -105,6 +106,12 @@ export function ReportScreen({
               <dd>{value}</dd>
             </div>
           ))}
+          {hint !== null && (
+            <div className="report-hints" data-hints="hinted">
+              <dt>{hint.label}</dt>
+              <dd>{hint.value}</dd>
+            </div>
+          )}
         </dl>
       )}
       {report.style !== undefined && (

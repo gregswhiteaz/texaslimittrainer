@@ -6,7 +6,7 @@ The report is written once and never changed. The Session Report screen shows it
 paused session (TASK-2.7) also ends sessions, through `endPausedSessions`, without opening the screen.
 
 - `src/table/session-report.ts` (headless): the `SessionReport` and `CashResult` types, `sessionReport(…)`,
-  `bbPer100(…)`, `parseSessionReport(…)`, `signedDollars(…)`, `signedTenths(…)`, `reportView(…)`, `rateTiles(…)` and the
+  `bbPer100(…)`, `parseSessionReport(…)`, `signedDollars(…)`, `signedTenths(…)`, `reportView(…)`, `rateTiles(…)`, `hintTile(…)` and the
   `SessionEnder` interface.
 - `src/storage/hand-store.ts` (browser): the `reports` store, `endSession(sessionId, endedAt)`,
   `endPausedSessions(sessionId, endedAt)` and `getReport(sessionId)`.
@@ -36,6 +36,7 @@ paused session (TASK-2.7) also ends sessions, through `endPausedSessions`, witho
 | `style`       | object, optional           | The user's style counts over the session's stored hands (TASK-10.3)           |
 | `errors`      | object, optional           | `{ major, minor }`: the user's unhinted Major / Minor decisions (TASK-10.4)   |
 | `leakCounts`  | array, optional            | Unhinted counts per leak category (postflop TASK-10.5, preflop TASK-10.6)     |
+| `hints`       | object, optional           | `{ hinted, decisions }`: the user's decisions and how many were hinted (10.7) |
 
 `cash`:
 
@@ -86,6 +87,23 @@ not back-filled and the screen shows no leaks section for them. Reports stored b
 counts only; they stay valid (the preflop categories were appended after the postflop ones) and are not
 back-filled.
 
+### hints
+
+`hints` holds two whole counts over the same decision records as `errors` (REQ-044.3, REQ-040.4): `decisions`
+is the number of the user's decision records in the session's stored hands, whatever their grade or street,
+and `hinted` is how many of those have `hinted` true. A forced fold (TASK-10.2) has no decision record, so it
+counts in neither. It is read from the stored `hinted` flags when the session ends, is present exactly when
+`errors` is, and is the report's last key.
+
+The screen shows it as a fourth tile in the "Volume and errors" list, after Minor errors /100: **Hints used**
+with `<hinted> of <decisions> decisions (<pct>%)` (`decision` when `decisions` is 1). `pct` is
+`bbPer100(hinted, 1, decisions)` with one decimal, i.e. half-up tenths
+`floor((2000 × hinted + decisions) / (2 × decisions))`, and `0.0` when `decisions` is 0. Examples:
+`40 of 320 decisions (12.5%)`, `0 of 320 decisions (0.0%)`, `25 of 25 decisions (100.0%)`, 1 of 16 → `6.3%`,
+1 of 3 → `33.3%`, 2 of 3 → `66.7%`, `1 of 1 decision (100.0%)`, `0 of 0 decisions (0.0%)`. Hinted decisions
+still count here but stay out of the error rates and leak counts. Reports stored before TASK-10.7 have no
+`hints`; they are not back-filled and the screen shows no hint tile for them (the other tiles are unchanged).
+
 The cash values come from the stored session record only: it is written in the same transaction as each hand
 record, so its `handsPlayed`, stacks and `rebuys` always match the stored hands. A rebuy bought during an
 unfinished hand is not stored yet, so neither the rebuy nor its chips count.
@@ -124,7 +142,9 @@ unfinished hand is not stored yet, so neither the rebuy nor its chips count.
   `minor` are whole numbers ≥ 0 (field `errors`, `errors.major`, `errors.minor`). A present `leakCounts` must
   be an array (field `leakCounts`) of objects (`leakCounts[i]`) whose `category` is a known category id later
   in data order than the previous element's (`leakCounts[i].category`), with whole `decisions ≥ 1`,
-  `0 ≤ errors ≤ decisions` and `0 ≤ major ≤ errors` (`leakCounts[i].decisions`, `.errors`, `.major`).
+  `0 ≤ errors ≤ decisions` and `0 ≤ major ≤ errors` (`leakCounts[i].decisions`, `.errors`, `.major`). A
+  present `hints` must be an object (field `hints`) with whole `decisions ≥ 0` (`hints.decisions`) and whole
+  `0 ≤ hinted ≤ decisions` (`hints.hinted`); it is not cross-checked against `errors` or `leakCounts`.
 - **An ended session never shows in Resume.** `findPausedSession` drops records with `endedAt`.
 
 ## Tests
@@ -147,6 +167,9 @@ unfinished hand is not stored yet, so neither the rebuy nor its chips count.
   leaks section.
 - `tests/stats/preflop-leaks.test.ts` and `tests/ui/report-preflop-leaks.acceptance.test.tsx`: stored preflop
   `leakCounts`, their order check and a preflop leak on the report.
+- `tests/table/session-report-hints.test.ts`, `tests/ui/report-hints.acceptance.test.tsx`,
+  `tests/storage/session-end-hints.acceptance.test.ts` (a scripted 50-hand session) and
+  `e2e/report-hints.spec.ts`: the stored `hints` counts, their validation and the Hints used tile.
 - `e2e/session-report.spec.ts` (every push): Leave table between hands, Back to Home, Leave with the Hand
   Review open, seeded long sessions, and a 0-hand session. `e2e/rebuy.spec.ts` and
   `e2e/bust-continue.spec.ts`: Leave table in the bust dialog.
