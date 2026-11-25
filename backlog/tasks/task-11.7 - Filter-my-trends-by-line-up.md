@@ -1,11 +1,11 @@
 ---
 id: TASK-11.7
 title: Filter my trends by line-up
-status: In Progress
+status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-25T15:11:00Z'
+updated_date: '2026-11-25T15:12:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -18,6 +18,7 @@ references:
 documentation:
   - doc-1
   - doc-2
+  - doc-140
 parent_task_id: TASK-11
 priority: high
 type: feature
@@ -83,4 +84,12 @@ AC added (moved from TASK-11.8, where TASK-11.3 Q-1 put it by mistake).
 Build: Line-up select (All/Mixed/Tough/Soft/Custom) between Game type and Group by; filters hands by stored lineUp, combines with other filters and groupings; G-2 target from all hands; App unchanged. npm test 1389 pass; statistics/report e2e 26 pass; gate PASS.
 
 Judge r1 PASS 10/10: production preview Chromium/WebKit — played Tough and Custom sessions, then 2,254 hands total; all 60 Line-up x Table size x Game type combinations plus 40 under Session/Day matched an independent IndexedDB computation; G-2 target from all hands; reset to All. CI 45639437155 green.
+
+Follow-ups: none (one test NIT only).
 <!-- SECTION:NOTES:END -->
+
+## Final Summary
+
+<!-- SECTION:FINAL_SUMMARY:BEGIN -->
+Added a Line-up select (All, Mixed, Tough, Soft, Custom) to Statistics, between Game type and Group by. It filters both charts, totals and empty states by each hand's stored line-up, ANDed with table size and game type, under every grouping. The G-2 target still comes from all hands (AC#5, moved here from TASK-11.8). Custom is one bucket. The filter resets to All on every opening. No App or storage change. Verified: lint, typecheck and 1389 tests pass, stats coverage 100%, e2e in Chromium and WebKit with axe, judge round 1 PASS 10/10, no blocking findings. Review: assumptions A-1..A-5 and Q-1 in the story doc. Risk: one NIT, a vacuous assertion in trends.test.ts. No follow-ups.
+<!-- SECTION:FINAL_SUMMARY:END -->
