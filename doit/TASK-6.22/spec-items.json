@@ -1,0 +1,26 @@
+[
+  {
+    "id": "SPEC-01",
+    "verifies": "AC#1",
+    "verification": "acceptance `tests/table/bot-step-seeded.acceptance.test.ts::the default bot step takes the seeded TAG decision in a mixed spot`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-02",
+    "verifies": "AC#1",
+    "verification": "acceptance `tests/table/bot-step-seeded.acceptance.test.ts::every default bot step matches the app worker's decision`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-03",
+    "verifies": "AC#2",
+    "verification": "acceptance `tests/table/session.acceptance.test.ts::every bot action is the TAG decision on its own view`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-04",
+    "verifies": "AC#1",
+    "verification": "unit `tests/table/session.test.ts` (existing `rejectingPolicy` case at `:62`) and",
+    "status": "pending"
+  }
+]

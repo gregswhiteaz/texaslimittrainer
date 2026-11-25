@@ -1,9 +1,11 @@
 ---
 id: TASK-6.22
 title: Make the headless bot step use the seeded TAG decision
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-21T22:26:00Z'
+updated_date: '2026-11-25T23:14:00Z'
 labels:
   - follow-up
   - dream-limit-holdem-trainer
@@ -28,3 +30,13 @@ Follow-up from TASK-6.2 (doc-73). src/table/session.ts stepBot still defaults to
 - [ ] #1 Given a bot turn stepped headlessly with stepBot's default policy, When it is a mixed spot, Then the action equals the seeded decision decideTag(view, {random: botRandom(botDecisionSeed(code, view))}) — the same as the app worker
 - [ ] #2 Given the locked TASK-3.1 session test, When it is updated with its owner's approval, Then it compares to the exact seeded decision with no widened assertion
 <!-- AC:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. stepBot(table, policy?) defaults to the seeded decideTag decision using the seed botTurn already computes
+2. Re-pin the locked TASK-3.1 session test's expected action to the seeded decision (Q-1)
+3. New acceptance test comparing headless steps with the real advice worker on the two hands that differ
+
+Full spec: doit/TASK-6.22/spec.md
+<!-- SECTION:PLAN:END -->

@@ -416,6 +416,12 @@
       "event": "unlock",
       "file": "e2e/table.spec.ts",
       "reason": "TASK-8.1 AC#1/AC#10: Hint button on every action bar; add Hint to BUTTON_NAME allow-list (no-buy-in-control check unchanged)"
+    },
+    {
+      "t": "2026-11-25T16:14:03",
+      "event": "unlock",
+      "file": "tests/table/session.acceptance.test.ts",
+      "reason": "TASK-6.22 Q-1 (auto-accepted): expected bot action is the seeded decideTag decision (line 177); seat/type/amount assertions unchanged"
     }
   ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-3.1",
@@ -432,6 +438,7 @@
     "e2e/table.spec.ts",
     "e2e/table.spec.ts",
     "tests/table/session.acceptance.test.ts",
-    "e2e/table.spec.ts"
+    "e2e/table.spec.ts",
+    "tests/table/session.acceptance.test.ts"
   ]
 }
