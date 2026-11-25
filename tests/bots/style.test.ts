@@ -310,7 +310,12 @@ describe('bot style files', () => {
       advice: 'check',
       instead: 'bet',
     });
-    expect(findDeviation(MANIAC_STYLE, 'postflop', 'fold')).toBeUndefined();
+    expect(findDeviation(MANIAC_STYLE, 'postflop', 'fold')).toMatchObject({
+      street: 'postflop',
+      advice: 'fold',
+      instead: 'call',
+    });
+    expect(findDeviation(MANIAC_STYLE, 'postflop', 'bet')).toBeUndefined();
 
     // Several problems are all listed, and untrusted text is cut to 20 characters.
     const long = 'y'.repeat(30);

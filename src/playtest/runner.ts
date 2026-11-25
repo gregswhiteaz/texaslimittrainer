@@ -28,7 +28,6 @@ import {
   type PlayerView,
   type SeatPolicy,
 } from '../engine/player-view';
-import { drawReplacementStyle } from '../table/session';
 import {
   nextReplacementName,
   seatLineUp,
@@ -339,7 +338,7 @@ export function summarize(hands: Iterable<PlayedHand>): PlaytestSummary {
 
 /** Plays options.hands hands; calls onHand after each (not retained, so memory is O(1) in hands).
  *  Stacks carry over between hands (D-8): in cash a seat that ends on 0 rebuys (with a line-up, a bot that ends
- *  on 0 is replaced by a new bot from the preset); in sng it sits out, and a new sit-and-go starts when one seat
+ *  on 0 is replaced by a new bot of the same style); in sng it sits out, and a new sit-and-go starts when one seat
  *  has every chip. A table starts with every seat at the starting stack, the button at seat 1 and the preset's
  *  seats, also after a hand with a violation (A-2, A-3). Each hand's views get the table's earlier showdowns
  *  (the last EARLIER_SHOWDOWN_LIMIT), which restart with the table. */
@@ -382,9 +381,8 @@ export function runPlaytest(
       }
       const stackOf = (seat: SeatNumber) => final.players.find((p) => p.seat === seat)?.stack ?? 0;
       if (seats !== undefined && lineUp !== undefined && rules.rebuy) {
-        for (const { seat, kind } of seats) {
+        for (const { seat, kind, style } of seats) {
           if (kind !== 'bot' || stackOf(seat) !== 0) continue;
-          const style = drawReplacementStyle(lineUp, size, hand.record.replayCode, seat);
           const names = seats.flatMap((s) => (s.name === null ? [] : [s.name]));
           const { name, next } = nextReplacementName(position, names);
           position = next;

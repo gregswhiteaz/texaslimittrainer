@@ -5,7 +5,6 @@ import {
   nextReplacementName,
   REPLACEMENT_NAMES,
   replacementName,
-  replacementStyles,
   lineUpSessionConfig,
   resolveLineUpName,
   seatLineUp,
@@ -13,15 +12,15 @@ import {
   type LineUpSeat,
 } from '../../src/bots/lineup';
 import type { StyleName } from '../../src/bots/style';
-import { replacementGenerator } from '../../src/engine/bot-random';
-import { replayCodeFromWords, type ReplayCode } from '../../src/engine/deck';
-import { fnv1a32, Xoshiro128 } from '../../src/engine/seeded-random';
+import { replayCodeFromWords } from '../../src/engine/deck';
 import {
   configForGameType,
   DEFAULT_SESSION_CONFIG,
-  drawReplacementStyle,
-  type LineUpName,
+  BOT_STYLES,
+  nextHand,
+  type TableState,
 } from '../../src/table/session';
+import { SEAT_1_DEALT, withFinalStacks } from '../support/table-scenarios';
 
 const SIZE_ERROR = new RangeError('Table size must be a whole number from 2 to 10');
 const SEAT_ERROR = new RangeError('User seat must be a whole number from 1 to the table size');
@@ -189,22 +188,34 @@ describe('resolveLineUpName and lineUpSessionConfig', () => {
 });
 
 describe('replacement bots', () => {
-  it('replacement draws and names are deterministic and validated', () => {
+  it('replacement styles and names are deterministic and validated', () => {
     const code = replayCodeFromWords([5, 6, 8, 3]);
-    expect(replacementGenerator(code, 3).nextUint32()).toBe(
-      new Xoshiro128(fnv1a32(`${code}/3/replace`)).nextUint32(),
-    );
+    const other = replayCodeFromWords([6, 6, 8, 3]);
     for (const lineUp of ['Mixed', 'Tough', 'Soft', 'Custom'] as const) {
       for (const seat of [2, 3, 4]) {
-        const style = drawReplacementStyle(lineUp, 6, code, seat);
-        expect(drawReplacementStyle(lineUp, 6, code, seat)).toBe(style);
-        const styles = replacementStyles(lineUp, 6);
-        expect(style).toBe(styles[replacementGenerator(code, seat).nextIntUnbiased(styles.length)]);
+        for (const style of BOT_STYLES) {
+          const stacks = [160, 222, 160, 160, 96, 165].map((stack, i) =>
+            i + 1 === seat ? 0 : stack,
+          );
+          const finished = withFinalStacks(stacks);
+          const table: TableState = {
+            ...finished,
+            config: { ...finished.config, lineUp },
+            replayCode: code,
+            seats: finished.seats.map((s) => (s.seat === seat ? { ...s, style } : s)),
+          };
+          const next = nextHand(table);
+          expect(nextHand(table)).toEqual(next);
+          expect(next.seats[seat - 1]?.style).toBe(style);
+          expect(nextHand({ ...table, replayCode: other }).seats).toEqual(next.seats);
+        }
       }
     }
-    expect(replacementStyles('Soft', 2)).toEqual(['Calling station']);
-    expect(replacementStyles('Tough', 3)).toEqual(['TAG', 'Maniac']);
-    expect(replacementStyles('Mixed', 4)).toEqual(['TAG', 'Calling station', 'Maniac']);
+    const busted = withFinalStacks([160, 0, 160, 160, 96, 165]);
+    const next = nextHand(busted);
+    expect(next.seats.map((s) => s.style)).toEqual(busted.seats.map((s) => s.style));
+    expect(next.seats[1]).toMatchObject({ seat: 2, kind: 'bot', name: 'Jay' });
+    expect(next.stacks[1]).toEqual({ seat: 2, stack: 160 });
 
     expect(replacementName(0)).toBe('Jay');
     expect(replacementName(16)).toBe('Zed');
@@ -216,17 +227,12 @@ describe('replacement bots', () => {
     expect(nextReplacementName(0, ['Jay', 'Kit', 'You'])).toEqual({ name: 'Lou', next: 3 });
     expect(nextReplacementName(5, [])).toEqual({ name: 'Oli', next: 6 });
 
-    for (const size of [1, 11, 2.5, Number.NaN]) {
-      expect(() => replacementStyles('Mixed', size)).toThrow(SIZE_ERROR);
-      expect(() => drawReplacementStyle('Custom', size, code, 2)).toThrow(SIZE_ERROR);
-    }
-    expect(() => replacementStyles('Loose' as LineUpName, 6)).toThrow(
-      new RangeError('Unknown line-up: Loose'),
-    );
-    expect(() => replacementStyles('Loose' as LineUpName, 11)).toThrow(SIZE_ERROR);
-    expect(() => drawReplacementStyle('Mixed', 6, 'not a code' as ReplayCode, 2)).toThrow(
-      new RangeError('Invalid replay code'),
-    );
+    const notDone = new RangeError('Not a next-hand step');
+    expect(() => nextHand({ ...busted, hand: null })).toThrow(notDone);
+    expect(() => nextHand(SEAT_1_DEALT)).toThrow(notDone);
+    expect(() => nextHand({ ...busted, replayCode: null })).not.toThrow();
+    expect(nextHand({ ...busted, replayCode: null }).seats).toEqual(next.seats);
+    expect(nextHand({ ...busted, replayCode: other }).seats).toEqual(next.seats);
     const positionError = new RangeError('Name position must be a whole number of at least 0');
     for (const position of [-1, 1.5, Number.NaN, Number.MAX_SAFE_INTEGER + 1]) {
       expect(() => replacementName(position)).toThrow(positionError);

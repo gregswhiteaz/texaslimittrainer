@@ -2,7 +2,7 @@
   "format": "tlh-bot-style",
   "version": 1,
   "style": "Maniac",
-  "description": "Maniac (loose-aggressive) plays far too many hands and bets and raises far too often. It starts from the trainer's own advice, like TAG, but often raises hands the advice folds, raises where the advice only calls, and bets most of the time when everyone checks to it. It still calls when the betting is capped and folds after the flop when the price is clearly wrong. Call it down with good hands and re-raise your strong ones.",
+  "description": "Maniac (loose-aggressive) plays far too many hands and bets and raises far too often. It starts from the trainer's own advice, like TAG, but often raises hands the advice folds, raises where the advice only calls, and bets most of the time when everyone checks to it. It still calls when the betting is capped, and after the flop it calls most bets the pot odds say to fold, so it pays off your value bets. Call it down with good hands and bet your strong ones for value.",
   "mixedSpots": [],
   "deviations": [
     {
@@ -37,8 +37,15 @@
       "street": "postflop",
       "advice": "call",
       "instead": "raise",
-      "probability": 0.6,
-      "justification": "Raising most bets it would call keeps the pot growing with drawing and medium hands, so the learner gets value by letting the Maniac raise into strong hands."
+      "probability": 0.2,
+      "justification": "Raising some of the bets it would call keeps the pot growing with drawing and medium hands, while calling the rest keeps its postflop aggression inside its 65 to 85 percent band now that opponents so often fold or check to it."
+    },
+    {
+      "street": "postflop",
+      "advice": "fold",
+      "instead": "call",
+      "probability": 0.8,
+      "justification": "Calling most bets the pot odds say to fold makes the Maniac pay off value bets with weak hands, which is how a real maniac gives back the chips it wins with steals and keeps its aggression from reaching every street."
     }
   ]
 }

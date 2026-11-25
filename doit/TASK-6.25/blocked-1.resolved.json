@@ -1,0 +1,10 @@
+{
+  "spec": "SPEC-04",
+  "reason": "Under the full `npm test` (vitest --coverage, parallel workers) the locked fast test tests/playtest/check-styles.acceptance.test.ts › 'band edges are inclusive and every stat prints with its band when all are inside' (owner TASK-6.11, FAST_TIMEOUT_MS = 30_000) now runs at the edge of its 30 s timeout and failed 2 of 3 runs. Cause is the approved Q-1 rule itself: its 3 x 300-hand `--lineup soft` runs keep the Soft table's 3 Calling stations + 2 Rocks (the random draw used to swap Calling stations for Rocks), so more seats play post-flop and each run costs more equity work. Every other check passes; the test passes alone in 6.5 s.",
+  "evidence": "Base 49bafa5: that test 4.2 s alone, 19.7 s inside npm test. This branch: 6.5 s alone (x2), inside npm test 30.5 s (timeout FAIL), 28.7 s (pass), 32.8 s (timeout FAIL). Soft 300 hands seed 42: base 595 Calling-station / 905 Rock seat-hands, 1.22 s; now 900 / 600, 1.75 s. Other runs: npm test otherwise 1309-1310 passed / 45 skipped; lint, typecheck clean; Playwright 304 passed / 16 skipped; 10k playtest 0 violations; SPEC-06 SHA unchanged; npm run test:slow 95/95 passed (style-bands seeds 42/7/1234 and check-styles 100k all pass).",
+  "options": [
+    "Unlock tests/playtest/check-styles.acceptance.test.ts (owner TASK-6.11, reason TASK-6.25 Q-1) and raise FAST_TIMEOUT_MS from 30_000 to 60_000 (one constant; no assertion changes) [Recommended]",
+    "Unlock it and lower bandEdges' fast hand count from 300 to 200 (changes which stats are pinned; weaker)",
+    "Accept the flake and rely on retries (not recommended: the gate and CI run npm test once)"
+  ]
+}

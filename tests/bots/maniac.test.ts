@@ -52,10 +52,20 @@ describe('Maniac decision', () => {
       const check = views.filter((v) => owed(v) === 0 && advice(v).action === 'check');
       const call = views.filter((v) => owed(v) > 0 && advice(v).action === 'call');
       const capped = views.filter((v) => owed(v) > 0 && v.betCount === 4);
-      // Examples A, D, E, B, C, F, G.
-      const examples = [check[0], check[1], check[7], call[3], call[1], capped[1], capped[0]].map(
-        (v) => v as PlayerView,
-      );
+      const postflopFold = views.find(
+        (v) => v.street !== 'preflop' && owed(v) > 0 && advice(v).action === 'fold',
+      ) as PlayerView;
+      // Examples A, D, E, B, C, F, G, then a postflop fold (the fold→call deviation).
+      const examples = [
+        check[0],
+        check[1],
+        check[7],
+        call[3],
+        call[1],
+        capped[1],
+        capped[0],
+        postflopFold,
+      ].map((v) => v as PlayerView);
       for (const view of examples) {
         const random = stub(4294967295);
         expect(decideManiac(view, { random, equity })).toEqual(advice(view).move);
@@ -85,15 +95,13 @@ describe('Maniac decision', () => {
       expect(decideManiac(noBet, { random: fallback })).toEqual({ seat: 1, type: 'check' });
       expect(fallback.calls).toBe(1);
 
-      const postflopFold = views.find(
-        (v) => v.street !== 'preflop' && owed(v) > 0 && advice(v).action === 'fold',
-      );
+      const postflopBet = views.find((v) => v.street !== 'preflop' && advice(v).action === 'bet');
       const preflopRaise = views.find(
         (v) => v.street === 'preflop' && advice(v).action === 'raise',
       );
       const noDeviations = { ...MANIAC_STYLE, deviations: [] };
       const zeroDraw: [PlayerView, object][] = [
-        [postflopFold as PlayerView, {}],
+        [postflopBet as PlayerView, {}],
         [preflopRaise as PlayerView, {}],
         ...examples.map((v): [PlayerView, object] => [v, { style: noDeviations }]),
       ];

@@ -4,7 +4,6 @@ import type { HandState } from '../../src/engine/hand';
 import {
   completedHand,
   dealHand,
-  drawReplacementStyle,
   nextHand,
   type SessionSeat,
   type TableState,
@@ -30,9 +29,7 @@ describe('replace a busted bot', () => {
     expect(seat1).toMatchObject({ seat: 1, kind: 'bot', name: 'Jay' });
     expect(seat1.name).not.toBe('Ava');
     expect(STYLES).toContain(seat1.style);
-    expect(seat1.style).toBe(
-      drawReplacementStyle('Custom', 6, KINGS_SHOWDOWN.replayCode as ReplayCode, 1),
-    );
+    expect(seat1.style).toBe(KINGS_SHOWDOWN.seats[0]?.style);
     expect(stackValues(next)).toEqual([160, 222, 160, 160, 96, 165]);
     expect(next.seats.slice(1)).toEqual(KINGS_SHOWDOWN.seats.slice(1));
     expect(next.nextBotName).toBe(1);
@@ -68,7 +65,7 @@ describe('replace a busted bot', () => {
 
     const again = nextHand(finishedWith(next, NEXT_CODE, [0, 222, 160, 160, 96, 160]));
     expect(again.seats[0]).toMatchObject({ seat: 1, kind: 'bot', name: 'Lou' });
-    expect(again.seats[0]?.style).toBe(drawReplacementStyle('Custom', 6, NEXT_CODE, 1));
+    expect(again.seats[0]?.style).toBe(next.seats[0]?.style);
     expect(again.seats[5]).toEqual(next.seats[5]);
     expect(again.nextBotName).toBe(3);
 

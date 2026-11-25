@@ -29,7 +29,7 @@ import {
 import maniacJson from '../../src/bots/styles/maniac.json' with { type: 'json' };
 
 const SLOW = process.env.TLH_SLOW_TESTS === '1';
-const FAST_TIMEOUT_MS = 30_000;
+const FAST_TIMEOUT_MS = 60_000;
 const SLOW_TIMEOUT_MS = 1_200_000;
 const STYLE_LINE =
   /^Style: (TAG|Calling station|Maniac|Rock), (\d+) hands, VPIP (\d+\.\d)%, PFR (\d+\.\d)%, aggression (\d+\.\d%|—)$/;

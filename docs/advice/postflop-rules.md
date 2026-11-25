@@ -207,4 +207,7 @@ calling range (a value bet still needs more than 50%). At 100,000 hands (seed 42
 TAG) the bots show VPIP 22.2, PFR 16.2, Aggression 64.3, WTSD 40.4 and W$SD 51.5, all inside the
 6-max healthy ranges. Other fixes that were measured either left WTSD above 42 or pushed Aggression
 above 66; they are listed in `doit/TASK-7.32/spec.md` §1a. Bots that fold to bets also stop paying
-off Maniacs, which moves the Mixed line-up's style bands; that is handled by TASK-6.25.
+off Maniacs, so Maniacs stopped busting and took over the seats of busted bots, which pushed TAG and
+the Rock out of their style bands in the Mixed line-up. Since TASK-6.25 a busted bot is replaced by a
+bot of the same style, and the Maniac (fewer postflop raises, calls most bets the price says to fold)
+and the Rock (80% value bar, wider ranges after a raise) are retuned, so every style stays in its band.

@@ -19,3 +19,7 @@ Unlocked with reason "TASK-6.25 Q-1/Q-2":
 - tests/table/replace-bot.acceptance.test.ts (TASK-6.8)
 - tests/storage/session-records.acceptance.test.ts — not hook-locked; editable.
 **Answer: auto-accepted (recommended)** — listed for review.
+
+## Block 1 — check-styles fast test timeout (TASK-6.11, locked)
+The 300-hand Soft-line-up runs now keep their 3 Calling stations (Q-1), so the fast band-edge test takes ~29–33 s inside the full suite (6.5 s alone) against a 30 s limit. Options: raise FAST_TIMEOUT_MS 30_000 → 60_000, no assertion change [Recommended]; lower the hand count 300 → 200 (weaker pins).
+**Answer: auto-accepted (recommended)** — timeout raised; unlocked under TASK-6.11; orchestrator edit.

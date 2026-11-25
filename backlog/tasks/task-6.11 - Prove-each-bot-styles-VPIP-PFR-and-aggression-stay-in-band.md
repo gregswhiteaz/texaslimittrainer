@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-25T00:07:00Z'
+updated_date: '2026-11-25T05:07:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -107,6 +107,8 @@ Review R1: 2 MAJOR fixed (every-push runs cut to 300 hands with slow twins at or
 Judge R1 PASS 14/14 (own counter matched CLI stats on 8 setups; edge/just-outside band cases; 3×100k slow pass; 21/23 mutants, 2 LOW test gaps). Follow-up spike: TAG aggression headroom. Workflow style-bands.yml not yet dispatched (user choice; costs minutes).
 
 Locked test(s) unlocked for TASK-7.32 Q-1 (user-approved advice/bot fix; expected values re-pinned one-for-one).
+
+TASK-6.25: check-styles fast test FAST_TIMEOUT_MS raised 30s -> 60s (same-style replacement makes Soft runs ~1.4x slower); no assertion changed.
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary

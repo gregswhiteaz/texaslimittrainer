@@ -1,6 +1,6 @@
 import { spawnSync } from 'node:child_process';
 import { describe, expect, it } from 'vitest';
-import { replacementStyles, type LineUpPreset } from '../../src/bots/lineup';
+import { seatLineUp, type LineUpPreset } from '../../src/bots/lineup';
 import type { SeatNumber } from '../../src/engine/hand';
 import { checkStep } from '../../src/engine/invariants';
 import { formatHand, main } from '../../src/playtest/cli';
@@ -11,7 +11,6 @@ import {
   type PlayedHand,
   type PlaytestSeams,
 } from '../../src/playtest/runner';
-import { drawReplacementStyle } from '../../src/table/session';
 import { REPO_ROOT, sandboxEnv } from '../support/sandbox';
 
 const SLOW = process.env.TLH_SLOW_TESTS === '1';
@@ -100,7 +99,7 @@ describe('replacement bots in the playtest', () => {
         true,
       );
 
-      const mixedStyles = replacementStyles('Mixed', 6);
+      const mixedStyles = seatLineUp('Mixed', 6, 1).map((s) => s.style);
       for (const [i, hand] of first.hands.entries()) {
         const seats = hand.lineUp ?? [];
         expect(seats).toHaveLength(6);
@@ -122,19 +121,18 @@ describe('replacement bots in the playtest', () => {
           expect(endStack).toBe(0);
           expect(hand.record.seats.find((s) => s.seat === seat.seat)?.stack).toBe(160);
           expect(mixedStyles).toContain(seat.style);
-          expect(seat.style).toBe(
-            drawReplacementStyle('Mixed', 6, handReplayCode(42, hand.number - 1), seat.seat),
-          );
+          expect(seat.style).toBe(before?.style);
           expect(seats.filter((s) => s.name === seat.name)).toHaveLength(1);
           expect(seat.name).not.toBe(before?.name);
         }
       }
 
-      const soft = replacements(run('Soft').hands);
+      const softHands = run('Soft').hands;
+      const soft = replacements(softHands);
       expect(soft.length).toBeGreaterThan(0);
       for (const { style } of soft) expect(['Calling station', 'Rock']).toContain(style);
       for (const { hand, seat, style } of soft) {
-        expect(style).toBe(drawReplacementStyle('Soft', 6, handReplayCode(42, hand - 1), seat));
+        expect(style).toBe(softHands[hand - 2]?.lineUp?.[seat - 1]?.style);
       }
     },
     TEST_TIMEOUT_MS,
@@ -144,10 +142,11 @@ describe('replacement bots in the playtest', () => {
     'a violation after a replacement prints a Replay line that reproduces the hand',
     () => {
       const { hands } = run('Mixed');
-      // Only a replacement that changed a seat's style prints `--styles` (seed 42's first one redraws the same style).
+      // A replacement keeps the seat's style, so the Replay line has no `--styles`; a replay given `--styles`
+      // echoes it (A-7).
       const startStyles = styleSlugs(hands[0] as PlayedHand);
       const firstReplaced = hands.find(
-        (hand) => (hand.replaced ?? []).length > 0 && styleSlugs(hand) !== startStyles,
+        (hand) => (hand.replaced ?? []).length > 0 && styleSlugs(hand) === startStyles,
       ) as PlayedHand;
       const k = firstReplaced.number;
       const slugs = styleSlugs(firstReplaced);
@@ -160,10 +159,12 @@ describe('replacement bots in the playtest', () => {
       const replayLine = violating.out
         .split('\n')
         .find((line) => line.startsWith('Replay: ')) as string;
-      expect(replayLine.endsWith(` --lineup mixed --styles ${slugs}`)).toBe(true);
+      expect(replayLine.endsWith(' --lineup mixed')).toBe(true);
 
       const replayArgs = replayLine.slice(replayLine.indexOf(' -- ') + 4).split(' ');
-      const replayed = capture(replayArgs, { onAction: flagFirstActionOfHand(1) });
+      const replayed = capture([...replayArgs, '--styles', slugs], {
+        onAction: flagFirstActionOfHand(1),
+      });
       expect(replayed.code).toBe(1);
       expect(replayed.out).toContain(` --lineup mixed --styles ${slugs}\n`);
       expect(handLines(replayed.out)).toBe(

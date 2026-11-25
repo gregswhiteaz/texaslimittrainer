@@ -154,10 +154,10 @@ Dream slug: limit-holdem-trainer   ·   Vision: dreams/limit-holdem-trainer/visi
   - REQ-007.2: When the user's stack is $0 at the end of a hand, a dialog offers Rebuy and Leave table; no further hand is dealt until the user chooses.
   - REQ-007.3: Rebuy sets the user's stack to the buy-in and the session continues; total rebuys are counted in the session result.
   - REQ-007.4: The user cannot add chips while their stack is above $0.
-  - REQ-007.5: When a bot's stack is $0 at the end of a hand, it leaves and a new bot of a style drawn at random from the session's line-up preset takes the seat with a fresh buy-in before the next hand.
+  - REQ-007.5: When a bot's stack is $0 at the end of a hand, it leaves and a new bot of the same style takes the seat with a fresh buy-in before the next hand.
   - REQ-007.6: When the user busts while the Hand Review panel is open, the panel's Deal next hand control reads Continue, and Continue opens the Rebuy / Leave table dialog.
-  - REQ-007.7: In a session recorded as Custom, a replacement bot's style is drawn at random from all four styles.
-  - REQ-007.8: A replacement bot's style is drawn from the styles the session's preset assigns at the current table size; at heads-up with the Tough preset the replacement is TAG.
+  - REQ-007.7: Retired (TASK-6.25 Q-1): a replacement bot keeps the busted bot's style (REQ-007.5), in a Custom session too. Was: in a session recorded as Custom, a replacement bot's style is drawn at random from all four styles.
+  - REQ-007.8: Retired (TASK-6.25 Q-1): a replacement bot keeps the busted bot's style (REQ-007.5). Was: a replacement bot's style is drawn from the styles the session's preset assigns at the current table size; at heads-up with the Tough preset the replacement is TAG.
 - Fit criterion: Scripted session where the user busts → dialog shown, Rebuy → stack = 20 big bets; bot bust → new bot name in the seat with a full buy-in.
 - Rationale: Q-35, Q-38, Q-40.
 - Source: Q-35, Q-38, Q-40; confirmed Q-43
@@ -1367,3 +1367,4 @@ Entity × lifecycle (every cell is a clause below or N/A):
 | 1.8 | 2026-11-17 | Judge round 2: added REQ-007.8 (replacement style from preset styles at current size) | User (Q-113) |
 | 1.9 | 2026-11-17 | Judge round 2 revision: added REQ-033.7 (implied-odds allowance) | User (Q-114) |
 | 1.10 | 2026-11-24 | TASK-7.32 (WTSD fix): REQ-033.1 turn required equity counts one river big bet; REQ-033.2 value raise facing a bet needs more than 65% (value bet stays above 50%) | User (TASK-7.32 Q-1) |
+| 1.11 | 2026-11-24 | TASK-6.25 (Mixed style bands): REQ-007.5 a replacement bot keeps the busted bot's style; REQ-007.7 and REQ-007.8 retired (reverses Q-113) | User (TASK-6.25 Q-1, auto-accepted) |

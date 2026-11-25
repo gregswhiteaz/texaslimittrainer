@@ -4,8 +4,8 @@
   "style": "Rock",
   "description": "Rock (very tight) plays only a small set of strong starting hands and folds everything else before the flop, even many hands TAG would play. When it does play, it follows the trainer's own advice, except that after the flop it bets or raises only with very strong hands and checks or calls with the rest, so its raises usually mean a big pair or a strong ace. It checks its big blind when that is free rather than folding. Steal its blinds often, and give its bets and raises real respect.",
   "postflopValue": {
-    "thresholdPct": 75,
-    "justification": "After the flop the Rock bets or raises only when it expects to win at least three times in four against the hands that would call, so good but not dominant hands check or call and its postflop aggression stays inside its 35 to 55 percent band."
+    "thresholdPct": 80,
+    "justification": "After the flop the Rock bets or raises only when it expects to win at least four times in five against the hands that would call, so good but not dominant hands check or call and its postflop aggression stays inside its 35 to 55 percent band even with a Maniac at the table."
   },
   "mixedSpots": [],
   "deviations": [],
@@ -79,20 +79,20 @@
     {
       "position": "HJ",
       "situation": "raise",
-      "hands": "AA AKs AQs AKo KK QQ JJ TT",
-      "justification": "Against a single early raise the Rock re-raises only premium pairs and big aces, folding the hands TAG would call with."
+      "hands": "AA AKs AQs AJs AKo KK KQs AQo QQ JJ TT 99 88",
+      "justification": "Against a single early raise the Rock continues with big pairs down to eights and its best broadway hands, still folding the hands TAG would call with."
     },
     {
       "position": "CO",
       "situation": "raise",
-      "hands": "AA AKs AQs AJs AKo KK AQo QQ JJ TT",
-      "justification": "From the cutoff against one raise the Rock adds ace-jack suited and ace-queen offsuit and still folds every other hand."
+      "hands": "AA AKs AQs AJs AKo KK KQs KJs AQo QQ QJs AJo JJ TT 99 88",
+      "justification": "From the cutoff against one raise the Rock adds medium pairs and suited broadway hands and still folds every weaker hand."
     },
     {
       "position": "BTN",
       "situation": "raise",
-      "hands": "AA AKs AQs AJs AKo KK KQs AQo QQ JJ TT 99",
-      "justification": "On the button against one raise the Rock plays a slightly wider premium range because it keeps position for every later street."
+      "hands": "AA AKs AQs AJs ATs AKo KK KQs KJs KTs AQo KQo QQ QJs QTs AJo JJ TT 99 88 77",
+      "justification": "On the button against one raise the Rock plays a wider premium range because it keeps position for every later street, so a loose raiser cannot push it out of every pot."
     },
     {
       "position": "UTG",
@@ -109,14 +109,14 @@
     {
       "position": "CO",
       "situation": "raise-and-calls",
-      "hands": "AA AKs AQs AJs AKo KK QQ JJ TT 99 88",
-      "justification": "In the cutoff with a raise and callers, the pot is big enough for the Rock to call with medium pairs hoping to flop a set."
+      "hands": "AA AKs AQs AJs AKo KK KQs AQo QQ JJ TT 99 88",
+      "justification": "In the cutoff with a raise and callers, the pot is big enough for the Rock to call with medium pairs hoping to flop a set and with its best broadway hands."
     },
     {
       "position": "BTN",
       "situation": "raise-and-calls",
-      "hands": "AA AKs AQs AJs AKo KK KQs AQo QQ JJ TT 99 88 77",
-      "justification": "On the button in a multiway raised pot, the Rock adds a few pairs and king-queen suited because position makes them easier to play."
+      "hands": "AA AKs AQs AJs AKo KK KQs KJs AQo QQ AJo JJ TT 99 88 77",
+      "justification": "On the button in a multiway raised pot, the Rock adds a few pairs and strong broadway hands because position makes them easier to play."
     },
     {
       "position": "UTG",
@@ -157,8 +157,8 @@
     {
       "position": "SB",
       "situation": "blind-defence",
-      "hands": "AA AKs AQs AJs AKo KK KQs AQo QQ JJ TT 99",
-      "justification": "Defending the small blind against a steal, the Rock re-raises its strong hands and folds the rest instead of calling out of position."
+      "hands": "AA AKs AQs AJs ATs AKo KK KQs KJs AQo KQo QQ JJ TT 99 88 77",
+      "justification": "Defending the small blind against a steal, the Rock re-raises its strong hands, adds a few pairs and broadway hands against loose stealers, and folds the rest instead of calling out of position."
     },
     {
       "position": "BB",

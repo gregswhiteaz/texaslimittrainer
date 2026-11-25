@@ -104,21 +104,21 @@ function problemsOf(input: unknown): readonly string[] {
 const words = (text: string): number => (text.match(/\p{L}+/gu) ?? []).length;
 
 describe('Rock postflop value bar (TASK-6.16)', () => {
-  it('the Rock bets or raises after the flop only above its 75% value bar', () => {
+  it('the Rock bets or raises after the flop only above its 80% value bar', () => {
     const open = free();
-    for (const pct of [75.1, 75, 60]) {
+    for (const pct of [80.1, 80, 60]) {
       expect(recommend(open, { equity: fixed(pct) }).action).toBe('bet');
     }
-    expect(decideRock(open, { equity: fixed(75.1) })).toStrictEqual(legal(open, 'bet'));
-    expect(decideRock(open, { equity: fixed(75) })).toStrictEqual(legal(open, 'check'));
+    expect(decideRock(open, { equity: fixed(80.1) })).toStrictEqual(legal(open, 'bet'));
+    expect(decideRock(open, { equity: fixed(80) })).toStrictEqual(legal(open, 'check'));
     expect(decideRock(open, { equity: fixed(60) })).toStrictEqual(legal(open, 'check'));
 
     const owed = facing();
-    for (const pct of [75.1, 75]) {
+    for (const pct of [80.1, 80]) {
       expect(recommend(owed, { equity: fixed(pct) }).action).toBe('raise');
     }
-    expect(decideRock(owed, { equity: fixed(75.1) })).toStrictEqual(legal(owed, 'raise'));
-    expect(decideRock(owed, { equity: fixed(75) })).toStrictEqual(legal(owed, 'call'));
+    expect(decideRock(owed, { equity: fixed(80.1) })).toStrictEqual(legal(owed, 'raise'));
+    expect(decideRock(owed, { equity: fixed(80) })).toStrictEqual(legal(owed, 'call'));
     expect(legal(owed, 'call')).toStrictEqual({ seat: 3, type: 'call', amount: 4 });
 
     // Advice of check, call or fold is played unchanged, whatever the equity.
@@ -143,7 +143,7 @@ describe('Rock postflop value bar (TASK-6.16)', () => {
 
   it('the Rock style file holds a justified postflop value bar and the other styles none', () => {
     expect(ROCK_STYLE.postflopValue).toStrictEqual({
-      thresholdPct: 75,
+      thresholdPct: 80,
       justification: JUSTIFICATION,
     });
     expect(words(JUSTIFICATION)).toBeGreaterThanOrEqual(10);

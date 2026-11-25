@@ -21,8 +21,7 @@ import {
   type PlayerView,
   type SeatPolicy,
 } from '../engine/player-view';
-import { botDecisionSeed, replacementGenerator } from '../engine/bot-random';
-import { isReplayCode } from '../engine/deck';
+import { botDecisionSeed } from '../engine/bot-random';
 import type { ObservedOpponent } from '../advice/ranges';
 import {
   addStyleCounts,
@@ -36,7 +35,6 @@ import {
   BOT_NAMES,
   lineUpSessionConfig,
   nextReplacementName,
-  replacementStyles,
   seatLineUp,
   type LineUpPreset,
   type LineUpSeat,
@@ -542,24 +540,10 @@ export function nextHandDelay(table: TableState, hold = false): number | null {
     : null;
 }
 
-/** REQ-007.5: a new bot's style, styles[replacementGenerator(code, seat).nextIntUnbiased(styles.length)] with
- *  styles = replacementStyles(lineUp, size). Pure. RangeError as replacementStyles, or on an invalid replay code. */
-export function drawReplacementStyle(
-  lineUp: LineUpName,
-  size: number,
-  code: ReplayCode,
-  seat: SeatNumber,
-): BotStyle {
-  const styles = replacementStyles(lineUp, size);
-  if (!isReplayCode(code)) throw new RangeError('Invalid replay code');
-  return styles[replacementGenerator(code, seat).nextIntUnbiased(styles.length)] as BotStyle;
-}
-
 /** The session ready for the next deal: final stacks carried, button one seat on, hand number + 1.
  *  Every seat keeps its chips (REQ-007.4). In cash a user on $0 waits at Rebuy (userBusted) and a bot on $0
- *  is replaced by a new bot (REQ-007.5): next unused replacement name, style drawn from the line-up with the
- *  finished hand's replay code, a fresh buy-in and the next bot id. A sit-and-go seat on 0 stops the
- *  sit-and-go (sitAndGoStopped). Throws RangeError if a replacement draw has no replay code. */
+ *  is replaced by a new bot of the same style (REQ-007.5): next unused replacement name, a fresh buy-in and the
+ *  next bot id. A sit-and-go seat on 0 stops the sit-and-go (sitAndGoStopped). */
 export function nextHand(table: TableState): TableState {
   const { hand, config } = table;
   if (nextStep(table) !== 'done' || hand === null) throw new RangeError('Not a next-hand step');
@@ -571,8 +555,7 @@ export function nextHand(table: TableState): TableState {
     const current = seats.find((s) => s.seat === seat) as SessionSeat;
     if (config.gameType === 'cash' && current.kind === 'bot') {
       if (stack > 0) return { seat, stack };
-      if (table.replayCode === null) throw new RangeError('No replay code to draw a new bot from');
-      const style = drawReplacementStyle(config.lineUp, config.players, table.replayCode, seat);
+      const { style } = current;
       const { name, next } = nextReplacementName(
         nextBotName,
         seats.map((s) => s.name),

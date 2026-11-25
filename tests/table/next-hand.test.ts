@@ -1,12 +1,11 @@
 import { describe, expect, it } from 'vitest';
-import { replayCodeFromWords, shuffledDeck, type ReplayCode } from '../../src/engine/deck';
+import { replayCodeFromWords, shuffledDeck } from '../../src/engine/deck';
 import { createHand, minimumStack, type HandState } from '../../src/engine/hand';
 import {
   NEXT_HAND_DELAY_MS,
   SIT_AND_GO_LEVEL_1,
   completedHand,
   dealHand,
-  drawReplacementStyle,
   nextHand,
   nextHandDelay,
   nextStep,
@@ -118,17 +117,19 @@ describe('busted seats', () => {
     expect(next.nextBotName).toBe(0);
   });
 
-  it('nextHand throws when a bot must be replaced but the hand has no replay code', () => {
-    const noCode = { ...withFinalStacks([0, 222, 160, 160, 96, 165]), replayCode: null };
-    expect(() => nextHand(noCode)).toThrow(new RangeError('No replay code to draw a new bot from'));
+  it('nextHand replaces a busted bot with the same style, with or without a replay code', () => {
+    const styled: TableState = {
+      ...KINGS_SHOWDOWN,
+      seats: KINGS_SHOWDOWN.seats.map((s) => (s.seat === 6 ? { ...s, style: 'Rock' } : s)),
+    };
+    const noCode = { ...withFinalStacks([0, 222, 160, 160, 96, 0], styled), replayCode: null };
+    expect(nextHand(noCode).seats[5]).toMatchObject({ seat: 6, name: 'Kit', style: 'Rock' });
     expect(() => nextHand({ ...KINGS_SHOWDOWN, replayCode: null })).not.toThrow();
 
     const replaced = nextHand(withFinalStacks([0, 222, 160, 160, 96, 0]));
     expect(replaced.seats.map((s) => s.name)).toEqual(['Jay', 'Ben', 'Cal', 'Dee', 'You', 'Kit']);
     expect(replaced.stacks.map((s) => s.stack)).toEqual([160, 222, 160, 160, 96, 160]);
-    expect(replaced.seats[5]?.style).toBe(
-      drawReplacementStyle('Custom', 6, KINGS_SHOWDOWN.replayCode as ReplayCode, 6),
-    );
+    expect(replaced.seats[5]?.style).toBe(KINGS_SHOWDOWN.seats[5]?.style);
     expect(replaced.nextBotName).toBe(2);
   });
 });

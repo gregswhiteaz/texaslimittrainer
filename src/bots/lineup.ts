@@ -128,20 +128,6 @@ export function lineUpSessionConfig(
   return { ...base, players: seats.length, userSeat, lineUp, seats: sessionSeats };
 }
 
-/** REQ-007.7/007.8: distinct styles a replacement may have, in order TAG, Calling station, Maniac, Rock.
- *  'Custom' → all four. RangeError: size not an integer 2..10, or unknown line-up name. */
-export function replacementStyles(lineUp: LineUpName, size: number): readonly StyleName[] {
-  if (!Number.isInteger(size) || size < 2 || size > 10) {
-    throw new RangeError('Table size must be a whole number from 2 to 10');
-  }
-  if (lineUp === 'Custom') return MIXED_CYCLE;
-  if (!LINE_UP_PRESETS.includes(lineUp)) {
-    throw new RangeError(`Unknown line-up: ${String(lineUp)}`);
-  }
-  const seated = seatLineUp(lineUp, size, 1).map((s) => s.style);
-  return MIXED_CYCLE.filter((style) => seated.includes(style));
-}
-
 /** Name at `position` in the sequence: REPLACEMENT_NAMES[p mod 17], plus ` ${floor(p/17)+1}` when p ≥ 17.
  *  RangeError if position is not a non-negative safe integer. */
 export function replacementName(position: number): string {

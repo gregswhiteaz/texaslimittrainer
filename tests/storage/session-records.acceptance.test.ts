@@ -12,7 +12,6 @@ import {
   configForLineUp,
   configWithSeatStyle,
   dealHand,
-  drawReplacementStyle,
   nextHand,
   nextStep,
   seatSession,
@@ -27,7 +26,7 @@ import {
   sessionRecord,
   type SessionRecord,
 } from '../../src/table/session-record';
-import { KINGS_SHOWDOWN, SCENARIO_CODE, withFinalStacks } from '../support/table-scenarios';
+import { KINGS_SHOWDOWN, withFinalStacks } from '../support/table-scenarios';
 
 const SESSION = '0123456789abcdef0123456789abcdef';
 const STARTED = new Date('2026-11-23T10:00:00Z');
@@ -189,7 +188,7 @@ describe('session records acceptance', () => {
         0,
         hand5.seats.map((s) => s.name),
       ).name,
-      style: drawReplacementStyle('Custom', 6, SCENARIO_CODE, 2),
+      style: hand5.seats.find((s) => s.seat === 2)?.style,
       stack: 160,
     });
     expect(stored.nextBotId).toBe(7);

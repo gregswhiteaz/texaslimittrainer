@@ -55,6 +55,7 @@ interface Points {
   check: PlayerView[];
   call: PlayerView[];
   capped: PlayerView[];
+  fold: PlayerView[];
 }
 let collected: Points | undefined;
 function collect(): Points {
@@ -62,6 +63,7 @@ function collect(): Points {
   const check: PlayerView[] = [];
   const call: PlayerView[] = [];
   const capped: PlayerView[] = [];
+  const fold: PlayerView[] = [];
   const summary = runPlaytest({ hands: 200, seed: 61, size: 6 }, undefined, {
     makePolicy: (code, seat) => {
       if (seat !== SEAT) return randomMovePolicy(seatGenerator(code, seat));
@@ -74,12 +76,13 @@ function collect(): Points {
         if (due === 0 && action === 'check') check.push(view);
         if (due > 0 && action === 'call') call.push(view);
         if (due > 0 && view.betCount === 4) capped.push(view);
+        if (due > 0 && action === 'fold' && view.street !== 'preflop') fold.push(view);
         return policy(view);
       };
     },
   });
   expect(summary.violations).toBe(0);
-  collected = { check, call, capped };
+  collected = { check, call, capped, fold };
   return collected;
 }
 
@@ -142,44 +145,61 @@ function withPreflopCall(
 }
 
 describe('Maniac from its style file', () => {
-  it('the Maniac style file holds its deviation parameters and a description', () => {
-    expect(MANIAC_STYLE.style).toBe('Maniac');
-    expect(words(MANIAC_STYLE.description)).toBeGreaterThanOrEqual(15);
-    expect(MANIAC_STYLE.mixedSpots.size).toBe(0);
-    expect(
-      MANIAC_STYLE.deviations.map(({ street, advice, instead, probability }) => ({
-        street,
-        advice,
-        instead,
-        probability,
-      })),
-    ).toEqual([
-      { street: 'preflop', advice: 'fold', instead: 'raise', probability: 0.45 },
-      { street: 'preflop', advice: 'call', instead: 'raise', probability: 0.6 },
-      { street: 'preflop', advice: 'check', instead: 'raise', probability: 0.6 },
-      { street: 'postflop', advice: 'check', instead: 'bet', probability: 0.6 },
-      { street: 'postflop', advice: 'call', instead: 'raise', probability: 0.6 },
-    ]);
-    for (const deviation of MANIAC_STYLE.deviations) {
-      expect(words(deviation.justification)).toBeGreaterThanOrEqual(10);
-    }
-    expect(parseStyle(raw(), 'maniac.json')).toEqual(MANIAC_STYLE);
+  it(
+    'the Maniac style file holds its deviation parameters and a description',
+    () => {
+      expect(MANIAC_STYLE.style).toBe('Maniac');
+      expect(words(MANIAC_STYLE.description)).toBeGreaterThanOrEqual(15);
+      expect(MANIAC_STYLE.mixedSpots.size).toBe(0);
+      expect(
+        MANIAC_STYLE.deviations.map(({ street, advice, instead, probability }) => ({
+          street,
+          advice,
+          instead,
+          probability,
+        })),
+      ).toEqual([
+        { street: 'preflop', advice: 'fold', instead: 'raise', probability: 0.45 },
+        { street: 'preflop', advice: 'call', instead: 'raise', probability: 0.6 },
+        { street: 'preflop', advice: 'check', instead: 'raise', probability: 0.6 },
+        { street: 'postflop', advice: 'check', instead: 'bet', probability: 0.6 },
+        { street: 'postflop', advice: 'call', instead: 'raise', probability: 0.2 },
+        { street: 'postflop', advice: 'fold', instead: 'call', probability: 0.8 },
+      ]);
+      expect(MANIAC_STYLE.description).not.toMatch(/folds after the flop/);
+      for (const deviation of MANIAC_STYLE.deviations) {
+        expect(words(deviation.justification)).toBeGreaterThanOrEqual(10);
+      }
+      expect(parseStyle(raw(), 'maniac.json')).toEqual(MANIAC_STYLE);
 
-    const missing = raw();
-    delete missing.description;
-    expect(problemsOf(missing)).toContain(
-      'maniac.json: style has no plain-English description (at least 15 words)',
-    );
-    const bad = raw();
-    bad.deviations = (bad.deviations as Record<string, unknown>[]).map((entry) =>
-      entry.street === 'postflop' && entry.advice === 'call'
-        ? { ...entry, probability: 1.5 }
-        : entry,
-    );
-    expect(problemsOf(bad)).toEqual([
-      'maniac.json: style Maniac deviation postflop call has an invalid probability',
-    ]);
-  });
+      const missing = raw();
+      delete missing.description;
+      expect(problemsOf(missing)).toContain(
+        'maniac.json: style has no plain-English description (at least 15 words)',
+      );
+      const bad = raw();
+      bad.deviations = (bad.deviations as Record<string, unknown>[]).map((entry) =>
+        entry.street === 'postflop' && entry.advice === 'call'
+          ? { ...entry, probability: 1.5 }
+          : entry,
+      );
+      expect(problemsOf(bad)).toEqual([
+        'maniac.json: style Maniac deviation postflop call has an invalid probability',
+      ]);
+
+      // A postflop fold: a draw under 0.8 calls, a draw at or above it folds like the advice.
+      const view = collect().fold[0] as PlayerView;
+      expect(recommend(view, { ...BOT_ADVICE, equity }).action).toBe('fold');
+      const draw = (u: number) => ({ nextUint32: () => u });
+      expect(decideManiac(view, { random: draw(0.8 * 2 ** 32 - 1), equity })).toEqual(
+        legal(view, 'call'),
+      );
+      expect(decideManiac(view, { random: draw(0.8 * 2 ** 32), equity })).toEqual(
+        legal(view, 'fold'),
+      );
+    },
+    TEST_TIMEOUT_MS,
+  );
 
   it(
     'with no bet to face where the advice is check the Maniac bets at more points than TAG',
@@ -282,7 +302,7 @@ describe('Maniac from its style file', () => {
       expect(tagAt(b)).toEqual({ seat: 1, type: 'call', amount: 4 });
 
       // Example C: call[29] (call[1] with 7h Qh before TASK-7.32: the bots now fold that turn), turn with Kd Ad
-      // facing a bet of 8; u ≥ 0.6 threshold, the Maniac calls like TAG.
+      // facing a bet of 8; u ≥ 0.2 threshold, the Maniac calls like TAG.
       const c = at(call, 6402, 29);
       expect(c.code).toBe('0000000000001902000000000000001e');
       expect(c.view.street).toBe('turn');
@@ -296,18 +316,18 @@ describe('Maniac from its style file', () => {
       expect(maniacAt(c)).toEqual({ seat: 1, type: 'call', amount: 8 });
       expect(tagAt(c)).toEqual({ seat: 1, type: 'call', amount: 8 });
 
-      // Example H: point 122 = call[38] (call[2] with 7h Qh before TASK-7.32; no river call point below 84 has
-      // u < 0.6 now), river with 8s 8d facing a bet of 8; u < 0.6 threshold, the Maniac raises to 16.
-      const h = at(call, 6402, 122);
-      expect(h.code).toBe('0000000000001902000000000000007b');
+      // Example H: point 290 = call[38] (point 122 before TASK-6.25 cut the postflop raise to 0.2; call[2] with
+      // 7h Qh before TASK-7.32), river with 8s 8d facing a bet of 8; u < 0.2 threshold, the Maniac raises to 16.
+      const h = at(call, 6402, 290);
+      expect(h.code).toBe('00000000000019020000000000000123');
       expect(h.view.street).toBe('river');
       expect(h.view.holeCards.map(formatCard)).toEqual(['8s', '8d']);
       expect(h.view.currentBet).toBe(8);
       expect(h.view.betCount).toBe(1);
       expect(owed(h.view)).toBe(8);
       expect(botDecisionIndex(h.view)).toBe(3);
-      expect(h.seed).toBe(289086986);
-      expect(botRandom(h.seed).nextUint32()).toBe(2099157800);
+      expect(h.seed).toBe(3747348384);
+      expect(botRandom(h.seed).nextUint32()).toBe(79073728);
       expect(recommend(h.view, { ...BOT_ADVICE, equity }).action).toBe('call');
       expect(maniacAt(h)).toEqual({ seat: 1, type: 'raise', amount: 16 });
       expect(tagAt(h)).toEqual({ seat: 1, type: 'call', amount: 8 });

@@ -185,13 +185,14 @@ describe('Calling station postflop value bar (TASK-6.17)', () => {
       postflop.map(({ advice, instead, probability }) => ({ advice, instead, probability })),
     ).toEqual([
       { advice: 'check', instead: 'bet', probability: 0.6 },
-      { advice: 'call', instead: 'raise', probability: 0.6 },
+      { advice: 'call', instead: 'raise', probability: 0.2 },
+      { advice: 'fold', instead: 'call', probability: 0.8 },
     ]);
     const checkBet = postflop[0]?.justification as string;
     expect(checkBet).toContain('more often than not');
     expect(checkBet).not.toContain('almost every time');
 
-    expect(ROCK_STYLE.postflopValue?.thresholdPct).toBe(75);
+    expect(ROCK_STYLE.postflopValue?.thresholdPct).toBe(80);
     expect(TAG_STYLE.postflopValue).toBeNull();
     expect(MANIAC_STYLE.postflopValue).toBeNull();
   });

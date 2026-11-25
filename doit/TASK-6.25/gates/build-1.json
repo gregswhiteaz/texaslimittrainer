@@ -1,0 +1,78 @@
+{
+  "task": "TASK-6.25",
+  "phase": "build",
+  "run": 1,
+  "result": "PASS",
+  "changed_lines": 554,
+  "changed_files": [
+    "docs/advice/postflop-rules.md",
+    "dreams/limit-holdem-trainer/requirements.md",
+    "src/bots/lineup.ts",
+    "src/bots/styles/maniac.json",
+    "src/bots/styles/rock.json",
+    "src/engine/bot-random.ts",
+    "src/playtest/runner.ts",
+    "src/table/session.ts",
+    "tests/bots/calling-station-postflop.acceptance.test.ts",
+    "tests/bots/lineup.test.ts",
+    "tests/bots/maniac.acceptance.test.ts",
+    "tests/bots/maniac.test.ts",
+    "tests/bots/replacement.acceptance.test.ts",
+    "tests/bots/rock-postflop.acceptance.test.ts",
+    "tests/bots/rock.acceptance.test.ts",
+    "tests/bots/style.test.ts",
+    "tests/playtest/check-styles.acceptance.test.ts",
+    "tests/playtest/mixed-composition.acceptance.test.ts",
+    "tests/playtest/replacement.acceptance.test.ts",
+    "tests/storage/session-records.acceptance.test.ts",
+    "tests/table/next-hand.test.ts",
+    "tests/table/replace-bot.acceptance.test.ts"
+  ],
+  "checks": [
+    {
+      "name": "test command",
+      "status": "pass",
+      "detail": "$ npm test\nexit 0\n 56                \n engine            |   99.56 |     94.9 |     100 |   99.59 |                   \n  cards.ts         |      90 |    91.17 |     100 |    93.1 | 45-47             \n  ...-evaluator.ts |     100 |    80.18 |     100 |     100 | ...87-200,214-215 \n  hand.ts          |     100 |    99.09 |     100 |     100 | 367,723           \n  invariants.ts    |   99.68 |    97.31 |     100 |   99.62 | 387               \n playtest          |     100 |    99.28 |     100 |     100 |                   \n  cli.ts           |     100 |     99.5 |     100 |     100 | 299               \n  shards.ts        |     100 |    98.11 |     100 |     100 | 232,338           \n  style-check.ts   |     100 |    98.43 |     100 |     100 | 119               \n stats             |     100 |    99.34 |     100 |     100 |                   \n  leaks.ts         |     100 |    98.64 |     100 |     100 | 115               \n storage           |   93.49 |    89.18 |   86.84 |   94.44 |                   \n  hand-store.ts    |   93.49 |    89.18 |   86.84 |   94.44 | ...18-120,129,220 \n table             |   98.66 |    97.63 |     100 |   99.53 |                   \n  ...ion-record.ts |   90.82 |    86.36 |     100 |   96.47 | 167,182,200       \n  session.ts       |    98.6 |    96.94 |     100 |   99.57 | 289               \n ui                |   21.25 |     7.01 |    5.71 |   24.32 |                   \n  App.tsx          |   20.16 |     7.54 |    3.03 |   23.07 | ...04-205,214-256 \n  ...adingFocus.ts |    37.5 |        0 |      50 |   42.85 | 10-13             \n ui/advice         |   94.54 |    95.83 |   92.85 |   95.83 |                   \n  advice-client.ts |   96.15 |    95.65 |   91.66 |   97.82 | 134               \n  advice.worker.ts |       0 |      100 |     100 |       0 | 3                 \n ui/config         |   61.33 |    52.77 |   46.42 |   66.66 |                   \n  ...ionDialog.tsx |   30.76 |    16.66 |      20 |      40 | 26-28,36-58       \n  ...figScreen.tsx |   67.74 |    70.83 |   52.17 |   71.42 | ...45-246,273-284 \n ui/table          |   39.05 |    60.61 |   38.53 |   43.45 |                   \n  ActionBar.tsx    |      75 |       50 |     100 |     100 | 19                \n  BustDialog.tsx   |   33.33 |        0 |      25 |   42.85 | 14-15,22-25       \n  HintCard.tsx     |     100 |    91.66 |     100 |     100 | 23                \n  LeaveDialog.tsx  |   44.44 |        0 |   33.33 |      50 | 15-17,32          \n  Table.tsx        |   46.53 |    76.57 |   40.54 |   52.22 | ...76,481-487,505 \n  ...bleSession.ts |   27.85 |    30.55 |   24.52 |   29.66 | ...37-343,348-351 \n-------------------|---------|----------|---------|---------|-------------------\n\n=============================== Coverage summary ===============================\nStatements   : 93.81% ( 4945/5271 )\nBranches     : 93.68% ( 3532/3770 )\nFunctions    : 89.84% ( 1071/1192 )\nLines        : 94.19% ( 4140/4395 )\n================================================================================\n"
+    },
+    {
+      "name": "lint command",
+      "status": "pass",
+      "detail": "$ npm run lint\nexit 0\n\n> tlh-trainer@0.0.0 lint\n> node tools/lint/sync-copies.js && eslint . --max-warnings 0 && prettier --check .\n\nChecking formatting...\nAll matched files use Prettier code style!\n"
+    },
+    {
+      "name": "typecheck command",
+      "status": "pass",
+      "detail": "$ npm run typecheck\nexit 0\n\n> tlh-trainer@0.0.0 typecheck\n> tsc -p tsconfig.json\n\n"
+    },
+    {
+      "name": "spec unchanged",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "name": "scope budget (lines)",
+      "status": "pass",
+      "detail": "554 changed lines vs budget 650 (fail above 1300)"
+    },
+    {
+      "name": "scope budget (files)",
+      "status": "pass",
+      "detail": "22 files vs budget 22"
+    },
+    {
+      "name": "files outside spec",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "name": "all changes listed in changes.md",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "name": "tests locked",
+      "status": "pass",
+      "detail": "4 acceptance test file(s) locked; 352 test files snapshotted"
+    }
+  ]
+}

@@ -134,10 +134,10 @@ const exampleD = (): PlayerView => views()[70] as PlayerView;
 const COUNTS: readonly number[] = [
   ...[15, 20, 29, 45, 25],
   ...[13, 18, 23, 14, 12],
-  ...[7, 8, 10, 12],
-  ...[7, 8, 11, 14],
+  ...[7, 13, 16, 21],
+  ...[7, 8, 13, 16],
   ...[5, 5, 6, 7, 5, 6],
-  ...[12, 41],
+  ...[17, 41],
 ];
 
 describe('Rock (very tight) bot', () => {
