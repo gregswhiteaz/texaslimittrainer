@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T23:03:00Z'
-updated_date: '2026-11-25T15:34:00Z'
+updated_date: '2026-11-25T18:06:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -96,6 +96,8 @@ Follow-ups: TASK-2.20 created (write-race test, clock-free history key, Forward-
 Locked e2e/home-control.spec.ts unlocked for TASK-10.1 D-4 (Leave table ends the session; expectation replaced, not loosened).
 
 Locked test unlocked for TASK-12.1 Q-1 (DB v4 settings store); DB version and store names re-pinned.
+
+Locked test unlocked for TASK-13.2 Q-1 (DB v5 meta store); version/store names re-pinned.
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary

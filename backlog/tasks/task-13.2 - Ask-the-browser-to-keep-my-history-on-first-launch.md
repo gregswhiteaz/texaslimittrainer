@@ -1,10 +1,11 @@
 ---
 id: TASK-13.2
 title: Ask the browser to keep my history on first launch
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-17T23:22:00Z'
+updated_date: '2026-11-25T18:06:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -62,3 +63,14 @@ Plan key: E13-S01 · Dream: limit-holdem-trainer
 - [ ] #11 Story documentation is written and published to Backlog.md
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. DB v5 adds a meta store; read/write the {granted} record under 'persistentStorage'; readPersistentStorage() for TASK-12.9
+2. On first launch (main.tsx, after render) call navigator.storage.persist() once and store granted = result === true; never rejects, never blocks Home
+3. Missing API, rejection or non-true result stored as not granted; read/write failures logged
+4. Re-pin locked DB-version/store-name tests and e2e helpers to v5; e2e with persist() stubbed by init scripts
+
+Full spec: doit/TASK-13.2/spec.md
+<!-- SECTION:PLAN:END -->

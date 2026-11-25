@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-25T15:34:00Z'
+updated_date: '2026-11-25T18:06:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -102,6 +102,8 @@ Follow-ups: none new. Already owned: mid-hand Leave dialog (TASK-10.2), record-b
 Locked tests/storage/session-end.acceptance.test.ts and e2e/session-report.spec.ts unlocked for TASK-10.3 Q-1 (pass hand records to sessionReport; no assertion loosened).
 
 Locked test unlocked for TASK-12.1 Q-1 (DB v4 settings store); DB version and store names re-pinned.
+
+Locked test unlocked for TASK-13.2 Q-1 (DB v5 meta store); version/store names re-pinned.
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary

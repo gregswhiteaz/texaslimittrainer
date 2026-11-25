@@ -4,7 +4,7 @@ title: Warn me in Settings when the browser can clear my history
 status: To Do
 assignee: []
 created_date: '2026-11-17T22:47:00Z'
-updated_date: '2026-11-25T17:01:00Z'
+updated_date: '2026-11-25T18:06:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-2
@@ -71,4 +71,6 @@ Plan key: E12-S09 · Dream: limit-holdem-trainer
 From TASK-12.2 (doc-142): settings saves currently only log failures (console.error 'Settings could not be saved'); this story should surface them.
 
 Correction: the save-failure message from TASK-12.2 is tracked in TASK-12.11, not here.
+
+From TASK-13.2: the persistent-storage request result is stored in the IndexedDB meta store (DB v5) as {granted} under 'persistentStorage'; read it with readPersistentStorage(): Promise<boolean|null> (null = nothing recorded yet; recommend showing the warning for null too). Reset all data (E12) must also clear the meta store.
 <!-- SECTION:NOTES:END -->

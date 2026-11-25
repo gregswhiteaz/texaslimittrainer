@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-25T16:54:00Z'
+updated_date: '2026-11-25T18:06:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -90,6 +90,8 @@ Build: writeSettings (validated whole-record write); App reads settings at launc
 Judge r1 PASS 12/12, no findings: production preview Chromium/WebKit — toggle by keyboard and mouse persists across reload; labels and separators hidden for every bot; applies on Resume; invalid records fall back to defaults and are repaired; other non-default fields preserved; checkbox disabled while the read is held back; full e2e 340 pass. CI 45656465611 green.
 
 Follow-ups: TASK-12.5 AC (component-level onChange test); TASK-12.9 note (surface failed settings saves).
+
+Locked test unlocked for TASK-13.2 Q-1 (DB v5 meta store); version/store names re-pinned.
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary

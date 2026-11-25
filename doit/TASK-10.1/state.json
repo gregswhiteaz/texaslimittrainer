@@ -1666,6 +1666,12 @@
       "event": "unlock",
       "file": "tests/storage/session-end.acceptance.test.ts",
       "reason": "TASK-12.1 Q-1 (auto-accepted): DB v4 adds a settings store; re-pin DB version and store names, keep every check"
+    },
+    {
+      "t": "2026-11-25T11:06:31",
+      "event": "unlock",
+      "file": "tests/storage/session-end.acceptance.test.ts",
+      "reason": "TASK-13.2 Q-1 (auto-accepted): DB v5 adds a meta store; re-pin DB version and store names / open version, keep every check"
     }
   ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-10.1",
@@ -1678,6 +1684,7 @@
   "relock_pending": [
     "tests/storage/session-end.acceptance.test.ts",
     "e2e/session-report.spec.ts",
+    "tests/storage/session-end.acceptance.test.ts",
     "tests/storage/session-end.acceptance.test.ts"
   ],
   "brief_history": {

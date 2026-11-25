@@ -1993,6 +1993,12 @@
       "event": "unlock",
       "file": "tests/ui/opponent-styles.acceptance.test.tsx",
       "reason": "Review r1 MAJOR: strengthen SPEC-01 \u2014 add the App-shaped loading case (settings undefined, onSettingsChange passed) asserting the checkbox is disabled"
+    },
+    {
+      "t": "2026-11-25T11:06:31",
+      "event": "unlock",
+      "file": "e2e/opponent-styles.spec.ts",
+      "reason": "TASK-13.2 Q-1 (auto-accepted): DB v5 adds a meta store; re-pin DB version and store names / open version, keep every check"
     }
   ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-12.2",
@@ -2001,7 +2007,9 @@
     "1": 1,
     "2": 0
   },
-  "relock_pending": [],
+  "relock_pending": [
+    "e2e/opponent-styles.spec.ts"
+  ],
   "brief_history": {
     "tests/ui/opponent-styles.acceptance.test.tsx:disabled-until-loaded-guard-untested": [
       "review r1"
