@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-21T22:26:00Z'
-updated_date: '2026-11-25T23:29:00Z'
+updated_date: '2026-11-25T23:41:00Z'
 labels:
   - follow-up
   - dream-limit-holdem-trainer
@@ -27,8 +27,8 @@ Follow-up from TASK-6.2 (doc-73). src/table/session.ts stepBot still defaults to
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Given a bot turn stepped headlessly with stepBot's default policy, When it is a mixed spot, Then the action equals the seeded decision decideTag(view, {random: botRandom(botDecisionSeed(code, view))}) — the same as the app worker
-- [ ] #2 Given the locked TASK-3.1 session test, When it is updated with its owner's approval, Then it compares to the exact seeded decision with no widened assertion
+- [x] #1 Given a bot turn stepped headlessly with stepBot's default policy, When it is a mixed spot, Then the action equals the seeded decision decideTag(view, {random: botRandom(botDecisionSeed(code, view))}) — the same as the app worker
+- [x] #2 Given the locked TASK-3.1 session test, When it is updated with its owner's approval, Then it compares to the exact seeded decision with no widened assertion
 <!-- AC:END -->
 
 ## Implementation Plan
@@ -45,4 +45,6 @@ Full spec: doit/TASK-6.22/spec.md
 
 <!-- SECTION:NOTES:BEGIN -->
 Build: stepBot(table, policy?) defaults to the seeded decideTag decision; locked TASK-3.1 expected action re-pinned (Q-1); new test matches the real advice worker and fails on the old default; table e2e 24 pass. gate PASS.
+
+Judge r1 PASS 4/4: 1,711 bot steps over 200 codes — headless stepBot default identical to the real worker (TAG, same seed) and the playtest seeded policy, including 9 mixed spots; explicit policies unchanged. CI 45721837009 green (incl. E2E).
 <!-- SECTION:NOTES:END -->

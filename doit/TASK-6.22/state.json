@@ -5,13 +5,18 @@
   "base_commit": "56869afda4f993c8bf3c8125916b924aa5ab5c3b",
   "started": "2026-11-25T16:09:37",
   "review_round": 1,
-  "judge_round": 0,
+  "judge_round": 1,
   "sendbacks": 0,
   "gate_runs": 2,
   "questions": 1,
   "assumptions": 3,
   "escalations": 0,
-  "item_failures": {},
+  "item_failures": {
+    "SPEC-01": 0,
+    "SPEC-02": 0,
+    "SPEC-03": 0,
+    "SPEC-04": 0
+  },
   "locked_tests": {
     "tests/table/bot-step-seeded.acceptance.test.ts": "73daca4e95c17dfec5402495c27c3c47aac7dd0b4d6d7735b129edac67b890b9",
     "tests/table/session.acceptance.test.ts": "02e3dfe218542b4435d222fed564d6d4a6ae91ce2eedaf3418072ddd0c57cf89"
@@ -2043,5 +2048,8 @@
   "spec_sha256": "94a483a62eb18d77c0c733876753eba9f3e249a2edfd4cdfc54b416bf807d0f9",
   "review_findings": {
     "1": 0
+  },
+  "judge_results": {
+    "1": "PASS"
   }
 }
