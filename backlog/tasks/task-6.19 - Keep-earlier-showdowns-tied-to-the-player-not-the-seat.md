@@ -1,7 +1,7 @@
 ---
 id: TASK-6.19
 title: Keep earlier showdowns tied to the player, not the seat
-status: In Progress
+status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-18T07:03:00Z'
@@ -14,6 +14,8 @@ dependencies:
   - TASK-1.5
 references:
   - doc-13
+documentation:
+  - doc-148
 parent_task_id: TASK-6
 priority: medium
 type: feature
@@ -50,4 +52,12 @@ From TASK-6.9: the playtest runner now passes earlier showdowns (runner.ts, last
 Build: rememberShowdown (frozen, capped) and forgetSeats; runner forgets replaced seats after each hand; locked style-bots expected list re-pinned (Q-1); playtest output byte-identical to base on 4 runs incl. Mixed with replacements; new tests fail without forgetSeats. gate PASS.
 
 Judge r1 PASS 6/6: 9 playtest CLI runs (Mixed/Tough/Soft, 3/6/9 seats, cash and sit-and-go, up to 45 replacements) byte-identical to main; holdout over ~13k hands and 700+ replacements matched an independent model, 0 shown hands from a previous player, lists capped at 1000 and deep-frozen. New tests fail on main. CI 45704655073 green.
+
+Follow-ups: none new (TASK-6.23 AC added at spec time).
 <!-- SECTION:NOTES:END -->
+
+## Final Summary
+
+<!-- SECTION:FINAL_SUMMARY:BEGIN -->
+Earlier showdowns are now tied to the player, not the seat. In a cash line-up playtest, runPlaytest forgets a replaced seat's shown hands when the bot is replaced, and the list, entries and hands it hands to policies are deep-frozen (new rememberShowdown/forgetSeats in src/engine/player-view.ts). Verified: lint, typecheck and npm test pass (1416 tests), judge round 1 PASS 6/6, and playtest output is byte-identical to main in 9 configurations. Review: Q-1 (locked TASK-6.9 style-bots expected list re-pinned), D-1 (seat keys kept, no persisted-format change), assumptions A-1..A-5. Follow-up: app bots get no earlier showdowns yet; TASK-6.23 has an AC to apply forgetSeats. Known: one NIT on a unit-test fixture and a duplicate relock_pending entry in TASK-6.9 state.
+<!-- SECTION:FINAL_SUMMARY:END -->
