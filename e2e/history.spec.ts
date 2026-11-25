@@ -122,27 +122,22 @@ test('browser Back on the Table pauses to Home, Forward never reopens it, and Ba
     await expectLeftApp(page);
   });
 
-  // (5) A Table entry from an earlier load does not keep a resumed Table open. Real clock: the fake one gives
-  // every load the same performance.timeOrigin, which the entry keys rely on to differ across loads.
-  await inContext(
-    browser,
-    async (page) => {
-      await openHome(page);
-      await newGame(page).click();
-      await button(page, 'Start game').click();
-      await expect(header(page)).toHaveText(/^Cash · 6 players · \$4\/\$8 · Hand #\d+$/);
-      await expect.poll(async () => (await storedSessions(page)).length).toBe(1);
-      await page.reload();
-      await expect(menu(page)).toHaveAttribute('data-paused', 'shown');
-      await resumeButton(page).click();
-      await expect(tableSection(page)).toHaveCount(1);
-      await page.goBack();
-      await expect(heading(page, 'TLH Trainer')).toBeFocused();
-      await expect(tableSection(page)).toHaveCount(0);
-      await expect(menu(page)).toHaveAttribute('data-paused', 'shown');
-    },
-    { pausedClock: false },
-  );
+  // (5) A Table entry from an earlier load does not keep a resumed Table open.
+  await inContext(browser, async (page) => {
+    await openHome(page);
+    await newGame(page).click();
+    await button(page, 'Start game').click();
+    await expect(header(page)).toHaveText(/^Cash · 6 players · \$4\/\$8 · Hand #\d+$/);
+    await expect.poll(async () => (await storedSessions(page)).length).toBe(1);
+    await page.reload();
+    await expect(menu(page)).toHaveAttribute('data-paused', 'shown');
+    await resumeButton(page).click();
+    await expect(tableSection(page)).toHaveCount(1);
+    await page.goBack();
+    await expect(heading(page, 'TLH Trainer')).toBeFocused();
+    await expect(tableSection(page)).toHaveCount(0);
+    await expect(menu(page)).toHaveAttribute('data-paused', 'shown');
+  });
 });
 
 test('a stored session with nextBotName above the cap is skipped and Home stays usable', async ({

@@ -57,9 +57,15 @@ type EndPromptState = {
   readonly ending: boolean;
 } | null;
 
-/** Opaque per-push keys for the Table's history entries: unique across loads of the page (D-2). */
-let tableEntries = 0;
-const newTableKey = (): string => `${performance.timeOrigin}:${++tableEntries}`;
+/** Opaque per-push key for a Table history entry: 32 hex characters from 16 CSPRNG bytes, so keys differ
+ *  across loads of the page even under a faked clock (TASK-2.20 D-2). */
+function newTableKey(): string {
+  const bytes = crypto.getRandomValues(new Uint8Array(16));
+  return Array.from(bytes, (byte) => byte.toString(16).padStart(2, '0')).join('');
+}
+/** The key of the Table entry this page load pushed last. Module-level so it survives AppRoot's remount of App
+ *  (TASK-2.20 A-5). */
+let lastTableKey: string | null = null;
 const entryKey = (state: unknown): unknown =>
   typeof state === 'object' && state !== null
     ? (state as { tlhTable?: unknown }).tlhTable
@@ -175,7 +181,12 @@ export default function App({
 
   useEffect(() => {
     const onPopState = (event: PopStateEvent): void => {
-      if (tableKey.current === null || entryKey(event.state) === tableKey.current) return;
+      if (tableKey.current === null) {
+        // Forward onto this load's stale Table entry: step back off it, so one Back leaves the app (D-3).
+        if (lastTableKey !== null && entryKey(event.state) === lastTableKey) history.back();
+        return;
+      }
+      if (entryKey(event.state) === tableKey.current) return;
       tableKey.current = null;
       setPaused(undefined);
       setScreen({ name: 'home', returned: true });
@@ -186,6 +197,7 @@ export default function App({
 
   const openTable = (table: Extract<Screen, { name: 'table' }>): void => {
     const key = newTableKey();
+    lastTableKey = key;
     history.pushState({ tlhTable: key }, '');
     tableKey.current = key;
     setScreen(table);

@@ -111,31 +111,39 @@ opens over Game Config, which stays as it was:
 With no paused session, Start game opens the Table at once. New game, Resume session and Cancel / ← Home never
 ask and never end anything.
 
-## Browser Back and Forward (TASK-2.14 D-2)
+## Browser Back and Forward (TASK-2.14 D-2, TASK-2.20)
 
 Only opening the Table (Start game or Resume session) adds a history entry, `{ tlhTable: <key> }`, with a key
-unique to that opening (`performance.timeOrigin` and a counter; nothing else is stored in history). Home, Game
+unique to that opening (32 hex characters from 16 `crypto.getRandomValues` bytes, so keys differ across loads
+even under a faked clock; nothing else is stored in history). Home, Game
 Config, Statistics, Settings and the Session report add no entries; Back on the Session report leaves the app.
 
 - **Back on the Table** pauses to Home, exactly like the Home control.
-- **Forward never reopens the Table.** Use Resume session.
+- **Forward never reopens the Table.** Use Resume session. Forward onto the Table entry this page load pushed
+  last steps straight back off it, so Home stays and one Back leaves the app.
 - **Back on Home or Game Config** leaves the app, to whatever page came before it. A session that was started
   stays paused, as when the app is closed.
 - Leaving the Table in the app (Home control or Leave table) steps back off its entry, so the entry does not
   linger and a later Back leaves the app.
 - A Table entry from an earlier load of the page never matches the current key, so Back onto it from a new
-  Table pauses to Home.
+  Table pauses to Home. Such entries are not stepped off (stepping back from them would reload the page), so
+  Back from Home onto one keeps today's behaviour.
+- Home and browser Back wait for any table write still running (the start record and hand writes) before
+  reading the paused session, so the Resume count includes the hand just completed.
 
 Example, starting from the page before the app:
 
 ```text
 load the app            […, app*]
-Start game              […, app, T1*]        push T1
+Start game              […, app, T1*]        push T1 (the last key this load pushed)
 Back                    […, app*, T1]        popstate (state null) on the Table → pause to Home
-Forward                 […, app, T1*]        popstate (T1) on Home → ignored, Home stays
-Resume session          […, app, T1, T2*]    push T2 (drops nothing here; a push drops forward entries)
-Home control            […, app, T1*, T2]    current entry is T2 → history.back(); popstate on Home → ignored
+Forward                 […, app, T1*]        popstate (T1) on Home, T1 is the last key → history.back()
+                        […, app*, T1]        popstate (state null) on Home → ignored, Home stays
+Back                    […*]                 leaves the app (one Back)
 ```
+
+After a reload on the Table (`[app, T1*]`, a new load that has pushed nothing), Resume session pushes T2:
+`[app, T1, T2*]`. Back → popstate (T1) on the Table → pause to Home; T1 is not stepped off.
 
 ## Error screen (TASK-13.1, REQ-056.3, REQ-057)
 
@@ -171,7 +179,10 @@ as after a reload mid-hand 1, and Resume deals Hand #1. Only ending a session de
 - `tests/ui/table-home.acceptance.test.tsx`: the header's Home button, rendered only when `App` provides it.
 - `e2e/home-control.spec.ts` (every push): the Home control between hands and in the middle of a hand.
 - `e2e/history.spec.ts` (every push): Back and Forward on the Table, Back on Home and Game Config, and Back
-  after a reload and Resume.
+  after a reload and Resume, all under the paused clock.
+- `e2e/pause-history.spec.ts` (every push): Home and browser Back wait for a held session write (an init script
+  from `e2e/support/hold-writes.ts` holds it open) before showing the paused hand count; the random history key;
+  Back, Forward, then one Back leaves the app; and Back after a reload and Resume on the real clock.
 - `e2e/home.spec.ts`: `history.length` is unchanged across New game, then Cancel or ← Home.
 - `tests/ui/end-session-dialog.acceptance.test.tsx`: the dialog markup, shown only with a prompt.
 - `e2e/new-game-confirm.spec.ts` (every push): the dialog, Cancel and Escape, Confirm, older sessions, a 0-hand
