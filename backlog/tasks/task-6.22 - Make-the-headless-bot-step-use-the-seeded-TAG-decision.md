@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-21T22:26:00Z'
-updated_date: '2026-11-25T23:14:00Z'
+updated_date: '2026-11-25T23:29:00Z'
 labels:
   - follow-up
   - dream-limit-holdem-trainer
@@ -40,3 +40,9 @@ Follow-up from TASK-6.2 (doc-73). src/table/session.ts stepBot still defaults to
 
 Full spec: doit/TASK-6.22/spec.md
 <!-- SECTION:PLAN:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+Build: stepBot(table, policy?) defaults to the seeded decideTag decision; locked TASK-3.1 expected action re-pinned (Q-1); new test matches the real advice worker and fails on the old default; table e2e 24 pass. gate PASS.
+<!-- SECTION:NOTES:END -->

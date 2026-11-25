@@ -1,0 +1,3 @@
+{"reviewer": "security", "round": 1,
+ "findings": [],
+ "summary": "src/table/session.ts stepBot now defaults to decideTag(turn.view, {random: botRandom(turn.seed)}). The decision input is only playerView(hand, seat) (bot's own view); the seed comes from botDecisionSeed(replayCode, view), which uses only the replay code (the existing deterministic hand identity) plus seat/decision index from the view, so it reveals no hidden cards. botRandom validates the seed range. No new input, trust boundary, secret, log, dependency, or Math.random. The non-cryptographic Xoshiro128 is used for bot style choices only, not for shuffling, so it doesn't affect fairness. No findings."}

@@ -1,0 +1,16 @@
+{"reviewer": "code", "round": 1,
+ "rubric": [
+  {"item": "SPEC-01 correctness", "result": "pass"},
+  {"item": "SPEC-01 test strength", "result": "pass"},
+  {"item": "SPEC-02 correctness", "result": "pass"},
+  {"item": "SPEC-02 test strength", "result": "pass"},
+  {"item": "SPEC-03 correctness", "result": "pass"},
+  {"item": "SPEC-03 test strength", "result": "pass"},
+  {"item": "SPEC-04 correctness", "result": "pass"},
+  {"item": "SPEC-04 test strength", "result": "pass"},
+  {"item": "scope", "result": "pass"},
+  {"item": "concision", "result": "pass"},
+  {"item": "clarity", "result": "pass"}
+ ],
+ "findings": [],
+ "summary": "stepBot's default is decideTag(turn.view, { random: botRandom(turn.seed) }), using the seed botTurn already computes. That matches the worker: handleAdviceRequest calls decideBot(view, style, botRandom(seed)), and for TAG that is decideTag(view, { random }) (src/bots/decide.ts). An explicit policy still goes through policy(turn.view) -> applyBotDecision exactly as before. The existing session.test.ts and bot-turn.test.ts cover this and pass. Grep finds no caller of stepBot under src, tools or e2e apart from its own definition. The locked TASK-3.1 edit adds one import and replaces line 177 with the seeded expectation; the length, seat, type and amount assertions are unchanged, and the unlock is recorded in doit/TASK-3.1/state.json. The new tests would fail with the old tagPolicy default: SPEC-01 expects raise where the old default records fold for code 26 seat 3, and SPEC-02 includes code 26 and compares against the worker's real response. Ran the 4 relevant test files: 13 tests pass. Gates PASS. The only gate warning is lines 113 vs a budget of 90, still under the fail limit of 180."}
