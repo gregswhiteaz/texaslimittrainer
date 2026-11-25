@@ -1,7 +1,7 @@
 ---
 id: TASK-10.8
 title: See my three most costly leaks first
-status: In Progress
+status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
@@ -16,6 +16,7 @@ references:
 documentation:
   - doc-1
   - doc-2
+  - doc-133
 parent_task_id: TASK-10
 priority: high
 type: feature
@@ -77,4 +78,12 @@ Full spec: doit/TASK-10.8/spec.md
 Build: sessionLeaks ranks by Major count, exact error rate, more errors, then data order; capped at MAX_SHOWN_LEAKS=3; display-time only, no persisted change. npm test 1333 pass; report e2e 12 pass; gate PASS.
 
 Judge r1 PASS 9/9: sessionLeaks matched an independent reference ranking on 20,000 random leakCounts sets; live Chromium/WebKit report from a 57-hand seeded session showed exactly the top 3 (middle-fold, blinds-fold, flop-facing-a-bet-call) with the Q-1 tie-break. CI 45571688810 green.
+
+Follow-ups: none (one test NIT only).
 <!-- SECTION:NOTES:END -->
+
+## Final Summary
+
+<!-- SECTION:FINAL_SUMMARY:BEGIN -->
+The Session Report now lists at most three leaks, ranked by unhinted Major errors, then error rate, then more errors, then category order. Ranking runs at display time in sessionLeaks, so the stored format is unchanged and older reports are ranked too. Verified by new acceptance and unit tests, npm test and the locked e2e, all passing. Judge round 1 passed 9/9. Please review Q-1 (tie-break: more errors, then category order), Q-2 (no new text) and A-1..A-4. Risks: one NIT in a tie test that cannot isolate the category-order step. Output is correct either way. No follow-ups.
+<!-- SECTION:FINAL_SUMMARY:END -->
