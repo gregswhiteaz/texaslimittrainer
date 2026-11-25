@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-24T03:18:00Z'
-updated_date: '2026-11-25T19:33:00Z'
+updated_date: '2026-11-25T19:50:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -48,4 +48,6 @@ Full spec: doit/TASK-2.20/spec.md
 
 <!-- SECTION:NOTES:BEGIN -->
 AC added from TASK-3.11 follow-up (judge J-1-01, doc-109).
+
+Build: random 32-hex Table history key; step off this load's stale Table entry on popstate; race tests hold the start-record write (fail without the Home guard — verified); history.spec case (5) under the paused clock. Full e2e 371 pass; repeat-each=3 clean; gate PASS.
 <!-- SECTION:NOTES:END -->
