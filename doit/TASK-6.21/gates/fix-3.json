@@ -1,0 +1,60 @@
+{
+  "task": "TASK-6.21",
+  "phase": "fix",
+  "run": 3,
+  "result": "FAIL",
+  "changed_lines": 248,
+  "changed_files": [
+    "eslint.config.js",
+    "tests/bots/tag.test.ts",
+    "tests/toolchain/bot-boundary.acceptance.test.ts",
+    "tools/lint/headless-boundary.js"
+  ],
+  "checks": [
+    {
+      "name": "test command",
+      "status": "fail",
+      "detail": "$ npm test\nexit 1\ne advice engine agrees with golden spot hu-river-bb-check-aqo 0ms\n \u2713 tests/golden/postflop.acceptance.test.ts > postflop golden spots > AC#5 the advice engine agrees with golden spot hu-river-btn-call-93s 0ms\n \u2713 tests/golden/postflop.acceptance.test.ts > postflop golden spots > AC#5 the advice engine agrees with golden spot hu-river-bb-call-tt 0ms\n \u2713 tests/golden/postflop.acceptance.test.ts > postflop golden spots > AC#5 the advice engine agrees with golden spot hu-river-btn-fold-t7s 0ms\n \u2713 tests/golden/postflop.acceptance.test.ts > postflop golden spots > AC#5 the advice engine agrees with golden spot hu-river-bb-raise-k9o 0ms\n \u2713 tests/golden/postflop.acceptance.test.ts > postflop golden spots > AC#5 the advice engine agrees with golden spot hu-river-btn-call-t5s 0ms\n \u2713 tests/golden/postflop.acceptance.test.ts > postflop golden spots > AC#5 the advice engine agrees with golden spot hu-river-btn-call-85o 0ms\n \u2713 tests/golden/postflop.acceptance.test.ts > postflop golden spots > AC#5 the advice engine agrees with golden spot fr-river-utg-bet-kjo 0ms\n \u2713 tests/golden/postflop.acceptance.test.ts > postflop golden spots > AC#5 the advice engine agrees with golden spot fr-river-bb-check-52o 0ms\n \u2713 tests/golden/postflop.acceptance.test.ts > postflop golden spots > AC#5 the advice engine agrees with golden spot fr-river-bb-fold-t3o 0ms\n \u2713 tests/golden/postflop.acceptance.test.ts > postflop golden spots > AC#5 the advice engine agrees with golden spot fr-river-utg-call-t5o 0ms\n \u2713 tests/golden/postflop.acceptance.test.ts > postflop golden spots > AC#5 the advice engine agrees with golden spot fr-river-utg-fold-ato 0ms\n \u2713 tests/golden/postflop.acceptance.test.ts > postflop golden spots > AC#5 a disagreement names the spot, the expected and the actual action 0ms\n \u2713 tests/golden/postflop.acceptance.test.ts > postflop golden spots > AC#4 every postflop explanation quotes the equity and required equity it returns 5ms\n \u2713 tests/golden/postflop.acceptance.test.ts > postflop golden spots > DoD#1 golden ids and justifications are distinct across files 0ms\n \u2713 tests/bots/maniac.acceptance.test.ts > Maniac from its style file > a Maniac seat in the worker plays the Maniac decision 44130ms\n\n Test Files  1 failed | 313 passed | 5 skipped (319)\n      Tests  1 failed | 1417 passed | 46 skipped (1464)\n   Start at  15:31:19\n   Duration  252.15s (tests 96%, import 3%)\n\n\n\u23af\u23af\u23af\u23af\u23af\u23af\u23af Failed Tests 1 \u23af\u23af\u23af\u23af\u23af\u23af\u23af\n\n FAIL  tests/playtest/check-styles.acceptance.test.ts > playtest style stats (--check-styles) > band edges are inclusive and every stat prints with its band when all are inside\nError: Test timed out in 60000ms.\nIf this is a long-running test, pass a timeout value as the last argument or configure it globally with \"testTimeout\".\n \u276f tests/playtest/check-styles.acceptance.test.ts:347:3\n    345|   );\n    346|\n    347|   it(\n       |   ^\n    348|     'band edges are inclusive and every stat prints with its band when\u2026\n    349|     () => bandEdges(300),\n\n\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af[1/1]\u23af\n\n"
+    },
+    {
+      "name": "lint command",
+      "status": "pass",
+      "detail": "$ npm run lint\nexit 0\n\n> tlh-trainer@0.0.0 lint\n> node tools/lint/sync-copies.js && eslint . --max-warnings 0 && prettier --check .\n\nChecking formatting...\nAll matched files use Prettier code style!\n"
+    },
+    {
+      "name": "typecheck command",
+      "status": "pass",
+      "detail": "$ npm run typecheck\nexit 0\n\n> tlh-trainer@0.0.0 typecheck\n> tsc -p tsconfig.json\n\n"
+    },
+    {
+      "name": "spec unchanged",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "name": "scope budget (lines)",
+      "status": "pass",
+      "detail": "248 changed lines vs budget 260 (fail above 520)"
+    },
+    {
+      "name": "scope budget (files)",
+      "status": "pass",
+      "detail": "4 files vs budget 4"
+    },
+    {
+      "name": "files outside spec",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "name": "all changes listed in changes.md",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "name": "test integrity",
+      "status": "pass",
+      "detail": ""
+    }
+  ]
+}

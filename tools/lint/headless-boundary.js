@@ -141,6 +141,8 @@ const BOT_PACKAGE_MESSAGE =
 
 export const BOT_BOUNDARY_PATTERNS = [
   { regex: '^(?!\\.)', message: BOT_PACKAGE_MESSAGE },
+  // A non-normalized path ('/./', '//', 'name/..') could reach an engine module past the patterns below.
+  { regex: '/\\./|//|(^|/)[^./][^/]*/\\.\\.(/|$)', message: BOT_BOUNDARY_MESSAGE },
   { regex: '(^|/)engine/(?!(player-view|hand)$)[^/]+$', message: BOT_BOUNDARY_MESSAGE },
   { regex: '(^|/)engine/player-view$', allowTypeImports: true, message: BOT_BOUNDARY_MESSAGE },
   {

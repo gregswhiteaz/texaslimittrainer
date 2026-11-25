@@ -7,17 +7,17 @@
   "review_round": 1,
   "judge_round": 0,
   "sendbacks": 0,
-  "gate_runs": 2,
+  "gate_runs": 5,
   "questions": 0,
   "assumptions": 4,
   "escalations": 0,
   "item_failures": {},
   "locked_tests": {
-    "tests/toolchain/bot-boundary.acceptance.test.ts": "cebadc430debc20af0340e3ab6630e1f9e645bfb4dafeee13466c52ae7ce6c75"
+    "tests/toolchain/bot-boundary.acceptance.test.ts": "ee7b9bf02e16d87c91474da3ebf1236d19bdf107874125bd6f05a55abcd447ac"
   },
   "test_snapshot": {
     "tests/toolchain/bot-boundary.acceptance.test.ts": {
-      "sha": "cebadc430debc20af0340e3ab6630e1f9e645bfb4dafeee13466c52ae7ce6c75",
+      "sha": "ee7b9bf02e16d87c91474da3ebf1236d19bdf107874125bd6f05a55abcd447ac",
       "asserts": 8,
       "skips": 0
     },
@@ -2045,9 +2045,7 @@
   "review_findings": {
     "1": 1
   },
-  "relock_pending": [
-    "tests/toolchain/bot-boundary.acceptance.test.ts"
-  ],
+  "relock_pending": [],
   "brief_history": {
     "tools/lint/headless-boundary.js:non-normalized-engine-path-bypass": [
       "review r1"

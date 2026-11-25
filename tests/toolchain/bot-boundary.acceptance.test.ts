@@ -17,12 +17,17 @@ const ENGINE_PROBES: Record<string, string> = {
   'bet-cap': "import { STREET_BET_CAP } from '../engine/hand';\n\nexport { STREET_BET_CAP };\n",
   'view-fn': "import { playerView } from '../engine/player-view';\n\nexport { playerView };\n",
   cards: "import type { Card } from '../engine/cards';\n\nexport type { Card };\n",
+  'dot-segment': "import { applyAction } from '../engine/./hand';\n\nexport { applyAction };\n",
+  'double-slash': "import { applyAction } from '../engine//hand';\n\nexport { applyAction };\n",
+  'parent-segment':
+    "import { applyAction } from '../engine/hand/../hand';\n\nexport { applyAction };\n",
 };
 
 const REACH_PROBES: Record<string, { code: string; expected: string[] }> = {
   reexport: { code: "export { applyAction } from '../engine/hand';\n", expected: BOUNDARY },
   'reexport-all': { code: "export * from '../engine/hand';\n", expected: BOUNDARY },
   'side-effect': { code: "import '../engine/hand';\n", expected: BOUNDARY },
+  'side-effect-dot': { code: "import '../engine/./hand';\n", expected: BOUNDARY },
   dynamic: {
     code: "export const load = (): Promise<unknown> => import('../engine/hand');\n",
     expected: ['Dynamic import() is not allowed'],
