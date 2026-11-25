@@ -1,11 +1,11 @@
 ---
 id: TASK-13.1
 title: Return Home from an unexpected error without losing completed hands
-status: In Progress
+status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-25T17:54:00Z'
+updated_date: '2026-11-25T17:55:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -18,6 +18,7 @@ references:
 documentation:
   - doc-1
   - doc-2
+  - doc-143
 parent_task_id: TASK-13
 priority: high
 type: feature
@@ -91,4 +92,12 @@ AC added from TASK-3.6 judge J-1-01 (shared worker stays failed)
 Build: AppRoot error boundary + window error/unhandledrejection listeners; ErrorScreen (approved text) with Return Home remounting App on Home; session left after last completed hand (Resume works); sharedAdviceClient replaces a failed worker; faults only via Playwright init scripts (dist has no hook). Full e2e 350 pass; gate PASS.
 
 Judge r1 FAIL only on SPEC-13 (doc said a hand-1 error leaves a 0-hand session not offered for Resume; the app offers it) — doc corrected; r2 PASS. Real-app runs in Chromium/WebKit: mid-hand error after 3 hands kept exactly hands 1-3, Resume dealt Hand #4; worker failure recovered with hints working; report-mount failure handled; second error shown again; Back does not return to the dead table. Full e2e 350 pass. CI 45665415993 green.
+
+Follow-ups: TASK-13.13 (history test, 0-hand Resume decision, generation key); TASK-9.10 AC (pending grade rejections).
 <!-- SECTION:NOTES:END -->
+
+## Final Summary
+
+<!-- SECTION:FINAL_SUMMARY:BEGIN -->
+Added AppRoot error boundary plus window error/unhandledrejection handlers. They show a detail-free error screen with a native Return Home button. Return Home remounts App on Home, and Resume continues from the last completed hand, because nothing is written or ended on error. The shared advice client is replaced after a worker failure (fixes TASK-3.6 J-1-01). Verified: npm test 1405 passed, e2e 350 passed on Chromium and WebKit, lint and typecheck clean, judge round 2 PASS (round 1 failed only a wrong docs sentence about hand-1 errors, now fixed). Review: Q-1 wording, Q-2 nothing written on error, Q-3 one local console.error, A-1..A-6. The app offers a '0 hands · paused' Resume after a hand-1 error, which differs from the spec premise. Follow-ups: pin A-4 history.back() with a test, handle failed decision grades mid-hand (TASK-9.10), decide whether 0-hand paused sessions should be resumable.
+<!-- SECTION:FINAL_SUMMARY:END -->
