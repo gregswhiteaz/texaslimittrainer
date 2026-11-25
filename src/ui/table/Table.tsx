@@ -93,6 +93,8 @@ export interface TableViewProps {
   /** A-4: header Home and Leave table disabled; no bust dialog, review panel, badge or Deal next. */
   readonly leaving?: boolean;
   readonly leaveRef?: React.Ref<HTMLButtonElement>;
+  /** REQ-050.3: style labels on bot seats (default on). */
+  readonly showOpponentStyles?: boolean;
 }
 
 function SeatMarkers({ seat }: { readonly seat: SeatView }): React.JSX.Element {
@@ -113,7 +115,13 @@ function SeatMarkers({ seat }: { readonly seat: SeatView }): React.JSX.Element {
   );
 }
 
-function Seat({ seat }: { readonly seat: SeatView }): React.JSX.Element {
+function Seat({
+  seat,
+  showStyle,
+}: {
+  readonly seat: SeatView;
+  readonly showStyle: boolean;
+}): React.JSX.Element {
   const className = `seat${seat.isUser ? ' seat-user' : ''}${seat.toAct ? ' seat-to-act' : ''}`;
   const style =
     seat.slot === null ? undefined : { left: `${seat.slot.left}%`, top: `${seat.slot.top}%` };
@@ -140,8 +148,12 @@ function Seat({ seat }: { readonly seat: SeatView }): React.JSX.Element {
     <li data-seat={seat.seat} className={className} style={style}>
       <span data-part="name">{seat.name}</span>
       <span className="seat-line">
-        <span data-part="style">{seat.style}</span>
-        {' · '}
+        {showStyle && (
+          <>
+            <span data-part="style">{seat.style}</span>
+            {' · '}
+          </>
+        )}
         <span data-part="stack">{`$${seat.stack}`}</span>
       </span>
       <SeatMarkers seat={seat} />
@@ -241,6 +253,7 @@ export function TableView({
   leavePrompt = null,
   leaving = false,
   leaveRef,
+  showOpponentStyles = true,
 }: TableViewProps): React.JSX.Element {
   const model = tableView(table);
   const bar = userActionBar(table);
@@ -298,7 +311,7 @@ export function TableView({
               </div>
               <ul aria-label="Seats" className="table-seats">
                 {model.seats.map((seat) => (
-                  <Seat key={seat.seat} seat={seat} />
+                  <Seat key={seat.seat} seat={seat} showStyle={showOpponentStyles} />
                 ))}
               </ul>
             </div>
@@ -363,6 +376,8 @@ export type TableProps = TableSessionOptions & {
   readonly onHome?: () => void;
   /** Open the review by itself after a reviewed hand (REQ-050.2, default on); off shows a badge instead. */
   readonly autoOpenReview?: boolean;
+  /** REQ-050.3: style labels on bot seats (default on). */
+  readonly showOpponentStyles?: boolean;
 };
 
 /** The badge's hand and its stored entries (null until graded). */
@@ -377,6 +392,7 @@ export function Table({
   onHandComplete: external,
   holdNextHand = false,
   autoOpenReview = true,
+  showOpponentStyles = true,
   ...options
 }: TableProps): React.JSX.Element {
   const [review, setReview] = useState<HeldReview | null>(null);
@@ -507,6 +523,7 @@ export function Table({
       leavePrompt={leavePrompt}
       leaving={leaving}
       leaveRef={leaveButton}
+      showOpponentStyles={showOpponentStyles}
     />
   );
 }

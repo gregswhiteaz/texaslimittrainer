@@ -12,7 +12,12 @@ import {
   type SessionEnder,
   type SessionReport,
 } from '../table/session-report';
-import { DEFAULT_SETTINGS, parseSettings, type SettingsReader } from '../table/settings';
+import {
+  DEFAULT_SETTINGS,
+  parseSettings,
+  type SettingsReader,
+  type SettingsWriter,
+} from '../table/settings';
 
 export const DB_NAME = 'tlh-trainer';
 /** The only version marker until REQ-054 adds per-store schema versions. v2 added SESSIONS_STORE, v3
@@ -180,7 +185,7 @@ async function trendData(db: IDBDatabase): Promise<TrendData> {
 export function openHandStore(
   factory: IDBFactory = indexedDB,
   name = DB_NAME,
-): HandStore & SessionEnder & TrendReader & SettingsReader {
+): HandStore & SessionEnder & TrendReader & SettingsReader & SettingsWriter {
   let db: Promise<IDBDatabase> | null = null;
   const database = (): Promise<IDBDatabase> => (db ??= opened(factory, name));
   const readOnly = async (store: string): Promise<IDBObjectStore> =>
@@ -254,12 +259,27 @@ export function openHandStore(
       const value: unknown = await requested((await readOnly(SETTINGS_STORE)).get(SETTINGS_KEY));
       return value === undefined ? DEFAULT_SETTINGS : parseSettings(value);
     },
+    async writeSettings(settings) {
+      const record = parseSettings(settings);
+      const transaction = (await database()).transaction(SETTINGS_STORE, 'readwrite', {
+        durability: 'strict',
+      });
+      return completed(
+        transaction,
+        transaction.objectStore(SETTINGS_STORE).put(record, SETTINGS_KEY),
+      );
+    },
   };
 }
 
-let shared: (HandStore & SessionEnder & TrendReader & SettingsReader) | null = null;
+let shared: (HandStore & SessionEnder & TrendReader & SettingsReader & SettingsWriter) | null =
+  null;
 
 /** The app-wide store, created on first call (never at module load). */
-export function sharedHandStore(): HandStore & SessionEnder & TrendReader & SettingsReader {
+export function sharedHandStore(): HandStore &
+  SessionEnder &
+  TrendReader &
+  SettingsReader &
+  SettingsWriter {
   return (shared ??= openHandStore());
 }

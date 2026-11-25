@@ -13,6 +13,7 @@ import { sharedHandStore } from '../storage/hand-store';
 import { DEFAULT_SESSION_CONFIG, type SessionConfig } from '../table/session';
 import { restoreSession, type SessionRecord } from '../table/session-record';
 import type { SessionReport } from '../table/session-report';
+import { DEFAULT_SETTINGS, type Settings } from '../table/settings';
 import { resumeSummary } from '../table/table-view';
 import { GameConfigScreen } from './config/GameConfigScreen';
 import { HomeScreen } from './home/HomeScreen';
@@ -68,6 +69,8 @@ export default function App(): React.JSX.Element {
   const [screen, setScreen] = useState<Screen>({ name: 'home', returned: false });
   const [paused, setPaused] = useState<Paused>(undefined);
   const [endPrompt, setEndPrompt] = useState<EndPromptState>(null);
+  // undefined until the launch read settles (TASK-12.2 A-1), DEFAULT_SETTINGS if it fails (A-2).
+  const [settings, setSettings] = useState<Settings | undefined>(undefined);
   // D-2: bumped by every Start game and every leave of Game Config; a click-time read acts only if current.
   const startRequest = useRef(0);
   // The shown Table's history key; null while another screen is shown. Set in the handlers that change screen.
@@ -75,6 +78,25 @@ export default function App(): React.JSX.Element {
   // The ending screen this App has started ending, so StrictMode's second effect run (same object) does not
   // end it twice, while each Leave table (a new object) does, even for a resumed session id.
   const endingScreen = useRef<Extract<Screen, { name: 'ending' }> | null>(null);
+  useEffect(() => {
+    let cancelled = false;
+    sharedHandStore()
+      .readSettings()
+      .then(
+        (stored) => {
+          if (!cancelled) setSettings(stored);
+        },
+        (error: unknown) => {
+          if (cancelled) return;
+          console.error('Settings could not be read', error);
+          setSettings(DEFAULT_SETTINGS);
+        },
+      );
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
   const onHome = screen.name === 'home';
   useEffect(() => {
     if (!onHome) return undefined;
@@ -264,6 +286,14 @@ export default function App(): React.JSX.Element {
     setScreen({ name: 'stats', view: undefined, filter: ALL_TRENDS, grouping: DEFAULT_GROUPING });
   };
 
+  /** Shows the change at once, then saves it. A failed save is only logged (TASK-12.2 A-3). */
+  const changeSettings = (next: Settings): void => {
+    setSettings(next);
+    sharedHandStore()
+      .writeSettings(next)
+      .catch((error: unknown) => console.error('Settings could not be saved', error));
+  };
+
   switch (screen.name) {
     case 'home':
       return (
@@ -309,6 +339,7 @@ export default function App(): React.JSX.Element {
           {...('resume' in screen ? { resume: screen.resume } : { config: screen.config })}
           onLeave={leave}
           onHome={goHome}
+          showOpponentStyles={(settings ?? DEFAULT_SETTINGS).showOpponentStyles}
         />
       );
     case 'ending':
@@ -349,6 +380,12 @@ export default function App(): React.JSX.Element {
         />
       );
     case 'settings':
-      return <SettingsScreen onHome={() => setScreen({ name: 'home', returned: true })} />;
+      return (
+        <SettingsScreen
+          onHome={() => setScreen({ name: 'home', returned: true })}
+          settings={settings}
+          onSettingsChange={changeSettings}
+        />
+      );
   }
 }

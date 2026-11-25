@@ -1,3 +1,4 @@
+import { DEFAULT_SETTINGS, type Settings } from '../../table/settings';
 import { APP_VERSION, versionText } from '../app-version';
 import { useHeadingFocus } from '../useHeadingFocus';
 
@@ -7,11 +8,17 @@ export interface SettingsScreenProps {
   readonly onHome: () => void;
   /** The version shown; defaults to the build's version. */
   readonly version?: string;
+  /** The current settings; undefined while they are being read (controls disabled). */
+  readonly settings?: Settings;
+  /** Called with the whole new settings record when a control changes. */
+  readonly onSettingsChange?: (settings: Settings) => void;
 }
 
 export function SettingsScreen({
   onHome,
   version = APP_VERSION,
+  settings,
+  onSettingsChange,
 }: SettingsScreenProps): React.JSX.Element {
   const heading = useHeadingFocus(true);
   return (
@@ -27,6 +34,18 @@ export function SettingsScreen({
       </section>
       <section className="settings-section" aria-labelledby="settings-display">
         <h2 id="settings-display">Display</h2>
+        <label className="settings-toggle">
+          <input
+            type="checkbox"
+            checked={(settings ?? DEFAULT_SETTINGS).showOpponentStyles}
+            disabled={settings === undefined || onSettingsChange === undefined}
+            onChange={(e) =>
+              settings &&
+              onSettingsChange?.({ ...settings, showOpponentStyles: e.currentTarget.checked })
+            }
+          />
+          Show opponent styles at the table
+        </label>
       </section>
       <section className="settings-section" aria-labelledby="settings-data">
         <h2 id="settings-data">Your data</h2>

@@ -11,3 +11,7 @@ Options: (rec) re-pin the control list AND measure the 44x44 rule on the control
 ## Q-3 — First write to the settings record
 Options: writeSettings(settings) of the whole validated record on every change, durability strict, screen updates first, a failed save is logged [Recommended]; save on leaving Settings; patch-style update; undo on failure.
 **Answer: auto-accepted (recommended)**.
+
+## Block 1 — Tab order in the locked e2e/settings.spec.ts
+The walk starts at the focused h1, which follows ← Home in the DOM, so with two controls the order is checkbox then ← Home. Options: compare against the order from the heading, [...expected.slice(1), expected[0]] — still exact, each control once [Recommended]; move ← Home after the h1 (TASK-12.10 already owns the Tab-order fix for Settings and Statistics).
+**Answer: auto-accepted (recommended)** — exact rotated comparison; orchestrator edit; no check removed.

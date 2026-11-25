@@ -24,8 +24,16 @@ screen with its `Settings` heading focused: `← Home`, then the sections Play, 
 says that hands, sessions and statistics are stored only in this browser, with no backup), then
 `Version <x>`, where `<x>` is `package.json`'s `version` inlined at build time (`__APP_VERSION__` in
 `vite.config.ts`, read as `APP_VERSION` from `src/ui/app-version.ts`). `← Home` returns to Home. Settings adds
-no history entry and, in this slice, has no controls and reads or writes nothing; the settings record it will
-use is described in [settings.md](../storage/settings.md).
+no history entry.
+
+**Display: Show opponent styles at the table (TASK-12.2).** The Display section has one native checkbox, `Show
+opponent styles at the table`, checked by default. It is disabled until App has read the settings at launch.
+Each change is saved at once (see [settings.md](../storage/settings.md)). Unchecked, every bot seat at the table
+shows its name and stack without the style label and its `·` separator; the user's seat and every other seat
+field are unchanged. Style labels elsewhere (Game Config line-up, Session report, Statistics) are not affected.
+Settings opens only from Home in this slice, so a change applies the next time a Table is shown (New game or
+Resume session). App passes the value to the Table on every render, so a later in-table Settings overlay
+(TASK-12.3) applies it on the next render.
 
 **From the Session report (TASK-11.6).** The report ends with a right-aligned row: `View statistics` (outlined),
 then `Back to Home`. Opening Statistics from the report resets the filters and grouping like Home's entry (All /
@@ -145,3 +153,5 @@ Home control            […, app, T1*, T2]    current entry is T2 → history.b
   and the Settings screen markup and version line.
 - `e2e/settings.spec.ts` (every push): Home → Settings → Home, Tab reach, Enter/Space, 44x44 targets, axe and
   the version line.
+- `tests/ui/opponent-styles.acceptance.test.tsx`, `e2e/opponent-styles.spec.ts` (every push): the opponent
+  styles toggle, its save and reload, and the seats with styles on and off, including a change made while paused.

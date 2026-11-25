@@ -1,13 +1,13 @@
 # Settings record (REQ-050)
 
-The trainer's settings are one record in IndexedDB. TASK-12.1 creates the store and its default record; the
-Settings controls that change it come with later stories (TASK-12.2, 12.4-12.9), which also add the write API.
-Nothing in the app reads the record yet.
+The trainer's settings are one record in IndexedDB. TASK-12.1 creates the store and its default record.
+TASK-12.2 adds the writer and the app's reader (App state) with the first control, `showOpponentStyles`; the
+other Settings controls come with later stories (TASK-12.4-12.9, TASK-2.11).
 
 - `src/table/settings.ts` (headless): the `Settings` type, `DEFAULT_SETTINGS`, the `parseSettings(…)` validator
-  and the `SettingsReader` interface.
+  and the `SettingsReader` / `SettingsWriter` interfaces.
 - `src/storage/hand-store.ts` (browser): `SETTINGS_STORE`, `SETTINGS_KEY`, the version 4 upgrade step and
-  `readSettings()` on `openHandStore` / `sharedHandStore`.
+  `readSettings()` / `writeSettings(…)` on `openHandStore` / `sharedHandStore`.
 
 ## Database
 
@@ -47,9 +47,38 @@ records later (for example TASK-12.9's storage-warning flag).
 - If the database cannot be opened (for example `VersionError`), it rejects with that error, like every other
   store call.
 
+## Writing
+
+`writeSettings(settings)` replaces the whole record:
+
+- It first validates and copies `settings` with `parseSettings`, so an invalid value rejects with
+  `RangeError('Invalid settings: <field>')` before any transaction and the stored record is unchanged. Extra
+  fields are not stored.
+- It puts the copy under `'settings'` in a `readwrite` transaction with `durability: 'strict'` and resolves when
+  the transaction completes. A database or transaction error rejects with that error.
+- Writes started back to back need no queue: each one waits for the same opened database, so their transactions
+  are created in call order and the last one wins.
+
+## The App reader
+
+`src/ui/App.tsx` holds the settings as state (`Settings | undefined`):
+
+- At launch a mount effect calls `readSettings()` once. Until it settles the state is `undefined`: the Settings
+  controls are disabled and the Table uses `DEFAULT_SETTINGS`. If the read rejects (database error or an
+  invalid record), App logs `Settings could not be read` and uses `DEFAULT_SETTINGS`; the next change then
+  overwrites the bad record with a valid one.
+- A Settings control calls `changeSettings(next)` with the whole new record. App updates the state first (the
+  change shows on the next render of any mounted screen) and then calls `writeSettings(next)`. A failed save is
+  only logged (`Settings could not be saved`); the new value stays in memory for this launch.
+- Consumers get values from this state: `SettingsScreen` receives `settings` and `onSettingsChange`, and the
+  Table receives `showOpponentStyles` (REQ-050.3: bot seats show no style label when it is `false`).
+
 ## Tests
 
 - `tests/table/settings.test.ts`: `parseSettings` and the defaults.
 - `tests/storage/settings-store.test.ts` (Vitest with `fake-indexeddb`): a new database stores the defaults, a
   missing or invalid record, and an upgrade from a version 3 database with data.
+- `tests/storage/settings-write.test.ts`: `writeSettings` replaces, validates, strips extra fields and keeps the
+  last of two back-to-back writes.
+- `e2e/opponent-styles.spec.ts`: the toggle's save, its reload, and the defaults shown for an invalid record.
 - `e2e/support/hand-records.ts` opens the database at version 4 and mirrors the version 4 step.

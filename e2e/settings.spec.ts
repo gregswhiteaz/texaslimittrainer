@@ -32,7 +32,9 @@ async function tabOrder(page: Page, key: string): Promise<string[]> {
     await page.keyboard.press(key);
     const focused = await page.evaluate(() => {
       const el = document.activeElement;
-      return el === null || el === document.body ? null : (el.textContent ?? '');
+      return el === null || el === document.body
+        ? null
+        : el.textContent || (el as HTMLInputElement).labels?.[0]?.textContent?.trim() || '';
     });
     if (focused === null) {
       if (++exits === 2) break;
@@ -61,14 +63,23 @@ test('every Settings control is reachable by Tab, native, keyboard-operable and 
   browserName,
 }) => {
   await openSettings(page);
+  await expect(
+    page.getByRole('checkbox', { name: 'Show opponent styles at the table' }),
+  ).toBeEnabled();
   const controls = page.locator(
     'main :is(a[href], button, input, select, textarea, [tabindex]:not([tabindex="-1"]))',
   );
-  const expected = await controls.evaluateAll((els) => els.map((el) => el.textContent ?? ''));
-  expect(expected).toEqual(['← Home']);
+  const expected = await controls.evaluateAll((els) =>
+    els.map(
+      (el) => el.textContent || (el as HTMLInputElement).labels?.[0]?.textContent?.trim() || '',
+    ),
+  );
+  expect(expected).toEqual(['← Home', 'Show opponent styles at the table']);
   // WebKit only tabs to buttons with Alt held (no full keyboard access, A-8).
   const order = await tabOrder(page, browserName === 'webkit' ? 'Alt+Tab' : 'Tab');
-  expect(order).toEqual(expected);
+  // TASK-12.2 Block 1: the walk starts at the focused h1, after ← Home in the DOM, so Tab reaches the
+  // controls after the h1 first, then wraps to ← Home. Each control still appears exactly once, in a fixed order.
+  expect(order).toEqual([...expected.slice(1), expected[0]]);
 
   for (const control of await controls.all()) {
     expect(await control.evaluate((el) => el.tagName)).toMatch(

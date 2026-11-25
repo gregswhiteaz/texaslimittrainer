@@ -29,6 +29,11 @@ export interface SettingsReader {
   readSettings(): Promise<Settings>;
 }
 
+export interface SettingsWriter {
+  /** Replaces the stored settings with a validated copy of `settings`; rejects with parseSettings' RangeError or the DB error. */
+  writeSettings(settings: Settings): Promise<void>;
+}
+
 const BOOLEAN_FIELDS = [
   'autoOpenReview',
   'showOpponentStyles',
