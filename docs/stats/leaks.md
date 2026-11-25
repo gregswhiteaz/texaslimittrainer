@@ -3,14 +3,14 @@
 The Session Report's "Biggest leaks this session" section names the kinds of decision the user got wrong most
 often, each with evidence from the session and a one-sentence fix: 15 postflop categories (TASK-10.5) and 16
 preflop categories by position group (TASK-10.6). The category titles, evidence names, fixes and
-justifications were written for this project (REQ-061.2). Ranking by Major errors and the limit of three leaks
-come in TASK-10.8.
+justifications were written for this project (REQ-061.2). The section shows at most three leaks, most costly
+first (TASK-10.8).
 
 - `src/stats/leak-categories.json`: the 15 postflop categories, then the 16 preflop ones, format
   `{"format": "tlh-leak-categories", "version": 1, "categories": [...]}`.
 - `src/stats/leaks.ts` (headless): `parseLeakCategories`, `LEAK_CATEGORIES` (the file, validated at import),
   `positionGroup`, `preflopAction`, `decisionCategory`, `handCategoryDecisions`, `categoryCounts`, `isLeak`,
-  `leakEvidence` and `sessionLeaks`.
+  `leakEvidence`, `MAX_SHOWN_LEAKS` and `sessionLeaks`.
 - `src/table/session-report.ts`: `sessionReport` stores the counts as `leakCounts` (see
   [Session reports](../storage/reports.md#leakcounts)).
 - `src/ui/report/ReportScreen.tsx`: the leaks section.
@@ -79,8 +79,17 @@ or with misaligned records is skipped. Stored hand records are validated to have
   3 of 10 is not; 3 of 8 (37.5%) is not; 8 of 20 is.
 - **Evidence:** `<errors> of <decisions> <evidence name> graded as errors`, e.g.
   `4 of 10 turn calls graded as errors` (REQ-047.4).
-- Every leak is listed, in the category order below: the postflop categories (flop, turn, river; fold, call,
-  raise, check, bet), then the preflop ones (early, middle, late, blinds; fold, open, call, raise).
+- **Ranking (REQ-047.3):** leaks are listed most costly first, by, in turn: unhinted Major errors (more
+  first); error rate `errors / decisions` (higher first, compared in integers as
+  `a.errors × b.decisions > b.errors × a.decisions`); errors (more first); then the category order below (the
+  postflop categories — flop, turn, river; fold, call, raise, check, bet — then the preflop ones — early,
+  middle, late, blinds; fold, open, call, raise). Preflop and postflop leaks rank on the same rule. Example:
+  turn calls 5 of 8 with 4 Major rank above flop calls 4 of 8 with 4 Major (62.5% > 50%), and river calls
+  6 of 10 with 5 Major rank above both.
+- **Cap (REQ-044.5):** at most `MAX_SHOWN_LEAKS` = 3 leaks are shown; with fewer, all are shown. No note
+  names the leaks left out.
+- The ranking is computed when the report is shown, from the stored `leakCounts` (which stay in category
+  order), so reports saved before TASK-10.8 are ranked too.
 - No leak → the section shows
   `No leaks found this session (a leak needs 8+ spots with 40%+ errors).` A report stored before TASK-10.5 has
   no `leakCounts` and shows no leaks section.
@@ -148,7 +157,8 @@ letter and ends with `.`. A bad file throws `RangeError('Invalid leak categories
 
 - `tests/stats/leaks.acceptance.test.ts`: classification, the 15 categories, the thresholds and hinted
   decisions.
-- `tests/stats/leaks.test.ts`: data validation, counting, `isLeak`, `leakEvidence` and `sessionLeaks` order.
+- `tests/stats/leaks.test.ts`: data validation, counting, `isLeak`, `leakEvidence`, and `sessionLeaks` ranking
+  and cap.
 - `tests/table/session-report-leaks.test.ts`: `leakCounts` presence and validation.
 - `tests/ui/report-leaks.acceptance.test.tsx` and `e2e/report-leaks.spec.ts`: the leaks section.
 - `tests/stats/preflop-leaks.acceptance.test.ts`: position groups at 9, 6, 4, 3 and 2 seats, open, call,
@@ -156,3 +166,5 @@ letter and ends with `.`. A bad file throws `RangeError('Invalid leak categories
 - `tests/stats/preflop-leaks.test.ts`: preflop data validation, pairing decisions with action records, every
   table size, and stored preflop `leakCounts`.
 - `tests/ui/report-preflop-leaks.acceptance.test.tsx`: an early-position folds leak on the report.
+- `tests/ui/report-leak-ranking.acceptance.test.tsx`: leak ranking by Major errors and error rate, and the
+  three-leak cap on the report.

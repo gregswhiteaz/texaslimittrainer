@@ -315,13 +315,42 @@ export interface Leak {
   readonly fix: string;
 }
 
-/** The leaks among `counts`, in LEAK_CATEGORIES order (A-3); counts whose category is unknown are ignored. */
+/** At most this many leaks are shown on the report (REQ-044.5, REQ-047.3). */
+export const MAX_SHOWN_LEAKS = 3;
+
+interface Candidate {
+  readonly category: LeakCategory;
+  readonly count: CategoryCount;
+  /** Index in LEAK_CATEGORIES, the last tie-break. */
+  readonly index: number;
+}
+
+/** Negative when `a` is more costly than `b`: more Major, higher error rate, more errors, then data order. */
+function compareLeaks(a: Candidate, b: Candidate): number {
+  const x = a.count;
+  const y = b.count;
+  return (
+    y.major - x.major ||
+    y.errors * x.decisions - x.errors * y.decisions ||
+    y.errors - x.errors ||
+    a.index - b.index
+  );
+}
+
+/** The leaks among `counts`, most costly first (REQ-047.3), at most MAX_SHOWN_LEAKS;
+ *  counts whose category is unknown are ignored. */
 export function sessionLeaks(counts: readonly CategoryCount[]): readonly Leak[] {
   const byCategory = new Map(counts.map((count) => [count.category, count]));
-  return LEAK_CATEGORIES.flatMap(({ id, title, fix }) => {
-    const count = byCategory.get(id);
-    return count !== undefined && isLeak(count)
-      ? [{ category: id, title, evidence: leakEvidence(count), fix }]
-      : [];
-  });
+  return LEAK_CATEGORIES.flatMap((category, index): Candidate[] => {
+    const count = byCategory.get(category.id);
+    return count !== undefined && isLeak(count) ? [{ category, count, index }] : [];
+  })
+    .sort(compareLeaks)
+    .slice(0, MAX_SHOWN_LEAKS)
+    .map(({ category: { id, title, fix }, count }) => ({
+      category: id,
+      title,
+      evidence: leakEvidence(count),
+      fix,
+    }));
 }

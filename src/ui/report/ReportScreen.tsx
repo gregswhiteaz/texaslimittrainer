@@ -39,7 +39,7 @@ function StyleSection({
   );
 }
 
-/** Every postflop leak among the stored counts, or the no-leaks sentence (TASK-10.5). */
+/** The top 3 leaks among the stored counts, most costly first (TASK-10.8), or the no-leaks sentence. */
 function LeaksSection({
   counts,
 }: {

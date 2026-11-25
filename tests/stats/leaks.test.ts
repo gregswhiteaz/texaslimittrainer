@@ -6,6 +6,7 @@ import {
   isLeak,
   LEAK_CATEGORIES,
   leakEvidence,
+  MAX_SHOWN_LEAKS,
   parseLeakCategories,
   sessionLeaks,
   type CategoryCount,
@@ -125,5 +126,73 @@ describe('leak categories', () => {
       evidence: '4 of 8 flop raises graded as errors',
       fix: raise?.fix,
     });
+  });
+
+  it('sessionLeaks ranks by Major, error rate, errors and data order and keeps the top 3', () => {
+    const c = (
+      category: string,
+      decisions: number,
+      errors: number,
+      major: number,
+    ): CategoryCount => ({
+      category: category as CategoryCount['category'],
+      decisions,
+      errors,
+      major,
+    });
+    const ids = (counts: readonly CategoryCount[]): string[] =>
+      sessionLeaks(counts).map((l) => l.category);
+
+    expect(MAX_SHOWN_LEAKS).toBe(3);
+    // Equal Major and rate: more errors first (Q-1), whatever the data order.
+    expect(
+      ids([c('flop-facing-a-bet-call', 10, 5, 3), c('flop-facing-a-bet-fold', 20, 10, 3)]),
+    ).toEqual(['flop-facing-a-bet-fold', 'flop-facing-a-bet-call']);
+    expect(
+      ids([c('flop-facing-a-bet-fold', 10, 5, 3), c('flop-facing-a-bet-call', 20, 10, 3)]),
+    ).toEqual(['flop-facing-a-bet-call', 'flop-facing-a-bet-fold']);
+    // Equal in all three: data order.
+    expect(
+      ids([c('flop-facing-a-bet-call', 10, 5, 3), c('flop-facing-a-bet-fold', 10, 5, 3)]),
+    ).toEqual(['flop-facing-a-bet-fold', 'flop-facing-a-bet-call']);
+    // Rate compared exactly: 5/8 above 4/8 above 9/20 at equal Major.
+    expect(
+      ids([
+        c('river-facing-a-bet-call', 20, 9, 2),
+        c('flop-facing-a-bet-call', 8, 4, 2),
+        c('turn-facing-a-bet-call', 8, 5, 2),
+      ]),
+    ).toEqual(['turn-facing-a-bet-call', 'flop-facing-a-bet-call', 'river-facing-a-bet-call']);
+    // Preflop and postflop rank on one rule.
+    expect(ids([c('flop-facing-a-bet-fold', 10, 5, 2), c('early-fold', 10, 5, 5)])).toEqual([
+      'early-fold',
+      'flop-facing-a-bet-fold',
+    ]);
+
+    const five = [
+      c('flop-facing-a-bet-fold', 10, 5, 1),
+      c('flop-facing-a-bet-call', 10, 5, 2),
+      c('turn-facing-a-bet-call', 10, 5, 3),
+      c('river-facing-a-bet-call', 10, 5, 4),
+      c('river-not-facing-a-bet-bet', 10, 5, 5),
+    ];
+    const top = ['river-not-facing-a-bet-bet', 'river-facing-a-bet-call', 'turn-facing-a-bet-call'];
+    const copy = structuredClone(five);
+    expect(ids(five)).toEqual(top);
+    expect(five).toEqual(copy);
+    expect(ids([...five].reverse())).toEqual(top);
+    expect(ids(five.slice(1))).toEqual(top);
+    expect(ids(five.slice(2))).toEqual(top);
+    expect(ids(five.slice(3))).toEqual(top.slice(0, 2));
+    expect(
+      ids([
+        ...five.slice(2),
+        c('river-facing-a-bet-raise', 7, 7, 7),
+        c('turn-facing-a-bet-fold', 10, 3, 3),
+        c('preflop-raise', 9, 9, 9),
+      ]),
+    ).toEqual(top);
+    expect(ids([c('turn-facing-a-bet-fold', 10, 3, 3)])).toEqual([]);
+    expect(ids([])).toEqual([]);
   });
 });
