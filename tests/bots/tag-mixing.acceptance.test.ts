@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { handClassOf } from '../../src/advice/hand-class';
 import { recommend } from '../../src/advice/recommend';
 import { StyleValidationError, parseStyle } from '../../src/bots/style';
-import { BOT_EQUITY, decideTag, TAG_STYLE } from '../../src/bots/tag';
+import { BOT_ADVICE, BOT_EQUITY, decideTag, TAG_STYLE } from '../../src/bots/tag';
 import { botDecisionIndex, botDecisionSeed, botRandom } from '../../src/engine/bot-random';
 import type { Action } from '../../src/engine/hand';
 import { playerView, type PlayerView } from '../../src/engine/player-view';
@@ -206,7 +206,7 @@ describe('TAG mixing from its style file', () => {
           onAction: (step) => {
             const seen = playerView(step.before, step.action.seat);
             // TAG plays the advice at the bots' equity budget (TASK-7.8).
-            const advice = recommend(seen, { equity: BOT_EQUITY });
+            const advice = recommend(seen, { ...BOT_ADVICE, equity: BOT_EQUITY });
             const mixed =
               advice.basis === 'chart' &&
               advice.alternative !== null &&

@@ -7,6 +7,8 @@ import {
   OBSERVED_MIN_HANDS,
   OPPONENT_TYPE_LEAD,
   POSTFLOP_TEMPLATES,
+  POT_ODDS_LEAD,
+  POT_ODDS_RIVER_BET_LEAD,
   PREFLOP_CONTEXT,
   PREFLOP_SENTENCES,
   RANK_NAMES,
@@ -81,6 +83,7 @@ export function chartBasisText(
   });
 }
 
+/** `valueThresholdPct` is the threshold that applied (50 or 65). */
 export function explainPostflop(
   rec: Omit<PostflopRecommendation, 'explanation'>,
   valueThresholdPct: number,
@@ -102,7 +105,11 @@ export function explainPostflop(
     rec.ruleId === 'pot-odds-fold' && rec.impliedRequiredEquityPct !== null
       ? 'pot-odds-fold-implied'
       : rec.ruleId;
-  const text = fillTemplate(POSTFLOP_TEMPLATES[key], values);
+  const template =
+    rec.requiredCountsRiverBet === true
+      ? POSTFLOP_TEMPLATES[key].replace(POT_ODDS_LEAD, POT_ODDS_RIVER_BET_LEAD)
+      : POSTFLOP_TEMPLATES[key];
+  const text = fillTemplate(template, values);
   if (rec.opponentBasis.every((b) => b.observedHands === null)) return text;
   const lead = fillTemplate(OPPONENT_TYPE_LEAD, { minHands: String(OBSERVED_MIN_HANDS) });
   return lead + text.charAt(0).toLowerCase() + text.slice(1);

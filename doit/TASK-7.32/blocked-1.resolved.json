@@ -1,0 +1,10 @@
+{
+  "spec": "SPEC-10",
+  "reason": "Three hook-locked tests outside qa.md's unlock list must change (or be accepted as failing) because of the approved Q-1/Q-3/A-3 behaviour. Everything else is built and green.",
+  "evidence": "1) tests/advice/explanations.acceptance.test.ts (owner TASK-7.10), AC#4 (normal and slow variants) line 129 asserts every value-bet/check-free/value-raise explanation contains '50.0%'; per Q-3 value-raise now shows 65.0% (e.g. '... is above 65.0%, so raising is a value bet'). One-for-one fix: expect(text).toContain(rec.ruleId === 'value-raise' ? '65.0%' : '50.0%'). 2) tests/table/review.acceptance.test.ts (owner TASK-9.1), \"each entry's grade is the grader output\" line 59: the REVIEW_FOUR river decision (user calls, advice raise, 65.2% vs callers, valueThresholdPct 65) now grades Minor (aggression-margin 0.2) instead of Major (15.2 from 50), exactly A-3; the same test's per-entry check against gradeView passes. One-for-one fix: 4th expected label 'Major error' -> 'Minor error'. 3) tests/playtest/check-styles.acceptance.test.ts (owner TASK-6.11; listed in qa.md as unlocked, but this is its slow 100,000-hand Mixed test) fails on seeds 42/7/1234 with the Mixed line-up drift spec §1a predicted (seed 42: TAG PFR 10.3, Aggression 31.3; Rock VPIP 6.7, PFR 5.9, Aggression 31.2). Same cause as style-bands (Q-2 -> TASK-6.25); it cannot pass without rebalancing styles, and loosening it is not allowed.",
+  "options": [
+    "Unlock explanations.acceptance (TASK-7.10) and review.acceptance (TASK-9.1) for the two one-for-one edits above, and accept the check-styles 100,000-hand Mixed slow test as failing until TASK-6.25 (like style-bands)",
+    "Same, but move the check-styles 100,000-hand Mixed case under TASK-6.25's scope explicitly",
+    "Revisit A-3 (keep aggression-margin from 50) to avoid the review.acceptance change — would make the grade disagree with the advice threshold"
+  ]
+}

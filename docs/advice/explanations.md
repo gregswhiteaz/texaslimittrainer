@@ -47,14 +47,19 @@ Every postflop explanation quotes the equity % and the required equity % (`0.0%`
 | ------------------- | ---------------------------------------------------------------------------------- |
 | `value-bet`         | equity against the hands that would call, and the 50.0% value line                 |
 | `check-free`        | equity against the hands that would call, and the 50.0% value line                 |
-| `value-raise`       | equity against the hands that would call, and the 50.0% value line                 |
+| `value-raise`       | equity against the hands that would call, and the 65.0% value line                 |
 | `pot-odds-call`     | nothing more                                                                       |
 | `implied-odds-call` | the number of outs and the implied required equity %                               |
 | `pot-odds-fold`     | the implied required equity % when there is one (a drawing hand still short of it) |
 
-In `value-bet`, `check-free` and `value-raise` the second sentence names the equity it compares with the 50.0%
-line (TASK-8.1, AC#12): "Your equity against the hands that would call is (not) above 50.0%, so …". Earlier text
-began that sentence with a bare "That is", which could be read as the equity against all their hands.
+In `value-bet`, `check-free` and `value-raise` the second sentence names the equity it compares with the value line
+(TASK-8.1, AC#12): "Your equity against the hands that would call is (not) above 50.0%, so …". The line is 50.0% for
+a bet and 65.0% for a raise facing a bet (TASK-7.32). Earlier text began that sentence with a bare "That is", which
+could be read as the equity against all their hands.
+
+When a turn price counts the river big bet (TASK-7.32), the pot-odds clause says so inline, keeping the three-sentence
+limit: "Pot odds, …, counting the big bet you will likely face on the river, ask for 26.7%, …". Flop and river
+explanations are unchanged.
 
 ## Preflop
 

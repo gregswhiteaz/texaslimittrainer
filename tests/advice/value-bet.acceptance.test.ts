@@ -12,6 +12,7 @@ import { gradeDecision, gradeView, type EquityGradeInput } from '../../src/advic
 import {
   POSTFLOP_RULE_IDS,
   recommendPostflop,
+  VALUE_RAISE_THRESHOLD_PCT,
   VALUE_THRESHOLD_PCT,
   type PostflopRecommendation,
 } from '../../src/advice/postflop';
@@ -171,7 +172,8 @@ const realViews = () =>
 function expectedRule(view: PlayerView, advice: PostflopRecommendation): string {
   const value =
     view.legalActions.some((a) => a.type === 'bet' || a.type === 'raise') &&
-    Math.round(advice.equityVsCallingRangePct * 10) > VALUE_THRESHOLD_PCT * 10;
+    Math.round(advice.equityVsCallingRangePct * 10) >
+      (advice.callAmount > 0 ? VALUE_RAISE_THRESHOLD_PCT : VALUE_THRESHOLD_PCT) * 10;
   if (advice.callAmount === 0) return value ? 'value-bet' : 'check-free';
   if (value) return 'value-raise';
   if (advice.equityPct >= advice.requiredEquityPct) return 'pot-odds-call';
@@ -240,9 +242,10 @@ describe('value bet and raise acceptance (TASK-7.8)', () => {
   });
 
   it('AC#6 50.1% against callers raises', () => {
+    // TASK-7.32: a raise facing a bet needs more than VALUE_RAISE_THRESHOLD_PCT (65), so the boundary is 65.1%.
     const view = viewAt(3, spotDeck(3, 'Ah 5h', 'Kh 9h 2c'), FLOP_BET);
     expect(view.legalActions.some((a) => a.type === 'raise')).toBe(true);
-    const advice = recommendPostflop(view, { equity: byRun(0.1, 0.501).fn });
+    const advice = recommendPostflop(view, { equity: byRun(0.1, 0.651).fn });
     expect(advice).toMatchObject({
       action: 'raise',
       ruleId: 'value-raise',
@@ -274,7 +277,7 @@ describe('value bet and raise acceptance (TASK-7.8)', () => {
       equity: byRun(0.2, 0.501).fn,
     });
     const raise = recommendPostflop(viewAt(3, spotDeck(3, 'Ah 5h', 'Kh 9h 2c'), FLOP_BET), {
-      equity: byRun(0.2, 0.501).fn,
+      equity: byRun(0.2, 0.651).fn, // TASK-7.32: raising needs more than 65%
     });
     expect([bet.ruleId, bet.equityVsCallingRangePct, bet.requiredEquityPct]).toEqual([
       'value-bet',
@@ -283,7 +286,7 @@ describe('value bet and raise acceptance (TASK-7.8)', () => {
     ]);
     expect([raise.ruleId, raise.equityVsCallingRangePct, raise.requiredEquityPct]).toEqual([
       'value-raise',
-      50.1,
+      65.1,
       16.7,
     ]);
     for (const advice of [bet, raise]) {
@@ -309,6 +312,8 @@ describe('value bet and raise acceptance (TASK-7.8)', () => {
               'outs',
               'explanation',
               'opponentBasis',
+              'requiredCountsRiverBet',
+              'valueThresholdPct',
             ].sort(),
           );
           expect(['fold', 'check', 'call', 'bet', 'raise']).toContain(advice.action);

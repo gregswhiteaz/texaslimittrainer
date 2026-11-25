@@ -82,7 +82,7 @@
       "userAction": "fold",
       "grade": "major",
       "ruleId": "call-fold-margin",
-      "marginPts": 26.9,
+      "marginPts": 18.3,
       "justification": "Second pair of jacks has far more equity than the pot odds require against the button's turn bet. Folding throws away a call that wins by well over ten points, which makes it a Major error."
     },
     {

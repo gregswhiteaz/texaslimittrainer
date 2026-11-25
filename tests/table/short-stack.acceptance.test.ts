@@ -156,9 +156,10 @@ describe('short stack acceptance', () => {
     expect(mostPots).toBeGreaterThanOrEqual(2);
     // A-4 re-pinned: the spec's prototype ($62 main pot) drove bots by stepBot; the live app (and this test)
     // decide through the advice worker's seeded style policy, as the browser run of e2e/short-stack confirms.
+    // TASK-7.32: the bots read action ranges and fold earlier, so the side pot is $44 ($124 before).
     expect(handResultView(done)?.pots?.map((p) => p.text)).toEqual([
       'Main pot $54 · Dee wins $54',
-      'Side pot $124 · Dee wins $124',
+      'Side pot $44 · Dee wins $44',
     ]);
   });
 

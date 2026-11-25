@@ -128,6 +128,7 @@ describe('postflop advice acceptance', () => {
       ruleId: 'pot-odds-call',
       equityPct: 16.7,
       requiredEquityPct: 16.7,
+      requiredCountsRiverBet: false,
       callAmount: 4,
       pot: 20,
       opponents: 3,
@@ -140,6 +141,7 @@ describe('postflop advice acceptance', () => {
         observedHands: null,
         text: 'typical player',
       })),
+      valueThresholdPct: 65,
       explanation: expect.any(String),
     });
     // Whole-range run, then the calling-range run (TASK-7.8).
@@ -278,7 +280,8 @@ describe('postflop advice acceptance', () => {
     }
 
     const turn = recommendPostflop(heroView(deckWith(spotDeck('Ah 5h', 'Kh 9h 2c 7d')), TURN_BET));
-    expect(turn).toMatchObject({ street: 'turn', callAmount: 8, pot: 24, requiredEquityPct: 25 });
+    // TASK-7.32: the turn price counts one river big bet, (8 + 8) / (32 + 16).
+    expect(turn).toMatchObject({ street: 'turn', callAmount: 8, pot: 24, requiredEquityPct: 33.3 });
 
     const draw = recommendPostflop(heroView(deckWith(spotDeck('Ah 5h', 'Kh 9h 2c')), FLOP_BET));
     const junk = recommendPostflop(heroView(deckWith(spotDeck('7c 3d', 'Kh 9h 2c')), FLOP_BET));

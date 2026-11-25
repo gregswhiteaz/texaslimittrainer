@@ -104,7 +104,8 @@ describe('implied odds acceptance (TASK-7.9)', () => {
       action: 'call',
       ruleId: 'implied-odds-call',
       equityPct: 20.5,
-      requiredEquityPct: 22.2,
+      // TASK-7.32: the turn price counts one river big bet, (8 + 8) / (36 + 16).
+      requiredEquityPct: 30.8,
       impliedRequiredEquityPct: 18.2,
       pot: 28,
       callAmount: 8,
@@ -146,7 +147,7 @@ describe('implied odds acceptance (TASK-7.9)', () => {
       ruleId: 'pot-odds-fold',
       pot: 12,
       equityPct: 20.5,
-      requiredEquityPct: 40,
+      requiredEquityPct: 44.4, // (8 + 8) / (20 + 16), TASK-7.32
       impliedRequiredEquityPct: 28.6,
     });
     expect(result.outs).toEqual(HEART_OUTS);
@@ -159,7 +160,7 @@ describe('implied odds acceptance (TASK-7.9)', () => {
         pot: 36,
         callAmount: 8,
         opponents: 2,
-        requiredEquityPct: 18.2,
+        requiredEquityPct: 26.7, // (8 + 8) / (44 + 16), TASK-7.32
         impliedRequiredEquityPct: 13.3,
       });
     }

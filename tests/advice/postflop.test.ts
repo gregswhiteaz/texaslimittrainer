@@ -139,13 +139,15 @@ describe('rule pot-odds-call', () => {
       equityPct: 16.7,
       requiredEquityPct: 16.7,
     });
-    const turn = adviseWith(viewAfter(TURN_BET), 0.25);
+    // TASK-7.32: the turn price counts one river big bet, (8 + 8) / (24 + 8 + 16) = 33.3%.
+    const turn = adviseWith(viewAfter(TURN_BET), 0.3333);
     expect(turn).toMatchObject({
       action: 'call',
       ruleId: 'pot-odds-call',
       street: 'turn',
-      equityPct: 25,
-      requiredEquityPct: 25,
+      equityPct: 33.3,
+      requiredEquityPct: 33.3,
+      requiredCountsRiverBet: true,
       callAmount: 8,
       pot: 24,
     });
@@ -159,7 +161,7 @@ describe('rule pot-odds-fold', () => {
     const cases: [PlayerView, number, number][] = [
       [flop, 0.1656, 16.6],
       [flop, 0, 0],
-      [turn, 0.2449, 24.5],
+      [turn, 0.3324, 33.2],
       [turn, 0, 0],
     ];
     for (const [view, equity, equityPct] of cases) {
@@ -219,7 +221,7 @@ describe('rule implied-odds-call', () => {
       impliedRequiredEquityPct: 8.3,
       outs: HEARTS_OUTS,
     });
-    expect(adviseWithRuns(view, 0.1, 0.6)).toMatchObject({
+    expect(adviseWithRuns(view, 0.1, 0.651)).toMatchObject({
       action: 'raise',
       ruleId: 'value-raise',
       impliedRequiredEquityPct: 8.3,
@@ -400,23 +402,24 @@ describe('rule value-bet', () => {
 });
 
 describe('rule value-raise', () => {
-  it('raises facing a bet when the rounded calling-range equity is above 50.0% and a raise is legal', () => {
+  it('raises facing a bet when the rounded calling-range equity is above 65.0% and a raise is legal', () => {
     const flop = viewAfter(FLOP_BET);
-    const advice = adviseWithRuns(flop, 0.1, 0.501);
+    const advice = adviseWithRuns(flop, 0.1, 0.651);
     expect(advice).toMatchObject({
       action: 'raise',
       ruleId: 'value-raise',
       equityPct: 10,
-      equityVsCallingRangePct: 50.1,
+      equityVsCallingRangePct: 65.1,
       requiredEquityPct: 16.7,
       callAmount: 4,
+      valueThresholdPct: 65,
     });
     expect(advice.move).toStrictEqual({ seat: 3, type: 'raise', amount: 8 });
-    expect(adviseWithRuns(flop, 0.3, 0.5)).toMatchObject({
+    expect(adviseWithRuns(flop, 0.3, 0.65)).toMatchObject({
       action: 'call',
       ruleId: 'pot-odds-call',
     });
-    expect(adviseWithRuns(flop, 0.1, 0.5)).toMatchObject({
+    expect(adviseWithRuns(flop, 0.1, 0.65)).toMatchObject({
       action: 'fold',
       ruleId: 'pot-odds-fold',
     });
@@ -434,6 +437,39 @@ describe('rule value-raise', () => {
       action: 'fold',
       ruleId: 'pot-odds-fold',
     });
+  });
+});
+
+describe('explanations (TASK-7.32)', () => {
+  it('explanations name the river bet and the 65 percent raise threshold', () => {
+    // SPEC-03 spot: pot 28 after the flop, seat 2 bets 8 on the turn, hero (seat 3) keeps 100 behind.
+    const turnSteps: Step[] = [...PREFLOP, b(2, 4), c(3, 4), f(6), c(1, 4), b(2, 8)];
+    const turn = playerView(stateAfter(turnSteps, ORDERED_DECK, { 3: 108 }), 3);
+    const fold = adviseWith(turn, 0.22);
+    expect(fold).toMatchObject({
+      ruleId: 'pot-odds-fold',
+      pot: 36,
+      requiredEquityPct: 26.7,
+      requiredCountsRiverBet: true,
+      outs: [],
+    });
+    expect(fold.explanation).toContain('22.0%');
+    expect(fold.explanation).toContain(
+      'Pot odds, the cost of a call as a share of the pot after you call, counting the big bet you will likely face on the river, ask for 26.7%, more than you have, so folding saves chips over time.',
+    );
+    expect(fold.explanation.split(/(?<=[.!?])\s+(?=[A-Z])/).length).toBeLessThanOrEqual(3);
+
+    const raise = adviseWithRuns(turn, 0.7, 0.7);
+    expect(raise).toMatchObject({ ruleId: 'value-raise', valueThresholdPct: 65 });
+    expect(raise.explanation).toContain('is above 65.0%, so raising is a value bet');
+    expect(raise.explanation).not.toContain('50.0%');
+
+    const flop = adviseWith(viewAfter(FLOP_BET), 0.1);
+    expect(flop).toMatchObject({ ruleId: 'pot-odds-fold', requiredCountsRiverBet: false });
+    expect(flop.explanation).not.toContain('river');
+    const river = adviseWith(viewAfter(RIVER_BET), 0.1);
+    expect(river).toMatchObject({ ruleId: 'pot-odds-fold', requiredCountsRiverBet: false });
+    expect(river.explanation).not.toContain('river');
   });
 });
 

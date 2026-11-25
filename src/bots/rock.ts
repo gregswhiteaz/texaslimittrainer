@@ -4,7 +4,7 @@ import { handClassOf } from '../advice/hand-class';
 import { chartSpotOf } from '../advice/preflop';
 import { adviceOptions, recommend, type RecommendOptions } from '../advice/recommend';
 import { parseStyle, postflopValueMove, startingRangeFor, type BotStyleData } from './style';
-import { BOT_EQUITY } from './tag';
+import { BOT_ADVICE, BOT_EQUITY } from './tag';
 // The JSON import stays last: the bots import-boundary test's regex can't read past its `with` clause.
 import rock from './styles/rock.json' with { type: 'json' };
 
@@ -24,7 +24,7 @@ export type RockOptions = RecommendOptions & { readonly style?: BotStyleData };
 export function decideRock(view: PlayerView, options: RockOptions = {}): Action {
   const hero = view.players.find((p) => p.seat === view.seat);
   const owed = hero === undefined ? 0 : view.currentBet - hero.streetContribution;
-  const advice = { ...adviceOptions(options), equity: options.equity ?? BOT_EQUITY };
+  const advice = { ...BOT_ADVICE, ...adviceOptions(options), equity: options.equity ?? BOT_EQUITY };
   const style = options.style ?? ROCK_STYLE;
   if (view.street !== 'preflop') {
     const rec = recommend(view, advice);

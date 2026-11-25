@@ -24,8 +24,10 @@ export const POSTFLOP_RULE_IDS = [
   'implied-odds-call',
   'pot-odds-fold',
 ] as const;
-/** Bet or raise for value when the rounded equity against the range that would call is above this percent. */
+/** Bet for value (nothing owed) when the rounded equity against the range that would call is above this percent. */
 export const VALUE_THRESHOLD_PCT = 50;
+/** Raise for value (a bet owed) when the rounded equity against the range that would call is above this percent. */
+export const VALUE_RAISE_THRESHOLD_PCT = 65;
 export type PostflopRuleId = (typeof POSTFLOP_RULE_IDS)[number];
 
 export interface PostflopRecommendation {
@@ -40,8 +42,16 @@ export interface PostflopRecommendation {
   readonly ruleId: PostflopRuleId;
   /** Hero pot share against all live opponents, percent, one decimal (0..100). */
   readonly equityPct: number;
-  /** call ÷ (pot + call) as a percent, one decimal; 0 when nothing is owed. */
+  /**
+   * call ÷ (pot + call) as a percent, one decimal; 0 when nothing is owed. On the turn it counts one river big bet R
+   * (capped by the hero's stack after the call; 0 when no opponent can bet): (call + R) ÷ (pot + call + 2R).
+   */
   readonly requiredEquityPct: number;
+  /**
+   * True iff requiredEquityPct counts a river bet (turn, something owed, R > 0). Always set by recommendPostflop;
+   * optional so hand-built inputs (tests, stored data) stay valid, absent = false.
+   */
+  readonly requiredCountsRiverBet?: boolean;
   /** Chips the hero must add to call; 0 when nothing is owed. */
   readonly callAmount: number;
   /** Chips in the middle before the hero acts (all pots + all street contributions). */
@@ -61,6 +71,11 @@ export interface PostflopRecommendation {
   readonly outs: readonly Card[];
   /** One per live opponent, ascending seat: whether its range rests on observed stats ('typical player' otherwise). */
   readonly opponentBasis: readonly OpponentBasis[];
+  /**
+   * The value threshold that applied: VALUE_RAISE_THRESHOLD_PCT when a bet is owed, else VALUE_THRESHOLD_PCT. Always
+   * set by recommendPostflop; optional like requiredCountsRiverBet (absent = 50).
+   */
+  readonly valueThresholdPct?: 50 | 65;
   /** Plain-English reason, ≤ 3 sentences (REQ-037). */
   readonly explanation: string;
 }
@@ -94,9 +109,10 @@ function withFallbacks(
 }
 
 /**
- * Bet or raise when the rounded equity against the ranges that would call is above VALUE_THRESHOLD_PCT and the
- * move is legal; else check when free, else call when the rounded equity % reaches the rounded required %, else
- * call when it reaches the rounded implied required % (a drawing hand), else fold.
+ * Bet when the rounded equity against the ranges that would call is above VALUE_THRESHOLD_PCT (raise, when a bet is
+ * owed, above VALUE_RAISE_THRESHOLD_PCT) and the move is legal; else check when free, else call when the rounded
+ * equity % reaches the rounded required % (on the turn counting one river big bet), else call when it reaches the
+ * rounded implied required % (a drawing hand), else fold.
  */
 export function recommendPostflop<O extends object = PostflopOptions>(
   view: PlayerView,
@@ -148,9 +164,14 @@ export function recommendPostflop<O extends object = PostflopOptions>(
   const opponents = (attempts[0] as readonly Range[]).length;
   const result = withFallbacks(run, attempts);
   const equityPct = toPct(result.hero.equity);
-  const requiredEquityPct = owed > 0 ? toPct(callAmount / (pot + callAmount)) : 0;
   const outs = drawOuts(view.holeCards, view.board);
   const payers = view.players.filter((p) => p.seat !== view.seat && !p.folded && !p.allIn).length;
+  // A turn call usually faces one more big bet on the river (A-1).
+  const riverBet =
+    street === 'turn' && payers > 0 ? Math.min(view.stakes.bigBet, hero.stack - callAmount) : 0;
+  const requiredEquityPct =
+    owed > 0 ? toPct((callAmount + riverBet) / (pot + callAmount + 2 * riverBet)) : 0;
+  const requiredCountsRiverBet = owed > 0 && riverBet > 0;
   const impliedRequiredEquityPct =
     owed > 0 && outs.length > 0 && payers > 0 && hero.stack - callAmount > 0
       ? toPct(callAmount / (pot + callAmount + view.stakes.bigBet * payers))
@@ -167,9 +188,10 @@ export function recommendPostflop<O extends object = PostflopOptions>(
   }
 
   const aggressive = view.legalActions.find((a) => a.type === 'bet' || a.type === 'raise');
+  const valueThresholdPct: 50 | 65 = owed > 0 ? VALUE_RAISE_THRESHOLD_PCT : VALUE_THRESHOLD_PCT;
   const value =
     aggressive !== undefined &&
-    Math.round(equityVsCallingRangePct * 10) > Math.round(VALUE_THRESHOLD_PCT * 10);
+    Math.round(equityVsCallingRangePct * 10) > Math.round(valueThresholdPct * 10);
 
   let ruleId: PostflopRuleId;
   let action: PostflopAdvice;
@@ -204,6 +226,7 @@ export function recommendPostflop<O extends object = PostflopOptions>(
     ruleId,
     equityPct,
     requiredEquityPct,
+    requiredCountsRiverBet,
     callAmount,
     pot,
     opponents,
@@ -212,6 +235,7 @@ export function recommendPostflop<O extends object = PostflopOptions>(
     impliedRequiredEquityPct,
     outs,
     opponentBasis,
+    valueThresholdPct,
   };
-  return { ...rec, explanation: explainPostflop(rec, VALUE_THRESHOLD_PCT) };
+  return { ...rec, explanation: explainPostflop(rec, valueThresholdPct) };
 }

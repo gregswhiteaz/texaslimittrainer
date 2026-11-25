@@ -1,0 +1,101 @@
+{
+  "task": "TASK-7.32",
+  "phase": "build",
+  "run": 2,
+  "result": "FAIL",
+  "changed_lines": 2607,
+  "changed_files": [
+    "docs/advice/explanations.md",
+    "docs/advice/golden-spots.md",
+    "docs/advice/postflop-rules.md",
+    "docs/advice/range-model.md",
+    "docs/stats/leaks.md",
+    "docs/storage/reports.md",
+    "dreams/limit-holdem-trainer/requirements.md",
+    "e2e/report-errors.spec.ts",
+    "e2e/report-leaks.spec.ts",
+    "package.json",
+    "src/advice/explain.ts",
+    "src/advice/explanations.ts",
+    "src/advice/golden.ts",
+    "src/advice/grade.ts",
+    "src/advice/postflop.ts",
+    "src/bots/calling-station.ts",
+    "src/bots/maniac.ts",
+    "src/bots/rock.ts",
+    "src/bots/tag.ts",
+    "src/stats/leak-categories.json",
+    "src/stats/leaks.ts",
+    "src/table/session-report.ts",
+    "src/ui/report/ReportScreen.tsx",
+    "src/ui/styles.css",
+    "tests/advice/grade.acceptance.test.ts",
+    "tests/advice/implied-odds.acceptance.test.ts",
+    "tests/advice/postflop-coverage.acceptance.test.ts",
+    "tests/advice/postflop-folding.acceptance.test.ts",
+    "tests/advice/postflop.acceptance.test.ts",
+    "tests/advice/postflop.test.ts",
+    "tests/advice/value-bet.acceptance.test.ts",
+    "tests/bots/calling-station.acceptance.test.ts",
+    "tests/bots/maniac.acceptance.test.ts",
+    "tests/bots/maniac.test.ts",
+    "tests/bots/rock.test.ts",
+    "tests/bots/tag-mixing.acceptance.test.ts",
+    "tests/bots/tag.acceptance.test.ts",
+    "tests/golden/graded-examples.json",
+    "tests/golden/postflop-spots.json",
+    "tests/playtest/games.acceptance.test.ts",
+    "tests/playtest/style-bots.acceptance.test.ts",
+    "tests/stats/leaks.acceptance.test.ts",
+    "tests/stats/leaks.test.ts",
+    "tests/storage/session-end-errors.acceptance.test.ts",
+    "tests/table/next-hand.acceptance.test.ts",
+    "tests/table/session-report-errors.test.ts",
+    "tests/table/session-report-leaks.test.ts",
+    "tests/table/short-stack.acceptance.test.ts",
+    "tests/ui/report-errors.acceptance.test.tsx",
+    "tests/ui/report-leaks.acceptance.test.tsx"
+  ],
+  "checks": [
+    {
+      "name": "test command",
+      "status": "fail",
+      "detail": "$ npm test\nexit 1\no 0ms\n \u2713 tests/golden/postflop.acceptance.test.ts > postflop golden spots > AC#5 the advice engine agrees with golden spot fr-river-utg-call-t5o 0ms\n \u2713 tests/golden/postflop.acceptance.test.ts > postflop golden spots > AC#5 the advice engine agrees with golden spot fr-river-utg-fold-ato 0ms\n \u2713 tests/golden/postflop.acceptance.test.ts > postflop golden spots > AC#5 a disagreement names the spot, the expected and the actual action 0ms\n \u2713 tests/golden/postflop.acceptance.test.ts > postflop golden spots > AC#4 every postflop explanation quotes the equity and required equity it returns 6ms\n \u2713 tests/golden/postflop.acceptance.test.ts > postflop golden spots > DoD#1 golden ids and justifications are distinct across files 0ms\n \u2713 tests/bots/maniac.acceptance.test.ts > Maniac from its style file > on a capped street an aggressive Maniac calls and the action is legal 1719ms\n \u2713 tests/bots/maniac.acceptance.test.ts > Maniac from its style file > a Maniac seat in the worker plays the Maniac decision 45860ms\n\n Test Files  2 failed | 278 passed | 4 skipped (284)\n      Tests  2 failed | 1307 passed | 45 skipped (1354)\n   Start at  17:38:44\n   Duration  219.72s (tests 97%, import 3%)\n\n\n\u23af\u23af\u23af\u23af\u23af\u23af\u23af Failed Tests 2 \u23af\u23af\u23af\u23af\u23af\u23af\u23af\n\n FAIL  tests/advice/explanations.acceptance.test.ts > explanations on the first 2,000 decisions of the playtest sample > AC#4 postflop explanations quote the equity and required equity the advice returns\nAssertionError: expected 'Your equity, your share of the pot if\u2026' to contain '50.0%'\n\nExpected: \"50.0%\"\nReceived: \"Your equity, your share of the pot if the hand were played out to the end, is 92.7% against all their hands and 89.7% against the hands that would call a raise. Your equity against the hands that would call is above 65.0%, so raising is a value bet, a bet that worse hands will call. Pot odds, the cost of a call as a share of the pot after you call, ask only for 4.1% to call, but raising wins more.\"\n\n \u276f tests/advice/explanations.acceptance.test.ts:129:24\n    127|         ) {\n    128|           expect(text).toContain(formatPct(rec.equityVsCallingRangePct\u2026\n    129|           expect(text).toContain('50.0%');\n       |                        ^\n    130|         }\n    131|         if (rec.ruleId === 'implied-odds-call') {\n\n\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af[1/2]\u23af\n\n FAIL  tests/table/review.acceptance.test.ts > TASK-9.1 review model > each entry's grade is the grader output for that decision's view\nAssertionError: expected [ 'Correct', 'Correct', \u2026(2) ] to deeply equal [ 'Correct', 'Correct', \u2026(2) ]\n\n- Expected\n+ Received\n\n  [\n    \"Correct\",\n    \"Correct\",\n    \"Minor error\",\n-   \"Major error\",\n+   \"Minor error\",\n  ]\n\n \u276f tests/table/review.acceptance.test.ts:59:46\n     57|       expect(entry?.gradeLabel).toBe(GRADE_LABELS[expected.grade]);\n     58|     });\n     59|     expect(entries.map((e) => e.gradeLabel)).toEqual([\n       |                                              ^\n     60|       'Correct',\n     61|       'Correct',\n\n\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af[2/2]\u23af\n\n"
+    },
+    {
+      "name": "lint command",
+      "status": "pass",
+      "detail": "$ npm run lint\nexit 0\n\n> tlh-trainer@0.0.0 lint\n> node tools/lint/sync-copies.js && eslint . --max-warnings 0 && prettier --check .\n\nChecking formatting...\nAll matched files use Prettier code style!\n"
+    },
+    {
+      "name": "typecheck command",
+      "status": "pass",
+      "detail": "$ npm run typecheck\nexit 0\n\n> tlh-trainer@0.0.0 typecheck\n> tsc -p tsconfig.json\n\n"
+    },
+    {
+      "name": "spec unchanged",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "name": "scope budget (lines)",
+      "status": "fail",
+      "detail": "2607 changed lines vs budget 1100 (fail above 2200)"
+    },
+    {
+      "name": "scope budget (files)",
+      "status": "warn",
+      "detail": "50 files vs budget 36"
+    },
+    {
+      "name": "files outside spec",
+      "status": "warn",
+      "detail": "docs/advice/explanations.md, docs/stats/leaks.md, docs/storage/reports.md, src/advice/golden.ts, src/stats/leak-categories.json, src/stats/leaks.ts, src/table/session-report.ts, src/ui/report/ReportScreen.tsx, src/ui/styles.css"
+    },
+    {
+      "name": "all changes listed in changes.md",
+      "status": "fail",
+      "detail": "unlisted (scratch file? list it or delete it): docs/stats/leaks.md, docs/storage/reports.md, e2e/report-errors.spec.ts, e2e/report-leaks.spec.ts, src/stats/leak-categories.json, src/stats/leaks.ts, src/table/session-report.ts, src/ui/report/ReportScreen.tsx, src/ui/styles.css, tests/stats/leaks.acceptance.test.ts, tests/stats/leaks.test.ts, tests/storage/session-end-errors.acceptance.test.ts, tests/table/session-report-errors.test.ts, tests/table/session-report-leaks.test.ts, tests/ui/report-errors.acceptance.test.tsx, tests/ui/report-leaks.acceptance.test.tsx"
+    }
+  ]
+}

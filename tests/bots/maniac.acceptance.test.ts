@@ -4,7 +4,7 @@ import { handClassOf } from '../../src/advice/hand-class';
 import { recommend } from '../../src/advice/recommend';
 import { MANIAC_STYLE, decideManiac } from '../../src/bots/maniac';
 import { StyleValidationError, parseStyle, type BotStyleData } from '../../src/bots/style';
-import { decideTag } from '../../src/bots/tag';
+import { BOT_ADVICE, decideTag } from '../../src/bots/tag';
 import { botDecisionIndex, botDecisionSeed, botRandom } from '../../src/engine/bot-random';
 import { formatCard } from '../../src/engine/cards';
 import type { ReplayCode } from '../../src/engine/deck';
@@ -69,7 +69,7 @@ function collect(): Points {
       const policy = (view: PlayerView) =>
         decideTag(view, { random: botRandom(botDecisionSeed(code, view)), equity });
       return (view) => {
-        const action = recommend(view, { equity }).action;
+        const action = recommend(view, { ...BOT_ADVICE, equity }).action;
         const due = owed(view);
         if (due === 0 && action === 'check') check.push(view);
         if (due > 0 && action === 'call') call.push(view);
@@ -191,7 +191,7 @@ describe('Maniac from its style file', () => {
       for (let i = 0; i < POINTS; i++) {
         const { view, seed } = at(check, 6401, i);
         expect(owed(view)).toBe(0);
-        expect(recommend(view, { equity }).action).toBe('check');
+        expect(recommend(view, { ...BOT_ADVICE, equity }).action).toBe('check');
         const action = decideManiac(view, { random: botRandom(seed), equity });
         const aggressive = view.street === 'preflop' ? 'raise' : 'bet';
         expect(same(action, legal(view, 'check')) || same(action, legal(view, aggressive))).toBe(
@@ -228,16 +228,16 @@ describe('Maniac from its style file', () => {
       expect(botRandom(d.seed).nextUint32()).toBe(4068788660);
       expect(maniacAt(d)).toEqual({ seat: 1, type: 'check' });
 
-      // Example E: check[2] (check[7] before TASK-7.8), big blind's option with JTo; u < 0.6 threshold, the
-      // Maniac raises to 8.
-      const e = at(check, 6401, 2);
-      expect(e.code).toBe('00000000000019010000000000000003');
+      // Example E: check[8] (check[7] before TASK-7.8, check[2] with JTo before TASK-7.32), big blind's option with
+      // 96o; u < 0.6 threshold, the Maniac raises to 8.
+      const e = at(check, 6401, 8);
+      expect(e.code).toBe('00000000000019010000000000000009');
       expect(e.view.street).toBe('preflop');
-      expect(handClassOf(e.view.holeCards)).toBe('JTo');
+      expect(handClassOf(e.view.holeCards)).toBe('96o');
       expect(e.view.currentBet).toBe(4);
       expect(e.view.betCount).toBe(1);
-      expect(e.seed).toBe(3874910595);
-      expect(botRandom(e.seed).nextUint32()).toBe(841821234);
+      expect(e.seed).toBe(16137192);
+      expect(botRandom(e.seed).nextUint32()).toBe(1593414525);
       expect(maniacAt(e)).toEqual({ seat: 1, type: 'raise', amount: 8 });
       expect(tagAt(e)).toEqual({ seat: 1, type: 'check' });
     },
@@ -254,7 +254,7 @@ describe('Maniac from its style file', () => {
       for (let i = 0; i < POINTS; i++) {
         const { view, seed } = at(call, 6402, i);
         expect(owed(view)).toBeGreaterThan(0);
-        expect(recommend(view, { equity }).action).toBe('call');
+        expect(recommend(view, { ...BOT_ADVICE, equity }).action).toBe('call');
         const action = decideManiac(view, { random: botRandom(seed), equity });
         expect(same(action, legal(view, 'call')) || same(action, legal(view, 'raise'))).toBe(true);
         if (action.type === 'raise') raises++;
@@ -267,45 +267,48 @@ describe('Maniac from its style file', () => {
       );
       expect(raises).toBeGreaterThan(tag);
 
-      // Example B: call[3], preflop T8o facing a raise; u < 0.6 threshold, the Maniac raises to 12.
-      const b = at(call, 6402, 3);
-      expect(b.code).toBe('00000000000019020000000000000004');
+      // Example B: call[1] (call[3] before TASK-7.32), preflop T8o facing a raise; u < 0.6 threshold, the Maniac
+      // raises to 12.
+      const b = at(call, 6402, 1);
+      expect(b.code).toBe('00000000000019020000000000000002');
       expect(b.view.street).toBe('preflop');
       expect(b.view.holeCards.map(formatCard)).toEqual(['Th', '8c']);
       expect(b.view.currentBet).toBe(8);
       expect(b.view.betCount).toBe(2);
       expect(owed(b.view)).toBe(4);
-      expect(b.seed).toBe(4056530141);
-      expect(botRandom(b.seed).nextUint32()).toBe(1325301165);
+      expect(b.seed).toBe(1461725007);
+      expect(botRandom(b.seed).nextUint32()).toBe(455255669);
       expect(maniacAt(b)).toEqual({ seat: 1, type: 'raise', amount: 12 });
       expect(tagAt(b)).toEqual({ seat: 1, type: 'call', amount: 4 });
 
-      // Example C: call[1], turn with 7h Qh facing a bet of 8; u ≥ 0.6 threshold, the Maniac calls like TAG.
-      const c = at(call, 6402, 1);
-      expect(c.code).toBe('00000000000019020000000000000002');
+      // Example C: call[29] (call[1] with 7h Qh before TASK-7.32: the bots now fold that turn), turn with Kd Ad
+      // facing a bet of 8; u ≥ 0.6 threshold, the Maniac calls like TAG.
+      const c = at(call, 6402, 29);
+      expect(c.code).toBe('0000000000001902000000000000001e');
       expect(c.view.street).toBe('turn');
-      expect(c.view.holeCards.map(formatCard)).toEqual(['7h', 'Qh']);
+      expect(c.view.holeCards.map(formatCard)).toEqual(['Kd', 'Ad']);
       expect(c.view.currentBet).toBe(8);
       expect(c.view.betCount).toBe(1);
       expect(owed(c.view)).toBe(8);
-      expect(botDecisionIndex(c.view)).toBe(2);
-      expect(c.seed).toBe(3418715972);
-      expect(botRandom(c.seed).nextUint32()).toBe(3612399516);
+      expect(botDecisionIndex(c.view)).toBe(3);
+      expect(c.seed).toBe(4212165515);
+      expect(botRandom(c.seed).nextUint32()).toBe(2592319463);
       expect(maniacAt(c)).toEqual({ seat: 1, type: 'call', amount: 8 });
       expect(tagAt(c)).toEqual({ seat: 1, type: 'call', amount: 8 });
 
-      // Example H: call[2], river with 7h Qh facing a bet of 8; u < 0.6 threshold, the Maniac raises to 16.
-      const h = at(call, 6402, 2);
-      expect(h.code).toBe('00000000000019020000000000000003');
+      // Example H: point 122 = call[38] (call[2] with 7h Qh before TASK-7.32; no river call point below 84 has
+      // u < 0.6 now), river with 8s 8d facing a bet of 8; u < 0.6 threshold, the Maniac raises to 16.
+      const h = at(call, 6402, 122);
+      expect(h.code).toBe('0000000000001902000000000000007b');
       expect(h.view.street).toBe('river');
-      expect(h.view.holeCards.map(formatCard)).toEqual(['7h', 'Qh']);
+      expect(h.view.holeCards.map(formatCard)).toEqual(['8s', '8d']);
       expect(h.view.currentBet).toBe(8);
       expect(h.view.betCount).toBe(1);
       expect(owed(h.view)).toBe(8);
       expect(botDecisionIndex(h.view)).toBe(3);
-      expect(h.seed).toBe(2239381735);
-      expect(botRandom(h.seed).nextUint32()).toBe(111952548);
-      expect(recommend(h.view, { equity }).action).toBe('call');
+      expect(h.seed).toBe(289086986);
+      expect(botRandom(h.seed).nextUint32()).toBe(2099157800);
+      expect(recommend(h.view, { ...BOT_ADVICE, equity }).action).toBe('call');
       expect(maniacAt(h)).toEqual({ seat: 1, type: 'raise', amount: 16 });
       expect(tagAt(h)).toEqual({ seat: 1, type: 'call', amount: 8 });
     },
@@ -358,7 +361,7 @@ describe('Maniac from its style file', () => {
       const aggressive = { nextUint32: () => 0 };
       for (const view of capped) {
         expect(view.legalActions.some((a) => a.type === 'raise')).toBe(false);
-        const advice = recommend(view, { equity });
+        const advice = recommend(view, { ...BOT_ADVICE, equity });
         expect(
           advice.action === 'call' || (view.street === 'preflop' && advice.action === 'fold'),
         ).toBe(true);
@@ -370,7 +373,7 @@ describe('Maniac from its style file', () => {
         const action = decideManiac(view, { random: botRandom(seed), equity });
         expect(isLegal(view, action)).toBe(true);
         expect(action.type).not.toBe('raise');
-        if (!same(action, recommend(view, { equity }).move)) {
+        if (!same(action, recommend(view, { ...BOT_ADVICE, equity }).move)) {
           expect(action).toEqual(legal(view, 'call'));
         }
       }
@@ -411,8 +414,8 @@ describe('Maniac from its style file', () => {
   it(
     'a Maniac seat in the worker plays the Maniac decision',
     () => {
-      const view = collect().call[3] as PlayerView;
-      const request = { id: 1, kind: 'bot', view, seed: 4056530141 } as const;
+      const view = collect().call[1] as PlayerView;
+      const request = { id: 1, kind: 'bot', view, seed: 1461725007 } as const;
       expect(handleAdviceRequest({ ...request, style: 'Maniac' })).toEqual({
         id: 1,
         ok: true,

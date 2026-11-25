@@ -220,5 +220,8 @@ gets the same advice.
 
 ## Who uses it
 
-Hints and review grades use these ranges. The bots still weigh their own decisions against every
-unseen hand for now; moving them to this model is a later task.
+Hints, review grades and the bots all use these ranges. The bots always use the typical-player
+basis: they never pass observed stats, so their ranges come from the default ranges and the
+narrowing above only (REQ-029.2). Before TASK-7.32 the bots weighed their decisions against every
+unseen hand, which made them call almost every bet after the flop (see
+[postflop-rules.md](postflop-rules.md#why-bots-almost-never-folded-task-732)).

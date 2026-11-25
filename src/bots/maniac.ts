@@ -2,7 +2,7 @@ import type { Action } from '../engine/hand';
 import type { PlayerView } from '../engine/player-view';
 import { adviceOptions, recommend, type RecommendOptions } from '../advice/recommend';
 import { drawDeviation, findDeviation, parseStyle, type BotStyleData } from './style';
-import { BOT_EQUITY, type BotRandom } from './tag';
+import { BOT_ADVICE, BOT_EQUITY, type BotRandom } from './tag';
 // The JSON import stays last: the bots import-boundary test's regex can't read past its `with` clause.
 import maniac from './styles/maniac.json' with { type: 'json' };
 
@@ -25,6 +25,7 @@ export type ManiacOptions = RecommendOptions & {
 export function decideManiac(view: PlayerView, options: ManiacOptions = {}): Action {
   const street = view.street === 'preflop' ? 'preflop' : 'postflop';
   const advice = recommend(view, {
+    ...BOT_ADVICE,
     ...adviceOptions(options),
     equity: options.equity ?? BOT_EQUITY,
   });

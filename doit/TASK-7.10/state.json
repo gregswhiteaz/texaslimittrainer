@@ -1251,6 +1251,12 @@
       "event": "unlock",
       "file": "tests/advice/explanations.acceptance.test.ts",
       "reason": "Review MINOR: apply spec D-6 split (2,000 every push + 10,000 under TLH_SLOW_TESTS); same assertions in both"
+    },
+    {
+      "t": "2026-11-24T17:55:34",
+      "event": "unlock",
+      "file": "tests/advice/explanations.acceptance.test.ts",
+      "reason": "TASK-7.32 Q-3 (user): value-raise sentence shows 65.0%; expected threshold becomes rule-dependent (value-raise 65.0%, others 50.0%)"
     }
   ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-7.10",
@@ -1259,7 +1265,9 @@
     "1": 0,
     "2": 0
   },
-  "relock_pending": [],
+  "relock_pending": [
+    "tests/advice/explanations.acceptance.test.ts"
+  ],
   "doc_id": "doc-97",
   "judge_results": {
     "1": "PASS"

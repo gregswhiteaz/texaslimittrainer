@@ -229,20 +229,20 @@
       "street": "flop",
       "holeCards": "Jc Jh",
       "board": "3s Js 4d",
-      "before": ["call", "fold", "call", "call", "call", "check", "check", "bet", "call"],
+      "before": ["call", "fold", "call", "fold", "fold", "check", "check", "bet"],
       "action": "raise",
-      "justification": "Top set of jacks has huge equity in this five-way pot, and the bettor and caller will pay off with pairs and draws. Raise to charge everyone now, rather than call and let straight draws continue cheaply."
+      "justification": "Top set of jacks is far ahead of the limper's flop bet and the big blind behind, who hold pairs and straight draws on this low board. Raise as a value bet so those hands pay more now instead of drawing cheaply to the turn."
     },
     {
-      "id": "6max-flop-hj-raise-a2o",
+      "id": "6max-flop-hj-raise-99",
       "seats": 6,
       "position": "HJ",
       "street": "flop",
-      "holeCards": "Ac 2s",
+      "holeCards": "9c 9d",
       "board": "2d 9h 2c",
       "before": ["raise", "call", "fold", "call", "fold", "call", "check", "bet"],
       "action": "raise",
-      "justification": "Trip deuces with an ace kicker are well ahead of the under-the-gun raiser's overpairs and ace-high hands on this paired board. Raise now with strong equity, because waiting for the turn's bigger bets lets the players behind see cheap cards."
+      "justification": "Nines full of deuces is almost never behind on this paired board, and the under-the-gun raiser's overpairs and ace-high hands will pay. Raise as a value bet now, because waiting for the turn's bigger bets lets the players behind see cheap cards."
     },
     {
       "id": "6max-flop-bb-raise-aa",
@@ -285,15 +285,15 @@
       "justification": "Top and bottom pair is far ahead of a loose big blind whose observed opponent type calls preflop with many weak hands. Raise for value, since its weaker aces, tens and draws will keep paying."
     },
     {
-      "id": "6max-flop-btn-raise-44",
+      "id": "6max-flop-btn-raise-ajo",
       "seats": 6,
       "position": "BTN",
       "street": "flop",
-      "holeCards": "4d 4s",
+      "holeCards": "Ah Jd",
       "board": "2h 4h Jh",
       "before": ["fold", "fold", "raise", "raise", "fold", "fold", "call", "bet"],
       "action": "raise",
-      "justification": "Middle set of fours on a monotone flop is strong, though a heart flush is already possible. Raise while our equity is high, so the cutoff's overpairs and one-heart draws pay more before a fourth heart lands."
+      "justification": "Top pair of jacks plus the ace of hearts for the nut flush draw keeps our equity high on this monotone flop. Raise as a value bet, since the cutoff's overpairs and smaller one-heart draws will call."
     },
     {
       "id": "6max-flop-btn-raise-97o",
@@ -722,22 +722,22 @@
       "justification": "Bottom pair of eights lost ground when the queen made a three-heart, three-broadway board. Check behind, because the small blind's flop call leaves it many kings, queens and hearts that our equity cannot bet into."
     },
     {
-      "id": "6max-turn-bb-call-jj",
+      "id": "6max-turn-bb-call-k8s",
       "seats": 6,
       "position": "BB",
       "street": "turn",
-      "holeCards": "Js Jd",
+      "holeCards": "Ks 8s",
       "board": "Kd 9c 9h 6h",
       "before": ["raise", "fold", "fold", "fold", "fold", "call", "bet", "call", "check", "bet"],
       "action": "call",
-      "justification": "Jacks with the paired nines are behind a king but ahead of the many hands an under-the-gun raiser bets after we check. The pot odds are good enough to call one big bet, while raising would only face kings and better."
+      "justification": "Top pair of kings with an eight kicker beats the pocket pairs and draws an under-the-gun raiser bets when we check the turn. The pot odds easily cover a call, while a raise would only be called by better kings and nines."
     },
     {
-      "id": "6max-turn-co-call-qjo",
+      "id": "6max-turn-co-call-kto",
       "seats": 6,
       "position": "CO",
       "street": "turn",
-      "holeCards": "Jc Qh",
+      "holeCards": "Kc Td",
       "board": "2c Kh 3h 9h",
       "before": [
         "fold",
@@ -753,47 +753,47 @@
         "bet"
       ],
       "action": "call",
-      "justification": "The queen of hearts gives a flush draw and the ten would give a straight, so we have plenty of outs against the button's turn bet. The pot odds cover a call, but our equity is too low to raise."
+      "justification": "Top pair of kings with a ten kicker is ahead of the button's draws and smaller pairs on this three-heart board. The pot odds cover a call, but raising would only be called by better kings and flushes."
     },
     {
-      "id": "6max-turn-btn-call-84o",
+      "id": "6max-turn-btn-call-a9s",
       "seats": 6,
       "position": "BTN",
       "street": "turn",
-      "holeCards": "8d 4s",
+      "holeCards": "Ad 9d",
       "board": "Qs Kh 9s 8c",
       "before": ["fold", "fold", "fold", "raise", "fold", "call", "check", "bet", "call", "bet"],
       "action": "call",
-      "justification": "The eight gives us bottom pair on a turn that also hands the big blind straight draws to lead with. Calling one big bet has the pot odds, since we beat its draws and bluffs, while a raise folds out exactly those hands."
+      "justification": "Third pair of nines with an ace kicker beats the big blind's draws and bluffs on this connected turn. Calling one big bet has the pot odds, while a raise folds out exactly the hands we beat."
     },
     {
-      "id": "6max-turn-utg-call-t7s",
+      "id": "6max-turn-utg-call-qq",
       "seats": 6,
       "position": "UTG",
       "street": "turn",
-      "holeCards": "Td 7d",
+      "holeCards": "Qd Qs",
       "board": "6h Kc 8c 7c",
       "before": ["raise", "fold", "fold", "fold", "fold", "call", "check", "bet", "call", "bet"],
       "action": "call",
-      "justification": "Third pair of sevens and a gutshot to the nine give us enough equity to call the big blind's turn lead. Raising on a three-club board would be called mostly by kings and flushes, so call."
+      "justification": "Pocket queens beat the draws and smaller pairs that make up much of the big blind's turn lead after it called the flop. The pot odds cover a call, while raising on a three-club board would be called mostly by kings and flushes."
     },
     {
-      "id": "6max-turn-bb-call-kqs",
+      "id": "6max-turn-bb-call-99",
       "seats": 6,
       "position": "BB",
       "street": "turn",
-      "holeCards": "Qc Kc",
+      "holeCards": "9c 9d",
       "board": "2d Tc 5d 7c",
       "before": ["fold", "fold", "fold", "raise", "fold", "call", "check", "check", "check", "bet"],
       "action": "call",
-      "justification": "King-queen of clubs picked up a flush draw on the turn, adding two overcards to its outs. The pot odds are fine for a call, while raising would fold out weak hands and get called by the pairs that beat us now."
+      "justification": "Pocket nines sit under the ten but stay ahead of the button's ace-high and king-high stabs after the flop checked through. The pot odds cover a call, while raising would fold out the hands we beat and get called by tens."
     },
     {
-      "id": "6max-turn-bb-call-k3s",
+      "id": "6max-turn-bb-call-a6s",
       "seats": 6,
       "position": "BB",
       "street": "turn",
-      "holeCards": "Kc 3c",
+      "holeCards": "Ah 6h",
       "board": "9c 9s Jd Ac",
       "before": ["fold", "fold", "fold", "raise", "fold", "call", "check", "check", "bet", "raise"],
       "opponentStats": {
@@ -804,7 +804,7 @@
         }
       },
       "action": "call",
-      "justification": "The nut flush draw gives strong outs, and this button raises preflop so often that its opponent type includes many bluffs and weak aces. Calling the raise has the pot odds needed, while re-raising would build a pot we usually win only when the flush arrives."
+      "justification": "Top pair of aces with a weak kicker holds up well against this button, whose opponent type raises preflop so often that its range has many bluffs and weaker aces. Calling the raise has the pot odds needed, while re-raising would only be called by better aces and nines."
     },
     {
       "id": "6max-turn-co-fold-98o",
@@ -950,26 +950,26 @@
       "justification": "Sixes full of queens is close to the best possible hand, and the button bets after our check with aces and draws. Raise now, because its hand strength is far below ours."
     },
     {
-      "id": "6max-turn-bb-raise-q5o",
+      "id": "6max-turn-bb-raise-kqs",
       "seats": 6,
       "position": "BB",
       "street": "turn",
-      "holeCards": "Qs 5d",
+      "holeCards": "Kh Qh",
       "board": "9d 8s Tc Jc",
       "before": ["raise", "fold", "fold", "fold", "fold", "call", "check", "check", "check", "bet"],
       "action": "raise",
-      "justification": "The jack gives us the queen-high straight, beaten only by king-queen on this board. Check-raise as a value bet, since the under-the-gun raiser's turn bet comes from overpairs and draws that will call."
+      "justification": "The jack gives us the king-high straight, the best possible hand on this board. Check-raise as a value bet, since the under-the-gun raiser's turn bet comes from overpairs and draws that will call."
     },
     {
-      "id": "6max-turn-bb-raise-qq",
+      "id": "6max-turn-bb-raise-kk",
       "seats": 6,
       "position": "BB",
       "street": "turn",
-      "holeCards": "Qd Qh",
+      "holeCards": "Kd Ks",
       "board": "6c 2c Th 2s",
       "before": ["fold", "fold", "fold", "fold", "raise", "call", "check", "bet", "call", "bet"],
       "action": "raise",
-      "justification": "Pocket queens are an overpair on a board where the small blind's flop check-call and turn lead often mean a ten or a draw. Raise, because our hand strength is ahead of almost everything that bets this way."
+      "justification": "Pocket kings are an overpair on a board where the small blind's flop check-call and turn lead often mean a ten or a draw. Raise, because our hand strength is ahead of almost everything that bets this way."
     },
     {
       "id": "6max-turn-bb-raise-92o",
@@ -983,15 +983,15 @@
       "justification": "Trip nines are strong, and the under-the-gun raiser's turn raise often comes from a king or an overpair that we beat. Re-raise as a value bet, since only a set of kings, fours full or a nine with a better kicker is ahead."
     },
     {
-      "id": "6max-turn-utg-call-q7o",
+      "id": "6max-turn-utg-call-a9s",
       "seats": 6,
       "position": "UTG",
       "street": "turn",
-      "holeCards": "7h Qs",
+      "holeCards": "As 9s",
       "board": "8d 7d Jd 9c",
       "before": ["raise", "fold", "fold", "fold", "fold", "call", "check", "bet", "call", "bet"],
       "action": "call",
-      "justification": "Bottom pair of sevens plus a gutshot to the ten gives enough equity to call the big blind's turn lead. Raising would be called by flushes and two pairs on this coordinated board, so call."
+      "justification": "Second pair of nines with an ace kicker has enough equity to call the big blind's turn lead, which often comes from draws and weaker pairs. Raising would be called by flushes and two pairs on this coordinated board, so call."
     },
     {
       "id": "6max-turn-bb-check-72o",
@@ -1096,11 +1096,11 @@
       "justification": "Ace-high with no draw is not strong enough to bet into the under-the-gun raiser, who checked the flop but still holds many pairs. Check, since the equity against the hands that would call a bet is low."
     },
     {
-      "id": "fr-turn-hj-call-k7o",
+      "id": "fr-turn-hj-call-kts",
       "seats": 9,
       "position": "HJ",
       "street": "turn",
-      "holeCards": "Kc 7s",
+      "holeCards": "Ks Ts",
       "board": "Td Qs 7c 4d",
       "before": [
         "fold",
@@ -1118,7 +1118,7 @@
         "bet"
       ],
       "action": "call",
-      "justification": "Third pair of sevens with a king kicker is a reasonable bluff catcher after the flop checked around, and the big blind's turn bet is often a stab. Pot odds ask for less than one win in five, so call, but do not raise into its tens and queens."
+      "justification": "Second pair of tens with a king kicker is a reasonable bluff catcher after the flop checked around, and the big blind's turn bet is often a stab. The pot odds cover a call, but do not raise into its queens."
     },
     {
       "id": "fr-turn-hj-raise-86s",

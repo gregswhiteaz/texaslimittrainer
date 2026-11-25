@@ -126,7 +126,8 @@ function sampleChecks(sampleSize: number) {
           rec.ruleId === 'value-raise'
         ) {
           expect(text).toContain(formatPct(rec.equityVsCallingRangePct));
-          expect(text).toContain('50.0%');
+          // TASK-7.32 Q-3: a value raise facing a bet uses the 65% threshold; bets stay at 50%.
+          expect(text).toContain(rec.ruleId === 'value-raise' ? '65.0%' : '50.0%');
         }
         if (rec.ruleId === 'implied-odds-call') {
           expect(rec.impliedRequiredEquityPct).not.toBeNull();

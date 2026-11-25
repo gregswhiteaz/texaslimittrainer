@@ -8,7 +8,7 @@ import {
   postflopValueMove,
   type BotStyleData,
 } from './style';
-import { BOT_EQUITY, type BotRandom } from './tag';
+import { BOT_ADVICE, BOT_EQUITY, type BotRandom } from './tag';
 // The JSON import stays last: the bots import-boundary test's regex can't read past its `with` clause.
 import callingStation from './styles/calling-station.json' with { type: 'json' };
 
@@ -39,6 +39,7 @@ export function decideCallingStation(
   const owed = hero === undefined ? 0 : view.currentBet - hero.streetContribution;
   const street = view.street === 'preflop' ? 'preflop' : 'postflop';
   const advice = recommend(view, {
+    ...BOT_ADVICE,
     ...adviceOptions(options),
     equity: options.equity ?? BOT_EQUITY,
   });

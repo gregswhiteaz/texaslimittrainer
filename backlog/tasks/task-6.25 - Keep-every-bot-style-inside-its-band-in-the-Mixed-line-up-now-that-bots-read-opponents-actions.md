@@ -6,6 +6,7 @@ title: >-
 status: To Do
 assignee: []
 created_date: '2026-11-25T00:07:00Z'
+updated_date: '2026-11-25T00:55:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -27,4 +28,11 @@ Follow-up from TASK-7.32 (user Q-2). Once bots use action-based ranges and fold 
 <!-- AC:BEGIN -->
 - [ ] #1 Given the Mixed line-up with bots on action ranges, When the opt-in style-bands check runs (TLH_SLOW_TESTS=1), Then every style's VPIP, PFR and Aggression fall inside their REQ-027 bands
 - [ ] #2 Given the fix, When the manual style-bands.yml workflow is dispatched, Then it passes
+- [ ] #3 Given the Mixed line-up with bots on action ranges, When tests/playtest/check-styles.acceptance.test.ts's slow 100,000-hand Mixed check runs (seeds 42, 7, 1234), Then it passes
 <!-- AC:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+AC added from TASK-7.32 build: check-styles slow Mixed check also fails until this lands (TAG PFR 10.3 / Agg 31.3, Rock VPIP 6.7 at seed 42).
+<!-- SECTION:NOTES:END -->

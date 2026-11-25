@@ -107,18 +107,19 @@ describe('Style bots in the playtest', () => {
       });
       expect(summary).toEqual(unwrapped);
 
-      // A violation in hand 5 restarts the table, so hand 6 starts over with no earlier showdowns.
+      // A violation in hand 6 restarts the table, so hand 7 starts over with no earlier showdowns. (Hand 5 before
+      // TASK-7.32: with bots folding more after the flop, the first showdown is now hand 5.)
       const flagged = recordShowdowns(8, (done) => ({
         onAction: (step) =>
-          done.length === 4 && step.result.ok && step.result.state.result !== null
+          done.length === 5 && step.result.ok && step.result.state.result !== null
             ? [{ invariant: 'custom', message: 'flagged' }]
             : checkStep(step),
       }));
-      expect(flagged.played.map((hand) => hand.violations)).toEqual([0, 0, 0, 0, 1, 0, 0, 0]);
-      const earlier = flagged.played.slice(0, 4).filter((hand) => showdownOf(hand.final) !== null);
+      expect(flagged.played.map((hand) => hand.violations)).toEqual([0, 0, 0, 0, 0, 1, 0, 0]);
+      const earlier = flagged.played.slice(0, 5).filter((hand) => showdownOf(hand.final) !== null);
       expect(earlier.length).toBeGreaterThan(0);
-      expect(flagged.perHand[4]?.every((seen) => seen.length === earlier.length)).toBe(true);
-      expect(flagged.perHand[5]?.every((seen) => seen.length === 0)).toBe(true);
+      expect(flagged.perHand[5]?.every((seen) => seen.length === earlier.length)).toBe(true);
+      expect(flagged.perHand[6]?.every((seen) => seen.length === 0)).toBe(true);
     },
     TEST_TIMEOUT_MS,
   );

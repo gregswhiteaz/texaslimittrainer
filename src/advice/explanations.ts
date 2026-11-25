@@ -125,6 +125,11 @@ export const POSTFLOP_TEMPLATES: Readonly<Record<PostflopTemplateKey, string>> =
     'Your equity, {def:equity}, is {equity}. Pot odds, {def:pot-odds}, ask for {required}, more than you have. Even implied odds, {def:implied-odds}, ask for {impliedRequired}, so fold.',
 };
 
+/** The pot-odds lead every postflop template uses, and its Q-3 turn form when the price counts a river bet. */
+export const POT_ODDS_LEAD = 'Pot odds, {def:pot-odds}, ask';
+export const POT_ODDS_RIVER_BET_LEAD =
+  'Pot odds, {def:pot-odds}, counting the big bet you will likely face on the river, ask';
+
 export const PREFLOP_CONTEXT: Readonly<Record<Situation, string>> = {
   unopened:
     'No one has entered the pot yet and you sit {seat}, so position, {def:position}, decides how many hands are worth playing.',

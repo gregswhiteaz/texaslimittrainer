@@ -603,8 +603,8 @@ Dream slug: limit-holdem-trainer   ·   Vision: dreams/limit-holdem-trainer/visi
 - Status: Confirmed
 - Statement: For each postflop decision, the advice engine shall compute the hero's equity against each opponent's estimated range and the pot odds, and recommend fold, check, call, bet or raise by documented rules comparing those numbers.
 - Clauses:
-  - REQ-033.1: Call is recommended over fold when equity is at least the required equity (call amount ÷ pot after calling).
-  - REQ-033.2: Bet or raise for value is recommended when equity against the range that would call exceeds 50%.
+  - REQ-033.1: Call is recommended over fold when equity is at least the required equity (call amount ÷ pot after calling). On the turn the required equity also counts the big bet the player will likely face on the river: (call + R) ÷ (pot after calling + 2R), where R is one big bet, capped by the player's chips left after the call, and 0 when no opponent can still bet.
+  - REQ-033.2: Bet for value is recommended when equity against the range that would call exceeds 50%; raise for value, when facing a bet, when it exceeds 65%.
   - REQ-033.3: Drawing hands count implied odds by a documented rule that names the outs used.
   - REQ-033.4: The rules are written in one design document and every rule has a unit test.
   - REQ-033.5: Each recommendation returns the action, equity %, required equity % and the rule that fired.
@@ -1366,3 +1366,4 @@ Entity × lifecycle (every cell is a clause below or N/A):
 | 1.7 | 2026-11-17 | Revision-round user questions: added REQ-008.13, 019.8, 019.9, 024.6, 033.6, 035.5, 035.6, 043.13, 047.9, 048.13, 048.14, 064.4, 067.4 | User (Q-105..Q-112) |
 | 1.8 | 2026-11-17 | Judge round 2: added REQ-007.8 (replacement style from preset styles at current size) | User (Q-113) |
 | 1.9 | 2026-11-17 | Judge round 2 revision: added REQ-033.7 (implied-odds allowance) | User (Q-114) |
+| 1.10 | 2026-11-24 | TASK-7.32 (WTSD fix): REQ-033.1 turn required equity counts one river big bet; REQ-033.2 value raise facing a bet needs more than 65% (value bet stays above 50%) | User (TASK-7.32 Q-1) |

@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { recommend } from '../../src/advice/recommend';
 import { MANIAC_STYLE, decideManiac } from '../../src/bots/maniac';
-import { BOT_EQUITY, decideTag } from '../../src/bots/tag';
+import { BOT_ADVICE, BOT_EQUITY, decideTag } from '../../src/bots/tag';
 import { botDecisionSeed, botRandom } from '../../src/engine/bot-random';
 import type { Action } from '../../src/engine/hand';
 import type { PlayerView } from '../../src/engine/player-view';
@@ -47,7 +47,7 @@ describe('Maniac decision', () => {
     'Maniac draws once only at deviating decisions',
     () => {
       const views = seatOneViews();
-      const advices = new Map(views.map((v) => [v, recommend(v, { equity })]));
+      const advices = new Map(views.map((v) => [v, recommend(v, { ...BOT_ADVICE, equity })]));
       const advice = (v: PlayerView) => advices.get(v) as ReturnType<typeof recommend>;
       const check = views.filter((v) => owed(v) === 0 && advice(v).action === 'check');
       const call = views.filter((v) => owed(v) > 0 && advice(v).action === 'call');
@@ -111,7 +111,9 @@ describe('Maniac decision', () => {
     () => {
       const checkedTo = seatOneViews().filter(
         (v) =>
-          v.street !== 'preflop' && owed(v) === 0 && recommend(v, { equity }).action === 'check',
+          v.street !== 'preflop' &&
+          owed(v) === 0 &&
+          recommend(v, { ...BOT_ADVICE, equity }).action === 'check',
       );
       expect(new Set(checkedTo.map((v) => v.street))).toEqual(new Set(['flop', 'turn', 'river']));
       for (const view of checkedTo) {

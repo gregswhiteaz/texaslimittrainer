@@ -1,4 +1,5 @@
 import type { PlayerView } from '../engine/player-view';
+import { VALUE_THRESHOLD_PCT } from './postflop';
 import {
   recommend,
   type ExactOptions,
@@ -45,6 +46,8 @@ export interface EquityGradeInput {
   /** Equity against the range that would call, percent one decimal; always set by recommendPostflop (TASK-7.8),
    *  absent/null only in hand-built inputs (graded aggression-no-range). */
   readonly equityVsCallingRangePct?: number | null;
+  /** The value threshold that applied (recommendPostflop sets 50 or 65); absent/null in hand-built inputs → 50. */
+  readonly valueThresholdPct?: number | null;
 }
 
 export type GradeInput = ChartGradeInput | EquityGradeInput;
@@ -133,7 +136,10 @@ export function gradeDecision<R extends GradeInput>(
   if (vsCallingRange === undefined || vsCallingRange === null) {
     return result('minor', 'aggression-no-range', null);
   }
-  const distance = Math.abs(tenths(finitePct('equityVsCallingRangePct', vsCallingRange)) - 500);
+  const threshold = tenths(recommendation.valueThresholdPct ?? VALUE_THRESHOLD_PCT);
+  const distance = Math.abs(
+    tenths(finitePct('equityVsCallingRangePct', vsCallingRange)) - threshold,
+  );
   return result(
     distance >= AGGRESSION_MAJOR_TENTHS ? 'major' : 'minor',
     'aggression-margin',

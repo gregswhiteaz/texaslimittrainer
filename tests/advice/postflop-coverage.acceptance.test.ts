@@ -88,14 +88,21 @@ describe('postflop advice coverage (TASK-7.22)', () => {
             expect(pct).toBe(oneDecimal(pct));
           }
           if (advice.callAmount > 0) {
+            // TASK-7.32: on the turn the price counts one river big bet R, capped by the stack left after the call.
+            const hero = view.players.find((p) => p.seat === view.seat);
+            const payers = view.players.some((p) => p.seat !== view.seat && !p.folded && !p.allIn);
+            const river =
+              view.street === 'turn' && payers && hero !== undefined
+                ? Math.min(view.stakes.bigBet, hero.stack - advice.callAmount)
+                : 0;
             expect(advice.requiredEquityPct).toBe(
-              toPct(advice.callAmount / (advice.pot + advice.callAmount)),
+              toPct((advice.callAmount + river) / (advice.pot + advice.callAmount + 2 * river)),
             );
           }
-          // TASK-7.8: the value rules come first when a bet or raise is legal.
+          // TASK-7.8: the value rules come first when a bet or raise is legal (TASK-7.32: a raise needs > 65).
           const value =
             view.legalActions.some((a) => a.type === 'bet' || a.type === 'raise') &&
-            advice.equityVsCallingRangePct > 50;
+            advice.equityVsCallingRangePct > (advice.callAmount > 0 ? 65 : 50);
           const expectedRule =
             advice.callAmount === 0
               ? value

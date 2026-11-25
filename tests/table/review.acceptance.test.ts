@@ -60,7 +60,8 @@ describe('TASK-9.1 review model', () => {
       'Correct',
       'Correct',
       'Minor error',
-      'Major error',
+      // TASK-7.32 Q-1/A-3: river call vs value-raise at 65.2% is 0.2 points from the 65% threshold.
+      'Minor error',
     ]);
   });
 

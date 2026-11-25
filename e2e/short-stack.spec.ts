@@ -125,7 +125,8 @@ test('a short user sees all-in labels, side pots and pot winners in the live ses
 
   await expect(page.getByRole('list', { name: 'Pot winners' }).getByRole('listitem')).toHaveText([
     'Main pot $54 · Dee wins $54',
-    'Side pot $124 · Dee wins $124',
+    // TASK-7.32: the bots read action ranges and fold earlier, so the side pot is $44 ($124 before).
+    'Side pot $44 · Dee wins $44',
   ]);
   await axeWithPausedClock(page);
 

@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-23T09:33:00Z'
+updated_date: '2026-11-25T00:55:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -93,6 +93,8 @@ Review R1: 0 blocking; MINOR (10k sample at 8 s threshold) fixed via D-6 split (
 Follow-ups: ACs on TASK-7.13 (opponent-type template), TASK-8.1 (hint shows explanation), TASK-9.3 (review reason). Bluff concept: no advice rule recommends bluffs (none planned) — defined only; no task.
 
 Judge R1 PASS 12/12 (own splitter/matcher over 22,000 decisions on seed 4242: 0 failures; all 6 rules, 17 pairs; 7/7 mutants). J-1-01 copy clarity → AC on TASK-8.1.
+
+Locked test unlocked for TASK-7.32 (user-approved advice change; expected value re-pinned one-for-one).
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary

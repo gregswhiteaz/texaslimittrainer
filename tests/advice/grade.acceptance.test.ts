@@ -280,9 +280,10 @@ describe('grade acceptance', () => {
       basis: 'equity',
       action: 'fold',
       equityPct: 5,
-      requiredEquityPct: 25,
+      // TASK-7.32: the turn price counts one river big bet, (8 + 8) / (32 + 16).
+      requiredEquityPct: 33.3,
     });
-    expect(first).toMatchObject({ grade: 'major', ruleId: 'call-fold-margin', marginPts: 20 });
+    expect(first).toMatchObject({ grade: 'major', ruleId: 'call-fold-margin', marginPts: 28.3 });
     // Whole-range run, then the calling-range run (TASK-7.8).
     expect(stub.calls).toHaveLength(2);
 

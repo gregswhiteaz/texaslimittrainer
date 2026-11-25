@@ -73,7 +73,7 @@ export interface PostflopGoldenSpot {
 /** The numbers the clear-cut rule reads; PostflopRecommendation is assignable. */
 export type GoldenNumbers = Pick<
   PostflopRecommendation,
-  'action' | 'equityPct' | 'requiredEquityPct' | 'equityVsCallingRangePct'
+  'action' | 'equityPct' | 'requiredEquityPct' | 'equityVsCallingRangePct' | 'valueThresholdPct'
 >;
 
 export const GRADED_FORMAT = 'tlh-graded-examples';
@@ -503,6 +503,7 @@ function clearCutProblems(
     equityPct: numbers.equityPct,
     requiredEquityPct: numbers.requiredEquityPct,
     equityVsCallingRangePct: numbers.equityVsCallingRangePct,
+    valueThresholdPct: numbers.valueThresholdPct,
   };
   const problems: string[] = [];
   for (const { type } of view.legalActions) {

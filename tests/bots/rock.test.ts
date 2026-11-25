@@ -5,7 +5,7 @@ import { HAND_CLASSES, handClassOf, type HandClass } from '../../src/advice/hand
 import { chartSpotOf } from '../../src/advice/preflop';
 import { decideRock, ROCK_STYLE } from '../../src/bots/rock';
 import { startingRangeFor } from '../../src/bots/style';
-import { BOT_EQUITY, TAG_STYLE } from '../../src/bots/tag';
+import { BOT_ADVICE, BOT_EQUITY, TAG_STYLE } from '../../src/bots/tag';
 import { RANK_CHARS, type Card } from '../../src/engine/cards';
 import { applyAction, createHand, type Action, type SeatNumber } from '../../src/engine/hand';
 import { playerView, type PlayerView } from '../../src/engine/player-view';
@@ -31,7 +31,7 @@ const owed = (view: PlayerView): number =>
 
 /** The advice's move, except that a bet or raise at or below the Rock's 75% value bar checks or calls (TASK-6.16). */
 function rockMove(view: PlayerView, eq: (input: EquityInput) => EquityResult): Action {
-  const rec = recommend(view, { equity: eq });
+  const rec = recommend(view, { ...BOT_ADVICE, equity: eq });
   if (
     rec.basis !== 'equity' ||
     (rec.action !== 'bet' && rec.action !== 'raise') ||

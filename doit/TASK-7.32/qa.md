@@ -30,3 +30,10 @@ Unlocked under their owners with reason "TASK-7.32 Q-1".
 - e2e/short-stack.spec.ts (owner TASK-3.21)
 - tests/playtest/check-styles.acceptance.test.ts (owner TASK-6.11)
 **Answer: approved by user via Q-1** — re-baselines listed for review.
+
+## Block 1 — three locked tests outside the unlock list (resolved by orchestrator)
+- tests/advice/explanations.acceptance.test.ts (TASK-7.10): AC#4 expected "50.0%" for every value rule; value-raise now shows 65.0% (Q-3), so the check is rule-dependent. Unlocked under TASK-7.10; orchestrator edit.
+- tests/table/review.acceptance.test.ts (TASK-9.1): the REVIEW_FOUR river call vs value-raise at 65.2% now grades Minor (A-3); 4th label re-pinned. Unlocked under TASK-9.1; orchestrator edit.
+- tests/playtest/check-styles.acceptance.test.ts (TASK-6.11) slow 100k Mixed check: same Mixed drift as Q-2, accepted failing until TASK-6.25 (AC added there); not edited.
+- base_commit updated to the merge-base with main (79b793c) after merging main into the branch.
+**Answer: follows the user's Q-1..Q-3 answers** — listed for review.

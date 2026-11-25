@@ -103,8 +103,9 @@ explanation check share one equity computation.
 
 Every legal action other than the recorded action must be a Major error under the grader (REQ-038), using the engine's
 own numbers. In practice a call/fold decision must sit at least 10 points from the required equity, and a bet/check
-(or raise/call) decision at least 15 points from 50% against the calling range. The validator grades each other legal
-action against the recorded one and rejects the spot if any is not Major:
+(or raise/call) decision at least 15 points from the value threshold that applied against the calling range: 50% for a
+bet, 65% for a raise facing a bet (TASK-7.32). The validator grades each other legal action against the recorded one,
+with the engine's threshold, and rejects the spot if any is not Major:
 
 | Recorded | Numbers                                           | Result                                                                                                               |
 | -------- | ------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
@@ -187,6 +188,32 @@ stats. Together the two files hold 230 spots. The whole `tests/golden/` director
   opener's.
 - `fr-co-limpers-87s` and `fr-sb-unopened-65s` sat on call cells whose suited neighbours fold. They are replaced by
   `fr-co-limpers-44` (call; 55 and 33 also call) and `fr-sb-unopened-kjs` (raise; its neighbours also raise).
+
+## Changes from TASK-7.32 (WTSD fix)
+
+A turn call now counts the river big bet in its price, and a value raise facing a bet needs more than 65% against the
+calling range (see `postflop-rules.md`). Thirteen postflop spots stopped being clear-cut. Each is replaced by a spot on
+the same street, table size and action, so the coverage counts above are unchanged; the line and board are kept and
+only the hole cards change, except where noted.
+
+| Old id                   | New id                    | Reason                                                                                                                                            |
+| ------------------------ | ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `6max-turn-bb-call-jj`   | `6max-turn-bb-call-k8s`   | With the river bet counted, folding jacks is only 3.9 points from the price; top pair of kings stays well clear of it.                            |
+| `6max-turn-co-call-qjo`  | `6max-turn-co-call-kto`   | The draw sits 2.0 points from the new turn price; top pair of kings is a clear call.                                                              |
+| `6max-turn-btn-call-84o` | `6max-turn-btn-call-a9s`  | Bottom pair sits 1.4 points from the new turn price; third pair with an ace kicker is a clear call.                                               |
+| `6max-turn-utg-call-t7s` | `6max-turn-utg-call-qq`   | Third pair and a gutshot sit 2.4 points from the new turn price; pocket queens are a clear call.                                                  |
+| `6max-turn-bb-call-kqs`  | `6max-turn-bb-call-99`    | The flush draw sits 2.0 points from the new turn price; pocket nines are a clear call against the button's stabs.                                 |
+| `6max-turn-bb-call-k3s`  | `6max-turn-bb-call-a6s`   | The nut flush draw sits 3.2 points from the new turn price; top pair of aces is a clear call (the observed button stats are kept).                |
+| `6max-turn-utg-call-q7o` | `6max-turn-utg-call-a9s`  | Bottom pair and a gutshot sit 6.6 points from the new turn price; second pair with an ace kicker is a clear call.                                 |
+| `fr-turn-hj-call-k7o`    | `fr-turn-hj-call-kts`     | Third pair sits 6.3 points from the new turn price; second pair of tens is a clear call.                                                          |
+| `6max-flop-co-raise-jj`  | `6max-flop-co-raise-jj`   | Against four opponents top set is no longer 15 points above the 65% raise threshold; the line is now a three-way limped pot, where it is (82.1%). |
+| `6max-flop-hj-raise-a2o` | `6max-flop-hj-raise-99`   | Trip deuces sit 7.1 points above the 65% raise threshold, so calling is only a Minor error; nines full is a clear raise.                          |
+| `6max-flop-btn-raise-44` | `6max-flop-btn-raise-ajo` | The set of fours on a monotone board sits 10.4 points above the 65% raise threshold; top pair with the nut flush draw is a clear raise (84.2%).   |
+| `6max-turn-bb-raise-q5o` | `6max-turn-bb-raise-kqs`  | The queen-high straight sits 8.5 points above the 65% raise threshold; the king-high nut straight is a clear raise.                               |
+| `6max-turn-bb-raise-qq`  | `6max-turn-bb-raise-kk`   | Pocket queens sit 11.6 points above the 65% raise threshold; pocket kings are a clear raise (82.4%).                                              |
+
+`graded-postflop-fold-major-6max-turn-second-pair` keeps its grade (Major, `call-fold-margin`) but its margin moves
+from 26.9 to 18.3 points, because the turn price now counts the river big bet.
 
 ## Originality
 

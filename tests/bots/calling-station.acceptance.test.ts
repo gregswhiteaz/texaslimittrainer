@@ -4,7 +4,7 @@ import { handClassOf } from '../../src/advice/hand-class';
 import { recommend } from '../../src/advice/recommend';
 import { CALLING_STATION_STYLE, decideCallingStation } from '../../src/bots/calling-station';
 import { StyleValidationError, parseStyle, type BotStyleData } from '../../src/bots/style';
-import { decideTag } from '../../src/bots/tag';
+import { BOT_ADVICE, decideTag } from '../../src/bots/tag';
 import { botDecisionIndex, botDecisionSeed, botRandom } from '../../src/engine/bot-random';
 import { formatCard } from '../../src/engine/cards';
 import type { ReplayCode } from '../../src/engine/deck';
@@ -65,7 +65,7 @@ function collect(): Points {
       if (seat !== SEAT) return randomMovePolicy(seatGenerator(code, seat));
       const policy = seededTagPolicy(code);
       return (view) => {
-        const action = recommend(view, { equity }).action;
+        const action = recommend(view, { ...BOT_ADVICE, equity }).action;
         if (action === 'fold') fold.push(view);
         else if (action === 'raise') (owed(view) > 0 ? raise : free).push(view);
         return policy(view);
@@ -171,7 +171,7 @@ describe('Calling station from its style file', () => {
       let station = 0;
       for (let i = 0; i < POINTS; i++) {
         const { view, seed } = at(fold, 6003, i);
-        const advice = recommend(view, { equity });
+        const advice = recommend(view, { ...BOT_ADVICE, equity });
         expect(advice.action).toBe('fold');
         expect(owed(view)).toBeGreaterThan(0);
         const action = decideCallingStation(view, { random: botRandom(seed), equity });
@@ -180,9 +180,9 @@ describe('Calling station from its style file', () => {
       }
       expect(station).toBeGreaterThan(tagCalls(fold, 6003));
 
-      // Example C: fold[0], CO 97o facing a raise; u >= 2^31, the station folds like TAG.
-      const c = at(fold, 6003, 0);
-      expect(c.code).toBe('00000000000017730000000000000001');
+      // Example C: fold[1] (fold[0] before TASK-7.32), CO 97o facing a raise; u >= 2^31, the station folds like TAG.
+      const c = at(fold, 6003, 1);
+      expect(c.code).toBe('00000000000017730000000000000002');
       expect(c.view.street).toBe('preflop');
       expect(handClassOf(c.view.holeCards)).toBe('97o');
       expect(recommend(c.view)).toMatchObject({
@@ -190,22 +190,23 @@ describe('Calling station from its style file', () => {
         situation: 'raise',
         action: 'fold',
       });
-      expect(c.seed).toBe(4053618777);
-      expect(botRandom(c.seed).nextUint32()).toBe(2247995765);
+      expect(c.seed).toBe(886283066);
+      expect(botRandom(c.seed).nextUint32()).toBe(2290566634);
       expect(decideCallingStation(c.view, { random: botRandom(c.seed) })).toEqual({
         seat: 1,
         type: 'fold',
       });
 
-      // Example B: fold[30], flop with 5c 3c facing a bet; u < 2^31, the station calls 4 where TAG folds.
-      const b = at(fold, 6003, 30);
-      expect(b.code).toBe('0000000000001773000000000000001f');
+      // Example B: fold[35] (fold[30] before TASK-7.32), flop with 5c 3c facing a bet; u < 2^31, the station calls 4
+      // where TAG folds.
+      const b = at(fold, 6003, 35);
+      expect(b.code).toBe('00000000000017730000000000000024');
       expect(b.view.street).toBe('flop');
       expect(b.view.holeCards.map(formatCard)).toEqual(['5c', '3c']);
       expect(b.view.currentBet).toBe(4);
       expect(botDecisionIndex(b.view)).toBe(1);
-      expect(b.seed).toBe(2826725471);
-      expect(botRandom(b.seed).nextUint32()).toBe(523750097);
+      expect(b.seed).toBe(1097189332);
+      expect(botRandom(b.seed).nextUint32()).toBe(1854933015);
       expect(decideCallingStation(b.view, { random: botRandom(b.seed), equity })).toEqual({
         seat: 1,
         type: 'call',
@@ -226,7 +227,7 @@ describe('Calling station from its style file', () => {
       let station = 0;
       for (let i = 0; i < POINTS; i++) {
         const { view, seed } = at(raise, 6004, i);
-        const advice = recommend(view, { equity });
+        const advice = recommend(view, { ...BOT_ADVICE, equity });
         expect(advice.action).toBe('raise');
         expect(owed(view)).toBeGreaterThan(0);
         const action = decideCallingStation(view, { random: botRandom(seed), equity });
@@ -271,10 +272,10 @@ describe('Calling station from its style file', () => {
       expect(decideCallingStation(zero.view, { random: botRandom(zero.seed) })).toEqual(raiseTo16);
       expect(decideTag(zero.view, { random: botRandom(zero.seed) })).toEqual(raiseTo16);
 
-      // D-5 point 6 (TASK-7.8): preflop HJ 77 unopened; u = 3382865500 / 2^32 ≈ 0.79 >= the 0.6 threshold,
-      // so the station keeps the raise and both raise to 8.
-      const six = at(raise, 6004, 6);
-      expect(six.code).toBe('00000000000017740000000000000007');
+      // D-5 point 3 (point 6 before TASK-7.32): preflop HJ 77 unopened; u = 3289859922 / 2^32 ≈ 0.77 >= the 0.6
+      // threshold, so the station keeps the raise and both raise to 8.
+      const six = at(raise, 6004, 3);
+      expect(six.code).toBe('00000000000017740000000000000004');
       expect(six.view.street).toBe('preflop');
       expect(handClassOf(six.view.holeCards)).toBe('77');
       expect(recommend(six.view)).toMatchObject({
@@ -283,9 +284,9 @@ describe('Calling station from its style file', () => {
         situation: 'unopened',
       });
       expect(botDecisionIndex(six.view)).toBe(0);
-      expect(six.seed).toBe(1806309033);
-      expect(botRandom(six.seed).nextUint32()).toBe(3382865500);
-      expect(3382865500 / 2 ** 32).toBeGreaterThanOrEqual(0.6);
+      expect(six.seed).toBe(2256600441);
+      expect(botRandom(six.seed).nextUint32()).toBe(3289859922);
+      expect(3289859922 / 2 ** 32).toBeGreaterThanOrEqual(0.6);
       const raiseTo8 = { seat: 1, type: 'raise', amount: 8 };
       expect(decideCallingStation(six.view, { random: botRandom(six.seed) })).toEqual(raiseTo8);
       expect(decideTag(six.view, { random: botRandom(six.seed) })).toEqual(raiseTo8);

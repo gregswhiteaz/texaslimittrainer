@@ -526,6 +526,12 @@
       "event": "unlock",
       "file": "tests/ui/review-panel.acceptance.test.tsx",
       "reason": "TASK-9.3 Q-1/A-8: review shows numbers/explanation/basis; re-pin entries and expected values to hint options; banned list replaced per qa.md (\u2026 kept); $ anchor kept on the You/Advice line"
+    },
+    {
+      "t": "2026-11-24T17:55:34",
+      "event": "unlock",
+      "file": "tests/table/review.acceptance.test.ts",
+      "reason": "TASK-7.32 Q-1/A-3 (user-approved): REVIEW_FOUR river call vs value-raise at 65.2% now grades Minor (margin from 65), re-pin the 4th label"
     }
   ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-9.1",
@@ -544,6 +550,7 @@
     "e2e/review.spec.ts",
     "tests/table/review.acceptance.test.ts",
     "tests/ui/review-panel.acceptance.test.tsx",
-    "tests/ui/review-panel.acceptance.test.tsx"
+    "tests/ui/review-panel.acceptance.test.tsx",
+    "tests/table/review.acceptance.test.ts"
   ]
 }

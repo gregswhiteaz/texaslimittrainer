@@ -4,7 +4,7 @@ import { handClassOf } from '../../src/advice/hand-class';
 import { chartCell, type ChartAction } from '../../src/advice/preflop-chart';
 import { positionOf, recommendPreflop, situationOf, SIX_MAX_CHART } from '../../src/advice/preflop';
 import { recommend } from '../../src/advice/recommend';
-import { BOT_EQUITY, decideTag } from '../../src/bots/tag';
+import { BOT_ADVICE, BOT_EQUITY, decideTag } from '../../src/bots/tag';
 import { parseCards, type Card } from '../../src/engine/cards';
 import {
   applyAction,
@@ -180,7 +180,7 @@ describe('TAG bot acceptance', () => {
         if (view.street === 'preflop' || owes(view) === 0) return;
         const move = decideTag(view);
         // TAG plays the advice at the bots' equity budget (TASK-7.8).
-        expect(move).toStrictEqual(recommend(view, { equity: BOT_EQUITY }).move);
+        expect(move).toStrictEqual(recommend(view, { ...BOT_ADVICE, equity: BOT_EQUITY }).move);
         expect(['call', 'fold', 'raise']).toContain(move.type);
         seen.add(move.type);
       });
@@ -213,7 +213,7 @@ describe('TAG bot acceptance', () => {
         const move = decideTag(view);
         // TASK-7.8: a free decision checks or bets for value.
         expect(['check', 'bet']).toContain(move.type);
-        expect(move).toStrictEqual(recommend(view, { equity: BOT_EQUITY }).move);
+        expect(move).toStrictEqual(recommend(view, { ...BOT_ADVICE, equity: BOT_EQUITY }).move);
       });
       expect(free).toBeGreaterThan(0);
     },

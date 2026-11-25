@@ -6,6 +6,7 @@ import {
   type EquityInput,
   type EquityResult,
 } from '../advice/equity';
+import type { PostflopOptions } from '../advice/postflop';
 import { adviceOptions, recommend, type RecommendOptions } from '../advice/recommend';
 import { drawMixed, parseStyle, type BotStyleData } from './style';
 // The JSON import stays last: the bots import-boundary test's regex can't read past its `with` clause.
@@ -30,6 +31,10 @@ export function BOT_EQUITY(input: EquityInput): EquityResult {
   return equityWithBudget(input, BOT_EQUITY_BUDGET);
 }
 
+/** The bots' range model (TASK-7.32): opponents' action ranges with the typical-player basis, never observed stats
+ *  (REQ-029.2). Spread before adviceOptions so an explicit `opponentRanges` still wins. */
+export const BOT_ADVICE: PostflopOptions = { opponentRanges: 'actions' };
+
 /**
  * The TAG decision: the advice engine's recommended move for `view`, except in a preflop cell with an acceptable
  * alternative in a spot type TAG_STYLE marks as mixed, where one draw from `random` picks between the two.
@@ -37,6 +42,7 @@ export function BOT_EQUITY(input: EquityInput): EquityResult {
  */
 export function decideTag(view: PlayerView, options: TagOptions = {}): Action {
   const advice = recommend(view, {
+    ...BOT_ADVICE,
     ...adviceOptions(options),
     equity: options.equity ?? BOT_EQUITY,
   });
