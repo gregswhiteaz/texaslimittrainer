@@ -3,9 +3,11 @@ id: TASK-2.21
 title: >-
   Harden the end-paused-session path: in-transaction recheck, focus after
   failure, early-open test
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-24T18:44:00Z'
+updated_date: '2026-11-25T20:19:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -31,3 +33,13 @@ Follow-up from TASK-2.7 (doc-123). (1) ended() checks 'already ended' only befor
 - [ ] #2 Given ending the confirmed paused session fails, When the dialog closes, Then focus returns to Start game in Chromium and WebKit and Game Config keeps its values
 - [ ] #3 Given a confirmed new game, When the Table opens, Then a test polls for the new 0-hand unended session before hand 1 and asserts its sessionId is unchanged after hand 1 (fails if the Table opens before the end finishes)
 <!-- AC:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. Ending a session rechecks 'already ended' inside its own transaction (rejects ConstraintError, writes nothing) — closes the race with another tab
+2. After a failed Confirm, focus returns to Start game
+3. Deterministic tests: fake-indexeddb recheck; e2e with the TASK-2.20 hold extended to the end transaction so the Table can't open early
+
+Full spec: doit/TASK-2.21/spec.md
+<!-- SECTION:PLAN:END -->
