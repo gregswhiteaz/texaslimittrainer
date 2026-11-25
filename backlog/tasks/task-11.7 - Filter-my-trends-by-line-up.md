@@ -1,10 +1,11 @@
 ---
 id: TASK-11.7
 title: Filter my trends by line-up
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-17T23:22:00Z'
+updated_date: '2026-11-25T14:35:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -44,6 +45,7 @@ Plan key: E11-S08 · Dream: limit-holdem-trainer
 - [ ] #2 Given stored sessions with Mixed, Tough and Custom line-ups, When the line-up filter is Custom, Then only hands from the Custom sessions are counted in the charts and totals [REQ-048.8, REQ-048.6]
 - [ ] #3 Given line-up Mixed and table size 6-max filters together, When the charts are shown, Then every point equals the value recomputed from hands that are both Mixed and 6-max [REQ-048.8, REQ-048.2]
 - [ ] #4 Given no stored Soft sessions, When the line-up filter is Soft, Then the screen shows 'Play your first hand to see trends.' and totals of 0 hands over 0 sessions [REQ-048.8, REQ-048.10]
+- [ ] #5 Given any line-up filter, When the Major-error chart is shown, Then its G-2 target line is computed from all stored hands (statisticsView(filtered, all)), not from the filtered set
 <!-- AC:END -->
 
 ## Definition of Done
@@ -61,3 +63,20 @@ Plan key: E11-S08 · Dream: limit-holdem-trainer
 - [ ] #11 Story documentation is written and published to Backlog.md
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. TrendFilter gains optional lineUp (all / Mixed / Tough / Soft / Custom) applied per hand in filterTrendData; All/All/All still returns data unchanged
+2. 'Line-up' select between Game type and Group by, reset to All on each opening (existing App reset)
+3. G-2 target stays from all hands; storyboard gains the select
+4. Tests with non-chronological input and an e2e through the real App
+
+Full spec: doit/TASK-11.7/spec.md
+<!-- SECTION:PLAN:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+AC added (moved from TASK-11.8, where TASK-11.3 Q-1 put it by mistake).
+<!-- SECTION:NOTES:END -->
