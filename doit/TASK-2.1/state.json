@@ -470,6 +470,12 @@
       "event": "unlock",
       "file": "tests/ui/home.acceptance.test.tsx",
       "reason": "TASK-2.9 Q-3 (auto-accepted): Game Config gains a 'Randomise line-up' button \u2014 add it to the button list; no other expected value changes"
+    },
+    {
+      "t": "2026-11-25T08:24:11",
+      "event": "unlock",
+      "file": "e2e/home.spec.ts",
+      "reason": "TASK-12.1 Q-5 (auto-accepted): Home menu and route list gain Settings, play-money walk visits it, e2e DB helpers open v4; update expected values, keep every check"
     }
   ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-2.1",
@@ -489,6 +495,7 @@
     "tests/ui/home.acceptance.test.tsx",
     "e2e/home.spec.ts",
     "tests/ui/home.acceptance.test.tsx",
-    "tests/ui/home.acceptance.test.tsx"
+    "tests/ui/home.acceptance.test.tsx",
+    "e2e/home.spec.ts"
   ]
 }

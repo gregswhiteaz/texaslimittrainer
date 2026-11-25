@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T23:03:00Z'
-updated_date: '2026-11-25T08:22:00Z'
+updated_date: '2026-11-25T15:24:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -92,6 +92,8 @@ Locked tests/ui/screen-list.acceptance.test.ts unlocked for TASK-10.2 D-5 (Leave
 Locked e2e/play-money.spec.ts unlocked for TASK-10.2 D-5 (Leave mid-hand dialog; expectation updated, nothing loosened).
 
 Locked test(s) unlocked for TASK-11.1 Q-4 (Statistics screen added to Home, route list and play-money walk).
+
+Locked test(s) unlocked for TASK-12.1 Q-5 (Settings added to Home, route list and play-money walk; e2e DB helpers at v4).
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary

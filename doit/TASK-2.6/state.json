@@ -1394,6 +1394,12 @@
       "event": "unlock",
       "file": "e2e/resume.spec.ts",
       "reason": "TASK-11.1 Q-4 (auto-accepted): Home menu gains Statistics; button counts 1->2 and 2->3, add check that the last entry is Statistics"
+    },
+    {
+      "t": "2026-11-25T08:24:11",
+      "event": "unlock",
+      "file": "e2e/resume.spec.ts",
+      "reason": "TASK-12.1 Q-5 (auto-accepted): Home menu and route list gain Settings, play-money walk visits it, e2e DB helpers open v4; update expected values, keep every check"
     }
   ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-2.6",
@@ -1406,6 +1412,7 @@
   },
   "doc_id": "doc-107",
   "relock_pending": [
+    "e2e/resume.spec.ts",
     "e2e/resume.spec.ts",
     "e2e/resume.spec.ts"
   ]

@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-25T08:22:00Z'
+updated_date: '2026-11-25T15:24:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -91,6 +91,8 @@ Judge r1 PASS 15/15; live Chromium+WebKit leave flows (my turn, bot turn, after 
 Follow-ups: TASK-10.13 created (spike: forced-fold top bettor dead money vs refund; multi-fold invariant; bot-freeze e2e timing). Not tracked: NITs (redundant || leaving, helper placement, docs test list).
 
 Locked test(s) unlocked for TASK-11.1 Q-4 (Statistics screen added to Home, route list and play-money walk).
+
+Locked test(s) unlocked for TASK-12.1 Q-5 (Settings added to Home, route list and play-money walk; e2e DB helpers at v4).
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary

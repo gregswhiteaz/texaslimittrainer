@@ -1714,6 +1714,12 @@
       "event": "unlock",
       "file": "e2e/play-money.spec.ts",
       "reason": "TASK-11.1 Q-4 (auto-accepted): Statistics screen added to route list and play-money walk"
+    },
+    {
+      "t": "2026-11-25T08:24:12",
+      "event": "unlock",
+      "file": "e2e/play-money.spec.ts",
+      "reason": "TASK-12.1 Q-5 (auto-accepted): Home menu and route list gain Settings, play-money walk visits it, e2e DB helpers open v4; update expected values, keep every check"
     }
   ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-10.2",
@@ -1726,6 +1732,7 @@
   },
   "doc_id": "doc-125",
   "relock_pending": [
+    "e2e/play-money.spec.ts",
     "e2e/play-money.spec.ts"
   ]
 }

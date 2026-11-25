@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-25T08:57:00Z'
+updated_date: '2026-11-25T15:24:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -102,6 +102,8 @@ Build: Statistics screen (Home entry, totals, hand-written SVG chart of unhinted
 Judge r1 PASS 20/20: production preview, Chromium and WebKit — 1,200 shuffled seeded hands over 5 sessions showed 1,200 hands over 5 sessions and points 17.8, 16.8 matching an independent computation; 0/320/499/500 messages, load failure, focus and axe checked. CI 45578835504 green.
 
 Follow-ups: TASK-11.5 AC (Group by default vs storyboard), TASK-11.12 AC (100k read strategy), TASK-11.13 (test hardening).
+
+Locked test(s) unlocked for TASK-12.1 Q-5 (Settings added to Home, route list and play-money walk; e2e DB helpers at v4).
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary

@@ -1,10 +1,11 @@
 ---
 id: TASK-12.1
 title: Open Settings from Home and see the app version
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-24T19:27:00Z'
+updated_date: '2026-11-25T15:24:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -68,6 +69,17 @@ Plan key: E12-S01 · Dream: limit-holdem-trainer
 - [ ] #13 Story documentation is written and published to Backlog.md
 - [ ] #14 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. Settings entry on Home (last, subtitle 'Speed, display, reset data') and a settings route with '← Home'
+2. Settings screen: Play, Display and Your data headings, storyboard paragraph, version line from a Vite define (Version 0.0.0)
+3. Database v4 adds a settings store with the defaults record; read-only readSettings() with validation
+4. Register in the play-money walk; update locked Home/resume/route/play-money tests (Q-5); e2e DB helpers open v4
+
+Full spec: doit/TASK-12.1/spec.md
+<!-- SECTION:PLAN:END -->
 
 ## Implementation Notes
 

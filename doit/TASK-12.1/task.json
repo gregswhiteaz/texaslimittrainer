@@ -1,0 +1,533 @@
+{
+  "id": "TASK-12.1",
+  "title": "Open Settings from Home and see the app version",
+  "status": "To Do",
+  "archived": false,
+  "type": "feature",
+  "priority": "high",
+  "project": null,
+  "assignees": [],
+  "reporter": null,
+  "labels": [
+    "dream-limit-holdem-trainer"
+  ],
+  "milestone": "m-1",
+  "parentTaskId": "TASK-12",
+  "acceptanceCriteriaCompleted": 0,
+  "acceptanceCriteriaCount": 5,
+  "references": [
+    "dreams/limit-holdem-trainer/requirements.md"
+  ],
+  "modifiedFiles": [],
+  "ordinal": 47000,
+  "createdAt": "2026-11-17T22:46:00Z",
+  "updatedAt": "2026-11-24T19:27:00Z",
+  "dueDate": null,
+  "isReady": true,
+  "path": "backlog/tasks/task-12.1 - Open-Settings-from-Home-and-see-the-app-version.md",
+  "description": "As a learner, I want to open the Settings screen from Home, so that I can find every trainer option and check which version I am running.\n\nAdds the Settings entry to Home (Home = E02-S01; E11 adds Statistics) and the Settings screen (Settings storyboard: '\u2190 Home' back control, sections Play, Display, Your data, version line). This slice creates the local settings store (IndexedDB, created with defaults on first launch: default speed Rapid, auto-open Hand Review on, show opponent styles on, four-colour deck off, bot banter on) that every later toggle writes and that E02-S11 already reads for the default speed. The screen shows 'Version <x>' where <x> is the build's app version (package.json version injected at build time); E13 reuses the same string for 'Updated to version <x>'. Toggles are added by E12-S02, S04..S07; Reset all data by E12-S08; the storage warning by E12-S09. All controls are native form fields or buttons, at least 44 x 44 CSS px. Each default is verified by the story that builds its control (E12-S02, S04, S05, S06, S07 AC1).\n\n## Requirements covered\n- REQ-002 (Must): Home screen menu \u2014 The Home screen shall offer New game, Statistics and Settings, and shall offer Resume session only while a paused session exists.\n- REQ-050 (Should): Settings options \u2014 The Settings screen shall offer default speed, auto-open Hand Review, show opponent styles and four-colour deck, and each change shall take effect immediately and persist across launches.\n- REQ-057 (Should): Accessibility and usability \u2014 Every screen shall meet WCAG 2.1 AA contrast and control-labelling rules, and every grade or status shown in colour shall also be shown as text.\n- REQ-061 (Should): Legal and content \u2014 TLH Trainer shall use play money only and shall contain only strategy text and data written for this project.\n\nCovers: REQ-002, REQ-050, REQ-057, REQ-061\n\n## Notes\nThe storyboard's 'Show amounts as Dollars / Big bets' row is NOT a requirement (waiting room, Q-61 not selected): do not build it. Keep the settings store in the place E13 versions (REQ-054).\n\nPlan key: E12-S01 \u00b7 Dream: limit-holdem-trainer",
+  "dependencies": [
+    "TASK-2.1"
+  ],
+  "dependencyGraph": {
+    "root": "TASK-12.1",
+    "nodes": [
+      {
+        "id": "TASK-12.1",
+        "title": "Open Settings from Home and see the app version",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": 0,
+        "dependentDepth": 0
+      },
+      {
+        "id": "TASK-1.1",
+        "title": "Bootstrap the strict TypeScript project with one-command checks",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 4,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.2",
+        "title": "Rank showdown hands by real poker hand rankings",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 5,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.3",
+        "title": "Deal every hand from a seeded shuffle with a replay code",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 5,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.4",
+        "title": "Play a complete fixed-limit hand from blinds to showdown",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 4,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.5",
+        "title": "Give each deciding seat only its own view of the hand",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 3,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.6",
+        "title": "Run seeded bot-only hands from the command line",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 4,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.7",
+        "title": "Run every check in GitHub Actions on each push and pull request",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 6,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-2.1",
+        "title": "Start a game from Home through Game Config",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 1,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-3.1",
+        "title": "Play a complete hand against TAG bots at a default 6-max table in the browser",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 2,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-3.5",
+        "title": "Read big-index cards drawn in code",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 3,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-6.1",
+        "title": "Face TAG bots that act from the advice engine",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 3,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-7.1",
+        "title": "Compute a hand's equity against opponent hands",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 5,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-7.2",
+        "title": "Recommend a preflop action from the 6-max chart",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 4,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-7.3",
+        "title": "Recommend call or fold after the flop from equity and pot odds",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 4,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-12",
+        "title": "Tune the trainer",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 1
+      },
+      {
+        "id": "TASK-12.2",
+        "title": "Hide opponent style labels at the table",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 1
+      },
+      {
+        "id": "TASK-12.3",
+        "title": "Open Settings over the table without pausing the session",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 2
+      },
+      {
+        "id": "TASK-12.4",
+        "title": "Delete all my data after confirming",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 2
+      },
+      {
+        "id": "TASK-12.5",
+        "title": "Choose the default speed for new sessions in Settings",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 1
+      },
+      {
+        "id": "TASK-12.6",
+        "title": "Turn off automatic opening of the Hand Review panel",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 3
+      },
+      {
+        "id": "TASK-12.7",
+        "title": "Switch to a four-colour deck",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 3
+      },
+      {
+        "id": "TASK-12.8",
+        "title": "Turn bot banter off",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 1
+      },
+      {
+        "id": "TASK-12.9",
+        "title": "Warn me in Settings when the browser can clear my history",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": null,
+        "dependentDepth": 3
+      }
+    ],
+    "edges": [
+      {
+        "from": "TASK-1.2",
+        "to": "TASK-1.7"
+      },
+      {
+        "from": "TASK-1.3",
+        "to": "TASK-1.7"
+      },
+      {
+        "from": "TASK-1.4",
+        "to": "TASK-1.2"
+      },
+      {
+        "from": "TASK-1.4",
+        "to": "TASK-1.3"
+      },
+      {
+        "from": "TASK-1.5",
+        "to": "TASK-1.4"
+      },
+      {
+        "from": "TASK-1.6",
+        "to": "TASK-1.5"
+      },
+      {
+        "from": "TASK-1.7",
+        "to": "TASK-1.1"
+      },
+      {
+        "from": "TASK-2.1",
+        "to": "TASK-3.1"
+      },
+      {
+        "from": "TASK-3.1",
+        "to": "TASK-1.5"
+      },
+      {
+        "from": "TASK-3.1",
+        "to": "TASK-3.5"
+      },
+      {
+        "from": "TASK-3.1",
+        "to": "TASK-6.1"
+      },
+      {
+        "from": "TASK-3.5",
+        "to": "TASK-1.1"
+      },
+      {
+        "from": "TASK-6.1",
+        "to": "TASK-1.6"
+      },
+      {
+        "from": "TASK-6.1",
+        "to": "TASK-7.2"
+      },
+      {
+        "from": "TASK-6.1",
+        "to": "TASK-7.3"
+      },
+      {
+        "from": "TASK-7.1",
+        "to": "TASK-1.2"
+      },
+      {
+        "from": "TASK-7.2",
+        "to": "TASK-1.5"
+      },
+      {
+        "from": "TASK-7.3",
+        "to": "TASK-7.1"
+      },
+      {
+        "from": "TASK-7.3",
+        "to": "TASK-7.2"
+      },
+      {
+        "from": "TASK-12",
+        "to": "TASK-12.1"
+      },
+      {
+        "from": "TASK-12",
+        "to": "TASK-12.2"
+      },
+      {
+        "from": "TASK-12",
+        "to": "TASK-12.3"
+      },
+      {
+        "from": "TASK-12",
+        "to": "TASK-12.4"
+      },
+      {
+        "from": "TASK-12",
+        "to": "TASK-12.5"
+      },
+      {
+        "from": "TASK-12",
+        "to": "TASK-12.6"
+      },
+      {
+        "from": "TASK-12",
+        "to": "TASK-12.7"
+      },
+      {
+        "from": "TASK-12",
+        "to": "TASK-12.8"
+      },
+      {
+        "from": "TASK-12",
+        "to": "TASK-12.9"
+      },
+      {
+        "from": "TASK-12.1",
+        "to": "TASK-2.1"
+      },
+      {
+        "from": "TASK-12.2",
+        "to": "TASK-12.1"
+      },
+      {
+        "from": "TASK-12.3",
+        "to": "TASK-12.2"
+      },
+      {
+        "from": "TASK-12.4",
+        "to": "TASK-12.3"
+      },
+      {
+        "from": "TASK-12.4",
+        "to": "TASK-12.5"
+      },
+      {
+        "from": "TASK-12.4",
+        "to": "TASK-12.6"
+      },
+      {
+        "from": "TASK-12.4",
+        "to": "TASK-12.7"
+      },
+      {
+        "from": "TASK-12.4",
+        "to": "TASK-12.8"
+      },
+      {
+        "from": "TASK-12.5",
+        "to": "TASK-12.1"
+      },
+      {
+        "from": "TASK-12.6",
+        "to": "TASK-12.3"
+      },
+      {
+        "from": "TASK-12.7",
+        "to": "TASK-12.3"
+      },
+      {
+        "from": "TASK-12.8",
+        "to": "TASK-12.1"
+      },
+      {
+        "from": "TASK-12.9",
+        "to": "TASK-12.3"
+      }
+    ]
+  },
+  "readiness": {
+    "isReady": true,
+    "isBlocked": false,
+    "blockingDependencies": [],
+    "missingDependencies": []
+  },
+  "documentation": [
+    "doc-1",
+    "doc-2"
+  ],
+  "subtasks": [],
+  "acceptanceCriteria": [
+    {
+      "index": 1,
+      "text": "Given the Home screen, When it is shown, Then it offers a Settings entry; When the user chooses Settings, Then the Settings screen opens [REQ-002.3, REQ-050.5]",
+      "checked": false
+    },
+    {
+      "index": 2,
+      "text": "Given a build whose app version is 1.2.0, When the Settings screen is shown, Then it shows \"Version 1.2.0\" [REQ-050.6]",
+      "checked": false
+    },
+    {
+      "index": 3,
+      "text": "Given the Settings screen opened from Home, When the user chooses the back control, Then the Home screen opens [REQ-050.5]",
+      "checked": false
+    },
+    {
+      "index": 4,
+      "text": "Given the Settings screen at 1280 x 720, When the user presses Tab repeatedly, Then focus reaches every Settings control, each is a native button, link or form field, each activates with Enter or Space, and each is at least 44 x 44 CSS px [REQ-057.2, REQ-057.4]",
+      "checked": false
+    },
+    {
+      "index": 5,
+      "text": "Given the Settings screen and any Settings dialog are added, When the play-money check runs (e2e/play-money.spec.ts, tests/ui/screen-list.acceptance.test.ts), Then they are registered in e2e/support/screen-list.ts, visited by the walk, and the dialog detector also recognises role written as a JSX expression (e.g. role={'dialog'})",
+      "checked": false
+    }
+  ],
+  "definitionOfDone": [
+    {
+      "index": 1,
+      "text": "axe reports zero serious or critical violations on the Settings screen in Chromium and WebKit [REQ-057.1]",
+      "checked": false
+    },
+    {
+      "index": 2,
+      "text": "The Settings screen offers no deposit, payment, purchase, cash-out, real-money wager or real-money conversion [REQ-061.1]",
+      "checked": false
+    },
+    {
+      "index": 3,
+      "text": "Every acceptance criterion has at least one automated test (unit, property or Playwright) that passes",
+      "checked": false
+    },
+    {
+      "index": 4,
+      "text": "`npm run lint`, `npm run typecheck` and `npm test` pass with zero errors [REQ-059.1, REQ-059.4]",
+      "checked": false
+    },
+    {
+      "index": 5,
+      "text": "The golden-spot suite passes 100% (applies from the story that creates the suite, E07-S14, onward) [REQ-039.4]",
+      "checked": false
+    },
+    {
+      "index": 6,
+      "text": "Coverage thresholds hold: >= 90% engine/bots/advice/statistics, >= 70% overall [REQ-059.3]",
+      "checked": false
+    },
+    {
+      "index": 7,
+      "text": "Engine, bots, advice and statistics code imports no UI or browser-only code [REQ-059.2]",
+      "checked": false
+    },
+    {
+      "index": 8,
+      "text": "Stories that touch the engine, bots or advice: a 10,000-hand playtest reports zero invariant violations (applies once the playtest runner exists, E01-S07, onward) [REQ-056.1]",
+      "checked": false
+    },
+    {
+      "index": 9,
+      "text": "Stories that add or change a screen: Playwright test of the screen flow in Chromium and WebKit, and axe reports zero serious or critical violations (axe tooling is provisioned in the toolchain story E01-S01) [REQ-057.1]",
+      "checked": false
+    },
+    {
+      "index": 10,
+      "text": "No new network requests beyond the app's own files [REQ-058.1]",
+      "checked": false
+    },
+    {
+      "index": 11,
+      "text": "Strategy-content stories: text is original and every chart, range or golden spot carries its justification [REQ-061.2]",
+      "checked": false
+    },
+    {
+      "index": 12,
+      "text": "CI workflow is green on the story's branch (applies once the CI story E01-S02 is done; E01-S01 instead passes the same checks locally) [REQ-064.2]",
+      "checked": false
+    },
+    {
+      "index": 13,
+      "text": "Story documentation is written and published to Backlog.md",
+      "checked": false
+    },
+    {
+      "index": 14,
+      "text": "Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled",
+      "checked": false
+    }
+  ],
+  "implementationPlan": null,
+  "implementationNotes": "AC added from TASK-2.15 follow-up (doc-124).",
+  "comments": [],
+  "finalSummary": null
+}

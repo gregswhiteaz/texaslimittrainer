@@ -1,0 +1,104 @@
+[
+  {
+    "id": "SPEC-01",
+    "verifies": "AC#1",
+    "verification": "acceptance `tests/ui/home-settings.acceptance.test.tsx::home offers Settings after Statistics`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-02",
+    "verifies": "AC#1, DoD#9",
+    "verification": "acceptance `e2e/settings.spec.ts::Settings opens from Home and \u2190 Home returns`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-03",
+    "verifies": "AC#2",
+    "verification": "acceptance `tests/ui/settings.acceptance.test.tsx::shows Version 1.2.0 for a 1.2.0 build`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-04",
+    "verifies": "AC#2",
+    "verification": "acceptance `tests/ui/settings.acceptance.test.tsx::the default version is the package.json version`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-05",
+    "verifies": "AC#3",
+    "verification": "acceptance `e2e/settings.spec.ts::Settings opens from Home and \u2190 Home returns`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-06",
+    "verifies": "AC#4",
+    "verification": "acceptance `e2e/settings.spec.ts::every Settings control is reachable by Tab, native, keyboard-operable and at least 44x44`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-07",
+    "verifies": "AC#5, DoD#2",
+    "verification": "acceptance `e2e/play-money.spec.ts::every listed screen and dialog shows only play money`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-08",
+    "verifies": "AC#5",
+    "verification": "acceptance `tests/ui/screen-list.acceptance.test.ts::the screen list names every App screen and every dialog component`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-09",
+    "verifies": "AC#5",
+    "verification": "acceptance `tests/ui/dialog-detector.acceptance.test.ts::the dialog detector recognises role written as a JSX expression`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-10",
+    "verifies": "DoD#1, DoD#9, DoD#10, DoD#2",
+    "verification": "acceptance `e2e/settings.spec.ts::Settings shows the version with no axe violations and no outside requests`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-11",
+    "verifies": "DoD#4",
+    "verification": "unit `tests/storage/settings-store.test.ts::a new database stores the default settings`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-12",
+    "verifies": "DoD#4",
+    "verification": "unit `tests/storage/settings-store.test.ts::upgrading a v3 database keeps its records and adds default settings`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-13",
+    "verifies": "DoD#4, DoD#6",
+    "verification": "unit `tests/table/settings.test.ts::parseSettings accepts valid settings and names the first bad field`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-14",
+    "verifies": "AC#1",
+    "verification": "command `npx playwright test e2e/home.spec.ts e2e/resume.spec.ts`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-15",
+    "verifies": "DoD#3, DoD#4, DoD#6, DoD#7, DoD#12",
+    "verification": "command `npm run lint && npm run typecheck && npm test && npm run e2e`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-16",
+    "verifies": "DoD#13",
+    "verification": "manual the four doc files and the `backlog doc list --plain` entry for TASK-12.1",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-17",
+    "verifies": "DoD#5, DoD#8, DoD#11, DoD#14",
+    "verification": "manual `git diff --stat main -- src/engine src/bots src/advice` is empty",
+    "status": "pending"
+  }
+]

@@ -1894,7 +1894,20 @@
       "skips": 0
     }
   },
-  "history": [],
+  "history": [
+    {
+      "t": "2026-11-25T08:24:12",
+      "event": "unlock",
+      "file": "tests/ui/screen-list.acceptance.test.ts",
+      "reason": "TASK-12.1 Q-5 (auto-accepted): Home menu and route list gain Settings, play-money walk visits it, e2e DB helpers open v4; update expected values, keep every check"
+    },
+    {
+      "t": "2026-11-25T08:24:12",
+      "event": "unlock",
+      "file": "e2e/play-money.spec.ts",
+      "reason": "TASK-12.1 Q-5 (auto-accepted): Home menu and route list gain Settings, play-money walk visits it, e2e DB helpers open v4; update expected values, keep every check"
+    }
+  ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-11.1",
   "spec_sha256": "471c198692f5ed2ba45622ffdcb25d642f38a54cba2b5b662883905ed55450f3",
   "review_findings": {
@@ -1903,5 +1916,9 @@
   "judge_results": {
     "1": "PASS"
   },
-  "doc_id": "doc-134"
+  "doc_id": "doc-134",
+  "relock_pending": [
+    "tests/ui/screen-list.acceptance.test.ts",
+    "e2e/play-money.spec.ts"
+  ]
 }

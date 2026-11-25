@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-25T08:38:00Z'
+updated_date: '2026-11-25T15:24:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -101,6 +101,8 @@ Follow-ups: TASK-2.14 AC added (nextBotName cap). Already owned: SNG level in Re
 Locked e2e/resume.spec.ts unlocked for TASK-10.1 D-4 (Leave table ends the session; expectation replaced, not loosened).
 
 Locked e2e/resume.spec.ts unlocked for TASK-11.1 Q-4 (Home menu gains Statistics; counts re-pinned, check added).
+
+Locked test(s) unlocked for TASK-12.1 Q-5 (Settings added to Home, route list and play-money walk; e2e DB helpers at v4).
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary
