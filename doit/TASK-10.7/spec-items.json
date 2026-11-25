@@ -3,66 +3,66 @@
     "id": "SPEC-01",
     "verifies": "AC#1, DoD#1",
     "verification": "acceptance `tests/ui/report-hints.acceptance.test.tsx::AC#1 shows 40 of 320 decisions hinted as 12.5%`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-02",
     "verifies": "AC#2, DoD#1",
     "verification": "acceptance `tests/ui/report-hints.acceptance.test.tsx::AC#2 shows 0 hinted decisions as 0.0%`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-03",
     "verifies": "AC#3, DoD#1",
     "verification": "acceptance `tests/ui/report-hints.acceptance.test.tsx::AC#3 shows 25 of 25 decisions hinted as 100.0%`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-04",
     "verifies": "AC#4, DoD#1",
     "verification": "acceptance `tests/storage/session-end-hints.acceptance.test.ts::AC#4 the hinted count equals the stored decision records with the hinted flag`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-05",
     "verifies": "AC#1, AC#2, DoD#2",
     "verification": "unit `tests/table/session-report-hints.test.ts::hints is present exactly when errors is and old reports show no tile`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-06",
     "verifies": "AC#1, AC#2, AC#3, DoD#2",
     "verification": "unit `tests/table/session-report-hints.test.ts::hintTile rounds half up to one decimal and handles one and zero decisions`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-07",
     "verifies": "AC#4, DoD#2",
     "verification": "unit `tests/table/session-report-hints.test.ts::parseSessionReport validates hints`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-08",
     "verifies": "DoD#7, DoD#8, DoD#1",
     "verification": "acceptance `e2e/report-hints.spec.ts::Leave table shows how many decisions used a hint`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-09",
     "verifies": "DoD#2, DoD#3, DoD#4, DoD#5, DoD#10",
     "verification": "command `npm run lint && npm run typecheck && npm test`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-10",
     "verifies": "DoD#11",
     "verification": "manual `docs/storage/reports.md` section \"hints\" and `backlog doc list --plain` entry for TASK-10.7",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-11",
     "verifies": "DoD#6, DoD#9, DoD#12",
     "verification": "manual `git diff --stat main -- src/engine src/bots src/advice src/stats` is empty",
-    "status": "pending"
+    "status": "pass"
   }
 ]
