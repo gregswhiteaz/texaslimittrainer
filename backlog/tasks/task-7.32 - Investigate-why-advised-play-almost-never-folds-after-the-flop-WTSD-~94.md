@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-24T20:47:00Z'
-updated_date: '2026-11-25T00:08:00Z'
+updated_date: '2026-11-25T00:59:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -46,4 +46,6 @@ Full spec: doit/TASK-7.32/spec.md
 
 <!-- SECTION:NOTES:BEGIN -->
 doit: parked — investigation done (see doit/TASK-7.32/spec.md §1a): root cause is that all four bot styles request advice with the default 'unseen' (any two cards) range model, so they call ~98% of postflop bets; hints already use action ranges. Bots on action ranges alone give WTSD ~44% (just outside 30–42). The recommended full fix also amends REQ-033.1 (turn pot odds count one river big bet) and REQ-033.2 (value raise vs a bet needs >65%), re-baselines ~18 locked tests across 12 stories, and leaves the Mixed line-up REQ-027 style bands failing (Maniacs take over). That changes the requirements, so it needs the user's decision on Q-1..Q-3 (spec §11). Related ready story: TASK-7.25 (switch bots to action-based ranges).
+
+Build: bots on action ranges (BOT_ADVICE), turn price counts one river big bet, value raise vs a bet >65%, inline river clause; REQ-033.1/033.2 amended (changelog 1.10); locked re-baselines one-for-one (qa.md); 13 golden spots replaced and logged; 100k all-TAG 6-max: 22.2/16.2/64.3/40.4/51.5 inside healthy ranges; style-bands + check-styles slow Mixed checks accepted failing until TASK-6.25; gate PASS.
 <!-- SECTION:NOTES:END -->

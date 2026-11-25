@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-25T00:07:00Z'
+updated_date: '2026-11-25T01:04:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -111,6 +111,8 @@ Judge R1 PASS 18/18; deviations Q-5/Q-6 accepted on substance; 15/15 mutants cau
 Locked test tests/playtest/games.acceptance.test.ts: heavy run moved to opt-in slow group for TASK-7.8 (D-7), smaller every-push version kept.
 
 Locked test(s) unlocked for TASK-7.32 Q-1 (user-approved advice/bot fix; expected values re-pinned one-for-one).
+
+TASK-7.32: tests/playtest/games.acceptance.test.ts AC#6 in-process sit-and-go input seed changed 42 → 7 (with bots on action ranges, seed 42 no longer finishes a sit-and-go within 10,000 hands; seed 7 finishes at hand 5,732). Stated behaviour unchanged.
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary
