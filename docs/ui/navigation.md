@@ -106,7 +106,7 @@ opens over Game Config, which stays as it was:
 - `End session and start` ends the paused session (its report is saved; a 0-hand session is deleted), also
   ends any older unended sessions ([reports.md](../storage/reports.md)), and then opens the Table for the new
   game. No Session report screen is shown. While it runs, both buttons are disabled and Escape is ignored. If
-  the paused session cannot be ended, the error is logged, the dialog closes and no game starts.
+  the paused session cannot be ended, the error is logged, the dialog closes, focus returns to Start game and no game starts.
 
 With no paused session, Start game opens the Table at once. New game, Resume session and Cancel / ← Home never
 ask and never end anything.

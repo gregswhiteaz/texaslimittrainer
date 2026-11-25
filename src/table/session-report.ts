@@ -101,8 +101,8 @@ export interface SessionEnder {
   /** Ends the stored session in one strict transaction over `sessions` and `reports`. Absent → resolves null,
    *  writes nothing. handsPlayed 0 → deletes the session record, resolves null. Otherwise puts the stored
    *  value with `endedAt`, adds sessionReport(...) and resolves that report once complete. Rejects (nothing
-   *  changed) if the stored session fails parseSessionRecord (RangeError) or a report for the id exists
-   *  (DOMException 'ConstraintError'). */
+   *  changed) if the stored session fails parseSessionRecord (RangeError), or if the stored session is already
+   *  ended or a report for the id exists (DOMException 'ConstraintError'). */
   endSession(sessionId: string, endedAt: Date): Promise<SessionReport | null>;
   /** Ends `sessionId` at `endedAt` (as endSession), then every other valid unended stored session at its own
    *  updatedAt, each in its own transaction. Rejects (nothing changed) only if ending `sessionId` fails;

@@ -7,11 +7,14 @@ type HoldState = 'armed' | 'held' | 'released';
 
 interface HoldWindow {
   __tlhSessionsHold?: HoldState;
+  /** Sorted, comma-joined store names of the transaction to hold (TASK-2.21 D-3); unset means `sessions`. */
+  __tlhSessionsHoldScope?: string;
 }
 
 /**
  * Init script (page.addInitScript(holdSessionsWrite)). While `__tlhSessionsHold` is 'armed', the next
- * readwrite transaction whose scope is exactly `sessions` (the session start record's put) is held open:
+ * readwrite transaction whose scope is exactly the armed scope (by default `sessions`, the session start
+ * record's put; the scope must include `sessions`) is held open:
  * the flag becomes 'held' and a chain of `count()` requests on its `sessions` store keeps it alive, so its
  * data stays uncommitted. Setting the flag to 'released' ends the chain and the transaction commits. Every
  * other transaction passes through unchanged.
@@ -26,12 +29,13 @@ export function holdSessionsWrite(): void {
     options?: IDBTransactionOptions,
   ): IDBTransaction {
     const opened = transaction.call(this, storeNames, mode, options);
-    const scope = typeof storeNames === 'string' ? [storeNames] : Array.from(storeNames);
+    const scope = (typeof storeNames === 'string' ? [storeNames] : Array.from(storeNames))
+      .sort()
+      .join(',');
     if (
       hold.__tlhSessionsHold === 'armed' &&
       mode === 'readwrite' &&
-      scope.length === 1 &&
-      scope[0] === 'sessions'
+      scope === (hold.__tlhSessionsHoldScope ?? 'sessions')
     ) {
       hold.__tlhSessionsHold = 'held';
       const store = opened.objectStore('sessions');
@@ -44,11 +48,19 @@ export function holdSessionsWrite(): void {
   } as typeof IDBDatabase.prototype.transaction;
 }
 
-/** Arms the hold for the next `sessions`-only readwrite transaction. */
-export async function armSessionsHold(page: Page): Promise<void> {
-  await page.evaluate(() => {
-    (window as HoldWindow).__tlhSessionsHold = 'armed';
-  });
+/** Arms the hold for the next readwrite transaction over exactly `scope` (which must include `sessions`). */
+export async function armSessionsHold(
+  page: Page,
+  scope: readonly string[] = ['sessions'],
+): Promise<void> {
+  await page.evaluate(
+    (joined) => {
+      const hold = window as HoldWindow;
+      hold.__tlhSessionsHoldScope = joined;
+      hold.__tlhSessionsHold = 'armed';
+    },
+    [...scope].sort().join(','),
+  );
 }
 
 /** 'armed', 'held', 'released', or undefined when never armed. */

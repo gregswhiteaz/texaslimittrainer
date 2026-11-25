@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useLayoutEffect, useRef, useState } from 'react';
 import { referenceSizeOf } from '../../advice/preflop';
 import type { ReferenceSize } from '../../advice/preflop-chart';
 import { LINE_UP_PRESETS, type LineUpPreset } from '../../bots/lineup';
@@ -89,6 +89,16 @@ export function GameConfigScreen({
 }: GameConfigScreenProps): React.JSX.Element {
   const heading = useHeadingFocus(true);
   const start = useRef<HTMLButtonElement>(null);
+  // TASK-2.21 D-2: a failed end clears the prompt without a native close, so focus Start game here.
+  const prompted = useRef(false);
+  const shown = Boolean(endPrompt);
+  useLayoutEffect(() => {
+    if (shown) prompted.current = true;
+    else if (prompted.current) {
+      prompted.current = false;
+      start.current?.focus();
+    }
+  }, [shown]);
   const [gameType, setGameType] = useState<GameType>(config.gameType);
   // A-7: a sit-and-go config carries no stake, so the hidden cash stake starts at the default.
   const [stake, setStake] = useState<Stake>(

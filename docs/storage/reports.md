@@ -117,7 +117,8 @@ unfinished hand is not stored yet, so neither the rebuy nor its chips count.
   header line is `Cash · 6 players · $4/$8 · 214 hands` (`1 hand` for one). A sit-and-go shows its limits in
   plain chips and no tiles.
 - **Ending (`endSession`).** One strict transaction over `sessions`, `reports` and `hands`. An absent session writes
-  nothing and resolves null. A session with 0 completed hands is deleted and resolves null: no report is
+  nothing and resolves null. A session that is already ended when this transaction reads it is rejected
+  (`ConstraintError`) and nothing is written, even if its report is missing (TASK-2.21). A session with 0 completed hands is deleted and resolves null: no report is
   stored and Home opens. Otherwise the stored session is validated (`parseSessionRecord`), its hand records
   1…`handsPlayed` are read (one `get` each) and those that pass `parseHandRecord` give `style`; a missing or
   invalid record is skipped, so `style.handsDealt` can be below `handsPlayed`. Then the session is put again

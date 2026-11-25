@@ -86,8 +86,9 @@ function completed(transaction: IDBTransaction, request: IDBRequest): Promise<vo
 }
 
 /** Ends `sessionId` in `db` (SessionEnder.endSession): every step runs in request callbacks of one strict
- *  transaction, so a failure anywhere changes nothing. The report's style counts come from the session's
- *  stored hand records; a missing or invalid record is skipped (TASK-10.3 A-7). */
+ *  transaction, so a failure anywhere changes nothing. An already-ended session rejects with a
+ *  'ConstraintError' DOMException and writes nothing (TASK-2.21 D-1). The report's style counts come from
+ *  the session's stored hand records; a missing or invalid record is skipped (TASK-10.3 A-7). */
 function ended(db: IDBDatabase, sessionId: string, endedAt: Date): Promise<SessionReport | null> {
   return new Promise((resolve, reject) => {
     const transaction = db.transaction([SESSIONS_STORE, REPORTS_STORE, HANDS_STORE], 'readwrite', {
@@ -106,6 +107,12 @@ function ended(db: IDBDatabase, sessionId: string, endedAt: Date): Promise<Sessi
         session = parseSessionRecord(value);
       } catch (error) {
         failure = error;
+        transaction.abort();
+        return;
+      }
+      // Checked in this transaction, so no other tab can end the session between the check and the writes.
+      if (isEnded(session)) {
+        failure = new DOMException('Session already ended', 'ConstraintError');
         transaction.abort();
         return;
       }
