@@ -1,0 +1,102 @@
+{
+ "round": 2,
+ "test_suite": {
+  "command": "npm test",
+  "result": "PASS",
+  "passed": 1405,
+  "failed": 0,
+  "notes": "Round 2 sanity run: exit 0, coverage thresholds met, coverage totals identical to round 1 (statements 5294/5703 = 92.82%), which is expected because no code changed. The per-test count is carried from round 1 because only the coverage tail of this run was captured. e2e, lint and typecheck results carried from round 1 (no code change since then)."
+ },
+ "end_to_end": {
+  "command": "npm run build && npm run preview (production bundle on :4173), driven by Playwright in Chromium and WebKit with the judge's own init-script fault injection (round 1; carried, no product change since)",
+  "result": "PASS",
+  "expected": "After 3 real hands, an error mid-hand 4 replaces the table with 'Something went wrong' + the D-1 sentence + one native Return Home button, no details; Return Home opens Home with '... 3 hands · paused'; IndexedDB holds exactly hands 1-3 and the same session record (handsPlayed 3) before and after; Resume deals Hand #4 with the stored stacks; a second error after Return Home is shown again; worker failure followed by Return Home gives one new worker and working hints/bots; a Session report mount failure shows the error screen; axe clean; same-origin only.",
+  "actual": "All observed in both browsers. Illegal bot action in hand 4 -> error screen, focused heading, body innerText is exactly the three texts, no 'Injected'/'Error'/stack/file text, exactly 1 button (>= 44x44), Tab reaches BUTTON 'Return Home', axe zero serious/critical. Exactly one 'Unexpected error' console log even when a rejection and an uncaught error were raised while the screen showed. Enter -> TLH Trainer heading focused, history.state.tlhTable unset, subtitle '... 3 hands · paused'; hands store deep-equal to snapshot (handNumbers 1,2,3), sessions store deep-equal (handsPlayed 3). Resume -> 'Hand #4', seat stacks equal stored session seats. queueMicrotask throw during resumed hand 4 -> error screen again (2nd log), Return Home -> still 3 hands, stores unchanged. Browser Back from Home then leaves the app (no dead table). Worker 'error' in hand 3 -> error screen; Return Home -> worker count +1 immediately; Resume -> Hint shows 'Recommended: ...' (no failure text), hand 3 completes and is stored; a later ok:false reply -> error screen again, no further worker created. Report mount failure on Leave table -> error screen, no Session report heading, Return Home -> Home without Resume, report stored, New game -> Start game deals Hand #1 and bots act. All request URLs same-origin; dist/ contains no __tlhFault/__tlhWorkers marker."
+ },
+ "integrity": {
+  "result": "PASS",
+  "notes": "doit.py test-integrity exit 0. git diff 67151ef..HEAD --stat: docs/ui/navigation.md (+2/-1) and doit/TASK-13.1/** only. No src/, tests/ or e2e/ changes since the round-1 integrity review."
+ },
+ "items": [
+  {
+   "spec": "SPEC-01",
+   "result": "PASS",
+   "evidence": "Carried from round 1 (git diff 67151ef..HEAD touches only docs/ui/navigation.md and doit/TASK-13.1/**; no product or test code changed). e2e error-recovery 'an error during a bot action in hand 15...' passes in Chromium and WebKit; it asserts exact innerText lines, forbidden detail strings, realMoneyOffers empty, Tab -> BUTTON Return Home, axe. Judge check: illegal bot reply (wrong seat) in a real hand 4 -> same error screen, one button >= 44px, axe clean, both browsers."
+  },
+  {
+   "spec": "SPEC-02",
+   "result": "PASS",
+   "evidence": "Carried from round 1 (git diff 67151ef..HEAD touches only docs/ui/navigation.md and doit/TASK-13.1/**; no product or test code changed). Spec test presses Enter and asserts focused heading + '14 hands · paused'. Judge check: Enter on Return Home -> TLH Trainer focused, '3 hands · paused' after 3 real hands."
+  },
+  {
+   "spec": "SPEC-03",
+   "result": "PASS",
+   "evidence": "Carried from round 1 (git diff 67151ef..HEAD touches only docs/ui/navigation.md and doit/TASK-13.1/**; no product or test code changed). Spec test deep-compares records 1-14 and session to snapshots and seat rows to stored stacks. Judge check: stores deep-equal before/after error and after a second error; Resume shows Hand #4 with stored stacks."
+  },
+  {
+   "spec": "SPEC-04",
+   "result": "PASS",
+   "evidence": "Carried from round 1 (git diff 67151ef..HEAD touches only docs/ui/navigation.md and doit/TASK-13.1/**; no product or test code changed). Spec test passes both browsers. Judge check (own focus patch on the Session report h1): error screen, no Session report heading, Return Home -> Home with no Resume, 1 report stored, New game works afterwards."
+  },
+  {
+   "spec": "SPEC-05",
+   "result": "PASS",
+   "evidence": "Carried from round 1 (git diff 67151ef..HEAD touches only docs/ui/navigation.md and doit/TASK-13.1/**; no product or test code changed). Spec test asserts workerCount +1, action count > 2, no reload marker. Judge check: worker error event -> error screen; Return Home creates exactly one new worker at once; after Resume a Hint shows a recommendation and the hand completes and is stored."
+  },
+  {
+   "spec": "SPEC-06",
+   "result": "PASS",
+   "evidence": "Carried from round 1 (git diff 67151ef..HEAD touches only docs/ui/navigation.md and doit/TASK-13.1/**; no product or test code changed). Spec test passes both browsers. Judge check: ok:false reply after recovery -> error screen again, Return Home keeps earlier records, no extra worker."
+  },
+  {
+   "spec": "SPEC-07",
+   "result": "PASS",
+   "evidence": "Carried from round 1 (git diff 67151ef..HEAD touches only docs/ui/navigation.md and doit/TASK-13.1/**; no product or test code changed). Spec test does uncaught then rejection on Home. Judge check: Promise.reject(undefined) and a dispatched ErrorEvent with error 'x' each show the screen; ErrorEvents with no/null error (ResizeObserver, Script error.) do not; errors while the screen shows are not re-logged."
+  },
+  {
+   "spec": "SPEC-08",
+   "result": "PASS",
+   "evidence": "Carried from round 1 (git diff 67151ef..HEAD touches only docs/ui/navigation.md and doit/TASK-13.1/**; no product or test code changed). tests/ui/error-screen.acceptance.test.tsx exact renderToString equality passes. Judge unit check: constants equal D-1 text, exactly one h1 and one button; AppRoot initially renders Home, getDerivedStateFromError -> {error:true}."
+  },
+  {
+   "spec": "SPEC-09",
+   "result": "PASS",
+   "evidence": "Carried from round 1 (git diff 67151ef..HEAD touches only docs/ui/navigation.md and doit/TASK-13.1/**; no product or test code changed). tests/ui/unexpected-error.test.ts passes. Judge unit check: error 0/false/'' and objects count; null/undefined do not; rejections with undefined/null/0 reasons all returned."
+  },
+  {
+   "spec": "SPEC-10",
+   "result": "PASS",
+   "evidence": "Carried from round 1 (git diff 67151ef..HEAD touches only docs/ui/navigation.md and doit/TASK-13.1/**; no product or test code changed). tests/ui/advice-client-recovery.test.ts passes and would fail if the replace branch were removed. Judge unit check: messageerror also marks failed and is replaced; a throwing create throws and leaves the failed client in place; a second failure yields a third client; healthy client reused."
+  },
+  {
+   "spec": "SPEC-11",
+   "result": "PASS",
+   "evidence": "Carried from round 1 (git diff 67151ef..HEAD touches only docs/ui/navigation.md and doit/TASK-13.1/**; no product or test code changed). lint exit 0, typecheck exit 0, npm test 1405 passed/0 failed with thresholds met, npm run e2e 350 passed/0 failed; locked tests unchanged; caller reports branch CI green at 67151ef."
+  },
+  {
+   "spec": "SPEC-12",
+   "result": "PASS",
+   "evidence": "Carried from round 1 (git diff 67151ef..HEAD touches only docs/ui/navigation.md and doit/TASK-13.1/**; no product or test code changed). Spec test asserts same-origin requests and no __tlhFault in dist. Judge: rebuilt dist has no fault markers; every request in all judge flows was http://localhost:4173."
+  },
+  {
+   "spec": "SPEC-13",
+   "result": "PASS",
+   "evidence": "docs/ui/navigation.md Error screen section now says an error during hand 1 leaves the paused session with 0 hands, Home offers it for Resume ('0 hands · paused') as after a reload mid-hand 1, Resume deals Hand #1, and only ending a session deletes a 0-hand session. This matches the round-1 observation in Chromium and WebKit (Return Home after a hand-1 error -> 'Resume session ... 0 hands · paused', session handsPlayed 0, no hand records; same as the existing reload-in-hand-1 path) and docs/ui/navigation.md line 106 / docs/storage/sessions.md (0-hand deletion only on ending a session). The old 'not offered for Resume' sentence is gone; no other doc contradicts it. Judge doc check -> PASS. The Error screen row and the trigger/A-1/text/Return Home/Resume coverage are as verified in round 1. Spec section 5/7 still hold the old assumption, but the spec is locked; the repo docs match the app."
+  },
+  {
+   "spec": "SPEC-14",
+   "result": "PASS",
+   "evidence": "Carried from round 1 (git diff 67151ef..HEAD touches only docs/ui/navigation.md and doit/TASK-13.1/**; no product or test code changed). git diff --stat main -- src/engine src/bots src/advice is empty; no serviceWorker in src/."
+  }
+ ],
+ "findings": [
+  {
+   "id": "J-2-01",
+   "severity": "LOW",
+   "spec": "SPEC-04",
+   "expected_vs_actual": "Carried from J-1-02 and not a defect in this change: leaving the table during a hand stores that hand as a forced fold (existing behaviour). Whether a paused 0-hand session should be offered for Resume at all is a product question, and the locked spec section 5/7 still assume it is not.",
+   "fix": "Optional backlog follow-up: decide on the 0-hand paused-session Resume policy."
+  }
+ ],
+ "summary": "J-1-01 is fixed: the navigation doc now describes what happens after an error in hand 1 as the app actually behaves ('0 hands · paused' Resume, which deals Hand #1). Only docs and work files changed since round 1, so the other items carry forward. npm test exits 0 with the same coverage, and the integrity check passes. All 14 SPEC items pass, with no blocking findings."
+}

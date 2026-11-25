@@ -5,7 +5,7 @@
   "base_commit": "d2beebdab339eaad1da05dc9f44dbdca7a5c7977",
   "started": "2026-11-25T10:01:25",
   "review_round": 1,
-  "judge_round": 1,
+  "judge_round": 2,
   "sendbacks": 0,
   "gate_runs": 3,
   "questions": 3,
@@ -24,7 +24,7 @@
     "SPEC-10": 0,
     "SPEC-11": 0,
     "SPEC-12": 0,
-    "SPEC-13": 2,
+    "SPEC-13": 0,
     "SPEC-14": 0
   },
   "locked_tests": {
@@ -2015,6 +2015,7 @@
     "1": 0
   },
   "judge_results": {
-    "1": "FAIL"
+    "1": "FAIL",
+    "2": "PASS"
   }
 }

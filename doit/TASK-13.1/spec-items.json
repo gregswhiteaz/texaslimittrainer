@@ -75,7 +75,7 @@
     "id": "SPEC-13",
     "verifies": "DoD#11",
     "verification": "manual `docs/ui/navigation.md` and the `backlog doc list --plain` entry for TASK-13.1",
-    "status": "fail"
+    "status": "pass"
   },
   {
     "id": "SPEC-14",
