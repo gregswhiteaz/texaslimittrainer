@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-25T15:37:00Z'
+updated_date: '2026-11-25T15:54:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -45,29 +45,29 @@ Plan key: E12-S01 · Dream: limit-holdem-trainer
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Given the Home screen, When it is shown, Then it offers a Settings entry; When the user chooses Settings, Then the Settings screen opens [REQ-002.3, REQ-050.5]
-- [ ] #2 Given a build whose app version is 1.2.0, When the Settings screen is shown, Then it shows "Version 1.2.0" [REQ-050.6]
-- [ ] #3 Given the Settings screen opened from Home, When the user chooses the back control, Then the Home screen opens [REQ-050.5]
-- [ ] #4 Given the Settings screen at 1280 x 720, When the user presses Tab repeatedly, Then focus reaches every Settings control, each is a native button, link or form field, each activates with Enter or Space, and each is at least 44 x 44 CSS px [REQ-057.2, REQ-057.4]
-- [ ] #5 Given the Settings screen and any Settings dialog are added, When the play-money check runs (e2e/play-money.spec.ts, tests/ui/screen-list.acceptance.test.ts), Then they are registered in e2e/support/screen-list.ts, visited by the walk, and the dialog detector also recognises role written as a JSX expression (e.g. role={'dialog'})
+- [x] #1 Given the Home screen, When it is shown, Then it offers a Settings entry; When the user chooses Settings, Then the Settings screen opens [REQ-002.3, REQ-050.5]
+- [x] #2 Given a build whose app version is 1.2.0, When the Settings screen is shown, Then it shows "Version 1.2.0" [REQ-050.6]
+- [x] #3 Given the Settings screen opened from Home, When the user chooses the back control, Then the Home screen opens [REQ-050.5]
+- [x] #4 Given the Settings screen at 1280 x 720, When the user presses Tab repeatedly, Then focus reaches every Settings control, each is a native button, link or form field, each activates with Enter or Space, and each is at least 44 x 44 CSS px [REQ-057.2, REQ-057.4]
+- [x] #5 Given the Settings screen and any Settings dialog are added, When the play-money check runs (e2e/play-money.spec.ts, tests/ui/screen-list.acceptance.test.ts), Then they are registered in e2e/support/screen-list.ts, visited by the walk, and the dialog detector also recognises role written as a JSX expression (e.g. role={'dialog'})
 <!-- AC:END -->
 
 ## Definition of Done
 <!-- DOD:BEGIN -->
-- [ ] #1 axe reports zero serious or critical violations on the Settings screen in Chromium and WebKit [REQ-057.1]
-- [ ] #2 The Settings screen offers no deposit, payment, purchase, cash-out, real-money wager or real-money conversion [REQ-061.1]
-- [ ] #3 Every acceptance criterion has at least one automated test (unit, property or Playwright) that passes
-- [ ] #4 `npm run lint`, `npm run typecheck` and `npm test` pass with zero errors [REQ-059.1, REQ-059.4]
-- [ ] #5 The golden-spot suite passes 100% (applies from the story that creates the suite, E07-S14, onward) [REQ-039.4]
-- [ ] #6 Coverage thresholds hold: >= 90% engine/bots/advice/statistics, >= 70% overall [REQ-059.3]
-- [ ] #7 Engine, bots, advice and statistics code imports no UI or browser-only code [REQ-059.2]
-- [ ] #8 Stories that touch the engine, bots or advice: a 10,000-hand playtest reports zero invariant violations (applies once the playtest runner exists, E01-S07, onward) [REQ-056.1]
-- [ ] #9 Stories that add or change a screen: Playwright test of the screen flow in Chromium and WebKit, and axe reports zero serious or critical violations (axe tooling is provisioned in the toolchain story E01-S01) [REQ-057.1]
-- [ ] #10 No new network requests beyond the app's own files [REQ-058.1]
-- [ ] #11 Strategy-content stories: text is original and every chart, range or golden spot carries its justification [REQ-061.2]
-- [ ] #12 CI workflow is green on the story's branch (applies once the CI story E01-S02 is done; E01-S01 instead passes the same checks locally) [REQ-064.2]
-- [ ] #13 Story documentation is written and published to Backlog.md
-- [ ] #14 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
+- [x] #1 axe reports zero serious or critical violations on the Settings screen in Chromium and WebKit [REQ-057.1]
+- [x] #2 The Settings screen offers no deposit, payment, purchase, cash-out, real-money wager or real-money conversion [REQ-061.1]
+- [x] #3 Every acceptance criterion has at least one automated test (unit, property or Playwright) that passes
+- [x] #4 `npm run lint`, `npm run typecheck` and `npm test` pass with zero errors [REQ-059.1, REQ-059.4]
+- [x] #5 The golden-spot suite passes 100% (applies from the story that creates the suite, E07-S14, onward) [REQ-039.4]
+- [x] #6 Coverage thresholds hold: >= 90% engine/bots/advice/statistics, >= 70% overall [REQ-059.3]
+- [x] #7 Engine, bots, advice and statistics code imports no UI or browser-only code [REQ-059.2]
+- [x] #8 Stories that touch the engine, bots or advice: a 10,000-hand playtest reports zero invariant violations (applies once the playtest runner exists, E01-S07, onward) [REQ-056.1]
+- [x] #9 Stories that add or change a screen: Playwright test of the screen flow in Chromium and WebKit, and axe reports zero serious or critical violations (axe tooling is provisioned in the toolchain story E01-S01) [REQ-057.1]
+- [x] #10 No new network requests beyond the app's own files [REQ-058.1]
+- [x] #11 Strategy-content stories: text is original and every chart, range or golden spot carries its justification [REQ-061.2]
+- [x] #12 CI workflow is green on the story's branch (applies once the CI story E01-S02 is done; E01-S01 instead passes the same checks locally) [REQ-064.2]
+- [x] #13 Story documentation is written and published to Backlog.md
+- [x] #14 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
 
 ## Implementation Plan
@@ -87,4 +87,6 @@ Full spec: doit/TASK-12.1/spec.md
 AC added from TASK-2.15 follow-up (doc-124).
 
 Build: Settings entry and screen (Play / Display / Your data, Version 0.0.0 via Vite define); DB v4 adds a settings store with defaults (additive; tested upgrade from v3 with data); readSettings(); play-money walk visits Settings; locked Home/resume/route/play-money tests (Q-5) and session-end/home-control store lists (Block 1) re-pinned. gate PASS.
+
+Judge r1 PASS 17/17: real upgrade test — main build created a v3 DB with played hands, a report and a paused session; this build upgraded it to v4 with hands/sessions/reports byte-identical and the raw settings record equal to the defaults; Resume and Statistics still work; Settings sections, Version 0.0.0, focus, play-money walk, axe; full e2e 332 pass. CI 45647646463 green.
 <!-- SECTION:NOTES:END -->
