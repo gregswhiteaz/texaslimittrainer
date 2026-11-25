@@ -7,7 +7,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-24T18:44:00Z'
-updated_date: '2026-11-25T20:39:00Z'
+updated_date: '2026-11-25T20:55:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -29,9 +29,9 @@ Follow-up from TASK-2.7 (doc-123). (1) ended() checks 'already ended' only befor
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Given a session that is already ended when ended() reads it inside its transaction, When ending is requested, Then nothing is written (endedAt and any report unchanged)
-- [ ] #2 Given ending the confirmed paused session fails, When the dialog closes, Then focus returns to Start game in Chromium and WebKit and Game Config keeps its values
-- [ ] #3 Given a confirmed new game, When the Table opens, Then a test polls for the new 0-hand unended session before hand 1 and asserts its sessionId is unchanged after hand 1 (fails if the Table opens before the end finishes)
+- [x] #1 Given a session that is already ended when ended() reads it inside its transaction, When ending is requested, Then nothing is written (endedAt and any report unchanged)
+- [x] #2 Given ending the confirmed paused session fails, When the dialog closes, Then focus returns to Start game in Chromium and WebKit and Game Config keeps its values
+- [x] #3 Given a confirmed new game, When the Table opens, Then a test polls for the new 0-hand unended session before hand 1 and asserts its sessionId is unchanged after hand 1 (fails if the Table opens before the end finishes)
 <!-- AC:END -->
 
 ## Implementation Plan
@@ -48,4 +48,6 @@ Full spec: doit/TASK-2.21/spec.md
 
 <!-- SECTION:NOTES:BEGIN -->
 Build: in-transaction already-ended recheck (ConstraintError, no write); focus returns to Start game after a failed end; hold helper takes a scope; each new test fails without its fix (recorded). Full e2e 375 pass; gate PASS.
+
+Judge r1 PASS 5/5, no findings: two real tabs — ending the paused session in tab 2 makes tab 1 End session and start fail cleanly (logged, focus on Start game, nothing overwritten), next Start game works; own hold keeps the Table closed until the end commits; endPausedSessions with C ended mid-gap leaves C untouched (base code overwrote it). Full e2e 375 pass. CI 45697325125 green.
 <!-- SECTION:NOTES:END -->

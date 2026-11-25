@@ -3,30 +3,30 @@
     "id": "SPEC-01",
     "verifies": "AC#1",
     "verification": "acceptance `tests/storage/end-recheck.acceptance.test.ts::an already-ended session is not ended again`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-02",
     "verifies": "AC#1",
     "verification": "acceptance `tests/storage/end-recheck.acceptance.test.ts::endPausedSessions rejects an already-ended confirmed session and changes nothing`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-03",
     "verifies": "AC#2",
     "verification": "acceptance `e2e/end-session-hardening.spec.ts::a failed end returns focus to Start game and keeps the chosen values`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-04",
     "verifies": "AC#3",
     "verification": "acceptance `e2e/end-session-hardening.spec.ts::the Table opens only after the paused session is ended`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-05",
     "verifies": "AC#1, AC#2, AC#3",
     "verification": "command `npm test && npm run lint && npm run typecheck && npx playwright test`",
-    "status": "pending"
+    "status": "pass"
   }
 ]
