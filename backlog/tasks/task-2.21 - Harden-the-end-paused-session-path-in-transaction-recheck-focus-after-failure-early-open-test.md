@@ -3,11 +3,11 @@ id: TASK-2.21
 title: >-
   Harden the end-paused-session path: in-transaction recheck, focus after
   failure, early-open test
-status: In Progress
+status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-24T18:44:00Z'
-updated_date: '2026-11-25T20:55:00Z'
+updated_date: '2026-11-25T20:56:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -16,6 +16,8 @@ dependencies:
   - TASK-2.7
 references:
   - doc-123
+documentation:
+  - doc-147
 parent_task_id: TASK-2
 priority: medium
 ordinal: 235000
@@ -50,4 +52,12 @@ Full spec: doit/TASK-2.21/spec.md
 Build: in-transaction already-ended recheck (ConstraintError, no write); focus returns to Start game after a failed end; hold helper takes a scope; each new test fails without its fix (recorded). Full e2e 375 pass; gate PASS.
 
 Judge r1 PASS 5/5, no findings: two real tabs — ending the paused session in tab 2 makes tab 1 End session and start fail cleanly (logged, focus on Start game, nothing overwritten), next Start game works; own hold keeps the Table closed until the end commits; endPausedSessions with C ended mid-gap leaves C untouched (base code overwrote it). Full e2e 375 pass. CI 45697325125 green.
+
+Follow-ups: TASK-2.23 (tidy new tests). TASK-2.7 SPEC-08 weakness covered by the new e2e; no change.
 <!-- SECTION:NOTES:END -->
+
+## Final Summary
+
+<!-- SECTION:FINAL_SUMMARY:BEGIN -->
+Ending a paused session now rechecks 'already ended' inside the same transaction (ConstraintError, nothing written), closing the cross-tab overwrite race; a failed 'End session and start' returns focus to Start game with Game Config values kept; a new e2e holds the end transaction open and proves the Table opens only after it commits. Verified: judge PASS 5/5, vitest 1412 passed, lint/typecheck clean, Playwright 375 passed (chromium+webkit), no locked test edited. Review assumptions A-1..A-5 (A-1 reject with ConstraintError when already ended; A-2 a lost race fails the normal way, dialog closes, no game starts). Follow-ups: tidy double endSession call and a cast in new tests; TASK-2.7 SPEC-08 stays weak; scope 347 vs 330 lines.
+<!-- SECTION:FINAL_SUMMARY:END -->

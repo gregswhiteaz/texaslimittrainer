@@ -1,0 +1,30 @@
+---
+id: TASK-2.23
+title: Tidy the end-session hardening tests
+status: To Do
+assignee: []
+created_date: '2026-11-25T20:56:00Z'
+labels:
+  - dream-limit-holdem-trainer
+  - follow-up
+milestone: m-1
+dependencies:
+  - TASK-2.21
+references:
+  - doc-147
+parent_task_id: TASK-2
+priority: low
+ordinal: 251000
+---
+
+## Description
+
+<!-- SECTION:DESCRIPTION:BEGIN -->
+Follow-up from TASK-2.21 review (doc-147). Each case in tests/storage/end-recheck.acceptance.test.ts calls endSession twice (once per matcher); e2e/end-session-hardening.spec.ts casts started?.sessionId. TASK-2.7's locked new-game-confirm SPEC-08 stays weak; the stronger check lives in the new e2e.
+<!-- SECTION:DESCRIPTION:END -->
+
+## Acceptance Criteria
+<!-- AC:BEGIN -->
+- [ ] #1 Given the end-recheck unit cases, When they run, Then each calls endSession once and asserts both DOMException and the ConstraintError name, with no check lost
+- [ ] #2 Given the hardening e2e, When read, Then the sessionId cast is replaced by an asserted non-null value
+<!-- AC:END -->
