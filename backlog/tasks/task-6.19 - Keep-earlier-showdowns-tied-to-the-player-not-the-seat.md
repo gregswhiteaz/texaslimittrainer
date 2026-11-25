@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-18T07:03:00Z'
-updated_date: '2026-11-25T21:27:00Z'
+updated_date: '2026-11-25T21:53:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -28,8 +28,8 @@ Follow-up from TASK-1.5. earlierShowdowns is keyed by seat number. When a busted
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Given a bot at seat 4 is replaced, When later views are built, Then no earlier showdown of the previous seat-4 player is attributed to the new bot
-- [ ] #2 Given the session appends an earlier showdown, When any seat policy receives it, Then the entry is frozen and cannot be changed by a policy
+- [x] #1 Given a bot at seat 4 is replaced, When later views are built, Then no earlier showdown of the previous seat-4 player is attributed to the new bot
+- [x] #2 Given the session appends an earlier showdown, When any seat policy receives it, Then the entry is frozen and cannot be changed by a policy
 <!-- AC:END -->
 
 ## Implementation Plan
@@ -48,4 +48,6 @@ Full spec: doit/TASK-6.19/spec.md
 From TASK-6.9: the playtest runner now passes earlier showdowns (runner.ts, last 1,000, keyed by seat). Its seat-vs-player attribution and freezing are this task's ACs #1–#2 — cover the runner too.
 
 Build: rememberShowdown (frozen, capped) and forgetSeats; runner forgets replaced seats after each hand; locked style-bots expected list re-pinned (Q-1); playtest output byte-identical to base on 4 runs incl. Mixed with replacements; new tests fail without forgetSeats. gate PASS.
+
+Judge r1 PASS 6/6: 9 playtest CLI runs (Mixed/Tough/Soft, 3/6/9 seats, cash and sit-and-go, up to 45 replacements) byte-identical to main; holdout over ~13k hands and 700+ replacements matched an independent model, 0 shown hands from a previous player, lists capped at 1000 and deep-frozen. New tests fail on main. CI 45704655073 green.
 <!-- SECTION:NOTES:END -->
