@@ -1,7 +1,7 @@
 ---
 id: TASK-6.22
 title: Make the headless bot step use the seeded TAG decision
-status: In Progress
+status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-21T22:26:00Z'
@@ -14,6 +14,8 @@ dependencies:
   - TASK-6.2
 references:
   - doc-73
+documentation:
+  - doc-150
 parent_task_id: TASK-6
 priority: medium
 ordinal: 213000
@@ -47,4 +49,12 @@ Full spec: doit/TASK-6.22/spec.md
 Build: stepBot(table, policy?) defaults to the seeded decideTag decision; locked TASK-3.1 expected action re-pinned (Q-1); new test matches the real advice worker and fails on the old default; table e2e 24 pass. gate PASS.
 
 Judge r1 PASS 4/4: 1,711 bot steps over 200 codes — headless stepBot default identical to the real worker (TAG, same seed) and the playtest seeded policy, including 9 mixed spots; explicit policies unchanged. CI 45721837009 green (incl. E2E).
+
+Follow-ups: none (style-aware default outside AC#1; stale comment noted).
 <!-- SECTION:NOTES:END -->
+
+## Final Summary
+
+<!-- SECTION:FINAL_SUMMARY:BEGIN -->
+stepBot's default (no policy) now decides with the seeded decideTag(view, {random: botRandom(seed)}), matching the app worker and playtest for TAG; an explicit policy is unchanged. The locked TASK-3.1 test (line 177) was re-pinned to the seeded decision (Q-1) and a new acceptance test pins a real mixed spot (code 26, seat 3: raise seeded vs fold unseeded). Verified: npm test 1420 passed, judge 4/4 PASS, 200-code/1711-step holdout matched the worker, CI green. Review A-1..A-3: default is TAG for every seat regardless of style. Risks: stepBot has no app caller so live play is unchanged; stale comment at src/table/session.ts:67 remains.
+<!-- SECTION:FINAL_SUMMARY:END -->
