@@ -1,10 +1,11 @@
 ---
 id: TASK-11.2
 title: See my BB/100 trend from cash hands against a break-even line
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-17T23:22:00Z'
+updated_date: '2026-11-25T09:10:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -66,3 +67,14 @@ Plan key: E11-S04 · Dream: limit-holdem-trainer
 - [ ] #11 Story documentation is written and published to Backlog.md
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. TrendHand gains optional cash {net, bigBet} from stored cash records (netResult / stake.bigBet; rebuys never count)
+2. bb100Value: exact big-bet sum per 500 cash hands, rounded like the Session Report; per-session value equals the report BB/100
+3. StatisticsView bb100 states (no-cash / more-cash / points); second chart card with dashed break-even line and approved text
+4. Filter and per-session cases proven as pure functions (UI wiring in TASK-11.4/11.5)
+
+Full spec: doit/TASK-11.2/spec.md
+<!-- SECTION:PLAN:END -->
