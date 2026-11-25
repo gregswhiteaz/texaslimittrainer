@@ -1,7 +1,7 @@
 ---
 id: TASK-13.2
 title: Ask the browser to keep my history on first launch
-status: In Progress
+status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
@@ -16,6 +16,7 @@ references:
 documentation:
   - doc-1
   - doc-2
+  - doc-144
 parent_task_id: TASK-13
 priority: high
 type: feature
@@ -81,4 +82,12 @@ Full spec: doit/TASK-13.2/spec.md
 Build: DB v5 adds an empty meta store (additive; tested upgrade from v4 with hands, sessions, reports, settings); requestPersistenceOnce on first launch stores {granted} and never rejects; readPersistentStorage for TASK-12.9; six version/store-name pins re-pinned (Q-1). Full e2e 357 pass; gate PASS.
 
 Judge r1 PASS 11/11, no findings: real upgrade from a main-build v4 profile (played hands, report, paused session, changed setting) to v5 — all data byte-identical, meta store holds {granted}; Resume, Statistics and Settings work; persist stubs (true/false/reject/throw/missing/never-settling) never block Home and are asked once across reloads; full e2e 357 pass. CI 45675284876 green.
+
+Follow-ups: TASK-12.4 AC (Delete all clears meta); TASK-12.9 note (read via readPersistentStorage, warn on null).
 <!-- SECTION:NOTES:END -->
+
+## Final Summary
+
+<!-- SECTION:FINAL_SUMMARY:BEGIN -->
+On first launch the app now calls navigator.storage.persist() once and stores {granted} in a new IndexedDB meta store (DB v5, key 'persistentStorage'); missing API, rejection or non-true result means not granted, and relaunch doesn't ask again. Verified: npm test 1410 pass, e2e 357 pass (Chromium+WebKit), judge PASS 11/11 incl. real v4->v5 upgrade. Review: assumptions A-1..A-7 and Q-1 (format). Follow-ups: TASK-12.9 should warn on null too; E12 Reset all data must clear meta. Minor: duplicated unit test, scope 693 vs 520 lines.
+<!-- SECTION:FINAL_SUMMARY:END -->

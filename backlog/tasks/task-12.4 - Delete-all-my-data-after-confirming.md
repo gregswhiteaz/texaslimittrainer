@@ -4,7 +4,7 @@ title: Delete all my data after confirming
 status: To Do
 assignee: []
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-17T23:22:00Z'
+updated_date: '2026-11-25T18:42:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-2
@@ -58,6 +58,7 @@ Plan key: E12-S08 · Dream: limit-holdem-trainer
 - [ ] #6 Given the deletion has completed, When Settings and Game Config are opened, Then Settings shows Rapid, auto-open on, opponent styles on, four-colour off and banter on, and Game Config shows Cash game, 6 players, $4/$8, Mixed and Rapid [REQ-051.3]
 - [ ] #7 Given the Settings overlay is open over an active session at hand 30, When the user confirms 'Delete everything', Then the session and its 29 stored hands are deleted, no report is written and Home opens in its first-use state [REQ-051.3]
 - [ ] #8 Given storage seeded with 100,000 hand records across 500 sessions, When Settings is opened and 'Delete everything' is confirmed, Then Settings opens without error and afterwards no hand record remains and Home opens in its first-use state [REQ-053.1, REQ-051.3]
+- [ ] #9 Given stored data in every store (hands, sessions, reports, settings, meta), When the user confirms Delete all, Then every store including meta is cleared, so the next launch asks for persistent storage again
 <!-- AC:END -->
 
 ## Definition of Done
@@ -76,3 +77,9 @@ Plan key: E12-S08 · Dream: limit-holdem-trainer
 - [ ] #12 Story documentation is written and published to Backlog.md
 - [ ] #13 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+AC added from TASK-13.2 follow-up (doc-144): DB v5 added a meta store holding the persistent-storage result.
+<!-- SECTION:NOTES:END -->
