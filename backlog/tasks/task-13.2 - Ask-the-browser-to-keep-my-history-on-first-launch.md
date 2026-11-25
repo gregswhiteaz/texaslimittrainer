@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-25T18:06:00Z'
+updated_date: '2026-11-25T18:25:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -74,3 +74,9 @@ Plan key: E13-S01 · Dream: limit-holdem-trainer
 
 Full spec: doit/TASK-13.2/spec.md
 <!-- SECTION:PLAN:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+Build: DB v5 adds an empty meta store (additive; tested upgrade from v4 with hands, sessions, reports, settings); requestPersistenceOnce on first launch stores {granted} and never rejects; readPersistentStorage for TASK-12.9; six version/store-name pins re-pinned (Q-1). Full e2e 357 pass; gate PASS.
+<!-- SECTION:NOTES:END -->
