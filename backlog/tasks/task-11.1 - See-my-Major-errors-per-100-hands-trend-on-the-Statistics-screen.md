@@ -1,11 +1,11 @@
 ---
 id: TASK-11.1
 title: See my Major errors per 100 hands trend on the Statistics screen
-status: In Progress
+status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-25T08:56:00Z'
+updated_date: '2026-11-25T08:57:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -19,6 +19,7 @@ references:
 documentation:
   - doc-1
   - doc-2
+  - doc-134
 parent_task_id: TASK-11
 priority: high
 type: feature
@@ -99,4 +100,12 @@ AC added from TASK-2.15 follow-up (doc-124).
 Build: Statistics screen (Home entry, totals, hand-written SVG chart of unhinted Majors per 100 hands per 500 hands, empty / not-enough / load-failure states), pure src/stats/trends.ts, store trendData(); play-money registration; locked Home/route/play-money/resume tests re-pinned (Q-4, Block 1). npm test 1346 pass; full Playwright 304 pass + resume fixed; slow store read and speed check pass (opt-in). gate PASS.
 
 Judge r1 PASS 20/20: production preview, Chromium and WebKit — 1,200 shuffled seeded hands over 5 sessions showed 1,200 hands over 5 sessions and points 17.8, 16.8 matching an independent computation; 0/320/499/500 messages, load failure, focus and axe checked. CI 45578835504 green.
+
+Follow-ups: TASK-11.5 AC (Group by default vs storyboard), TASK-11.12 AC (100k read strategy), TASK-11.13 (test hardening).
 <!-- SECTION:NOTES:END -->
+
+## Final Summary
+
+<!-- SECTION:FINAL_SUMMARY:BEGIN -->
+Added a Statistics entry on Home and a Statistics screen with a totals line and a Major errors per 100 hands chart (one point per 500 stored hands, unhinted Majors only, read from stored records; messages for 0 and 1-499 hands). Logic is in the headless src/stats/trends.ts; the store gained a one-transaction trendData() read. Verified: judge round 1 PASS 20/20, npm test 1346 passed, e2e 30/30 in Chromium and WebKit with axe, opt-in 3,000-hand store and speed checks passed. Review assumptions A-1..A-12, Q-1 (no filter row), Q-2 chart text, Q-3 load-failure text, and the locked-test edits (home, screen-list, play-money, resume). Follow-ups: 100,000-hand read needs a cursor or stored summaries (TASK-11.12); storyboard says Every 100 hands vs REQ-048.1's 500; two test MINORs and one NIT.
+<!-- SECTION:FINAL_SUMMARY:END -->

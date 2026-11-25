@@ -4,7 +4,7 @@ title: Group my trends per session or per day
 status: To Do
 assignee: []
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-17T23:22:00Z'
+updated_date: '2026-11-25T08:57:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -46,6 +46,7 @@ Plan key: E11-S02 · Dream: limit-holdem-trainer
 - [ ] #4 Given a table-size filter of 6-max is set, When the grouping is changed to per day, Then the filter stays 6-max and the points use only 6-max hands [REQ-048.1, REQ-048.2]
 - [ ] #5 Given 1 stored session of 12 hands, When grouping is per session or per day, Then the Major-error chart plots 1 point computed from those 12 hands and no 'Play ... more hands' message is shown [REQ-048.10]
 - [ ] #6 Given zero hands in the current filter, When grouping is per session or per day, Then the screen shows 'Play your first hand to see trends.' instead of a chart [REQ-048.10]
+- [ ] #7 Given the Stats storyboard's Group by default ('Every 100 hands') and REQ-048.1's per-500 default, When this story adds Group by, Then the default matches REQ-048.1 and the storyboard is updated to match
 <!-- AC:END -->
 
 ## Definition of Done
@@ -63,3 +64,9 @@ Plan key: E11-S02 · Dream: limit-holdem-trainer
 - [ ] #11 Story documentation is written and published to Backlog.md
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+AC added from TASK-11.1 follow-up (doc-134): storyboard shows Every 100 hands; TASK-11.1 followed REQ-048.1 (500).
+<!-- SECTION:NOTES:END -->
