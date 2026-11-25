@@ -1,7 +1,7 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { sharedAdviceClient } from './ui/advice/advice-client';
-import App from './ui/App';
+import { AppRoot } from './ui/AppRoot';
 import './ui/styles.css';
 
 const root = document.getElementById('root');
@@ -14,6 +14,6 @@ sharedAdviceClient();
 
 createRoot(root).render(
   <StrictMode>
-    <App />
+    <AppRoot />
   </StrictMode>,
 );

@@ -74,6 +74,11 @@ export class AdviceClient {
     worker.addEventListener('messageerror', this.#onFailure);
   }
 
+  /** True once the worker failed or the client was disposed: every call now rejects. */
+  get failed(): boolean {
+    return this.#failure !== null;
+  }
+
   /** `seed` is the bot's main-thread seed (BotTurn.seed); 0 if omitted. */
   decideBot(view: PlayerView, style: BotStyle, seed = 0): Promise<Action> {
     return this.#request({ kind: 'bot', view, style, seed }) as Promise<Action>;
@@ -139,9 +144,10 @@ let shared: AdviceClient | null = null;
 /**
  * The app-wide advice client, shared by every table (deviation from D-2: a per-table worker's cold start
  * outlasted the paused-clock e2e slices). The first call creates its worker with `create`; later calls
- * return the same client. main.tsx calls it at load so the worker is warm before any table mounts.
+ * return the same client until it has failed, when the next call replaces it with a new one (TASK-13.1 D-5).
+ * main.tsx calls it at load so the worker is warm before any table mounts.
  */
 export function sharedAdviceClient(create: () => WorkerLike = createAdviceWorker): AdviceClient {
-  shared ??= new AdviceClient(create());
+  if (shared === null || shared.failed) shared = new AdviceClient(create());
   return shared;
 }

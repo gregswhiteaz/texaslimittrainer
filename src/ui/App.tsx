@@ -65,8 +65,11 @@ const entryKey = (state: unknown): unknown =>
     ? (state as { tlhTable?: unknown }).tlhTable
     : undefined;
 
-export default function App(): React.JSX.Element {
-  const [screen, setScreen] = useState<Screen>({ name: 'home', returned: false });
+/** `returned`: the first Home focuses its heading, as after Return Home from the error screen (TASK-13.1). */
+export default function App({
+  returned = false,
+}: { readonly returned?: boolean } = {}): React.JSX.Element {
+  const [screen, setScreen] = useState<Screen>({ name: 'home', returned });
   const [paused, setPaused] = useState<Paused>(undefined);
   const [endPrompt, setEndPrompt] = useState<EndPromptState>(null);
   // undefined until the launch read settles (TASK-12.2 A-1), DEFAULT_SETTINGS if it fails (A-2).

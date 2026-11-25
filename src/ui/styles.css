@@ -230,6 +230,16 @@ h1[tabindex='-1']:focus {
   color: #a7aeb8;
 }
 
+.error-screen {
+  max-width: 640px;
+  gap: 24px;
+}
+
+.error-message {
+  margin: 0;
+  line-height: 1.5;
+}
+
 .report-actions {
   display: flex;
   justify-content: flex-end;
@@ -237,7 +247,8 @@ h1[tabindex='-1']:focus {
   gap: 12px;
 }
 
-.screen .report-home {
+.screen .report-home,
+.screen .error-home {
   align-self: flex-start;
   padding: 0 24px;
   background: #d7262e;

@@ -1,6 +1,6 @@
 # Navigation: screens, the Home control and browser Back/Forward
 
-The app has six screens (plus the busy screen shown while a session ends), held in `App`'s state (`src/ui/App.tsx`). There are no URL routes, hash fragments
+The app has six screens (plus the busy screen shown while a session ends, and the error screen), held in `App`'s state (`src/ui/App.tsx`). There are no URL routes, hash fragments
 or deep links: the URL stays `/` on every screen.
 
 | Screen         | Opened by                                                                                                    | Leaves to                                                                                    |
@@ -11,6 +11,7 @@ or deep links: the URL stays `/` on every screen.
 | Session report | Leave table (after at least one completed hand)                                                              | View statistics → Statistics; Back to Home → Home                                            |
 | Statistics     | Statistics on Home; View statistics on the Session report                                                    | ← Home → Home                                                                                |
 | Settings       | Settings on Home                                                                                             | ← Home → Home                                                                                |
+| Error screen   | any unexpected error (TASK-13.1)                                                                             | Return Home → Home                                                                           |
 
 Each return to Home moves focus to Home's `TLH Trainer` heading.
 
@@ -136,6 +137,34 @@ Resume session          […, app, T1, T2*]    push T2 (drops nothing here; a pu
 Home control            […, app, T1*, T2]    current entry is T2 → history.back(); popstate on Home → ignored
 ```
 
+## Error screen (TASK-13.1, REQ-056.3, REQ-057)
+
+`AppRoot` (`src/ui/AppRoot.tsx`, rendered by `src/main.tsx`) wraps `App` in an error boundary and listens for
+`window` `error` and `unhandledrejection`. Any of these replaces the whole app with the error screen
+(`src/ui/error/ErrorScreen.tsx`):
+
+- a render, commit or effect error anywhere below it (for example a rejected or illegal bot decision, or a
+  failure while the Session report mounts);
+- a window `error` event that carries an error object. Events with `error: null` (cross-origin `Script error.`,
+  Chrome's `ResizeObserver loop` notice) are ignored (A-1);
+- any unhandled promise rejection, whatever its reason.
+
+The screen is not one of App's routes, so it adds no history entry. It shows the heading `Something went wrong`
+(focused), one sentence, `The app hit an unexpected problem. Every completed hand is saved, and a paused session
+resumes from its last completed hand.`, and a native `Return Home` button. It never shows the error's message,
+stack or file names. The first error is logged once to the console as `Unexpected error`; errors while the screen
+shows are ignored. Nothing is sent off the device or stored.
+
+**Return Home** steps back off the Table's history entry if it is the current one (so a later Back leaves the
+app), replaces the shared advice client if its worker has failed (a new worker starts warming at once, so a new
+game works without a reload), and remounts App on Home with the `TLH Trainer` heading focused.
+
+**Resume after an error.** Nothing is written or ended on an error, exactly as when the app is closed mid-hand
+(REQ-004.2). Each completed hand is stored with the session record before the next hand is dealt, so Home (which
+waits for any hand write still running) shows Resume session with the hands completed before the error. Resume
+deals the unfinished hand's number again from the stacks at the end of the last completed hand; the unfinished
+hand has no record. An error during hand 1 leaves a 0-hand session, which is not offered for Resume.
+
 ## Tests
 
 - `tests/ui/table-home.acceptance.test.tsx`: the header's Home button, rendered only when `App` provides it.
@@ -155,3 +184,10 @@ Home control            […, app, T1*, T2]    current entry is T2 → history.b
   the version line.
 - `tests/ui/opponent-styles.acceptance.test.tsx`, `e2e/opponent-styles.spec.ts` (every push): the opponent
   styles toggle, its save and reload, and the seats with styles on and off, including a change made while paused.
+- `tests/ui/error-screen.acceptance.test.tsx`, `tests/ui/unexpected-error.test.ts`,
+  `tests/ui/advice-client-recovery.test.ts`: the error screen markup, which window events count, and the
+  replacement of a failed advice client.
+- `e2e/error-recovery.spec.ts` (every push): errors injected from a Playwright init script
+  (`e2e/support/fault-injection.ts`, never in `dist/`) in a bot step, a worker failure, a rejected decision, the
+  Session report's mount and outside React; Return Home, Resume from the last completed hand and a fresh
+  worker for a new game.
