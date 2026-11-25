@@ -4,7 +4,7 @@ title: Choose the default speed for new sessions in Settings
 status: To Do
 assignee: []
 created_date: '2026-11-17T22:47:00Z'
-updated_date: '2026-11-17T23:22:00Z'
+updated_date: '2026-11-25T15:55:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-2
@@ -45,6 +45,7 @@ Plan key: E12-S04 · Dream: limit-holdem-trainer
 - [ ] #3 Given Default speed is Realistic, When the app is closed and relaunched, Then Settings shows Realistic and Game Config pre-selects Realistic [REQ-050.1]
 - [ ] #4 Given a session running at Rapid, When the user sets Default speed to Realistic in the Settings overlay and closes it, Then the running session stays at Rapid and the next Game Config pre-selects Realistic [REQ-050.1, REQ-050.5]
 - [ ] #5 Given the last session was started at Realistic and Default speed is Rapid in Settings, When Game Config opens, Then Rapid is pre-selected [REQ-050.1, REQ-012.3]
+- [ ] #6 Given the settings store created by TASK-12.1, When the default speed is chosen in Settings, Then it is written through a validated write API next to readSettings() and read back on the next launch
 <!-- AC:END -->
 
 ## Definition of Done
@@ -62,3 +63,9 @@ Plan key: E12-S04 · Dream: limit-holdem-trainer
 - [ ] #11 Story documentation is written and published to Backlog.md
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+AC added from TASK-12.1 follow-up (doc-141): store exists with defaults but nothing writes or reads it yet.
+<!-- SECTION:NOTES:END -->

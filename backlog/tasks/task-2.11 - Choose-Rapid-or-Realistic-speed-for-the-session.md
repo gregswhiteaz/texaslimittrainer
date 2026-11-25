@@ -4,7 +4,7 @@ title: Choose Rapid or Realistic speed for the session
 status: To Do
 assignee: []
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-17T23:22:00Z'
+updated_date: '2026-11-25T15:55:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-2
@@ -46,6 +46,7 @@ Plan key: E02-S11 · Dream: limit-holdem-trainer
 - [ ] #3 Given the Settings default speed is Rapid and the last started session used Realistic, When Game Config opens, Then Rapid is selected [REQ-012.3]
 - [ ] #4 Given Realistic chosen on Game Config, When the started session plays its first 10 bot actions, Then each bot waits between 0.8 s and 3.0 s before acting, showing the chosen speed reached the table [REQ-011.2]
 - [ ] #5 Given Rapid chosen on Game Config, When the started session plays its first 10 bot actions, Then each is displayed within 300 ms of the previous action, showing the chosen speed reached the table [REQ-011.1]
+- [ ] #6 Given a stored default speed (TASK-12.1 settings store), When a new session starts, Then its initial speed comes from readSettings().defaultSpeed
 <!-- AC:END -->
 
 ## Definition of Done
@@ -63,3 +64,9 @@ Plan key: E02-S11 · Dream: limit-holdem-trainer
 - [ ] #11 Story documentation is written and published to Backlog.md
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+AC added from TASK-12.1 follow-up (doc-141).
+<!-- SECTION:NOTES:END -->

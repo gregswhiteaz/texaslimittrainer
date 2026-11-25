@@ -1,11 +1,11 @@
 ---
 id: TASK-12.1
 title: Open Settings from Home and see the app version
-status: In Progress
+status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-25T15:54:00Z'
+updated_date: '2026-11-25T15:55:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -16,6 +16,7 @@ references:
 documentation:
   - doc-1
   - doc-2
+  - doc-141
 parent_task_id: TASK-12
 priority: high
 type: feature
@@ -89,4 +90,12 @@ AC added from TASK-2.15 follow-up (doc-124).
 Build: Settings entry and screen (Play / Display / Your data, Version 0.0.0 via Vite define); DB v4 adds a settings store with defaults (additive; tested upgrade from v3 with data); readSettings(); play-money walk visits Settings; locked Home/resume/route/play-money tests (Q-5) and session-end/home-control store lists (Block 1) re-pinned. gate PASS.
 
 Judge r1 PASS 17/17: real upgrade test — main build created a v3 DB with played hands, a report and a paused session; this build upgraded it to v4 with hands/sessions/reports byte-identical and the raw settings record equal to the defaults; Resume and Statistics still work; Settings sections, Version 0.0.0, focus, play-money walk, axe; full e2e 332 pass. CI 45647646463 green.
+
+Follow-ups: TASK-12.10 (raw-record test, onblocked handling, back-control Tab order); ACs added to TASK-12.5 (write API) and TASK-2.11 (read default speed).
 <!-- SECTION:NOTES:END -->
+
+## Final Summary
+
+<!-- SECTION:FINAL_SUMMARY:BEGIN -->
+Home now has a Settings entry (last) opening a Settings screen with Play, Display and Your data sections and a Version line from package.json (0.0.0). It also creates the settings store: DB v4 with a defaults record, added by the upgrade step with existing data untouched. The play-money walk and screen list include Settings, and the dialog detector reads role={'dialog'}. Verified: npm test 1397 passed, full e2e 332 passed, judge PASS 17/17 including a real v3 to v4 upgrade with played data byte-identical. Review: Q-1 persisted format, Q-2..Q-4 text and version, Q-5 + Block 1 locked-test edits, A-1..A-8. Follow-ups: assert the raw record in the upgrade test, Chromium first Tab leaves the page (back control before h1), no onblocked handler, nothing reads settings yet (TASK-2.11 / 12.5).
+<!-- SECTION:FINAL_SUMMARY:END -->
