@@ -1,0 +1,30 @@
+---
+id: TASK-6.27
+title: Close the remaining bot import gaps (type-position imports, advice path)
+status: To Do
+assignee: []
+created_date: '2026-11-25T23:03:00Z'
+labels:
+  - dream-limit-holdem-trainer
+  - follow-up
+milestone: m-1
+dependencies:
+  - TASK-6.21
+references:
+  - doc-149
+parent_task_id: TASK-6
+priority: low
+ordinal: 252000
+---
+
+## Description
+
+<!-- SECTION:DESCRIPTION:BEGIN -->
+Follow-up from TASK-6.21 judge (doc-149). A type-position import('../engine/hand').HandState in src/bots passes lint and tsc (types only; cannot reach hidden cards at runtime). Bots may also import src/advice, which imports engine runtime — an indirect path outside TASK-6.21's scope.
+<!-- SECTION:DESCRIPTION:END -->
+
+## Acceptance Criteria
+<!-- AC:BEGIN -->
+- [ ] #1 Given a src/bots file using a type-position import('../engine/…') outside the allow-list, When lint runs, Then it fails with the REQ-025.1 boundary message (TSImportType selector), and allowed PlayerView types still pass
+- [ ] #2 Given the indirect src/bots → src/advice → engine path, When the user decides whether bots may import src/advice, Then the decision is recorded and, if barred, a lint test enforces it
+<!-- AC:END -->
