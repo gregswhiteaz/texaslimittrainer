@@ -1,11 +1,19 @@
 import {
+  BB100_GOAL,
+  BB100_NOTE,
+  BB100_TITLE,
   CHART_NOTE,
   CHART_TITLE,
   LOAD_FAILED_MESSAGE,
+  NO_CASH_MESSAGE,
   NO_HANDS_MESSAGE,
+  bb100ChartLabel,
+  bb100PointLabel,
   chartLabel,
+  moreCashHandsMessage,
   moreHandsMessage,
   pointLabel,
+  type Bb100Point,
   type StatisticsView,
   type TrendPoint,
 } from '../../stats/trends';
@@ -19,12 +27,16 @@ export interface StatisticsScreenProps {
 
 const round = (n: number): number => Math.round(n * 10) / 10;
 
+/** Point i of `count` across the plot: x 10…390, or the middle for a single point (A-9). */
+const xOf = (i: number, count: number): number =>
+  count === 1 ? 200 : round(10 + (i * 380) / (count - 1));
+
 /** The storyboard's 400×160 plot: baseline y=150, top y=10 (A-9). */
 function MajorErrorTrend({ points }: { readonly points: readonly TrendPoint[] }) {
   const yMax = Math.max(1, ...points.map((p) => p.majorPer100));
   const xy = points.map((p, i) => ({
     point: p,
-    x: points.length === 1 ? 200 : round(10 + (i * 380) / (points.length - 1)),
+    x: xOf(i, points.length),
     y: round(150 - (p.majorPer100 / yMax) * 140),
   }));
   return (
@@ -43,9 +55,54 @@ function MajorErrorTrend({ points }: { readonly points: readonly TrendPoint[] })
   );
 }
 
+/** The same plot with 0 kept inside it: hi = max(1, values), lo = min(−1, values), and a dashed break-even
+ *  line at 0 (TASK-11.2 A-5). */
+function Bb100Trend({ points }: { readonly points: readonly Bb100Point[] }) {
+  const hi = Math.max(1, ...points.map((p) => p.bb100));
+  const lo = Math.min(-1, ...points.map((p) => p.bb100));
+  const yOf = (v: number): number => round(150 - ((v - lo) / (hi - lo)) * 140);
+  const xy = points.map((p, i) => ({ point: p, x: xOf(i, points.length), y: yOf(p.bb100) }));
+  const zero = yOf(0);
+  return (
+    <>
+      <p className="stats-goal">{BB100_GOAL}</p>
+      <svg
+        className="stats-trend"
+        viewBox="0 0 400 160"
+        role="img"
+        aria-label={bb100ChartLabel(points)}
+      >
+        <line
+          x1="0"
+          y1={zero}
+          x2="400"
+          y2={zero}
+          strokeDasharray="6 5"
+          className="stats-break-even"
+        />
+        <polyline points={xy.map(({ x, y }) => `${x},${y}`).join(' ')} className="stats-line" />
+        {xy.map(({ point, x, y }) => (
+          <circle
+            key={point.firstHand}
+            data-bb100-point=""
+            cx={x}
+            cy={y}
+            r="5"
+            className="stats-dot"
+          >
+            <title>{bb100PointLabel(point)}</title>
+          </circle>
+        ))}
+      </svg>
+      <p className="stats-note">{BB100_NOTE}</p>
+    </>
+  );
+}
+
 export function StatisticsScreen({ view, onHome }: StatisticsScreenProps): React.JSX.Element {
   const heading = useHeadingFocus(true);
   const chart = view?.chart;
+  const bb100 = view?.bb100;
   return (
     <main className="screen stats-screen">
       <header className="stats-header">
@@ -67,6 +124,18 @@ export function StatisticsScreen({ view, onHome }: StatisticsScreenProps): React
           <p className="stats-message">{moreHandsMessage(chart.needed)}</p>
         )}
         {chart?.kind === 'points' && <MajorErrorTrend points={chart.points} />}
+      </section>
+      <section
+        className="panel stats-chart"
+        aria-labelledby="stats-bb100-title"
+        aria-busy={view === undefined ? true : undefined}
+      >
+        <h2 id="stats-bb100-title">{BB100_TITLE}</h2>
+        {bb100?.kind === 'no-cash' && <p className="stats-bb100-message">{NO_CASH_MESSAGE}</p>}
+        {bb100?.kind === 'more-cash' && (
+          <p className="stats-bb100-message">{moreCashHandsMessage(bb100.needed)}</p>
+        )}
+        {bb100?.kind === 'points' && <Bb100Trend points={bb100.points} />}
       </section>
     </main>
   );

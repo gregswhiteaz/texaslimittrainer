@@ -2,7 +2,16 @@ import { IDBFactory } from 'fake-indexeddb';
 import { expect, it } from 'vitest';
 import { trendHand } from '../../src/stats/trends';
 import { HANDS_STORE, openHandStore, SESSIONS_STORE } from '../../src/storage/hand-store';
-import { forcedFoldRecord, mixedGrades, statRecords } from '../support/stat-records';
+import type { HandRecord } from '../../src/table/hand-record';
+import { CASH_STAKES, type Stake } from '../../src/table/session';
+import {
+  cashPool,
+  cloneRecords,
+  forcedFoldRecord,
+  mixedGrades,
+  sitAndGoPool,
+  statRecords,
+} from '../support/stat-records';
 
 // TASK-11.1 (A-3): trendData() reads every valid hand and session in one read-only transaction.
 
@@ -54,4 +63,35 @@ it('trendData reads valid hands and sessions and skips invalid values', async ()
   expect(sorted(data.hands)).toEqual(sorted(valid.map(trendHand)));
   expect(data.hands.find((h) => key(h) === key(left))?.unhintedMajors).toBe(0);
   expect(data.sessionStarts).toEqual(new Map(sessions.map((s) => [s.sessionId, s.startedAt])));
+});
+
+it("trendData carries each cash hand's net and big bet", async () => {
+  const store = openHandStore(new IDBFactory(), DB);
+  const startedAt = new Date(Date.UTC(2026, 10, 21));
+  const cash = cloneRecords(cashPool(CASH_STAKES[4] as Stake, 2), {
+    sessionId: '4'.repeat(32),
+    startedAt,
+    hands: 2,
+    ended: true,
+  }).records;
+  const sng = cloneRecords(sitAndGoPool(1), {
+    sessionId: '5'.repeat(32),
+    startedAt,
+    hands: 1,
+    ended: true,
+  }).records[0] as HandRecord;
+  for (const record of [...cash, sng]) await store.add(record);
+
+  const { hands } = await store.trendData();
+  expect(hands).toHaveLength(3);
+  for (const record of cash) {
+    const read = hands.find(
+      (h) => h.sessionId === record.sessionId && h.handNumber === record.handNumber,
+    );
+    expect(read?.cash).toEqual(trendHand(record).cash);
+    expect(read?.cash?.bigBet).toBe(20);
+  }
+  const sngHand = hands.find((h) => h.sessionId === '5'.repeat(32));
+  expect(sngHand).toBeDefined();
+  expect('cash' in (sngHand as object)).toBe(false);
 });

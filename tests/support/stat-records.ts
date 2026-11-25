@@ -1,10 +1,20 @@
 import type { Grade } from '../../src/advice/grade';
+import { replayCodeFromWords, type ReplayCode } from '../../src/engine/deck';
 import type { HandRecord } from '../../src/table/hand-record';
-import { foldUserToLeave, nextStep, seatSession, stepBot } from '../../src/table/session';
+import {
+  foldUserToLeave,
+  nextStep,
+  seatSession,
+  stepBot,
+  type Stake,
+  type TableState,
+} from '../../src/table/session';
 import { handWrite, sessionRecord, type SessionRecord } from '../../src/table/session-record';
+import { playSession } from './session-play';
 import { REVIEW_DECK, REVIEW_FOUR, userTableAfter } from './table-scenarios';
 
 // TASK-11.1: stored-shape hand and session records for the Statistics trends, cloned from real handWrite records.
+// TASK-11.2: pools of really played cash and sit-and-go hands, cloned to the counts a test needs (A-8).
 // No test-runner imports, so Vitest tests and e2e seeding can both use them.
 
 export interface StatSession {
@@ -45,6 +55,21 @@ function graded(record: HandRecord, grades: (decision: number) => DecisionGrade)
   };
 }
 
+/** `session`'s stored session record: ended at its last hand's time, or paused. */
+function storedSession(session: StatSession): SessionRecord {
+  const last = completedAt(session, session.hands);
+  const record = sessionRecord(seatSession(), {
+    sessionId: session.sessionId,
+    startedAt: session.startedAt,
+    updatedAt: last,
+  });
+  return {
+    ...record,
+    handsPlayed: session.hands,
+    ...(session.ended && { endedAt: last.toISOString() }),
+  };
+}
+
 /** One hand record per (session, hand), each a clone of the template with `gradeFor`'s grades, and one
  *  session record per session, in the order given. */
 export function statRecords(
@@ -62,17 +87,7 @@ export function statRecords(
       };
       records.push(graded(clone, (d) => gradeFor(s, n, d)));
     }
-    const last = completedAt(session, session.hands);
-    const record = sessionRecord(seatSession(), {
-      sessionId: session.sessionId,
-      startedAt: session.startedAt,
-      updatedAt: last,
-    });
-    return {
-      ...record,
-      handsPlayed: session.hands,
-      ...(session.ended && { endedAt: last.toISOString() }),
-    };
+    return storedSession(session);
   });
   return { records, sessions: sessionRecords };
 }
@@ -111,4 +126,35 @@ export function forcedFoldRecord(sessionId: string, handNumber: number, at: Date
   while (nextStep(table) === 'bot') table = stepBot(table);
   const { record } = handWrite(table, { sessionId, startedAt: at, completedAt: at });
   return graded(record, () => ({ grade: 'correct', hinted: false }));
+}
+
+const poolCode = (hand: number): ReplayCode => replayCodeFromWords([0x2c1b3a, hand, 11, 5]);
+
+/** The handWrite records of `hands` hands played from `table` (bots by style, the user checks or calls). */
+function playedRecords(table: TableState, hands: number): HandRecord[] {
+  return playSession(table, hands, poolCode).map((done) => handWrite(done, TEMPLATE_META).record);
+}
+
+/** `hands` real cash hands played at `stake`. */
+export function cashPool(stake: Stake, hands: number): HandRecord[] {
+  return playedRecords(seatSession({ gameType: 'cash', stake }), hands);
+}
+
+/** `hands` real sit-and-go hands (level 1). */
+export function sitAndGoPool(hands: number): HandRecord[] {
+  return playedRecords(seatSession({ gameType: 'sit-and-go' }), hands);
+}
+
+/** `session.hands` clones of `pool`'s records (cycling) as hands 1… of `session`, and its session record. */
+export function cloneRecords(
+  pool: readonly HandRecord[],
+  session: StatSession,
+): { records: HandRecord[]; session: SessionRecord } {
+  const records = Array.from({ length: session.hands }, (_, i): HandRecord => ({
+    ...structuredClone(pool[i % pool.length] as HandRecord),
+    sessionId: session.sessionId,
+    handNumber: i + 1,
+    completedAt: completedAt(session, i + 1).toISOString(),
+  }));
+  return { records, session: storedSession(session) };
 }

@@ -1228,14 +1228,21 @@ h1[tabindex='-1']:focus {
 }
 
 .stats-message,
+.stats-bb100-message,
+.stats-goal,
 .stats-note {
   margin: 0;
   font-size: 13px;
   color: #c9ced6;
 }
 
-.stats-message {
+.stats-message,
+.stats-bb100-message {
   font-size: 14px;
+}
+
+.stats-goal {
+  color: #f0a030;
 }
 
 .stats-trend {
@@ -1257,4 +1264,9 @@ h1[tabindex='-1']:focus {
 
 .stats-dot {
   fill: #6ea8ff;
+}
+
+.stats-break-even {
+  stroke: #f0a030;
+  stroke-width: 1.5;
 }

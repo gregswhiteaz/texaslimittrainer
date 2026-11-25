@@ -186,7 +186,7 @@ export interface ReviewSummary {
 }
 
 /** The user's net chips for the hand: award shares + returned − put in (A-2). */
-export function netResult(hand: CompletedHand): number {
+export function netResult(hand: Pick<CompletedHand, 'userSeat' | 'result' | 'actions'>): number {
   const { userSeat, result } = hand;
   let net = result.returned?.seat === userSeat ? result.returned.amount : 0;
   for (const award of result.awards) {
