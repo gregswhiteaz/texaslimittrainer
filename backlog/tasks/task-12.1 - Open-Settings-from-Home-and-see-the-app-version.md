@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-25T15:24:00Z'
+updated_date: '2026-11-25T15:37:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -85,4 +85,6 @@ Full spec: doit/TASK-12.1/spec.md
 
 <!-- SECTION:NOTES:BEGIN -->
 AC added from TASK-2.15 follow-up (doc-124).
+
+Build: Settings entry and screen (Play / Display / Your data, Version 0.0.0 via Vite define); DB v4 adds a settings store with defaults (additive; tested upgrade from v3 with data); readSettings(); play-money walk visits Settings; locked Home/resume/route/play-money tests (Q-5) and session-end/home-control store lists (Block 1) re-pinned. gate PASS.
 <!-- SECTION:NOTES:END -->
