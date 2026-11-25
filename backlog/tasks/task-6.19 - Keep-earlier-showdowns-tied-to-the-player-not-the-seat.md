@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-18T07:03:00Z'
-updated_date: '2026-11-25T21:07:00Z'
+updated_date: '2026-11-25T21:27:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -46,4 +46,6 @@ Full spec: doit/TASK-6.19/spec.md
 
 <!-- SECTION:NOTES:BEGIN -->
 From TASK-6.9: the playtest runner now passes earlier showdowns (runner.ts, last 1,000, keyed by seat). Its seat-vs-player attribution and freezing are this task's ACs #1–#2 — cover the runner too.
+
+Build: rememberShowdown (frozen, capped) and forgetSeats; runner forgets replaced seats after each hand; locked style-bots expected list re-pinned (Q-1); playtest output byte-identical to base on 4 runs incl. Mixed with replacements; new tests fail without forgetSeats. gate PASS.
 <!-- SECTION:NOTES:END -->

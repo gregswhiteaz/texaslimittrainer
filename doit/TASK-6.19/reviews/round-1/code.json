@@ -1,0 +1,26 @@
+{"reviewer": "code", "round": 1,
+ "rubric": [
+  {"item": "SPEC-01 correctness", "result": "pass"},
+  {"item": "SPEC-01 test strength", "result": "pass"},
+  {"item": "SPEC-02 correctness", "result": "pass"},
+  {"item": "SPEC-02 test strength", "result": "pass"},
+  {"item": "SPEC-03 correctness", "result": "pass"},
+  {"item": "SPEC-03 test strength", "result": "pass"},
+  {"item": "SPEC-04 correctness", "result": "pass"},
+  {"item": "SPEC-04 test strength", "result": "pass"},
+  {"item": "SPEC-05 correctness", "result": "pass"},
+  {"item": "SPEC-05 test strength", "result": "pass"},
+  {"item": "SPEC-06 correctness", "result": "pass"},
+  {"item": "SPEC-06 test strength", "result": "pass"},
+  {"item": "scope", "result": "pass"},
+  {"item": "concision", "result": "pass"},
+  {"item": "clarity", "result": "pass"}
+ ],
+ "findings": [
+  {"fingerprint": "tests/engine/player-view.test.ts:spec03-fixture-built-with-unit-under-test", "severity": "NIT",
+   "file": "tests/engine/player-view.test.ts", "line": 174,
+   "issue": "The SPEC-03 test builds its two 'already frozen' starting entries by calling rememberShowdown itself, so the fixture depends on the function being tested.",
+   "evidence": "const older = rememberShowdown([], {shown:[{seat:3,...}]}, 2)[0]; const old2 = rememberShowdown([], ...)[0]; The assertions that matter (result[0] toBe old2, length 2, copy not same object, deeplyFrozen(result), entry unfrozen) still fail if the function breaks, so the test is still strong.",
+   "fix": "Build the fixture entries as literals and freeze them with Object.freeze, e.g. Object.freeze({ shown: Object.freeze([Object.freeze({ seat: 3, holeCards: Object.freeze([1, 2] as const) })]) })."}
+ ],
+ "summary": "The change matches the spec. rememberShowdown makes one deep-frozen copy and applies the window. forgetSeats returns the same list when seats is empty or no seat matches, keeps untouched entries as the same objects, makes changed entries deep-frozen, and drops entries left empty (A-1). The runner adds the finished hand's showdown first and then forgets the replaced seats (A-5); the yielded PlayedHand.replaced is not changed because the runner assigns a new array before pushing. The new acceptance model is built only from showdownOf(final) and PlayedHand.replaced, without the helpers, so it is independent of the code under test. It would fail if forgetting were removed, if the order were swapped (every hand shows down, so a busting bot's cards would stay), or if freezing were removed (SPEC-02 needs exactly nonEmpty*5 TypeErrors). The locked style-bots edit only changes how the expected list is built (let + filter by played[k+1].replaced); every assertion is still there. I checked: the 3 test files pass (11 tests), and `npm run playtest -- --hands 300 --seed 42 --size 6 --lineup tough` gives byte-identical output on the base commit and the branch. No bot reads earlierShowdowns. One NIT only."}
