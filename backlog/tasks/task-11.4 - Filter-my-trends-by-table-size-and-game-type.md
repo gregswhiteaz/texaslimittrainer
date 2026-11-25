@@ -1,10 +1,11 @@
 ---
 id: TASK-11.4
 title: Filter my trends by table size and game type
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-25T11:42:00Z'
+updated_date: '2026-11-25T11:55:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -66,6 +67,17 @@ Plan key: E11-S03 · Dream: limit-holdem-trainer
 - [ ] #11 Story documentation is written and published to Backlog.md
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. filterTrendData(data, filter) for table size (session size = largest dealt-in count, via referenceSizeOf) and game type; All/All returns data unchanged
+2. Table size and Game type selects on Statistics once data has loaded; not remembered
+3. App recomputes statisticsView(filtered, all) so the G-2 target always uses all hands; BB/100 stays cash-only
+4. Tests per AC (incl. no G-2 elements without points), unit cases, e2e with axe
+
+Full spec: doit/TASK-11.4/spec.md
+<!-- SECTION:PLAN:END -->
 
 ## Implementation Notes
 
