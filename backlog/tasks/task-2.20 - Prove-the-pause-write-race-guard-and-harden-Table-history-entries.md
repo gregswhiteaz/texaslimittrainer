@@ -1,11 +1,11 @@
 ---
 id: TASK-2.20
 title: Prove the pause write-race guard and harden Table history entries
-status: In Progress
+status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-24T03:18:00Z'
-updated_date: '2026-11-25T20:07:00Z'
+updated_date: '2026-11-25T20:08:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -14,6 +14,8 @@ dependencies:
   - TASK-2.14
 references:
   - doc-108
+documentation:
+  - doc-146
 parent_task_id: TASK-2
 priority: medium
 ordinal: 231000
@@ -52,4 +54,12 @@ AC added from TASK-3.11 follow-up (judge J-1-01, doc-109).
 Build: random 32-hex Table history key; step off this load's stale Table entry on popstate; race tests hold the start-record write (fail without the Home guard — verified); history.spec case (5) under the paused clock. Full e2e 371 pass; repeat-each=3 clean; gate PASS.
 
 Judge r1 PASS 8/8: guard removal makes both held-write tests fail (0 hands vs 1); 18 real Back/Forward flows on the production preview in Chromium/WebKit (Home control, Back/Forward/Resume, held write, reload, rebuy, leave table, error Return Home) — paused counts match IndexedDB, no stale Table entry traps navigation; full e2e 371 pass. CI 45689683518 green.
+
+Follow-ups: TASK-2.22 (extra Back after reload).
 <!-- SECTION:NOTES:END -->
+
+## Final Summary
+
+<!-- SECTION:FINAL_SUMMARY:BEGIN -->
+Added e2e proof that Home and browser Back wait for a held session start-record write (guard removal makes both tests fail), made the Table history key random (32 hex chars) so every TASK-2.14 Back/Forward case runs under the paused clock, and made Forward onto this load's stale Table entry step off so one Back on Home leaves the app. Verified: judge PASS 8/8, npm test 1410 passed, Playwright 371 passed/0 failed in Chromium and WebKit. Review: assumptions A-1..A-5, D-3 (step-off rule) and D-4 (locked history.spec case 5 edited). Follow-up: after a reload, entries from the earlier load stay in history so leaving takes an extra Back (pre-existing, not tracked). Changed lines 328 vs budget 320.
+<!-- SECTION:FINAL_SUMMARY:END -->
