@@ -1,0 +1,156 @@
+{
+  "id": "TASK-6.19",
+  "title": "Keep earlier showdowns tied to the player, not the seat",
+  "status": "To Do",
+  "archived": false,
+  "type": "feature",
+  "priority": "medium",
+  "project": null,
+  "assignees": [],
+  "reporter": null,
+  "labels": [
+    "dream-limit-holdem-trainer",
+    "follow-up"
+  ],
+  "milestone": "m-1",
+  "parentTaskId": "TASK-6",
+  "acceptanceCriteriaCompleted": 0,
+  "acceptanceCriteriaCount": 2,
+  "references": [
+    "doc-13"
+  ],
+  "modifiedFiles": [],
+  "ordinal": 172000,
+  "createdAt": "2026-11-18T07:03:00Z",
+  "updatedAt": "2026-11-22T18:28:00Z",
+  "dueDate": null,
+  "isReady": true,
+  "path": "backlog/tasks/task-6.19 - Keep-earlier-showdowns-tied-to-the-player-not-the-seat.md",
+  "description": "Follow-up from TASK-1.5. earlierShowdowns is keyed by seat number. When a busted cash bot is replaced (REQ-007.5) or seats change in a sit-and-go, a new occupant would inherit the previous player's shown hands, so bots could profile the wrong player. The list is also shared by reference across views.",
+  "dependencies": [
+    "TASK-1.5"
+  ],
+  "dependencyGraph": {
+    "root": "TASK-6.19",
+    "nodes": [
+      {
+        "id": "TASK-6.19",
+        "title": "Keep earlier showdowns tied to the player, not the seat",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": 0,
+        "dependentDepth": 0
+      },
+      {
+        "id": "TASK-1.1",
+        "title": "Bootstrap the strict TypeScript project with one-command checks",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 5,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.2",
+        "title": "Rank showdown hands by real poker hand rankings",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 3,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.3",
+        "title": "Deal every hand from a seeded shuffle with a replay code",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 3,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.4",
+        "title": "Play a complete fixed-limit hand from blinds to showdown",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 2,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.5",
+        "title": "Give each deciding seat only its own view of the hand",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 1,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.7",
+        "title": "Run every check in GitHub Actions on each push and pull request",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 4,
+        "dependentDepth": null
+      }
+    ],
+    "edges": [
+      {
+        "from": "TASK-1.2",
+        "to": "TASK-1.7"
+      },
+      {
+        "from": "TASK-1.3",
+        "to": "TASK-1.7"
+      },
+      {
+        "from": "TASK-1.4",
+        "to": "TASK-1.2"
+      },
+      {
+        "from": "TASK-1.4",
+        "to": "TASK-1.3"
+      },
+      {
+        "from": "TASK-1.5",
+        "to": "TASK-1.4"
+      },
+      {
+        "from": "TASK-1.7",
+        "to": "TASK-1.1"
+      },
+      {
+        "from": "TASK-6.19",
+        "to": "TASK-1.5"
+      }
+    ]
+  },
+  "readiness": {
+    "isReady": true,
+    "isBlocked": false,
+    "blockingDependencies": [],
+    "missingDependencies": []
+  },
+  "documentation": [],
+  "subtasks": [],
+  "acceptanceCriteria": [
+    {
+      "index": 1,
+      "text": "Given a bot at seat 4 is replaced, When later views are built, Then no earlier showdown of the previous seat-4 player is attributed to the new bot",
+      "checked": false
+    },
+    {
+      "index": 2,
+      "text": "Given the session appends an earlier showdown, When any seat policy receives it, Then the entry is frozen and cannot be changed by a policy",
+      "checked": false
+    }
+  ],
+  "definitionOfDone": [],
+  "implementationPlan": null,
+  "implementationNotes": "From TASK-6.9: the playtest runner now passes earlier showdowns (runner.ts, last 1,000, keyed by seat). Its seat-vs-player attribution and freezing are this task's ACs #1\u2013#2 \u2014 cover the runner too.",
+  "comments": [],
+  "finalSummary": null
+}

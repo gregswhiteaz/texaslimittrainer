@@ -1,10 +1,11 @@
 ---
 id: TASK-6.19
 title: Keep earlier showdowns tied to the player, not the seat
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-18T07:03:00Z'
-updated_date: '2026-11-22T18:28:00Z'
+updated_date: '2026-11-25T21:07:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -30,6 +31,16 @@ Follow-up from TASK-1.5. earlierShowdowns is keyed by seat number. When a busted
 - [ ] #1 Given a bot at seat 4 is replaced, When later views are built, Then no earlier showdown of the previous seat-4 player is attributed to the new bot
 - [ ] #2 Given the session appends an earlier showdown, When any seat policy receives it, Then the entry is frozen and cannot be changed by a policy
 <!-- AC:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. Pure helpers rememberShowdown (frozen, capped) and forgetSeats in src/engine/player-view.ts
+2. Playtest runner adds each finished hand's showdown, then forgets seats in replaced, so a seat's history covers only its current player
+3. Re-pin the locked style-bots test's expected list (Q-1); new acceptance test at 3 seats with replacements; playtest output unchanged
+
+Full spec: doit/TASK-6.19/spec.md
+<!-- SECTION:PLAN:END -->
 
 ## Implementation Notes
 

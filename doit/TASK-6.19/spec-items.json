@@ -1,0 +1,38 @@
+[
+  {
+    "id": "SPEC-01",
+    "verifies": "AC#1",
+    "verification": "acceptance `tests/playtest/earlier-showdowns.acceptance.test.ts::a replaced bot never sees the previous seat holder's showdowns`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-02",
+    "verifies": "AC#2",
+    "verification": "acceptance `tests/playtest/earlier-showdowns.acceptance.test.ts::every earlier showdown a policy receives is frozen`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-03",
+    "verifies": "AC#2",
+    "verification": "unit `tests/engine/player-view.test.ts::rememberShowdown appends a deep-frozen copy and keeps the last limit`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-04",
+    "verifies": "AC#1",
+    "verification": "unit `tests/engine/player-view.test.ts::forgetSeats drops the shown hands of replaced seats`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-05",
+    "verifies": "AC#1",
+    "verification": "acceptance `tests/playtest/style-bots.acceptance.test.ts::the playtest passes each seat the earlier showdowns from previous hands`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-06",
+    "verifies": "AC#1, AC#2",
+    "verification": "command `npm run lint && npm run typecheck && npm test`",
+    "status": "pending"
+  }
+]

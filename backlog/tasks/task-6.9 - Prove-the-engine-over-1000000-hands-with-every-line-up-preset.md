@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-25T00:07:00Z'
+updated_date: '2026-11-25T21:06:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -99,6 +99,8 @@ Review R1: 0 blocking (code 3 NITs, security 1 NIT) — not tracked.
 Judge R1 PASS 13/13 (own full --lineups run 25.9 s, 3 shard re-runs byte-identical, 100k 27.3 s). J-1-01 MEDIUM (restart resets untested) fixed in-story with a unit test that fails if either reset is removed; gate PASS. J-1-02 LOW (cap reach is seed-dependent) info only. AC#3 live dispatch tracked on TASK-1.51. Follow-ups: ACs on TASK-1.51, TASK-6.15; notes on TASK-6.19, TASK-6.11.
 
 Locked test(s) unlocked for TASK-7.32 Q-1 (user-approved advice/bot fix; expected values re-pinned one-for-one).
+
+Locked tests/playtest/style-bots.acceptance.test.ts unlocked for TASK-6.19 Q-1 (expected earlier showdowns forget replaced seats).
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary

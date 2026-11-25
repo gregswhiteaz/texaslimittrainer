@@ -1085,6 +1085,12 @@
       "event": "unlock",
       "file": "tests/playtest/style-bots.acceptance.test.ts",
       "reason": "TASK-7.32 Q-1 (user-approved fix): bots on action ranges, turn price counts the river bet, 65% value-raise vs a bet; re-pin expected values one-for-one, keep check counts"
+    },
+    {
+      "t": "2026-11-25T14:06:47",
+      "event": "unlock",
+      "file": "tests/playtest/style-bots.acceptance.test.ts",
+      "reason": "TASK-6.19 Q-1 (auto-accepted): expected earlier-showdowns list forgets seats in each hand's replaced list (AC#1); no other assertion changed"
     }
   ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-6.9",
@@ -1097,6 +1103,7 @@
     "1": "PASS"
   },
   "relock_pending": [
+    "tests/playtest/style-bots.acceptance.test.ts",
     "tests/playtest/style-bots.acceptance.test.ts"
   ]
 }
