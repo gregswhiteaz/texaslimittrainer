@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-25T17:08:00Z'
+updated_date: '2026-11-25T17:27:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -87,4 +87,6 @@ Full spec: doit/TASK-13.1/spec.md
 AC added from TASK-3.6 follow-up (worker failure has no UI yet)
 
 AC added from TASK-3.6 judge J-1-01 (shared worker stays failed)
+
+Build: AppRoot error boundary + window error/unhandledrejection listeners; ErrorScreen (approved text) with Return Home remounting App on Home; session left after last completed hand (Resume works); sharedAdviceClient replaces a failed worker; faults only via Playwright init scripts (dist has no hook). Full e2e 350 pass; gate PASS.
 <!-- SECTION:NOTES:END -->
