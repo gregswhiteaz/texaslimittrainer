@@ -4,7 +4,7 @@ title: See whether I met the G-2 goal after 5,000 hands
 status: To Do
 assignee: []
 created_date: '2026-11-17T22:47:00Z'
-updated_date: '2026-11-25T10:47:00Z'
+updated_date: '2026-11-25T11:42:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-2
@@ -44,6 +44,7 @@ Plan key: E11-S11 · Dream: limit-holdem-trainer
 - [ ] #3 Given 5,000 stored hands with a first-1,000 rate of 6.2 and a hands 4,001-5,000 rate of 3.2, When the Statistics screen is shown, Then it shows 'G-2 goal not met' with the rates 6.2 and 3.2 [REQ-049.4]
 - [ ] #4 Given hands 4,001-5,000 contain 30 unhinted and 40 hinted Major errors and the first 1,000 contain 62 unhinted, When the verdict is computed, Then the later rate is 3.0 and the G-2 goal is met [REQ-040.3, REQ-049.4]
 - [ ] #5 Given 5,000 stored hands of which 2,000 are sit-and-go hands and 900 contain a hinted decision, When the Statistics screen is shown with game type filter Cash and table size Heads-up, Then the G-2 verdict is shown with the same result as with all filters set to All [REQ-049.4]
+- [ ] #6 Given the Major and BB/100 chart captions, When G-2/G-3 are both shown, Then both captions use the same '(G-n)' convention (both keep or both drop it), with the user's choice recorded
 <!-- AC:END -->
 
 ## Definition of Done
@@ -66,4 +67,6 @@ Plan key: E11-S11 · Dream: limit-holdem-trainer
 
 <!-- SECTION:NOTES:BEGIN -->
 From TASK-11.3 (spec scope note): the G-2 'met' check should compare the exact rate, not the rounded tenths value shown on the target line.
+
+AC added from TASK-11.3 follow-up (doc-136): Major caption keeps '(G-2)', BB/100 caption dropped '(G-3)' in TASK-11.2.
 <!-- SECTION:NOTES:END -->

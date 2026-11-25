@@ -1,11 +1,11 @@
 ---
 id: TASK-11.3
 title: See the G-2 target line on my Major-error trend
-status: In Progress
+status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-25T11:41:00Z'
+updated_date: '2026-11-25T11:42:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -16,6 +16,7 @@ references:
 documentation:
   - doc-1
   - doc-2
+  - doc-136
 parent_task_id: TASK-11
 priority: high
 type: feature
@@ -79,4 +80,12 @@ Full spec: doit/TASK-11.3/spec.md
 Build: g2Target (first 1,000 stored hands, bbPer100(m,2,1000), null below 1,000; always from all hands); dashed target line with approved caption and aria suffix; scale includes target; null-target markup unchanged. npm test 1361 pass; statistics e2e 14 pass; gate PASS.
 
 Judge r1 PASS 10/10: production preview Chromium/WebKit, 1,300 hands seeded out of time order — target 6.2 from 123 unhinted Majors in the first 1,000 hands, line at the computed y, exact caption and aria-label; 999 hands show no line. Review r1 MAJOR (order not tested) fixed in r2. CI 45605151334 green.
+
+Follow-ups: TASK-11.4 AC (no target without points), TASK-11.11 AC (caption convention).
 <!-- SECTION:NOTES:END -->
+
+## Final Summary
+
+<!-- SECTION:FINAL_SUMMARY:BEGIN -->
+Added the dashed G-2 target line and caption to the Major-error chart: half the unhinted Major rate over the first 1,000 chronological hands, shown only once 1,000 hands are stored, and unaffected by filters (statisticsView(filtered, all)). Verified: lint, typecheck and npm test green (1361 tests), locked acceptance tests, Chromium and WebKit e2e with axe, judge PASS 10/10. Review r1 MAJOR (fixtures already in time order) fixed in r2. Review: Q-1 (filter ACs added to TASK-11.4 and TASK-11.8, exact-rate note on TASK-11.11), Q-2 (caption keeps "(G-2)" while the BB/100 card dropped "(G-3)"), A-1..A-6 in the doc. Risks: open MINOR (no test that the target shows no line without plot points) is covered only by the judge holdout; scope 572 vs 560 lines.
+<!-- SECTION:FINAL_SUMMARY:END -->
