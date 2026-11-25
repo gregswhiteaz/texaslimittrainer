@@ -3,17 +3,19 @@ id: TASK-6.25
 title: >-
   Keep every bot style inside its band in the Mixed line-up now that bots read
   opponents' actions
-status: In Progress
+status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-25T00:07:00Z'
-updated_date: '2026-11-25T05:56:00Z'
+updated_date: '2026-11-25T05:57:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
 milestone: m-1
 dependencies:
   - TASK-7.32
+documentation:
+  - doc-130
 parent_task_id: TASK-6
 priority: high
 ordinal: 239000
@@ -52,4 +54,12 @@ AC added from TASK-7.32 build: check-styles slow Mixed check also fails until th
 Build: replacement keeps the busted bot's style (REQ-007.5 amended, 007.7/007.8 retired, changelog 1.11; random draw deleted); Maniac call->raise 0.2 + fold->call 0.8; Rock value bar 80 + wider ranges after a raise; locked re-pins one-for-one (qa.md); check-styles fast timeout 30s->60s (Block 1). Slow group 95/95 incl. style-bands 3 seeds and check-styles 100k; all-TAG output hash unchanged; gate PASS.
 
 Judge r1 PASS 7/7: CLI 100k Mixed --check-styles passed on seeds 42/7/1234 (style multiset constant, every style in band); slow style-bands + check-styles 15/15; all-TAG hash unchanged; live app: busted TAG and Calling station replaced by same style. CI 45552117336 green.
+
+Follow-ups: TASK-6.26 (tidy dead Replay option, comments, justifications, test loop); TASK-6.12 note (Maniac +12 BB/100, TAG PFR margin 0.6).
 <!-- SECTION:NOTES:END -->
+
+## Final Summary
+
+<!-- SECTION:FINAL_SUMMARY:BEGIN -->
+Replacement bots now keep the busted bot's style (app and playtest), stopping the Maniac takeover of Mixed seats; Maniac (call-to-raise 0.2, new fold-to-call 0.8) and Rock (value bar 80, wider ranges after a raise) retuned. Unchanged REQ-027 bands pass at 100,000 hands on seeds 42, 7, 1234 (workflow commands exit 0, slow tests pass); npm test 1310 passed, Playwright 304 passed, all-TAG output unchanged. Judge PASS 7/7. Review: Q-1 reverses your earlier Q-113 (random replacement style), Q-2 Maniac/Rock retune, check-styles fast timeout 30s to 60s, locked re-pins, A-1..A-7. Risks: Maniac still wins about +12 BB/100 (TASK-6.12); TAG PFR only 0.6 above its floor; dead replacedStylesOption in cli.ts. Doc: doc-130
+<!-- SECTION:FINAL_SUMMARY:END -->

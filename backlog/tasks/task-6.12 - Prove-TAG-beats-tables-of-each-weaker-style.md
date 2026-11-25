@@ -4,7 +4,7 @@ title: Prove TAG beats tables of each weaker style
 status: To Do
 assignee: []
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-22T19:15:00Z'
+updated_date: '2026-11-25T05:57:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-2
@@ -68,4 +68,6 @@ Plan key: E06-S12 · Dream: limit-holdem-trainer
 
 <!-- SECTION:NOTES:BEGIN -->
 AC added from TASK-6.10 follow-up (cross-shard pooling of win rates)
+
+From TASK-6.25 (doc-130): after bots switched to action ranges and Mixed tables keep their styles, the Maniac wins about +12 BB/100 at the fixed Mixed table because bots fold to it by design. Measure TAG vs Maniac tables with current bots before pinning thresholds. Also: TAG PFR sits only 0.6 above its band floor in Mixed 100k runs.
 <!-- SECTION:NOTES:END -->
