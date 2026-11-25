@@ -7,7 +7,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-25T00:07:00Z'
-updated_date: '2026-11-25T04:21:00Z'
+updated_date: '2026-11-25T05:11:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -48,4 +48,6 @@ Full spec: doit/TASK-6.25/spec.md
 
 <!-- SECTION:NOTES:BEGIN -->
 AC added from TASK-7.32 build: check-styles slow Mixed check also fails until this lands (TAG PFR 10.3 / Agg 31.3, Rock VPIP 6.7 at seed 42).
+
+Build: replacement keeps the busted bot's style (REQ-007.5 amended, 007.7/007.8 retired, changelog 1.11; random draw deleted); Maniac call->raise 0.2 + fold->call 0.8; Rock value bar 80 + wider ranges after a raise; locked re-pins one-for-one (qa.md); check-styles fast timeout 30s->60s (Block 1). Slow group 95/95 incl. style-bands 3 seeds and check-styles 100k; all-TAG output hash unchanged; gate PASS.
 <!-- SECTION:NOTES:END -->
