@@ -6,7 +6,7 @@ The report is written once and never changed. The Session Report screen shows it
 paused session (TASK-2.7) also ends sessions, through `endPausedSessions`, without opening the screen.
 
 - `src/table/session-report.ts` (headless): the `SessionReport` and `CashResult` types, `sessionReport(…)`,
-  `bbPer100(…)`, `parseSessionReport(…)`, `signedDollars(…)`, `signedTenths(…)`, `reportView(…)` and the
+  `bbPer100(…)`, `parseSessionReport(…)`, `signedDollars(…)`, `signedTenths(…)`, `reportView(…)`, `rateTiles(…)` and the
   `SessionEnder` interface.
 - `src/storage/hand-store.ts` (browser): the `reports` store, `endSession(sessionId, endedAt)`,
   `endPausedSessions(sessionId, endedAt)` and `getReport(sessionId)`.
@@ -34,6 +34,8 @@ paused session (TASK-2.7) also ends sessions, through `endPausedSessions`, witho
 | `handsPlayed` | integer ≥ 1                | Completed hands                                                               |
 | `cash`        | object \| null             | The cash result below; null for a sit-and-go (finishing position: TASK-10.12) |
 | `style`       | object, optional           | The user's style counts over the session's stored hands (TASK-10.3)           |
+| `errors`      | object, optional           | `{ major, minor }`: the user's unhinted Major / Minor decisions (TASK-10.4)   |
+| `leakCounts`  | array, optional            | Unhinted counts per postflop leak category (TASK-10.5)                        |
 
 `cash`:
 
@@ -50,6 +52,35 @@ paused session (TASK-2.7) also ends sessions, through `endPausedSessions`, witho
 The screen derives the five stats, the [healthy ranges](../stats/healthy-ranges.md) and the labels from these
 counts and `players` when it shows the report. Reports stored before TASK-10.3 have no `style`; they are not
 back-filled and the screen shows no style section for them.
+
+### errors
+
+`errors` holds two whole counts over the decision records (`decisions`) of the session's stored hands:
+`major` is the number of the user's decisions graded Major with `hinted` false, and `minor` likewise for
+Minor (REQ-044.2, REQ-040.3). Correct and hinted decisions count toward neither; a forced fold (TASK-10.2) has
+no decision entry, so it never counts. The counts are read from the stored grades when the session ends; the
+advice engine is never re-run. `sessionReport` adds `errors` only when it gets at least one hand and every
+hand carries `decisions` (stored hand records always do); a skipped missing or invalid record contributes
+nothing.
+
+The screen shows three tiles in their own list "Volume and errors", after the cash tiles and before the
+style section: **Hands played** (`handsPlayed`, a plain integer), **Major errors /100** and
+**Minor errors /100**. Each rate is `bbPer100(count, 1, handsPlayed)` shown with one decimal, i.e. integer
+half-up tenths `floor((2000 × count + hands) / (2 × hands))`: 12 Major in 200 hands → `6.0`, 1 in 3 → `33.3`,
+0 → `0.0`. Reports stored before TASK-10.4 have no `errors`; they are not back-filled and the screen shows
+none of the three tiles for them.
+
+### leakCounts
+
+`leakCounts` holds, for every postflop [leak category](../stats/leaks.md) with at least one unhinted decision,
+in category data order, `{ category, decisions, errors, major }`: the category id, the number of the user's
+unhinted decisions in it, how many of those were graded Minor or Major, and how many were graded Major.
+Categories with no unhinted decision are left out, so it is `[]` when the session had no unhinted postflop
+decision. Like `errors`, it is read from the stored decision records (their `street`, `action.type`, `grade`
+and `hinted`) when the session ends, and is present exactly when `errors` is. Whether a category is a leak, its
+evidence and its text are worked out from these counts and the current category data when the report is shown;
+`major` is kept for ranking leaks (TASK-10.8). Reports stored before TASK-10.5 have no `leakCounts`; they are
+not back-filled and the screen shows no leaks section for them.
 
 The cash values come from the stored session record only: it is written in the same transaction as each hand
 record, so its `handsPlayed`, stacks and `rebuys` always match the stored hands. A rebuy bought during an
@@ -85,7 +116,11 @@ unfinished hand is not stored yet, so neither the rebuy nor its chips count.
   that `result` and `bbPer100` match the formulas, and throws `RangeError('Invalid session report: <field>')`.
   A present `style` must be an object of whole counts with `1 ≤ handsDealt ≤ handsPlayed`,
   `voluntary ≤ handsDealt`, `preflopRaised ≤ voluntary`, `sawFlop ≤ handsDealt`, `showdowns ≤ sawFlop` and
-  `showdownsWon ≤ showdowns` (field `style.<name>`).
+  `showdownsWon ≤ showdowns` (field `style.<name>`). A present `errors` must be an object whose `major` and
+  `minor` are whole numbers ≥ 0 (field `errors`, `errors.major`, `errors.minor`). A present `leakCounts` must
+  be an array (field `leakCounts`) of objects (`leakCounts[i]`) whose `category` is a known category id later
+  in data order than the previous element's (`leakCounts[i].category`), with whole `decisions ≥ 1`,
+  `0 ≤ errors ≤ decisions` and `0 ≤ major ≤ errors` (`leakCounts[i].decisions`, `.errors`, `.major`).
 - **An ended session never shows in Resume.** `findPausedSession` drops records with `endedAt`.
 
 ## Tests
@@ -100,6 +135,12 @@ unfinished hand is not stored yet, so neither the rebuy nor its chips count.
 - `tests/table/session-report-style.acceptance.test.ts`, `tests/storage/session-end-style.test.ts`,
   `tests/ui/report-style.acceptance.test.tsx` and `e2e/report-style.spec.ts`: the stored `style` counts and
   the style section.
+- `tests/table/session-report-errors.test.ts`, `tests/ui/report-errors.acceptance.test.tsx`,
+  `tests/storage/session-end-errors.acceptance.test.ts` (a scripted 200-hand session) and
+  `e2e/report-errors.spec.ts`: the stored `errors` counts and the hands played and error-rate tiles.
+- `tests/table/session-report-leaks.test.ts`, `tests/stats/leaks.acceptance.test.ts`,
+  `tests/ui/report-leaks.acceptance.test.tsx` and `e2e/report-leaks.spec.ts`: the stored `leakCounts` and the
+  leaks section.
 - `e2e/session-report.spec.ts` (every push): Leave table between hands, Back to Home, Leave with the Hand
   Review open, seeded long sessions, and a 0-hand session. `e2e/rebuy.spec.ts` and
   `e2e/bust-continue.spec.ts`: Leave table in the bust dialog.

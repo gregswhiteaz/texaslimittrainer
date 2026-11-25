@@ -1,10 +1,11 @@
 ---
 id: TASK-10.4
 title: See my hands played and error rates per 100 hands in the report
-status: To Do
-assignee: []
+status: Done
+assignee:
+  - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-17T23:22:00Z'
+updated_date: '2026-11-24T22:39:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -16,6 +17,7 @@ references:
 documentation:
   - doc-1
   - doc-2
+  - doc-127
 parent_task_id: TASK-10
 priority: high
 type: feature
@@ -39,24 +41,51 @@ Plan key: E10-S02 · Dream: limit-holdem-trainer
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Given a 200-hand session with 12 unhinted Major errors and 28 unhinted Minor errors, When its report is shown, Then it shows hands played "200", Major errors /100 "6.0" and Minor errors /100 "14.0" [REQ-044.2]
-- [ ] #2 Given a 200-hand session with 12 unhinted and 5 hinted Major errors, When its report is shown, Then Major errors /100 is "6.0" [REQ-044.2]
-- [ ] #3 Given a 50-hand session in which every decision was graded Correct, When its report is shown, Then Major errors /100 and Minor errors /100 both show "0.0" [REQ-044.2]
-- [ ] #4 Given a scripted 200-hand session, When its report is shown, Then hands played, Major errors /100 and Minor errors /100 each equal the values recomputed from the session's stored hand records [REQ-044.2]
+- [x] #1 Given a 200-hand session with 12 unhinted Major errors and 28 unhinted Minor errors, When its report is shown, Then it shows hands played "200", Major errors /100 "6.0" and Minor errors /100 "14.0" [REQ-044.2]
+- [x] #2 Given a 200-hand session with 12 unhinted and 5 hinted Major errors, When its report is shown, Then Major errors /100 is "6.0" [REQ-044.2]
+- [x] #3 Given a 50-hand session in which every decision was graded Correct, When its report is shown, Then Major errors /100 and Minor errors /100 both show "0.0" [REQ-044.2]
+- [x] #4 Given a scripted 200-hand session, When its report is shown, Then hands played, Major errors /100 and Minor errors /100 each equal the values recomputed from the session's stored hand records [REQ-044.2]
 <!-- AC:END -->
 
 ## Definition of Done
 <!-- DOD:BEGIN -->
-- [ ] #1 Every acceptance criterion has at least one automated test (unit, property or Playwright) that passes
-- [ ] #2 `npm run lint`, `npm run typecheck` and `npm test` pass with zero errors [REQ-059.1, REQ-059.4]
-- [ ] #3 The golden-spot suite passes 100% (applies from the story that creates the suite, E07-S14, onward) [REQ-039.4]
-- [ ] #4 Coverage thresholds hold: >= 90% engine/bots/advice/statistics, >= 70% overall [REQ-059.3]
-- [ ] #5 Engine, bots, advice and statistics code imports no UI or browser-only code [REQ-059.2]
-- [ ] #6 Stories that touch the engine, bots or advice: a 10,000-hand playtest reports zero invariant violations (applies once the playtest runner exists, E01-S07, onward) [REQ-056.1]
-- [ ] #7 Stories that add or change a screen: Playwright test of the screen flow in Chromium and WebKit, and axe reports zero serious or critical violations (axe tooling is provisioned in the toolchain story E01-S01) [REQ-057.1]
-- [ ] #8 No new network requests beyond the app's own files [REQ-058.1]
-- [ ] #9 Strategy-content stories: text is original and every chart, range or golden spot carries its justification [REQ-061.2]
-- [ ] #10 CI workflow is green on the story's branch (applies once the CI story E01-S02 is done; E01-S01 instead passes the same checks locally) [REQ-064.2]
-- [ ] #11 Story documentation is written and published to Backlog.md
-- [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
+- [x] #1 Every acceptance criterion has at least one automated test (unit, property or Playwright) that passes
+- [x] #2 `npm run lint`, `npm run typecheck` and `npm test` pass with zero errors [REQ-059.1, REQ-059.4]
+- [x] #3 The golden-spot suite passes 100% (applies from the story that creates the suite, E07-S14, onward) [REQ-039.4]
+- [x] #4 Coverage thresholds hold: >= 90% engine/bots/advice/statistics, >= 70% overall [REQ-059.3]
+- [x] #5 Engine, bots, advice and statistics code imports no UI or browser-only code [REQ-059.2]
+- [x] #6 Stories that touch the engine, bots or advice: a 10,000-hand playtest reports zero invariant violations (applies once the playtest runner exists, E01-S07, onward) [REQ-056.1]
+- [x] #7 Stories that add or change a screen: Playwright test of the screen flow in Chromium and WebKit, and axe reports zero serious or critical violations (axe tooling is provisioned in the toolchain story E01-S01) [REQ-057.1]
+- [x] #8 No new network requests beyond the app's own files [REQ-058.1]
+- [x] #9 Strategy-content stories: text is original and every chart, range or golden spot carries its justification [REQ-061.2]
+- [x] #10 CI workflow is green on the story's branch (applies once the CI story E01-S02 is done; E01-S01 instead passes the same checks locally) [REQ-064.2]
+- [x] #11 Story documentation is written and published to Backlog.md
+- [x] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. sessionReport counts the user's unhinted Major/Minor decisions from the session's hand records and stores optional errors {major, minor} once at session end
+2. rateTiles(): Hands played, Major errors /100, Minor errors /100 (one decimal, handsPlayed denominator)
+3. Report screen: rate tiles in their own row after the cash tiles; old reports without errors show none
+4. Tests: unit/acceptance per AC (incl. 200-hand session), render, e2e Chromium+WebKit with axe; docs
+
+Full spec: doit/TASK-10.4/spec.md
+<!-- SECTION:PLAN:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+Build: report stores unhinted Major/Minor error counts once at session end; rate tiles (Hands played, Major/Minor errors /100); npm test 1291 passed, Playwright 302 passed; gate PASS.
+
+Judge r1 PASS 12/12; live Chromium+WebKit report rates match independent recount (hinted excluded, forced fold adds no error); CI 45501129314 green.
+
+Follow-ups: none tracked. Unneeded cast (MINOR) and half-up boundary case (NIT) change no behaviour; rate-tile row vs storyboard (A-2) is listed for user review; SPEC-04 local runtime below the infra value bar.
+<!-- SECTION:NOTES:END -->
+
+## Final Summary
+
+<!-- SECTION:FINAL_SUMMARY:BEGIN -->
+Session Report now shows Hands played, Major errors /100 and Minor errors /100 tiles in a 'Volume and errors' list. Counts of unhinted Major/Minor decisions are stored once on the report as optional errors {major, minor} at session end; rates are derived at display with one decimal (half-up). Hinted decisions and forced folds are excluded. Verified: npm test 1291 pass, lint/typecheck clean, Chromium and WebKit e2e with axe, judge 12/12. Review: Q-1 (stored errors counts), A-1..A-6 (esp. A-2: tiles in their own row, not the storyboard's single row; A-3: old reports show no tiles). Follow-ups: unneeded cast (MINOR), half-up boundary test (NIT); SPEC-04 adds ~40 s to local npm test under coverage.
+<!-- SECTION:FINAL_SUMMARY:END -->

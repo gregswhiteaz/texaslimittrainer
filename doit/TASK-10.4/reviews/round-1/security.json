@@ -1,0 +1,3 @@
+{"reviewer": "security", "round": 1,
+ "findings": [],
+ "summary": "Only untrusted input is the stored report read from IndexedDB. parseSessionReport now validates optional errors as an object with whole-number major/minor in [0, MAX_SAFE_INTEGER]; handsPlayed is already validated > 0, so rateTiles cannot divide by zero or produce NaN, and even maximal counts stay below the 1e21 toFixed exponent threshold. Values render as React text children (dt/dd), with keys from a fixed literal set, so there is no HTML injection. sessionReport counts from in-app hand records (trusted path). No new dependencies, secrets, network, crypto or file I/O. No findings."}

@@ -1,11 +1,18 @@
+import type { ActionType, Grade } from '../advice/grade';
 import type { SeatNumber } from '../engine/hand';
+import {
+  categoryCounts,
+  LEAK_CATEGORIES,
+  type CategoryCount,
+  type CategoryDecision,
+} from '../stats/leaks';
 import {
   addStyleCounts,
   handStyleCounts,
   type StatHand,
   type StyleCounts,
 } from '../stats/style-stats';
-import { isWhole } from './hand-record';
+import { isWhole, type HandRecordDecision } from './hand-record';
 import { buyIn, MAX_SESSION_COUNT, tableStake, type GameType, type Stake } from './session';
 import type { SessionRecord } from './session-record';
 import { GAME_LABEL } from './table-view';
@@ -43,10 +50,32 @@ export interface SessionReport {
   /** The user's style counts over the session's stored hands. Absent on reports without stored hands
    *  (TASK-10.3 A-4). */
   readonly style?: StyleCounts;
+  /** Absent on reports without stored decision records (TASK-10.4 A-3, A-4). */
+  readonly errors?: ErrorCounts;
+  /** Unhinted counts per postflop leak category; absent iff `errors` is absent (TASK-10.5 A-4, A-5). */
+  readonly leakCounts?: readonly CategoryCount[];
 }
 
-/** A stored hand as the report needs it; HandRecord satisfies it. */
-export type ReportHand = StatHand & { readonly userSeat: SeatNumber };
+/** The part of a stored decision the report reads; HandRecordDecision satisfies it. */
+export interface ReportDecision {
+  readonly grade: { readonly grade: Grade };
+  readonly hinted: boolean;
+  /** Absent only in hand-built test data; such a decision is not classified (TASK-10.5 A-2). */
+  readonly street?: HandRecordDecision['street'];
+  readonly action?: { readonly type: ActionType };
+}
+
+/** A stored hand as the report needs it; HandRecord satisfies it. `decisions` absent → no `errors` (A-4). */
+export type ReportHand = StatHand & {
+  readonly userSeat: SeatNumber;
+  readonly decisions?: readonly ReportDecision[];
+};
+
+/** Counts of the user's unhinted decisions graded Major / Minor (REQ-044.2, REQ-040.3). */
+export interface ErrorCounts {
+  readonly major: number;
+  readonly minor: number;
+}
 
 /** The result of SessionEnder.endPausedSessions. */
 export interface PausedSessionsEnd {
@@ -77,6 +106,12 @@ export interface ReportTile {
   readonly value: string;
 }
 
+export interface RateTile {
+  readonly key: 'hands' | 'major' | 'minor';
+  readonly label: string;
+  readonly value: string;
+}
+
 export interface ReportView {
   /** "Cash · 6 players · $4/$8 · 214 hands" */
   readonly header: string;
@@ -99,7 +134,8 @@ export function bbPer100(result: number, bigBet: number, hands: number): number 
 }
 
 /** The report of `session` ended at `endedAt`, with `style` summed over `hands` (absent when `hands` is
- *  omitted or empty). RangeError('Invalid session report: <field>') for 0 hands played or an invalid Date. */
+ *  omitted or empty), and `errors` and `leakCounts` counted from their decisions (absent unless every hand
+ *  carries them). RangeError('Invalid session report: <field>') for 0 hands played or an invalid Date. */
 export function sessionReport(
   session: SessionRecord,
   endedAt: Date,
@@ -136,7 +172,20 @@ export function sessionReport(
   const style = hands
     .map((hand) => handStyleCounts(hand, hand.userSeat))
     .reduce((total, counts) => addStyleCounts(total, counts));
-  return { ...report, style };
+  if (!hands.every((hand) => hand.decisions !== undefined)) return { ...report, style };
+  const decisions = hands.flatMap((hand) => hand.decisions as readonly ReportDecision[]);
+  const errors = { major: 0, minor: 0 };
+  for (const { grade, hinted } of decisions) {
+    if (hinted) continue;
+    if (grade.grade === 'major') errors.major++;
+    else if (grade.grade === 'minor') errors.minor++;
+  }
+  const leakCounts = categoryCounts(
+    decisions.filter(
+      (d): d is CategoryDecision => d.street !== undefined && d.action !== undefined,
+    ),
+  );
+  return { ...report, style, errors, leakCounts };
 }
 
 type Fields = Readonly<Record<string, unknown>>;
@@ -176,6 +225,30 @@ function parseStyle(value: unknown, handsPlayed: number): void {
   count('showdownsWon', showdowns);
 }
 
+function parseErrors(value: unknown): void {
+  const errors = object(value, 'errors');
+  whole(errors.major, 'errors.major', 0, Number.MAX_SAFE_INTEGER);
+  whole(errors.minor, 'errors.minor', 0, Number.MAX_SAFE_INTEGER);
+}
+
+/** Validates stored leak counts: categories known and in strictly increasing LEAK_CATEGORIES order,
+ *  1 ≤ decisions, errors ≤ decisions, major ≤ errors. */
+function parseLeakCounts(value: unknown): void {
+  if (!Array.isArray(value)) throw invalid('leakCounts');
+  const order = LEAK_CATEGORIES.map((category) => category.id as string);
+  let previous = -1;
+  value.forEach((element: unknown, i) => {
+    const path = `leakCounts[${i}]`;
+    const count = object(element, path);
+    const index = typeof count.category === 'string' ? order.indexOf(count.category) : -1;
+    if (index <= previous) throw invalid(`${path}.category`);
+    previous = index;
+    const decisions = whole(count.decisions, `${path}.decisions`, 1, Number.MAX_SAFE_INTEGER);
+    const errors = whole(count.errors, `${path}.errors`, 0, decisions);
+    whole(count.major, `${path}.major`, 0, errors);
+  });
+}
+
 /** Validates an untrusted stored report; returns it typed, not copied. Unknown extra properties are ignored.
  *  RangeError('Invalid session report: <field>'). */
 export function parseSessionReport(value: unknown): SessionReport {
@@ -205,6 +278,8 @@ export function parseSessionReport(value: unknown): SessionReport {
     if (cash.bbPer100 !== bbPer100(result, bigBet, hands)) throw invalid('cash.bbPer100');
   }
   if (report.style !== undefined) parseStyle(report.style, hands);
+  if (report.errors !== undefined) parseErrors(report.errors);
+  if (report.leakCounts !== undefined) parseLeakCounts(report.leakCounts);
   return value as SessionReport;
 }
 
@@ -239,4 +314,17 @@ export function reportView(report: SessionReport): ReportView {
             { key: 'rebuys', label: 'Rebuys', value: String(cash.rebuys) },
           ],
   };
+}
+
+/** Hands played and the Major / Minor error rates per 100 hands (TASK-10.4); [] for a report without
+ *  `errors`. */
+export function rateTiles(report: SessionReport): readonly RateTile[] {
+  const { handsPlayed, errors } = report;
+  if (errors === undefined) return [];
+  const rate = (count: number): string => bbPer100(count, 1, handsPlayed).toFixed(1);
+  return [
+    { key: 'hands', label: 'Hands played', value: String(handsPlayed) },
+    { key: 'major', label: 'Major errors /100', value: rate(errors.major) },
+    { key: 'minor', label: 'Minor errors /100', value: rate(errors.minor) },
+  ];
 }
