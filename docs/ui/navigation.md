@@ -163,7 +163,8 @@ game works without a reload), and remounts App on Home with the `TLH Trainer` he
 (REQ-004.2). Each completed hand is stored with the session record before the next hand is dealt, so Home (which
 waits for any hand write still running) shows Resume session with the hands completed before the error. Resume
 deals the unfinished hand's number again from the stacks at the end of the last completed hand; the unfinished
-hand has no record. An error during hand 1 leaves a 0-hand session, which is not offered for Resume.
+hand has no record. An error during hand 1 leaves the paused session with 0 hands; Home offers it for Resume ("0 hands · paused"),
+as after a reload mid-hand 1, and Resume deals Hand #1. Only ending a session deletes a 0-hand session.
 
 ## Tests
 

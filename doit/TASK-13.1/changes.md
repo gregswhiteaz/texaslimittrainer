@@ -15,3 +15,4 @@
 - `docs/ui/navigation.md` — modified: Error screen row, section and tests (SPEC-13).
 
 No new dependencies.
+- `docs/ui/navigation.md` — corrected the 0-hand-session sentence (judge J-1-01; orchestrator docs fix after round 1)
