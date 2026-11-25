@@ -1,11 +1,11 @@
 ---
 id: TASK-10.7
 title: See how many of my decisions used a hint in the report
-status: In Progress
+status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-25T07:27:00Z'
+updated_date: '2026-11-25T07:28:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -17,6 +17,7 @@ references:
 documentation:
   - doc-1
   - doc-2
+  - doc-132
 parent_task_id: TASK-10
 priority: high
 type: feature
@@ -80,4 +81,12 @@ Full spec: doit/TASK-10.7/spec.md
 Build: new optional write-once report field hints {hinted, decisions} counted at session end and validated on read; 4th 'Hints used' tile; key-order unit checks in session-report-errors/leaks tests moved to slice(-4) (not locked). npm test 1329 pass; report e2e 18 pass; gate PASS.
 
 Judge r1 PASS 11/11: live Chromium (15 of 44, 34.1%) and WebKit (13 of 38, 34.2%) tiles matched an independent count from stored records; rounding swept to d=400. CI 45566726961 green.
+
+Follow-ups: TASK-10.16 (literal e2e wording; reject hints without errors).
 <!-- SECTION:NOTES:END -->
+
+## Final Summary
+
+<!-- SECTION:FINAL_SUMMARY:BEGIN -->
+Added a "Hints used" tile to the Session Report ("Volume and errors"), e.g. "40 of 320 decisions (12.5%)". It reads from a new optional write-once `hints {hinted, decisions}` field on the stored report, validated on read and absent on older reports. Verified: npm test 1329 pass, lint/typecheck clean, new unit/acceptance/storage/e2e tests (Chromium and WebKit); judge round 1 PASS 11/11, including an independent production-build run whose tile matched the stored records. Review: Q-1 (separate hints field), Q-2 (tile text and placement) and A-1..A-5 were auto-accepted and need your review. Risks: the e2e takes its expected text from hintTile (wording covered by unit tests); a stored report with hints but no errors shows no tile (never written by the app).
+<!-- SECTION:FINAL_SUMMARY:END -->
