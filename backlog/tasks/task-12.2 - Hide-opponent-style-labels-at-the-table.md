@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-25T16:22:00Z'
+updated_date: '2026-11-25T16:53:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -44,27 +44,27 @@ Plan key: E12-S02 · Dream: limit-holdem-trainer
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Given a fresh install, When the Settings screen is shown, Then 'Show opponent styles at the table' is on [REQ-050.3]
-- [ ] #2 Given 'Show opponent styles' is off and a 6-max table with bots Ben (Calling station) and Ava (TAG), When the table is shown, Then no seat shows a style label and Ben's seat still shows his name and stack [REQ-021.2, REQ-050.3]
-- [ ] #3 Given 'Show opponent styles' is on, When the table is shown, Then every bot seat shows its style label [REQ-050.3]
-- [ ] #4 Given the user turned 'Show opponent styles' off, When the app is closed, relaunched and a table is opened, Then the toggle is still off and no style labels are shown [REQ-050.3, REQ-021.2]
-- [ ] #5 Given 'Show opponent styles' is off, When the table renders, Then each seat's data-part="style" label and its ' · ' separator are absent
+- [x] #1 Given a fresh install, When the Settings screen is shown, Then 'Show opponent styles at the table' is on [REQ-050.3]
+- [x] #2 Given 'Show opponent styles' is off and a 6-max table with bots Ben (Calling station) and Ava (TAG), When the table is shown, Then no seat shows a style label and Ben's seat still shows his name and stack [REQ-021.2, REQ-050.3]
+- [x] #3 Given 'Show opponent styles' is on, When the table is shown, Then every bot seat shows its style label [REQ-050.3]
+- [x] #4 Given the user turned 'Show opponent styles' off, When the app is closed, relaunched and a table is opened, Then the toggle is still off and no style labels are shown [REQ-050.3, REQ-021.2]
+- [x] #5 Given 'Show opponent styles' is off, When the table renders, Then each seat's data-part="style" label and its ' · ' separator are absent
 <!-- AC:END -->
 
 ## Definition of Done
 <!-- DOD:BEGIN -->
-- [ ] #1 Every acceptance criterion has at least one automated test (unit, property or Playwright) that passes
-- [ ] #2 `npm run lint`, `npm run typecheck` and `npm test` pass with zero errors [REQ-059.1, REQ-059.4]
-- [ ] #3 The golden-spot suite passes 100% (applies from the story that creates the suite, E07-S14, onward) [REQ-039.4]
-- [ ] #4 Coverage thresholds hold: >= 90% engine/bots/advice/statistics, >= 70% overall [REQ-059.3]
-- [ ] #5 Engine, bots, advice and statistics code imports no UI or browser-only code [REQ-059.2]
-- [ ] #6 Stories that touch the engine, bots or advice: a 10,000-hand playtest reports zero invariant violations (applies once the playtest runner exists, E01-S07, onward) [REQ-056.1]
-- [ ] #7 Stories that add or change a screen: Playwright test of the screen flow in Chromium and WebKit, and axe reports zero serious or critical violations (axe tooling is provisioned in the toolchain story E01-S01) [REQ-057.1]
-- [ ] #8 No new network requests beyond the app's own files [REQ-058.1]
-- [ ] #9 Strategy-content stories: text is original and every chart, range or golden spot carries its justification [REQ-061.2]
-- [ ] #10 CI workflow is green on the story's branch (applies once the CI story E01-S02 is done; E01-S01 instead passes the same checks locally) [REQ-064.2]
-- [ ] #11 Story documentation is written and published to Backlog.md
-- [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
+- [x] #1 Every acceptance criterion has at least one automated test (unit, property or Playwright) that passes
+- [x] #2 `npm run lint`, `npm run typecheck` and `npm test` pass with zero errors [REQ-059.1, REQ-059.4]
+- [x] #3 The golden-spot suite passes 100% (applies from the story that creates the suite, E07-S14, onward) [REQ-039.4]
+- [x] #4 Coverage thresholds hold: >= 90% engine/bots/advice/statistics, >= 70% overall [REQ-059.3]
+- [x] #5 Engine, bots, advice and statistics code imports no UI or browser-only code [REQ-059.2]
+- [x] #6 Stories that touch the engine, bots or advice: a 10,000-hand playtest reports zero invariant violations (applies once the playtest runner exists, E01-S07, onward) [REQ-056.1]
+- [x] #7 Stories that add or change a screen: Playwright test of the screen flow in Chromium and WebKit, and axe reports zero serious or critical violations (axe tooling is provisioned in the toolchain story E01-S01) [REQ-057.1]
+- [x] #8 No new network requests beyond the app's own files [REQ-058.1]
+- [x] #9 Strategy-content stories: text is original and every chart, range or golden spot carries its justification [REQ-061.2]
+- [x] #10 CI workflow is green on the story's branch (applies once the CI story E01-S02 is done; E01-S01 instead passes the same checks locally) [REQ-064.2]
+- [x] #11 Story documentation is written and published to Backlog.md
+- [x] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
 
 ## Implementation Plan
@@ -85,4 +85,6 @@ Full spec: doit/TASK-12.2/spec.md
 AC added from TASK-3.3 follow-up (doc-24).
 
 Build: writeSettings (validated whole-record write); App reads settings at launch and saves each change; Display checkbox 'Show opponent styles at the table' (44x44 input); Table hides bot style labels when off. Locked e2e/settings.spec.ts re-pinned (control list; Tab order from the heading, Block 1). Full e2e 338 pass + settings fixed; gate PASS.
+
+Judge r1 PASS 12/12, no findings: production preview Chromium/WebKit — toggle by keyboard and mouse persists across reload; labels and separators hidden for every bot; applies on Resume; invalid records fall back to defaults and are repaired; other non-default fields preserved; checkbox disabled while the read is held back; full e2e 340 pass. CI 45656465611 green.
 <!-- SECTION:NOTES:END -->
