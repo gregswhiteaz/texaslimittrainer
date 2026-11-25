@@ -1,10 +1,11 @@
 ---
 id: TASK-13.1
 title: Return Home from an unexpected error without losing completed hands
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-21T18:11:00Z'
+updated_date: '2026-11-25T17:08:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -68,6 +69,17 @@ Plan key: E13-S02 · Dream: limit-holdem-trainer
 - [ ] #11 Story documentation is written and published to Backlog.md
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. AppRoot error boundary above App, also catching window error and unhandledrejection; ErrorScreen with approved wording and Return Home
+2. Return Home remounts App on Home (heading focused); session left as stored after its last completed hand, so Resume works; nothing written or sent
+3. sharedAdviceClient replaces a failed worker
+4. Faults injected only from Playwright init scripts; new e2e through the built App (mid-session, worker, report mount)
+
+Full spec: doit/TASK-13.1/spec.md
+<!-- SECTION:PLAN:END -->
 
 ## Implementation Notes
 
