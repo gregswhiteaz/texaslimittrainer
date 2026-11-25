@@ -5,13 +5,23 @@
   "base_commit": "3d6df2bee2ec7f7c95db5ace50351c5ad03b4b9c",
   "started": "2026-11-25T00:34:24",
   "review_round": 1,
-  "judge_round": 0,
+  "judge_round": 1,
   "sendbacks": 0,
   "gate_runs": 2,
   "questions": 2,
   "assumptions": 4,
   "escalations": 0,
-  "item_failures": {},
+  "item_failures": {
+    "SPEC-01": 0,
+    "SPEC-02": 0,
+    "SPEC-03": 0,
+    "SPEC-04": 0,
+    "SPEC-05": 0,
+    "SPEC-06": 0,
+    "SPEC-07": 0,
+    "SPEC-08": 0,
+    "SPEC-09": 0
+  },
   "locked_tests": {
     "tests/ui/report-leak-ranking.acceptance.test.tsx": "88fd85cf29254d8b2d9385c5a86ff91f0ab6609345427a636434e6bd49d1dd40"
   },
@@ -1822,5 +1832,8 @@
   "spec_sha256": "6174459115b8ab8ecfd87d5dbb0fabda4e8d27c645263c33e0ee5372a6ea291b",
   "review_findings": {
     "1": 0
+  },
+  "judge_results": {
+    "1": "PASS"
   }
 }
