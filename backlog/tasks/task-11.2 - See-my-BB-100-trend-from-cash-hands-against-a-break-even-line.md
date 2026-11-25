@@ -1,11 +1,11 @@
 ---
 id: TASK-11.2
 title: See my BB/100 trend from cash hands against a break-even line
-status: In Progress
+status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-25T10:35:00Z'
+updated_date: '2026-11-25T10:36:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -17,6 +17,7 @@ references:
 documentation:
   - doc-1
   - doc-2
+  - doc-135
 parent_task_id: TASK-11
 priority: high
 type: feature
@@ -85,4 +86,12 @@ Full spec: doit/TASK-11.2/spec.md
 Build: TrendHand cash {net, bigBet}; bb100Value exact over LCM of big bets, rounded like the report; BB/100 card with dashed break-even line and approved text; real sit-and-go hand path confirmed. npm test 1355 pass; statistics/home/play-money/bb100 e2e 26 pass; gate PASS.
 
 Judge r1 PASS 13/13: real UI cash sessions with a rebuy (Chromium 643 hands, WebKit 542) — per-session BB/100 equals the report tile; 1,700+ seeded mixed-stake cash hands plus sit-and-go gave BB/100 points, tooltips, aria-label and break-even line matching an exact independent computation; message boundaries checked. CI 45586611899 green.
+
+Follow-ups: TASK-11.14 (LCM/stuck-loading hardening, discriminated TrendSource, all-negative case); UI wiring ACs on TASK-11.4/11.5 (added at Q-1).
 <!-- SECTION:NOTES:END -->
+
+## Final Summary
+
+<!-- SECTION:FINAL_SUMMARY:BEGIN -->
+Added a second Statistics chart, "Big bets won per 100 hands": one point per 500 cash hands (sit-and-go excluded), exact integer arithmetic matching the Session Report's BB/100, a dashed break-even line, and the 0 / 1-499 cash-hand messages. Verified: npm test 1355 pass, lint and typecheck clean, Chromium + WebKit e2e with axe, judge round 1 PASS 13/13 including a real played session whose value equals its report. Review assumptions A-1..A-8 and texts Q-2. The game-type filter and per-session UI stay in TASK-11.4/11.5 (Q-1; ACs added there). Risks: a tampered store with many odd big bets can overflow the lcm and leave Statistics on loading (MINOR); trendHand cash cast (MINOR); 799 lines vs 750 budget.
+<!-- SECTION:FINAL_SUMMARY:END -->
