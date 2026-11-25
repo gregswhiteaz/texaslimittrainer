@@ -1,0 +1,3 @@
+{"reviewer": "security", "round": 1,
+ "findings": [],
+ "summary": "Lint-config-only change (tools/lint/headless-boundary.js, eslint.config.js) plus tests; no src/runtime change, no new dependencies, no secrets, no untrusted input. Regex patterns are static developer config with no attacker-controlled input path. Test probes write fixed strings into the existing sandbox helper. The change strengthens the REQ-025.1 fairness boundary (bots cannot import hidden hand state); runtime playerView boundary unchanged. No findings."}

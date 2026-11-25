@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-18T07:03:00Z'
-updated_date: '2026-11-25T22:05:00Z'
+updated_date: '2026-11-25T22:22:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -48,4 +48,6 @@ Full spec: doit/TASK-6.21/spec.md
 
 <!-- SECTION:NOTES:BEGIN -->
 AC added from TASK-6.1 follow-up (doc-18).
+
+Build: botSeatPolicyConfig lint boundary for src/bots (type-only player-view, Action/SeatNumber/Street from hand, no other engine modules or packages, no side-effect engine imports); acceptance tests fail without the config; SPEC-09 source scan replaced; no src change, playtest byte-identical. gate PASS.
 <!-- SECTION:NOTES:END -->

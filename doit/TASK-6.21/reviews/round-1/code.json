@@ -1,0 +1,24 @@
+{"reviewer": "code", "round": 1,
+ "rubric": [
+  {"item": "SPEC-01 correctness", "result": "fail"},
+  {"item": "SPEC-01 test strength", "result": "pass"},
+  {"item": "SPEC-02 correctness", "result": "pass"},
+  {"item": "SPEC-02 test strength", "result": "pass"},
+  {"item": "SPEC-03 correctness", "result": "pass"},
+  {"item": "SPEC-03 test strength", "result": "pass"},
+  {"item": "SPEC-04 correctness", "result": "pass"},
+  {"item": "SPEC-04 test strength", "result": "pass"},
+  {"item": "scope", "result": "pass"},
+  {"item": "concision", "result": "pass"},
+  {"item": "clarity", "result": "pass"}
+ ],
+ "findings": [
+  {"fingerprint": "tools/lint/headless-boundary.js:non-normalized-engine-path-bypass",
+   "severity": "MAJOR",
+   "file": "tools/lint/headless-boundary.js",
+   "line": 144,
+   "issue": "The engine patterns match the raw specifier text, so a path with a non-canonical segment that still resolves to src/engine/hand.ts gets past every pattern. The SPEC-09 scan this replaces ran posix.join on the target first, so it caught these. Replacing it this way loses coverage, which goes against SPEC-04 and the A-1 rule that 'nothing that is forbidden today becomes allowed'.",
+   "evidence": "I ran the repo config in-process with ESLint lintText on src/bots/x.ts. `import { applyAction } from '../engine/./hand'`, `'../engine/hand/../hand'` and `'../engine//hand'` all produce no errors. `'./../engine/hand'`, `'../../engine/hand'` from src/bots/styles, `'../../src/engine/hand'`, `'../engine/hand.ts'`, aliased imports and re-exports (`applyAction as Action`, `export * as h`, `export *`, `export type * from hand`) are all caught. Side-effect `import '../engine/./hand'` is caught by the selector. src/engine has no index.ts, so a bare `'../engine'` import cannot resolve.",
+   "fix": "Add a first pattern to BOT_BOUNDARY_PATTERNS that rejects any non-normalized relative specifier, e.g. { regex: '/\\\\./|//|(^|/)[^./][^/]*/\\\\.\\\\.(/|$)', message: BOT_BOUNDARY_MESSAGE } (matches '/./', '//', and 'name/..'). Add `../engine/./hand` and `../engine/hand/../hand` probes to the SPEC-01 sandbox set so a regression fails."}
+ ],
+ "summary": "Implementation matches the spec's behaviour table. The determinism list was extracted as-is: botDeterminismConfig contents are identical, and src/advice and src/engine/bot-random.ts still fail on Math.random, Date and Date.now. Coverage the scan had (UI and react imports) is still provided by the headless core no-restricted-imports, which the TS-variant rule does not override. The SPEC-09 check that a value import like `import { Action }` is rejected is now enforced by verbatimModuleSyntax rather than by lint, which is acceptable. Aliased, nested-path, extension and every re-export form are caught. One gap: non-normalized paths (../engine/./hand, ../engine//hand, ../engine/hand/../hand) bypass the rule, and the old normalized scan caught them (MAJOR). The new test file runs in about 1.3 s with a single sandbox lint, so the tooling group stays fast."}

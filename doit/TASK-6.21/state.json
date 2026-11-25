@@ -4,7 +4,7 @@
   "branch": "doit/TASK-6.21",
   "base_commit": "94950c85d8ae6ff158015675a271091523819dec",
   "started": "2026-11-25T15:01:46",
-  "review_round": 0,
+  "review_round": 1,
   "judge_round": 0,
   "sendbacks": 0,
   "gate_runs": 2,
@@ -2032,7 +2032,25 @@
       "skips": 0
     }
   },
-  "history": [],
+  "history": [
+    {
+      "t": "2026-11-25T15:24:12",
+      "event": "unlock",
+      "file": "tests/toolchain/bot-boundary.acceptance.test.ts",
+      "reason": "Review r1 MAJOR: strengthen SPEC-01 probes with non-normalized engine paths"
+    }
+  ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-6.21",
-  "spec_sha256": "60a9b010368864a0e21be4545cbf6e1c31cee7174613e27d78e68aae20765fb8"
+  "spec_sha256": "60a9b010368864a0e21be4545cbf6e1c31cee7174613e27d78e68aae20765fb8",
+  "review_findings": {
+    "1": 1
+  },
+  "relock_pending": [
+    "tests/toolchain/bot-boundary.acceptance.test.ts"
+  ],
+  "brief_history": {
+    "tools/lint/headless-boundary.js:non-normalized-engine-path-bypass": [
+      "review r1"
+    ]
+  }
 }
