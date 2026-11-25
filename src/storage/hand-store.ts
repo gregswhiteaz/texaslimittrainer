@@ -13,6 +13,11 @@ import {
   type SessionReport,
 } from '../table/session-report';
 import {
+  parsePersistentStorage,
+  type PersistentStorageReader,
+  type PersistentStorageWriter,
+} from './persistent-storage';
+import {
   DEFAULT_SETTINGS,
   parseSettings,
   type SettingsReader,
@@ -21,14 +26,18 @@ import {
 
 export const DB_NAME = 'tlh-trainer';
 /** The only version marker until REQ-054 adds per-store schema versions. v2 added SESSIONS_STORE, v3
- *  REPORTS_STORE, v4 SETTINGS_STORE. */
-export const DB_VERSION = 4;
+ *  REPORTS_STORE, v4 SETTINGS_STORE, v5 META_STORE. */
+export const DB_VERSION = 5;
 export const HANDS_STORE = 'hands';
 export const SESSIONS_STORE = 'sessions';
 export const REPORTS_STORE = 'reports';
 export const SETTINGS_STORE = 'settings';
 /** The out-of-line key of the one settings record in SETTINGS_STORE. */
 export const SETTINGS_KEY = 'settings';
+/** App metadata records under out-of-line keys (TASK-13.2). */
+export const META_STORE = 'meta';
+/** The META_STORE key of the persistent-storage record, { granted: boolean }. */
+export const PERSISTENT_STORAGE_KEY = 'persistentStorage';
 
 function opened(factory: IDBFactory, name: string): Promise<IDBDatabase> {
   return new Promise((resolve, reject) => {
@@ -47,6 +56,8 @@ function opened(factory: IDBFactory, name: string): Promise<IDBDatabase> {
       if (event.oldVersion < 4) {
         request.result.createObjectStore(SETTINGS_STORE).put({ ...DEFAULT_SETTINGS }, SETTINGS_KEY);
       }
+      // No record: its absence means persistent storage has not been requested yet.
+      if (event.oldVersion < 5) request.result.createObjectStore(META_STORE);
     };
     request.onsuccess = () => {
       const db = request.result;
@@ -176,16 +187,21 @@ async function trendData(db: IDBDatabase): Promise<TrendData> {
   return { hands, sessionStarts };
 }
 
+type AppStore = HandStore &
+  SessionEnder &
+  TrendReader &
+  SettingsReader &
+  SettingsWriter &
+  PersistentStorageReader &
+  PersistentStorageWriter;
+
 /**
  * An IndexedDB HandStore: add-only hand records, one replaceable record per session and one write-once report
  * per ended session. The database opens on the first call; if opening fails, every call rejects with that
  * error. Records are validated by parseHandRecord / parseSessionRecord / parseSessionReport / parseSettings when
  * read.
  */
-export function openHandStore(
-  factory: IDBFactory = indexedDB,
-  name = DB_NAME,
-): HandStore & SessionEnder & TrendReader & SettingsReader & SettingsWriter {
+export function openHandStore(factory: IDBFactory = indexedDB, name = DB_NAME): AppStore {
   let db: Promise<IDBDatabase> | null = null;
   const database = (): Promise<IDBDatabase> => (db ??= opened(factory, name));
   const readOnly = async (store: string): Promise<IDBObjectStore> =>
@@ -269,17 +285,27 @@ export function openHandStore(
         transaction.objectStore(SETTINGS_STORE).put(record, SETTINGS_KEY),
       );
     },
+    async readPersistentStorage() {
+      const value: unknown = await requested(
+        (await readOnly(META_STORE)).get(PERSISTENT_STORAGE_KEY),
+      );
+      return parsePersistentStorage(value);
+    },
+    async writePersistentStorage(granted) {
+      const transaction = (await database()).transaction(META_STORE, 'readwrite', {
+        durability: 'strict',
+      });
+      return completed(
+        transaction,
+        transaction.objectStore(META_STORE).put({ granted }, PERSISTENT_STORAGE_KEY),
+      );
+    },
   };
 }
 
-let shared: (HandStore & SessionEnder & TrendReader & SettingsReader & SettingsWriter) | null =
-  null;
+let shared: AppStore | null = null;
 
 /** The app-wide store, created on first call (never at module load). */
-export function sharedHandStore(): HandStore &
-  SessionEnder &
-  TrendReader &
-  SettingsReader &
-  SettingsWriter {
+export function sharedHandStore(): AppStore {
   return (shared ??= openHandStore());
 }

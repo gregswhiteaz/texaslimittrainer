@@ -13,15 +13,16 @@ other Settings controls come with later stories (TASK-12.4-12.9, TASK-2.11).
 
 | Item         | Value                                                                    |
 | ------------ | ------------------------------------------------------------------------ |
-| Database     | `tlh-trainer`, version `4` (version 4 adds `settings`)                   |
+| Database     | `tlh-trainer`, version `5` (version 4 adds `settings`, version 5 `meta`) |
 | Object store | `settings` (next to `hands`, `sessions` and `reports`)                   |
 | Key          | out-of-line keys (no `keyPath`); the one record has the key `'settings'` |
 | Indexes      | none                                                                     |
 
 The `if (oldVersion < 4)` step of `onupgradeneeded` creates the store and puts a copy of `DEFAULT_SETTINGS`
 under `'settings'`. It runs on a first launch and when an existing version 1-3 database is upgraded; the
-`hands`, `sessions` and `reports` stores and their records are untouched. Out-of-line keys leave room for other
-records later (for example TASK-12.9's storage-warning flag).
+`hands`, `sessions` and `reports` stores and their records are untouched. The later `if (oldVersion < 5)` step
+adds the `meta` store for the persistent-storage record (TASK-13.2, see `persistent-storage.md`); the
+`settings` store gains no other record.
 
 ## Fields
 
@@ -81,4 +82,4 @@ records later (for example TASK-12.9's storage-warning flag).
 - `tests/storage/settings-write.test.ts`: `writeSettings` replaces, validates, strips extra fields and keeps the
   last of two back-to-back writes.
 - `e2e/opponent-styles.spec.ts`: the toggle's save, its reload, and the defaults shown for an invalid record.
-- `e2e/support/hand-records.ts` opens the database at version 4 and mirrors the version 4 step.
+- `e2e/support/hand-records.ts` opens the database at version 5 and mirrors the version 4 and 5 steps.

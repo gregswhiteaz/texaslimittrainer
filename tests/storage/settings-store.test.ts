@@ -70,7 +70,7 @@ describe('settings store', () => {
         db.transaction(SETTINGS_STORE, 'readonly').objectStore(SETTINGS_STORE).get(SETTINGS_KEY),
       ),
     }));
-    expect(version).toBe(4);
+    expect(version).toBe(5);
     expect(names).toContain('settings');
     expect(raw).toEqual(DEFAULTS);
     expect(await store.readSettings()).toEqual(DEFAULTS);
@@ -125,8 +125,8 @@ describe('settings store', () => {
       };
     });
     expect(stored).toEqual({
-      version: 4,
-      names: ['hands', 'reports', 'sessions', 'settings'],
+      version: 5,
+      names: ['hands', 'meta', 'reports', 'sessions', 'settings'],
       hands: [hand],
       sessions: [session],
       reports: [report],

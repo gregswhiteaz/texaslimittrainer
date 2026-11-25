@@ -140,7 +140,7 @@ test('a change made while paused applies when the table resumes', async ({ page 
 /** Runs in the page: replaces the settings record with an invalid one (showOpponentStyles: 'no'). */
 function storeInvalidSettings(defaults: Record<string, unknown>): Promise<void> {
   return new Promise((resolve, reject) => {
-    const open = indexedDB.open('tlh-trainer', 4);
+    const open = indexedDB.open('tlh-trainer', 5);
     open.onerror = () => reject(open.error);
     open.onsuccess = () => {
       const db = open.result;

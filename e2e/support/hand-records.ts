@@ -3,11 +3,11 @@ import { expect, type Page } from '@playwright/test';
 // Raw IndexedDB access to tlh-trainer from the page, independent of src/storage (TASK-3.9, TASK-3.10), and a
 // helper that plays the user's hands by folding.
 
-/** Runs in the page: every value in tlh-trainer's `store` ('hands', 'sessions', 'reports' or 'settings') in key
- *  order, after opening the database at v4 (creating the stores as the app does if they are missing). */
+/** Runs in the page: every value in tlh-trainer's `store` ('hands', 'sessions', 'reports', 'settings' or 'meta') in key
+ *  order, after opening the database at v5 (creating the stores as the app does if they are missing). */
 export function readStore(store: string): Promise<unknown[]> {
   return new Promise((resolve, reject) => {
-    const open = indexedDB.open('tlh-trainer', 4);
+    const open = indexedDB.open('tlh-trainer', 5);
     open.onupgradeneeded = (event) => {
       if (event.oldVersion < 1) {
         open.result.createObjectStore('hands', { keyPath: ['sessionId', 'handNumber'] });
@@ -26,6 +26,7 @@ export function readStore(store: string): Promise<unknown[]> {
           'settings',
         );
       }
+      if (event.oldVersion < 5) open.result.createObjectStore('meta');
     };
     open.onerror = () => reject(open.error);
     open.onsuccess = () => {
@@ -40,10 +41,10 @@ export function readStore(store: string): Promise<unknown[]> {
   });
 }
 
-/** Runs in the page: adds `records` straight into tlh-trainer/hands (v4) in one transaction. */
+/** Runs in the page: adds `records` straight into tlh-trainer/hands (v5) in one transaction. */
 export function seedStoredRecords(records: unknown[]): Promise<void> {
   return new Promise((resolve, reject) => {
-    const open = indexedDB.open('tlh-trainer', 4);
+    const open = indexedDB.open('tlh-trainer', 5);
     open.onupgradeneeded = (event) => {
       if (event.oldVersion < 1) {
         open.result.createObjectStore('hands', { keyPath: ['sessionId', 'handNumber'] });
@@ -62,6 +63,7 @@ export function seedStoredRecords(records: unknown[]): Promise<void> {
           'settings',
         );
       }
+      if (event.oldVersion < 5) open.result.createObjectStore('meta');
     };
     open.onerror = () => reject(open.error);
     open.onsuccess = () => {
@@ -78,10 +80,10 @@ export function seedStoredRecords(records: unknown[]): Promise<void> {
   });
 }
 
-/** Runs in the page: puts `records` as they are into tlh-trainer/sessions (v4) in one transaction. */
+/** Runs in the page: puts `records` as they are into tlh-trainer/sessions (v5) in one transaction. */
 export function seedStoredSessions(records: unknown[]): Promise<void> {
   return new Promise((resolve, reject) => {
-    const open = indexedDB.open('tlh-trainer', 4);
+    const open = indexedDB.open('tlh-trainer', 5);
     open.onupgradeneeded = (event) => {
       if (event.oldVersion < 1) {
         open.result.createObjectStore('hands', { keyPath: ['sessionId', 'handNumber'] });
@@ -100,6 +102,7 @@ export function seedStoredSessions(records: unknown[]): Promise<void> {
           'settings',
         );
       }
+      if (event.oldVersion < 5) open.result.createObjectStore('meta');
     };
     open.onerror = () => reject(open.error);
     open.onsuccess = () => {

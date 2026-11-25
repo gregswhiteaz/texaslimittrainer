@@ -44,7 +44,7 @@ describe('hand store', () => {
   it('a new store keeps 1,000 old records', async () => {
     expect([DB_NAME, DB_VERSION, HANDS_STORE, SESSIONS_STORE, REPORTS_STORE]).toEqual([
       'tlh-trainer',
-      4,
+      5,
       'hands',
       'sessions',
       'reports',
