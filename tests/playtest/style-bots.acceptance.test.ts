@@ -85,7 +85,7 @@ describe('Style bots in the playtest', () => {
       const { summary, perHand, played } = recordShowdowns(300);
       expect(summary.violations).toBe(0);
       expect(perHand).toHaveLength(300);
-      const expected: EarlierShowdown[] = [];
+      let expected: EarlierShowdown[] = [];
       let nonEmpty = 0;
       perHand.forEach((decisions, k) => {
         expect(decisions.length).toBeGreaterThan(0);
@@ -96,6 +96,11 @@ describe('Style bots in the playtest', () => {
         }
         const entry = showdownOf((played[k] as PlayedHand).final);
         if (entry !== null) expected.push(entry);
+        // TASK-6.19: a seat replaced before the next hand holds a new player, who sees none of the old one's hands.
+        const replaced = played[k + 1]?.replaced ?? [];
+        expected = expected
+          .map((e) => ({ shown: e.shown.filter((s) => !replaced.includes(s.seat)) }))
+          .filter((e) => e.shown.length > 0);
       });
       expect(perHand[0]?.every((seen) => seen.length === 0)).toBe(true);
       expect(nonEmpty).toBeGreaterThan(0);

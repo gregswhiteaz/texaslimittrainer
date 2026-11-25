@@ -17,7 +17,8 @@ export interface ShownHand {
   readonly seat: SeatNumber;
   readonly holeCards: readonly [Card, Card];
 }
-/** One earlier hand that reached showdown: only the hands that were shown. */
+/** One earlier hand that reached showdown: only the hands that were shown. In a list a runner keeps, a seat's
+ *  shown hands are those of the player at that seat now (a replaced player's are forgotten). */
 export interface EarlierShowdown {
   readonly shown: readonly ShownHand[];
 }
@@ -129,4 +130,45 @@ export function showdownOf(state: HandState): EarlierShowdown | null {
       holeCards: [s.holeCards[0], s.holeCards[1]],
     })),
   };
+}
+
+function frozenShowdown(entry: EarlierShowdown): EarlierShowdown {
+  return Object.freeze({
+    shown: Object.freeze(
+      entry.shown.map((s) =>
+        Object.freeze({
+          seat: s.seat,
+          holeCards: Object.freeze([s.holeCards[0], s.holeCards[1]] as const),
+        }),
+      ),
+    ),
+  });
+}
+
+/** `list` plus a deep-frozen copy of `entry`, keeping the last `limit` (oldest dropped first). Returns a new frozen
+ *  list; `list` and `entry` are not changed. */
+export function rememberShowdown(
+  list: readonly EarlierShowdown[],
+  entry: EarlierShowdown,
+  limit: number,
+): readonly EarlierShowdown[] {
+  return Object.freeze([...list, frozenShowdown(entry)].slice(-limit));
+}
+
+/** `list` without the shown hands of `seats` (seats that now hold a different player); entries left with no shown
+ *  hand are dropped. Returns `list` itself when nothing matches; otherwise a new frozen list whose untouched entries
+ *  are the same objects and whose changed entries are new deep-frozen objects. */
+export function forgetSeats(
+  list: readonly EarlierShowdown[],
+  seats: readonly SeatNumber[],
+): readonly EarlierShowdown[] {
+  if (seats.length === 0 || !list.some((entry) => entry.shown.some((s) => seats.includes(s.seat))))
+    return list;
+  const kept: EarlierShowdown[] = [];
+  for (const entry of list) {
+    const shown = entry.shown.filter((s) => !seats.includes(s.seat));
+    if (shown.length === entry.shown.length) kept.push(entry);
+    else if (shown.length > 0) kept.push(frozenShowdown({ shown }));
+  }
+  return Object.freeze(kept);
 }

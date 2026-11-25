@@ -22,7 +22,9 @@ import {
   type Violation,
 } from '../engine/invariants';
 import {
+  forgetSeats,
   playerView,
+  rememberShowdown,
   showdownOf,
   type EarlierShowdown,
   type PlayerView,
@@ -82,7 +84,8 @@ export interface HandSetup {
   /** Previous hand's final {seat, stack} for each seat dealt into it, on the same table; enables the AC#9
    *  cross-hand check. */
   readonly previous?: readonly SeatConfig[];
-  /** Earlier hands at this table that reached showdown, oldest first; passed to every view. Default []. */
+  /** Earlier hands at this table that reached showdown, oldest first; passed to every view as given (runPlaytest
+   *  passes a deep-frozen list without replaced players' hands). Default []. */
   readonly earlierShowdowns?: readonly EarlierShowdown[];
   /** Seat 1's policy, replacing the one makePolicy, the line-up or the default gives it. Other seats are
    *  unchanged. Default: none. */
@@ -341,7 +344,8 @@ export function summarize(hands: Iterable<PlayedHand>): PlaytestSummary {
  *  on 0 is replaced by a new bot of the same style); in sng it sits out, and a new sit-and-go starts when one seat
  *  has every chip. A table starts with every seat at the starting stack, the button at seat 1 and the preset's
  *  seats, also after a hand with a violation (A-2, A-3). Each hand's views get the table's earlier showdowns
- *  (the last EARLIER_SHOWDOWN_LIMIT), which restart with the table. */
+ *  (the last EARLIER_SHOWDOWN_LIMIT, deep-frozen), which restart with the table; a replaced bot's seat loses the
+ *  previous player's shown hands. */
 export function runPlaytest(
   options: PlaytestOptions,
   onHand?: (hand: PlayedHand) => void,
@@ -399,7 +403,9 @@ export function runPlaytest(
         continue;
       }
       const entry = showdownOf(final);
-      if (entry !== null) showdowns = [...showdowns, entry].slice(-EARLIER_SHOWDOWN_LIMIT);
+      if (entry !== null) showdowns = rememberShowdown(showdowns, entry, EARLIER_SHOWDOWN_LIMIT);
+      // A replaced seat holds a new player: the old player's shown hands (this hand's too) are not theirs.
+      showdowns = forgetSeats(showdowns, replaced);
       const next = stacks.map((stack, i) => ({ seat: i + 1, stack }));
       button = nextButton(next, final.button);
       setup = {

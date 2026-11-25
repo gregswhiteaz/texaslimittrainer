@@ -8,7 +8,9 @@ import {
 } from '../../src/engine/hand';
 import {
   actWith,
+  forgetSeats,
   playerView,
+  rememberShowdown,
   showdownOf,
   type EarlierShowdown,
   type PlayerView,
@@ -159,5 +161,74 @@ describe('showdownOf', () => {
 
     expect(showdownOf(foldOutHand())).toBeNull();
     expect(showdownOf(workedExample())).toBeNull();
+  });
+});
+
+/** True when `value` and every object reachable from it are frozen. */
+function deeplyFrozen(value: unknown): boolean {
+  return [...objectsIn(value)].every((o) => Object.isFrozen(o));
+}
+
+describe('rememberShowdown', () => {
+  it('rememberShowdown appends a deep-frozen copy and keeps the last limit', () => {
+    const older: EarlierShowdown = rememberShowdown(
+      [],
+      { shown: [{ seat: 3, holeCards: [1, 2] }] },
+      2,
+    )[0] as EarlierShowdown;
+    const old2: EarlierShowdown = rememberShowdown(
+      [],
+      { shown: [{ seat: 5, holeCards: [3, 4] }] },
+      2,
+    )[0] as EarlierShowdown;
+    const list = Object.freeze([older, old2]);
+    const entry = showdownOf(showdownHand()) as EarlierShowdown;
+    const before = structuredClone(entry);
+
+    const result = rememberShowdown(list, entry, 2);
+    expect(result).toHaveLength(2);
+    expect(result[0]).toBe(old2);
+    expect(result[1]).toEqual(entry);
+    expect(result[1]).not.toBe(entry);
+    expect(result[1]?.shown).not.toBe(entry.shown);
+    expect(deeplyFrozen(result)).toBe(true);
+    expect(list).toEqual([older, old2]);
+    expect(entry).toEqual(before);
+    expect(Object.isFrozen(entry)).toBe(false);
+    expect(Object.isFrozen(entry.shown)).toBe(false);
+    expect(Object.isFrozen(entry.shown[0])).toBe(false);
+    expect(Object.isFrozen(entry.shown[0]?.holeCards)).toBe(false);
+  });
+});
+
+describe('forgetSeats', () => {
+  it('forgetSeats drops the shown hands of replaced seats', () => {
+    const list: EarlierShowdown[] = [
+      {
+        shown: [
+          { seat: 4, holeCards: [1, 2] },
+          { seat: 2, holeCards: [3, 4] },
+        ],
+      },
+      { shown: [{ seat: 4, holeCards: [5, 6] }] },
+      { shown: [{ seat: 3, holeCards: [7, 8] }] },
+    ];
+    const before = structuredClone(list);
+
+    const result = forgetSeats(list, [4]);
+    expect(result).toEqual([
+      { shown: [{ seat: 2, holeCards: [3, 4] }] },
+      { shown: [{ seat: 3, holeCards: [7, 8] }] },
+    ]);
+    expect(result[1]).toBe(list[2]);
+    expect(Object.isFrozen(result)).toBe(true);
+    expect(deeplyFrozen(result[0])).toBe(true);
+    expect(list).toEqual(before);
+
+    expect(forgetSeats(list, [])).toBe(list);
+    expect(forgetSeats(list, [7])).toBe(list);
+
+    // Several seats at once.
+    expect(forgetSeats(list, [2, 4])).toEqual([{ shown: [{ seat: 3, holeCards: [7, 8] }] }]);
   });
 });
