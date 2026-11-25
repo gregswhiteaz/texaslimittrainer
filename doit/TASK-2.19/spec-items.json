@@ -1,0 +1,20 @@
+[
+  {
+    "id": "SPEC-01",
+    "verifies": "AC#1",
+    "verification": "acceptance `e2e/config-phone-width.spec.ts::game config with 10 players does not scroll sideways at 320 and 375 px`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-02",
+    "verifies": "AC#1",
+    "verification": "acceptance `e2e/config-phone-width.spec.ts::every bot row's seat, name and style select are visible and usable at 320 and 375 px`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-03",
+    "verifies": "AC#1",
+    "verification": "command `npm run lint && npm run typecheck && npm test && npx playwright test e2e/config-phone-width.spec.ts e2e/seat-style.spec.ts e2e/randomise-lineup.spec.ts e2e/game-type-choice.spec.ts e2e/lineup-choice.spec.ts e2e/players-choice.spec.ts`",
+    "status": "pending"
+  }
+]
