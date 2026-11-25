@@ -1,6 +1,6 @@
 {
   "task": "TASK-7.32",
-  "stage": "build",
+  "stage": "done",
   "branch": "doit/TASK-7.32",
   "base_commit": "79b793c41d89c285f34a1b3012000043a79d4de7",
   "started": "2026-11-24T14:29:05",
@@ -1792,5 +1792,6 @@
   "judge_results": {
     "1": "FAIL",
     "2": "PASS"
-  }
+  },
+  "doc_id": "doc-129"
 }

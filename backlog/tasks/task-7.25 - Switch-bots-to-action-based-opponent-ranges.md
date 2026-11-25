@@ -4,6 +4,7 @@ title: Switch bots to action-based opponent ranges
 status: To Do
 assignee: []
 created_date: '2026-11-22T21:02:00Z'
+updated_date: '2026-11-25T01:41:00Z'
 labels:
   - follow-up
   - feature
@@ -30,3 +31,9 @@ Follow-up from TASK-7.5 (doc-86, Q-1 (A)). TASK-7.5 gave only the user's hints a
 - [ ] #2 Given the locked tests that pin every-unseen-combo results (TASK-7.3 postflop AC#1, TASK-6.3 Example B, TASK-9.1 review grades if affected), When the user approves re-baselining, Then each is updated with the approval recorded and test-integrity clean for its owner
 - [ ] #3 Given a 10,000-hand default playtest after the switch, When it runs, Then it reports zero invariant violations, the new output SHA is recorded, and per-style VPIP/PFR stay inside their documented bands
 <!-- AC:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+TASK-7.32 (doc-129) switched every bot to action-based opponent ranges (BOT_ADVICE) and verified it (100k all-TAG 6-max inside healthy ranges). This task appears superseded — user to confirm before closing.
+<!-- SECTION:NOTES:END -->

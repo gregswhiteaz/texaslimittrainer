@@ -1,17 +1,19 @@
 ---
 id: TASK-7.32
 title: Investigate why advised play almost never folds after the flop (WTSD ~94%)
-status: In Progress
+status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-24T20:47:00Z'
-updated_date: '2026-11-25T01:40:00Z'
+updated_date: '2026-11-25T01:41:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
 milestone: m-1
 dependencies:
   - TASK-10.3
+documentation:
+  - doc-129
 parent_task_id: TASK-7
 priority: high
 ordinal: 237000
@@ -52,4 +54,12 @@ Build: bots on action ranges (BOT_ADVICE), turn price counts one river big bet, 
 Investigation write-up (SPEC-01, AC#1): docs/advice/postflop-rules.md#why-bots-almost-never-folded-task-732 — section "Why bots almost never folded (TASK-7.32)": root cause (bots requested advice with 'unseen' ranges, calling ~98% of postflop bets), measurements, and the chosen fix (Q-1). Judge J-1-02: games.acceptance AC#6 input seed changed 42 → 7 (seed 42 no longer finishes a sit-and-go within 10,000 hands); recorded on TASK-1.16.
 
 Judge r2 PASS (r1 FAIL only on SPEC-01 missing doc link, fixed by note). Base vs HEAD 2,000 hands: WTSD 94.2 → 41.2; 100k all-TAG 6-max 22.2/16.2/64.3/40.4/51.5; npm test 1309 pass; Playwright 304 pass; slow group: only the 4 accepted Mixed checks fail (TASK-6.25).
+
+Follow-ups: TASK-6.25 (Mixed line-up bands, high; created at Q-2, AC added for check-styles), TASK-7.33 (harden new fields/clause, low). TASK-7.25 noted as likely superseded (user to confirm).
 <!-- SECTION:NOTES:END -->
+
+## Final Summary
+
+<!-- SECTION:FINAL_SUMMARY:BEGIN -->
+Bots asked advice with the 'unseen' range model, so they called 97-99% of postflop bets (WTSD 94.2). Fix: bots use action ranges (BOT_ADVICE); a turn call price counts one river big bet (REQ-033.1); a raise facing a bet needs >65% vs callers (REQ-033.2); explanations and grading follow. Verified: npm test 1,309 pass; e2e 304 pass; 2,000 all-TAG hands WTSD 94.2 -> 41.2; 100k 6-max 22.2/16.2/64.3/40.4/51.5 all inside healthy ranges; real-app hints show the river clause and 65.0%. Judge r1 FAIL (SPEC-01 notes link), r2 PASS. Review: assumptions A-1..A-6, cross-story locked re-baselines, games AC#6 seed 42->7, 13 replaced golden spots (doc-129). Risks: Mixed line-up drifts out of REQ-027 bands, so style-bands and check-styles 100k Mixed slow checks fail until TASK-6.25; code-review MINORs listed in doc; TASK-7.25 looks superseded.
+<!-- SECTION:FINAL_SUMMARY:END -->
