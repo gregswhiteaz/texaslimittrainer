@@ -1,10 +1,11 @@
 ---
 id: TASK-11.6
 title: Open Statistics or go Home from the Session Report
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-24T16:41:00Z'
+updated_date: '2026-11-25T13:47:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -62,6 +63,17 @@ Plan key: E11-S07 · Dream: limit-holdem-trainer
 - [ ] #11 Story documentation is written and published to Backlog.md
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. ReportScreen gets optional onStatistics; 'View statistics' (outline) before 'Back to Home' in a right-aligned actions row
+2. App hoists one openStatistics() (reset All / All / Every 500 hands) used by Home and the report
+3. Unit render test plus e2e through the real App: report -> Statistics (totals include the session just ended) -> Home, and report -> Home
+4. docs/ui/navigation.md
+
+Full spec: doit/TASK-11.6/spec.md
+<!-- SECTION:PLAN:END -->
 
 ## Implementation Notes
 
