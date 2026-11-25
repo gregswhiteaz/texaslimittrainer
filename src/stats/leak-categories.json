@@ -151,6 +151,166 @@
       "evidenceName": "river bets",
       "fix": "Bet the river only when most of the hands that would call are worse than yours, and check medium hands that nothing worse will pay.",
       "justification": "On the river worse hands fold and better hands call, so a bet with a medium hand gains little and loses a big bet against the hands that pay it."
+    },
+    {
+      "id": "early-fold",
+      "street": "preflop",
+      "group": "early",
+      "action": "fold",
+      "title": "Folding strong hands from early position",
+      "evidenceName": "early-position folds",
+      "fix": "From early position, open-raise the strong hands the chart plays instead of folding them, because they stay profitable even with many players left to act.",
+      "justification": "The early-position charts still open premium pairs, big aces and strong broadway hands, so folding those hands gives up a profitable open."
+    },
+    {
+      "id": "early-open",
+      "street": "preflop",
+      "group": "early",
+      "action": "open",
+      "title": "Opening too many hands from early position",
+      "evidenceName": "early-position opens",
+      "fix": "From early position, open-raise only the tight range on the chart, because with many players still to act a strong hand often wakes up behind you.",
+      "justification": "With the most players left to act, the early-position chart range is the narrowest; hands outside it are too often dominated by a caller or re-raiser."
+    },
+    {
+      "id": "early-call",
+      "street": "preflop",
+      "group": "early",
+      "action": "call",
+      "title": "Calling too often from early position",
+      "evidenceName": "early-position calls",
+      "fix": "From early position, raise or fold rather than limp, and call a raise only with the few hands the chart calls with.",
+      "justification": "The charts do not limp from early position and call raises with few hands, because players still to act can raise behind and you will often play the pot out of position."
+    },
+    {
+      "id": "early-raise",
+      "street": "preflop",
+      "group": "early",
+      "action": "raise",
+      "title": "Re-raising too loosely from early position",
+      "evidenceName": "early-position raises",
+      "fix": "Re-raise from early position only with hands that are well ahead of the raiser's range, since the players behind you can still re-raise again.",
+      "justification": "The re-raise rows of the charts hold only hands that beat the raiser's range; with players left to act, a weaker re-raise risks a cap from a stronger hand."
+    },
+    {
+      "id": "middle-fold",
+      "street": "preflop",
+      "group": "middle",
+      "action": "fold",
+      "title": "Folding playable hands from middle position",
+      "evidenceName": "middle-position folds",
+      "fix": "From middle position, open-raise the hands the chart opens, because fewer players are left to act and a wider range now wins.",
+      "justification": "The middle-position chart range is wider than the early one, so folding hands inside it gives up opens the chart rates as profitable."
+    },
+    {
+      "id": "middle-open",
+      "street": "preflop",
+      "group": "middle",
+      "action": "open",
+      "title": "Opening too many hands from middle position",
+      "evidenceName": "middle-position opens",
+      "fix": "From middle position, open-raise only the chart's middle range, which is wider than early position but still leaves out weak aces and small offsuit hands.",
+      "justification": "Several players are still to act behind a middle-position open, so hands outside the chart range are too often behind the hands that continue."
+    },
+    {
+      "id": "middle-call",
+      "street": "preflop",
+      "group": "middle",
+      "action": "call",
+      "title": "Calling too often from middle position",
+      "evidenceName": "middle-position calls",
+      "fix": "From middle position, raise the hands worth playing in an unopened pot and call a raise only with hands that play well against the raiser's range.",
+      "justification": "The charts prefer raising to limping when the pot is unopened and call raises only with hands that do well after the flop against the raiser."
+    },
+    {
+      "id": "middle-raise",
+      "street": "preflop",
+      "group": "middle",
+      "action": "raise",
+      "title": "Re-raising too loosely from middle position",
+      "evidenceName": "middle-position raises",
+      "fix": "Re-raise from middle position only with hands that beat most of the raiser's range, and fold or call with the rest.",
+      "justification": "The re-raise rows of the charts hold only hands ahead of the raiser's range; weaker re-raises build a pot while behind."
+    },
+    {
+      "id": "late-fold",
+      "street": "preflop",
+      "group": "late",
+      "action": "fold",
+      "title": "Folding too much from late position",
+      "evidenceName": "late-position folds",
+      "fix": "From the cutoff and button, open-raise the wide range the chart allows, because only the blinds are left to act and you will have position after the flop.",
+      "justification": "The late-position charts open the widest range since only the blinds remain and the opener acts last after the flop, so folding those hands gives up easy profit."
+    },
+    {
+      "id": "late-open",
+      "street": "preflop",
+      "group": "late",
+      "action": "open",
+      "title": "Opening too many hands from late position",
+      "evidenceName": "late-position opens",
+      "fix": "Even on the cutoff and button, open-raise only the chart's late range and fold the weakest hands that rarely win against the blinds.",
+      "justification": "The late range is wide but not every hand; the weakest hands lose more when the blinds defend than they win when the blinds fold."
+    },
+    {
+      "id": "late-call",
+      "street": "preflop",
+      "group": "late",
+      "action": "call",
+      "title": "Calling too often from late position",
+      "evidenceName": "late-position calls",
+      "fix": "From late position, raise rather than limp when the pot is unopened, and call a raise only with hands that play well after the flop.",
+      "justification": "The charts raise rather than limp from late position to win the blinds or play a heads-up pot in position, and call raises only with hands that do well after the flop."
+    },
+    {
+      "id": "late-raise",
+      "street": "preflop",
+      "group": "late",
+      "action": "raise",
+      "title": "Re-raising too loosely from late position",
+      "evidenceName": "late-position raises",
+      "fix": "From late position, re-raise only with hands that beat most of the raiser's range, keeping in mind that an early raiser holds stronger hands.",
+      "justification": "The charts re-raise against the raiser's range for that seat, and an early-position raiser's range is strong, so a loose re-raise is often behind."
+    },
+    {
+      "id": "blinds-fold",
+      "street": "preflop",
+      "group": "blinds",
+      "action": "fold",
+      "title": "Folding too often from the blinds",
+      "evidenceName": "blind folds",
+      "fix": "In the blinds you already have chips in the pot, so defend the hands the chart defends instead of folding them to a single raise.",
+      "justification": "The blind-defence rows of the charts account for the chips already posted, which lower the price of a call, so folding those hands gives up value."
+    },
+    {
+      "id": "blinds-open",
+      "street": "preflop",
+      "group": "blinds",
+      "action": "open",
+      "title": "Raising too loosely from the blinds",
+      "evidenceName": "blind opens",
+      "fix": "From the blinds, raise an unopened or limped pot only with hands strong enough to play out of position on every later street.",
+      "justification": "A blind acts first on every street after the flop, so the charts raise from the blinds with fewer hands than from late position."
+    },
+    {
+      "id": "blinds-call",
+      "street": "preflop",
+      "group": "blinds",
+      "action": "call",
+      "title": "Calling too often from the blinds",
+      "evidenceName": "blind calls",
+      "fix": "From the blinds, complete or call only with hands that can win enough after the flop to make up for acting first on every street.",
+      "justification": "Calls from the blinds are cheap but are played out of position, so the charts call only with hands that keep enough value after the flop."
+    },
+    {
+      "id": "blinds-raise",
+      "street": "preflop",
+      "group": "blinds",
+      "action": "raise",
+      "title": "Re-raising too loosely from the blinds",
+      "evidenceName": "blind raises",
+      "fix": "From the blinds, re-raise only with hands that are well ahead of the raiser's range, because you will be out of position for the rest of the hand.",
+      "justification": "The re-raise rows of the blind-defence charts hold only hands ahead of the raiser's range, since being out of position makes marginal re-raises lose."
     }
   ]
 }

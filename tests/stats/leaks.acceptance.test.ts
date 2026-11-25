@@ -119,9 +119,15 @@ describe('postflop leaks acceptance', () => {
       ...['fold', 'call', 'raise'].map((a) => `${street}-facing-a-bet-${a}`),
       ...['check', 'bet'].map((a) => `${street}-not-facing-a-bet-${a}`),
     ]);
-    expect(LEAK_CATEGORIES.map((c) => c.id)).toEqual(expected);
-    expect(new Set(LEAK_CATEGORIES.map((c) => c.id)).size).toBe(15);
-    for (const c of LEAK_CATEGORIES) {
+    // TASK-10.6 D-3: the 16 preflop entries follow the 15 postflop ones in the same file.
+    const postflop = LEAK_CATEGORIES.filter((c) => c.street !== 'preflop');
+    expect(postflop.map((c) => c.id)).toEqual(expected);
+    expect(new Set(postflop.map((c) => c.id)).size).toBe(15);
+    const preflop = ['early', 'middle', 'late', 'blinds'].flatMap((group) =>
+      ['fold', 'open', 'call', 'raise'].map((a) => `${group}-${a}`),
+    );
+    expect(LEAK_CATEGORIES.filter((c) => c.street === 'preflop').map((c) => c.id)).toEqual(preflop);
+    for (const c of postflop) {
       expect(c.id).toBe(
         `${c.street}-${c.facingBet ? 'facing-a-bet' : 'not-facing-a-bet'}-${c.action}`,
       );

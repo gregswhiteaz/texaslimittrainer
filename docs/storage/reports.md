@@ -35,7 +35,7 @@ paused session (TASK-2.7) also ends sessions, through `endPausedSessions`, witho
 | `cash`        | object \| null             | The cash result below; null for a sit-and-go (finishing position: TASK-10.12) |
 | `style`       | object, optional           | The user's style counts over the session's stored hands (TASK-10.3)           |
 | `errors`      | object, optional           | `{ major, minor }`: the user's unhinted Major / Minor decisions (TASK-10.4)   |
-| `leakCounts`  | array, optional            | Unhinted counts per postflop leak category (TASK-10.5)                        |
+| `leakCounts`  | array, optional            | Unhinted counts per leak category (postflop TASK-10.5, preflop TASK-10.6)     |
 
 `cash`:
 
@@ -72,15 +72,19 @@ none of the three tiles for them.
 
 ### leakCounts
 
-`leakCounts` holds, for every postflop [leak category](../stats/leaks.md) with at least one unhinted decision,
-in category data order, `{ category, decisions, errors, major }`: the category id, the number of the user's
-unhinted decisions in it, how many of those were graded Minor or Major, and how many were graded Major.
-Categories with no unhinted decision are left out, so it is `[]` when the session had no unhinted postflop
-decision. Like `errors`, it is read from the stored decision records (their `street`, `action.type`, `grade`
-and `hinted`) when the session ends, and is present exactly when `errors` is. Whether a category is a leak, its
+`leakCounts` holds, for every [leak category](../stats/leaks.md) with at least one unhinted decision, in
+category data order (the 15 postflop categories first, then the 16 preflop ones),
+`{ category, decisions, errors, major }`: the category id, the number of the user's unhinted decisions in it,
+how many of those were graded Minor or Major, and how many were graded Major. Categories with no unhinted
+decision are left out, so it is `[]` when the session had no unhinted decision in any category (a big blind
+check is in none). Like `errors`, it is read from the stored decision records (their `street`, `action.type`, `grade`
+and `hinted`) when the session ends; a preflop decision's position group and whether someone raised before it
+come from the hand record's `seats`, `button` and `actions`, and is present exactly when `errors` is. Whether a category is a leak, its
 evidence and its text are worked out from these counts and the current category data when the report is shown;
 `major` is kept for ranking leaks (TASK-10.8). Reports stored before TASK-10.5 have no `leakCounts`; they are
-not back-filled and the screen shows no leaks section for them.
+not back-filled and the screen shows no leaks section for them. Reports stored before TASK-10.6 hold postflop
+counts only; they stay valid (the preflop categories were appended after the postflop ones) and are not
+back-filled.
 
 The cash values come from the stored session record only: it is written in the same transaction as each hand
 record, so its `handsPlayed`, stacks and `rebuys` always match the stored hands. A rebuy bought during an
@@ -141,6 +145,8 @@ unfinished hand is not stored yet, so neither the rebuy nor its chips count.
 - `tests/table/session-report-leaks.test.ts`, `tests/stats/leaks.acceptance.test.ts`,
   `tests/ui/report-leaks.acceptance.test.tsx` and `e2e/report-leaks.spec.ts`: the stored `leakCounts` and the
   leaks section.
+- `tests/stats/preflop-leaks.test.ts` and `tests/ui/report-preflop-leaks.acceptance.test.tsx`: stored preflop
+  `leakCounts`, their order check and a preflop leak on the report.
 - `e2e/session-report.spec.ts` (every push): Leave table between hands, Back to Home, Leave with the Hand
   Review open, seeded long sessions, and a 0-hand session. `e2e/rebuy.spec.ts` and
   `e2e/bust-continue.spec.ts`: Leave table in the bust dialog.

@@ -2,9 +2,9 @@ import type { ActionType, Grade } from '../advice/grade';
 import type { SeatNumber } from '../engine/hand';
 import {
   categoryCounts,
+  handCategoryDecisions,
   LEAK_CATEGORIES,
   type CategoryCount,
-  type CategoryDecision,
 } from '../stats/leaks';
 import {
   addStyleCounts,
@@ -52,7 +52,7 @@ export interface SessionReport {
   readonly style?: StyleCounts;
   /** Absent on reports without stored decision records (TASK-10.4 A-3, A-4). */
   readonly errors?: ErrorCounts;
-  /** Unhinted counts per postflop leak category; absent iff `errors` is absent (TASK-10.5 A-4, A-5). */
+  /** Unhinted counts per leak category (postflop, then preflop); absent iff `errors` is absent (TASK-10.5 A-4, A-5). */
   readonly leakCounts?: readonly CategoryCount[];
 }
 
@@ -68,6 +68,8 @@ export interface ReportDecision {
 /** A stored hand as the report needs it; HandRecord satisfies it. `decisions` absent → no `errors` (A-4). */
 export type ReportHand = StatHand & {
   readonly userSeat: SeatNumber;
+  /** Absent only in hand-built test data; such a hand's preflop decisions are not classified (TASK-10.6 A-2). */
+  readonly button?: SeatNumber;
   readonly decisions?: readonly ReportDecision[];
 };
 
@@ -181,8 +183,8 @@ export function sessionReport(
     else if (grade.grade === 'minor') errors.minor++;
   }
   const leakCounts = categoryCounts(
-    decisions.filter(
-      (d): d is CategoryDecision => d.street !== undefined && d.action !== undefined,
+    hands.flatMap((hand) =>
+      handCategoryDecisions({ ...hand, decisions: hand.decisions as readonly ReportDecision[] }),
     ),
   );
   return { ...report, style, errors, leakCounts };
