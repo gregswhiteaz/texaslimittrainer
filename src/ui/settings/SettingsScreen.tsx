@@ -14,6 +14,14 @@ export interface SettingsScreenProps {
   readonly onSettingsChange?: (settings: Settings) => void;
 }
 
+/** The record after the toggle changes; undefined (no change) while settings are still loading. */
+export function withOpponentStyles(
+  settings: Settings | undefined,
+  showOpponentStyles: boolean,
+): Settings | undefined {
+  return settings && { ...settings, showOpponentStyles };
+}
+
 export function SettingsScreen({
   onHome,
   version = APP_VERSION,
@@ -39,10 +47,10 @@ export function SettingsScreen({
             type="checkbox"
             checked={(settings ?? DEFAULT_SETTINGS).showOpponentStyles}
             disabled={settings === undefined || onSettingsChange === undefined}
-            onChange={(e) =>
-              settings &&
-              onSettingsChange?.({ ...settings, showOpponentStyles: e.currentTarget.checked })
-            }
+            onChange={(e) => {
+              const next = withOpponentStyles(settings, e.currentTarget.checked);
+              if (next !== undefined) onSettingsChange?.(next);
+            }}
           />
           Show opponent styles at the table
         </label>

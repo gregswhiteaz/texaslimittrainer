@@ -2,7 +2,7 @@ import { renderToString } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import type { TableState } from '../../src/table/session';
 import { DEFAULT_SETTINGS, type Settings } from '../../src/table/settings';
-import { SettingsScreen } from '../../src/ui/settings/SettingsScreen';
+import { SettingsScreen, withOpponentStyles } from '../../src/ui/settings/SettingsScreen';
 import { TableView } from '../../src/ui/table/Table';
 import { FLOP_BET } from '../support/table-scenarios';
 
@@ -95,6 +95,28 @@ describe('Show opponent styles at the table', () => {
         '<label class="settings-toggle"><input type="checkbox" disabled="" checked=""/>' + LABEL,
       ),
     ).toBe(1);
+
+    // App always passes onSettingsChange; the toggle stays disabled until settings are read.
+    const appLoading = renderToString(
+      <SettingsScreen onHome={noop} version="1.2.0" settings={undefined} onSettingsChange={noop} />,
+    );
+    expect(
+      occurrences(
+        appLoading,
+        '<label class="settings-toggle"><input type="checkbox" disabled="" checked=""/>' + LABEL,
+      ),
+    ).toBe(1);
+  });
+
+  it('a toggle change before settings are read produces no record to save', () => {
+    expect(withOpponentStyles(undefined, false)).toBeUndefined();
+    expect(withOpponentStyles(undefined, true)).toBeUndefined();
+    const saved = { ...DEFAULT_SETTINGS, showOpponentStyles: false };
+    expect(withOpponentStyles(saved, true)).toEqual({ ...saved, showOpponentStyles: true });
+    expect(withOpponentStyles(DEFAULT_SETTINGS, false)).toEqual({
+      ...DEFAULT_SETTINGS,
+      showOpponentStyles: false,
+    });
   });
 
   it('off hides every style label and its separator and keeps name and stack', () => {

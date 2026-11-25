@@ -9,3 +9,6 @@
 - A temporary probe (deleted) showed the checkbox input is 44x44 in both browsers.
 - I wrote `blocked.json` (SPEC-09), recommending a 4th locked edit with an exact rotated expected order.
 - I couldn't undo the intent-to-add index entries for the 3 new test files (the hook blocks git). They are harmless and will be committed anyway.
+
+## FIX r1
+- Item 1 (disabled-until-loaded guard untested): fixed. SPEC-01 test adds the App-shaped loading render (`settings={undefined}`, `onSettingsChange={noop}`) asserting `disabled="" checked=""`; the onChange guard is extracted to exported `withOpponentStyles` and unit-tested (undefined while loading). Mutation check: dropping `settings === undefined ||` and replacing the guard with `settings ?? DEFAULT_SETTINGS` fails 2 tests; restored.

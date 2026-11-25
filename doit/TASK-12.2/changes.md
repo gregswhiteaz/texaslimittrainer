@@ -19,3 +19,5 @@
 
 No new dependencies.
 - `e2e/settings.spec.ts` — Tab-order comparison starts from the heading (Block 1; TASK-12.1 locked; unlocked; orchestrator edit)
+- `src/ui/settings/SettingsScreen.tsx` — (fix r1) `withOpponentStyles(settings, checked)` pure change handler: no record while settings are loading.
+- `tests/ui/opponent-styles.acceptance.test.tsx` — (fix r1, strengthened) App-shaped loading render (settings undefined, onSettingsChange set) asserts disabled + checked; unit test for `withOpponentStyles`.
