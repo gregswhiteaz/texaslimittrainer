@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-25T09:10:00Z'
+updated_date: '2026-11-25T09:32:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -78,3 +78,9 @@ Plan key: E11-S04 · Dream: limit-holdem-trainer
 
 Full spec: doit/TASK-11.2/spec.md
 <!-- SECTION:PLAN:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+Build: TrendHand cash {net, bigBet}; bb100Value exact over LCM of big bets, rounded like the report; BB/100 card with dashed break-even line and approved text; real sit-and-go hand path confirmed. npm test 1355 pass; statistics/home/play-money/bb100 e2e 26 pass; gate PASS.
+<!-- SECTION:NOTES:END -->
