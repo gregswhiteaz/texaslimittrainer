@@ -1,0 +1,3 @@
+{"reviewer": "security", "round": 1,
+ "findings": [],
+ "summary": "Change is a pure display-time sort and slice(0, 3) in sessionLeaks over at most 31 already-validated stored CategoryCount records, plus a doc-comment edit. No new input surface, storage, network, dependency, randomness or HTML sink; output is rendered through React text (escaped). The comparator uses integer arithmetic only, and the worst case from malformed stored counts would be an odd ordering, with no security impact. Nothing to report."}
