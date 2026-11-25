@@ -1,5 +1,3 @@
-import { readdirSync, readFileSync } from 'node:fs';
-import { join, posix } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { equityWithBudget, type EquityInput, type EquityResult } from '../../src/advice/equity';
 import { SIX_MAX_CHART } from '../../src/advice/preflop';
@@ -7,7 +5,6 @@ import { BOT_EQUITY, BOT_EQUITY_BUDGET, decideTag } from '../../src/bots/tag';
 import { parseCards, type Card } from '../../src/engine/cards';
 import { applyAction, createHand, type Action, type SeatNumber } from '../../src/engine/hand';
 import { playerView } from '../../src/engine/player-view';
-import { REPO_ROOT } from '../support/sandbox';
 
 const STAKES_4_8 = { smallBlind: 2, bigBlind: 4, smallBet: 4, bigBet: 8 };
 
@@ -51,47 +48,6 @@ function stubEquity(equity: number) {
     };
   };
   return { fn, calls };
-}
-
-const ENGINE_TYPES: Readonly<Record<string, readonly string[]>> = {
-  'src/engine/player-view': [
-    'PlayerView',
-    'PublicPlayer',
-    'SeatPolicy',
-    'ShownHand',
-    'EarlierShowdown',
-  ],
-  'src/engine/hand': ['Action', 'SeatNumber', 'Street'],
-};
-const IMPORT = /^import\s+(type\s+)?([\s\S]*?)\s+from\s+'([^']+)';/gm;
-
-/** Imports in `text` (the source of `file`, repo-relative) that cross the PlayerView boundary. */
-function boundaryProblems(file: string, text: string): string[] {
-  const problems: string[] = [];
-  for (const [statement, typeOnly, clause, specifier] of text.matchAll(IMPORT)) {
-    const from = specifier as string;
-    if (!from.startsWith('.')) {
-      problems.push(`${file}: package import ${statement}`);
-      continue;
-    }
-    const target = posix.join(posix.dirname(file), from);
-    if (target.startsWith('src/ui')) problems.push(`${file}: UI import ${statement}`);
-    if (!target.startsWith('src/engine')) continue;
-    const allowed = ENGINE_TYPES[target];
-    const names = (clause as string)
-      .replace(/[{}]/g, '')
-      .split(',')
-      .map((name) => name.trim())
-      .filter((name) => name !== '');
-    if (
-      typeOnly === undefined ||
-      allowed === undefined ||
-      names.some((n) => !allowed.includes(n))
-    ) {
-      problems.push(`${file}: engine import ${statement}`);
-    }
-  }
-  return problems;
 }
 
 describe('TAG bot units', () => {
@@ -142,33 +98,5 @@ describe('TAG bot units', () => {
     expect(() =>
       decideTag(playerView(nine, nine.toAct as SeatNumber), { chart: SIX_MAX_CHART }),
     ).toThrow(new RangeError('The 6-max chart does not fit 9 dealt-in seats'));
-  });
-
-  it('bots import only PlayerView-boundary types from the engine', () => {
-    const dir = join(REPO_ROOT, 'src/bots');
-    const files = readdirSync(dir).filter((name) => name.endsWith('.ts'));
-    expect(files).toContain('tag.ts');
-    for (const name of files) {
-      const text = readFileSync(join(dir, name), 'utf8');
-      expect([...text.matchAll(IMPORT)].length).toBeGreaterThan(0);
-      expect(boundaryProblems(`src/bots/${name}`, text)).toEqual([]);
-    }
-
-    const probe = [
-      "import { applyAction } from '../engine/hand';",
-      "import type { HandState } from '../engine/hand';",
-      "import type { Card } from '../engine/cards';",
-      "import type { Action } from '../engine/hand';",
-      "import { useState } from 'react';",
-      "import { Table } from '../ui/table';",
-      "import { recommend } from '../advice/recommend';",
-    ].join('\n');
-    expect(boundaryProblems('src/bots/probe.ts', probe)).toEqual([
-      "src/bots/probe.ts: engine import import { applyAction } from '../engine/hand';",
-      "src/bots/probe.ts: engine import import type { HandState } from '../engine/hand';",
-      "src/bots/probe.ts: engine import import type { Card } from '../engine/cards';",
-      "src/bots/probe.ts: package import import { useState } from 'react';",
-      "src/bots/probe.ts: UI import import { Table } from '../ui/table';",
-    ]);
   });
 });

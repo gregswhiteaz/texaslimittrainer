@@ -99,6 +99,13 @@ const BARE_GLOBAL_REFERENCE = [
   ':not(CallExpression > .callee)',
 ].join('');
 
+const BOT_DETERMINISM_RESTRICTED_SYNTAX = [
+  ...HEADLESS_RESTRICTED_SYNTAX,
+  { selector: "NewExpression[callee.name='Date']", message: NON_DETERMINISTIC_MESSAGE },
+  { selector: "CallExpression[callee.name='Date']", message: NON_DETERMINISTIC_MESSAGE },
+  { selector: BARE_GLOBAL_REFERENCE, message: NON_DETERMINISTIC_MESSAGE },
+];
+
 /**
  * Must come after headlessBoundaryConfig: it replaces that block's no-restricted-properties and
  * no-restricted-syntax options for these files, so the headless entries are repeated. It doesn't use
@@ -119,12 +126,46 @@ export const botDeterminismConfig = {
       ]),
       { object: 'globalThis', property: 'Math', message: NON_DETERMINISTIC_MESSAGE },
     ],
-    'no-restricted-syntax': [
-      'error',
-      ...HEADLESS_RESTRICTED_SYNTAX,
-      { selector: "NewExpression[callee.name='Date']", message: NON_DETERMINISTIC_MESSAGE },
-      { selector: "CallExpression[callee.name='Date']", message: NON_DETERMINISTIC_MESSAGE },
-      { selector: BARE_GLOBAL_REFERENCE, message: NON_DETERMINISTIC_MESSAGE },
-    ],
+    'no-restricted-syntax': ['error', ...BOT_DETERMINISM_RESTRICTED_SYNTAX],
+  },
+};
+
+/** Bot code decides only from its seat's PlayerView, never from hidden hand state (REQ-025.1). */
+export const BOT_BOUNDARY_FILES = ['src/bots/**'];
+
+const BOT_BOUNDARY_MESSAGE =
+  'Bot code may import only PlayerView-boundary types from the engine (PlayerView, SeatPolicy and other src/engine/player-view.ts types; Action, SeatNumber, Street from src/engine/hand.ts), so it cannot see hidden cards (REQ-025.1).';
+
+const BOT_PACKAGE_MESSAGE =
+  'Bot code may import only project modules by relative path (REQ-025.1).';
+
+export const BOT_BOUNDARY_PATTERNS = [
+  { regex: '^(?!\\.)', message: BOT_PACKAGE_MESSAGE },
+  { regex: '(^|/)engine/(?!(player-view|hand)$)[^/]+$', message: BOT_BOUNDARY_MESSAGE },
+  { regex: '(^|/)engine/player-view$', allowTypeImports: true, message: BOT_BOUNDARY_MESSAGE },
+  {
+    regex: '(^|/)engine/hand$',
+    allowImportNames: ['Action', 'SeatNumber', 'Street'],
+    message: BOT_BOUNDARY_MESSAGE,
+  },
+];
+
+// Groups with allowImportNames ignore imports that have no specifiers, so side-effect imports need a selector.
+const BOT_SIDE_EFFECT_IMPORT = {
+  selector: 'ImportDeclaration[specifiers.length=0][source.value=/(^|\\/)engine\\//]',
+  message: BOT_BOUNDARY_MESSAGE,
+};
+
+/**
+ * Must come after botDeterminismConfig: it replaces that block's no-restricted-syntax options for these
+ * files, so the determinism entries are repeated.
+ * @type {import('eslint').Linter.Config}
+ */
+export const botSeatPolicyConfig = {
+  name: 'bot-seat-policy',
+  files: BOT_BOUNDARY_FILES,
+  rules: {
+    '@typescript-eslint/no-restricted-imports': ['error', { patterns: BOT_BOUNDARY_PATTERNS }],
+    'no-restricted-syntax': ['error', ...BOT_DETERMINISM_RESTRICTED_SYNTAX, BOT_SIDE_EFFECT_IMPORT],
   },
 };
