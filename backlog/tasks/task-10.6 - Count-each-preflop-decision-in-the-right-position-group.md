@@ -1,11 +1,11 @@
 ---
 id: TASK-10.6
 title: See my preflop leaks by position group
-status: In Progress
+status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-25T06:44:00Z'
+updated_date: '2026-11-25T06:45:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -16,6 +16,7 @@ references:
 documentation:
   - doc-1
   - doc-2
+  - doc-131
 parent_task_id: TASK-10
 priority: high
 type: feature
@@ -88,4 +89,12 @@ Full spec: doit/TASK-10.6/spec.md
 Build: 16 preflop leak categories appended (approved text); unhinted preflop decisions classified by position group (from stored button) and open/raise/call/fold; counted in the existing write-once leakCounts; TASK-10.5 AC#2 re-pinned to the postflop subset plus a 16-preflop-id check (D-3). npm test 1322 pass; report e2e 14 pass; gate PASS.
 
 Judge r1 PASS 15/15: live Chromium (33 hands) and WebKit (51 hands) sessions — stored leakCounts matched an independent recount; early-call leak shown with approved text; positionGroup matched an independent REQ-047.6 implementation over 10,000+ cases. CI 45561004627 green. Orchestrator fixed the garbled leakCounts sentence in docs/storage/reports.md (J-1-01).
+
+Follow-ups: TASK-10.15 (compute group once per hand, reuse userMade). Preflop-after-postflop order owned by TASK-10.8. BB-check case covered by unit tests (SPEC-06); no task.
 <!-- SECTION:NOTES:END -->
+
+## Final Summary
+
+<!-- SECTION:FINAL_SUMMARY:BEGIN -->
+Added the 16 preflop leak categories (position group x fold/open/call/raise) to the same data file, leakCounts record, leak rule and Biggest leaks section; no UI, engine or DB change. Verified: lint, typecheck, npm test (1322 passed), CI green, judge PASS round 1 incl. live 9-player Chromium/WebKit runs matching an independent tally. Review: ids <group>-<action> appended after postflop (Q-1), the 16 preflop texts (Q-2), the locked TASK-10.5 AC#2 edit narrowed to postflop (D-3), assumptions A-1..A-6. Risks/follow-ups: preflop leaks list after postflop until TASK-10.8 ranks them; BB check only unit-tested; minor refactors (compute group once per hand, reuse userMade); scope 1181 lines vs 950 (mostly tests).
+<!-- SECTION:FINAL_SUMMARY:END -->
