@@ -1708,7 +1708,14 @@
       "skips": 0
     }
   },
-  "history": [],
+  "history": [
+    {
+      "t": "2026-11-25T01:22:58",
+      "event": "unlock",
+      "file": "e2e/play-money.spec.ts",
+      "reason": "TASK-11.1 Q-4 (auto-accepted): Statistics screen added to route list and play-money walk"
+    }
+  ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-10.2",
   "spec_sha256": "f6393c58d76cb055b7d024a7ac3a2d3306c937f0f389e052b1bc7dccf1748f69",
   "review_findings": {
@@ -1717,5 +1724,8 @@
   "judge_results": {
     "1": "PASS"
   },
-  "doc_id": "doc-125"
+  "doc_id": "doc-125",
+  "relock_pending": [
+    "e2e/play-money.spec.ts"
+  ]
 }

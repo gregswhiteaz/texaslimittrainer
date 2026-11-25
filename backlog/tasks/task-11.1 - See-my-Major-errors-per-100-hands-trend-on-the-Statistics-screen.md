@@ -1,10 +1,11 @@
 ---
 id: TASK-11.1
 title: See my Major errors per 100 hands trend on the Statistics screen
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-24T19:27:00Z'
+updated_date: '2026-11-25T08:23:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -77,6 +78,18 @@ Plan key: E11-S01 · Dream: limit-holdem-trainer
 - [ ] #13 Story documentation is written and published to Backlog.md
 - [ ] #14 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. Pure trends module: per-hand summaries, ordering, 500-hand grouping, unhinted Majors per 100, totals, screen text
+2. Store read trendData() in one read-only transaction
+3. Statistics screen (route, Home entry, ← Home, totals, hand-written SVG chart, empty / not-enough / load-failure states)
+4. Register in the play-money screen list; update locked Home/route/play-money tests (Q-4)
+5. Tests: fast 3,000-summary AC#2 in normal suite; store-level 3,000 read and speed check opt-in slow
+
+Full spec: doit/TASK-11.1/spec.md
+<!-- SECTION:PLAN:END -->
 
 ## Implementation Notes
 

@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-23T02:28:00Z'
+updated_date: '2026-11-25T08:22:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-0
@@ -107,6 +107,8 @@ Locked test e2e/home.spec.ts edited for TASK-2.5 (Q-2 routine).
 Locked test tests/ui/home.acceptance.test.tsx edited for TASK-2.8 Q-2 (auto-accepted; row parsing/counts only).
 
 Locked test tests/ui/home.acceptance.test.tsx edited for TASK-2.9 Q-3 (auto-accepted; button list).
+
+Locked test(s) unlocked for TASK-11.1 Q-4 (Statistics screen added to Home, route list and play-money walk).
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary

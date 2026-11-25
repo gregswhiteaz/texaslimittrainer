@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-24T20:28:00Z'
+updated_date: '2026-11-25T08:22:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -89,6 +89,8 @@ Build: forceFold engine op (shared settle helper), LeaveDialog mid-hand confirm,
 Judge r1 PASS 15/15; live Chromium+WebKit leave flows (my turn, bot turn, after fold, all-in, between hands); playtest byte-identical to main; CI 45479328751 green.
 
 Follow-ups: TASK-10.13 created (spike: forced-fold top bettor dead money vs refund; multi-fold invariant; bot-freeze e2e timing). Not tracked: NITs (redundant || leaving, helper placement, docs test list).
+
+Locked test(s) unlocked for TASK-11.1 Q-4 (Statistics screen added to Home, route list and play-money walk).
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary
