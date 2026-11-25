@@ -1,0 +1,92 @@
+[
+  {
+    "id": "SPEC-01",
+    "verifies": "AC#1, DoD#2",
+    "verification": "acceptance `tests/stats/preflop-leaks.acceptance.test.ts::AC#1 groups a 9-player hand into blinds, early, middle and late`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-02",
+    "verifies": "AC#2, DoD#2",
+    "verification": "acceptance `tests/stats/preflop-leaks.acceptance.test.ts::AC#2 groups a 6-player hand with no early seats`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-03",
+    "verifies": "AC#3, DoD#2",
+    "verification": "acceptance `tests/stats/preflop-leaks.acceptance.test.ts::AC#3 groups 4-player, 3-player and heads-up hands`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-04",
+    "verifies": "AC#4, DoD#2",
+    "verification": "acceptance `tests/stats/preflop-leaks.acceptance.test.ts::AC#4 classifies button open, big blind call, hijack re-raise and UTG fold`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-05",
+    "verifies": "AC#5, DoD#2",
+    "verification": "acceptance `tests/stats/preflop-leaks.acceptance.test.ts::AC#5 a limp and a small-blind complete are calls and a raise over a limper is an open`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-06",
+    "verifies": "AC#6, DoD#2",
+    "verification": "acceptance `tests/stats/preflop-leaks.acceptance.test.ts::AC#6 a big blind check falls in no preflop category`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-07",
+    "verifies": "AC#7, DoD#1, DoD#2, DoD#10",
+    "verification": "acceptance `tests/stats/preflop-leaks.acceptance.test.ts::AC#7 all 16 preflop categories have a title, evidence name and a one-sentence fix`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-08",
+    "verifies": "AC#8, DoD#2",
+    "verification": "acceptance `tests/ui/report-preflop-leaks.acceptance.test.tsx::AC#8 the report lists the early-position folds leak with evidence and fix`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-09",
+    "verifies": "AC#7, DoD#2",
+    "verification": "unit `tests/stats/preflop-leaks.test.ts::parseLeakCategories rejects malformed preflop entries`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-10",
+    "verifies": "AC#4, AC#5, DoD#2",
+    "verification": "unit `tests/stats/preflop-leaks.test.ts::handCategoryDecisions pairs preflop decisions with their action records`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-11",
+    "verifies": "AC#1, AC#2, AC#3, DoD#2",
+    "verification": "unit `tests/stats/preflop-leaks.test.ts::positionGroup and preflopAction cover every table size and action`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-12",
+    "verifies": "DoD#2, DoD#8, DoD#9",
+    "verification": "unit `tests/stats/preflop-leaks.test.ts::stored leakCounts with preflop categories round-trip and are order-checked`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-13",
+    "verifies": "DoD#2, DoD#3, DoD#4, DoD#5, DoD#6, DoD#11",
+    "verification": "command `npm run lint && npm run typecheck && npm test`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-14",
+    "verifies": "DoD#1, DoD#10, DoD#12",
+    "verification": "manual `docs/stats/leaks.md` section \"Preflop categories\", `docs/storage/reports.md` section \"leakCounts\", and `backlog doc list --plain` entry for TASK-10.6",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-15",
+    "verifies": "DoD#7, DoD#13",
+    "verification": "manual `git diff --stat main -- src/engine src/bots src/advice src/ui` is empty",
+    "status": "pending"
+  }
+]

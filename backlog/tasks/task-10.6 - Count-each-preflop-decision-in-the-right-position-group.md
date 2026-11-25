@@ -1,10 +1,11 @@
 ---
 id: TASK-10.6
 title: See my preflop leaks by position group
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-17T23:22:00Z'
+updated_date: '2026-11-25T06:10:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -69,3 +70,14 @@ Plan key: E10-S12 · Dream: limit-holdem-trainer
 - [ ] #12 Story documentation is written and published to Backlog.md
 - [ ] #13 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. Append 16 preflop leak categories (early/middle/late/blinds x fold/open/call/raise) to src/stats/leak-categories.json with approved text
+2. Classify each unhinted preflop decision by position group (REQ-047.6, from the stored button) and action (open vs raise per the advice engine's test)
+3. Count them into the existing write-once leakCounts; same leak rule and evidence format
+4. Re-pin TASK-10.5 AC#2 to the postflop subset and add the preflop-id check; docs
+
+Full spec: doit/TASK-10.6/spec.md
+<!-- SECTION:PLAN:END -->

@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-24T23:58:00Z'
+updated_date: '2026-11-25T06:09:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -92,6 +92,8 @@ Build: leak-categories.json (approved copy), leakCounts stored once at session e
 Judge r1 PASS 16/16; live Chromium+WebKit sessions: leaks section matches independent recount of unhinted postflop decisions; CI 45508686083 green.
 
 Follow-ups: TASK-10.14 created (three leak-text wording fixes, needs user approval). Already owned: ranking/top-3 (TASK-10.8), preflop categories (TASK-10.6).
+
+Locked tests/stats/leaks.acceptance.test.ts AC#2 unlocked for TASK-10.6 Q-1: the exact-15-postflop-ids check now runs over the non-preflop subset, since preflop categories are appended to the same list.
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary
