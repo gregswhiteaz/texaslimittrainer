@@ -1,10 +1,11 @@
 ---
 id: TASK-10.7
 title: See how many of my decisions used a hint in the report
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-17T23:22:00Z'
+updated_date: '2026-11-25T06:55:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -61,3 +62,14 @@ Plan key: E10-S03 · Dream: limit-holdem-trainer
 - [ ] #11 Story documentation is written and published to Backlog.md
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. Count hinted and total user decisions once at session end into a new optional write-once report field hints {hinted, decisions}
+2. Validate hints on read; reports without it stay valid and show no tile
+3. Show a 4th 'Hints used' tile in Volume and errors: 'N of M decisions (P%)'
+4. Tests (unit, UI, storage, e2e) and docs/storage/reports.md
+
+Full spec: doit/TASK-10.7/spec.md
+<!-- SECTION:PLAN:END -->
