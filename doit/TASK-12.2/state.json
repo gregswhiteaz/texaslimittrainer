@@ -4,7 +4,7 @@
   "branch": "doit/TASK-12.2",
   "base_commit": "4fd2e90034a065d345febe021d43635a4f888599",
   "started": "2026-11-25T09:02:00",
-  "review_round": 0,
+  "review_round": 1,
   "judge_round": 0,
   "sendbacks": 0,
   "gate_runs": 1,
@@ -1974,7 +1974,25 @@
       "skips": 0
     }
   },
-  "history": [],
+  "history": [
+    {
+      "t": "2026-11-25T09:23:29",
+      "event": "unlock",
+      "file": "tests/ui/opponent-styles.acceptance.test.tsx",
+      "reason": "Review r1 MAJOR: strengthen SPEC-01 \u2014 add the App-shaped loading case (settings undefined, onSettingsChange passed) asserting the checkbox is disabled"
+    }
+  ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-12.2",
-  "spec_sha256": "a808ecb467739844e1e8e39bc68a0ae18287c12b4f36756385f71abd015db0be"
+  "spec_sha256": "a808ecb467739844e1e8e39bc68a0ae18287c12b4f36756385f71abd015db0be",
+  "review_findings": {
+    "1": 1
+  },
+  "relock_pending": [
+    "tests/ui/opponent-styles.acceptance.test.tsx"
+  ],
+  "brief_history": {
+    "tests/ui/opponent-styles.acceptance.test.tsx:disabled-until-loaded-guard-untested": [
+      "review r1"
+    ]
+  }
 }

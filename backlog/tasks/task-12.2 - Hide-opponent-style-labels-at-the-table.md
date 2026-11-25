@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-25T16:07:00Z'
+updated_date: '2026-11-25T16:22:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -83,4 +83,6 @@ Full spec: doit/TASK-12.2/spec.md
 
 <!-- SECTION:NOTES:BEGIN -->
 AC added from TASK-3.3 follow-up (doc-24).
+
+Build: writeSettings (validated whole-record write); App reads settings at launch and saves each change; Display checkbox 'Show opponent styles at the table' (44x44 input); Table hides bot style labels when off. Locked e2e/settings.spec.ts re-pinned (control list; Tab order from the heading, Block 1). Full e2e 338 pass + settings fixed; gate PASS.
 <!-- SECTION:NOTES:END -->
