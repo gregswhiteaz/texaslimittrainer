@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-25T15:55:00Z'
+updated_date: '2026-11-25T16:07:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -92,6 +92,8 @@ Build: Settings entry and screen (Play / Display / Your data, Version 0.0.0 via 
 Judge r1 PASS 17/17: real upgrade test — main build created a v3 DB with played hands, a report and a paused session; this build upgraded it to v4 with hands/sessions/reports byte-identical and the raw settings record equal to the defaults; Resume and Statistics still work; Settings sections, Version 0.0.0, focus, play-money walk, axe; full e2e 332 pass. CI 45647646463 green.
 
 Follow-ups: TASK-12.10 (raw-record test, onblocked handling, back-control Tab order); ACs added to TASK-12.5 (write API) and TASK-2.11 (read default speed).
+
+Locked e2e/settings.spec.ts unlocked for TASK-12.2 Q-2 (control list gains the opponent-styles checkbox; 44x44 check unchanged).
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary

@@ -1980,7 +1980,14 @@
       "skips": 0
     }
   },
-  "history": [],
+  "history": [
+    {
+      "t": "2026-11-25T09:07:21",
+      "event": "unlock",
+      "file": "e2e/settings.spec.ts",
+      "reason": "TASK-12.2 Q-2 (auto-accepted, alternative): Settings gains its first control; wait for it enabled, name controls by text or label, expect ['\u2190 Home','Show opponent styles at the table']; the 44x44 check stays on the control itself"
+    }
+  ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-12.1",
   "spec_sha256": "599267d36cdfb43d2833d2564c5f2d6562af10eeb091c39fddd38d26025be1ae",
   "review_findings": {
@@ -1989,5 +1996,8 @@
   "judge_results": {
     "1": "PASS"
   },
-  "doc_id": "doc-141"
+  "doc_id": "doc-141",
+  "relock_pending": [
+    "e2e/settings.spec.ts"
+  ]
 }

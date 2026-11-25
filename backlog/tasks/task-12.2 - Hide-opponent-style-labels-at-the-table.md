@@ -1,10 +1,11 @@
 ---
 id: TASK-12.2
 title: Hide opponent style labels at the table
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-19T00:21:00Z'
+updated_date: '2026-11-25T16:07:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -65,6 +66,18 @@ Plan key: E12-S02 · Dream: limit-holdem-trainer
 - [ ] #11 Story documentation is written and published to Backlog.md
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. writeSettings(settings): validated whole-record write, durability strict
+2. App reads settings once at launch (defaults until loaded; invalid record falls back to defaults) and holds them in state; one changeSettings handler saves each change
+3. Settings Display section gets the 'Show opponent styles at the table' checkbox (44x44 input), disabled until settings load
+4. Table hides bot style labels and their separators when off; applies on next table open / resume
+5. Re-pin locked e2e/settings.spec.ts control list (44x44 check unchanged); new unit, storage and e2e tests
+
+Full spec: doit/TASK-12.2/spec.md
+<!-- SECTION:PLAN:END -->
 
 ## Implementation Notes
 
