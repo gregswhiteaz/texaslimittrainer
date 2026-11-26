@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-25T01:41:00Z'
-updated_date: '2026-11-26T15:18:00Z'
+updated_date: '2026-11-26T15:35:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -43,3 +43,9 @@ Follow-up from TASK-7.32 code and security review (doc-129). requiredCountsRiver
 
 Full spec: doit/TASK-7.33/spec.md
 <!-- SECTION:PLAN:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+Build: fields required; river-bet clause via {riverBet} template slot (text byte-identical, playtest SHAs unchanged); grade rejects non-finite valueThresholdPct; AC#6 title and golden id fixed; gate PASS
+<!-- SECTION:NOTES:END -->

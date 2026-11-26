@@ -1,0 +1,24 @@
+{"reviewer": "code", "round": 1,
+ "rubric": [
+  {"item": "SPEC-01 correctness", "result": "pass"}, {"item": "SPEC-01 test strength", "result": "pass"},
+  {"item": "SPEC-02 correctness", "result": "pass"}, {"item": "SPEC-02 test strength", "result": "pass"},
+  {"item": "SPEC-03 correctness", "result": "pass"}, {"item": "SPEC-03 test strength", "result": "pass"},
+  {"item": "SPEC-04 correctness", "result": "pass"}, {"item": "SPEC-04 test strength", "result": "pass"},
+  {"item": "SPEC-05 correctness", "result": "pass"}, {"item": "SPEC-05 test strength", "result": "pass"},
+  {"item": "SPEC-06 correctness", "result": "pass"}, {"item": "SPEC-06 test strength", "result": "pass"},
+  {"item": "SPEC-07 correctness", "result": "pass"}, {"item": "SPEC-07 test strength", "result": "pass"},
+  {"item": "SPEC-08 correctness", "result": "pass"}, {"item": "SPEC-08 test strength", "result": "pass"},
+  {"item": "SPEC-09 correctness", "result": "pass"}, {"item": "SPEC-09 test strength", "result": "pass"},
+  {"item": "scope", "result": "pass"}, {"item": "concision", "result": "pass"}, {"item": "clarity", "result": "pass"}
+ ],
+ "findings": [
+  {"fingerprint": "src/advice/grade.ts:single-letter-threshold-local", "severity": "NIT", "file": "src/advice/grade.ts", "line": 140,
+   "issue": "The local `t` holding recommendation.valueThresholdPct is a one-letter name (taken verbatim from the spec design).",
+   "evidence": "const t = recommendation.valueThresholdPct;",
+   "fix": "Optionally rename to `rawThreshold` or `thresholdPct`."},
+  {"fingerprint": "tests/advice/advice-hardening.acceptance.test.ts:fixture-self-check", "severity": "NIT", "file": "tests/advice/advice-hardening.acceptance.test.ts", "line": 81,
+   "issue": "`expect([requiredCountsRiverBet, valueThresholdPct]).toEqual([false, 65])` asserts the test's own fixture defaults; it only exists to use the destructured names. The real SPEC-01 checks are the expectTypeOf/@ts-expect-error lines and the recommendPostflop runtime asserts.",
+   "evidence": "const { requiredCountsRiverBet, valueThresholdPct, ...fields } = turn({}); expect([...]).toEqual([false, 65]);",
+   "fix": "Optionally destructure with `_`-prefixed names (if lint allows) or build `rest` from an Omit helper and drop the self-check."}
+ ],
+ "summary": "All nine SPEC items are implemented as specified. Required fields on PostflopRecommendation, {riverBet} slot in exactly the 5 owed-bet templates with POT_ODDS_RIVER_BET_CLAUSE, no .replace in explainPostflop, finitePct validation of a present valueThresholdPct after equityVsCallingRangePct (A-4), and GoldenNumbers keeps the threshold optional (A-1). Tests would catch breakage: SPEC-02 compares W.replace(clause) to N and counts the full lead, SPEC-03 checks the slot directly, SPEC-01 @ts-expect-error lines fail typecheck if a field goes optional again, SPEC-05/06 assert exact RangeError messages and margins. The three locked files contain only the listed edits (one id in postflop-spots.json, one AC#6 title, two factory fields in value-copy). Verified: vitest tests/advice tests/golden tests/table 733 passed, golden test titled 6max-flop-co-raise-jj-3way passes, 120 spots, typecheck and lint clean. Only two NITs."}

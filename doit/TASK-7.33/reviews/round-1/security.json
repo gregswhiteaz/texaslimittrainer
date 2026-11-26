@@ -1,0 +1,8 @@
+{"reviewer": "security", "round": 1,
+ "findings": [
+  {"fingerprint": "src/advice/grade.ts:threshold-range-unchecked", "severity": "NIT", "file": "src/advice/grade.ts", "line": 140,
+   "issue": "valueThresholdPct is checked for finiteness but not for range (0-100) or for the 50|65 domain recommendPostflop produces. A finite but absurd stored value (e.g. 1e308, -5) is accepted and yields a meaningless margin/grade instead of a RangeError. Same pre-existing behaviour as equityPct/requiredEquityPct/equityVsCallingRangePct, so it is consistent with the existing contract.",
+   "evidence": "deserialized EquityGradeInput.valueThresholdPct = 1e308 -> finitePct passes -> tenths() -> Infinity distance -> grade 'major'. Outcome is a wrong grade on corrupt local data only; no code execution, disclosure or DoS.",
+   "fix": "Optional: reject thresholds outside [0,100] (or not in {50,65}) alongside the finiteness check, if the grader is ever fed data from outside the app."}
+ ],
+ "summary": "No BLOCKER/MAJOR. The change closes the prior gap: a present, non-finite or non-number threshold (NaN, Infinity, string from JSON) now throws RangeError via finitePct (Number.isFinite rejects non-numbers), and null/undefined fall back to 50, failing closed. The {riverBet} slot is filled from a constant clause via fillTemplate, which is single-pass (substituted values are not re-expanded) and throws on unknown placeholders; no user-controlled text enters the template, so no template/HTML injection path. The type tightening in postflop.ts is compile-time only. No new dependencies, secrets, logging, randomness, or file I/O."}
