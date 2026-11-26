@@ -4,13 +4,13 @@
   "branch": "doit/TASK-6.27",
   "base_commit": "96bf8577e4d135472163776498ced3f022b9de51",
   "started": "2026-11-26T14:16:35",
-  "review_round": 0,
+  "review_round": 1,
   "judge_round": 0,
   "sendbacks": 0,
   "gate_runs": 1,
-  "questions": 0,
+  "questions": 2,
   "assumptions": 0,
-  "escalations": 0,
+  "escalations": 1,
   "item_failures": {},
   "locked_tests": {
     "tests/toolchain/bot-import-gaps.acceptance.test.ts": "94646ec9f0ea7dfb260e5f164973dcec19141c7ed1cd2c4576f7c8424eb0004c"
@@ -2187,7 +2187,34 @@
       "skips": 0
     }
   },
-  "history": [],
+  "history": [
+    {
+      "t": "2026-11-26T15:26:44",
+      "event": "unlock",
+      "file": "tests/toolchain/bot-import-gaps.acceptance.test.ts",
+      "reason": "Q-2/AC#3: add allow-list probes (strengthen only)"
+    }
+  ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-6.27",
-  "spec_sha256": "9d8a09cd4b81d39927eb06ee0176f6310a859e6882e3fd7fb462a55afef788e0"
+  "spec_sha256": "9d8a09cd4b81d39927eb06ee0176f6310a859e6882e3fd7fb462a55afef788e0",
+  "review_findings": {
+    "1": 4
+  },
+  "brief_history": {
+    "tools/lint/headless-boundary.js:advice-golden-extension-bypass": [
+      "review r1"
+    ],
+    "tools/lint/headless-boundary.js:advice-may-import-golden": [
+      "review r1"
+    ],
+    "tools/lint/headless-boundary.js:advice-boundary-misses-non-engine-modules": [
+      "review r1"
+    ],
+    "tools/lint/headless-boundary.js:bot-boundary-misses-non-engine-modules": [
+      "review r1"
+    ]
+  },
+  "relock_pending": [
+    "tests/toolchain/bot-import-gaps.acceptance.test.ts"
+  ]
 }

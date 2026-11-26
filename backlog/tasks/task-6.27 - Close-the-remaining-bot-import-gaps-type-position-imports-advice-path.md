@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-25T23:03:00Z'
-updated_date: '2026-11-26T21:35:00Z'
+updated_date: '2026-11-26T22:26:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -29,6 +29,7 @@ Follow-up from TASK-6.21 judge (doc-149). A type-position import('../engine/hand
 <!-- AC:BEGIN -->
 - [ ] #1 Given a src/bots file using a type-position import('../engine/…') outside the allow-list, When lint runs, Then it fails with the REQ-025.1 boundary message (TSImportType selector), and allowed PlayerView types still pass
 - [ ] #2 Given the indirect src/bots → src/advice → engine path, When the user decides whether bots may import src/advice, Then the decision is recorded and, if barred, a lint test enforces it
+- [ ] #3 Given a src/bots or src/advice file (other than src/advice/golden.ts), When it imports any project module outside its allow-list (bots: src/bots, src/advice except golden, the allowed engine types, and only the LineUpName/SessionConfig/SessionSeat types from src/table/session; advice: its own files except golden plus the five allowed engine modules) by value, type, re-export or type-position import, Then lint fails with the boundary message, and every current import still lints clean
 <!-- AC:END -->
 
 ## Implementation Plan
@@ -50,4 +51,6 @@ doit autopilot skipped (2026-11-26): AC#2 needs a user decision (may bots import
 Build: TSImportType selectors in the bot boundary rule; bots barred from advice/golden; adviceHiddenStateConfig keeps engine hand state out of advice code (golden.ts excepted); new tooling acceptance tests; repo lints clean; gate PASS
 
 Recorded decision-3 (accepted): bots may import src/advice; lint guard keeps hidden hand state out of it (Q-1 = a).
+
+AC#3 added (user, review r1 escalation): turn both boundaries into allow-lists so bots can't reach hand state via table/storage/playtest modules or advice/golden.
 <!-- SECTION:NOTES:END -->
