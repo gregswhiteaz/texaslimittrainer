@@ -1,0 +1,20 @@
+{
+  "task": "TASK-6.20",
+  "stage": "build",
+  "branch": "doit/TASK-6.20",
+  "base_commit": "5ec239851bab001639f4d1580af6b41f8bb96f63",
+  "started": "2026-11-26T13:07:36",
+  "review_round": 0,
+  "judge_round": 0,
+  "sendbacks": 0,
+  "gate_runs": 0,
+  "questions": 0,
+  "assumptions": 0,
+  "escalations": 0,
+  "item_failures": {},
+  "locked_tests": {},
+  "test_snapshot": {},
+  "history": [],
+  "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-6.20",
+  "spec_sha256": "11c2edede4c92b51bdae81d2c55c8673eb3303d98087ab5d8fbeb8b655cc7adb"
+}

@@ -1,9 +1,11 @@
 ---
 id: TASK-6.20
 title: Decide how hand replay reproduces bot actions that use session memory
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-18T07:03:00Z'
+updated_date: '2026-11-26T20:13:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -29,3 +31,15 @@ Follow-up from TASK-1.5. REQ-028.2 says replaying a hand reproduces every bot ac
 <!-- AC:BEGIN -->
 - [ ] #1 Given the options (store session context in hand records, forbid cross-hand bot memory, or relax REQ-028.2), When the user decides, Then the decision is recorded as a Backlog decision and requirements.md is updated if needed
 <!-- AC:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. Record Backlog decision: bots decide from the current hand only (Q-1 = B)
+2. requirements.md: REQ-029.3 + change-log row 1.12
+3. Doc comment on PlayerView.earlierShowdowns
+4. Guard test: bot actions identical with a different earlier-showdowns list
+5. Archive TASK-6.23 as not needed
+
+Full spec: doit/TASK-6.20/spec.md
+<!-- SECTION:PLAN:END -->
