@@ -1,0 +1,24 @@
+{"reviewer": "code", "round": 1,
+ "rubric": [
+  {"item": "SPEC-01 correctness", "result": "pass"},
+  {"item": "SPEC-01 test strength", "result": "pass"},
+  {"item": "SPEC-02 correctness", "result": "pass"},
+  {"item": "SPEC-02 test strength", "result": "pass"},
+  {"item": "SPEC-03 correctness", "result": "pass"},
+  {"item": "SPEC-03 test strength", "result": "pass"},
+  {"item": "SPEC-04 correctness", "result": "pass"},
+  {"item": "SPEC-04 test strength", "result": "pass"},
+  {"item": "SPEC-05 correctness", "result": "pass"},
+  {"item": "SPEC-05 test strength", "result": "pass"},
+  {"item": "scope", "result": "pass"},
+  {"item": "concision", "result": "pass"},
+  {"item": "clarity", "result": "pass"}
+ ],
+ "findings": [
+  {"fingerprint": "e2e/reload-history.spec.ts:home-marker-checked-before-any-navigation", "severity": "NIT",
+   "file": "e2e/reload-history.spec.ts", "line": 70,
+   "issue": "In SPEC-01 and SPEC-03 the window marker is set after the Home click and checked before any further navigation, so it only catches a reload caused by the Home click that lands after setMarker. It adds little evidence beyond the history.state === null and history.length === L assertions.",
+   "evidence": "await button(page, 'Home').click(); await setMarker(page); ... expect(await hasMarker(page)).toBe(true); then page.goBack() goes straight to about:blank.",
+   "fix": "Optional: keep as specified (A-3). The state/length assertions are what actually fail if openTable pushes instead of replaces."}
+ ],
+ "summary": "openTable now replaces the current entry when history.state carries a string tlhTable key and pushes otherwise, exactly as in D-1/A-1. lastTableKey and tableKey.current are set the same way in both branches. The three new e2e tests would fail if the code went back to pushState: after Home (SPEC-01/03) or Back (SPEC-02), history.state would be {tlhTable: T1} rather than null, and history.length would be L+1. The docs cover every SPEC-05 point and the wrong 'would reload the page' sentence is gone. Verified locally: npm run build, then reload-history plus the 5 locked history specs, 54/54 passed in Chromium and WebKit. Only 3 files changed (src/ui/App.tsx, e2e/reload-history.spec.ts, docs/ui/navigation.md), there is no scope creep, and the test helpers were copied as A-2 allows. No BLOCKER or MAJOR findings."}

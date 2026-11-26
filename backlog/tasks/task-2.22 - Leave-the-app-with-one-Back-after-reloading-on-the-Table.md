@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-25T20:08:00Z'
-updated_date: '2026-11-26T10:21:00Z'
+updated_date: '2026-11-26T10:36:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -45,4 +45,6 @@ Full spec: doit/TASK-2.22/spec.md
 
 <!-- SECTION:NOTES:BEGIN -->
 Spec finding: stepping back from the stale entry does not reload the page (pushState entries share the document); the first Back from Home just does nothing visible. TASK-2.20/doc-146 wording was wrong; docs/ui/navigation.md is corrected in this story.
+
+Build: openTable replaces instead of pushing when a Table entry is current; new e2e reload-history (fails on old code, passes 3x repeat); e2e 389 passed; gate PASS
 <!-- SECTION:NOTES:END -->
