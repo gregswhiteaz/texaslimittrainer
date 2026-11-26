@@ -605,7 +605,25 @@ describe('BB/100 hardening (TASK-11.14)', () => {
     expect(bb100Value(primeHands(1))).toBe(3.1);
     expect(bb100Value(primeHands(-1))).toBe(-3.1);
     expect(Object.is(bb100Value(primeHands(0)), 0)).toBe(true);
+    // −2 / 2 / 16 × 100 = −6.25 exactly: half away from zero gives −6.3, Math.round would give −6.2.
+    expect(bb100Value(primeHands(-2))).toBe(-6.3);
     expect(bb100Value(primes(500).map((bigBet, i) => cashOf(bigBet, bigBet, i + 1)))).toBe(100);
+    // −1 / 3571 / 500 × 100 ≈ −5.6e-5 rounds to 0, never −0.
+    const tinyLoss = primes(500).map((bigBet, i) =>
+      cashOf(bigBet === 3571 ? -1 : 0, bigBet, i + 1),
+    );
+    expect(Object.is(bb100Value(tinyLoss), 0)).toBe(true);
+
+    // Switch point: big bets 4, 40 and eight primes; LCM just below vs just above MAX_SAFE_INTEGER.
+    const tieHands = (a: number, b: number, odd: readonly number[]): TrendHand[] => [
+      cashOf(a, 4, 1),
+      cashOf(b, 40, 2),
+      ...odd.map((bigBet, i) => cashOf(0, bigBet, i + 3)),
+    ];
+    // LCM 5 354 760 272 292 280: exact −138.25 → −138.3; the float sum would give −138.2.
+    expect(bb100Value(tieHands(-60, 47, [43, 47, 53, 59, 61, 67, 71, 73]))).toBe(-138.3);
+    // LCM 9 837 815 383 978 840: the float sum gives −146.3; the unsafe "exact" path would give −146.2.
+    expect(bb100Value(tieHands(-60, 15, [47, 53, 59, 61, 67, 71, 73, 79]))).toBe(-146.3);
 
     const nets = [7, -13, 3, 0, -25];
     for (const a of CASH_STAKES) {
