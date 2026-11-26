@@ -5,13 +5,20 @@
   "base_commit": "42e0cd8c1536f7253d382c97b9a31a41921de71d",
   "started": "2026-11-26T06:11:24",
   "review_round": 1,
-  "judge_round": 0,
+  "judge_round": 1,
   "sendbacks": 0,
   "gate_runs": 1,
   "questions": 0,
   "assumptions": 0,
   "escalations": 0,
-  "item_failures": {},
+  "item_failures": {
+    "SPEC-01": 0,
+    "SPEC-02": 0,
+    "SPEC-03": 0,
+    "SPEC-04": 0,
+    "SPEC-05": 0,
+    "SPEC-06": 0
+  },
   "locked_tests": {
     "tests/bots/replacement.acceptance.test.ts": "9342faafd076d60e9941c3bab57debd73987669e1694f8af838412ead898551c"
   },
@@ -2132,5 +2139,8 @@
   "spec_sha256": "9d9bafa7572b0f2135d5a5dd83e6c226a7df037c780e0affddeed839f3b8df1f",
   "review_findings": {
     "1": 0
+  },
+  "judge_results": {
+    "1": "PASS"
   }
 }

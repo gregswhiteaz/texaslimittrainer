@@ -7,7 +7,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-25T05:57:00Z'
-updated_date: '2026-11-26T13:29:00Z'
+updated_date: '2026-11-26T13:45:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -29,9 +29,9 @@ Follow-up from TASK-6.25 review and judge (doc-130). Since replacements keep the
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Given a playtest run, When its Replay line is built, Then no dead replaced-styles branch remains in src/playtest/cli.ts and its cli test is updated without removing a check of live behaviour
-- [ ] #2 Given runner.ts and the Rock and Maniac style files, When read, Then the lineUp comment says replacements keep their style, the Rock CO raise justification names AJo, and the Maniac fold-to-call justification is one clear sentence
-- [ ] #3 Given tests/bots/replacement.acceptance.test.ts, When it runs, Then the same-style checks hold over a small fixed set of codes with the same check count
+- [x] #1 Given a playtest run, When its Replay line is built, Then no dead replaced-styles branch remains in src/playtest/cli.ts and its cli test is updated without removing a check of live behaviour
+- [x] #2 Given runner.ts and the Rock and Maniac style files, When read, Then the lineUp comment says replacements keep their style, the Rock CO raise justification names AJo, and the Maniac fold-to-call justification is one clear sentence
+- [x] #3 Given tests/bots/replacement.acceptance.test.ts, When it runs, Then the same-style checks hold over a small fixed set of codes with the same check count
 <!-- AC:END -->
 
 ## Implementation Plan
@@ -49,4 +49,6 @@ Full spec: doit/TASK-6.26/spec.md
 
 <!-- SECTION:NOTES:BEGIN -->
 Build: removed dead replacedStylesOption; runner comment fixed; Rock justification names ace-jack offsuit (AJo); Maniac justification one sentence; replacement test over 8 fixed codes, same 18 assertions; gate PASS
+
+Judge r1 PASS (6/6 SPEC items; Rock (AJo) wording judged on substance)
 <!-- SECTION:NOTES:END -->

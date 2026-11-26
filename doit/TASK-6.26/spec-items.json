@@ -3,36 +3,36 @@
     "id": "SPEC-01",
     "verifies": "AC#1",
     "verification": "unit `tests/playtest/cli.test.ts::--styles replays a hand with the given styles and echoes them in the Options line`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-02",
     "verifies": "AC#1",
     "verification": "command `grep -c replacedStylesOption src/playtest/cli.ts; npm run playtest -- --replay-code 0123456789abcdef0123456789abcdef --lineup mixed --styles rock,calling-station,maniac,tag,tag | head -4`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-03",
     "verifies": "AC#1",
     "verification": "command `python3 /Users/gregwhite/.claude/skills/doit/scripts/doit.py test-integrity TASK-6.26` (no `fewer assertions in tests/playtest/cli.test.ts` line)",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-04",
     "verifies": "AC#2",
     "verification": "command `grep -n \"same style (REQ-007.5)\" src/playtest/runner.ts && ! grep -n \"drawn from the preset\" src/playtest/runner.ts && node -e \"const r=require('./src/bots/styles/rock.json'),m=require('./src/bots/styles/maniac.json');console.log(JSON.stringify(r).includes('adds medium pairs, suited broadway hands and ace-jack offsuit, and still folds every weaker hand.'));const j=m.deviations.find(d=>d.street==='postflop'&&d.advice==='fold'&&d.instead==='call').justification;console.log(j.split('.').length===2&&j.endsWith('.'))\" && npx vitest run tests/bots/style.test.ts tests/bots/rock.acceptance.test.ts tests/bots/maniac.acceptance.test.ts` (both `true`, tests green)",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-05",
     "verifies": "AC#3",
     "verification": "acceptance `tests/bots/replacement.acceptance.test.ts::replacements at 6 players keep each preset's styles`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-06",
     "verifies": "AC#3",
     "verification": "acceptance `tests/bots/replacement.acceptance.test.ts::a session recorded as Custom keeps each bot style, all four included`",
-    "status": "pending"
+    "status": "pass"
   }
 ]
