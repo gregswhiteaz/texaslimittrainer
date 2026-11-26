@@ -9,6 +9,7 @@ import {
 } from '../support/sandbox';
 
 const BOUNDARY = ['PlayerView-boundary', 'REQ-025.1'];
+const IMPORT_META = ['import.meta', 'REQ-059.2'];
 const ADVICE = ['Advice code that bots use', 'REQ-025.1'];
 
 const TYPE_PROBES: Record<string, string> = {
@@ -68,6 +69,8 @@ const BOT_ALLOW_LIST_PROBES: Record<string, string> = {
   'src/bots/hint.ts': "import { hintArrived } from '../table/hint';\n\nexport { hintArrived };\n",
   'src/bots/runner.ts': "import { runHands } from '../playtest/runner';\n\nexport { runHands };\n",
   'src/bots/runner-type.ts': "export type R = typeof import('../playtest/runner').runHands;\n",
+  'src/bots/store-dot-parent.ts':
+    "import { sharedHandStore } from './x/../../storage/hand-store';\n\nexport { sharedHandStore };\n",
 };
 
 const ADVICE_ALLOW_LIST_PROBES: Record<string, string> = {
@@ -93,7 +96,32 @@ const ADVICE_ALLOW_LIST_PROBES: Record<string, string> = {
     "import { applyAction } from '../engine/hand/../hand';\n\nexport { applyAction };\n",
   'src/advice/probe-dot-parent.ts':
     "import { sharedHandStore } from './../storage/hand-store';\n\nexport { sharedHandStore };\n",
+  'src/advice/probe-golden-type.ts': "export type G = import('./golden').GoldenSpot;\n",
+  'src/advice/probe-hand-state-type.ts': "export type H = import('../engine/hand').HandState;\n",
 };
+
+const IMPORT_META_PROBES: Record<string, string> = {
+  'src/bots/meta-glob.ts':
+    "export const m = import.meta.glob('../storage/*.ts', { eager: true });\n",
+  'src/advice/probe-meta-glob.ts':
+    "export const m = import.meta.glob('../table/*.ts', { eager: true });\n",
+};
+
+const GLOBAL_ESCAPE_PROBES: [code: string, expected: string][] = [
+  [
+    "export const db: unknown = globalThis['indexed' + 'DB'];\n",
+    'Computed member access on globalThis',
+  ],
+  [
+    "const k = 'Math';\nexport const m: unknown = globalThis[k];\n",
+    'Computed member access on globalThis',
+  ],
+  ["export const r: unknown = eval('1');\n", 'can be harmful'],
+  ["export const f = new Function('return 1');\n", 'Function constructor is eval'],
+  ["setTimeout('void 0', 0);\n", 'Implied eval'],
+  ["setInterval('void 0', 0);\n", 'Implied eval'],
+  ["globalThis.setTimeout('void 0', 0);\n", 'Implied eval'],
+];
 
 const LINEUP_CLEAN_PROBE = [
   "import type { LineUpName, SessionConfig, SessionSeat } from '../table/session';",
@@ -167,6 +195,7 @@ describe('bot import gaps: type-position imports and the advice path', () => {
         ...GOLDEN_PATH_PROBES,
         ...BOT_ALLOW_LIST_PROBES,
         ...ADVICE_ALLOW_LIST_PROBES,
+        ...IMPORT_META_PROBES,
       },
       'lint',
     );
@@ -197,6 +226,28 @@ describe('bot import gaps: type-position imports and the advice path', () => {
     expect(result.exitCode, result.output).not.toBe(0);
     for (const file of Object.keys(ADVICE_ALLOW_LIST_PROBES)) expectError(result, file, ADVICE);
   });
+
+  it('import.meta (including import.meta.glob) in bot and advice code fails npm run lint', () => {
+    expect(result.exitCode, result.output).not.toBe(0);
+    for (const file of Object.keys(IMPORT_META_PROBES)) expectError(result, file, IMPORT_META);
+  });
+
+  it(
+    'computed globalThis access and eval in bot and advice code fail',
+    async () => {
+      const eslint = new ESLint({ cwd: REPO_ROOT });
+      for (const file of ['src/bots/probe.ts', 'src/advice/probe.ts']) {
+        for (const [code, expected] of GLOBAL_ESCAPE_PROBES) {
+          const errors = await errorsOf(eslint, code, file);
+          expect(
+            errors.some((message) => message.includes(expected)),
+            `${file}: ${code}\n${errors.join('\n')}`,
+          ).toBe(true);
+        }
+      }
+    },
+    TOOLCHAIN_TIMEOUT_MS,
+  );
 
   it(
     'PlayerView-boundary types in type position pass',

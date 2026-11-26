@@ -52,6 +52,12 @@ const HEADLESS_RESTRICTED_SYNTAX = [
     selector: 'ImportExpression',
     message: 'Dynamic import() is not allowed in headless modules (REQ-059.2).',
   },
+  {
+    // Vite and Vitest turn import.meta.glob() into real imports that no-restricted-imports does not see.
+    selector: "MetaProperty[meta.name='import'][property.name='meta']",
+    message:
+      'import.meta (including import.meta.glob) is not allowed in headless modules (REQ-059.2).',
+  },
   ...TYPE_STRIPPING_RESTRICTED_SYNTAX,
 ];
 
@@ -104,6 +110,12 @@ const BOT_DETERMINISM_RESTRICTED_SYNTAX = [
   { selector: "NewExpression[callee.name='Date']", message: NON_DETERMINISTIC_MESSAGE },
   { selector: "CallExpression[callee.name='Date']", message: NON_DETERMINISTIC_MESSAGE },
   { selector: BARE_GLOBAL_REFERENCE, message: NON_DETERMINISTIC_MESSAGE },
+  // globalThis['indexed' + 'DB'] or globalThis[k] would escape the named-property bans.
+  {
+    selector: "MemberExpression[computed=true][object.type='Identifier'][object.name='globalThis']",
+    message:
+      'Computed member access on globalThis is not allowed in bot decision code (REQ-028.1).',
+  },
 ];
 
 /**
@@ -115,6 +127,8 @@ const BOT_DETERMINISM_RESTRICTED_SYNTAX = [
 export const botDeterminismConfig = {
   name: 'bot-determinism',
   files: BOT_DETERMINISM_FILES,
+  // no-implied-eval checks only declared globals; the TS config declares none.
+  languageOptions: { globals: { setTimeout: 'readonly', setInterval: 'readonly' } },
   rules: {
     'no-restricted-properties': [
       'error',
@@ -127,6 +141,9 @@ export const botDeterminismConfig = {
       { object: 'globalThis', property: 'Math', message: NON_DETERMINISTIC_MESSAGE },
     ],
     'no-restricted-syntax': ['error', ...BOT_DETERMINISM_RESTRICTED_SYNTAX],
+    'no-eval': 'error',
+    'no-implied-eval': 'error',
+    'no-new-func': 'error',
   },
 };
 
@@ -254,8 +271,8 @@ export const ADVICE_BOUNDARY_PATTERNS = [
   },
 ];
 
-// Type-position import('…') in advice code gets the same allow-list; engine types only from player-view and
-// the Action, SeatNumber, Street names of engine/hand.
+// Type-position import('…') in advice code gets the same allow-list: sibling advice files except golden and
+// the five engine modules; from engine/hand only the Action, SeatNumber and Street names.
 const ADVICE_TYPE_IMPORT_SYNTAX = [
   {
     selector:
@@ -275,6 +292,8 @@ const ADVICE_TYPE_IMPORT_SYNTAX = [
  * the advice engine (REQ-026.1). This block keeps engine hand state out of the advice code bots can reach,
  * so that path cannot see hidden cards either (REQ-025.1); bots may not import advice/golden, and advice
  * code may not import golden, table, storage, playtest or other non-engine modules (Q-2 allow-list).
+ * Must come after botDeterminismConfig: it replaces that block's no-restricted-syntax options for these
+ * files, so the determinism entries are repeated.
  * @type {import('eslint').Linter.Config}
  */
 export const adviceHiddenStateConfig = {
