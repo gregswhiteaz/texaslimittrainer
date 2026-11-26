@@ -1,0 +1,24 @@
+{"reviewer": "code", "round": 2,
+ "rubric": [
+  {"item": "SPEC-01 correctness", "result": "pass"},
+  {"item": "SPEC-01 test strength", "result": "pass"},
+  {"item": "SPEC-02 correctness", "result": "pass"},
+  {"item": "SPEC-02 test strength", "result": "pass"},
+  {"item": "SPEC-03 correctness", "result": "pass"},
+  {"item": "SPEC-03 test strength", "result": "pass"},
+  {"item": "SPEC-04 correctness", "result": "pass"},
+  {"item": "SPEC-04 test strength", "result": "pass"},
+  {"item": "SPEC-05 correctness", "result": "pass"},
+  {"item": "SPEC-05 test strength", "result": "pass"},
+  {"item": "scope", "result": "pass"},
+  {"item": "concision", "result": "pass"},
+  {"item": "clarity", "result": "pass"}
+ ],
+ "findings": [
+  {"fingerprint": "tests/stats/bb100-tampered.acceptance.test.tsx:netOf-reimplements-netResult", "severity": "NIT",
+   "file": "tests/stats/bb100-tampered.acceptance.test.tsx", "line": 25,
+   "issue": "Carried from round 1, unchanged: netOf re-derives netResult (src/table/review.ts) without saying it is a deliberately independent oracle.",
+   "evidence": "trends.test.ts imports netResult for the same purpose.",
+   "fix": "Either import netResult, or add a note that netOf is deliberately independent. The file is locked, so leave it unless it is reopened."}
+ ],
+ "summary": "Round-1 fixes verified. Commit 1cbe8ad changes only tests/stats/trends.test.ts (plus doit bookkeeping); src/stats/trends.ts is unchanged since round 1. All three findings are fixed: (1) the tinyLoss case pins the never -0 guard; (2) primeHands(-2) = -6.25 exactly pins half-away-from-zero (-6.3); (3) the two tieHands cases pin the switch point. BigInt check: their LCMs are 5,354,760,272,292,280 (below MAX_SAFE_INTEGER 9,007,199,254,740,991) and 9,837,815,383,978,840 (above). I re-ran each mutant on its own in a scratch copy, against trends.test.ts and bb100-tampered.acceptance.test.tsx. Baseline: 14/14 pass. Each mutant failed exactly 1 test, on the intended assertion: removing the -0 guard gives 'expected false to be true' (Object.is ... 0); Math.round(v*10) gives 'expected -6.2 to be -6.3'; next > 1e6 and next > 120 give 'expected -138.2 to be -138.3'; next > 2**60 gives 'expected -146.2 to be -146.3'. The scratch copy was restored to match the source byte for byte and then deleted. The new assertions sit inside the existing hardening case, have clear comments, and add no helpers beyond the local tieHands builder, which is used twice. No BLOCKER or MAJOR findings remain."}

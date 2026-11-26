@@ -4,7 +4,7 @@
   "branch": "doit/TASK-11.14",
   "base_commit": "ed74d29687fb06a4e235f2d39c0b60faf319f9b0",
   "started": "2026-11-26T10:07:10",
-  "review_round": 1,
+  "review_round": 2,
   "judge_round": 0,
   "sendbacks": 0,
   "gate_runs": 2,
@@ -2156,7 +2156,8 @@
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-11.14",
   "spec_sha256": "9bc4919e3373334731df1906081f30a0b6b073af9b7259fdf36c8afa6a6b46eb",
   "review_findings": {
-    "1": 2
+    "1": 2,
+    "2": 0
   },
   "brief_history": {
     "tests/stats/trends.test.ts:fallback-negative-zero-guard-untested": [
