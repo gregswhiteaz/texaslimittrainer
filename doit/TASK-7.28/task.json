@@ -1,0 +1,220 @@
+{
+  "id": "TASK-7.28",
+  "title": "Count straight-draw outs only when a hole card is part of the draw",
+  "status": "To Do",
+  "archived": false,
+  "type": null,
+  "priority": "medium",
+  "project": null,
+  "assignees": [],
+  "reporter": null,
+  "labels": [
+    "dream-limit-holdem-trainer",
+    "follow-up"
+  ],
+  "milestone": "m-1",
+  "parentTaskId": "TASK-7",
+  "acceptanceCriteriaCompleted": 0,
+  "acceptanceCriteriaCount": 4,
+  "references": [],
+  "modifiedFiles": [],
+  "ordinal": 224000,
+  "createdAt": "2026-11-23T08:19:00Z",
+  "updatedAt": "2026-11-23T08:38:00Z",
+  "dueDate": null,
+  "isReady": true,
+  "path": "backlog/tasks/task-7.28 - Count-straight-draw-outs-only-when-a-hole-card-is-part-of-the-draw.md",
+  "description": "From TASK-7.9 review (MINOR): drawOuts counts an open-ended straight draw made entirely by board cards (e.g. 7c 2d on 5h 6s 7h 8d gets 8 outs, the 7c only pairs the board), while the flush half already excludes board-only draws. Every player shares a board-only draw, so advice should not credit hero with those outs. hasOpenEnder (ranges classification) uses the same definition \u2014 decide whether range classification changes too.",
+  "dependencies": [
+    "TASK-7.9"
+  ],
+  "dependencyGraph": {
+    "root": "TASK-7.28",
+    "nodes": [
+      {
+        "id": "TASK-7.28",
+        "title": "Count straight-draw outs only when a hole card is part of the draw",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": 0,
+        "dependentDepth": 0
+      },
+      {
+        "id": "TASK-1.1",
+        "title": "Bootstrap the strict TypeScript project with one-command checks",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 6,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.2",
+        "title": "Rank showdown hands by real poker hand rankings",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 4,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.3",
+        "title": "Deal every hand from a seeded shuffle with a replay code",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 6,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.4",
+        "title": "Play a complete fixed-limit hand from blinds to showdown",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 5,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.5",
+        "title": "Give each deciding seat only its own view of the hand",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 4,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.7",
+        "title": "Run every check in GitHub Actions on each push and pull request",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 5,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-7.1",
+        "title": "Compute a hand's equity against opponent hands",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 3,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-7.2",
+        "title": "Recommend a preflop action from the 6-max chart",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 3,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-7.3",
+        "title": "Recommend call or fold after the flop from equity and pot odds",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 2,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-7.9",
+        "title": "Count implied odds for drawing hands",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 1,
+        "dependentDepth": null
+      }
+    ],
+    "edges": [
+      {
+        "from": "TASK-1.2",
+        "to": "TASK-1.7"
+      },
+      {
+        "from": "TASK-1.3",
+        "to": "TASK-1.7"
+      },
+      {
+        "from": "TASK-1.4",
+        "to": "TASK-1.2"
+      },
+      {
+        "from": "TASK-1.4",
+        "to": "TASK-1.3"
+      },
+      {
+        "from": "TASK-1.5",
+        "to": "TASK-1.4"
+      },
+      {
+        "from": "TASK-1.7",
+        "to": "TASK-1.1"
+      },
+      {
+        "from": "TASK-7.1",
+        "to": "TASK-1.2"
+      },
+      {
+        "from": "TASK-7.2",
+        "to": "TASK-1.5"
+      },
+      {
+        "from": "TASK-7.3",
+        "to": "TASK-7.1"
+      },
+      {
+        "from": "TASK-7.3",
+        "to": "TASK-7.2"
+      },
+      {
+        "from": "TASK-7.9",
+        "to": "TASK-7.3"
+      },
+      {
+        "from": "TASK-7.28",
+        "to": "TASK-7.9"
+      }
+    ]
+  },
+  "readiness": {
+    "isReady": true,
+    "isBlocked": false,
+    "blockingDependencies": [],
+    "missingDependencies": []
+  },
+  "documentation": [],
+  "subtasks": [],
+  "acceptanceCriteria": [
+    {
+      "index": 1,
+      "text": "Given hole 7c 2d and board 5h 6s 7h 8d, When drawOuts runs, Then it returns no straight-draw outs",
+      "checked": false
+    },
+    {
+      "index": 2,
+      "text": "Given hole 9c 2d and board 5h 6s 7h, When drawOuts runs, Then it returns the 8 straight-draw outs (a hole card extends the run)",
+      "checked": false
+    },
+    {
+      "index": 3,
+      "text": "Given the change, When the playtest and style-bands checks run, Then all four styles stay inside their bands and any changed playtest SHA is recorded",
+      "checked": false
+    },
+    {
+      "index": 4,
+      "text": "Given hole 9h 8h and board 7h 6h 2h (a made flush), When drawOuts runs, Then it lists no straight-draw outs (a made flush needs no draw)",
+      "checked": false
+    }
+  ],
+  "definitionOfDone": [],
+  "implementationPlan": null,
+  "implementationNotes": "AC added from TASK-7.9 judge note (made flush still listed OESD outs).",
+  "comments": [],
+  "finalSummary": null
+}
