@@ -18,3 +18,4 @@
 - `docs/ui/hint.md` — Observed stats snapshot paragraph: counts are saved with each hand and restored on Resume.
 
 No new dependencies.
+- `src/table/session-record.ts` — review r1 MINOR: dropped the redundant hole check in observedField (object() rejects undefined with the same message) (orchestrator)

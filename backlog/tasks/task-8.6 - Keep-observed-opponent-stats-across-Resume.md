@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-24T10:52:00Z'
-updated_date: '2026-11-26T07:17:00Z'
+updated_date: '2026-11-26T07:45:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -43,3 +43,9 @@ Follow-up from TASK-8.1 (doc-114, Q-3). Per-bot observed counts live in a useTab
 
 Full spec: doit/TASK-8.6/spec.md
 <!-- SECTION:PLAN:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+Build: optional observed[] on the session record written with each hand, validated, restored on Resume; e2e 381 passed; 824 lines vs 650 budget (warn); gate PASS
+<!-- SECTION:NOTES:END -->

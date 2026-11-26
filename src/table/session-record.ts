@@ -267,8 +267,7 @@ function observedField(observed: unknown, botIds: ReadonlySet<unknown>, handsPla
   const seen = new Set<unknown>();
   for (let i = 0; i < observed.length; i++) {
     const field = `observed[${i}]`;
-    if (!(i in observed)) throw invalid(field);
-    const entry = object(observed[i], field);
+    const entry = object(observed[i], field); // a hole reads as undefined and fails here
     if (!botIds.has(entry.botId) || seen.has(entry.botId)) throw invalid(`${field}.botId`);
     seen.add(entry.botId);
     whole(entry.hands, `${field}.hands`, 1, handsPlayed);
