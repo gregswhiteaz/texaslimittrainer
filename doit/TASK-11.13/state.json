@@ -4,22 +4,22 @@
   "branch": "doit/TASK-11.13",
   "base_commit": "06ef6220ffcf8c02eaefa6051e7a14da7d68d6c1",
   "started": "2026-11-26T11:39:41",
-  "review_round": 0,
+  "review_round": 1,
   "judge_round": 0,
   "sendbacks": 0,
-  "gate_runs": 1,
+  "gate_runs": 2,
   "questions": 0,
   "assumptions": 0,
   "escalations": 0,
   "item_failures": {},
   "locked_tests": {
-    "e2e/statistics-hardening.spec.ts": "6620b86bc9fe6ccd3c7a6f90452c5f717f46be04a65b89bc42b94c60c929041e",
+    "e2e/statistics-hardening.spec.ts": "cf6843a57a4367ee4157690a1adbc271f4ad90e79e1219d6965cb5cd66fb3620",
     "tests/stats/trend-order.acceptance.test.tsx": "cf9f4c74fb22f3cc9e7936f0ffb7a2625bb40cca87d1b3dad570ae232ce79653"
   },
   "test_snapshot": {
     "e2e/statistics-hardening.spec.ts": {
-      "sha": "6620b86bc9fe6ccd3c7a6f90452c5f717f46be04a65b89bc42b94c60c929041e",
-      "asserts": 22,
+      "sha": "cf6843a57a4367ee4157690a1adbc271f4ad90e79e1219d6965cb5cd66fb3620",
+      "asserts": 25,
       "skips": 0
     },
     "tests/stats/trend-order.acceptance.test.tsx": {
@@ -2173,7 +2173,18 @@
       "skips": 0
     }
   },
-  "history": [],
+  "history": [
+    {
+      "t": "2026-11-26T12:05:06",
+      "event": "unlock",
+      "file": "e2e/statistics-hardening.spec.ts",
+      "reason": "review r1 MINOR: also assert the all-hands target after a Group by change under a non-All filter (strengthen only)"
+    }
+  ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-11.13",
-  "spec_sha256": "00c60d3594f21736084ef9b276d96171a5e9dfde680e5fffade4788c585d5fda"
+  "spec_sha256": "00c60d3594f21736084ef9b276d96171a5e9dfde680e5fffade4788c585d5fda",
+  "relock_pending": [],
+  "review_findings": {
+    "1": 0
+  }
 }

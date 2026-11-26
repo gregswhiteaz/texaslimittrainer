@@ -1,0 +1,10 @@
+{"reviewer": "security", "round": 1,
+ "findings": [
+  {"fingerprint": "src/ui/stats/StatisticsScreen.tsx:grouping-select-cast",
+   "severity": "NIT",
+   "file": "src/ui/stats/StatisticsScreen.tsx", "line": 231,
+   "issue": "The Group by select still casts e.target.value as TrendGrouping, so a DOM-edited value reaches statisticsView/chartLabel/chartNote unvalidated. Spec §1 scopes this out on purpose (it is not a filter, so AC#5 does not apply).",
+   "evidence": "Only the local user can edit their own DOM (devtools) -> onGroupingChange -> filteredStatisticsView(..., grouping) -> non-'hands'/'session' value takes the day path; chartNote interpolates it into text that React escapes. Nothing crosses a trust boundary, and there is no injection or persistence sink.",
+   "fix": "Optional follow-up: use filterOption-style mapping against GROUPING_OPTIONS with DEFAULT_GROUPING as the fallback, for consistency with the filters."}
+ ],
+ "summary": "No reachable vulnerabilities. filterOption maps untrusted select values to known option ids only, falling back to 'all', and is applied to all three filter selects. The App stats state union removes the data-undefined guards by construction, and handlers are passed only once data is loaded, so it fails closed. pinTimeZone and the LCG shuffle are test-only: TZ is set in the Vitest worker and restored in afterAll, and the shuffle is not used for fairness. No new dependencies, secrets, logging, storage or injection surface. One hygiene NIT on the grouping cast, which the spec scopes out."}

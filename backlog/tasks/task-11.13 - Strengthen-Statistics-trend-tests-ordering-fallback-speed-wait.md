@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-25T08:57:00Z'
-updated_date: '2026-11-26T18:47:00Z'
+updated_date: '2026-11-26T19:02:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -53,4 +53,6 @@ Full spec: doit/TASK-11.13/spec.md
 ACs added from TASK-11.4 follow-ups (doc-137).
 
 AC added from TASK-11.5 follow-up (doc-138).
+
+Build: ordering tests, TEMPLATE_DECISIONS removed, visible-point speed timer, App-level G-2 e2e (1,200 hands), filterOption maps unknown to All, unreachable guard removed, day-grouping pinned to Pacific/Kiritimati; e2e 401 passed; gate PASS
 <!-- SECTION:NOTES:END -->

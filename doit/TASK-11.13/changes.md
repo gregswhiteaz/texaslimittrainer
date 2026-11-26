@@ -13,3 +13,5 @@
 - `docs/stats/trends.md` — modified: unknown-value rule, `filteredStatisticsView`, the time-zone pin and the new tests.
 
 No new dependencies.
+- `e2e/statistics-hardening.spec.ts` — review r1 MINOR: assert the all-hands target after a Group by change under a non-All filter (strengthen only; orchestrator)
+- `docs/stats/trends.md` — review r1 MINOR: speed-check sentence in its own bullet (orchestrator)

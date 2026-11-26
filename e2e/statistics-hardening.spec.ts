@@ -106,6 +106,14 @@ test('App takes the G-2 target from every stored hand under every filter', async
       await expect(chart.locator('line.stats-target')).toHaveCount(1);
     }
   }
+
+  // Review r1: a Group by change under a non-All filter also keeps the all-hands target.
+  const groupBy = page.getByRole('combobox', { name: 'Group by' });
+  await groupBy.selectOption({ label: 'Day' });
+  await groupBy.selectOption({ label: 'Session' });
+  await expect(totals).toHaveText('200 hands over 1 session');
+  await expect(chart).toHaveAttribute('aria-label', ending);
+  await expect(chart.locator('line.stats-target')).toHaveCount(1);
 });
 
 test('an unknown filter value is treated as All', async ({ page }) => {

@@ -222,5 +222,6 @@ trends.` and `0 hands over 0 sessions`.
   record orders by its earliest `completedAt`.
 - `tests/support/time-zone.ts`: `pinTimeZone`, used by the two day-grouping Vitest files.
 - `e2e/statistics-hardening.spec.ts` (TASK-11.13): the App shows the all-hands G-2 target under all 12 Table size
-  × Game type filters, and a DOM-edited unknown filter value counts as All. The opt-in speed check stops its
-  timer when the 6th point is visible (non-empty box, not hidden), checked on DOM mutations and animation frames.
+  × Game type filters and after a Group by change, and a DOM-edited unknown filter value counts as All.
+- `e2e/statistics-speed.spec.ts` (opt-in): the speed check stops its timer when the 6th point is visible
+  (non-empty box, not hidden), checked on DOM mutations and animation frames.
