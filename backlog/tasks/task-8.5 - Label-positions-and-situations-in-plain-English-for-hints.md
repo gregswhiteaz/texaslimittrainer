@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-18T16:24:00Z'
-updated_date: '2026-11-26T06:46:00Z'
+updated_date: '2026-11-26T06:57:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -41,3 +41,9 @@ Follow-up from TASK-7.2: the advice API returns ids (CO, raise-and-calls); REQ-0
 
 Full spec: doit/TASK-8.5/spec.md
 <!-- SECTION:PLAN:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+Build: SITUATION_LABELS + positionLabel/situationLabel; chartBasisText output unchanged; no display change (Q-2); gate PASS
+<!-- SECTION:NOTES:END -->

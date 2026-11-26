@@ -1,0 +1,3 @@
+{"reviewer": "security", "round": 1,
+ "findings": [],
+ "summary": "The change adds a frozen-typed static string map (SITUATION_LABELS) and two pure lookup functions (positionLabel, situationLabel) keyed by the internal Position/Situation union types; chartBasisText output is unchanged. No untrusted input reaches these lookups (keys come from engine-computed recommendations, not user/file/network data), there is no I/O, no HTML/template sink introduced, no randomness, no secrets, and no new dependencies. No findings."}

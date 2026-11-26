@@ -1,0 +1,20 @@
+{"reviewer": "code", "round": 1,
+ "rubric": [
+  {"item": "SPEC-01 correctness", "result": "pass"},
+  {"item": "SPEC-01 test strength", "result": "pass"},
+  {"item": "SPEC-02 correctness", "result": "pass"},
+  {"item": "SPEC-02 test strength", "result": "pass"},
+  {"item": "SPEC-03 correctness", "result": "pass"},
+  {"item": "SPEC-03 test strength", "result": "pass"},
+  {"item": "scope", "result": "pass"},
+  {"item": "concision", "result": "pass"},
+  {"item": "clarity", "result": "pass"}
+ ],
+ "findings": [
+  {"fingerprint": "tests/advice/labels.acceptance.test.ts:chart-basis-check-is-relative",
+   "severity": "NIT", "file": "tests/advice/labels.acceptance.test.ts", "line": 28,
+   "issue": "The chart-basis loop compares chartBasisText against positionLabel(position), so it would still pass if chartBasisText bypassed positionLabel and read CHART_POSITIONS directly (same values). It cannot detect a D-3 regression to two lookup paths, only divergence in output.",
+   "evidence": "expect(chartBasisText({...position})).toBe(`From the 6-max chart: raise A9o from ${positionLabel(position)}`)",
+   "fix": "None required: this is the exact assertion SPEC-03 specifies, label values are pinned absolutely in the same test and in SPEC-01, and existing tests/advice/explain.test.ts pins chartBasisText output. Leave as is."}
+ ],
+ "summary": "All three SPEC items are implemented exactly as specified. SITUATION_LABELS matches the Q-1 wording word for word; positionLabel/situationLabel are one-line total lookups in explain.ts; chartBasisText now routes through positionLabel with unchanged output. Tests pin absolute strings for all 9 positions and all 6 situations plus the key set, so a changed label fails. Changes stay within the 4 planned files, docs paragraph present, no UI change. Gates pass; targeted tests pass locally (19/19). No BLOCKER or MAJOR findings."}
