@@ -1,11 +1,11 @@
 ---
 id: TASK-8.6
 title: Keep observed opponent stats across Resume
-status: In Progress
+status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-24T10:52:00Z'
-updated_date: '2026-11-26T08:03:00Z'
+updated_date: '2026-11-26T08:04:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -15,6 +15,8 @@ dependencies:
   - TASK-2.6
 references:
   - doc-114
+documentation:
+  - doc-156
 parent_task_id: TASK-8
 priority: medium
 ordinal: 233000
@@ -50,4 +52,12 @@ Full spec: doit/TASK-8.6/spec.md
 Build: optional observed[] on the session record written with each hand, validated, restored on Resume; e2e 381 passed; 824 lines vs 650 budget (warn); gate PASS
 
 Judge r1 PASS (9/9 SPEC items)
+
+Follow-ups: none tracked (duplicated 45-hand setup in locked tests is below the value bar).
 <!-- SECTION:NOTES:END -->
+
+## Final Summary
+
+<!-- SECTION:FINAL_SUMMARY:BEGIN -->
+Observed opponent stats are now saved in the session record (optional observed field, written with each hand in the same transaction, no DB version bump) and restored on Resume, so hints and stored decisions keep using them. Malformed counts reject the record with a RangeError naming the field and Home skips it. Verified: npm test 1447 passed, lint/typecheck/build clean, Playwright 16/16 on Chromium and WebKit, judge PASS 9/9. Review: Q-1 (persisted format, auto-accepted) and A-1..A-7 in doc-156. Known limitation: sessions paused before this shipped show 'typical player' once after their next Resume. Follow-up NIT: duplicated 45-hand test setup in three files; diff was about 805 lines vs 650 budget.
+<!-- SECTION:FINAL_SUMMARY:END -->
