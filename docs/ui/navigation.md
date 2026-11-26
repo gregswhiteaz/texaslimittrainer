@@ -126,9 +126,10 @@ Config, Statistics, Settings and the Session report add no entries; Back on the 
   stays paused, as when the app is closed.
 - Leaving the Table in the app (Home control or Leave table) steps back off its entry, so the entry does not
   linger and a later Back leaves the app.
-- **After a reload on the Table** the current entry is the earlier load's Table entry. Opening the Table while a
-  Table entry is current (Resume session, or Start game / `End session and start`) replaces that entry instead of
-  pushing above it (TASK-2.22 D-1), so no stale Table entry remains: Home, then one Back leaves the app, and Back
+- **After a reload on the Table** the current entry is the earlier load's Table entry. Opening the Table while that
+  earlier load's entry is current (Resume session, or Start game / `End session and start`) replaces it instead of
+  pushing above it (TASK-2.22 D-1). This load's own Table entry is only current while a Back from leaving the
+  Table is still pending; opening the Table then pushes as usual, so that Back keeps its target, so no stale Table entry remains: Home, then one Back leaves the app, and Back
   on the Table pauses to Home, then one more Back leaves the app.
 - Stepping back from an earlier load's entry does not reload the page: after a reload, the earlier load's app and
   Table entries belong to the reloaded document. History entries cannot be deleted, though, so a reload on the

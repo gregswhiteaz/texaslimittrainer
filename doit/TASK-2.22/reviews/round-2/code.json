@@ -1,0 +1,31 @@
+{"reviewer": "code", "round": 2,
+ "rubric": [
+  {"item": "SPEC-01 correctness", "result": "pass"},
+  {"item": "SPEC-01 test strength", "result": "pass"},
+  {"item": "SPEC-02 correctness", "result": "pass"},
+  {"item": "SPEC-02 test strength", "result": "pass"},
+  {"item": "SPEC-03 correctness", "result": "pass"},
+  {"item": "SPEC-03 test strength", "result": "pass"},
+  {"item": "SPEC-04 correctness", "result": "pass"},
+  {"item": "SPEC-04 test strength", "result": "pass"},
+  {"item": "SPEC-05 correctness", "result": "pass"},
+  {"item": "SPEC-05 test strength", "result": "pass"},
+  {"item": "scope", "result": "pass"},
+  {"item": "concision", "result": "pass"},
+  {"item": "clarity", "result": "pass"}
+ ],
+ "findings": [
+  {"fingerprint": "docs/ui/navigation.md:replace-rule-wording-broader-than-code", "severity": "MINOR", "file": "docs/ui/navigation.md", "line": 129,
+   "issue": "The docs say that opening the Table while any Table entry is current replaces it. After 3cc538d the code replaces only an earlier page load's entry (key != lastTableKey). This load's own entry, which is current only while closeTable's history.back() is still pending, is pushed over.",
+   "evidence": "navigation.md:129-131: 'Opening the Table while a Table entry is current ... replaces that entry instead of pushing above it'. App.tsx:204: `if (typeof current === 'string' && current !== lastTableKey) history.replaceState(...)`.",
+   "fix": "Reword to: 'Opening the Table while an earlier page load's Table entry is current ... replaces that entry'. Optionally add one clause: this load's own entry is only current while a Back is pending, so it is pushed over as before."},
+  {"fingerprint": "doit/TASK-2.22/spec.md:a1-rejected-alternative-now-implemented", "severity": "MINOR", "file": "doit/TASK-2.22/spec.md", "line": 41,
+   "issue": "D-1 and A-1 define 'a Table entry is current' as any string key. A-1 lists 'test only foreign keys (!== lastTableKey)' as a rejected alternative. The code now implements that alternative. changes.md calls the fix 'deviation-free within D-1', which is not accurate. A-1's reason for rejecting it does not apply in practice, because this load's own entry is current with no Table shown only while a Back is pending (closeTable or the popstate D-3 step-back). The record still contradicts the code, though.",
+   "evidence": "spec.md A-1 Alternatives column; spec.md section 5 openTable sketch uses `typeof entryKey(history.state) === 'string'`; App.tsx:204 adds `&& current !== lastTableKey`.",
+   "fix": "Record a deviation (or amend D-1/A-1 and the section 5 sketch) stating that the replace applies only when key != lastTableKey, with the pending-Back race as the reason (CI run 45803095640). Fix the 'deviation-free' wording in changes.md."},
+  {"fingerprint": "src/ui/App.tsx:pending-back-race-no-deterministic-test", "severity": "NIT", "file": "src/ui/App.tsx", "line": 204,
+   "issue": "The race fix is only covered indirectly and intermittently, by e2e/players-choice.spec.ts:94 in WebKit (Leave table, then quickly New game and Start game). No test pins the same-load push branch.",
+   "evidence": "In r1 the replace-always code passed locally and failed once in CI WebKit.",
+   "fix": "Optional: accept the existing coverage. A timing race is hard to make deterministic, and players-choice repeats the sequence 9 times per run."}
+ ],
+ "summary": "The 3cc538d reasoning holds. closeTable calls history.back() only when the current state key equals tableKey.current, which is always lastTableKey while a Table is shown. So in this load, the Table-entry-current-with-no-Table-shown state happens only while that Back (or the popstate D-3 step-back) is still pending. In that state the fix pushes, which is exactly the pre-task behaviour that main's CI ran with. Replacing in that state, as r1 did, rewrote the entry the pending Back was leaving, so that Back popped the new Table. The reload case is intact: lastTableKey is module-level and starts null on each load, so any string key left by an earlier load is != lastTableKey and gets replaced (SPEC-01..03, including two reloads in a row). AppRoot's error remount keeps lastTableKey (module scope), so the same-load reasoning still applies after Return Home. I found no same-load path that reaches openTable with this load's own Table entry current and no Back pending: closeTable always steps back off it, popstate with a Table shown only fires after leaving it, and pushState clears forward entries. Verified locally: npm run build, then players-choice, reload-history and the 5 locked history specs: 58/58 passed in Chromium and WebKit. players-choice.spec.ts:94 with WebKit --repeat-each=15: 15/15 passed. I did not reproduce the r1 failure itself. Remaining findings are wording only (docs and the spec record no longer match the narrower rule). No BLOCKER or MAJOR findings."}

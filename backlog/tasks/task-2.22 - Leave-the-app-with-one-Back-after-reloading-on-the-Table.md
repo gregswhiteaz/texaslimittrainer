@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-25T20:08:00Z'
-updated_date: '2026-11-26T10:45:00Z'
+updated_date: '2026-11-26T10:55:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -49,4 +49,6 @@ Spec finding: stepping back from the stale entry does not reload the page (pushS
 Build: openTable replaces instead of pushing when a Table entry is current; new e2e reload-history (fails on old code, passes 3x repeat); e2e 389 passed; gate PASS
 
 CI on the branch failed once (WebKit players-choice: Leave table → New game → Start game raced closeTable's pending history.back()). openTable now replaces only an earlier load's Table entry (key ≠ lastTableKey); this load's entry, current only while a Back is pending, is pushed over as before. Orchestrator fix; judge told.
+
+Recorded deviation from spec D-1/A-1: replace only an earlier page load's Table entry (key ≠ lastTableKey); see doit/TASK-2.22/fix-brief.md.
 <!-- SECTION:NOTES:END -->
