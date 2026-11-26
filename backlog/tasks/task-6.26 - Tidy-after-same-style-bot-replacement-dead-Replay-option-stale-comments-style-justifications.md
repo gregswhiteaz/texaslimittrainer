@@ -7,7 +7,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-25T05:57:00Z'
-updated_date: '2026-11-26T13:14:00Z'
+updated_date: '2026-11-26T13:29:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -44,3 +44,9 @@ Follow-up from TASK-6.25 review and judge (doc-130). Since replacements keep the
 
 Full spec: doit/TASK-6.26/spec.md
 <!-- SECTION:PLAN:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+Build: removed dead replacedStylesOption; runner comment fixed; Rock justification names ace-jack offsuit (AJo); Maniac justification one sentence; replacement test over 8 fixed codes, same 18 assertions; gate PASS
+<!-- SECTION:NOTES:END -->

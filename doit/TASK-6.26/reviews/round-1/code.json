@@ -1,0 +1,26 @@
+{"reviewer": "code", "round": 1,
+ "rubric": [
+  {"item": "SPEC-01 correctness", "result": "pass"},
+  {"item": "SPEC-01 test strength", "result": "pass"},
+  {"item": "SPEC-02 correctness", "result": "pass"},
+  {"item": "SPEC-02 test strength", "result": "pass"},
+  {"item": "SPEC-03 correctness", "result": "pass"},
+  {"item": "SPEC-03 test strength", "result": "pass"},
+  {"item": "SPEC-04 correctness", "result": "pass"},
+  {"item": "SPEC-04 test strength", "result": "pass"},
+  {"item": "SPEC-05 correctness", "result": "pass"},
+  {"item": "SPEC-05 test strength", "result": "pass"},
+  {"item": "SPEC-06 correctness", "result": "pass"},
+  {"item": "SPEC-06 test strength", "result": "pass"},
+  {"item": "scope", "result": "pass"},
+  {"item": "concision", "result": "pass"},
+  {"item": "clarity", "result": "pass"}
+ ],
+ "findings": [
+  {"fingerprint": "src/bots/styles/rock.json:spec-04-verification-literal-mismatch", "severity": "MINOR",
+   "file": "src/bots/styles/rock.json", "line": 89,
+   "issue": "The Rock CO/raise text has 'ace-jack offsuit (AJo), and', which the orchestrator asked for in qa.md. The SPEC-04 verification command in spec.md/spec-items.json still checks for the exact A-1 substring 'ace-jack offsuit, and still folds', so it prints `false` even though the change matches what was agreed.",
+   "evidence": "Running the SPEC-04 node check gives `false` (Rock) and `true` (Maniac). The text itself is accurate: the pre-TASK-6.25 CO/raise range was 'AA AKs AQs AJs AKo KK AQo QQ JJ TT', and the current one adds 99 88 (medium pairs), KQs KJs QJs (suited broadway) and AJo, which is everything the new text names.",
+   "fix": "Judge: score SPEC-04 on substance, as the qa.md note says, or update the SPEC-04 verification substring to 'ace-jack offsuit (AJo), and still folds every weaker hand.' No code change needed."}
+ ],
+ "summary": "Every SPEC item is implemented and the targeted tests pass (31 of 31 across the cli, replacement, style, rock and maniac files). replacedStylesOption is gone (grep finds 0 in src and tests). The live --styles replay still echoes the Options and Line-up lines. The new cli expect compares the swapped-styles Replay line to the unswapped one, so it would fail if the dead branch came back. Assertion counts are unchanged: cli.test.ts 102 and replacement.acceptance 18 (test-integrity passes with no warning), and the per-code toEqual and DRAWS*5 checks are kept. The unlock is recorded under TASK-6.8. Justifications check out: the Rock text matches the hands added since TASK-6.25, and the Maniac text is one sentence using the same 65 to 85 percent band wording as its sibling entries. Only finding: the SPEC-04 verification string is stale because of the agreed '(AJo)' wording (MINOR)."}
