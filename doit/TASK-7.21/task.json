@@ -1,0 +1,170 @@
+{
+  "id": "TASK-7.21",
+  "title": "Decide whether to split preflop spots by raiser position and re-raise type",
+  "status": "To Do",
+  "archived": false,
+  "type": "spike",
+  "priority": "medium",
+  "project": null,
+  "assignees": [],
+  "reporter": null,
+  "labels": [
+    "dream-limit-holdem-trainer",
+    "follow-up"
+  ],
+  "milestone": "m-1",
+  "parentTaskId": "TASK-7",
+  "acceptanceCriteriaCompleted": 0,
+  "acceptanceCriteriaCount": 2,
+  "references": [
+    "doc-14",
+    "dreams/limit-holdem-trainer/requirements.md"
+  ],
+  "modifiedFiles": [],
+  "ordinal": 177000,
+  "createdAt": "2026-11-18T16:24:00Z",
+  "updatedAt": "2026-11-19T03:52:00Z",
+  "dueDate": null,
+  "isReady": true,
+  "path": "backlog/tasks/task-7.21 - Decide-whether-to-split-preflop-spots-by-raiser-position-and-re-raise-type.md",
+  "description": "Follow-up from TASK-7.2 Q-4. REQ-032.2 fixes 26 spots, so blind defence and facing-a-raise ignore who raised (BB defends the same vs UTG as vs a BTN steal), and facing-a-re-raise lumps 'my open was 3-bet' with 'cold 3-bet'. A real strategy weakness the user chose to ship and revisit.",
+  "dependencies": [
+    "TASK-7.2"
+  ],
+  "dependencyGraph": {
+    "root": "TASK-7.21",
+    "nodes": [
+      {
+        "id": "TASK-7.21",
+        "title": "Decide whether to split preflop spots by raiser position and re-raise type",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": 0,
+        "dependentDepth": 0
+      },
+      {
+        "id": "TASK-1.1",
+        "title": "Bootstrap the strict TypeScript project with one-command checks",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 6,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.2",
+        "title": "Rank showdown hands by real poker hand rankings",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 4,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.3",
+        "title": "Deal every hand from a seeded shuffle with a replay code",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 4,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.4",
+        "title": "Play a complete fixed-limit hand from blinds to showdown",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 3,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.5",
+        "title": "Give each deciding seat only its own view of the hand",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 2,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.7",
+        "title": "Run every check in GitHub Actions on each push and pull request",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 5,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-7.2",
+        "title": "Recommend a preflop action from the 6-max chart",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 1,
+        "dependentDepth": null
+      }
+    ],
+    "edges": [
+      {
+        "from": "TASK-1.2",
+        "to": "TASK-1.7"
+      },
+      {
+        "from": "TASK-1.3",
+        "to": "TASK-1.7"
+      },
+      {
+        "from": "TASK-1.4",
+        "to": "TASK-1.2"
+      },
+      {
+        "from": "TASK-1.4",
+        "to": "TASK-1.3"
+      },
+      {
+        "from": "TASK-1.5",
+        "to": "TASK-1.4"
+      },
+      {
+        "from": "TASK-1.7",
+        "to": "TASK-1.1"
+      },
+      {
+        "from": "TASK-7.2",
+        "to": "TASK-1.5"
+      },
+      {
+        "from": "TASK-7.21",
+        "to": "TASK-7.2"
+      }
+    ]
+  },
+  "readiness": {
+    "isReady": true,
+    "isBlocked": false,
+    "blockingDependencies": [],
+    "missingDependencies": []
+  },
+  "documentation": [],
+  "subtasks": [],
+  "acceptanceCriteria": [
+    {
+      "index": 1,
+      "text": "Given options (split by raiser position, split re-raise by open-vs-cold, keep 26 spots), When the user decides, Then the decision is recorded as a Backlog decision and REQ-032.2 and the chart format are updated if needed",
+      "checked": false
+    },
+    {
+      "index": 2,
+      "text": "Given re-raise spots are split into 'my open was 3-bet' and 'cold 3-bet', When the CO cold-3-bet spot is authored, Then CO A9o/A8o are reconsidered (TASK-7.19 folds them only because TASK-9.1's locked review test pins CO A9o as Fold) and that test is updated if the advice changes",
+      "checked": false
+    }
+  ],
+  "definitionOfDone": [],
+  "implementationPlan": null,
+  "implementationNotes": "Evidence from TASK-7.19 (user Q-1/Q-3, 2026-11-19): re-raise spots now continue with 80-90% of each opener's range, which suits 'my open was 3-bet' but makes cold 3-bet routes loose. For example, CO facing a UTG open and an HJ 3-bet continues ~22% of hands from an uninvested seat. Splitting the spot would fix this.\n\nAC added from TASK-7.19 follow-up (doc-28).",
+  "comments": [],
+  "finalSummary": null
+}

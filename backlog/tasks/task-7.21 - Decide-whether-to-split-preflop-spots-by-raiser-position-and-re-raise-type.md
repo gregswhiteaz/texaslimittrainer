@@ -1,10 +1,11 @@
 ---
 id: TASK-7.21
 title: Decide whether to split preflop spots by raiser position and re-raise type
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-18T16:24:00Z'
-updated_date: '2026-11-19T03:52:00Z'
+updated_date: '2026-11-26T23:28:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -31,6 +32,16 @@ Follow-up from TASK-7.2 Q-4. REQ-032.2 fixes 26 spots, so blind defence and faci
 - [ ] #1 Given options (split by raiser position, split re-raise by open-vs-cold, keep 26 spots), When the user decides, Then the decision is recorded as a Backlog decision and REQ-032.2 and the chart format are updated if needed
 - [ ] #2 Given re-raise spots are split into 'my open was 3-bet' and 'cold 3-bet', When the CO cold-3-bet spot is authored, Then CO A9o/A8o are reconsidered (TASK-7.19 folds them only because TASK-9.1's locked review test pins CO A9o as Fold) and that test is updated if the advice changes
 <!-- AC:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. requirements.md: new REQ-032.2 and REQ-032.6 text + change-log row 1.13
+2. Backlog decision (Q-1/Q-2/Q-3)
+3. Follow-up stories FU-1 (6-max re-raise split, carries AC#2), FU-2 (full-ring re-raise split), FU-3 (blind defence early/late)
+
+Full spec: doit/TASK-7.21/spec.md
+<!-- SECTION:PLAN:END -->
 
 ## Implementation Notes
 
