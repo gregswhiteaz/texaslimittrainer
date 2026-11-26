@@ -18,3 +18,10 @@
 - `doit/TASK-7.31/changes.md` (created): this file.
 
 No new dependencies.
+
+Fix round 1: `tests/golden/postflop-spots.json` justifications reworded for `6max-turn-bb-raise-92o` (complete list of
+hands ahead), `6max-river-sb-check-qjo`, `6max-river-utg-fold-t9s`, `6max-river-utg-fold-jts`,
+`6max-river-btn-fold-76s` (no-pair wording names the board card that plays), and `6max-river-bb-check-53s`,
+`6max-turn-bb-check-85s` (non-playing kicker dropped). `docs/advice/golden-spots.md` "Adding a spot" step 2 now
+states the Major-error rule (a borderline Minor step is allowed). `fr-flop-bb-raise-a3s` kept its justification,
+which is still accurate for its unchanged cards and board.

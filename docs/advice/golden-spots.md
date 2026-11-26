@@ -146,8 +146,9 @@ offsuit trash that folds, free checks in a limped big blind, and calls with hand
 
 1. Pick a decision that follows from the chart's documented strategy and is not near a boundary.
 2. Write the `before` list that reaches it at the chosen table size, then `position` and `situation`. For a postflop
-   spot, choose a hero line the chart plays: every hero preflop action must be the chart's action for that hand
-   (raise the hands it raises, fold or check the ones it folds), or the validator rejects the spot.
+   spot, choose a hero line the chart plays: no hero preflop action may be a Major error on the chart for that hand
+   (raise the hands it raises, fold or check the ones it folds). A borderline step the grader marks Minor is
+   allowed; a Major step makes the validator reject the spot.
 3. Decide the action from the chart's reasoning, then write the justification in your own words.
 4. Run `npx vitest run tests/golden/`. The validator reports any malformed or borderline spot, and the runner
    reports any disagreement with the advice engine. If the engine disagrees, choose a clearer spot; never edit the

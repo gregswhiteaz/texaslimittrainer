@@ -120,3 +120,18 @@ Numbers are `goldenPostflopAdvice` (equity %, required %, equity vs calling rang
 | `fr-river-bb-fold-t3o` | `fr-river-bb-fold-43s` | 4h 3h (was 3h Tc) | none | 0 / 19 / 0 (65) | high-card |
 | `fr-river-utg-call-t5o` | `fr-river-utg-call-aks` | Ac Kc (was 5h Td) | none | 31.5 / 16 / 31.5 (65) | one-pair |
 | `fr-river-utg-fold-jto` | `fr-river-utg-fold-jts` | Jc Tc (was Jh Tc) | none | 4.5 / 16 / 4.5 (65) | high-card |
+
+## FIX round 1
+
+- 1 [MAJOR] `6max-turn-bb-raise-92o`: fixed. Closing clause now "only kings full, nines full, fours full or a nine with
+  a kicker above the four is ahead". Exhaustive evaluator check: hands ahead are 44, 49, 9K, KK (full houses) and 9x
+  with x in 5..A (trips), all covered. Still says "kings full", no "set of kings".
+- No-pair wording: fixed. `qjo` (board nines with an ace kicker), `t9s` (board's ace high), `jts` (board's king high),
+  `76s` (board's queen high); evaluator confirms high-card / one-pair as stated.
+- Non-playing kickers: fixed. Dropped "with a three kicker" (`53s`) and "with a five kicker" (`85s`); evaluator
+  confirms swapping that card leaves the rank unchanged.
+- `docs/advice/golden-spots.md` step 2: fixed, now states no hero preflop step may be a Major error (borderline Minor
+  allowed).
+- `changes.md`: fixed, notes `fr-flop-bb-raise-a3s` kept its justification.
+- Commands: `npx vitest run tests/golden/` 288 passed (6 files).
+- Full run: `npm run format` ok; `npm test` 1439 passed, 48 skipped (318 files passed, 6 skipped); `npm run lint` clean; `npm run typecheck` clean.

@@ -719,7 +719,7 @@
       "board": "Kd 8h Jh Qh",
       "before": ["fold", "fold", "fold", "fold", "raise", "call", "check", "bet", "call", "check"],
       "action": "check",
-      "justification": "Bottom pair of eights with a five kicker lost ground when the queen made a three-heart, three-broadway board. Check behind, because the small blind's flop call leaves it many kings, queens and hearts that our equity cannot bet into."
+      "justification": "Bottom pair of eights lost ground when the queen made a three-heart, three-broadway board. Check behind, because the small blind's flop call leaves it many kings, queens and hearts that our equity cannot bet into."
     },
     {
       "id": "6max-turn-bb-call-k8s",
@@ -992,7 +992,7 @@
       "board": "9h 4h Ks 9c",
       "before": ["call", "fold", "fold", "fold", "fold", "check", "bet", "call", "bet", "raise"],
       "action": "raise",
-      "justification": "Trip nines are strong after we checked our option, and the under-the-gun limper's turn raise often comes from a king or a heart draw that we beat. Re-raise as a value bet, since only kings full, nines full of kings, fours full or a nine with a kicker above the four is ahead."
+      "justification": "Trip nines are strong after we checked our option, and the under-the-gun limper's turn raise often comes from a king or a heart draw that we beat. Re-raise as a value bet, since only kings full, nines full, fours full or a nine with a kicker above the four is ahead."
     },
     {
       "id": "6max-turn-utg-call-a9s",
@@ -1291,7 +1291,7 @@
       "board": "9c Ac 6h 9d Th",
       "before": ["fold", "fold", "fold", "fold", "raise", "call", "bet", "call", "check", "check"],
       "action": "check",
-      "justification": "Queen-jack has only queen-high with the board's nines on this ace-high paired board, and the big blind already called our flop bet. Check, because a river bluff will rarely fold out the pairs that called earlier."
+      "justification": "Queen-jack has no pair of its own, only the board's nines with an ace kicker, on this paired board, and the big blind already called our flop bet. Check, because a river bluff will rarely fold out the pairs that called earlier."
     },
     {
       "id": "6max-river-bb-check-43s",
@@ -1370,7 +1370,7 @@
         "check"
       ],
       "action": "check",
-      "justification": "Bottom pair of fives with a three kicker may be good against an under-the-gun raiser who checked every street, but it gains nothing by betting. Check, because only better pairs would call and the hand strength is too thin for a value bet."
+      "justification": "Bottom pair of fives may be good against an under-the-gun raiser who checked every street, but it gains nothing by betting. Check, because only better pairs would call and the hand strength is too thin for a value bet."
     },
     {
       "id": "6max-river-bb-call-j8o",
@@ -1441,7 +1441,7 @@
         "bet"
       ],
       "action": "fold",
-      "justification": "Ten-nine missed its open-ended straight draw and has only ten-high on an ace-high board, so it cannot beat even many bluffs. The big blind's river bet asks for far more equity than we hold, so fold."
+      "justification": "Ten-nine missed its open-ended straight draw and holds no pair, only the board's ace high, so it cannot beat even many bluffs. The big blind's river bet asks for far more equity than we hold, so fold."
     },
     {
       "id": "6max-river-btn-fold-76s",
@@ -1464,7 +1464,7 @@
         "bet"
       ],
       "action": "fold",
-      "justification": "Seven-six has only seven-high on a board that finished with three clubs and two diamonds. Fold to the river bet, since our equity is tiny and even the big blind's bluffs may hold a higher card."
+      "justification": "Seven-six has no pair, only the board's queen high, on a board that finished with three clubs and two diamonds. Fold to the river bet, since our equity is tiny and even the big blind's bluffs may hold a higher card."
     },
     {
       "id": "6max-river-utg-fold-jts",
@@ -1488,7 +1488,7 @@
         "bet"
       ],
       "action": "fold",
-      "justification": "Our turn bet with an open-ended straight draw was called, and jack-ten missed it on the river with only jack-high. When the big blind then leads out its range is full of pairs, so fold rather than pay to see a hand we cannot beat."
+      "justification": "Our turn bet with an open-ended straight draw was called, and jack-ten missed it on the river with no pair, only the board's king high. When the big blind then leads out its range is full of pairs, so fold rather than pay to see a hand we cannot beat."
     },
     {
       "id": "6max-river-btn-raise-a3s",
