@@ -1,11 +1,11 @@
 ---
 id: TASK-6.20
 title: Decide how hand replay reproduces bot actions that use session memory
-status: In Progress
+status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-18T07:03:00Z'
-updated_date: '2026-11-26T20:36:00Z'
+updated_date: '2026-11-26T20:37:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -15,6 +15,8 @@ dependencies:
 references:
   - doc-13
   - dreams/limit-holdem-trainer/requirements.md
+documentation:
+  - doc-173
 parent_task_id: TASK-6
 priority: medium
 type: spike
@@ -52,4 +54,12 @@ Build: REQ-029.3 + change-log 1.12; PlayerView.earlierShowdowns doc comment; gua
 Recorded decision-1 (accepted): bot decisions use only the current hand (Q-1 = B). TASK-6.23 archived as not needed.
 
 Judge r1 PASS (4/4 SPEC items)
+
+Follow-ups: none (adaptive bots remain in the Waiting room; they would need to revisit REQ-029.3/REQ-028.2).
 <!-- SECTION:NOTES:END -->
+
+## Final Summary
+
+<!-- SECTION:FINAL_SUMMARY:BEGIN -->
+Decision recorded as decision-1 (accepted): bot decisions use only the current hand. User answered Q-1 with option B (bots decide from the current hand only). Rationale (D-1): matches today's code, since no bot reads earlier showdowns or observed stats; styles are fixed and adaptive bots stay deferred; no stored-format change; replay from a hand's own record stays exact. Added REQ-029.3 plus change-log row 1.12, a doc comment on PlayerView.earlierShowdowns (review MINOR on wording fixed), and a fast guard test (200-hand playtest, actions identical with any earlier-showdowns list). TASK-6.23 archived as not needed. Judge round 1 PASS 4/4. Review assumptions A-1..A-3 in the doc (doc-173). Follow-up risk: any future adaptive bot must revisit REQ-029.3 and REQ-028.2.
+<!-- SECTION:FINAL_SUMMARY:END -->
