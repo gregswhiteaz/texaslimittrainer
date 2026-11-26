@@ -1506,6 +1506,12 @@
       "event": "unlock",
       "file": "tests/golden/postflop-spots.json",
       "reason": "TASK-7.26 J-1-01: justification wording only (JTo has no straight draw)"
+    },
+    {
+      "t": "2026-11-25T21:57:16",
+      "event": "unlock",
+      "file": "tests/golden/postflop-spots.json",
+      "reason": "TASK-7.31 Q-1: AC#1-2 like-for-like re-authoring of spots with Major hero preflop lines"
     }
   ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-7.14",
@@ -1518,6 +1524,7 @@
   "relock_pending": [
     "tests/golden/postflop-spots.json",
     "tests/golden/graded-examples.json",
+    "tests/golden/postflop-spots.json",
     "tests/golden/postflop-spots.json",
     "tests/golden/postflop-spots.json"
   ],

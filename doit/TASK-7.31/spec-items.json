@@ -1,0 +1,56 @@
+[
+  {
+    "id": "SPEC-01",
+    "verifies": "AC#1",
+    "verification": "acceptance `tests/golden/postflop-lines.acceptance.test.ts::AC#1 no postflop golden spot reaches its decision through a hero preflop action the chart grades as a Major error`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-02",
+    "verifies": "AC#1",
+    "verification": "acceptance `tests/golden/postflop-lines.acceptance.test.ts::AC#1 a spot whose hero preflop line is a Major error is rejected by the validator`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-03",
+    "verifies": "AC#1",
+    "verification": "acceptance `tests/golden/postflop-lines.acceptance.test.ts::AC#1 re-authored spots keep the documented coverage, are clear-cut and match the advice`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-04",
+    "verifies": "AC#2",
+    "verification": "acceptance `tests/golden/postflop-lines.acceptance.test.ts::AC#2 6max-turn-bb-raise-92o names kings full, not a set of kings`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-05",
+    "verifies": "AC#3",
+    "verification": "acceptance `tests/golden/postflop-lines.acceptance.test.ts::AC#3 a gradeDecision error in the clear-cut check is listed as a problem for that spot`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-06",
+    "verifies": "AC#1, AC#3",
+    "verification": "unit `tests/golden/postflop-golden.test.ts::hero preflop line rule and guarded clear-cut check`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-07",
+    "verifies": "AC#1, AC#2",
+    "verification": "manual `the judge compares the docs table rows with git diff of tests/golden/postflop-spots.json (every removed or changed id appears once) and checks the Coverage section still reads 120 / 45 / 40 / 35 / 86 / 18 / 16 / 20 / 4`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-08",
+    "verifies": "AC#1, AC#2",
+    "verification": "manual `reviewer and judge cross-check doit/TASK-7.31/build-log.md against tests/golden/postflop-spots.json for all changed spots`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-09",
+    "verifies": "AC#1, AC#2, AC#3",
+    "verification": "command `npm run lint && npm run typecheck && npm test && git diff --name-only 5a1b2a3 -- tests/` (the diff lists only `tests/golden/postflop-spots.json`, `tests/golden/postflop-golden.test.ts` and `tests/golden/postflop-lines.acceptance.test.ts`)",
+    "status": "pending"
+  }
+]

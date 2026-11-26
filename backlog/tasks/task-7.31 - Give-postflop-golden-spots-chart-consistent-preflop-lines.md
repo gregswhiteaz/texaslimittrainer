@@ -1,9 +1,11 @@
 ---
 id: TASK-7.31
 title: Give postflop golden spots chart-consistent preflop lines
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-24T06:32:00Z'
+updated_date: '2026-11-26T04:58:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -29,3 +31,15 @@ Follow-up from TASK-7.14 (doc-111). Many postflop golden spots reach their decis
 - [ ] #2 Given 6max-turn-bb-raise-92o, When its justification is read, Then it names the hand as kings full, not a set
 - [ ] #3 Given a postflop spot whose advice makes gradeDecision throw, When parsePostflopGoldenSpots runs, Then the error is listed as a problem for that spot id rather than thrown
 <!-- AC:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. Validator rejects postflop spots whose hero preflop step grades Major on the chart
+2. Clear-cut grading errors become listed problems, not throws (AC#3)
+3. Re-author the 72 failing spots like-for-like (action fix, hole-card swap, then line change), coverage unchanged
+4. 6max-turn-bb-raise-92o: chart-consistent line, justification says kings full
+5. Acceptance test pinning coverage; change log in docs/advice/golden-spots.md
+
+Full spec: doit/TASK-7.31/spec.md
+<!-- SECTION:PLAN:END -->
