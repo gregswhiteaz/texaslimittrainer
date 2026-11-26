@@ -1,11 +1,11 @@
 ---
 id: TASK-11.13
 title: Strengthen Statistics trend tests (ordering, fallback, speed wait)
-status: In Progress
+status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-25T08:57:00Z'
-updated_date: '2026-11-26T19:18:00Z'
+updated_date: '2026-11-26T19:19:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -14,6 +14,8 @@ dependencies:
   - TASK-11.1
 references:
   - doc-134
+documentation:
+  - doc-171
 parent_task_id: TASK-11
 priority: low
 ordinal: 244000
@@ -57,4 +59,12 @@ AC added from TASK-11.5 follow-up (doc-138).
 Build: ordering tests, TEMPLATE_DECISIONS removed, visible-point speed timer, App-level G-2 e2e (1,200 hands), filterOption maps unknown to All, unreachable guard removed, day-grouping pinned to Pacific/Kiritimati; e2e 401 passed; gate PASS
 
 Judge r1 PASS (12/12 SPEC items); CI 45881387393 green
+
+Follow-ups: none (Group by cast is devtools-only; below the value bar).
 <!-- SECTION:NOTES:END -->
+
+## Final Summary
+
+<!-- SECTION:FINAL_SUMMARY:BEGIN -->
+Closed the six Statistics trend follow-ups: new ordering and earliest-completedAt fallback tests, TEMPLATE_DECISIONS removed, speed timer waits for the 6th point to be visible, G-2 all-hands proof (unit + real-App e2e), unknown filter value maps to All, unreachable data guard removed, day-grouping tests pinned to Pacific/Kiritimati. Judge r1 PASS 12/12, CI 45881387393 green. Review: assumptions A-1..A-6 (esp. Group by left uncast-fixed, pinned zone, e2e instead of jsdom) and one locked TASK-11.5 test edited (pin only). Risk: Group by unknown value acts as Day (devtools only, no follow-up).
+<!-- SECTION:FINAL_SUMMARY:END -->
