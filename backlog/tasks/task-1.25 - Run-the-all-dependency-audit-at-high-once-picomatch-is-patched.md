@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-18T07:03:00Z'
-updated_date: '2026-11-26T11:24:00Z'
+updated_date: '2026-11-26T11:34:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -46,4 +46,6 @@ Full spec: doit/TASK-1.25/spec.md
 
 <!-- SECTION:NOTES:BEGIN -->
 Spec finding: GHSA-fc5q-39xc-vjpf was withdrawn on 2026-11-18, not patched; picomatch@4.0.7 is still a dev dependency (vite -> tinyglobby). Proceeding per Q-1 (auto-accepted).
+
+Build: all-deps audit at --audit-level=high; CI tests' expected string updated; README; gate PASS
 <!-- SECTION:NOTES:END -->

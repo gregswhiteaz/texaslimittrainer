@@ -1,0 +1,27 @@
+{"reviewer": "code", "round": 1,
+ "rubric": [
+  {"item": "SPEC-01 correctness", "result": "pass"},
+  {"item": "SPEC-01 test strength", "result": "pass"},
+  {"item": "SPEC-02 correctness", "result": "pass"},
+  {"item": "SPEC-02 test strength", "result": "pass"},
+  {"item": "SPEC-03 correctness", "result": "pass"},
+  {"item": "SPEC-03 test strength", "result": "pass"},
+  {"item": "SPEC-04 correctness", "result": "pass"},
+  {"item": "SPEC-04 test strength", "result": "pass"},
+  {"item": "SPEC-05 correctness", "result": "pass"},
+  {"item": "SPEC-05 test strength", "result": "pass"},
+  {"item": "scope", "result": "pass"},
+  {"item": "concision", "result": "pass"},
+  {"item": "clarity", "result": "pass"}
+ ],
+ "findings": [
+  {"fingerprint": "tests/ci/ci-jobs.acceptance.test.ts:no-critical-clause-not-asserted", "severity": "NIT", "file": "tests/ci/ci-jobs.acceptance.test.ts", "line": 146,
+   "issue": "SPEC-01's clause 'no workflow line contains --audit-level=critical' is not asserted directly in the test. The exact toEqual on the checks job's run commands catches a revert of this step, and the SPEC-05 grep command covers the rest of the workflow.",
+   "evidence": "The test pins runs.get('checks') exactly. No assertion of the form expect(ci).not.toContain('--audit-level=critical') exists. The spec says to change expected strings only and add no new tests.",
+   "fix": "None needed for this task, because the spec forbids new assertions. If wanted later, add expect(ci).not.toContain('--audit-level=critical')."},
+  {"fingerprint": "doit/TASK-1.7/state.json:duplicate-relock-pending-entries", "severity": "NIT", "file": "doit/TASK-1.7/state.json", "line": 139,
+   "issue": "relock_pending now lists tests/ci/workflow.test.ts three times. These are orchestrator bookkeeping entries, not builder code.",
+   "evidence": "The diff adds a third identical 'tests/ci/workflow.test.ts' entry to relock_pending.",
+   "fix": "At relock, the orchestrator could de-duplicate relock_pending. No builder action needed."}
+ ],
+ "summary": "The diff is exactly what the spec asks for. In ci.yml, line 102 changes critical to high. The three expected strings in the two CI tests change and nothing else in them does. Both README mentions are updated, and Prettier re-padded the table. Nothing changed outside the spec. The owner unlock records and notes match qa.md, and only the expected string changed. Local results: both audits exit 0 with 'found 0 vulnerabilities'; the SPEC-05 grep finds no 'critical'; the 14 tests in tests/ci/workflow.test.ts and tests/ci/ci-jobs.acceptance.test.ts pass; the build gate passes (test, lint, typecheck, scope). The exact-array and toContain assertions would fail if the step reverted to critical. SPEC-04 is a manual GitHub-run check, so it is left to the Judge. No BLOCKER or MAJOR findings."}
