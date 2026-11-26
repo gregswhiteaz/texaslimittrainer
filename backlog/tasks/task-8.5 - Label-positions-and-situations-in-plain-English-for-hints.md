@@ -1,11 +1,11 @@
 ---
 id: TASK-8.5
 title: Label positions and situations in plain English for hints
-status: In Progress
+status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-18T16:24:00Z'
-updated_date: '2026-11-26T07:03:00Z'
+updated_date: '2026-11-26T07:04:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -14,6 +14,8 @@ dependencies:
   - TASK-7.2
 references:
   - doc-14
+documentation:
+  - doc-155
 parent_task_id: TASK-8
 priority: medium
 type: feature
@@ -48,4 +50,12 @@ Full spec: doit/TASK-8.5/spec.md
 Build: SITUATION_LABELS + positionLabel/situationLabel; chartBasisText output unchanged; no display change (Q-2); gate PASS
 
 Judge r1 PASS (3/3 SPEC items)
+
+Follow-ups: TASK-8.7 created (spike: show situation label on hint/review?).
 <!-- SECTION:NOTES:END -->
+
+## Final Summary
+
+<!-- SECTION:FINAL_SUMMARY:BEGIN -->
+Added SITUATION_LABELS plus positionLabel/situationLabel (positions reuse the TASK-8.1 CHART_POSITIONS copy; chartBasisText now routes through positionLabel, output unchanged). Verified: 3 acceptance tests (all 9 positions, all 6 situations), npm test 1442 passed, lint/typecheck clean, judge round 1 PASS. Review: assumptions A-1..A-5 and auto-accepted Q-1 (wording) / Q-2 (no display change). Follow-up: situationLabel has no UI consumer yet; no existing task owns showing it.
+<!-- SECTION:FINAL_SUMMARY:END -->

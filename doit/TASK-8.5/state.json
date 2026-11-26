@@ -1,6 +1,6 @@
 {
   "task": "TASK-8.5",
-  "stage": "build",
+  "stage": "done",
   "branch": "doit/TASK-8.5",
   "base_commit": "b5bdc57de9ef0ea85b09b096d1a5c440b9d61c5c",
   "started": "2026-11-25T23:44:00",
@@ -2074,5 +2074,6 @@
   },
   "judge_results": {
     "1": "PASS"
-  }
+  },
+  "doc_id": "doc-155"
 }
