@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-18T07:03:00Z'
-updated_date: '2026-11-26T11:34:00Z'
+updated_date: '2026-11-26T11:45:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -28,7 +28,7 @@ Follow-up from TASK-1.1 (Q-3): the dev/build-only picomatch advisory GHSA-fc5q-3
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Given a patched picomatch is available through our dev dependencies, When CI runs the all-dependency audit, Then it uses --audit-level=high and passes
+- [x] #1 Given a patched picomatch is available through our dev dependencies, When CI runs the all-dependency audit, Then it uses --audit-level=high and passes
 <!-- AC:END -->
 
 ## Implementation Plan
@@ -48,4 +48,6 @@ Full spec: doit/TASK-1.25/spec.md
 Spec finding: GHSA-fc5q-39xc-vjpf was withdrawn on 2026-11-18, not patched; picomatch@4.0.7 is still a dev dependency (vite -> tinyglobby). Proceeding per Q-1 (auto-accepted).
 
 Build: all-deps audit at --audit-level=high; CI tests' expected string updated; README; gate PASS
+
+Judge r1 PASS (5/5 SPEC items); CI run 45812549642 green at f456bd3 with both audit steps passing
 <!-- SECTION:NOTES:END -->

@@ -5,13 +5,19 @@
   "base_commit": "c3432fba8eaed976e30eff63c39e249791a10cdc",
   "started": "2026-11-26T04:21:28",
   "review_round": 1,
-  "judge_round": 0,
+  "judge_round": 1,
   "sendbacks": 0,
   "gate_runs": 1,
   "questions": 0,
   "assumptions": 0,
   "escalations": 0,
-  "item_failures": {},
+  "item_failures": {
+    "SPEC-01": 0,
+    "SPEC-02": 0,
+    "SPEC-03": 0,
+    "SPEC-04": 0,
+    "SPEC-05": 0
+  },
   "locked_tests": {
     "tests/ci/ci-jobs.acceptance.test.ts": "6844d7ea692cae351445ef968a377f07e8db9764f19cc270ad48ee2f538d23f9"
   },
@@ -2117,5 +2123,8 @@
   "spec_sha256": "6113b66ac7a5817427a212ef87edd09d352631a1b16274336cc19b4738bba478",
   "review_findings": {
     "1": 0
+  },
+  "judge_results": {
+    "1": "PASS"
   }
 }

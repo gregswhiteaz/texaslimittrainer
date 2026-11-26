@@ -3,30 +3,30 @@
     "id": "SPEC-01",
     "verifies": "AC#1",
     "verification": "acceptance `tests/ci/ci-jobs.acceptance.test.ts::ci.yml runs lint, coverage, two sweep shards, tooling and e2e as parallel jobs that keep every check`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-02",
     "verifies": "AC#1",
     "verification": "unit `tests/ci/workflow.test.ts::runs each audit gate as its own named step`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-03",
     "verifies": "AC#1",
     "verification": "command `npm ci && npm audit --omit=dev --audit-level=high && npm audit --audit-level=high`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-04",
     "verifies": "AC#1",
     "verification": "manual \u2014 `gh run view <run-id> --json jobs --jq '.jobs[] | select(.name==\"Lint, typecheck, build and playtest\") | .steps[] | select(.name==\"Audit all dependencies\") | .conclusion'` prints `success`; `gh run view <run-id> --log | grep -- \"--audit-level=high\"` shows both audit commands. The run ID is recorded in `doit/TASK-1.25/build-log.md`.",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-05",
     "verifies": "AC#1",
     "verification": "command `! grep -n -- \"--audit-level=critical\" README.md .github/workflows/ci.yml tests/ci/*.ts && grep -c -- \"npm audit --audit-level=high\" README.md && npm run lint`",
-    "status": "pending"
+    "status": "pass"
   }
 ]
