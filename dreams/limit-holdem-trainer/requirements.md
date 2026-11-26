@@ -587,11 +587,11 @@ Dream slug: limit-holdem-trainer   ·   Vision: dreams/limit-holdem-trainer/visi
 - Statement: The advice engine shall take every preflop recommendation from authored charts that give, for each reference size, position and preflop situation, the action for each of the 169 starting-hand classes.
 - Clauses:
   - REQ-032.1: Charts exist for heads-up, 6-max and full ring.
-  - REQ-032.2: Situations covered per position: unopened pot, facing one or more limpers, facing a raise, facing a raise and calls, facing a re-raise, and blind defence.
+  - REQ-032.2: Situations covered per position: unopened pot, facing one or more limpers, facing a raise, facing a raise and calls, facing a re-raise of your own raise, facing a re-raise when you have not raised, and blind defence; blind defence is split by whether the raiser sits in an early or a late position.
   - REQ-032.3: Each chart cell holds one action (fold, call, raise) and a borderline flag, plus zero or one acceptable alternative action.
   - REQ-032.4: Every chart file carries a written justification of its ranges in plain English.
   - REQ-032.5: Charts are data files loaded by the engine, not hard-coded logic.
-  - REQ-032.6: When facing a fourth bet preflop (a re-raise of a re-raise), the advice uses the facing-a-re-raise chart; if the street is capped, a raise recommendation becomes call.
+  - REQ-032.6: When facing a fourth bet preflop (a re-raise of a re-raise), the advice uses the facing-a-re-raise-of-your-own-raise chart if you made a preflop raise, otherwise the facing-a-re-raise-when-you-have-not-raised chart; if the street is capped, a raise recommendation becomes call.
 - Fit criterion: Validation test: every (size, position, situation) has all 169 hand classes assigned; justification present for each chart.
 - Rationale: Explainable, testable preflop advice (Q-7, G-1).
 - Source: Q-7, Q-10, Q-53; confirmed Q-57
@@ -1370,3 +1370,4 @@ Entity × lifecycle (every cell is a clause below or N/A):
 | 1.10 | 2026-11-24 | TASK-7.32 (WTSD fix): REQ-033.1 turn required equity counts one river big bet; REQ-033.2 value raise facing a bet needs more than 65% (value bet stays above 50%) | User (TASK-7.32 Q-1) |
 | 1.11 | 2026-11-24 | TASK-6.25 (Mixed style bands): REQ-007.5 a replacement bot keeps the busted bot's style; REQ-007.7 and REQ-007.8 retired (reverses Q-113) | User (TASK-6.25 Q-1, auto-accepted) |
 | 1.12 | 2026-11-26 | TASK-6.20: added REQ-029.3 (bot decisions use only the current hand) | User (TASK-6.20 Q-1) |
+| 1.13 | 2026-11-26 | TASK-7.21: REQ-032.2 splits facing a re-raise into own raise re-raised and re-raised when you have not raised, and splits blind defence by an early or a late raiser; REQ-032.6 picks the matching re-raise chart for a fourth bet | User (TASK-7.21 Q-1/Q-2) |
