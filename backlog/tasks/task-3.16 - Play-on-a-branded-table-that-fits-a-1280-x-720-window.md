@@ -4,7 +4,7 @@ title: Play on a branded table that fits a 1280 x 720 window
 status: To Do
 assignee: []
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-22T23:30:00Z'
+updated_date: '2026-11-26T13:03:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-2
@@ -47,6 +47,7 @@ Plan key: E03-S16 · Dream: limit-holdem-trainer
 - [ ] #6 Given the branded table, When a hand ends, Then the result is shown on the felt as in the Review storyboard, and the duplicated e2e helpers (installPausedClock, runFor1000, axeWithPausedClock, nextTurnPaused, countReplayDraws) live in e2e/support/
 - [ ] #7 Given the Hand Review panel is open at 1280x720, When the Table screen is shown, Then the table, the open panel, the result and Deal next hand all fit without vertical scrolling, the table keeps the same width when the panel opens and closes, and the helpers copied into e2e/review.spec.ts live in e2e/support/
 - [ ] #8 Given a 10-player table (TASK-2.2), When it is shown in a 1280 x 720 window, Then all 10 seats with names, stacks and position labels are visible without overlap or sideways scrolling
+- [ ] #9 Given a side-pot hand result (title plus Pot winners, Winners and Shown hands rows) at 1280x720 in Chromium and WebKit, When it is shown with Deal next hand, Then the whole block and the button are visible without vertical scrolling
 <!-- AC:END -->
 
 ## Definition of Done
@@ -79,4 +80,6 @@ AC added from TASK-3.4 follow-up (doc-25).
 AC added from TASK-9.1 follow-up (doc-26).
 
 AC added from TASK-2.2 follow-up (10 seats may look crowded)
+
+AC added from TASK-3.26 follow-up (judge J-1-01, doc-162)
 <!-- SECTION:NOTES:END -->

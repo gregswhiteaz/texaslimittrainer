@@ -1,11 +1,11 @@
 ---
 id: TASK-3.26
 title: Tidy the side-pot hand result layout and pin split-pot rendering
-status: In Progress
+status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-21T19:29:00Z'
-updated_date: '2026-11-26T13:02:00Z'
+updated_date: '2026-11-26T13:03:00Z'
 labels:
   - follow-up
   - dream-limit-holdem-trainer
@@ -14,6 +14,8 @@ dependencies:
   - TASK-3.8
 references:
   - doc-69
+documentation:
+  - doc-162
 parent_task_id: TASK-3
 priority: low
 ordinal: 212000
@@ -51,4 +53,12 @@ AC added from TASK-2.4 judge J-1-02 (UI polish)
 Build: side-pot result stacks (Hand over one line); Table renders PotResultView potText/winnersText; Game Config radios border-box (44px); new render + Chromium/WebKit tests fail on old CSS; e2e 397 passed; gate PASS
 
 Judge r1 PASS (7/7 SPEC items; screenshots checked in Chromium and WebKit)
+
+Follow-ups: AC added to TASK-3.16 (side-pot result fits above the 720 px fold).
 <!-- SECTION:NOTES:END -->
+
+## Final Summary
+
+<!-- SECTION:FINAL_SUMMARY:BEGIN -->
+Side-pot hand result now stacks its rows so 'Hand over' stays on one line and no list is squeezed; the split side pot line is rendered from new view-model fields potText/winnersText and pinned in a render test and Chromium+WebKit e2e; game-type and line-up options are a constant 44 px (border-box). Verified: lint, typecheck, 1456 unit tests, e2e 397 passed 0 failed, judge round 1 PASS 7/7. Review assumptions A-1..A-4 (stack only with Pot winners list; crafted chip-reconciling split scene; border-box height; two VM string fields). Risk/follow-up: stacked block is ~169 px and runs below the 720 px fold in the harness; proposed AC for TASK-3.16.
+<!-- SECTION:FINAL_SUMMARY:END -->
