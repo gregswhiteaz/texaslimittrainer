@@ -14,3 +14,4 @@
 - `doit/TASK-7.35/changes.md`, `doit/TASK-7.35/build-log.md` — build records.
 
 No new dependencies.
+- `tests/advice/small-table-ranges.acceptance.test.ts` — review r1 MINOR: SPEC-07 now derives every out-of-range 'after' stat from the table and requires it in the misses list (strengthen-only; orchestrator)

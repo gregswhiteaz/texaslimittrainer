@@ -4,17 +4,17 @@
   "branch": "doit/TASK-7.35",
   "base_commit": "d43ec6d1339cae77e0c52d403badadc56e64a5aa",
   "started": "2026-11-26T01:57:37",
-  "review_round": 0,
+  "review_round": 1,
   "judge_round": 0,
   "sendbacks": 0,
-  "gate_runs": 1,
+  "gate_runs": 2,
   "questions": 0,
   "assumptions": 0,
   "escalations": 0,
   "item_failures": {},
   "locked_tests": {
     "tests/advice/small-table-ranges-playtest.acceptance.test.ts": "01c8aaa20f127f23a7e48f0613307ae3324006b87feb7134d630cc67d2a47146",
-    "tests/advice/small-table-ranges.acceptance.test.ts": "6622f578460b9403510cd8f9a6a52d16f37fac85cd9c063192a593b300550a80"
+    "tests/advice/small-table-ranges.acceptance.test.ts": "0131a3f76da1efbc60ed32418899c181b2e19fcb70e323821f7db08571be9ac7"
   },
   "test_snapshot": {
     "tests/advice/small-table-ranges-playtest.acceptance.test.ts": {
@@ -23,8 +23,8 @@
       "skips": 0
     },
     "tests/advice/small-table-ranges.acceptance.test.ts": {
-      "sha": "6622f578460b9403510cd8f9a6a52d16f37fac85cd9c063192a593b300550a80",
-      "asserts": 36,
+      "sha": "0131a3f76da1efbc60ed32418899c181b2e19fcb70e323821f7db08571be9ac7",
+      "asserts": 39,
       "skips": 0
     },
     "e2e/action-bar-limits.spec.ts": {
@@ -2108,7 +2108,18 @@
       "skips": 0
     }
   },
-  "history": [],
+  "history": [
+    {
+      "t": "2026-11-26T02:48:26",
+      "event": "unlock",
+      "file": "tests/advice/small-table-ranges.acceptance.test.ts",
+      "reason": "review r1 MINOR: strengthen SPEC-07 misses check (derive from table)"
+    }
+  ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-7.35",
-  "spec_sha256": "fb04cb3c98af0ff521f3adecfa0f4c7b97dabde83167aae90b4886cadf77f356"
+  "spec_sha256": "fb04cb3c98af0ff521f3adecfa0f4c7b97dabde83167aae90b4886cadf77f356",
+  "relock_pending": [],
+  "review_findings": {
+    "1": 0
+  }
 }

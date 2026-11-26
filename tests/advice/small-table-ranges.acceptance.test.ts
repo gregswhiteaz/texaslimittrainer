@@ -191,6 +191,29 @@ describe('6-max ranges at 3, 4, 5 and 7 seats (TASK-7.35)', () => {
     }
     expect(section).toContain('| 6-max healthy |');
     expect(section).toMatch(/[Oo]utside/);
+    // Review r1: every "after" stat outside its 6-max healthy range is named with its value in the misses list.
+    const STATS = ['VPIP', 'PFR', 'Aggression', 'WTSD', 'W$SD'];
+    const healthyRow = section.split('\n').find((l) => l.startsWith('| 6-max healthy')) ?? '';
+    const healthy = healthyRow
+      .split('|')
+      .slice(2, 7)
+      .map((c) => c.trim().split('–').map(Number));
+    const misses = section.slice(section.indexOf('Stats still outside'));
+    let found = 0;
+    for (const row of section.split('\n').filter((l) => /^\| \d seats .*after/.test(l))) {
+      const cells = row.split('|').map((c) => c.trim());
+      const seats = (cells[1] ?? '').split(' ')[0];
+      cells.slice(2, 7).forEach((cell, i) => {
+        const [lo = NaN, hi = NaN] = healthy[i] ?? [];
+        const value = Number(cell);
+        if (value < lo || value > hi) {
+          found++;
+          expect(misses).toContain(`${seats} seats ${STATS[i]}`);
+          expect(misses).toContain(cell);
+        }
+      });
+    }
+    expect(found).toBeGreaterThan(0);
 
     const rules = read('postflop-rules.md');
     const notYet = rules.slice(rules.indexOf('## Not applied yet'));

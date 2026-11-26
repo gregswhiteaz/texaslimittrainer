@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-26T01:56:00Z'
-updated_date: '2026-11-26T09:05:00Z'
+updated_date: '2026-11-26T09:47:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -47,4 +47,6 @@ Full spec: doit/TASK-7.35/spec.md
 AC added from TASK-7.26 follow-up (review MINOR + NIT)
 
 AC#2 (added by the orchestrator from TASK-7.26) reworded: it pinned 3/4/5/7 → null, which contradicts AC#1; it now pins every seat count to the ranges AC#1 requires.
+
+Build: rangesFor = DEFAULT_RANGES[referenceSizeOf(n)], 3-7 seats use 6-max ranges; WTSD at 4/5/7 seats back inside 30-42 over 100k; 3-seat VPIP 31.1 (preflop, out of scope) logged for follow-up; gate PASS
 <!-- SECTION:NOTES:END -->
