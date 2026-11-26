@@ -3,7 +3,7 @@ id: TASK-6.26
 title: >-
   Tidy after same-style bot replacement (dead Replay option, stale comments,
   style justifications)
-status: In Progress
+status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-25T05:57:00Z'
@@ -16,6 +16,8 @@ dependencies:
   - TASK-6.25
 references:
   - doc-130
+documentation:
+  - doc-163
 parent_task_id: TASK-6
 priority: low
 ordinal: 241000
@@ -51,4 +53,12 @@ Full spec: doit/TASK-6.26/spec.md
 Build: removed dead replacedStylesOption; runner comment fixed; Rock justification names ace-jack offsuit (AJo); Maniac justification one sentence; replacement test over 8 fixed codes, same 18 assertions; gate PASS
 
 Judge r1 PASS (6/6 SPEC items; Rock (AJo) wording judged on substance)
+
+Follow-ups: none.
 <!-- SECTION:NOTES:END -->
+
+## Final Summary
+
+<!-- SECTION:FINAL_SUMMARY:BEGIN -->
+Removed the dead replaced-styles branch from the playtest Replay line (cli.ts, test kept at 102 assertions), fixed the runner lineUp comment, named AJo in the Rock CO raise justification and made the Maniac fold-to-call justification one sentence, and cut the replacement acceptance test from 10,000 to 8 fixed codes (18 assertions kept). Verified: npm test 1456 passed, CI green, 2000-hand Mixed playtest 0 invariant violations, judge round 1 PASS 6/6. Review: Rock text says "ace-jack offsuit (AJo)", a recorded deviation from spec A-1, so the spec literal check prints false (MINOR/LOW, no product fix). Locked test edited under owner TASK-6.8. No follow-ups.
+<!-- SECTION:FINAL_SUMMARY:END -->
