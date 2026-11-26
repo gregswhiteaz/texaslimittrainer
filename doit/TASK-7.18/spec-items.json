@@ -3,42 +3,42 @@
     "id": "SPEC-01",
     "verifies": "AC#1",
     "verification": "command `for i in 1 2 3; do EQUITY_PERF_SCALE=0.75 npx vitest run tests/advice/equity.perf.test.ts || exit 1; done`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-02",
     "verifies": "AC#2",
     "verification": "command `! grep -n \"testTimeout\" vite.config.ts && test \"$(grep -rl 'vi.setConfig({ testTimeout: 30_000 })' tests src | wc -l | tr -d ' ')\" = 42 && npm test`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-03",
     "verifies": "AC#3",
     "verification": "command `for i in 1 2 3; do ADVICE_PERF_SCALE=1 npx vitest run tests/advice/postflop.perf.test.ts | grep \"10-seat flop vs 9 opponents:\"; done` (each line p95 \u2264 75.00 ms; exit 0)",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-04",
     "verifies": "AC#4",
     "verification": "command `TLH_SLOW_TESTS=1 ADVICE_PERF_SCALE=1 npx vitest run tests/advice/postflop.perf.test.ts -t \"value-bet postflop advice latency\"`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-05",
     "verifies": "AC#1, AC#3, AC#4",
     "verification": "unit `tests/advice/equity.test.ts::sampled results are byte-identical to the pre-TASK-7.18 sampler`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-06",
     "verifies": "AC#3, AC#4",
     "verification": "unit `tests/advice/equity.test.ts::sampler aborts early only when the rejection cap cannot be met`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-07",
     "verifies": "AC#3, AC#4",
     "verification": "command `npm run playtest | shasum -a 256` (equal to the base value in build-log.md) `&& npx vitest run tests/golden tests/advice/value-bet.acceptance.test.ts tests/advice/determinism.acceptance.test.ts tests/advice/equity.acceptance.test.ts`",
-    "status": "pending"
+    "status": "pass"
   }
 ]

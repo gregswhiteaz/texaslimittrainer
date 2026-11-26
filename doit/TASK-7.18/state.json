@@ -5,13 +5,21 @@
   "base_commit": "6622918fce4cafb892895dd6cbbeb372d7c67b07",
   "started": "2026-11-25T16:49:45",
   "review_round": 2,
-  "judge_round": 0,
+  "judge_round": 1,
   "sendbacks": 0,
-  "gate_runs": 4,
+  "gate_runs": 5,
   "questions": 3,
   "assumptions": 6,
   "escalations": 0,
-  "item_failures": {},
+  "item_failures": {
+    "SPEC-01": 0,
+    "SPEC-02": 0,
+    "SPEC-03": 0,
+    "SPEC-04": 0,
+    "SPEC-05": 0,
+    "SPEC-06": 0,
+    "SPEC-07": 0
+  },
   "locked_tests": {},
   "test_snapshot": {
     "e2e/action-bar-limits.spec.ts": {
@@ -2046,5 +2054,8 @@
     "src/advice/equity.ts:early-abort-ignores-remaining-variance": [
       "review r1"
     ]
+  },
+  "judge_results": {
+    "1": "PASS"
   }
 }

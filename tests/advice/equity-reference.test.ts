@@ -1,10 +1,12 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { parseCards } from '../../src/engine/cards';
 import { evaluate } from '../../src/engine/hand-evaluator';
 import { enumerateExact, REFERENCE_MATCHUPS } from '../../tools/equity/generate-reference.js';
 import { REPO_ROOT } from '../support/sandbox';
+
+vi.setConfig({ testTimeout: 30_000 });
 
 interface ReferenceCase {
   id: string;

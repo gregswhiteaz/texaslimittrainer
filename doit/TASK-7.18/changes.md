@@ -52,3 +52,4 @@ Timeout-only edits (one `vi.setConfig({ testTimeout: 30_000 });` line after the 
 - `tests/ci/retry.reap.test.ts` — per-file 30 s test timeout (§10 measured list).
 
 No new dependencies.
+- `tests/advice/equity-reference.test.ts` — one vi.setConfig 30 s line (judge J-1-01: ~4 s in full npm test; orchestrator edit; measured set changed per §10)
