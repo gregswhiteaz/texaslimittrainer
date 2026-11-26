@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-24T00:58:00Z'
+updated_date: '2026-11-26T00:07:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -110,6 +110,8 @@ doit: parked — judge PASS 17/17 and docs done (doc-101), but build commit 71be
 Story doc renumbered doc-101 → doc-105: main's TASK-1.54 story doc took doc-101 while this branch was parked. Stray doc-100 copy removed in e1d513e.
 
 Unparked 2026-11-24: stray doc-100 copy removed (e1d513e), main merged in (package.json conflict: kept session-kill e2e:slow entry and main's sync-copies lint step), story doc renumbered to doc-105. Merged tree: lint/typecheck clean, npm test 984 passed, playtest 0 violations. Follow-ups: hands-played cap already owned by TASK-2.6 AC#8; live-hand HandState validation not tracked (no story persists an in-progress hand by design, REQ-004.2; parseSessionRecord rejects any stored hand); sync-copy prevention done in TASK-1.54.
+
+Locked test(s) unlocked for TASK-7.18 Q-3: one vi.setConfig({ testTimeout: 30_000 }) line added after the global testTimeout was removed; no assertion touched.
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary

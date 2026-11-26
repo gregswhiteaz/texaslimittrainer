@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-18T18:15:00Z'
-updated_date: '2026-11-19T21:53:00Z'
+updated_date: '2026-11-26T00:07:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -60,6 +60,8 @@ Build: approved K2/C3 wording, K4 deal-order check, H1/H2 history checks, bounde
 Judge R1 PASS 11/11, no findings; CLI output byte-identical to base.
 
 Follow-ups (Step 6a): TASK-1.41 rename checkStep arrays + comment the L4 raise clause.
+
+Locked test(s) unlocked for TASK-7.18 Q-3: one vi.setConfig({ testTimeout: 30_000 }) line added after the global testTimeout was removed; no assertion touched.
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary

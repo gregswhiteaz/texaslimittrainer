@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-25T00:07:00Z'
+updated_date: '2026-11-26T00:07:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-0
@@ -98,6 +98,8 @@ Locked test re-pinned by TASK-7.10 Q-3 (explanation key; auto-accepted; count ke
 Locked test re-pinned by TASK-7.13 Q-4 (opponentBasis key; count kept).
 
 Locked test(s) unlocked for TASK-7.32 Q-1 (user-approved advice/bot fix; expected values re-pinned one-for-one).
+
+Locked test(s) unlocked for TASK-7.18 Q-3: one vi.setConfig({ testTimeout: 30_000 }) line added after the global testTimeout was removed; no assertion touched.
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary

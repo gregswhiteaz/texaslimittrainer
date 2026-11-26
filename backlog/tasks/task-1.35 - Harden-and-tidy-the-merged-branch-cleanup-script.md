@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-19T04:51:00Z'
-updated_date: '2026-11-20T06:02:00Z'
+updated_date: '2026-11-26T00:07:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -54,6 +54,8 @@ Build: leased remote deletes (SHA per branch, one porcelain push, refusals repor
 Judge R1 PASS 4/4; pre-change script deletes the moved branch (exit 0), new one refuses (exit 1).
 
 Follow-ups (Step 6a): TASK-1.45 refspec + shared failure reporting; TASK-1.46 local timing-test flakes.
+
+Locked test(s) unlocked for TASK-7.18 Q-3: one vi.setConfig({ testTimeout: 30_000 }) line added after the global testTimeout was removed; no assertion touched.
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary

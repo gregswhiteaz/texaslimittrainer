@@ -1205,7 +1205,14 @@
       "skips": 0
     }
   },
-  "history": [],
+  "history": [
+    {
+      "t": "2026-11-25T17:07:00",
+      "event": "unlock",
+      "file": "tests/advice/equity-multiway.acceptance.test.ts",
+      "reason": "TASK-7.18 Q-3 (auto-accepted): global testTimeout removed; add one vi.setConfig({ testTimeout: 30_000 }) line only, no assertion touched"
+    }
+  ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-7.7",
   "spec_sha256": "1e80d623d4ac5c5164daaf56585a90201459fdd70b9bb057a2e275e570ba98d5",
   "review_findings": {
@@ -1214,5 +1221,8 @@
   "doc_id": "doc-92",
   "judge_results": {
     "1": "PASS"
-  }
+  },
+  "relock_pending": [
+    "tests/advice/equity-multiway.acceptance.test.ts"
+  ]
 }

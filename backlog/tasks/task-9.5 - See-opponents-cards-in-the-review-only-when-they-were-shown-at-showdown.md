@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-24T15:05:00Z'
+updated_date: '2026-11-26T00:07:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -84,6 +84,8 @@ Build: review 'Shown at showdown' list from CompletedHand.shown only (opponents,
 Judge r1 PASS 11/11; no hidden-card leak across 1,796 mucked/folded hands (unit) and 35 live reviews in Chromium+WebKit; CI 45414460393 green.
 
 Follow-ups: none tracked. reviewHeader rename (MINOR) and extra gap CSS (NIT) change no behaviour; live e2e 'opponent showed' assertion (NIT) is covered by the review-shown scene tests and the judge's 35-review holdout.
+
+Locked test(s) unlocked for TASK-7.18 Q-3: one vi.setConfig({ testTimeout: 30_000 }) line added after the global testTimeout was removed; no assertion touched.
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary

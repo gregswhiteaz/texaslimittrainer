@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-18T07:03:00Z'
-updated_date: '2026-11-22T03:27:00Z'
+updated_date: '2026-11-26T00:07:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -57,6 +57,8 @@ Judge R1 PASS 9/9. J-1-02 (AC numbering swapped) is a false alarm: judge read th
 Follow-ups (Step 6a): TASK-1.33 apply branch protection once public/Pro; TASK-1.34 confirm Dependabot + run cleanup --apply after push; TASK-1.35 harden/tidy cleanup script (lease, missing-ref test, renames).
 
 Locked test unlocked for TASK-1.50 Q-6 (user-approved CI split).
+
+Locked test(s) unlocked for TASK-7.18 Q-3: one vi.setConfig({ testTimeout: 30_000 }) line added after the global testTimeout was removed; no assertion touched.
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary

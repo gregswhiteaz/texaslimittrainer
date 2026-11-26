@@ -1892,7 +1892,14 @@
       "skips": 0
     }
   },
-  "history": [],
+  "history": [
+    {
+      "t": "2026-11-25T17:07:00",
+      "event": "unlock",
+      "file": "tests/stats/bb100.acceptance.test.tsx",
+      "reason": "TASK-7.18 Q-3 (auto-accepted): global testTimeout removed; add one vi.setConfig({ testTimeout: 30_000 }) line only, no assertion touched"
+    }
+  ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-11.2",
   "spec_sha256": "30ba65b43e90fa3d7978cc66f2c59dca90af66ffd6500b2b3ffb8fdafc24331c",
   "review_findings": {
@@ -1901,5 +1908,8 @@
   "judge_results": {
     "1": "PASS"
   },
-  "doc_id": "doc-135"
+  "doc_id": "doc-135",
+  "relock_pending": [
+    "tests/stats/bb100.acceptance.test.tsx"
+  ]
 }

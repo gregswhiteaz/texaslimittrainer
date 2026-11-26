@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-18T07:03:00Z'
-updated_date: '2026-11-19T19:55:00Z'
+updated_date: '2026-11-26T00:07:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -62,6 +62,8 @@ Build: retry.js sudo escalation on EPERM + 2 s reap wait + fail-fast stuck attem
 Judge R1 PASS 8/8; real-sudo tests verified on branch CI run 44600933321 (f4a6897). J-1-01 MEDIUM (spurious sudo escalation on macOS during SIGKILL teardown) -> follow-up.
 
 Follow-ups (Step 6a): TASK-1.37 escalate to sudo only when needed (J-1-01, pid-reuse, shared reap, onSignal); TASK-1.38 tidy sudo retry tests (NITs); TASK-1.39 dpkg --configure -a before retry + runInSandbox group kill.
+
+Locked test(s) unlocked for TASK-7.18 Q-3: one vi.setConfig({ testTimeout: 30_000 }) line added after the global testTimeout was removed; no assertion touched.
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary

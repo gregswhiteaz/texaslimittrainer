@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-23T04:18:00Z'
+updated_date: '2026-11-26T00:07:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-0
@@ -94,6 +94,8 @@ CI run 44357290247 (head ec5c4c3): success first push. Judge round 1: PASS 15/15
 Locked test tests/playtest/runner.acceptance.test.ts: heavy run moved to opt-in slow group for TASK-7.8 (D-7), smaller every-push version kept.
 
 Locked test tests/playtest/playtest.acceptance.test.ts: heavy run moved to opt-in slow group for TASK-7.8 (D-7), smaller every-push version kept.
+
+Locked test(s) unlocked for TASK-7.18 Q-3: one vi.setConfig({ testTimeout: 30_000 }) line added after the global testTimeout was removed; no assertion touched.
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary

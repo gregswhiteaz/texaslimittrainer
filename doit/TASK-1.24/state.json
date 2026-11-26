@@ -531,6 +531,12 @@
       "event": "unlock",
       "file": "tests/ci/branch-protection.acceptance.test.ts",
       "reason": "TASK-1.50 Q-6 (user-approved): CI split into parallel jobs; intent kept or tightened; timeout 20\u219230 per AC#5"
+    },
+    {
+      "t": "2026-11-25T17:06:59",
+      "event": "unlock",
+      "file": "tests/git/prune-merged-branches.acceptance.test.ts",
+      "reason": "TASK-7.18 Q-3 (auto-accepted): global testTimeout removed; add one vi.setConfig({ testTimeout: 30_000 }) line only, no assertion touched"
     }
   ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-1.24",
@@ -544,6 +550,7 @@
   "doc_id": "doc-30",
   "relock_pending": [
     "tests/ci/dependabot.acceptance.test.ts",
-    "tests/ci/branch-protection.acceptance.test.ts"
+    "tests/ci/branch-protection.acceptance.test.ts",
+    "tests/git/prune-merged-branches.acceptance.test.ts"
   ]
 }

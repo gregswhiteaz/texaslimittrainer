@@ -631,6 +631,12 @@
       "event": "unlock",
       "file": "tests/ci/apt-archives-cache.test.ts",
       "reason": "TASK-1.50 Q-6 (user-approved): CI split into parallel jobs; intent kept or tightened; timeout 20\u219230 per AC#5"
+    },
+    {
+      "t": "2026-11-25T17:07:00",
+      "event": "unlock",
+      "file": "tests/ci/apt-lock.dpkg.acceptance.test.ts",
+      "reason": "TASK-7.18 Q-3 (auto-accepted): global testTimeout removed; add one vi.setConfig({ testTimeout: 30_000 }) line only, no assertion touched"
     }
   ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-1.39",
@@ -644,6 +650,7 @@
   "doc_id": "doc-43",
   "relock_pending": [
     "tests/ci/apt-archives-cache.test.ts",
-    "tests/ci/apt-archives-cache.test.ts"
+    "tests/ci/apt-archives-cache.test.ts",
+    "tests/ci/apt-lock.dpkg.acceptance.test.ts"
   ]
 }

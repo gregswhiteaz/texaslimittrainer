@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-20T06:02:00Z'
-updated_date: '2026-11-21T00:29:00Z'
+updated_date: '2026-11-26T00:07:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -52,6 +52,8 @@ Build: cpuNowMs() (process.cpuUsage) replaces wall-clock in the six local timing
 Judge R2 PASS 4/4 after the best-of-10 fix: full-speed evaluator command passed 18/18 under 3x-core load; 2x-slower evaluate still fails idle; npm test 362/362 under load.
 
 Follow-ups (Step 6a, value filter): none — nits recorded as not tracked in doc-45.
+
+Locked test(s) unlocked for TASK-7.18 Q-3: one vi.setConfig({ testTimeout: 30_000 }) line added after the global testTimeout was removed; no assertion touched.
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary

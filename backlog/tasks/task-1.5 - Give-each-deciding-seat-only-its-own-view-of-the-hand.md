@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-18T06:52:00Z'
+updated_date: '2026-11-26T00:07:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-0
@@ -82,6 +82,8 @@ Full spec: doit/TASK-1.5/spec.md
 Build: src/engine/player-view.ts (PlayerView/PublicPlayer/ShownHand/EarlierShowdown/SeatPolicy; playerView, actWith, showdownOf); acceptance (incl. sandboxed typecheck), 300-hand hidden-card property test, unit tests; hand.ts unchanged; gate PASS.
 
 CI run 44253680537 (head 080f4ac): success first try. Judge round 1: PASS 10/10, no findings; 17 holdout mutants all caught; player-view.ts 100% line coverage; e2e bot-via-SeatPolicy scenario 50 hands, chips conserved.
+
+Locked test(s) unlocked for TASK-7.18 Q-3: one vi.setConfig({ testTimeout: 30_000 }) line added after the global testTimeout was removed; no assertion touched.
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary

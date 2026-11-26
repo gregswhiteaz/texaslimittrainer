@@ -931,6 +931,12 @@
       "event": "unlock",
       "file": "e2e/rapid-pace.spec.ts",
       "reason": "TASK-2.5 Q-5 (auto-accepted): scripted-user helper folds only when a Fold button exists, else checks; no assertion change"
+    },
+    {
+      "t": "2026-11-25T17:07:00",
+      "event": "unlock",
+      "file": "tests/table/pace.acceptance.test.ts",
+      "reason": "TASK-7.18 Q-3 (auto-accepted): global testTimeout removed; add one vi.setConfig({ testTimeout: 30_000 }) line only, no assertion touched"
     }
   ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-3.13",
@@ -944,6 +950,7 @@
   },
   "relock_pending": [
     "e2e/rapid-pace.spec.ts",
-    "e2e/rapid-pace.spec.ts"
+    "e2e/rapid-pace.spec.ts",
+    "tests/table/pace.acceptance.test.ts"
   ]
 }

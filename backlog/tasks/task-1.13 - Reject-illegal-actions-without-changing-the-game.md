@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-21T07:06:00Z'
+updated_date: '2026-11-26T00:07:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -87,6 +87,8 @@ Build: illegal-actions acceptance (AC#1–5; 100k injections ~2.2 s); hand.ts do
 Follow-ups (Step 6a): AC#11 added to TASK-3.10 (validate restored action shape). Review NITs (vacuous sum check; unreachable early return) not tracked — locked test, no behaviour change.
 
 Judge R1 PASS 7/7 (13 applyAction mutants all caught).
+
+Locked test(s) unlocked for TASK-7.18 Q-3: one vi.setConfig({ testTimeout: 30_000 }) line added after the global testTimeout was removed; no assertion touched.
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary

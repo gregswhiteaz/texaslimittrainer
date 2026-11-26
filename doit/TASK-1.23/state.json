@@ -533,11 +533,19 @@
       "event": "unlock",
       "file": "tests/ci/retry.sudo.test.ts",
       "reason": "Code review R1 MAJOR: SPEC-02 real-sudo test can pass without the sudo fallback (use_pty); strengthen by asserting the EPERM and sudo-kill log lines, and print the process layout on failure"
+    },
+    {
+      "t": "2026-11-25T17:06:59",
+      "event": "unlock",
+      "file": "tests/ci/retry.sudo.test.ts",
+      "reason": "TASK-7.18 Q-3 (auto-accepted): global testTimeout removed; add one vi.setConfig({ testTimeout: 30_000 }) line only, no assertion touched"
     }
   ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-1.23",
   "spec_sha256": "ecd91050d374b9270c0110fe768b2a0966bdb00570cb92233ba2513c95ee78fc",
-  "relock_pending": [],
+  "relock_pending": [
+    "tests/ci/retry.sudo.test.ts"
+  ],
   "brief_history": {
     "tests/ci/retry.sudo.test.ts:spec02-does-not-prove-sudo-fallback-ran": [
       "review r1"

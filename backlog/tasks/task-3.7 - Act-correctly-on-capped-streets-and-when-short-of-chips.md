@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-22T15:14:00Z'
+updated_date: '2026-11-26T00:07:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -102,6 +102,8 @@ Follow-ups (Step 6a): ACs added to TASK-2.4 (chip labels) and TASK-3.21 (live al
 Judge R1 PASS 18/18 (independent label oracle 60k decisions; 9/10 mutants, the 10th caught by engine suites).
 
 Locked e2e test unlocked for TASK-1.52 Q-1 (user-approved; clock-advance only).
+
+Locked test(s) unlocked for TASK-7.18 Q-3: one vi.setConfig({ testTimeout: 30_000 }) line added after the global testTimeout was removed; no assertion touched.
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary

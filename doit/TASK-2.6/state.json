@@ -1400,6 +1400,18 @@
       "event": "unlock",
       "file": "e2e/resume.spec.ts",
       "reason": "TASK-12.1 Q-5 (auto-accepted): Home menu and route list gain Settings, play-money walk visits it, e2e DB helpers open v4; update expected values, keep every check"
+    },
+    {
+      "t": "2026-11-25T17:07:00",
+      "event": "unlock",
+      "file": "tests/storage/resume.acceptance.test.ts",
+      "reason": "TASK-7.18 Q-3 (auto-accepted): global testTimeout removed; add one vi.setConfig({ testTimeout: 30_000 }) line only, no assertion touched"
+    },
+    {
+      "t": "2026-11-25T17:07:00",
+      "event": "unlock",
+      "file": "tests/table/resume.acceptance.test.ts",
+      "reason": "TASK-7.18 Q-3 (auto-accepted): global testTimeout removed; add one vi.setConfig({ testTimeout: 30_000 }) line only, no assertion touched"
     }
   ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-2.6",
@@ -1414,6 +1426,8 @@
   "relock_pending": [
     "e2e/resume.spec.ts",
     "e2e/resume.spec.ts",
-    "e2e/resume.spec.ts"
+    "e2e/resume.spec.ts",
+    "tests/storage/resume.acceptance.test.ts",
+    "tests/table/resume.acceptance.test.ts"
   ]
 }

@@ -1254,6 +1254,12 @@
       "event": "unlock",
       "file": "tests/advice/postflop.acceptance.test.ts",
       "reason": "TASK-7.32 Q-1 (user-approved fix): bots on action ranges, turn price counts the river bet, 65% value-raise vs a bet; re-pin expected values one-for-one, keep check counts"
+    },
+    {
+      "t": "2026-11-25T17:07:00",
+      "event": "unlock",
+      "file": "tests/advice/postflop.acceptance.test.ts",
+      "reason": "TASK-7.18 Q-3 (auto-accepted): global testTimeout removed; add one vi.setConfig({ testTimeout: 30_000 }) line only, no assertion touched"
     }
   ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-7.9",
@@ -1268,6 +1274,7 @@
   "relock_pending": [
     "tests/advice/postflop.acceptance.test.ts",
     "tests/advice/implied-odds.acceptance.test.ts",
+    "tests/advice/postflop.acceptance.test.ts",
     "tests/advice/postflop.acceptance.test.ts"
   ]
 }

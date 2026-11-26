@@ -1,0 +1,136 @@
+{
+  "id": "TASK-7.18",
+  "title": "Restore equity calculation performance headroom",
+  "status": "To Do",
+  "archived": false,
+  "type": "enhancement",
+  "priority": "medium",
+  "project": null,
+  "assignees": [],
+  "reporter": null,
+  "labels": [
+    "dream-limit-holdem-trainer",
+    "follow-up"
+  ],
+  "milestone": "m-1",
+  "parentTaskId": "TASK-7",
+  "acceptanceCriteriaCompleted": 0,
+  "acceptanceCriteriaCount": 4,
+  "references": [
+    "doc-8"
+  ],
+  "modifiedFiles": [],
+  "ordinal": 171000,
+  "createdAt": "2026-11-18T07:03:00Z",
+  "updatedAt": "2026-11-23T04:39:00Z",
+  "dueDate": null,
+  "isReady": true,
+  "path": "backlog/tasks/task-7.18 - Restore-equity-calculation-performance-headroom.md",
+  "description": "Follow-up from TASK-7.1: the full-ring equity scenarios run at about 88% of their p95 latency target on the reference Mac, so small regressions will break the target. The global 30 s testTimeout was raised for the slowest equity tests and also loosens every other test.",
+  "dependencies": [
+    "TASK-7.1"
+  ],
+  "dependencyGraph": {
+    "root": "TASK-7.18",
+    "nodes": [
+      {
+        "id": "TASK-7.18",
+        "title": "Restore equity calculation performance headroom",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": 0,
+        "dependentDepth": 0
+      },
+      {
+        "id": "TASK-1.1",
+        "title": "Bootstrap the strict TypeScript project with one-command checks",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 4,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.2",
+        "title": "Rank showdown hands by real poker hand rankings",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 2,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.7",
+        "title": "Run every check in GitHub Actions on each push and pull request",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 3,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-7.1",
+        "title": "Compute a hand's equity against opponent hands",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 1,
+        "dependentDepth": null
+      }
+    ],
+    "edges": [
+      {
+        "from": "TASK-1.2",
+        "to": "TASK-1.7"
+      },
+      {
+        "from": "TASK-1.7",
+        "to": "TASK-1.1"
+      },
+      {
+        "from": "TASK-7.1",
+        "to": "TASK-1.2"
+      },
+      {
+        "from": "TASK-7.18",
+        "to": "TASK-7.1"
+      }
+    ]
+  },
+  "readiness": {
+    "isReady": true,
+    "isBlocked": false,
+    "blockingDependencies": [],
+    "missingDependencies": []
+  },
+  "documentation": [],
+  "subtasks": [],
+  "acceptanceCriteria": [
+    {
+      "index": 1,
+      "text": "Given the full-speed equity command (EQUITY_PERF_SCALE=1) on the reference Mac, When it runs, Then every scenario's p95 is at most 75% of its target",
+      "checked": false
+    },
+    {
+      "index": 2,
+      "text": "Given vite.config.ts, When tests run, Then the default per-test timeout applies everywhere except the tests that need longer, which set their own timeout",
+      "checked": false
+    },
+    {
+      "index": 3,
+      "text": "Given postflop advice at a 10-seat flop with 9 opponents, When the advice latency test runs at real targets, Then p95 is at most 75 ms (currently 71.5 ms against 100 ms)",
+      "checked": false
+    },
+    {
+      "index": 4,
+      "text": "Given a 9-opponent postflop spot, When the user's advice is computed with value betting (two equity runs: whole and calling range), Then p95 latency meets the 100 ms target (TASK-7.8 measured ~205 ms because the calling-range run exhausts the sampler's rejection budget before falling back)",
+      "checked": false
+    }
+  ],
+  "definitionOfDone": [],
+  "implementationPlan": null,
+  "implementationNotes": "AC added from TASK-7.3 follow-up (doc-17).\n\nAC added from TASK-7.8 review MINOR (multiway user-advice latency)",
+  "comments": [],
+  "finalSummary": null
+}

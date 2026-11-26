@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-18T19:10:00Z'
-updated_date: '2026-11-25T00:07:00Z'
+updated_date: '2026-11-26T00:07:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -55,6 +55,8 @@ Follow-ups (Step 6a): stale A-4 rationale corrected by a note on TASK-7.3 (docs-
 Locked test tests/advice/postflop-coverage.acceptance.test.ts re-pinned for TASK-7.8 Q-3 (auto-accepted; value betting).
 
 Locked test(s) unlocked for TASK-7.32 Q-1 (user-approved advice/bot fix; expected values re-pinned one-for-one).
+
+Locked test(s) unlocked for TASK-7.18 Q-3: one vi.setConfig({ testTimeout: 30_000 }) line added after the global testTimeout was removed; no assertion touched.
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary

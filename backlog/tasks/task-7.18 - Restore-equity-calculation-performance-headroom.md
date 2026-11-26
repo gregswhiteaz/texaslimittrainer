@@ -1,10 +1,11 @@
 ---
 id: TASK-7.18
 title: Restore equity calculation performance headroom
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-18T07:03:00Z'
-updated_date: '2026-11-23T04:39:00Z'
+updated_date: '2026-11-26T00:07:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -32,6 +33,17 @@ Follow-up from TASK-7.1: the full-ring equity scenarios run at about 88% of thei
 - [ ] #3 Given postflop advice at a 10-seat flop with 9 opponents, When the advice latency test runs at real targets, Then p95 is at most 75 ms (currently 71.5 ms against 100 ms)
 - [ ] #4 Given a 9-opponent postflop spot, When the user's advice is computed with value betting (two equity runs: whole and calling range), Then p95 latency meets the 100 ms target (TASK-7.8 measured ~205 ms because the calling-range run exhausts the sampler's rejection budget before falling back)
 <!-- AC:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. Faster sampler loop that keeps the random stream (byte-identical results)
+2. Early abort for hopeless calling-range runs (same RangeError, sooner) so 9-opponent value-bet advice meets 100 ms
+3. 15 untimed warm-ups in both perf tests; new 10-seat value-bet perf scenario (slow group only)
+4. Remove the global 30 s testTimeout; 42 slow files set their own (1 s threshold under coverage)
+
+Full spec: doit/TASK-7.18/spec.md
+<!-- SECTION:PLAN:END -->
 
 ## Implementation Notes
 

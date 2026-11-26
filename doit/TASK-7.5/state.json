@@ -1115,6 +1115,12 @@
       "event": "unlock",
       "file": "tests/advice/range-model.acceptance.test.ts",
       "reason": "TASK-7.8 Q-3 (auto-accepted): value betting changes advice/bot results \u2014 re-pin expected values, keep every assertion and time limit"
+    },
+    {
+      "t": "2026-11-25T17:07:00",
+      "event": "unlock",
+      "file": "tests/advice/range-model.acceptance.test.ts",
+      "reason": "TASK-7.18 Q-3 (auto-accepted): global testTimeout removed; add one vi.setConfig({ testTimeout: 30_000 }) line only, no assertion touched"
     }
   ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-7.5",
@@ -1133,6 +1139,7 @@
     "1": "PASS"
   },
   "relock_pending": [
+    "tests/advice/range-model.acceptance.test.ts",
     "tests/advice/range-model.acceptance.test.ts"
   ]
 }

@@ -1924,7 +1924,14 @@
       "skips": 0
     }
   },
-  "history": [],
+  "history": [
+    {
+      "t": "2026-11-25T17:07:00",
+      "event": "unlock",
+      "file": "tests/stats/trend-grouping.acceptance.test.tsx",
+      "reason": "TASK-7.18 Q-3 (auto-accepted): global testTimeout removed; add one vi.setConfig({ testTimeout: 30_000 }) line only, no assertion touched"
+    }
+  ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-11.5",
   "spec_sha256": "313412e9d293001ee70e7eb5e72ce3beee4045442aba5d029cefc6c28708e863",
   "review_findings": {
@@ -1933,5 +1940,8 @@
   "judge_results": {
     "1": "PASS"
   },
-  "doc_id": "doc-138"
+  "doc_id": "doc-138",
+  "relock_pending": [
+    "tests/stats/trend-grouping.acceptance.test.tsx"
+  ]
 }

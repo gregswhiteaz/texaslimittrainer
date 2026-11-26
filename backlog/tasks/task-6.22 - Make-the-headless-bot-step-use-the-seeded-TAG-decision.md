@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-21T22:26:00Z'
-updated_date: '2026-11-25T23:41:00Z'
+updated_date: '2026-11-26T00:07:00Z'
 labels:
   - follow-up
   - dream-limit-holdem-trainer
@@ -51,6 +51,8 @@ Build: stepBot(table, policy?) defaults to the seeded decideTag decision; locked
 Judge r1 PASS 4/4: 1,711 bot steps over 200 codes — headless stepBot default identical to the real worker (TAG, same seed) and the playtest seeded policy, including 9 mixed spots; explicit policies unchanged. CI 45721837009 green (incl. E2E).
 
 Follow-ups: none (style-aware default outside AC#1; stale comment noted).
+
+Locked test(s) unlocked for TASK-7.18 Q-3: one vi.setConfig({ testTimeout: 30_000 }) line added after the global testTimeout was removed; no assertion touched.
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary

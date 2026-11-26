@@ -1335,6 +1335,12 @@
       "event": "unlock",
       "file": "tests/table/session-restore.acceptance.test.ts",
       "reason": "Judge J-1-01: add REQ-025 seat-kind swap case (strengthen only)"
+    },
+    {
+      "t": "2026-11-25T17:07:00",
+      "event": "unlock",
+      "file": "tests/storage/session-records.acceptance.test.ts",
+      "reason": "TASK-7.18 Q-3 (auto-accepted): global testTimeout removed; add one vi.setConfig({ testTimeout: 30_000 }) line only, no assertion touched"
     }
   ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-3.10",
@@ -1345,6 +1351,8 @@
   "judge_results": {
     "1": "PASS"
   },
-  "relock_pending": [],
+  "relock_pending": [
+    "tests/storage/session-records.acceptance.test.ts"
+  ],
   "doc_id": "doc-105"
 }

@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-25T13:37:00Z'
+updated_date: '2026-11-26T00:07:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -91,6 +91,8 @@ Build: Group by (Every 500 hands default / Session / Day) drives both charts; pe
 Judge r1 PASS 15/15: production preview Chromium/WebKit in Pacific/Kiritimati — two played cash sessions each matched their Session Report BB/100; seeded out-of-order data incl. a midnight-crossing session matched an independent computation across 7 filters under Session and Day; G-2 target unchanged; reset to Every 500 hands. CI 45620662930 green.
 
 Follow-ups: TASK-11.13 AC (pinned non-UTC TZ for day tests), TASK-11.12 AC (no Math.max/min spread at scale).
+
+Locked test(s) unlocked for TASK-7.18 Q-3: one vi.setConfig({ testTimeout: 30_000 }) line added after the global testTimeout was removed; no assertion touched.
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary

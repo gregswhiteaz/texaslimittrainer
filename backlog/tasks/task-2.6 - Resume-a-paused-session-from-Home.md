@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-25T15:24:00Z'
+updated_date: '2026-11-26T00:07:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -103,6 +103,8 @@ Locked e2e/resume.spec.ts unlocked for TASK-10.1 D-4 (Leave table ends the sessi
 Locked e2e/resume.spec.ts unlocked for TASK-11.1 Q-4 (Home menu gains Statistics; counts re-pinned, check added).
 
 Locked test(s) unlocked for TASK-12.1 Q-5 (Settings added to Home, route list and play-money walk; e2e DB helpers at v4).
+
+Locked test(s) unlocked for TASK-7.18 Q-3: one vi.setConfig({ testTimeout: 30_000 }) line added after the global testTimeout was removed; no assertion touched.
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary

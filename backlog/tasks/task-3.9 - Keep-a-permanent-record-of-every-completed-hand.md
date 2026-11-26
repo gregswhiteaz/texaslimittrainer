@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-24T08:55:00Z'
+updated_date: '2026-11-26T00:07:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -108,6 +108,8 @@ Locked e2e/hand-records.spec.ts made timing-robust by TASK-1.55 (expect.poll on 
 Locked test tests/storage/hand-records.acceptance.test.ts unlocked for TASK-3.12 Q-3 (decisions field, one-line change).
 
 Locked e2e/hand-records.spec.ts unlocked for TASK-3.12 Q-4 (oldRecord fixture gains decisions; no assertion change).
+
+Locked test(s) unlocked for TASK-7.18 Q-3: one vi.setConfig({ testTimeout: 30_000 }) line added after the global testTimeout was removed; no assertion touched.
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary

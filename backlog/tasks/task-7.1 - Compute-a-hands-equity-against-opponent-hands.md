@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-18T03:57:00Z'
+updated_date: '2026-11-26T00:07:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-0
@@ -81,6 +81,8 @@ Full spec: doit/TASK-7.1/spec.md
 
 <!-- SECTION:NOTES:BEGIN -->
 Build: src/advice/equity.ts (computeEquity; exact ≤200k evals else 30,000 seeded trials), src/engine/seeded-random.ts (FNV-1a + SplitMix32 + xoshiro128**), offline generator + 121-case fixture; max HU error 0.957 pts; p95 5.7/0.19/5.1/6.5/8.3/20.7/69.9 ms; gate PASS. A-12/A-13 in qa.md.
+
+Locked test(s) unlocked for TASK-7.18 Q-3: one vi.setConfig({ testTimeout: 30_000 }) line added after the global testTimeout was removed; no assertion touched.
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary

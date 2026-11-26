@@ -890,6 +890,12 @@
       "event": "unlock",
       "file": "e2e/action-bar-limits.spec.ts",
       "reason": "TASK-1.52 Q-1 (user-approved): reach state via bounded runUntilMyTurn; assertions unchanged"
+    },
+    {
+      "t": "2026-11-25T17:07:00",
+      "event": "unlock",
+      "file": "tests/table/action-bar-limits.acceptance.test.ts",
+      "reason": "TASK-7.18 Q-3 (auto-accepted): global testTimeout removed; add one vi.setConfig({ testTimeout: 30_000 }) line only, no assertion touched"
     }
   ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-3.7",
@@ -898,7 +904,8 @@
     "1": 0
   },
   "relock_pending": [
-    "e2e/action-bar-limits.spec.ts"
+    "e2e/action-bar-limits.spec.ts",
+    "tests/table/action-bar-limits.acceptance.test.ts"
   ],
   "doc_id": "doc-68",
   "judge_results": {

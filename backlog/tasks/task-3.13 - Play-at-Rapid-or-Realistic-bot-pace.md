@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-23T01:18:00Z'
+updated_date: '2026-11-26T00:07:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -93,6 +93,8 @@ Judge R1 PASS 10/10 (re-ran e2e:slow: 6p max 17.7 ms, 10p max 50.3 ms, 200 hands
 Locked e2e/rapid-pace.spec.ts unlocked for TASK-3.27 Q-2 (user-approved strengthen-only race fix).
 
 Locked e2e/rapid-pace.spec.ts helper fixed for TASK-2.5 Q-5 (fold only when Fold exists).
+
+Locked test(s) unlocked for TASK-7.18 Q-3: one vi.setConfig({ testTimeout: 30_000 }) line added after the global testTimeout was removed; no assertion touched.
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary

@@ -1166,6 +1166,12 @@
       "event": "unlock",
       "file": "tests/ui/game-config-players.acceptance.test.tsx",
       "reason": "TASK-2.8 Q-2 (auto-accepted): per-row style select \u2014 read style from the selected option / scope control counts; no expected result changes"
+    },
+    {
+      "t": "2026-11-25T17:07:00",
+      "event": "unlock",
+      "file": "tests/table/table-size.acceptance.test.ts",
+      "reason": "TASK-7.18 Q-3 (auto-accepted): global testTimeout removed; add one vi.setConfig({ testTimeout: 30_000 }) line only, no assertion touched"
     }
   ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-2.2",
@@ -1180,6 +1186,7 @@
   "relock_pending": [
     "tests/ui/game-config-players.acceptance.test.tsx",
     "e2e/players-choice.spec.ts",
-    "tests/ui/game-config-players.acceptance.test.tsx"
+    "tests/ui/game-config-players.acceptance.test.tsx",
+    "tests/table/table-size.acceptance.test.ts"
   ]
 }

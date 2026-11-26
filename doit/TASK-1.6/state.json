@@ -303,6 +303,12 @@
       "event": "unlock",
       "file": "tests/playtest/playtest.acceptance.test.ts",
       "reason": "TASK-7.8 D-7/Q-1 (auto-accepted): 10,000-hand run opt-in slow (TLH_SLOW_TESTS) + 1,000-hand every-push version with the same assertions and limits"
+    },
+    {
+      "t": "2026-11-25T17:06:59",
+      "event": "unlock",
+      "file": "tests/playtest/runner.acceptance.test.ts",
+      "reason": "TASK-7.18 Q-3 (auto-accepted): global testTimeout removed; add one vi.setConfig({ testTimeout: 30_000 }) line only, no assertion touched"
     }
   ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-1.6",
@@ -318,6 +324,7 @@
     "tests/playtest/playtest.acceptance.test.ts",
     "tests/playtest/runner.acceptance.test.ts",
     "tests/playtest/runner.acceptance.test.ts",
-    "tests/playtest/playtest.acceptance.test.ts"
+    "tests/playtest/playtest.acceptance.test.ts",
+    "tests/playtest/runner.acceptance.test.ts"
   ]
 }

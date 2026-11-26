@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-25T10:36:00Z'
+updated_date: '2026-11-26T00:07:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -88,6 +88,8 @@ Build: TrendHand cash {net, bigBet}; bb100Value exact over LCM of big bets, roun
 Judge r1 PASS 13/13: real UI cash sessions with a rebuy (Chromium 643 hands, WebKit 542) — per-session BB/100 equals the report tile; 1,700+ seeded mixed-stake cash hands plus sit-and-go gave BB/100 points, tooltips, aria-label and break-even line matching an exact independent computation; message boundaries checked. CI 45586611899 green.
 
 Follow-ups: TASK-11.14 (LCM/stuck-loading hardening, discriminated TrendSource, all-negative case); UI wiring ACs on TASK-11.4/11.5 (added at Q-1).
+
+Locked test(s) unlocked for TASK-7.18 Q-3: one vi.setConfig({ testTimeout: 30_000 }) line added after the global testTimeout was removed; no assertion touched.
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary

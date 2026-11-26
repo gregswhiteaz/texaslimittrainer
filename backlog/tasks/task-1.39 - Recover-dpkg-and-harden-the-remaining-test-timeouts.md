@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-19T19:55:00Z'
-updated_date: '2026-11-22T03:27:00Z'
+updated_date: '2026-11-26T00:07:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -61,6 +61,8 @@ Judge R1 PASS 9/9. Cache proven: cold run 44831732531 saved 186 .debs; warm run 
 Follow-ups (Step 6a): TASK-1.47 verify + prune cached .debs; TASK-1.48 apt-lock/sandbox polish. Cold-cache slow-mirror limit stays with the user's parked CI container-image plan (memory: project-ci-speed-plan; user deferred CI restructuring until m-0 is done).
 
 Locked test unlocked for TASK-1.50 Q-6 (user-approved CI split).
+
+Locked test(s) unlocked for TASK-7.18 Q-3: one vi.setConfig({ testTimeout: 30_000 }) line added after the global testTimeout was removed; no assertion touched.
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary

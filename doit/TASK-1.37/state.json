@@ -559,7 +559,14 @@
       "skips": 0
     }
   },
-  "history": [],
+  "history": [
+    {
+      "t": "2026-11-25T17:06:59",
+      "event": "unlock",
+      "file": "tests/ci/retry.reap.test.ts",
+      "reason": "TASK-7.18 Q-3 (auto-accepted): global testTimeout removed; add one vi.setConfig({ testTimeout: 30_000 }) line only, no assertion touched"
+    }
+  ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-1.37",
   "spec_sha256": "b20a1ae0f34654392cefd2571b00210b8849756a5fb1737ad2cd008e88e0d693",
   "review_findings": {
@@ -568,5 +575,8 @@
   "judge_results": {
     "1": "PASS"
   },
-  "doc_id": "doc-37"
+  "doc_id": "doc-37",
+  "relock_pending": [
+    "tests/ci/retry.reap.test.ts"
+  ]
 }

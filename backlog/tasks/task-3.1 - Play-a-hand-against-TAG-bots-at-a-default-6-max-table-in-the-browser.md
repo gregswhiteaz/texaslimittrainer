@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-25T23:14:00Z'
+updated_date: '2026-11-26T00:07:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-0
@@ -101,6 +101,8 @@ Locked test re-pinned by TASK-3.9 block 1 (botId on CompletedHand seats; auto-ac
 Locked e2e/table.spec.ts unlocked for TASK-8.1 (BUTTON_NAME allow-list gains Hint; no assertion change).
 
 Locked tests/table/session.acceptance.test.ts unlocked for TASK-6.22 Q-1 (expected bot action computed with the seeded decision).
+
+Locked test(s) unlocked for TASK-7.18 Q-3: one vi.setConfig({ testTimeout: 30_000 }) line added after the global testTimeout was removed; no assertion touched.
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary
