@@ -3,24 +3,24 @@
     "id": "SPEC-01",
     "verifies": "AC#1",
     "verification": "unit `tests/stats/preflop-pairing.test.ts::handCategoryDecisions computes the seat list and group once per hand`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-02",
     "verifies": "AC#1",
     "verification": "unit `tests/stats/preflop-pairing.test.ts::handCategoryDecisions only computes the group when a preflop decision pairs`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-03",
     "verifies": "AC#2",
     "verification": "command `grep -q \"import { userMade } from '../table/hand-record';\" src/stats/leaks.ts && ! grep -qE \"'(small|big)-blind'\" src/stats/leaks.ts && grep -q \"^export function userMade\" src/table/hand-record.ts && npx vitest run tests/stats/preflop-pairing.test.ts -t \"skips the user's blind\"`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-04",
     "verifies": "AC#1, AC#2",
     "verification": "command `git diff --exit-code --diff-filter=MD e6bea12 -- tests e2e && npm test`",
-    "status": "pending"
+    "status": "pass"
   }
 ]

@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-25T06:45:00Z'
-updated_date: '2026-11-26T18:29:00Z'
+updated_date: '2026-11-26T18:38:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -27,8 +27,8 @@ Follow-up from TASK-10.6 code review (doc-131). handCategoryDecisions recomputes
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Given a hand with several user preflop decisions, When handCategoryDecisions runs, Then the seat list and user position group are computed once per hand and every existing leak test still passes unchanged
-- [ ] #2 Given the user's non-blind action filter, When leaks.ts pairs decisions, Then it reuses the hand-record helper instead of a copy, with the same results
+- [x] #1 Given a hand with several user preflop decisions, When handCategoryDecisions runs, Then the seat list and user position group are computed once per hand and every existing leak test still passes unchanged
+- [x] #2 Given the user's non-blind action filter, When leaks.ts pairs decisions, Then it reuses the hand-record helper instead of a copy, with the same results
 <!-- AC:END -->
 
 ## Implementation Plan
@@ -45,4 +45,6 @@ Full spec: doit/TASK-10.15/spec.md
 
 <!-- SECTION:NOTES:BEGIN -->
 Build: leaks.ts reuses exported userMade; position group computed once per hand (lazy); no existing test changed; gate PASS
+
+Judge r1 PASS (4/4 SPEC items; base-vs-head differential identical)
 <!-- SECTION:NOTES:END -->

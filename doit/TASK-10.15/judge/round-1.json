@@ -1,0 +1,44 @@
+{
+ "round": 1,
+ "test_suite": {
+  "command": "npm test",
+  "result": "PASS",
+  "passed": 1478,
+  "failed": 0,
+  "notes": "330 files passed, 9 skipped; 56 tests skipped (slow opt-in); coverage thresholds met. typecheck and lint also pass. CI run 45876467250 still in progress at judging time (Visual run passed)."
+ },
+ "end_to_end": {
+  "command": "npx vitest run tests/stats tests/table/session-report.test.ts tests/ui/report-leaks.acceptance.test.tsx tests/ui/report-preflop-leaks.acceptance.test.tsx",
+  "result": "PASS",
+  "expected": "All leak, session-report and report UI leak tests pass; leak output identical to base",
+  "actual": "21 files passed (1 skipped), 97 tests passed. Base-vs-head differential: 200000 fuzzed CategoryHands (incl. user not dealt in, missing button, duplicated action refs, blind records, misaligned decisions) give identical handCategoryDecisions output, identical thrown errors (1889 throws) and identical categoryCounts; 60 generated sessions (2-10 players, random user actions, real engine/bots, handRecord) give byte-identical sessionReport JSON incl. leakCounts (1061 leak rows, 507 preflop) and identical sessionLeaks. Seats read at most once per call. Differential was confirmed to catch mutants (eager/non-??= group, changed raisedBefore rule)."
+ },
+ "integrity": {
+  "result": "PASS",
+  "notes": "doit.py test-integrity exit 0. git diff e6bea12 -- tests e2e shows only the new tests/stats/preflop-pairing.test.ts. src diff: hand-record.ts adds only 'export' to userMade; leaks.ts imports userMade, pairs by reference against made[j], computes group with ??= lazily; inline blind check removed. No special-casing, hard-coded values or early returns."
+ },
+ "items": [
+  {
+   "spec": "SPEC-01",
+   "result": "PASS",
+   "evidence": "npx vitest run tests/stats/preflop-pairing.test.ts \u2192 3/3 pass. Test counts seats getter reads (asserts 1; base code would read 3) and asserts spots and categoryCounts. Holdout: fuzz over 200000 hands, max seat reads per call = 1, outputs identical to base; a mutant without the once-only guard is caught (reads 2)."
+  },
+  {
+   "spec": "SPEC-02",
+   "result": "PASS",
+   "evidence": "Test asserts 0 reads when nothing pairs, no throw for undealt user seat with postflop-only decision, and RangeError('Seat 7 is not dealt in') when a preflop decision pairs. Holdout fuzz: all 1889 base throws reproduced with identical class+message; no extra or missing throws."
+  },
+  {
+   "spec": "SPEC-03",
+   "result": "PASS",
+   "evidence": "SPEC-03 command (import grep, no blind literals, exported userMade, -t \"skips the user's blind\") \u2192 exit 0, 1 passed. userMade body unchanged (diff is only the export keyword). Holdout: real generated sessions where the user posts blinds produce identical preflop spots to base."
+  },
+  {
+   "spec": "SPEC-04",
+   "result": "PASS",
+   "evidence": "git diff --exit-code --diff-filter=MD e6bea12 -- tests e2e \u2192 exit 0; npm test \u2192 exit 0, 1478 passed, 0 failed, including locked TASK-10.5/10.6 acceptance tests."
+  }
+ ],
+ "findings": [],
+ "summary": "Pure refactor verified: all four SPEC items pass, full suite green, and a base-vs-head differential over 200k fuzzed hands and 60 generated sessions shows identical leak output and errors, with seats read at most once per hand. No findings."
+}
