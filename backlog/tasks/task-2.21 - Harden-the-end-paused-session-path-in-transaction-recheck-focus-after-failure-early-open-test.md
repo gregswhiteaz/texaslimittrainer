@@ -7,7 +7,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-24T18:44:00Z'
-updated_date: '2026-11-25T20:56:00Z'
+updated_date: '2026-11-26T11:53:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -54,6 +54,8 @@ Build: in-transaction already-ended recheck (ConstraintError, no write); focus r
 Judge r1 PASS 5/5, no findings: two real tabs — ending the paused session in tab 2 makes tab 1 End session and start fail cleanly (logged, focus on Start game, nothing overwritten), next Start game works; own hold keeps the Table closed until the end commits; endPausedSessions with C ended mid-gap leaves C untouched (base code overwrote it). Full e2e 375 pass. CI 45697325125 green.
 
 Follow-ups: TASK-2.23 (tidy new tests). TASK-2.7 SPEC-08 weakness covered by the new e2e; no change.
+
+Locked tests end-recheck and end-session-hardening unlocked for TASK-2.23 tidy (no check removed)
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary

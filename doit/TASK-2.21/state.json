@@ -2029,7 +2029,20 @@
       "skips": 0
     }
   },
-  "history": [],
+  "history": [
+    {
+      "t": "2026-11-26T04:53:51",
+      "event": "unlock",
+      "file": "e2e/end-session-hardening.spec.ts",
+      "reason": "TASK-2.23 AC#1-2: tidy (one endSession call per case, both matchers kept; non-null assertion replaces cast) \u2014 no check removed"
+    },
+    {
+      "t": "2026-11-26T04:53:51",
+      "event": "unlock",
+      "file": "tests/storage/end-recheck.acceptance.test.ts",
+      "reason": "TASK-2.23 AC#1-2: tidy (one endSession call per case, both matchers kept; non-null assertion replaces cast) \u2014 no check removed"
+    }
+  ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-2.21",
   "spec_sha256": "c37f922e14497c6a251d4c4036c40fdda65bf197573e017bd4ee6a06f2bf6941",
   "review_findings": {
@@ -2038,5 +2051,9 @@
   "judge_results": {
     "1": "PASS"
   },
-  "doc_id": "doc-147"
+  "doc_id": "doc-147",
+  "relock_pending": [
+    "e2e/end-session-hardening.spec.ts",
+    "tests/storage/end-recheck.acceptance.test.ts"
+  ]
 }

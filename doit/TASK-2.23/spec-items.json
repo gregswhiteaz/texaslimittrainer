@@ -1,0 +1,26 @@
+[
+  {
+    "id": "SPEC-01",
+    "verifies": "AC#1",
+    "verification": "acceptance `tests/storage/end-recheck.acceptance.test.ts::an already-ended session is not ended again`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-02",
+    "verifies": "AC#1",
+    "verification": "command `grep -c \"endSession(\" tests/storage/end-recheck.acceptance.test.ts` \u2192 1; `grep -c \"toBeInstanceOf(DOMException)\" tests/storage/end-recheck.acceptance.test.ts` \u2192 1; `grep -c \"name: 'ConstraintError'\" tests/storage/end-recheck.acceptance.test.ts` \u2192 2; `grep -c \"toBe(ENDED_AT)\" tests/storage/end-recheck.acceptance.test.ts` \u2192 2",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-03",
+    "verifies": "AC#2",
+    "verification": "acceptance `e2e/end-session-hardening.spec.ts::the Table opens only after the paused session is ended` plus command `grep -c \" as string\" e2e/end-session-hardening.spec.ts` \u2192 0",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-04",
+    "verifies": "AC#1, AC#2",
+    "verification": "command `npm test && npm run lint && npm run typecheck && npx playwright test e2e/end-session-hardening.spec.ts`",
+    "status": "pending"
+  }
+]

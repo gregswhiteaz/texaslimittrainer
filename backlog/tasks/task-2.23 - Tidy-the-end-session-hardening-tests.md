@@ -1,9 +1,11 @@
 ---
 id: TASK-2.23
 title: Tidy the end-session hardening tests
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-25T20:56:00Z'
+updated_date: '2026-11-26T11:54:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -28,3 +30,13 @@ Follow-up from TASK-2.21 review (doc-147). Each case in tests/storage/end-rechec
 - [ ] #1 Given the end-recheck unit cases, When they run, Then each calls endSession once and asserts both DOMException and the ConstraintError name, with no check lost
 - [ ] #2 Given the hardening e2e, When read, Then the sessionId cast is replaced by an asserted non-null value
 <!-- AC:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. end-recheck: one endSession promise per case, both matchers awaited on it
+2. end-session-hardening e2e: runtime guard replaces the sessionId cast
+3. grep checks that every assertion is kept
+
+Full spec: doit/TASK-2.23/spec.md
+<!-- SECTION:PLAN:END -->
