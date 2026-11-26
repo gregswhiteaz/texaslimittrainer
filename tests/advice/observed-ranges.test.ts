@@ -3,6 +3,7 @@ import { computeEquity, type EquityInput, type EquityResult } from '../../src/ad
 import { comboCount, HAND_CLASSES } from '../../src/advice/hand-class';
 import { recommendPostflop, toPct } from '../../src/advice/postflop';
 import {
+  DEFAULT_RANGES,
   defaultRange,
   estimateOpponentRanges,
   expandRange,
@@ -224,6 +225,23 @@ describe('range width and scaling', () => {
     expect(at(150)?.widthPct).toBeCloseTo(35, 9);
     expect(at(150)?.start).toEqual(at(100)?.start);
     expect(at(150)?.basis.text).toBe('based on 150 hands of this opponent');
+  });
+
+  it('scaledWidthPct is exactly the observed stat from 100 hands', () => {
+    const ranges = Object.values(DEFAULT_RANGES).flatMap((r) => r.ranges);
+    expect(ranges.length).toBeGreaterThan(0);
+    for (const range of ranges) {
+      const d = rangeWidthPct(range.classes);
+      for (const o of [0, 37.5, 100]) {
+        for (const n of [100, 150]) expect(scaledWidthPct(d, o, n)).toBe(o);
+        for (const n of [30, 50, 99]) expect(scaledWidthPct(d, o, n)).toBe(d + ((o - d) * n) / 100);
+      }
+    }
+    const view = toActView(MULTIWAY);
+    const range = estimateOpponentRanges(view, [entry({ hands: 150, vpip: 0, pfr: 0 })]).find(
+      (r) => r.seat === 4,
+    );
+    expect(range?.widthPct).toBe(0);
   });
 
   it('scales each line by its stat: PFR for raises, VPIP for calls', () => {

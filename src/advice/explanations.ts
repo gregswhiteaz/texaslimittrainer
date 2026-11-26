@@ -90,6 +90,20 @@ export const CONCEPTS: readonly Concept[] = [
   },
 ];
 
+/** Replaces {key} from `values` and {def:<ConceptId>} with that concept's definition.
+ *  Throws Error(`Unknown template placeholder {<name>}`) for any other placeholder. */
+export function fillTemplate(template: string, values: Readonly<Record<string, string>>): string {
+  return template.replace(/\{([^{}]+)\}/g, (_, name: string) => {
+    const value = name.startsWith('def:')
+      ? CONCEPTS.find((c) => c.id === name.slice(4))?.definition
+      : Object.hasOwn(values, name)
+        ? values[name]
+        : undefined;
+    if (value === undefined) throw new Error(`Unknown template placeholder {${name}}`);
+    return value;
+  });
+}
+
 /** Observed hands from which an opponent's range follows their stats; ranges.ts re-exports it. */
 export const OBSERVED_MIN_HANDS = 30;
 /** Basis of an opponent's range: the default range, or one rebuilt from that opponent's observed stats. */
@@ -100,7 +114,7 @@ export const OBSERVED_BASIS = 'based on {hands} hands of this opponent';
 export function basisText(observedHands: number | null): string {
   return observedHands === null
     ? TYPICAL_PLAYER_BASIS
-    : OBSERVED_BASIS.replace('{hands}', String(observedHands));
+    : fillTemplate(OBSERVED_BASIS, { hands: String(observedHands) });
 }
 /** Lead clause joined to the first sentence when any range rests on observed stats (keeps REQ-037's 3 sentences). */
 export const OPPONENT_TYPE_LEAD =

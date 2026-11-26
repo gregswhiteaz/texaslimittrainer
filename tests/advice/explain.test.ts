@@ -1,3 +1,5 @@
+import { readdirSync, readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import {
   basisText,
@@ -12,6 +14,7 @@ import {
   CHART_NAMES,
   CHART_POSITIONS,
   CONCEPTS,
+  fillTemplate as explanationsFillTemplate,
   POSTFLOP_TEMPLATES,
   PREFLOP_CONTEXT,
   PREFLOP_SENTENCES,
@@ -23,6 +26,7 @@ import type { PostflopRecommendation } from '../../src/advice/postflop';
 import type { PreflopRecommendation } from '../../src/advice/preflop';
 import type { ChartCell, Position, Situation } from '../../src/advice/preflop-chart';
 import { RANK_CHARS } from '../../src/engine/cards';
+import { REPO_ROOT } from '../support/sandbox';
 
 const EQUITY = 'your share of the pot if the hand were played out to the end';
 const POT_ODDS = 'the cost of a call as a share of the pot after you call';
@@ -103,6 +107,40 @@ describe('explanation helpers', () => {
     expect(() => fillTemplate('{toString}', {})).toThrow(
       new Error('Unknown template placeholder {toString}'),
     );
+  });
+});
+
+describe('template filling', () => {
+  /** The source between `export function <name>(` and the next line that is just `}`. */
+  const bodyOf = (source: string, name: string) => {
+    const start = source.indexOf(`export function ${name}(`);
+    return { start, end: source.indexOf('\n}\n', start) };
+  };
+
+  it('src/advice fills placeholders only through fillTemplate', () => {
+    const dir = join(REPO_ROOT, 'src/advice');
+    const files = readdirSync(dir, { recursive: true, encoding: 'utf8' }).filter((f) =>
+      f.endsWith('.ts'),
+    );
+    const call = /\.replace(?:All)?\(\s*(\/(?:\\.|[^/\n])+\/[a-z]*|'[^']*'|"[^"]*"|`[^`]*`)/g;
+    const fillers: { file: string; index: number }[] = [];
+    for (const file of files) {
+      const source = readFileSync(join(dir, file), 'utf8');
+      for (const match of source.matchAll(call)) {
+        const arg = match[1] as string;
+        const fills = arg.startsWith('/') ? arg.includes('\\{') : arg.includes('{');
+        if (fills) fillers.push({ file, index: match.index });
+      }
+    }
+    expect(fillers.map((f) => f.file)).toEqual(['explanations.ts']);
+    const source = readFileSync(join(dir, 'explanations.ts'), 'utf8');
+    const fill = bodyOf(source, 'fillTemplate');
+    expect(fill.start).toBeGreaterThanOrEqual(0);
+    expect(fillers[0]?.index).toBeGreaterThan(fill.start);
+    expect(fillers[0]?.index).toBeLessThan(fill.end);
+    const basis = bodyOf(source, 'basisText');
+    expect(source.slice(basis.start, basis.end)).toContain('fillTemplate(OBSERVED_BASIS');
+    expect(fillTemplate).toBe(explanationsFillTemplate);
   });
 });
 

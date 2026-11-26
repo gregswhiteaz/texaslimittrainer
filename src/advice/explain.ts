@@ -3,7 +3,7 @@ import {
   CHART_BASIS,
   CHART_NAMES,
   CHART_POSITIONS,
-  CONCEPTS,
+  fillTemplate,
   OBSERVED_MIN_HANDS,
   OPPONENT_TYPE_LEAD,
   POSTFLOP_TEMPLATES,
@@ -21,25 +21,11 @@ import type { PostflopRecommendation } from './postflop';
 import type { PreflopRecommendation } from './preflop';
 import type { Position, Situation } from './preflop-chart';
 
-export { basisText } from './explanations';
+export { basisText, fillTemplate } from './explanations';
 
 /** `${pct.toFixed(1)}%`. */
 export function formatPct(pct: number): string {
   return `${pct.toFixed(1)}%`;
-}
-
-/** Replaces {key} from `values` and {def:<ConceptId>} with that concept's definition.
- *  Throws Error(`Unknown template placeholder {<name>}`) for any other placeholder. */
-export function fillTemplate(template: string, values: Readonly<Record<string, string>>): string {
-  return template.replace(/\{([^{}]+)\}/g, (_, name: string) => {
-    const value = name.startsWith('def:')
-      ? CONCEPTS.find((c) => c.id === name.slice(4))?.definition
-      : Object.hasOwn(values, name)
-        ? values[name]
-        : undefined;
-    if (value === undefined) throw new Error(`Unknown template placeholder {${name}}`);
-    return value;
-  });
 }
 
 function rankName(rank: string) {

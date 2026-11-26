@@ -343,9 +343,10 @@ export function rangeWidthPct(classes: ReadonlySet<HandClass>): number {
   return (combos / ALL_COMBOS) * 100;
 }
 
-/** d + (o − d) × min(n, 100) ÷ 100: the default width moved toward the observed one. */
+/** d + (o − d) × n ÷ 100: the default width moved toward the observed one; exactly o from 100 hands. */
 export function scaledWidthPct(d: number, o: number, n: number): number {
-  return d + ((o - d) * Math.min(n, OBSERVED_FULL_HANDS)) / OBSERVED_FULL_HANDS;
+  if (n >= OBSERVED_FULL_HANDS) return o;
+  return d + ((o - d) * n) / OBSERVED_FULL_HANDS;
 }
 
 /** The shortest HAND_ORDER prefix whose combos reach `widthPct` % of 1326, at least AA (A-1). */

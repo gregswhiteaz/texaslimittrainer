@@ -1,0 +1,15 @@
+## BUILD (TASK-7.30)
+- `src/advice/ranges.ts`: `scaledWidthPct` early-returns `o` for `n >= OBSERVED_FULL_HANDS`; below 100 hands it computes `d + ((o - d) * n) / 100` (same operation order as before, `Math.min` dropped as redundant per A-1).
+- `src/advice/explanations.ts`: `fillTemplate` moved here unchanged; `basisText` calls `fillTemplate(OBSERVED_BASIS, { hands: String(observedHands) })`.
+- `src/advice/explain.ts`: own `fillTemplate` and `CONCEPTS` import removed; imports `fillTemplate` from `./explanations` and re-exports `{ basisText, fillTemplate }`. The `POT_ODDS_LEAD` phrase swap stays (A-2).
+- Tests: new `tests/advice/observed-range-tidy.acceptance.test.ts` (2/2: AC#1, AC#2); `observed-ranges.test.ts` adds `scaledWidthPct is exactly the observed stat from 100 hands`; `explain.test.ts` adds `src/advice fills placeholders only through fillTemplate`. No locked test edited; no blocked.json.
+- Note: spec §2/§7 says 90 default ranges; `DEFAULT_RANGES` actually holds 102. SPEC-03's test loops over all of them, so it does not pin the count.
+- `npm run format` (clean), `npm run typecheck` (clean), `npm run lint` (exit 0).
+- `npm test`: 329 files passed, 7 skipped; 1466 tests passed, 52 skipped; coverage thresholds held.
+- `npm run -s playtest -- --hands 10000 --seed 42 | shasum -a 256`:
+  - before: `f6c8d1724d90bb27a8b4cae912586341fad7f614a926a31bd040e14fde947cbc`
+  - after: `f6c8d1724d90bb27a8b4cae912586341fad7f614a926a31bd040e14fde947cbc`, `Invariant violations: 0`
+- `npm run -s playtest -- --check-advice --hands 3000 --seed 42 | shasum -a 256`:
+  - before: `1b057087831676b9a77089bb7f0305b7e92fddb0e5893535210a6ff9fa00f40b`
+  - after: `1b057087831676b9a77089bb7f0305b7e92fddb0e5893535210a6ff9fa00f40b`, `Advice check: 26503 decision points, 0 mismatches`
+- Scope: about 206 changed lines against a budget of 140 (warn band; the gate fails above 280). Most of the overrun is the new acceptance file (114 lines vs ≈60 estimated), because the spec requires copying the locked file's `deckWith`/`stateAfter`/`toActView` helpers into it. After the full run, AC#2 was trimmed to reuse the CO-open hand; the file was rerun on its own (2/2), and lint and typecheck were clean again.
