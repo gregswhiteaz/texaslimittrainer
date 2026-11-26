@@ -25,3 +25,8 @@ hands ahead), `6max-river-sb-check-qjo`, `6max-river-utg-fold-t9s`, `6max-river-
 `6max-turn-bb-check-85s` (non-playing kicker dropped). `docs/advice/golden-spots.md` "Adding a spot" step 2 now
 states the Major-error rule (a borderline Minor step is allowed). `fr-flop-bb-raise-a3s` kept its justification,
 which is still accurate for its unchanged cards and board.
+
+Fix round 2 (judge r1): `tests/golden/postflop-spots.json` wording only, no decisions, cards or values changed. Made-hand
+wording now matches the evaluator (board pair or higher board card that plays) in `6max-turn-utg-check-t9s`,
+`6max-turn-bb-check-q8o`, `6max-turn-bb-check-a3o`, `6max-turn-co-check-a2s`, `6max-turn-utg-fold-k9s`,
+`fr-river-utg-fold-jts`, `hu-river-bb-check-t8o`, `hu-river-btn-fold-t7s` and `fr-river-utg-call-aks`.

@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-24T06:32:00Z'
-updated_date: '2026-11-26T05:34:00Z'
+updated_date: '2026-11-26T06:08:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -48,4 +48,6 @@ Full spec: doit/TASK-7.31/spec.md
 
 <!-- SECTION:NOTES:BEGIN -->
 Build: validator rejects Major hero preflop steps; clear-cut throw becomes a problem; 72 spots re-authored (10 action fix, 59 hole swap, 2 line change, 92o kings-full); coverage pinned 120/45/40/35; gate PASS
+
+Judge r1 FAIL on SPEC-08 (3 justifications name the hero's high card where a board card/pair plays). doit.py verdict is not idempotent: calling it twice inflated SPEC-08 item_failures to 4; reset to 1 (one real failure).
 <!-- SECTION:NOTES:END -->

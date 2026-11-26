@@ -1518,6 +1518,12 @@
       "event": "unlock",
       "file": "tests/golden/postflop-spots.json",
       "reason": "TASK-7.31 review r1: justification accuracy fixes (92o MAJOR + X-high MINORs)"
+    },
+    {
+      "t": "2026-11-25T23:08:57",
+      "event": "unlock",
+      "file": "tests/golden/postflop-spots.json",
+      "reason": "TASK-7.31 judge r1 J-1-01/02: justification wording only"
     }
   ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-7.14",
@@ -1530,6 +1536,7 @@
   "relock_pending": [
     "tests/golden/postflop-spots.json",
     "tests/golden/graded-examples.json",
+    "tests/golden/postflop-spots.json",
     "tests/golden/postflop-spots.json",
     "tests/golden/postflop-spots.json",
     "tests/golden/postflop-spots.json",

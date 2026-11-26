@@ -664,7 +664,7 @@
       "board": "Ks 5s 5h 8d",
       "before": ["raise", "fold", "fold", "fold", "fold", "call", "check", "bet", "call", "check"],
       "action": "check",
-      "justification": "Our flop continuation bet was called, and ten-nine has only ten-high on a king-high paired board, with little equity against that calling range. Check the turn rather than bluff a big bet into a player who has already shown interest."
+      "justification": "Our flop continuation bet was called, and ten-nine has no pair of its own, only the board's fives with a king kicker, with little equity against that calling range. Check the turn rather than bluff a big bet into a player who has already shown interest."
     },
     {
       "id": "6max-turn-bb-check-q8o",
@@ -675,7 +675,7 @@
       "board": "9h 9s 2h 4d",
       "before": ["fold", "fold", "fold", "raise", "fold", "call", "check", "check"],
       "action": "check",
-      "justification": "Queen-high on a paired board has some showdown chance against a button that also checked the flop, but its equity against any calling hand is poor. Check again, because a bet would fold out weaker hands and keep only better ones."
+      "justification": "Queen-eight has no pair of its own, only the board's nines with a queen kicker, which has some showdown chance against a button that also checked the flop, but its equity against any calling hand is poor. Check again, because a bet would fold out weaker hands and keep only better ones."
     },
     {
       "id": "6max-turn-bb-check-a3o",
@@ -686,7 +686,7 @@
       "board": "Jh Jc 4s Ts",
       "before": ["raise", "fold", "fold", "fold", "fold", "call", "check", "bet", "call"],
       "action": "check",
-      "justification": "Ace-high on a jack-high paired board has very little equity once the raiser has bet and we have only called. Check and let the opener act, because betting into its pairs and broadway hands would be a poor bluff."
+      "justification": "Ace-three has no pair of its own, only the board's jacks with an ace kicker, which has very little equity once the raiser has bet and we have only called. Check and let the opener act, because betting into its pairs and broadway hands would be a poor bluff."
     },
     {
       "id": "6max-turn-co-check-a2s",
@@ -697,7 +697,7 @@
       "board": "8d Js 8s 5d",
       "before": ["fold", "fold", "raise", "raise", "fold", "fold", "call", "bet", "call"],
       "action": "check",
-      "justification": "Ace-deuce still has only ace-high, and the button called our flop bet with a re-raising range full of pairs. Check the turn, since our equity against hands that would call a big bet is small."
+      "justification": "Ace-deuce still has no pair of its own, only the board's eights with an ace kicker, and the button called our flop bet with a re-raising range full of pairs. Check the turn, since our equity against hands that would call a big bet is small."
     },
     {
       "id": "6max-turn-sb-check-a6o",
@@ -866,7 +866,7 @@
       "board": "As 8d 6d Qh",
       "before": ["raise", "fold", "fold", "fold", "fold", "call", "check", "bet", "call", "bet"],
       "action": "fold",
-      "justification": "King-high with no draw is in poor shape once the big blind check-calls the flop and then leads the turn on an ace-high board. The pot odds need far more equity than king-nine has, so fold."
+      "justification": "King-nine has no pair and no draw, only the board's ace high, so it is in poor shape once the big blind check-calls the flop and then leads the turn. The pot odds need far more equity than we hold, so fold."
     },
     {
       "id": "6max-turn-co-fold-22",
@@ -1679,7 +1679,7 @@
       "board": "9s Jh Jd 3h 4s",
       "before": ["raise", "call", "check", "check", "check", "bet", "call"],
       "action": "check",
-      "justification": "Ten-high with a missed straight draw can still win at showdown against a button that bet only the turn, but no hand that calls a bet is worse. Check, since a bet would not be a value bet."
+      "justification": "Ten-eight missed its straight draw and has no pair of its own, only the board's jacks with a ten kicker, which can still win at showdown against a button that bet only the turn, but no hand that calls a bet is worse. Check, since a bet would not be a value bet."
     },
     {
       "id": "hu-river-btn-call-q9s",
@@ -1712,7 +1712,7 @@
       "board": "8d Kc 9h 5h Qc",
       "before": ["raise", "call", "check", "check", "check", "bet", "call", "bet"],
       "action": "fold",
-      "justification": "Our straight draw and flush draw both missed, so ten-seven ends with only ten-high. Against a river bet that hand has almost no equity, and folding saves the big bet."
+      "justification": "Our straight draw and flush draw both missed, so ten-seven ends with no pair, only the board's king high. Against a river bet that hand has almost no equity, and folding saves the big bet."
     },
     {
       "id": "hu-river-bb-raise-k9o",
@@ -1850,7 +1850,7 @@
         "bet"
       ],
       "action": "call",
-      "justification": "Ace-king has only ace-high with the board's pair of deuces, yet that is a fair bluff catcher against a big blind that called our turn bet and then led the river. The pot odds ask for about one win in six, so call rather than fold or raise."
+      "justification": "Ace-king has no pair of its own, only the board's deuces with an ace-king kicker, yet that is a fair bluff catcher against a big blind that called our turn bet and then led the river. The pot odds ask for about one win in six, so call rather than fold or raise."
     },
     {
       "id": "fr-river-utg-fold-jts",
@@ -1876,7 +1876,7 @@
         "bet"
       ],
       "action": "fold",
-      "justification": "Jack-ten of clubs called the turn with no pair and no draw, and now the big blind bets the river too. Jack-high almost never beats a player who bets the turn and river, so our equity is too low for the pot odds."
+      "justification": "Jack-ten of clubs called the turn with no pair and no draw, and now the big blind bets the river too. With only the board's king high, we almost never beat a player who bets the turn and river, so our equity is too low for the pot odds."
     }
   ]
 }

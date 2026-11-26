@@ -1,0 +1,87 @@
+{
+ "round": 1,
+ "test_suite": {
+  "command": "npm test",
+  "result": "PASS",
+  "passed": 1439,
+  "failed": 0,
+  "notes": "318 files passed, 6 skipped; 1439 tests passed, 48 skipped, exit 0. npm run lint exit 0, npm run typecheck exit 0. npx vitest run tests/golden/: 6 files, 288 tests passed in 1.08 s."
+ },
+ "end_to_end": {
+  "command": "npx vitest run tests/golden/",
+  "result": "PASS",
+  "expected": "Golden suite green; with one re-authored spot restored to its old chart-fold line, the suite fails with the A-5 hero-line text naming that spot; 92o reads kings full",
+  "actual": "Golden suite 288/288 green. In a scratch worktree with 6max-turn-utg-fold-82o restored (old UTG 82o open), 2 golden files fail with 'Golden spot 6max-turn-utg-fold-82o: hero preflop step 1 \"raise\" is a Major error on the chart (6-max UTG unopened 82o: fold)'. 6max-turn-bb-raise-92o keeps 2c 9d, line call,fold x4,check,bet,call,bet,raise, justification says 'kings full' with no 'set of kings'. Justification spot-check: see SPEC-08."
+ },
+ "integrity": {
+  "result": "PASS",
+  "notes": "doit.py test-integrity exit 0, no output. git diff 5a1b2a3 -- tests/ lists only postflop-golden.test.ts, postflop-lines.acceptance.test.ts and postflop-spots.json (the latter unlocked under Q-1). golden.ts diff adds heroPreflopProblems (real recommendPreflop + gradeDecision, no id or input recognition) and a try/catch around clearCutProblems; no hard-coded expected values, mocks of the unit under test or early exits."
+ },
+ "items": [
+  {
+   "spec": "SPEC-01",
+   "result": "PASS",
+   "evidence": "Acceptance test passes; it replays each spot independently with createHand/playerView and grades with recommend+gradeDecision, collecting majors and empty-decision spots (can fail: a restored old spot makes the golden suite fail). Independent audit through the public engine: 0 of 120 spots have a Major hero preflop step, every spot has at least one hero preflop decision; 5 steps grade Minor (UTG/MP limps, one SB open), allowed by A-3 and documented."
+  },
+  {
+   "spec": "SPEC-02",
+   "result": "PASS",
+   "evidence": "Acceptance test passes with exact toEqual. Independent probes: BTN 72o open gives exactly the A-5 text (6-max BTN unopened 72o: fold); KQs accepted; full-ring UTG 72o rejected with the full-ring cell; a hero who opens 72o and calls a 3-bet gets two problems (steps 4 and 7); BB checking its option with 72o is accepted; a Major line is listed alongside an invalid-opponent-stats problem; an illegal before list gives no hero-line message and no crash; the advice function is not called for a Major-line spot (D-2)."
+  },
+  {
+   "spec": "SPEC-03",
+   "result": "PASS",
+   "evidence": "Acceptance test passes. Independent: real-advice parse of the file succeeds; counts equal A-8 (flop 45/turn 40/river 35; 6/2/9 seats 86/18/16; call 27, raise 24, bet 23, check 23, fold 23; multiway 20; observed 4); street/seats/action multiset identical to the base file; checkGoldenSpot null for all 120. Docs-table pairing check: every old->new pair keeps street, seats, action and observed-stats status."
+  },
+  {
+   "spec": "SPEC-04",
+   "result": "PASS",
+   "evidence": "Acceptance test passes. JSON read directly: id 6max-turn-bb-raise-92o exists, contains 'kings full', no 'set of kings'. The list of hands ahead (kings full, nines full, fours full, a nine with a kicker above the four) checked against the board 9h 4h Ks 9c with 2c 9d: complete."
+  },
+  {
+   "spec": "SPEC-05",
+   "result": "PASS",
+   "evidence": "Acceptance test passes. Independent: NaN equity gives exactly ['Golden spot j: clear-cut check failed (equityPct must be a finite number, got NaN)'] as GoldenSpotValidationError; Infinity requiredEquityPct also becomes a listed problem, not a RangeError; two throwing spots plus one valid spot list exactly the two throwing ids; 'advice failed (boom)' text unchanged."
+  },
+  {
+   "spec": "SPEC-06",
+   "result": "PASS",
+   "evidence": "Unit test 'hero preflop line rule and guarded clear-cut check' passes and asserts each bullet with exact toEqual: borderline K7o limp accepted, turn spot reports only preflop step 4, HU BB call with 99 rejected with A-5 text (heads-up BB blind-defence 99: raise), throwing+valid file lists only 'a'. Existing advice-failed case still passes; HU second-pass probe now raise,raise,call."
+  },
+  {
+   "spec": "SPEC-07",
+   "result": "PASS",
+   "evidence": "Docs table has 72 data rows; old ids equal exactly the 72 spec \u00a73 ids and exactly the set of ids removed (60) or changed in place (12) in the JSON diff; each appears once; every new id exists in the file; every added id appears in the table. Rows name the old step, action and chart cell. Field rule (line 85-91), A-5 texts (lines 91, 133) and 'Adding a spot' step 2 (chart-consistent hero line, Minor allowed) present. Coverage section still reads 120 / 45 / 40 / 35 / 86 / 18 / 16 / 20 / 4."
+  },
+  {
+   "spec": "SPEC-08",
+   "result": "FAIL",
+   "evidence": "Fact-checked all 72 changed justifications against evaluator category, board and before-line replay (positions, who raised/limped, pot odds where quoted). 69 are accurate, including the 92o list of hands ahead, the pot-odds ratios (8.5:1, 7 small bets, ~6.75:1, 6:1, one in six) and the observed-stats wording. Three misname the hand: the hero's hand is described by a hole card although a higher board card plays (and in one case a board pair is ignored).",
+   "expected": "Every changed justification's made-hand wording matches the evaluator category and board (spec \u00a75 step 3, SPEC-08).",
+   "actual": "6max-turn-utg-check-t9s (Tc 9c on Ks 5s 5h 8d, evaluator one-pair: fives with king high) says 'ten-nine has only ten-high'. 6max-turn-utg-fold-k9s (Kc 9c on As 8d 6d Qh, plays ace-high off the board) says 'King-high with no draw'. fr-river-utg-fold-jts (Jc Tc on Ks 4c 5s 8d 2d, plays king-high off the board) says 'Jack-high almost never beats'.",
+   "observed_via": "evaluator category of hole cards + board at the decision street, compared with the JSON justification text"
+  },
+  {
+   "spec": "SPEC-09",
+   "result": "PASS",
+   "evidence": "npm run lint exit 0; npm run typecheck exit 0; npm test exit 0 (1439 passed, 0 failed); git diff --name-only 5a1b2a3 -- tests/ lists only tests/golden/postflop-golden.test.ts, tests/golden/postflop-lines.acceptance.test.ts and tests/golden/postflop-spots.json; locked postflop.acceptance/suite.acceptance/graded-examples/preflop files untouched; doit.py test-integrity clean."
+  }
+ ],
+ "findings": [
+  {
+   "id": "J-1-01",
+   "severity": "MEDIUM",
+   "spec": "SPEC-08",
+   "expected_vs_actual": "Expected the no-pair / board-pair wording to name the card or pair that actually plays (the convention applied in fix round 1). Actual: 6max-turn-utg-check-t9s says 'only ten-high' though the hand is the board's pair of fives with a king; 6max-turn-utg-fold-k9s says 'King-high' though the board ace plays; fr-river-utg-fold-jts says 'Jack-high' though the board king plays.",
+   "fix": "Reword those three justifications so the made hand matches the evaluator and board (e.g. 'only the board's pair of fives', 'only the board's ace high', 'only the board's king high'), keeping them distinct from every other id and justification."
+  },
+  {
+   "id": "J-1-02",
+   "severity": "LOW",
+   "spec": "SPEC-08",
+   "expected_vs_actual": "6max-flop-utg-fold-a9o (Ah 9c on 8d Qd 4h) says it has 'only ace-high and a backdoor straight draw'; it also has a backdoor heart flush draw (Ah with the 4h).",
+   "fix": "Optionally mention the backdoor flush draw or drop 'only'."
+  }
+ ],
+ "summary": "Code, tests, coverage, docs and the AC#2/AC#3 behaviour all verified independently: no Major hero preflop line remains, the validator rejects one with the exact A-5 text before advice runs, a clear-cut grading throw is a listed problem, coverage counts are exactly A-8, and the docs table maps all 72 changed spots. Full suite, lint and typecheck are green, and integrity is clean. SPEC-08 fails on three justifications that misname the hand when a higher board card or a board pair plays. This is the same class reviewers flagged in r1 and the builder fixed elsewhere. Wording fix only."
+}

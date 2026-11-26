@@ -135,3 +135,25 @@ Numbers are `goldenPostflopAdvice` (equity %, required %, equity vs calling rang
 - `changes.md`: fixed, notes `fr-flop-bb-raise-a3s` kept its justification.
 - Commands: `npx vitest run tests/golden/` 288 passed (6 files).
 - Full run: `npm run format` ok; `npm test` 1439 passed, 48 skipped (318 files passed, 6 skipped); `npm run lint` clean; `npm run typecheck` clean.
+
+## FIX round 2 (judge r1)
+
+- 1 SPEC-08: fixed. `6max-turn-utg-check-t9s` now "no pair of its own, only the board's fives with a king kicker"
+  (evaluator one-pair); `6max-turn-utg-fold-k9s` now "no pair and no draw, only the board's ace high" (high-card, As
+  plays); `fr-river-utg-fold-jts` now "With only the board's king high" (high-card, Ks plays).
+- Orchestrator exhaustive X-high pass: scratchpad script ran the evaluator on all 120 spots (hole + board), listed the
+  category, best five cards and suit counts, and every justification was read against it. Further hits fixed:
+  `6max-turn-bb-check-q8o` (board's nines with a queen kicker), `6max-turn-bb-check-a3o` (board's jacks with an ace
+  kicker), `6max-turn-co-check-a2s` (board's eights with an ace kicker), `hu-river-bb-check-t8o` (board's jacks with a
+  ten kicker; the open-ended draw on the turn is real), `hu-river-btn-fold-t7s` (board's king high; flush and
+  open-ended draws on the turn are real), `fr-river-utg-call-aks` (board's deuces with an ace-king kicker). Remaining
+  "X-high" uses are board or opponent descriptions, or hero high-card hands whose top card is the highest card in play
+  (`6max-flop-utg-check-a9o`, `6max-flop-utg-fold-a9o`, `6max-flop-bb-check-q9o`, `6max-flop-utg-fold-k9s`,
+  `6max-turn-co-fold-a2s`, `6max-turn-bb-fold-k3s`, `6max-turn-utg-fold-a7s`, `hu-turn-bb-fold-k4o`,
+  `fr-turn-bb-check-a6o`); all correct.
+- J-1-02 (`6max-flop-utg-fold-a9o` backdoor heart flush draw): disputed. Hole Ah 9c, flop 8d Qd 4h: only two hearts
+  (Ah, 4h), so no backdoor flush draw exists (needs three to a suit on the flop; turn and river add at most two).
+  Its "only ace-high and a backdoor straight draw" is accurate (ace is the highest card; 8-9-Q is three to 8-Q).
+  Left unchanged.
+- Commands: `npm run format` ok; `npx vitest run tests/golden/` 288 passed (6 files); `npm test` 1439 passed,
+  48 skipped (318 files passed, 6 skipped); `npm run lint` clean; `npm run typecheck` clean.
