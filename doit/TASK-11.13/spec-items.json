@@ -3,72 +3,72 @@
     "id": "SPEC-01",
     "verifies": "AC#1",
     "verification": "acceptance `tests/stats/trend-order.acceptance.test.tsx::AC#1 shuffled hands across sessions give the sorted-order points and totals`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-02",
     "verifies": "AC#2",
     "verification": "acceptance `tests/stats/trend-order.acceptance.test.tsx::AC#2 a session without a record orders by its earliest completedAt`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-03",
     "verifies": "AC#3",
     "verification": "command `grep -rn TEMPLATE_DECISIONS src tests e2e tools docs; test $? -eq 1`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-04",
     "verifies": "AC#3",
     "verification": "command `TLH_SLOW_TESTS=1 npx playwright test e2e/statistics-speed.spec.ts` (passes in both",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-05",
     "verifies": "AC#4",
     "verification": "acceptance `e2e/statistics-hardening.spec.ts::App takes the G-2 target from every stored hand under every filter`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-06",
     "verifies": "AC#4",
     "verification": "unit `tests/stats/trends.test.ts::filteredStatisticsView keeps the all-hands G-2 target under every filter`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-07",
     "verifies": "AC#5",
     "verification": "acceptance `e2e/statistics-hardening.spec.ts::an unknown filter value is treated as All`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-08",
     "verifies": "AC#5",
     "verification": "unit `tests/stats/trends.test.ts::filterOption keeps known ids and maps others to all`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-09",
     "verifies": "AC#5",
     "verification": "command `! grep -nE \"data === undefined|data!|as TrendData\" src/ui/App.tsx && npm run typecheck && npx vitest run tests/ui/screen-list.acceptance.test.ts`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-10",
     "verifies": "AC#6",
     "verification": "unit `tests/stats/trends.test.ts::day-grouping tests run in a pinned non-UTC time zone`, plus",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-11",
     "verifies": "AC#6",
     "verification": "manual Judge applies the mutation in a scratch working copy, then runs",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-12",
     "verifies": "AC#1, AC#2, AC#3, AC#4, AC#5, AC#6",
     "verification": "command `npm run lint && npm run typecheck && npm test && npm run e2e`",
-    "status": "pending"
+    "status": "pass"
   }
 ]

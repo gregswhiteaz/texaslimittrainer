@@ -1948,7 +1948,6 @@
   },
   "doc_id": "doc-138",
   "relock_pending": [
-    "tests/stats/trend-grouping.acceptance.test.tsx",
     "tests/stats/trend-grouping.acceptance.test.tsx"
   ]
 }

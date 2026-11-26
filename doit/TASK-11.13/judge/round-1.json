@@ -1,0 +1,99 @@
+{
+ "round": 1,
+ "test_suite": {
+  "command": "npm test",
+  "result": "PASS",
+  "passed": 1483,
+  "failed": 0,
+  "notes": "331 test files passed, 9 skipped; 56 tests skipped (opt-in). src/stats coverage 100% lines. Also TZ=UTC npx vitest run tests/stats: 98 passed."
+ },
+ "end_to_end": {
+  "command": "Spec \u00a710 Judge scenario: the 6 statistics e2e files; TLH_SLOW_TESTS=1 statistics-speed; TZ=UTC tests/stats + SPEC-11 mutation; the Run command (Vite dev server) driven through Playwright",
+  "result": "PASS",
+  "expected": "All statistics e2e pass in both browsers; the speed check passes in both; under every filter and grouping the dashed target value stays the same; a DOM-edited option value selected makes the select show All",
+  "actual": "16/16 statistics e2e passed; speed 2/2 passed (and 2 skipped when not opted in); the holdout flow against `vite` dev server and the preview build: the target aria-label was constant (all-hands value) across Day/Session and the filter combinations, and the 'x', '' and '__proto__' values showed All with the totals recomputed"
+ },
+ "integrity": {
+  "result": "PASS",
+  "notes": "doit.py test-integrity exit 0 with no output. Locked trend-grouping.acceptance diff is only the pinTimeZone import and the top-level call (unlock recorded in TASK-11.5 state.json). No special-casing, hard-coded expectations, mocks of the unit under test or early returns found in the product diff. NIT: TASK-11.5 relock_pending lists the same file twice."
+ },
+ "items": [
+  {
+   "spec": "SPEC-01",
+   "result": "PASS",
+   "evidence": "trend-order AC#1 passes (npm test + TZ=UTC tests/stats). Test asserts start order != id order, shuffled order != sorted, toEqual per grouping, independent 500-hand titles with a spanning slice and >1 distinct value, totals. Mutation: orderHands with no-op comparator -> AC#1 fails. Holdout: reverse + 3 independent random permutations over 3,000 hands give identical views for hands/session/day -> PASS."
+  },
+  {
+   "spec": "SPEC-02",
+   "result": "PASS",
+   "evidence": "trend-order AC#2 passes; asserts [[A,1],[A,2],[B,1],[B,2]] and session points (50, then 0). Mutation: Math.min->Math.max in the earliest-completedAt fallback -> AC#2 fails. Holdout: two recordless sessions where earliest and latest rules disagree, under every rotation of input -> PASS."
+  },
+  {
+   "spec": "SPEC-03",
+   "result": "PASS",
+   "evidence": "grep -rn TEMPLATE_DECISIONS src tests e2e tools docs -> no match (exit 1); typecheck and lint (prettier) pass."
+  },
+  {
+   "spec": "SPEC-04",
+   "result": "PASS",
+   "evidence": "TLH_SLOW_TESTS=1 npx playwright test e2e/statistics-speed.spec.ts -> 2 passed (chromium, webkit); unset -> 2 skipped. Observer code matches A-6 (6th circle, checkVisibility visibilityProperty, non-zero box, MutationObserver incl. attributes + rAF loop, started set just before click). Holdout mutation: style hiding circles (visibility:hidden, and separately r:0) removed 1,500 ms after click -> test fails with elapsed ~1,512 ms in both browsers, proving presence alone does not stop the timer and the rAF path catches style-only changes."
+  },
+  {
+   "spec": "SPEC-05",
+   "result": "PASS",
+   "evidence": "e2e/statistics-hardening.spec.ts 'App takes the G-2 target...' passes in chromium + webkit. Mutation: onGroupingChange passing filtered hands as the G-2 source -> test fails (aria-label lacks 'Dashed target line at 27.0'), so the r1 strengthening is effective. Holdout e2e (different store: 1,800 hands, reverse-seeded, session ids out of start order): target constant under Day and Session across several filter combos -> PASS against preview build and against the Vite dev server."
+  },
+  {
+   "spec": "SPEC-06",
+   "result": "PASS",
+   "evidence": "trends.test.ts 'filteredStatisticsView keeps the all-hands G-2 target' passes; asserts toEqual composition for 12 filters x 3 groupings, target equality, and null target for filtered-only views. Mutation: passing filtered hands as all -> fails. Holdout: line-up filters x 3 groupings keep the all-hands target and equal the composition; empty data and an empty filter result do not throw -> PASS."
+  },
+  {
+   "spec": "SPEC-07",
+   "result": "PASS",
+   "evidence": "e2e 'an unknown filter value is treated as All' passes in both browsers. Mutation: Game type handler restored to an 'as' cast -> fails (select value 'bogus'). Holdout e2e: 'x', '' and '__proto__' option values from non-All states fall back to All, keep the other filters and Group by, totals recompute, real options still work afterwards, reopening resets -> PASS."
+  },
+  {
+   "spec": "SPEC-08",
+   "result": "PASS",
+   "evidence": "trends.test.ts 'filterOption keeps known ids...' passes. Mutations: pass-through and case-insensitive match -> both fail. Holdout: __proto__, constructor, toString, padded ids, labels instead of ids, wrong case, empty options list -> all 'all' -> PASS."
+  },
+  {
+   "spec": "SPEC-09",
+   "result": "PASS",
+   "evidence": "No 'data === undefined', 'data!' or 'as TrendData' in App.tsx or StatisticsScreen.tsx; Screen union has the two stats members with required data in the loaded one; typecheck passes; screen-list acceptance test 1 passed. App no longer imports statisticsView/filterTrendData."
+  },
+  {
+   "spec": "SPEC-10",
+   "result": "PASS",
+   "evidence": "TZ=UTC npx vitest run tests/stats -> 19 files passed, 98 tests passed, 1 skipped. pinTimeZone is called only in the two day-grouping files; vite.config.ts/package.json set no TZ. Control: with both pins removed, the UTC-getter mutation passes all day-grouping tests except the pin assertion, so the pin is what makes them catch it. Holdout: an afterAll registered before the pin sees the original TZ restored; an invalid zone throws 'time zone Mars/Olympus not applied'; a bad pin in trends.test.ts fails the file at load -> PASS."
+  },
+  {
+   "spec": "SPEC-11",
+   "result": "PASS",
+   "evidence": "Mutation run in a scratch git worktree: localDay with getUTCFullYear/getUTCMonth/getUTCDate, TZ=UTC on the two pinned files -> 4 failed (3 in trend-grouping.acceptance, 1 in trends.test.ts). After reverting -> 25 passed."
+  },
+  {
+   "spec": "SPEC-12",
+   "result": "PASS",
+   "evidence": "lint passes, typecheck passes, npm test: 331 files passed / 9 skipped, 1,483 tests passed / 56 skipped, src/stats lines 100%. npm run e2e: 401 passed, 19 skipped (opt-in), 0 failed. CI run 45881387393 on 9486ac0 is green for all jobs. The docs contain the unknown-value rule, the Pacific/Kiritimati pin and the new test files, and do not mention TEMPLATE_DECISIONS. No diff under src/engine, src/bots, src/advice or src/storage."
+  }
+ ],
+ "findings": [
+  {
+   "id": "J-1-01",
+   "severity": "LOW",
+   "spec": "SPEC-10",
+   "expected_vs_actual": "Expected: a pinTimeZone call that throws leaves process.env.TZ unchanged. Actual: it sets TZ before checking and throws before registering the restore, so a failed pin leaves the bad zone in the worker. The file still fails at load, so there is no false pass.",
+   "fix": "Restore the saved TZ before throwing (optional)."
+  },
+  {
+   "id": "J-1-02",
+   "severity": "LOW",
+   "spec": "SPEC-12",
+   "expected_vs_actual": "Expected: relock_pending in doit/TASK-11.5/state.json lists each file once. Actual: tests/stats/trend-grouping.acceptance.test.tsx is listed twice.",
+   "fix": "De-duplicate the entry when relocking at finalization."
+  }
+ ],
+ "summary": "All 12 SPEC items PASS. The suites are green locally and on CI, the e2e scenario passes, and integrity is clean. Mutation checks confirm that each new test can fail (ordering, earliest fallback, G-2 source on the filter and grouping paths, filterOption, the as-cast path, the UTC day key under the pin, and the speed-timer visibility). Two LOW findings, neither blocking."
+}
