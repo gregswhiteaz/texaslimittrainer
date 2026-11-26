@@ -1,10 +1,11 @@
 ---
 id: TASK-11.13
 title: Strengthen Statistics trend tests (ordering, fallback, speed wait)
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-25T08:57:00Z'
-updated_date: '2026-11-25T13:37:00Z'
+updated_date: '2026-11-26T18:47:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -33,6 +34,18 @@ Follow-up from TASK-11.1 code review (doc-134). The AC#2 view test feeds hands a
 - [ ] #5 Given a filter select value that is not a known option id, When it changes, Then it is treated as All; and the unreachable data===undefined guard in App.tsx is removed
 - [ ] #6 Given the Vitest day-grouping tests, When they run on a UTC machine (CI), Then they run in a pinned non-UTC time zone so a UTC-date day key fails npm test
 <!-- AC:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. Shuffled-order and earliest-completedAt ordering tests
+2. Remove TEMPLATE_DECISIONS; speed check stops when the 6th point is visible (still opt-in)
+3. e2e: App with 1,200 seeded hands proves the G-2 target uses all stored hands
+4. Unknown filter value maps to All via filterOption; remove unreachable data===undefined guard
+5. Day-grouping tests pinned to Pacific/Kiritimati
+
+Full spec: doit/TASK-11.13/spec.md
+<!-- SECTION:PLAN:END -->
 
 ## Implementation Notes
 

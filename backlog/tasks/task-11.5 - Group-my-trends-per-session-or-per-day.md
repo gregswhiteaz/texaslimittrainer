@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-26T00:07:00Z'
+updated_date: '2026-11-26T18:47:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -93,6 +93,8 @@ Judge r1 PASS 15/15: production preview Chromium/WebKit in Pacific/Kiritimati â€
 Follow-ups: TASK-11.13 AC (pinned non-UTC TZ for day tests), TASK-11.12 AC (no Math.max/min spread at scale).
 
 Locked test(s) unlocked for TASK-7.18 Q-3: one vi.setConfig({ testTimeout: 30_000 }) line added after the global testTimeout was removed; no assertion touched.
+
+trend-grouping acceptance test unlocked for TASK-11.13 AC#6 (time-zone pin only)
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary
