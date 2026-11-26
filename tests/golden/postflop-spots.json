@@ -1862,7 +1862,7 @@
         "bet"
       ],
       "action": "fold",
-      "justification": "Jack-ten called the turn hoping for a straight card, but the river missed and the big blind leads again. Jack-high almost never beats a player who bets the turn and river, so our equity is too low for the pot odds."
+      "justification": "Jack-ten called the turn with no pair and no draw, and now the big blind bets the river too. Jack-high almost never beats a player who bets the turn and river, so our equity is too low for the pot odds."
     }
   ]
 }

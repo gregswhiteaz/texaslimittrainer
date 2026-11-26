@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-22T22:50:00Z'
-updated_date: '2026-11-26T03:01:00Z'
+updated_date: '2026-11-26T03:22:00Z'
 labels:
   - follow-up
   - feature
@@ -29,9 +29,9 @@ Follow-up from TASK-7.6 Q-3 (doc-87). TASK-7.5 authored 36 6-max default opponen
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Given the range data, When the validator runs, Then every applicable (heads-up or full-ring position, preflop line) has a range and a plain-English justification, and a missing one fails validation
-- [ ] #2 Given a heads-up or full-ring postflop view, When the user's advice is computed, Then each opponent's start range is the authored range for that size, position and line (not every unseen combo), narrowed by TASK-7.5's rule
-- [ ] #3 Given the authored ranges, When their widths are measured, Then each lies inside its documented band
+- [x] #1 Given the range data, When the validator runs, Then every applicable (heads-up or full-ring position, preflop line) has a range and a plain-English justification, and a missing one fails validation
+- [x] #2 Given a heads-up or full-ring postflop view, When the user's advice is computed, Then each opponent's start range is the authored range for that size, position and line (not every unseen combo), narrowed by TASK-7.5's rule
+- [x] #3 Given the authored ranges, When their widths are measured, Then each lies inside its documented band
 <!-- AC:END -->
 
 ## Implementation Plan
@@ -49,4 +49,6 @@ Full spec: doit/TASK-7.26/spec.md
 
 <!-- SECTION:NOTES:BEGIN -->
 Build: 66 HU/full-ring default ranges in src/advice/ranges/{heads-up,full-ring}.json, rangesFor by table size; 6 golden spots replaced like-for-like (Q-2); stats at 2/9 seats all in healthy range after (9-max WTSD 50.7→38.4); TASK-7.2 locked preflop sandbox file list gained the two JSON paths (unlocked, no assertion change); gate PASS
+
+Judge r1 PASS (12/12 SPEC items); J-1-01 LOW justification wording fixed by orchestrator
 <!-- SECTION:NOTES:END -->

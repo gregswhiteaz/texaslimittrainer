@@ -1500,6 +1500,12 @@
       "event": "unlock",
       "file": "tests/golden/postflop-spots.json",
       "reason": "TASK-7.26 Q-2 (auto-accepted): heads-up/full-ring action ranges move equity; replace spots that stop being clear-cut on the same street/size/action, logged in docs/advice/golden-spots.md; counts kept"
+    },
+    {
+      "t": "2026-11-25T20:22:18",
+      "event": "unlock",
+      "file": "tests/golden/postflop-spots.json",
+      "reason": "TASK-7.26 J-1-01: justification wording only (JTo has no straight draw)"
     }
   ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-7.14",
@@ -1512,6 +1518,7 @@
   "relock_pending": [
     "tests/golden/postflop-spots.json",
     "tests/golden/graded-examples.json",
+    "tests/golden/postflop-spots.json",
     "tests/golden/postflop-spots.json"
   ],
   "brief_history": {

@@ -1,0 +1,40 @@
+{
+  "round": 1,
+  "test_suite": {
+    "command": "npm test",
+    "result": "PASS",
+    "passed": 1428,
+    "failed": 0,
+    "notes": "316 files passed, 6 skipped; 1428 tests passed, 48 skipped. lint, typecheck and prettier --check clean. npm run e2e: 375 passed, 19 skipped."
+  },
+  "end_to_end": {
+    "command": "npm run -s playtest -- --hands 2000 --size 2 ; npm run -s playtest -- --hands 2000 --size 9 ; npm run -s playtest -- --hands 2000 --seed 42 (6-max, branch vs base) ; postflop hint via recommendPostflop(ACTION_RANGE_ADVICE) on a HU and a 9-seat flop, branch vs base ; 5,000-hand all-TAG stats spot-check at sizes 2 and 9",
+    "result": "PASS",
+    "expected": "0 violations at sizes 2 and 9; 6-max output byte-identical to base; hint basis 'typical player' with equity different from the base commit's every-unseen-hand figure; stats match the build-log table",
+    "actual": "size 2: 0 violations (TAG aggression 67.2 -> 70.0 vs base); size 9: 0 violations (showdowns 445 -> 342, aggression 59.1 -> 63.4). 6-max output cmp-identical to base. HU hint equity 24.4% (base) -> 19.8% (branch), 9-seat 30.2% -> 28.5%, basis 'typical player' in both. 5,000-hand stats reproduce the build-log rows exactly for before (base tree) and after: HU 79.0/46.9/69.4/43.4/53.8, 9-max 15.2/11.3/63.7/39.8/50.8. Browser hint UI not driven manually; the hint path is the same recommendPostflop call and the e2e suite is green."
+  },
+  "integrity": {
+    "result": "PASS",
+    "notes": "doit.py test-integrity exit 0, no output. Diff of src/advice/ranges.ts is a clean generalisation (SIZE_POSITIONS + one line rule, isReferenceSize via Object.hasOwn so '__proto__'/'toString' are rejected, rangesFor by dealt-in count); no test-input recognition, hard-coded expectations or early returns. Locked-file edits: tests/advice/preflop.acceptance.test.ts adds only two sandbox paths (approved orchestrator edit); tests/golden/postflop-spots.json replaces six spots' hole cards/id/justification only (Q-2, unlocked under TASK-7.14, logged in golden-spots.md). range-model.acceptance.test.ts untouched."
+  },
+  "items": [
+    {"spec": "SPEC-01", "result": "PASS", "evidence": "AC#1 test passes and asserts counts, order, word counts and the four exact problem lists. Holdout: HU order equals the 12 expected pairs; HU/FR ranges list APPLICABLE_LINES order; file justification >= 50 words, each range >= 15 words and >= 1 class; missing BTN limp / UTG+1 open-raise, a 4-word BB check justification and whitespace-only hands each give exactly the specified single problem."},
+    {"spec": "SPEC-02", "result": "PASS", "evidence": "Unit test passes. Holdout: HU UTG open-raise, HU BB limp, FR BB limp, FR SB check, 6-max MP open-raise are each rejected as 'does not apply at <size>'; duplicate FR pair gives the duplicate message; '9-max' gives exactly ['Range file: unknown reference size \"9-max\"']; 'HEADS-UP', 'heads-up ', '', 6, null, 'toString', '__proto__', 'constructor' all give one unknown-size problem; HU data relabelled full-ring reports missing pairs; four 6-max mutations give problem lists identical to the base commit; 6-max 36-pair order identical to base."},
+    {"spec": "SPEC-03", "result": "PASS", "evidence": "AC#2 HU test passes and compares start, combos and the equity spy input. Holdout: worked example (BTN raise, BB call, BB check, BTN bet) gives BTN open-raise width 49.3, start < 1081, advice equity input equals combos; BTN limp then re-raise is BTN three-bet (4.7%) with matching start/combos; BTN-limp/BB-check gives BB check start from the HU range."},
+    {"spec": "SPEC-04", "result": "PASS", "evidence": "AC#2 FR test passes. Holdout: limped pots at 8, 9 and 10 seats map every opponent to the expected position and line (8: first seat UTG+1; 9: UTG..CO; 10: two UTG seats) with start equal to the expanded FR range; a 10-seat table with one busted seat (9 dealt in) uses the full-ring ranges."},
+    {"spec": "SPEC-05", "result": "PASS", "evidence": "AC#3 passes and checks band coverage of all 66 pairs plus doc rows. Holdout parsed all 66 Appendix A rows from the spec: every file range's class set equals the Appendix A notation exactly, width within 0.05 of the stated %, inside the band, and the doc contains each band row."},
+    {"spec": "SPEC-06", "result": "PASS", "evidence": "Unit test passes. Holdout: four-bet subset of three-bet, limp/open disjoint, BB check/open disjoint at both sizes; FR opens non-decreasing UTG..BTN (6.9..27.3); justifications distinct within each file and from every 6-max justification (case-insensitive)."},
+    {"spec": "SPEC-07", "result": "PASS", "evidence": "Test file read: it.runIf(SLOW), 100,000 hands seed 42 at sizes 2 and 9, asserts handsPlayed and violations = 0, non-null stats, prints 'TAG <size> <stat>: x.x (healthy lo–hi)' from HEALTHY_RANGES; added to test:slow only. Not rerun at 100k per instructions; builder's run 452 s pass. 5,000-hand spot-check of the same computation matched build-log exactly. Timeout is 1200 s for both sizes combined rather than 600 s each (immaterial)."},
+    {"spec": "SPEC-08", "result": "PASS", "evidence": "build-log.md has 5,000 before/after, 10,000 before/after and 100,000 after for sizes 2 and 9; range-model.md has the 'Effect at heads-up and full ring (TASK-7.26)' table. Independent rerun on base and branch reproduced the 5,000-hand numbers. No after-stat outside healthy (base 9-max WTSD 51.2 outside is named)."},
+    {"spec": "SPEC-09", "result": "PASS", "evidence": "Unit test passes (HU now asserts BB check start; 5-seat fallback asserts null fields and unseenCombos). Holdout: sizes 3, 4, 5, 7 give position/line/widthPct null and start = all unseen; rangesFor returns null for 0,1,3,4,5,7,11,-1,2.5,NaN; 6-max estimateOpponentRanges output (with and without observed stats) JSON-identical to the base commit; 6-max playtest 2000 hands seed 42 byte-identical to base."},
+    {"spec": "SPEC-10", "result": "PASS", "evidence": "npx vitest run tests/golden passes (in a 12-file run, 330 tests). Six replacements keep seats, position, street, action, before-line and board; logged with old id, new id and margins in golden-spots.md; coverage line still 120 / 86 / 18 / 16. One replacement justification is factually off (see J-1-01, LOW)."},
+    {"spec": "SPEC-11", "result": "PASS", "evidence": "range-model.acceptance + size-ranges.acceptance pass. range-model.md names the three files, positions per size, pair counts 12/36/54, band table, observed scaling at heads-up/six-max/full ring, 3/4/5/7 seats every unseen hand with TASK-7.35, still contains Ks 8d 7c. postflop-rules.md 'Not applied yet' now names only 3, 4, 5, 7 seats."},
+    {"spec": "SPEC-12", "result": "PASS", "evidence": "npm run lint exit 0, npm run typecheck exit 0, prettier --check exit 0, npm test all pass, npm run e2e 375 passed. Slow suite not rerun in full (builder: 22 files, 100 tests pass). Only approved locked edits present."}
+  ],
+  "findings": [
+    {"id": "J-1-01", "severity": "LOW", "spec": "SPEC-10",
+     "expected_vs_actual": "Expected the replacement golden spot fr-river-utg-fold-jto's justification to describe the hand correctly. Actual: it says jack-ten 'called the turn hoping for a straight card', but Jh Tc on Ks 4c 5s 8d has no straight draw (no single card makes a straight).",
+     "fix": "Reword that justification so it does not claim a straight draw (e.g. it called hoping to pair, or as a bluff catcher)."}
+  ],
+  "summary": "All 12 SPEC items PASS. npm test, lint, typecheck, format and e2e green. Holdout checks confirmed exact Appendix A content for all 66 ranges, validator edge cases, size selection at 2-10 seats including a busted seat, 6-max byte-identical behaviour vs base, and reproduced the before/after stats. One LOW wording issue in a replacement golden spot justification; no blocking findings."
+}

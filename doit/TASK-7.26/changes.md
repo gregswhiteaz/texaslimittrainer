@@ -15,3 +15,4 @@
 
 No new dependency.
 - `tests/advice/preflop.acceptance.test.ts` — sandbox file list adds heads-up.json and full-ring.json (TASK-7.2 locked; unlocked; orchestrator edit, no assertion change)
+- `tests/golden/postflop-spots.json` — fr-river-utg-fold-jto justification reworded (J-1-01; TASK-7.14 locked; unlocked; orchestrator edit)
