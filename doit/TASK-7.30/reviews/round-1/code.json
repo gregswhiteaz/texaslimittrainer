@@ -1,0 +1,26 @@
+{"reviewer": "code", "round": 1,
+ "rubric": [
+  {"item": "SPEC-01 correctness", "result": "pass"},
+  {"item": "SPEC-01 test strength", "result": "pass"},
+  {"item": "SPEC-02 correctness", "result": "pass"},
+  {"item": "SPEC-02 test strength", "result": "pass"},
+  {"item": "SPEC-03 correctness", "result": "pass"},
+  {"item": "SPEC-03 test strength", "result": "pass"},
+  {"item": "SPEC-04 correctness", "result": "pass"},
+  {"item": "SPEC-04 test strength", "result": "pass"},
+  {"item": "SPEC-05 correctness", "result": "pass"},
+  {"item": "SPEC-05 test strength", "result": "pass"},
+  {"item": "scope", "result": "pass"},
+  {"item": "concision", "result": "pass"},
+  {"item": "clarity", "result": "pass"}
+ ],
+ "findings": [
+  {"fingerprint": "tests/advice/observed-ranges.test.ts:default-range-sweep-not-pinned",
+   "severity": "MINOR",
+   "file": "tests/advice/observed-ranges.test.ts",
+   "line": 232,
+   "issue": "SPEC-03 says 'every default range of all three reference sizes', but the sweep only asserts ranges.length > 0. If a reference size or most ranges went missing from DEFAULT_RANGES, the sweep would quietly cover less. The spec's figure of 90 ranges is also out of date: DEFAULT_RANGES now has 102. The loop covers all of them, so the behaviour is still tested correctly.",
+   "evidence": "expect(ranges.length).toBeGreaterThan(0); with Object.values(DEFAULT_RANGES).flatMap((r) => r.ranges)",
+   "fix": "Add expect(Object.keys(DEFAULT_RANGES)).toHaveLength(3), or pin the current range count (102), so that the sweep's coverage is asserted. Optionally correct '90' in the spec's A-1 and edge-case text when it is next edited."}
+ ],
+ "summary": "The change matches the spec. scaledWidthPct returns early with o from 100 hands, and the arithmetic below 100 hands is unchanged. fillTemplate was moved unchanged into explanations.ts. basisText now calls fillTemplate(OBSERVED_BASIS, ...). explain.ts imports fillTemplate and re-exports it, the unused CONCEPTS import is gone, and the river-bet phrase swap is left alone (A-2). Mutation checks: putting back the Math.min form makes AC#1 and the SPEC-03 unit test fail, and putting back OBSERVED_BASIS.replace('{hands}', ...) makes the SPEC-04 unit test fail. In a re-run, the default playtest SHA is f6c8d172...7cbc with 0 invariant violations, matching the spec. The build log records both SHA pairs. The --check-advice run was not repeated because it takes about 2.5 minutes. All gates pass. The line count is 209 against a budget of 140, which is a warning only: most of it is the acceptance helpers the spec asked to be copied. One MINOR finding: the SPEC-03 sweep does not pin how many ranges it covers. There are no BLOCKER or MAJOR findings."}

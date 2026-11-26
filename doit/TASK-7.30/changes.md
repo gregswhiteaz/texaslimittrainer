@@ -10,3 +10,4 @@
 - `doit/TASK-7.30/changes.md` — this list (pipeline file).
 
 No new dependencies.
+- `tests/advice/observed-ranges.test.ts` — review r1 MINOR: pin the three sizes and 102 default ranges in the SPEC-03 sweep (orchestrator)

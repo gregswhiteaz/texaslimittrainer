@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-23T19:21:00Z'
-updated_date: '2026-11-26T14:36:00Z'
+updated_date: '2026-11-26T14:51:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -41,3 +41,9 @@ Follow-up from TASK-7.13 (doc-104). scaledWidthPct can return about 3.55e-15 ins
 
 Full spec: doit/TASK-7.30/spec.md
 <!-- SECTION:PLAN:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+Build: scaledWidthPct exact from 100 hands; fillTemplate moved to explanations.ts and used by basisText; playtest SHAs unchanged; gate PASS
+<!-- SECTION:NOTES:END -->

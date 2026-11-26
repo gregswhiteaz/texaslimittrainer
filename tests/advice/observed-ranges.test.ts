@@ -229,7 +229,8 @@ describe('range width and scaling', () => {
 
   it('scaledWidthPct is exactly the observed stat from 100 hands', () => {
     const ranges = Object.values(DEFAULT_RANGES).flatMap((r) => r.ranges);
-    expect(ranges.length).toBeGreaterThan(0);
+    expect(Object.keys(DEFAULT_RANGES).sort()).toEqual(['6-max', 'full-ring', 'heads-up']);
+    expect(ranges).toHaveLength(12 + 36 + 54);
     for (const range of ranges) {
       const d = rangeWidthPct(range.classes);
       for (const o of [0, 37.5, 100]) {
