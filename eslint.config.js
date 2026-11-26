@@ -4,6 +4,7 @@ import reactHooks from 'eslint-plugin-react-hooks';
 import { defineConfig } from 'eslint/config';
 import tseslint from 'typescript-eslint';
 import {
+  adviceHiddenStateConfig,
   botDeterminismConfig,
   botSeatPolicyConfig,
   headlessBoundaryConfig,
@@ -33,5 +34,6 @@ export default defineConfig(
   headlessBoundaryConfig,
   botDeterminismConfig,
   botSeatPolicyConfig,
+  adviceHiddenStateConfig,
   prettier,
 );

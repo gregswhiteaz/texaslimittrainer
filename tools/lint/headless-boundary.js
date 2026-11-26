@@ -150,6 +150,8 @@ export const BOT_BOUNDARY_PATTERNS = [
     allowImportNames: ['Action', 'SeatNumber', 'Street'],
     message: BOT_BOUNDARY_MESSAGE,
   },
+  // golden.ts builds hands with createHand/applyAction, so it sits outside the advice boundary (TASK-6.27 D-3).
+  { regex: '(^|/)advice/golden$', message: BOT_BOUNDARY_MESSAGE },
 ];
 
 // Groups with allowImportNames ignore imports that have no specifiers, so side-effect imports need a selector.
@@ -157,6 +159,23 @@ const BOT_SIDE_EFFECT_IMPORT = {
   selector: 'ImportDeclaration[specifiers.length=0][source.value=/(^|\\/)engine\\//]',
   message: BOT_BOUNDARY_MESSAGE,
 };
+
+// A type-position import('…') is a TSImportType, which no-restricted-imports does not check (TASK-6.27).
+// Same allow-list as BOT_BOUNDARY_PATTERNS: any engine/player-view type, and Action, SeatNumber, Street from
+// engine/hand.
+const BOT_TYPE_IMPORT_SYNTAX = [
+  {
+    selector:
+      'TSImportType[source.value=/(^|\\/)engine\\//]:not([source.value=/(^|\\/)engine\\/(player-view|hand)$/]),' +
+      'TSImportType[source.value=/\\/\\.\\/|\\/\\/|(^|\\/)[^.\\/][^\\/]*\\/\\.\\.(\\/|$)/]',
+    message: BOT_BOUNDARY_MESSAGE,
+  },
+  {
+    selector:
+      "TSImportType[source.value=/(^|\\/)engine\\/hand$/]:not([qualifier.type='Identifier'][qualifier.name=/^(Action|SeatNumber|Street)$/])",
+    message: BOT_BOUNDARY_MESSAGE,
+  },
+];
 
 /**
  * Must come after botDeterminismConfig: it replaces that block's no-restricted-syntax options for these
@@ -168,6 +187,48 @@ export const botSeatPolicyConfig = {
   files: BOT_BOUNDARY_FILES,
   rules: {
     '@typescript-eslint/no-restricted-imports': ['error', { patterns: BOT_BOUNDARY_PATTERNS }],
-    'no-restricted-syntax': ['error', ...BOT_DETERMINISM_RESTRICTED_SYNTAX, BOT_SIDE_EFFECT_IMPORT],
+    'no-restricted-syntax': [
+      'error',
+      ...BOT_DETERMINISM_RESTRICTED_SYNTAX,
+      BOT_SIDE_EFFECT_IMPORT,
+      ...BOT_TYPE_IMPORT_SYNTAX,
+    ],
+  },
+};
+
+export const ADVICE_BOUNDARY_FILES = ['src/advice/**'];
+
+// golden.ts builds fixed golden-spot hands for tests with createHand/applyAction; bots may not import it.
+export const ADVICE_BOUNDARY_IGNORES = ['src/advice/golden.ts'];
+
+const ADVICE_BOUNDARY_MESSAGE =
+  'Advice code that bots use may import only PlayerView-boundary engine types and the pure card, evaluator and random helpers, so bots cannot reach hidden cards through it (REQ-025.1).';
+
+export const ADVICE_BOUNDARY_PATTERNS = [
+  { regex: '/\\./|//|(^|/)[^./][^/]*/\\.\\.(/|$)', message: ADVICE_BOUNDARY_MESSAGE },
+  {
+    regex: '(^|/)engine/(?!(player-view|hand|cards|hand-evaluator|seeded-random)$)[^/]+$',
+    message: ADVICE_BOUNDARY_MESSAGE,
+  },
+  { regex: '(^|/)engine/player-view$', allowTypeImports: true, message: ADVICE_BOUNDARY_MESSAGE },
+  {
+    regex: '(^|/)engine/hand$',
+    allowImportNames: ['Action', 'SeatNumber', 'Street', 'STREET_BET_CAP'],
+    message: ADVICE_BOUNDARY_MESSAGE,
+  },
+];
+
+/**
+ * TASK-6.27 D-3 (user answer Q-1, option (a)): bots may import src/advice, because every bot style builds on
+ * the advice engine (REQ-026.1). This block keeps engine hand state out of the advice code bots can reach,
+ * so that path cannot see hidden cards either (REQ-025.1); bots may not import advice/golden.
+ * @type {import('eslint').Linter.Config}
+ */
+export const adviceHiddenStateConfig = {
+  name: 'advice-hidden-state',
+  files: ADVICE_BOUNDARY_FILES,
+  ignores: ADVICE_BOUNDARY_IGNORES,
+  rules: {
+    '@typescript-eslint/no-restricted-imports': ['error', { patterns: ADVICE_BOUNDARY_PATTERNS }],
   },
 };
