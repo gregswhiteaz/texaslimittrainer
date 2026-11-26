@@ -199,6 +199,16 @@ export const CHART_POSITIONS: Readonly<Record<Position, string>> = {
   'UTG+1': 'an early seat (UTG+1)',
 };
 
+/** Short situation labels (TASK-8.5 Q-1), written to follow a position: "from the cutoff, facing a raise". */
+export const SITUATION_LABELS: Readonly<Record<Situation, string>> = {
+  unopened: 'in an unopened pot',
+  limpers: 'facing one or more limpers',
+  raise: 'facing a raise',
+  'raise-and-calls': 'facing a raise and calls',
+  're-raise': 'facing a re-raise',
+  'blind-defence': 'defending the blind against a raise',
+};
+
 /** Keyed by RANK_CHARS character: singular and plural names. */
 export const RANK_NAMES: Readonly<Record<string, { readonly one: string; readonly many: string }>> =
   {

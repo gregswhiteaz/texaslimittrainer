@@ -13,11 +13,13 @@ import {
   PREFLOP_SENTENCES,
   RANK_NAMES,
   SEAT_NAMES,
+  SITUATION_LABELS,
   type PreflopSentenceKey,
 } from './explanations';
 import type { HandClass } from './hand-class';
 import type { PostflopRecommendation } from './postflop';
 import type { PreflopRecommendation } from './preflop';
+import type { Position, Situation } from './preflop-chart';
 
 export { basisText } from './explanations';
 
@@ -71,6 +73,16 @@ export function explainPreflop(rec: Omit<PreflopRecommendation, 'explanation'>):
   return sentences.join(' ');
 }
 
+/** Plain-English position label, e.g. 'the cutoff'. */
+export function positionLabel(position: Position): string {
+  return CHART_POSITIONS[position];
+}
+
+/** Plain-English situation label, e.g. 'facing a raise and calls'. */
+export function situationLabel(situation: Situation): string {
+  return SITUATION_LABELS[situation];
+}
+
 /** The preflop hint's chart basis, e.g. 'From the 6-max chart: raise A9o from the cutoff'. */
 export function chartBasisText(
   rec: Pick<PreflopRecommendation, 'referenceSize' | 'action' | 'handClass' | 'position'>,
@@ -79,7 +91,7 @@ export function chartBasisText(
     chart: CHART_NAMES[rec.referenceSize],
     action: rec.action,
     hand: rec.handClass,
-    position: CHART_POSITIONS[rec.position],
+    position: positionLabel(rec.position),
   });
 }
 

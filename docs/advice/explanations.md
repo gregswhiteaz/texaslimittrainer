@@ -78,6 +78,14 @@ chart advice made legal, `{hand}` the hand class, and `{position}` comes from `C
 small blind, the big blind, the cutoff, the hijack, the lojack, a middle seat (MP), an early seat (UTG), an early
 seat (UTG+1)).
 
+### Position and situation labels
+
+`positionLabel(position)` returns the `CHART_POSITIONS` label above, and `situationLabel(situation)` returns a short
+label from `SITUATION_LABELS`, written to follow a position ("from the cutoff, facing a raise"): unopened "in an
+unopened pot", limpers "facing one or more limpers", raise "facing a raise", raise-and-calls "facing a raise and
+calls", re-raise "facing a re-raise", blind-defence "defending the blind against a raise". The situation label is not
+shown in the app yet; the explanation's first sentence already describes the situation.
+
 ## Not in the explanation
 
 Short-stack notes and approximate-advice labels (later stories) are kept out of the explanation; they are separate fields.
