@@ -30,3 +30,4 @@ Fix round 2 (judge r1): `tests/golden/postflop-spots.json` wording only, no deci
 wording now matches the evaluator (board pair or higher board card that plays) in `6max-turn-utg-check-t9s`,
 `6max-turn-bb-check-q8o`, `6max-turn-bb-check-a3o`, `6max-turn-co-check-a2s`, `6max-turn-utg-fold-k9s`,
 `fr-river-utg-fold-jts`, `hu-river-bb-check-t8o`, `hu-river-btn-fold-t7s` and `fr-river-utg-call-aks`.
+- `docs/advice/golden-spots.md` — J-2-01: note the four wording-only fixes outside the 72-row table (orchestrator)

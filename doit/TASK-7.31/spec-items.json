@@ -45,7 +45,7 @@
     "id": "SPEC-08",
     "verifies": "AC#1, AC#2",
     "verification": "manual `reviewer and judge cross-check doit/TASK-7.31/build-log.md against tests/golden/postflop-spots.json for all changed spots`",
-    "status": "fail"
+    "status": "pass"
   },
   {
     "id": "SPEC-09",

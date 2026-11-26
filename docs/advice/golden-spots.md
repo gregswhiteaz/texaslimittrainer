@@ -261,6 +261,10 @@ kept and only the hole cards change; otherwise the line changes. Where the only 
 keeps its id and hand on a limped line where the big blind checks its option, and its justification now says kings
 full. Graded examples are not checked by this rule.
 
+Four spots outside the table below kept their cards and line and only had their justification corrected, so it names
+the board card or board pair that plays rather than the hero's high card: `6max-turn-bb-check-a3o`,
+`6max-turn-bb-check-q8o`, `hu-river-bb-check-t8o` and `hu-river-btn-fold-t7s`.
+
 | Old id                     | New id                     | Reason                                                                                                                                                                                                        |
 | -------------------------- | -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `6max-flop-co-bet-76o`     | `6max-flop-co-bet-76s`     | Major hero preflop step 3 `raise` (6-max CO unopened 76o: fold); step 7 `call` (6-max CO re-raise 76o: fold). Fix: same line and board, hole cards now 6c 7c.                                                 |

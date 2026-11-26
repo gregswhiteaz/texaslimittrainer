@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-24T06:32:00Z'
-updated_date: '2026-11-26T06:08:00Z'
+updated_date: '2026-11-26T06:36:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -27,9 +27,9 @@ Follow-up from TASK-7.14 (doc-111). Many postflop golden spots reach their decis
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Given every postflop golden spot, When its hero preflop actions are graded against the chart for that table size and position, Then none is a Major error (a test enforces this), with spot decisions and clear-cut margins re-validated after any line change
-- [ ] #2 Given 6max-turn-bb-raise-92o, When its justification is read, Then it names the hand as kings full, not a set
-- [ ] #3 Given a postflop spot whose advice makes gradeDecision throw, When parsePostflopGoldenSpots runs, Then the error is listed as a problem for that spot id rather than thrown
+- [x] #1 Given every postflop golden spot, When its hero preflop actions are graded against the chart for that table size and position, Then none is a Major error (a test enforces this), with spot decisions and clear-cut margins re-validated after any line change
+- [x] #2 Given 6max-turn-bb-raise-92o, When its justification is read, Then it names the hand as kings full, not a set
+- [x] #3 Given a postflop spot whose advice makes gradeDecision throw, When parsePostflopGoldenSpots runs, Then the error is listed as a problem for that spot id rather than thrown
 <!-- AC:END -->
 
 ## Implementation Plan
@@ -50,4 +50,6 @@ Full spec: doit/TASK-7.31/spec.md
 Build: validator rejects Major hero preflop steps; clear-cut throw becomes a problem; 72 spots re-authored (10 action fix, 59 hole swap, 2 line change, 92o kings-full); coverage pinned 120/45/40/35; gate PASS
 
 Judge r1 FAIL on SPEC-08 (3 justifications name the hero's high card where a board card/pair plays). doit.py verdict is not idempotent: calling it twice inflated SPEC-08 item_failures to 4; reset to 1 (one real failure).
+
+Judge r2 PASS (9/9 SPEC items); J-1-02 withdrawn by the judge (no backdoor flush)
 <!-- SECTION:NOTES:END -->
