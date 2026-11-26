@@ -7,7 +7,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-26T01:40:00Z'
-updated_date: '2026-11-26T16:54:00Z'
+updated_date: '2026-11-26T17:05:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -29,8 +29,8 @@ Follow-up from TASK-7.18 (doc-151). tests/advice/equity.perf.test.ts and tests/a
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Given npm test without TLH_SLOW_TESTS, When it runs, Then neither advice perf file runs any timed scenario; they run in full under npm run test:slow
-- [ ] #2 Given HU advice facing a bet and an 8-opponent calling-range spot, When the opt-in advice perf test runs at real targets, Then each p95 is at most 75% of its target
+- [x] #1 Given npm test without TLH_SLOW_TESTS, When it runs, Then neither advice perf file runs any timed scenario; they run in full under npm run test:slow
+- [x] #2 Given HU advice facing a bet and an 8-opponent calling-range spot, When the opt-in advice perf test runs at real targets, Then each p95 is at most 75% of its target
 <!-- AC:END -->
 
 ## Implementation Plan
@@ -49,4 +49,6 @@ Full spec: doit/TASK-7.34/spec.md
 Recorded deviation: headroom scenarios timed 9-seat first, then HU (HU-first gave fresh-worker spikes over 18.75 ms in 6/17 runs). Limits unchanged.
 
 Build: advice perf files opt-in; new headroom test (9-seat 131-133 ms of 150 limit, HU 9.3 ms of 18.75) 3/3; test:slow both files; speed-limits unchanged; playtest SHA unchanged; gate PASS
+
+Judge r1 PASS (6/6 SPEC items); CI 45863631179
 <!-- SECTION:NOTES:END -->
