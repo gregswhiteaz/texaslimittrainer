@@ -1,11 +1,11 @@
 ---
 id: TASK-11.14
 title: Harden the BB/100 trend against tampered stakes and type its cash summaries
-status: In Progress
+status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-25T10:36:00Z'
-updated_date: '2026-11-26T17:48:00Z'
+updated_date: '2026-11-26T17:49:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -14,6 +14,8 @@ dependencies:
   - TASK-11.2
 references:
   - doc-135
+documentation:
+  - doc-168
 parent_task_id: TASK-11
 priority: low
 ordinal: 245000
@@ -49,4 +51,12 @@ Full spec: doit/TASK-11.14/spec.md
 Build: bb100Value exact while safe, float fallback above MAX_SAFE_INTEGER, iterative gcd; TrendSource union, no cast; all-negative break-even unit case; gate PASS
 
 Judge r1 PASS (5/5 SPEC items; real-app tampered-store check)
+
+Follow-ups: none.
 <!-- SECTION:NOTES:END -->
+
+## Final Summary
+
+<!-- SECTION:FINAL_SUMMARY:BEGIN -->
+Bb100Value no longer overflows on tampered big bets: exact LCM path while safe, float per-hand fallback (half away from zero, never -0) above it; gcd is iterative; TrendSource is a discriminated union so trendHand has no cast. Verified: judge PASS 5/5, CI 45869869473 green, review r1 test-strength gaps fixed and mutation-checked. Review A-3: break-even line is above every point, not y=10. Risk: none known; NIT left in locked test (netOf re-derives netResult).
+<!-- SECTION:FINAL_SUMMARY:END -->
