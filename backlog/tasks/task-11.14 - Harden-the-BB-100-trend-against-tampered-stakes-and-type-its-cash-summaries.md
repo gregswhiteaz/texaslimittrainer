@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-25T10:36:00Z'
-updated_date: '2026-11-26T17:12:00Z'
+updated_date: '2026-11-26T17:26:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -42,3 +42,9 @@ Follow-up from TASK-11.2 security and code review (doc-135). A tampered store wi
 
 Full spec: doit/TASK-11.14/spec.md
 <!-- SECTION:PLAN:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+Build: bb100Value exact while safe, float fallback above MAX_SAFE_INTEGER, iterative gcd; TrendSource union, no cast; all-negative break-even unit case; gate PASS
+<!-- SECTION:NOTES:END -->
