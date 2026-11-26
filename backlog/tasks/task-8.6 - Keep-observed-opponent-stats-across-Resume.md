@@ -1,9 +1,11 @@
 ---
 id: TASK-8.6
 title: Keep observed opponent stats across Resume
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-24T10:52:00Z'
+updated_date: '2026-11-26T07:17:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -29,3 +31,15 @@ Follow-up from TASK-8.1 (doc-114, Q-3). Per-bot observed counts live in a useTab
 - [ ] #1 Given a session where a bot has been observed for 45 hands, When the user pauses, resumes and opens Hint on a postflop decision, Then that bot's basis reads 'based on 45 hands of this opponent' (counts carried across Resume)
 - [ ] #2 Given a stored session record with observed counts that are malformed (non-integer hands, vpip/pfr outside 0-100, unknown bot id), When it is read, Then it is rejected with a RangeError naming the field and Home stays usable
 <!-- AC:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. Optional observed[] on the session record (botId, hands, vpipHands, pfrHands), validated with RangeErrors naming the field
+2. Write it with each hand record in the same transaction; DB stays v5
+3. Resume restores the counts into the table session (restoreObserved), hints use them
+4. Acceptance + e2e: 45-hand basis after Resume; malformed records rejected, Home usable
+5. Docs: storage/sessions.md, ui/hint.md
+
+Full spec: doit/TASK-8.6/spec.md
+<!-- SECTION:PLAN:END -->

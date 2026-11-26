@@ -1,0 +1,56 @@
+[
+  {
+    "id": "SPEC-01",
+    "verifies": "AC#1",
+    "verification": "acceptance `tests/table/observed-resume.acceptance.test.ts::restored counts equal the counts before the pause`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-02",
+    "verifies": "AC#1",
+    "verification": "acceptance `tests/table/observed-resume.acceptance.test.ts::resumed hint and stored decision use the restored counts`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-03",
+    "verifies": "AC#1",
+    "verification": "acceptance `e2e/observed-resume.spec.ts::a resumed session's hint uses the 45 hands observed before the pause`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-04",
+    "verifies": "AC#2",
+    "verification": "acceptance `tests/table/observed-record.acceptance.test.ts::malformed observed counts are rejected naming the field`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-05",
+    "verifies": "AC#2",
+    "verification": "acceptance `e2e/observed-resume.spec.ts::a stored record with malformed observed counts is skipped and Home stays usable`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-06",
+    "verifies": "AC#1",
+    "verification": "unit `tests/table/observed-record.test.ts::write rules`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-07",
+    "verifies": "AC#1",
+    "verification": "unit `tests/table/observed-record.test.ts::restore rules`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-08",
+    "verifies": "AC#1",
+    "verification": "acceptance `e2e/observed-resume.spec.ts::observed counts are saved with each hand and carried through Home and Resume`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-09",
+    "verifies": "AC#1, AC#2",
+    "verification": "command `npm test && npm run lint && npm run typecheck && npm run build && npx playwright test e2e/observed-resume.spec.ts e2e/resume.spec.ts e2e/session-records.spec.ts e2e/hint-observed.spec.ts`",
+    "status": "pending"
+  }
+]
