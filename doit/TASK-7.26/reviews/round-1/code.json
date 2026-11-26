@@ -1,0 +1,72 @@
+{
+  "reviewer": "code",
+  "round": 1,
+  "rubric": [
+    {"item": "SPEC-01 correctness", "result": "pass"},
+    {"item": "SPEC-01 test strength", "result": "pass"},
+    {"item": "SPEC-02 correctness", "result": "pass"},
+    {"item": "SPEC-02 test strength", "result": "pass"},
+    {"item": "SPEC-03 correctness", "result": "pass"},
+    {"item": "SPEC-03 test strength", "result": "pass"},
+    {"item": "SPEC-04 correctness", "result": "pass"},
+    {"item": "SPEC-04 test strength", "result": "pass"},
+    {"item": "SPEC-05 correctness", "result": "pass"},
+    {"item": "SPEC-05 test strength", "result": "pass"},
+    {"item": "SPEC-06 correctness", "result": "pass"},
+    {"item": "SPEC-06 test strength", "result": "pass"},
+    {"item": "SPEC-07 correctness", "result": "pass"},
+    {"item": "SPEC-07 test strength", "result": "pass"},
+    {"item": "SPEC-08 correctness", "result": "pass"},
+    {"item": "SPEC-08 test strength", "result": "pass"},
+    {"item": "SPEC-09 correctness", "result": "pass"},
+    {"item": "SPEC-09 test strength", "result": "pass"},
+    {"item": "SPEC-10 correctness", "result": "pass"},
+    {"item": "SPEC-10 test strength", "result": "pass"},
+    {"item": "SPEC-11 correctness", "result": "pass"},
+    {"item": "SPEC-11 test strength", "result": "pass"},
+    {"item": "SPEC-12 correctness", "result": "pass"},
+    {"item": "SPEC-12 test strength", "result": "pass"},
+    {"item": "scope", "result": "pass"},
+    {"item": "concision", "result": "pass"},
+    {"item": "clarity", "result": "pass"}
+  ],
+  "findings": [
+    {
+      "fingerprint": "tests/advice/postflop-ranges.test.ts:rangesFor-boundary-sizes-unpinned",
+      "severity": "MINOR",
+      "file": "tests/advice/postflop-ranges.test.ts",
+      "line": 169,
+      "issue": "The null branch of rangesFor (D-2) is tested only at 5 seats. A wrong mapping for 3, 4 or 7 seats, e.g. `dealtIn >= 7` instead of `>= 8` at src/advice/ranges.ts:244, would still pass every test.",
+      "evidence": "SPEC-09 names only a 5-seat view. No test calls rangesFor(3), rangesFor(4), rangesFor(7) or rangesFor(11), and none checks a 7-seat view's start.",
+      "fix": "Add one assertion, e.g. `for (const n of [3, 4, 5, 7]) expect(rangesFor(n)).toBeNull()` and `expect([2, 6, 8, 9, 10].map(rangesFor)).toEqual([HEADS_UP_RANGES, SIX_MAX_RANGES, FULL_RING_RANGES, FULL_RING_RANGES, FULL_RING_RANGES])`."
+    },
+    {
+      "fingerprint": "tests/golden/postflop-spots.json:jto-justification-no-straight-draw",
+      "severity": "MINOR",
+      "file": "tests/golden/postflop-spots.json",
+      "line": 1865,
+      "issue": "The new `fr-river-utg-fold-jto` justification says jack-ten 'called the turn hoping for a straight card'. On the turn board Ks 4c 5s 8d, J-T has no straight draw: a straight needs both a Q and a 9, and only the river is left. The poker reasoning shown to users is wrong.",
+      "evidence": "Board `Ks 4c 5s 8d 2d`, hole cards `Jh Tc`. The only J-T straight using the K is K-Q-J-T-9, which needs two more cards.",
+      "fix": "Reword without the straight draw, e.g. 'Jack-ten called the turn with two overcards to the low cards and hoped the big blind was weak, but the big blind leads the river again...'"
+    },
+    {
+      "fingerprint": "src/advice/ranges.ts:default-ranges-export-unused",
+      "severity": "NIT",
+      "file": "src/advice/ranges.ts",
+      "line": 234,
+      "issue": "`DEFAULT_RANGES` is exported as the spec asks, but nothing in src or tests reads it.",
+      "evidence": "`grep -rn DEFAULT_RANGES src tests` finds only its definition.",
+      "fix": "Keep it (spec-listed), or use it in rangesFor (`DEFAULT_RANGES['heads-up']` and so on) so it is not dead."
+    },
+    {
+      "fingerprint": "docs/advice/range-model.md:effect-table-10k-not-5k",
+      "severity": "NIT",
+      "file": "docs/advice/range-model.md",
+      "line": 192,
+      "issue": "SPEC-08 asks for the 5,000-hand before/after figures. The doc paragraph shows 10,000 and 100,000 instead. The build log has 5,000, 10,000 and 100,000.",
+      "evidence": "Rows 'heads-up 10,000, before' etc. The build-log lines 26-36 include the 5,000 rows.",
+      "fix": "Optional: add the 5,000-hand rows to the doc table, or leave it as is since the build log has them."
+    }
+  ],
+  "summary": "Clean, spec-faithful change. I checked all 66 ranges token for token against Appendix A (no differences), and every measured width matches the Appendix width column within 0.05. The doc band table matches the spec bands row for row. rangesFor maps 2 to heads-up, 6 to 6-max, 8-10 to full ring and everything else to null. estimateOpponentRanges passes the size to positionOf, and the 6-max path is unchanged. All six golden replacements are like-for-like: same seats, position, street, board, before line and action; only id, hole cards and justification change. They are logged with old id, new id and new margin in golden-spots.md, and no other file references the old ids. Before/after stats are in the build log (5k/10k/100k) and in range-model.md, and the 6-max playtest was byte-identical. The orchestrator's preflop.acceptance sandbox edit only adds the two JSON paths. The fast suites (size-ranges, ranges, postflop-ranges, range-model, preflop acceptance, golden) pass: 321 passed, with the slow file skipped. No BLOCKER or MAJOR findings. Two MINOR: an untested rangesFor boundary at 3/4/7 seats, and an inaccurate straight-draw claim in the jto justification."
+}

@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-22T22:50:00Z'
-updated_date: '2026-11-26T01:57:00Z'
+updated_date: '2026-11-26T03:01:00Z'
 labels:
   - follow-up
   - feature
@@ -44,3 +44,9 @@ Follow-up from TASK-7.6 Q-3 (doc-87). TASK-7.5 authored 36 6-max default opponen
 
 Full spec: doit/TASK-7.26/spec.md
 <!-- SECTION:PLAN:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+Build: 66 HU/full-ring default ranges in src/advice/ranges/{heads-up,full-ring}.json, rangesFor by table size; 6 golden spots replaced like-for-like (Q-2); stats at 2/9 seats all in healthy range after (9-max WTSD 50.7→38.4); TASK-7.2 locked preflop sandbox file list gained the two JSON paths (unlocked, no assertion change); gate PASS
+<!-- SECTION:NOTES:END -->
