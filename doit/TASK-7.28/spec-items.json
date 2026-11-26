@@ -3,42 +3,42 @@
     "id": "SPEC-01",
     "verifies": "AC#1",
     "verification": "acceptance `tests/advice/straight-outs.acceptance.test.ts::AC#1 a board-only open-ended run gives no straight-draw outs`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-02",
     "verifies": "AC#4",
     "verification": "acceptance `tests/advice/straight-outs.acceptance.test.ts::AC#4 a hole card that extends the run gives the 8 straight-draw outs`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-03",
     "verifies": "AC#3",
     "verification": "acceptance `tests/advice/straight-outs.acceptance.test.ts::AC#3 a made flush lists no straight-draw outs`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-04",
     "verifies": "AC#1, AC#3, AC#4",
     "verification": "unit `tests/advice/ranges.test.ts::drawOuts counts straight outs only when a hole card adds a rank to the run`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-05",
     "verifies": "AC#1",
     "verification": "unit `tests/advice/ranges.test.ts::classifyCombo is unchanged by the hole-card straight-draw rule`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-06",
     "verifies": "AC#2",
     "verification": "command `bash -c 'npm run -s playtest -- --hands 10000 --seed 42 | tee /dev/stderr | shasum -a 256 && TLH_SLOW_TESTS=1 npx vitest run tests/bots/style-bands.acceptance.test.ts'`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-07",
     "verifies": "AC#1, AC#3",
     "verification": "manual read `docs/advice/postflop-rules.md` \"Draw and outs\" section",
-    "status": "pending"
+    "status": "pass"
   }
 ]
