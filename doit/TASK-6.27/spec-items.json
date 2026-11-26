@@ -1,0 +1,50 @@
+[
+  {
+    "id": "SPEC-01",
+    "verifies": "AC#1",
+    "verification": "acceptance `tests/toolchain/bot-import-gaps.acceptance.test.ts::type-position engine imports in bot code fail npm run lint`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-02",
+    "verifies": "AC#1",
+    "verification": "acceptance `tests/toolchain/bot-import-gaps.acceptance.test.ts::PlayerView-boundary types in type position pass`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-03",
+    "verifies": "AC#2",
+    "verification": "acceptance `tests/toolchain/bot-import-gaps.acceptance.test.ts::advice code that imports hand state fails npm run lint`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-04",
+    "verifies": "AC#2",
+    "verification": "acceptance `tests/toolchain/bot-import-gaps.acceptance.test.ts::bot code that imports advice/golden fails npm run lint`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-05",
+    "verifies": "AC#2",
+    "verification": "acceptance `tests/toolchain/bot-import-gaps.acceptance.test.ts::bot-reachable advice code lints clean and golden.ts is exempt`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-06",
+    "verifies": "AC#2",
+    "verification": "command `grep -n \"TASK-6.27\" tools/lint/headless-boundary.js && grep -n \"Approved\\|user (Q-1)\" doit/TASK-6.27/spec.md`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-07",
+    "verifies": "AC#1, AC#2",
+    "verification": "command `test -z \"$(git diff --stat main -- src tests/toolchain/bot-boundary.acceptance.test.ts)\" && npm run lint && npm run typecheck && npm test`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-08",
+    "verifies": "AC#2",
+    "verification": "command `backlog decision list --plain | grep \"TASK-6.27 Q-1\"`",
+    "status": "pending"
+  }
+]
