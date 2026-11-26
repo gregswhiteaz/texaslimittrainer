@@ -94,14 +94,9 @@ describe('end recheck storage acceptance', () => {
       const sessions = JSON.stringify(await all(factory, SESSIONS_STORE));
       const stored = JSON.stringify(await all(factory, REPORTS_STORE));
 
-      await expect(
-        openHandStore(factory).endSession(value.sessionId, NOW),
-        label,
-      ).rejects.toMatchObject({ name: 'ConstraintError' });
-      await expect(
-        openHandStore(factory).endSession(value.sessionId, NOW),
-        label,
-      ).rejects.toBeInstanceOf(DOMException);
+      const result = openHandStore(factory).endSession(value.sessionId, NOW);
+      await expect(result, label).rejects.toBeInstanceOf(DOMException);
+      await expect(result, label).rejects.toMatchObject({ name: 'ConstraintError' });
 
       const after = await all(factory, SESSIONS_STORE);
       expect(JSON.stringify(after), label).toBe(sessions);

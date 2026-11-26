@@ -140,7 +140,8 @@ test('the Table opens only after the paused session is ended', async ({ page }) 
     );
   await expect.poll(async () => (await fresh()).length).toBe(1);
   const [started] = await fresh();
-  const id = started?.sessionId as string;
+  const id = started?.sessionId;
+  if (typeof id !== 'string') throw new Error('no new session id');
   expect((await storedSessions(page)).filter((s) => s.sessionId !== A)).toHaveLength(1);
 
   await playToResult(page, 1, () => page.clock.runFor(50));
