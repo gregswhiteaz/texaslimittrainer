@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-25T23:03:00Z'
-updated_date: '2026-11-26T21:24:00Z'
+updated_date: '2026-11-26T21:35:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -46,4 +46,8 @@ Full spec: doit/TASK-6.27/spec.md
 
 <!-- SECTION:NOTES:BEGIN -->
 doit autopilot skipped (2026-11-26): AC#2 needs a user decision (may bots import src/advice?). AC#1 is buildable on its own once that is decided or the AC is split out.
+
+Build: TSImportType selectors in the bot boundary rule; bots barred from advice/golden; adviceHiddenStateConfig keeps engine hand state out of advice code (golden.ts excepted); new tooling acceptance tests; repo lints clean; gate PASS
+
+Recorded decision-3 (accepted): bots may import src/advice; lint guard keeps hidden hand state out of it (Q-1 = a).
 <!-- SECTION:NOTES:END -->
