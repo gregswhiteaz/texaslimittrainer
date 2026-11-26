@@ -1,7 +1,7 @@
 ---
 id: TASK-7.33
 title: Harden the TASK-7.32 advice fields and river-bet clause
-status: In Progress
+status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-25T01:41:00Z'
@@ -14,6 +14,8 @@ dependencies:
   - TASK-7.32
 references:
   - doc-129
+documentation:
+  - doc-166
 parent_task_id: TASK-7
 priority: low
 ordinal: 240000
@@ -50,4 +52,12 @@ Full spec: doit/TASK-7.33/spec.md
 Build: fields required; river-bet clause via {riverBet} template slot (text byte-identical, playtest SHAs unchanged); grade rejects non-finite valueThresholdPct; AC#6 title and golden id fixed; gate PASS
 
 Judge r1 PASS (9/9 SPEC items; mutation-checked; text byte-identical)
+
+Follow-ups: none tracked (percent range-check NIT is local-tampering only, below the value bar).
 <!-- SECTION:NOTES:END -->
+
+## Final Summary
+
+<!-- SECTION:FINAL_SUMMARY:BEGIN -->
+Made requiredCountsRiverBet and valueThresholdPct required on PostflopRecommendation; the river-bet clause is now its own {riverBet} template slot (slot loss fails a test); grading rejects a non-finite valueThresholdPct; fixed the AC#6 title (65.1%) and renamed the golden spot to 6max-flop-co-raise-jj-3way (logged). Explanation text is byte-identical. Verified: gate PASS, judge round 1 PASS 9/9. Review: assumptions A-1..A-4 (GoldenNumbers threshold stays optional; id suffix -3way). Risks: none; optional follow-up to range-check percent fields.
+<!-- SECTION:FINAL_SUMMARY:END -->
