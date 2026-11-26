@@ -7,3 +7,4 @@
 No new dependencies.
 - `src/ui/App.tsx` — CI fix after review r1 (branch run 45803095640, WebKit players-choice timeout): replace only when the current Table entry is an earlier page load's (key ≠ lastTableKey). This load's own entry can still be current while closeTable's history.back() is pending; replacing it then let that Back pop the new Table entry. Orchestrator edit; recorded deviation from D-1/A-1 (see fix-brief.md).
 - `docs/ui/navigation.md` — review r2 MINOR: say only an earlier load's Table entry is replaced (orchestrator)
+- `docs/ui/navigation.md` — judge J-1-01: split the run-on reload sentence (orchestrator)

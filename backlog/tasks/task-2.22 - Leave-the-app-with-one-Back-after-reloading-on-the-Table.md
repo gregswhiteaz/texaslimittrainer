@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-25T20:08:00Z'
-updated_date: '2026-11-26T10:55:00Z'
+updated_date: '2026-11-26T11:13:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -27,7 +27,7 @@ Follow-up from TASK-2.20 (doc-146). After a reload while on the Table, the earli
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Given a reload while on the Table, then Resume and Home, When the user presses Back from Home, Then one Back leaves the app (or the extra entry is replaced so no stale Table entry remains), with no page reload on the way
+- [x] #1 Given a reload while on the Table, then Resume and Home, When the user presses Back from Home, Then one Back leaves the app (or the extra entry is replaced so no stale Table entry remains), with no page reload on the way
 <!-- AC:END -->
 
 ## Implementation Plan
@@ -51,4 +51,6 @@ Build: openTable replaces instead of pushing when a Table entry is current; new 
 CI on the branch failed once (WebKit players-choice: Leave table → New game → Start game raced closeTable's pending history.back()). openTable now replaces only an earlier load's Table entry (key ≠ lastTableKey); this load's entry, current only while a Back is pending, is pushed over as before. Orchestrator fix; judge told.
 
 Recorded deviation from spec D-1/A-1: replace only an earlier page load's Table entry (key ≠ lastTableKey); see doit/TASK-2.22/fix-brief.md.
+
+Judge r1 PASS (5/5 SPEC items; recorded deviation judged on substance); J-1-01 doc sentence split by orchestrator
 <!-- SECTION:NOTES:END -->

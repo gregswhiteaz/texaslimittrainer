@@ -3,30 +3,30 @@
     "id": "SPEC-01",
     "verifies": "AC#1",
     "verification": "acceptance `e2e/reload-history.spec.ts::after a reload on the Table, Resume and Home, one Back leaves the app`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-02",
     "verifies": "AC#1",
     "verification": "acceptance `e2e/reload-history.spec.ts::after a reload on the Table and Resume, Back pauses to Home and one more Back leaves the app`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-03",
     "verifies": "AC#1",
     "verification": "acceptance `e2e/reload-history.spec.ts::after a reload on the Table a new game then Home leaves the app with one Back`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-04",
     "verifies": "AC#1",
     "verification": "command `npm run build && npx playwright test e2e/history.spec.ts e2e/pause-history.spec.ts e2e/home.spec.ts e2e/home-control.spec.ts e2e/error-recovery.spec.ts`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-05",
     "verifies": "AC#1",
     "verification": "manual Read `docs/ui/navigation.md` \u00a7\"Browser Back and Forward\" and \u00a7Tests against this list.",
-    "status": "pending"
+    "status": "pass"
   }
 ]
