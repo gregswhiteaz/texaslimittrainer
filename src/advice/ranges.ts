@@ -10,7 +10,7 @@ import type { PlayerView } from '../engine/player-view';
 import type { HoleCards } from './equity';
 import { basisText, OBSERVED_MIN_HANDS } from './explanations';
 import { comboCount, HAND_CLASSES, handClassOf, type HandClass } from './hand-class';
-import { positionOf } from './preflop';
+import { positionOf, referenceSizeOf } from './preflop';
 import type { Position, ReferenceSize } from './preflop-chart';
 // The JSON imports stay last, like the chart's.
 import handOrder from './ranges/hand-order.json' with { type: 'json' };
@@ -237,12 +237,9 @@ export const DEFAULT_RANGES: Readonly<Record<ReferenceSize, DefaultRanges>> = {
   'full-ring': FULL_RING_RANGES,
 };
 
-/** The default ranges for `dealtIn` seats: 2 heads-up, 6 six-max, 8-10 full ring; null for other sizes (Q-4). */
-export function rangesFor(dealtIn: number): DefaultRanges | null {
-  if (dealtIn === 2) return HEADS_UP_RANGES;
-  if (dealtIn === 6) return SIX_MAX_RANGES;
-  if (dealtIn >= 8 && dealtIn <= 10) return FULL_RING_RANGES;
-  return null;
+/** The default ranges for `dealtIn` seats: 2 heads-up, 3-7 six-max, 8-10 full ring. Throws RangeError otherwise. */
+export function rangesFor(dealtIn: number): DefaultRanges {
+  return DEFAULT_RANGES[referenceSizeOf(dealtIn)];
 }
 
 /** Throws RangeError('Ranges <size> have no range <position> <line>') if absent. */
@@ -560,18 +557,16 @@ export function callingRange(
 
 export interface OpponentRange {
   readonly seat: SeatNumber;
-  /** null when the table size has no default ranges (rangesFor). */
-  readonly position: Position | null;
-  /** null when the table size has no default ranges (rangesFor). */
-  readonly line: PreflopLine | null;
-  /** The expanded default range, or every unseen combo (A-3). */
+  readonly position: Position;
+  readonly line: PreflopLine;
+  /** The expanded default range, or every unseen combo when dead cards block all of it (A-3). */
   readonly start: readonly HoleCards[];
   /** After postflop narrowing. */
   readonly combos: readonly HoleCards[];
   /** Whether the start range rests on this opponent's observed stats. */
   readonly basis: OpponentBasis;
-  /** Width % of the classes `start` was built from; null without a default range. */
-  readonly widthPct: number | null;
+  /** Width % of the classes `start` was built from. */
+  readonly widthPct: number;
 }
 
 const AGGRESSION: readonly NarrowingAction[] = ['raise', 'bet', 'call', 'check'];
@@ -637,25 +632,19 @@ export function estimateOpponentRanges(
   return view.players
     .filter((p) => p.seat !== view.seat && !p.folded)
     .map(({ seat }) => {
-      let position: Position | null = null;
-      let line: PreflopLine | null = null;
-      let start: HoleCards[] = [];
-      let widthPct: number | null = null;
+      const position = positionOf({ ...view, seat }, ranges.referenceSize);
+      const line = preflopLineOf(view, seat);
+      let classes = defaultRange(ranges, position, line).classes;
+      let widthPct = rangeWidthPct(classes);
       let basis: OpponentBasis = { seat, observedHands: null, text: basisText(null) };
-      if (ranges !== null) {
-        position = positionOf({ ...view, seat }, ranges.referenceSize);
-        line = preflopLineOf(view, seat);
-        let classes = defaultRange(ranges, position, line).classes;
-        widthPct = rangeWidthPct(classes);
-        const obs = bySeat.get(seat);
-        const stat = OBSERVED_LINE_STAT[line];
-        if (obs !== undefined && stat !== null && obs.hands >= OBSERVED_MIN_HANDS) {
-          widthPct = scaledWidthPct(widthPct, obs[stat], obs.hands);
-          classes = strongestClasses(widthPct);
-          basis = { seat, observedHands: obs.hands, text: basisText(obs.hands) };
-        }
-        start = expandRange(classes, dead);
+      const obs = bySeat.get(seat);
+      const stat = OBSERVED_LINE_STAT[line];
+      if (obs !== undefined && stat !== null && obs.hands >= OBSERVED_MIN_HANDS) {
+        widthPct = scaledWidthPct(widthPct, obs[stat], obs.hands);
+        classes = strongestClasses(widthPct);
+        basis = { seat, observedHands: obs.hands, text: basisText(obs.hands) };
       }
+      let start = expandRange(classes, dead);
       if (start.length === 0) start = unseenCombos(dead);
       let combos = start;
       for (const [street, size] of STREET_BOARDS) {

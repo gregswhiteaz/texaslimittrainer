@@ -27,13 +27,16 @@ the position, counting only seats dealt in:
 | Seats dealt in | Data file        | Positions                                       |
 | -------------- | ---------------- | ----------------------------------------------- |
 | 2              | `heads-up.json`  | BTN (the button, who posts the small blind), BB |
-| 6              | `six-max.json`   | SB, BB, UTG, HJ, CO, BTN                        |
+| 3 to 7         | `six-max.json`   | SB, BB, UTG, HJ, CO, BTN                        |
 | 8, 9 or 10     | `full-ring.json` | SB, BB, UTG, UTG+1, MP, LJ, HJ, CO, BTN         |
 
-At full ring the seats are named back from the button (BTN, CO, HJ, LJ, MP, UTG+1, UTG), as on the
-full-ring preflop chart. With 8 seats nobody is UTG: the first seat after the big blind is UTG+1.
-With 10 seats the two seats after the big blind are both UTG and share the UTG ranges. Tables with 3,
-4, 5 or 7 seats dealt in have no default ranges yet (see "Other table sizes" below).
+The table size picks the same reference size as the preflop charts: 2 seats heads-up, 3 to 7 seats
+six-max and 8 to 10 seats full ring. At six-max and full ring the seats are named back from the
+button, as on the preflop charts. Six-max seats with 3 seats are BTN, SB, BB; with 4 seats CO, BTN,
+SB, BB; with 5 seats HJ, CO, BTN, SB, BB; with 6 seats UTG, HJ, CO, BTN, SB, BB. With 7 seats the
+two seats after the big blind are both UTG and share the UTG ranges. At full ring the names run BTN,
+CO, HJ, LJ, MP, UTG+1, UTG. With 8 seats nobody is UTG: the first seat after the big blind is UTG+1.
+With 10 seats the two seats after the big blind are both UTG and share the UTG ranges.
 
 **Preflop line.** The opponent's last voluntary action before the flop, counted against how many
 raises came before it. Posting a blind is not a voluntary action.
@@ -206,6 +209,39 @@ Before the change the 9-seat WTSD (50.7) was above its healthy range; with the f
 the range. Every stat at both sizes is now inside its healthy range. Heads-up aggression (69.5) sits just under its
 70 ceiling. Preflop stats do not move, because the preflop charts are unchanged.
 
+### Effect at 3, 4, 5 and 7 seats (TASK-7.35)
+
+Measured the same way (all-TAG cash, seed 42, stats summed over every seat), before and after tables with 3, 4, 5
+or 7 seats moved from every unseen hand to the six-max ranges. Each size is compared with the six-max healthy
+ranges, as the session report does.
+
+| Size (hands)           | VPIP  | PFR   | Aggression | WTSD  | W$SD  |
+| ---------------------- | ----- | ----- | ---------- | ----- | ----- |
+| 3 seats 10,000, before | 31.0  | 21.9  | 64.2       | 41.2  | 52.6  |
+| 3 seats 10,000, after  | 31.0  | 21.9  | 65.8       | 40.9  | 52.8  |
+| 3 seats 100,000, after | 31.1  | 22.0  | 65.9       | 41.7  | 52.7  |
+| 4 seats 10,000, before | 27.9  | 20.1  | 63.2       | 44.4  | 51.6  |
+| 4 seats 10,000, after  | 27.9  | 20.1  | 65.0       | 42.5  | 51.7  |
+| 4 seats 100,000, after | 28.1  | 20.4  | 65.2       | 41.5  | 52.2  |
+| 5 seats 10,000, before | 24.9  | 18.1  | 61.9       | 44.9  | 51.6  |
+| 5 seats 10,000, after  | 24.9  | 18.1  | 64.6       | 41.1  | 52.0  |
+| 5 seats 100,000, after | 24.8  | 18.1  | 64.7       | 40.9  | 52.0  |
+| 7 seats 10,000, before | 20.4  | 14.8  | 60.8       | 46.5  | 50.6  |
+| 7 seats 10,000, after  | 20.4  | 14.8  | 63.9       | 40.0  | 51.5  |
+| 7 seats 100,000, after | 20.4  | 14.9  | 63.7       | 40.3  | 51.2  |
+| 6-max healthy          | 20–28 | 14–22 | 50–66      | 30–42 | 47–57 |
+
+Before the change WTSD was above its healthy range at 4, 5 and 7 seats (44.4, 44.9 and 46.5). With the six-max
+ranges it falls to 40.3–41.7 over 100,000 hands, inside the range at every size. Aggression rises by 1.5 to 3 points
+and stays inside. Stats still outside their healthy range after the change:
+
+- 3 seats VPIP 31.1 (100,000 hands; 31.0 over 10,000), above 20–28.
+- 4 seats VPIP 28.1 (100,000 hands), just above 20–28 (27.9 over 10,000).
+- 4 seats WTSD 42.5 over 10,000 hands, just above 30–42 (41.5 over 100,000, inside).
+
+VPIP and PFR come from the preflop charts, which this change does not touch, so the two VPIP misses were there
+before too.
+
 ## Adjusting to observed play
 
 The caller may pass a snapshot of each opponent's session stats with every decision: hands seen,
@@ -236,8 +272,8 @@ for more as hands build up and fully from 100 hands. With `d` = 20 and 30 hands,
 | `check` (big blind, nobody raised)     | not scaled        |
 
 The `check` line is not a voluntary range, so it keeps its default. The scaling applies at every
-table size with default ranges (heads-up, six-max and full ring). Tables with 3, 4, 5 or 7 seats
-have no default range to scale yet, and the simpler "every unseen hand" mode ignores the snapshot.
+table size from 2 to 10 seats, because every size has default ranges. The simpler "every unseen
+hand" mode ignores the snapshot.
 
 **Hand order.** The rebuilt range is the strongest `width` % of starting hands in the hand order
 stored in `src/advice/ranges/hand-order.json`: the shortest run of classes from the top of the
@@ -330,9 +366,9 @@ and Draw, which leaves {AhKh, 9h9d, 6h5h, Th9h, Ac2c}.
 - **Cards that cannot all be dealt.** With several opponents, their ranges can occasionally clash
   so that no deal gives every one of them a hand. The equity is then computed again from the
   starting ranges before narrowing, and if that also fails, from every unseen hand for everyone.
-- **Other table sizes.** Default ranges exist for 2, 6 and 8 to 10 seats dealt in. With 3, 4, 5 or
-  7 seats every opponent starts from every unseen hand, and the narrowing after the flop still
-  applies. Follow-up TASK-7.35 moves those sizes to the six-max ranges.
+- **Other table sizes.** Only heads-up, six-max and full-ring ranges are authored. Tables with 3,
+  4, 5 or 7 seats dealt in use the six-max ranges for their positions (TASK-7.35), so the ranges
+  are an approximation there, as the preflop charts are.
 
 All of these steps are fixed and depend only on what the hero can see, so the same decision always
 gets the same advice.

@@ -8,6 +8,7 @@ import {
   expandRange,
   HEADS_UP_RANGES,
   narrowRange,
+  SIX_MAX_RANGES,
   unseenCombos,
 } from '../../src/advice/ranges';
 import { ACTION_RANGE_ADVICE } from '../../src/advice/recommend';
@@ -106,7 +107,7 @@ afterEach(() => {
 });
 
 describe('postflop advice with action ranges', () => {
-  it('actions mode falls back on scripted lines and tables without default ranges', () => {
+  it('actions mode falls back on scripted lines and uses size ranges at every table size', () => {
     for (const [steps, size] of [
       [FLOP_STEPS, 1081],
       [TURN_STEPS, 1035],
@@ -166,7 +167,7 @@ describe('postflop advice with action ranges', () => {
     expect(hu?.combos.length).toBeGreaterThan(0);
     expect(recommendPostflop(headsUp, ACTION_RANGE_ADVICE).opponents).toBe(1);
 
-    // Five seats have no default ranges (Q-4), so starts are every unseen combo; narrowing still applies.
+    // Five seats use the 6-max ranges (TASK-7.35): SB 2 completes, BB 3 checks, then BB bets the flop.
     const fiveSeats = toActView(
       [
         [4, 'call', 4],
@@ -183,12 +184,18 @@ describe('postflop advice with action ranges', () => {
     const fiveDead = [...fiveSeats.holeCards, ...fiveSeats.board];
     const five = estimateOpponentRanges(fiveSeats);
     expect(five.map((o) => o.seat)).toEqual([2, 3]);
+    expect(five[0]).toMatchObject({ seat: 2, position: 'SB', line: 'limp' });
+    expect(five[1]).toMatchObject({ seat: 3, position: 'BB', line: 'check' });
     for (const opponent of five) {
-      expect(opponent).toMatchObject({ position: null, line: null, widthPct: null });
-      expect(opponent.start).toEqual(unseenCombos(fiveDead));
+      const start = expandRange(
+        defaultRange(SIX_MAX_RANGES, opponent.position, opponent.line).classes,
+        fiveDead,
+      );
+      expect(opponent.start).toEqual(start);
+      expect(start.length).toBeLessThan(unseenCombos(fiveDead).length);
     }
-    expect(five[1]?.combos).toEqual(narrowRange(unseenCombos(fiveDead), fiveSeats.board, 'bet'));
-    expect(five[1]?.combos.length).toBeLessThan(1081);
+    expect(five[1]?.combos).toEqual(narrowRange(five[1]?.start ?? [], fiveSeats.board, 'bet'));
+    expect(five[1]?.combos.length).toBeGreaterThan(0);
     expect(recommendPostflop(fiveSeats, ACTION_RANGE_ADVICE).opponents).toBe(2);
   });
 
