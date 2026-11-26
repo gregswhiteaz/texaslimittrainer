@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-18T07:03:00Z'
-updated_date: '2026-11-26T20:13:00Z'
+updated_date: '2026-11-26T20:24:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -43,3 +43,11 @@ Follow-up from TASK-1.5. REQ-028.2 says replaying a hand reproduces every bot ac
 
 Full spec: doit/TASK-6.20/spec.md
 <!-- SECTION:PLAN:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+Build: REQ-029.3 + change-log 1.12; PlayerView.earlierShowdowns doc comment; guard test bot-actions-ignore-earlier-showdowns (fails with 55 mismatches when a bot reads the list); gate PASS
+
+Recorded decision-1 (accepted): bot decisions use only the current hand (Q-1 = B). TASK-6.23 archived as not needed.
+<!-- SECTION:NOTES:END -->

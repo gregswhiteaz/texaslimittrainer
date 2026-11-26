@@ -4,7 +4,7 @@ title: Give bots the same earlier showdowns in the app and on replay
 status: To Do
 assignee: []
 created_date: '2026-11-22T19:31:00Z'
-updated_date: '2026-11-25T21:06:00Z'
+updated_date: '2026-11-26T20:24:00Z'
 labels:
   - follow-up
   - feature
@@ -34,4 +34,6 @@ Moved from TASK-6.15 AC#4 (autopilot Q-1, auto-accepted 2026-11-22). A replay co
 
 <!-- SECTION:NOTES:BEGIN -->
 AC added from TASK-6.19 spec scope note.
+
+Not needed: decision-1 (TASK-6.20 Q-1, user 2026-11-26) — bot decisions use only the current hand; REQ-029.3. Archived.
 <!-- SECTION:NOTES:END -->
