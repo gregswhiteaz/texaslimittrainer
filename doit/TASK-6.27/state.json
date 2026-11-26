@@ -7,18 +7,18 @@
   "review_round": 1,
   "judge_round": 0,
   "sendbacks": 0,
-  "gate_runs": 1,
+  "gate_runs": 2,
   "questions": 2,
   "assumptions": 0,
   "escalations": 1,
   "item_failures": {},
   "locked_tests": {
-    "tests/toolchain/bot-import-gaps.acceptance.test.ts": "94646ec9f0ea7dfb260e5f164973dcec19141c7ed1cd2c4576f7c8424eb0004c"
+    "tests/toolchain/bot-import-gaps.acceptance.test.ts": "f8c451f41d84eabd315479bbe5d3f2eb68830c7521fab83ed9c40609fe84a7e2"
   },
   "test_snapshot": {
     "tests/toolchain/bot-import-gaps.acceptance.test.ts": {
-      "sha": "94646ec9f0ea7dfb260e5f164973dcec19141c7ed1cd2c4576f7c8424eb0004c",
-      "asserts": 12,
+      "sha": "f8c451f41d84eabd315479bbe5d3f2eb68830c7521fab83ed9c40609fe84a7e2",
+      "asserts": 15,
       "skips": 0
     },
     "e2e/action-bar-limits.spec.ts": {
@@ -2214,7 +2214,5 @@
       "review r1"
     ]
   },
-  "relock_pending": [
-    "tests/toolchain/bot-import-gaps.acceptance.test.ts"
-  ]
+  "relock_pending": []
 }

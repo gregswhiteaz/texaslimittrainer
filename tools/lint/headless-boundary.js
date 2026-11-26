@@ -139,10 +139,23 @@ const BOT_BOUNDARY_MESSAGE =
 const BOT_PACKAGE_MESSAGE =
   'Bot code may import only project modules by relative path (REQ-025.1).';
 
+// A non-normalized path ('/./', '//', 'name/..', './.') could reach a module past the allow-lists below.
+const NON_NORMALIZED_PATH = '/\\./|//|(^|/)[^./][^/]*/\\.\\.(/|$)|^\\./\\.';
+
+// golden.ts builds hands with createHand/applyAction, so it sits outside the advice boundary (TASK-6.27 D-3).
+const GOLDEN_PATH = '(^|/)advice/golden(\\.|$)';
+
+const SESSION_TYPE_NAMES = ['LineUpName', 'SessionConfig', 'SessionSeat'];
+
+// Allow-list (TASK-6.27 Q-2): bot code may import only sibling bot files, advice modules (not golden), the
+// two PlayerView-boundary engine modules and the lineup types from table/session.
 export const BOT_BOUNDARY_PATTERNS = [
   { regex: '^(?!\\.)', message: BOT_PACKAGE_MESSAGE },
-  // A non-normalized path ('/./', '//', 'name/..') could reach an engine module past the patterns below.
-  { regex: '/\\./|//|(^|/)[^./][^/]*/\\.\\.(/|$)', message: BOT_BOUNDARY_MESSAGE },
+  { regex: NON_NORMALIZED_PATH, message: BOT_BOUNDARY_MESSAGE },
+  {
+    regex: '^(?!\\./|\\.\\./(advice|engine)/[^/]+$|\\.\\./table/session$)',
+    message: BOT_BOUNDARY_MESSAGE,
+  },
   { regex: '(^|/)engine/(?!(player-view|hand)$)[^/]+$', message: BOT_BOUNDARY_MESSAGE },
   { regex: '(^|/)engine/player-view$', allowTypeImports: true, message: BOT_BOUNDARY_MESSAGE },
   {
@@ -150,29 +163,48 @@ export const BOT_BOUNDARY_PATTERNS = [
     allowImportNames: ['Action', 'SeatNumber', 'Street'],
     message: BOT_BOUNDARY_MESSAGE,
   },
-  // golden.ts builds hands with createHand/applyAction, so it sits outside the advice boundary (TASK-6.27 D-3).
-  { regex: '(^|/)advice/golden$', message: BOT_BOUNDARY_MESSAGE },
+  { regex: GOLDEN_PATH, message: BOT_BOUNDARY_MESSAGE },
+  // Only the lineup types (see BOT_SESSION_VALUE_IMPORT): TableState and BotTurn carry HandState. An
+  // allowTypeImports pattern here would let every type import skip all the patterns above.
+  {
+    regex: '(^|/)table/session$',
+    allowImportNames: SESSION_TYPE_NAMES,
+    message: BOT_BOUNDARY_MESSAGE,
+  },
 ];
 
 // Groups with allowImportNames ignore imports that have no specifiers, so side-effect imports need a selector.
 const BOT_SIDE_EFFECT_IMPORT = {
-  selector: 'ImportDeclaration[specifiers.length=0][source.value=/(^|\\/)engine\\//]',
+  selector:
+    'ImportDeclaration[specifiers.length=0][source.value=/(^|\\/)(engine\\/|table\\/session$)/]',
+  message: BOT_BOUNDARY_MESSAGE,
+};
+
+// table/session names may be imported or re-exported only as types.
+const BOT_SESSION_VALUE_IMPORT = {
+  selector:
+    "ImportDeclaration[importKind='value'][source.value=/(^|\\/)table\\/session$/] > ImportSpecifier[importKind='value']," +
+    "ExportNamedDeclaration[exportKind='value'][source.value=/(^|\\/)table\\/session$/] > ExportSpecifier[exportKind='value']",
   message: BOT_BOUNDARY_MESSAGE,
 };
 
 // A type-position import('…') is a TSImportType, which no-restricted-imports does not check (TASK-6.27).
-// Same allow-list as BOT_BOUNDARY_PATTERNS: any engine/player-view type, and Action, SeatNumber, Street from
-// engine/hand.
+// Same allow-list as BOT_BOUNDARY_PATTERNS.
 const BOT_TYPE_IMPORT_SYNTAX = [
   {
     selector:
-      'TSImportType[source.value=/(^|\\/)engine\\//]:not([source.value=/(^|\\/)engine\\/(player-view|hand)$/]),' +
+      'TSImportType:not([source.value=/^(\\.\\/(?!\\.)|\\.\\.\\/(advice\\/(?!golden(\\.|$))[^\\/]+|engine\\/(player-view|hand)|table\\/session)$)/]),' +
       'TSImportType[source.value=/\\/\\.\\/|\\/\\/|(^|\\/)[^.\\/][^\\/]*\\/\\.\\.(\\/|$)/]',
     message: BOT_BOUNDARY_MESSAGE,
   },
   {
     selector:
       "TSImportType[source.value=/(^|\\/)engine\\/hand$/]:not([qualifier.type='Identifier'][qualifier.name=/^(Action|SeatNumber|Street)$/])",
+    message: BOT_BOUNDARY_MESSAGE,
+  },
+  {
+    selector:
+      "TSImportType[source.value=/(^|\\/)table\\/session$/]:not([qualifier.type='Identifier'][qualifier.name=/^(LineUpName|SessionConfig|SessionSeat)$/])",
     message: BOT_BOUNDARY_MESSAGE,
   },
 ];
@@ -191,6 +223,7 @@ export const botSeatPolicyConfig = {
       'error',
       ...BOT_DETERMINISM_RESTRICTED_SYNTAX,
       BOT_SIDE_EFFECT_IMPORT,
+      BOT_SESSION_VALUE_IMPORT,
       ...BOT_TYPE_IMPORT_SYNTAX,
     ],
   },
@@ -204,8 +237,11 @@ export const ADVICE_BOUNDARY_IGNORES = ['src/advice/golden.ts'];
 const ADVICE_BOUNDARY_MESSAGE =
   'Advice code that bots use may import only PlayerView-boundary engine types and the pure card, evaluator and random helpers, so bots cannot reach hidden cards through it (REQ-025.1).';
 
+// Allow-list (TASK-6.27 Q-2): sibling advice files except golden, and five engine modules.
 export const ADVICE_BOUNDARY_PATTERNS = [
-  { regex: '/\\./|//|(^|/)[^./][^/]*/\\.\\.(/|$)', message: ADVICE_BOUNDARY_MESSAGE },
+  { regex: NON_NORMALIZED_PATH, message: ADVICE_BOUNDARY_MESSAGE },
+  { regex: '^(?!\\./|\\.\\./engine/[^/]+$)', message: ADVICE_BOUNDARY_MESSAGE },
+  { regex: '(^|/)golden(\\.|$)', message: ADVICE_BOUNDARY_MESSAGE },
   {
     regex: '(^|/)engine/(?!(player-view|hand|cards|hand-evaluator|seeded-random)$)[^/]+$',
     message: ADVICE_BOUNDARY_MESSAGE,
@@ -218,10 +254,27 @@ export const ADVICE_BOUNDARY_PATTERNS = [
   },
 ];
 
+// Type-position import('…') in advice code gets the same allow-list; engine types only from player-view and
+// the Action, SeatNumber, Street names of engine/hand.
+const ADVICE_TYPE_IMPORT_SYNTAX = [
+  {
+    selector:
+      'TSImportType:not([source.value=/^(\\.\\/(?!\\.|golden(\\.|$))[^\\/]|\\.\\.\\/engine\\/(player-view|hand|cards|hand-evaluator|seeded-random)$)/]),' +
+      'TSImportType[source.value=/\\/\\.\\/|\\/\\/|(^|\\/)[^.\\/][^\\/]*\\/\\.\\.(\\/|$)/]',
+    message: ADVICE_BOUNDARY_MESSAGE,
+  },
+  {
+    selector:
+      "TSImportType[source.value=/(^|\\/)engine\\/hand$/]:not([qualifier.type='Identifier'][qualifier.name=/^(Action|SeatNumber|Street)$/])",
+    message: ADVICE_BOUNDARY_MESSAGE,
+  },
+];
+
 /**
  * TASK-6.27 D-3 (user answer Q-1, option (a)): bots may import src/advice, because every bot style builds on
  * the advice engine (REQ-026.1). This block keeps engine hand state out of the advice code bots can reach,
- * so that path cannot see hidden cards either (REQ-025.1); bots may not import advice/golden.
+ * so that path cannot see hidden cards either (REQ-025.1); bots may not import advice/golden, and advice
+ * code may not import golden, table, storage, playtest or other non-engine modules (Q-2 allow-list).
  * @type {import('eslint').Linter.Config}
  */
 export const adviceHiddenStateConfig = {
@@ -230,5 +283,10 @@ export const adviceHiddenStateConfig = {
   ignores: ADVICE_BOUNDARY_IGNORES,
   rules: {
     '@typescript-eslint/no-restricted-imports': ['error', { patterns: ADVICE_BOUNDARY_PATTERNS }],
+    'no-restricted-syntax': [
+      'error',
+      ...BOT_DETERMINISM_RESTRICTED_SYNTAX,
+      ...ADVICE_TYPE_IMPORT_SYNTAX,
+    ],
   },
 };

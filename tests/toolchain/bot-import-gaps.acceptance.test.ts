@@ -36,6 +36,76 @@ const GOLDEN_PROBE = {
     "import { parseGoldenSpots } from '../advice/golden';\n\nexport { parseGoldenSpots };\n",
 };
 
+const GOLDEN_PATH_PROBES: Record<string, string> = {
+  'src/bots/golden-js.ts':
+    "import { parseGoldenSpots } from '../advice/golden.js';\n\nexport { parseGoldenSpots };\n",
+  'src/bots/golden-ts.ts':
+    "import { parseGoldenSpots } from '../advice/golden.ts';\n\nexport { parseGoldenSpots };\n",
+  'src/bots/golden-type.ts':
+    "export type G = typeof import('../advice/golden').parseGoldenSpots;\n",
+  'src/bots/golden-type-js.ts':
+    "export type G = typeof import('../advice/golden.js').parseGoldenSpots;\n",
+};
+
+const BOT_ALLOW_LIST_PROBES: Record<string, string> = {
+  'src/bots/store.ts':
+    "import { sharedHandStore } from '../storage/hand-store';\n\nexport { sharedHandStore };\n",
+  'src/bots/table-state.ts':
+    "import type { TableState } from '../table/session';\n\nexport type { TableState };\n",
+  'src/bots/table-state-inline.ts':
+    "import { type TableState } from '../table/session';\n\nexport type { TableState };\n",
+  'src/bots/table-state-type.ts': "export type T = import('../table/session').TableState;\n",
+  'src/bots/table-state-js.ts':
+    "import type { TableState } from '../table/session.js';\n\nexport type { TableState };\n",
+  'src/bots/table-value.ts': "import { botTurn } from '../table/session';\n\nexport { botTurn };\n",
+  'src/bots/table-lineup-value.ts':
+    "import { LineUpName } from '../table/session';\n\nexport type { LineUpName };\n",
+  'src/bots/table-reexport.ts': "export type { TableState } from '../table/session';\n",
+  'src/bots/table-reexport-all.ts': "export * from '../table/session';\n",
+  'src/bots/table-side-effect.ts': "import '../table/session';\n",
+  'src/bots/table-dot.ts':
+    "import type { TableState } from './../table/session';\n\nexport type { TableState };\n",
+  'src/bots/hint.ts': "import { hintArrived } from '../table/hint';\n\nexport { hintArrived };\n",
+  'src/bots/runner.ts': "import { runHands } from '../playtest/runner';\n\nexport { runHands };\n",
+  'src/bots/runner-type.ts': "export type R = typeof import('../playtest/runner').runHands;\n",
+};
+
+const ADVICE_ALLOW_LIST_PROBES: Record<string, string> = {
+  'src/advice/probe-golden.ts':
+    "import { parseGoldenSpots } from './golden';\n\nexport { parseGoldenSpots };\n",
+  'src/advice/probe-golden-js.ts':
+    "import { parseGoldenSpots } from './golden.js';\n\nexport { parseGoldenSpots };\n",
+  'src/advice/probe-golden-all.ts': "export * from './golden';\n",
+  'src/advice/probe-table.ts':
+    "import { dealHand, type TableState } from '../table/session';\n\nexport { dealHand };\nexport type { TableState };\n",
+  'src/advice/probe-table-reexport.ts': "export { botTurn } from '../table/session';\n",
+  'src/advice/probe-table-type.ts': "export type T = import('../table/session').TableState;\n",
+  'src/advice/probe-storage.ts': "export { sharedHandStore } from '../storage/hand-store';\n",
+  'src/advice/probe-playtest.ts':
+    "import { runHands } from '../playtest/runner';\n\nexport { runHands };\n",
+  'src/advice/probe-package.ts':
+    "import { readFileSync } from 'node:fs';\n\nexport { readFileSync };\n",
+  'src/advice/probe-dot.ts':
+    "import { applyAction } from '../engine/./hand';\n\nexport { applyAction };\n",
+  'src/advice/probe-double-slash.ts':
+    "import { applyAction } from '../engine//hand';\n\nexport { applyAction };\n",
+  'src/advice/probe-parent.ts':
+    "import { applyAction } from '../engine/hand/../hand';\n\nexport { applyAction };\n",
+  'src/advice/probe-dot-parent.ts':
+    "import { sharedHandStore } from './../storage/hand-store';\n\nexport { sharedHandStore };\n",
+};
+
+const LINEUP_CLEAN_PROBE = [
+  "import type { LineUpName, SessionConfig, SessionSeat } from '../table/session';",
+  "import { type LineUpName as Name } from '../table/session';",
+  "import { recommend } from '../advice/recommend.js';",
+  '',
+  "export type { SessionSeat } from '../table/session';",
+  "export type T = [LineUpName, SessionConfig, SessionSeat, Name, import('../table/session').LineUpName];",
+  'export const probe = recommend;',
+  '',
+].join('\n');
+
 const TYPE_CLEAN_PROBE = [
   'export type T = [',
   "  import('../engine/player-view').PlayerView,",
@@ -89,7 +159,17 @@ describe('bot import gaps: type-position imports and the advice path', () => {
   let result: SandboxResult;
 
   beforeAll(() => {
-    result = runInSandbox({ ...TYPE_PROBES, ...ADVICE_PROBES, ...GOLDEN_PROBE }, 'lint');
+    result = runInSandbox(
+      {
+        ...TYPE_PROBES,
+        ...ADVICE_PROBES,
+        ...GOLDEN_PROBE,
+        ...GOLDEN_PATH_PROBES,
+        ...BOT_ALLOW_LIST_PROBES,
+        ...ADVICE_ALLOW_LIST_PROBES,
+      },
+      'lint',
+    );
   }, TOOLCHAIN_TIMEOUT_MS);
 
   it('type-position engine imports in bot code fail npm run lint', () => {
@@ -105,6 +185,17 @@ describe('bot import gaps: type-position imports and the advice path', () => {
   it('bot code that imports advice/golden fails npm run lint', () => {
     expect(result.exitCode, result.output).not.toBe(0);
     expectError(result, 'src/bots/golden.ts', BOUNDARY);
+    for (const file of Object.keys(GOLDEN_PATH_PROBES)) expectError(result, file, BOUNDARY);
+  });
+
+  it('bot code that imports modules outside the allow-list fails npm run lint', () => {
+    expect(result.exitCode, result.output).not.toBe(0);
+    for (const file of Object.keys(BOT_ALLOW_LIST_PROBES)) expectError(result, file, BOUNDARY);
+  });
+
+  it('advice code that imports golden, table, storage, playtest or packages fails npm run lint', () => {
+    expect(result.exitCode, result.output).not.toBe(0);
+    for (const file of Object.keys(ADVICE_ALLOW_LIST_PROBES)) expectError(result, file, ADVICE);
   });
 
   it(
@@ -112,6 +203,7 @@ describe('bot import gaps: type-position imports and the advice path', () => {
     async () => {
       const eslint = new ESLint({ cwd: REPO_ROOT });
       expect(await errorsOf(eslint, TYPE_CLEAN_PROBE, 'src/bots/probe.ts')).toEqual([]);
+      expect(await errorsOf(eslint, LINEUP_CLEAN_PROBE, 'src/bots/probe.ts')).toEqual([]);
 
       const bots = await eslint.lintFiles(['src/bots']);
       expect(bots.length).toBeGreaterThan(0);
