@@ -1,6 +1,6 @@
 {
   "task": "TASK-7.28",
-  "stage": "build",
+  "stage": "done",
   "branch": "doit/TASK-7.28",
   "base_commit": "7e02c7f397fe57249f14283cc33f88f70759b71c",
   "started": "2026-11-25T20:33:37",
@@ -9,7 +9,7 @@
   "sendbacks": 0,
   "gate_runs": 3,
   "questions": 0,
-  "assumptions": 0,
+  "assumptions": 3,
   "escalations": 0,
   "item_failures": {
     "SPEC-01": 0,
@@ -2068,5 +2068,6 @@
   },
   "judge_results": {
     "1": "PASS"
-  }
+  },
+  "doc_id": "doc-153"
 }

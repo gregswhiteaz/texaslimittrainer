@@ -1,17 +1,19 @@
 ---
 id: TASK-7.28
 title: Count straight-draw outs only when a hole card is part of the draw
-status: In Progress
+status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-23T08:19:00Z'
-updated_date: '2026-11-26T04:42:00Z'
+updated_date: '2026-11-26T04:43:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
 milestone: m-1
 dependencies:
   - TASK-7.9
+documentation:
+  - doc-153
 parent_task_id: TASK-7
 priority: medium
 ordinal: 224000
@@ -52,4 +54,12 @@ AC#2 replaced (Q-1, auto-accepted): the original example 9c 2d on 5h 6s 7h is on
 Build: straight outs need a hole rank in the run not on the board; no straight outs on a made flush; playtest SHA 643c81…→f6c8d1… (0 violations); slow style-bands 3/3 seeds pass; gate PASS
 
 Judge r1 PASS (7/7 SPEC items)
+
+Follow-ups: none (two NITs not tracked).
 <!-- SECTION:NOTES:END -->
+
+## Final Summary
+
+<!-- SECTION:FINAL_SUMMARY:BEGIN -->
+`drawOuts` now counts straight outs only when a hole card adds a rank not on the board, and drops straight outs when the hero already holds a flush (5+ of a suit). Change is in src/advice/ranges.ts (67 lines, 4 files); classifier results are unchanged. Verified: npm test 1433 pass, new locked acceptance test, judge PASS 7/7, playtest SHA moved 643c8111... to f6c8d172... with 0 invariant violations, style bands 3/3 seeds pass unedited. Assumptions to review: A-1 (hole rank not on board), A-2 (made flush = 5+ suit cards), A-3 (SHA recorded in build-log). Q-1 replaced AC#2's example (now AC#4, 8c 2d on 5h 6s 7h). Only two NITs remain; no follow-ups.
+<!-- SECTION:FINAL_SUMMARY:END -->
