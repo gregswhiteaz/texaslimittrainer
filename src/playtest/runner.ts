@@ -69,7 +69,7 @@ export interface PlaytestOptions {
   /** Default 'cash'. */
   readonly game?: GameType;
   /** Seat 1 plays the user (TAG), seats 2..size the preset's styles (seatStylesPolicyFactory); in cash a bot
-   *  that busts is replaced by a new bot drawn from the preset (REQ-007.5). An explicit seams.makePolicy wins.
+   *  that busts is replaced by a new bot of the same style (REQ-007.5). An explicit seams.makePolicy wins.
    *  Default: defaultPolicyFactory. */
   readonly lineUp?: LineUpPreset;
   /** Passed to every hand as HandSetup.userPolicy. Default: none. */

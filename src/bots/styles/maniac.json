@@ -45,7 +45,7 @@
       "advice": "fold",
       "instead": "call",
       "probability": 0.8,
-      "justification": "Calling most bets the pot odds say to fold makes the Maniac pay off value bets with weak hands, which is how a real maniac gives back the chips it wins with steals and keeps its aggression from reaching every street."
+      "justification": "Calling most bets the pot odds say to fold makes the Maniac pay off value bets with weak hands, giving back the chips it wins with steals, and the extra calls help keep its postflop aggression inside its 65 to 85 percent band."
     }
   ]
 }

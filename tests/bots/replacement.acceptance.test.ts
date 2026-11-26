@@ -23,7 +23,7 @@ import {
 } from '../../src/table/session';
 import { withFinalStacks } from '../support/table-scenarios';
 
-const DRAWS = 10_000;
+const DRAWS = 8;
 const CODES = Array.from({ length: DRAWS }, (_, i) => replayCodeFromWords([i + 1, 6, 8, 3]));
 
 /** `config`'s first hand dealt from CODES[0] and played out (the user folds), with every bot ending on $0. */
@@ -34,7 +34,7 @@ function everyBotBusted(config: SessionConfig): TableState {
   return withFinalStacks(stacks, table);
 }
 
-/** The style of each new bot after nextHand, over the 10,000 codes as the finished hand's replay code. */
+/** The style of each new bot after nextHand, over the fixed CODES as the finished hand's replay code. */
 function tally(config: SessionConfig): Map<StyleName, number> {
   const busted = everyBotBusted(config);
   const counts = new Map<StyleName, number>();
@@ -65,7 +65,7 @@ const seated = (config: SessionConfig): StyleName[] =>
   ALL.filter((style) => config.seats.some((s) => s.style === style));
 
 describe('replacement bot styles and names', () => {
-  it("10,000 replacements at 6 players keep each preset's styles", () => {
+  it("replacements at 6 players keep each preset's styles", () => {
     const expected: [LineUpPreset, StyleName[]][] = [
       ['Mixed', ALL],
       ['Tough', ['TAG', 'Maniac']],

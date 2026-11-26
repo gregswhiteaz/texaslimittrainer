@@ -271,15 +271,6 @@ const stylesOption = (seats: readonly LineUpSeat[]): string =>
     .map((s) => styleSlug(s.style as StyleName))
     .join(',')}`;
 
-/** ` --styles …` when a bot in `hand.lineUp` no longer plays the preset's style at its seat, else ''. */
-function replacedStylesOption(hand: PlayedHand, lineUp: string | undefined): string {
-  const preset = lineUp === undefined ? undefined : LINE_UPS[lineUp];
-  if (hand.lineUp === undefined || preset === undefined) return '';
-  const seated = seatLineUp(preset, hand.record.size, 1);
-  const changed = hand.lineUp.some((s) => s.style !== seated[s.seat - 1]?.style);
-  return changed ? stylesOption(hand.lineUp) : '';
-}
-
 function violationBlock(
   hand: PlayedHand,
   counts: PlaytestSummary['violationCounts'],
@@ -306,8 +297,7 @@ function violationBlock(
   lines.push(
     `Replay: npm run playtest -- --replay-code ${record.replayCode} --size ${record.size} --button ${record.button}` +
       gameSuffix(record.game, recordStacks(record)) +
-      lineUpOption(lineUp) +
-      replacedStylesOption(hand, lineUp),
+      lineUpOption(lineUp),
   );
   return lines.map((line) => `${line}\n`).join('') + formatHand(hand);
 }

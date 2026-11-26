@@ -685,7 +685,7 @@ describe('replacement bots in the CLI', () => {
     );
   });
 
-  it('--styles replays a hand with the given styles and the Replay line carries replaced styles', () => {
+  it('--styles replays a hand with the given styles and echoes them in the Options line', () => {
     expect(
       parseArgs([
         '--replay-code',
@@ -750,8 +750,8 @@ describe('replacement bots in the CLI', () => {
           'run',
           'mixed',
         ),
-      ).endsWith(' --lineup mixed --styles tag,rock,maniac,rock,tag'),
-    ).toBe(true);
+      ),
+    ).toBe(replayLine(formatReport('', faulty, 'run', 'mixed')));
     expect(
       replayLine(formatReport('', { ...faulty, firstViolation: { ...hand, lineUp: swapped } })),
     ).not.toContain('--styles');

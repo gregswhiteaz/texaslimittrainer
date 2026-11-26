@@ -86,7 +86,7 @@
       "position": "CO",
       "situation": "raise",
       "hands": "AA AKs AQs AJs AKo KK KQs KJs AQo QQ QJs AJo JJ TT 99 88",
-      "justification": "From the cutoff against one raise the Rock adds medium pairs and suited broadway hands and still folds every weaker hand."
+      "justification": "From the cutoff against one raise the Rock adds medium pairs, suited broadway hands and ace-jack offsuit (AJo), and still folds every weaker hand."
     },
     {
       "position": "BTN",
