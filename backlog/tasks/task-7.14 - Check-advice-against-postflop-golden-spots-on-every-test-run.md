@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-26T15:18:00Z'
+updated_date: '2026-11-26T19:28:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -109,6 +109,8 @@ Locked tests/golden/postflop-spots.json unlocked for TASK-7.26 Q-2 (replace non-
 tests/golden/postflop-spots.json unlocked for TASK-7.31 Q-1 (re-author spots whose hero preflop line is a Major chart error)
 
 Locked test unlocked for TASK-7.33 (id/title/required-field edits only; no assertion dropped)
+
+graded-examples.json unlocked for TASK-7.36 (three examples re-authored like-for-like)
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary

@@ -1530,6 +1530,12 @@
       "event": "unlock",
       "file": "tests/golden/postflop-spots.json",
       "reason": "TASK-7.33 AC#4: rename id 6max-flop-co-raise-jj -> 6max-flop-co-raise-jj-3way only"
+    },
+    {
+      "t": "2026-11-26T12:28:04",
+      "event": "unlock",
+      "file": "tests/golden/graded-examples.json",
+      "reason": "TASK-7.36 AC#1-2: re-author three graded examples with chart-consistent hero lines (grade, rule id and margin kept)"
     }
   ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-7.14",
@@ -1547,7 +1553,8 @@
     "tests/golden/postflop-spots.json",
     "tests/golden/postflop-spots.json",
     "tests/golden/postflop-spots.json",
-    "tests/golden/postflop-spots.json"
+    "tests/golden/postflop-spots.json",
+    "tests/golden/graded-examples.json"
   ],
   "brief_history": {
     "tests/golden/postflop-spots.json:justifications-misname-made-hand": [
