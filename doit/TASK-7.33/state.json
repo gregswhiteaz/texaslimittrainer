@@ -5,13 +5,23 @@
   "base_commit": "ec15f42c2fa706962f4c4a1a808bfde3903e524d",
   "started": "2026-11-26T08:12:02",
   "review_round": 1,
-  "judge_round": 0,
+  "judge_round": 1,
   "sendbacks": 0,
   "gate_runs": 1,
   "questions": 0,
   "assumptions": 0,
   "escalations": 0,
-  "item_failures": {},
+  "item_failures": {
+    "SPEC-01": 0,
+    "SPEC-02": 0,
+    "SPEC-03": 0,
+    "SPEC-04": 0,
+    "SPEC-05": 0,
+    "SPEC-06": 0,
+    "SPEC-07": 0,
+    "SPEC-08": 0,
+    "SPEC-09": 0
+  },
   "locked_tests": {
     "tests/advice/advice-hardening.acceptance.test.ts": "d63d4e29b336aa8d7f12f105e042657bf917e6e5bd705370e23bd76e92837afc",
     "tests/golden/postflop.acceptance.test.ts": "4469df95046d3de3d28cb2a2b4505f2cd8cbd39366d0414c9dc4b0e8cf4d7bda"
@@ -2153,5 +2163,8 @@
   "spec_sha256": "69b32acb10c7608139a8183f5daee17bb3bb63d09644df14ba0a24be391b758f",
   "review_findings": {
     "1": 0
+  },
+  "judge_results": {
+    "1": "PASS"
   }
 }

@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-25T01:41:00Z'
-updated_date: '2026-11-26T15:35:00Z'
+updated_date: '2026-11-26T16:05:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -27,10 +27,10 @@ Follow-up from TASK-7.32 code and security review (doc-129). requiredCountsRiver
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Given recommendPostflop output, When its type is checked, Then requiredCountsRiverBet and valueThresholdPct are required fields (hand-built test inputs updated, no assertion removed)
-- [ ] #2 Given a turn pot-odds or implied-odds explanation with requiredCountsRiverBet, When the template wording changes, Then a test fails if the river-bet clause is missing (the clause is built from its own template, not a text replace)
-- [ ] #3 Given an EquityGradeInput with a non-finite valueThresholdPct, When it is graded, Then grading rejects it with the same error as other non-finite percent fields
-- [ ] #4 Given the value-bet AC#6 test and golden spot 6max-flop-co-raise-jj, When read, Then the test title names 65.1% and the spot id describes its current spot (re-pin logged)
+- [x] #1 Given recommendPostflop output, When its type is checked, Then requiredCountsRiverBet and valueThresholdPct are required fields (hand-built test inputs updated, no assertion removed)
+- [x] #2 Given a turn pot-odds or implied-odds explanation with requiredCountsRiverBet, When the template wording changes, Then a test fails if the river-bet clause is missing (the clause is built from its own template, not a text replace)
+- [x] #3 Given an EquityGradeInput with a non-finite valueThresholdPct, When it is graded, Then grading rejects it with the same error as other non-finite percent fields
+- [x] #4 Given the value-bet AC#6 test and golden spot 6max-flop-co-raise-jj, When read, Then the test title names 65.1% and the spot id describes its current spot (re-pin logged)
 <!-- AC:END -->
 
 ## Implementation Plan
@@ -48,4 +48,6 @@ Full spec: doit/TASK-7.33/spec.md
 
 <!-- SECTION:NOTES:BEGIN -->
 Build: fields required; river-bet clause via {riverBet} template slot (text byte-identical, playtest SHAs unchanged); grade rejects non-finite valueThresholdPct; AC#6 title and golden id fixed; gate PASS
+
+Judge r1 PASS (9/9 SPEC items; mutation-checked; text byte-identical)
 <!-- SECTION:NOTES:END -->
