@@ -5,13 +5,21 @@
   "base_commit": "69b188df4f4e70b197c2f0c95692333bcc6ff7ff",
   "started": "2026-11-26T05:28:50",
   "review_round": 1,
-  "judge_round": 0,
+  "judge_round": 1,
   "sendbacks": 0,
   "gate_runs": 1,
   "questions": 0,
   "assumptions": 0,
   "escalations": 0,
-  "item_failures": {},
+  "item_failures": {
+    "SPEC-01": 0,
+    "SPEC-02": 0,
+    "SPEC-03": 0,
+    "SPEC-04": 0,
+    "SPEC-05": 0,
+    "SPEC-06": 0,
+    "SPEC-07": 0
+  },
   "locked_tests": {
     "e2e/game-type-height.spec.ts": "277085e13bb7985420de713666891503ad91432e7d1728c9c999717dfcb0799c",
     "e2e/side-pot-result.spec.ts": "c2f0098b6d2feacdd1f502ecc33ba9e9750bb3c38e09805c2411b4932eb49354",
@@ -2134,5 +2142,8 @@
   "spec_sha256": "126e7f4c36de6b0974ee92f53cefe8dad980c1d348ca3f1d990803a218b91a38",
   "review_findings": {
     "1": 0
+  },
+  "judge_results": {
+    "1": "PASS"
   }
 }
