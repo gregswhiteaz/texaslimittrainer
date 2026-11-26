@@ -1,11 +1,11 @@
 ---
 id: TASK-10.15
 title: Simplify preflop leak pairing in src/stats/leaks.ts
-status: In Progress
+status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-25T06:45:00Z'
-updated_date: '2026-11-26T18:38:00Z'
+updated_date: '2026-11-26T18:39:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -14,6 +14,8 @@ dependencies:
   - TASK-10.6
 references:
   - doc-131
+documentation:
+  - doc-170
 parent_task_id: TASK-10
 priority: low
 ordinal: 242000
@@ -47,4 +49,12 @@ Full spec: doit/TASK-10.15/spec.md
 Build: leaks.ts reuses exported userMade; position group computed once per hand (lazy); no existing test changed; gate PASS
 
 Judge r1 PASS (4/4 SPEC items; base-vs-head differential identical)
+
+Follow-ups: none.
 <!-- SECTION:NOTES:END -->
+
+## Final Summary
+
+<!-- SECTION:FINAL_SUMMARY:BEGIN -->
+Refactor only: handCategoryDecisions now computes the seat list and user position group once per hand (lazily, on the first paired preflop decision) and reuses the exported hand-record userMade instead of a duplicate blind check. Outputs and errors are unchanged. Verified by 8 new unit assertions, unchanged existing leak tests, a judge differential over 200k fuzzed hands and 60 sessions (identical), and green CI 45876467250. Review assumptions A-1 (lazy computation), A-2 (export userMade as is), A-3 (new test file). No risks or follow-ups.
+<!-- SECTION:FINAL_SUMMARY:END -->
