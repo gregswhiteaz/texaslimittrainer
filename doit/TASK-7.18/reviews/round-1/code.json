@@ -1,0 +1,33 @@
+{"reviewer": "code", "round": 1,
+ "rubric": [
+  {"item": "SPEC-01 correctness", "result": "pass"},
+  {"item": "SPEC-01 test strength", "result": "pass"},
+  {"item": "SPEC-02 correctness", "result": "pass"},
+  {"item": "SPEC-02 test strength", "result": "pass"},
+  {"item": "SPEC-03 correctness", "result": "pass"},
+  {"item": "SPEC-03 test strength", "result": "pass"},
+  {"item": "SPEC-04 correctness", "result": "pass"},
+  {"item": "SPEC-04 test strength", "result": "pass"},
+  {"item": "SPEC-05 correctness", "result": "pass"},
+  {"item": "SPEC-05 test strength", "result": "pass"},
+  {"item": "SPEC-06 correctness", "result": "fail"},
+  {"item": "SPEC-06 test strength", "result": "pass"},
+  {"item": "SPEC-07 correctness", "result": "pass"},
+  {"item": "SPEC-07 test strength", "result": "pass"},
+  {"item": "scope", "result": "pass"},
+  {"item": "concision", "result": "pass"},
+  {"item": "clarity", "result": "pass"}
+ ],
+ "findings": [
+  {"fingerprint": "src/advice/equity.ts:early-abort-ignores-remaining-variance",
+   "severity": "MAJOR", "file": "src/advice/equity.ts", "line": 322,
+   "issue": "rejectionsOverBudget implements the spec section 5 rule exactly, but the rule's safety claim (false-abort probability < 1e-14, 'never aborts a feasible run', SPEC-06 title and the section 5 invariant) is false. The rule compares r + E[remaining | pHi] with M and does not allow for the spread of the remaining negative-binomial rejection count. Late in a run (T - a small), pHi is only about 8/sqrt(a), roughly 4.6%, above p, while the relative spread of the remaining rejections is about 1/sqrt(T - a), which is much larger. So a run whose total would land just under the cap gets aborted with real probability.",
+   "evidence": "Bernoulli simulation of the exact rule (checks every 8192 rejections, z = 8). T = 30,000, M = 3,000,000: p = 0.00985 gave 2 false aborts in 31 successes, p = 0.0099 gave 4 in 108, p = 0.00995 gave 1 in 156. T = 500 (BOT_EQUITY_BUDGET), M = 50,000: p = 0.0099 gave 15 false aborts in 2024 successes. A false abort is a run that ends with total rejections <= M under the old sampler but is aborted by the new one. Script: /private/tmp/claude-501/-Users-gregwhite-Documents-claudeworkspaces-limitholdem/4f7a755b-7d9f-4f95-8508-90fc0fabf0c8/scratchpad/sim.mjs. Only inputs with acceptance near 1/101 are affected, and the pinned SPEC-05, golden and playtest hashes show no instance today. Even so, for affected seeded inputs the advice changes (A-7 fallback replaces the calling-range number) and BOT_EQUITY changes (it throws), which breaks the section 5 invariant.",
+   "fix": "Subtract z standard deviations of the remaining rejection count from the projection: rem = T - a; projected = rem*(1 - pHi)/pHi - SAMPLER_ABORT_Z*Math.sqrt(rem*(1 - pHi))/pHi; return r + projected > M. In simulation this gave 0 false aborts in the same runs (sim2.mjs in the same scratchpad), and the 9-opponent calling-range spot still aborts at r = 32,768 (so AC#3/AC#4 timing holds). The worked example T=500, a=0, r=8192 then returns false instead of true, so spec section 5 and SPEC-06's expected values need a spec amendment (orchestrator/user decision, since Q-1 was approved on the 1e-14 claim). The other option is to keep the rule and correct the spec's safety claim."},
+  {"fingerprint": "src/advice/equity.ts:inlined-xoshiro-duplicated",
+   "severity": "MINOR", "file": "src/advice/equity.ts", "line": 385,
+   "issue": "The 8-line xoshiro128** step is copied at two call sites (opponent pick at about line 385 and runout at about line 420). A future edit to one copy without the other would silently desync the stream. The first copy's comment names `rng.nextInt(range.length / 2)` although no `rng` exists any more.",
+   "evidence": "Both blocks are textually identical apart from the final Math.floor multiplier. The comment says 'rng.nextInt(range.length / 2), inlined'. SPEC-05's hash test would catch a desync, which keeps this MINOR.",
+   "fix": "Keep the inlining (the closure cost about 10 ms, per the builder's measurement). Add one comment at the seed block saying both draw sites must stay identical to Xoshiro128.nextUint32 (seeded-random.ts:68-80), and reword the first inline comment to 'Xoshiro128.nextInt(range.length / 2), inlined'."}
+ ],
+ "summary": "The sampler rewrite is faithful. I independently recomputed the SPEC-05 hash on a git-archive copy of base 6622918's src and got fd3c9bf3...59daa, which equals the pin and the head result. Five extra inputs (turn 4-way, 3-way and 5-way calling/unseen, BOT_EQUITY 4- and 9-way) also hash identically on base and head. Seeding with |0 is equivalent because every state operation coerces to int32. range.length >> 1 equals range.length / 2 (even length). The stamp check covers both opponent and runout cards of the current attempt. The Uint32Array stamp cannot wrap (attempt <= trials + maxRejections + 1, about 3.03M) and cannot collide with the initial 0 (attempt starts at 1). Timeout edits: exactly the 42 spec section 10 files contain the line, each exactly once and after its last import. Across the 41 non-equity.test files the only diff lines are 41 blank lines, 41 setConfig lines and 35 vitest-import lines that add `vi`. No other edits, locked files included. vite.config.ts drops testTimeout. Warm-ups: 15 untimed calls in total (the first call plus 14), and the 20 timed runs, RUNS and the p95 definition are unchanged. There is no result cache, so the timed runs still measure full work. My perf runs: full ring 52.3 ms (limit 60), HU vs every combo 4.6 ms (limit 15), advice 9-opponent 54.3 ms (limit 75), value-bet 53.6 ms (limit 100). One MAJOR: the section 5 early-abort rule (implemented as specified) does not account for the spread of the remaining rejection count, so it aborts some runs that would have succeeded when acceptance is near 1/101 (about 1-4% of successes in simulation). The fix needs a spec amendment. One MINOR on the duplicated inline generator."}

@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-18T07:03:00Z'
-updated_date: '2026-11-26T00:07:00Z'
+updated_date: '2026-11-26T00:56:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -51,4 +51,8 @@ Full spec: doit/TASK-7.18/spec.md
 AC added from TASK-7.3 follow-up (doc-17).
 
 AC added from TASK-7.8 review MINOR (multiway user-advice latency)
+
+Build: stamp-based sampler with inlined xoshiro (results byte-identical, SHA pinned); early abort z=8 every 8,192 rejections; 15 warm-ups; new value-bet perf scenario (slow group); global testTimeout removed, 42 files set 30 s. p95: full ring 73→52 ms (/80), HU 15.9→4.8 (/20), 9-opp advice 207→54 (/100). test:slow 99 pass. gate PASS.
+
+Recorded deviation (review r1 MAJOR): early-abort projection subtracts z std devs of the remaining count; spec §5's T=500,a=0,r=8192 example changes to false. Approved by orchestrator to honour Q-1's 'no successful result changes'.
 <!-- SECTION:NOTES:END -->
