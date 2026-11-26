@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-25T20:08:00Z'
-updated_date: '2026-11-26T10:36:00Z'
+updated_date: '2026-11-26T10:45:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -47,4 +47,6 @@ Full spec: doit/TASK-2.22/spec.md
 Spec finding: stepping back from the stale entry does not reload the page (pushState entries share the document); the first Back from Home just does nothing visible. TASK-2.20/doc-146 wording was wrong; docs/ui/navigation.md is corrected in this story.
 
 Build: openTable replaces instead of pushing when a Table entry is current; new e2e reload-history (fails on old code, passes 3x repeat); e2e 389 passed; gate PASS
+
+CI on the branch failed once (WebKit players-choice: Leave table → New game → Start game raced closeTable's pending history.back()). openTable now replaces only an earlier load's Table entry (key ≠ lastTableKey); this load's entry, current only while a Back is pending, is pushed over as before. Orchestrator fix; judge told.
 <!-- SECTION:NOTES:END -->

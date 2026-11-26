@@ -197,11 +197,14 @@ export default function App({
 
   const openTable = (table: Extract<Screen, { name: 'table' }>): void => {
     const key = newTableKey();
-    lastTableKey = key;
-    // A Table entry is already current after a reload on the Table: replace it rather than push above it, so no
-    // stale Table entry remains and one Back from Home leaves the app (TASK-2.22 D-1).
-    if (typeof entryKey(history.state) === 'string') history.replaceState({ tlhTable: key }, '');
+    const current = entryKey(history.state);
+    // An earlier page load's Table entry is current after a reload on the Table: replace it rather than push above
+    // it, so no stale Table entry remains and one Back from Home leaves the app (TASK-2.22 D-1). This load's own
+    // entry can still be current while closeTable's history.back() is pending; pushing then keeps that Back's target.
+    if (typeof current === 'string' && current !== lastTableKey)
+      history.replaceState({ tlhTable: key }, '');
     else history.pushState({ tlhTable: key }, '');
+    lastTableKey = key;
     tableKey.current = key;
     setScreen(table);
   };
