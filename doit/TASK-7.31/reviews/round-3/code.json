@@ -1,0 +1,99 @@
+{
+ "reviewer": "code",
+ "round": 3,
+ "rubric": [
+  {
+   "item": "SPEC-01 correctness",
+   "result": "pass"
+  },
+  {
+   "item": "SPEC-01 test strength",
+   "result": "pass"
+  },
+  {
+   "item": "SPEC-02 correctness",
+   "result": "pass"
+  },
+  {
+   "item": "SPEC-02 test strength",
+   "result": "pass"
+  },
+  {
+   "item": "SPEC-03 correctness",
+   "result": "pass"
+  },
+  {
+   "item": "SPEC-03 test strength",
+   "result": "pass"
+  },
+  {
+   "item": "SPEC-04 correctness",
+   "result": "pass"
+  },
+  {
+   "item": "SPEC-04 test strength",
+   "result": "pass"
+  },
+  {
+   "item": "SPEC-05 correctness",
+   "result": "pass"
+  },
+  {
+   "item": "SPEC-05 test strength",
+   "result": "pass"
+  },
+  {
+   "item": "SPEC-06 correctness",
+   "result": "pass"
+  },
+  {
+   "item": "SPEC-06 test strength",
+   "result": "pass"
+  },
+  {
+   "item": "SPEC-07 correctness",
+   "result": "pass"
+  },
+  {
+   "item": "SPEC-08 correctness",
+   "result": "pass"
+  },
+  {
+   "item": "SPEC-09 correctness",
+   "result": "pass"
+  },
+  {
+   "item": "scope",
+   "result": "pass"
+  },
+  {
+   "item": "concision",
+   "result": "pass"
+  },
+  {
+   "item": "clarity",
+   "result": "pass"
+  }
+ ],
+ "findings": [
+  {
+   "fingerprint": "src/advice/golden.ts:unreachable-illegal-step-break",
+   "severity": "NIT",
+   "file": "src/advice/golden.ts",
+   "line": 548,
+   "issue": "heroPreflopProblems runs only after buildView succeeded, so every step is known to be legal (its own docstring says so). The `if (!result.ok) break;` branch and the `as Action` cast on legalOf guard a case that cannot happen.",
+   "evidence": "parsePostflopSpot calls it only when view !== null, and buildView has already replayed the same steps from a deal with the same seat count.",
+   "fix": "Optional: keep it as a cheap guard, or assert the result instead (for example `state = (applyAction(...) as {ok: true; state: HandState}).state`). Either way is fine."
+  },
+  {
+   "fingerprint": "tests/golden/postflop-lines.acceptance.test.ts:tautological-length-assert",
+   "severity": "NIT",
+   "file": "tests/golden/postflop-lines.acceptance.test.ts",
+   "line": 122,
+   "issue": "`expect(SPOTS).toHaveLength(RAW.spots.length)` cannot fail, because parsePostflopGoldenSpots returns every spot or throws. The SPEC-03 check is still real: the module-level parse uses real advice and throws on any problem, which fails every test in the file, and the pinned counts and checkGoldenSpot assertions are real. So this is not a blocker.",
+   "evidence": "parseEntries collects problems and throws if there are any, otherwise it returns all entries.",
+   "fix": "None required. The line could be dropped since `toHaveLength(120)` follows; the test file is locked, so leave it unless it is unlocked for another reason."
+  }
+ ],
+ "summary": "I checked judge fix r1 (commit 8977798), which changes only 9 justification strings in tests/golden/postflop-spots.json. It changes no cards, actions or code. I re-ran the evaluator dump on all 120 spots. All 9 rewordings match the evaluator. t9s: one-pair, fives with K-T-9. q8o: one-pair, nines with Q-8-4. a3o: one-pair, jacks with an ace kicker, and no flush or straight draw on the turn. a2s: one-pair, eights with an ace kicker. k9s turn: high-card A-K-Q-9-8, and there is really no draw: no club on the board and no one-card straight. fr jts: high-card with the Ks playing, and on the turn only 3 clubs, so 'no draw' holds. hu t8o: one-pair jacks with a ten kicker, and 8-9-T-J on the turn was a real open-ended draw. hu t7s: high-card with the K playing; on the turn it had four hearts and 7-8-9-T, so both missed-draw claims hold, and the river Q makes no straight. fr aks: one-pair deuces with A-K kickers, and no straight because there is no 4. The exhaustive pass holds too. Every remaining justification that names the hero's high card (a9o x2, q9o, k9s flop, co-fold-a2s, k3s, a7s, k4o, a6o) is high-card with the hero's card the highest in play. The draw claims there (gutshot to J, gutshot to 4, no draw) are correct. J-1-02 dispute: the builder is right. With Ah 9c on 8d Qd 4h there are only two hearts (Ah, 4h), and there is no diamond in the hand, so there is no backdoor flush draw. The backdoor straight claim (8-9-Q needs T and J) is accurate. Golden tests: 288 of 288 pass. No new findings. The two NITs from round 2 carry forward."
+}

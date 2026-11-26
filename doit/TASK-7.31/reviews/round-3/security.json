@@ -1,0 +1,3 @@
+{"reviewer": "security", "round": 3,
+ "findings": [],
+ "summary": "Rounds 1 and 2 had no security findings, so there was nothing to re-check. Commit 8977798 changes only the justification prose in nine entries of tests/golden/postflop-spots.json, the TASK-7.14 backlog task text and doit/ tracking files (state, judge, gates, build-log, changes, fix-brief, spec-items). It adds no code, dependencies, secrets, filesystem, network, shell or randomness use. The golden JSON is test data stored in the repo and read only by tests/golden/*. The app never loads it (spec section 8). No new security issues."}
