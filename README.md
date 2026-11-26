@@ -52,14 +52,14 @@ Every check runs with one command and exits non-zero on failure.
 version from `.nvmrc`, as parallel jobs. Each job has a 30-minute limit (as do the jobs in
 `visual.yml` and `million.yml`):
 
-| Job (check name)                                  | What it runs                                                                                                                                                                                                                                            |
-| ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `E2E (Chromium and WebKit)`                       | `npm ci`, the Playwright browser and system dependency installs, then `npm run e2e` in Chromium and WebKit with axe                                                                                                                                     |
-| `Lint, typecheck, build and playtest`             | `npm ci`, the two audits (shipped dependencies: no high or critical advisory, `npm audit --omit=dev --audit-level=high`; all dependencies: no critical advisory, `npm audit --audit-level=critical`), lint, typecheck, build and a 10,000-hand playtest |
-| `Unit tests with coverage`                        | `npm run test:unit`, with the coverage thresholds                                                                                                                                                                                                       |
-| `Sweep tests (shard 1 of 2)` and `(shard 2 of 2)` | `npm run test:sweeps -- --shard=<n>/2`, without coverage; one shard failing does not cancel the other                                                                                                                                                   |
-| `Detect tooling changes`                          | `tools/ci/tooling-changed.js`, which decides whether the tooling tests run                                                                                                                                                                              |
-| `Tooling tests`                                   | `npm run test:tooling`, only when `Detect tooling changes` says so; otherwise it shows as skipped                                                                                                                                                       |
+| Job (check name)                                  | What it runs                                                                                                                                                                                                                                                |
+| ------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `E2E (Chromium and WebKit)`                       | `npm ci`, the Playwright browser and system dependency installs, then `npm run e2e` in Chromium and WebKit with axe                                                                                                                                         |
+| `Lint, typecheck, build and playtest`             | `npm ci`, the two audits (shipped dependencies: no high or critical advisory, `npm audit --omit=dev --audit-level=high`; all dependencies: no high or critical advisory, `npm audit --audit-level=high`), lint, typecheck, build and a 10,000-hand playtest |
+| `Unit tests with coverage`                        | `npm run test:unit`, with the coverage thresholds                                                                                                                                                                                                           |
+| `Sweep tests (shard 1 of 2)` and `(shard 2 of 2)` | `npm run test:sweeps -- --shard=<n>/2`, without coverage; one shard failing does not cancel the other                                                                                                                                                       |
+| `Detect tooling changes`                          | `tools/ci/tooling-changed.js`, which decides whether the tooling tests run                                                                                                                                                                                  |
+| `Tooling tests`                                   | `npm run test:tooling`, only when `Detect tooling changes` says so; otherwise it shows as skipped                                                                                                                                                           |
 
 The Vitest suite is split into three groups, each with its own command:
 
@@ -106,7 +106,7 @@ is attached to the run as the `playwright-report` artifact (kept 7 days).
 Local equivalent:
 
 ```sh
-npm audit --omit=dev --audit-level=high && npm audit --audit-level=critical && npm run lint && npm run typecheck && npm run build && npm test && npm run e2e
+npm audit --omit=dev --audit-level=high && npm audit --audit-level=high && npm run lint && npm run typecheck && npm run build && npm test && npm run e2e
 ```
 
 ### Million-hand playtest

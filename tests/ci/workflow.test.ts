@@ -61,7 +61,7 @@ describe('CI workflow', () => {
       checks: [
         'npm ci',
         'npm audit --omit=dev --audit-level=high',
-        'npm audit --audit-level=critical',
+        'npm audit --audit-level=high',
         'npm run lint',
         'npm run typecheck',
         'npm run build',
@@ -226,7 +226,7 @@ describe('CI workflow', () => {
       '- name: Audit shipped dependencies\n        run: npm audit --omit=dev --audit-level=high\n',
     );
     expect(workflow).toContain(
-      '- name: Audit all dependencies\n        run: npm audit --audit-level=critical\n',
+      '- name: Audit all dependencies\n        run: npm audit --audit-level=high\n',
     );
   });
 });

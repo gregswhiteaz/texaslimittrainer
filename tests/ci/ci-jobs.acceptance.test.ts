@@ -148,7 +148,7 @@ describe('CI jobs', () => {
       undefined,
       'npm ci',
       'npm audit --omit=dev --audit-level=high',
-      'npm audit --audit-level=critical',
+      'npm audit --audit-level=high',
       'npm run lint',
       'npm run typecheck',
       'npm run build',
