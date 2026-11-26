@@ -5,13 +5,21 @@
   "base_commit": "9892c22e80e141f1e3a4348f8c9d33126c7f6cb9",
   "started": "2026-11-26T06:52:29",
   "review_round": 1,
-  "judge_round": 0,
+  "judge_round": 1,
   "sendbacks": 0,
   "gate_runs": 1,
   "questions": 0,
   "assumptions": 0,
   "escalations": 0,
-  "item_failures": {},
+  "item_failures": {
+    "SPEC-01": 0,
+    "SPEC-02": 0,
+    "SPEC-03": 0,
+    "SPEC-04": 0,
+    "SPEC-05": 0,
+    "SPEC-06": 0,
+    "SPEC-07": 0
+  },
   "locked_tests": {
     "tests/advice/chart-print-sizes.acceptance.test.ts": "cc037081a742462730733ebfd988c907c5e6f5e9e8674a9387ab70e942f5e4af"
   },
@@ -2142,5 +2150,8 @@
   "spec_sha256": "94c645408ceb27efc84ff5d5cf5f761ac839a18089b6c6eb5d8bf2477d0739e7",
   "review_findings": {
     "1": 0
+  },
+  "judge_results": {
+    "1": "PASS"
   }
 }

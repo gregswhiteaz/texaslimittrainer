@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-22T22:50:00Z'
-updated_date: '2026-11-26T14:05:00Z'
+updated_date: '2026-11-26T14:18:00Z'
 labels:
   - follow-up
   - dream-limit-holdem-trainer
@@ -27,7 +27,7 @@ Follow-up from TASK-7.6 (doc-87): npm run chart:print prints only the 6-max char
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Given npm run chart:print with a size argument (heads-up, 6-max, full-ring), When it runs, Then it prints that chart's grid per spot with its justification
+- [x] #1 Given npm run chart:print with a size argument (heads-up, 6-max, full-ring), When it runs, Then it prints that chart's grid per spot with its justification
 <!-- AC:END -->
 
 ## Implementation Plan
@@ -44,4 +44,6 @@ Full spec: doit/TASK-7.27/spec.md
 
 <!-- SECTION:NOTES:BEGIN -->
 Build: chart:print -- heads-up|6-max|full-ring prints the review format with justifications; no-argument output unchanged; bad input exits 2; gate PASS
+
+Judge r1 PASS (7/7 SPEC items)
 <!-- SECTION:NOTES:END -->
