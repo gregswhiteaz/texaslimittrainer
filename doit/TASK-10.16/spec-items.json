@@ -1,0 +1,14 @@
+[
+  {
+    "id": "SPEC-01",
+    "verifies": "AC#1",
+    "verification": "acceptance `e2e/report-hints.spec.ts::Leave table shows how many decisions used a hint`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-02",
+    "verifies": "AC#2",
+    "verification": "unit `tests/table/session-report-hints.test.ts::parseSessionReport rejects hints without errors`",
+    "status": "pending"
+  }
+]

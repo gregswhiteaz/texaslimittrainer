@@ -1826,7 +1826,14 @@
       "skips": 0
     }
   },
-  "history": [],
+  "history": [
+    {
+      "t": "2026-11-26T10:51:50",
+      "event": "unlock",
+      "file": "e2e/report-hints.spec.ts",
+      "reason": "TASK-10.16 AC#1: expected tile text built from stored counts with literal wording (no assertion dropped)"
+    }
+  ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-10.7",
   "spec_sha256": "181ef21ad25ed39829ff0c73672bb5203df792b812db93fed3e595c81083211d",
   "review_findings": {
@@ -1835,5 +1842,8 @@
   "judge_results": {
     "1": "PASS"
   },
-  "doc_id": "doc-132"
+  "doc_id": "doc-132",
+  "relock_pending": [
+    "e2e/report-hints.spec.ts"
+  ]
 }

@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-25T07:28:00Z'
+updated_date: '2026-11-26T17:51:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -83,6 +83,8 @@ Build: new optional write-once report field hints {hinted, decisions} counted at
 Judge r1 PASS 11/11: live Chromium (15 of 44, 34.1%) and WebKit (13 of 38, 34.2%) tiles matched an independent count from stored records; rounding swept to d=400. CI 45566726961 green.
 
 Follow-ups: TASK-10.16 (literal e2e wording; reject hints without errors).
+
+e2e/report-hints.spec.ts unlocked for TASK-10.16 AC#1 (expected text source only)
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary
