@@ -1,0 +1,13 @@
+{"round": 1,
+ "test_suite": {"command": "npm test", "result": "PASS", "passed": 1442, "failed": 0, "notes": "319 files passed, 6 skipped; 48 tests skipped (pre-existing). typecheck clean; lint/prettier clean. Branch CI run 45771835687 green at 47ef51a."},
+ "end_to_end": {"command": "npx vitest run tests/advice/labels.acceptance.test.ts tests/advice/explain.test.ts", "result": "PASS",
+   "expected": "Both files green; existing chartBasisText pins (hint card / chart basis text) unchanged; changing CHART_POSITIONS.CO fails SPEC-01 and the existing chart-basis test; SITUATION_LABELS matches Q-1 word for word; no UI change (Q-2).",
+   "actual": "2 files, 19/19 passed. explain.test.ts not modified in diff and still green, so chart basis output is unchanged. Scratch copy with CO -> 'the cut-off' failed both 'labels each 6-max position' and 'chart basis > chartBasisText'. SITUATION_LABELS read and compared against qa.md Q-1: identical for all six ids. Diff touches no UI/hint/table files."},
+ "integrity": {"result": "PASS", "notes": "doit.py test-integrity exit 0 with no findings. Diff vs b5bdc57 in src/tests is explain.ts (+2 one-line lookups, chartBasisText routed via positionLabel), explanations.ts (+SITUATION_LABELS), and the new acceptance test. No test-input recognition, hard-coded results, early returns, mocks or overridden equality. No existing test modified."},
+ "items": [
+  {"spec": "SPEC-01", "result": "PASS", "evidence": "Acceptance 'position labels > labels each 6-max position' passes and asserts the exact ordered list for UTG,HJ,CO,BTN,SB,BB; mutating CO label made it fail. Holdout check of positionLabel for all 9 ids against absolute strings and CHART_POSITIONS key set → pass."},
+  {"spec": "SPEC-02", "result": "PASS", "evidence": "Acceptance 'situation labels > labels each situation' passes; asserts the exact key set and each absolute label. Mutating the raise-and-calls label and adding an extra key each made it fail. Holdout check: all six labels exact, key set exactly six ids, all lower case, no trailing punctuation/whitespace, deterministic, no throw → pass."},
+  {"spec": "SPEC-03", "result": "PASS", "evidence": "Acceptance 'labels the other positions and matches the chart basis' passes; mutating LJ label failed it, and perturbing chartBasisText's position text failed it. Holdout check: chartBasisText for all 9 positions equals 'From the 6-max chart: raise A9o from <absolute label>' and fold variant contains 'from <label>' → pass."}
+ ],
+ "findings": [],
+ "summary": "All three SPEC items pass with observed behaviour, tests are non-vacuous (verified by mutation), full suite green (1442 passed, 0 failed), typecheck and lint clean, chart basis/hint text unchanged, no integrity issues. No blocking findings."}

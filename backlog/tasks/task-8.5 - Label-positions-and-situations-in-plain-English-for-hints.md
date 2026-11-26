@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-18T16:24:00Z'
-updated_date: '2026-11-26T06:57:00Z'
+updated_date: '2026-11-26T07:03:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -28,7 +28,7 @@ Follow-up from TASK-7.2: the advice API returns ids (CO, raise-and-calls); REQ-0
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Given each position id (UTG, HJ, CO, BTN, SB, BB) and situation id, When a label is requested, Then it returns the approved English label (e.g. 'the cutoff', 'facing a raise and calls')
+- [x] #1 Given each position id (UTG, HJ, CO, BTN, SB, BB) and situation id, When a label is requested, Then it returns the approved English label (e.g. 'the cutoff', 'facing a raise and calls')
 <!-- AC:END -->
 
 ## Implementation Plan
@@ -46,4 +46,6 @@ Full spec: doit/TASK-8.5/spec.md
 
 <!-- SECTION:NOTES:BEGIN -->
 Build: SITUATION_LABELS + positionLabel/situationLabel; chartBasisText output unchanged; no display change (Q-2); gate PASS
+
+Judge r1 PASS (3/3 SPEC items)
 <!-- SECTION:NOTES:END -->

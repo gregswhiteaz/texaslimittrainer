@@ -3,18 +3,18 @@
     "id": "SPEC-01",
     "verifies": "AC#1",
     "verification": "acceptance `tests/advice/labels.acceptance.test.ts::position labels > labels each 6-max position`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-02",
     "verifies": "AC#1",
     "verification": "acceptance `tests/advice/labels.acceptance.test.ts::situation labels > labels each situation`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-03",
     "verifies": "AC#1",
     "verification": "acceptance `tests/advice/labels.acceptance.test.ts::position labels > labels the other positions and matches the chart basis`",
-    "status": "pending"
+    "status": "pass"
   }
 ]
