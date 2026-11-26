@@ -1,0 +1,139 @@
+{
+  "id": "TASK-7.34",
+  "title": "Make the advice speed checks opt-in and restore headroom on the remaining tight spots",
+  "status": "To Do",
+  "archived": false,
+  "type": null,
+  "priority": "low",
+  "project": null,
+  "assignees": [],
+  "reporter": null,
+  "labels": [
+    "dream-limit-holdem-trainer",
+    "follow-up"
+  ],
+  "milestone": "m-1",
+  "parentTaskId": "TASK-7",
+  "acceptanceCriteriaCompleted": 0,
+  "acceptanceCriteriaCount": 2,
+  "references": [
+    "doc-151"
+  ],
+  "modifiedFiles": [],
+  "ordinal": 253000,
+  "createdAt": "2026-11-26T01:40:00Z",
+  "updatedAt": null,
+  "dueDate": null,
+  "isReady": true,
+  "path": "backlog/tasks/task-7.34 - Make-the-advice-speed-checks-opt-in-and-restore-headroom-on-the-remaining-tight-spots.md",
+  "description": "Follow-up from TASK-7.18 (doc-151). tests/advice/equity.perf.test.ts and tests/advice/postflop.perf.test.ts still run in every npm test at 20x slack, against the standing rule that speed checks are opt-in (TLH_SLOW_TESTS / npm run test:slow). HU advice facing a bet sits at 90% of its 25 ms target and the 8-opponent calling-range run takes ~97 ms.",
+  "dependencies": [
+    "TASK-7.18"
+  ],
+  "dependencyGraph": {
+    "root": "TASK-7.34",
+    "nodes": [
+      {
+        "id": "TASK-7.34",
+        "title": "Make the advice speed checks opt-in and restore headroom on the remaining tight spots",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": 0,
+        "dependentDepth": 0
+      },
+      {
+        "id": "TASK-1.1",
+        "title": "Bootstrap the strict TypeScript project with one-command checks",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 5,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.2",
+        "title": "Rank showdown hands by real poker hand rankings",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 3,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.7",
+        "title": "Run every check in GitHub Actions on each push and pull request",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 4,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-7.1",
+        "title": "Compute a hand's equity against opponent hands",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 2,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-7.18",
+        "title": "Restore equity calculation performance headroom",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 1,
+        "dependentDepth": null
+      }
+    ],
+    "edges": [
+      {
+        "from": "TASK-1.2",
+        "to": "TASK-1.7"
+      },
+      {
+        "from": "TASK-1.7",
+        "to": "TASK-1.1"
+      },
+      {
+        "from": "TASK-7.1",
+        "to": "TASK-1.2"
+      },
+      {
+        "from": "TASK-7.18",
+        "to": "TASK-7.1"
+      },
+      {
+        "from": "TASK-7.34",
+        "to": "TASK-7.18"
+      }
+    ]
+  },
+  "readiness": {
+    "isReady": true,
+    "isBlocked": false,
+    "blockingDependencies": [],
+    "missingDependencies": []
+  },
+  "documentation": [],
+  "subtasks": [],
+  "acceptanceCriteria": [
+    {
+      "index": 1,
+      "text": "Given npm test without TLH_SLOW_TESTS, When it runs, Then neither advice perf file runs any timed scenario; they run in full under npm run test:slow",
+      "checked": false
+    },
+    {
+      "index": 2,
+      "text": "Given HU advice facing a bet and an 8-opponent calling-range spot, When the opt-in advice perf test runs at real targets, Then each p95 is at most 75% of its target",
+      "checked": false
+    }
+  ],
+  "definitionOfDone": [],
+  "implementationPlan": null,
+  "implementationNotes": null,
+  "comments": [],
+  "finalSummary": null
+}

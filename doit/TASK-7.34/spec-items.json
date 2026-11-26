@@ -1,0 +1,38 @@
+[
+  {
+    "id": "SPEC-01",
+    "verifies": "AC#1",
+    "verification": "command `env -u TLH_SLOW_TESTS -u EQUITY_PERF_SCALE -u ADVICE_PERF_SCALE npx vitest run tests/advice/equity.perf.test.ts tests/advice/postflop.perf.test.ts 2>&1 | tee /dev/stderr | grep -E 'Tests +5 skipped \\(5\\)' && ! env -u TLH_SLOW_TESTS -u EQUITY_PERF_SCALE -u ADVICE_PERF_SCALE npx vitest run tests/advice/equity.perf.test.ts tests/advice/postflop.perf.test.ts 2>&1 | grep -q 'p95'` exits 0; and `npm test` exits 0",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-02",
+    "verifies": "AC#1",
+    "verification": "command `node -e \"const s=require('./package.json').scripts['test:slow'];process.exit(s.includes('tests/advice/equity.perf.test.ts')&&s.includes('tests/advice/postflop.perf.test.ts')?0:1)\" && TLH_SLOW_TESTS=1 npx vitest run tests/advice/equity.perf.test.ts tests/advice/postflop.perf.test.ts 2>&1 | tee /dev/stderr | grep -E 'Tests +5 passed \\(5\\)'` exits 0; and `npm run test:slow` exits 0",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-03",
+    "verifies": "AC#1",
+    "verification": "command `env -u TLH_SLOW_TESTS EQUITY_PERF_SCALE=1 npx vitest run tests/advice/equity.perf.test.ts 2>&1 | grep -E 'Tests +1 passed \\(1\\)' && env -u TLH_SLOW_TESTS ADVICE_PERF_SCALE=1 npx vitest run tests/advice/postflop.perf.test.ts 2>&1 | grep -E 'Tests +4 passed \\(4\\)' && env -u TLH_SLOW_TESTS npx vitest run tests/ci/speed-limits.acceptance.test.ts && git diff --quiet main -- tests/ci/speed-limits.acceptance.test.ts` exits 0 (with `CI` unset)",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-04",
+    "verifies": "AC#2",
+    "verification": "command `for i in 1 2 3; do ADVICE_PERF_SCALE=1 npx vitest run tests/advice/postflop.perf.test.ts -t headroom 2>&1 | tee /dev/stderr | grep -E 'Tests +1 passed' || exit 1; done`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-05",
+    "verifies": "AC#2",
+    "verification": "unit `tests/advice/postflop.perf.test.ts::headroom: HU facing a bet and 8 opponents within 75% of target times slack`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-06",
+    "verifies": "AC#2",
+    "verification": "command `git diff --quiet main -- src/ && npm run playtest | shasum -a 256` (equal to the base value in build-log.md)",
+    "status": "pending"
+  }
+]
