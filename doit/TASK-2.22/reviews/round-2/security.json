@@ -1,0 +1,3 @@
+{"reviewer": "security", "round": 2,
+ "findings": [],
+ "summary": "Round 1 had no findings. Since then (3cc538d, b55fdad) openTable replaces only when history.state's string tlhTable differs from the in-memory lastTableKey, and lastTableKey is assigned after the branch. The value is still only type-checked and compared for equality. It is never evaluated, rendered, logged, or used as a URL, and pushState/replaceState still pass '' with no URL. The written key still comes from newTableKey (CSPRNG). A forged same-origin state can at most flip push and replace, which only affects UX. The docs rewording adds no attack surface. No new dependencies. No findings."}
