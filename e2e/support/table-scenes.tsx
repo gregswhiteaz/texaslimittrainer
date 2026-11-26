@@ -19,6 +19,7 @@ import {
   SHOWN_HANDS,
   SIDE_POT_RIVER,
   SIDE_POT_SHOWDOWN,
+  SPLIT_SIDE_POT_SHOWDOWN,
   TEN_SEAT_FLOP,
   TEN_SEAT_SHOWDOWN,
 } from '../../tests/support/table-scenarios';
@@ -34,6 +35,7 @@ const SCENES: Partial<Record<string, TableState>> = {
   'bet-all-in': BET_ALL_IN,
   'side-pot-river': SIDE_POT_RIVER,
   'side-pot-showdown': SIDE_POT_SHOWDOWN,
+  'split-side-pot': SPLIT_SIDE_POT_SHOWDOWN,
   'ten-seat-hint': TEN_SEAT_FLOP,
   'ten-seat-review': TEN_SEAT_SHOWDOWN,
   'review-header': REVIEW_LOST_48,

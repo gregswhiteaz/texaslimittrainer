@@ -37,6 +37,10 @@ export interface PotResultView {
     /** "You win $60" | "Ben wins $80" */
     readonly text: string;
   }[];
+  /** "Side pot $81" = `${label} $${amount}`. */
+  readonly potText: string;
+  /** "Ben wins $41, Ava wins $40" = the winners' text joined with ", ". */
+  readonly winnersText: string;
   /** "Main pot $60 · You win $60"; split: "Side pot $81 · Ben wins $41, Ava wins $40" (Q-2). */
   readonly text: string;
 }
@@ -156,12 +160,16 @@ export function handResultView(table: TableState): HandResultView | null {
       isUser: seat === table.config.userSeat,
       text: winText(seat, amount),
     }));
+    const potText = `${label} $${award.amount}`;
+    const winnersText = potWinners.map((w) => w.text).join(', ');
     return {
       pot: award.pot,
       label,
       amount: award.amount,
       winners: potWinners,
-      text: `${label} $${award.amount} · ${potWinners.map((w) => w.text).join(', ')}`,
+      potText,
+      winnersText,
+      text: `${potText} · ${winnersText}`,
     };
   });
   return { endedBy: result.endedBy, winners, shown, pots };

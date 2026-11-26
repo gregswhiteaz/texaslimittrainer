@@ -170,9 +170,9 @@ function HandResult({ result }: { readonly result: HandResultView }): React.JSX.
         <ul aria-label="Pot winners">
           {result.pots.map((p) => (
             <li key={p.pot} data-pot={p.pot}>
-              <span data-part="pot">{`${p.label} $${p.amount}`}</span>
+              <span data-part="pot">{p.potText}</span>
               <span aria-hidden="true"> · </span>
-              <span data-part="pot-winners">{p.winners.map((w) => w.text).join(', ')}</span>
+              <span data-part="pot-winners">{p.winnersText}</span>
             </li>
           ))}
         </ul>

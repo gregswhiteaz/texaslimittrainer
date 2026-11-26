@@ -237,6 +237,7 @@ export type TableScene =
   | 'bet-all-in'
   | 'side-pot-river'
   | 'side-pot-showdown'
+  | 'split-side-pot'
   | 'ten-seat-hint'
   | 'ten-seat-review'
   | 'review-header'

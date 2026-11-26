@@ -8,6 +8,7 @@ import {
   SIDE_POT_MOVES,
   SIDE_POT_RIVER,
   SIDE_POT_SHOWDOWN,
+  SPLIT_SIDE_POT_SHOWDOWN,
   userTableAfter,
 } from '../support/table-scenarios';
 
@@ -69,6 +70,8 @@ describe('side pots', () => {
         label: 'Main pot',
         amount: 60,
         winners: [{ seat: 5, isUser: true, text: 'You win $60' }],
+        potText: 'Main pot $60',
+        winnersText: 'You win $60',
         text: 'Main pot $60 · You win $60',
       },
       {
@@ -76,6 +79,8 @@ describe('side pots', () => {
         label: 'Side pot',
         amount: 80,
         winners: [{ seat: 2, isUser: false, text: 'Ben wins $80' }],
+        potText: 'Side pot $80',
+        winnersText: 'Ben wins $80',
         text: 'Side pot $80 · Ben wins $80',
       },
     ]);
@@ -138,6 +143,51 @@ describe('side pots', () => {
       'Main pot $60 · You win $60',
       'Side pot $80 · Ava wins $80',
     ]);
+  });
+
+  it('pot result text is built from potText and winnersText', () => {
+    const split81 = (pot: number): HandResult['awards'][number] => ({
+      pot,
+      amount: 81,
+      winners: [
+        { seat: 2, amount: 41 },
+        { seat: 1, amount: 40 },
+      ],
+    });
+    const main60 = { pot: 0, amount: 60, winners: [{ seat: 5 as const, amount: 60 }] };
+    const views = [
+      handResultView(SIDE_POT_SHOWDOWN),
+      handResultView(
+        withAwards([
+          main60,
+          { pot: 1, amount: 40, winners: [{ seat: 2, amount: 40 }] },
+          split81(2),
+        ]),
+      ),
+      handResultView(withAwards([main60, split81(1)])),
+      handResultView(SPLIT_SIDE_POT_SHOWDOWN),
+    ];
+    for (const view of views) {
+      expect(view?.pots?.length).toBeGreaterThanOrEqual(2);
+      for (const p of view?.pots ?? []) {
+        expect(p.potText).toBe(`${p.label} $${p.amount}`);
+        expect(p.winnersText).toBe(p.winners.map((w) => w.text).join(', '));
+        expect(p.text).toBe(`${p.potText} · ${p.winnersText}`);
+      }
+    }
+    expect(views[3]?.pots?.map((p) => [p.potText, p.winnersText])).toEqual([
+      ['Main pot $60', 'You win $60'],
+      ['Side pot $81', 'Ben wins $41, Ava wins $40'],
+    ]);
+
+    // The crafted split scene keeps its chips: contributions equal the awards, and the stacks total is unchanged.
+    const split = SPLIT_SIDE_POT_SHOWDOWN.hand as HandState;
+    const dealt = SIDE_POT_SHOWDOWN.hand as HandState;
+    const sum = (ns: number[]): number => ns.reduce((a, b) => a + b, 0);
+    expect(sum(split.players.map((p) => p.totalContribution))).toBe(
+      sum((split.result?.awards ?? []).map((a) => a.amount)),
+    );
+    expect(sum(split.players.map((p) => p.stack))).toBe(sum(dealt.players.map((p) => p.stack)));
   });
 
   it('an award to an unseated seat throws RangeError', () => {

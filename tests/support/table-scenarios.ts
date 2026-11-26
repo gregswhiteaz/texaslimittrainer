@@ -467,3 +467,37 @@ export const SIDE_POT_SHOWDOWN: TableState = userTableAfter(
   6,
   { 5: 20 },
 );
+
+/** Crafted, not dealt (TASK-3.26 A-2): SIDE_POT_SHOWDOWN with You winning the $60 main pot and Ben and Ava
+ *  splitting an $81 side pot $41/$40. Ava's contribution gets an extra $1 and the stacks follow the
+ *  awards, so the chips still add up ($20 + $60 + $61 = $60 + $81). */
+export const SPLIT_SIDE_POT_SHOWDOWN: TableState = (() => {
+  const hand = SIDE_POT_SHOWDOWN.hand as HandState;
+  const result = hand.result as NonNullable<HandState['result']>;
+  return {
+    ...SIDE_POT_SHOWDOWN,
+    hand: {
+      ...hand,
+      // From the dealt result (You +60, Ben +80) to the crafted one (You +60, Ben +41, Ava +40 less her $1).
+      players: hand.players.map((p) => {
+        if (p.seat === 1)
+          return { ...p, stack: p.stack + 39, totalContribution: p.totalContribution + 1 };
+        return p.seat === 2 ? { ...p, stack: p.stack - 39 } : p;
+      }),
+      result: {
+        ...result,
+        awards: [
+          { pot: 0, amount: 60, winners: [{ seat: 5, amount: 60 }] },
+          {
+            pot: 1,
+            amount: 81,
+            winners: [
+              { seat: 2, amount: 41 },
+              { seat: 1, amount: 40 },
+            ],
+          },
+        ],
+      },
+    },
+  };
+})();
