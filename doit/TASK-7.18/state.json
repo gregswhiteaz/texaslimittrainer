@@ -4,7 +4,7 @@
   "branch": "doit/TASK-7.18",
   "base_commit": "6622918fce4cafb892895dd6cbbeb372d7c67b07",
   "started": "2026-11-25T16:49:45",
-  "review_round": 1,
+  "review_round": 2,
   "judge_round": 0,
   "sendbacks": 0,
   "gate_runs": 4,
@@ -2039,7 +2039,8 @@
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-7.18",
   "spec_sha256": "d1a22bd590322e37b7f216ad267d7e511102e86de71607e44dc74153a85ddc13",
   "review_findings": {
-    "1": 1
+    "1": 1,
+    "2": 0
   },
   "brief_history": {
     "src/advice/equity.ts:early-abort-ignores-remaining-variance": [

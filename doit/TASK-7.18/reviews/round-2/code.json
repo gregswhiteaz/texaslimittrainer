@@ -1,0 +1,22 @@
+{"reviewer": "code", "round": 2,
+ "rubric": [
+  {"item": "SPEC-01 correctness", "result": "pass"},
+  {"item": "SPEC-01 test strength", "result": "pass"},
+  {"item": "SPEC-02 correctness", "result": "pass"},
+  {"item": "SPEC-02 test strength", "result": "pass"},
+  {"item": "SPEC-03 correctness", "result": "pass"},
+  {"item": "SPEC-03 test strength", "result": "pass"},
+  {"item": "SPEC-04 correctness", "result": "pass"},
+  {"item": "SPEC-04 test strength", "result": "pass"},
+  {"item": "SPEC-05 correctness", "result": "pass"},
+  {"item": "SPEC-05 test strength", "result": "pass"},
+  {"item": "SPEC-06 correctness (recorded deviation)", "result": "pass"},
+  {"item": "SPEC-06 test strength", "result": "pass"},
+  {"item": "SPEC-07 correctness", "result": "pass"},
+  {"item": "SPEC-07 test strength", "result": "pass"},
+  {"item": "scope", "result": "pass"},
+  {"item": "concision", "result": "pass"},
+  {"item": "clarity", "result": "pass"}
+ ],
+ "findings": [],
+ "summary": "Round-1 MAJOR early-abort-ignores-remaining-variance is fixed. rejectionsOverBudget (src/advice/equity.ts:323-336) now subtracts z*sqrt(rem*(1-pHi))/pHi, as the recorded deviation says. I ran a seeded comparison that imports the real function and compares it with the old rule (scratchpad r2/r2.test.ts). At T=500 with p in 0.0097-0.0105 (4,000 runs each) and at T=30,000 with p in 0.0098-0.0101 (150 runs each), the new rule gave 0 false aborts. The old rule gave 1-17 per configuration on the same seeds. Runs that really are infeasible are still mostly aborted early. Low acceptance still aborts fast: p=0.0005 aborts at r=8,192, p=0.002 at 16,384 and p=0.005 at 40,960. The regression test (equity.test.ts:381-399) would fail under the old rule: I replayed seed 91 at p=0.0099 and the old rule aborts at exactly 485/49,152 while the run completes under the cap, and the new rule does not abort. The arithmetic precondition in the test pins that same fact. The updated worked example (0, 8,192, 500, 50,000) -> false is correct under the new rule. The 9-opponent cases (150, 32,768) -> true and computeEquity(9 calling) RangeError still pass. The SPEC-05 hash pin fd3c9bf3...59daa is unchanged and passes. The equity unit/acceptance/multiway tests all pass (20 tests). Perf: 9-opponent advice p95 54.67 ms (limit 75), value-bet 53.01 ms, full ring 53.48 ms, HU vs every combo 4.62 ms. The round-1 MINOR inlined-xoshiro-duplicated is also addressed: there is a keep-identical note at the seed block and the stale rng comment is reworded. No new findings."}
