@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-25T10:36:00Z'
-updated_date: '2026-11-26T17:26:00Z'
+updated_date: '2026-11-26T17:48:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -27,9 +27,9 @@ Follow-up from TASK-11.2 security and code review (doc-135). A tampered store wi
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Given stored cash hands whose big bets make the exact LCM exceed a safe integer, When Statistics opens, Then it either shows a finite BB/100 value or the load-failure message, never stays on loading, and a test pins this
-- [ ] #2 Given TrendSource, When a cash source lacks its cash fields, Then the type system rejects it and trendHand needs no cast
-- [ ] #3 Given all-negative BB/100 points, When the chart is drawn, Then a unit case pins the break-even line at the top of the plot
+- [x] #1 Given stored cash hands whose big bets make the exact LCM exceed a safe integer, When Statistics opens, Then it either shows a finite BB/100 value or the load-failure message, never stays on loading, and a test pins this
+- [x] #2 Given TrendSource, When a cash source lacks its cash fields, Then the type system rejects it and trendHand needs no cast
+- [x] #3 Given all-negative BB/100 points, When the chart is drawn, Then a unit case pins the break-even line at the top of the plot
 <!-- AC:END -->
 
 ## Implementation Plan
@@ -47,4 +47,6 @@ Full spec: doit/TASK-11.14/spec.md
 
 <!-- SECTION:NOTES:BEGIN -->
 Build: bb100Value exact while safe, float fallback above MAX_SAFE_INTEGER, iterative gcd; TrendSource union, no cast; all-negative break-even unit case; gate PASS
+
+Judge r1 PASS (5/5 SPEC items; real-app tampered-store check)
 <!-- SECTION:NOTES:END -->
