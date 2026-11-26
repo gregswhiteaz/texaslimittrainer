@@ -1524,6 +1524,12 @@
       "event": "unlock",
       "file": "tests/golden/postflop-spots.json",
       "reason": "TASK-7.31 judge r1 J-1-01/02: justification wording only"
+    },
+    {
+      "t": "2026-11-26T08:18:52",
+      "event": "unlock",
+      "file": "tests/golden/postflop-spots.json",
+      "reason": "TASK-7.33 AC#4: rename id 6max-flop-co-raise-jj -> 6max-flop-co-raise-jj-3way only"
     }
   ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-7.14",
@@ -1536,6 +1542,7 @@
   "relock_pending": [
     "tests/golden/postflop-spots.json",
     "tests/golden/graded-examples.json",
+    "tests/golden/postflop-spots.json",
     "tests/golden/postflop-spots.json",
     "tests/golden/postflop-spots.json",
     "tests/golden/postflop-spots.json",

@@ -1535,7 +1535,14 @@
       "skips": 0
     }
   },
-  "history": [],
+  "history": [
+    {
+      "t": "2026-11-26T08:18:52",
+      "event": "unlock",
+      "file": "tests/advice/value-copy.acceptance.test.ts",
+      "reason": "TASK-7.33 AC#1: hand-built input gains the now-required fields; no assertion changed"
+    }
+  ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-8.1",
   "spec_sha256": "739b82423d2f0c16e105f59ab5b55ff146f1919323c8c7366925dd1afce20797",
   "review_findings": {
@@ -1550,5 +1557,8 @@
   "judge_results": {
     "1": "PASS"
   },
-  "doc_id": "doc-114"
+  "doc_id": "doc-114",
+  "relock_pending": [
+    "tests/advice/value-copy.acceptance.test.ts"
+  ]
 }

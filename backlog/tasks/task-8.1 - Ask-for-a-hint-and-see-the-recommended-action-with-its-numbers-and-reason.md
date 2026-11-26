@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-24T10:52:00Z'
+updated_date: '2026-11-26T15:18:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -107,6 +107,8 @@ Build: observed counts per bot (outside TableState, restart on Resume), snapshot
 Judge r1 PASS 23/23; real app Chromium+WebKit (preflop/postflop cards, loading/error, layout, axe); CI 45376916865 green on c289b60.
 
 Follow-ups: TASK-8.6 created (observed counts across Resume). Not tracked: Table.onHint null-guard NIT (no behaviour change); AdviceClient.grade snapshot (no caller — stored decisions already carry snapshot-based grades, TASK-3.12/9.3).
+
+Locked test unlocked for TASK-7.33 (id/title/required-field edits only; no assertion dropped)
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary

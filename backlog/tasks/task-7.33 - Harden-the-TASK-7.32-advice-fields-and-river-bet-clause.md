@@ -1,9 +1,11 @@
 ---
 id: TASK-7.33
 title: Harden the TASK-7.32 advice fields and river-bet clause
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-25T01:41:00Z'
+updated_date: '2026-11-26T15:18:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -30,3 +32,14 @@ Follow-up from TASK-7.32 code and security review (doc-129). requiredCountsRiver
 - [ ] #3 Given an EquityGradeInput with a non-finite valueThresholdPct, When it is graded, Then grading rejects it with the same error as other non-finite percent fields
 - [ ] #4 Given the value-bet AC#6 test and golden spot 6max-flop-co-raise-jj, When read, Then the test title names 65.1% and the spot id describes its current spot (re-pin logged)
 <!-- AC:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. requiredCountsRiverBet and valueThresholdPct required on PostflopRecommendation
+2. River-bet clause from its own template slot {riverBet} (no text replace); explanation text byte-identical
+3. grade.ts rejects non-finite valueThresholdPct like other percent fields
+4. Value-bet AC#6 title 65.1%; golden id 6max-flop-co-raise-jj-3way (re-pin logged)
+
+Full spec: doit/TASK-7.33/spec.md
+<!-- SECTION:PLAN:END -->
