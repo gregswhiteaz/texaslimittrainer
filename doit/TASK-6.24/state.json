@@ -1,6 +1,6 @@
 {
   "task": "TASK-6.24",
-  "stage": "build",
+  "stage": "done",
   "branch": "doit/TASK-6.24",
   "base_commit": "a08251ce34d1ba6b4848db701a288d7a08ecf4cc",
   "started": "2026-11-26T13:45:08",
@@ -8,7 +8,7 @@
   "judge_round": 1,
   "sendbacks": 0,
   "gate_runs": 0,
-  "questions": 0,
+  "questions": 1,
   "assumptions": 0,
   "escalations": 0,
   "item_failures": {
@@ -25,5 +25,6 @@
   "spec_sha256": "d25fc2e1766ac8d0cc02dc4638706dff5f8fdad6b158a4502a7a3af2a5a33970",
   "judge_results": {
     "1": "PASS"
-  }
+  },
+  "doc_id": "doc-174"
 }

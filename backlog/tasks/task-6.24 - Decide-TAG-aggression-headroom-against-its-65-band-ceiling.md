@@ -1,11 +1,11 @@
 ---
 id: TASK-6.24
 title: Decide TAG aggression headroom against its 65% band ceiling
-status: In Progress
+status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-23T15:21:00Z'
-updated_date: '2026-11-26T21:06:00Z'
+updated_date: '2026-11-26T21:07:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -13,6 +13,8 @@ labels:
 milestone: m-1
 dependencies:
   - TASK-6.11
+documentation:
+  - doc-174
 parent_task_id: TASK-6
 priority: medium
 ordinal: 226000
@@ -43,6 +45,8 @@ Measurements (TASK-6.24, 100k at seed 42; 2k at seeds 1–20 per line-up; code a
 | Mixed | 54.3–63.6% (59.2) | **0 / 20** | 12 / 20 | 7 from "One action only". Band misses: Rock VPIP 7.7–7.9% (5 seeds, floor 8%), TAG PFR 13.7/13.9% (seeds 20 and 5, floor 14%), Rock aggression 56.1/56.2% (seeds 9 and 10, ceiling 55%). |
 
 Judge r1 PASS (5/5 SPEC items)
+
+Follow-ups: TASK-6.28 (document the 100,000-hand run length for --check-styles).
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary
