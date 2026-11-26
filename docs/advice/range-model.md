@@ -1,7 +1,8 @@
 # Opponent range model
 
 This document describes how the trainer estimates the hands each opponent may hold after the flop.
-The code is `src/advice/ranges.ts` and the default ranges are `src/advice/ranges/six-max.json`.
+The code is `src/advice/ranges.ts` and the default ranges are `src/advice/ranges/heads-up.json`,
+`src/advice/ranges/six-max.json` and `src/advice/ranges/full-ring.json`.
 The postflop rules in [postflop-rules.md](postflop-rules.md) compute the hero's equity against
 these ranges when the player asks for a hint or reads the hand review.
 
@@ -20,7 +21,19 @@ their preflop range is rebuilt from their observed habits (see "Adjusting to obs
 
 Each live opponent starts from a default range picked by two keys.
 
-**Position.** At a six-handed table the seats after the button are SB, BB, UTG, HJ, CO and BTN.
+**Table size and position.** The number of seats dealt in picks the data file, and the seat picks
+the position, counting only seats dealt in:
+
+| Seats dealt in | Data file        | Positions                                       |
+| -------------- | ---------------- | ----------------------------------------------- |
+| 2              | `heads-up.json`  | BTN (the button, who posts the small blind), BB |
+| 6              | `six-max.json`   | SB, BB, UTG, HJ, CO, BTN                        |
+| 8, 9 or 10     | `full-ring.json` | SB, BB, UTG, UTG+1, MP, LJ, HJ, CO, BTN         |
+
+At full ring the seats are named back from the button (BTN, CO, HJ, LJ, MP, UTG+1, UTG), as on the
+full-ring preflop chart. With 8 seats nobody is UTG: the first seat after the big blind is UTG+1.
+With 10 seats the two seats after the big blind are both UTG and share the UTG ranges. Tables with 3,
+4, 5 or 7 seats dealt in have no default ranges yet (see "Other table sizes" below).
 
 **Preflop line.** The opponent's last voluntary action before the flop, counted against how many
 raises came before it. Posting a blind is not a voluntary action.
@@ -38,11 +51,13 @@ when nobody raised, `call-raise` after one raise and `call-three-bet` after more
 
 The seven lines are `check`, `limp`, `open-raise`, `call-raise`, `three-bet`, `call-three-bet` and
 `four-bet`. Only the big blind can take the `check` line, and the big blind never takes the `limp`
-line, so a six-handed table has 36 (position, line) pairs. Each has a range in the data file.
+line. Every other line applies to every position. That gives 12 (position, line) pairs heads-up,
+36 at six-max and 54 at full ring. Each has a range in its data file.
 
 ### Default range file
 
-The file is checked when the app loads. Its shape:
+Each file is checked when the app loads. `referenceSize` is `heads-up`, `6-max` or `full-ring`.
+Its shape:
 
 ```json
 {
@@ -63,8 +78,9 @@ The file is checked when the app loads. Its shape:
 
 Every pair must be present exactly once with a plain-English justification and at least one hand.
 A missing pair, a short justification, an empty or invalid `hands` field, a pair that does not
-apply at six-max or a duplicate pair stops the file from loading, and the error lists every problem
-at once.
+apply at the file's size (such as UTG at heads-up, or a BB limp anywhere) or a duplicate pair stops
+the file from loading, and the error lists every problem at once, for example
+`heads-up ranges: missing range BTN limp`.
 
 ### Hand notation
 
@@ -82,11 +98,113 @@ rejected.
 The ranges model a typical low-stakes limit player, who is looser than the trainer's own preflop
 chart. The data file holds the justification for each range.
 
+### Heads-up and full-ring ranges (TASK-7.26)
+
+Full ring is tighter than six-max at every comparable seat, because more players are left to act.
+Typical players raise less than the full-ring chart (UTG opens 6.9% of hands against the chart's
+9.2%, the button 27.3% against 37.3%) and limp part of the rest; a seat's limp and open-raise
+ranges never share a hand. Early re-raises are big pairs and AK only, and every four-bet range sits
+inside the same seat's three-bet range. Heads-up is far wider: the button raises about 49% and
+limps about 19%, while the big blind defends a raise with about 56% (45% calls, 11% re-raises), so
+a typical heads-up player folds the big blind too often.
+
+Each range's width (its combinations before dead cards, as a percent of 1,326) must lie inside its
+band. A test checks every row below.
+
+| Size      | Position | Line           | Band % |
+| --------- | -------- | -------------- | ------ |
+| heads-up  | BB       | check          | 65–90  |
+| heads-up  | BTN      | limp           | 10–30  |
+| heads-up  | BTN      | open-raise     | 40–70  |
+| heads-up  | BB       | open-raise     | 10–30  |
+| heads-up  | BTN      | call-raise     | 5–20   |
+| heads-up  | BB       | call-raise     | 35–65  |
+| heads-up  | BTN      | three-bet      | 2–8    |
+| heads-up  | BB       | three-bet      | 6–20   |
+| heads-up  | BTN      | call-three-bet | 12–40  |
+| heads-up  | BB       | call-three-bet | 8–30   |
+| heads-up  | BTN      | four-bet       | 1.5–8  |
+| heads-up  | BB       | four-bet       | 1.5–8  |
+| full-ring | BB       | check          | 80–97  |
+| full-ring | UTG      | limp           | 3–14   |
+| full-ring | UTG+1    | limp           | 3–14   |
+| full-ring | MP       | limp           | 3–14   |
+| full-ring | LJ       | limp           | 3–14   |
+| full-ring | HJ       | limp           | 3–14   |
+| full-ring | CO       | limp           | 3–14   |
+| full-ring | BTN      | limp           | 5–20   |
+| full-ring | SB       | limp           | 20–55  |
+| full-ring | UTG      | open-raise     | 5–10   |
+| full-ring | UTG+1    | open-raise     | 6–12   |
+| full-ring | MP       | open-raise     | 7–14   |
+| full-ring | LJ       | open-raise     | 8–16   |
+| full-ring | HJ       | open-raise     | 10–19  |
+| full-ring | CO       | open-raise     | 13–25  |
+| full-ring | BTN      | open-raise     | 18–35  |
+| full-ring | SB       | open-raise     | 9–25   |
+| full-ring | BB       | open-raise     | 4–12   |
+| full-ring | UTG      | call-raise     | 5–15   |
+| full-ring | UTG+1    | call-raise     | 5–15   |
+| full-ring | MP       | call-raise     | 5–15   |
+| full-ring | LJ       | call-raise     | 5–15   |
+| full-ring | HJ       | call-raise     | 8–20   |
+| full-ring | CO       | call-raise     | 8–22   |
+| full-ring | BTN      | call-raise     | 12–28  |
+| full-ring | SB       | call-raise     | 8–22   |
+| full-ring | BB       | call-raise     | 18–45  |
+| full-ring | UTG      | three-bet      | 2–8    |
+| full-ring | UTG+1    | three-bet      | 2–8    |
+| full-ring | MP       | three-bet      | 2–8    |
+| full-ring | LJ       | three-bet      | 2–8    |
+| full-ring | HJ       | three-bet      | 2–8    |
+| full-ring | CO       | three-bet      | 2–8    |
+| full-ring | BTN      | three-bet      | 2–8    |
+| full-ring | SB       | three-bet      | 2–8    |
+| full-ring | BB       | three-bet      | 2–8    |
+| full-ring | UTG      | call-three-bet | 2.5–18 |
+| full-ring | UTG+1    | call-three-bet | 2.5–18 |
+| full-ring | MP       | call-three-bet | 2.5–18 |
+| full-ring | LJ       | call-three-bet | 2.5–18 |
+| full-ring | HJ       | call-three-bet | 2.5–18 |
+| full-ring | CO       | call-three-bet | 2.5–18 |
+| full-ring | BTN      | call-three-bet | 2.5–18 |
+| full-ring | SB       | call-three-bet | 2.5–18 |
+| full-ring | BB       | call-three-bet | 2.5–18 |
+| full-ring | UTG      | four-bet       | 1–4    |
+| full-ring | UTG+1    | four-bet       | 1–4    |
+| full-ring | MP       | four-bet       | 1–4    |
+| full-ring | LJ       | four-bet       | 1–4    |
+| full-ring | HJ       | four-bet       | 1–4    |
+| full-ring | CO       | four-bet       | 1–4    |
+| full-ring | BTN      | four-bet       | 1–4    |
+| full-ring | SB       | four-bet       | 1–4    |
+| full-ring | BB       | four-bet       | 1–4    |
+
 ### Removing dead cards
 
 A class is turned into its two-card combinations, and every combination that uses one of the
 hero's cards or a board card is dropped. Cards shown at earlier showdowns are not dropped, because
 every hand is dealt from a fresh deck.
+
+### Effect at heads-up and full ring (TASK-7.26)
+
+Measured on all-TAG cash playtests (seed 42), the five style stats summed over every seat, before and after the
+heads-up and full-ring ranges. Healthy ranges are from `src/stats/healthy-ranges.json`.
+
+| Size (hands)            | VPIP  | PFR   | Aggression | WTSD  | W$SD  |
+| ----------------------- | ----- | ----- | ---------- | ----- | ----- |
+| heads-up 10,000, before | 79.3  | 47.0  | 66.4       | 42.7  | 53.6  |
+| heads-up 10,000, after  | 79.3  | 47.0  | 69.5       | 43.2  | 53.9  |
+| heads-up 100,000, after | 79.3  | 47.0  | 69.5       | 42.7  | 53.8  |
+| heads-up healthy        | 65–90 | 40–75 | 50–70      | 40–55 | 46–56 |
+| 9 seats 10,000, before  | 15.2  | 11.3  | 59.4       | 50.7  | 49.8  |
+| 9 seats 10,000, after   | 15.2  | 11.3  | 63.7       | 38.6  | 50.5  |
+| 9 seats 100,000, after  | 15.1  | 11.3  | 63.8       | 38.4  | 50.9  |
+| full-ring healthy       | 13–20 | 9–16  | 50–66      | 28–40 | 47–57 |
+
+Before the change the 9-seat WTSD (50.7) was above its healthy range; with the full-ring ranges it falls to 38.4, inside
+the range. Every stat at both sizes is now inside its healthy range. Heads-up aggression (69.5) sits just under its
+70 ceiling. Preflop stats do not move, because the preflop charts are unchanged.
 
 ## Adjusting to observed play
 
@@ -117,7 +235,8 @@ for more as hands build up and fully from 100 hands. With `d` = 20 and 30 hands,
 | `limp`, `call-raise`, `call-three-bet` | VPIP %            |
 | `check` (big blind, nobody raised)     | not scaled        |
 
-The `check` line is not a voluntary range, so it keeps its default. Tables that are not six-handed
+The `check` line is not a voluntary range, so it keeps its default. The scaling applies at every
+table size with default ranges (heads-up, six-max and full ring). Tables with 3, 4, 5 or 7 seats
 have no default range to scale yet, and the simpler "every unseen hand" mode ignores the snapshot.
 
 **Hand order.** The rebuilt range is the strongest `width` % of starting hands in the hand order
@@ -211,9 +330,9 @@ and Draw, which leaves {AhKh, 9h9d, 6h5h, Th9h, Ac2c}.
 - **Cards that cannot all be dealt.** With several opponents, their ranges can occasionally clash
   so that no deal gives every one of them a hand. The equity is then computed again from the
   starting ranges before narrowing, and if that also fails, from every unseen hand for everyone.
-- **Other table sizes.** Default ranges exist for six-handed tables only so far (TASK-7.6 adds
-  heads-up and full-ring). At any other size every opponent starts from every unseen hand, and the
-  narrowing after the flop still applies.
+- **Other table sizes.** Default ranges exist for 2, 6 and 8 to 10 seats dealt in. With 3, 4, 5 or
+  7 seats every opponent starts from every unseen hand, and the narrowing after the flop still
+  applies. Follow-up TASK-7.35 moves those sizes to the six-max ranges.
 
 All of these steps are fixed and depend only on what the hero can see, so the same decision always
 gets the same advice.

@@ -1,7 +1,15 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import type { EquityInput, EquityResult } from '../../src/advice/equity';
 import { recommendPostflop } from '../../src/advice/postflop';
-import { callingRange, estimateOpponentRanges, unseenCombos } from '../../src/advice/ranges';
+import {
+  callingRange,
+  defaultRange,
+  estimateOpponentRanges,
+  expandRange,
+  HEADS_UP_RANGES,
+  narrowRange,
+  unseenCombos,
+} from '../../src/advice/ranges';
 import { ACTION_RANGE_ADVICE } from '../../src/advice/recommend';
 import { parseCards, type Card } from '../../src/engine/cards';
 import {
@@ -98,7 +106,7 @@ afterEach(() => {
 });
 
 describe('postflop advice with action ranges', () => {
-  it('actions mode falls back on scripted lines and heads-up', () => {
+  it('actions mode falls back on scripted lines and tables without default ranges', () => {
     for (const [steps, size] of [
       [FLOP_STEPS, 1081],
       [TURN_STEPS, 1035],
@@ -137,7 +145,7 @@ describe('postflop advice with action ranges', () => {
       expect(other.calls).toHaveLength(1);
     }
 
-    // Heads-up: no authored ranges yet (A-3), so starts are every unseen combo; narrowing still applies.
+    // Heads-up (TASK-7.26): the big blind who checked a completed button starts from the authored BB check range.
     const headsUp = toActView(
       [
         [1, 'call', 2],
@@ -147,11 +155,41 @@ describe('postflop advice with action ranges', () => {
       2,
     );
     const [hu] = estimateOpponentRanges(headsUp);
-    expect(hu).toMatchObject({ seat: 2, position: null, line: null });
-    expect(hu?.start).toEqual(unseenCombos([...headsUp.holeCards, ...headsUp.board]));
-    expect(hu?.combos.length).toBeLessThan(1081);
+    expect(hu).toMatchObject({ seat: 2, position: 'BB', line: 'check' });
+    const huStart = expandRange(defaultRange(HEADS_UP_RANGES, 'BB', 'check').classes, [
+      ...headsUp.holeCards,
+      ...headsUp.board,
+    ]);
+    expect(hu?.start).toEqual(huStart);
+    expect(hu?.start.length).toBeLessThan(1081);
+    expect(hu?.combos).toEqual(narrowRange(huStart, headsUp.board, 'bet'));
     expect(hu?.combos.length).toBeGreaterThan(0);
     expect(recommendPostflop(headsUp, ACTION_RANGE_ADVICE).opponents).toBe(1);
+
+    // Five seats have no default ranges (Q-4), so starts are every unseen combo; narrowing still applies.
+    const fiveSeats = toActView(
+      [
+        [4, 'call', 4],
+        [5, 'fold'],
+        [1, 'fold'],
+        [2, 'call', 2],
+        [3, 'check'],
+        [2, 'check'],
+        [3, 'bet', 4],
+      ],
+      5,
+    );
+    expect(fiveSeats.seat).toBe(4);
+    const fiveDead = [...fiveSeats.holeCards, ...fiveSeats.board];
+    const five = estimateOpponentRanges(fiveSeats);
+    expect(five.map((o) => o.seat)).toEqual([2, 3]);
+    for (const opponent of five) {
+      expect(opponent).toMatchObject({ position: null, line: null, widthPct: null });
+      expect(opponent.start).toEqual(unseenCombos(fiveDead));
+    }
+    expect(five[1]?.combos).toEqual(narrowRange(unseenCombos(fiveDead), fiveSeats.board, 'bet'));
+    expect(five[1]?.combos.length).toBeLessThan(1081);
+    expect(recommendPostflop(fiveSeats, ACTION_RANGE_ADVICE).opponents).toBe(2);
   });
 
   it('a fully blocked start uses every unseen combo and an empty narrowing keeps the range', async () => {

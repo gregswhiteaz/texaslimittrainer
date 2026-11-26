@@ -6,6 +6,7 @@ import { recommendPostflop } from '../../src/advice/postflop';
 import type { Position } from '../../src/advice/preflop-chart';
 import { recommend } from '../../src/advice/recommend';
 import {
+  APPLICABLE_LINES,
   callingRange,
   classifyCombo,
   CONTINUE_CLASSES,
@@ -13,6 +14,8 @@ import {
   drawOuts,
   estimateOpponentRanges,
   expandRange,
+  FULL_RING_RANGES,
+  HEADS_UP_RANGES,
   KEEP,
   narrowRange,
   parseDefaultRanges,
@@ -21,6 +24,7 @@ import {
   RangeValidationError,
   SIX_MAX_RANGES,
   unseenCombos,
+  type DefaultRanges,
   type PreflopLine,
 } from '../../src/advice/ranges';
 import { TAG_STYLE } from '../../src/bots/tag';
@@ -34,6 +38,8 @@ import {
   type SeatNumber,
 } from '../../src/engine/hand';
 import { playerView, type PlayerView } from '../../src/engine/player-view';
+import fullRingRaw from '../../src/advice/ranges/full-ring.json' with { type: 'json' };
+import headsUpRaw from '../../src/advice/ranges/heads-up.json' with { type: 'json' };
 import sixMaxRaw from '../../src/advice/ranges/six-max.json' with { type: 'json' };
 
 const STAKES_4_8 = { smallBlind: 2, bigBlind: 4, smallBet: 4, bigBet: 8 };
@@ -83,8 +89,8 @@ function problemsOf(raw: unknown): readonly string[] {
   throw new Error('validation passed');
 }
 
-const copyOf = () =>
-  JSON.parse(JSON.stringify(sixMaxRaw)) as Record<string, unknown> & {
+const copyOf = (raw: unknown = sixMaxRaw) =>
+  JSON.parse(JSON.stringify(raw)) as Record<string, unknown> & {
     ranges: Record<string, unknown>[];
   };
 
@@ -405,6 +411,117 @@ describe('range notation, lines and classifier', () => {
     expect(opens).toEqual([...opens].sort((a, b) => a - b));
     const bbRaise = of('BB', 'open-raise');
     for (const hc of of('BB', 'check')) expect(bbRaise.has(hc), hc).toBe(false);
+  });
+
+  it('validates heads-up and full-ring range files', () => {
+    const headsUp = copyOf(headsUpRaw);
+    headsUp.ranges.push({
+      position: 'UTG',
+      line: 'open-raise',
+      justification: 'x',
+      hands: 'AA',
+    });
+    expect(problemsOf(headsUp)).toContain(
+      'heads-up ranges: range UTG open-raise does not apply at heads-up',
+    );
+    const bbLimp = copyOf(fullRingRaw);
+    bbLimp.ranges.push({ position: 'BB', line: 'limp', justification: 'x', hands: 'AA' });
+    expect(problemsOf(bbLimp)).toEqual([
+      'full-ring ranges: range BB limp does not apply at full-ring',
+    ]);
+    const duplicate = copyOf(fullRingRaw);
+    duplicate.ranges.push({ ...(duplicate.ranges[20] as Record<string, unknown>) });
+    const { position, line } = duplicate.ranges[20] as { position: string; line: string };
+    expect(problemsOf(duplicate)).toEqual([
+      `full-ring ranges: duplicate range ${position} ${line}`,
+    ]);
+    for (const raw of [headsUpRaw, sixMaxRaw, fullRingRaw]) {
+      expect(problemsOf({ ...copyOf(raw), referenceSize: '9-max' })).toEqual([
+        'Range file: unknown reference size "9-max"',
+      ]);
+    }
+    expect(problemsOf({ ...copyOf(headsUpRaw), ranges: 'none' })).toHaveLength(12);
+    expect(problemsOf({ ...copyOf(fullRingRaw), ranges: [] })).toHaveLength(54);
+    // A file's pairs belong to its own size: the heads-up data is not a valid full-ring file.
+    expect(problemsOf({ ...copyOf(headsUpRaw), referenceSize: 'full-ring' })).toContain(
+      'full-ring ranges: missing range UTG limp',
+    );
+
+    // 6-max is unchanged: 36 pairs, same order and messages.
+    const keys = (ids: readonly { position: string; line: string }[]) =>
+      ids.map((r) => `${r.position} ${r.line}`);
+    expect(APPLICABLE_LINES['6-max']).toHaveLength(36);
+    expect(keys(APPLICABLE_LINES['6-max']).slice(0, 7)).toEqual([
+      'BB check',
+      'UTG limp',
+      'HJ limp',
+      'CO limp',
+      'BTN limp',
+      'SB limp',
+      'UTG open-raise',
+    ]);
+    expect(keys(SIX_MAX_RANGES.ranges)).toEqual(keys(APPLICABLE_LINES['6-max']));
+    const sixMax = copyOf();
+    sixMax.ranges = sixMax.ranges.filter((r) => !(r.position === 'CO' && r.line === 'open-raise'));
+    expect(problemsOf(sixMax)).toEqual(['6-max ranges: missing range CO open-raise']);
+    expect(keys(APPLICABLE_LINES['heads-up'])).toEqual([
+      'BB check',
+      'BTN limp',
+      'BTN open-raise',
+      'BB open-raise',
+      'BTN call-raise',
+      'BB call-raise',
+      'BTN three-bet',
+      'BB three-bet',
+      'BTN call-three-bet',
+      'BB call-three-bet',
+      'BTN four-bet',
+      'BB four-bet',
+    ]);
+    expect(keys(APPLICABLE_LINES['full-ring']).slice(0, 10)).toEqual([
+      'BB check',
+      'UTG limp',
+      'UTG+1 limp',
+      'MP limp',
+      'LJ limp',
+      'HJ limp',
+      'CO limp',
+      'BTN limp',
+      'SB limp',
+      'UTG open-raise',
+    ]);
+  });
+
+  it('heads-up and full-ring range content sanity', () => {
+    const sixMaxTexts = new Set(SIX_MAX_RANGES.ranges.map((r) => r.justification));
+    const sizes: [DefaultRanges, readonly Position[]][] = [
+      [HEADS_UP_RANGES, ['BTN', 'BB']],
+      [FULL_RING_RANGES, ['UTG', 'UTG+1', 'MP', 'LJ', 'HJ', 'CO', 'BTN', 'SB', 'BB']],
+    ];
+    for (const [ranges, positions] of sizes) {
+      const seen = new Set<string>();
+      for (const range of ranges.ranges) {
+        const name = `${ranges.referenceSize} ${range.position} ${range.line}`;
+        expect(seen.has(range.justification), name).toBe(false);
+        expect(sixMaxTexts.has(range.justification), name).toBe(false);
+        seen.add(range.justification);
+      }
+      const of = (position: Position, line: PreflopLine) =>
+        defaultRange(ranges, position, line).classes;
+      for (const position of positions) {
+        const name = `${ranges.referenceSize} ${position}`;
+        const threeBet = of(position, 'three-bet');
+        for (const hc of of(position, 'four-bet'))
+          expect(threeBet.has(hc), `${name} ${hc}`).toBe(true);
+        const open = of(position, 'open-raise');
+        const other = of(position, position === 'BB' ? 'check' : 'limp');
+        for (const hc of other) expect(open.has(hc), `${name} ${hc}`).toBe(false);
+      }
+    }
+    const opens = (['UTG', 'UTG+1', 'MP', 'LJ', 'HJ', 'CO', 'BTN'] as const).map((p) =>
+      width(defaultRange(FULL_RING_RANGES, p, 'open-raise').classes),
+    );
+    expect(opens).toEqual([...opens].sort((a, b) => a - b));
   });
 
   it('a variable holding only bot keys is not an advice option', () => {

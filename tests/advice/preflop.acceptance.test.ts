@@ -315,6 +315,8 @@ describe('preflop advice acceptance', () => {
         'src/advice/recommend.ts',
         'src/engine/seeded-random.ts',
         'src/advice/ranges/hand-order.json',
+        'src/advice/ranges/heads-up.json',
+        'src/advice/ranges/full-ring.json',
       ]) {
         files[path] = readFileSync(join(REPO_ROOT, path), 'utf8');
       }

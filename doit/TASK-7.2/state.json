@@ -273,6 +273,12 @@
       "event": "unlock",
       "file": "tests/advice/preflop.acceptance.test.ts",
       "reason": "TASK-7.13 block 1 auto-accepted: AC#6 sandbox list adds src/advice/ranges/hand-order.json (no assertion change)"
+    },
+    {
+      "t": "2026-11-25T19:58:14",
+      "event": "unlock",
+      "file": "tests/advice/preflop.acceptance.test.ts",
+      "reason": "TASK-7.26 SPEC-12: sandbox fixture list gains the two new range data files (no assertion change)"
     }
   ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-7.2",
@@ -291,6 +297,7 @@
     "1": "PASS"
   },
   "relock_pending": [
+    "tests/advice/preflop.acceptance.test.ts",
     "tests/advice/preflop.acceptance.test.ts",
     "tests/advice/preflop.acceptance.test.ts",
     "tests/advice/preflop.acceptance.test.ts"

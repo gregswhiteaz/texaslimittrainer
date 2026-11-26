@@ -215,6 +215,22 @@ only the hole cards change, except where noted.
 `graded-postflop-fold-major-6max-turn-second-pair` keeps its grade (Major, `call-fold-margin`) but its margin moves
 from 26.9 to 18.3 points, because the turn price now counts the river big bet.
 
+## Changes from TASK-7.26 (heads-up and full-ring ranges)
+
+Opponents at heads-up and full-ring tables now start from the authored default ranges for their size, position and
+preflop line instead of every unseen hand (see `range-model.md`). Six heads-up and full-ring postflop spots stopped
+matching or being clear-cut. Each is replaced by a spot on the same street, table size and action, so the coverage
+counts above are unchanged; the line and board are kept and only the hole cards change.
+
+| Old id                  | New id                  | Reason                                                                                                                       |
+| ----------------------- | ----------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| `fr-flop-hj-fold-aqs`   | `fr-flop-hj-fold-a2s`   | Against the narrower ranges ace-queen sits 8.4 points under the price; ace-deuce is 14.6 points under it (5.4% vs 20.0%).    |
+| `hu-river-bb-check-aqo` | `hu-river-bb-check-t8o` | Ace-queen high now has 74.3% against the button's turn-betting range, so the advice bets; ten-high has 18.4%, a clear check. |
+| `hu-river-btn-call-93s` | `hu-river-btn-call-q9s` | Bottom pair of threes now sits 10.2 points under the price; third pair of queens is 24.6 points above it (41.3% vs 16.7%).   |
+| `hu-river-btn-call-t5s` | `hu-river-btn-call-77`  | A pair of fives sits 8.6 points above the price; pocket sevens are 30.5 points above it (44.8% vs 14.3%).                    |
+| `fr-river-utg-bet-kjo`  | `fr-river-utg-bet-ajs`  | Second pair of kings is only 11.3 points above 50% against the calling range; top pair of aces has 98.2%, a clear value bet. |
+| `fr-river-utg-fold-ato` | `fr-river-utg-fold-jto` | Ace-ten high sits 5.9 points under the price; jack-ten high is 11.5 points under it (4.5% vs 16.0%).                         |
+
 ## Originality
 
 All spots, graded examples and justifications were written for this project from the project's own charts and

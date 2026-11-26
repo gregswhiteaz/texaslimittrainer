@@ -15,3 +15,7 @@ Options: log the five stats, assert zero violations and non-null stats; any stat
 ## Q-4 — Tables with 3, 4, 5 or 7 dealt-in seats
 Options: unchanged here; follow-up to use 6-max ranges [Recommended]; key by referenceSizeOf now.
 **Answer: auto-accepted (recommended)** — follow-up TASK-7.35 created.
+
+## Block 1 — locked TASK-7.2 sandbox typecheck file list (resolved by orchestrator)
+tests/advice/preflop.acceptance.test.ts AC#6 copies a fixed file list; ranges.ts now imports the two new data files (D-5). Unlocked under TASK-7.2; added the two paths (as TASK-7.13 did for hand-order.json). No assertion changed.
+**Answer: auto-accepted (recommended)**

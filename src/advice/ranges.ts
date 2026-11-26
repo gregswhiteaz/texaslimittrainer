@@ -14,6 +14,8 @@ import { positionOf } from './preflop';
 import type { Position, ReferenceSize } from './preflop-chart';
 // The JSON imports stay last, like the chart's.
 import handOrder from './ranges/hand-order.json' with { type: 'json' };
+import fullRing from './ranges/full-ring.json' with { type: 'json' };
+import headsUp from './ranges/heads-up.json' with { type: 'json' };
 import sixMax from './ranges/six-max.json' with { type: 'json' };
 
 export type PreflopLine =
@@ -33,22 +35,26 @@ interface RangeId {
   readonly line: PreflopLine;
 }
 
-const ALL_POSITIONS: readonly Position[] = ['UTG', 'HJ', 'CO', 'BTN', 'SB', 'BB'];
-const LINE_POSITIONS: Readonly<Record<PreflopLine, readonly Position[]>> = {
-  check: ['BB'],
-  limp: ['UTG', 'HJ', 'CO', 'BTN', 'SB'],
-  'open-raise': ALL_POSITIONS,
-  'call-raise': ALL_POSITIONS,
-  'three-bet': ALL_POSITIONS,
-  'call-three-bet': ALL_POSITIONS,
-  'four-bet': ALL_POSITIONS,
+const SIZE_POSITIONS: Readonly<Record<ReferenceSize, readonly Position[]>> = {
+  'heads-up': ['BTN', 'BB'],
+  '6-max': ['UTG', 'HJ', 'CO', 'BTN', 'SB', 'BB'],
+  'full-ring': ['UTG', 'UTG+1', 'MP', 'LJ', 'HJ', 'CO', 'BTN', 'SB', 'BB'],
 };
 
-/** Lines each 6-max position can take (36 pairs). */
-export const APPLICABLE_LINES: Readonly<Record<'6-max', readonly RangeId[]>> = {
-  '6-max': PREFLOP_LINES.flatMap((line) =>
-    LINE_POSITIONS[line].map((position) => ({ position, line })),
-  ),
+/** `check` is the big blind's only; `limp` is everyone's but the big blind's; the other lines apply everywhere. */
+function applicableLines(positions: readonly Position[]): readonly RangeId[] {
+  return PREFLOP_LINES.flatMap((line) =>
+    positions
+      .filter((p) => (line === 'check' ? p === 'BB' : line !== 'limp' || p !== 'BB'))
+      .map((position) => ({ position, line })),
+  );
+}
+
+/** Lines each position can take at each reference size: heads-up 12, 6-max 36, full-ring 54 pairs. */
+export const APPLICABLE_LINES: Readonly<Record<ReferenceSize, readonly RangeId[]>> = {
+  'heads-up': applicableLines(SIZE_POSITIONS['heads-up']),
+  '6-max': applicableLines(SIZE_POSITIONS['6-max']),
+  'full-ring': applicableLines(SIZE_POSITIONS['full-ring']),
 };
 
 export type StrengthClass = 'strong' | 'pair' | 'draw' | 'air';
@@ -102,6 +108,9 @@ function wordCount(text: unknown): number {
 function echo(text: string): string {
   return text.length <= ECHO_CHARS ? text : `${text.slice(0, ECHO_CHARS)}...`;
 }
+
+const isReferenceSize = (value: unknown): value is ReferenceSize =>
+  typeof value === 'string' && Object.hasOwn(APPLICABLE_LINES, value);
 
 const rangeKey = (position: unknown, line: unknown) => `${String(position)} ${String(line)}`;
 
@@ -164,7 +173,7 @@ export function parseDefaultRanges(raw: unknown): DefaultRanges {
   if (!isRecord(raw) || raw.format !== FORMAT || raw.version !== 1) {
     throw new RangeValidationError([`Range file: expected format "${FORMAT}" version 1`]);
   }
-  if (raw.referenceSize !== '6-max') {
+  if (!isReferenceSize(raw.referenceSize)) {
     throw new RangeValidationError([
       `Range file: unknown reference size "${echo(String(raw.referenceSize))}"`,
     ]);
@@ -218,8 +227,23 @@ export function parseDefaultRanges(raw: unknown): DefaultRanges {
   };
 }
 
-/** The shipped 6-max default ranges, validated at import. */
+/** The shipped default ranges, validated at import. */
+export const HEADS_UP_RANGES: DefaultRanges = parseDefaultRanges(headsUp);
 export const SIX_MAX_RANGES: DefaultRanges = parseDefaultRanges(sixMax);
+export const FULL_RING_RANGES: DefaultRanges = parseDefaultRanges(fullRing);
+export const DEFAULT_RANGES: Readonly<Record<ReferenceSize, DefaultRanges>> = {
+  'heads-up': HEADS_UP_RANGES,
+  '6-max': SIX_MAX_RANGES,
+  'full-ring': FULL_RING_RANGES,
+};
+
+/** The default ranges for `dealtIn` seats: 2 heads-up, 6 six-max, 8-10 full ring; null for other sizes (Q-4). */
+export function rangesFor(dealtIn: number): DefaultRanges | null {
+  if (dealtIn === 2) return HEADS_UP_RANGES;
+  if (dealtIn === 6) return SIX_MAX_RANGES;
+  if (dealtIn >= 8 && dealtIn <= 10) return FULL_RING_RANGES;
+  return null;
+}
 
 /** Throws RangeError('Ranges <size> have no range <position> <line>') if absent. */
 export function defaultRange(
@@ -532,9 +556,9 @@ export function callingRange(
 
 export interface OpponentRange {
   readonly seat: SeatNumber;
-  /** null when not exactly 6 seats are dealt in (A-3). */
+  /** null when the table size has no default ranges (rangesFor). */
   readonly position: Position | null;
-  /** null when not exactly 6 seats are dealt in. */
+  /** null when the table size has no default ranges (rangesFor). */
   readonly line: PreflopLine | null;
   /** The expanded default range, or every unseen combo (A-3). */
   readonly start: readonly HoleCards[];
@@ -592,7 +616,7 @@ function observedBySeat(observed: readonly ObservedOpponent[]): Map<SeatNumber, 
 
 /**
  * One entry per live opponent (not folded, not the viewer), ascending seat. Reads only `view` and `observed`.
- * From OBSERVED_MIN_HANDS observed hands, a six-max raising or calling range is rebuilt at the scaled width.
+ * From OBSERVED_MIN_HANDS observed hands, a default raising or calling range is rebuilt at the scaled width.
  * A non-array `observed` is ignored; array entries are validated (RangeError).
  */
 export function estimateOpponentRanges(
@@ -605,7 +629,7 @@ export function estimateOpponentRanges(
   // A non-array snapshot (an untyped caller) is ignored: every opponent gets the default range.
   const bySeat = observedBySeat(Array.isArray(observed) ? observed : []);
   const dead = [...view.holeCards, ...view.board];
-  const sixMax = view.players.length === 6;
+  const ranges = rangesFor(view.players.length);
   return view.players
     .filter((p) => p.seat !== view.seat && !p.folded)
     .map(({ seat }) => {
@@ -614,10 +638,10 @@ export function estimateOpponentRanges(
       let start: HoleCards[] = [];
       let widthPct: number | null = null;
       let basis: OpponentBasis = { seat, observedHands: null, text: basisText(null) };
-      if (sixMax) {
-        position = positionOf({ ...view, seat });
+      if (ranges !== null) {
+        position = positionOf({ ...view, seat }, ranges.referenceSize);
         line = preflopLineOf(view, seat);
-        let classes = defaultRange(SIX_MAX_RANGES, position, line).classes;
+        let classes = defaultRange(ranges, position, line).classes;
         widthPct = rangeWidthPct(classes);
         const obs = bySeat.get(seat);
         const stat = OBSERVED_LINE_STAT[line];

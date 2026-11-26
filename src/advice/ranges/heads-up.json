@@ -1,0 +1,80 @@
+{
+  "format": "tlh-default-ranges",
+  "version": 1,
+  "referenceSize": "heads-up",
+  "justification": "These ranges describe what a typical low-stakes heads-up limit opponent holds after each preflop line, before we have watched them play. With only two players the blinds come round every hand, so both seats play far more hands than at a full table. The button raises about half its hands and limps a good share of the weaker ones instead of folding them. The big blind, by contrast, gives up too often: it defends a raise with a little over half its hands, calling with most of them and re-raising only its better pairs and aces. Re-raises and caps are kept for clearly strong holdings. After the flop the narrowing rule trims each starting range street by street from what the player does.",
+  "ranges": [
+    {
+      "position": "BB",
+      "line": "check",
+      "justification": "When the button only completes, the heads-up big blind checks with everything it did not want to raise, which is nearly the whole deck apart from its better pairs and big cards.",
+      "hands": "22-55 A2s-A5s A2o-A8o K2s-K8s K2o-KTo Q2s-Q9s Q2o-QJo J2s-J9s J2o-JTo T2s-T9s T2o-T9o 92s-98s 92o-98o 82s-87s 82o-87o 72s-76s 72o-76o 62s-65s 62o-65o 52s-54s 52o-54o 42s-43s 42o-43o 32s 32o"
+    },
+    {
+      "position": "BTN",
+      "line": "limp",
+      "justification": "A heads-up button that just completes the small blind usually holds a weak king, queen or jack, or a low suited hand it finds too pretty to throw away but too poor to raise.",
+      "hands": "K2o-K4o Q2s Q3s Q5o-Q7o J2s-J5s J5o-J7o T2s-T5s T6o T7o 92s-95s 96o 97o 84s 86o 74s 76o 63s 53s 43s"
+    },
+    {
+      "position": "BTN",
+      "line": "open-raise",
+      "justification": "Raising first on the heads-up button covers about half of all hands: every pair, every ace, most kings and the better queens, jacks and connected cards that play well in position.",
+      "hands": "22+ A2s+ A2o+ K2s+ K5o+ Q4s+ Q8o+ J6s+ J8o+ T6s+ T8o+ 96s+ 98o 85s+ 87o 75s+ 64s+ 54s"
+    },
+    {
+      "position": "BB",
+      "line": "open-raise",
+      "justification": "A big blind that raises after the button only completes has a hand worth building the pot with: a middle or high pair, a good ace, or two strong broadway cards.",
+      "hands": "66+ A6s+ A9o+ K9s+ KJo+ QTs+ JTs"
+    },
+    {
+      "position": "BTN",
+      "line": "call-raise",
+      "justification": "When the button limps and then only calls the big blind's raise, it is holding one of its weaker completing hands that it now feels priced in to see a flop with.",
+      "hands": "Q2s Q3s Q6o Q7o J2s-J5s J6o J7o T4s T5s T7o 94s 95s 97o 84s 86o 74s 76o 63s 53s 43s"
+    },
+    {
+      "position": "BB",
+      "line": "call-raise",
+      "justification": "Facing a button raise, a typical big blind flat calls with small and middle pairs, most aces and kings, and the connected or suited cards that can hit a flop hard.",
+      "hands": "22-99 A2s-ATs A2o-AJo K2s-KJs K5o-KQo Q4s-QJs Q8o-QJo J6s-JTs J8o-JTo T6s-T9s T8o T9o 96s-98s 98o 85s-87s 87o 74s-76s 64s 65s 53s 54s 43s"
+    },
+    {
+      "position": "BTN",
+      "line": "three-bet",
+      "justification": "A button that limps and then re-raises the big blind is setting a trap, so it holds a premium pair of tens or better, or ace with queen or king.",
+      "hands": "TT+ AQs+ AQo+"
+    },
+    {
+      "position": "BB",
+      "line": "three-bet",
+      "justification": "The big blind re-raising a button open in a heads-up game shows a pair of sevens or more, a strong ace, or the best king and queen combinations.",
+      "hands": "77+ A9s+ ATo+ KTs+ KQo QJs"
+    },
+    {
+      "position": "BTN",
+      "line": "call-three-bet",
+      "justification": "After opening and getting re-raised by the big blind, the button keeps calling with its pairs, its better aces and the stronger kings, queens and suited connectors.",
+      "hands": "22-TT A2s-AQs A7o-AQo K8s+ KTo+ Q9s+ QJo J9s+ T9s 98s 87s"
+    },
+    {
+      "position": "BB",
+      "line": "call-three-bet",
+      "justification": "If the big blind raised a limp and the button then re-raised, the big blind calls with medium pairs and the good broadway hands rather than folding them.",
+      "hands": "55-JJ A8s-AQs ATo-AQo KTs+ KJo+ QTs+ QJo JTs T9s"
+    },
+    {
+      "position": "BTN",
+      "line": "four-bet",
+      "justification": "Capping the betting from the heads-up button means jacks or better, ace with king, or a suited ace with queen; anything weaker would simply call the re-raise.",
+      "hands": "JJ+ AKs AKo AQs"
+    },
+    {
+      "position": "BB",
+      "line": "four-bet",
+      "justification": "When the big blind puts in the final raise before the flop against a heads-up button, it almost always holds queens, kings, aces or ace with king.",
+      "hands": "QQ+ AKs AKo"
+    }
+  ]
+}

@@ -1,0 +1,332 @@
+{
+  "format": "tlh-default-ranges",
+  "version": 1,
+  "referenceSize": "full-ring",
+  "justification": "These ranges describe what a typical low-stakes full-ring limit opponent holds after each preflop line, before we have watched them play. With eight to ten players at the table, someone behind is more likely to hold a big hand, so every seat plays tighter than at six-handed. Typical players raise less often than a solid chart suggests and limp with part of the rest, especially small pairs and suited hands that like a cheap multiway flop. Re-raises from the early seats are almost always big pairs or ace with king. The big blind still checks or defends with many hands because it already has a bet in the pot. After the flop the narrowing rule trims each starting range street by street from what the player does.",
+  "ranges": [
+    {
+      "position": "BB",
+      "line": "check",
+      "justification": "In an unraised full-ring pot the big blind checks with every hand it chose not to raise, so only its better pairs and strongest aces are missing from this very wide range.",
+      "hands": "22-77 A2s-A9s A2o-AJo K2s-KJs K2o-KJo Q2s-QJs Q2o-QJo J2s-JTs J2o-JTo T2s-T9s T2o-T9o 92s-98s 92o-98o 82s-87s 82o-87o 72s-76s 72o-76o 62s-65s 62o-65o 52s-54s 52o-54o 42s-43s 42o-43o 32s 32o KQo"
+    },
+    {
+      "position": "UTG",
+      "line": "limp",
+      "justification": "Limping first in from under the gun at a full table usually means a small pair hoping to flop a set, or a pretty suited broadway hand the player would not raise.",
+      "hands": "22-66 A9s KJs QJs JTs AJo KQo"
+    },
+    {
+      "position": "UTG+1",
+      "line": "limp",
+      "justification": "The second seat limps with low pairs and a handful of suited aces and connected cards, plus a couple of offsuit broadway hands it does not trust enough to raise.",
+      "hands": "22-66 A8s A9s KTs QJs JTs T9s ATo KJo"
+    },
+    {
+      "position": "MP",
+      "line": "limp",
+      "justification": "A middle-position limper often holds a small pair, a suited ace with a weak kicker, or a suited connector that wants several callers before seeing the flop.",
+      "hands": "22-55 A5s-A9s KTs QTs JTs T9s 98s ATo KJo"
+    },
+    {
+      "position": "LJ",
+      "line": "limp",
+      "justification": "From the lojack a limp tends to show the smallest pairs, low suited aces and suited one-gap or connected cards, along with a few loose offsuit broadway combinations.",
+      "hands": "22-44 A2s-A7s K9s Q9s J9s T9s 98s 87s ATo KJo QJo"
+    },
+    {
+      "position": "HJ",
+      "line": "limp",
+      "justification": "The hijack limps with deuces or treys, weak suited aces and kings, lower suited connectors and several offsuit picture cards that it is unsure how to play.",
+      "hands": "22-33 A2s-A6s K8s K9s Q9s J9s T8s 98s 87s 76s A9o KTo QJo JTo"
+    },
+    {
+      "position": "CO",
+      "line": "limp",
+      "justification": "Limping from the cutoff is a loose habit kept for weak suited kings, small suited aces and connectors, and offsuit aces and tens too poor to raise.",
+      "hands": "22 A2s-A4s K6s-K8s Q8s J8s T8s 97s 87s 76s 65s A7o A8o KTo QTo JTo"
+    },
+    {
+      "position": "BTN",
+      "line": "limp",
+      "justification": "A full-ring button that limps behind usually has a weak offsuit ace, a low suited king or queen, or a small suited connector it hopes to play cheaply in position.",
+      "hands": "A2o-A6o K2s-K5s K8o K9o Q5s-Q7s Q9o J7s J9o T7s T9o 96s 86s 75s 65s 54s"
+    },
+    {
+      "position": "SB",
+      "line": "limp",
+      "justification": "Completing from the small blind is cheap, so typical players do it with a wide spread of small pairs, suited cards, offsuit aces and connected hands that they would not raise.",
+      "hands": "22-66 A2s-A6s A2o-A9o K2s-K9s K6o-KTo Q5s-Q9s Q8o-QJo J6s-J9s J8o-JTo T6s-T9s T8o T9o 96s-98s 98o 85s-87s 87o 74s-76s 76o 64s 65s 53s 54s 43s"
+    },
+    {
+      "position": "UTG",
+      "line": "open-raise",
+      "justification": "Raising first from under the gun with nine players behind is reserved for sevens or better, strong suited aces, ace with queen or king, and suited king with queen.",
+      "hands": "77+ ATs+ AQo+ KQs"
+    },
+    {
+      "position": "UTG+1",
+      "line": "open-raise",
+      "justification": "The second seat opens a touch wider than under the gun, adding ace with jack offsuit and the better suited kings while still folding most speculative hands.",
+      "hands": "77+ ATs+ AJo+ KJs+ KQo"
+    },
+    {
+      "position": "MP",
+      "line": "open-raise",
+      "justification": "From middle position a typical raiser adds sixes and suited queen with jack to the early range, but still keeps out weak aces and most suited connectors.",
+      "hands": "66+ ATs+ AJo+ KJs+ KQo QJs"
+    },
+    {
+      "position": "LJ",
+      "line": "open-raise",
+      "justification": "In the lojack the opening range grows to include fives, more suited aces and the suited broadway cards down to jack with ten, since fewer players remain to act.",
+      "hands": "55+ A8s+ AJo+ KTs+ KQo QTs+ JTs"
+    },
+    {
+      "position": "HJ",
+      "line": "open-raise",
+      "justification": "The hijack raises fours and up, any ace with ten or better, and most broadway hands, because only four players are left behind to wake up with something.",
+      "hands": "44+ A7s+ ATo+ KTs+ KJo+ QTs+ JTs"
+    },
+    {
+      "position": "CO",
+      "line": "open-raise",
+      "justification": "With only the button and blinds to pass, the cutoff opens treys and above, suited aces down to the five, and a few suited connectors for variety.",
+      "hands": "33+ A5s+ ATo+ K9s+ KJo+ Q9s+ QJo J9s+ T9s 98s"
+    },
+    {
+      "position": "BTN",
+      "line": "open-raise",
+      "justification": "Raising first on the button attacks only the two blinds, so it includes every pair, every suited ace, most offsuit aces and plenty of suited kings, queens and connectors.",
+      "hands": "22+ A2s+ A7o+ K6s+ KTo+ Q8s+ QTo+ J8s+ JTo T8s+ 97s+ 87s 76s"
+    },
+    {
+      "position": "SB",
+      "line": "open-raise",
+      "justification": "A small blind that raises when everyone has folded holds sevens or better, a decent ace, or a good broadway hand; the rest it either completes or folds.",
+      "hands": "77+ A7s+ ATo+ KTs+ KJo+ QTs+ JTs"
+    },
+    {
+      "position": "BB",
+      "line": "open-raise",
+      "justification": "When limpers come in and the big blind raises, it nearly always has eights or better, a big suited ace, ace with queen or king, or suited king with queen.",
+      "hands": "88+ ATs+ AQo+ KQs"
+    },
+    {
+      "position": "UTG",
+      "line": "call-raise",
+      "justification": "An under-the-gun player who limped and then calls a raise behind holds a pair below jacks or a suited broadway hand that was too modest to raise itself.",
+      "hands": "22-TT ATs-AQs KJs+ QJs JTs AQo KQo"
+    },
+    {
+      "position": "UTG+1",
+      "line": "call-raise",
+      "justification": "From the second seat, calling an earlier raise or calling after a limp shows small and middle pairs, suited big cards and a few offsuit aces with jack or queen.",
+      "hands": "22-TT ATs-AQs KJs+ QJs JTs AJo AQo KQo"
+    },
+    {
+      "position": "MP",
+      "line": "call-raise",
+      "justification": "Middle-position callers of a raise keep pairs from deuces to tens, suited aces from the nine up, suited broadway hands and a single suited connector.",
+      "hands": "22-TT A9s-AQs KTs+ QTs+ JTs T9s AJo AQo KQo"
+    },
+    {
+      "position": "LJ",
+      "line": "call-raise",
+      "justification": "The lojack flat calls a raise with almost the same hands as middle position, adding a suited eight-high ace and nine with eight suited for multiway pots.",
+      "hands": "22-TT A8s-AQs KTs+ QTs+ JTs T9s 98s AJo AQo KQo"
+    },
+    {
+      "position": "HJ",
+      "line": "call-raise",
+      "justification": "A hijack calling a raise ahead of it holds pairs up to tens, many suited aces, suited kings and queens from the nine, and offsuit aces from ten upward.",
+      "hands": "22-TT A7s-AQs K9s+ Q9s+ J9s+ T9s 98s 87s ATo-AQo KJo+"
+    },
+    {
+      "position": "CO",
+      "line": "call-raise",
+      "justification": "The cutoff calls raises a little more freely, keeping jacks and smaller pairs, suited connectors down to seven with six, and offsuit queen with jack.",
+      "hands": "22-JJ A5s-AQs K9s+ Q9s+ J9s+ T9s 98s 87s 76s ATo-AQo KJo+ QJo"
+    },
+    {
+      "position": "BTN",
+      "line": "call-raise",
+      "justification": "Holding position on the raiser, a full-ring button calls with every pair below queens, all the suited aces, many suited connectors and the better offsuit broadway cards.",
+      "hands": "22-JJ A2s-AQs K8s+ Q8s+ J8s+ T8s+ 97s+ 87s 76s 65s A9o-AQo KTo+ QJo"
+    },
+    {
+      "position": "SB",
+      "line": "call-raise",
+      "justification": "Out of position for the whole hand, the small blind calls a raise with pairs to jacks, decent suited aces and kings, and offsuit aces of ten or better.",
+      "hands": "22-JJ A7s-AQs K9s+ Q9s+ J9s+ T9s 98s ATo-AQo KJo+"
+    },
+    {
+      "position": "BB",
+      "line": "call-raise",
+      "justification": "Closing the action with a bet already in, the big blind defends a single raise with many pairs, aces from the seven, suited cards and connected hands at a good price.",
+      "hands": "22-TT A2s-AJs A7o-AJo K5s+ K9o+ Q7s+ QTo+ J7s+ JTo T7s+ T9o 96s+ 86s+ 75s+ 65s 54s"
+    },
+    {
+      "position": "UTG",
+      "line": "three-bet",
+      "justification": "An under-the-gun player who limps and then re-raises, or re-raises from the first seats, is showing queens, kings, aces or ace with king and little else.",
+      "hands": "QQ+ AKs AKo"
+    },
+    {
+      "position": "UTG+1",
+      "line": "three-bet",
+      "justification": "A re-raise from the second seat at a full table is just as narrow as from under the gun: the three biggest pairs plus suited and offsuit ace with king.",
+      "hands": "QQ+ AKs AKo"
+    },
+    {
+      "position": "MP",
+      "line": "three-bet",
+      "justification": "Middle position re-raises an early opener with jacks or better and ace with king, folding or calling with everything weaker such as ace with queen.",
+      "hands": "JJ+ AKs AKo"
+    },
+    {
+      "position": "LJ",
+      "line": "three-bet",
+      "justification": "The lojack re-raise adds suited ace with queen to the big pairs and ace with king, but still does not include tens or any offsuit ace with queen.",
+      "hands": "JJ+ AQs+ AKo"
+    },
+    {
+      "position": "HJ",
+      "line": "three-bet",
+      "justification": "From the hijack a typical player re-raises with tens or better, suited ace with queen or king, and offsuit ace with king against an earlier opener.",
+      "hands": "TT+ AQs+ AKo"
+    },
+    {
+      "position": "CO",
+      "line": "three-bet",
+      "justification": "The cutoff re-raises a little wider than earlier seats, with tens and up, suited ace with jack or better, suited king with queen and offsuit big aces.",
+      "hands": "TT+ AJs+ KQs AQo+"
+    },
+    {
+      "position": "BTN",
+      "line": "three-bet",
+      "justification": "A full-ring button that re-raises to isolate the opener holds nines or better, suited ace with jack and up, suited king with queen, or ace with queen offsuit.",
+      "hands": "99+ AJs+ KQs AQo+"
+    },
+    {
+      "position": "SB",
+      "line": "three-bet",
+      "justification": "Re-raising from the small blind against a late opener shows tens or better, the strong suited aces, suited king with queen and offsuit ace with queen or king.",
+      "hands": "TT+ AJs+ KQs AQo+"
+    },
+    {
+      "position": "BB",
+      "line": "three-bet",
+      "justification": "When the big blind re-raises a single opener at a full table it usually has tens or better, or ace with queen or ace with king of either kind.",
+      "hands": "TT+ AQs+ AQo+"
+    },
+    {
+      "position": "UTG",
+      "line": "call-three-bet",
+      "justification": "After opening from under the gun and facing a re-raise, a typical player calls with eights through jacks, ace with jack or queen suited and suited king with queen.",
+      "hands": "88-JJ AJs AQs AQo KQs"
+    },
+    {
+      "position": "UTG+1",
+      "line": "call-three-bet",
+      "justification": "The second seat, re-raised after it opened, continues by calling with middle pairs, suited aces from ten to queen and the strongest offsuit or suited king hands.",
+      "hands": "88-JJ ATs-AQs AQo KQs"
+    },
+    {
+      "position": "MP",
+      "line": "call-three-bet",
+      "justification": "A middle-position opener that gets re-raised calls with sevens through tens, suited aces from ten up to queen, and the better offsuit aces and suited kings.",
+      "hands": "77-TT ATs-AQs AJo AQo KQs"
+    },
+    {
+      "position": "LJ",
+      "line": "call-three-bet",
+      "justification": "Facing a re-raise after opening from the lojack, the player calls with sixes to tens, suited ace with ten or jack, and suited kings with jack or queen.",
+      "hands": "66-TT ATs-AJs AJo AQo KQs KJs"
+    },
+    {
+      "position": "HJ",
+      "line": "call-three-bet",
+      "justification": "The hijack calls a re-raise with fives through nines, suited aces from nine to jack, offsuit aces from ten to queen and the suited broadway hands.",
+      "hands": "55-99 A9s-AJs ATo-AQo KJs KQs QJs"
+    },
+    {
+      "position": "CO",
+      "line": "call-three-bet",
+      "justification": "A cutoff opener that faces a re-raise keeps fours through nines, middling suited aces, suited kings from ten and a few connected suited broadway hands.",
+      "hands": "44-99 A7s-ATs ATo AJo KTs-KQs QJs JTs KQo"
+    },
+    {
+      "position": "BTN",
+      "line": "call-three-bet",
+      "justification": "Because the button opens so many hands, it calls a blind re-raise with every small pair, most suited aces, offsuit aces from nine and many suited broadway cards.",
+      "hands": "22-88 A2s-ATs A9o-AJo K9s-KJs QTs QJs JTs T9s KJo KQo"
+    },
+    {
+      "position": "SB",
+      "line": "call-three-bet",
+      "justification": "A small blind that raised and is re-raised by the big blind calls with sixes to nines, suited aces with nine or ten, and the strong broadway combinations.",
+      "hands": "66-99 A9s-ATs ATo AJo KJs KQs QJs KQo"
+    },
+    {
+      "position": "BB",
+      "line": "call-three-bet",
+      "justification": "When the big blind raised limpers and someone re-raised, it calls with fours to nines, suited aces from seven to jack, suited kings and connected suited cards.",
+      "hands": "44-99 A7s-AJs ATo AJo K9s-KQs QTs QJs JTs T9s KQo"
+    },
+    {
+      "position": "UTG",
+      "line": "four-bet",
+      "justification": "Capping the betting from under the gun at a full table is the strongest signal in the game: kings, aces or suited ace with king and nothing else.",
+      "hands": "KK+ AKs"
+    },
+    {
+      "position": "UTG+1",
+      "line": "four-bet",
+      "justification": "From the second seat the final raise before the flop is equally tight, showing only pocket kings, pocket aces or the suited version of ace with king.",
+      "hands": "KK+ AKs"
+    },
+    {
+      "position": "MP",
+      "line": "four-bet",
+      "justification": "A middle-position player who puts in the cap adds queens to the top pairs and suited ace with king, but still flat calls with offsuit ace with king.",
+      "hands": "QQ+ AKs"
+    },
+    {
+      "position": "LJ",
+      "line": "four-bet",
+      "justification": "The lojack caps the preflop betting with queens or better and suited ace with king, the same tight group as middle position at a full table.",
+      "hands": "QQ+ AKs"
+    },
+    {
+      "position": "HJ",
+      "line": "four-bet",
+      "justification": "In the hijack the cap comes from queens, kings or aces, or ace with king of either kind, which typical players will happily raise again with.",
+      "hands": "QQ+ AKs AKo"
+    },
+    {
+      "position": "CO",
+      "line": "four-bet",
+      "justification": "The cutoff puts in the fourth bet with the same group as the hijack: queens and up and every ace with king, folding or calling with anything less.",
+      "hands": "QQ+ AKs AKo"
+    },
+    {
+      "position": "BTN",
+      "line": "four-bet",
+      "justification": "A full-ring button that caps the betting is slightly wider than the earlier seats, adding jacks to queens or better and ace with king of either suit pattern.",
+      "hands": "JJ+ AKs AKo"
+    },
+    {
+      "position": "SB",
+      "line": "four-bet",
+      "justification": "Putting in the last raise from the small blind against a re-raise shows a big hand: queens or better, or ace with king suited or offsuit.",
+      "hands": "QQ+ AKs AKo"
+    },
+    {
+      "position": "BB",
+      "line": "four-bet",
+      "justification": "When the big blind caps the betting at a full table it has queens, kings, aces or ace with king, the hands it is never willing to just call with.",
+      "hands": "QQ+ AKs AKo"
+    }
+  ]
+}

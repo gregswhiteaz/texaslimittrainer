@@ -509,11 +509,11 @@
       "justification": "Top pair of jacks with a deuce kicker is ahead of the many draws in this five-way pot but behind any jack with a better kicker. Calling is right because the pot odds are generous, and raising would mainly fold out the worse hands we want to keep in."
     },
     {
-      "id": "fr-flop-hj-fold-aqs",
+      "id": "fr-flop-hj-fold-a2s",
       "seats": 9,
       "position": "HJ",
       "street": "flop",
-      "holeCards": "Ad Qd",
+      "holeCards": "Ad 2d",
       "board": "6c Ks 8h",
       "before": [
         "fold",
@@ -530,7 +530,7 @@
         "raise"
       ],
       "action": "fold",
-      "justification": "Ace-queen with no pair faces a bet and a raise from two players in a multiway pot, so its equity is far below what the price needs. Fold now, because even an ace or queen on the turn may not be good against such strength."
+      "justification": "Ace-deuce with no pair and no draw faces a bet and a raise from two players in a multiway pot, so its equity is far below what the price needs. Fold now, because even an ace on the turn would often lose to such strength."
     },
     {
       "id": "fr-flop-bb-raise-a3o",
@@ -1657,26 +1657,26 @@
       "justification": "We made a jack-high flush on the river, and the big blind has checked after leading the turn, so many pairs and weaker hands remain. Bet as a value bet, since higher flushes are rare and lower ones will pay."
     },
     {
-      "id": "hu-river-bb-check-aqo",
+      "id": "hu-river-bb-check-t8o",
       "seats": 2,
       "position": "BB",
       "street": "river",
-      "holeCards": "Ad Qc",
+      "holeCards": "Td 8c",
       "board": "9s Jh Jd 3h 4s",
       "before": ["raise", "call", "check", "check", "check", "bet", "call"],
       "action": "check",
-      "justification": "Ace-queen high has some chance to win at showdown against a button that bet only the turn, but almost no hand that calls a bet is worse. Check, since a bet would not be a value bet."
+      "justification": "Ten-high with a missed straight draw can still win at showdown against a button that bet only the turn, but no hand that calls a bet is worse. Check, since a bet would not be a value bet."
     },
     {
-      "id": "hu-river-btn-call-93s",
+      "id": "hu-river-btn-call-q9s",
       "seats": 2,
       "position": "BTN",
       "street": "river",
-      "holeCards": "3h 9h",
+      "holeCards": "Qh 9h",
       "board": "8s Qs 3s Kc Ac",
       "before": ["raise", "call", "check", "check", "check", "bet", "call", "bet"],
       "action": "call",
-      "justification": "Bottom pair of threes is weak, but heads-up the big blind leads this river with missed draws and bluffs as well as better hands. The pot odds ask us to be right only about one time in six, so call."
+      "justification": "Third pair of queens is modest, but heads-up the big blind leads this river with weaker pairs and bluffs as well as better hands. The pot odds ask us to be right only about one time in six, so call."
     },
     {
       "id": "hu-river-bb-call-tt",
@@ -1712,15 +1712,15 @@
       "justification": "The queen made our king-high straight, which beats every two pair, set and smaller straight here. Check-raise as a value bet, as only ace-king or a diamond flush is ahead."
     },
     {
-      "id": "hu-river-btn-call-t5s",
+      "id": "hu-river-btn-call-77",
       "seats": 2,
       "position": "BTN",
       "street": "river",
-      "holeCards": "Th 5h",
+      "holeCards": "7h 7c",
       "board": "5s 6d 9s 4c Ah",
       "before": ["raise", "call", "bet", "call", "check", "bet", "call", "bet"],
       "action": "call",
-      "justification": "A pair of fives is weak, but the big blind's lead after check-calling the turn includes missed spade draws and bluffs. The pot odds need only about one win in seven, so call."
+      "justification": "Pocket sevens sit below the nine and the ace, but the big blind's lead after check-calling the turn includes missed spade draws and bluffs. The pot odds need only about one win in seven, so call."
     },
     {
       "id": "hu-river-btn-call-85o",
@@ -1734,11 +1734,11 @@
       "justification": "A pair of fives with an eight kicker beats the big blind's missed draws and bluffs in a limped heads-up pot. At pot odds of one in five, calling one big bet is profitable, while raising would fold the hands we beat."
     },
     {
-      "id": "fr-river-utg-bet-kjo",
+      "id": "fr-river-utg-bet-ajs",
       "seats": 9,
       "position": "UTG",
       "street": "river",
-      "holeCards": "Js Kd",
+      "holeCards": "As Js",
       "board": "Ah Kc 5d 7h 3h",
       "before": [
         "raise",
@@ -1757,7 +1757,7 @@
         "check"
       ],
       "action": "bet",
-      "justification": "Second pair of kings is likely best after the big blind checked every street and showed no interest in the ace. Make a thin value bet on the river, because weaker kings, sevens and small pairs will call."
+      "justification": "Top pair of aces with a good kicker is very likely best after the big blind checked every street. Make a value bet on the river, because weaker aces, kings and small pairs will call."
     },
     {
       "id": "fr-river-bb-check-52o",
@@ -1839,11 +1839,11 @@
       "justification": "Our pair of fives, with the deuces on board, is a modest bluff catcher against a big blind that called the turn and then led the river. The pot odds ask for one win in six, so call rather than fold or raise."
     },
     {
-      "id": "fr-river-utg-fold-ato",
+      "id": "fr-river-utg-fold-jto",
       "seats": 9,
       "position": "UTG",
       "street": "river",
-      "holeCards": "Ah Tc",
+      "holeCards": "Jh Tc",
       "board": "Ks 4c 5s 8d 2d",
       "before": [
         "raise",
@@ -1862,7 +1862,7 @@
         "bet"
       ],
       "action": "fold",
-      "justification": "Ace-ten called the turn hoping for an ace or a ten, but neither came and the big blind leads again. Ace-high rarely beats a player who bets the turn and river, so our equity is too low for the pot odds."
+      "justification": "Jack-ten called the turn hoping for a straight card, but the river missed and the big blind leads again. Jack-high almost never beats a player who bets the turn and river, so our equity is too low for the pot odds."
     }
   ]
 }
