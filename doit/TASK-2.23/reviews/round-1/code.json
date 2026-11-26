@@ -1,0 +1,16 @@
+{"reviewer": "code", "round": 1,
+ "rubric": [
+  {"item": "SPEC-01 correctness", "result": "pass"},
+  {"item": "SPEC-01 test strength", "result": "pass"},
+  {"item": "SPEC-02 correctness", "result": "pass"},
+  {"item": "SPEC-02 test strength", "result": "pass"},
+  {"item": "SPEC-03 correctness", "result": "pass"},
+  {"item": "SPEC-03 test strength", "result": "pass"},
+  {"item": "SPEC-04 correctness", "result": "pass"},
+  {"item": "SPEC-04 test strength", "result": "pass"},
+  {"item": "scope", "result": "pass"},
+  {"item": "concision", "result": "pass"},
+  {"item": "clarity", "result": "pass"}
+ ],
+ "findings": [],
+ "summary": "Code diff is 14 lines across the two unlocked files and matches D-1/D-2 exactly. Unit test: one endSession call per case; the same promise is checked with toBeInstanceOf(DOMException) and toMatchObject({name:'ConstraintError'}), both labelled; the after-checks (sessions JSON, endedAt toBe(ENDED_AT), reports JSON) are unchanged. No assertion was lost: the SPEC-02 grep counts are 1/1/2/2, and the e2e ' as string' count is 0. Both matchers still fail if endSession resolves or rejects with a different error. E2e: the typeof guard throws 'no new session id' and narrows id to string, and no other line changed. Verified: vitest file passes (2 tests); playwright end-session-hardening passes 4/4 (chromium and webkit); build-1 gates are PASS (test, lint, typecheck, scope, locks). The other non-test diffs (TASK-2.21 backlog note, TASK-2.21 state.json, doit artifacts) are workflow bookkeeping for the unlock, not code scope creep. No src/ changes."}

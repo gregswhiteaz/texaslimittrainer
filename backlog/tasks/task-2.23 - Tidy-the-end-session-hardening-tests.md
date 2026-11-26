@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-25T20:56:00Z'
-updated_date: '2026-11-26T11:54:00Z'
+updated_date: '2026-11-26T12:06:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -40,3 +40,9 @@ Follow-up from TASK-2.21 review (doc-147). Each case in tests/storage/end-rechec
 
 Full spec: doit/TASK-2.23/spec.md
 <!-- SECTION:PLAN:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+Build: one endSession call per case with both matchers; runtime guard replaces the sessionId cast; greps confirm no check lost; gate PASS
+<!-- SECTION:NOTES:END -->
