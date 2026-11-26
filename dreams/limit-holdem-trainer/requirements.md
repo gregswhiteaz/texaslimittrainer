@@ -539,6 +539,7 @@ Dream slug: limit-holdem-trainer   ·   Vision: dreams/limit-holdem-trainer/visi
 - Clauses:
   - REQ-029.1: Bot parameters do not change in response to the user's actions or statistics.
   - REQ-029.2: Bots request advice with the typical-player basis only; observed opponent statistics (REQ-035.2) are never used in bot decisions.
+  - REQ-029.3: A bot's decision depends only on the current hand: its view of this hand, the replay code and its seat. Earlier showdowns and anything else carried between hands never change a bot action.
 - Fit criterion: Two playtests with different user strategies and the same seeds give each bot identical parameters.
 - Rationale: Predictable opponents are what a learner practises exploiting (Q-49).
 - Source: Q-49; confirmed Q-52
@@ -1368,3 +1369,4 @@ Entity × lifecycle (every cell is a clause below or N/A):
 | 1.9 | 2026-11-17 | Judge round 2 revision: added REQ-033.7 (implied-odds allowance) | User (Q-114) |
 | 1.10 | 2026-11-24 | TASK-7.32 (WTSD fix): REQ-033.1 turn required equity counts one river big bet; REQ-033.2 value raise facing a bet needs more than 65% (value bet stays above 50%) | User (TASK-7.32 Q-1) |
 | 1.11 | 2026-11-24 | TASK-6.25 (Mixed style bands): REQ-007.5 a replacement bot keeps the busted bot's style; REQ-007.7 and REQ-007.8 retired (reverses Q-113) | User (TASK-6.25 Q-1, auto-accepted) |
+| 1.12 | 2026-11-26 | TASK-6.20: added REQ-029.3 (bot decisions use only the current hand) | User (TASK-6.20 Q-1) |
