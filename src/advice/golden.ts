@@ -530,7 +530,8 @@ function clearCutProblems(
 
 /**
  * One problem per hero preflop step of a postflop spot or graded example that grades as a Major error against the
- * chart advice at that decision. Runs only after `view` was built, so the cards, board and steps are known to be valid and legal.
+ * chart advice at that decision. Runs only after `view` was built, so the cards, board and steps are known to be
+ * valid and legal.
  */
 function heroPreflopProblems(data: Record<string, unknown>, view: PlayerView): string[] {
   const cards = parseHoleCards(data.holeCards) as [Card, Card];

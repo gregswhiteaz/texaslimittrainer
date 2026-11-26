@@ -15,3 +15,4 @@
 - `doit/TASK-7.36/changes.md` (created): this file.
 
 No new dependencies.
+- `src/advice/golden.ts` — review NIT / judge J-1-01: rewrap the long doc-comment line (orchestrator)

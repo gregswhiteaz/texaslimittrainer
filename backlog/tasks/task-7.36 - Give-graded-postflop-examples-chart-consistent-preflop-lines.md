@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-26T06:37:00Z'
-updated_date: '2026-11-26T19:40:00Z'
+updated_date: '2026-11-26T19:51:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -27,8 +27,8 @@ Follow-up from TASK-7.31 (doc-154, assumption A-1). TASK-7.31 made every postflo
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Given every postflop graded example, When its hero preflop actions are graded against the chart for its table size and position, Then none is a Major error and a test enforces this
-- [ ] #2 Given a re-authored graded example, When the golden suite runs, Then its grade, rule id and margin are re-pinned like-for-like and logged in docs/advice/golden-spots.md
+- [x] #1 Given every postflop graded example, When its hero preflop actions are graded against the chart for its table size and position, Then none is a Major error and a test enforces this
+- [x] #2 Given a re-authored graded example, When the golden suite runs, Then its grade, rule id and margin are re-pinned like-for-like and logged in docs/advice/golden-spots.md
 <!-- AC:END -->
 
 ## Implementation Plan
@@ -46,4 +46,6 @@ Full spec: doit/TASK-7.36/spec.md
 
 <!-- SECTION:NOTES:BEGIN -->
 Build: graded examples checked by the hero-preflop rule; three re-authored like-for-like (grades/margins kept, evaluator-checked); unreachable break removed; gate PASS
+
+Judge r1 PASS (6/6 SPEC items; justifications evaluator-checked)
 <!-- SECTION:NOTES:END -->
