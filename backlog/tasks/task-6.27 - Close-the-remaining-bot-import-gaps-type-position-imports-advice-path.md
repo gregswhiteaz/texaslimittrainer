@@ -2,8 +2,10 @@
 id: TASK-6.27
 title: Close the remaining bot import gaps (type-position imports, advice path)
 status: To Do
-assignee: []
+assignee:
+  - '@claude'
 created_date: '2026-11-25T23:03:00Z'
+updated_date: '2026-11-26T13:52:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -28,3 +30,9 @@ Follow-up from TASK-6.21 judge (doc-149). A type-position import('../engine/hand
 - [ ] #1 Given a src/bots file using a type-position import('../engine/…') outside the allow-list, When lint runs, Then it fails with the REQ-025.1 boundary message (TSImportType selector), and allowed PlayerView types still pass
 - [ ] #2 Given the indirect src/bots → src/advice → engine path, When the user decides whether bots may import src/advice, Then the decision is recorded and, if barred, a lint test enforces it
 <!-- AC:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+doit autopilot skipped (2026-11-26): AC#2 needs a user decision (may bots import src/advice?). AC#1 is buildable on its own once that is decided or the AC is split out.
+<!-- SECTION:NOTES:END -->

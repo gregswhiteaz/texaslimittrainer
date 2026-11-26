@@ -1,0 +1,44 @@
+[
+  {
+    "id": "SPEC-01",
+    "verifies": "AC#1",
+    "verification": "acceptance `tests/advice/chart-print-sizes.acceptance.test.ts::chart:print heads-up prints each spot's grid and justification`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-02",
+    "verifies": "AC#1",
+    "verification": "acceptance `tests/advice/chart-print-sizes.acceptance.test.ts::chart:print full-ring prints each spot's grid and justification`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-03",
+    "verifies": "AC#1",
+    "verification": "acceptance `tests/advice/chart-print-sizes.acceptance.test.ts::chart:print 6-max prints each spot's grid and justification`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-04",
+    "verifies": "AC#1",
+    "verification": "acceptance `tests/advice/chart-print-sizes.acceptance.test.ts::chart:print rejects an unknown size`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-05",
+    "verifies": "AC#1",
+    "verification": "unit `tests/advice/chart-print-review.test.ts::no argument prints the 6-max chart exactly as before`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-06",
+    "verifies": "AC#1",
+    "verification": "unit `tests/advice/chart-print-review.test.ts::chartPrintMain validates the size argument and prints the review layout`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-07",
+    "verifies": "AC#1",
+    "verification": "command `npm run format && npm run lint && npm run typecheck && npm test`",
+    "status": "pending"
+  }
+]

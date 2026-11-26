@@ -1,9 +1,11 @@
 ---
 id: TASK-7.27
 title: Print the heads-up and full-ring charts for review
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-22T22:50:00Z'
+updated_date: '2026-11-26T13:55:00Z'
 labels:
   - follow-up
   - dream-limit-holdem-trainer
@@ -27,3 +29,13 @@ Follow-up from TASK-7.6 (doc-87): npm run chart:print prints only the 6-max char
 <!-- AC:BEGIN -->
 - [ ] #1 Given npm run chart:print with a size argument (heads-up, 6-max, full-ring), When it runs, Then it prints that chart's grid per spot with its justification
 <!-- AC:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. chartPrintMain(argv, io): no argument = today's 6-max grids; heads-up / 6-max / full-ring = review format with chart and per-spot justifications
+2. Bad input: stderr message + usage, exit 2
+3. Spawn tests for each size and unknown size; unit tests for the formatter
+
+Full spec: doit/TASK-7.27/spec.md
+<!-- SECTION:PLAN:END -->
