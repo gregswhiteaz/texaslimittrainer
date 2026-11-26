@@ -1,11 +1,11 @@
 ---
 id: TASK-6.27
 title: Close the remaining bot import gaps (type-position imports, advice path)
-status: In Progress
+status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-25T23:03:00Z'
-updated_date: '2026-11-26T23:05:00Z'
+updated_date: '2026-11-26T23:06:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -14,6 +14,8 @@ dependencies:
   - TASK-6.21
 references:
   - doc-149
+documentation:
+  - doc-175
 parent_task_id: TASK-6
 priority: low
 ordinal: 252000
@@ -55,4 +57,12 @@ Recorded decision-3 (accepted): bots may import src/advice; lint guard keeps hid
 AC#3 added (user, review r1 escalation): turn both boundaries into allow-lists so bots can't reach hand state via table/storage/playtest modules or advice/golden.
 
 Judge r1 PASS (SPEC-01..08 and AC#3 judged on substance)
+
+Follow-ups: TASK-6.29 (Function constructor and global alias escapes). NITs not tracked (typecheck-caught or bind nothing).
 <!-- SECTION:NOTES:END -->
+
+## Final Summary
+
+<!-- SECTION:FINAL_SUMMARY:BEGIN -->
+Closed the bot import gaps. Type-position imports (import('../engine/hand').HandState) in src/bots now fail lint with the REQ-025.1 message (AC#1); allowed PlayerView types pass. AC#2: decision-3 (accepted), Q-1 option (a): bots may keep using src/advice, with a lint guard (adviceHiddenStateConfig) that keeps engine hand state out of advice and bars bots from advice/golden. D-3 rationale: every bot builds on the advice engine (TAG plays it exactly, REQ-026.1), the path is safe today (advice takes only a PlayerView plus pure helpers), so a per-file guard against drift enforces REQ-025.1 without rewriting five bots. Q-2 (user-approved scope change): review r1 showed table/session, storage and playtest were reachable, so both import boundaries became allow-lists; AC#3 added. Verified: 1497 tests pass, lint and typecheck clean, judge round 1 PASS (~75 holdout probes), 3 review rounds (r1 four MAJORs, r2 one MAJOR import.meta.glob plus MINORs, r3 none blocking). No src/ change. Follow-ups: Function constructor via .constructor / globalThis.Function and the Node `global` alias (J-1-01, J-1-02); NITs: case-sensitive golden type-position match, bindless side-effect imports, repeated SESSION_TYPE_NAMES. Doc: doc-175
+<!-- SECTION:FINAL_SUMMARY:END -->

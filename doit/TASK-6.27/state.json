@@ -1,6 +1,6 @@
 {
   "task": "TASK-6.27",
-  "stage": "build",
+  "stage": "done",
   "branch": "doit/TASK-6.27",
   "base_commit": "96bf8577e4d135472163776498ced3f022b9de51",
   "started": "2026-11-26T14:16:35",
@@ -2237,5 +2237,6 @@
   "relock_pending": [],
   "judge_results": {
     "1": "PASS"
-  }
+  },
+  "doc_id": "doc-175"
 }
