@@ -1,0 +1,25 @@
+{"reviewer": "code", "round": 1,
+ "rubric": [
+  {"item": "SPEC-01 correctness", "result": "pass"},
+  {"item": "SPEC-01 test strength", "result": "pass"},
+  {"item": "SPEC-02 correctness", "result": "pass"},
+  {"item": "SPEC-02 test strength", "result": "pass"},
+  {"item": "SPEC-03 correctness", "result": "pass"},
+  {"item": "SPEC-03 test strength", "result": "pass"},
+  {"item": "SPEC-04 correctness", "result": "pass"},
+  {"item": "SPEC-04 test strength", "result": "pass"},
+  {"item": "SPEC-05 correctness", "result": "pass"},
+  {"item": "SPEC-05 test strength", "result": "pass"},
+  {"item": "SPEC-06 correctness", "result": "pass"},
+  {"item": "SPEC-06 test strength", "result": "pass"},
+  {"item": "scope", "result": "pass"},
+  {"item": "concision", "result": "pass"},
+  {"item": "clarity", "result": "pass"}
+ ],
+ "findings": [
+  {"fingerprint": "src/advice/golden.ts:doc-comment-line-over-width", "severity": "NIT", "file": "src/advice/golden.ts", "line": 533,
+   "issue": "The widened heroPreflopProblems doc comment's second line runs past the 120-column width the rest of the file keeps. Prettier does not rewrap comments, so lint doesn't catch it.",
+   "evidence": "' * chart advice at that decision. Runs only after `view` was built, so the cards, board and steps are known to be valid and legal.'",
+   "fix": "Rewrap the comment so no line goes past 120 columns."}
+ ],
+ "summary": "All six SPEC items are implemented as specified. parseExample calls the existing heroPreflopProblems for built, non-preflop views after the field checks, with the 'Graded example <id>:' prefix. The unreachable guard is replaced by the narrowing cast from section 3. SPEC-05 fact-check: I reran the spec-writer prototype steps.ts audit and cat.ts on the new data. Gutshot Kd 4h on 7s 3c 6h is high card; its 4 straight outs are all fives, so it is a gutshot to the five, and Kc/Kh/Ks give top pair. The line is UTG/MP/CO fold, BTN limps, SB folds, BB (hero) checks its option, BB checks the flop and BTN bets. Hero step 6 is check, Correct (BB limpers K4o: check). Equity 26.8 vs required 22.2 gives minor call-fold-margin 4.6. Top pair Kh 7h on 9s Jh 5c Kc 8h is one pair. Best five is K K J 9 8, so the seven kicker doesn't play. There are only four hearts (no flush) and no straight. Steps 8-11 check the flop and turn. Steps 3 and 7 are Correct on borderline K7s cells. 56.9 vs 50 gives minor aggression-margin 6.9. Trips Ah 3c on Kd 3h 5c 3d is three of a kind with an ace kicker. The BB calls preflop, leads the flop (step 7 bet), hero calls, and the BB checks the turn. Step 4 raise is Correct (BTN unopened A3o: raise). 79 vs 50 gives major aggression-margin 29. All exact enumeration. Every claim in the three justifications matches, and no text describes the old hands. Like-for-like is confirmed in the diff: id, seats 6, street, userAction, grade, ruleId and marginPts are unchanged, and only holeCards, the gutshot's before and the justifications changed. The tests would catch a broken implementation. SPEC-01 replays each line independently and requires exactly 5 postflop examples, each with a hero decision. SPEC-02 pins the exact problem arrays, which would be [] without the new call. SPEC-03 checks fields and checkGradedExample null. The guard grep is clean, tests/ changes are only the two expected files, and npx vitest run tests/golden/ passes 292/292. One NIT."}

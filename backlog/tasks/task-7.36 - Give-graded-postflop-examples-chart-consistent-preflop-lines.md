@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-26T06:37:00Z'
-updated_date: '2026-11-26T19:28:00Z'
+updated_date: '2026-11-26T19:40:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -41,3 +41,9 @@ Follow-up from TASK-7.31 (doc-154, assumption A-1). TASK-7.31 made every postflo
 
 Full spec: doit/TASK-7.36/spec.md
 <!-- SECTION:PLAN:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+Build: graded examples checked by the hero-preflop rule; three re-authored like-for-like (grades/margins kept, evaluator-checked); unreachable break removed; gate PASS
+<!-- SECTION:NOTES:END -->
