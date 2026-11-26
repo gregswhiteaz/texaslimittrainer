@@ -1,0 +1,22 @@
+{"reviewer": "code", "round": 1,
+ "rubric": [
+  {"item": "SPEC-01 correctness", "result": "pass"},
+  {"item": "SPEC-01 test strength", "result": "pass"},
+  {"item": "SPEC-02 correctness", "result": "pass"},
+  {"item": "SPEC-02 test strength", "result": "pass"},
+  {"item": "SPEC-03 correctness", "result": "pass"},
+  {"item": "SPEC-03 test strength", "result": "pass"},
+  {"item": "SPEC-04 correctness", "result": "pass"},
+  {"item": "SPEC-04 test strength", "result": "pass"},
+  {"item": "scope", "result": "pass"},
+  {"item": "concision", "result": "pass"},
+  {"item": "clarity", "result": "pass"}
+ ],
+ "findings": [
+  {"fingerprint": "src/engine/player-view.ts:doc-comment-advice-ambiguous", "severity": "MINOR",
+   "file": "src/engine/player-view.ts", "line": 56,
+   "issue": "The comment says 'the advice and grader may use it', but bots also call the advice code (decideTag uses the advice with BOT_ADVICE). A reader could think the shared advice path may read earlierShowdowns, which would make bot actions depend on it through that path and break REQ-029.3.",
+   "evidence": "Comment text: 'Bot decisions must not depend on it (REQ-029.3) ...; the advice and grader may use it.' The wording follows spec section 5 exactly, so this is not a spec violation.",
+   "fix": "Say 'the user's advice and the grader may use it' (or 'advice requested for the user'), so it is clear the bot advice path must not read it."}
+ ],
+ "summary": "All four SPEC items are met. REQ-029.3 matches the section 5 text word for word and sits under REQ-029. Change-log row 1.12 matches SPEC-02 (date 2026-11-26, approved by 'User (TASK-6.20 Q-1)'). No other requirement text changed. The doc comment on PlayerView.earlierShowdowns states the rule and cites REQ-029.3 and REQ-028.2. The guard test runs in about 0.9 s and wraps every bot seat (seats 2..6 via seatStylesPolicyFactory) with alt = [] or SHOWN_LIST. It asserts zero mismatches, at least 1,000 decisions compared, at least 200 with a non-empty list, and all four styles. Mutation check in a scratch copy: I made decideStyle return legalActions[0] when the list length is odd, once for each style. The test failed for Rock (8 mismatches), Maniac (62), Calling station (101) and TAG (49). It also failed for a Rock variant that only fires when the list length is 3 or more. So the guard catches any bot reading the list, not just TAG. Seat 1 (user, seededTagPolicy) is not compared, which is correct because it is not a bot. The orchestrator steps are in place: decision-1 is accepted, and TASK-6.23 has a note citing decision-1 and REQ-029.3 and has been moved to archive. One MINOR wording finding. No BLOCKER or MAJOR."}

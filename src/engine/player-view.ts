@@ -54,7 +54,7 @@ export interface PlayerView {
   /** Exact amounts when seat === toAct, else []. */
   readonly legalActions: readonly Action[];
   /** Oldest first, as supplied (not copied). Bot decisions must not depend on it (REQ-029.3), so one hand's
-   *  record replays every bot action (REQ-028.2); the advice and grader may use it. */
+   *  record replays every bot action (REQ-028.2); the user's advice and the grader may use it. */
   readonly earlierShowdowns: readonly EarlierShowdown[];
 }
 /** Any deciding code: bots, playtest seat policies. Accepts only a PlayerView. */

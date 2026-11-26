@@ -6,3 +6,4 @@
 - `doit/TASK-6.20/changes.md`, `doit/TASK-6.20/build-log.md` — work-folder records.
 
 No new dependencies.
+- `src/engine/player-view.ts` — review MINOR: comment says the user's advice and the grader may use the list (bots also go through advice code) (orchestrator)

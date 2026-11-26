@@ -1,0 +1,3 @@
+{"reviewer": "security", "round": 1,
+ "findings": [],
+ "summary": "Diff since 5ec2398 touches only a requirements clause (REQ-029.3 plus change-log row), a doc comment on PlayerView.earlierShowdowns (no code change), and a new vitest guard test that runs the in-process playtest with fixed literal inputs. No new trust boundary, untrusted input, dependency, file/network/shell operation, secret, or randomness source is introduced. The change narrows what bots may depend on, which supports REQ-025 fairness. No security impact."}
