@@ -84,7 +84,7 @@ const NINE_SEAT_FACING_BET = viewAfter(9, [...limpedPreflop(9), [2, 'bet', 4]]);
 
 /**
  * Headroom scenarios (TASK-7.34): the 8-opponent target is 200 ms (Q-1). HU is timed second: timed
- * first in a fresh worker, background JIT work put about 1 run in 4 over 18.75 ms.
+ * first in a fresh worker, background JIT work put 6 of 17 runs over 18.75 ms.
  */
 const HEADROOM_SCENARIOS: [string, PlayerView, number][] = [
   ['9-seat flop vs 8 opponents', NINE_SEAT_FACING_BET, 200],

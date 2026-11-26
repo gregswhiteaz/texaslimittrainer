@@ -1,0 +1,29 @@
+{"reviewer": "code", "round": 1,
+ "rubric": [
+  {"item": "SPEC-01 correctness", "result": "pass"},
+  {"item": "SPEC-01 test strength", "result": "pass"},
+  {"item": "SPEC-02 correctness", "result": "pass"},
+  {"item": "SPEC-02 test strength", "result": "pass"},
+  {"item": "SPEC-03 correctness", "result": "pass"},
+  {"item": "SPEC-03 test strength", "result": "pass"},
+  {"item": "SPEC-04 correctness", "result": "pass"},
+  {"item": "SPEC-04 test strength", "result": "pass"},
+  {"item": "SPEC-05 correctness", "result": "pass"},
+  {"item": "SPEC-05 test strength", "result": "pass"},
+  {"item": "SPEC-06 correctness", "result": "pass"},
+  {"item": "SPEC-06 test strength", "result": "pass"},
+  {"item": "scope", "result": "pass"},
+  {"item": "concision", "result": "pass"},
+  {"item": "clarity", "result": "pass"}
+ ],
+ "findings": [
+  {"fingerprint": "tests/advice/postflop.perf.test.ts:headroom-order-comment-rate-mismatch", "severity": "NIT", "file": "tests/advice/postflop.perf.test.ts", "line": 86,
+   "issue": "The comment explaining why HU is timed second says 'about 1 run in 4' went over 18.75 ms; the recorded deviation in changes.md says 6 of 17 runs (about 1 in 3).",
+   "evidence": "changes.md 'Recorded deviation': 'spiked to 19.6-26.9 ms in 6 of 17 runs'; comment at postflop.perf.test.ts:84-87 says 'about 1 run in 4'.",
+   "fix": "Say 'about 1 run in 3' (or 'in 6 of 17 runs') so the comment matches the measurement."},
+  {"fingerprint": "tests/advice/postflop.perf.test.ts:fullringpreflop-alias", "severity": "NIT", "file": "tests/advice/postflop.perf.test.ts", "line": 55,
+   "issue": "`const fullRingPreflop = limpedPreflop(10)` keeps an alias used in two places. The spec allows this ('fullRingPreflop becomes limpedPreflop(10)'), so it is a preference only.",
+   "evidence": "Used at lines 80 and 126.",
+   "fix": "Optional: leave it, or inline limpedPreflop(10) at both call sites."}
+ ],
+ "summary": "The change matches the spec. Both advice perf files gate every timed test on OPT_IN = TLH_SLOW_TESTS==='1' || <file scale var> !== undefined (A-1), and test:slow now lists equity.perf.test.ts. No assertion was dropped. The equity test body is unchanged; only the gate and timeout position moved (still 120 s). In postflop, the 'latency', 'value-bet' (all 4 expects: bet legal, calling-range RangeError, A-7 fallback equality, slowScenarios owed=false) and 'actions-mode' tests keep identical bodies. The 120 s timeout is now set on the describe. limpedPreflop(10) gives the same steps as the old literal (4..10, 1, then SB call 2, BB check). The headroom test checks the 8x calling-range computeEquity returns 'sampled' (it would throw on fallback), opponents 1/8, and callAmount>0 via slowScenarios(owed=true). It applies t*0.75*SCALE. The recorded deviation (9-seat timed before HU) leaves targets, limits and warm-ups unchanged and is fine on substance. Verified locally: plain run gives 'Tests 5 skipped (5)' with no p95 lines. One headroom run at ADVICE_PERF_SCALE=1 passed: 9-seat 131.28/150 ms, HU 9.26/18.75 ms. No src/ or locked-test changes. Gate reports 150 changed lines against a 90-line budget, mostly from re-indenting the moved value-bet test; that is acceptable. Only NITs."}

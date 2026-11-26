@@ -1,0 +1,3 @@
+{"reviewer": "security", "round": 1,
+ "findings": [],
+ "summary": "No security impact. The diff (base 1afab72) touches only test files (tests/advice/equity.perf.test.ts, tests/advice/postflop.perf.test.ts), the package.json test:slow script (adds one test path), README and doit/ workflow files. No src/ change, no new dependencies. New env reads (TLH_SLOW_TESTS === '1', EQUITY_PERF_SCALE / ADVICE_PERF_SCALE !== undefined) are developer-controlled, used only as boolean test gates via strict comparison, and reach no shell, file, network or eval sink. Existing scale parsing only affects test time limits. No secrets, logging, randomness or trust-boundary changes, consistent with spec section 8."}

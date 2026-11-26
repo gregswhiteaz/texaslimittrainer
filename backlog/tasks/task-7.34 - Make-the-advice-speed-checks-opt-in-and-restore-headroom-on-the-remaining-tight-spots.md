@@ -7,7 +7,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-26T01:40:00Z'
-updated_date: '2026-11-26T16:47:00Z'
+updated_date: '2026-11-26T16:54:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -47,4 +47,6 @@ Full spec: doit/TASK-7.34/spec.md
 
 <!-- SECTION:NOTES:BEGIN -->
 Recorded deviation: headroom scenarios timed 9-seat first, then HU (HU-first gave fresh-worker spikes over 18.75 ms in 6/17 runs). Limits unchanged.
+
+Build: advice perf files opt-in; new headroom test (9-seat 131-133 ms of 150 limit, HU 9.3 ms of 18.75) 3/3; test:slow both files; speed-limits unchanged; playtest SHA unchanged; gate PASS
 <!-- SECTION:NOTES:END -->
