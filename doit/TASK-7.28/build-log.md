@@ -1,0 +1,22 @@
+## BUILD (TASK-7.28)
+- `src/advice/ranges.ts`: `openEnderStart` needs a run rank that is in the hole and not on the board (`rankMask(hole) & ~rankMask(board)`); `drawOuts` skips straight outs when any suit has >= 5 cards. Flush rule unchanged; no signature changes.
+- Tests: new `tests/advice/straight-outs.acceptance.test.ts` (3/3 pass: AC#1, AC#4, AC#3); `ranges.test.ts` adds `drawOuts counts straight outs only when a hole card adds a rank to the run` and `classifyCombo is unchanged by the hole-card straight-draw rule`. Existing drawOuts/classifier expectations unedited and passing. No locked test from another story moved; no blocked.json.
+- Docs: `docs/advice/postflop-rules.md` "Draw and outs" bullet updated.
+- `npm run format`, `npm run lint` (exit 0), `npm run typecheck`: clean.
+- `npm test`: 317 files passed, 6 skipped; 1433 tests passed, 48 skipped; coverage thresholds held.
+- `npm run -s playtest -- --hands 10000 --seed 42 | shasum -a 256`:
+  - before: `643c8111335aac296b112af2dab5c2add8a7304f0f91b1cffdce3ca4fd0848c1`
+  - after: `f6c8d1724d90bb27a8b4cae912586341fad7f614a926a31bd040e14fde947cbc` (matches spec prototype), `Invariant violations: 0`, 11 s wall. Folds 8093 -> 8095, showdowns 1907 -> 1905.
+- `TLH_SLOW_TESTS=1 npx vitest run tests/bots/style-bands.acceptance.test.ts` (run alone): 3/3 passed, 901 s. Logged lines:
+  - seed 42 TAG: VPIP 20.4 PFR 14.6 AGG 59.5
+  - seed 42 Rock: VPIP 8.7 PFR 7.2 AGG 50
+  - seed 42 Calling station: VPIP 60.5 PFR 7.2 AGG 18.7
+  - seed 42 Maniac: VPIP 56.1 PFR 53.2 AGG 82.3
+  - seed 7 TAG: VPIP 20.6 PFR 14.8 AGG 59.3
+  - seed 7 Rock: VPIP 8.8 PFR 7.3 AGG 49.7
+  - seed 7 Calling station: VPIP 60.2 PFR 6.8 AGG 18.4
+  - seed 7 Maniac: VPIP 56.1 PFR 53.2 AGG 82.2
+  - seed 1234 TAG: VPIP 20.6 PFR 14.8 AGG 59.3
+  - seed 1234 Rock: VPIP 8.8 PFR 7.3 AGG 50.7
+  - seed 1234 Calling station: VPIP 60.3 PFR 7.1 AGG 18.1
+  - seed 1234 Maniac: VPIP 55.8 PFR 52.9 AGG 82.2

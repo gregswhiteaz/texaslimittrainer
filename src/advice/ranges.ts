@@ -444,15 +444,17 @@ function rankMask(cards: readonly Card[]): number {
 }
 
 /**
- * The lowest v of four consecutive ranks v..v+3, one from a hole card, that one more rank completes at either end;
- * -1 when none. The ace counts below the 2 only to complete 2345, so A234 and JQKA are not open-ended.
+ * The lowest v of four consecutive ranks v..v+3, at least one from a hole card and not on the board, that one more
+ * rank completes at either end; -1 when none. The ace counts below the 2 only to complete 2345, so A234 and JQKA
+ * are not open-ended.
  */
 function openEnderStart(hole: readonly Card[], board: readonly Card[]): number {
-  const fromHole = rankMask(hole);
-  const present = fromHole | rankMask(board);
+  const onBoard = rankMask(board);
+  const holeOnly = rankMask(hole) & ~onBoard;
+  const present = rankMask(hole) | onBoard;
   for (let v = 0; v + 4 <= 12; v++) {
     const run = 0b1111 << v;
-    if ((present & run) === run && (fromHole & run) !== 0) return v;
+    if ((present & run) === run && (holeOnly & run) !== 0) return v;
   }
   return -1;
 }
@@ -475,21 +477,23 @@ function hasStraight(cards: readonly Card[]): boolean {
 /**
  * Unseen cards that complete the hero's flush draw (exactly four cards of a suit, one from the hole) or open-ended
  * straight draw (as in hasOpenEnder), ascending, no duplicates; [] on a 5-card board, without such a draw, or when
- * the draw is already made. Pure; reads only its arguments.
+ * the draw is already made. A made flush also drops the straight outs. Pure; reads only its arguments.
  */
 export function drawOuts(hole: readonly Card[], board: readonly Card[]): Card[] {
   if (board.length >= 5) return [];
   const cards = [...hole, ...board];
   const seen = new Set(cards);
   const outs = new Set<Card>();
+  let madeFlush = false;
   for (let suit = 0; suit < 4; suit++) {
     const ofSuit = cards.filter((c) => cardSuit(c) === suit).length;
+    if (ofSuit >= 5) madeFlush = true;
     if (ofSuit === 4 && hole.some((h) => cardSuit(h) === suit)) {
       for (let rank = 0; rank < 13; rank++) outs.add(rank * 4 + suit);
     }
   }
   const v = openEnderStart(hole, board);
-  if (v >= 0 && !hasStraight(cards)) {
+  if (v >= 0 && !hasStraight(cards) && !madeFlush) {
     for (const rank of [v === 0 ? 12 : v - 1, v + 4]) {
       for (let suit = 0; suit < 4; suit++) outs.add(rank * 4 + suit);
     }

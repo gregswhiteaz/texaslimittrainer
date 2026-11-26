@@ -588,6 +588,13 @@ describe('callingRange', () => {
   });
 });
 
+describe('classifyCombo', () => {
+  it('is unchanged by the hole-card straight-draw rule', () => {
+    expect(classify('7c 2d', '5h 6s 7h 8d')).toBe('pair');
+    expect(classify('9h 8h', '7h 6h 2h')).toBe('strong');
+  });
+});
+
 describe('drawOuts', () => {
   const outs = (hole: string, board: string) => drawOuts(parseCards(hole), parseCards(board));
   const ofRank = (rank: string) => parseCards(`${rank}c ${rank}d ${rank}h ${rank}s`);
@@ -630,6 +637,15 @@ describe('drawOuts', () => {
     expect(outs('Jc Qd', 'Kh As 2c')).toEqual([]);
     expect(outs('Ac 2d', 'Kh 8h 7h 3h')).toEqual([]);
     expect(outs('Ah 5h', 'Kh 8h 7c 2d 3s')).toEqual([]);
+  });
+
+  it('counts straight outs only when a hole card adds a rank to the run', () => {
+    // The 4 is new to the board even though the 7 pairs it.
+    expect(outs('4c 7d', '5h 6s 7h Kd')).toEqual(sorted([...ofRank('3'), ...ofRank('8')]));
+    // A turn flush made with one hole card.
+    expect(outs('9h 8c', '7h 6h 2h Kh')).toEqual([]);
+    expect(outs('9c 8d', '7h 6s 2c')).toEqual(sorted([...ofRank('5'), ...ofRank('T')]));
+    expect(outs('7c 2d', '5h 6s 7h 8d')).toEqual([]);
   });
 
   it('returns ascending distinct unseen cards', () => {

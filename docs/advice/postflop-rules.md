@@ -32,13 +32,14 @@ all match.
   either of these holds:
   - a flush draw: exactly four cards of one suit among the hero's two cards and the board, at least
     one of them in the hero's hand. Its outs are the 9 unseen cards of that suit.
-  - an open-ended straight draw: four ranks in a row, at least one from the hero's hand, that one
-    more rank at either end turns into a straight. Its outs are the 8 unseen cards of those two
-    ranks. The ace sits below the 2 only to finish 2-3-4-5, so A-2-3-4 and J-Q-K-A have one end
-    and don't count.
+  - an open-ended straight draw: four ranks in a row, at least one of them from the hero's hand and
+    not already on the board, that one more rank at either end turns into a straight. Its outs are
+    the 8 unseen cards of those two ranks. A run made by the board alone is shared by every player,
+    so a hero card that only pairs it gives no outs. The ace sits below the 2 only to finish
+    2-3-4-5, so A-2-3-4 and J-Q-K-A have one end and don't count.
 
   A hand with both draws counts every out once (15). A draw already made into a flush or straight
-  has no outs. Gutshots (one rank missing inside the run) and backdoor draws (needing two more
+  has no outs, and a hero who already has a flush or a straight gets no straight-draw outs. Gutshots (one rank missing inside the run) and backdoor draws (needing two more
   cards) count no outs. Outs are not reduced when they might also improve an opponent. On the river
   there are no outs.
 
