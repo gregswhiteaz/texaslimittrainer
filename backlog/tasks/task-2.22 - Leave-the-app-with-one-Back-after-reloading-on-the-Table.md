@@ -1,11 +1,11 @@
 ---
 id: TASK-2.22
 title: Leave the app with one Back after reloading on the Table
-status: In Progress
+status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-25T20:08:00Z'
-updated_date: '2026-11-26T11:13:00Z'
+updated_date: '2026-11-26T11:14:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -14,6 +14,8 @@ dependencies:
   - TASK-2.20
 references:
   - doc-146
+documentation:
+  - doc-159
 parent_task_id: TASK-2
 priority: low
 ordinal: 250000
@@ -53,4 +55,12 @@ CI on the branch failed once (WebKit players-choice: Leave table → New game �
 Recorded deviation from spec D-1/A-1: replace only an earlier page load's Table entry (key ≠ lastTableKey); see doit/TASK-2.22/fix-brief.md.
 
 Judge r1 PASS (5/5 SPEC items; recorded deviation judged on substance); J-1-01 doc sentence split by orchestrator
+
+Follow-ups: TASK-2.24 created (one Back when the Table is never reopened; needs a race-free approach). No deterministic race test: below the value bar.
 <!-- SECTION:NOTES:END -->
+
+## Final Summary
+
+<!-- SECTION:FINAL_SUMMARY:BEGIN -->
+openTable now replaces (instead of pushing over) an earlier page load's Table history entry, so after reload, Resume and Home one Back leaves the app. The task premise was off: no reload happened, the first Back was a silent step onto the stale entry; docs/ui/navigation.md corrected. Recorded deviation from D-1/A-1: replace only an earlier load's entry, because replacing this load's own entry raced closeTable's pending history.back() (CI run 45803095640, WebKit players-choice). Verified: npm test 1454 passed; full Playwright 389 passed/0 failed; new e2e/reload-history.spec.ts fails 6/6 on base and passes x5 in Chromium and WebKit; judge PASS 5/5. Review assumptions A-1..A-3 (A-1 superseded). Risk/follow-up: reload on Table then Back from Home without reopening the Table still takes two Backs (low priority, excluded from AC#1); no deterministic test for the race.
+<!-- SECTION:FINAL_SUMMARY:END -->
