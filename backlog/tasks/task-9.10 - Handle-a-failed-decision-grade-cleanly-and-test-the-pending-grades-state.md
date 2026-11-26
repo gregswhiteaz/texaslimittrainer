@@ -1,10 +1,11 @@
 ---
 id: TASK-9.10
 title: Handle a failed decision grade cleanly and test the pending-grades state
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-24T13:09:00Z'
-updated_date: '2026-11-25T17:55:00Z'
+updated_date: '2026-11-26T08:16:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -30,6 +31,17 @@ Follow-up from TASK-9.3 (doc-117). If the advice worker's grade request for a de
 - [ ] #2 Given a finished hand whose grades are still pending, When the Table renders, Then no review panel (<aside>) is shown and the Deal next hand button is present
 - [ ] #3 Given a decision grade that fails mid-hand, When it rejects, Then the outcome is handled deliberately (not an unhandled rejection) and docs/ui/navigation.md states what the user sees
 <!-- AC:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. requestNewGrades attaches a no-op catch to each grade request; pending keeps the original promise
+2. Hand end still logs 'Hand record could not be saved'; no unhandledrejection; table stops dealing (Q-1 option A)
+3. e2e reject-grade fault (Chromium + WebKit); unit test; renderToString test for the pending-grades state
+4. docs/ui/navigation.md and docs/ui/review.md state what the user sees
+
+Full spec: doit/TASK-9.10/spec.md
+<!-- SECTION:PLAN:END -->
 
 ## Implementation Notes
 

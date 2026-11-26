@@ -1,0 +1,38 @@
+[
+  {
+    "id": "SPEC-01",
+    "verifies": "AC#1, AC#3",
+    "verification": "acceptance `e2e/grade-failure.spec.ts::a grade that fails mid-hand logs the failed save at hand end with no unhandled rejection or review panel`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-02",
+    "verifies": "AC#2",
+    "verification": "acceptance `tests/ui/review-pending.acceptance.test.tsx::a finished hand whose grades are pending shows Deal next hand and no review panel`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-03",
+    "verifies": "AC#3",
+    "verification": "unit `tests/table/decision-grades-rejection.test.ts::a rejected grade request is handled when requested`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-04",
+    "verifies": "AC#1, AC#3",
+    "verification": "unit `tests/table/decision-grades-rejection.test.ts::gradedDecisions still rejects with the failed grade's error`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-05",
+    "verifies": "AC#3",
+    "verification": "manual read `docs/ui/navigation.md` \u00a7\"Error screen\" and \u00a7\"Tests\", `docs/ui/review.md` \u00a7\"Timing\"",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-06",
+    "verifies": "AC#1, AC#2, AC#3",
+    "verification": "command `npm run lint && npm run typecheck && npm test && npm run e2e`",
+    "status": "pending"
+  }
+]
