@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-25T07:28:00Z'
-updated_date: '2026-11-26T17:51:00Z'
+updated_date: '2026-11-26T18:05:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -39,3 +39,9 @@ Follow-up from TASK-10.7 review/judge (doc-132). e2e/report-hints.spec.ts derive
 
 Full spec: doit/TASK-10.16/spec.md
 <!-- SECTION:PLAN:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+Build: e2e Hints tile expected text built from stored counts with literal wording; parseSessionReport rejects hints without errors; gate PASS
+<!-- SECTION:NOTES:END -->

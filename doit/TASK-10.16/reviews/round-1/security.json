@@ -1,0 +1,3 @@
+{"reviewer": "security", "round": 1,
+ "findings": [],
+ "summary": "The only production change is in src/table/session-report.ts. parseSessionReport now throws RangeError('Invalid session report: hints') when a stored IndexedDB report has hints but no errors. That makes validation stricter at the trust boundary named in spec section 8, and it fails closed. The error message is a fixed field name and contains no stored data. The check takes constant time, so it adds no resource-exhaustion risk. Valid reports are still checked by parseHints as before. The e2e and unit test changes only touch test code, there are no new dependencies, and nothing involves secrets, logging or randomness. No reachable vulnerability found."}

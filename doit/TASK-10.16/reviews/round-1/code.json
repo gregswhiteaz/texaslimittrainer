@@ -1,0 +1,12 @@
+{"reviewer": "code", "round": 1,
+ "rubric": [
+  {"item": "SPEC-01 correctness", "result": "pass"},
+  {"item": "SPEC-01 test strength", "result": "pass"},
+  {"item": "SPEC-02 correctness", "result": "pass"},
+  {"item": "SPEC-02 test strength", "result": "pass"},
+  {"item": "scope", "result": "pass"},
+  {"item": "concision", "result": "pass"},
+  {"item": "clarity", "result": "pass"}
+ ],
+ "findings": [],
+ "summary": "All three files match the spec. SPEC-01: in e2e/report-hints.spec.ts the hintTile import and call are gone. The expected dd text is built in the test from stored.hints using the exact integer half-up formula from spec section 5, with literal 'of' and 'decision'/'decisions' wording. I compared the old and new file: every earlier assertion is still there (hints defined, hinted >= 1, hints equal to the sessionReport recompute, dt 'Hints used', dd text, axe, request-origin checks). Only the source of the expected value changed, which is what TASK-10.7 allowed. Because hinted >= 1, decisions >= 1, so the formula never divides by zero. A wording regression in hintTile would now make this test fail. SPEC-02: parseSessionReport throws invalid('hints') when hints is present and errors is absent. The check comes after the style, errors and leakCounts checks and before parseHints (A-3). The reverse rule was not added (D-1). The new unit test covers both {1,2} and {0,0}. Both are well-formed hints, so the test fails if the presence check is removed. It also checks that a report with neither field still round-trips, and that BASE (errors, no hints) still parses. I ran it: vitest file passes 4/4, and `npm run e2e -- e2e/report-hints.spec.ts` passes on chromium and webkit. The diff is 29 changed lines in 3 files, with no extra helpers and no extra scope."}
