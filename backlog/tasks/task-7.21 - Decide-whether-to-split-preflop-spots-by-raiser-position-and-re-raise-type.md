@@ -1,7 +1,7 @@
 ---
 id: TASK-7.21
 title: Decide whether to split preflop spots by raiser position and re-raise type
-status: In Progress
+status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-18T16:24:00Z'
@@ -15,6 +15,8 @@ dependencies:
 references:
   - doc-14
   - dreams/limit-holdem-trainer/requirements.md
+documentation:
+  - doc-176
 parent_task_id: TASK-7
 priority: medium
 type: spike
@@ -53,6 +55,8 @@ AC added from TASK-7.19 follow-up (doc-28).
 Decision (Q-1/Q-2/Q-3, user 2026-11-26): split facing a re-raise into own-raise-re-raised and re-raised-when-I-had-not-raised (rule A-2); split blind defence by an early or a late raiser; authoring in follow-ups. Recorded as decision-4. Cost: heads-up stays 6 spots; 6-max 26 -> 34; full ring 41 -> 52 (facts and cost table: doit/TASK-7.21/spec.md §3 and §5). Chart format version 1 needs no change (spots matched by string key, src/advice/preflop-chart.ts:185-232). Follow-ups: TASK-7.40 (6-max re-raise split), TASK-7.41 (full-ring re-raise split, after 7.40; related to TASK-7.38), TASK-7.42 (blind defence early/late, after 7.40).
 
 Judge r1 PASS (5/5 SPEC items). Chart format: tlh-preflop-chart version 1 (unchanged).
+
+Follow-ups: TASK-7.40, TASK-7.41, TASK-7.42 (TASK-7.41 overlaps TASK-7.38: review full ring after or within 7.41).
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary
