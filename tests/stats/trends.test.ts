@@ -32,6 +32,7 @@ import {
   type TrendHand,
 } from '../../src/stats/trends';
 import { netResult } from '../../src/table/review';
+import { bbPer100 } from '../../src/table/session-report';
 import { CASH_STAKES } from '../../src/table/session';
 import { StatisticsScreen } from '../../src/ui/stats/StatisticsScreen';
 import { cashPool, sitAndGoPool } from '../support/stat-records';
@@ -573,5 +574,136 @@ describe('trend grouping', () => {
     expect(
       filterTrendData(data, { tableSize: 'all', gameType: 'cash', lineUp: 'Tough' }).hands,
     ).toEqual([tough2, tough1]);
+  });
+});
+
+describe('BB/100 hardening (TASK-11.14)', () => {
+  /** The first `n` primes. */
+  const primes = (n: number): number[] => {
+    const found: number[] = [];
+    for (let k = 2; found.length < n; k++) {
+      if (found.every((p) => p * p > k || k % p !== 0)) found.push(k);
+    }
+    return found;
+  };
+  const cashOf = (net: number, bigBet: number, n = 1): TrendHand => ({
+    ...hand(A, n, '2026-11-01T00:00:00.000Z'),
+    cash: { net, bigBet },
+  });
+
+  it('bb100Value keeps exact rounding for real stakes and stays finite for tampered ones', () => {
+    expect(bb100Value([cashOf(12, 8), cashOf(-20, 20)])).toBe(25);
+    expect(
+      bb100Value(Array.from({ length: 500 }, (_, i) => cashOf(i === 0 ? -52 : 0, 8, i + 1))),
+    ).toBe(-1.3);
+    // −46 / 4 + 57 / 40 = −10.075 → −503.75 exactly; the float sum would round to −503.7.
+    expect(bb100Value([cashOf(-46, 4), cashOf(57, 40)])).toBe(-503.8);
+
+    const sixteen = primes(16);
+    const primeHands = (netOfFirst: number): TrendHand[] =>
+      sixteen.map((bigBet, i) => cashOf(i === 0 ? netOfFirst : 0, bigBet, i + 1));
+    expect(bb100Value(primeHands(1))).toBe(3.1);
+    expect(bb100Value(primeHands(-1))).toBe(-3.1);
+    expect(Object.is(bb100Value(primeHands(0)), 0)).toBe(true);
+    expect(bb100Value(primes(500).map((bigBet, i) => cashOf(bigBet, bigBet, i + 1)))).toBe(100);
+
+    const nets = [7, -13, 3, 0, -25];
+    for (const a of CASH_STAKES) {
+      for (const b of CASH_STAKES) {
+        const bigBets = [a.bigBet, b.bigBet, a.bigBet, b.bigBet, b.bigBet];
+        const scaled = nets.reduce((s, net, i) => s + net * (120 / (bigBets[i] as number)), 0);
+        expect(bb100Value(nets.map((net, i) => cashOf(net, bigBets[i] as number, i + 1)))).toBe(
+          bbPer100(scaled, 120, nets.length),
+        );
+      }
+    }
+  });
+
+  it('statisticsView gives finite BB/100 points for tampered stakes in every grouping', () => {
+    const hands = primes(500).map((bigBet, i): TrendHand => ({
+      ...hand(
+        i < 250 ? A : B,
+        i + 1,
+        i < 250 ? '2026-11-01T12:00:00.000Z' : '2026-11-03T12:00:00.000Z',
+      ),
+      cash: { net: bigBet, bigBet },
+    }));
+    const data: TrendData = { hands, sessionStarts: new Map() };
+    for (const grouping of ['hands', 'session', 'day'] as const) {
+      const { bb100 } = statisticsView(data, data, grouping);
+      expect(bb100.kind).toBe('points');
+      const points = bb100.kind === 'points' ? bb100.points : [];
+      expect(points.length).toBeGreaterThan(0);
+      for (const point of points) expect(point.bb100).toBe(100);
+    }
+  });
+
+  it('TrendSource rejects a cash source without its cash fields', () => {
+    const source = { sessionId: A, handNumber: 1, completedAt: '2026-11-01T00:00:00.000Z' };
+    // Type-checked only; never called.
+    const typeChecks = (): void => {
+      // @ts-expect-error a cash source needs stake, userSeat, actions and result.
+      trendHand({ ...source, decisions: [], gameType: 'cash' });
+      const noResult = {
+        ...source,
+        decisions: [],
+        gameType: 'cash' as const,
+        stake: { bigBet: 8 },
+        userSeat: 1,
+        actions: [],
+      };
+      // @ts-expect-error a cash source needs its result.
+      trendHand(noResult);
+    };
+    expect(typeof typeChecks).toBe('function');
+
+    const [record] = cashPool(CASH_STAKES[2] as (typeof CASH_STAKES)[number], 1);
+    const cashRecord = record as NonNullable<typeof record>;
+    expect(trendHand(cashRecord).cash).toEqual({
+      net: netResult(cashRecord),
+      bigBet: cashRecord.stake.bigBet,
+    });
+    expect('cash' in trendHand({ ...source, decisions: [] })).toBe(false);
+  });
+
+  it('all-negative BB/100 geometry puts break-even above every point', () => {
+    const bbSvg = (values: readonly number[]): string => {
+      const view: StatisticsView = {
+        hands: 0,
+        sessions: 0,
+        totals: '',
+        chart: { kind: 'no-hands' },
+        bb100: {
+          kind: 'points',
+          points: values.map((bb100, i) => ({
+            firstHand: 500 * i + 1,
+            lastHand: 500 * i + 500,
+            bb100,
+          })),
+        },
+        g2Target: null,
+      };
+      return renderToString(createElement(StatisticsScreen, { view, onHome: () => undefined }));
+    };
+    const breakEven = (svg: string): RegExpExecArray | null =>
+      /<line[^>]*stats-break-even[^>]*>/.exec(svg);
+    const cys = (svg: string): number[] =>
+      [...svg.matchAll(/<circle data-bb100-point="" cx="[^"]*" cy="([^"]*)"/g)].map((m) =>
+        Number(m[1]),
+      );
+
+    const twoNegative = bbSvg([-2, -4]);
+    const line = breakEven(twoNegative)?.[0] ?? '';
+    expect(line).toContain('y1="38"');
+    expect(line).toContain('y2="38"');
+    expect(twoNegative).toMatch(/<circle data-bb100-point="" cx="10" cy="94"/);
+    expect(twoNegative).toMatch(/<circle data-bb100-point="" cx="390" cy="150"/);
+    expect(twoNegative).toContain('points="10,94 390,150"');
+    expect(cys(twoNegative)).toHaveLength(2);
+    for (const cy of cys(twoNegative)) expect(38).toBeLessThan(cy);
+
+    const oneNegative = bbSvg([-3]);
+    expect(breakEven(oneNegative)?.[0]).toContain('y1="45"');
+    expect(oneNegative).toMatch(/<circle data-bb100-point="" cx="200" cy="150"/);
   });
 });

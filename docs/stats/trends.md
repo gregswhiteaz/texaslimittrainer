@@ -58,7 +58,10 @@ A second chart card, `Big bets won per 100 hands`, plots cash-game hands only. S
 - Group value: `Σ(net_i / bigBet_i) / n × 100`, computed exactly as `bbPer100(Σ net_i × (L / bigBet_i), L, n)`
   with `L` the least common multiple of the group's big bets, so it rounds exactly like the Session Report's
   BB/100 (`bb100Value`). A group of one session's hands equals that session's report BB/100. Example: +12 at
-  $4/$8 and −20 at $10/$20 over 2 hands → `L = 40`, `bbPer100(20, 40, 2)` = 25.0.
+  $4/$8 and −20 at $10/$20 over 2 hands → `L = 40`, `bbPer100(20, 40, 2)` = 25.0. Every real stake mix has
+  `L ≤ 120`. If `L` would exceed `Number.MAX_SAFE_INTEGER` (only a tampered store, TASK-11.14), the value is the
+  float sum `v = Σ(net_i / bigBet_i) / n × 100` instead, rounded half away from zero to tenths (0, never −0), so
+  the chart always gets a finite value. `gcd` is iterative, so no store can overflow the stack.
 - Grouping: the hands in the order above, cash hands only, in complete groups of 500 cash hands. A point's
   `firstHand`/`lastHand` are positions among the cash hands. 1,000 cash + 500 sit-and-go hands → 2 points.
 - Plot: the same 400×160 plot, with `hi = max(1, values)` and `lo = min(−1, values)` so 0 is always inside it. A

@@ -36,8 +36,7 @@ export interface CashSummary {
   readonly bigBet: number;
 }
 
-/** Decisions and cash fields as stored; HandRecord satisfies it. */
-export interface TrendSource {
+interface TrendSourceBase {
   readonly sessionId: string;
   readonly handNumber: number;
   readonly completedAt: string;
@@ -45,14 +44,25 @@ export interface TrendSource {
     readonly grade: { readonly grade: Grade };
     readonly hinted: boolean;
   }[];
-  readonly gameType?: GameType;
-  readonly stake?: { readonly bigBet: number };
-  readonly userSeat?: SeatNumber;
-  readonly actions?: readonly ActionRecord[];
-  readonly result?: HandResult;
   readonly seats?: readonly unknown[];
   readonly lineUp?: LineUpName;
 }
+
+/** A stored cash hand: it always carries its stake and the fields netResult reads. */
+export interface CashTrendSource extends TrendSourceBase {
+  readonly gameType: 'cash';
+  readonly stake: { readonly bigBet: number };
+  readonly userSeat: SeatNumber;
+  readonly actions: readonly ActionRecord[];
+  readonly result: HandResult;
+}
+
+export interface OtherTrendSource extends TrendSourceBase {
+  readonly gameType?: Exclude<GameType, 'cash'>;
+}
+
+/** Decisions and cash fields as stored; HandRecord satisfies it. */
+export type TrendSource = CashTrendSource | OtherTrendSource;
 
 export interface TrendData {
   readonly hands: readonly TrendHand[];
@@ -129,11 +139,7 @@ export function trendHand(record: TrendSource): TrendHand {
     ...(record.lineUp && { lineUp: record.lineUp }),
   };
   if (record.gameType !== 'cash') return base;
-  // parseHandRecord guarantees a cash record carries these fields.
-  const cashHand = record as Required<
-    Pick<TrendSource, 'stake' | 'userSeat' | 'actions' | 'result'>
-  >;
-  const cash = { net: netResult(cashHand), bigBet: cashHand.stake.bigBet };
+  const cash = { net: netResult(record), bigBet: record.stake.bigBet };
   return { ...base, cash };
 }
 
@@ -259,17 +265,35 @@ export function majorErrorPoints(ordered: readonly TrendHand[]): readonly TrendP
   return points;
 }
 
-const gcd = (a: number, b: number): number => (b === 0 ? a : gcd(b, a % b));
+/** Greatest common divisor of positive safe integers. */
+function gcd(a: number, b: number): number {
+  while (b !== 0) [a, b] = [b, a % b];
+  return a;
+}
+
+/** Σ(net / bigBet) / n × 100 summed in floats, rounded half away from zero to tenths; 0, never -0. */
+function floatBb100(summaries: readonly CashSummary[]): number {
+  const sum = summaries.reduce((s, c) => s + c.net / c.bigBet, 0);
+  const v = (sum / summaries.length) * 100;
+  const tenths = Math.sign(v) * Math.floor(Math.abs(v) * 10 + 0.5);
+  return tenths === 0 ? 0 : tenths / 10;
+}
 
 /** BB/100 of `hands`, all cash: Σ(net / bigBet) / n × 100 as an exact fraction over the big bets' least common
- *  multiple, rounded like the Session Report's BB/100. RangeError if empty or a hand is not cash. */
+ *  multiple, rounded like the Session Report's BB/100. If that multiple would exceed Number.MAX_SAFE_INTEGER (only
+ *  tampered stakes), the float sum rounded half away from zero instead. RangeError if empty or a hand is not cash. */
 export function bb100Value(hands: readonly TrendHand[]): number {
   const cash = hands.map((h) => h.cash);
   if (cash.length === 0 || cash.includes(undefined)) {
     throw new RangeError('bb100Value needs cash hands');
   }
   const summaries = cash as readonly CashSummary[];
-  const lcm = summaries.reduce((l, c) => (l / gcd(l, c.bigBet)) * c.bigBet, 1);
+  let lcm = 1;
+  for (const { bigBet } of summaries) {
+    const next = (lcm / gcd(lcm, bigBet)) * bigBet;
+    if (next > Number.MAX_SAFE_INTEGER) return floatBb100(summaries);
+    lcm = next;
+  }
   const net = summaries.reduce((sum, c) => sum + c.net * (lcm / c.bigBet), 0);
   return bbPer100(net, lcm, summaries.length);
 }
