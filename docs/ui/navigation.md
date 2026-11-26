@@ -158,6 +158,9 @@ After a reload on the Table (`[app, T1*]`, a new load that has pushed nothing), 
   Chrome's `ResizeObserver loop` notice) are ignored (A-1);
 - any unhandled promise rejection, whatever its reason.
 
+A failed decision grade is not one of these causes: each grade promise is marked handled when it is requested
+(see "Failed decision grade" below).
+
 The screen is not one of App's routes, so it adds no history entry. It shows the heading `Something went wrong`
 (focused), one sentence, `The app hit an unexpected problem. Every completed hand is saved, and a paused session
 resumes from its last completed hand.`, and a native `Return Home` button. It never shows the error's message,
@@ -174,6 +177,14 @@ waits for any hand write still running) shows Resume session with the hands comp
 deals the unfinished hand's number again from the stacks at the end of the last completed hand; the unfinished
 hand has no record. An error during hand 1 leaves the paused session with 0 hands; Home offers it for Resume ("0 hands · paused"),
 as after a reload mid-hand 1, and Resume deals Hand #1. Only ending a session deletes a 0-hand session.
+
+**Failed decision grade (TASK-9.10).** Each user decision is graded by the advice worker when it is made. A grade
+request that fails mid-hand does not show the error screen and is not an unhandled rejection
+(`requestNewGrades` in `src/table/decision-grades.ts` marks each request handled). The hand plays to its result,
+which stays on screen. At the hand end the record write fails and `Hand record could not be saved` is logged. No
+Hand Review panel or review badge opens, and no further hand is dealt (Deal next hand does nothing). Leave table
+and Home still work. The hand has no record, so Resume deals that hand number again. TASK-13.3 adds a visible
+message with Retry for a failed write.
 
 ## Tests
 
@@ -204,3 +215,9 @@ as after a reload mid-hand 1, and Resume deals Hand #1. Only ending a session de
   (`e2e/support/fault-injection.ts`, never in `dist/`) in a bot step, a worker failure, a rejected decision, the
   Session report's mount and outside React; Return Home, Resume from the last completed hand and a fresh
   worker for a new game.
+- `e2e/grade-failure.spec.ts` (every push): a decision grade that fails mid-hand (the `reject-grade` fault)
+  shows no error screen, raises no unhandled rejection, logs the failed save at the hand end, opens no review
+  panel and deals no next hand.
+- `tests/table/decision-grades-rejection.test.ts`, `tests/ui/review-pending.acceptance.test.tsx`: a rejected
+  grade request is handled when requested yet still fails the hand end; pending grades show Deal next hand and
+  no panel.

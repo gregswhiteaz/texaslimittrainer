@@ -126,7 +126,9 @@ hand. When the user busts with auto-open off, nothing is held and the bust dialo
 The result and the held next hand (Deal next hand) appear as soon as the hand ends. The panel appears once every
 grade of the hand has come back from the worker, which is normally already the case. There is no loading text. If
 a grade request fails, the hand record cannot be saved: the failure is logged, the panel does not open and no
-further hand is dealt (the hand-record write-failure rule).
+further hand is dealt (the hand-record write-failure rule). A grade that fails mid-hand is handled when it is
+requested, so it is not an unhandled rejection and shows no error screen; the hand plays to its result first
+(TASK-9.10, `docs/ui/navigation.md` "Failed decision grade").
 
 ## Security
 

@@ -12,7 +12,10 @@ export interface DecisionGrades {
 export const NO_GRADES: DecisionGrades = { handNumber: 0, pending: [] };
 
 /** Calls `request` once for each of table.userDecisions not yet requested for table.handNumber (starting
- *  afresh when the hand number changes); returns the new tracker (input unchanged if nothing is new). */
+ *  afresh when the hand number changes); returns the new tracker (input unchanged if nothing is new). Each new
+ *  request promise is marked handled at once (TASK-9.10 D-1), so a grade that fails mid-hand, or in a hand that
+ *  never ends, is not an unhandled rejection; the tracker keeps the original promise, so gradedDecisions still
+ *  rejects with its error. */
 export function requestNewGrades(
   grades: DecisionGrades,
   table: TableState,
@@ -25,7 +28,11 @@ export function requestNewGrades(
     handNumber: table.handNumber,
     pending: [
       ...(current?.pending ?? []),
-      ...table.userDecisions.slice(requested).map((decision) => request(decision)),
+      ...table.userDecisions.slice(requested).map((decision) => {
+        const grade = request(decision);
+        grade.catch(() => undefined);
+        return grade;
+      }),
     ],
   };
 }
