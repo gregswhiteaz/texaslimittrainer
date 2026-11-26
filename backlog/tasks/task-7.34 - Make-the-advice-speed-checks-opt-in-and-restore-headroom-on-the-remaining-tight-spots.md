@@ -7,7 +7,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-26T01:40:00Z'
-updated_date: '2026-11-26T16:16:00Z'
+updated_date: '2026-11-26T16:47:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -42,3 +42,9 @@ Follow-up from TASK-7.18 (doc-151). tests/advice/equity.perf.test.ts and tests/a
 
 Full spec: doit/TASK-7.34/spec.md
 <!-- SECTION:PLAN:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+Recorded deviation: headroom scenarios timed 9-seat first, then HU (HU-first gave fresh-worker spikes over 18.75 ms in 6/17 runs). Limits unchanged.
+<!-- SECTION:NOTES:END -->

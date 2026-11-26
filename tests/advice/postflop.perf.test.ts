@@ -1,8 +1,10 @@
 // Real targets: the p95 targets in SCENARIOS (scale 1). They are enforced only by
 //   ADVICE_PERF_SCALE=1 npx vitest run tests/advice/postflop.perf.test.ts
-// run with CI unset on the reference machine (Apple-silicon Mac, Node 22.18.0). Local `npm test`
-// enforces only the targets times the slack scale below. CI (CI=true) prints the numbers but
-// enforces no speed limit.
+// and the 25% headroom check (TASK-7.34 AC#2) by
+//   ADVICE_PERF_SCALE=1 npx vitest run tests/advice/postflop.perf.test.ts -t headroom
+// run with CI unset on the reference machine (Apple-silicon Mac, Node 22.18.0). Opt-in: the tests run
+// only with TLH_SLOW_TESTS=1 (`npm run test:slow`, at the slack scale below) or with ADVICE_PERF_SCALE
+// set; plain `npm test` skips them. CI (CI=true) prints the numbers but enforces no speed limit.
 // Times are process CPU time (cpuNowMs in tests/support/speed.ts), so other busy processes do not inflate them.
 import { describe, expect, it } from 'vitest';
 import { computeEquity } from '../../src/advice/equity';
@@ -17,7 +19,8 @@ const SCALE = Number(process.env.ADVICE_PERF_SCALE ?? 20);
 const RUNS = 20;
 // Untimed calls first: process CPU time also counts V8's background compiler threads (TASK-7.18 D-3).
 const WARMUP_RUNS = 15;
-const SLOW = process.env.TLH_SLOW_TESTS === '1';
+const OPT_IN = process.env.TLH_SLOW_TESTS === '1' || process.env.ADVICE_PERF_SCALE !== undefined;
+const HEADROOM = 0.75;
 const ENFORCED = speedLimitsEnforced();
 const STAKES_4_8 = { smallBlind: 2, bigBlind: 4, smallBet: 4, bigBet: 8 };
 const ORDERED_DECK = Array.from({ length: 52 }, (_, i) => i);
@@ -39,29 +42,28 @@ function viewAfter(seats: number, steps: [SeatNumber, Action['type'], number?][]
   return playerView(state, state.toAct as SeatNumber);
 }
 
-/** Ten seats, button 1: UTG (4) to the button call, SB (2) completes, BB (3) checks. */
-const fullRingPreflop: [SeatNumber, Action['type'], number?][] = [
-  ...[4, 5, 6, 7, 8, 9, 10, 1].map((seat): [SeatNumber, Action['type'], number] => [
-    seat,
-    'call',
-    4,
-  ]),
+/** `seats` seats, button 1: UTG (4) to the button call, SB (2) completes, BB (3) checks. */
+function limpedPreflop(seats: number): [SeatNumber, Action['type'], number?][] {
+  const limpers = Array.from({ length: seats - 3 }, (_, i) => i + 4).concat(1);
+  return [
+    ...limpers.map((seat): [SeatNumber, Action['type'], number] => [seat, 'call', 4]),
+    [2, 'call', 2],
+    [3, 'check'],
+  ];
+}
+
+const fullRingPreflop = limpedPreflop(10);
+
+const HU_FACING_BET = viewAfter(3, [
+  [1, 'fold'],
   [2, 'call', 2],
   [3, 'check'],
-];
+  [2, 'bet', 4],
+]);
 
 /** [name, view, target p95 in ms on the reference machine] (spec §9). */
 const SCENARIOS: [string, PlayerView, number][] = [
-  [
-    'HU flop facing a bet',
-    viewAfter(3, [
-      [1, 'fold'],
-      [2, 'call', 2],
-      [3, 'check'],
-      [2, 'bet', 4],
-    ]),
-    25,
-  ],
+  ['HU flop facing a bet', HU_FACING_BET, 25],
   [
     '6-max flop vs 3 opponents',
     viewAfter(6, [
@@ -76,6 +78,17 @@ const SCENARIOS: [string, PlayerView, number][] = [
     50,
   ],
   ['10-seat flop vs 9 opponents', viewAfter(10, [...fullRingPreflop, [2, 'bet', 4]]), 100],
+];
+
+const NINE_SEAT_FACING_BET = viewAfter(9, [...limpedPreflop(9), [2, 'bet', 4]]);
+
+/**
+ * Headroom scenarios (TASK-7.34): the 8-opponent target is 200 ms (Q-1). HU is timed second: timed
+ * first in a fresh worker, background JIT work put about 1 run in 4 over 18.75 ms.
+ */
+const HEADROOM_SCENARIOS: [string, PlayerView, number][] = [
+  ['9-seat flop vs 8 opponents', NINE_SEAT_FACING_BET, 200],
+  ['HU flop facing a bet', HU_FACING_BET, 25],
 ];
 
 /** p95 failures for `scenarios` run with `options`; logs every scenario's numbers. */
@@ -144,34 +157,48 @@ const ACTION_SCENARIOS: [string, PlayerView, number][] = [
   ],
 ];
 
-describe('postflop advice performance', () => {
-  it('postflop advice latency within target times slack', () => {
+describe('postflop advice performance', { timeout: 120_000 }, () => {
+  it.runIf(OPT_IN)('postflop advice latency within target times slack', () => {
     expect(slowScenarios(SCENARIOS)).toEqual([]);
-  }, 120_000);
+  });
 
-  // Opt-in slow (TLH_SLOW_TESTS=1, in `npm run test:slow`).
-  it.runIf(SLOW)(
-    'value-bet postflop advice latency within target times slack',
-    () => {
-      const [[, view]] = VALUE_BET_SCENARIOS as [[string, PlayerView, number]];
-      expect(view.legalActions.some((a) => a.type === 'bet')).toBe(true);
-      // The calling-range run throws, so A-7 falls back to the whole-range number.
-      const calling = callingRange(unseenCombos([...view.holeCards, ...view.board]), view.board);
-      expect(() =>
-        computeEquity({
-          hero: view.holeCards,
-          board: view.board,
-          opponents: new Array<typeof calling>(9).fill(calling),
-        }),
-      ).toThrow(new RangeError('Sampling rejected too many deals'));
-      const advice = recommendPostflop(view);
-      expect(advice.equityVsCallingRangePct).toBe(advice.equityPct);
-      expect(slowScenarios(VALUE_BET_SCENARIOS, undefined, false)).toEqual([]);
-    },
-    120_000,
-  );
+  it.runIf(OPT_IN)('value-bet postflop advice latency within target times slack', () => {
+    const [[, view]] = VALUE_BET_SCENARIOS as [[string, PlayerView, number]];
+    expect(view.legalActions.some((a) => a.type === 'bet')).toBe(true);
+    // The calling-range run throws, so A-7 falls back to the whole-range number.
+    const calling = callingRange(unseenCombos([...view.holeCards, ...view.board]), view.board);
+    expect(() =>
+      computeEquity({
+        hero: view.holeCards,
+        board: view.board,
+        opponents: new Array<typeof calling>(9).fill(calling),
+      }),
+    ).toThrow(new RangeError('Sampling rejected too many deals'));
+    const advice = recommendPostflop(view);
+    expect(advice.equityVsCallingRangePct).toBe(advice.equityPct);
+    expect(slowScenarios(VALUE_BET_SCENARIOS, undefined, false)).toEqual([]);
+  });
 
-  it('actions-mode postflop advice latency within target times slack', () => {
+  it.runIf(OPT_IN)('actions-mode postflop advice latency within target times slack', () => {
     expect(slowScenarios(ACTION_SCENARIOS, ACTION_RANGE_ADVICE)).toEqual([]);
-  }, 120_000);
+  });
+
+  it.runIf(OPT_IN)(
+    'headroom: HU facing a bet and 8 opponents within 75% of target times slack',
+    () => {
+      // The calling-range run succeeds, so this is a calling-range spot, not the A-7 fallback.
+      const { holeCards, board } = NINE_SEAT_FACING_BET;
+      const calling = callingRange(unseenCombos([...holeCards, ...board]), board);
+      const opponents = new Array<typeof calling>(8).fill(calling);
+      expect(computeEquity({ hero: holeCards, board, opponents }).method).toBe('sampled');
+      expect(recommendPostflop(HU_FACING_BET).opponents).toBe(1);
+      expect(recommendPostflop(NINE_SEAT_FACING_BET).opponents).toBe(8);
+      const limits = HEADROOM_SCENARIOS.map(([n, v, t]): [string, PlayerView, number] => [
+        n,
+        v,
+        t * HEADROOM,
+      ]);
+      expect(slowScenarios(limits)).toEqual([]);
+    },
+  );
 });

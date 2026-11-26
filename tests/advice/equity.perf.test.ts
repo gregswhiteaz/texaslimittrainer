@@ -2,15 +2,16 @@
 //   EQUITY_PERF_SCALE=1 npx vitest run tests/advice/equity.perf.test.ts
 // and the 25% headroom check (TASK-7.18 AC#1) by
 //   EQUITY_PERF_SCALE=0.75 npx vitest run tests/advice/equity.perf.test.ts
-// run with CI unset on the reference machine (Apple-silicon Mac, Node 22.18.0). Local `npm test`
-// enforces only the targets times the slack scale below. CI (CI=true) prints the numbers but
-// enforces no speed limit.
+// run with CI unset on the reference machine (Apple-silicon Mac, Node 22.18.0). Opt-in: the test runs
+// only with TLH_SLOW_TESTS=1 (`npm run test:slow`, at the slack scale below) or with EQUITY_PERF_SCALE
+// set; plain `npm test` skips it. CI (CI=true) prints the numbers but enforces no speed limit.
 // Times are process CPU time (cpuNowMs in tests/support/speed.ts), so other busy processes do not inflate them.
 import { describe, expect, it } from 'vitest';
 import { computeEquity, type EquityInput, type HoleCards } from '../../src/advice/equity';
 import { parseCards, type Card } from '../../src/engine/cards';
 import { cpuNowMs, SPEED_LIMITS_NOT_ENFORCED, speedLimitsEnforced } from '../support/speed';
 
+const OPT_IN = process.env.TLH_SLOW_TESTS === '1' || process.env.EQUITY_PERF_SCALE !== undefined;
 const SCALE = Number(process.env.EQUITY_PERF_SCALE ?? 20);
 const RUNS = 20;
 // Untimed calls first: process CPU time also counts V8's background compiler threads (TASK-7.18 D-3).
@@ -57,7 +58,7 @@ const SCENARIOS: [string, EquityInput, string, number][] = [
 ];
 
 describe('equity performance', () => {
-  it('equity latency within target times slack', () => {
+  it.runIf(OPT_IN)('equity latency within target times slack', { timeout: 120_000 }, () => {
     const failures: string[] = [];
     if (!ENFORCED) console.log(SPEED_LIMITS_NOT_ENFORCED);
     for (const [name, input, method, targetMs] of SCENARIOS) {
@@ -79,5 +80,5 @@ describe('equity performance', () => {
       if (ENFORCED && p95 > limit) failures.push(`${name}: p95 ${p95.toFixed(2)} ms > ${limit} ms`);
     }
     expect(failures).toEqual([]);
-  }, 120_000);
+  });
 });

@@ -226,6 +226,8 @@ machine (Apple-silicon Mac, Node 22.18.0) with `CI` unset:
   ```
 
 - Equity: every scenario's p95 within its target at scale 1 (targets listed in the test file).
+  Opt-in: plain `npm test` skips it. It runs with `EQUITY_PERF_SCALE` set or under
+  `npm run test:slow` (`TLH_SLOW_TESTS=1`, at 20x slack).
 
   ```sh
   EQUITY_PERF_SCALE=1 npx vitest run tests/advice/equity.perf.test.ts
@@ -238,11 +240,19 @@ machine (Apple-silicon Mac, Node 22.18.0) with `CI` unset:
   ```
 
 - Postflop advice: every scenario's p95 within its target at scale 1 (targets listed in the test
-  file). The 10-seat value-bet scenario is opt-in (`TLH_SLOW_TESTS=1`, also run by
-  `npm run test:slow`). Headroom check: the 10-seat flop vs 9 opponents p95 within 75 ms.
+  file). Opt-in: plain `npm test` skips it. It runs with `ADVICE_PERF_SCALE` set or under
+  `npm run test:slow` (`TLH_SLOW_TESTS=1`, at 20x slack). Headroom check: the 10-seat flop vs 9
+  opponents p95 within 75 ms.
 
   ```sh
-  TLH_SLOW_TESTS=1 ADVICE_PERF_SCALE=1 npx vitest run tests/advice/postflop.perf.test.ts
+  ADVICE_PERF_SCALE=1 npx vitest run tests/advice/postflop.perf.test.ts
+  ```
+
+  Headroom check: HU flop facing a bet and the 9-seat flop vs 8 opponents (calling-range spot,
+  200 ms target) each within 75% of target.
+
+  ```sh
+  ADVICE_PERF_SCALE=1 npx vitest run tests/advice/postflop.perf.test.ts -t headroom
   ```
 
 - Playtest: 100,000 6-max hands in at most 60 minutes. Measured 4.8 s (real) on an Apple M4 Pro
