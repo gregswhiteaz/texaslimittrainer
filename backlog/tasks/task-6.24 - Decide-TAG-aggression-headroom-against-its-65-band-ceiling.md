@@ -1,9 +1,11 @@
 ---
 id: TASK-6.24
 title: Decide TAG aggression headroom against its 65% band ceiling
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-23T15:21:00Z'
+updated_date: '2026-11-26T20:45:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up

@@ -1,0 +1,343 @@
+{
+  "id": "TASK-6.24",
+  "title": "Decide TAG aggression headroom against its 65% band ceiling",
+  "status": "To Do",
+  "archived": false,
+  "type": null,
+  "priority": "medium",
+  "project": null,
+  "assignees": [],
+  "reporter": null,
+  "labels": [
+    "dream-limit-holdem-trainer",
+    "follow-up",
+    "spike"
+  ],
+  "milestone": "m-1",
+  "parentTaskId": "TASK-6",
+  "acceptanceCriteriaCompleted": 0,
+  "acceptanceCriteriaCount": 1,
+  "references": [],
+  "modifiedFiles": [],
+  "ordinal": 226000,
+  "createdAt": "2026-11-23T15:21:00Z",
+  "updatedAt": null,
+  "dueDate": null,
+  "isReady": true,
+  "path": "backlog/tasks/task-6.24 - Decide-TAG-aggression-headroom-against-its-65-band-ceiling.md",
+  "description": "From TASK-6.11 (and TASK-6.16/6.17/7.9 judge notes): TAG aggression measures 63.5\u201364.2% over 100k hands against the REQ-027.1 band 45\u201365%, and short --check-styles runs (2k hands) read 67.2% and fail with no tuning problem. A later advice change could push the 100k value out. Options: widen the band (requirements change), tune TAG postflop (e.g. a small value bar like the Rock's), or document a minimum run length for --check-styles.",
+  "dependencies": [
+    "TASK-6.11"
+  ],
+  "dependencyGraph": {
+    "root": "TASK-6.24",
+    "nodes": [
+      {
+        "id": "TASK-6.24",
+        "title": "Decide TAG aggression headroom against its 65% band ceiling",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": 0,
+        "dependentDepth": 0
+      },
+      {
+        "id": "TASK-1.1",
+        "title": "Bootstrap the strict TypeScript project with one-command checks",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 6,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.2",
+        "title": "Rank showdown hands by real poker hand rankings",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 4,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.3",
+        "title": "Deal every hand from a seeded shuffle with a replay code",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 4,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.4",
+        "title": "Play a complete fixed-limit hand from blinds to showdown",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 3,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.5",
+        "title": "Give each deciding seat only its own view of the hand",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 8,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.6",
+        "title": "Run seeded bot-only hands from the command line",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 7,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.7",
+        "title": "Run every check in GitHub Actions on each push and pull request",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 5,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-6.1",
+        "title": "Face TAG bots that act from the advice engine",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 6,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-6.2",
+        "title": "Vary TAG's play in mixed spots from its style data file",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 4,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-6.3",
+        "title": "Face a Calling station that calls where TAG would fold or raise",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 3,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-6.4",
+        "title": "Face a Maniac that bets and raises where TAG would check or call",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 3,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-6.5",
+        "title": "Face a Rock that folds every hand outside a narrow starting range",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 3,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-6.6",
+        "title": "Seat bots by line-up preset with unique names",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 2,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-6.11",
+        "title": "Report each bot style's VPIP, PFR and aggression against its band",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 1,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-6.18",
+        "title": "Draw bot randomness only from the replay code and seat",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 5,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-7.1",
+        "title": "Compute a hand's equity against opponent hands",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 8,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-7.2",
+        "title": "Recommend a preflop action from the 6-max chart",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 7,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-7.3",
+        "title": "Recommend call or fold after the flop from equity and pot odds",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 7,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-7.12",
+        "title": "Enabler: shared style-stat functions for VPIP, PFR, Aggression, WTSD and W$SD",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 2,
+        "dependentDepth": null
+      }
+    ],
+    "edges": [
+      {
+        "from": "TASK-1.2",
+        "to": "TASK-1.7"
+      },
+      {
+        "from": "TASK-1.3",
+        "to": "TASK-1.7"
+      },
+      {
+        "from": "TASK-1.4",
+        "to": "TASK-1.2"
+      },
+      {
+        "from": "TASK-1.4",
+        "to": "TASK-1.3"
+      },
+      {
+        "from": "TASK-1.5",
+        "to": "TASK-1.4"
+      },
+      {
+        "from": "TASK-1.6",
+        "to": "TASK-1.5"
+      },
+      {
+        "from": "TASK-1.7",
+        "to": "TASK-1.1"
+      },
+      {
+        "from": "TASK-6.1",
+        "to": "TASK-1.6"
+      },
+      {
+        "from": "TASK-6.1",
+        "to": "TASK-7.2"
+      },
+      {
+        "from": "TASK-6.1",
+        "to": "TASK-7.3"
+      },
+      {
+        "from": "TASK-6.2",
+        "to": "TASK-6.18"
+      },
+      {
+        "from": "TASK-6.3",
+        "to": "TASK-6.2"
+      },
+      {
+        "from": "TASK-6.4",
+        "to": "TASK-6.2"
+      },
+      {
+        "from": "TASK-6.5",
+        "to": "TASK-6.2"
+      },
+      {
+        "from": "TASK-6.6",
+        "to": "TASK-6.3"
+      },
+      {
+        "from": "TASK-6.6",
+        "to": "TASK-6.4"
+      },
+      {
+        "from": "TASK-6.6",
+        "to": "TASK-6.5"
+      },
+      {
+        "from": "TASK-6.11",
+        "to": "TASK-6.6"
+      },
+      {
+        "from": "TASK-6.11",
+        "to": "TASK-7.12"
+      },
+      {
+        "from": "TASK-6.18",
+        "to": "TASK-6.1"
+      },
+      {
+        "from": "TASK-6.24",
+        "to": "TASK-6.11"
+      },
+      {
+        "from": "TASK-7.1",
+        "to": "TASK-1.2"
+      },
+      {
+        "from": "TASK-7.2",
+        "to": "TASK-1.5"
+      },
+      {
+        "from": "TASK-7.3",
+        "to": "TASK-7.1"
+      },
+      {
+        "from": "TASK-7.3",
+        "to": "TASK-7.2"
+      },
+      {
+        "from": "TASK-7.12",
+        "to": "TASK-1.4"
+      }
+    ]
+  },
+  "readiness": {
+    "isReady": true,
+    "isBlocked": false,
+    "blockingDependencies": [],
+    "missingDependencies": []
+  },
+  "documentation": [],
+  "subtasks": [],
+  "acceptanceCriteria": [
+    {
+      "index": 1,
+      "text": "Given the options (widen band / tune TAG / document minimum run length), When the user decides, Then the decision is recorded on this task and any resulting change is a follow-up story",
+      "checked": false
+    }
+  ],
+  "definitionOfDone": [],
+  "implementationPlan": null,
+  "implementationNotes": null,
+  "comments": [],
+  "finalSummary": null
+}
