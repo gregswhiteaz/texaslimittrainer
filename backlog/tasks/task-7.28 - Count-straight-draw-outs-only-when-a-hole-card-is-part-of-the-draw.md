@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-23T08:19:00Z'
-updated_date: '2026-11-26T03:52:00Z'
+updated_date: '2026-11-26T04:25:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -48,4 +48,6 @@ Full spec: doit/TASK-7.28/spec.md
 AC added from TASK-7.9 judge note (made flush still listed OESD outs).
 
 AC#2 replaced (Q-1, auto-accepted): the original example 9c 2d on 5h 6s 7h is only a gutshot, so it now uses 8c 2d; the replacement is the last AC listed
+
+Build: straight outs need a hole rank in the run not on the board; no straight outs on a made flush; playtest SHA 643c81…→f6c8d1… (0 violations); slow style-bands 3/3 seeds pass; gate PASS
 <!-- SECTION:NOTES:END -->

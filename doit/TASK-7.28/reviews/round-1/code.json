@@ -1,0 +1,31 @@
+{"reviewer": "code", "round": 1,
+ "rubric": [
+  {"item": "SPEC-01 correctness", "result": "pass"},
+  {"item": "SPEC-01 test strength", "result": "pass"},
+  {"item": "SPEC-02 correctness", "result": "pass"},
+  {"item": "SPEC-02 test strength", "result": "pass"},
+  {"item": "SPEC-03 correctness", "result": "pass"},
+  {"item": "SPEC-03 test strength", "result": "pass"},
+  {"item": "SPEC-04 correctness", "result": "pass"},
+  {"item": "SPEC-04 test strength", "result": "pass"},
+  {"item": "SPEC-05 correctness", "result": "pass"},
+  {"item": "SPEC-05 test strength", "result": "pass"},
+  {"item": "SPEC-06 correctness", "result": "pass"},
+  {"item": "SPEC-06 test strength", "result": "pass"},
+  {"item": "SPEC-07 correctness", "result": "pass"},
+  {"item": "SPEC-07 test strength", "result": "pass"},
+  {"item": "scope", "result": "pass"},
+  {"item": "concision", "result": "pass"},
+  {"item": "clarity", "result": "pass"}
+ ],
+ "findings": [
+  {"fingerprint": "src/advice/ranges.ts:rankmask-hole-computed-twice", "severity": "NIT", "file": "src/advice/ranges.ts", "line": 452,
+   "issue": "openEnderStart calls rankMask(hole) twice (for holeOnly and present).",
+   "evidence": "const holeOnly = rankMask(hole) & ~onBoard; const present = rankMask(hole) | onBoard;",
+   "fix": "Keep `const fromHole = rankMask(hole);` and derive holeOnly = fromHole & ~onBoard, present = fromHole | onBoard."},
+  {"fingerprint": "docs/advice/postflop-rules.md:unwrapped-long-line", "severity": "NIT", "file": "docs/advice/postflop-rules.md", "line": 42,
+   "issue": "The edited 'has no outs, and a hero who already has a flush or a straight...' line is much longer than the surrounding ~100-column wrapped prose.",
+   "evidence": "Line 42 runs well past the wrap width used by neighbouring lines in the same bullet.",
+   "fix": "Re-wrap the paragraph to match the surrounding line width."}
+ ],
+ "summary": "All seven SPEC items are implemented as specified. openEnderStart now requires a hole-only rank (rankMask(hole) & ~rankMask(board)) inside the run, and drawOuts skips straight outs when any suit has 5+ cards. The tests would catch a regression: under the old rule AC#1 and the 7c 2d unit case would return 8 outs, and without the made-flush guard AC#3 and the 9h 8c turn-flush case would return the 5s/Ts or 7s/Ts. SPEC-05 is a regression check that passes under both rules by design (D-1). The build log has the before/after playtest SHA (after matches the prototype, 0 invariant violations) and all 12 style-band lines. Scope is the 4 spec'd files, about 67 lines. The targeted tests pass (21/21). Only two NITs."}

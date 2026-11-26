@@ -1,0 +1,3 @@
+{"reviewer": "security", "round": 1,
+ "findings": [],
+ "summary": "The change is confined to pure in-memory bitmask and counting logic in src/advice/ranges.ts (openEnderStart, drawOuts), plus tests and docs. It adds no I/O, parsing, network, filesystem, eval or dynamic code. It does not touch randomness, and it adds no dependencies, secrets or logging. The loops are bounded by constants (13 ranks, 4 suits) and by the card count, which is at most 7, so unbounded input cannot exhaust resources. No reachable path from untrusted input to a dangerous sink. This matches spec section 8 (N/A)."}
