@@ -1,9 +1,11 @@
 ---
 id: TASK-11.14
 title: Harden the BB/100 trend against tampered stakes and type its cash summaries
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-25T10:36:00Z'
+updated_date: '2026-11-26T17:12:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -29,3 +31,14 @@ Follow-up from TASK-11.2 security and code review (doc-135). A tampered store wi
 - [ ] #2 Given TrendSource, When a cash source lacks its cash fields, Then the type system rejects it and trendHand needs no cast
 - [ ] #3 Given all-negative BB/100 points, When the chart is drawn, Then a unit case pins the break-even line at the top of the plot
 <!-- AC:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. bb100Value: exact LCM while safe; float per-hand fallback above MAX_SAFE_INTEGER; iterative gcd
+2. TrendSource becomes CashTrendSource | OtherTrendSource; trendHand has no cast
+3. Unit case pins the break-even line above all-negative points
+4. Acceptance test: tampered store with 500 prime big bets shows a finite point, never stuck loading
+
+Full spec: doit/TASK-11.14/spec.md
+<!-- SECTION:PLAN:END -->

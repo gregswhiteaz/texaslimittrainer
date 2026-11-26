@@ -1,0 +1,32 @@
+[
+  {
+    "id": "SPEC-01",
+    "verifies": "AC#1",
+    "verification": "acceptance `tests/stats/bb100-tampered.acceptance.test.tsx::AC#1 tampered big bets show a finite BB/100 point instead of failing`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-02",
+    "verifies": "AC#1",
+    "verification": "unit `tests/stats/trends.test.ts::bb100Value keeps exact rounding for real stakes and stays finite for tampered ones`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-03",
+    "verifies": "AC#1",
+    "verification": "unit `tests/stats/trends.test.ts::statisticsView gives finite BB/100 points for tampered stakes in every grouping`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-04",
+    "verifies": "AC#2",
+    "verification": "unit `tests/stats/trends.test.ts::TrendSource rejects a cash source without its cash fields`; command `npm run typecheck && ! sed -n '/^export function trendHand/,/^}/p' src/stats/trends.ts | grep -qw as`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-05",
+    "verifies": "AC#3",
+    "verification": "unit `tests/stats/trends.test.ts::all-negative BB/100 geometry puts break-even above every point`",
+    "status": "pending"
+  }
+]
