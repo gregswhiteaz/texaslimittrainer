@@ -1,11 +1,11 @@
 ---
 id: TASK-7.31
 title: Give postflop golden spots chart-consistent preflop lines
-status: In Progress
+status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-24T06:32:00Z'
-updated_date: '2026-11-26T06:36:00Z'
+updated_date: '2026-11-26T06:37:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -14,6 +14,8 @@ dependencies:
   - TASK-7.14
 references:
   - doc-111
+documentation:
+  - doc-154
 parent_task_id: TASK-7
 priority: medium
 ordinal: 232000
@@ -52,4 +54,12 @@ Build: validator rejects Major hero preflop steps; clear-cut throw becomes a pro
 Judge r1 FAIL on SPEC-08 (3 justifications name the hero's high card where a board card/pair plays). doit.py verdict is not idempotent: calling it twice inflated SPEC-08 item_failures to 4; reset to 1 (one real failure).
 
 Judge r2 PASS (9/9 SPEC items); J-1-02 withdrawn by the judge (no backdoor flush)
+
+Follow-ups: TASK-7.36 created (graded examples with Major hero lines + unreachable break NIT). Tautological length assert in the locked acceptance test left as is (removing would loosen a locked test).
 <!-- SECTION:NOTES:END -->
+
+## Final Summary
+
+<!-- SECTION:FINAL_SUMMARY:BEGIN -->
+Re-authored the 72 postflop golden spots whose hero preflop lines the chart grades Major (10 action fixes, 59 hole-card swaps, 2 line changes, 92o spot now a limped pot reading 'kings full'). Added a validator rule in src/advice/golden.ts that rejects any postflop spot with a Major hero preflop step, and guarded the clear-cut check so a gradeDecision throw is a listed problem. Verified: judge round 2 PASS 9/9, npm test 1439 passed, lint and typecheck clean, locked acceptance tests green. Review assumptions A-1..A-8 (esp. A-1: graded-examples.json out of scope, A-7: 92o limped-pot line). Follow-up: three graded examples still have Major hero preflop lines; two NITs left.
+<!-- SECTION:FINAL_SUMMARY:END -->
