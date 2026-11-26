@@ -1,0 +1,59 @@
+{
+  "task": "TASK-10.15",
+  "phase": "build",
+  "run": 1,
+  "result": "PASS",
+  "changed_lines": 123,
+  "changed_files": [
+    "src/stats/leaks.ts",
+    "src/table/hand-record.ts",
+    "tests/stats/preflop-pairing.test.ts"
+  ],
+  "checks": [
+    {
+      "name": "test command",
+      "status": "pass",
+      "detail": "$ npm test\nexit 0\n                   \n  cli.ts           |     100 |    99.48 |     100 |     100 | 290               \n  shards.ts        |     100 |    98.11 |     100 |     100 | 232,338           \n  style-check.ts   |     100 |    98.43 |     100 |     100 | 119               \n stats             |     100 |    99.09 |     100 |     100 |                   \n  leaks.ts         |     100 |    98.61 |     100 |     100 | 207-210           \n  trends.ts        |     100 |    99.06 |     100 |     100 | 246               \n storage           |   95.58 |     93.1 |   89.58 |   96.27 |                   \n  hand-store.ts    |    94.9 |    91.11 |   88.63 |   95.74 | ...49-151,160,317 \n table             |   98.74 |    97.74 |     100 |   99.55 |                   \n  ...ion-record.ts |    92.7 |    88.78 |     100 |   97.22 | 212,227,245       \n  session.ts       |    98.6 |    96.95 |     100 |   99.57 | 289               \n ui                |   15.38 |     6.12 |    4.68 |   17.61 |                   \n  App.tsx          |   16.38 |      7.4 |    1.96 |    18.7 | ...19-322,331-413 \n  AppRoot.tsx      |       0 |        0 |       0 |       0 | 21-81             \n  ...adingFocus.ts |    37.5 |        0 |      50 |   42.85 | 10-13             \n ui/advice         |   94.73 |    96.42 |   93.33 |   95.91 |                   \n  advice-client.ts |   96.29 |    96.29 |    92.3 |   97.87 | 139               \n  advice.worker.ts |       0 |      100 |     100 |       0 | 3                 \n ui/config         |   59.03 |     47.5 |   44.82 |   64.38 |                   \n  ...ionDialog.tsx |   30.76 |    16.66 |      20 |      40 | 26-28,36-58       \n  ...figScreen.tsx |   64.28 |    60.71 |      50 |   68.25 | ...55-256,283-294 \n ui/settings       |      50 |    77.77 |   66.66 |      60 |                   \n  ...ngsScreen.tsx |      50 |    77.77 |   66.66 |      60 | 51-52             \n ui/stats          |   88.88 |      100 |    82.6 |    86.2 |                   \n  ...icsScreen.tsx |   88.88 |      100 |    82.6 |    86.2 | 177,193,209,224   \n ui/table          |   38.68 |    61.63 |   37.96 |   43.03 |                   \n  ActionBar.tsx    |      75 |       50 |     100 |     100 | 19                \n  BustDialog.tsx   |   33.33 |        0 |      25 |   42.85 | 14-15,22-25       \n  HintCard.tsx     |     100 |    91.66 |     100 |     100 | 23                \n  LeaveDialog.tsx  |   44.44 |        0 |   33.33 |      50 | 15-17,32          \n  Table.tsx        |      46 |    77.39 |   38.88 |   51.68 | ...92,497-503,521 \n  ...bleSession.ts |   27.65 |    32.43 |   24.52 |   29.41 | ...43-349,354-357 \n-------------------|---------|----------|---------|---------|-------------------\n\n=============================== Coverage summary ===============================\nStatements   : 92.74% ( 5461/5888 )\nBranches     : 93.11% ( 3865/4151 )\nFunctions    : 88.46% ( 1189/1344 )\nLines        : 93.07% ( 4584/4925 )\n================================================================================\n"
+    },
+    {
+      "name": "lint command",
+      "status": "pass",
+      "detail": "$ npm run lint\nexit 0\n\n> tlh-trainer@0.0.0 lint\n> node tools/lint/sync-copies.js && eslint . --max-warnings 0 && prettier --check .\n\nChecking formatting...\nAll matched files use Prettier code style!\n"
+    },
+    {
+      "name": "typecheck command",
+      "status": "pass",
+      "detail": "$ npm run typecheck\nexit 0\n\n> tlh-trainer@0.0.0 typecheck\n> tsc -p tsconfig.json\n\n"
+    },
+    {
+      "name": "spec unchanged",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "name": "scope budget (lines)",
+      "status": "warn",
+      "detail": "123 changed lines vs budget 110 (fail above 220)"
+    },
+    {
+      "name": "scope budget (files)",
+      "status": "pass",
+      "detail": "3 files vs budget 3"
+    },
+    {
+      "name": "files outside spec",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "name": "all changes listed in changes.md",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "name": "tests locked",
+      "status": "pass",
+      "detail": "0 acceptance test file(s) locked; 428 test files snapshotted"
+    }
+  ]
+}

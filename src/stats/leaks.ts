@@ -1,5 +1,6 @@
 import type { ActionType, Grade } from '../advice/grade';
 import type { ActionRecord, SeatNumber } from '../engine/hand';
+import { userMade } from '../table/hand-record';
 // The JSON import stays last, as in src/stats/healthy-ranges.ts.
 import leakCategories from './leak-categories.json' with { type: 'json' };
 
@@ -233,28 +234,31 @@ export interface CategoryHand {
 }
 
 /** The hand's decisions that have a street and action, as CategoryDecisions. The j-th decision pairs with the
- *  user's j-th non-blind action record (A-3); a preflop decision gets its spot when the hand has a `button`
+ *  user's j-th non-blind action record (userMade, A-3); a preflop decision gets its spot when the hand has a `button`
  *  and its paired record is preflop with the same type, otherwise it has none and is not counted. */
 export function handCategoryDecisions(hand: CategoryHand): CategoryDecision[] {
   const spots = new Map<number, PreflopSpot>();
   if (hand.button !== undefined) {
     const { button, userSeat, decisions } = hand;
+    const made = userMade(hand.actions, userSeat);
+    // Fixed for the hand; computed on the first pairing so a hand with none never reads seats or throws (A-1).
+    let group: PositionGroup | undefined;
     let raisedBefore = false;
     let j = 0;
     for (const record of hand.actions) {
-      if (
-        record.seat === userSeat &&
-        record.type !== 'small-blind' &&
-        record.type !== 'big-blind'
-      ) {
+      if (record === made[j]) {
         const d = decisions[j];
         if (
           d?.street === 'preflop' &&
           record.street === 'preflop' &&
           record.type === d.action?.type
         ) {
-          const seats = hand.seats.map((s) => s.seat);
-          spots.set(j, { group: positionGroup(seats, button, userSeat), raisedBefore });
+          group ??= positionGroup(
+            hand.seats.map((s) => s.seat),
+            button,
+            userSeat,
+          );
+          spots.set(j, { group, raisedBefore });
         }
         j++;
       }

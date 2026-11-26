@@ -134,7 +134,7 @@ export interface HandStore {
 
 const SESSION_ID = /^[0-9a-f]{32}$/;
 /** The user's non-blind actions, in order. */
-function userMade(actions: readonly ActionRecord[], userSeat: unknown): ActionRecord[] {
+export function userMade(actions: readonly ActionRecord[], userSeat: unknown): ActionRecord[] {
   return actions.filter(
     (a) => a.seat === userSeat && a.type !== 'small-blind' && a.type !== 'big-blind',
   );
