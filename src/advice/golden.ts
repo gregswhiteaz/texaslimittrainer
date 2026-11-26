@@ -1,5 +1,11 @@
 import { parseCards, type Card } from '../engine/cards';
-import { applyAction, createHand, type HandState, type SeatNumber } from '../engine/hand';
+import {
+  applyAction,
+  createHand,
+  type Action,
+  type HandState,
+  type SeatNumber,
+} from '../engine/hand';
 import { playerView, type PlayerView } from '../engine/player-view';
 import { CONCEPTS, type ConceptId } from './explanations';
 import {
@@ -17,6 +23,7 @@ import {
   chartSpotOf,
   positionOf,
   PREFLOP_CHARTS,
+  recommendPreflop,
   referenceSizeOf,
   situationOf,
   type PreflopAdvice,
@@ -518,6 +525,32 @@ function clearCutProblems(
   return problems;
 }
 
+/**
+ * One problem per hero preflop step that grades as a Major error against the chart advice at that decision.
+ * Runs only after `view` was built, so the cards, board and steps are known to be valid and legal.
+ */
+function heroPreflopProblems(data: Record<string, unknown>, view: PlayerView): string[] {
+  const cards = parseHoleCards(data.holeCards) as [Card, Card];
+  let state = dealtHand(data.seats as number, view.seat, cards, view.board);
+  const problems: string[] = [];
+  for (const [k, step] of (data.before as readonly unknown[]).entries()) {
+    if (state.street !== 'preflop') break;
+    if (state.toAct === view.seat) {
+      const rec = recommendPreflop(playerView(state, view.seat));
+      if (gradeDecision(rec, step as ActionType).grade === 'major') {
+        problems.push(
+          `hero preflop step ${k + 1} "${echo(step)}" is a Major error on the chart ` +
+            `(${rec.referenceSize} ${rec.position} ${rec.situation} ${rec.handClass}: ${rec.action})`,
+        );
+      }
+    }
+    const result = applyAction(state, legalOf(state, step) as Action);
+    if (!result.ok) break;
+    state = result.state;
+  }
+  return problems;
+}
+
 function parsePostflopSpot(
   data: Record<string, unknown>,
   name: string,
@@ -538,6 +571,9 @@ function parsePostflopSpot(
   checkJustification(data.justification, where, problems);
   const observed = parseObserved(data.opponentStats);
   if (observed === null) problems.push(`${where}: invalid opponent stats`);
+  if (view !== null) {
+    for (const problem of heroPreflopProblems(data, view)) problems.push(`${where}: ${problem}`);
+  }
   if (problems.length > before || view === null) return null;
 
   const spot: PostflopGoldenSpot = {
@@ -557,7 +593,13 @@ function parsePostflopSpot(
     problems.push(`${where}: advice failed (${(error as Error).message})`);
     return null;
   }
-  const unclear = clearCutProblems(view, spot.action, spot.alternative, numbers);
+  let unclear: string[];
+  try {
+    unclear = clearCutProblems(view, spot.action, spot.alternative, numbers);
+  } catch (error) {
+    problems.push(`${where}: clear-cut check failed (${(error as Error).message})`);
+    return null;
+  }
   for (const problem of unclear) problems.push(`${where}: ${problem}`);
   return unclear.length > 0 ? null : spot;
 }

@@ -71,7 +71,7 @@ Postflop spots use the same format and table, with these differences:
   "street": "flop",
   "holeCards": "Ac Qh",
   "board": "8h Qc 7d",
-  "before": ["fold", "fold", "raise", "call", "fold", "fold", "check"],
+  "before": ["fold", "fold", "raise", "raise", "fold", "fold", "call", "check"],
   "action": "bet",
   "justification": "..."
 }
@@ -82,7 +82,15 @@ Postflop spots use the same format and table, with these differences:
 - `street`: `flop`, `turn` or `river`; it must match the board's length.
 - `before`: every action from the first preflop decision up to the hero's decision, across all streets. Each is
   `fold`, `check`, `call`, `bet` or `raise`, applied to whichever seat is to act. The hand must reach a decision on
-  the board's street.
+  the board's street. Every preflop action the hero takes must not be a Major error on the chart: the validator
+  grades each one with `gradeDecision(recommend(view), step)` at that decision, as the learner would be graded in
+  play. A Minor error (a borderline cell) is allowed. The hero's earlier flop or turn actions and the opponents'
+  preflop actions are not graded. A Major step is reported, before any equity is computed, as:
+
+  ```
+  Golden spot <id>: hero preflop step <k> "<action>" is a Major error on the chart (<size> <position> <situation> <hand class>: <chart action>)
+  ```
+
 - `position`: must equal `positionOf(view)`. There is no `situation`; a spot that has one is rejected.
 - `action`: any of the five types, legal in the view. Postflop spots record no `alternative`, because the engine
   gives none after the flop; the field is still accepted and validated as for preflop.
@@ -118,6 +126,13 @@ Implied-odds calls can never be golden spots, since folding them is never a Majo
 (seeded from the input), and the 10- and 15-point margins are far wider than the engine's accuracy bound, so a
 recorded answer cannot flip between runs.
 
+If grading itself throws (for example, the advice returns a non-finite number that the deciding margin reads), the
+spot is rejected with the error's message and the other spots keep validating:
+
+```
+Golden spot <id>: clear-cut check failed (equityPct must be a finite number, got NaN)
+```
+
 ### Preflop
 
 A spot must sit on a chart cell that is not marked borderline (`*` in the chart). The validator reads the same cell
@@ -130,7 +145,9 @@ offsuit trash that folds, free checks in a limped big blind, and calls with hand
 ## Adding a spot
 
 1. Pick a decision that follows from the chart's documented strategy and is not near a boundary.
-2. Write the `before` list that reaches it at the chosen table size, then `position` and `situation`.
+2. Write the `before` list that reaches it at the chosen table size, then `position` and `situation`. For a postflop
+   spot, choose a hero line the chart plays: every hero preflop action must be the chart's action for that hand
+   (raise the hands it raises, fold or check the ones it folds), or the validator rejects the spot.
 3. Decide the action from the chart's reasoning, then write the justification in your own words.
 4. Run `npx vitest run tests/golden/`. The validator reports any malformed or borderline spot, and the runner
    reports any disagreement with the advice engine. If the engine disagrees, choose a clearer spot; never edit the
@@ -230,6 +247,93 @@ counts above are unchanged; the line and board are kept and only the hole cards 
 | `hu-river-btn-call-t5s` | `hu-river-btn-call-77`  | A pair of fives sits 8.6 points above the price; pocket sevens are 30.5 points above it (44.8% vs 14.3%).                    |
 | `fr-river-utg-bet-kjo`  | `fr-river-utg-bet-ajs`  | Second pair of kings is only 11.3 points above 50% against the calling range; top pair of aces has 98.2%, a clear value bet. |
 | `fr-river-utg-fold-ato` | `fr-river-utg-fold-jto` | Ace-ten high sits 5.9 points under the price; jack-ten high is 11.5 points under it (4.5% vs 16.0%).                         |
+
+## Changes from TASK-7.31 (chart-consistent hero lines)
+
+A postflop spot teaches the whole hand, so the hero's preflop line must be one the chart plays. 72 spots reached
+their decision through a hero preflop action the chart grades as a Major error. Each is replaced like-for-like on the
+same street, table size, recorded action, multiway status and observed-stats status, so the coverage counts above are
+unchanged. In order of preference: the hero takes the chart's action where the chart raises a hand the hero only
+called or checked (the id is kept and the opponents' responses follow the new raise); otherwise the line and board are
+kept and only the hole cards change; otherwise the line changes. Where the only hand found plays a borderline cell
+(five spots, all limps or small-blind opens), the step is a Minor error, which the rule allows. `6max-turn-bb-raise-92o`
+keeps its id and hand on a limped line where the big blind checks its option, and its justification now says kings
+full. Graded examples are not checked by this rule.
+
+| Old id                     | New id                     | Reason                                                                                                                                                                                                        |
+| -------------------------- | -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `6max-flop-co-bet-76o`     | `6max-flop-co-bet-76s`     | Major hero preflop step 3 `raise` (6-max CO unopened 76o: fold); step 7 `call` (6-max CO re-raise 76o: fold). Fix: same line and board, hole cards now 6c 7c.                                                 |
+| `6max-flop-btn-bet-aqo`    | `6max-flop-btn-bet-aqo`    | Major hero preflop step 4 `call` (6-max BTN raise AQo: raise). Fix: the button now re-raises the cutoff's open and the cutoff calls.                                                                          |
+| `6max-flop-bb-bet-aa`      | `6max-flop-bb-bet-aa`      | Major hero preflop step 6 `call` (6-max BB blind-defence AA: raise). Fix: the big blind now re-raises the small blind's open and the small blind calls.                                                       |
+| `6max-flop-btn-bet-97o`    | `6max-flop-btn-bet-99`     | Major hero preflop step 4 `raise` (6-max BTN raise 97o: fold). Fix: same line and board, hole cards now 9c 9h.                                                                                                |
+| `6max-flop-btn-bet-q8o`    | `6max-flop-btn-bet-q8s`    | Major hero preflop step 4 `raise` (6-max BTN unopened Q8o: fold). Fix: same line and board, hole cards now Qd 8d.                                                                                             |
+| `6max-flop-utg-check-a5o`  | `6max-flop-utg-check-a9o`  | Major hero preflop step 1 `call` (6-max UTG unopened A5o: fold). Fix: same line and board, hole cards now Ah 9c.                                                                                              |
+| `6max-flop-co-check-83o`   | `6max-flop-co-check-22`    | Major hero preflop step 3 `raise` (6-max CO unopened 83o: fold). Fix: same line and board, hole cards now 2c 2d.                                                                                              |
+| `6max-flop-co-call-a7o`    | `6max-flop-co-call-a7s`    | Major hero preflop step 3 `call` (6-max CO limpers A7o: fold). Fix: same line and board, hole cards now Ac 7c.                                                                                                |
+| `6max-flop-co-call-a6o`    | `6max-flop-co-call-a6s`    | Major hero preflop step 7 `call` (6-max CO re-raise A6o: fold). Fix: same line and board, hole cards now Ad 6d.                                                                                               |
+| `6max-flop-co-call-j7o`    | `6max-flop-co-call-44`     | Major hero preflop step 3 `raise` (6-max CO unopened J7o: fold). Fix: same line and board, hole cards now 4c 4s.                                                                                              |
+| `6max-flop-utg-fold-k9o`   | `6max-flop-utg-fold-k9s`   | Major hero preflop step 1 `call` (6-max UTG unopened K9o: fold). Fix: same line and board, hole cards now Kc 9c.                                                                                              |
+| `6max-flop-utg-fold-a3o`   | `6max-flop-utg-fold-a9o`   | Major hero preflop step 1 `call` (6-max UTG unopened A3o: fold). Fix: same line and board, hole cards now Ah 9c.                                                                                              |
+| `6max-flop-sb-fold-93o`    | `6max-flop-sb-fold-64s`    | Major hero preflop step 5 `raise` (6-max SB unopened 93o: fold). Fix: same line and board, hole cards now 6c 4c.                                                                                              |
+| `6max-flop-bb-fold-95o`    | `6max-flop-bb-fold-95o`    | Major hero preflop step 6 `call` (6-max BB blind-defence 95o: fold). Fix: no hole-card swap is clear-cut; the small blind now limps, the big blind checks its option and folds to the small blind's flop bet. |
+| `6max-flop-co-raise-jj`    | `6max-flop-co-raise-jj`    | Major hero preflop step 3 `call` (6-max CO limpers JJ: raise). Fix: the cutoff now raises the limper, and the big blind and the limper call.                                                                  |
+| `6max-flop-bb-raise-aa`    | `6max-flop-bb-raise-aa`    | Major hero preflop step 6 `call` (6-max BB blind-defence AA: raise). Fix: the big blind now re-raises the small blind's open and the small blind calls.                                                       |
+| `6max-flop-bb-raise-65o`   | `6max-flop-bb-raise-65s`   | Major hero preflop step 6 `call` (6-max BB blind-defence 65o: fold). Fix: same line and board, hole cards now 6c 5c.                                                                                          |
+| `6max-flop-btn-raise-97o`  | `6max-flop-btn-raise-97s`  | Major hero preflop step 4 `raise` (6-max BTN unopened 97o: fold). Fix: same line and board, hole cards now 9c 7c.                                                                                             |
+| `6max-flop-co-fold-j3o`    | `6max-flop-co-fold-j9s`    | Major hero preflop step 3 `call` (6-max CO limpers J3o: fold). Fix: same line and board, hole cards now Jd 9d.                                                                                                |
+| `6max-flop-hj-fold-t5o`    | `6max-flop-hj-fold-88`     | Major hero preflop step 2 `call` (6-max HJ raise T5o: fold). Fix: same line and board, hole cards now 8c 8h.                                                                                                  |
+| `6max-flop-hj-call-t5s`    | `6max-flop-hj-call-t9s`    | Major hero preflop step 2 `call` (6-max HJ raise T5s: fold). Fix: no hole-card swap is clear-cut; the hijack now opens Ts 9s, the button and big blind call, and the big blind leads.                         |
+| `6max-flop-btn-call-97o`   | `6max-flop-btn-call-76s`   | Major hero preflop step 4 `call` (6-max BTN raise-and-calls 97o: fold). Fix: same line and board, hole cards now 7c 6c.                                                                                       |
+| `hu-flop-bb-call-33`       | `hu-flop-bb-call-33`       | Major hero preflop step 2 `check` (heads-up BB limpers 33: raise). Fix: the big blind now raises the button's limp, the button calls, and the big blind leads the flop.                                       |
+| `hu-flop-btn-fold-73o`     | `hu-flop-btn-fold-73s`     | Major hero preflop step 1 `raise` (heads-up BTN unopened 73o: fold). Fix: same line and board, hole cards now 7c 3c.                                                                                          |
+| `fr-flop-utg-bet-kto`      | `fr-flop-utg-bet-kts`      | Major hero preflop step 1 `raise` (full-ring UTG unopened KTo: fold). Fix: same line and board, hole cards now Kc Tc.                                                                                         |
+| `fr-flop-mp-check-83o`     | `fr-flop-mp-check-44`      | Major hero preflop step 3 `call` (full-ring MP unopened 83o: fold). Fix: same line and board, hole cards now 4c 4d.                                                                                           |
+| `fr-flop-btn-check-j3s`    | `fr-flop-btn-check-kjs`    | Major hero preflop step 7 `call` (full-ring BTN raise J3s: fold). Fix: same line and board, hole cards now Kc Jc.                                                                                             |
+| `fr-flop-hj-call-j2o`      | `fr-flop-hj-call-qjs`      | Major hero preflop step 5 `call` (full-ring HJ limpers J2o: fold). Fix: same line and board, hole cards now Qc Jc.                                                                                            |
+| `fr-flop-bb-raise-a3o`     | `fr-flop-bb-raise-a3s`     | Major hero preflop step 9 `call` (full-ring BB blind-defence A3o: fold). Fix: same line and board, hole cards now Ac 3c.                                                                                      |
+| `fr-flop-btn-fold-87o`     | `fr-flop-btn-fold-66`      | Major hero preflop step 7 `call` (full-ring BTN raise 87o: fold). Fix: same line and board, hole cards now 6c 6d.                                                                                             |
+| `6max-turn-bb-bet-63s`     | `6max-turn-bb-bet-a3s`     | Major hero preflop step 6 `call` (6-max BB blind-defence 63s: fold). Fix: same line and board, hole cards now Ad 3d.                                                                                          |
+| `6max-turn-btn-bet-94o`    | `6max-turn-btn-bet-a4s`    | Major hero preflop step 4 `raise` (6-max BTN unopened 94o: fold). Fix: same line and board, hole cards now Ac 4c.                                                                                             |
+| `6max-turn-utg-bet-k3o`    | `6max-turn-utg-bet-a3s`    | Major hero preflop step 1 `raise` (6-max UTG unopened K3o: fold). Fix: same line and board, hole cards now Ad 3d.                                                                                             |
+| `6max-turn-btn-bet-86o`    | `6max-turn-btn-bet-ats`    | Major hero preflop step 4 `raise` (6-max BTN raise 86o: fold). Fix: same line and board, hole cards now Ac Tc.                                                                                                |
+| `6max-turn-utg-bet-a6o`    | `6max-turn-utg-bet-a6s`    | Major hero preflop step 1 `raise` (6-max UTG unopened A6o: fold). Fix: same line and board, hole cards now Ad 6d.                                                                                             |
+| `6max-turn-utg-check-92o`  | `6max-turn-utg-check-t9s`  | Major hero preflop step 1 `raise` (6-max UTG unopened 92o: fold). Fix: same line and board, hole cards now Tc 9c.                                                                                             |
+| `6max-turn-co-check-t7o`   | `6max-turn-co-check-a2s`   | Major hero preflop step 3 `raise` (6-max CO unopened T7o: fold); step 7 `call` (6-max CO re-raise T7o: fold). Fix: same line and board, hole cards now Ac 2c.                                                 |
+| `6max-turn-bb-check-85o`   | `6max-turn-bb-check-85s`   | Major hero preflop step 6 `call` (6-max BB blind-defence 85o: fold). Fix: same line and board, hole cards now 8c 5c.                                                                                          |
+| `6max-turn-co-fold-98o`    | `6max-turn-co-fold-a2s`    | Major hero preflop step 3 `raise` (6-max CO unopened 98o: fold). Fix: same line and board, hole cards now Ad 2d.                                                                                              |
+| `6max-turn-btn-fold-64o`   | `6max-turn-btn-fold-55`    | Major hero preflop step 4 `call` (6-max BTN raise 64o: fold). Fix: same line and board, hole cards now 5c 5d.                                                                                                 |
+| `6max-turn-bb-fold-93o`    | `6max-turn-bb-fold-k3s`    | Major hero preflop step 6 `call` (6-max BB blind-defence 93o: fold). Fix: same line and board, hole cards now Kc 3c.                                                                                          |
+| `6max-turn-utg-fold-82o`   | `6max-turn-utg-fold-a7s`   | Major hero preflop step 1 `raise` (6-max UTG unopened 82o: fold). Fix: same line and board, hole cards now Ac 7c.                                                                                             |
+| `6max-turn-utg-fold-k2o`   | `6max-turn-utg-fold-k9s`   | Major hero preflop step 1 `raise` (6-max UTG unopened K2o: fold). Fix: same line and board, hole cards now Kc 9c.                                                                                             |
+| `6max-turn-co-fold-j3s`    | `6max-turn-co-fold-22`     | Major hero preflop step 3 `raise` (6-max CO unopened J3s: fold); step 7 `call` (6-max CO re-raise J3s: fold). Fix: same line and board, hole cards now 2c 2d.                                                 |
+| `6max-turn-co-raise-a6o`   | `6max-turn-co-raise-a6s`   | Major hero preflop step 7 `call` (6-max CO re-raise A6o: fold). Fix: same line and board, hole cards now Ac 6c.                                                                                               |
+| `6max-turn-co-raise-t9o`   | `6max-turn-co-raise-t9s`   | Major hero preflop step 3 `raise` (6-max CO unopened T9o: fold); step 7 `call` (6-max CO re-raise T9o: fold). Fix: same line and board, hole cards now Tc 9c.                                                 |
+| `6max-turn-bb-raise-kk`    | `6max-turn-bb-raise-kk`    | Major hero preflop step 6 `call` (6-max BB blind-defence KK: raise). Fix: the big blind now re-raises the small blind's open and the small blind calls.                                                       |
+| `6max-turn-bb-raise-92o`   | `6max-turn-bb-raise-92o`   | Major hero preflop step 6 `call` (6-max BB blind-defence 92o: fold). Fix: the under-the-gun player now limps and the big blind checks its option (A-7); the justification says kings full.                    |
+| `6max-turn-bb-check-72o`   | `6max-turn-bb-check-k2s`   | Major hero preflop step 6 `call` (6-max BB blind-defence 72o: fold). Fix: same line and board, hole cards now Kc 2c.                                                                                          |
+| `hu-turn-btn-bet-k2o`      | `hu-turn-btn-bet-k2o`      | Major hero preflop step 1 `call` (heads-up BTN unopened K2o: raise). Fix: the button now raises and the big blind calls.                                                                                      |
+| `hu-turn-btn-check-73o`    | `hu-turn-btn-check-73s`    | Major hero preflop step 1 `raise` (heads-up BTN unopened 73o: fold). Fix: same line and board, hole cards now 7c 3c.                                                                                          |
+| `fr-turn-utg-bet-94o`      | `fr-turn-utg-bet-99`       | Major hero preflop step 1 `raise` (full-ring UTG unopened 94o: fold). Fix: same line and board, hole cards now 9c 9d.                                                                                         |
+| `fr-turn-hj-raise-86s`     | `fr-turn-hj-raise-a2s`     | Major hero preflop step 5 `raise` (full-ring HJ unopened 86s: fold). Fix: same line and board, hole cards now Ad 2d.                                                                                          |
+| `6max-river-bb-bet-aks`    | `6max-river-bb-bet-aks`    | Major hero preflop step 6 `call` (6-max BB blind-defence AKs: raise). Fix: the big blind now re-raises and the under-the-gun raiser calls.                                                                    |
+| `6max-river-sb-bet-j4o`    | `6max-river-sb-bet-j8s`    | Major hero preflop step 5 `raise` (6-max SB unopened J4o: fold). Fix: same line and board, hole cards now Jd 8d.                                                                                              |
+| `6max-river-sb-check-52o`  | `6max-river-sb-check-qjo`  | Major hero preflop step 5 `raise` (6-max SB unopened 52o: fold). Fix: same line and board, hole cards now Qd Jc.                                                                                              |
+| `6max-river-bb-check-93o`  | `6max-river-bb-check-43s`  | Major hero preflop step 6 `call` (6-max BB blind-defence 93o: fold). Fix: same line and board, hole cards now 4c 3c.                                                                                          |
+| `6max-river-co-check-72o`  | `6max-river-co-check-76s`  | Major hero preflop step 3 `raise` (6-max CO unopened 72o: fold). Fix: same line and board, hole cards now 7c 6c.                                                                                              |
+| `6max-river-bb-check-j5o`  | `6max-river-bb-check-53s`  | Major hero preflop step 6 `call` (6-max BB blind-defence J5o: fold). Fix: same line and board, hole cards now 5d 3d.                                                                                          |
+| `6max-river-btn-call-k6o`  | `6max-river-btn-call-88`   | Major hero preflop step 4 `call` (6-max BTN raise K6o: fold). Fix: same line and board, hole cards now 8d 8h.                                                                                                 |
+| `6max-river-utg-fold-92o`  | `6max-river-utg-fold-t9s`  | Major hero preflop step 1 `raise` (6-max UTG unopened 92o: fold). Fix: same line and board, hole cards now Ts 9s.                                                                                             |
+| `6max-river-btn-fold-t7o`  | `6max-river-btn-fold-76s`  | Major hero preflop step 4 `raise` (6-max BTN unopened T7o: fold). Fix: same line and board, hole cards now 7h 6h.                                                                                             |
+| `6max-river-utg-fold-t4o`  | `6max-river-utg-fold-jts`  | Major hero preflop step 1 `raise` (6-max UTG unopened T4o: fold). Fix: same line and board, hole cards now Jc Tc.                                                                                             |
+| `6max-river-btn-raise-q3s` | `6max-river-btn-raise-a3s` | Major hero preflop step 4 `raise` (6-max BTN unopened Q3s: fold). Fix: same line and board, hole cards now Ad 3d.                                                                                             |
+| `6max-river-sb-raise-53o`  | `6max-river-sb-raise-55`   | Major hero preflop step 5 `raise` (6-max SB unopened 53o: fold). Fix: same line and board, hole cards now 5c 5d.                                                                                              |
+| `6max-river-bb-raise-aks`  | `6max-river-bb-raise-aks`  | Major hero preflop step 6 `call` (6-max BB blind-defence AKs: raise). Fix: the big blind now re-raises the small blind's open and the small blind calls.                                                      |
+| `6max-river-bb-fold-63s`   | `6max-river-bb-fold-k6s`   | Major hero preflop step 6 `call` (6-max BB blind-defence 63s: fold). Fix: same line and board, hole cards now Kh 6h.                                                                                          |
+| `hu-river-bb-call-tt`      | `hu-river-bb-call-tt`      | Major hero preflop step 2 `check` (heads-up BB limpers TT: raise). Fix: the big blind now raises the button's limp, the button calls, and the big blind leads the flop.                                       |
+| `fr-river-bb-check-52o`    | `fr-river-bb-check-65s`    | Major hero preflop step 9 `call` (full-ring BB blind-defence 52o: fold). Fix: same line and board, hole cards now 6c 5c.                                                                                      |
+| `fr-river-bb-fold-t3o`     | `fr-river-bb-fold-43s`     | Major hero preflop step 9 `call` (full-ring BB blind-defence T3o: fold). Fix: same line and board, hole cards now 4h 3h.                                                                                      |
+| `fr-river-utg-call-t5o`    | `fr-river-utg-call-aks`    | Major hero preflop step 1 `raise` (full-ring UTG unopened T5o: fold). Fix: same line and board, hole cards now Ac Kc.                                                                                         |
+| `fr-river-utg-fold-jto`    | `fr-river-utg-fold-jts`    | Major hero preflop step 1 `raise` (full-ring UTG unopened JTo: fold). Fix: same line and board, hole cards now Jc Tc.                                                                                         |
 
 ## Originality
 

@@ -268,11 +268,50 @@ describe('postflop golden spot views', () => {
 
   it('finds a heads-up big blind hero on the second pass', () => {
     const spot = one(
-      base({ seats: 2, position: 'BB', before: ['raise', 'call'], holeCards: '9h 9d' }),
+      base({ seats: 2, position: 'BB', before: ['raise', 'raise', 'call'], holeCards: '9h 9d' }),
     );
     expect(spot.view.seat).toBe(2);
     expect(spot.view.holeCards).toEqual(parseCards('9h 9d'));
     expect(spot.view.board).toEqual(parseCards('Ah 8c 3d'));
+  });
+});
+
+describe('hero preflop line rule and guarded clear-cut check', () => {
+  it('hero preflop line rule and guarded clear-cut check', () => {
+    // 6-max BTN K7o unopened is a borderline fold-or-raise cell: a limp is a Minor error, so it is accepted.
+    const limp = base({
+      holeCards: 'Kh 7c',
+      before: ['fold', 'fold', 'fold', 'call', 'fold', 'check', 'check'],
+    });
+    expect(problemsOf(file(limp))).toEqual([]);
+
+    // A turn spot: the 72o open is Major; the hero's flop bet is not graded.
+    const turn = base({
+      holeCards: '7h 2s',
+      board: 'Ah 8c 3d Ks',
+      street: 'turn',
+      before: [...FLOP, 'check', 'bet', 'call', 'check'],
+    });
+    expect(problemsOf(file(turn))).toEqual([
+      `${P}: hero preflop step 4 "raise" is a Major error on the chart (6-max BTN unopened 72o: fold)`,
+    ]);
+
+    // Heads-up, the big blind re-raises 99 against the button's raise.
+    const huCall = base({
+      seats: 2,
+      position: 'BB',
+      before: ['raise', 'call'],
+      holeCards: '9h 9d',
+    });
+    expect(problemsOf(file(huCall))).toEqual([
+      `${P}: hero preflop step 2 "call" is a Major error on the chart (heads-up BB blind-defence 99: raise)`,
+    ]);
+
+    // Grading fold against a NaN equity throws inside the clear-cut check; only that spot is listed.
+    const nanEquity = numbers(Number.NaN, 20, 80);
+    expect(problemsOf(file(facing({ id: 'a' }), base({ id: 'b' })), nanEquity)).toEqual([
+      'Golden spot a: clear-cut check failed (equityPct must be a finite number, got NaN)',
+    ]);
   });
 });
 
