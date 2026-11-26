@@ -3,9 +3,11 @@ id: TASK-6.26
 title: >-
   Tidy after same-style bot replacement (dead Replay option, stale comments,
   style justifications)
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-25T05:57:00Z'
+updated_date: '2026-11-26T13:14:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -31,3 +33,14 @@ Follow-up from TASK-6.25 review and judge (doc-130). Since replacements keep the
 - [ ] #2 Given runner.ts and the Rock and Maniac style files, When read, Then the lineUp comment says replacements keep their style, the Rock CO raise justification names AJo, and the Maniac fold-to-call justification is one clear sentence
 - [ ] #3 Given tests/bots/replacement.acceptance.test.ts, When it runs, Then the same-style checks hold over a small fixed set of codes with the same check count
 <!-- AC:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. Remove dead replacedStylesOption from src/playtest/cli.ts; cli test compares with the normal mixed run (no live check lost)
+2. runner.ts lineUp comment: replacements keep their style
+3. Rock CO raise justification names ace-jack offsuit (AJo); Maniac fold-to-call one clear sentence
+4. replacement acceptance test over 8 fixed codes, same 18 assertions
+
+Full spec: doit/TASK-6.26/spec.md
+<!-- SECTION:PLAN:END -->

@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-25T04:20:00Z'
+updated_date: '2026-11-26T13:14:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -100,6 +100,8 @@ Judge R1 PASS 14/14 (own 10k-draw tallies per preset/size, forced post-replaceme
 Locked test re-pinned by TASK-6.17 Q-3 (auto-accepted; assertion count kept).
 
 Locked test(s) unlocked for TASK-6.25 (busted bot keeps its style; Maniac/Rock retune); expected values re-pinned one-for-one.
+
+tests/bots/replacement.acceptance.test.ts unlocked for TASK-6.26 AC#3 (fixed 8-code set, same assertions)
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary
