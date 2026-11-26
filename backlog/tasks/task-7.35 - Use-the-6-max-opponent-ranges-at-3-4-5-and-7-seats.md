@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-26T01:56:00Z'
-updated_date: '2026-11-26T09:47:00Z'
+updated_date: '2026-11-26T10:08:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -25,8 +25,8 @@ Follow-up from TASK-7.26 Q-4. After TASK-7.26 only 2, 6 and 8-10 seat tables hav
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Given a postflop spot at 3, 4, 5 or 7 dealt-in seats, When advice is computed with action ranges, Then it uses default typical-player ranges (6-max, keyed by referenceSizeOf) rather than every unseen combo, and the change to advice and bot play is measured and reviewed
-- [ ] #2 Given rangesFor, When called with every seat count from 2 to 10, Then it returns the heads-up ranges for 2, the full-ring ranges for 8-10 and the 6-max ranges for 3-7 (each count pinned by a test); and DEFAULT_RANGES is either used by rangesFor or no longer exported
+- [x] #1 Given a postflop spot at 3, 4, 5 or 7 dealt-in seats, When advice is computed with action ranges, Then it uses default typical-player ranges (6-max, keyed by referenceSizeOf) rather than every unseen combo, and the change to advice and bot play is measured and reviewed
+- [x] #2 Given rangesFor, When called with every seat count from 2 to 10, Then it returns the heads-up ranges for 2, the full-ring ranges for 8-10 and the 6-max ranges for 3-7 (each count pinned by a test); and DEFAULT_RANGES is either used by rangesFor or no longer exported
 <!-- AC:END -->
 
 ## Implementation Plan
@@ -49,4 +49,6 @@ AC added from TASK-7.26 follow-up (review MINOR + NIT)
 AC#2 (added by the orchestrator from TASK-7.26) reworded: it pinned 3/4/5/7 → null, which contradicts AC#1; it now pins every seat count to the ranges AC#1 requires.
 
 Build: rangesFor = DEFAULT_RANGES[referenceSizeOf(n)], 3-7 seats use 6-max ranges; WTSD at 4/5/7 seats back inside 30-42 over 100k; 3-seat VPIP 31.1 (preflop, out of scope) logged for follow-up; gate PASS
+
+Judge r1 PASS (10/10 SPEC items)
 <!-- SECTION:NOTES:END -->
