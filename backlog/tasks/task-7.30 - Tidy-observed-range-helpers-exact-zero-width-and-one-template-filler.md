@@ -1,7 +1,7 @@
 ---
 id: TASK-7.30
 title: 'Tidy observed-range helpers: exact zero width and one template filler'
-status: In Progress
+status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-23T19:21:00Z'
@@ -14,6 +14,8 @@ dependencies:
   - TASK-7.13
 references:
   - doc-104
+documentation:
+  - doc-165
 parent_task_id: TASK-7
 priority: low
 ordinal: 229000
@@ -48,4 +50,12 @@ Full spec: doit/TASK-7.30/spec.md
 Build: scaledWidthPct exact from 100 hands; fillTemplate moved to explanations.ts and used by basisText; playtest SHAs unchanged; gate PASS
 
 Judge r1 PASS (5/5 SPEC items)
+
+Follow-ups: none.
 <!-- SECTION:NOTES:END -->
+
+## Final Summary
+
+<!-- SECTION:FINAL_SUMMARY:BEGIN -->
+Moved exact-zero fix and single template filler: scaledWidthPct now returns the observed stat exactly from 100 hands (early return; below 100 unchanged), and basisText fills its placeholder through fillTemplate, now in explanations.ts and re-exported from explain.ts. Verified: npm test 1466 passed, typecheck/lint clean, playtest and --check-advice SHAs unchanged (0 mismatches over 26503 points), judge 5/5. Review assumptions A-1..A-3 (early return; phrase swap left alone; SHAs in build log). Risks: none; spec said 90 default ranges, actual 102.
+<!-- SECTION:FINAL_SUMMARY:END -->
