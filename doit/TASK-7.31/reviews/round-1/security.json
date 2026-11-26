@@ -1,0 +1,3 @@
+{"reviewer": "security", "round": 1,
+ "findings": [],
+ "summary": "No security findings. The change adds a validator rule (heroPreflopProblems) and a try/catch around clearCutProblems in src/advice/golden.ts, plus re-authored test data. golden.ts is imported only by tests/golden/*; the app never loads it, and its only input is repo-controlled JSON (spec section 8). The new message echoes the step through the existing echo() (truncated, typed), and rec fields are engine-derived enums or numbers. The loop is bounded by the already-validated `before` array and stops at the end of preflop or on an illegal action. The new catch fails closed: the spot is rejected with a problem, not accepted. No new dependencies, secrets, randomness, filesystem, network or shell use."}

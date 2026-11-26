@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-24T06:32:00Z'
-updated_date: '2026-11-26T04:58:00Z'
+updated_date: '2026-11-26T05:34:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -43,3 +43,9 @@ Follow-up from TASK-7.14 (doc-111). Many postflop golden spots reach their decis
 
 Full spec: doit/TASK-7.31/spec.md
 <!-- SECTION:PLAN:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+Build: validator rejects Major hero preflop steps; clear-cut throw becomes a problem; 72 spots re-authored (10 action fix, 59 hole swap, 2 line change, 92o kings-full); coverage pinned 120/45/40/35; gate PASS
+<!-- SECTION:NOTES:END -->

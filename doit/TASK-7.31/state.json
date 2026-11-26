@@ -4,7 +4,7 @@
   "branch": "doit/TASK-7.31",
   "base_commit": "5a1b2a39eb1c45f5acf867b6958927ae9d5cfc1c",
   "started": "2026-11-25T21:49:38",
-  "review_round": 0,
+  "review_round": 1,
   "judge_round": 0,
   "sendbacks": 0,
   "gate_runs": 1,
@@ -2059,5 +2059,13 @@
   },
   "history": [],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-7.31",
-  "spec_sha256": "ad9b4e18ec0031705b8c6d4ab1a2304de21594cb3942bcb646cbacf6382d11c6"
+  "spec_sha256": "ad9b4e18ec0031705b8c6d4ab1a2304de21594cb3942bcb646cbacf6382d11c6",
+  "review_findings": {
+    "1": 1
+  },
+  "brief_history": {
+    "tests/golden/postflop-spots.json:92o-omits-nines-full-of-fours": [
+      "review r1"
+    ]
+  }
 }
