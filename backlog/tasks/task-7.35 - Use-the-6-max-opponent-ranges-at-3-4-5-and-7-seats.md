@@ -1,17 +1,19 @@
 ---
 id: TASK-7.35
 title: Use the 6-max opponent ranges at 3, 4, 5 and 7 seats
-status: In Progress
+status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-26T01:56:00Z'
-updated_date: '2026-11-26T10:08:00Z'
+updated_date: '2026-11-26T10:09:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
 milestone: m-1
 dependencies:
   - TASK-7.26
+documentation:
+  - doc-158
 parent_task_id: TASK-7
 priority: medium
 ordinal: 254000
@@ -51,4 +53,12 @@ AC#2 (added by the orchestrator from TASK-7.26) reworded: it pinned 3/4/5/7 → 
 Build: rangesFor = DEFAULT_RANGES[referenceSizeOf(n)], 3-7 seats use 6-max ranges; WTSD at 4/5/7 seats back inside 30-42 over 100k; 3-seat VPIP 31.1 (preflop, out of scope) logged for follow-up; gate PASS
 
 Judge r1 PASS (10/10 SPEC items)
+
+Follow-ups: TASK-7.37 created (3/4-seat preflop VPIP). 4-seat WTSD 42.5@10k is noise (41.5@100k), not tracked.
 <!-- SECTION:NOTES:END -->
+
+## Final Summary
+
+<!-- SECTION:FINAL_SUMMARY:BEGIN -->
+rangesFor now returns the 6-max ranges at 3-7 seats (heads-up at 2, full-ring at 8-10), so advice and bots at 3/4/5/7 seats use typical-player ranges instead of every unseen hand. Verified: npm test 1454 pass, e2e 383 pass, lint/typecheck clean, judge 10/10; 2/6/9-seat output byte-identical to base. Measured 10k all-TAG: WTSD at 4/5/7 seats drops from 44-46.5 to 40-42.5 and runs are about 30% faster. Assumptions: none; AC#2 was reworded by the orchestrator. Remaining misses: 3-seat VPIP 31.1, 4-seat VPIP 28.1 (preflop chart, out of scope), 4-seat WTSD 42.5 at 10k (41.5 at 100k). Follow-ups: tighten the short-handed preflop opening range; no existing task owns it.
+<!-- SECTION:FINAL_SUMMARY:END -->
