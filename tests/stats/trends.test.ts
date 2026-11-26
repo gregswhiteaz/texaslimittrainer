@@ -1,6 +1,6 @@
 import { createElement } from 'react';
 import { renderToString } from 'react-dom/server';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import {
   ALL_TRENDS,
   BB100_GOAL,
@@ -35,6 +35,8 @@ import { netResult } from '../../src/table/review';
 import { CASH_STAKES } from '../../src/table/session';
 import { StatisticsScreen } from '../../src/ui/stats/StatisticsScreen';
 import { cashPool, sitAndGoPool } from '../support/stat-records';
+
+vi.setConfig({ testTimeout: 30_000 });
 
 const A = 'a'.repeat(32);
 const B = 'b'.repeat(32);

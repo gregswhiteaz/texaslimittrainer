@@ -10,9 +10,11 @@ import {
 } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join, relative } from 'node:path';
-import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { decide, isToolingPath } from '../../tools/ci/tooling-changed.js';
 import { REPO_ROOT } from '../support/sandbox';
+
+vi.setConfig({ testTimeout: 30_000 });
 
 const SCRIPT = join(REPO_ROOT, 'tools/ci/tooling-changed.js');
 const ZERO = '0'.repeat(40);

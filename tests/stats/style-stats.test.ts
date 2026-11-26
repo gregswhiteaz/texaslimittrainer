@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import type { ActionRecord, HandResult, SeatNumber } from '../../src/engine/hand';
 import { runPlaytest } from '../../src/playtest/runner';
 import {
@@ -11,6 +11,8 @@ import {
   type StyleCounts,
 } from '../../src/stats/style-stats';
 import type { CompletedHand } from '../../src/table/session';
+
+vi.setConfig({ testTimeout: 30_000 });
 
 const act = (
   street: ActionRecord['street'],

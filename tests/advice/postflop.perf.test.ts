@@ -5,7 +5,9 @@
 // enforces no speed limit.
 // Times are process CPU time (cpuNowMs in tests/support/speed.ts), so other busy processes do not inflate them.
 import { describe, expect, it } from 'vitest';
+import { computeEquity } from '../../src/advice/equity';
 import { recommendPostflop, type PostflopOptions } from '../../src/advice/postflop';
+import { callingRange, unseenCombos } from '../../src/advice/ranges';
 import { ACTION_RANGE_ADVICE } from '../../src/advice/recommend';
 import { applyAction, createHand, type Action, type SeatNumber } from '../../src/engine/hand';
 import { playerView, type PlayerView } from '../../src/engine/player-view';
@@ -13,6 +15,9 @@ import { cpuNowMs, SPEED_LIMITS_NOT_ENFORCED, speedLimitsEnforced } from '../sup
 
 const SCALE = Number(process.env.ADVICE_PERF_SCALE ?? 20);
 const RUNS = 20;
+// Untimed calls first: process CPU time also counts V8's background compiler threads (TASK-7.18 D-3).
+const WARMUP_RUNS = 15;
+const SLOW = process.env.TLH_SLOW_TESTS === '1';
 const ENFORCED = speedLimitsEnforced();
 const STAKES_4_8 = { smallBlind: 2, bigBlind: 4, smallBet: 4, bigBet: 8 };
 const ORDERED_DECK = Array.from({ length: 52 }, (_, i) => i);
@@ -77,12 +82,15 @@ const SCENARIOS: [string, PlayerView, number][] = [
 function slowScenarios(
   scenarios: [string, PlayerView, number][],
   options?: PostflopOptions,
+  owed = true,
 ): string[] {
   const failures: string[] = [];
   if (!ENFORCED) console.log(SPEED_LIMITS_NOT_ENFORCED);
   for (const [name, view, targetMs] of scenarios) {
     const first = recommendPostflop(view, options);
-    expect(first.callAmount, name).toBeGreaterThan(0);
+    if (owed) expect(first.callAmount, name).toBeGreaterThan(0);
+    else expect(first.callAmount, name).toBe(0);
+    for (let i = 1; i < WARMUP_RUNS; i++) recommendPostflop(view, options);
     const times: number[] = [];
     for (let i = 0; i < RUNS; i++) {
       const start = cpuNowMs();
@@ -99,6 +107,11 @@ function slowScenarios(
   }
   return failures;
 }
+
+/** Nothing owed: the flop is checked to the SB (seat 2), so `bet` is legal (TASK-7.18 A-4). */
+const VALUE_BET_SCENARIOS: [string, PlayerView, number][] = [
+  ['10-seat flop checked to the SB vs 9 opponents', viewAfter(10, fullRingPreflop), 100],
+];
 
 /** Action-range scenarios (TASK-7.5 spec SPEC-14): six seats, so the authored ranges apply. */
 const ACTION_SCENARIOS: [string, PlayerView, number][] = [
@@ -135,6 +148,28 @@ describe('postflop advice performance', () => {
   it('postflop advice latency within target times slack', () => {
     expect(slowScenarios(SCENARIOS)).toEqual([]);
   }, 120_000);
+
+  // Opt-in slow (TLH_SLOW_TESTS=1, in `npm run test:slow`).
+  it.runIf(SLOW)(
+    'value-bet postflop advice latency within target times slack',
+    () => {
+      const [[, view]] = VALUE_BET_SCENARIOS as [[string, PlayerView, number]];
+      expect(view.legalActions.some((a) => a.type === 'bet')).toBe(true);
+      // The calling-range run throws, so A-7 falls back to the whole-range number.
+      const calling = callingRange(unseenCombos([...view.holeCards, ...view.board]), view.board);
+      expect(() =>
+        computeEquity({
+          hero: view.holeCards,
+          board: view.board,
+          opponents: new Array<typeof calling>(9).fill(calling),
+        }),
+      ).toThrow(new RangeError('Sampling rejected too many deals'));
+      const advice = recommendPostflop(view);
+      expect(advice.equityVsCallingRangePct).toBe(advice.equityPct);
+      expect(slowScenarios(VALUE_BET_SCENARIOS, undefined, false)).toEqual([]);
+    },
+    120_000,
+  );
 
   it('actions-mode postflop advice latency within target times slack', () => {
     expect(slowScenarios(ACTION_SCENARIOS, ACTION_RANGE_ADVICE)).toEqual([]);

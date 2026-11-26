@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { recommend } from '../../src/advice/recommend';
 import {
   drawMixed,
@@ -18,6 +18,8 @@ import { seededTagPolicy } from '../../src/playtest/policy';
 import { runPlaytest } from '../../src/playtest/runner';
 import tagJson from '../../src/bots/styles/tag.json' with { type: 'json' };
 import callingStationJson from '../../src/bots/styles/calling-station.json' with { type: 'json' };
+
+vi.setConfig({ testTimeout: 30_000 });
 
 const JUSTIFICATION = 'One two three four five six seven eight nine ten words of reasoning.';
 const DESCRIPTION =

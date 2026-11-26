@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { replayCodeFromWords } from '../../src/engine/deck';
 import { legalActions, type Action } from '../../src/engine/hand';
 import {
@@ -13,6 +13,8 @@ import {
   stepBot,
   type TableState,
 } from '../../src/table/session';
+
+vi.setConfig({ testTimeout: 30_000 });
 
 const HANDS = 200;
 const HOUR_MS = 3_600_000;

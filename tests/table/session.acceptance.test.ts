@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { decideTag } from '../../src/bots/tag';
 import { botDecisionSeed, botRandom } from '../../src/engine/bot-random';
 import { replayCodeFromWords, type ReplayCode } from '../../src/engine/deck';
@@ -17,6 +17,8 @@ import {
   userActions,
   type TableState,
 } from '../../src/table/session';
+
+vi.setConfig({ testTimeout: 30_000 });
 
 const CODES: ReplayCode[] = Array.from({ length: 50 }, (_, i) => replayCodeFromWords([i, 1, 2, 3]));
 

@@ -1,7 +1,8 @@
 import fc from 'fast-check';
+import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import {
   canonicalise,
   canonicalKey,
@@ -11,11 +12,15 @@ import {
   EXACT_EVALUATION_LIMIT,
   estimateEvaluations,
   SAMPLE_TRIALS,
+  SAMPLER_ABORT_Z,
+  SAMPLER_CHECK_EVERY,
   sampledEquity,
+  rejectionsOverBudget,
   type EquityInput,
   type HoleCards,
   type Range,
 } from '../../src/advice/equity';
+import { callingRange, unseenCombos } from '../../src/advice/ranges';
 import { BOT_EQUITY, BOT_EQUITY_BUDGET } from '../../src/bots/tag';
 import { parseCards, type Card } from '../../src/engine/cards';
 import { fnv1a32 } from '../../src/engine/seeded-random';
@@ -23,6 +28,8 @@ import { evaluate } from '../../src/engine/hand-evaluator';
 import { enumerateExact } from '../../tools/equity/generate-reference.js';
 import { REPO_ROOT } from '../support/sandbox';
 import { cpuNowMs, speedLimitsEnforced } from '../support/speed';
+
+vi.setConfig({ testTimeout: 30_000 });
 
 function hole(text: string): HoleCards {
   const [a = -1, b = -1] = parseCards(text);
@@ -331,5 +338,45 @@ describe('equityWithBudget', () => {
       const c = canonicalise(x);
       expect(deriveSeed(c)).toBe(fnv1a32(canonicalKey(c)));
     }
+  });
+});
+
+describe('sampler speed-up (TASK-7.18)', () => {
+  const flop = parseCards('Qh 7h 2c');
+  const unseen = unseenCombos([...hole('Ah Kh'), ...flop]);
+  const calling = callingRange(unseen, flop);
+  const ranges = (opponents: number, r: Range): EquityInput =>
+    input('Ah Kh', 'Qh 7h 2c', ...new Array<Range>(opponents).fill(r));
+
+  it('sampled results are byte-identical to the pre-TASK-7.18 sampler', () => {
+    const sixMax = input('Ah Kh', '', ...new Array<Range>(5).fill(everyCombo(hole('Ah Kh'))));
+    const results = [
+      computeEquity(input('As Ks', '', range('Qh Qd'))),
+      computeEquity(ranges(1, unseen)),
+      computeEquity(sixMax),
+      computeEquity(ranges(9, unseen)),
+      computeEquity(ranges(8, calling)),
+      BOT_EQUITY(sixMax),
+    ];
+    expect(results.every((r) => r.method === 'sampled')).toBe(true);
+    // Pinned at base commit 6622918 (build-log.md).
+    expect(createHash('sha256').update(JSON.stringify(results)).digest('hex')).toBe(
+      'fd3c9bf34e17bddbacd0404432f8901b42187bcd53d6b8b90bc06515ed859daa',
+    );
+  });
+
+  it('sampler aborts early only when the rejection cap cannot be met', () => {
+    expect(SAMPLER_CHECK_EVERY).toBe(8192);
+    expect(SAMPLER_ABORT_Z).toBe(8);
+    // Spec §5 worked examples.
+    expect(rejectionsOverBudget(0, 8_192, 30_000, 3_000_000)).toBe(true);
+    expect(rejectionsOverBudget(147, 24_576, 30_000, 3_000_000)).toBe(false);
+    expect(rejectionsOverBudget(150, 32_768, 30_000, 3_000_000)).toBe(true);
+    expect(rejectionsOverBudget(1_000, 32_768, 30_000, 3_000_000)).toBe(false);
+    expect(rejectionsOverBudget(0, 8_192, 500, 50_000)).toBe(true);
+    expect(rejectionsOverBudget(40, 8_192, 500, 50_000)).toBe(false);
+
+    expectRangeError(() => computeEquity(ranges(9, calling)), 'Sampling rejected too many deals');
+    expect(computeEquity(ranges(9, unseen))).toMatchObject({ method: 'sampled', trials: 30_000 });
   });
 });

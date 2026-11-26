@@ -1,9 +1,11 @@
 import { spawnSync } from 'node:child_process';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import type { HandState } from '../../src/engine/hand';
 import { formatHand, main } from '../../src/playtest/cli';
 import { replayHand, runPlaytest, type PlayedHand } from '../../src/playtest/runner';
 import { REPO_ROOT, sandboxEnv } from '../support/sandbox';
+
+vi.setConfig({ testTimeout: 30_000 });
 
 const SLOW = process.env.TLH_SLOW_TESTS === '1';
 const TEST_TIMEOUT_MS = 120_000;

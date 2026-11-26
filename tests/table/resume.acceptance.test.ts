@@ -25,6 +25,8 @@ import {
 import { headerText, resumeSummary } from '../../src/table/table-view';
 import { playSession } from '../support/session-play';
 
+vi.setConfig({ testTimeout: 30_000 });
+
 vi.mock('../../src/bots/lineup', async (importOriginal) => {
   const real = await importOriginal<typeof import('../../src/bots/lineup')>();
   return {

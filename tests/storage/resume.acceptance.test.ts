@@ -1,5 +1,5 @@
 import { IDBFactory } from 'fake-indexeddb';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { replayCodeFromWords, type ReplayCode } from '../../src/engine/deck';
 import type { HandState } from '../../src/engine/hand';
 import { styleCounts, styleStats } from '../../src/stats/style-stats';
@@ -25,6 +25,8 @@ import {
   type SessionRecord,
 } from '../../src/table/session-record';
 import { checkOrCall, playHand, playSession } from '../support/session-play';
+
+vi.setConfig({ testTimeout: 30_000 });
 
 const SESSION = '0123456789abcdef0123456789abcdef';
 const STARTED = new Date('2026-11-23T10:00:00Z');

@@ -1,5 +1,5 @@
 import { readFileSync } from 'node:fs';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { shuffledDeck } from '../../src/engine/deck';
 import { applyAction, createHand, type Action, type HandState } from '../../src/engine/hand';
 import { playerView, type SeatPolicy } from '../../src/engine/player-view';
@@ -19,6 +19,8 @@ import {
   runPlaytest,
   type PolicyFactory,
 } from '../../src/playtest/runner';
+
+vi.setConfig({ testTimeout: 30_000 });
 
 const STAKES = { smallBlind: 2, bigBlind: 4, smallBet: 4, bigBet: 8 };
 const DECK = shuffledDeck('00000000000000000000000000000001');

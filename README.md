@@ -231,6 +231,20 @@ machine (Apple-silicon Mac, Node 22.18.0) with `CI` unset:
   EQUITY_PERF_SCALE=1 npx vitest run tests/advice/equity.perf.test.ts
   ```
 
+  Headroom check: every scenario's p95 within 75% of its target.
+
+  ```sh
+  EQUITY_PERF_SCALE=0.75 npx vitest run tests/advice/equity.perf.test.ts
+  ```
+
+- Postflop advice: every scenario's p95 within its target at scale 1 (targets listed in the test
+  file). The 10-seat value-bet scenario is opt-in (`TLH_SLOW_TESTS=1`, also run by
+  `npm run test:slow`). Headroom check: the 10-seat flop vs 9 opponents p95 within 75 ms.
+
+  ```sh
+  TLH_SLOW_TESTS=1 ADVICE_PERF_SCALE=1 npx vitest run tests/advice/postflop.perf.test.ts
+  ```
+
 - Playtest: 100,000 6-max hands in at most 60 minutes. Measured 4.8 s (real) on an Apple M4 Pro
   with Node 22.18.0. The 60-minute check is opt-in: run `npm run test:slow` (it sets
   `TLH_SLOW_TESTS=1`). It is a speed guard, not a real play scenario, so it is kept out of

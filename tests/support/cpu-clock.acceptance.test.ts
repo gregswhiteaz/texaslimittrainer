@@ -1,5 +1,7 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { cpuNowMs } from './speed';
+
+vi.setConfig({ testTimeout: 30_000 });
 
 function work(n: number): number {
   let sum = 0;

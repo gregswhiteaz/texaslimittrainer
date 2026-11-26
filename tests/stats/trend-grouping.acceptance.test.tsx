@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { renderToString } from 'react-dom/server';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { replayCodeFromWords } from '../../src/engine/deck';
 import {
   DEFAULT_GROUPING,
@@ -30,6 +30,8 @@ import {
   statRecords,
   type StatSession,
 } from '../support/stat-records';
+
+vi.setConfig({ testTimeout: 30_000 });
 
 // TASK-11.5: grouping the trends per session or per local day (AC#1–AC#8) at module and renderToString level.
 

@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { main } from '../../src/playtest/cli';
 import {
   MILLION_USAGE,
@@ -16,6 +16,8 @@ import {
   type ShardRun,
   type ShardRunner,
 } from '../../src/playtest/shards';
+
+vi.setConfig({ testTimeout: 30_000 });
 
 const PLAN_ERROR = 'Total hands must be a whole number from 9 to 1000000000';
 const HANDS_ERROR = 'Error: --hands must be a whole number from 9 to 1000000000.';

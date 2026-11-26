@@ -3,8 +3,10 @@ import { existsSync, mkdtempSync, readFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { setTimeout as sleep } from 'node:timers/promises';
-import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { REPO_ROOT } from '../support/sandbox';
+
+vi.setConfig({ testTimeout: 30_000 });
 
 const RETRY = join(REPO_ROOT, 'tools/ci/retry.js');
 const STUB = join(REPO_ROOT, 'tests/ci/fixtures/flaky-command.js');

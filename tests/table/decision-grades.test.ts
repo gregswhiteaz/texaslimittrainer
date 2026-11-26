@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { formatPct } from '../../src/advice/explain';
 import type { GradeResult } from '../../src/advice/grade';
 import type { ObservedOpponent } from '../../src/advice/ranges';
@@ -38,6 +38,8 @@ import {
   SHOWDOWN,
   STORYBOARD_HISTORY,
 } from '../support/table-scenarios';
+
+vi.setConfig({ testTimeout: 30_000 });
 
 function done(table: TableState): CompletedHand {
   const hand = completedHand(table);

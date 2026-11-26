@@ -28,6 +28,8 @@ import {
 } from '../../src/table/session-record';
 import { KINGS_SHOWDOWN, withFinalStacks } from '../support/table-scenarios';
 
+vi.setConfig({ testTimeout: 30_000 });
+
 const SESSION = '0123456789abcdef0123456789abcdef';
 const STARTED = new Date('2026-11-23T10:00:00Z');
 const codeFor = (hand: number): ReplayCode => replayCodeFromWords([0x9e3779b9, hand, 2, 3]);

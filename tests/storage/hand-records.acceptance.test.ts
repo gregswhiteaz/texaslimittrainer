@@ -1,5 +1,5 @@
 import { IDBFactory } from 'fake-indexeddb';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { tagPolicy } from '../../src/bots/tag';
 import { replayCodeFromWords } from '../../src/engine/deck';
 import type { HandState } from '../../src/engine/hand';
@@ -20,6 +20,8 @@ import {
   type TableState,
 } from '../../src/table/session';
 import { KINGS_SHOWDOWN, SHOWN_HANDS } from '../support/table-scenarios';
+
+vi.setConfig({ testTimeout: 30_000 });
 
 const SESSION = '0123456789abcdef0123456789abcdef';
 

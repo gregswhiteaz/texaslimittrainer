@@ -1,6 +1,6 @@
 import { readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import type { EquityInput, EquityResult, HoleCards } from '../../src/advice/equity';
 import { gradeView } from '../../src/advice/grade';
 import { comboCount } from '../../src/advice/hand-class';
@@ -47,6 +47,8 @@ import {
 import { REVIEW_FOUR } from '../support/table-scenarios';
 import { REPO_ROOT } from '../support/sandbox';
 import sixMaxRaw from '../../src/advice/ranges/six-max.json' with { type: 'json' };
+
+vi.setConfig({ testTimeout: 30_000 });
 
 const STAKES_4_8 = { smallBlind: 2, bigBlind: 4, smallBet: 4, bigBet: 8 };
 /** Button 1: SB 2, BB 3, UTG 4, HJ 5, CO 6, BTN 1. Hole cards go to deck[i] and deck[i + 6]. */

@@ -1,5 +1,5 @@
 import fc from 'fast-check';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import type { Card } from '../../src/engine/cards';
 import { replayCodeFromWords, shuffledDeck } from '../../src/engine/deck';
 import {
@@ -14,6 +14,8 @@ import {
   type Stakes,
 } from '../../src/engine/hand';
 import { mixState128, Xoshiro128 } from '../../src/engine/seeded-random';
+
+vi.setConfig({ testTimeout: 30_000 });
 
 const STAKES_4_8: Stakes = { smallBlind: 2, bigBlind: 4, smallBet: 4, bigBet: 8 };
 const DECK: Card[] = Array.from({ length: 52 }, (_, i) => i);

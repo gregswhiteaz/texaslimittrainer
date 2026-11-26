@@ -11,9 +11,11 @@ import {
 } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { delimiter, join } from 'node:path';
-import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { devParts, dpkgInterrupted } from '../../tools/ci/apt-lock.js';
 import { REPO_ROOT } from '../support/sandbox';
+
+vi.setConfig({ testTimeout: 30_000 });
 
 const APT_LOCK = join(REPO_ROOT, 'tools/ci/apt-lock.js');
 

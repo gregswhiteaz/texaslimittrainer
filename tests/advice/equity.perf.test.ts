@@ -1,5 +1,7 @@
 // Real targets: the p95 targets in SCENARIOS (scale 1). They are enforced only by
 //   EQUITY_PERF_SCALE=1 npx vitest run tests/advice/equity.perf.test.ts
+// and the 25% headroom check (TASK-7.18 AC#1) by
+//   EQUITY_PERF_SCALE=0.75 npx vitest run tests/advice/equity.perf.test.ts
 // run with CI unset on the reference machine (Apple-silicon Mac, Node 22.18.0). Local `npm test`
 // enforces only the targets times the slack scale below. CI (CI=true) prints the numbers but
 // enforces no speed limit.
@@ -11,6 +13,8 @@ import { cpuNowMs, SPEED_LIMITS_NOT_ENFORCED, speedLimitsEnforced } from '../sup
 
 const SCALE = Number(process.env.EQUITY_PERF_SCALE ?? 20);
 const RUNS = 20;
+// Untimed calls first: process CPU time also counts V8's background compiler threads (TASK-7.18 D-3).
+const WARMUP_RUNS = 15;
 const ENFORCED = speedLimitsEnforced();
 
 function hole(text: string): HoleCards {
@@ -58,6 +62,7 @@ describe('equity performance', () => {
     if (!ENFORCED) console.log(SPEED_LIMITS_NOT_ENFORCED);
     for (const [name, input, method, targetMs] of SCENARIOS) {
       const used = computeEquity(input).method;
+      for (let i = 1; i < WARMUP_RUNS; i++) computeEquity(input);
       const times: number[] = [];
       for (let i = 0; i < RUNS; i++) {
         const start = cpuNowMs();

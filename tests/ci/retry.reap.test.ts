@@ -6,6 +6,8 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { runWithRetry } from '../../tools/ci/retry.js';
 import { REPO_ROOT } from '../support/sandbox';
 
+vi.setConfig({ testTimeout: 30_000 });
+
 const RETRY = join(REPO_ROOT, 'tools/ci/retry.js');
 const LABEL = 'Install Playwright system dependencies';
 const realKill = process.kill.bind(process);

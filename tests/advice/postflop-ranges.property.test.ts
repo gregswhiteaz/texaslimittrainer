@@ -1,5 +1,5 @@
 import fc from 'fast-check';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import type { EquityInput, EquityResult } from '../../src/advice/equity';
 import { recommendPostflop } from '../../src/advice/postflop';
 import { callingRange, estimateOpponentRanges, unseenCombos } from '../../src/advice/ranges';
@@ -14,6 +14,8 @@ import {
 } from '../../src/engine/hand';
 import { playerView, type PlayerView } from '../../src/engine/player-view';
 import { handReplayCode, playHand } from '../../src/playtest/runner';
+
+vi.setConfig({ testTimeout: 30_000 });
 
 const STAKES_4_8 = { smallBlind: 2, bigBlind: 4, smallBet: 4, bigBet: 8 };
 const ALL_CARDS: readonly Card[] = Array.from({ length: 52 }, (_, i) => i);

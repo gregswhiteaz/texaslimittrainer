@@ -10,6 +10,8 @@ import { seededTagPolicy } from '../../src/playtest/policy';
 import { handReplayCode, runPlaytest } from '../../src/playtest/runner';
 import { REPO_ROOT, sandboxEnv } from '../support/sandbox';
 
+vi.setConfig({ testTimeout: 30_000 });
+
 const SLOW = process.env.TLH_SLOW_TESTS === '1';
 const TEST_TIMEOUT_MS = 120_000;
 

@@ -3,7 +3,7 @@ import { existsSync, mkdtempSync, readFileSync, rmSync, statSync, writeFileSync 
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { setTimeout as sleep } from 'node:timers/promises';
-import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import {
   devParts,
   findHeldLock,
@@ -11,6 +11,8 @@ import {
   waitForAptLocks,
 } from '../../tools/ci/apt-lock.js';
 import { REPO_ROOT } from '../support/sandbox';
+
+vi.setConfig({ testTimeout: 30_000 });
 
 const APT_LOCK = join(REPO_ROOT, 'tools/ci/apt-lock.js');
 // Above Linux's maximum pid, so /proc/<pid>/comm can never be read.

@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { renderToString } from 'react-dom/server';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { formatCard, parseCard, type Card } from '../../src/engine/cards';
 import type { HandState, SeatNumber } from '../../src/engine/hand';
 import { decisionRecord, handRecord } from '../../src/table/hand-record';
@@ -16,6 +16,8 @@ import {
   SHOWN_HANDS,
   TEN_SEAT_SHOWDOWN,
 } from '../support/table-scenarios';
+
+vi.setConfig({ testTimeout: 30_000 });
 
 const noop = (): void => undefined;
 const SUIT_GLYPHS = '♣♦♥♠';

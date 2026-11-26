@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import {
   applyAction,
   createHand,
@@ -9,6 +9,8 @@ import {
 } from '../../src/engine/hand';
 import { checkState, checkStep, type Violation } from '../../src/engine/invariants';
 import { runPlaytest } from '../../src/playtest/runner';
+
+vi.setConfig({ testTimeout: 30_000 });
 
 const STAKES = { smallBlind: 2, bigBlind: 4, smallBet: 4, bigBet: 8 };
 

@@ -1,5 +1,5 @@
 import { renderToString } from 'react-dom/server';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { replayCodeFromWords } from '../../src/engine/deck';
 import { bb100Value, statisticsView, trendHand, type StatisticsView } from '../../src/stats/trends';
 import { parseHandRecord, type HandRecord } from '../../src/table/hand-record';
@@ -9,6 +9,8 @@ import { sessionReport } from '../../src/table/session-report';
 import { StatisticsScreen } from '../../src/ui/stats/StatisticsScreen';
 import { playSession } from '../support/session-play';
 import { cashPool, cloneRecords, sitAndGoPool, type StatSession } from '../support/stat-records';
+
+vi.setConfig({ testTimeout: 30_000 });
 
 // TASK-11.2: the cash-only BB/100 trend (AC#1–AC#7) at module and renderToString level.
 

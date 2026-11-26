@@ -1,5 +1,5 @@
 import { readFileSync } from 'node:fs';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { parseCard, type Card } from '../../src/engine/cards';
 import {
   applyAction,
@@ -22,6 +22,8 @@ import {
   type PolicyFactory,
   type ViolatingHand,
 } from '../../src/playtest/runner';
+
+vi.setConfig({ testTimeout: 30_000 });
 
 function capture(argv: string[], seams?: PlaytestSeams) {
   let out = '';

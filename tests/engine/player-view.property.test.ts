@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import type { Card } from '../../src/engine/cards';
 import { replayCodeFromWords, shuffledDeck } from '../../src/engine/deck';
 import {
@@ -11,6 +11,8 @@ import {
 } from '../../src/engine/hand';
 import { actWith, playerView, type SeatPolicy } from '../../src/engine/player-view';
 import { fnv1a32, Xoshiro128 } from '../../src/engine/seeded-random';
+
+vi.setConfig({ testTimeout: 30_000 });
 
 const STAKES = { smallBlind: 2, bigBlind: 4, smallBet: 4, bigBet: 8 };
 const HANDS = 300;

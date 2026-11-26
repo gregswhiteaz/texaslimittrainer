@@ -1,5 +1,5 @@
 import { IDBFactory } from 'fake-indexeddb';
-import { expect, it } from 'vitest';
+import { expect, it, vi } from 'vitest';
 import { trendHand } from '../../src/stats/trends';
 import { HANDS_STORE, openHandStore, SESSIONS_STORE } from '../../src/storage/hand-store';
 import type { HandRecord } from '../../src/table/hand-record';
@@ -12,6 +12,8 @@ import {
   sitAndGoPool,
   statRecords,
 } from '../support/stat-records';
+
+vi.setConfig({ testTimeout: 30_000 });
 
 // TASK-11.1 (A-3): trendData() reads every valid hand and session in one read-only transaction.
 

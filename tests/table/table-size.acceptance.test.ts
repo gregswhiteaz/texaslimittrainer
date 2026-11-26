@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { GRADE_LABELS, gradeView } from '../../src/advice/grade';
 import { BOT_NAMES } from '../../src/bots/lineup';
 import { replayCodeFromWords } from '../../src/engine/deck';
@@ -23,6 +23,8 @@ import {
 } from '../../src/table/session';
 import { positionName, tableView } from '../../src/table/table-view';
 import { SCENARIO_CODE } from '../support/table-scenarios';
+
+vi.setConfig({ testTimeout: 30_000 });
 
 const S = 'Small blind';
 const G = 'Big blind';

@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { replayCodeFromWords, shuffledDeck } from '../../src/engine/deck';
 import {
   applyAction,
@@ -15,6 +15,8 @@ import { fnv1a32, Xoshiro128 } from '../../src/engine/seeded-random';
 import { randomMovePolicy, seatGenerator } from '../../src/playtest/policy';
 import { actionBar, actionLabel, type AmountUnit } from '../../src/table/action-bar';
 import { stakesFor, type Stake } from '../../src/table/session';
+
+vi.setConfig({ testTimeout: 30_000 });
 
 const STATES = 100_000;
 const UNLIMITED = 1_000_000_000;

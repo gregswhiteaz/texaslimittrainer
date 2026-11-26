@@ -1,6 +1,6 @@
 import { formatCard, type Card } from '../engine/cards';
 import { evaluate } from '../engine/hand-evaluator';
-import { Xoshiro128 } from '../engine/seeded-random';
+import { splitMix32 } from '../engine/seeded-random';
 
 /** Two distinct cards. Order does not matter. */
 export type HoleCards = readonly [Card, Card];
@@ -310,6 +310,28 @@ export function exactEquity(c: CanonicalInput): EquityResult {
   return table.result('exact');
 }
 
+/** @internal How often, in rejections, the sampler checks whether its rejection cap can still be met. */
+export const SAMPLER_CHECK_EVERY = 8192;
+/** @internal Standard deviations in the Wilson upper bound on the sampler's acceptance rate. */
+export const SAMPLER_ABORT_Z = 8;
+
+/**
+ * @internal True when, even at the z = SAMPLER_ABORT_Z Wilson upper bound on the acceptance rate, the
+ * rejections expected before `trials` deals are accepted would exceed `maxRejections`.
+ */
+export function rejectionsOverBudget(
+  accepted: number,
+  rejections: number,
+  trials: number,
+  maxRejections: number,
+): boolean {
+  const n = accepted + rejections;
+  const z2 = SAMPLER_ABORT_Z * SAMPLER_ABORT_Z;
+  const pHi = (accepted + z2 / 2 + SAMPLER_ABORT_Z * Math.sqrt(accepted + z2 / 4)) / (n + z2);
+  const projected = ((trials - accepted) * (1 - pHi)) / pHi;
+  return rejections + projected > maxRejections;
+}
+
 /** @internal Samples whole deals, seeded from the input. Results are in canonical opponent order. */
 export function sampledEquity(
   c: CanonicalInput,
@@ -329,7 +351,12 @@ export function sampledEquity(
   // If the budget runs out the deal is assumed possible; maxRejections then bounds the sampler.
   table.nodeLimit = FEASIBILITY_NODE_LIMIT;
   if (!table.forEachDeal(0, () => true)) throw cannotDeal();
-  const rng = new Xoshiro128(deriveSeed(c));
+  // xoshiro128** state in locals, seeded and drawn exactly as Xoshiro128(deriveSeed(c)).nextInt.
+  const seed = splitMix32(deriveSeed(c));
+  let s0 = seed() | 0;
+  let s1 = seed() | 0;
+  let s2 = seed() | 0;
+  let s3 = seed() | 0;
   const { dealt, need, hands, players } = table;
   const opponents = c.opponents.length;
   const firstRunout = 7 - need;
@@ -342,38 +369,68 @@ export function sampledEquity(
     });
     return pairs;
   });
-  // Cards dealt in the current trial, so they can be returned to the deck before the next one.
-  const marked = new Uint8Array(52);
-  let markedCount = 0;
+  // stamp[card] === attempt marks a card dealt in the current attempt; `dealt` holds hero and board.
+  // Opponent combos never contain hero or board cards, so only the runout checks `dealt`.
+  const stamp = new Uint32Array(52);
+  let attempt = 0;
+  // The current attempt's opponent cards, copied into `hands` once the deal is accepted.
+  const picks = new Uint8Array(2 * opponents);
   let rejections = 0;
   while (table.trials < trials) {
-    for (let m = 0; m < markedCount; m++) dealt[marked[m] as number] = 0;
-    markedCount = 0;
+    attempt++;
     let i = 0;
     for (; i < opponents; i++) {
       const range = flat[i] as Uint8Array;
-      const pick = 2 * rng.nextInt(range.length / 2);
+      // rng.nextInt(range.length / 2), inlined: locals, not a closure, keep the state in registers.
+      const x = Math.imul(s1, 5);
+      const u = Math.imul((x << 7) | (x >>> 25), 9) >>> 0;
+      const t = s1 << 9;
+      s2 ^= s0;
+      s3 ^= s1;
+      s1 ^= s2;
+      s0 ^= s3;
+      s2 ^= t;
+      s3 = (s3 << 11) | (s3 >>> 21);
+      const pick = 2 * Math.floor((u * (range.length >> 1)) / 4294967296);
       const a = range[pick] as number;
       const b = range[pick + 1] as number;
-      if (dealt[a] || dealt[b]) break;
-      dealt[a] = 1;
-      dealt[b] = 1;
-      marked[markedCount++] = a;
-      marked[markedCount++] = b;
-      // Read only once the whole deal is accepted; a rejected trial's writes are overwritten.
-      const hand = hands[i + 1] as Card[];
-      hand[0] = a;
-      hand[1] = b;
+      if (stamp[a] === attempt || stamp[b] === attempt) break;
+      stamp[a] = attempt;
+      stamp[b] = attempt;
+      picks[2 * i] = a;
+      picks[2 * i + 1] = b;
     }
     if (i < opponents) {
-      if (++rejections > maxRejections) throw new RangeError('Sampling rejected too many deals');
+      // Over the cap, or (checked now and then) certain to go over it: the same error either way.
+      if (
+        ++rejections > maxRejections ||
+        (rejections % SAMPLER_CHECK_EVERY === 0 &&
+          rejectionsOverBudget(table.trials, rejections, trials, maxRejections))
+      )
+        throw new RangeError('Sampling rejected too many deals');
       continue;
     }
+    for (let p = 0; p < opponents; p++) {
+      const hand = hands[p + 1] as Card[];
+      hand[0] = picks[2 * p] as number;
+      hand[1] = picks[2 * p + 1] as number;
+    }
     for (let slot = firstRunout; slot < 7; slot++) {
-      let card = rng.nextInt(52);
-      while (dealt[card]) card = rng.nextInt(52);
-      dealt[card] = 1;
-      marked[markedCount++] = card;
+      let card: number;
+      do {
+        // nextInt(52), inlined like the opponent picks.
+        const x = Math.imul(s1, 5);
+        const u = Math.imul((x << 7) | (x >>> 25), 9) >>> 0;
+        const t = s1 << 9;
+        s2 ^= s0;
+        s3 ^= s1;
+        s1 ^= s2;
+        s0 ^= s3;
+        s2 ^= t;
+        s3 = (s3 << 11) | (s3 >>> 21);
+        card = Math.floor((u * 52) / 4294967296);
+      } while (dealt[card] || stamp[card] === attempt);
+      stamp[card] = attempt;
       for (let p = 0; p < players; p++) (hands[p] as Card[])[slot] = card;
     }
     table.score();

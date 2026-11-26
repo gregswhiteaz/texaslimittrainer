@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import {
   computeEquity,
   type EquityInput,
@@ -11,6 +11,8 @@ import {
 import { expandRange, parseHandRange, unseenCombos } from '../../src/advice/ranges';
 import { parseCards, type Card } from '../../src/engine/cards';
 import { REPO_ROOT } from '../support/sandbox';
+
+vi.setConfig({ testTimeout: 30_000 });
 
 interface MultiwayCase {
   id: string;

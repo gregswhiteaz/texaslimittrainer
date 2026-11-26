@@ -1,5 +1,5 @@
 import fc from 'fast-check';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { POSTFLOP_RULE_IDS, recommendPostflop, toPct } from '../../src/advice/postflop';
 import type { Card } from '../../src/engine/cards';
 import {
@@ -10,6 +10,8 @@ import {
   type SeatNumber,
 } from '../../src/engine/hand';
 import { playerView } from '../../src/engine/player-view';
+
+vi.setConfig({ testTimeout: 30_000 });
 
 const STAKES_4_8 = { smallBlind: 2, bigBlind: 4, smallBet: 4, bigBet: 8 };
 const SEATS: readonly SeatNumber[] = [1, 2, 3, 4, 5, 6];

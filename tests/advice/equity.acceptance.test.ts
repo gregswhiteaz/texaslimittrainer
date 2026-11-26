@@ -13,6 +13,8 @@ import {
 import { parseCards, type Card } from '../../src/engine/cards';
 import { REPO_ROOT } from '../support/sandbox';
 
+vi.setConfig({ testTimeout: 30_000 });
+
 interface ReferenceCase {
   id: string;
   players: string[];

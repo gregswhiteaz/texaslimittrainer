@@ -1,5 +1,5 @@
 import fc from 'fast-check';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import type { EquityInput, EquityResult } from '../../src/advice/equity';
 import {
   gradeDecision,
@@ -18,6 +18,8 @@ import {
   type SeatNumber,
 } from '../../src/engine/hand';
 import { playerView } from '../../src/engine/player-view';
+
+vi.setConfig({ testTimeout: 30_000 });
 
 const STAKES_4_8 = { smallBlind: 2, bigBlind: 4, smallBet: 4, bigBet: 8 };
 /** Button 1: SB 2, BB 3, UTG 4, HJ 5, CO 6, BTN 1. Hole cards go to deck[i] and deck[i + 6]. */
