@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-25T07:28:00Z'
-updated_date: '2026-11-26T18:05:00Z'
+updated_date: '2026-11-26T18:15:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -27,8 +27,8 @@ Follow-up from TASK-10.7 review/judge (doc-132). e2e/report-hints.spec.ts derive
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Given the e2e Hints used check, When it compares the tile, Then the expected text is built from the stored counts with the literal 'N of M decisions (P%)' wording, not from hintTile
-- [ ] #2 Given a stored report with hints but no errors, When it is read, Then parseSessionReport rejects it with a RangeError naming hints
+- [x] #1 Given the e2e Hints used check, When it compares the tile, Then the expected text is built from the stored counts with the literal 'N of M decisions (P%)' wording, not from hintTile
+- [x] #2 Given a stored report with hints but no errors, When it is read, Then parseSessionReport rejects it with a RangeError naming hints
 <!-- AC:END -->
 
 ## Implementation Plan
@@ -44,4 +44,6 @@ Full spec: doit/TASK-10.16/spec.md
 
 <!-- SECTION:NOTES:BEGIN -->
 Build: e2e Hints tile expected text built from stored counts with literal wording; parseSessionReport rejects hints without errors; gate PASS
+
+Judge r1 PASS (2/2 SPEC items; mutation-checked)
 <!-- SECTION:NOTES:END -->

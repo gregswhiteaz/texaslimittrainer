@@ -5,13 +5,16 @@
   "base_commit": "a1292c6b0eef05a03309694c4681a776ebe64370",
   "started": "2026-11-26T10:49:41",
   "review_round": 1,
-  "judge_round": 0,
+  "judge_round": 1,
   "sendbacks": 0,
   "gate_runs": 1,
   "questions": 0,
   "assumptions": 0,
   "escalations": 0,
-  "item_failures": {},
+  "item_failures": {
+    "SPEC-01": 0,
+    "SPEC-02": 0
+  },
   "locked_tests": {
     "e2e/report-hints.spec.ts": "0aaf3e5bdb15bce20cf6a00d69f10ffe55e7d249c2c024f0b6c3a21571903470"
   },
@@ -2157,5 +2160,8 @@
   "spec_sha256": "9d5d6f61a04274c5212ef44f12c4ae6547506f1c4e65f1255c7f401923426005",
   "review_findings": {
     "1": 0
+  },
+  "judge_results": {
+    "1": "PASS"
   }
 }
