@@ -5,13 +5,19 @@
   "base_commit": "281ceb1ae322a06dc3e9febae9767804b400e475",
   "started": "2026-11-26T07:26:27",
   "review_round": 1,
-  "judge_round": 0,
+  "judge_round": 1,
   "sendbacks": 0,
   "gate_runs": 2,
   "questions": 0,
   "assumptions": 0,
   "escalations": 0,
-  "item_failures": {},
+  "item_failures": {
+    "SPEC-01": 0,
+    "SPEC-02": 0,
+    "SPEC-03": 0,
+    "SPEC-04": 0,
+    "SPEC-05": 0
+  },
   "locked_tests": {
     "tests/advice/observed-range-tidy.acceptance.test.ts": "d6fe4d6807012039d0f7f7b5c1c6934f3c7ce16e791328c9982699e7acf75a10"
   },
@@ -2147,5 +2153,8 @@
   "spec_sha256": "b090207411ef45ada9f7e6b9a8cee595ba4e0aee08e386ed74315a539c64ee82",
   "review_findings": {
     "1": 0
+  },
+  "judge_results": {
+    "1": "PASS"
   }
 }

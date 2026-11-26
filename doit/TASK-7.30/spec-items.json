@@ -3,30 +3,30 @@
     "id": "SPEC-01",
     "verifies": "AC#1",
     "verification": "acceptance `tests/advice/observed-range-tidy.acceptance.test.ts::AC#1 a CO open-raiser seen for 100 hands with PFR 0 has a scaled width of exactly 0`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-02",
     "verifies": "AC#2",
     "verification": "acceptance `tests/advice/observed-range-tidy.acceptance.test.ts::AC#2 basisText for 45 hands reads based on 45 hands of this opponent`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-03",
     "verifies": "AC#1",
     "verification": "unit `tests/advice/observed-ranges.test.ts::scaledWidthPct is exactly the observed stat from 100 hands`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-04",
     "verifies": "AC#2",
     "verification": "unit `tests/advice/explain.test.ts::src/advice fills placeholders only through fillTemplate`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-05",
     "verifies": "AC#1, AC#2",
     "verification": "command `bash -c 'npm run -s playtest -- --hands 10000 --seed 42 | shasum -a 256 && npm run -s playtest -- --check-advice --hands 3000 --seed 42 | shasum -a 256'`",
-    "status": "pending"
+    "status": "pass"
   }
 ]

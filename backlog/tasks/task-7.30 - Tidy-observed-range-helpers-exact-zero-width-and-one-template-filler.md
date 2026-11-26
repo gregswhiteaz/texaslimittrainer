@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-23T19:21:00Z'
-updated_date: '2026-11-26T14:51:00Z'
+updated_date: '2026-11-26T15:11:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -27,8 +27,8 @@ Follow-up from TASK-7.13 (doc-104). scaledWidthPct can return about 3.55e-15 ins
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Given a CO open-raiser observed for 100 hands with PFR 0, When its scaled width is computed, Then the width is exactly 0 (toBe(0), not toBeCloseTo)
-- [ ] #2 Given basisText for 45 hands, When it is rendered, Then it is produced through fillTemplate and reads exactly 'based on 45 hands of this opponent', and no other template-filling helper remains in src/advice
+- [x] #1 Given a CO open-raiser observed for 100 hands with PFR 0, When its scaled width is computed, Then the width is exactly 0 (toBe(0), not toBeCloseTo)
+- [x] #2 Given basisText for 45 hands, When it is rendered, Then it is produced through fillTemplate and reads exactly 'based on 45 hands of this opponent', and no other template-filling helper remains in src/advice
 <!-- AC:END -->
 
 ## Implementation Plan
@@ -46,4 +46,6 @@ Full spec: doit/TASK-7.30/spec.md
 
 <!-- SECTION:NOTES:BEGIN -->
 Build: scaledWidthPct exact from 100 hands; fillTemplate moved to explanations.ts and used by basisText; playtest SHAs unchanged; gate PASS
+
+Judge r1 PASS (5/5 SPEC items)
 <!-- SECTION:NOTES:END -->
