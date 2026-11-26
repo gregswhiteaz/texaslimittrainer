@@ -5,16 +5,25 @@
   "base_commit": "a08251ce34d1ba6b4848db701a288d7a08ecf4cc",
   "started": "2026-11-26T13:45:08",
   "review_round": 0,
-  "judge_round": 0,
+  "judge_round": 1,
   "sendbacks": 0,
   "gate_runs": 0,
   "questions": 0,
   "assumptions": 0,
   "escalations": 0,
-  "item_failures": {},
+  "item_failures": {
+    "SPEC-01": 0,
+    "SPEC-02": 0,
+    "SPEC-03": 0,
+    "SPEC-04": 0,
+    "SPEC-05": 0
+  },
   "locked_tests": {},
   "test_snapshot": {},
   "history": [],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-6.24",
-  "spec_sha256": "d25fc2e1766ac8d0cc02dc4638706dff5f8fdad6b158a4502a7a3af2a5a33970"
+  "spec_sha256": "d25fc2e1766ac8d0cc02dc4638706dff5f8fdad6b158a4502a7a3af2a5a33970",
+  "judge_results": {
+    "1": "PASS"
+  }
 }

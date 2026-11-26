@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-23T15:21:00Z'
-updated_date: '2026-11-26T21:01:00Z'
+updated_date: '2026-11-26T21:06:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -26,7 +26,7 @@ From TASK-6.11 (and TASK-6.16/6.17/7.9 judge notes): TAG aggression measures 63.
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Given the options (widen band / tune TAG / document minimum run length), When the user decides, Then the decision is recorded on this task and any resulting change is a follow-up story
+- [x] #1 Given the options (widen band / tune TAG / document minimum run length), When the user decides, Then the decision is recorded on this task and any resulting change is a follow-up story
 <!-- AC:END -->
 
 ## Implementation Notes
@@ -41,6 +41,8 @@ Measurements (TASK-6.24, 100k at seed 42; 2k at seeds 1–20 per line-up; code a
 |---|---|---|---|---|
 | All-TAG | 63.2–64.9% (64.3) | **0 / 20** | 20 / 20 | Every one: "One action only" on a rare mixed spot (`preflop-limpers` or `preflop-raise-and-calls`, 0–3 hands each). No band was missed. |
 | Mixed | 54.3–63.6% (59.2) | **0 / 20** | 12 / 20 | 7 from "One action only". Band misses: Rock VPIP 7.7–7.9% (5 seeds, floor 8%), TAG PFR 13.7/13.9% (seeds 20 and 5, floor 14%), Rock aggression 56.1/56.2% (seeds 9 and 10, ceiling 55%). |
+
+Judge r1 PASS (5/5 SPEC items)
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary
