@@ -1,0 +1,99 @@
+{
+ "reviewer": "code",
+ "round": 2,
+ "rubric": [
+  {
+   "item": "SPEC-01 correctness",
+   "result": "pass"
+  },
+  {
+   "item": "SPEC-01 test strength",
+   "result": "pass"
+  },
+  {
+   "item": "SPEC-02 correctness",
+   "result": "pass"
+  },
+  {
+   "item": "SPEC-02 test strength",
+   "result": "pass"
+  },
+  {
+   "item": "SPEC-03 correctness",
+   "result": "pass"
+  },
+  {
+   "item": "SPEC-03 test strength",
+   "result": "pass"
+  },
+  {
+   "item": "SPEC-04 correctness",
+   "result": "pass"
+  },
+  {
+   "item": "SPEC-04 test strength",
+   "result": "pass"
+  },
+  {
+   "item": "SPEC-05 correctness",
+   "result": "pass"
+  },
+  {
+   "item": "SPEC-05 test strength",
+   "result": "pass"
+  },
+  {
+   "item": "SPEC-06 correctness",
+   "result": "pass"
+  },
+  {
+   "item": "SPEC-06 test strength",
+   "result": "pass"
+  },
+  {
+   "item": "SPEC-07 correctness",
+   "result": "pass"
+  },
+  {
+   "item": "SPEC-08 correctness",
+   "result": "pass"
+  },
+  {
+   "item": "SPEC-09 correctness",
+   "result": "pass"
+  },
+  {
+   "item": "scope",
+   "result": "pass"
+  },
+  {
+   "item": "concision",
+   "result": "pass"
+  },
+  {
+   "item": "clarity",
+   "result": "pass"
+  }
+ ],
+ "findings": [
+  {
+   "fingerprint": "src/advice/golden.ts:unreachable-illegal-step-break",
+   "severity": "NIT",
+   "file": "src/advice/golden.ts",
+   "line": 548,
+   "issue": "heroPreflopProblems runs only after buildView succeeded, so every step is known to be legal (its own docstring says so). The `if (!result.ok) break;` branch and the `as Action` cast on legalOf guard a case that cannot happen.",
+   "evidence": "parsePostflopSpot calls it only when view !== null, and buildView has already replayed the same steps from a deal with the same seat count.",
+   "fix": "Optional: keep it as a cheap guard, or assert the result instead (for example `state = (applyAction(...) as {ok: true; state: HandState}).state`). Either way is fine."
+  },
+  {
+   "fingerprint": "tests/golden/postflop-lines.acceptance.test.ts:tautological-length-assert",
+   "severity": "NIT",
+   "file": "tests/golden/postflop-lines.acceptance.test.ts",
+   "line": 122,
+   "issue": "`expect(SPOTS).toHaveLength(RAW.spots.length)` cannot fail, because parsePostflopGoldenSpots returns every spot or throws. The SPEC-03 check is still real: the module-level parse uses real advice and throws on any problem, which fails every test in the file, and the pinned counts and checkGoldenSpot assertions are real. So this is not a blocker.",
+   "evidence": "parseEntries collects problems and throws if there are any, otherwise it returns all entries.",
+   "fix": "None required. The line could be dropped since `toHaveLength(120)` follows; the test file is locked, so leave it unless it is unlocked for another reason."
+  }
+ ],
+ "summary": "Round-1 fixes verified (commit 48e0866). MAJOR 92o-omits-nines-full-of-fours is fixed: the clause now reads 'only kings full, nines full, fours full or a nine with a kicker above the four is ahead'. That covers KK, 9K, 94, 44 and 9x (x in 5..A), which is every holding that beats 9-9-9-K-4 on 9h 4h Ks 9c. No quads (one nine left) and no flush or straight on the turn. The text still has 'kings full', is clear of /set of kings/i, and every justification is still distinct. I re-ran the evaluator dump on the seven reworded spots. qjo (9-9-A-Q-J, no pair of its own), t9s (high card, ace on the board), 76s (high card, queen on the board) and jts (high card, king on the board) are accurate now, and the open-ended draw claims hold on the turn boards. 53s and 85s are bottom pair with the kicker dropped, both correct. The docs step 2 now states the Major-error rule with Minor allowed, and changes.md notes that a3s keeps its justification, which is still accurate (trip threes, ace kicker). Golden tests pass: 288 of 288. No new issues. The two round-1 NITs were not part of the fix brief and are carried forward unchanged."
+}

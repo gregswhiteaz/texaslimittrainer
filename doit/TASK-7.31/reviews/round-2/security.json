@@ -1,0 +1,3 @@
+{"reviewer": "security", "round": 2,
+ "findings": [],
+ "summary": "Round 1 had no security findings. The round-1 fix (48e0866) changes only justification prose in seven entries of tests/golden/postflop-spots.json, one docs paragraph in docs/advice/golden-spots.md, and doit/ bookkeeping. It adds no code, dependencies, secrets, filesystem, network, shell or randomness use. The golden JSON is repo-controlled test data read only by tests/golden/*, and the app never loads it (spec section 8). No new security issues."}
