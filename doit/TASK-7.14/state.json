@@ -1494,6 +1494,12 @@
       "event": "unlock",
       "file": "tests/golden/graded-examples.json",
       "reason": "TASK-7.32 Q-1 (user-approved fix): bots on action ranges, turn price counts the river bet, 65% value-raise vs a bet; re-pin expected values one-for-one, keep check counts"
+    },
+    {
+      "t": "2026-11-25T18:56:57",
+      "event": "unlock",
+      "file": "tests/golden/postflop-spots.json",
+      "reason": "TASK-7.26 Q-2 (auto-accepted): heads-up/full-ring action ranges move equity; replace spots that stop being clear-cut on the same street/size/action, logged in docs/advice/golden-spots.md; counts kept"
     }
   ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-7.14",
@@ -1505,7 +1511,8 @@
   },
   "relock_pending": [
     "tests/golden/postflop-spots.json",
-    "tests/golden/graded-examples.json"
+    "tests/golden/graded-examples.json",
+    "tests/golden/postflop-spots.json"
   ],
   "brief_history": {
     "tests/golden/postflop-spots.json:justifications-misname-made-hand": [

@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-25T00:07:00Z'
+updated_date: '2026-11-26T01:56:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -103,6 +103,8 @@ Judge r1 PASS 18/18; CI 45339470694 green on b857384; review took 3 rounds (just
 Follow-ups: TASK-7.31 created (chart-consistent preflop lines, kings-full wording, grader throw reported). Not tracked: street-of-board index NIT (no behaviour change); margin re-recording self-enforces via the golden suite when TASK-7.26/7.28/7.18 land.
 
 Locked test(s) unlocked for TASK-7.32 Q-1 (user-approved advice/bot fix; expected values re-pinned one-for-one).
+
+Locked tests/golden/postflop-spots.json unlocked for TASK-7.26 Q-2 (replace non-clear-cut heads-up/full-ring spots like-for-like, logged).
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary
