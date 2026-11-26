@@ -6,7 +6,7 @@ TASK-2.14) needs to deal the next hand. Home's Resume session entry (TASK-2.6) r
 [Resume](#resume-from-home).
 
 - `src/table/session-record.ts` (headless): the `SessionRecord` type, `sessionRecord(…)`, `handWrite(…)`,
-  `parseSessionRecord(…)`, `restoreSession(…)` and `findPausedSession(…)`.
+  `parseSessionRecord(…)`, `restoreSession(…)`, `restoreObserved(…)` and `findPausedSession(…)`.
 - `src/table/session.ts`: `assertSessionConfig(…)`, the config rules shared by records and
   `resolveSessionConfig`.
 - `src/storage/hand-store.ts` (browser): the `sessions` store and `HandStore.add(record, session)`,
@@ -19,7 +19,7 @@ TASK-2.14) needs to deal the next hand. Home's Resume session entry (TASK-2.6) r
 
 | Item         | Value                                                                |
 | ------------ | -------------------------------------------------------------------- |
-| Database     | `tlh-trainer`, version `4` (the only version marker)                 |
+| Database     | `tlh-trainer`, version `5` (the only version marker)                 |
 | Object store | `sessions` (next to `hands`, see [hand-records.md](hand-records.md)) |
 | Key          | `keyPath: 'sessionId'`; one record per session, replaced (`put`)     |
 | Indexes      | none (`pausedSession` reads every record with `getAll`)              |
@@ -40,12 +40,29 @@ TASK-2.14) needs to deal the next hand. Home's Resume session entry (TASK-2.6) r
 | `nextBotName` | integer 0..`MAX_SESSION_COUNT`         | Position of the next replacement bot name (`TableState.nextBotName`)                                                                                                       |
 | `nextBotId`   | integer 1..`MAX_SESSION_COUNT`         | The id the next replacement bot gets (`TableState.nextBotId`)                                                                                                              |
 | `endedAt`     | string, ISO-8601 UTC \| null, optional | When the session was ended. Absent or null = not ended (paused). Written only by `endSession` (Leave table) and `endPausedSessions` (Start game, [reports.md](reports.md)) |
+| `observed`    | observed entries (below), optional     | The seated bots' observed counts this session (TASK-8.6). Absent in start records and records saved before TASK-8.6 = nothing observed                                     |
 
 Seat entry: `{ seat, kind: 'user' | 'bot', botId, name, style, stack }`. `botId` and `style` are null for the
 user; a bot's `botId` is unique and below `nextBotId`. `name` is 1–40 characters. `stack` is the seat's chips
 before the next hand: at least 1, except that the **user** seat of a cash session may hold 0, meaning busted
 and waiting at Rebuy / Leave table (TASK-3.11 D-1). The seat numbers and kinds always equal `config.seats`. The record holds no hole cards
 and no replay code.
+
+### Observed counts
+
+Observed entry: `{ botId, hands, vpipHands, pfrHands }`, whole numbers. `hands` is the finished hands of this
+session the bot was dealt into, `vpipHands` those with a preflop call or raise, and `pfrHands` those with a
+preflop raise. There is one entry per bot seat of the record whose bot has at least 1 hand, in ascending seat
+order. A bot replaced after busting has no entry: the record is built after the replacement, and the new bot
+(new `botId`) starts at 0.
+
+`useTableSession` adds each completed hand to its counts (`countObserved`) before the write and passes them
+to `handWrite(table, meta, decisions, counts)`, so the entries are written in the same transaction as the hand
+record and always match `handsPlayed`. `sessionRecord`/`handWrite` write `observed` only when counts are
+given (the start record has none). On Resume, `restoreObserved(record)` turns the entries back into the hook's
+counts (`handsDealt`, `voluntary`, `preflopRaised`; the other style counts are 0, as the snapshot never reads
+them), and the Table opens with `resume: { table, sessionId, startedAt, observed }`. A record without
+`observed` resumes with empty counts.
 
 ## The state stored: ready for the next hand
 
@@ -101,7 +118,13 @@ building anything. In order it checks:
 - the engine's `assertChips` on the stakes and stacks: every stack a safe integer of at least 1 and the
   stacks totalling at most `Number.MAX_SAFE_INTEGER`, with `createHand`'s own messages. The one exception is a
   cash user seat with stack exactly `0` (D-1), which is left out of `assertChips`; a bot on 0, or the user on 0
-  in a sit-and-go, is still rejected (`Stack at seat <n> must be an integer of at least 1`).
+  in a sit-and-go, is still rejected (`Stack at seat <n> must be an integer of at least 1`);
+- `observed`, if present (TASK-8.6): an array (`null` or an object is rejected: `Invalid session record:
+observed`), with no holes or non-object entries (`observed[<i>]`). Each entry's `botId` is the `botId` of a
+  bot seat of this record and not repeated (`observed[<i>].botId`); `hands` is whole in 1..`handsPlayed`,
+  `vpipHands` whole in 0..`hands` and `pfrHands` whole in 0..`vpipHands` (`observed[<i>].hands` /
+  `vpipHands` / `pfrHands`). Unknown properties of an entry are ignored. A malformed `observed` rejects the
+  whole record, so Home logs it and shows no Resume entry for it, as for any other bad field.
 
 Every failure is a `RangeError` naming the field (`Invalid session record: <field>`,
 `Invalid session config: <field>`) or the engine's message. Checks use `Number.isSafeInteger` and `typeof`, so
@@ -134,6 +157,9 @@ state ready for this hand). It deals hand `handsPlayed + 1` from the stored stac
 button. The hand in progress when the app closed was never stored, so it is not counted: its number is dealt
 again and its record is written, under the same `sessionId`, only when that new hand completes. Hand numbers
 then continue as before.
+
+The Table's observed counts start from `restoreObserved(record)` (see [Observed counts](#observed-counts)), so
+the hints and stored decisions of the resumed session use the hands seen before the pause.
 
 Leave table ends the session: `endSession` writes `endedAt` and adds its report, or deletes a session with 0
 completed hands (see [reports.md](reports.md)). An ended session never shows in Resume.
@@ -176,9 +202,10 @@ the same way; see [navigation.md](../ui/navigation.md). Leave table ends it inst
 ## Upgrades
 
 Version 1 created `hands`; version 2 adds `sessions`; version 3 adds `reports` ([reports.md](reports.md));
-version 4 adds `settings` ([settings.md](settings.md)). `onupgradeneeded` runs each missing step
-(`if (oldVersion < 1)` … `if (oldVersion < 4)`) and never touches
-existing stores or records. A later version
+version 4 adds `settings` ([settings.md](settings.md)); version 5 adds `meta` ([persistent-storage.md](persistent-storage.md)). `onupgradeneeded` runs each missing step
+(`if (oldVersion < 1)` … `if (oldVersion < 5)`) and never touches
+existing stores or records. The optional `observed` field (TASK-8.6), like `endedAt`, needed no new version:
+older records without it still load. A later version
 must append another `if (oldVersion < N)` step only. Formal migrations and per-store schema versions belong to
 E13 (REQ-054). A tab still open at version 1 closes its connection on `versionchange`; a database newer than
 the app makes every call reject with `VersionError` and dealing stops.
@@ -206,6 +233,11 @@ the app makes every call reject with `VersionError` and dealing stops.
 - `tests/storage/end-paused.acceptance.test.ts`, `tests/ui/end-session-dialog.acceptance.test.tsx` and
   `e2e/new-game-confirm.spec.ts` (every push): ending paused sessions from Start game, the dialog markup,
   Cancel and Escape, Confirm, a 0-hand session and no dialog without a paused session.
+- `tests/table/observed-record.acceptance.test.ts`, `tests/table/observed-record.test.ts` and
+  `tests/table/observed-resume.acceptance.test.ts`: the `observed` write, validation and restore rules, and a
+  45-hand session's counts, hint and stored decision after Resume.
+- `e2e/observed-resume.spec.ts` (every push): a seeded 45-hand session's hint after Resume, a record with
+  malformed `observed` skipped on Home, and the counts carried through Home and Resume.
 - `e2e/session-records.spec.ts` (every push): the start record, the record after hand 2 and a reload in the
   middle of hand 3.
 - `e2e/session-kill.spec.ts` (opt-in, Chromium): plays 10 hands, deals hand 11, sends SIGKILL to the browser

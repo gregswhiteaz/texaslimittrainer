@@ -70,6 +70,8 @@ export interface ResumedSession {
   readonly table: TableState;
   readonly sessionId: string;
   readonly startedAt: Date;
+  /** Restored observed counts (restoreObserved); {} when absent. */
+  readonly observed?: ObservedCounts;
 }
 
 /** A new session id: 32 lowercase hex characters from 16 CSPRNG bytes (A-8). */
@@ -140,8 +142,9 @@ export function requestDecisionGrade(
  * At mount the session's start record is put in the hand store, unless the session is resumed. After a hand
  * its record and the session's next-hand state are written together, and the next one is dealt NEXT_HAND_DELAY_MS later
  * (unless held) or once that write completes, whichever is later; a failed write deals nothing more (D-2).
- * Each completed hand is also added to the session's observed counts (TASK-8.1), which start empty at every
- * mount, a resumed one included (Q-3); each user action stores the snapshot built from them.
+ * Each completed hand is also added to the session's observed counts (TASK-8.1), which are written with its
+ * session record and start from the resumed session's counts, else empty (TASK-8.6); each user action stores
+ * the snapshot built from them.
  * Each user decision is graded by the advice worker as soon as it is made (TASK-9.3 A-1); the hand's record is
  * written from those entries once they have all resolved, and a failed grade fails the write (A-3).
  * leave() folds the user's hand at once (TASK-10.2), deals nothing more and calls onLeft once the hand is
@@ -175,7 +178,7 @@ export function useTableSession({
   const [table, setTable] = useState(() => resume?.table ?? seatSession(config));
   const reported = useRef<number | null>(null);
   // Read only in callbacks and updaters, so a ref: the counts never change what is rendered.
-  const observed = useRef<ObservedCounts>({});
+  const observed = useRef<ObservedCounts>(resume?.observed ?? {});
   const [sessionId] = useState(() => resume?.sessionId ?? newSessionId());
   const [startedAt] = useState(() => resume?.startedAt ?? new Date());
   // The start record (A-3): written once per mount from the seated table; each hand's write waits for it.
@@ -249,12 +252,16 @@ export function useTableSession({
       if (done !== null) {
         const completedAt = new Date();
         const store = handStore ?? sharedHandStore();
+        // Counted now so the stored record and the next hint use the same counts (TASK-8.6 A-6).
+        const counts = countObserved(observed.current, done);
+        observed.current = counts;
         write.current = gradedDecisions(grades.current, table).then((decisions) => {
           gradedCallback.current?.(done, decisions);
           const { record, session } = handWrite(
             table,
             { sessionId, startedAt, completedAt },
             decisions,
+            counts,
           );
           return (started.current ?? Promise.resolve()).then(() => store.add(record, session));
         });
@@ -262,7 +269,6 @@ export function useTableSession({
           console.error('Hand record could not be saved', error);
         });
         track(write.current);
-        observed.current = countObserved(observed.current, done);
         callback.current?.(done);
       }
     }

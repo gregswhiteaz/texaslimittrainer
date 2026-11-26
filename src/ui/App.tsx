@@ -11,7 +11,7 @@ import {
 } from '../stats/trends';
 import { sharedHandStore } from '../storage/hand-store';
 import { DEFAULT_SESSION_CONFIG, type SessionConfig } from '../table/session';
-import { restoreSession, type SessionRecord } from '../table/session-record';
+import { restoreObserved, restoreSession, type SessionRecord } from '../table/session-record';
 import type { SessionReport } from '../table/session-report';
 import { DEFAULT_SETTINGS, type Settings } from '../table/settings';
 import { resumeSummary } from '../table/table-view';
@@ -226,8 +226,10 @@ export default function App({
 
   const resume = (record: SessionRecord): void => {
     let table;
+    let observed;
     try {
       table = restoreSession(record);
+      observed = restoreObserved(record);
     } catch (error) {
       console.error('Session could not be resumed', error);
       setPaused(null);
@@ -236,7 +238,12 @@ export default function App({
     setPaused(undefined);
     openTable({
       name: 'table',
-      resume: { table, sessionId: record.sessionId, startedAt: new Date(record.startedAt) },
+      resume: {
+        table,
+        sessionId: record.sessionId,
+        startedAt: new Date(record.startedAt),
+        observed,
+      },
     });
   };
 

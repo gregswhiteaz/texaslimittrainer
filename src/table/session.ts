@@ -588,7 +588,8 @@ export function nextHand(table: TableState): TableState {
 }
 
 /** Style counts of the finished hands this session, by per-session bot id (TASK-8.1, D-2 alternative). Held by
- *  the table's session hook, not on TableState, and not persisted (Q-3). A missing id means 0 hands. */
+ *  the table's session hook, not on TableState, and persisted in the session record's `observed` (TASK-8.6). A
+ *  missing id means 0 hands. */
 export type ObservedCounts = Readonly<Record<number, StyleCounts>>;
 
 /** `counts` plus the finished hand, for each dealt-in bot by the id it had in that hand, so a bot replaced

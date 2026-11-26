@@ -40,8 +40,10 @@ could not be worked out. Select Hint to try again." and the error is logged; the
 
 The table's session hook keeps style counts per bot (keyed by per-session bot id) for every finished hand of this
 session: `countObserved(counts, completedHand)` runs once per completed hand, before a busted bot is replaced, so
-a replacement bot starts at 0 hands (A-2). The counts are not part of `TableState` and are not stored: they start
-empty at every mount, so after Resume they restart at 0 (Q-3).
+a replacement bot starts at 0 hands (A-2). The counts are not part of `TableState`. They are saved with each
+hand in the session record's `observed` field and restored on Resume (TASK-8.6,
+[sessions.md](../storage/sessions.md#observed-counts)), so a resumed session's hints and stored decisions go on
+using the hands seen before the pause. A new session, or one saved before TASK-8.6, starts at 0.
 
 `userObservedSnapshot(table, counts)` turns them into the user's snapshot: one entry per bot seat whose current
 bot has at least one finished hand, ascending seat, `{ seat, hands, vpip, pfr }` with unrounded percentages

@@ -1,5 +1,6 @@
 import { assertChips, type SeatNumber } from '../engine/hand';
 import { handRecord, isWhole, type HandRecord, type HandRecordDecision } from './hand-record';
+import { EMPTY_STYLE_COUNTS, type StyleCounts } from '../stats/style-stats';
 import {
   BOT_STYLES,
   MAX_SESSION_COUNT,
@@ -11,6 +12,7 @@ import {
   stakesFor,
   tableStake,
   type BotStyle,
+  type ObservedCounts,
   type SessionConfig,
   type SessionSeat,
   type TableState,
@@ -28,6 +30,18 @@ export interface SessionRecordSeat {
   /** Chips before the next hand: a safe integer of at least 1, except 0 for the user seat of a cash session
    *  waiting at Rebuy / Leave table (D-1). */
   readonly stack: number;
+}
+
+/** One seated bot's observed counts this session (TASK-8.6 D-1). */
+export interface SessionRecordObserved {
+  /** A bot id held by a bot seat of this record. */
+  readonly botId: number;
+  /** Finished hands this session the bot was dealt into: whole 1..handsPlayed. */
+  readonly hands: number;
+  /** Of those, hands with a preflop call or raise (VPIP numerator): whole 0..hands. */
+  readonly vpipHands: number;
+  /** Of those, hands with a preflop raise (PFR numerator): whole 0..vpipHands. */
+  readonly pfrHands: number;
 }
 
 /** A session as stored in IndexedDB (REQ-052.3): the state ready for the next hand (D-3). Never holds a hand
@@ -56,6 +70,8 @@ export interface SessionRecord {
   readonly nextBotId: number;
   /** ISO-8601 UTC: when the session was ended; absent or null while not ended. Written only by E10 (D-1). */
   readonly endedAt?: string | null;
+  /** Observed counts of the seated bots with at least 1 hand, ascending seat; absent means none (TASK-8.6). */
+  readonly observed?: readonly SessionRecordObserved[];
 }
 
 export { MAX_SESSION_COUNT };
@@ -84,9 +100,31 @@ function isoDate(date: Date, field: string): string {
   return date.toISOString();
 }
 
+/** The `observed` entries of `table`'s bot seats with at least 1 hand in `counts`, ascending seat (D-1). */
+function observedEntries(table: TableState, counts: ObservedCounts): SessionRecordObserved[] {
+  const entries: SessionRecordObserved[] = [];
+  for (const { seat } of [...table.seats].sort((a, b) => a.seat - b.seat)) {
+    const botId = table.botIds[seat];
+    const c = botId === undefined ? undefined : counts[botId];
+    if (botId === undefined || c === undefined || c.handsDealt < 1) continue;
+    entries.push({
+      botId,
+      hands: c.handsDealt,
+      vpipHands: c.voluntary,
+      pfrHands: c.preflopRaised,
+    });
+  }
+  return entries;
+}
+
 /** Plain-data record of `table`, which must be ready to deal (no hand). handsPlayed = handNumber - 1.
+ *  `observed` is written only when `counts` is given (D-3).
  *  RangeError('Invalid session record: <field>') on a dealt table, a bad session id or an invalid Date. */
-export function sessionRecord(table: TableState, meta: SessionMeta): SessionRecord {
+export function sessionRecord(
+  table: TableState,
+  meta: SessionMeta,
+  counts?: ObservedCounts,
+): SessionRecord {
   if (table.hand !== null) throw invalid('hand');
   if (!SESSION_ID.test(meta.sessionId)) throw invalid('sessionId');
   const { config } = table;
@@ -111,15 +149,18 @@ export function sessionRecord(table: TableState, meta: SessionMeta): SessionReco
     level: config.gameType === 'sit-and-go' ? 1 : null,
     nextBotName: table.nextBotName,
     nextBotId: table.nextBotId,
+    ...(counts === undefined ? {} : { observed: observedEntries(table, counts) }),
   };
 }
 
 /** The finished hand's record and the session ready for the next hand (nextHand), written together (D-2).
- *  `decisions` are the hand's graded entries (handRecord). RangeError if the hand is not done. */
+ *  `decisions` are the hand's graded entries (handRecord); `counts`, the observed counts including this hand,
+ *  are written for the bots seated after nextHand. RangeError if the hand is not done. */
 export function handWrite(
   table: TableState,
   meta: { readonly sessionId: string; readonly startedAt: Date; readonly completedAt: Date },
   decisions?: readonly HandRecordDecision[],
+  counts?: ObservedCounts,
 ): { record: HandRecord; session: SessionRecord } {
   const done = nextStep(table) === 'done' ? completedHand(table) : null;
   if (done === null) throw new RangeError('Not a completed hand');
@@ -130,7 +171,11 @@ export function handWrite(
       { sessionId, handNumber: table.handNumber, config: table.config, completedAt },
       decisions,
     ),
-    session: sessionRecord(nextHand(table), { sessionId, startedAt, updatedAt: completedAt }),
+    session: sessionRecord(
+      nextHand(table),
+      { sessionId, startedAt, updatedAt: completedAt },
+      counts,
+    ),
   };
 }
 
@@ -210,7 +255,41 @@ export function parseSessionRecord(value: unknown): SessionRecord {
   }
   if (!config.seats.some(({ seat }) => seat === record.button)) throw invalid('button');
   assertChips(stakesFor(tableStake(config)), chips);
+  if (Object.hasOwn(record, 'observed')) {
+    observedField(record.observed, botIds, record.handsPlayed as number);
+  }
   return value as SessionRecord;
+}
+
+/** Validates a present `observed` against the record's bot seat ids and handsPlayed (TASK-8.6). */
+function observedField(observed: unknown, botIds: ReadonlySet<unknown>, handsPlayed: number): void {
+  if (!Array.isArray(observed)) throw invalid('observed');
+  const seen = new Set<unknown>();
+  for (let i = 0; i < observed.length; i++) {
+    const field = `observed[${i}]`;
+    if (!(i in observed)) throw invalid(field);
+    const entry = object(observed[i], field);
+    if (!botIds.has(entry.botId) || seen.has(entry.botId)) throw invalid(`${field}.botId`);
+    seen.add(entry.botId);
+    whole(entry.hands, `${field}.hands`, 1, handsPlayed);
+    whole(entry.vpipHands, `${field}.vpipHands`, 0, entry.hands as number);
+    whole(entry.pfrHands, `${field}.pfrHands`, 0, entry.vpipHands as number);
+  }
+}
+
+/** parseSessionRecord, then its observed counts by bot id ({} when `observed` is absent). Only handsDealt,
+ *  voluntary and preflopRaised are stored; the other counts are 0 (A-5). */
+export function restoreObserved(value: unknown): ObservedCounts {
+  const counts: Record<number, StyleCounts> = {};
+  for (const { botId, hands, vpipHands, pfrHands } of parseSessionRecord(value).observed ?? []) {
+    counts[botId] = {
+      ...EMPTY_STYLE_COUNTS,
+      handsDealt: hands,
+      voluntary: vpipHands,
+      preflopRaised: pfrHands,
+    };
+  }
+  return counts;
 }
 
 /** parseSessionRecord, then the table ready to deal hand handsPlayed + 1. Never restores a hand or applies

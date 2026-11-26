@@ -1,0 +1,11 @@
+## BUILD (2026-11-26)
+- `session-record.ts`: `SessionRecordObserved`, optional `SessionRecord.observed`, `counts` argument on `sessionRecord`/`handWrite` (written only when given, D-3), `observed` validation in `parseSessionRecord` (after seats; messages per spec), new `restoreObserved` (A-5).
+- `useTableSession.ts`: ref seeded from `resume.observed`; counts computed before the write and passed to `handWrite` (A-6). `App.resume` passes `restoreObserved(record)` inside the existing try/catch.
+- Tests: `tests/table/observed-resume.acceptance.test.ts` (SPEC-01, SPEC-02), `tests/table/observed-record.acceptance.test.ts` (SPEC-04, incl. the replaced-bot-id case in the same named test), `tests/table/observed-record.test.ts` (SPEC-06, SPEC-07), `e2e/observed-resume.spec.ts` (SPEC-03, SPEC-05, SPEC-08). `observed-snapshot.test.ts` title and comment only.
+- The 45-hand headless play took ~10 s per test under `--coverage` with the full suite in parallel and hit the 5 s default; the 45-hand session is now played once per file and those tests carry `60_000` timeouts (the project's convention for long tests).
+- Docs: `docs/storage/sessions.md` (field, Observed counts section, validation, Resume, version 5, Upgrades, tests), `docs/ui/hint.md` (Q-3 paragraph).
+- `npm test`: 322 files passed / 6 skipped; 1447 tests passed / 48 skipped.
+- `npm run lint`: clean. `npm run typecheck`: clean. `npm run format`: run, clean.
+- `npx playwright test e2e/observed-resume.spec.ts e2e/resume.spec.ts e2e/session-records.spec.ts e2e/hint-observed.spec.ts e2e/home-control.spec.ts e2e/rebuy.spec.ts e2e/history.spec.ts`: 38 passed (Chromium + WebKit).
+- `npm run e2e` (full): 381 passed, 19 skipped (opt-in slow group).
+- Diff: 11 files (budget 11); ~824 changed lines (186 in modified files + 638 in new files) vs budget 650 (warn band, below the 2x fail line). Most of it is the three new Vitest files and the e2e spec.

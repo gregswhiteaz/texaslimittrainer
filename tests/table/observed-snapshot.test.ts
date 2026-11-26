@@ -101,8 +101,9 @@ describe('observed snapshot', () => {
     ]);
   });
 
-  it('restored session starts with an empty snapshot', () => {
-    // Counts live in the session hook and start empty at each mount (Q-3); the record carries none.
+  it('a record written without counts restores an empty snapshot', () => {
+    // A record written without counts (start records, records saved before TASK-8.6) carries none, so the
+    // resumed session starts from an empty snapshot (TASK-8.6 A-1).
     const record = sessionRecord(nextHand(KINGS_SHOWDOWN), {
       sessionId: '0123456789abcdef0123456789abcdef',
       startedAt: new Date(0),
