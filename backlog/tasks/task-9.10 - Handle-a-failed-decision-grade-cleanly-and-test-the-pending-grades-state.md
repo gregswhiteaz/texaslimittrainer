@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-24T13:09:00Z'
-updated_date: '2026-11-26T08:36:00Z'
+updated_date: '2026-11-26T08:55:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -27,9 +27,9 @@ Follow-up from TASK-9.3 (doc-117). If the advice worker's grade request for a de
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Given the worker rejects a decision's grade request mid-hand, When the page runs, Then no unhandledrejection event fires, the hand end still logs 'Hand record could not be saved', and no review panel opens (Chromium and WebKit)
-- [ ] #2 Given a finished hand whose grades are still pending, When the Table renders, Then no review panel (<aside>) is shown and the Deal next hand button is present
-- [ ] #3 Given a decision grade that fails mid-hand, When it rejects, Then the outcome is handled deliberately (not an unhandled rejection) and docs/ui/navigation.md states what the user sees
+- [x] #1 Given the worker rejects a decision's grade request mid-hand, When the page runs, Then no unhandledrejection event fires, the hand end still logs 'Hand record could not be saved', and no review panel opens (Chromium and WebKit)
+- [x] #2 Given a finished hand whose grades are still pending, When the Table renders, Then no review panel (<aside>) is shown and the Deal next hand button is present
+- [x] #3 Given a decision grade that fails mid-hand, When it rejects, Then the outcome is handled deliberately (not an unhandled rejection) and docs/ui/navigation.md states what the user sees
 <!-- AC:END -->
 
 ## Implementation Plan
@@ -49,4 +49,6 @@ Full spec: doit/TASK-9.10/spec.md
 AC added from TASK-13.1 follow-up (doc-143): since TASK-13.1, an unhandled pending-grade rejection mid-hand shows the app error screen instead of stalling at the hand write.
 
 Build: grade requests get a no-op catch (pending keeps the original promise); grade failure follows the write-failure path (Q-1 A); e2e 383 passed; gate PASS
+
+Judge r1 PASS (6/6 SPEC items)
 <!-- SECTION:NOTES:END -->
