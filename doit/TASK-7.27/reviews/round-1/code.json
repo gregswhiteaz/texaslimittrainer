@@ -1,0 +1,26 @@
+{"reviewer": "code", "round": 1,
+ "rubric": [
+  {"item": "SPEC-01 correctness", "result": "pass"}, {"item": "SPEC-01 test strength", "result": "pass"},
+  {"item": "SPEC-02 correctness", "result": "pass"}, {"item": "SPEC-02 test strength", "result": "pass"},
+  {"item": "SPEC-03 correctness", "result": "pass"}, {"item": "SPEC-03 test strength", "result": "pass"},
+  {"item": "SPEC-04 correctness", "result": "pass"}, {"item": "SPEC-04 test strength", "result": "pass"},
+  {"item": "SPEC-05 correctness", "result": "pass"}, {"item": "SPEC-05 test strength", "result": "pass"},
+  {"item": "SPEC-06 correctness", "result": "pass"}, {"item": "SPEC-06 test strength", "result": "pass"},
+  {"item": "SPEC-07 correctness", "result": "pass"}, {"item": "SPEC-07 test strength", "result": "pass"},
+  {"item": "scope", "result": "pass"},
+  {"item": "concision", "result": "pass"},
+  {"item": "clarity", "result": "pass"}
+ ],
+ "findings": [
+  {"fingerprint": "src/advice/chart-print.ts:size-casts-instead-of-narrowing", "severity": "NIT",
+   "file": "src/advice/chart-print.ts", "line": 86,
+   "issue": "Two casts (`argv[0] as string`, `size as keyof typeof PREFLOP_CHARTS`) where the Object.hasOwn check already proves the key; the compiler does not narrow it, so the casts are needed as written.",
+   "evidence": "const size = argv[0] as string; ... PREFLOP_CHARTS[size as keyof typeof PREFLOP_CHARTS]",
+   "fix": "Optional: use a small `(s): s is ReferenceSize` guard inline, or leave as is. The behaviour is correct."},
+  {"fingerprint": "doit/TASK-7.27:scope-budget-lines-slightly-over", "severity": "NIT",
+   "file": "tests/advice/chart-print-sizes.acceptance.test.ts", "line": 1,
+   "issue": "The gate reports 236 changed lines against a budget of 230 (files=4 is on budget). Most of the extra is the spawn helper copied from the locked TASK-7.19 test, which the spec asked for.",
+   "evidence": "gates/build-1.json changed_lines=236",
+   "fix": "No action needed. Reported only for completeness."}
+ ],
+ "summary": "The implementation follows the spec's design exactly. formatChartForReview gives the header, the chart justification, a blank line, then formatSpot + 'Why: ' line per spot joined by one blank line. chartPrintMain covers no argument (byte-identical formatChart for 6-max), a valid size (review format), an unknown size including '', toString, wrong case and the six-max alias (exit 2, exact message plus usage), and 2+ arguments (exit 2). The tools entry is a thin wrapper that sets process.exitCode. The acceptance tests rebuild every block's header percentages, rank row, grid tokens and Why line from the raw JSON, in APPLICABLE_SPOTS order, so a broken formatter or a wrong order would fail them. The unit tests pin the exact out/err writes and return codes. The locked TASK-7.19 test, package.json, the chart JSON and preflop*.ts are unchanged. All 9 chart-print tests pass locally and the build gate is PASS. No blocking findings."}

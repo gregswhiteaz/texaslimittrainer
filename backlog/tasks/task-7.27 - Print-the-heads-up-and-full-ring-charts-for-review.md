@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-22T22:50:00Z'
-updated_date: '2026-11-26T13:55:00Z'
+updated_date: '2026-11-26T14:05:00Z'
 labels:
   - follow-up
   - dream-limit-holdem-trainer
@@ -39,3 +39,9 @@ Follow-up from TASK-7.6 (doc-87): npm run chart:print prints only the 6-max char
 
 Full spec: doit/TASK-7.27/spec.md
 <!-- SECTION:PLAN:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+Build: chart:print -- heads-up|6-max|full-ring prints the review format with justifications; no-argument output unchanged; bad input exits 2; gate PASS
+<!-- SECTION:NOTES:END -->
