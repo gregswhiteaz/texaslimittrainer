@@ -30,6 +30,9 @@ import {
   statRecords,
   type StatSession,
 } from '../support/stat-records';
+import { pinTimeZone } from '../support/time-zone';
+
+pinTimeZone('Pacific/Kiritimati');
 
 vi.setConfig({ testTimeout: 30_000 });
 

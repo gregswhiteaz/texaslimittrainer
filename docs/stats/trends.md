@@ -119,6 +119,13 @@ once the data has loaded):
 trends.` and `0 hands over 0 sessions` when nothing matches) come from the matching hands, while the G-2 target
   comes from every stored hand. The BB/100 chart stays cash-only, so Sit-and-go shows `No cash-game hands yet.`
 - The selection is not remembered: every opening of Statistics starts at All / All.
+- Unknown values (TASK-11.13 A-1): a Table size, Game type or Line-up select value that is not one of its option
+  ids (only possible by editing the DOM) counts as All. `filterOption(options, value)` in `src/stats/trends.ts`
+  maps it where the value enters, in `StatisticsScreen`'s `onChange`, and keeps the other filters. The select then
+  shows All. `filterTrendData` is unchanged.
+- The App computes every view through `filteredStatisticsView(data, filter, grouping)`, which is
+  `statisticsView(filterTrendData(data, filter), data, grouping)`. Its loaded `stats` state always holds `data`,
+  and the loading or failed state has none (TASK-11.13 D-3).
 
 ## Grouping: every 500 hands, session or day (TASK-11.5)
 
@@ -136,6 +143,9 @@ All / All.
 - Day: one point per local calendar day on which a hand in the filter was completed, ascending. Each hand counts on
   the local date of its own `completedAt`, so a session that runs past midnight is split across two days. "Local"
   is the time zone of the device viewing Statistics (`localDay`, plain `Date` getters). Records store UTC only.
+  The day-grouping Vitest files (`trend-grouping.acceptance.test.tsx`, `trends.test.ts`) call
+  `pinTimeZone('Pacific/Kiritimati')` (`tests/support/time-zone.ts`, UTC+14, no DST), so a UTC-date day key
+  fails `npm test` even on a UTC machine such as CI. No global `TZ` is set.
 - No minimum group size (REQ-048.10): a 12-hand session is a point. With no hands in the filter the Major card
   shows `Play your first hand to see trends.`
 - Values use the same formulas: Major is `bbPer100(unhinted Majors, 1, n)` per group, BB/100 is `bb100Value` of the
@@ -207,3 +217,10 @@ trends.` and `0 hands over 0 sessions`.
   points recomputed from the records, Mixed with 6-max together, the Soft empty state under every grouping and the
   G-2 target under every line-up. `e2e/statistics-lineup.spec.ts`: the App flow with axe, reset on reopening and
   same-origin requests.
+- `tests/stats/trend-order.acceptance.test.tsx` (TASK-11.13): shuffled input (`shuffled` in
+  `tests/support/stat-records.ts`) gives the sorted-order view under every grouping, and a session without a
+  record orders by its earliest `completedAt`.
+- `tests/support/time-zone.ts`: `pinTimeZone`, used by the two day-grouping Vitest files.
+- `e2e/statistics-hardening.spec.ts` (TASK-11.13): the App shows the all-hands G-2 target under all 12 Table size
+  × Game type filters, and a DOM-edited unknown filter value counts as All. The opt-in speed check stops its
+  timer when the 6th point is visible (non-empty box, not hidden), checked on DOM mutations and animation frames.

@@ -43,7 +43,6 @@ const TEMPLATE_META = {
 };
 /** REVIEW_FOUR's record: 4 user decisions (raise, flop bet, turn check, river call). */
 const TEMPLATE = handWrite(REVIEW_FOUR, TEMPLATE_META).record;
-export const TEMPLATE_DECISIONS = TEMPLATE.decisions.length;
 
 const completedAt = (session: StatSession, handNumber: number): Date =>
   new Date(session.startedAt.getTime() + handNumber * 1000);
@@ -173,4 +172,17 @@ export function cloneRecords(
     completedAt: completedAt(session, i + 1).toISOString(),
   }));
   return { records, session: storedSession(session) };
+}
+
+/** A deterministic shuffle (fixed LCG, seed 12345, Fisher–Yates from the end), so no computation can rely on
+ *  input order. */
+export function shuffled<T>(items: readonly T[]): T[] {
+  const out = [...items];
+  let seed = 12345;
+  for (let i = out.length - 1; i > 0; i--) {
+    seed = (seed * 1103515245 + 12345) % 2147483648;
+    const j = seed % (i + 1);
+    [out[i], out[j]] = [out[j] as T, out[i] as T];
+  }
+  return out;
 }

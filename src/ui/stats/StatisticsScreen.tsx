@@ -21,14 +21,12 @@ import {
   bb100PointLabel,
   chartLabel,
   chartNote,
+  filterOption,
   moreCashHandsMessage,
   moreHandsMessage,
   pointLabel,
   type Bb100Point,
-  type GameTypeFilter,
-  type LineUpFilter,
   type StatisticsView,
-  type TableSizeFilter,
   type TrendFilter,
   type TrendGrouping,
   type TrendPoint,
@@ -174,7 +172,10 @@ export function StatisticsScreen({
               id="stats-table-size"
               value={filter.tableSize}
               onChange={(e) =>
-                onFilterChange?.({ ...filter, tableSize: e.target.value as TableSizeFilter })
+                onFilterChange?.({
+                  ...filter,
+                  tableSize: filterOption(TABLE_SIZE_OPTIONS, e.target.value),
+                })
               }
             >
               {TABLE_SIZE_OPTIONS.map(([id, label]) => (
@@ -190,7 +191,10 @@ export function StatisticsScreen({
               id="stats-game-type"
               value={filter.gameType}
               onChange={(e) =>
-                onFilterChange?.({ ...filter, gameType: e.target.value as GameTypeFilter })
+                onFilterChange?.({
+                  ...filter,
+                  gameType: filterOption(GAME_TYPE_OPTIONS, e.target.value),
+                })
               }
             >
               {GAME_TYPE_OPTIONS.map(([id, label]) => (
@@ -206,7 +210,10 @@ export function StatisticsScreen({
               id="stats-line-up"
               value={filter.lineUp ?? 'all'}
               onChange={(e) =>
-                onFilterChange?.({ ...filter, lineUp: e.target.value as LineUpFilter })
+                onFilterChange?.({
+                  ...filter,
+                  lineUp: filterOption(LINE_UP_OPTIONS, e.target.value),
+                })
               }
             >
               {LINE_UP_OPTIONS.map(([id, label]) => (

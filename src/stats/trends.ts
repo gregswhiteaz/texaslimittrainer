@@ -453,6 +453,24 @@ export function statisticsView(
   return { hands, sessions, totals: totalsLine(hands, sessions), chart, bb100, g2Target: target };
 }
 
+/** The view of `data`'s hands matching `filter`, grouped by `grouping`, with the G-2 target from every hand in
+ *  `data` (every stored hand), so a filter never moves it. */
+export function filteredStatisticsView(
+  data: TrendData,
+  filter: TrendFilter,
+  grouping: TrendGrouping,
+): StatisticsView {
+  return statisticsView(filterTrendData(data, filter), data, grouping);
+}
+
+/** `value` when it is one of `options`' ids, else 'all': a select value that is not a known option counts as All. */
+export function filterOption<T extends string>(
+  options: readonly (readonly [T, string])[],
+  value: string,
+): T | 'all' {
+  return options.find(([id]) => id === value)?.[0] ?? 'all';
+}
+
 /** A whole count with comma thousands separators, independent of the browser locale (A-7). */
 export function countText(n: number): string {
   return String(n).replace(/\B(?=(\d{3})+$)/g, ',');

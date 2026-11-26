@@ -7,6 +7,9 @@ import {
   BB100_NOTE,
   CHART_NOTE,
   G2_CAPTION,
+  GAME_TYPE_OPTIONS,
+  LINE_UP_OPTIONS,
+  TABLE_SIZE_OPTIONS,
   bb100ChartLabel,
   bb100Note,
   bb100PointLabel,
@@ -17,7 +20,9 @@ import {
   moreCashHandsMessage,
   chartLabel,
   countText,
+  filterOption,
   filterTrendData,
+  filteredStatisticsView,
   g2Target,
   moreHandsMessage,
   orderHands,
@@ -29,6 +34,7 @@ import {
   type StatisticsView,
   type TableSizeFilter,
   type TrendData,
+  type TrendGrouping,
   type TrendHand,
 } from '../../src/stats/trends';
 import { netResult } from '../../src/table/review';
@@ -36,6 +42,9 @@ import { bbPer100 } from '../../src/table/session-report';
 import { CASH_STAKES } from '../../src/table/session';
 import { StatisticsScreen } from '../../src/ui/stats/StatisticsScreen';
 import { cashPool, sitAndGoPool } from '../support/stat-records';
+import { pinTimeZone } from '../support/time-zone';
+
+pinTimeZone('Pacific/Kiritimati');
 
 vi.setConfig({ testTimeout: 30_000 });
 
@@ -723,5 +732,65 @@ describe('BB/100 hardening (TASK-11.14)', () => {
     const oneNegative = bbSvg([-3]);
     expect(breakEven(oneNegative)?.[0]).toContain('y1="45"');
     expect(oneNegative).toMatch(/<circle data-bb100-point="" cx="200" cy="150"/);
+  });
+});
+
+describe('TASK-11.13 hardening', () => {
+  it('day-grouping tests run in a pinned non-UTC time zone', () => {
+    expect(new Date(Date.UTC(2026, 10, 10)).getTimezoneOffset()).toBe(-840);
+    expect(Intl.DateTimeFormat().resolvedOptions().timeZone).toBe('Pacific/Kiritimati');
+  });
+
+  it('filteredStatisticsView keeps the all-hands G-2 target under every filter', () => {
+    const [cashRecord] = cashPool(CASH_STAKES[2] as (typeof CASH_STAKES)[number], 1);
+    const cash = trendHand(cashRecord as NonNullable<typeof cashRecord>).cash;
+    // Six sessions of 200 hands: dealtIn 2, 6, 10 x cash and non-cash, one Major on hands 10, 20, ...
+    const kinds = [2, 6, 10].flatMap((dealtIn) =>
+      [true, false].map((isCash) => ({ dealtIn, isCash })),
+    );
+    const sessionStarts = new Map<string, string>();
+    const hands: TrendHand[] = kinds.flatMap(({ dealtIn, isCash }, s) => {
+      const sessionId = String(s).repeat(32);
+      sessionStarts.set(sessionId, new Date(Date.UTC(2026, 10, 1, s)).toISOString());
+      return Array.from({ length: 200 }, (_, i): TrendHand => {
+        const n = s * 200 + i + 1;
+        return {
+          ...hand(
+            sessionId,
+            i + 1,
+            new Date(Date.UTC(2026, 10, 1, s, 0, i + 1)).toISOString(),
+            n % 10 === 0 ? 1 : 0,
+          ),
+          dealtIn,
+          ...(isCash && { cash }),
+        };
+      });
+    });
+    const data: TrendData = { hands, sessionStarts };
+    const target = statisticsView(data).g2Target;
+    expect(target).not.toBeNull();
+    for (const [tableSize] of TABLE_SIZE_OPTIONS) {
+      for (const [gameType] of GAME_TYPE_OPTIONS) {
+        const filter = { tableSize, gameType, lineUp: 'all' as const };
+        for (const grouping of ['hands', 'session', 'day'] as const satisfies TrendGrouping[]) {
+          const view = filteredStatisticsView(data, filter, grouping);
+          expect(view).toEqual(statisticsView(filterTrendData(data, filter), data, grouping));
+          expect(view.g2Target).toBe(target);
+        }
+        if (tableSize !== 'all' || gameType !== 'all') {
+          expect(statisticsView(filterTrendData(data, filter)).g2Target).toBeNull();
+        }
+      }
+    }
+  });
+
+  it('filterOption keeps known ids and maps others to all', () => {
+    for (const options of [TABLE_SIZE_OPTIONS, GAME_TYPE_OPTIONS, LINE_UP_OPTIONS]) {
+      for (const [id] of options) expect(filterOption(options, id)).toBe(id);
+      for (const value of ['bogus', '', 'All', 'CASH'])
+        expect(filterOption(options, value)).toBe('all');
+    }
+    expect(filterOption(GAME_TYPE_OPTIONS, 'cash')).toBe('cash');
+    expect(filterOption(TABLE_SIZE_OPTIONS, '')).toBe('all');
   });
 });

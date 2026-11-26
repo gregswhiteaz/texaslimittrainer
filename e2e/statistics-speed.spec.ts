@@ -25,15 +25,33 @@ test('3,000 stored hands open the Statistics trend within 1 second', async ({ pa
     const button = [...document.querySelectorAll('nav[aria-label="Main menu"] button')].find((b) =>
       b.textContent?.startsWith('Statistics'),
     );
-    const started = performance.now();
+    let started = 0;
+    // Stops at the first moment the 6th point is visible (TASK-11.13 A-6): present, not visibility:hidden, and
+    // a non-empty box. Checked on every DOM mutation and on every animation frame until then.
     (window as { __statsShown?: Promise<number> }).__statsShown = new Promise((resolve) => {
-      const observer = new MutationObserver(() => {
-        if (document.querySelectorAll('circle[data-point]').length < 6) return;
+      let done = false;
+      const visible = (): boolean => {
+        const sixth = document.querySelectorAll('circle[data-point]')[5];
+        if (sixth === undefined || !sixth.checkVisibility({ visibilityProperty: true }))
+          return false;
+        const box = sixth.getBoundingClientRect();
+        return box.width > 0 && box.height > 0;
+      };
+      const check = (): void => {
+        if (done || !visible()) return;
+        done = true;
         observer.disconnect();
         resolve(performance.now() - started);
-      });
-      observer.observe(document.body, { childList: true, subtree: true });
+      };
+      const observer = new MutationObserver(check);
+      const frame = (): void => {
+        check();
+        if (!done) requestAnimationFrame(frame);
+      };
+      observer.observe(document.body, { childList: true, subtree: true, attributes: true });
+      requestAnimationFrame(frame);
     });
+    started = performance.now();
     (button as HTMLButtonElement).click();
   });
   await expect(sixth).toBeVisible();

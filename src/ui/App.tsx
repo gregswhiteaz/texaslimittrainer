@@ -2,8 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import {
   ALL_TRENDS,
   DEFAULT_GROUPING,
-  filterTrendData,
-  statisticsView,
+  filteredStatisticsView,
   type StatisticsView,
   type TrendData,
   type TrendFilter,
@@ -33,13 +32,19 @@ type Screen =
   | { readonly name: 'table'; readonly resume: ResumedSession }
   | { readonly name: 'ending'; readonly sessionId: string }
   | { readonly name: 'report'; readonly report: SessionReport }
-  // view: undefined while the read is pending, null if it failed (TASK-11.1 A-10, D-7). data: every stored hand
-  // once read, and view is computed from its hands matching filter (TASK-11.4 D-4), grouped by grouping
-  // (TASK-11.5).
+  // view: undefined while the read is pending, null if it failed (TASK-11.1 A-10, D-7), with no data yet.
+  // Once read, data holds every stored hand and view is computed from its hands matching filter (TASK-11.4 D-4),
+  // grouped by grouping (TASK-11.5), through filteredStatisticsView (TASK-11.13 D-3).
   | {
       readonly name: 'stats';
-      readonly view: StatisticsView | undefined | null;
-      readonly data?: TrendData;
+      readonly view: undefined | null;
+      readonly filter: TrendFilter;
+      readonly grouping: TrendGrouping;
+    }
+  | {
+      readonly name: 'stats';
+      readonly view: StatisticsView;
+      readonly data: TrendData;
       readonly filter: TrendFilter;
       readonly grouping: TrendGrouping;
     }
@@ -143,7 +148,7 @@ export default function App({
               data,
               filter: ALL_TRENDS,
               grouping: DEFAULT_GROUPING,
-              view: statisticsView(data),
+              view: filteredStatisticsView(data, ALL_TRENDS, DEFAULT_GROUPING),
             });
           }
         },
@@ -380,33 +385,31 @@ export default function App({
           onStatistics={openStatistics}
         />
       );
-    case 'stats':
+    case 'stats': {
+      const loaded = 'data' in screen ? screen : null;
       return (
         <StatisticsScreen
           view={screen.view}
           onHome={() => setScreen({ name: 'home', returned: true })}
           filter={screen.filter}
-          onFilterChange={(filter) => {
-            const { data } = screen;
-            if (data === undefined) return;
-            setScreen({
-              ...screen,
-              filter,
-              view: statisticsView(filterTrendData(data, filter), data, screen.grouping),
-            });
-          }}
           grouping={screen.grouping}
-          onGroupingChange={(grouping) => {
-            const { data } = screen;
-            if (data === undefined) return;
-            setScreen({
-              ...screen,
-              grouping,
-              view: statisticsView(filterTrendData(data, screen.filter), data, grouping),
-            });
-          }}
+          {...(loaded && {
+            onFilterChange: (filter: TrendFilter) =>
+              setScreen({
+                ...loaded,
+                filter,
+                view: filteredStatisticsView(loaded.data, filter, loaded.grouping),
+              }),
+            onGroupingChange: (grouping: TrendGrouping) =>
+              setScreen({
+                ...loaded,
+                grouping,
+                view: filteredStatisticsView(loaded.data, loaded.filter, grouping),
+              }),
+          })}
         />
       );
+    }
     case 'settings':
       return (
         <SettingsScreen
