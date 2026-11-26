@@ -128,21 +128,19 @@ export const POSTFLOP_TEMPLATES: Readonly<Record<PostflopTemplateKey, string>> =
   'check-free':
     'Your equity, {def:equity}, is {equity} against all their hands and {callingEquity} against the hands that would call a bet. Your equity against the hands that would call is not above {threshold}, so a bet would not be a value bet, {def:value-bet}. Checking is free, with {required} equity required, so check.',
   'value-raise':
-    'Your equity, {def:equity}, is {equity} against all their hands and {callingEquity} against the hands that would call a raise. Your equity against the hands that would call is above {threshold}, so raising is a value bet, {def:value-bet}. Pot odds, {def:pot-odds}, ask only for {required} to call, but raising wins more.',
+    'Your equity, {def:equity}, is {equity} against all their hands and {callingEquity} against the hands that would call a raise. Your equity against the hands that would call is above {threshold}, so raising is a value bet, {def:value-bet}. Pot odds, {def:pot-odds}{riverBet}, ask only for {required} to call, but raising wins more.',
   'pot-odds-call':
-    'Your equity, {def:equity}, is {equity}. Pot odds, {def:pot-odds}, ask for {required}, and you have at least that, so calling earns chips over time.',
+    'Your equity, {def:equity}, is {equity}. Pot odds, {def:pot-odds}{riverBet}, ask for {required}, and you have at least that, so calling earns chips over time.',
   'implied-odds-call':
-    'You have a draw with {outs} outs, {def:outs-and-draws}, and your equity, {def:equity}, is {equity}. Pot odds, {def:pot-odds}, ask for {required}, more than you have. Implied odds, {def:implied-odds}, ask only for {impliedRequired}, so calling earns chips over time.',
+    'You have a draw with {outs} outs, {def:outs-and-draws}, and your equity, {def:equity}, is {equity}. Pot odds, {def:pot-odds}{riverBet}, ask for {required}, more than you have. Implied odds, {def:implied-odds}, ask only for {impliedRequired}, so calling earns chips over time.',
   'pot-odds-fold':
-    'Your equity, {def:equity}, is {equity}. Pot odds, {def:pot-odds}, ask for {required}, more than you have, so folding saves chips over time.',
+    'Your equity, {def:equity}, is {equity}. Pot odds, {def:pot-odds}{riverBet}, ask for {required}, more than you have, so folding saves chips over time.',
   'pot-odds-fold-implied':
-    'Your equity, {def:equity}, is {equity}. Pot odds, {def:pot-odds}, ask for {required}, more than you have. Even implied odds, {def:implied-odds}, ask for {impliedRequired}, so fold.',
+    'Your equity, {def:equity}, is {equity}. Pot odds, {def:pot-odds}{riverBet}, ask for {required}, more than you have. Even implied odds, {def:implied-odds}, ask for {impliedRequired}, so fold.',
 };
 
-/** The pot-odds lead every postflop template uses, and its Q-3 turn form when the price counts a river bet. */
-export const POT_ODDS_LEAD = 'Pot odds, {def:pot-odds}, ask';
-export const POT_ODDS_RIVER_BET_LEAD =
-  'Pot odds, {def:pot-odds}, counting the big bet you will likely face on the river, ask';
+/** The Q-3 (TASK-7.32) clause filled into {riverBet} when a turn price counts the river big bet; '' otherwise. */
+export const POT_ODDS_RIVER_BET_CLAUSE = ', counting the big bet you will likely face on the river';
 
 export const PREFLOP_CONTEXT: Readonly<Record<Situation, string>> = {
   unopened:

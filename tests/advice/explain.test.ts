@@ -22,6 +22,7 @@ import {
   SEAT_NAMES,
   type ConceptId,
 } from '../../src/advice/explanations';
+import * as explanations from '../../src/advice/explanations';
 import type { PostflopRecommendation } from '../../src/advice/postflop';
 import type { PreflopRecommendation } from '../../src/advice/preflop';
 import type { ChartCell, Position, Situation } from '../../src/advice/preflop-chart';
@@ -56,6 +57,8 @@ const postflop = (fields: Partial<PostflopInput>): PostflopInput => ({
   impliedRequiredEquityPct: null,
   outs: [],
   opponentBasis: [],
+  requiredCountsRiverBet: false,
+  valueThresholdPct: 50,
   ...fields,
 });
 
@@ -141,6 +144,15 @@ describe('template filling', () => {
     const basis = bodyOf(source, 'basisText');
     expect(source.slice(basis.start, basis.end)).toContain('fillTemplate(OBSERVED_BASIS');
     expect(fillTemplate).toBe(explanationsFillTemplate);
+  });
+
+  it('explainPostflop adds the river-bet clause through its own template, not a text replace', () => {
+    const source = readFileSync(join(REPO_ROOT, 'src/advice/explain.ts'), 'utf8');
+    const body = bodyOf(source, 'explainPostflop');
+    expect(body.start).toBeGreaterThanOrEqual(0);
+    expect(source.slice(body.start, body.end)).not.toMatch(/\.replace(?:All)?\(/);
+    expect(Object.keys(explanations)).not.toContain('POT_ODDS_LEAD');
+    expect(Object.keys(explanations)).not.toContain('POT_ODDS_RIVER_BET_LEAD');
   });
 });
 
@@ -405,6 +417,7 @@ describe('authored explanation data', () => {
       outs: '9',
       aggressive: 'bet',
       aggressiveIng: 'betting',
+      riverBet: '',
       seat: SEAT_NAMES.UTG,
       hand: handClassName('AKs'),
       alternativeIng: 'Raising',

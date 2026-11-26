@@ -241,7 +241,7 @@ describe('value bet and raise acceptance (TASK-7.8)', () => {
     }
   });
 
-  it('AC#6 50.1% against callers raises', () => {
+  it('AC#6 65.1% against callers raises', () => {
     // TASK-7.32: a raise facing a bet needs more than VALUE_RAISE_THRESHOLD_PCT (65), so the boundary is 65.1%.
     const view = viewAt(3, spotDeck(3, 'Ah 5h', 'Kh 9h 2c'), FLOP_BET);
     expect(view.legalActions.some((a) => a.type === 'raise')).toBe(true);

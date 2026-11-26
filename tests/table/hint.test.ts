@@ -59,6 +59,8 @@ function postflop(move: Action, equityPct: number): PostflopRecommendation {
     equityMethod: 'exact',
     equityVsCallingRangePct: equityPct,
     impliedRequiredEquityPct: null,
+    requiredCountsRiverBet: false,
+    valueThresholdPct: 50,
     outs: [],
     opponentBasis: [
       { seat: 2, observedHands: 45, text: 'based on 45 hands of this opponent' },

@@ -7,8 +7,7 @@ import {
   OBSERVED_MIN_HANDS,
   OPPONENT_TYPE_LEAD,
   POSTFLOP_TEMPLATES,
-  POT_ODDS_LEAD,
-  POT_ODDS_RIVER_BET_LEAD,
+  POT_ODDS_RIVER_BET_CLAUSE,
   PREFLOP_CONTEXT,
   PREFLOP_SENTENCES,
   RANK_NAMES,
@@ -95,6 +94,7 @@ export function explainPostflop(
     outs: String(rec.outs.length),
     aggressive: raise ? 'raise' : 'bet',
     aggressiveIng: raise ? 'raising' : 'betting',
+    riverBet: rec.requiredCountsRiverBet ? fillTemplate(POT_ODDS_RIVER_BET_CLAUSE, {}) : '',
   };
   if (rec.impliedRequiredEquityPct !== null) {
     values.impliedRequired = formatPct(rec.impliedRequiredEquityPct);
@@ -103,11 +103,7 @@ export function explainPostflop(
     rec.ruleId === 'pot-odds-fold' && rec.impliedRequiredEquityPct !== null
       ? 'pot-odds-fold-implied'
       : rec.ruleId;
-  const template =
-    rec.requiredCountsRiverBet === true
-      ? POSTFLOP_TEMPLATES[key].replace(POT_ODDS_LEAD, POT_ODDS_RIVER_BET_LEAD)
-      : POSTFLOP_TEMPLATES[key];
-  const text = fillTemplate(template, values);
+  const text = fillTemplate(POSTFLOP_TEMPLATES[key], values);
   if (rec.opponentBasis.every((b) => b.observedHands === null)) return text;
   const lead = fillTemplate(OPPONENT_TYPE_LEAD, { minHands: String(OBSERVED_MIN_HANDS) });
   return lead + text.charAt(0).toLowerCase() + text.slice(1);

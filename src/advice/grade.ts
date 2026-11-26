@@ -79,7 +79,7 @@ const IMPOSSIBLE_PAIRS: readonly (readonly [ActionType, ActionType])[] = [
 const tenths = (pct: number): number => Math.round(pct * 10);
 
 function finitePct(
-  field: 'equityPct' | 'requiredEquityPct' | 'equityVsCallingRangePct',
+  field: 'equityPct' | 'requiredEquityPct' | 'equityVsCallingRangePct' | 'valueThresholdPct',
   value: number | undefined,
 ): number {
   if (value === undefined || !Number.isFinite(value)) {
@@ -136,10 +136,12 @@ export function gradeDecision<R extends GradeInput>(
   if (vsCallingRange === undefined || vsCallingRange === null) {
     return result('minor', 'aggression-no-range', null);
   }
-  const threshold = tenths(recommendation.valueThresholdPct ?? VALUE_THRESHOLD_PCT);
-  const distance = Math.abs(
-    tenths(finitePct('equityVsCallingRangePct', vsCallingRange)) - threshold,
+  const calling = tenths(finitePct('equityVsCallingRangePct', vsCallingRange));
+  const t = recommendation.valueThresholdPct;
+  const threshold = tenths(
+    t === undefined || t === null ? VALUE_THRESHOLD_PCT : finitePct('valueThresholdPct', t),
   );
+  const distance = Math.abs(calling - threshold);
   return result(
     distance >= AGGRESSION_MAJOR_TENTHS ? 'major' : 'minor',
     'aggression-margin',

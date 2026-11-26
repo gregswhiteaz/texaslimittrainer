@@ -77,11 +77,13 @@ export interface PostflopGoldenSpot {
   readonly justification: string;
 }
 
-/** The numbers the clear-cut rule reads; PostflopRecommendation is assignable. */
+/** The numbers the clear-cut rule reads; PostflopRecommendation is assignable. Hand-built numbers may omit the
+ *  threshold (→ 50). */
 export type GoldenNumbers = Pick<
   PostflopRecommendation,
-  'action' | 'equityPct' | 'requiredEquityPct' | 'equityVsCallingRangePct' | 'valueThresholdPct'
->;
+  'action' | 'equityPct' | 'requiredEquityPct' | 'equityVsCallingRangePct'
+> &
+  Partial<Pick<PostflopRecommendation, 'valueThresholdPct'>>;
 
 export const GRADED_FORMAT = 'tlh-graded-examples';
 

@@ -223,7 +223,7 @@
       "justification": "Nine-five checked its option in a pot the small blind limped, then missed this ace-queen flop with no pair and no draw. Our equity is far below the pot odds the small blind's bet offers, so fold."
     },
     {
-      "id": "6max-flop-co-raise-jj",
+      "id": "6max-flop-co-raise-jj-3way",
       "seats": 6,
       "position": "CO",
       "street": "flop",

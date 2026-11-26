@@ -21,6 +21,8 @@ const input = (fields: Partial<PostflopInput>): PostflopInput => ({
   impliedRequiredEquityPct: null,
   outs: [],
   opponentBasis: [],
+  requiredCountsRiverBet: false,
+  valueThresholdPct: 50,
   ...fields,
 });
 

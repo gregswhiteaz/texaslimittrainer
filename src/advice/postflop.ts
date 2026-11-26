@@ -47,11 +47,8 @@ export interface PostflopRecommendation {
    * (capped by the hero's stack after the call; 0 when no opponent can bet): (call + R) ÷ (pot + call + 2R).
    */
   readonly requiredEquityPct: number;
-  /**
-   * True iff requiredEquityPct counts a river bet (turn, something owed, R > 0). Always set by recommendPostflop;
-   * optional so hand-built inputs (tests, stored data) stay valid, absent = false.
-   */
-  readonly requiredCountsRiverBet?: boolean;
+  /** True iff requiredEquityPct counts a river bet (turn, something owed, R > 0). */
+  readonly requiredCountsRiverBet: boolean;
   /** Chips the hero must add to call; 0 when nothing is owed. */
   readonly callAmount: number;
   /** Chips in the middle before the hero acts (all pots + all street contributions). */
@@ -71,11 +68,8 @@ export interface PostflopRecommendation {
   readonly outs: readonly Card[];
   /** One per live opponent, ascending seat: whether its range rests on observed stats ('typical player' otherwise). */
   readonly opponentBasis: readonly OpponentBasis[];
-  /**
-   * The value threshold that applied: VALUE_RAISE_THRESHOLD_PCT when a bet is owed, else VALUE_THRESHOLD_PCT. Always
-   * set by recommendPostflop; optional like requiredCountsRiverBet (absent = 50).
-   */
-  readonly valueThresholdPct?: 50 | 65;
+  /** The value threshold that applied: VALUE_RAISE_THRESHOLD_PCT when a bet is owed, else VALUE_THRESHOLD_PCT. */
+  readonly valueThresholdPct: 50 | 65;
   /** Plain-English reason, ≤ 3 sentences (REQ-037). */
   readonly explanation: string;
 }

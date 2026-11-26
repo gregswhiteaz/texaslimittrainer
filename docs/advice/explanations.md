@@ -59,7 +59,8 @@ could be read as the equity against all their hands.
 
 When a turn price counts the river big bet (TASK-7.32), the pot-odds clause says so inline, keeping the three-sentence
 limit: "Pot odds, …, counting the big bet you will likely face on the river, ask for 26.7%, …". Flop and river
-explanations are unchanged.
+explanations are unchanged. The clause is its own template, `POT_ODDS_RIVER_BET_CLAUSE`, filled into the `{riverBet}`
+slot that every template a bet facing the hero can use carries right after the pot-odds definition (TASK-7.33).
 
 ## Preflop
 

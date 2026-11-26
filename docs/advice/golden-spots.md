@@ -340,6 +340,14 @@ the board card or board pair that plays rather than the hero's high card: `6max-
 | `fr-river-utg-call-t5o`    | `fr-river-utg-call-aks`    | Major hero preflop step 1 `raise` (full-ring UTG unopened T5o: fold). Fix: same line and board, hole cards now Ac Kc.                                                                                         |
 | `fr-river-utg-fold-jto`    | `fr-river-utg-fold-jts`    | Major hero preflop step 1 `raise` (full-ring UTG unopened JTo: fold). Fix: same line and board, hole cards now Jc Tc.                                                                                         |
 
+## Changes from TASK-7.33
+
+One spot id is corrected so it describes its current spot.
+
+| Old id                  | New id                       | Reason                                                                                                                                                                                                    |
+| ----------------------- | ---------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `6max-flop-co-raise-jj` | `6max-flop-co-raise-jj-3way` | TASK-7.31 changed the line (the cutoff raises the limper, and the big blind and the limper call), and TASK-7.32 kept the id for this three-way pot. Cards, board, action and justification are unchanged. |
+
 ## Originality
 
 All spots, graded examples and justifications were written for this project from the project's own charts and
