@@ -1,11 +1,11 @@
 ---
 id: TASK-7.36
 title: Give graded postflop examples chart-consistent preflop lines
-status: In Progress
+status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-26T06:37:00Z'
-updated_date: '2026-11-26T19:51:00Z'
+updated_date: '2026-11-26T19:58:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -14,6 +14,8 @@ dependencies:
   - TASK-7.31
 references:
   - doc-154
+documentation:
+  - doc-172
 parent_task_id: TASK-7
 priority: low
 ordinal: 255000
@@ -48,4 +50,12 @@ Full spec: doit/TASK-7.36/spec.md
 Build: graded examples checked by the hero-preflop rule; three re-authored like-for-like (grades/margins kept, evaluator-checked); unreachable break removed; gate PASS
 
 Judge r1 PASS (6/6 SPEC items; justifications evaluator-checked)
+
+Follow-ups: none.
 <!-- SECTION:NOTES:END -->
+
+## Final Summary
+
+<!-- SECTION:FINAL_SUMMARY:BEGIN -->
+Postflop graded examples now go through the same hero-preflop-line rule as golden spots; three examples (gutshot, top pair, trips) were re-authored like-for-like with unchanged id, grade, rule id and margin. Removed the unreachable break in heroPreflopProblems. Verified: judge round 1 PASS 6/6, acceptance tests graded-lines.acceptance.test.ts, evaluator fact-check of justifications. Review assumptions A-1..A-5 (esp. A-3: gutshot example now uses a limped line with Kd 4h) and the auto-accepted edit to the locked graded-examples.json. No follow-ups.
+<!-- SECTION:FINAL_SUMMARY:END -->
