@@ -1,0 +1,16 @@
+{"reviewer": "code", "round": 1,
+ "rubric": [
+  {"item": "SPEC-01 correctness", "result": "pass"},
+  {"item": "SPEC-01 test strength", "result": "pass"},
+  {"item": "SPEC-02 correctness", "result": "pass"},
+  {"item": "SPEC-02 test strength", "result": "pass"},
+  {"item": "SPEC-03 correctness", "result": "pass"},
+  {"item": "SPEC-03 test strength", "result": "pass"},
+  {"item": "SPEC-04 correctness", "result": "pass"},
+  {"item": "SPEC-04 test strength", "result": "pass"},
+  {"item": "scope", "result": "pass"},
+  {"item": "concision", "result": "pass"},
+  {"item": "clarity", "result": "pass"}
+ ],
+ "findings": [],
+ "summary": "The change matches the spec's reference design exactly. userMade is exported from hand-record.ts and its body is unchanged. handCategoryDecisions pairs records by reference against userMade(...) and computes the seat list and positionGroup lazily behind ??=, so a hand with no pairing never reads seats or throws (A-1). The inline blind literals are gone. Test strength: SPEC-01 counts reads with a seats getter, so recomputing per pairing would give 3 reads and fail. SPEC-02 fails under eager computation, because the not-dealt postflop hand would throw and the unpaired hand would read seats once, and it also checks that the RangeError still fires when a decision pairs. SPEC-03 fails if the blind is not skipped, because SB would pair with the call decision, the types would not match and there would be no spot. I re-ran the SPEC-03 grep checks and git diff --exit-code --diff-filter=MD e6bea12 -- tests e2e (both pass) and vitest on tests/stats plus session-report (94 passed). Gate build-1 passes; the line budget warns at 123 vs 110, which is reasonable for one new test file and well under the fail limit. The diff touches only the 3 files in scope."}

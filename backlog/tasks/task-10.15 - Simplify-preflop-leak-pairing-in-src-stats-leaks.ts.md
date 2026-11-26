@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-25T06:45:00Z'
-updated_date: '2026-11-26T18:18:00Z'
+updated_date: '2026-11-26T18:29:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -40,3 +40,9 @@ Follow-up from TASK-10.6 code review (doc-131). handCategoryDecisions recomputes
 
 Full spec: doit/TASK-10.15/spec.md
 <!-- SECTION:PLAN:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+Build: leaks.ts reuses exported userMade; position group computed once per hand (lazy); no existing test changed; gate PASS
+<!-- SECTION:NOTES:END -->
