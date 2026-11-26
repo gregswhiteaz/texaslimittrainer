@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-18T07:03:00Z'
-updated_date: '2026-11-26T20:24:00Z'
+updated_date: '2026-11-26T20:36:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -29,7 +29,7 @@ Follow-up from TASK-1.5. REQ-028.2 says replaying a hand reproduces every bot ac
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Given the options (store session context in hand records, forbid cross-hand bot memory, or relax REQ-028.2), When the user decides, Then the decision is recorded as a Backlog decision and requirements.md is updated if needed
+- [x] #1 Given the options (store session context in hand records, forbid cross-hand bot memory, or relax REQ-028.2), When the user decides, Then the decision is recorded as a Backlog decision and requirements.md is updated if needed
 <!-- AC:END -->
 
 ## Implementation Plan
@@ -50,4 +50,6 @@ Full spec: doit/TASK-6.20/spec.md
 Build: REQ-029.3 + change-log 1.12; PlayerView.earlierShowdowns doc comment; guard test bot-actions-ignore-earlier-showdowns (fails with 55 mismatches when a bot reads the list); gate PASS
 
 Recorded decision-1 (accepted): bot decisions use only the current hand (Q-1 = B). TASK-6.23 archived as not needed.
+
+Judge r1 PASS (4/4 SPEC items)
 <!-- SECTION:NOTES:END -->

@@ -5,13 +5,18 @@
   "base_commit": "5ec239851bab001639f4d1580af6b41f8bb96f63",
   "started": "2026-11-26T13:07:36",
   "review_round": 1,
-  "judge_round": 0,
+  "judge_round": 1,
   "sendbacks": 0,
   "gate_runs": 2,
   "questions": 0,
   "assumptions": 0,
   "escalations": 0,
-  "item_failures": {},
+  "item_failures": {
+    "SPEC-01": 0,
+    "SPEC-02": 0,
+    "SPEC-03": 0,
+    "SPEC-04": 0
+  },
   "locked_tests": {
     "tests/bots/no-session-memory.acceptance.test.ts": "e0a1bd69297058db02e7396049a8d10a0d5f93fd90ddb92d14f4eb96289aedde"
   },
@@ -2187,5 +2192,8 @@
   "spec_sha256": "11c2edede4c92b51bdae81d2c55c8673eb3303d98087ab5d8fbeb8b655cc7adb",
   "review_findings": {
     "1": 0
+  },
+  "judge_results": {
+    "1": "PASS"
   }
 }

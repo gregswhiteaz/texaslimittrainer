@@ -3,24 +3,24 @@
     "id": "SPEC-01",
     "verifies": "AC#1",
     "verification": "command `backlog decision list --plain`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-02",
     "verifies": "AC#1",
     "verification": "command `git diff main -- dreams/limit-holdem-trainer/requirements.md`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-03",
     "verifies": "AC#1",
     "verification": "acceptance `tests/bots/no-session-memory.acceptance.test.ts::bot actions ignore earlier showdowns`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-04",
     "verifies": "AC#1",
     "verification": "command `backlog task view TASK-6.23 --plain`",
-    "status": "pending"
+    "status": "pass"
   }
 ]
