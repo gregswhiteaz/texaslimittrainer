@@ -1,0 +1,242 @@
+{
+  "id": "TASK-7.30",
+  "title": "Tidy observed-range helpers: exact zero width and one template filler",
+  "status": "To Do",
+  "archived": false,
+  "type": null,
+  "priority": "low",
+  "project": null,
+  "assignees": [],
+  "reporter": null,
+  "labels": [
+    "dream-limit-holdem-trainer",
+    "follow-up"
+  ],
+  "milestone": "m-1",
+  "parentTaskId": "TASK-7",
+  "acceptanceCriteriaCompleted": 0,
+  "acceptanceCriteriaCount": 2,
+  "references": [
+    "doc-104"
+  ],
+  "modifiedFiles": [],
+  "ordinal": 229000,
+  "createdAt": "2026-11-23T19:21:00Z",
+  "updatedAt": null,
+  "dueDate": null,
+  "isReady": true,
+  "path": "backlog/tasks/task-7.30 - Tidy-observed-range-helpers-exact-zero-width-and-one-template-filler.md",
+  "description": "Follow-up from TASK-7.13 (doc-104). scaledWidthPct can return about 3.55e-15 instead of exactly 0 when the observed PFR/VPIP is 0 (judge J-2-01; the range is still AA). basisText fills its placeholder with String.replace instead of the existing fillTemplate (code review MINOR basis-text-reimplements-fill-template).",
+  "dependencies": [
+    "TASK-7.13"
+  ],
+  "dependencyGraph": {
+    "root": "TASK-7.30",
+    "nodes": [
+      {
+        "id": "TASK-7.30",
+        "title": "Tidy observed-range helpers: exact zero width and one template filler",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": 0,
+        "dependentDepth": 0
+      },
+      {
+        "id": "TASK-1.1",
+        "title": "Bootstrap the strict TypeScript project with one-command checks",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 6,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.2",
+        "title": "Rank showdown hands by real poker hand rankings",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 4,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.3",
+        "title": "Deal every hand from a seeded shuffle with a replay code",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 4,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.4",
+        "title": "Play a complete fixed-limit hand from blinds to showdown",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 3,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.5",
+        "title": "Give each deciding seat only its own view of the hand",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 5,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.7",
+        "title": "Run every check in GitHub Actions on each push and pull request",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 5,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-7.1",
+        "title": "Compute a hand's equity against opponent hands",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 4,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-7.2",
+        "title": "Recommend a preflop action from the 6-max chart",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 4,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-7.3",
+        "title": "Recommend call or fold after the flop from equity and pot odds",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 3,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-7.5",
+        "title": "Estimate each opponent's range from their actions in the hand",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 2,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-7.12",
+        "title": "Enabler: shared style-stat functions for VPIP, PFR, Aggression, WTSD and W$SD",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 2,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-7.13",
+        "title": "Adjust opponent ranges to their observed play after 30 hands",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 1,
+        "dependentDepth": null
+      }
+    ],
+    "edges": [
+      {
+        "from": "TASK-1.2",
+        "to": "TASK-1.7"
+      },
+      {
+        "from": "TASK-1.3",
+        "to": "TASK-1.7"
+      },
+      {
+        "from": "TASK-1.4",
+        "to": "TASK-1.2"
+      },
+      {
+        "from": "TASK-1.4",
+        "to": "TASK-1.3"
+      },
+      {
+        "from": "TASK-1.5",
+        "to": "TASK-1.4"
+      },
+      {
+        "from": "TASK-1.7",
+        "to": "TASK-1.1"
+      },
+      {
+        "from": "TASK-7.1",
+        "to": "TASK-1.2"
+      },
+      {
+        "from": "TASK-7.2",
+        "to": "TASK-1.5"
+      },
+      {
+        "from": "TASK-7.3",
+        "to": "TASK-7.1"
+      },
+      {
+        "from": "TASK-7.3",
+        "to": "TASK-7.2"
+      },
+      {
+        "from": "TASK-7.5",
+        "to": "TASK-7.3"
+      },
+      {
+        "from": "TASK-7.12",
+        "to": "TASK-1.4"
+      },
+      {
+        "from": "TASK-7.13",
+        "to": "TASK-7.5"
+      },
+      {
+        "from": "TASK-7.13",
+        "to": "TASK-7.12"
+      },
+      {
+        "from": "TASK-7.30",
+        "to": "TASK-7.13"
+      }
+    ]
+  },
+  "readiness": {
+    "isReady": true,
+    "isBlocked": false,
+    "blockingDependencies": [],
+    "missingDependencies": []
+  },
+  "documentation": [],
+  "subtasks": [],
+  "acceptanceCriteria": [
+    {
+      "index": 1,
+      "text": "Given a CO open-raiser observed for 100 hands with PFR 0, When its scaled width is computed, Then the width is exactly 0 (toBe(0), not toBeCloseTo)",
+      "checked": false
+    },
+    {
+      "index": 2,
+      "text": "Given basisText for 45 hands, When it is rendered, Then it is produced through fillTemplate and reads exactly 'based on 45 hands of this opponent', and no other template-filling helper remains in src/advice",
+      "checked": false
+    }
+  ],
+  "definitionOfDone": [],
+  "implementationPlan": null,
+  "implementationNotes": null,
+  "comments": [],
+  "finalSummary": null
+}

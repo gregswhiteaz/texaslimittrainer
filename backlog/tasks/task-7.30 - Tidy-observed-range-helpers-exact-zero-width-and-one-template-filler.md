@@ -1,9 +1,11 @@
 ---
 id: TASK-7.30
 title: 'Tidy observed-range helpers: exact zero width and one template filler'
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-23T19:21:00Z'
+updated_date: '2026-11-26T14:36:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -28,3 +30,14 @@ Follow-up from TASK-7.13 (doc-104). scaledWidthPct can return about 3.55e-15 ins
 - [ ] #1 Given a CO open-raiser observed for 100 hands with PFR 0, When its scaled width is computed, Then the width is exactly 0 (toBe(0), not toBeCloseTo)
 - [ ] #2 Given basisText for 45 hands, When it is rendered, Then it is produced through fillTemplate and reads exactly 'based on 45 hands of this opponent', and no other template-filling helper remains in src/advice
 <!-- AC:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. scaledWidthPct returns the observed stat exactly from 100 hands (early return); below 100 unchanged
+2. Move fillTemplate into explanations.ts; basisText uses it; explain.ts re-exports
+3. Acceptance + unit tests (exact zero, basis text, single template filler)
+4. Playtest SHAs unchanged
+
+Full spec: doit/TASK-7.30/spec.md
+<!-- SECTION:PLAN:END -->
