@@ -1,0 +1,3 @@
+{"reviewer": "security", "round": 1,
+ "findings": [],
+ "summary": "No security findings. The src change (decision-grades.ts) only attaches a no-op catch to each grade request promise while keeping the original promise. Grade rejections still reach gradedDecisions, so the change fails closed and opens no new trust boundary; worker replies are still parsed by AdviceClient. The fault injection (reject-grade, __tlhGradeFaulted) is only in e2e/support/fault-injection.ts and is installed by a Playwright init script. Nothing under src/, tsconfig or vite config imports e2e/. The existing dist/ build has no '__tlh' string, and the locked error-recovery spec checks dist for '__tlhFault'. No new dependencies, secrets, logging changes or randomness."}

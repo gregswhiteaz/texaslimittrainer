@@ -1,0 +1,20 @@
+{"reviewer": "code", "round": 1,
+ "rubric": [
+  {"item": "SPEC-01 correctness", "result": "pass"},
+  {"item": "SPEC-01 test strength", "result": "pass"},
+  {"item": "SPEC-02 correctness", "result": "pass"},
+  {"item": "SPEC-02 test strength", "result": "pass"},
+  {"item": "SPEC-03 correctness", "result": "pass"},
+  {"item": "SPEC-03 test strength", "result": "pass"},
+  {"item": "SPEC-04 correctness", "result": "pass"},
+  {"item": "SPEC-04 test strength", "result": "pass"},
+  {"item": "SPEC-05 correctness", "result": "pass"},
+  {"item": "SPEC-05 test strength", "result": "pass"},
+  {"item": "SPEC-06 correctness", "result": "pass"},
+  {"item": "SPEC-06 test strength", "result": "pass"},
+  {"item": "scope", "result": "pass"},
+  {"item": "concision", "result": "pass"},
+  {"item": "clarity", "result": "pass"}
+ ],
+ "findings": [],
+ "summary": "requestNewGrades attaches a no-op catch to each new request promise and stores the original promise (D-1), so gradedDecisions still rejects with the grade's error. Unit tests would fail if the handler were missing (process unhandledRejection listener records it) or if the derived promise were stored (toBe identity on pending and rejects.toBe(failure)). The pending-grades markup test checks no <aside and exactly one Deal next hand for open true/false with a result shown. The e2e proves the fault fired before the hand ended (__tlhGradeFaulted true with no Hand over), checks no error heading and no <aside> at each polled slice, and checks the failed-save log, 0 unhandledrejection events, no page errors, no 'Unexpected error' log, Hand #1 still showing after 100 x 50 ms, Leave table enabled and storedCount 0. Without the fix, the error screen would appear mid-hand and the per-slice errorHeading check would fail. I ran e2e/grade-failure.spec.ts and the locked e2e/error-recovery.spec.ts in Chromium and WebKit (12/12 pass) and the two new Vitest files (3/3 pass). The fix-2 gate is PASS for test, lint, typecheck, scope and test integrity. Docs cover every point SPEC-05 lists. Only the 7 spec'd files changed, and nothing touches AppRoot, ErrorScreen, the bot path or the store-failure path."}

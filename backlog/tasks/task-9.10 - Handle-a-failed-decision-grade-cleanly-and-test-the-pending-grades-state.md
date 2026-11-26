@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-24T13:09:00Z'
-updated_date: '2026-11-26T08:16:00Z'
+updated_date: '2026-11-26T08:36:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -47,4 +47,6 @@ Full spec: doit/TASK-9.10/spec.md
 
 <!-- SECTION:NOTES:BEGIN -->
 AC added from TASK-13.1 follow-up (doc-143): since TASK-13.1, an unhandled pending-grade rejection mid-hand shows the app error screen instead of stalling at the hand write.
+
+Build: grade requests get a no-op catch (pending keeps the original promise); grade failure follows the write-failure path (Q-1 A); e2e 383 passed; gate PASS
 <!-- SECTION:NOTES:END -->
