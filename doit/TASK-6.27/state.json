@@ -4,7 +4,7 @@
   "branch": "doit/TASK-6.27",
   "base_commit": "96bf8577e4d135472163776498ced3f022b9de51",
   "started": "2026-11-26T14:16:35",
-  "review_round": 1,
+  "review_round": 2,
   "judge_round": 0,
   "sendbacks": 0,
   "gate_runs": 2,
@@ -2193,12 +2193,19 @@
       "event": "unlock",
       "file": "tests/toolchain/bot-import-gaps.acceptance.test.ts",
       "reason": "Q-2/AC#3: add allow-list probes (strengthen only)"
+    },
+    {
+      "t": "2026-11-26T15:45:38",
+      "event": "unlock",
+      "file": "tests/toolchain/bot-import-gaps.acceptance.test.ts",
+      "reason": "review r2: import.meta, globalThis/eval and missing-probe additions (strengthen only)"
     }
   ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-6.27",
   "spec_sha256": "9d8a09cd4b81d39927eb06ee0176f6310a859e6882e3fd7fb462a55afef788e0",
   "review_findings": {
-    "1": 4
+    "1": 4,
+    "2": 1
   },
   "brief_history": {
     "tools/lint/headless-boundary.js:advice-golden-extension-bypass": [
@@ -2212,7 +2219,12 @@
     ],
     "tools/lint/headless-boundary.js:bot-boundary-misses-non-engine-modules": [
       "review r1"
+    ],
+    "tools/lint/headless-boundary.js:import-meta-glob-bypasses-allow-lists": [
+      "review r2"
     ]
   },
-  "relock_pending": []
+  "relock_pending": [
+    "tests/toolchain/bot-import-gaps.acceptance.test.ts"
+  ]
 }
