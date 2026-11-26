@@ -23,7 +23,7 @@ import {
 import { callingRange, unseenCombos } from '../../src/advice/ranges';
 import { BOT_EQUITY, BOT_EQUITY_BUDGET } from '../../src/bots/tag';
 import { parseCards, type Card } from '../../src/engine/cards';
-import { fnv1a32 } from '../../src/engine/seeded-random';
+import { fnv1a32, Xoshiro128 } from '../../src/engine/seeded-random';
 import { evaluate } from '../../src/engine/hand-evaluator';
 import { enumerateExact } from '../../tools/equity/generate-reference.js';
 import { REPO_ROOT } from '../support/sandbox';
@@ -373,8 +373,30 @@ describe('sampler speed-up (TASK-7.18)', () => {
     expect(rejectionsOverBudget(147, 24_576, 30_000, 3_000_000)).toBe(false);
     expect(rejectionsOverBudget(150, 32_768, 30_000, 3_000_000)).toBe(true);
     expect(rejectionsOverBudget(1_000, 32_768, 30_000, 3_000_000)).toBe(false);
-    expect(rejectionsOverBudget(0, 8_192, 500, 50_000)).toBe(true);
+    // Recorded deviation (fix round 1): the projection now subtracts z standard deviations of the
+    // remaining rejections, so this early-run state no longer aborts.
+    expect(rejectionsOverBudget(0, 8_192, 500, 50_000)).toBe(false);
     expect(rejectionsOverBudget(40, 8_192, 500, 50_000)).toBe(false);
+
+    // Regression: a seeded Bernoulli run at acceptance 0.0099 that finishes under the cap. The spec's
+    // original rule (no variance term) aborted it at accepted = 485, rejections = 49,152.
+    const z = SAMPLER_ABORT_Z;
+    const pHi = (485 + (z * z) / 2 + z * Math.sqrt(485 + (z * z) / 4)) / (485 + 49_152 + z * z);
+    expect(49_152 + (15 * (1 - pHi)) / pHi).toBeGreaterThan(50_000);
+    const rng = new Xoshiro128(91);
+    let accepted = 0;
+    let rejections = 0;
+    let aborted = false;
+    while (accepted < 500 && rejections <= 50_000) {
+      if (rng.nextUint32() < 0.0099 * 2 ** 32) accepted++;
+      else if (++rejections % SAMPLER_CHECK_EVERY === 0)
+        aborted ||= rejectionsOverBudget(accepted, rejections, 500, 50_000);
+    }
+    expect({ accepted, rejections: rejections <= 50_000, aborted }).toEqual({
+      accepted: 500,
+      rejections: true,
+      aborted: false,
+    });
 
     expectRangeError(() => computeEquity(ranges(9, calling)), 'Sampling rejected too many deals');
     expect(computeEquity(ranges(9, unseen))).toMatchObject({ method: 'sampled', trials: 30_000 });

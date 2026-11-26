@@ -1,7 +1,7 @@
 # TASK-7.18 changes
 
-- `src/advice/equity.ts` — sampler loop: generation stamps instead of the reset loop, opponent picks copied into `hands` only on acceptance, xoshiro128** state in locals (same seed and draw order as `Xoshiro128`, results byte-identical); early abort via new `@internal` `SAMPLER_CHECK_EVERY`, `SAMPLER_ABORT_Z`, `rejectionsOverBudget` (D-1, D-2).
-- `tests/advice/equity.test.ts` — SPEC-05 byte-identical hash test and SPEC-06 early-abort test; also the timeout-only `vi.setConfig({ testTimeout: 30_000 })` line (§10 list).
+- `src/advice/equity.ts` — sampler loop: generation stamps instead of the reset loop, opponent picks copied into `hands` only on acceptance, xoshiro128** state in locals (same seed and draw order as `Xoshiro128`, results byte-identical); early abort via new `@internal` `SAMPLER_CHECK_EVERY`, `SAMPLER_ABORT_Z`, `rejectionsOverBudget` (D-1, D-2); fix round 1: projection subtracts z SDs of the remaining rejections (recorded deviation), comment fixes at the inlined generator.
+- `tests/advice/equity.test.ts` — SPEC-05 byte-identical hash test and SPEC-06 early-abort test (fix round 1: T=500 worked example expects false, seeded p≈1/101 regression run); also the timeout-only `vi.setConfig({ testTimeout: 30_000 })` line (§10 list).
 - `tests/advice/equity.perf.test.ts` — `WARMUP_RUNS = 15` untimed calls per scenario (D-3); header notes the 0.75 headroom command.
 - `tests/advice/postflop.perf.test.ts` — `WARMUP_RUNS = 15`; `slowScenarios` `owed` flag; new `TLH_SLOW_TESTS`-gated 9-opponent nothing-owed value-bet scenario at 100 ms (SPEC-04).
 - `vite.config.ts` — removed the global `testTimeout: 30_000` (SPEC-02).

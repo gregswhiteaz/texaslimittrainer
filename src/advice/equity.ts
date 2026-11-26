@@ -317,7 +317,8 @@ export const SAMPLER_ABORT_Z = 8;
 
 /**
  * @internal True when, even at the z = SAMPLER_ABORT_Z Wilson upper bound on the acceptance rate, the
- * rejections expected before `trials` deals are accepted would exceed `maxRejections`.
+ * rejections still to come before `trials` deals are accepted would exceed `maxRejections` by more than
+ * z standard deviations of that (negative binomial) count.
  */
 export function rejectionsOverBudget(
   accepted: number,
@@ -328,7 +329,9 @@ export function rejectionsOverBudget(
   const n = accepted + rejections;
   const z2 = SAMPLER_ABORT_Z * SAMPLER_ABORT_Z;
   const pHi = (accepted + z2 / 2 + SAMPLER_ABORT_Z * Math.sqrt(accepted + z2 / 4)) / (n + z2);
-  const projected = ((trials - accepted) * (1 - pHi)) / pHi;
+  const remaining = trials - accepted;
+  const projected =
+    (remaining * (1 - pHi)) / pHi - (SAMPLER_ABORT_Z * Math.sqrt(remaining * (1 - pHi))) / pHi;
   return rejections + projected > maxRejections;
 }
 
@@ -352,6 +355,7 @@ export function sampledEquity(
   table.nodeLimit = FEASIBILITY_NODE_LIMIT;
   if (!table.forEachDeal(0, () => true)) throw cannotDeal();
   // xoshiro128** state in locals, seeded and drawn exactly as Xoshiro128(deriveSeed(c)).nextInt.
+  // Both inlined draws below duplicate Xoshiro128.nextUint32: keep both identical to it.
   const seed = splitMix32(deriveSeed(c));
   let s0 = seed() | 0;
   let s1 = seed() | 0;
@@ -381,7 +385,7 @@ export function sampledEquity(
     let i = 0;
     for (; i < opponents; i++) {
       const range = flat[i] as Uint8Array;
-      // rng.nextInt(range.length / 2), inlined: locals, not a closure, keep the state in registers.
+      // Xoshiro128.nextInt(range.length / 2), inlined: locals, not a closure, keep the state in registers.
       const x = Math.imul(s1, 5);
       const u = Math.imul((x << 7) | (x >>> 25), 9) >>> 0;
       const t = s1 << 9;

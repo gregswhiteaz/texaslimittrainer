@@ -59,3 +59,21 @@ was slower (69 ms), so it was dropped.
 - `npm run test:slow` (full, now 21 files incl. `postflop.perf.test.ts`) → 21 files, 99 passed, 1150 s.
 - `npm run lint` → clean; `npm run typecheck` → clean; `npm run format` run.
 - No blocked.json: 9-opponent advice is ~54 ms, under 75 ms.
+
+## FIX round 1
+- Item 1 [MAJOR] early-abort-ignores-remaining-variance: fixed. `rejectionsOverBudget` now subtracts
+  `SAMPLER_ABORT_Z * sqrt(rem * (1 - pHi)) / pHi` (z SDs of the remaining negative-binomial rejection count)
+  from the projection, per the recorded deviation. SPEC-06 test: T=500, a=0, r=8,192 now expects `false`
+  (other five worked examples unchanged under both rules); added a regression case, a seeded
+  `Xoshiro128(91)` Bernoulli run at p = 0.0099, T = 500, M = 50,000 that finishes under the cap (49,771
+  rejections), which the old rule aborted at a = 485, r = 49,152 and the new rule never aborts.
+  The 9-opponent calling-range spot still throws within the first checks (~1–3 ms per call, warm).
+- Recorded-deviation MINORs: stale `rng.nextInt` comment now names `Xoshiro128.nextInt`; added "keep both
+  identical to Xoshiro128.nextUint32" note at the inlined generator.
+- `npx vitest run tests/advice/equity.test.ts` → 11 passed; SPEC-05 hash unchanged (fd3c9bf3…).
+- 9-opponent advice p95, `ADVICE_PERF_SCALE=1 npx vitest run tests/advice/postflop.perf.test.ts` ×3, nothing
+  else running: 53.05 / 53.62 / 53.64 ms (≤ 75), 2 passed | 1 skipped each.
+- `TLH_SLOW_TESTS=1 npx vitest run tests/advice/equity.perf.test.ts tests/advice/postflop.perf.test.ts` →
+  4 passed (full ring 54.12 ms, 9-opponent advice 54.88 ms, value-bet 53.19 ms).
+- `npm test` → 315 files passed | 5 skipped; 1422 tests passed | 47 skipped. `npm run lint` clean,
+  `npm run typecheck` clean, prettier on touched files.
