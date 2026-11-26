@@ -5,13 +5,22 @@
   "base_commit": "96bf8577e4d135472163776498ced3f022b9de51",
   "started": "2026-11-26T14:16:35",
   "review_round": 3,
-  "judge_round": 0,
+  "judge_round": 1,
   "sendbacks": 0,
   "gate_runs": 3,
   "questions": 2,
   "assumptions": 0,
   "escalations": 1,
-  "item_failures": {},
+  "item_failures": {
+    "SPEC-01": 0,
+    "SPEC-02": 0,
+    "SPEC-03": 0,
+    "SPEC-04": 0,
+    "SPEC-05": 0,
+    "SPEC-06": 0,
+    "SPEC-07": 0,
+    "SPEC-08": 0
+  },
   "locked_tests": {
     "tests/toolchain/bot-import-gaps.acceptance.test.ts": "8a9f3959ea0e5c39aec1b32a04d40c8ca83f0f0c9980a022d58e5c5e81406e7e"
   },
@@ -2225,5 +2234,8 @@
       "review r2"
     ]
   },
-  "relock_pending": []
+  "relock_pending": [],
+  "judge_results": {
+    "1": "PASS"
+  }
 }
