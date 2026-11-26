@@ -4,7 +4,7 @@ title: Stop dealing when the last hand could not be saved
 status: To Do
 assignee: []
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-17T23:22:00Z'
+updated_date: '2026-11-26T08:56:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-2
@@ -49,6 +49,7 @@ Plan key: E13-S03 · Dream: limit-holdem-trainer
 - [ ] #4 Given the message is shown and storage still fails, When the user chooses Retry, Then no hand is dealt and the message with Retry and Leave table is shown again [REQ-053.2]
 - [ ] #5 Given the message is shown, When the user chooses Leave table, Then the session ends, no further hand is dealt and the Leave table flow runs [REQ-053.2]
 - [ ] #6 Given the message is shown for 60 seconds with no user input, When the table is observed, Then no hand has been dealt and no bot has acted [REQ-053.2]
+- [ ] #7 Given a hand whose record write failed because a decision grade failed (TASK-9.10), When the user chooses Retry, Then the grades are requested again before the hand record is written, and on success the review panel opens and dealing resumes
 <!-- AC:END -->
 
 ## Definition of Done
@@ -66,3 +67,9 @@ Plan key: E13-S03 · Dream: limit-holdem-trainer
 - [ ] #11 Story documentation is written and published to Backlog.md
 - [ ] #12 Stories that add a screen or dialog: once the offline service worker exists (E13-S07), the screen works with the network disabled
 <!-- DOD:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+AC added from TASK-9.10 follow-up (doc-157)
+<!-- SECTION:NOTES:END -->

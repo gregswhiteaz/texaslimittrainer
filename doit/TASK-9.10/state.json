@@ -1,6 +1,6 @@
 {
   "task": "TASK-9.10",
-  "stage": "build",
+  "stage": "done",
   "branch": "doit/TASK-9.10",
   "base_commit": "cff5e346832a53ef3f09832c2f8668f3926544bd",
   "started": "2026-11-26T01:12:01",
@@ -8,8 +8,8 @@
   "judge_round": 1,
   "sendbacks": 0,
   "gate_runs": 2,
-  "questions": 0,
-  "assumptions": 0,
+  "questions": 1,
+  "assumptions": 4,
   "escalations": 0,
   "item_failures": {
     "SPEC-01": 0,
@@ -2113,5 +2113,6 @@
   },
   "judge_results": {
     "1": "PASS"
-  }
+  },
+  "doc_id": "doc-157"
 }

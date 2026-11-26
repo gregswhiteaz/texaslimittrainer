@@ -1,11 +1,11 @@
 ---
 id: TASK-9.10
 title: Handle a failed decision grade cleanly and test the pending-grades state
-status: In Progress
+status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-24T13:09:00Z'
-updated_date: '2026-11-26T08:55:00Z'
+updated_date: '2026-11-26T08:56:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -14,6 +14,8 @@ dependencies:
   - TASK-9.3
 references:
   - doc-117
+documentation:
+  - doc-157
 parent_task_id: TASK-9
 priority: medium
 ordinal: 234000
@@ -51,4 +53,12 @@ AC added from TASK-13.1 follow-up (doc-143): since TASK-13.1, an unhandled pendi
 Build: grade requests get a no-op catch (pending keeps the original promise); grade failure follows the write-failure path (Q-1 A); e2e 383 passed; gate PASS
 
 Judge r1 PASS (6/6 SPEC items)
+
+Follow-ups: AC added to TASK-13.3 (Retry re-requests grades after a grade-caused write failure).
 <!-- SECTION:NOTES:END -->
+
+## Final Summary
+
+<!-- SECTION:FINAL_SUMMARY:BEGIN -->
+A failed decision grade mid-hand no longer raises an unhandled rejection (and so no error screen): requestNewGrades attaches a no-op handler and the failure surfaces only through the hand's record write ('Hand record could not be saved', no review panel, result stays, no next hand, Leave works). Added unit, markup and Chromium/WebKit e2e tests plus docs (navigation.md, review.md). Judge round 1 PASS 6/6, no review findings. Review: Q-1 (auto-accepted option A: the write-failure behaviour above, no error screen) and A-1..A-4 in the doc. Follow-up: TASK-13.3 Retry must re-request grades when a write failed because grading failed.
+<!-- SECTION:FINAL_SUMMARY:END -->
