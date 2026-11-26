@@ -1,0 +1,3 @@
+{"reviewer": "security", "round": 1,
+ "findings": [],
+ "summary": "No security findings. The change adds two derived strings (potText, winnersText) built by template literals from internal engine state (pot label, integer amounts, seat names) and renders them as React text children in Table.tsx, which React escapes; no dangerouslySetInnerHTML/innerHTML sinks exist in src. CSS changes (nowrap, flex, :has selector, box-sizing) are static. The new SPLIT_SIDE_POT_SHOWDOWN scenario and 'split-side-pot' scene live under tests/ and e2e/support and are not imported by the app. No new input, network, storage, randomness or dependencies; spec §8 matches the diff."}

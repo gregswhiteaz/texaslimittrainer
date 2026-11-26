@@ -1,0 +1,27 @@
+{"reviewer": "code", "round": 1,
+ "rubric": [
+  {"item": "SPEC-01 correctness", "result": "pass"},
+  {"item": "SPEC-01 test strength", "result": "pass"},
+  {"item": "SPEC-02 correctness", "result": "pass"},
+  {"item": "SPEC-02 test strength", "result": "pass"},
+  {"item": "SPEC-03 correctness", "result": "pass"},
+  {"item": "SPEC-03 test strength", "result": "pass"},
+  {"item": "SPEC-04 correctness", "result": "pass"},
+  {"item": "SPEC-04 test strength", "result": "pass"},
+  {"item": "SPEC-05 correctness", "result": "pass"},
+  {"item": "SPEC-05 test strength", "result": "pass"},
+  {"item": "SPEC-06 correctness", "result": "pass"},
+  {"item": "SPEC-06 test strength", "result": "pass"},
+  {"item": "SPEC-07 correctness", "result": "pass"},
+  {"item": "SPEC-07 test strength", "result": "pass"},
+  {"item": "scope", "result": "pass"},
+  {"item": "concision", "result": "pass"},
+  {"item": "clarity", "result": "pass"}
+ ],
+ "findings": [
+  {"fingerprint": "tests/table/side-pots.test.ts:chip-reconciliation-in-spec05-case", "severity": "NIT", "file": "tests/table/side-pots.test.ts", "line": 184,
+   "issue": "The SPEC-05 case 'pot result text is built from potText and winnersText' also asserts that the crafted split scene's chips reconcile. That is a different concern (scene integrity, added at the orchestrator's request), and it accounts for part of the 319-vs-280 line overrun.",
+   "evidence": "Lines 184-191 sum totalContribution vs awards and compare stack totals with SIDE_POT_SHOWDOWN inside the view-model text test.",
+   "fix": "Optional: move the two reconciliation assertions into their own `it('the crafted split side pot scene keeps its chips', ...)` so a failure names the right cause."}
+ ],
+ "summary": "All seven SPEC items are implemented as specified. PotResultView.potText/winnersText compose text; HandResult has no join( (awk check = 0). The CSS gives a nowrap/no-shrink title, the :has(> ul[aria-label='Pot winners']) column stack, and border-box on .config-choice label. The crafted split scene reconciles: Ava contributes +1 and the Ben/Ava stacks shift by 39, while engine pots are emptied at showdown, so no felt total disagrees. The tests would catch regressions. On the old CSS the title wraps and lists are under 50% width (SPEC-01 fails), the single-pot overlap check fails if stacking were applied always (SPEC-02), and 46/48 px heights fail SPEC-06. The render and e2e line text are pinned to view-model strings and exact AC text. Verified: the locked files match main (git diff --quiet = 0). The targeted vitest files pass, as does the full Playwright suite in Chromium and WebKit (397 passed, 19 skipped). No BLOCKER or MAJOR findings."}

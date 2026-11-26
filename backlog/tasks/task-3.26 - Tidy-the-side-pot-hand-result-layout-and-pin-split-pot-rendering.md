@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-21T19:29:00Z'
-updated_date: '2026-11-26T12:32:00Z'
+updated_date: '2026-11-26T12:46:00Z'
 labels:
   - follow-up
   - dream-limit-holdem-trainer
@@ -47,4 +47,6 @@ Full spec: doit/TASK-3.26/spec.md
 
 <!-- SECTION:NOTES:BEGIN -->
 AC added from TASK-2.4 judge J-1-02 (UI polish)
+
+Build: side-pot result stacks (Hand over one line); Table renders PotResultView potText/winnersText; Game Config radios border-box (44px); new render + Chromium/WebKit tests fail on old CSS; e2e 397 passed; gate PASS
 <!-- SECTION:NOTES:END -->
