@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-19T02:21:00Z'
-updated_date: '2026-11-26T00:07:00Z'
+updated_date: '2026-11-26T11:24:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -60,6 +60,8 @@ Build: tools/ci/apt-lock.js (reads /proc/locks, waits up to 150 s per attempt, :
 CI run 44445933036 (head 119bdc0): success first push; the Linux real-flock test ran and passed (270/270, 0 skipped); install-deps ran through apt-lock in 48 s with no lock held. Judge round 1: PASS 12/12, no blocking. Follow-ups (Step 6a): created TASK-1.30 (sanitise comm, three test gaps, devParts high majors, mirror stall timeouts/cache); AC added to TASK-1.23 (really stop a timed-out sudo'd apt-get).
 
 Locked test(s) unlocked for TASK-7.18 Q-3: one vi.setConfig({ testTimeout: 30_000 }) line added after the global testTimeout was removed; no assertion touched.
+
+CI test expected audit level changed critical -> high for TASK-1.25 Q-1 (unlocked, stricter)
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary

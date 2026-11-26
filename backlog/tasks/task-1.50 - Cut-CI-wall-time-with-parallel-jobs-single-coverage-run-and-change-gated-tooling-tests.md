@@ -7,7 +7,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-22T03:13:00Z'
-updated_date: '2026-11-22T04:53:00Z'
+updated_date: '2026-11-26T11:24:00Z'
 labels:
   - chore
   - ci
@@ -61,6 +61,8 @@ Judge R1 PASS 14/14 (55/55 scratch-repo detector cases, 29/29 mutants, live runs
 Follow-ups (Step 6a): created TASK-1.51 (spike: Actions usage vs budget). Post-merge: record first main run wall time and first nightly (06:00 UTC) run in doc-78; open a task if main > 540 s. Not tracked (infra, below bar): persist-credentials default, '... and N more' line, branch protection (403 on Free private).
 
 Post-merge: main CI #171 (44986680853, 551c270) success, all 7 jobs, wall 260 s (≤ 540 s); Visual #91 success; branch pruned. First nightly 06:00 UTC run still to record.
+
+CI test expected audit level changed critical -> high for TASK-1.25 Q-1 (unlocked, stricter)
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary

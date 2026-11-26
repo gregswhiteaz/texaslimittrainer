@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-22T03:27:00Z'
+updated_date: '2026-11-26T11:24:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-0
@@ -85,6 +85,8 @@ Build: .github/workflows/ci.yml (push+PR, npm ci, two audit steps, lint, typeche
 Judge round 1 FAIL (SPEC-09 only: PR run cancelled by apt mirror stall at 20-min timeout); re-ran run 44220403675 (attempt 2 success). Judge round 2 PASS 23/23. Proof runs: main 44220276704 ✓, push 44220396247 ✓, PR 44220403675 ✓; lint 44220395401 ✗, typecheck 44220396630 ✗, build 44220395299 ✗, test 44220396647 ✗, e2e-chromium 44220396921 ✗, e2e-webkit 44220395878 ✗, audit-shipped 44220396018 ✗, audit-all 44220396132 ✗ — each at its intended step. Workflow also committed to main (ee5e68f) so GitHub registered it (user-approved).
 
 Locked test unlocked for TASK-1.50 Q-6 (user-approved CI split).
+
+CI test expected audit level changed critical -> high for TASK-1.25 Q-1 (unlocked, stricter)
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary

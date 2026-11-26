@@ -117,6 +117,12 @@
       "event": "unlock",
       "file": "tests/ci/workflow.test.ts",
       "reason": "TASK-1.50 Q-6 (user-approved): CI split into parallel jobs; intent kept or tightened; timeout 20\u219230 per AC#5"
+    },
+    {
+      "t": "2026-11-26T04:23:37",
+      "event": "unlock",
+      "file": "tests/ci/workflow.test.ts",
+      "reason": "TASK-1.25 Q-1: all-deps audit level critical -> high (expected string only)"
     }
   ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-1.7",
@@ -130,6 +136,7 @@
   },
   "doc_id": "doc-6",
   "relock_pending": [
+    "tests/ci/workflow.test.ts",
     "tests/ci/workflow.test.ts",
     "tests/ci/workflow.test.ts"
   ]

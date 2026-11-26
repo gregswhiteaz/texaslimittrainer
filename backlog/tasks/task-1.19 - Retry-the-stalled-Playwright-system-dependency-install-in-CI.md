@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-18T04:37:00Z'
-updated_date: '2026-11-26T00:07:00Z'
+updated_date: '2026-11-26T11:24:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-0
@@ -53,6 +53,8 @@ Build: tools/ci/retry.js (3×240 s, process-group kill, ::warning::/::error::), 
 CI run 44247645009: attempt 1 failed only in pre-existing hand-evaluator throughput floor (935,660/s, TASK-1.20); real-sudo test passed 4.1 s. Attempt 2 success; install-deps 27 s via helper, overhead ~0.04 s. Judge round 1: PASS 12/12 (41/41 holdout checks).
 
 Locked test(s) unlocked for TASK-7.18 Q-3: one vi.setConfig({ testTimeout: 30_000 }) line added after the global testTimeout was removed; no assertion touched.
+
+CI test expected audit level changed critical -> high for TASK-1.25 Q-1 (unlocked, stricter)
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary
