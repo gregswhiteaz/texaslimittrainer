@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-24T10:52:00Z'
-updated_date: '2026-11-26T07:45:00Z'
+updated_date: '2026-11-26T08:03:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -28,8 +28,8 @@ Follow-up from TASK-8.1 (doc-114, Q-3). Per-bot observed counts live in a useTab
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Given a session where a bot has been observed for 45 hands, When the user pauses, resumes and opens Hint on a postflop decision, Then that bot's basis reads 'based on 45 hands of this opponent' (counts carried across Resume)
-- [ ] #2 Given a stored session record with observed counts that are malformed (non-integer hands, vpip/pfr outside 0-100, unknown bot id), When it is read, Then it is rejected with a RangeError naming the field and Home stays usable
+- [x] #1 Given a session where a bot has been observed for 45 hands, When the user pauses, resumes and opens Hint on a postflop decision, Then that bot's basis reads 'based on 45 hands of this opponent' (counts carried across Resume)
+- [x] #2 Given a stored session record with observed counts that are malformed (non-integer hands, vpip/pfr outside 0-100, unknown bot id), When it is read, Then it is rejected with a RangeError naming the field and Home stays usable
 <!-- AC:END -->
 
 ## Implementation Plan
@@ -48,4 +48,6 @@ Full spec: doit/TASK-8.6/spec.md
 
 <!-- SECTION:NOTES:BEGIN -->
 Build: optional observed[] on the session record written with each hand, validated, restored on Resume; e2e 381 passed; 824 lines vs 650 budget (warn); gate PASS
+
+Judge r1 PASS (9/9 SPEC items)
 <!-- SECTION:NOTES:END -->
