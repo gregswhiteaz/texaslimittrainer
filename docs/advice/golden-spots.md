@@ -173,6 +173,14 @@ Minor and Major. Every postflop example uses a spot the engine enumerates exactl
 sampling. Graded examples are close calls by design, so they are exempt from the clear-cut rule and do not count
 toward the 200 spots.
 
+As for postflop spots, every preflop action the hero takes in a postflop example's `before` must not be a Major error
+on the chart for its table size and position; a borderline step the grader marks Minor is allowed. The validator
+rejects an example that breaks this with one problem per Major step:
+
+```
+Graded example <id>: hero preflop step <k> "<action>" is a Major error on the chart (<size> <position> <situation> <hand class>: <chart action>)
+```
+
 ## How the suite runs
 
 `tests/golden/preflop.acceptance.test.ts`, `tests/golden/postflop.acceptance.test.ts` and
@@ -259,7 +267,7 @@ called or checked (the id is kept and the opponents' responses follow the new ra
 kept and only the hole cards change; otherwise the line changes. Where the only hand found plays a borderline cell
 (five spots, all limps or small-blind opens), the step is a Minor error, which the rule allows. `6max-turn-bb-raise-92o`
 keeps its id and hand on a limped line where the big blind checks its option, and its justification now says kings
-full. Graded examples are not checked by this rule.
+full. TASK-7.36 extends this rule to postflop graded examples.
 
 Four spots outside the table below kept their cards and line and only had their justification corrected, so it names
 the board card or board pair that plays rather than the hero's high card: `6max-turn-bb-check-a3o`,
@@ -347,6 +355,16 @@ One spot id is corrected so it describes its current spot.
 | Old id                  | New id                       | Reason                                                                                                                                                                                                    |
 | ----------------------- | ---------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `6max-flop-co-raise-jj` | `6max-flop-co-raise-jj-3way` | TASK-7.31 changed the line (the cutoff raises the limper, and the big blind and the limper call), and TASK-7.32 kept the id for this three-way pot. Cards, board, action and justification are unchanged. |
+
+## Changes from TASK-7.36 (chart-consistent graded example lines)
+
+Three postflop graded examples reached their decision through a hero preflop action the chart grades as a Major error; each is re-authored with its id, street, user action, grade, rule id and margin unchanged.
+
+| Id                                                | Old hand and Major step (chart cell)                                                                | Fix                                                                                                                                                              | Grade, rule, margin           |
+| ------------------------------------------------- | --------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------- |
+| `graded-postflop-fold-minor-6max-flop-gutshot`    | 5d 2h, step 4 `call` (6-max BTN raise 52o: fold)                                                    | Line change on the same board: the button limps, the small blind folds, the big blind checks its option and the flop, and the button bets. Hole cards now Kd 4h. | `minor call-fold-margin 4.6`  |
+| `graded-postflop-check-minor-6max-river-top-pair` | Kh 6h, step 3 `raise` (6-max CO unopened K6s: fold) and step 7 `call` (6-max CO re-raise K6s: fold) | Same line and board, hole cards now Kh 7h.                                                                                                                       | `minor aggression-margin 6.9` |
+| `graded-postflop-check-major-6max-turn-trips`     | 3c Ts, step 4 `raise` (6-max BTN unopened T3o: fold)                                                | Same line and board, hole cards now Ah 3c.                                                                                                                       | `major aggression-margin 29`  |
 
 ## Originality
 

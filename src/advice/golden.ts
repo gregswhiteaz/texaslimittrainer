@@ -3,6 +3,7 @@ import {
   applyAction,
   createHand,
   type Action,
+  type ApplyResult,
   type HandState,
   type SeatNumber,
 } from '../engine/hand';
@@ -528,8 +529,8 @@ function clearCutProblems(
 }
 
 /**
- * One problem per hero preflop step that grades as a Major error against the chart advice at that decision.
- * Runs only after `view` was built, so the cards, board and steps are known to be valid and legal.
+ * One problem per hero preflop step of a postflop spot or graded example that grades as a Major error against the
+ * chart advice at that decision. Runs only after `view` was built, so the cards, board and steps are known to be valid and legal.
  */
 function heroPreflopProblems(data: Record<string, unknown>, view: PlayerView): string[] {
   const cards = parseHoleCards(data.holeCards) as [Card, Card];
@@ -546,9 +547,9 @@ function heroPreflopProblems(data: Record<string, unknown>, view: PlayerView): s
         );
       }
     }
-    const result = applyAction(state, legalOf(state, step) as Action);
-    if (!result.ok) break;
-    state = result.state;
+    state = (
+      applyAction(state, legalOf(state, step) as Action) as Extract<ApplyResult, { ok: true }>
+    ).state;
   }
   return problems;
 }
@@ -669,6 +670,9 @@ function parseExample(
   checkJustification(data.justification, where, problems);
   const observed = parseObserved(data.opponentStats);
   if (observed === null) problems.push(`${where}: invalid opponent stats`);
+  if (view !== null && view.street !== 'preflop') {
+    for (const problem of heroPreflopProblems(data, view)) problems.push(`${where}: ${problem}`);
+  }
   if (problems.length > before || view === null) return null;
   return {
     id: name,

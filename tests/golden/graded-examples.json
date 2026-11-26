@@ -62,15 +62,15 @@
     {
       "id": "graded-postflop-fold-minor-6max-flop-gutshot",
       "seats": 6,
-      "holeCards": "5d 2h",
+      "holeCards": "Kd 4h",
       "board": "7s 3c 6h",
       "street": "flop",
-      "before": ["fold", "fold", "raise", "call", "fold", "fold", "bet"],
+      "before": ["fold", "fold", "fold", "call", "fold", "check", "check", "bet"],
       "userAction": "fold",
       "grade": "minor",
       "ruleId": "call-fold-margin",
       "marginPts": 4.6,
-      "justification": "Five-deuce has a gutshot to the four plus a few small pair outs, and its equity is a few points above what the pot odds ask. Folding gives up that small edge, so it is a Minor error because the margin is under ten points."
+      "justification": "King-four has a gutshot to the five and three king outs for top pair after the big blind checked its option in a limped pot, so its equity is a few points above what the pot odds ask against the button's flop bet. Folding gives up that small edge, so it is a Minor error because the margin is under ten points."
     },
     {
       "id": "graded-postflop-fold-major-6max-turn-second-pair",
@@ -88,7 +88,7 @@
     {
       "id": "graded-postflop-check-minor-6max-river-top-pair",
       "seats": 6,
-      "holeCards": "Kh 6h",
+      "holeCards": "Kh 7h",
       "board": "9s Jh 5c Kc 8h",
       "street": "river",
       "before": [
@@ -108,12 +108,12 @@
       "grade": "minor",
       "ruleId": "aggression-margin",
       "marginPts": 6.9,
-      "justification": "Top pair of kings with a weak kicker is only a thin value bet after a checked flop and turn, a few points above even against the hands that call. Checking misses that small gain, so it is a Minor error."
+      "justification": "Top pair of kings with a seven kicker that does not play on this board is only a thin value bet after a checked flop and turn, a few points above even against the hands that call. Checking misses that small gain, so it is a Minor error."
     },
     {
       "id": "graded-postflop-check-major-6max-turn-trips",
       "seats": 6,
-      "holeCards": "3c Ts",
+      "holeCards": "Ah 3c",
       "board": "Kd 3h 5c 3d",
       "street": "turn",
       "before": ["fold", "fold", "fold", "raise", "fold", "call", "bet", "call", "check"],
@@ -121,7 +121,7 @@
       "grade": "major",
       "ruleId": "aggression-margin",
       "marginPts": 29,
-      "justification": "Trip threes are far ahead of what the big blind would call a turn bet with after it led the flop and then checked. Checking passes up a clear value bet, a Major error because the margin from even is well over fifteen points."
+      "justification": "Trip threes with an ace kicker are far ahead of what the big blind would call a turn bet with after it led the flop and then checked. Checking passes up a clear value bet, a Major error because the margin from even is well over fifteen points."
     }
   ]
 }
