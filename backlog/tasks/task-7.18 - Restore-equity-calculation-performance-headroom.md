@@ -1,11 +1,11 @@
 ---
 id: TASK-7.18
 title: Restore equity calculation performance headroom
-status: In Progress
+status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-18T07:03:00Z'
-updated_date: '2026-11-26T01:39:00Z'
+updated_date: '2026-11-26T01:40:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -14,6 +14,8 @@ dependencies:
   - TASK-7.1
 references:
   - doc-8
+documentation:
+  - doc-151
 parent_task_id: TASK-7
 priority: medium
 type: enhancement
@@ -57,4 +59,12 @@ Build: stamp-based sampler with inlined xoshiro (results byte-identical, SHA pin
 Recorded deviation (review r1 MAJOR): early-abort projection subtracts z std devs of the remaining count; spec §5's T=500,a=0,r=8192 example changes to false. Approved by orchestrator to honour Q-1's 'no successful result changes'.
 
 Judge r1 PASS 7/7: 521 outputs byte-identical to base 6622918; ~23k simulated runs, 0 false aborts under the corrected (recorded-deviation) rule; p95 at 0.75 scale full ring 51-52 ms (/60), HU 4.6 (/15); 9-opp advice 53 ms (/75); value-bet 52 ms (/100); playtest hash unchanged. J-1-01: equity-reference.test.ts given the 30 s line by orchestrator (43 files now). CI 45735151058 green.
+
+Follow-ups: TASK-7.34 (perf files opt-in; HU facing-bet and 8-opponent headroom).
 <!-- SECTION:NOTES:END -->
+
+## Final Summary
+
+<!-- SECTION:FINAL_SUMMARY:BEGIN -->
+Sampler loop sped up with byte-identical results (generation stamps, inlined xoshiro128**), plus an early abort when the 3M-rejection cap is statistically unreachable. Global 30 s testTimeout removed; 43 slow files set their own 30 s (1 s threshold, chosen for CI headroom). Perf: full ring 73 -> 52 ms, 9-opponent advice 207 -> 53 ms (limit 75), new opt-in value-bet check 53 ms (limit 100). Verified: npm test 1422 passed, judge PASS 7/7, playtest hash and 521 holdout inputs identical to base. Review r1 MAJOR (early abort ignored remaining variance) fixed in r2 as an approved deviation from spec 5. Review: Q-1 early abort, Q-2 15 warm-ups, Q-3 per-file timeouts, A-1..A-6. Risks/follow-ups: SC-1 perf files still run in every npm test at 20x slack (against opt-in rule); SC-2 HU facing-a-bet advice at 90% of 25 ms and 8-opponent calling-range ~97 ms (outside ACs); scope 389 vs 380 lines.
+<!-- SECTION:FINAL_SUMMARY:END -->
