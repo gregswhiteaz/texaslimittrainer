@@ -1,4 +1,5 @@
 import { comboCount, HAND_CLASSES, handClassAt } from './hand-class';
+import { PREFLOP_CHARTS } from './preflop';
 import type { ChartCell, ChartSpot, PreflopChart } from './preflop-chart';
 
 const LETTER = { fold: 'F', call: 'C', raise: 'R' } as const;
@@ -55,4 +56,38 @@ export function formatSpot(spot: ChartSpot): string {
 /** formatSpot for every spot in chart order, joined by one empty line. */
 export function formatChart(chart: PreflopChart): string {
   return chart.spots.map(formatSpot).join('\n');
+}
+
+/** Header, chart justification, then per spot: formatSpot(spot) + 'Why: ' + justification. */
+export function formatChartForReview(chart: PreflopChart): string {
+  return (
+    `${chart.referenceSize} chart: ${chart.spots.length} spots\n${chart.justification}\n\n` +
+    chart.spots.map((s) => formatSpot(s) + 'Why: ' + s.justification + '\n').join('\n')
+  );
+}
+
+export interface ChartPrintIo {
+  readonly out: (text: string) => void;
+  readonly err: (text: string) => void;
+}
+
+export const CHART_PRINT_USAGE = 'Usage: npm run chart:print -- [heads-up | 6-max | full-ring]\n';
+
+/** 0 = printed; 2 = usage error (nothing on stdout). */
+export function chartPrintMain(argv: readonly string[], io: ChartPrintIo): number {
+  if (argv.length === 0) {
+    io.out(formatChart(PREFLOP_CHARTS['6-max']));
+    return 0;
+  }
+  if (argv.length > 1) {
+    io.err(`Expected one chart size, got ${argv.length} arguments.\n` + CHART_PRINT_USAGE);
+    return 2;
+  }
+  const size = argv[0] as string;
+  if (!Object.hasOwn(PREFLOP_CHARTS, size)) {
+    io.err(`Unknown chart size "${size}". Use heads-up, 6-max or full-ring.\n` + CHART_PRINT_USAGE);
+    return 2;
+  }
+  io.out(formatChartForReview(PREFLOP_CHARTS[size as keyof typeof PREFLOP_CHARTS]));
+  return 0;
 }
