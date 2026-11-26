@@ -275,6 +275,7 @@ function parseHints(value: unknown): void {
 }
 
 /** Validates an untrusted stored report; returns it typed, not copied. Unknown extra properties are ignored.
+ *  `hints` without `errors` is rejected: the app never writes it and it would show no tile.
  *  RangeError('Invalid session report: <field>'). */
 export function parseSessionReport(value: unknown): SessionReport {
   const report = object(value, 'report');
@@ -305,7 +306,10 @@ export function parseSessionReport(value: unknown): SessionReport {
   if (report.style !== undefined) parseStyle(report.style, hands);
   if (report.errors !== undefined) parseErrors(report.errors);
   if (report.leakCounts !== undefined) parseLeakCounts(report.leakCounts);
-  if (report.hints !== undefined) parseHints(report.hints);
+  if (report.hints !== undefined) {
+    if (report.errors === undefined) throw invalid('hints');
+    parseHints(report.hints);
+  }
   return value as SessionReport;
 }
 

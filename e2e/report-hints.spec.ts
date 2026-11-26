@@ -1,7 +1,7 @@
 import { expect, test, type Page } from '@playwright/test';
 import type { HandRecord } from '../src/table/hand-record';
 import type { SessionRecord } from '../src/table/session-record';
-import { hintTile, sessionReport, type SessionReport } from '../src/table/session-report';
+import { sessionReport, type SessionReport } from '../src/table/session-report';
 import {
   handOver,
   header,
@@ -56,7 +56,10 @@ test('Leave table shows how many decisions used a hint', async ({ page }) => {
 
   const tile = page.getByLabel('Volume and errors').locator('.report-hints');
   await expect(tile.locator('dt')).toHaveText('Hints used');
-  await expect(tile.locator('dd')).toHaveText(hintTile(stored)?.value ?? '');
+  const { hinted, decisions } = hints;
+  const tenths = Math.floor((2000 * hinted + decisions) / (2 * decisions));
+  const expected = `${hinted} of ${decisions} ${decisions === 1 ? 'decision' : 'decisions'} (${Math.floor(tenths / 10)}.${tenths % 10}%)`;
+  await expect(tile.locator('dd')).toHaveText(expected);
 
   await axeWithPausedClock(page);
   expect(requests.length).toBeGreaterThan(0);

@@ -134,4 +134,20 @@ describe('session report hints', () => {
       );
     }
   });
+
+  it('parseSessionReport rejects hints without errors', () => {
+    const { errors, ...noErrors } = BASE;
+    expect(errors).toBeDefined();
+    for (const hints of [
+      { hinted: 1, decisions: 2 },
+      { hinted: 0, decisions: 0 },
+    ]) {
+      const stored = JSON.parse(JSON.stringify({ ...noErrors, hints })) as unknown;
+      expect(() => parseSessionReport(stored)).toThrow(
+        new RangeError('Invalid session report: hints'),
+      );
+    }
+    expect(parseSessionReport(JSON.parse(JSON.stringify(noErrors)))).toEqual(noErrors);
+    expect(parseSessionReport(JSON.parse(JSON.stringify(BASE)))).toEqual(BASE);
+  });
 });
