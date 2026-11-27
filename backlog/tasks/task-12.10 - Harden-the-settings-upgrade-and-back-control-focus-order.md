@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-25T15:55:00Z'
-updated_date: '2026-11-27T11:07:00Z'
+updated_date: '2026-11-27T11:31:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -47,4 +47,6 @@ Full spec: doit/TASK-12.10/spec.md
 
 <!-- SECTION:NOTES:BEGIN -->
 Build: UpgradeBlockedError + retry; raw settings record test; back control after h1 in DOM with CSS order; locked e2e/settings.spec.ts Tab order re-pinned (TASK-12.1, Q-2); gate PASS
+
+Judge r1 FAIL (J-1-01: second call hung behind the pending blocked open). Fixed: calls while a blocked open is pending wait at most 100 ms (BLOCKED_GRACE_MS, assumption) then reject with UpgradeBlockedError; late success closes its connection (tested).
 <!-- SECTION:NOTES:END -->
