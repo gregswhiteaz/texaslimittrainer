@@ -3,9 +3,11 @@ id: TASK-10.17
 title: >-
   Ignore a forced-fold-voided raise when classifying the preflop situation, and
   tidy the forced-fold code
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-27T05:16:00Z'
+updated_date: '2026-11-27T08:47:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -31,3 +33,15 @@ From TASK-10.13 (doc-178). After a forced fold voids the leaver's raise (dead mo
 - [ ] #2 Given hands with no voided raise, When situationOf runs, Then its result is unchanged (seeded playtest output byte-identical)
 - [ ] #3 Given src/engine/hand.ts forceFold and src/engine/invariants.ts, When the tidy-ups are applied (clockwiseAfter(open, toAct - 1) with a comment; sole computed once), Then all engine tests and the 10,000-hand playtest stay green and byte-identical
 <!-- AC:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. Export pure voidedBets(BetContext) from src/engine/hand.ts (same walk as liveLevels)
+2. situationOf drops voided bet/raise records before classifying
+3. Add voidedBets to the advice engine/hand lint allow-list + lint probe test
+4. Tidy-ups: clockwiseAfter(open, toAct - 1) with comment; sole computed once
+5. Tests; 10,000-hand playtest byte-identical vs base
+
+Full spec: doit/TASK-10.17/spec.md
+<!-- SECTION:PLAN:END -->
