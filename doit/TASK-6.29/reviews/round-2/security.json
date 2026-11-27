@@ -1,0 +1,18 @@
+{"reviewer": "security", "round": 2,
+ "findings": [
+  {"fingerprint": "tools/lint/headless-boundary.js:runtime-key-and-descriptor-walk",
+   "severity": "MINOR",
+   "file": "tools/lint/headless-boundary.js",
+   "line": 124,
+   "issue": "Carried over from r1 for the record. Runtime-built keys (f['constr' + 'uctor'], template strings with expressions) and walks over property descriptors still reach the Function constructor. The spec's 'Not doing' and section 8 accept this limit. No change is asked for.",
+   "evidence": "Contributed bot code -> computed key -> Function constructor. Accepted residual risk; code review is the backstop.",
+   "fix": "None required."},
+  {"fingerprint": "tools/lint/headless-boundary.js:bot-random-node-builtin-imports",
+   "severity": "MINOR",
+   "file": "tools/lint/headless-boundary.js",
+   "line": 80,
+   "issue": "This gap predates the change; the diff does not touch it. src/engine/bot-random.ts is in BOT_DETERMINISM_FILES but not in the bot or advice import allow-lists. As a result, `import { randomInt } from 'node:crypto'`, `import { hrtime } from 'node:process'` and `import os from 'node:os'` all lint clean there. The same imports are rejected in src/bots and src/advice. The new AC#3 ban covers the process *global* in bot-random.ts but not the `node:process` *module*. This file is core engine code, not contributed bot code, so the threat in spec section 8 (evasion by contributed bot code) barely reaches it.",
+   "evidence": "In-process ESLint lintText with the repo config on src/engine/bot-random.ts: `import { hrtime } from 'node:process'; export const r = hrtime();` -> 0 errors. The same holds for node:crypto randomInt and node:os uptime. node:perf_hooks performance.now is caught by the existing determinism rule.",
+   "fix": "Not part of this task. Optionally, open a follow-up to add no-restricted-imports for `node:*` (or for crypto, process, os, child_process and worker_threads, with and without the node: prefix) to botDeterminismConfig, so bot-random.ts gets the same import ban."}
+ ],
+ "summary": "The r1 MAJOR tools/lint/headless-boundary.js:node-process-global-open is closed. B9 (Identifier[name='process'] with NAME_ONLY_POSITIONS) and B10 (globalThis.process) are in place. I checked them with in-process ESLint on src/bots, src/advice and src/engine/bot-random.ts. They reject process.hrtime(), process.hrtime.bigint(), process?.hrtime(), process.uptime(), process.getBuiltinModule(...), `const { hrtime } = process`, (0, process).uptime(), typeof process, globalThis.process, globalThis?.process, globalThis['process'], `const { process } = globalThis` and `const { process: p } = globalThis`. Other forms were already blocked: global.process (B6), require('process') and, in bots/advice, `import ... from 'node:process'`. Property names called `process` (object keys, interface members, `declare global`) lint clean. grep finds no `process` in non-UI src. The new acceptance tests pass (6/6). Two MINOR findings remain, and neither blocks: (1) runtime-built keys, a limit the spec accepts; (2) a gap that predates the change: Node built-in module imports (node:crypto, node:process, node:os) lint clean in src/engine/bot-random.ts, which is core engine code rather than contributed bot code. No new dependencies, secrets or runtime trust boundaries."}

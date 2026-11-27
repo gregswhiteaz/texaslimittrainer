@@ -1,0 +1,31 @@
+{"reviewer": "code", "round": 2,
+ "rubric": [
+  {"item": "SPEC-01 correctness", "result": "pass"},
+  {"item": "SPEC-01 test strength", "result": "pass"},
+  {"item": "SPEC-02 correctness", "result": "pass"},
+  {"item": "SPEC-02 test strength", "result": "pass"},
+  {"item": "SPEC-03 correctness", "result": "pass"},
+  {"item": "SPEC-03 test strength", "result": "pass"},
+  {"item": "SPEC-04 correctness", "result": "pass"},
+  {"item": "SPEC-04 test strength", "result": "pass"},
+  {"item": "SPEC-05 correctness", "result": "pass"},
+  {"item": "SPEC-05 test strength", "result": "pass"},
+  {"item": "AC#3 (recorded deviation: process global, B9/B10) correctness", "result": "pass"},
+  {"item": "AC#3 (recorded deviation: process global, B9/B10) test strength", "result": "pass"},
+  {"item": "scope", "result": "pass"},
+  {"item": "concision", "result": "pass"},
+  {"item": "clarity", "result": "pass"}
+ ],
+ "findings": [
+  {"fingerprint": "tools/lint/headless-boundary.js:escapes-name-and-jsdoc-omit-process", "severity": "MINOR",
+   "file": "tools/lint/headless-boundary.js", "line": 125,
+   "issue": "The process ban (B9) was added to FUNCTION_AND_GLOBAL_ESCAPES, but the constant name and its JSDoc still describe only the Function constructor and the global alias. A reader looking for why `process` is banned has to find the inline AC#3 comment.",
+   "evidence": "JSDoc: 'TASK-6.29 (J-1-01/J-1-02): no-new-func sees only ... The Node `global` alias ...'. The process entry is explained only by the inline comment `// TASK-6.29 AC#3: process.hrtime()...`.",
+   "fix": "Add one sentence to the JSDoc about `process` (unseeded clock, getBuiltinModule), or rename the constant to something like NODE_AND_FUNCTION_ESCAPES. Optional."},
+  {"fingerprint": "tests/toolchain/bot-process-escapes.acceptance.test.ts:errorsOf-duplicated", "severity": "NIT",
+   "file": "tests/toolchain/bot-process-escapes.acceptance.test.ts", "line": 31,
+   "issue": "`errorsOf` is copied word for word from bot-function-escapes.acceptance.test.ts. That matches the spec's 'copy it locally' guidance, and both files are locked acceptance tests, so this is acceptable.",
+   "evidence": "Identical 4-line function in both new test files.",
+   "fix": "None needed. A later cleanup could move it into tests/support."}
+ ],
+ "summary": "Round 1 had no BLOCKER/MAJOR from code review. The r1 security MAJOR (process global) is fixed on substance: B9 (value-position `process` identifier using NAME_ONLY_POSITIONS) and B10 (`globalThis.process` property ban) are separate entries, and PROCESS_GLOBAL_MESSAGE cites REQ-028.1. My in-memory mutation check confirms both are load-bearing. Removing B9 makes process.hrtime()/uptime()/getBuiltinModule pass lint, and removing B10 makes globalThis.process.hrtime() pass. Each of those cases is a probe in the new bot-process-escapes test, and the probes run against bots, advice and bot-random. Variants are also caught: process.hrtime.bigint(), process?.uptime(), `{ hrtime } = process`, `typeof process` and globalThis['process']. The r1 MINOR (declare global untested) is addressed: the new clean probe would fail if the B6 TSModuleDeclaration exclusion were removed. B1-B8 and the earlier test are unchanged since r1. Both test files pass (6/6). Gate fix-4: lint, typecheck and npm test pass; the scope budget warning (256/190 lines, 3/2 files) comes from the recorded AC#3 deviation. No BLOCKER or MAJOR."}

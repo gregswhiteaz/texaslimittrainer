@@ -4,7 +4,7 @@
   "branch": "doit/TASK-6.29",
   "base_commit": "89e3ad4676164f436fb70a479cb19fd7ed8c1074",
   "started": "2026-11-27T00:14:25",
-  "review_round": 1,
+  "review_round": 2,
   "judge_round": 0,
   "sendbacks": 0,
   "gate_runs": 4,
@@ -2216,7 +2216,8 @@
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-6.29",
   "spec_sha256": "37052affcccfa2dab663688dde2bd24283115523d27458df5daf0478d0b1754a",
   "review_findings": {
-    "1": 1
+    "1": 1,
+    "2": 0
   },
   "brief_history": {
     "tools/lint/headless-boundary.js:node-process-global-open": [
