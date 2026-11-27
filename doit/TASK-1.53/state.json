@@ -5,13 +5,25 @@
   "base_commit": "fb8706e14af88ded6e4fb3a555fb5553f817d92b",
   "started": "2026-11-27T11:17:27",
   "review_round": 2,
-  "judge_round": 0,
+  "judge_round": 1,
   "sendbacks": 0,
   "gate_runs": 8,
   "questions": 0,
   "assumptions": 0,
   "escalations": 0,
-  "item_failures": {},
+  "item_failures": {
+    "SPEC-01": 0,
+    "SPEC-02": 0,
+    "SPEC-03": 0,
+    "SPEC-04": 0,
+    "SPEC-05": 0,
+    "SPEC-06": 0,
+    "SPEC-07": 0,
+    "SPEC-08": 0,
+    "SPEC-09": 0,
+    "SPEC-10": 0,
+    "SPEC-11": 0
+  },
   "locked_tests": {
     "tests/ci/branch-protection.acceptance.test.ts": "e0db1ebe54dc81d06c0a34bebb3efbc9da91f58548e7cb83482e66c62824451c",
     "tests/ci/ci-shards.acceptance.test.ts": "f5bbc34d8370760ddc09292838eb836ba3c757095e40fe89b300eb0df117d52c"
@@ -2309,5 +2321,8 @@
     "tests/ci/sweep-shards.test.ts:invalid-weight-cases-cannot-fail": [
       "review r1"
     ]
+  },
+  "judge_results": {
+    "1": "PASS"
   }
 }

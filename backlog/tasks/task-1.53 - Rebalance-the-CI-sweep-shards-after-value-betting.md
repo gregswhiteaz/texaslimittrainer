@@ -7,7 +7,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-23T04:42:00Z'
-updated_date: '2026-11-27T18:49:00Z'
+updated_date: '2026-11-27T19:15:00Z'
 labels:
   - follow-up
   - ci
@@ -28,8 +28,8 @@ After TASK-7.8, CI run #210: sweep shard 2 took 476 s while shard 1 took 156 s (
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Given the sweep tests on CI, When they run, Then no sweep shard takes more than about 1.5× the other (by duration, e.g. 3 shards or duration-based file assignment) and the CI wall time on main is back under about 6 min, with every sweep file still run exactly once
-- [ ] #2 Given the E2E suite on CI, When it runs, Then it is split into 4 parallel jobs (2 shards per browser, Chromium and WebKit), every e2e test runs exactly once per browser, the Playwright report/artifact on failure still identifies the failing test, and no test or assertion is removed
+- [x] #1 Given the sweep tests on CI, When they run, Then no sweep shard takes more than about 1.5× the other (by duration, e.g. 3 shards or duration-based file assignment) and the CI wall time on main is back under about 6 min, with every sweep file still run exactly once
+- [x] #2 Given the E2E suite on CI, When it runs, Then it is split into 4 parallel jobs (2 shards per browser, Chromium and WebKit), every e2e test runs exactly once per browser, the Playwright report/artifact on failure still identifies the failing test, and no test or assertion is removed
 - [ ] #3 Given a push to main after this change, When CI finishes, Then the wall time is about 3.5 minutes or less, measured on at least 2 runs (the repo is public, so the extra standard-runner jobs are not billed)
 <!-- AC:END -->
 
