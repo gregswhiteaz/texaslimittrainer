@@ -6,6 +6,7 @@ title: >-
 status: To Do
 assignee: []
 created_date: '2026-11-27T03:28:00Z'
+updated_date: '2026-11-27T03:51:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -37,4 +38,11 @@ Follow-up from TASK-7.29 (decision: Q-3 C). Today every three-bet and four-bet l
 - [ ] #4 Given open-raise and calling lines, When ranges are scaled, Then they are unchanged from FU-A (raw PFR and raw VPIP)
 - [ ] #5 Given the 4 observed golden postflop spots, When npm test runs, Then each still agrees and is clear-cut, or each changed one is re-justified with the user's sign-off
 - [ ] #6 Given docs/advice/range-model.md, When the story is done, Then its line-to-stat table and Known limits state the relative re-raise rule
+- [ ] #7 Given a full-ring UTG four-bet line (default width 1.21%) and an opponent observed for 100 hands, When the observed PFR is 12.5 or 25, Then the scaled widths are 1.21% and 2.42%; and given any three-bet or four-bet line where default × PFR ÷ typical PFR exceeds 100, Then the scaled width is 100% (heads-up uses typical PFR 57.5 and is covered by one concrete width in the same test)
 <!-- AC:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+AC added from TASK-7.29 follow-up (review r1 MINOR: AC#3 had no observable widths)
+<!-- SECTION:NOTES:END -->

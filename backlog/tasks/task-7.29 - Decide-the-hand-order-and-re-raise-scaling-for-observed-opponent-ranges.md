@@ -1,11 +1,11 @@
 ---
 id: TASK-7.29
 title: Decide the hand order and re-raise scaling for observed-opponent ranges
-status: In Progress
+status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-23T16:31:00Z'
-updated_date: '2026-11-27T03:51:00Z'
+updated_date: '2026-11-27T03:52:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -13,6 +13,8 @@ labels:
 milestone: m-1
 dependencies:
   - TASK-7.13
+documentation:
+  - doc-177
 parent_task_id: TASK-7
 priority: medium
 ordinal: 228000
@@ -57,4 +59,12 @@ Follow-ups: TASK-7.43 (FU-A, resize + three-way hand order; depends on TASK-7.29
 No product code changed (D-5).
 
 Build: decision-5, REQ-035.6 + changelog 1.14, follow-ups TASK-7.43/7.44/7.45; gate PASS
+
+Step 6a: TASK-7.44 AC added (concrete widths, review r1 MINOR). Follow-ups TASK-7.43, 7.44, 7.45.
 <!-- SECTION:NOTES:END -->
+
+## Final Summary
+
+<!-- SECTION:FINAL_SUMMARY:BEGIN -->
+Decision spike, recorded as decision-5 (accepted): resize the authored default range for observed opponents (Q-1 B); rank hands by equity vs three random hands (Q-2 B); scale three-bet/four-bet lines by PFR relative to typical PFR, o = min(100, d x PFR / typical PFR) (Q-3 C); open-raise and calling lines go to a spike (Q-4 a). Only change: REQ-035.6 reworded and changelog 1.14 in requirements.md; no product code. Follow-ups: TASK-7.43 (range construction and hand order), TASK-7.44 (re-raise scaling), TASK-7.45 (open-raise/calling spike). Verification: npm test 1497 passed/56 skipped, lint and typecheck clean, review r1 no blockers, judge r1 PASS. Assumptions to review: A-1 empty decision body, A-2 three follow-ups, A-4 typical PFR = healthy-band midpoints (57.5/18/12.5), A-5 resize rule. Risks: product code disagrees with REQ-035.6 for 3-/4-bet lines until TASK-7.44 ships; TASK-7.44 AC#3 lacks concrete widths (MINOR, to be added); observed-ranges AC#2 needs unlock and re-pin in TASK-7.43.
+<!-- SECTION:FINAL_SUMMARY:END -->
