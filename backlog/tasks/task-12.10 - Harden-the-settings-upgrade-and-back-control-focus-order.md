@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-25T15:55:00Z'
-updated_date: '2026-11-27T10:49:00Z'
+updated_date: '2026-11-27T11:07:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -42,3 +42,9 @@ Follow-up from TASK-12.1 review and judge (doc-141). The v3->v4 upgrade unit tes
 
 Full spec: doit/TASK-12.10/spec.md
 <!-- SECTION:PLAN:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+Build: UpgradeBlockedError + retry; raw settings record test; back control after h1 in DOM with CSS order; locked e2e/settings.spec.ts Tab order re-pinned (TASK-12.1, Q-2); gate PASS
+<!-- SECTION:NOTES:END -->

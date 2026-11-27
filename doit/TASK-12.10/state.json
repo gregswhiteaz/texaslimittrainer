@@ -4,7 +4,7 @@
   "branch": "doit/TASK-12.10",
   "base_commit": "4b038eff7614d5afeb66ce4390ee27eae005cf91",
   "started": "2026-11-27T03:46:01",
-  "review_round": 0,
+  "review_round": 1,
   "judge_round": 0,
   "sendbacks": 0,
   "gate_runs": 2,
@@ -2265,5 +2265,8 @@
   },
   "history": [],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-12.10",
-  "spec_sha256": "eedbabb9d3376ab1154e47b10fccbb0775153cf3342e83733ce24379f75204b0"
+  "spec_sha256": "eedbabb9d3376ab1154e47b10fccbb0775153cf3342e83733ce24379f75204b0",
+  "review_findings": {
+    "1": 0
+  }
 }
