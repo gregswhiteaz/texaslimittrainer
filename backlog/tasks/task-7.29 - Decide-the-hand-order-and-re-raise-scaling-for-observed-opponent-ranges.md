@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-23T16:31:00Z'
-updated_date: '2026-11-27T03:27:00Z'
+updated_date: '2026-11-27T03:28:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -40,3 +40,19 @@ From TASK-7.13 review: the approved hand order (equity vs one random hand) ranks
 
 Full spec: doit/TASK-7.29/spec.md
 <!-- SECTION:PLAN:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+Decision (user, 2026-11-26, doit/TASK-7.29/qa.md), recorded as decision-5:
+- Q-1 B: an observed range is the authored default range resized by the hand order (rule A-5), not a prefix of the order (reverses TASK-7.13 A-8).
+- Q-2 B: the hand order ranks hands by equity against three random hands (seeded computeEquity; hand-order.json keeps format v1 and its path).
+- Q-3 C: three-bet and four-bet lines use o = min(100, d x observed PFR / typical PFR), typical PFR = healthy PFR midpoint per table size (heads-up 57.5, 6-max 18, full ring 12.5). Open-raise keeps raw PFR, calling lines raw VPIP.
+- Q-4 a: open-raise and calling-line scaling goes to a follow-up spike.
+
+Key numbers: hand-order.json ranks K2o #87 above 87s #99, Q2o #108 above 76s #116, J2o #123 above 65s #128. The 6-max UTG four-bet width goes 2.56% -> 18% for a 22/18 player at 100 hands under today's raw-PFR scaling (2.56% kept under Q-3 C). Full evidence: doit/TASK-7.29/spec.md §3 (current system, measured orders, re-raise table) and §5 (option costs, Q-3 C values).
+
+REQ change: REQ-035.6 reworded for the relative re-raise rule; changelog row 1.14 (dreams/limit-holdem-trainer/requirements.md). REQ-035.2 unchanged.
+Follow-ups: TASK-7.43 (FU-A, resize + three-way hand order; depends on TASK-7.29), TASK-7.44 (FU-B, relative re-raise scaling; depends on TASK-7.43), TASK-7.45 (FU-C spike, open-raise and calling-line scaling; depends on TASK-7.44).
+No product code changed (D-5).
+<!-- SECTION:NOTES:END -->

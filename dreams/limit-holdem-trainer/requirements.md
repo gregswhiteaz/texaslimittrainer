@@ -643,7 +643,7 @@ Dream slug: limit-holdem-trainer   ·   Vision: dreams/limit-holdem-trainer/visi
   - REQ-035.3: The range model never reads a bot's style label or internal parameters.
   - REQ-035.4: The hint and review show which basis was used: "typical player" or "based on N hands of this opponent".
   - REQ-035.5: Range narrowing sorts each hand into Strong (two pair or better), Pair, Draw (flush draw or open-ended straight draw without a pair) or Air; a bet keeps Strong, Pair and Draw; a check keeps Pair, Draw and Air; a call keeps Pair and Draw; a raise keeps Strong and Draw; the rule is re-applied on every street.
-  - REQ-035.6: Observed-statistics scaling uses width = d + (o − d) × min(n, 100) ÷ 100, where d is the default range width, o is the observed PFR for raising ranges or VPIP for calling ranges, and n is the number of observed hands.
+  - REQ-035.6: Observed-statistics scaling uses width = d + (o − d) × min(n, 100) ÷ 100, where d is the default range width and n is the number of observed hands; o is the observed PFR for open-raise ranges, the observed VPIP for calling ranges, and d × observed PFR ÷ typical PFR (at most 100) for three-bet and four-bet ranges, where typical PFR is the midpoint of the healthy PFR range for the table size (REQ-046.1).
 - Fit criterion: Test: two opponents with identical actions but different observed stats (≥ 30 hands) produce different ranges; a bot's internal parameters are not reachable from the advice engine's inputs (type check).
 - Rationale: Q-55; realistic reading skills; addresses R-2.
 - Source: Q-55; threshold and formula proposed-by-Claude; confirmed Q-57
@@ -1371,3 +1371,4 @@ Entity × lifecycle (every cell is a clause below or N/A):
 | 1.11 | 2026-11-24 | TASK-6.25 (Mixed style bands): REQ-007.5 a replacement bot keeps the busted bot's style; REQ-007.7 and REQ-007.8 retired (reverses Q-113) | User (TASK-6.25 Q-1, auto-accepted) |
 | 1.12 | 2026-11-26 | TASK-6.20: added REQ-029.3 (bot decisions use only the current hand) | User (TASK-6.20 Q-1) |
 | 1.13 | 2026-11-26 | TASK-7.21: REQ-032.2 splits facing a re-raise into own raise re-raised and re-raised when you have not raised, and splits blind defence by an early or a late raiser; REQ-032.6 picks the matching re-raise chart for a fourth bet | User (TASK-7.21 Q-1/Q-2) |
+| 1.14 | 2026-11-26 | TASK-7.29: REQ-035.6 scales observed three-bet and four-bet ranges by PFR relative to the typical PFR for the table size instead of by raw PFR | User (TASK-7.29 Q-3) |
