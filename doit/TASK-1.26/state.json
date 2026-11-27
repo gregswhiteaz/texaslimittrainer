@@ -542,6 +542,12 @@
       "event": "unlock",
       "file": "tests/toolchain/headless-lint-dirs.acceptance.test.ts",
       "reason": "TASK-1.40 AC#2 (autopilot): LINT_ONLY_HEADLESS_DIRS folded into HEADLESS_DIRS \u2014 stricter only"
+    },
+    {
+      "t": "2026-11-27T01:19:41",
+      "event": "unlock",
+      "file": "tests/playtest/summary.acceptance.test.ts",
+      "reason": "TASK-7.37 blocked.json (autopilot, recommended): withAwards fixture drops the copied hand's optional 'returned' so largestPot = award sum is independent of TAG's hand-1 play; no assertion changed or dropped"
     }
   ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-1.26",
@@ -554,6 +560,7 @@
   },
   "doc_id": "doc-32",
   "relock_pending": [
-    "tests/toolchain/headless-lint-dirs.acceptance.test.ts"
+    "tests/toolchain/headless-lint-dirs.acceptance.test.ts",
+    "tests/playtest/summary.acceptance.test.ts"
   ]
 }

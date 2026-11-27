@@ -2,7 +2,7 @@
   "format": "tlh-bot-style",
   "version": 1,
   "style": "TAG",
-  "description": "TAG (tight-aggressive) plays few starting hands and plays them hard. It follows the trainer's own advice: the 6-max preflop chart before the flop and equity against pot odds after it. In close preflop spots, where the chart lists an acceptable alternative, it usually takes the chart's main action but sometimes the alternative, so it can't be beaten by one simple pattern. It never adapts to how you play.",
+  "description": "TAG (tight-aggressive) plays few starting hands and plays them hard. It follows the trainer's own advice: the 6-max preflop chart before the flop and equity against pot odds after it. In close preflop spots, where the chart lists an acceptable alternative, it usually takes the chart's main action but sometimes the alternative, so it can't be beaten by one simple pattern. With only three or four players dealt in, it opens from the button and small blind only the hands it would open from the cutoff, to stay tight. It never adapts to how you play.",
   "mixedSpots": [
     {
       "spot": "preflop-unopened",

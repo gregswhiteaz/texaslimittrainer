@@ -1,0 +1,10 @@
+{
+  "spec": "SPEC-08",
+  "reason": "SPEC-08 requires tests/playtest/summary.acceptance.test.ts to pass unchanged, but its first test ('Largest pot is the largest per-hand sum of award amounts') uses a 4-seat TAG hand as a fixture, and that hand changes by design under SPEC-02 / A-1. The fixture keeps the hand's result.returned while replacing awards; the new hand has returned {seat 3, amount 2}, so summarize([a, b]).largestPot is 142, not 140.",
+  "evidence": "Fixture: tests/playtest/summary.acceptance.test.ts:12 `const base = playHand(handReplayCode(42, 1), 4, 1);` and withAwards (:14-18) spreads `...result` (keeping `returned`). summarize adds `final.result?.returned?.amount` to each hand's pot (src/playtest/runner.ts:309-312). Base 735e6cd hand: `4:fold 1:fold 2:call 3:check ...` (returned undefined). After change: `4:fold 1:fold 2:fold` (button holds a BTN-open/CO-fold class and folds; SB likewise folds), returned {seat:3, amount:2}. Failure: `expected 142 to be 140` at summary.acceptance.test.ts:29. Every other test passes: npm test 341 files passed, 1 failed; 1526 tests passed, 1 failed, 59 skipped.",
+  "options": [
+    "Recommended: approve a one-line fixture edit in tests/playtest/summary.acceptance.test.ts so withAwards drops the fixture hand's returned chips (omit the optional `returned` field from the copied result, e.g. destructure it out before spreading), making the test independent of how TAG plays hand 1. The test's intent (largestPot = largest per-hand award sum) is unchanged.",
+    "Approve switching the fixture to a size the change does not touch, e.g. `playHand(handReplayCode(42, 1), 6, 1)`, if that hand has no returned chips.",
+    "Change the spec's rule so 4-seat hand 1 (seed 42) plays as before (not recommended: it is the intended behaviour change)."
+  ]
+}

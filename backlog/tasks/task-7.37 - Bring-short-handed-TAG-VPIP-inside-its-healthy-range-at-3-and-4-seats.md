@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-26T10:09:00Z'
-updated_date: '2026-11-27T08:09:00Z'
+updated_date: '2026-11-27T08:19:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -42,3 +42,9 @@ Follow-up from TASK-7.35 (doc-158). Over 100,000 all-TAG cash hands (seed 42), V
 
 Full spec: doit/TASK-7.37/spec.md
 <!-- SECTION:PLAN:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+Locked edit: tests/playtest/summary.acceptance.test.ts (owner TASK-1.26) withAwards drops 'returned' (Q-1 autopilot).
+<!-- SECTION:NOTES:END -->

@@ -14,7 +14,9 @@ const base = playHand(handReplayCode(42, 1), 4, 1);
 function withAwards(number: number, awards: PotAward[]): PlayedHand {
   const result = base.final.result;
   if (result === null) throw new Error('fixture hand did not complete');
-  return { ...base, number, final: { ...base.final, result: { ...result, awards } } };
+  const copy = { ...result, awards };
+  delete copy.returned;
+  return { ...base, number, final: { ...base.final, result: copy } };
 }
 
 describe('playtest Largest pot', () => {

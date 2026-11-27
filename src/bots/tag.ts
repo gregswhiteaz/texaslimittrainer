@@ -7,6 +7,8 @@ import {
   type EquityResult,
 } from '../advice/equity';
 import type { PostflopOptions } from '../advice/postflop';
+import { SIX_MAX_CHART } from '../advice/preflop';
+import type { ChartSpot, PreflopChart } from '../advice/preflop-chart';
 import { adviceOptions, recommend, type RecommendOptions } from '../advice/recommend';
 import { drawMixed, parseStyle, type BotStyleData } from './style';
 // The JSON import stays last: the bots import-boundary test's regex can't read past its `with` clause.
@@ -35,15 +37,42 @@ export function BOT_EQUITY(input: EquityInput): EquityResult {
  *  (REQ-029.2). Spread before adviceOptions so an explicit `opponentRanges` still wins. */
 export const BOT_ADVICE: PostflopOptions = { opponentRanges: 'actions' };
 
+/** Dealt-in seat counts at which TAG plays TAG_SHORT_HANDED_CHART. */
+export const TAG_SHORT_HANDED_SEATS: readonly number[] = [3, 4];
+
+const coUnopened = SIX_MAX_CHART.spots.find(
+  (s) => s.position === 'CO' && s.situation === 'unopened',
+) as ChartSpot;
+
+/** SIX_MAX_CHART with the BTN unopened and SB unopened cells replaced by the CO unopened cells (TASK-7.37 A-1).
+ *  Every other spot is the same object as in SIX_MAX_CHART. referenceSize '6-max'. */
+export const TAG_SHORT_HANDED_CHART: PreflopChart = {
+  ...SIX_MAX_CHART,
+  spots: SIX_MAX_CHART.spots.map((spot) =>
+    spot.situation === 'unopened' && (spot.position === 'BTN' || spot.position === 'SB')
+      ? { ...spot, cells: coUnopened.cells }
+      : spot,
+  ),
+};
+
+/** TAG_SHORT_HANDED_CHART when dealtIn is in TAG_SHORT_HANDED_SEATS, else undefined (the shared chart applies). */
+export function tagChartFor(dealtIn: number): PreflopChart | undefined {
+  return TAG_SHORT_HANDED_SEATS.includes(dealtIn) ? TAG_SHORT_HANDED_CHART : undefined;
+}
+
 /**
  * The TAG decision: the advice engine's recommended move for `view`, except in a preflop cell with an acceptable
  * alternative in a spot type TAG_STYLE marks as mixed, where one draw from `random` picks between the two.
+ * Preflop at 3 or 4 dealt-in seats it reads TAG_SHORT_HANDED_CHART unless `options.chart` is given.
  * Errors from recommend propagate.
  */
 export function decideTag(view: PlayerView, options: TagOptions = {}): Action {
+  const chart =
+    options.chart ?? (view.street === 'preflop' ? tagChartFor(view.players.length) : undefined);
   const advice = recommend(view, {
     ...BOT_ADVICE,
     ...adviceOptions(options),
+    ...(chart === undefined ? {} : { chart }),
     equity: options.equity ?? BOT_EQUITY,
   });
   if (options.random === undefined || advice.basis !== 'chart' || advice.alternative === null) {

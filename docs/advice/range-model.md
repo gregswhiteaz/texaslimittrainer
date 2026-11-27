@@ -235,12 +235,41 @@ Before the change WTSD was above its healthy range at 4, 5 and 7 seats (44.4, 44
 ranges it falls to 40.3–41.7 over 100,000 hands, inside the range at every size. Aggression rises by 1.5 to 3 points
 and stays inside. Stats still outside their healthy range after the change:
 
-- 3 seats VPIP 31.1 (100,000 hands; 31.0 over 10,000), above 20–28.
-- 4 seats VPIP 28.1 (100,000 hands), just above 20–28 (27.9 over 10,000).
+- 3 seats VPIP 31.1 (100,000 hands; 31.0 over 10,000), above 20–28 (fixed for TAG by TASK-7.37).
+- 4 seats VPIP 28.1 (100,000 hands), just above 20–28 (27.9 over 10,000) (fixed for TAG by TASK-7.37).
 - 4 seats WTSD 42.5 over 10,000 hands, just above 30–42 (41.5 over 100,000, inside).
 
 VPIP and PFR come from the preflop charts, which this change does not touch, so the two VPIP misses were there
 before too.
+
+### TAG at 3 and 4 seats (TASK-7.37)
+
+With only 3 or 4 players dealt in, the TAG bot opens the button and the small blind (when everyone before it
+folded) with the 6-max chart's cutoff (CO) unopened range instead of the button and small-blind ranges. Every other
+spot, including blind defence and every spot facing a limp or raise, reads the 6-max chart as before. This is a TAG
+bot rule only (`TAG_SHORT_HANDED_CHART` in `src/bots/tag.ts`): the shared 6-max chart, and so the user's advice,
+hints and grades, are unchanged, and TAG at 2 and 5–10 seats plays exactly as before. "Dealt in" counts the players
+in the hand, so a sit-and-go table that shrinks to 3 or 4 players uses the rule too.
+
+Measured all-TAG cash, seed 42, stats summed over every seat. The 100,000-hand "before" rows are the TASK-7.35
+figures above; the 100,000-hand "after" rows come from the opt-in slow test
+`tests/bots/tag-short-handed-playtest.acceptance.test.ts`, which asserts every stat inside its 6-max healthy range.
+
+| Size (hands)            | VPIP  | PFR   | Aggression | WTSD  | W$SD  |
+| ----------------------- | ----- | ----- | ---------- | ----- | ----- |
+| 3 seats 10,000, before  | 31.0  | 21.9  | 65.8       | 40.9  | 52.8  |
+| 3 seats 10,000, after   | 23.7  | 17.3  | 65.1       | 40.2  | 52.0  |
+| 3 seats 100,000, before | 31.1  | 22.0  | 65.9       | 41.7  | 52.7  |
+| 3 seats 100,000, after  | 23.6  | 17.3  | 65.2       | 41.7  | 52.4  |
+| 4 seats 10,000, before  | 27.9  | 20.1  | 65.0       | 42.5  | 51.7  |
+| 4 seats 10,000, after   | 23.6  | 17.5  | 64.5       | 43.6  | 51.3  |
+| 4 seats 100,000, before | 28.1  | 20.4  | 65.2       | 41.5  | 52.2  |
+| 4 seats 100,000, after  | 23.9  | 17.7  | 64.7       | 41.7  | 51.9  |
+| 6-max healthy           | 20–28 | 14–22 | 50–66      | 30–42 | 47–57 |
+
+VPIP falls by about 7.5 points at 3 seats and 4 points at 4 seats and is inside 20–28 at both. Over 100,000 hands
+every stat is inside its range. The 4-seat WTSD of 43.6 over 10,000 hands is sampling noise, as it was before this
+change (41.7 over 100,000).
 
 ## Adjusting to observed play
 

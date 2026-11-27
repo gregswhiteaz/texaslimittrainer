@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-18T17:24:00Z'
-updated_date: '2026-11-19T20:45:00Z'
+updated_date: '2026-11-27T08:19:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -61,6 +61,8 @@ Build: lint-only headless dirs (playtest, table); summary + policy-lifetime test
 Judge R1 PASS 7/7, no findings.
 
 Follow-ups (Step 6a): TASK-1.40 coverage threshold for playtest/table. The cross-story removal note was already recorded at spec lock.
+
+Locked test tests/playtest/summary.acceptance.test.ts edited by TASK-7.37 (autopilot): withAwards fixture drops 'returned' so the largest-pot check doesn't depend on TAG play; no assertion changed.
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary

@@ -3,7 +3,7 @@ import { CALLING_STATION_STYLE } from '../bots/calling-station';
 import { MANIAC_STYLE } from '../bots/maniac';
 import { ROCK_STYLE } from '../bots/rock';
 import { SPOT_TYPES, type BotStyleData, type SpotType, type StyleName } from '../bots/style';
-import { BOT_EQUITY, TAG_STYLE } from '../bots/tag';
+import { BOT_EQUITY, TAG_STYLE, tagChartFor } from '../bots/tag';
 import type { Action, HandState } from '../engine/hand';
 import { playerView } from '../engine/player-view';
 import {
@@ -109,7 +109,12 @@ export class StyleCheck {
       const spots = style === undefined ? undefined : this.mixedCounts.get(style);
       if (spots === undefined) continue;
       // The draw condition of decideTag (A-4); preflop advice reads no earlier showdowns (A-5).
-      const advice = recommend(playerView(before, action.seat, []), { equity: BOT_EQUITY });
+      const view = playerView(before, action.seat, []);
+      const chart = view.street === 'preflop' ? tagChartFor(view.players.length) : undefined;
+      const advice = recommend(view, {
+        equity: BOT_EQUITY,
+        ...(chart === undefined ? {} : { chart }),
+      });
       if (advice.basis !== 'chart' || advice.alternative === null) continue;
       const spot = `preflop-${advice.situation}` as SpotType;
       const counts = spots.get(spot);
