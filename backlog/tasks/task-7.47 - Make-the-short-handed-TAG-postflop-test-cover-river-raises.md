@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-27T10:03:00Z'
-updated_date: '2026-11-27T13:18:00Z'
+updated_date: '2026-11-27T13:23:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -27,7 +27,7 @@ From TASK-7.46 judge J-1-03: the 50-hand sample in tests/bots/tag-short-handed.a
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Given tests/bots/tag-short-handed.acceptance.test.ts (owner TASK-7.37/7.46), When its sample is enlarged or a targeted river-raise view is added, Then a mutation turning a TAG river raise into a call fails the test, with no assertion loosened
+- [x] #1 Given tests/bots/tag-short-handed.acceptance.test.ts (owner TASK-7.37/7.46), When its sample is enlarged or a targeted river-raise view is added, Then a mutation turning a TAG river raise into a call fails the test, with no assertion loosened
 <!-- AC:END -->
 
 ## Implementation Plan
