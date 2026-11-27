@@ -357,6 +357,12 @@
       "event": "unlock",
       "file": "tests/bots/tag-playtest.acceptance.test.ts",
       "reason": "TASK-7.18 Q-3 (auto-accepted): global testTimeout removed; add one vi.setConfig({ testTimeout: 30_000 }) line only, no assertion touched"
+    },
+    {
+      "t": "2026-11-27T16:04:24",
+      "event": "unlock",
+      "file": "tests/bots/tag.acceptance.test.ts",
+      "reason": "TASK-7.40 (user Q-1..Q-4; decision-4): re-pin for the 6-max re-raise split (counts 26->32, new rows/labels/golden spots); no assertion dropped"
     }
   ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-6.1",
@@ -373,6 +379,7 @@
     "tests/bots/tag.acceptance.test.ts",
     "tests/bots/tag-playtest.acceptance.test.ts",
     "tests/bots/tag.acceptance.test.ts",
-    "tests/bots/tag-playtest.acceptance.test.ts"
+    "tests/bots/tag-playtest.acceptance.test.ts",
+    "tests/bots/tag.acceptance.test.ts"
   ]
 }

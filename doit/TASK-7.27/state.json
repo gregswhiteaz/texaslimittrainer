@@ -2145,7 +2145,14 @@
       "skips": 0
     }
   },
-  "history": [],
+  "history": [
+    {
+      "t": "2026-11-27T16:04:23",
+      "event": "unlock",
+      "file": "tests/advice/chart-print-sizes.acceptance.test.ts",
+      "reason": "TASK-7.40 (user Q-1..Q-4; decision-4): re-pin for the 6-max re-raise split (counts 26->32, new rows/labels/golden spots); no assertion dropped"
+    }
+  ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-7.27",
   "spec_sha256": "94c645408ceb27efc84ff5d5cf5f761ac839a18089b6c6eb5d8bf2477d0739e7",
   "review_findings": {
@@ -2154,5 +2161,8 @@
   "judge_results": {
     "1": "PASS"
   },
-  "doc_id": "doc-164"
+  "doc_id": "doc-164",
+  "relock_pending": [
+    "tests/advice/chart-print-sizes.acceptance.test.ts"
+  ]
 }

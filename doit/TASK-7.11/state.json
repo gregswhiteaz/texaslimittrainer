@@ -1281,6 +1281,12 @@
       "event": "unlock",
       "file": "tests/golden/preflop-spots.json",
       "reason": "TASK-7.14 Q-1, AC#7-9: fr-btn-raise-88 call->raise, AJs justification, two borderline spots replaced; spot count 110 kept"
+    },
+    {
+      "t": "2026-11-27T16:04:24",
+      "event": "unlock",
+      "file": "tests/golden/preflop-spots.json",
+      "reason": "TASK-7.40 (user Q-1..Q-4; decision-4): re-pin for the 6-max re-raise split (counts 26->32, new rows/labels/golden spots); no assertion dropped"
     }
   ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-7.11",
@@ -1307,6 +1313,7 @@
     ]
   },
   "relock_pending": [
+    "tests/golden/preflop-spots.json",
     "tests/golden/preflop-spots.json"
   ],
   "doc_id": "doc-98",

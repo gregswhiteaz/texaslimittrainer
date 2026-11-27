@@ -3,10 +3,11 @@ id: TASK-7.40
 title: >-
   Split the 6-max re-raise spots into own-raise-re-raised and
   re-raised-when-I-had-not-raised
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-26T23:45:00Z'
-updated_date: '2026-11-27T19:30:00Z'
+updated_date: '2026-11-27T23:04:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -42,8 +43,22 @@ Follow-up from TASK-7.21 (decision: Q-1 split re-raise). Today `situationOf` sen
 - [ ] #8 Given the reshaped 6-max chart, When the opt-in slow test tests/bots/tag-short-handed-playtest.acceptance.test.ts runs (TLH_SLOW_TESTS=1), Then all-TAG 3- and 4-seat VPIP, PFR, aggression, WTSD and W$SD stay inside the 6-max healthy ranges, with before/after figures recorded
 <!-- AC:END -->
 
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. situationOf: own-raise re-raised -> re-raise; other 2+ raises -> re-raise-not-mine (falls back to re-raise when the size's chart lacks it)
+2. Author 6 new 6-max grids (subset rule, Q-3) and re-justify the 6 re-raise grids (80-90% rule; CO A9o/A8o)
+3. Labels/context (Q-1/Q-2), Rock ranges, golden spots, re-pin locked tests under owners
+4. signoff.md for the user's sign-off before code review (Q-4)
+5. AC#8 slow test before/after
+
+Full spec: doit/TASK-7.40/spec.md
+<!-- SECTION:PLAN:END -->
+
 ## Implementation Notes
 
 <!-- SECTION:NOTES:BEGIN -->
 AC added from TASK-7.37 follow-up (short-handed TAG chart is derived from SIX_MAX_CHART)
+
+Locked re-pins unlocked under owners: TASK-7.19, 7.27, 7.20, 7.2, 10.17, 8.5, 6.5, 6.1, 7.11 (see spec).
 <!-- SECTION:NOTES:END -->

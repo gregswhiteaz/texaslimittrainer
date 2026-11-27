@@ -279,6 +279,12 @@
       "event": "unlock",
       "file": "tests/advice/preflop.acceptance.test.ts",
       "reason": "TASK-7.26 SPEC-12: sandbox fixture list gains the two new range data files (no assertion change)"
+    },
+    {
+      "t": "2026-11-27T16:04:23",
+      "event": "unlock",
+      "file": "tests/advice/preflop.acceptance.test.ts",
+      "reason": "TASK-7.40 (user Q-1..Q-4; decision-4): re-pin for the 6-max re-raise split (counts 26->32, new rows/labels/golden spots); no assertion dropped"
     }
   ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-7.2",
@@ -297,6 +303,7 @@
     "1": "PASS"
   },
   "relock_pending": [
+    "tests/advice/preflop.acceptance.test.ts",
     "tests/advice/preflop.acceptance.test.ts",
     "tests/advice/preflop.acceptance.test.ts",
     "tests/advice/preflop.acceptance.test.ts",
