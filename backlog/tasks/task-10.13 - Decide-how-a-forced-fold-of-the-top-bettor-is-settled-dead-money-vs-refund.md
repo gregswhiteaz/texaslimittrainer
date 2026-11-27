@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-24T20:28:00Z'
-updated_date: '2026-11-27T05:02:00Z'
+updated_date: '2026-11-27T05:15:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -28,10 +28,10 @@ Follow-up from TASK-10.2 (doc-125, judge J-1-01 / code review MINOR). When Leave
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Given the options above, When the user decides, Then the decision is recorded in this task and in docs/ui/navigation.md
-- [ ] #2 Given the decided rule, When the user is force-folded while holding the top bet (preflop raise, flop bet), Then the pot, the amount the remaining players must call and any refund follow that rule, with engine tests and invariants holding
-- [ ] #3 Given forceFold is called on several seats in one hand, When the hand settles, Then checkState holds (or forceFold rejects the call) — a property test covers it
-- [ ] #4 Given the leave dialog is open on a bot's turn, When the test checks that no bot acted, Then it waits for any in-flight worker reply and advances the clock again before asserting (no timing-dependent pass)
+- [x] #1 Given the options above, When the user decides, Then the decision is recorded in this task and in docs/ui/navigation.md
+- [x] #2 Given the decided rule, When the user is force-folded while holding the top bet (preflop raise, flop bet), Then the pot, the amount the remaining players must call and any refund follow that rule, with engine tests and invariants holding
+- [x] #3 Given forceFold is called on several seats in one hand, When the hand settles, Then checkState holds (or forceFold rejects the call) — a property test covers it
+- [x] #4 Given the leave dialog is open on a bot's turn, When the test checks that no bot acted, Then it waits for any in-flight worker reply and advances the clock again before asserting (no timing-dependent pass)
 <!-- AC:END -->
 
 ## Implementation Plan
@@ -50,4 +50,6 @@ Full spec: doit/TASK-10.13/spec.md
 
 <!-- SECTION:NOTES:BEGIN -->
 Build: forced fold of top bettor voids its bet to highest live bet (BB floor preflop), no refund to leaver; checker C5/pot structure from last street, $0 lone fold-out winner allowed (J-1-02); new acceptance + property tests; e2e/leave-mid-hand.spec.ts waits for worker replies (locked edit unlocked under TASK-10.2, Q-4); REQ-004.8/018.4 + changelog 1.15; gate PASS
+
+Decision (TASK-10.13 Q-1..Q-4, user 2026-11-26): Q-1 (a) a forced fold of the top bettor is dead money — chips stay in the pot, never refunded, amount to match drops to the highest live bet; Q-2 preflop floor is the big blind (dead big blind); Q-3 REQ-004.8 and REQ-018.4 reworded, changelog 1.15; Q-4 locked e2e/leave-mid-hand.spec.ts edited (worker-reply wait), unlocked under TASK-10.2. Also recorded in docs/ui/navigation.md.
 <!-- SECTION:NOTES:END -->

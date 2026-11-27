@@ -5,13 +5,23 @@
   "base_commit": "221f6e1a1d4dc47d661dd78b42a523fee90d45f8",
   "started": "2026-11-26T21:19:32",
   "review_round": 1,
-  "judge_round": 0,
+  "judge_round": 1,
   "sendbacks": 0,
   "gate_runs": 4,
   "questions": 0,
   "assumptions": 0,
   "escalations": 0,
-  "item_failures": {},
+  "item_failures": {
+    "SPEC-01": 0,
+    "SPEC-02": 0,
+    "SPEC-03": 0,
+    "SPEC-04": 0,
+    "SPEC-05": 0,
+    "SPEC-06": 0,
+    "SPEC-07": 0,
+    "SPEC-08": 0,
+    "SPEC-09": 0
+  },
   "locked_tests": {
     "e2e/leave-mid-hand.spec.ts": "9f32f298dae4e700329e201aa7eaf2e5fd99241fec51564712afd113c8c3f631",
     "tests/engine/force-fold-top-bet.acceptance.test.ts": "31ebfd72844360f2acb28f91c9bd03ddbc2579915a46994426c0cf2b9effb1fd",
@@ -2204,5 +2214,8 @@
   "spec_sha256": "a6c331db94900f4fad22948d3b6ce14578d09bfe4e64af258186d0ad015daf9c",
   "review_findings": {
     "1": 0
+  },
+  "judge_results": {
+    "1": "PASS"
   }
 }
