@@ -14,9 +14,9 @@ interface HoldWindow {
 /**
  * Init script (page.addInitScript(holdSessionsWrite)). While `__tlhSessionsHold` is 'armed', the next
  * readwrite transaction whose scope is exactly the armed scope (by default `sessions`, the session start
- * record's put; the scope must include `sessions`) is held open:
- * the flag becomes 'held' and a chain of `count()` requests on its `sessions` store keeps it alive, so its
- * data stays uncommitted. Setting the flag to 'released' ends the chain and the transaction commits. Every
+ * record's put) is held open: the flag becomes 'held' and a chain of `count()` requests on the held store
+ * (`sessions` if in scope, else the first store of the sorted scope) keeps it alive, so its data stays
+ * uncommitted. Setting the flag to 'released' ends the chain and the transaction commits. Every
  * other transaction passes through unchanged.
  */
 export function holdSessionsWrite(): void {
@@ -38,7 +38,11 @@ export function holdSessionsWrite(): void {
       scope === (hold.__tlhSessionsHoldScope ?? 'sessions')
     ) {
       hold.__tlhSessionsHold = 'held';
-      const store = opened.objectStore('sessions');
+      const stores = scope.split(',');
+      // split() always yields one name, so the `?? 'sessions'` fallback only satisfies the type checker.
+      const store = opened.objectStore(
+        stores.includes('sessions') ? 'sessions' : (stores[0] ?? 'sessions'),
+      );
       const keepAlive = (): void => {
         if (hold.__tlhSessionsHold === 'held') store.count().onsuccess = keepAlive;
       };
@@ -48,7 +52,7 @@ export function holdSessionsWrite(): void {
   } as typeof IDBDatabase.prototype.transaction;
 }
 
-/** Arms the hold for the next readwrite transaction over exactly `scope` (which must include `sessions`). */
+/** Arms the hold for the next readwrite transaction over exactly `scope`. */
 export async function armSessionsHold(
   page: Page,
   scope: readonly string[] = ['sessions'],

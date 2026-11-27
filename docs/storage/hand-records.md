@@ -15,22 +15,24 @@ changes or deletes them.
 
 ## Database
 
-| Item         | Value                                                                           |
-| ------------ | ------------------------------------------------------------------------------- |
-| Database     | `tlh-trainer`, version `4` (the only version marker; no per-store versions)     |
-| Object store | `hands` (and `sessions` since version 2, `reports` since 3, `settings` since 4) |
-| Key          | `keyPath: ['sessionId', 'handNumber']` (compound, no auto-increment)            |
-| Indexes      | none besides the primary key                                                    |
+| Item         | Value                                                                                           |
+| ------------ | ----------------------------------------------------------------------------------------------- |
+| Database     | `tlh-trainer`, version `5` (the only version marker; no per-store versions)                     |
+| Object store | `hands` (and `sessions` since version 2, `reports` since 3, `settings` since 4, `meta` since 5) |
+| Key          | `keyPath: ['sessionId', 'handNumber']` (compound, no auto-increment)                            |
+| Indexes      | none besides the primary key                                                                    |
 
 The store is created in `onupgradeneeded` when `oldVersion < 1`; version 2 adds `sessions` when
 `oldVersion < 2` and leaves `hands` and its records untouched. Version 3 adds `reports` and version 4 adds
-`settings` with its default record ([settings.md](settings.md)) the same way. Later stores are added the same
-way with a higher version and an `oldVersion` check. An open connection closes itself on `versionchange`. If
+`settings` with its default record ([settings.md](settings.md)) the same way; version 5 adds `meta`. Later
+stores are added the same way with a higher version and an `oldVersion` check. An open connection closes itself on `versionchange`. If
 another connection does not close (`blocked`, e.g. an older build), the open rejects with
 `UpgradeBlockedError` instead of waiting (the callers show their existing failure states),
 and the next store call retries the open. While the blocked request is still pending, a new open would queue
 behind it, so store calls wait at most 100 ms for it to finish and otherwise reject with `UpgradeBlockedError`;
-a blocked open that later succeeds closes its connection at once.
+a blocked open that later succeeds closes its connection at once. An open that gets no first answer
+(`blocked`, `upgradeneeded`, `success` or `error`) within 10 s (`OPEN_TIMEOUT_MS`, e.g. a second tab queued
+behind another tab's blocked upgrade) is handled the same way as a blocked one.
 
 ## Record fields
 

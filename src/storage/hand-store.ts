@@ -50,21 +50,34 @@ export class UpgradeBlockedError extends Error {
 /** How long a store call waits for a still-pending blocked open to finish (e.g. its blocker just closed). */
 const BLOCKED_GRACE_MS = 100;
 
-/** Opens the database. If the open is blocked it rejects with UpgradeBlockedError, and `onBlocked` gets a promise
- *  that resolves when the blocked request finally settles (until then, a new open would queue behind it). */
+/** How long an open waits for its first answer (blocked, upgradeneeded, success or error). A request queued behind
+ *  another tab's blocked upgrade gets none; first answers normally take ~1 ms, so 10 s only catches that case. */
+export const OPEN_TIMEOUT_MS = 10_000;
+
+/** Opens the database. If the open is blocked, or gets no answer within `timeoutMs`, it rejects with
+ *  UpgradeBlockedError, and `onBlocked` gets a promise that resolves when that request finally settles (until
+ *  then, a new open would queue behind it). */
 function opened(
   factory: IDBFactory,
   name: string,
   onBlocked: (settled: Promise<void>) => void,
+  timeoutMs: number,
 ): Promise<IDBDatabase> {
   return new Promise((resolve, reject) => {
     const request = factory.open(name, DB_VERSION);
     let settle: (() => void) | null = null;
-    request.onblocked = () => {
+    const giveUp = (): void => {
+      if (settle !== null) return;
       onBlocked(new Promise((done) => (settle = done)));
       reject(new UpgradeBlockedError());
     };
+    const timer = setTimeout(giveUp, timeoutMs);
+    request.onblocked = () => {
+      clearTimeout(timer);
+      giveUp();
+    };
     request.onupgradeneeded = (event) => {
+      clearTimeout(timer);
       if (event.oldVersion < 1) {
         request.result.createObjectStore(HANDS_STORE, { keyPath: ['sessionId', 'handNumber'] });
       }
@@ -82,6 +95,7 @@ function opened(
       if (event.oldVersion < 5) request.result.createObjectStore(META_STORE);
     };
     request.onsuccess = () => {
+      clearTimeout(timer);
       const db = request.result;
       // The caller already got UpgradeBlockedError; a late open must not hold the database.
       if (settle !== null) {
@@ -93,6 +107,7 @@ function opened(
       resolve(db);
     };
     request.onerror = () => {
+      clearTimeout(timer);
       settle?.();
       reject(request.error);
     };
@@ -236,13 +251,18 @@ type AppStore = HandStore &
 /**
  * An IndexedDB HandStore: add-only hand records, one replaceable record per session and one write-once report
  * per ended session. The database opens on the first call; if opening fails, every call rejects with that
- * error, except that a blocked open (UpgradeBlockedError) is retried on the next call; while the blocked request is
- * still pending, calls reject with UpgradeBlockedError after a short wait. Records are validated by parseHandRecord / parseSessionRecord / parseSessionReport / parseSettings when
- * read.
+ * error, except that a blocked open, or one that gets no answer within `openTimeoutMs`, rejects with
+ * UpgradeBlockedError and is retried on the next call; while that request is still pending, calls reject with
+ * UpgradeBlockedError after a short wait. Records are validated by parseHandRecord / parseSessionRecord /
+ * parseSessionReport / parseSettings when read.
  */
-export function openHandStore(factory: IDBFactory = indexedDB, name = DB_NAME): AppStore {
+export function openHandStore(
+  factory: IDBFactory = indexedDB,
+  name = DB_NAME,
+  openTimeoutMs = OPEN_TIMEOUT_MS,
+): AppStore {
   let db: Promise<IDBDatabase> | null = null;
-  // Settles when a blocked open request finishes; null when no blocked request is pending.
+  // Settles when the last blocked (or timed-out) open request finishes; null until an open is blocked.
   let blockedOpen: Promise<void> | null = null;
   const database = async (): Promise<IDBDatabase> => {
     const pending = blockedOpen;
@@ -257,15 +277,17 @@ export function openHandStore(factory: IDBFactory = indexedDB, name = DB_NAME): 
       if (!released) throw new UpgradeBlockedError();
     }
     if (db === null) {
-      const opening = opened(factory, name, (settled) => {
-        blockedOpen = settled;
-        void settled.then(() => {
-          if (blockedOpen === settled) blockedOpen = null;
-        });
-      });
+      const opening = opened(
+        factory,
+        name,
+        (settled) => {
+          blockedOpen = settled;
+        },
+        openTimeoutMs,
+      );
       db = opening;
       opening.catch((error: unknown) => {
-        if (error instanceof UpgradeBlockedError && db === opening) db = null;
+        if (error instanceof UpgradeBlockedError) db = null;
       });
     }
     return db;

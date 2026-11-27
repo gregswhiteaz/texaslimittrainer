@@ -1,9 +1,11 @@
 import { IDBFactory } from 'fake-indexeddb';
 import { describe, expect, it } from 'vitest';
+import { DEFAULT_SETTINGS } from '../../src/table/settings';
 import {
   DB_NAME,
   DB_VERSION,
   HANDS_STORE,
+  OPEN_TIMEOUT_MS,
   REPORTS_STORE,
   SESSIONS_STORE,
   SETTINGS_STORE,
@@ -12,6 +14,7 @@ import {
 } from '../../src/storage/hand-store';
 
 // TASK-12.10 (AC#2, D-1): a blocked upgrade rejects instead of hanging, and the next call retries.
+// TASK-12.12 (AC#1): an open queued behind a blocked upgrade (a second tab) rejects after the open timeout.
 
 /** Opens `DB_NAME` at `version` with no `versionchange` handler, creating `stores` on upgrade, and resolves with
  *  the connection and the `oldVersion` of its upgrade (null when no upgrade ran). Rejects if the open is blocked. */
@@ -93,6 +96,44 @@ describe('blocked database upgrade', () => {
     const { db, oldVersion } = await openRaw(factory, DB_VERSION + 1);
     expect(oldVersion).toBe(5);
     db.close();
+  });
+
+  it('a second store whose open is queued behind a blocked upgrade rejects after the open timeout', async () => {
+    const factory = new IDBFactory();
+    const blocker = await openV4Blocker(factory);
+    await expect(openHandStore(factory).count()).rejects.toBeInstanceOf(UpgradeBlockedError);
+
+    const second = openHandStore(factory, DB_NAME, 200);
+    const started = Date.now();
+    const error: unknown = await second.count().then(
+      () => null,
+      (e: unknown) => e,
+    );
+    const elapsed = Date.now() - started;
+    expect(error).toBeInstanceOf(UpgradeBlockedError);
+    expect((error as Error).name).toBe('UpgradeBlockedError');
+    expect(elapsed).toBeGreaterThanOrEqual(190);
+    expect(elapsed).toBeLessThan(2000);
+
+    blocker.close();
+    await expect
+      .poll(() => second.count().catch((e: unknown) => e), { timeout: 2000, interval: 50 })
+      .toBe(0);
+    // Queued behind every late open; openRaw rejects if a late connection is still open and blocks it.
+    const { db, oldVersion } = await openRaw(factory, DB_VERSION + 1);
+    expect(oldVersion).toBe(5);
+    db.close();
+  });
+
+  it('an open that is answered in time never times out', async () => {
+    expect(OPEN_TIMEOUT_MS).toBe(10_000);
+    const factory = new IDBFactory();
+    const store = openHandStore(factory, DB_NAME, 50);
+    expect(await store.count()).toBe(0);
+
+    await new Promise((done) => setTimeout(done, 150));
+    expect(await store.count()).toBe(0);
+    expect(await store.readSettings()).toEqual(DEFAULT_SETTINGS);
   });
 
   it('an open app connection closes on versionchange so a newer version opens', async () => {
