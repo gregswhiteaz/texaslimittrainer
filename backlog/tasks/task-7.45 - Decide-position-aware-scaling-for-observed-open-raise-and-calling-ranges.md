@@ -1,11 +1,11 @@
 ---
 id: TASK-7.45
 title: Decide position-aware scaling for observed open-raise and calling ranges
-status: In Progress
+status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-27T03:28:00Z'
-updated_date: '2026-11-27T21:28:00Z'
+updated_date: '2026-11-27T21:29:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -18,6 +18,7 @@ references:
   - dreams/limit-holdem-trainer/requirements.md
 documentation:
   - doc-104
+  - doc-197
 parent_task_id: TASK-7
 priority: medium
 type: enhancement
@@ -56,4 +57,12 @@ Key numbers (n = 100): under today's raw rule a typical 6-max 24/18 player's BTN
 REQ-035.6 reworded in dreams/limit-holdem-trainer/requirements.md (changelog row 1.18). No product code changed; implementation, TYPICAL_VPIP constant, docs and locked-test re-pins go to the follow-up story TASK-7.48. Full measured tables for options A-D and the golden-spot widths: doit/TASK-7.45/spec.md section 3.
 
 Build: decision-8; REQ-035.6 + changelog 1.18; follow-up TASK-7.48; gate PASS
+
+Step 6a: none new (TASK-7.48 owns the work; r2 NITs already noted on TASK-7.48).
 <!-- SECTION:NOTES:END -->
+
+## Final Summary
+
+<!-- SECTION:FINAL_SUMMARY:BEGIN -->
+Decision spike, no product code. User chose Q-1 D (decision-8): open-raise width scales by PFR relative to typical PFR and calling lines (limp, call-raise, call-three-bet) by VPIP relative to typical VPIP (77.5 / 24 / 16.5), each capped at 100; a typical player now keeps the authored ranges. REQ-035.6 reworded in requirements.md (changelog 1.18). Follow-up TASK-7.48 (7 ACs) implements it with the complete locked re-pin list and owners. Verification: 4 gate runs PASS, review r2 clean (r1 BLOCKER: incomplete re-pin list, fixed in TASK-7.48; locked spec lists stay incomplete, TASK-7.48 is authoritative), judge PASS r1 (5/5). Assumptions to review: A-4 typical VPIP = healthy band midpoint; A-1 evidence lives in notes, not the decision body. Risks: golden a6s needs re-tuning with user sign-off in TASK-7.48; 100 cap binds on 6-max/full-ring blind lines for VPIP of about 45-60 and up.
+<!-- SECTION:FINAL_SUMMARY:END -->
