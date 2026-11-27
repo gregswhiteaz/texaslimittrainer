@@ -7,7 +7,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-27T10:03:00Z'
-updated_date: '2026-11-27T22:03:00Z'
+updated_date: '2026-11-27T22:04:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -43,3 +43,9 @@ From TASK-7.46 (doc-185, Q-2). REQ-027.5 fails --check-styles when any mixed spo
 
 Full spec: doit/TASK-6.30/spec.md
 <!-- SECTION:PLAN:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+Q-1 answered B with N = 10 (user, 2026-11-27): the one-action rule judges a mixed spot only when it came up at least 10 times (recommended + alternative >= 10); spots with 1 to 9 decisions are listed on a separate 'Not judged (fewer than 10 decisions): <style> <spot>' line and do not fail the check; 0/0 passes as today. Recorded as decision-9. REQ-028 fit criterion reworded in dreams/limit-holdem-trainer/requirements.md (changelog 1.19); REQ-027.5 and REQ-028.3 unchanged. Follow-up build story TASK-6.31 (depends on TASK-6.30): rule change, usage text, docs, re-pin of the TASK-6.11 never-mixing case and restore exit 0 in the TASK-7.46 3-seat slow test. Key numbers (seed 42): all-TAG 3 seats 100,000 hands, TAG preflop-limpers 1/0 is the only one-action failure; honest 75/25 bot P(one action) = 0.75^n + 0.25^n = 5.6% at n = 10 (0.32% at n = 20); smallest spot in the REQ-027 fit-criterion run (Mixed 6-max 100k) is preflop-raise-and-calls with 13 decisions (10/3), so all fit-criterion spots stay judged; at 100,000 hands N = 10 excludes only 3-seat all-TAG limpers (N = 20 would also drop 9-seat limpers (10) and fit-criterion raise-and-calls (13)). No product code changed. Evidence tables: doit/TASK-6.30/spec.md section 3.
+<!-- SECTION:NOTES:END -->

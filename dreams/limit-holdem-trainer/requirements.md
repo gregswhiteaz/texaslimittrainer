@@ -525,7 +525,7 @@ Dream slug: limit-holdem-trainer   ·   Vision: dreams/limit-holdem-trainer/visi
   - REQ-028.1: Bot randomness comes only from a generator seeded from the hand's replay code and the bot's seat.
   - REQ-028.2: Replaying a hand with the same replay code and the same user actions reproduces every bot action.
   - REQ-028.3: No bot plays a fully deterministic strategy in spots its style marks as mixed.
-- Fit criterion: Replay test over 1,000 recorded hands reproduces identical action sequences; harness shows each mixed spot type uses more than one action.
+- Fit criterion: Replay test over 1,000 recorded hands reproduces identical action sequences; harness shows each mixed spot type that came up at least 10 times in the run uses more than one action.
 - Rationale: Bots not exploitable by one trick (A-2, R-5); replayable hands (Q-47).
 - Source: Q-47; proposed-by-Claude; confirmed Q-52
 - Depends on: REQ-013
@@ -1376,3 +1376,4 @@ Entity × lifecycle (every cell is a clause below or N/A):
 | 1.16 | 2026-11-27 | TASK-7.46: REQ-027.1 TAG aggression band ceiling raised from 65% to 66% (matches the 6-max and full-ring healthy-range ceiling); all-TAG play at 3 seats measures 65.2% over 100,000 hands | User (TASK-7.46 Q-1, autopilot) |
 | 1.17 | 2026-11-27 | TASK-3.24: REQ-019.5 and REQ-019.8 apply automatic show/muck to the user's hand as well as the bots'; no Show/Muck control; an uncalled winner is never shown | User (TASK-3.24 Q-1) |
 | 1.18 | 2026-11-27 | TASK-7.45: REQ-035.6 scales observed open-raise ranges by PFR relative to the typical PFR and calling ranges by VPIP relative to the typical VPIP for the table size, instead of by raw PFR and VPIP | User (TASK-7.45 Q-1) |
+| 1.19 | 2026-11-27 | TASK-6.30: REQ-028 fit criterion judges a mixed spot's one-action rule only when the spot came up at least 10 times in the run; rarer spots are listed as not judged | User (TASK-6.30 Q-1) |
