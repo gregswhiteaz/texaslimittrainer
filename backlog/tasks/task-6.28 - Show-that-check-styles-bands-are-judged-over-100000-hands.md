@@ -1,9 +1,11 @@
 ---
 id: TASK-6.28
 title: Show that --check-styles bands are judged over 100,000 hands
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-26T21:01:00Z'
+updated_date: '2026-11-27T06:49:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -27,3 +29,13 @@ From TASK-6.24 (decision: option B, Q-1). REQ-027's fit criterion judges each bo
 - [ ] #2 Given a reader opens docs/stats/style-stats.md, When they read the playtest CLI section, Then it states the 100,000-hand run length REQ-027 uses and the sample-noise failures shorter runs can show (mixed spots used one way, stats near a band edge)
 - [ ] #3 Given npm test runs, When the USAGE assertions in tests/playtest/cli.test.ts check the help text, Then they pass with the new --check-styles wording and no check of 100,000-hand scale is added to npm test or CI
 <!-- AC:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. Update --check-styles USAGE line in src/playtest/cli.ts (100,000-hand judging, sample noise)
+2. Add the docs paragraph to docs/stats/style-stats.md
+3. Update USAGE assertions in tests/playtest/cli.test.ts; no 100k check in npm test
+
+Full spec: doit/TASK-6.28/spec.md
+<!-- SECTION:PLAN:END -->
