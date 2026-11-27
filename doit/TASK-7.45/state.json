@@ -4,7 +4,7 @@
   "branch": "doit/TASK-7.45",
   "base_commit": "78aaa3f4cedaf8daf757496d35d13bc710769b75",
   "started": "2026-11-27T13:43:37",
-  "review_round": 0,
+  "review_round": 1,
   "judge_round": 0,
   "sendbacks": 0,
   "gate_runs": 2,
@@ -2302,5 +2302,13 @@
   },
   "history": [],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-7.45",
-  "spec_sha256": "267d7439df816b53c040588cdd76b0050c8ec70131cbb7da2326f3ec1a685504"
+  "spec_sha256": "267d7439df816b53c040588cdd76b0050c8ec70131cbb7da2326f3ec1a685504",
+  "review_findings": {
+    "1": 1
+  },
+  "brief_history": {
+    "backlog/tasks/task-7.48:locked-repin-list-incomplete": [
+      "review r1"
+    ]
+  }
 }

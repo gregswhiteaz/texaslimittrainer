@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-27T03:28:00Z'
-updated_date: '2026-11-27T20:52:00Z'
+updated_date: '2026-11-27T21:05:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -54,4 +54,6 @@ Decision (TASK-7.45 Q-1, user, 2026-11-27): option D, recorded as decision-8. Op
 Key numbers (n = 100): under today's raw rule a typical 6-max 24/18 player's BTN open goes 34.54 -> 18.0 and SB limp 44.65 -> 24.0; a typical heads-up caller's BTN call-raise goes 11.76 -> 77.5. Under D the typical player keeps every authored default at every size and position survives (BTN stays wider than UTG). The 100 cap binds only on SB limp and BB call-raise, for VPIP >= about 45-60 (6-max SB limp 53.8, BB call-raise 57.9; full ring SB limp 44.7, BB call-raise 59.8).
 
 REQ-035.6 reworded in dreams/limit-holdem-trainer/requirements.md (changelog row 1.18). No product code changed; implementation, TYPICAL_VPIP constant, docs and locked-test re-pins go to the follow-up story TASK-7.48. Full measured tables for options A-D and the golden-spot widths: doit/TASK-7.45/spec.md section 3.
+
+Build: decision-8; REQ-035.6 + changelog 1.18; follow-up TASK-7.48; gate PASS
 <!-- SECTION:NOTES:END -->
