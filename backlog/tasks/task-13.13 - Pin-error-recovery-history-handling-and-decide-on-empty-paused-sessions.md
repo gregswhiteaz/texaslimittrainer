@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-25T17:55:00Z'
-updated_date: '2026-11-27T20:31:00Z'
+updated_date: '2026-11-27T20:38:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -27,9 +27,9 @@ Follow-up from TASK-13.1 review and judge (doc-143). No repo test pins that Retu
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Given Return Home after a mid-session error, When the user presses browser Back, Then a repo e2e shows the app does not return to the dead table and history.state.tlhTable is unset
-- [ ] #2 Given a paused session with 0 completed hands, When Home loads, Then whether it is offered for Resume follows the user's recorded decision
-- [ ] #3 Given AppRoot, When read, Then the redundant generation key is removed or justified in a comment
+- [x] #1 Given Return Home after a mid-session error, When the user presses browser Back, Then a repo e2e shows the app does not return to the dead table and history.state.tlhTable is unset
+- [x] #2 Given a paused session with 0 completed hands, When Home loads, Then whether it is offered for Resume follows the user's recorded decision
+- [x] #3 Given AppRoot, When read, Then the redundant generation key is removed or justified in a comment
 <!-- AC:END -->
 
 ## Implementation Plan

@@ -5,13 +5,17 @@
   "base_commit": "3b6f33ac6655ef47ed70d1543a841fab94315bef",
   "started": "2026-11-27T13:05:09",
   "review_round": 1,
-  "judge_round": 0,
+  "judge_round": 1,
   "sendbacks": 0,
   "gate_runs": 2,
   "questions": 0,
   "assumptions": 0,
   "escalations": 0,
-  "item_failures": {},
+  "item_failures": {
+    "SPEC-01": 0,
+    "SPEC-02": 0,
+    "SPEC-03": 0
+  },
   "locked_tests": {
     "e2e/error-recovery-history.spec.ts": "79af26ad16205ad5404f1104f19649ab0f96ce57bb05da7874bcd10eaca266d5"
   },
@@ -2307,5 +2311,8 @@
   "spec_sha256": "92398130a847fb813acb10ca84f3838d72045306d27b7196ffeb56b33613690d",
   "review_findings": {
     "1": 0
+  },
+  "judge_results": {
+    "1": "PASS"
   }
 }
