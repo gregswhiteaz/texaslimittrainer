@@ -3,11 +3,11 @@ id: TASK-7.40
 title: >-
   Split the 6-max re-raise spots into own-raise-re-raised and
   re-raised-when-I-had-not-raised
-status: In Progress
+status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-26T23:45:00Z'
-updated_date: '2026-11-27T23:55:00Z'
+updated_date: '2026-11-27T23:56:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -19,6 +19,7 @@ references:
   - dreams/limit-holdem-trainer/requirements.md
 documentation:
   - doc-28
+  - doc-199
 parent_task_id: TASK-7
 priority: medium
 type: enhancement
@@ -63,4 +64,12 @@ AC added from TASK-7.37 follow-up (short-handed TAG chart is derived from SIX_MA
 Locked re-pins unlocked under owners: TASK-7.19, 7.27, 7.20, 7.2, 10.17, 8.5, 6.5, 6.1, 7.11 (see spec).
 
 User sign-off 2026-11-27 (Q-4, AC#7): signed off the 12 6-max spots in doit/TASK-7.40/signoff.md (6 new re-raise-not-mine grids, 6 re-justified re-raise grids with CO A9o F -> C*/F) and the seeded re-pins (maniac Examples A and G, games side-pot seed 42 -> 43) as shown, no tweaks.
+
+Step 6a: TASK-7.41 AC added (not-mine fourth-bet cap assertion).
 <!-- SECTION:NOTES:END -->
+
+## Final Summary
+
+<!-- SECTION:FINAL_SUMMARY:BEGIN -->
+Split 6-max two-raise spots per TASK-7.21 A-2: own raise re-raised keeps `re-raise`, every other two-raise spot reads new `re-raise-not-mine`. 6-max chart is now 32 spots (6 new grids, 6 re-justified; CO A9o F -> C*/F), with approved label and context sentence, 6 Rock ranges, 3 golden spots. Heads-up and full ring byte-identical over 61,125 views. Verified: npm test green, judge PASS r1 (13/13), user signed off the 12 spots; slow AC#8 test healthy (3 seats 23.6/17.3/65.2/41.7/52.4, 4 seats 23.8/17.7/64.9/41.5/52.2 VPIP/PFR/Agg/WTSD/W$SD). Assumptions to review: A-1..A-9 in the doc (A-8 seeded re-pins in locked calling-station/maniac/games tests, games seed 42->43; A-9 `as SpotType` cast in tag.ts). Follow-ups: 4th-bet cap assertion for not-mine route and full ring split go to TASK-7.41; blind defence TASK-7.42.
+<!-- SECTION:FINAL_SUMMARY:END -->

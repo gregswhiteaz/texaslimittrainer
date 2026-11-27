@@ -6,6 +6,7 @@ title: >-
 status: To Do
 assignee: []
 created_date: '2026-11-26T23:45:00Z'
+updated_date: '2026-11-27T23:56:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -36,4 +37,11 @@ Follow-up from TASK-7.21 (decision: Q-1 split re-raise), after the 6-max split. 
 - [ ] #3 Given any new user-visible label or context text, When shown, Then its wording was approved by the user in this story's Q&A
 - [ ] #4 Given the golden spots, When npm test runs, Then at least one full-ring golden spot covers each re-raise situation
 - [ ] #5 Given the revised chart, When npm test runs, Then all checks pass and the user has signed off the new and changed full-ring spots from npm run chart:print full-ring in the task notes
+- [ ] #6 Given a 6-max or full-ring hand where the viewer has not raised and a fourth bet is already in (e.g. BB facing r(4,8) r(5,12) r(6,16) f(1) f(2)), When preflop advice is computed, Then it reads re-raise-not-mine and a raise cell (AA) is advised call because the betting is capped
 <!-- AC:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+AC added from TASK-7.40 follow-up (review r1 MINOR: no cap assertion for a not-mine fourth-bet route)
+<!-- SECTION:NOTES:END -->
