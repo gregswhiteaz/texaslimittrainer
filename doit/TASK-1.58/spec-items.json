@@ -1,0 +1,20 @@
+[
+  {
+    "id": "SPEC-01",
+    "verifies": "AC#1",
+    "verification": "command `npx vitest run --coverage tests/playtest/style-check-short-handed.test.ts`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-02",
+    "verifies": "AC#1",
+    "verification": "command `git diff <base> -- tests/playtest/style-check-short-handed.test.ts`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-03",
+    "verifies": "AC#1",
+    "verification": "command `npm run playtest -- --hands 200 --seed 42 --size 3 --check-styles | grep 'Mixed spot: TAG'`",
+    "status": "pending"
+  }
+]
