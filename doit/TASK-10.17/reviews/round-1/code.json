@@ -1,0 +1,29 @@
+{"reviewer": "code", "round": 1,
+ "rubric": [
+  {"item": "SPEC-01 correctness", "result": "pass"},
+  {"item": "SPEC-01 test strength", "result": "pass"},
+  {"item": "SPEC-02 correctness", "result": "pass"},
+  {"item": "SPEC-02 test strength", "result": "pass"},
+  {"item": "SPEC-03 correctness", "result": "pass"},
+  {"item": "SPEC-03 test strength", "result": "pass"},
+  {"item": "SPEC-04 correctness", "result": "pass"},
+  {"item": "SPEC-04 test strength", "result": "pass"},
+  {"item": "SPEC-05 correctness", "result": "pass"},
+  {"item": "SPEC-05 test strength", "result": "pass"},
+  {"item": "SPEC-06 correctness", "result": "pass"},
+  {"item": "SPEC-06 test strength", "result": "pass"},
+  {"item": "scope", "result": "pass"},
+  {"item": "concision", "result": "pass"},
+  {"item": "clarity", "result": "pass"}
+ ],
+ "findings": [
+  {"fingerprint": "src/engine/hand.ts:voidedbets-duplicates-livelevels-voiding-walk", "severity": "MINOR", "file": "src/engine/hand.ts", "line": 361,
+   "issue": "voidedBets re-implements liveLevels' voiding walk (folded set from other streets, put map, preflop big-blind floor, strict-top test). Nothing ties the two together, so a future change to the voiding rule in liveLevels would silently leave advice classifying against a different rule than the engine's currentBet/betCount.",
+   "evidence": "Lines 361-387 repeat liveLevels lines 330-350 nearly verbatim. I fuzzed 20,000 random 2-10 seat hands with random forced folds (184,290 states, 9,830 with a void) and compared liveLevels (copied) with a plain full-bet level walk that skips the indices voidedBets returns. There were 0 mismatches, so the two agree today. The playtest output (10,000 hands, seed 42) is byte-identical to base_commit's.",
+   "fix": "Optional: drop the voiding branch from liveLevels and have it skip `voidedBets(state)` indices in its level walk (the fuzz shows this is equivalent), so one function owns the rule. If you'd rather leave liveLevels untouched, add a short comment on each function pointing to the other, saying they must stay in step."},
+  {"fingerprint": "tests/engine/voided-bets.test.ts:copied-deal-play-helpers", "severity": "NIT", "file": "tests/engine/voided-bets.test.ts", "line": 14,
+   "issue": "deal/play helpers are copied verbatim into both new test files (and already exist in force-fold-top-bet.acceptance.test.ts).",
+   "evidence": "The spec asks for the copy ('copy into the new test, do not import from a test file'), so this is within the spec.",
+   "fix": "None needed for this task. A later task could move them to a tests/support helper."}
+ ],
+ "summary": "Every SPEC item is implemented and tested, and none of the tests could pass against a broken implementation. Reverting the situationOf filter fails SPEC-01, and over-voiding fails SPEC-02 (hand P). voidedBets agrees with liveLevels' voiding rule: 0 mismatches over 184k fuzzed states. The ring tidy-up and the sole hoist are equivalent, and the 10k-hand playtest is byte-identical to base with 0 invariant violations. The new tests, the force-fold suites, lint and typecheck all pass. Only a MINOR (the voiding rule is duplicated) and a NIT. No BLOCKER or MAJOR."}

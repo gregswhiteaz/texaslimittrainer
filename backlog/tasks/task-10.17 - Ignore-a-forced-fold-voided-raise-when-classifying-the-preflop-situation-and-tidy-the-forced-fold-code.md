@@ -7,7 +7,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-27T05:16:00Z'
-updated_date: '2026-11-27T08:47:00Z'
+updated_date: '2026-11-27T09:02:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -45,3 +45,9 @@ From TASK-10.13 (doc-178). After a forced fold voids the leaver's raise (dead mo
 
 Full spec: doit/TASK-10.17/spec.md
 <!-- SECTION:PLAN:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+Build: voidedBets helper in engine/hand.ts; situationOf ignores voided records; advice lint allow-list adds voidedBets (A-5) with lint probe; forceFold/invariants tidy-ups; 10k playtest byte-identical; gate PASS
+<!-- SECTION:NOTES:END -->
