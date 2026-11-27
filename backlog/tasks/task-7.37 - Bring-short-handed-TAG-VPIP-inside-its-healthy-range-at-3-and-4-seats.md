@@ -1,11 +1,11 @@
 ---
 id: TASK-7.37
 title: Bring short-handed TAG VPIP inside its healthy range at 3 and 4 seats
-status: In Progress
+status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-26T10:09:00Z'
-updated_date: '2026-11-27T08:41:00Z'
+updated_date: '2026-11-27T08:42:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -14,6 +14,8 @@ dependencies:
   - TASK-7.35
 references:
   - doc-158
+documentation:
+  - doc-183
 parent_task_id: TASK-7
 priority: low
 ordinal: 257000
@@ -49,4 +51,12 @@ Full spec: doit/TASK-7.37/spec.md
 Locked edit: tests/playtest/summary.acceptance.test.ts (owner TASK-1.26) withAwards drops 'returned' (Q-1 autopilot).
 
 Build: TAG at 3-4 dealt-in seats opens BTN/SB with the 6-max CO cells (derived chart in src/bots/tag.ts); style check uses it; 100k slow test 3 seats 23.6/17.3/65.2/41.7/52.4, 4 seats 23.9/17.7/64.7/41.7/51.9 (all inside); 2/5/6/7/9 seats byte-identical; gate PASS
+
+Step 6a: TASK-7.40 AC added (re-measure 3/4-seat TAG stats after chart reshape); created TASK-7.46 (3-seat TAG aggression vs style band; make postflop test able to fail).
 <!-- SECTION:NOTES:END -->
+
+## Final Summary
+
+<!-- SECTION:FINAL_SUMMARY:BEGIN -->
+Short-handed TAG now opens BTN and SB unopened with the CO range at 3 and 4 dealt-in seats (TAG only; user advice and 2/5/6/7/9 seats byte-identical). 100k all-TAG: 3 seats VPIP 31.1 -> 23.6, 4 seats 28.1 -> 23.9; all five stats inside 6-max healthy ranges. Judge PASS r1, gates green. Review: locked tests/playtest/summary.acceptance.test.ts (TASK-1.26) fixture edited (withAwards drops 'returned'), auto-accepted Q-1 - please review. Assumptions A-1..A-4 in doc. Follow-ups: re-measure after TASK-7.40; TAG 3-seat aggression 65.2 exceeds --check-styles band 65.0 (pre-existing).
+<!-- SECTION:FINAL_SUMMARY:END -->

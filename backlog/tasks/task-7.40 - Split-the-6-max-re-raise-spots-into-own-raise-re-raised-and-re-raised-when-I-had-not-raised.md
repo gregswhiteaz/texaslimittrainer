@@ -6,6 +6,7 @@ title: >-
 status: To Do
 assignee: []
 created_date: '2026-11-26T23:45:00Z'
+updated_date: '2026-11-27T08:42:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -38,4 +39,11 @@ Follow-up from TASK-7.21 (decision: Q-1 split re-raise). Today `situationOf` sen
 - [ ] #5 Given the Rock style and the golden spots, When npm test runs, Then every new 6-max spot has a Rock starting range that is a strict subset of the TAG chart's plays, and each new situation has at least one golden spot
 - [ ] #6 Given a heads-up or full-ring hand, When the split is in place, Then the advice is unchanged from today (heads-up has only own-raise re-raises; full ring keeps today's re-raise grids until the full-ring story)
 - [ ] #7 Given the revised chart, When npm test runs, Then all checks pass and the user has signed off the new and changed 6-max spots from npm run chart:print in the task notes
+- [ ] #8 Given the reshaped 6-max chart, When the opt-in slow test tests/bots/tag-short-handed-playtest.acceptance.test.ts runs (TLH_SLOW_TESTS=1), Then all-TAG 3- and 4-seat VPIP, PFR, aggression, WTSD and W$SD stay inside the 6-max healthy ranges, with before/after figures recorded
 <!-- AC:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+AC added from TASK-7.37 follow-up (short-handed TAG chart is derived from SIX_MAX_CHART)
+<!-- SECTION:NOTES:END -->

@@ -1,6 +1,6 @@
 {
   "task": "TASK-7.37",
-  "stage": "build",
+  "stage": "done",
   "branch": "doit/TASK-7.37",
   "base_commit": "735e6cd6e611b85fe2d2fca9fd7faaf8a91e662c",
   "started": "2026-11-27T00:59:45",
@@ -8,8 +8,8 @@
   "judge_round": 1,
   "sendbacks": 0,
   "gate_runs": 2,
-  "questions": 0,
-  "assumptions": 0,
+  "questions": 1,
+  "assumptions": 4,
   "escalations": 0,
   "item_failures": {
     "SPEC-01": 0,
@@ -2250,5 +2250,6 @@
   },
   "judge_results": {
     "1": "PASS"
-  }
+  },
+  "doc_id": "doc-183"
 }
