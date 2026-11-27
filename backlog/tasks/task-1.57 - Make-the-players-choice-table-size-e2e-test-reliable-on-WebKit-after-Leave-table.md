@@ -7,7 +7,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-27T10:20:00Z'
-updated_date: '2026-11-27T10:33:00Z'
+updated_date: '2026-11-27T10:37:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -38,3 +38,9 @@ Main CI run 45978923317 (commit 46e6e83, TASK-7.46 merge, no app/bot change) fai
 
 Full spec: doit/TASK-1.57/spec.md
 <!-- SECTION:PLAN:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+Build: wait for the session start record before the n=2/n=10 table axe scans (locked edit under TASK-2.2, Q-1); 40/40 on chromium+webkit --repeat-each 10; gate PASS
+<!-- SECTION:NOTES:END -->

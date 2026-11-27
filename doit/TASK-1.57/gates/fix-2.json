@@ -2,7 +2,7 @@
   "task": "TASK-1.57",
   "phase": "fix",
   "run": 2,
-  "result": "FAIL",
+  "result": "PASS",
   "changed_lines": 9,
   "changed_files": [
     "e2e/players-choice.spec.ts"
@@ -10,8 +10,8 @@
   "checks": [
     {
       "name": "test command",
-      "status": "fail",
-      "detail": "$ npm run e2e\nexit 1\n\n> tlh-trainer@0.0.0 e2e\n> playwright test\n\nError: http://localhost:4173 is already used, make sure that nothing is running on the port/url or set reuseExistingServer:true in config.webServer.\n\n"
+      "status": "pass",
+      "detail": "$ npm run e2e\nexit 0\nreated as All (3.5s)\n  \u2713  397 [webkit] \u203a e2e/statistics-lineup.spec.ts:44:1 \u203a Statistics filters the trends by line-up (3.4s)\n  \u2713  407 [webkit] \u203a e2e/table-display.spec.ts:268:1 \u203a last actions and the player to act are visible text (475ms)\n  \u2713  405 [webkit] \u203a e2e/table-display.spec.ts:219:1 \u203a the replay code is not in the page text, attributes or accessible names during the hand (726ms)\n  \u2713  406 [webkit] \u203a e2e/table-display.spec.ts:240:1 \u203a a bot's card back marker is small, shows the logo and passes axe (735ms)\n  \u2713  399 [webkit] \u203a e2e/statistics-target.spec.ts:12:1 \u203a Statistics draws the G-2 target line once 1,000 hands are stored (2.5s)\n  \u2713  409 [webkit] \u203a e2e/table.spec.ts:162:1 \u203a default table seats the user and five bots with $160 each (422ms)\n  \u2713  410 [webkit] \u203a e2e/table.spec.ts:176:1 \u203a stake $10/$20 starts every stack at $400 with no buy-in control (453ms)\n  \u2713  412 [webkit] \u203a e2e/table.spec.ts:242:1 \u203a after a preflop fold the bots finish the hand without me (498ms)\n  \u2713  413 [webkit] \u203a e2e/table.spec.ts:263:1 \u203a ten idle minutes on my turn change nothing (449ms)\n  \u2713  404 [webkit] \u203a e2e/table-display.spec.ts:195:1 \u203a the header shows the session and Leave table during hand 1 ends it after that hand (1.5s)\n  \u2713  411 [webkit] \u203a e2e/table.spec.ts:192:1 \u203a check or call at every decision plays to showdown with my cards face up (744ms)\n  \u2713  417 [webkit] \u203a e2e/worker-delay-hand.spec.ts:58:1 \u203a runUntil throws at its fake-time bound (346ms)\n  \u2713  408 [webkit] \u203a e2e/table-display.spec.ts:286:1 \u203a the table fits 1280 wide, is axe clean and makes only same-origin requests (1.9s)\n  \u2713  414 [webkit] \u203a e2e/table.spec.ts:281:1 \u203a my buttons are enabled within 100 ms of the bot action, axe clean, no outside requests (1.6s)\n  \u2713  420 [webkit] \u203a e2e/worker-delay.spec.ts:57:1 \u203a runUntilMyTurn throws when my turn never comes (793ms)\n  \u2713  401 [webkit] \u203a e2e/statistics.spec.ts:34:1 \u203a Statistics shows totals and the trend from stored hands, and the empty state, with no axe violations (4.0s)\n  \u2713  418 [webkit] \u203a e2e/worker-delay.spec.ts:33:1 \u203a with every worker reply 2 s late the bounded advance still reaches my turn (4.5s)\n  \u2713  419 [webkit] \u203a e2e/worker-delay.spec.ts:47:1 \u203a with every worker reply 2 s late a fixed 1,000 ms budget is not enough (4.4s)\n  \u2713  415 [webkit] \u203a e2e/worker-delay-hand.spec.ts:36:1 \u203a with every worker reply 2 s late runUntil plays the hand to its end (10.5s)\n  \u2713  416 [webkit] \u203a e2e/worker-delay-hand.spec.ts:44:1 \u203a with every worker reply 2 s late a 400-slice loop does not reach the end of the hand (10.5s)\n\n  19 skipped\n  401 passed (1.2m)\n[WebServer] [plugin builtin:vite-reporter] \n[WebServer] (!) Some chunks are larger than 500 kB after minification. Consider:\n[WebServer] - Using dynamic import() to code-split the application\n[WebServer] - Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting\n[WebServer] - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.\n"
     },
     {
       "name": "lint command",

@@ -1,0 +1,57 @@
+{
+  "task": "TASK-1.57",
+  "phase": "fix",
+  "run": 3,
+  "result": "PASS",
+  "changed_lines": 9,
+  "changed_files": [
+    "e2e/players-choice.spec.ts"
+  ],
+  "checks": [
+    {
+      "name": "test command",
+      "status": "pass",
+      "detail": "$ npm run e2e\nexit 0\n\n  \u2713  402 [webkit] \u203a e2e/table-display.spec.ts:152:1 \u203a my seat is drawn at the bottom centre whatever its seat number (505ms)\n  \u2713  407 [webkit] \u203a e2e/table-display.spec.ts:268:1 \u203a last actions and the player to act are visible text (485ms)\n  \u2713  405 [webkit] \u203a e2e/table-display.spec.ts:219:1 \u203a the replay code is not in the page text, attributes or accessible names during the hand (690ms)\n  \u2713  406 [webkit] \u203a e2e/table-display.spec.ts:240:1 \u203a a bot's card back marker is small, shows the logo and passes axe (770ms)\n  \u2713  409 [webkit] \u203a e2e/table.spec.ts:162:1 \u203a default table seats the user and five bots with $160 each (428ms)\n  \u2713  399 [webkit] \u203a e2e/statistics-target.spec.ts:12:1 \u203a Statistics draws the G-2 target line once 1,000 hands are stored (2.6s)\n  \u2713  410 [webkit] \u203a e2e/table.spec.ts:176:1 \u203a stake $10/$20 starts every stack at $400 with no buy-in control (464ms)\n  \u2713  413 [webkit] \u203a e2e/table.spec.ts:263:1 \u203a ten idle minutes on my turn change nothing (446ms)\n  \u2713  412 [webkit] \u203a e2e/table.spec.ts:242:1 \u203a after a preflop fold the bots finish the hand without me (483ms)\n  \u2713  404 [webkit] \u203a e2e/table-display.spec.ts:195:1 \u203a the header shows the session and Leave table during hand 1 ends it after that hand (1.5s)\n  \u2713  411 [webkit] \u203a e2e/table.spec.ts:192:1 \u203a check or call at every decision plays to showdown with my cards face up (774ms)\n  \u2713  417 [webkit] \u203a e2e/worker-delay-hand.spec.ts:58:1 \u203a runUntil throws at its fake-time bound (340ms)\n  \u2713  408 [webkit] \u203a e2e/table-display.spec.ts:286:1 \u203a the table fits 1280 wide, is axe clean and makes only same-origin requests (2.0s)\n  \u2713  414 [webkit] \u203a e2e/table.spec.ts:281:1 \u203a my buttons are enabled within 100 ms of the bot action, axe clean, no outside requests (1.6s)\n  \u2713  420 [webkit] \u203a e2e/worker-delay.spec.ts:57:1 \u203a runUntilMyTurn throws when my turn never comes (795ms)\n  \u2713  401 [webkit] \u203a e2e/statistics.spec.ts:34:1 \u203a Statistics shows totals and the trend from stored hands, and the empty state, with no axe violations (4.3s)\n  \u2713  418 [webkit] \u203a e2e/worker-delay.spec.ts:33:1 \u203a with every worker reply 2 s late the bounded advance still reaches my turn (4.5s)\n  \u2713  419 [webkit] \u203a e2e/worker-delay.spec.ts:47:1 \u203a with every worker reply 2 s late a fixed 1,000 ms budget is not enough (4.4s)\n  \u2713  415 [webkit] \u203a e2e/worker-delay-hand.spec.ts:44:1 \u203a with every worker reply 2 s late a 400-slice loop does not reach the end of the hand (10.5s)\n  \u2713  416 [webkit] \u203a e2e/worker-delay-hand.spec.ts:36:1 \u203a with every worker reply 2 s late runUntil plays the hand to its end (10.5s)\n\n  19 skipped\n  401 passed (1.2m)\n[WebServer] [plugin builtin:vite-reporter] \n[WebServer] (!) Some chunks are larger than 500 kB after minification. Consider:\n[WebServer] - Using dynamic import() to code-split the application\n[WebServer] - Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting\n[WebServer] - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.\n"
+    },
+    {
+      "name": "lint command",
+      "status": "pass",
+      "detail": "$ npm run lint\nexit 0\n\n> tlh-trainer@0.0.0 lint\n> node tools/lint/sync-copies.js && eslint . --max-warnings 0 && prettier --check .\n\nChecking formatting...\nAll matched files use Prettier code style!\n"
+    },
+    {
+      "name": "typecheck command",
+      "status": "pass",
+      "detail": "$ npm run typecheck\nexit 0\n\n> tlh-trainer@0.0.0 typecheck\n> tsc -p tsconfig.json\n\n"
+    },
+    {
+      "name": "spec unchanged",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "name": "scope budget (lines)",
+      "status": "pass",
+      "detail": "9 changed lines vs budget 15 (fail above 30)"
+    },
+    {
+      "name": "scope budget (files)",
+      "status": "pass",
+      "detail": "1 files vs budget 1"
+    },
+    {
+      "name": "files outside spec",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "name": "all changes listed in changes.md",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "name": "test integrity",
+      "status": "pass",
+      "detail": ""
+    }
+  ]
+}
