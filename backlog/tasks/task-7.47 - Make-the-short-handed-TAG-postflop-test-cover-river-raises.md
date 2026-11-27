@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-27T10:03:00Z'
-updated_date: '2026-11-27T13:04:00Z'
+updated_date: '2026-11-27T13:18:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -38,3 +38,9 @@ From TASK-7.46 judge J-1-03: the 50-hand sample in tests/bots/tag-short-handed.a
 
 Full spec: doit/TASK-7.47/spec.md
 <!-- SECTION:PLAN:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+Build: new river-raise test (200 hands, 3 seats, seed 3, 6 river raises); river raise->call mutation fails it; gate PASS
+<!-- SECTION:NOTES:END -->

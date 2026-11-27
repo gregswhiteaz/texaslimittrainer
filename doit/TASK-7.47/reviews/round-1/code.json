@@ -1,0 +1,12 @@
+{"reviewer": "code", "round": 1,
+ "rubric": [
+  {"item": "SPEC-01 correctness", "result": "pass"},
+  {"item": "SPEC-01 test strength", "result": "pass"},
+  {"item": "SPEC-02 correctness", "result": "pass"},
+  {"item": "SPEC-02 test strength", "result": "pass"},
+  {"item": "scope", "result": "pass"},
+  {"item": "concision", "result": "pass"},
+  {"item": "clarity", "result": "pass"}
+ ],
+ "findings": [],
+ "summary": "The new file tests/bots/tag-short-handed-river.acceptance.test.ts follows spec section 5 step by step: a 3-seat, seed-3, 200-hand playtest; river views captured via composeChecks(checkStep, capture) with handReplayCode(3, handsDone + 1); 0 violations; each river view's decideTag move (seeded with botDecisionSeed/botRandom) toEqual recommend(view, {...BOT_ADVICE, equity: BOT_EQUITY}).move; an explicit raise-type assertion and a riverRaises counter (D-2); and non-vacuity guards river.length > 0 and riverRaises > 0 (A-3). The test passes locally in 253 ms, well under the 1 s budget. SPEC-02 holds by construction. The guard makes sure at least one captured view has an engine raise. Play before the first river raise (hand 35) is identical under the mutation, so that view is still captured, and the mutated decideTag returns a call there, which makes toEqual fail. git diff main -- tests/bots/tag-short-handed.acceptance.test.ts src/ is empty. The only code file changed is the new test, and it is not added to test:slow. Line 29's type assertion repeats the toEqual on line 27, but the spec asks for it (D-2), so it is not a finding. No findings."}
