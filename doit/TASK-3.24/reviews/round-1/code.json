@@ -1,0 +1,15 @@
+{"reviewer": "code", "round": 1,
+ "rubric": [
+  {"item": "SPEC-01 correctness", "result": "pass"},
+  {"item": "SPEC-01 test strength", "result": "pass"},
+  {"item": "SPEC-02 correctness", "result": "pass"},
+  {"item": "SPEC-02 test strength", "result": "pass"},
+  {"item": "SPEC-03 correctness", "result": "pass"},
+  {"item": "SPEC-03 test strength", "result": "pass"},
+  {"item": "SPEC-04 correctness", "result": "pass"},
+  {"item": "SPEC-04 test strength", "result": "pass"},
+  {"item": "scope", "result": "pass"},
+  {"item": "concision", "result": "pass"},
+  {"item": "clarity", "result": "pass"}],
+ "findings": [],
+ "summary": "Decision spike, no code. requirements.md diff is exactly 2 changed lines (REQ-019.5, REQ-019.8) and 1 appended row (1.17, last row), and the text matches spec section 5 character for character. The wording matches the engine: revealShown (src/engine/hand.ts:589-609) has no user-seat special case, shows a seat when nothing eligible is face up or it ties or beats the best face-up eligible hand, and otherwise mucks, pot by pot from the last side pot. The fold path (hand.ts:548-553) returns showdown: [], so 'a hand that wins because everyone else folded is never shown' holds. decision-6 exists with status accepted and the spec's title; the body is empty, which A-1 allows (the CLI has no body option). TASK-3.24 implementation notes give the Q-1 A answer, all five key facts SPEC-03 asks for, and a pointer to spec section 3. No files changed under src/tests/e2e/tools/docs, and no follow-up story was created. SPEC-04 (tick AC#1, final summary) is an orchestrator step at finish and is not checkable yet; nothing in the build blocks it. Gates fix-2 PASS (tests, lint, typecheck, scope 5/6 lines, 1/1 files)."}

@@ -1,0 +1,3 @@
+{"reviewer": "security", "round": 1,
+ "findings": [],
+ "summary": "Decision spike, documentation only. The diff changes requirements.md (REQ-019.5, REQ-019.8 and changelog row 1.17), adds a Backlog decision record and task notes through the CLI, and adds doit work-folder artefacts. Nothing changed under src, tests, e2e, tools or docs, and no dependencies were added, so no untrusted input reaches new code. I found no secrets, tokens or credentials in the diff or the gate logs. The reworded rule (a mucked hand stays hidden from the other seats, and an uncalled winner is never shown) keeps hidden cards hidden and does not weaken it. Spec section 8 (N/A) is correct."}

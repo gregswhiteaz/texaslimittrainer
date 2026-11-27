@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-21T08:35:00Z'
-updated_date: '2026-11-27T17:47:00Z'
+updated_date: '2026-11-27T17:58:00Z'
 labels:
   - follow-up
   - spike
@@ -54,4 +54,6 @@ Key facts (doit/TASK-3.24/spec.md §3):
 - Showing after an uncalled win would need a new result/record field and a persisted-format (hand-record parser) change, and would affect nothing.
 - A prompt would cost a click per showdown against the 200+ hands/hour pace (G-5, REQ-024.6).
 No product code changed.
+
+Build: decision-6; REQ-019.5/019.8 + changelog 1.17; no code; gate PASS
 <!-- SECTION:NOTES:END -->
