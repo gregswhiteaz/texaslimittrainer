@@ -7,7 +7,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-27T08:42:00Z'
-updated_date: '2026-11-27T09:27:00Z'
+updated_date: '2026-11-27T09:47:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -48,4 +48,6 @@ Full spec: doit/TASK-7.46/spec.md
 
 <!-- SECTION:NOTES:BEGIN -->
 Builder blocked on SPEC-02 (3-seat --check-styles exits 1 from REQ-027.5 one-action rule on rare TAG preflop-limpers spot). Autopilot Q-2 (a): recorded deviation — slow test asserts the band claim, not exit 0; follow-up spike for the rare-spot rule.
+
+Build: TAG aggression band 45-66 (REQ-027.1, changelog 1.16); slow test asserts band claim (Q-2 deviation); TASK-7.37 postflop check strengthened; bot output byte-identical; gate PASS
 <!-- SECTION:NOTES:END -->
