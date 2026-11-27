@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-23T16:31:00Z'
-updated_date: '2026-11-27T03:28:00Z'
+updated_date: '2026-11-27T03:35:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -55,4 +55,6 @@ Key numbers: hand-order.json ranks K2o #87 above 87s #99, Q2o #108 above 76s #11
 REQ change: REQ-035.6 reworded for the relative re-raise rule; changelog row 1.14 (dreams/limit-holdem-trainer/requirements.md). REQ-035.2 unchanged.
 Follow-ups: TASK-7.43 (FU-A, resize + three-way hand order; depends on TASK-7.29), TASK-7.44 (FU-B, relative re-raise scaling; depends on TASK-7.43), TASK-7.45 (FU-C spike, open-raise and calling-line scaling; depends on TASK-7.44).
 No product code changed (D-5).
+
+Build: decision-5, REQ-035.6 + changelog 1.14, follow-ups TASK-7.43/7.44/7.45; gate PASS
 <!-- SECTION:NOTES:END -->
