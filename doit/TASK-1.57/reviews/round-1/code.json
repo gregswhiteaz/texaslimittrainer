@@ -1,0 +1,14 @@
+{"reviewer": "code", "round": 1,
+ "rubric": [
+  {"item": "SPEC-01 correctness", "result": "pass"},
+  {"item": "SPEC-01 test strength", "result": "pass"},
+  {"item": "SPEC-02 correctness", "result": "pass"},
+  {"item": "SPEC-02 test strength", "result": "pass"},
+  {"item": "SPEC-03 correctness", "result": "pass"},
+  {"item": "SPEC-03 test strength", "result": "pass"},
+  {"item": "scope", "result": "pass"},
+  {"item": "concision", "result": "pass"},
+  {"item": "clarity", "result": "pass"}
+ ],
+ "findings": [],
+ "summary": "The only source change is in e2e/players-choice.spec.ts and it matches spec section 5 exactly. It imports storedSessions from the existing helper (the reuse the spec asks for). It turns the one-line n===2||n===10 axe call into a block that first runs expect.poll(storedSessions length).toBe(1) and then calls axeWithPausedClock. Locked-edit check: no line containing expect( was removed. No assertion, locator, timeout or step order changed. Only the import, the braces, a 3-line comment and the poll were added. The other test in the file and the shared paused-clock helper are untouched. The wait is sound. (1) In useTableSession.ts the putSession effect is declared before the deal effect and runs in the same passive flush, so a stored start record means the first-deal setTimeout is already queued on the paused clock. (2) In App.tsx, Home is shown only after endSession resolves, and endSession deletes a zero-hand session (hand-store.ts:118-121). So the previous iteration's record is gone before the next Start game, and the count cannot be 1 because of a stale record. If the record is never written, the poll times out with a clear failure instead of hanging. Gate fix-3 passes: e2e 401 passed, lint, typecheck, 9 changed lines against a budget of 15, test integrity. The repeat-each evidence (40/40 on chromium and webkit) is recorded in the task notes; per the orchestrator's instruction I did not re-run it. The TASK-2.2 lock bookkeeping (unlock event, task note) is consistent with Q-1."}

@@ -1,0 +1,3 @@
+{"reviewer": "security", "round": 1,
+ "findings": [],
+ "summary": "Test-only change: e2e/players-choice.spec.ts adds an expect.poll on the existing storedSessions helper (reads the test browser's IndexedDB) before an axe scan. No production code, no new dependencies, no untrusted input, secrets, randomness, or file/shell operations. Backlog task markdown edits carry no security surface. No findings."}
