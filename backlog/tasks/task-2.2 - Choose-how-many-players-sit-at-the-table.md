@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-26T00:07:00Z'
+updated_date: '2026-11-27T10:33:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -110,6 +110,8 @@ Locked test e2e/players-choice.spec.ts edited for TASK-2.5 (Q-2 routine).
 Locked test tests/ui/game-config-players.acceptance.test.tsx edited for TASK-2.8 Q-2 (auto-accepted; row parsing/counts only).
 
 Locked test(s) unlocked for TASK-7.18 Q-3: one vi.setConfig({ testTimeout: 30_000 }) line added after the global testTimeout was removed; no assertion touched.
+
+Locked e2e/players-choice.spec.ts edited by TASK-1.57 (autopilot): added a wait before the table axe scans; no assertion changed.
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary

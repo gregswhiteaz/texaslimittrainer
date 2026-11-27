@@ -3,9 +3,11 @@ id: TASK-1.57
 title: >-
   Make the players-choice table-size e2e test reliable on WebKit after Leave
   table
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-27T10:20:00Z'
+updated_date: '2026-11-27T10:33:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -26,3 +28,13 @@ Main CI run 45978923317 (commit 46e6e83, TASK-7.46 merge, no app/bot change) fai
 <!-- AC:BEGIN -->
 - [ ] #1 Given e2e/players-choice.spec.ts table-size test, When it runs repeatedly on Chromium and WebKit (e.g. --repeat-each 10), Then it passes every time because it waits on the actual condition after Leave table (dialog handled or session-end complete), with no assertion removed or loosened
 <!-- AC:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. Before the n=2 and n=10 table axe scans, poll until the session start record is stored (deal timer already waiting on the paused clock)
+2. Locked edit under TASK-2.2: import + poll only
+3. Verify 20/20 on chromium+webkit with --repeat-each 10
+
+Full spec: doit/TASK-1.57/spec.md
+<!-- SECTION:PLAN:END -->
