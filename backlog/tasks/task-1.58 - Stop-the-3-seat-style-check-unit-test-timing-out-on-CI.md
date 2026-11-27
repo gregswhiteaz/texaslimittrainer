@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-27T11:52:00Z'
-updated_date: '2026-11-27T12:14:00Z'
+updated_date: '2026-11-27T12:25:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -36,3 +36,9 @@ Main CI run 45992781358 (commit 8bea902) failed once in 'Unit tests with coverag
 
 Full spec: doit/TASK-1.58/spec.md
 <!-- SECTION:PLAN:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+Build: HANDS 300->200, decisions captured once per file, 20 s per-test timeout via options argument (recorded deviation from spec's numeric-third-arg wording, same limit); gate PASS
+<!-- SECTION:NOTES:END -->

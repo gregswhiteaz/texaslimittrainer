@@ -1,0 +1,3 @@
+{"reviewer": "security", "round": 1,
+ "findings": [],
+ "summary": "Test-only change to tests/playtest/style-check-short-handed.test.ts: hand count reduced 300->200, capture playtest memoised per file, explicit 20 s vitest timeouts. Fixed seed and constant CLI args; no untrusted input, no I/O, shell, file paths, secrets, crypto/randomness affecting production, or new dependencies. No security findings."}

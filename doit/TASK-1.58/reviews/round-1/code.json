@@ -1,0 +1,19 @@
+{"reviewer": "code", "round": 1,
+ "rubric": [
+  {"item": "SPEC-01 correctness", "result": "pass"},
+  {"item": "SPEC-01 test strength", "result": "pass"},
+  {"item": "SPEC-02 correctness", "result": "pass"},
+  {"item": "SPEC-02 test strength", "result": "pass"},
+  {"item": "SPEC-03 correctness", "result": "pass"},
+  {"item": "SPEC-03 test strength", "result": "pass"},
+  {"item": "scope", "result": "pass"},
+  {"item": "concision", "result": "pass"},
+  {"item": "clarity", "result": "pass"}
+ ],
+ "findings": [
+  {"fingerprint": "tests/playtest/style-check-short-handed.test.ts:limit-constant-name", "severity": "NIT", "file": "tests/playtest/style-check-short-handed.test.ts", "line": 17,
+   "issue": "The shared options object is named `LIMIT`, which reads like a hand/bet limit in a limit hold'em codebase rather than a test timeout.",
+   "evidence": "const LIMIT = { timeout: 20_000 };",
+   "fix": "Rename to `TIMEOUT` (or `SLOW_TEST`) so the `it(name, TIMEOUT, fn)` calls read unambiguously."}
+ ],
+ "summary": "Only the test file changed (23 lines). HANDS 300 -> 200; capturePreflop() is cached lazily by preflopDecisions(), which still runs expect(violations).toBe(0) on every call; both it() calls pass { timeout: 20_000 } via the vitest 5.1 options argument (recorded deviation, same limit). All original assertions are kept unchanged and unconditional, and the test names are the same. Verified: with coverage, the file alone runs test 1 in 1013 ms and test 2 in 4 ms (both under 2000 ms); -t \"6-max\" passes on its own; the SPEC-03 playtest prints unopened 14/2 and blind-defence 9/3. All gates pass in fix-2. No BLOCKER or MAJOR findings."}
