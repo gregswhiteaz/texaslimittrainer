@@ -7,7 +7,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-23T04:42:00Z'
-updated_date: '2026-11-27T18:25:00Z'
+updated_date: '2026-11-27T18:49:00Z'
 labels:
   - follow-up
   - ci
@@ -51,4 +51,6 @@ Full spec: doit/TASK-1.53/spec.md
 Autopilot 2026-11-25 measurement (main CI run 45677932929): wall time 5.6 min (<6 min target met); sweep shard 1 = 123 s, shard 2 = 219 s (1.8x); E2E job (5.6 min) is the critical path, so rebalancing sweeps would not shorten CI. Skipped in autopilot as no-gain; user to decide whether to keep, re-scope or drop.
 
 2026-11-27: user chose 'Shard E2E + rebalance sweeps'. Main run 46046670509: wall 439 s; E2E job 439 s (test step 378 s, ~420 tests x 2 browsers); sweep shard 2 212 s, shard 1 147 s; unit 75 s; lint/build/playtest 62 s. Expected cost ~4-5 extra Actions minutes per run for job setup.
+
+Build: E2E 4-job matrix; 3 weighted sweep shards (sweep-shards.ts + sweep-weights.json + sequencer); locked CI tests re-pinned (Q-2); recorded deviation: tests/support/sandbox.ts copies the two new tools/ci files because vite.config.ts imports them; gate PASS
 <!-- SECTION:NOTES:END -->
