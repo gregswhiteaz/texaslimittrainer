@@ -1,0 +1,20 @@
+[
+  {
+    "id": "SPEC-01",
+    "verifies": "AC#1",
+    "verification": "command `grep -c \"c > live) live = c\" src/engine/hand.ts` prints `1`, and code review confirms",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-02",
+    "verifies": "AC#1",
+    "verification": "unit `tests/engine/force-fold.property.test.ts::voidedBets agrees with the engine's amount to match after every forced fold`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-03",
+    "verifies": "AC#1",
+    "verification": "command `npm test` passes, and `npm run -s playtest -- --hands 10000 --seed 42 > /tmp/after.txt`",
+    "status": "pending"
+  }
+]
