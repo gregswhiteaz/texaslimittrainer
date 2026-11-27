@@ -1,11 +1,11 @@
 ---
 id: TASK-10.18
 title: Keep the engine's bet-voiding rule in one place (liveLevels and voidedBets)
-status: In Progress
+status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-27T09:11:00Z'
-updated_date: '2026-11-27T10:27:00Z'
+updated_date: '2026-11-27T10:28:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -14,6 +14,8 @@ dependencies:
   - TASK-10.17
 references:
   - doc-184
+documentation:
+  - doc-186
 parent_task_id: TASK-10
 priority: low
 ordinal: 271000
@@ -45,4 +47,12 @@ Full spec: doit/TASK-10.18/spec.md
 
 <!-- SECTION:NOTES:BEGIN -->
 Build: single private voidingWalk; liveLevels/voidedBets thin wrappers; property agreement test; 10k playtest byte-identical; gate PASS
+
+Step 6a: none.
 <!-- SECTION:NOTES:END -->
+
+## Final Summary
+
+<!-- SECTION:FINAL_SUMMARY:BEGIN -->
+Merged the duplicated forced-fold voiding walk in src/engine/hand.ts into one private voidingWalk; liveLevels and voidedBets are now thin wrappers (no behaviour change). Added a property test that voidedBets agrees with the engine's currentBet after every forced fold. Verified: npm test 1534 passed, lint/typecheck clean, 10,000-hand seed-42 playtest byte-identical to base, judge PASS 3/3, review r1 clean (one NIT). Assumptions to review: A-1 single-pass walk, A-2 keep wrappers, A-3 add the optional property test. Risks: none; changed lines 110 vs budget 90 (warn only).
+<!-- SECTION:FINAL_SUMMARY:END -->
