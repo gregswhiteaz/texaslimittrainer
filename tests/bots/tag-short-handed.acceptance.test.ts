@@ -3,7 +3,13 @@ import { HAND_CLASSES, type HandClass } from '../../src/advice/hand-class';
 import { SIX_MAX_CHART } from '../../src/advice/preflop';
 import { chartCell, parseChart, type Position } from '../../src/advice/preflop-chart';
 import { recommend } from '../../src/advice/recommend';
-import { decideTag, TAG_SHORT_HANDED_CHART, tagChartFor } from '../../src/bots/tag';
+import {
+  BOT_ADVICE,
+  BOT_EQUITY,
+  decideTag,
+  TAG_SHORT_HANDED_CHART,
+  tagChartFor,
+} from '../../src/bots/tag';
 import { botDecisionSeed, botRandom } from '../../src/engine/bot-random';
 import { parseCards } from '../../src/engine/cards';
 import { applyAction, createHand, type Action } from '../../src/engine/hand';
@@ -127,10 +133,20 @@ describe('TAG at 3 and 4 seats (TASK-7.37)', () => {
     });
     expect(summary.violations).toBe(0);
     expect(postflop.length).toBeGreaterThan(0);
+    let aggressive = 0;
+    let rangeSensitive = 0;
     for (const { code, view } of postflop) {
       const seed = botDecisionSeed(code, view);
       const actual: Action = decideTag(view, { random: botRandom(seed) });
       expect(actual).toEqual(decideTag(view, { random: botRandom(seed), chart: SIX_MAX_CHART }));
+      // TAG's postflop move is the advice engine's move with the bots' options: no short-handed rule, no mixing.
+      const engine = recommend(view, { ...BOT_ADVICE, equity: BOT_EQUITY }).move;
+      expect(actual, `postflop ${view.street} seat ${view.seat}`).toEqual(engine);
+      if (engine.type === 'bet' || engine.type === 'raise') aggressive++;
+      if (recommend(view, { equity: BOT_EQUITY }).move.type !== engine.type) rangeSensitive++;
     }
+    // The check is not vacuous: some moves are bets or raises, and some depend on the bots' range model.
+    expect(aggressive).toBeGreaterThan(0);
+    expect(rangeSensitive).toBeGreaterThan(0);
   });
 });

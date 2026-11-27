@@ -86,6 +86,9 @@ near a band edge can land just outside it. For example, 2,000-hand runs in TASK-
 against its 8% floor, TAG PFR 13.7–13.9% against its 14% floor and Rock aggression 56.1–56.2% against its 55%
 ceiling. Read a short-run failure as a hint and confirm it with a 100,000-hand run.
 
+TAG's aggression band ends at 66%, the same ceiling as the 6-max and full-ring healthy ranges, since TASK-7.46:
+all-TAG play at 3 seats measures 65.2% over 100,000 hands.
+
 ## Display
 
 `formatStat` shows `—` when the denominator is 0 (for example W$SD before any showdown) and otherwise the

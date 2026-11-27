@@ -131,7 +131,7 @@ describe('StyleCheck and the style report', () => {
       expect(report.text.endsWith('Style check: passed\n')).toBe(true);
     }
     expect(tag(180).text).toContain(
-      'Style: TAG, 1000 hands, VPIP 18.0% (band 18.0-26.0%), PFR 18.0% (band 14.0-22.0%), aggression 55.0% (band 45.0-65.0%)\n',
+      'Style: TAG, 1000 hands, VPIP 18.0% (band 18.0-26.0%), PFR 18.0% (band 14.0-22.0%), aggression 55.0% (band 45.0-66.0%)\n',
     );
     expect(tag(179)).toEqual({
       text: expect.stringContaining(
@@ -147,8 +147,8 @@ describe('StyleCheck and the style report', () => {
       true,
     );
     expect(noPostflop.passed).toBe(false);
-    expect(noPostflop.text).toContain('aggression — (band 45.0-65.0%)\n');
-    expect(noPostflop.text).toContain('Outside band: TAG aggression — (band 45.0-65.0%)\n');
+    expect(noPostflop.text).toContain('aggression — (band 45.0-66.0%)\n');
+    expect(noPostflop.text).toContain('Outside band: TAG aggression — (band 45.0-66.0%)\n');
     expect(
       formatStyleReport(
         new Map([['TAG', { ...tagCounts(200), postflopAggressive: 0, postflopCalls: 0 }]]),

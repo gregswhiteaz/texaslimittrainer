@@ -27,7 +27,7 @@ export interface StyleBands {
 export type StyleBandTable = Readonly<Record<StyleName, StyleBands>>;
 /** REQ-027.1 (TAG), REQ-027.2 (Calling station), REQ-027.3 (Maniac) and REQ-027.4 (Rock). */
 export const STYLE_BANDS: StyleBandTable = {
-  TAG: { vpip: [18, 26], pfr: [14, 22], aggression: [45, 65] },
+  TAG: { vpip: [18, 26], pfr: [14, 22], aggression: [45, 66] },
   'Calling station': { vpip: [45, 65], pfr: [3, 10], aggression: [10, 25] },
   Maniac: { vpip: [50, 75], pfr: [35, 60], aggression: [65, 85] },
   Rock: { vpip: [8, 15], pfr: [6, 12], aggression: [35, 55] },

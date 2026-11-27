@@ -7,7 +7,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-27T08:42:00Z'
-updated_date: '2026-11-27T09:23:00Z'
+updated_date: '2026-11-27T09:27:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -43,3 +43,9 @@ From TASK-7.37 (doc-183, judge J-1-02, review MINOR). Over 100,000 all-TAG hands
 
 Full spec: doit/TASK-7.46/spec.md
 <!-- SECTION:PLAN:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+Builder blocked on SPEC-02 (3-seat --check-styles exits 1 from REQ-027.5 one-action rule on rare TAG preflop-limpers spot). Autopilot Q-2 (a): recorded deviation — slow test asserts the band claim, not exit 0; follow-up spike for the rare-spot rule.
+<!-- SECTION:NOTES:END -->

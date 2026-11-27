@@ -504,7 +504,7 @@ Dream slug: limit-holdem-trainer   ·   Vision: dreams/limit-holdem-trainer/visi
 - Status: Confirmed
 - Statement: In headless 6-max playtests of 100,000 hands with the Mixed line-up, each bot style's measured statistics shall fall inside its target band.
 - Clauses:
-  - REQ-027.1: TAG — VPIP 18–26%, PFR 14–22%, aggression (bets + raises as % of bets, raises and calls) 45–65%.
+  - REQ-027.1: TAG — VPIP 18–26%, PFR 14–22%, aggression (bets + raises as % of bets, raises and calls) 45–66%.
   - REQ-027.2: Calling station — VPIP 45–65%, PFR 3–10%, aggression 10–25%.
   - REQ-027.3: Maniac — VPIP 50–75%, PFR 35–60%, aggression 65–85%.
   - REQ-027.4: Rock — VPIP 8–15%, PFR 6–12%, aggression 35–55%.
@@ -512,7 +512,7 @@ Dream slug: limit-holdem-trainer   ·   Vision: dreams/limit-holdem-trainer/visi
   - REQ-027.6: Aggression in these bands uses the REQ-045.3 definition (flop, turn and river actions only).
 - Fit criterion: `npm run playtest -- --hands 100000 --lineup mixed --size 6 --check-styles` exits 0.
 - Rationale: Recognisable styles teach adjustment (Q-12); measurable so tests can hold them.
-- Source: Q-12, Q-51; bands proposed-by-Claude; confirmed Q-52
+- Source: Q-12, Q-51; bands proposed-by-Claude; confirmed Q-52; TAG aggression ceiling 65 → 66 by TASK-7.46 Q-1
 - Depends on: REQ-026
 
 ### REQ-028: Reproducible mixed decisions
@@ -1373,3 +1373,4 @@ Entity × lifecycle (every cell is a clause below or N/A):
 | 1.13 | 2026-11-26 | TASK-7.21: REQ-032.2 splits facing a re-raise into own raise re-raised and re-raised when you have not raised, and splits blind defence by an early or a late raiser; REQ-032.6 picks the matching re-raise chart for a fourth bet | User (TASK-7.21 Q-1/Q-2) |
 | 1.14 | 2026-11-26 | TASK-7.29: REQ-035.6 scales observed three-bet and four-bet ranges by PFR relative to the typical PFR for the table size instead of by raw PFR | User (TASK-7.29 Q-3) |
 | 1.15 | 2026-11-26 | TASK-10.13: REQ-004.8 forced fold forfeits chips; REQ-018.4 exception | User (TASK-10.13 Q-3) |
+| 1.16 | 2026-11-27 | TASK-7.46: REQ-027.1 TAG aggression band ceiling raised from 65% to 66% (matches the 6-max and full-ring healthy-range ceiling); all-TAG play at 3 seats measures 65.2% over 100,000 hands | User (TASK-7.46 Q-1, autopilot) |
