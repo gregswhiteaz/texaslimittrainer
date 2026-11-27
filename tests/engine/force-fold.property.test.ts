@@ -8,6 +8,7 @@ import {
   type Action,
   type HandState,
   type PlayerState,
+  voidedBets,
 } from '../../src/engine/hand';
 import { checkDeal, checkState, checkStep } from '../../src/engine/invariants';
 import { Xoshiro128 } from '../../src/engine/seeded-random';
@@ -38,7 +39,10 @@ interface Outcome {
   readonly topFolds: number;
 }
 
-function playOut(rng: Xoshiro128): Outcome {
+function playOut(
+  rng: Xoshiro128,
+  afterForceFold?: (state: HandState) => string | undefined,
+): Outcome {
   const dealt = dealHand(rng);
   let state = dealt.state;
   let topFolds = 0;
@@ -69,6 +73,9 @@ function playOut(rng: Xoshiro128): Outcome {
       if (violations.length > 0) {
         return fail(`step ${step}: forceFold(${leaver.seat}): ${JSON.stringify(violations)}`);
       }
+      const mismatch = afterForceFold?.(state);
+      if (mismatch !== undefined)
+        return fail(`step ${step}: forceFold(${leaver.seat}): ${mismatch}`);
       continue;
     }
     const action = legal[rng.nextInt(legal.length)] as Action;
@@ -102,5 +109,41 @@ describe('forced-fold property', () => {
       topFolds += outcome.topFolds;
     }
     expect(topFolds).toBeGreaterThanOrEqual(200);
+  });
+
+  // TASK-10.18: advice's view of voided raises matches the engine's amount to match.
+  it("voidedBets agrees with the engine's amount to match after every forced fold", () => {
+    const rng = new Xoshiro128(0x10d18);
+    let voids = 0;
+    const check = (state: HandState): string | undefined => {
+      if (state.result !== null) return undefined;
+      const voided = voidedBets(state);
+      for (const i of voided) {
+        const a = state.actions[i];
+        if (
+          a === undefined ||
+          a.street !== state.street ||
+          (a.type !== 'bet' && a.type !== 'raise')
+        ) {
+          return `voided index ${i} is not a same-street bet or raise`;
+        }
+      }
+      voids += voided.size;
+      const missed = state.actions.findIndex(
+        (a, i) =>
+          a.street === state.street &&
+          (a.type === 'bet' || a.type === 'raise') &&
+          a.amount > state.currentBet &&
+          !voided.has(i),
+      );
+      return missed === -1
+        ? undefined
+        : `record ${missed} is above currentBet ${state.currentBet} but not voided`;
+    };
+    for (let h = 0; h < 2000; h++) {
+      const outcome = playOut(rng, check);
+      if (outcome.failure !== undefined) expect.fail(`hand ${h}: ${outcome.failure}`);
+    }
+    expect(voids).toBeGreaterThan(0);
   });
 });

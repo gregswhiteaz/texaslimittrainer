@@ -320,17 +320,23 @@ function betUnit(state: BetContext): number {
 }
 
 /**
- * The street's surviving counted bet levels in order, each with the index of the record that set it: the big
- * blind, or a bet/raise adding at least half a unit over the previous level (REQ-016.5; short all-ins under
- * half a bet leave it unchanged). A fold of a seat whose street chips exceed the live top at that point (the
- * highest street chips of a seat not yet folded, preflop at least the big blind) voids every level above that
- * live top (TASK-10.13 R2). A fold through applyAction never does, as it always owes chips.
+ * The one walk that owns the forced-fold voiding rule. `levels`: the street's surviving counted bet levels in
+ * order, each with the index of the record that set it: the big blind, or a bet/raise adding at least half a
+ * unit over the previous level (REQ-016.5; short all-ins under half a bet leave it unchanged). A fold of a seat
+ * whose street chips exceed the live top at that point (the highest street chips of a seat not yet folded,
+ * preflop at least the big blind) voids every level above that live top and, in `voided`, marks every earlier
+ * bet/raise on the street whose amount exceeds it (TASK-10.13 R2). A fold through applyAction never does, as it
+ * always owes chips.
  */
-function liveLevels(state: BetContext): { level: number; at: number }[] {
+function voidingWalk(state: BetContext): {
+  levels: { level: number; at: number }[];
+  voided: Set<number>;
+} {
   const unit = betUnit(state);
   const folded = new Set<SeatNumber>();
   const put = new Map<SeatNumber, number>();
   const levels: { level: number; at: number }[] = [];
+  const voided = new Set<number>();
   state.actions.forEach((a, i) => {
     if (a.street !== state.street) {
       if (a.type === 'fold') folded.add(a.seat);
@@ -347,43 +353,32 @@ function liveLevels(state: BetContext): { level: number; at: number }[] {
       for (const [s, c] of put) if (!folded.has(s) && c > live) live = c;
       if ((put.get(a.seat) ?? 0) > live) {
         while ((levels.at(-1)?.level ?? 0) > live) levels.pop();
+        state.actions.slice(0, i).forEach((b, j) => {
+          if (
+            b.street === state.street &&
+            (b.type === 'bet' || b.type === 'raise') &&
+            b.amount > live
+          ) {
+            voided.add(j);
+          }
+        });
       }
     }
   });
-  return levels;
+  return { levels, voided };
+}
+
+/** The street's surviving counted bet levels (see voidingWalk). */
+function liveLevels(state: BetContext): { level: number; at: number }[] {
+  return voidingWalk(state).levels;
 }
 
 /**
- * Indices into `state.actions` of the street's bet/raise records that a fold has voided, by the same rule as
- * liveLevels: a fold of a seat whose street chips exceed the live top voids every earlier bet/raise on the
- * street whose amount exceeds that live top (TASK-10.13 R2). Lets advice ignore voided raises (TASK-10.17).
+ * Indices into `state.actions` of the street's bet/raise records that a fold has voided (see voidingWalk). Lets
+ * advice ignore voided raises (TASK-10.17).
  */
 export function voidedBets(state: BetContext): ReadonlySet<number> {
-  const folded = new Set<SeatNumber>();
-  const put = new Map<SeatNumber, number>();
-  const voided = new Set<number>();
-  state.actions.forEach((a, i) => {
-    if (a.street !== state.street) {
-      if (a.type === 'fold') folded.add(a.seat);
-      return;
-    }
-    put.set(a.seat, (put.get(a.seat) ?? 0) + a.added);
-    if (a.type !== 'fold') return;
-    folded.add(a.seat);
-    let live = state.street === 'preflop' ? state.stakes.bigBlind : 0;
-    for (const [s, c] of put) if (!folded.has(s) && c > live) live = c;
-    if ((put.get(a.seat) ?? 0) <= live) return;
-    state.actions.slice(0, i).forEach((b, j) => {
-      if (
-        b.street === state.street &&
-        (b.type === 'bet' || b.type === 'raise') &&
-        b.amount > live
-      ) {
-        voided.add(j);
-      }
-    });
-  });
-  return voided;
+  return voidingWalk(state).voided;
 }
 
 /** The street's last surviving counted bet level, or 0. */
