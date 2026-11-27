@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-26T21:01:00Z'
-updated_date: '2026-11-27T07:06:00Z'
+updated_date: '2026-11-27T07:11:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -25,9 +25,9 @@ From TASK-6.24 (decision: option B, Q-1). REQ-027's fit criterion judges each bo
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Given a user reads npm run playtest -- --help, When they read the --check-styles line, Then it says the bands are judged over 100,000 hands and that shorter runs can fail from sample noise
-- [ ] #2 Given a reader opens docs/stats/style-stats.md, When they read the playtest CLI section, Then it states the 100,000-hand run length REQ-027 uses and the sample-noise failures shorter runs can show (mixed spots used one way, stats near a band edge)
-- [ ] #3 Given npm test runs, When the USAGE assertions in tests/playtest/cli.test.ts check the help text, Then they pass with the new --check-styles wording and no check of 100,000-hand scale is added to npm test or CI
+- [x] #1 Given a user reads npm run playtest -- --help, When they read the --check-styles line, Then it says the bands are judged over 100,000 hands and that shorter runs can fail from sample noise
+- [x] #2 Given a reader opens docs/stats/style-stats.md, When they read the playtest CLI section, Then it states the 100,000-hand run length REQ-027 uses and the sample-noise failures shorter runs can show (mixed spots used one way, stats near a band edge)
+- [x] #3 Given npm test runs, When the USAGE assertions in tests/playtest/cli.test.ts check the help text, Then they pass with the new --check-styles wording and no check of 100,000-hand scale is added to npm test or CI
 <!-- AC:END -->
 
 ## Implementation Plan

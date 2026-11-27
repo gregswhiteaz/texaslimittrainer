@@ -3,30 +3,30 @@
     "id": "SPEC-01",
     "verifies": "AC#1",
     "verification": "unit `tests/playtest/cli.test.ts::rejects every invalid argument with its fixed message`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-02",
     "verifies": "AC#1, AC#3",
     "verification": "unit `tests/playtest/cli.test.ts::--check-styles is a value-less run flag echoed in the Options line`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-03",
     "verifies": "AC#1",
     "verification": "command `npm run playtest -- --help | grep -- '--check-styles: .*judged over 100,000 hands (REQ-027), so shorter runs can fail from sample noise$'`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-04",
     "verifies": "AC#2",
     "verification": "command `grep -c -e 'REQ-027 judges these bands over 100,000 hands' -e 'used only one way' -e 'near a band edge' docs/stats/style-stats.md` (prints 3) plus manual reading that all three phrases sit in the \"In the playtest CLI\" section",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-05",
     "verifies": "AC#3",
     "verification": "command `npm test && test -z \"$(git diff --name-only main -- package.json .github 'tests/**/*.acceptance.test.*' 'tests/**/*.perf.test.*')\" && ! git diff main -- tests/playtest/cli.test.ts | grep -E \"^\\+.*'--hands', '[0-9]{6,}'\"`",
-    "status": "pending"
+    "status": "pass"
   }
 ]

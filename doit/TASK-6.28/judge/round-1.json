@@ -1,0 +1,15 @@
+{"round": 1,
+ "test_suite": {"command": "npm test", "result": "PASS", "passed": 1516, "failed": 0, "notes": "338 test files passed, 9 skipped; 57 tests skipped (pre-existing opt-in slow/skipped groups)."},
+ "end_to_end": {"command": "npm run playtest -- --help", "result": "PASS",
+   "expected": "exit 0; 6 USAGE lines; --check-styles line ends with '; the bands are judged over 100,000 hands (REQ-027), so shorter runs can fail from sample noise'; other lines unchanged",
+   "actual": "exit 0; 6 lines; line 5 is exactly the spec §5 line; lines 1-4 and 6 match the base commit text. Also: usage errors (--hands 0, unknown flag) exit 2 and reprint the new line on stderr; a 200-hand --lineup mixed --check-styles run produces byte-identical output and exit code (1) to the base commit, with no runtime note (D-2)."},
+ "integrity": {"result": "PASS", "notes": "doit.py test-integrity exit 0. Diff vs base ca5708d touches only src/playtest/cli.ts (one USAGE string line), tests/playtest/cli.test.ts (two expected strings updated to the spec wording), docs/stats/style-stats.md (new paragraph) plus backlog/doit metadata. No special-casing, no mocks, no locked/acceptance/package.json/.github changes, no 100,000-hand run added."},
+ "items": [
+  {"spec": "SPEC-01", "result": "PASS", "evidence": "npm test passes; cli.test.ts full-USAGE assertion is an exact toBe against the spec wording (would fail on any drift). Holdout: --help exits 0, stdout line 5 equals the §5 line exactly, 6 lines total, other lines identical to base; usage errors exit 2 and include the new line on stderr."},
+  {"spec": "SPEC-02", "result": "PASS", "evidence": "usage[4] toBe updated to the exact §5 line; usage[0] regex assertion unchanged and passing in npm test. Holdout confirmed line index 4 of real --help output matches."},
+  {"spec": "SPEC-03", "result": "PASS", "evidence": "npm run playtest -- --help | grep '--check-styles: .*judged over 100,000 hands (REQ-027), so shorter runs can fail from sample noise$' → 1 match."},
+  {"spec": "SPEC-04", "result": "PASS", "evidence": "grep -c of the three phrases → 3. Manual read: paragraph sits under '### In the playtest CLI' before '## Display'. Holdout: whitespace-normalised section text contains the §5 paragraph verbatim (line wrapping differs from spec only by Prettier reflow, rendered text identical)."},
+  {"spec": "SPEC-05", "result": "PASS", "evidence": "npm test exit 0; git diff vs base and vs main lists no package.json, .github, *.acceptance.test.*, *.perf.test.* changes; no added '--hands' value of 6+ digits in tests."}
+ ],
+ "findings": [],
+ "summary": "All 5 SPEC items PASS. Text-only change implemented exactly as specified; help output, usage-error output and docs verified directly; short --check-styles run output byte-identical to base (no runtime note). No regressions, no tampering."}
