@@ -8,3 +8,8 @@
 - Not done (orchestrator): AC#1 tick, Done status.
 - No product code; no tests added (spec §10).
 - Ran `npm run format` (no changes) and `doit.py gate TASK-6.30`: PASS (test, lint, typecheck ok; scope warn 3 diff lines = 1 changed + 1 added, as budgeted).
+
+## FIX (review r1)
+- Item 1 [MAJOR] check-styles.acceptance co-owner TASK-6.25 missing: fixed via `backlog task edit TASK-6.31 -d ... --acceptance-criteria x6` (description and AC#4 now say owners TASK-6.11 and TASK-6.25, unlock under both; AC numbering kept 1-6). Per orchestrator note, also added to the TASK-6.31 description that the comments in tests/playtest/check-styles-three-seats.acceptance.test.ts:9 and docs/advice/range-model.md:294 should cite the REQ-028 fit criterion, not REQ-027.5. Appended TASK-6.30 notes (`--append-notes`): co-owner correction and fit-criterion smallest spot raise-and-calls 13 / 12 / 16 at seeds 42 / 7 / 1234 under N = 10.
+- Deviation: spec sections 3 and 5 still name only TASK-6.11 as owner (spec is locked; not edited). The backlog records are the corrected source.
+- No product code changed.
