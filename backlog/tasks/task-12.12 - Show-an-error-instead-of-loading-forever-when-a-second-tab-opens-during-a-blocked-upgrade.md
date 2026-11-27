@@ -6,6 +6,7 @@ title: >-
 status: To Do
 assignee: []
 created_date: '2026-11-27T11:43:00Z'
+updated_date: '2026-11-27T12:12:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -29,4 +30,11 @@ From TASK-12.10 (doc-188, judge J-2-01 MEDIUM). With an old-version connection b
 <!-- AC:BEGIN -->
 - [ ] #1 Given an old connection blocks the upgrade and a second app tab is opened, When that tab's store open gets no response within a bounded time, Then it rejects with UpgradeBlockedError so the tab shows its existing failure state instead of loading forever, and a test covers it
 - [ ] #2 Given docs/storage/hand-records.md and src/storage/hand-store.ts, When the version table is corrected to 5 and the redundant reset, dead guard and long docblock line are tidied, Then all storage tests still pass
+- [ ] #3 Given a settings save is held (not yet settled) after a previous failure showed the message, When the user makes the next change, Then the message is gone before that save settles (e2e with a held write), pinning TASK-12.11 A-3
 <!-- AC:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+AC added from TASK-12.11 follow-up (review MINOR / judge J-1-01)
+<!-- SECTION:NOTES:END -->
