@@ -1,0 +1,22 @@
+{"reviewer": "code", "round": 1,
+ "rubric": [
+  {"item": "SPEC-01 correctness", "result": "pass"},
+  {"item": "SPEC-01 test strength", "result": "pass"},
+  {"item": "SPEC-02 correctness", "result": "pass"},
+  {"item": "SPEC-02 test strength", "result": "pass"},
+  {"item": "SPEC-03 correctness", "result": "pass"},
+  {"item": "SPEC-03 test strength", "result": "pass"},
+  {"item": "SPEC-04 correctness", "result": "pass"},
+  {"item": "SPEC-04 test strength", "result": "pass"},
+  {"item": "SPEC-05 correctness", "result": "pass"},
+  {"item": "SPEC-05 test strength", "result": "pass"},
+  {"item": "scope", "result": "pass"},
+  {"item": "concision", "result": "pass"},
+  {"item": "clarity", "result": "pass"}],
+ "findings": [
+  {"fingerprint": "backlog/decisions/decision-7:empty-body-sections", "severity": "NIT",
+   "file": "backlog/decisions/decision-7 - Hints-and-reviews-do-not-show-the-situation-label-the-explanation-states-the-situation-no-follow-up-story-TASK-8.7-Q-1.md", "line": 9,
+   "issue": "Context/Decision/Consequences sections are empty; the rationale lives only in TASK-8.7 notes.",
+   "evidence": "File has only headings after the front matter. Spec A-1 accepts this (CLI has no body option; same as decision-1..6).",
+   "fix": "None required; optionally mention TASK-8.7 notes in the title or leave as is per A-1."}],
+ "summary": "Backlog-only spike. decision-7 exists with the exact §5 title and status accepted. TASK-7.40 AC#4 and TASK-7.42 AC#3 match the §5 text exactly, keep their numbers, and all other ACs are unchanged and in order (only those lines plus updated_date changed). TASK-7.41, requirements.md, src/tests/e2e/tools/docs have no diff vs main. TASK-8.7 notes state the Q-1 answer and every §3 fact SPEC-03 requires, with a pointer to spec §3. AC#1 not yet ticked; SPEC-05 is the orchestrator's finalization step. Spot-checked citations (explain.ts:43-45, preflop.ts:90) are accurate. Gate fix-3 PASS. No BLOCKER or MAJOR findings."}

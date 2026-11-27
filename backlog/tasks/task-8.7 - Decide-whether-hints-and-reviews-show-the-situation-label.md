@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-26T07:04:00Z'
-updated_date: '2026-11-27T19:31:00Z'
+updated_date: '2026-11-27T19:44:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -53,4 +53,6 @@ Evidence (full detail in doit/TASK-8.7/spec.md §3):
 - Showing it in the chart line would re-pin locked tests: tests/ui/hint.acceptance.test.tsx:229 (TASK-8.1), tests/ui/review-numbers.acceptance.test.tsx:180,205 (TASK-9.3, TASK-7.43); tests/advice/labels.acceptance.test.ts:29-30 (TASK-8.5) breaks if chartBasisText requires a situation.
 - Worst-case chart line with the label would be 93 characters ("From the full-ring chart: raise A9o from the small blind, defending the blind against a raise"), wrapping to two lines in the 640 px hint card; today's longest is about 60.
 - TASK-7.40 AC#4 and TASK-7.42 AC#3 reworded (numbers kept) to: "Given each new situation, When the chart is authored, Then it has a label in SITUATION_LABELS and a context sentence shown in the preflop explanation, both with wording the user approved in this story's Q&A". TASK-7.41 untouched.
+
+Build: decision-7; TASK-7.40 AC#4 and TASK-7.42 AC#3 reworded (numbers kept); no code or requirements change; gate PASS
 <!-- SECTION:NOTES:END -->
