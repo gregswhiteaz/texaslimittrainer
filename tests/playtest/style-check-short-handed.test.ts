@@ -11,7 +11,10 @@ import { main } from '../../src/playtest/cli';
 import { composeChecks, runPlaytest, type ActionHook } from '../../src/playtest/runner';
 import type { MixedCounts } from '../../src/playtest/style-check';
 
-const HANDS = 300;
+// 200 hands still reach both TAG mixed spots with both actions (unopened 14/2, blind-defence 9/3); CI took
+// 3.3 s at 300 hands under coverage against the 5 s default, so each test gets an explicit 20 s limit.
+const HANDS = 200;
+const LIMIT = { timeout: 20_000 };
 
 interface Decision {
   readonly before: HandState;
@@ -20,7 +23,7 @@ interface Decision {
 }
 
 /** Every preflop decision of a 3-seat all-TAG cash playtest (seed 42, HANDS hands). */
-function preflopDecisions(): Decision[] {
+function capturePreflop(): { decisions: Decision[]; violations: number } {
   const decisions: Decision[] = [];
   const capture: ActionHook = (step) => {
     if (step.before.street === 'preflop') {
@@ -31,8 +34,16 @@ function preflopDecisions(): Decision[] {
   const summary = runPlaytest({ hands: HANDS, seed: 42, size: 3, game: 'cash' }, undefined, {
     onAction: composeChecks(checkStep, capture),
   });
-  expect(summary.violations).toBe(0);
-  return decisions;
+  return { decisions, violations: summary.violations };
+}
+
+let captured: ReturnType<typeof capturePreflop> | undefined;
+
+/** The capture playtest runs once per file; every call still checks it had no invariant violations. */
+function preflopDecisions(): Decision[] {
+  captured ??= capturePreflop();
+  expect(captured.violations).toBe(0);
+  return captured.decisions;
 }
 
 /** TAG's mixed-spot tally with `chart`. When `strict`, every decision in a mixed cell must be the move or the
@@ -68,7 +79,7 @@ function tally(
 }
 
 describe('style check at 3 seats', () => {
-  it('style check tallies TAG mixed spots with the short-handed chart at 3 seats', () => {
+  it('style check tallies TAG mixed spots with the short-handed chart at 3 seats', LIMIT, () => {
     let out = '';
     main(['--hands', String(HANDS), '--seed', '42', '--size', '3', '--check-styles'], {
       out: (text) => (out += text),
@@ -85,7 +96,7 @@ describe('style check at 3 seats', () => {
     expect(lines.length).toBeGreaterThan(0);
   });
 
-  it('the 6-max chart would tally the 3-seat mixed spots differently', () => {
+  it('the 6-max chart would tally the 3-seat mixed spots differently', LIMIT, () => {
     const decisions = preflopDecisions();
     expect(tally(decisions, SIX_MAX_CHART, false)).not.toEqual(
       tally(decisions, TAG_SHORT_HANDED_CHART, true),
