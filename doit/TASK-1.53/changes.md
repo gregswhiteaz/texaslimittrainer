@@ -4,7 +4,7 @@
 - `vite.config.ts` — `test.sequence.sequencer: WeightedSequencer` (SPEC-04). Imported as `./tools/ci/sweep-shards.js` (resolves to the `.ts`; an extensionless import makes Vite print a `configLoader: 'native'` warning into `vitest list` output, and `.ts` needs `allowImportingTsExtensions`).
 - `tools/ci/sweep-shards.ts` — new: `DEFAULT_WEIGHT_SECONDS`, `assignShards` (weighted LPT greedy) and `WeightedSequencer` (weighted `shard`, Vitest's default `sort` via lazy `vitest/node` import) (SPEC-02–05).
 - `tools/ci/sweep-weights.json` — new: per-sweep-file summed test durations (s, 0.1) from main run 46046670509 jobs 140667544142 and 140667543813 (A-4); 222 keys, sorted.
-- `tests/ci/sweep-shards.test.ts` — new unit tests (SPEC-04, SPEC-05).
+- `tests/ci/sweep-shards.test.ts` — new unit tests (SPEC-04, SPEC-05), incl. invalid weights that change the outcome and the sequencer's default use of `sweep-weights.json`.
 - `tests/ci/ci-shards.acceptance.test.ts` — new acceptance tests (SPEC-01, 02, 03, 06, 07, 08).
 - `tests/ci/ci-jobs.acceptance.test.ts` — locked cross-story re-pin (D-5): e2e/sweeps names, sweeps matrix `[1, 2, 3]`, added e2e matrix pin, sweeps and e2e run commands, test title wording. No assertion removed.
 - `tests/ci/workflow.test.ts` — locked cross-story re-pin (D-5): e2e and sweeps commands.

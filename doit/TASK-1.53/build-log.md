@@ -12,3 +12,8 @@
   - `npm run lint`, `npm run typecheck`, `npm run format`: clean.
   - Gate runs 2–3 failed only because my own background `npm test` held the coverage directory lock at the same time.
   - `npm test` (alone): 351 files passed, 11 skipped; 1554 tests passed, 60 skipped.
+
+## FIX round 1
+- Item 1 (invalid-weight cases cannot fail): fixed — added `assignShards(['x','y'], {x: bad, y: 1}, 2)` → `[['x'],['y']]` for -1, NaN, '5' in `tests/ci/sweep-shards.test.ts`; worked-example assertions kept.
+- Orchestrator note (MINOR sweep-shards.ts:48): fixed — new test that `new WeightedSequencer(ctx)` (no weights arg) shards all committed weight keys per `sweep-weights.json`, which differs from the empty-weights split. `ci-shards.acceptance.test.ts:102` left as is (locked).
+- `npx vitest run tests/ci/sweep-shards.test.ts`: 3 passed.
