@@ -3,7 +3,7 @@ id: TASK-1.57
 title: >-
   Make the players-choice table-size e2e test reliable on WebKit after Leave
   table
-status: In Progress
+status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-27T10:20:00Z'
@@ -13,6 +13,8 @@ labels:
   - follow-up
 milestone: m-1
 dependencies: []
+documentation:
+  - doc-187
 parent_task_id: TASK-1
 priority: medium
 ordinal: 274000
@@ -43,4 +45,12 @@ Full spec: doit/TASK-1.57/spec.md
 
 <!-- SECTION:NOTES:BEGIN -->
 Build: wait for the session start record before the n=2/n=10 table axe scans (locked edit under TASK-2.2, Q-1); 40/40 on chromium+webkit --repeat-each 10; gate PASS
+
+Step 6a: none.
 <!-- SECTION:NOTES:END -->
+
+## Final Summary
+
+<!-- SECTION:FINAL_SUMMARY:BEGIN -->
+Fixed the WebKit e2e flake (main CI runs 45978923317, 45982375061). Root cause was a race in the test: the axe scan swapped in real worker timers before the Table's mount effects had queued the first-deal timer, so a full hand was played and Leave table opened the report. e2e/players-choice.spec.ts now polls until the session start record is stored before the n=2/n=10 axe scans (+8/-1, no src change, no assertion changed; locked edit under TASK-2.2 auto-accepted, Q-1). Verified: 40/40 passed with --repeat-each 10 --retries=0 on chromium and webkit, full e2e 401 passed, branch CI 45983703864 green, judge PASS 3/3, review clean. Assumptions to review: A-1 (wait only before the two table scans), A-2 (one stored session means effects have run). Risk: the race is not reproducible on demand, so proof is repeated passes. No follow-ups.
+<!-- SECTION:FINAL_SUMMARY:END -->

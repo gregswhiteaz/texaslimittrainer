@@ -1,6 +1,6 @@
 {
   "task": "TASK-1.57",
-  "stage": "build",
+  "stage": "done",
   "branch": "doit/TASK-1.57",
   "base_commit": "87760c3534c80ed82db45d30d2e69677142ff998",
   "started": "2026-11-27T03:28:27",
@@ -8,7 +8,7 @@
   "judge_round": 1,
   "sendbacks": 0,
   "gate_runs": 3,
-  "questions": 0,
+  "questions": 1,
   "assumptions": 0,
   "escalations": 0,
   "item_failures": {
@@ -2264,5 +2264,6 @@
   },
   "judge_results": {
     "1": "PASS"
-  }
+  },
+  "doc_id": "doc-187"
 }
