@@ -3,11 +3,11 @@ id: TASK-10.17
 title: >-
   Ignore a forced-fold-voided raise when classifying the preflop situation, and
   tidy the forced-fold code
-status: In Progress
+status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-27T05:16:00Z'
-updated_date: '2026-11-27T09:10:00Z'
+updated_date: '2026-11-27T09:11:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -16,6 +16,8 @@ dependencies:
   - TASK-10.13
 references:
   - doc-178
+documentation:
+  - doc-184
 parent_task_id: TASK-10
 priority: low
 ordinal: 269000
@@ -50,4 +52,12 @@ Full spec: doit/TASK-10.17/spec.md
 
 <!-- SECTION:NOTES:BEGIN -->
 Build: voidedBets helper in engine/hand.ts; situationOf ignores voided records; advice lint allow-list adds voidedBets (A-5) with lint probe; forceFold/invariants tidy-ups; 10k playtest byte-identical; gate PASS
+
+Step 6a: created follow-up (shared voiding walk).
 <!-- SECTION:NOTES:END -->
+
+## Final Summary
+
+<!-- SECTION:FINAL_SUMMARY:BEGIN -->
+situationOf now ignores raises that a forced fold voided (new engine helper voidedBets, same rule as liveLevels), so bots and advice treat the pot as unraised or limped; forceFold ring start and invariants `sole` tidied. Verified: 6/6 SPEC items, judge PASS r1, review r1 clean, npm test 1533 passed, 10,000-hand seeded playtest byte-identical to base with 0 invariant violations. Review: A-5 adds voidedBets to the advice lint allow-list for engine/hand imports (pure function over public history); A-1 voiding rule mirrors the engine. Risks/follow-ups: voidedBets duplicates liveLevels' voiding walk with nothing keeping them in step (20k-hand fuzz found 0 mismatches); short all-in call after a voided raise reads as a limper (A-3).
+<!-- SECTION:FINAL_SUMMARY:END -->
