@@ -6,8 +6,6 @@ import { unexpectedFromErrorEvent, unexpectedFromRejection } from './error/unexp
 
 interface State {
   readonly error: boolean;
-  /** App's key: bumped by Return Home so App remounts fresh on Home. */
-  readonly generation: number;
   readonly returned: boolean;
 }
 
@@ -18,7 +16,7 @@ interface State {
  * ignored (A-2).
  */
 export class AppRoot extends Component<object, State> {
-  override state: State = { error: false, generation: 0, returned: false };
+  override state: State = { error: false, returned: false };
   /** Set with the first error and cleared by Return Home, so only that error is logged (A-2, D-4). */
   #showing = false;
 
@@ -69,19 +67,11 @@ export class AppRoot extends Component<object, State> {
       console.error('Advice worker could not be started', error);
     }
     this.#showing = false;
-    this.setState(({ generation }) => ({
-      error: false,
-      generation: generation + 1,
-      returned: true,
-    }));
+    this.setState({ error: false, returned: true });
   };
 
   override render(): React.JSX.Element {
-    const { error, generation, returned } = this.state;
-    return error ? (
-      <ErrorScreen onHome={this.#returnHome} />
-    ) : (
-      <App key={generation} returned={returned} />
-    );
+    const { error, returned } = this.state;
+    return error ? <ErrorScreen onHome={this.#returnHome} /> : <App returned={returned} />;
   }
 }

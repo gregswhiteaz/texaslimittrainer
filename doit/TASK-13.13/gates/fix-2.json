@@ -1,0 +1,59 @@
+{
+  "task": "TASK-13.13",
+  "phase": "fix",
+  "run": 2,
+  "result": "PASS",
+  "changed_lines": 121,
+  "changed_files": [
+    "docs/ui/navigation.md",
+    "e2e/error-recovery-history.spec.ts",
+    "src/ui/AppRoot.tsx"
+  ],
+  "checks": [
+    {
+      "name": "test command",
+      "status": "pass",
+      "detail": "$ npm test && npm run build && npm run e2e\nexit 0\nnames during the hand (705ms)\n  \u2713  422 [webkit] \u203a e2e/table-display.spec.ts:240:1 \u203a a bot's card back marker is small, shows the logo and passes axe (743ms)\n  \u2713  415 [webkit] \u203a e2e/statistics-target.spec.ts:12:1 \u203a Statistics draws the G-2 target line once 1,000 hands are stored (2.5s)\n  \u2713  425 [webkit] \u203a e2e/table.spec.ts:162:1 \u203a default table seats the user and five bots with $160 each (434ms)\n  \u2713  426 [webkit] \u203a e2e/table.spec.ts:176:1 \u203a stake $10/$20 starts every stack at $400 with no buy-in control (470ms)\n  \u2713  420 [webkit] \u203a e2e/table-display.spec.ts:195:1 \u203a the header shows the session and Leave table during hand 1 ends it after that hand (1.6s)\n  \u2713  429 [webkit] \u203a e2e/table.spec.ts:263:1 \u203a ten idle minutes on my turn change nothing (429ms)\n  \u2713  428 [webkit] \u203a e2e/table.spec.ts:242:1 \u203a after a preflop fold the bots finish the hand without me (524ms)\n  \u2713  427 [webkit] \u203a e2e/table.spec.ts:192:1 \u203a check or call at every decision plays to showdown with my cards face up (772ms)\n  \u2713  433 [webkit] \u203a e2e/worker-delay-hand.spec.ts:58:1 \u203a runUntil throws at its fake-time bound (363ms)\n  \u2713  424 [webkit] \u203a e2e/table-display.spec.ts:286:1 \u203a the table fits 1280 wide, is axe clean and makes only same-origin requests (2.0s)\n  \u2713  430 [webkit] \u203a e2e/table.spec.ts:281:1 \u203a my buttons are enabled within 100 ms of the bot action, axe clean, no outside requests (1.6s)\n  \u2713  436 [webkit] \u203a e2e/worker-delay.spec.ts:57:1 \u203a runUntilMyTurn throws when my turn never comes (795ms)\n  \u2713  417 [webkit] \u203a e2e/statistics.spec.ts:34:1 \u203a Statistics shows totals and the trend from stored hands, and the empty state, with no axe violations (4.0s)\n  \u2713  434 [webkit] \u203a e2e/worker-delay.spec.ts:33:1 \u203a with every worker reply 2 s late the bounded advance still reaches my turn (4.5s)\n  \u2713  435 [webkit] \u203a e2e/worker-delay.spec.ts:47:1 \u203a with every worker reply 2 s late a fixed 1,000 ms budget is not enough (4.4s)\n  \u2713  432 [webkit] \u203a e2e/worker-delay-hand.spec.ts:44:1 \u203a with every worker reply 2 s late a 400-slice loop does not reach the end of the hand (10.5s)\n  \u2713  431 [webkit] \u203a e2e/worker-delay-hand.spec.ts:36:1 \u203a with every worker reply 2 s late runUntil plays the hand to its end (10.5s)\n\n  19 skipped\n  417 passed (1.2m)\n[plugin builtin:vite-reporter] \n(!) Some chunks are larger than 500 kB after minification. Consider:\n- Using dynamic import() to code-split the application\n- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting\n- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.\n[WebServer] [plugin builtin:vite-reporter] \n[WebServer] (!) Some chunks are larger than 500 kB after minification. Consider:\n[WebServer] - Using dynamic import() to code-split the application\n[WebServer] - Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting\n[WebServer] - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.\n"
+    },
+    {
+      "name": "lint command",
+      "status": "pass",
+      "detail": "$ npm run lint\nexit 0\n\n> tlh-trainer@0.0.0 lint\n> node tools/lint/sync-copies.js && eslint . --max-warnings 0 && prettier --check .\n\nChecking formatting...\nAll matched files use Prettier code style!\n"
+    },
+    {
+      "name": "typecheck command",
+      "status": "pass",
+      "detail": "$ npm run typecheck\nexit 0\n\n> tlh-trainer@0.0.0 typecheck\n> tsc -p tsconfig.json\n\n"
+    },
+    {
+      "name": "spec unchanged",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "name": "scope budget (lines)",
+      "status": "pass",
+      "detail": "121 changed lines vs budget 170 (fail above 340)"
+    },
+    {
+      "name": "scope budget (files)",
+      "status": "pass",
+      "detail": "3 files vs budget 3"
+    },
+    {
+      "name": "files outside spec",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "name": "all changes listed in changes.md",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "name": "test integrity",
+      "status": "pass",
+      "detail": ""
+    }
+  ]
+}
