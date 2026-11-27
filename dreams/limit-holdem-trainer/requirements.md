@@ -369,10 +369,10 @@ Dream slug: limit-holdem-trainer   ·   Vision: dreams/limit-holdem-trainer/visi
   - REQ-019.2: Within a category, ties are broken by kickers; suits never break ties.
   - REQ-019.3: A split pot that does not divide evenly gives the odd whole dollar (or chip) to the first tied player left of the button.
   - REQ-019.4: The last player to bet or raise on the river shows first; if nobody bet on the river, the first active player left of the button shows first.
-  - REQ-019.5: Each later bot shows only if its hand beats or ties the highest-ranking hand shown so far; otherwise it mucks and its cards stay hidden (Q-33).
+  - REQ-019.5: Each later hand, the user's included, shows only if it beats or ties the highest-ranking hand shown so far; otherwise it mucks and its cards stay hidden from the other seats (Q-33). The user has no Show/Muck control, and a hand that wins because everyone else folded is never shown (TASK-3.24 Q-1).
   - REQ-019.6: The user's own hole cards are always visible to the user.
   - REQ-019.7: The winning hand's name (e.g. "Pair of kings") is displayed with the amount won.
-  - REQ-019.8: Showdown is resolved pot by pot, starting with the last side pot created and ending with the main pot; for each pot a bot shows if its hand can win that pot, and mucking in one pot never forfeits another pot the bot can win.
+  - REQ-019.8: Showdown is resolved pot by pot, starting with the last side pot created and ending with the main pot; for each pot a hand shows if it can win that pot, and mucking in one pot never forfeits another pot that hand can win.
   - REQ-019.9: When a split leaves more than one odd whole dollar (or chip), the odd units go one each to the tied players in clockwise order starting left of the button.
 - Fit criterion: Hand evaluator agrees with a reference table of all 7,462 distinct five-card hand ranks; scripted showdowns verify order, mucking and odd-chip award.
 - Rationale: Real rules; realistic information (Q-33).
@@ -1374,3 +1374,4 @@ Entity × lifecycle (every cell is a clause below or N/A):
 | 1.14 | 2026-11-26 | TASK-7.29: REQ-035.6 scales observed three-bet and four-bet ranges by PFR relative to the typical PFR for the table size instead of by raw PFR | User (TASK-7.29 Q-3) |
 | 1.15 | 2026-11-26 | TASK-10.13: REQ-004.8 forced fold forfeits chips; REQ-018.4 exception | User (TASK-10.13 Q-3) |
 | 1.16 | 2026-11-27 | TASK-7.46: REQ-027.1 TAG aggression band ceiling raised from 65% to 66% (matches the 6-max and full-ring healthy-range ceiling); all-TAG play at 3 seats measures 65.2% over 100,000 hands | User (TASK-7.46 Q-1, autopilot) |
+| 1.17 | 2026-11-27 | TASK-3.24: REQ-019.5 and REQ-019.8 apply automatic show/muck to the user's hand as well as the bots'; no Show/Muck control; an uncalled winner is never shown | User (TASK-3.24 Q-1) |

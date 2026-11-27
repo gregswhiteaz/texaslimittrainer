@@ -41,3 +41,17 @@ Spike from TASK-1.15 (doc-62). TASK-1.15 Q-1 was auto-accepted in autopilot: the
 
 Full spec: doit/TASK-3.24/spec.md
 <!-- SECTION:PLAN:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+Q-1 answer (user, 2026-11-27): A. Keep automatic show/muck for the user's hand; no Show/Muck control; a hand that wins uncalled is never shown; no follow-up story (Q-1 A). Recorded as decision-6; REQ-019.5 and REQ-019.8 reworded, changelog row 1.17 in dreams/limit-holdem-trainer/requirements.md.
+Key facts (doit/TASK-3.24/spec.md §3):
+- Bots ignore shown cards: a bot decision uses only the current hand (REQ-029.3, decision-1); only the playtest runner passes earlierShowdowns.
+- The user always sees their own cards (REQ-019.6); Hand Review always shows the user's hole cards (REQ-043.3).
+- Mucking a hand that can win forfeits the pot: endRound awards only among shown hands, so a Muck option for a winning hand is never right.
+- The only visible difference is the hand-over "You show · <hand>" line in the Shown hands list (src/table/hand-result.ts); grading and WTSD/W$SD stats are unaffected.
+- Showing after an uncalled win would need a new result/record field and a persisted-format (hand-record parser) change, and would affect nothing.
+- A prompt would cost a click per showdown against the 200+ hands/hour pace (G-5, REQ-024.6).
+No product code changed.
+<!-- SECTION:NOTES:END -->
