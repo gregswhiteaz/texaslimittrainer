@@ -7,7 +7,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-27T11:43:00Z'
-updated_date: '2026-11-27T12:35:00Z'
+updated_date: '2026-11-27T12:53:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -48,4 +48,6 @@ Full spec: doit/TASK-12.12/spec.md
 
 <!-- SECTION:NOTES:BEGIN -->
 AC added from TASK-12.11 follow-up (review MINOR / judge J-1-01)
+
+Build: OPEN_TIMEOUT_MS 10 s to first open event (A-1) via blocked-open path; tidy-ups; hold-writes can hold settings; new held-write e2e; gate PASS
 <!-- SECTION:NOTES:END -->
