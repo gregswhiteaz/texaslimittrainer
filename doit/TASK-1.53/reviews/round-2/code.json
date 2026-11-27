@@ -1,0 +1,23 @@
+{"reviewer": "code", "round": 2,
+ "rubric": [
+  {"item": "SPEC-05 correctness", "result": "pass"},
+  {"item": "SPEC-05 test strength", "result": "pass"},
+  {"item": "Other SPEC items correctness (unchanged since r1)", "result": "pass"},
+  {"item": "Other SPEC items test strength (unchanged since r1)", "result": "pass"},
+  {"item": "scope", "result": "pass"},
+  {"item": "concision", "result": "pass"},
+  {"item": "clarity", "result": "pass"}
+ ],
+ "findings": [
+  {"fingerprint": "tests/ci/ci-shards.acceptance.test.ts:load-default-duplicates-constant", "severity": "MINOR",
+   "file": "tests/ci/ci-shards.acceptance.test.ts", "line": 102,
+   "issue": "`?? 1` repeats DEFAULT_WEIGHT_SECONDS as a literal. Carried over from r1. Left as is because the file is locked, which is what the orchestrator note allowed.",
+   "evidence": "Line 102: `(weights as Record<string, number>)[file] ?? 1`. The file is in state.json locked_tests.",
+   "fix": "If the lock is lifted later, import DEFAULT_WEIGHT_SECONDS and use it in place of the literal 1."},
+  {"fingerprint": "tests/ci/sweep-shards.test.ts:input-order-not-distinguished", "severity": "NIT",
+   "file": "tests/ci/sweep-shards.test.ts", "line": 52,
+   "issue": "Carried over from r1, not in the fix brief: the sequencer shard test does not tell 'keeps the input order' apart from 'sorted by path'.",
+   "evidence": "The specs are passed in path order, so either behaviour gives the same output.",
+   "fix": "Optional: pass the specs in a shuffled order and assert the order you expect."}
+ ],
+ "summary": "Round 2. The r1 MAJOR (tests/ci/sweep-shards.test.ts:invalid-weight-cases-cannot-fail) is fixed. The new {x: bad, y: 1} fixture fails when -1 or NaN is kept as is. I checked this by simulation: the mutants 'no >= 0 check', 'no type/finite checks' and 'use the raw value' are all caught. Two mutants survive, 'drop Number.isFinite' and 'drop typeof', but both are equivalent for the values the spec lists (-1, NaN, string), because NaN >= 0 is false and Number.isFinite rejects strings. Only Infinity would tell them apart, and the spec does not ask for that. The new default-weights test can fail: it checks that new WeightedSequencer(ctx) matches assignShards over the committed sweep-weights.json, and that this result differs from the empty-weights split. That catches a constructor that defaults to {} or to the wrong weights. The r1 MINOR tools/ci/sweep-shards.ts:default-weights-untested-injection-param is closed, because the default path is now tested and the injected parameter is used by the worked-example sequencer test. The change since r1 touches only tests/ci/sweep-shards.test.ts, so there is no scope creep. The tests/support/sandbox.ts deviation is unchanged and still acceptable. sweep-shards.test.ts and ci-shards.acceptance.test.ts pass locally (9 tests, one vitest run). gates/fix-8.json is PASS. No BLOCKER or MAJOR findings."}
