@@ -82,14 +82,8 @@ export const BOT_DETERMINISM_FILES = ['src/bots/**', 'src/advice/**', 'src/engin
 const NON_DETERMINISTIC_MESSAGE =
   'Non-deterministic source in bot decision code; use the seeded bot generator (REQ-028.1).';
 
-/**
- * A bare reference to one of these globals (`const c = crypto`, `const { random } = Math`, `f(crypto)`) would
- * escape the member-expression bans. Allowed: the object of a member expression (`Math.floor`), property and
- * key names (`o.crypto`, `{ crypto: 1 }`) and type names.
- */
-const BARE_GLOBAL_REFERENCE = [
-  'Identifier[name=/^(Math|Date|crypto|performance|globalThis)$/]',
-  ':not(MemberExpression > .object)',
+// Positions where an identifier is only a name (property and key names, type names), not a value reference.
+const NAME_ONLY_POSITIONS = [
   ':not(MemberExpression[computed=false] > .property)',
   ':not(Property[computed=false] > .key)',
   ':not(PropertyDefinition[computed=false] > .key)',
@@ -100,10 +94,58 @@ const BARE_GLOBAL_REFERENCE = [
   ':not(TSQualifiedName > .left)',
   ':not(TSQualifiedName > .right)',
   ':not(TSTypeQuery > .exprName)',
+].join('');
+
+/**
+ * A bare reference to one of these globals (`const c = crypto`, `const { random } = Math`, `f(crypto)`) would
+ * escape the member-expression bans. Allowed: the object of a member expression (`Math.floor`), property and
+ * key names (`o.crypto`, `{ crypto: 1 }`) and type names.
+ */
+const BARE_GLOBAL_REFERENCE = [
+  'Identifier[name=/^(Math|Date|crypto|performance|globalThis)$/]',
+  ':not(MemberExpression > .object)',
+  NAME_ONLY_POSITIONS,
   // new Date() and Date() have their own selectors below.
   ':not(NewExpression > .callee)',
   ':not(CallExpression > .callee)',
 ].join('');
+
+const FUNCTION_CONSTRUCTOR_MESSAGE =
+  'The Function constructor (including .constructor access) is not allowed in bot decision code (REQ-025.1, REQ-028.1).';
+
+const GLOBAL_ALIAS_MESSAGE =
+  'The Node global alias is not allowed in bot decision code; it escapes the determinism and headless rules (REQ-028.1, REQ-059.2).';
+
+/**
+ * TASK-6.29 (J-1-01/J-1-02): no-new-func sees only `new Function(…)` and `Function(…)`, so the constructor was
+ * still reachable as `(fn).constructor`, `fn['constructor']`, `{ constructor } = fn` or a `Function` value
+ * passed to `Reflect.apply`. The Node `global` alias (`global.Math.random()`) slipped past every globalThis
+ * and Math ban. Each entry is separate so the acceptance test can show each one is needed. Class
+ * `constructor` declarations, `{ constructor: 1 }` keys and `declare global` stay allowed.
+ */
+const FUNCTION_AND_GLOBAL_ESCAPES = [
+  {
+    selector: "MemberExpression[computed=false][property.name='constructor']",
+    message: FUNCTION_CONSTRUCTOR_MESSAGE,
+  },
+  { selector: "Literal[value='constructor']", message: FUNCTION_CONSTRUCTOR_MESSAGE },
+  {
+    selector: "TemplateLiteral[expressions.length=0] > TemplateElement[value.cooked='constructor']",
+    message: FUNCTION_CONSTRUCTOR_MESSAGE,
+  },
+  {
+    selector: "ObjectPattern > Property[computed=false][key.name='constructor']",
+    message: FUNCTION_CONSTRUCTOR_MESSAGE,
+  },
+  {
+    selector: `Identifier[name='Function']${NAME_ONLY_POSITIONS}:not(TSModuleDeclaration > .id)`,
+    message: FUNCTION_CONSTRUCTOR_MESSAGE,
+  },
+  {
+    selector: `Identifier[name='global']${NAME_ONLY_POSITIONS}:not(TSModuleDeclaration > .id)`,
+    message: GLOBAL_ALIAS_MESSAGE,
+  },
+];
 
 const BOT_DETERMINISM_RESTRICTED_SYNTAX = [
   ...HEADLESS_RESTRICTED_SYNTAX,
@@ -116,6 +158,7 @@ const BOT_DETERMINISM_RESTRICTED_SYNTAX = [
     message:
       'Computed member access on globalThis is not allowed in bot decision code (REQ-028.1).',
   },
+  ...FUNCTION_AND_GLOBAL_ESCAPES,
 ];
 
 /**
@@ -139,6 +182,8 @@ export const botDeterminismConfig = {
         { object: 'globalThis', property: name, message: NON_DETERMINISTIC_MESSAGE },
       ]),
       { object: 'globalThis', property: 'Math', message: NON_DETERMINISTIC_MESSAGE },
+      { object: 'globalThis', property: 'Function', message: FUNCTION_CONSTRUCTOR_MESSAGE },
+      { object: 'globalThis', property: 'global', message: GLOBAL_ALIAS_MESSAGE },
     ],
     'no-restricted-syntax': ['error', ...BOT_DETERMINISM_RESTRICTED_SYNTAX],
     'no-eval': 'error',
