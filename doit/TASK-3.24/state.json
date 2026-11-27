@@ -1,6 +1,6 @@
 {
   "task": "TASK-3.24",
-  "stage": "build",
+  "stage": "done",
   "branch": "doit/TASK-3.24",
   "base_commit": "37cb4532f25d03a4c7d276739447655ae28b31cc",
   "started": "2026-11-27T10:42:49",
@@ -8,7 +8,7 @@
   "judge_round": 1,
   "sendbacks": 0,
   "gate_runs": 2,
-  "questions": 0,
+  "questions": 1,
   "assumptions": 0,
   "escalations": 0,
   "item_failures": {
@@ -2298,5 +2298,6 @@
   },
   "judge_results": {
     "1": "PASS"
-  }
+  },
+  "doc_id": "doc-193"
 }

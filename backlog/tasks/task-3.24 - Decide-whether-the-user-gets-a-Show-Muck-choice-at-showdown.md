@@ -1,7 +1,7 @@
 ---
 id: TASK-3.24
 title: Decide whether the user gets a Show/Muck choice at showdown
-status: In Progress
+status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-21T08:35:00Z'
@@ -15,6 +15,8 @@ dependencies:
   - TASK-1.15
 references:
   - doc-62
+documentation:
+  - doc-193
 parent_task_id: TASK-3
 priority: low
 ordinal: 210000
@@ -56,4 +58,12 @@ Key facts (doit/TASK-3.24/spec.md §3):
 No product code changed.
 
 Build: decision-6; REQ-019.5/019.8 + changelog 1.17; no code; gate PASS
+
+Step 6a: none (Q-1 A, no follow-up story).
 <!-- SECTION:NOTES:END -->
+
+## Final Summary
+
+<!-- SECTION:FINAL_SUMMARY:BEGIN -->
+Decision spike. The user chose Q-1 A: the user's hand keeps the automatic show/muck rule (shows if it ties or beats the best face-up hand, else mucks; an uncalled winner is never shown), with no Show/Muck control. Recorded as decision-6 (accepted). REQ-019.5 and REQ-019.8 reworded in requirements.md and changelog row 1.17 added; no code changed under src, tests, e2e, tools or docs. Why: bots ignore shown cards (REQ-029.3), the user always sees their own cards, mucking a winner forfeits the pot, and a prompt costs a click per showdown. Verification: judge PASS round 1, gates PASS (test, lint, typecheck), reviews clean with no findings. Assumptions to review: rtm.md not regenerated (A-2); decision body held in task notes (A-1). Risks: none; no follow-up story (Q-1 A). Doc: doc-193.
+<!-- SECTION:FINAL_SUMMARY:END -->
