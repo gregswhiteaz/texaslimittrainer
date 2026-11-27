@@ -1,0 +1,225 @@
+{
+  "id": "TASK-3.24",
+  "title": "Decide whether the user gets a Show/Muck choice at showdown",
+  "status": "To Do",
+  "archived": false,
+  "type": null,
+  "priority": "low",
+  "project": null,
+  "assignees": [],
+  "reporter": null,
+  "labels": [
+    "follow-up",
+    "spike",
+    "dream-limit-holdem-trainer"
+  ],
+  "milestone": "m-1",
+  "parentTaskId": "TASK-3",
+  "acceptanceCriteriaCompleted": 0,
+  "acceptanceCriteriaCount": 1,
+  "references": [
+    "doc-62"
+  ],
+  "modifiedFiles": [],
+  "ordinal": 210000,
+  "createdAt": "2026-11-21T08:35:00Z",
+  "updatedAt": null,
+  "dueDate": null,
+  "isReady": true,
+  "path": "backlog/tasks/task-3.24 - Decide-whether-the-user-gets-a-Show-Muck-choice-at-showdown.md",
+  "description": "Spike from TASK-1.15 (doc-62). TASK-1.15 Q-1 was auto-accepted in autopilot: the user's hand follows the same automatic show/muck rule as the bots (shown if it beats or ties the best hand shown so far, otherwise mucked). Casinos let a player choose to show a losing hand or muck a winning-but-uncalled one; whether the trainer should offer that choice is a product decision for the user.",
+  "dependencies": [
+    "TASK-1.15"
+  ],
+  "dependencyGraph": {
+    "root": "TASK-3.24",
+    "nodes": [
+      {
+        "id": "TASK-3.24",
+        "title": "Decide whether the user gets a Show/Muck choice at showdown",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": 0,
+        "dependentDepth": 0
+      },
+      {
+        "id": "TASK-1.1",
+        "title": "Bootstrap the strict TypeScript project with one-command checks",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 4,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.2",
+        "title": "Rank showdown hands by real poker hand rankings",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 6,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.3",
+        "title": "Deal every hand from a seeded shuffle with a replay code",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 6,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.4",
+        "title": "Play a complete fixed-limit hand from blinds to showdown",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 5,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.5",
+        "title": "Give each deciding seat only its own view of the hand",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 4,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.6",
+        "title": "Run seeded bot-only hands from the command line",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 3,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.7",
+        "title": "Run every check in GitHub Actions on each push and pull request",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 3,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.8",
+        "title": "Check game invariants after every playtest action",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 2,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.9",
+        "title": "Let a short-stacked player call all-in",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 3,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.10",
+        "title": "Split the pot into side pots for unequal all-ins",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 2,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.15",
+        "title": "Show and muck cards at showdown in casino order",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 1,
+        "dependentDepth": null
+      }
+    ],
+    "edges": [
+      {
+        "from": "TASK-1.2",
+        "to": "TASK-1.7"
+      },
+      {
+        "from": "TASK-1.3",
+        "to": "TASK-1.7"
+      },
+      {
+        "from": "TASK-1.4",
+        "to": "TASK-1.2"
+      },
+      {
+        "from": "TASK-1.4",
+        "to": "TASK-1.3"
+      },
+      {
+        "from": "TASK-1.5",
+        "to": "TASK-1.4"
+      },
+      {
+        "from": "TASK-1.6",
+        "to": "TASK-1.5"
+      },
+      {
+        "from": "TASK-1.7",
+        "to": "TASK-1.1"
+      },
+      {
+        "from": "TASK-1.8",
+        "to": "TASK-1.6"
+      },
+      {
+        "from": "TASK-1.8",
+        "to": "TASK-1.7"
+      },
+      {
+        "from": "TASK-1.9",
+        "to": "TASK-1.8"
+      },
+      {
+        "from": "TASK-1.10",
+        "to": "TASK-1.9"
+      },
+      {
+        "from": "TASK-1.15",
+        "to": "TASK-1.8"
+      },
+      {
+        "from": "TASK-1.15",
+        "to": "TASK-1.10"
+      },
+      {
+        "from": "TASK-3.24",
+        "to": "TASK-1.15"
+      }
+    ]
+  },
+  "readiness": {
+    "isReady": true,
+    "isBlocked": false,
+    "blockingDependencies": [],
+    "missingDependencies": []
+  },
+  "documentation": [],
+  "subtasks": [],
+  "acceptanceCriteria": [
+    {
+      "index": 1,
+      "text": "The user decides between keeping automatic show/muck for their own hand and adding a Show/Muck prompt, and the decision is recorded in this task's notes (and, if a prompt is chosen, a story is created for it)",
+      "checked": false
+    }
+  ],
+  "definitionOfDone": [],
+  "implementationPlan": null,
+  "implementationNotes": null,
+  "comments": [],
+  "finalSummary": null
+}

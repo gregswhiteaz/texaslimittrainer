@@ -1,0 +1,26 @@
+[
+  {
+    "id": "SPEC-01",
+    "verifies": "AC#1",
+    "verification": "command `backlog decision list --plain`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-02",
+    "verifies": "AC#1",
+    "verification": "command `git diff main -- dreams/limit-holdem-trainer/requirements.md`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-03",
+    "verifies": "AC#1",
+    "verification": "command `git diff --stat main -- src tests e2e tools docs`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-04",
+    "verifies": "AC#1",
+    "verification": "command `backlog task view TASK-3.24 --plain`",
+    "status": "pending"
+  }
+]
