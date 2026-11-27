@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-21T08:35:00Z'
-updated_date: '2026-11-27T17:58:00Z'
+updated_date: '2026-11-27T18:03:00Z'
 labels:
   - follow-up
   - spike
@@ -28,7 +28,7 @@ Spike from TASK-1.15 (doc-62). TASK-1.15 Q-1 was auto-accepted in autopilot: the
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 The user decides between keeping automatic show/muck for their own hand and adding a Show/Muck prompt, and the decision is recorded in this task's notes (and, if a prompt is chosen, a story is created for it)
+- [x] #1 The user decides between keeping automatic show/muck for their own hand and adding a Show/Muck prompt, and the decision is recorded in this task's notes (and, if a prompt is chosen, a story is created for it)
 <!-- AC:END -->
 
 ## Implementation Plan
