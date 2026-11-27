@@ -4,7 +4,7 @@
   "branch": "doit/TASK-6.30",
   "base_commit": "199dc6353b8192a555bead3cd99be5fadb8392b4",
   "started": "2026-11-27T14:53:12",
-  "review_round": 0,
+  "review_round": 1,
   "judge_round": 0,
   "sendbacks": 0,
   "gate_runs": 2,
@@ -2302,5 +2302,13 @@
   },
   "history": [],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-6.30",
-  "spec_sha256": "15bf3db936c63b48c1ebc3c7fa850b7c3dbbd2cdda73296fe664e12429dffd1c"
+  "spec_sha256": "15bf3db936c63b48c1ebc3c7fa850b7c3dbbd2cdda73296fe664e12429dffd1c",
+  "review_findings": {
+    "1": 1
+  },
+  "brief_history": {
+    "backlog/tasks/task-6.31:check-styles-acceptance-co-owner-task-6.25-missing": [
+      "review r1"
+    ]
+  }
 }

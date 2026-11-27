@@ -1,0 +1,88 @@
+{
+ "reviewer": "code",
+ "round": 1,
+ "rubric": [
+  {
+   "item": "SPEC-01 correctness",
+   "result": "pass"
+  },
+  {
+   "item": "SPEC-01 test strength",
+   "result": "pass"
+  },
+  {
+   "item": "SPEC-02 correctness",
+   "result": "pass"
+  },
+  {
+   "item": "SPEC-02 test strength",
+   "result": "pass"
+  },
+  {
+   "item": "SPEC-03 correctness",
+   "result": "pass"
+  },
+  {
+   "item": "SPEC-03 test strength",
+   "result": "pass"
+  },
+  {
+   "item": "SPEC-04 correctness",
+   "result": "fail"
+  },
+  {
+   "item": "SPEC-04 test strength",
+   "result": "pass"
+  },
+  {
+   "item": "SPEC-05 correctness",
+   "result": "pass"
+  },
+  {
+   "item": "SPEC-05 test strength",
+   "result": "pass"
+  },
+  {
+   "item": "scope",
+   "result": "pass"
+  },
+  {
+   "item": "concision",
+   "result": "pass"
+  },
+  {
+   "item": "clarity",
+   "result": "pass"
+  }
+ ],
+ "findings": [
+  {
+   "fingerprint": "backlog/tasks/task-6.31:check-styles-acceptance-co-owner-task-6.25-missing",
+   "severity": "MAJOR",
+   "file": "backlog/tasks/task-6.31 - Judge-the-one-action-style-check-only-on-mixed-spots-seen-at-least-10-times.md",
+   "line": 1,
+   "issue": "TASK-6.31's locked re-pin list names only TASK-6.11 as owner of tests/playtest/check-styles.acceptance.test.ts, but the file is locked by two tasks: TASK-6.11 (sha 51a788b3...) and TASK-6.25 (sha 29c7ffab..., which is the file's current sha). Locks are per task (SKILL.md: unlock under the owning task so test-integrity <OWNER-ID> stays clean), so re-pinning mixedSpots(300) after unlocking only under TASK-6.11 leaves `doit.py test-integrity TASK-6.25` reporting a modified locked test. The same omission is in spec.md section 3 'What the change touches' and section 5 follow-up description / AC#4.",
+   "evidence": "Scratch copy of HEAD with the N = 10 rule applied (outside the repo, since removed): vitest (excluding tests/ci, tests/git, tests/toolchain) gave 2 failures: tests/playtest/check-styles.acceptance.test.ts mixedSpots(300) never-mixing case (locked, TASK-6.11 + TASK-6.25) and tests/playtest/style-check.test.ts:268 (unlocked, listed). Slow 'original hand counts' twins in check-styles.acceptance passed; 100k Mixed 6-max seeds 7 and 1234 passed (raise-and-calls 12 and 16, still judged). check-styles-three-seats does not assert the exit code today, so it does not break; restoring exit 0 is a strengthen edit (listed, owner TASK-7.46). cli.test.ts breaks only when the usage text changes (listed, unlocked). `python3 -c` over doit/*/state.json locked_tests shows check-styles.acceptance.test.ts under TASK-6.11 and TASK-6.25; `shasum -a 256` of the file equals TASK-6.25's recorded sha.",
+   "fix": "Orchestrator: `backlog task edit TASK-6.31` to change the description's 'owner TASK-6.11' for check-styles.acceptance.test.ts to 'owners TASK-6.11 and TASK-6.25 (unlock under both)' and the same in AC#4 (edit the AC text via the CLI); add a matching line to TASK-6.30's implementation notes. Optionally correct spec section 3/5 wording for the record."
+  },
+  {
+   "fingerprint": "doit/TASK-6.30/spec.md:fit-criterion-min-spot-seed-42-only",
+   "severity": "MINOR",
+   "file": "doit/TASK-6.30/spec.md",
+   "line": 108,
+   "issue": "The claim 'N = 10 keeps every fit-criterion spot judged' rests on seed 42 only, while the fit criterion and CI run seeds 42, 7 and 1234. Measured here, it holds on all three: the smallest spot is raise-and-calls at 13 (seed 42), 12 (seed 7, 6/6) and 16 (seed 1234, 13/3). The margin is thin (2 to 6 decisions) and the notes don't record it.",
+   "evidence": "Patched scratch copy, npm run playtest -- --hands 100000 --lineup mixed --size 6 --check-styles: seed 7 'Mixed spot: TAG preflop-raise-and-calls, recommended 6, alternative 6', seed 1234 'recommended 13, alternative 3'; both 'Style check: passed', exit 0.",
+   "fix": "Append to TASK-6.30's implementation notes: under N = 10 all three CI seeds keep every fit-criterion spot judged (smallest raise-and-calls: 13 / 12 / 16 for seeds 42 / 7 / 1234)."
+  },
+  {
+   "fingerprint": "tests/playtest/check-styles-three-seats.acceptance.test.ts:stale-req-027.5-attribution",
+   "severity": "NIT",
+   "file": "tests/playtest/check-styles-three-seats.acceptance.test.ts",
+   "line": 9,
+   "issue": "The comment (and docs/advice/range-model.md:294) attribute the one-action rule to REQ-027.5; D-3 establishes it comes from the REQ-028 fit criterion. Out of scope here (no tests/docs edits), but TASK-6.31 touches both files.",
+   "evidence": "'one-action rule trips on the rare 3-seat TAG preflop-limpers spot (follow-up pending)' / 'REQ-027.5's other rule'.",
+   "fix": "Add to TASK-6.31's description: when editing those lines, cite the REQ-028 fit criterion instead of REQ-027.5."
+  }
+ ],
+ "summary": "The change is exactly what the spec allows: requirements.md has 1 changed fit-criterion line and 1 new changelog row 1.19, both matching section 5 word for word. Nothing changed under src, tests, tools, e2e, docs or .github. decision-9 exists and is accepted. TASK-6.31 was created with the right title, labels, milestone, refs, dependency and six ACs. TASK-6.30's notes hold the key numbers. SPEC-05 (ticking the AC and the final summary) is a finish step for the orchestrator. I checked the re-pin list by applying N = 10 to a scratch copy of HEAD. Only two tests break, and both are listed, but the locked check-styles.acceptance.test.ts is co-owned by TASK-6.25, which neither the follow-up nor the spec names (MAJOR)."
+}
