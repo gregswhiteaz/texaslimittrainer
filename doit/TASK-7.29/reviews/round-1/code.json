@@ -1,0 +1,28 @@
+{"reviewer": "code", "round": 1,
+ "rubric": [
+  {"item": "SPEC-01 correctness", "result": "pass"},
+  {"item": "SPEC-01 test strength", "result": "pass"},
+  {"item": "SPEC-02 correctness", "result": "pass"},
+  {"item": "SPEC-02 test strength", "result": "pass"},
+  {"item": "SPEC-03 correctness", "result": "pass"},
+  {"item": "SPEC-03 test strength", "result": "pass"},
+  {"item": "SPEC-04 correctness", "result": "pass"},
+  {"item": "SPEC-04 test strength", "result": "pass"},
+  {"item": "SPEC-05 correctness", "result": "pass"},
+  {"item": "SPEC-05 test strength", "result": "pass"},
+  {"item": "scope", "result": "pass"},
+  {"item": "concision", "result": "pass"},
+  {"item": "clarity", "result": "pass"}],
+ "findings": [
+  {"fingerprint": "backlog/tasks/task-7.44:ac3-no-concrete-widths", "severity": "MINOR",
+   "file": "backlog/tasks/task-7.44 - Scale-observed-three-bet-and-four-bet-ranges-by-PFR-relative-to-a-typical-player.md", "line": 33,
+   "issue": "FU-B AC#3 says the typical PFR is 57.5 (heads-up) and 12.5 (full ring) and o is capped at 100, but gives no observable expected width. The typical PFR is an internal value, so a test can only check it indirectly, and the builder has to pick the numbers. AC#1 and AC#2 give exact 6-max widths. AC#3 does not.",
+   "evidence": "AC#3: 'Then the typical PFR is 57.5 and 12.5 respectively, and o is capped at 100'. The spec gives the same text in §5, so the task matches the spec. This is a testability gap in the spec's wording, not a transcription error.",
+   "fix": "Optionally add concrete values when FU-B is planned. Full-ring UTG four-bet (KK+ AKs, 16 combos, d = 1.21) with PFR 12.5 at 100 hands stays 1.21. A heads-up BB three-bet with a PFR that pushes d × PFR ÷ 57.5 above 100 gives exactly 100. Use `backlog task edit` to change the AC text, or leave it to FU-B's spec."},
+  {"fingerprint": "backlog/decisions/decision-5:empty-body", "severity": "NIT",
+   "file": "backlog/decisions/decision-5 - Observed-opponent-ranges-resize-the-authored-default-range-rank-hands-by-equity-vs-three-random-hands-scale-three-bet-four-bet-by-PFR-relative-to-typical-PFR-open-raise-and-calling-lines-go-to-a-spike-TASK-7.29-Q-1..Q-4.md", "line": 9,
+   "issue": "The Context, Decision and Consequences sections are empty. Only the title carries the choice.",
+   "evidence": "Spec A-1 accepts this because the CLI has no body option and decisions 1 to 4 were made the same way. The evidence is in the TASK-7.29 notes.",
+   "fix": "No action. This is the accepted A-1 approach."}
+ ],
+ "summary": "The work matches the spec. The REQ-035.6 line and changelog row 1.14 match spec §5 byte for byte: the diff is 1 changed line and 1 added line, REQ-035.2 is untouched, and REQ-046.1 exists. decision-5 is accepted with the exact title. TASK-7.43, 7.44 and 7.45 match §5 in title, description, every AC, labels (FU-C adds spike), milestone m-1, references, doc-104, parent TASK-7, and the dependency chain 7.29 -> 7.43 -> 7.44 -> 7.45. FU-A AC#5 names the TASK-7.13 AC#2 re-pin, and FU-A and FU-B both name the 4 golden spots. Numbers checked against the repo: hand-order ranks K2o 87, 87s 99, Q2o 108, 76s 116, J2o 123, 65s 128, T2o 135, 54s 136. The 6-max UTG four-bet is QQ+ AKs AKo, which is 34 combos or 2.564%. 2.564 × 45/18 = 6.41 and 2.564 × 9/18 = 1.28. The healthy PFR midpoints are 57.5, 18 and 12.5. Every open-raise default contains AA, so the A-5 floor keeps the width-0 -> AA locked tests valid. Nothing under src, tests, tools, e2e or docs changed. The TASK-7.29 notes carry the Q-1 to Q-4 answers, the key numbers and the follow-up ids. AC#1 tick and final summary (SPEC-05) are orchestrator finish steps and are correctly still pending. No BLOCKER or MAJOR findings."}

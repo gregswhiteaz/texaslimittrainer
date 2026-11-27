@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-23T16:31:00Z'
-updated_date: '2026-11-27T03:35:00Z'
+updated_date: '2026-11-27T03:51:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -26,7 +26,7 @@ From TASK-7.13 review: the approved hand order (equity vs one random hand) ranks
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Given the options, When the user decides, Then the decision is recorded here and any change becomes a follow-up story with re-pinned expectations
+- [x] #1 Given the options, When the user decides, Then the decision is recorded here and any change becomes a follow-up story with re-pinned expectations
 <!-- AC:END -->
 
 ## Implementation Plan
