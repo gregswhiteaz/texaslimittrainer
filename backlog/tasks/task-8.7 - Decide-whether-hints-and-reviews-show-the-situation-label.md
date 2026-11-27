@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-26T07:04:00Z'
-updated_date: '2026-11-27T19:44:00Z'
+updated_date: '2026-11-27T19:49:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -28,7 +28,7 @@ Follow-up from TASK-8.5 (doc-155). situationLabel() now returns approved labels 
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Given the choice to show or not show the situation label on the hint card and review entries, When the user decides, Then the decision is recorded on this task (and, if yes, a build task with Given/When/Then ACs is created)
+- [x] #1 Given the choice to show or not show the situation label on the hint card and review entries, When the user decides, Then the decision is recorded on this task (and, if yes, a build task with Given/When/Then ACs is created)
 <!-- AC:END -->
 
 ## Implementation Plan
