@@ -32,10 +32,10 @@ export function SettingsScreen({
   return (
     <main className="screen settings-screen">
       <header className="settings-header">
+        <h1 ref={heading}>Settings</h1>
         <button type="button" className="link-button" onClick={onHome}>
           ← Home
         </button>
-        <h1 ref={heading}>Settings</h1>
       </header>
       <section className="settings-section" aria-labelledby="settings-play">
         <h2 id="settings-play">Play</h2>

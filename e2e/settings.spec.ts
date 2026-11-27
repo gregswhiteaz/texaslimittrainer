@@ -24,7 +24,7 @@ async function openSettings(page: Page): Promise<void> {
 }
 
 /** The texts of the elements `key` reaches from the focused element, in order. Focus may leave the page once
- *  and wrap to its start (the h1 follows ← Home); the walk stops when focus repeats or leaves a second time. */
+ *  and wrap to its start; the walk stops when focus repeats or leaves a second time. */
 async function tabOrder(page: Page, key: string): Promise<string[]> {
   const reached: string[] = [];
   let exits = 0;
@@ -77,9 +77,8 @@ test('every Settings control is reachable by Tab, native, keyboard-operable and 
   expect(expected).toEqual(['← Home', 'Show opponent styles at the table']);
   // WebKit only tabs to buttons with Alt held (no full keyboard access, A-8).
   const order = await tabOrder(page, browserName === 'webkit' ? 'Alt+Tab' : 'Tab');
-  // TASK-12.2 Block 1: the walk starts at the focused h1, after ← Home in the DOM, so Tab reaches the
-  // controls after the h1 first, then wraps to ← Home. Each control still appears exactly once, in a fixed order.
-  expect(order).toEqual([...expected.slice(1), expected[0]]);
+  // TASK-12.10: ← Home follows the focused h1 in the DOM, so the walk follows the DOM order of the controls.
+  expect(order).toEqual(expected);
 
   for (const control of await controls.all()) {
     expect(await control.evaluate((el) => el.tagName)).toMatch(

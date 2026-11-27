@@ -27,6 +27,9 @@ says that hands, sessions and statistics are stored only in this browser, with n
 `vite.config.ts`, read as `APP_VERSION` from `src/ui/app-version.ts`). `← Home` returns to Home. Settings adds
 no history entry.
 
+On Settings and Statistics `← Home` follows the h1 in the DOM (CSS `order: -1` still shows it first), so one
+Tab (`Alt+Tab` in WebKit) from the focused heading reaches `← Home` (TASK-12.10).
+
 **Display: Show opponent styles at the table (TASK-12.2).** The Display section has one native checkbox, `Show
 opponent styles at the table`, checked by default. It is disabled until App has read the settings at launch.
 Each change is saved at once (see [settings.md](../storage/settings.md)). Unchecked, every bot seat at the table

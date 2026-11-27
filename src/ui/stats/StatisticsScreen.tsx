@@ -158,10 +158,10 @@ export function StatisticsScreen({
   return (
     <main className="screen stats-screen">
       <header className="stats-header">
+        <h1 ref={heading}>Statistics</h1>
         <button type="button" className="link-button" onClick={onHome}>
           ← Home
         </button>
-        <h1 ref={heading}>Statistics</h1>
         {view && <p className="stats-totals">{view.totals}</p>}
       </header>
       {view && (

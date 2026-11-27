@@ -39,9 +39,22 @@ export const META_STORE = 'meta';
 /** The META_STORE key of the persistent-storage record, { granted: boolean }. */
 export const PERSISTENT_STORAGE_KEY = 'persistentStorage';
 
+/** An open blocked by another connection that did not close on `versionchange` (e.g. an older app build). */
+export class UpgradeBlockedError extends Error {
+  override name = 'UpgradeBlockedError';
+  constructor() {
+    super('The database upgrade is blocked by another open connection');
+  }
+}
+
 function opened(factory: IDBFactory, name: string): Promise<IDBDatabase> {
   return new Promise((resolve, reject) => {
     const request = factory.open(name, DB_VERSION);
+    let blocked = false;
+    request.onblocked = () => {
+      blocked = true;
+      reject(new UpgradeBlockedError());
+    };
     request.onupgradeneeded = (event) => {
       if (event.oldVersion < 1) {
         request.result.createObjectStore(HANDS_STORE, { keyPath: ['sessionId', 'handNumber'] });
@@ -61,6 +74,11 @@ function opened(factory: IDBFactory, name: string): Promise<IDBDatabase> {
     };
     request.onsuccess = () => {
       const db = request.result;
+      // The caller already got UpgradeBlockedError; a late open must not hold the database.
+      if (blocked) {
+        db.close();
+        return;
+      }
       db.onversionchange = () => db.close();
       resolve(db);
     };
@@ -205,12 +223,21 @@ type AppStore = HandStore &
 /**
  * An IndexedDB HandStore: add-only hand records, one replaceable record per session and one write-once report
  * per ended session. The database opens on the first call; if opening fails, every call rejects with that
- * error. Records are validated by parseHandRecord / parseSessionRecord / parseSessionReport / parseSettings when
+ * error, except that a blocked open (UpgradeBlockedError) is retried on the next call. Records are validated by parseHandRecord / parseSessionRecord / parseSessionReport / parseSettings when
  * read.
  */
 export function openHandStore(factory: IDBFactory = indexedDB, name = DB_NAME): AppStore {
   let db: Promise<IDBDatabase> | null = null;
-  const database = (): Promise<IDBDatabase> => (db ??= opened(factory, name));
+  const database = (): Promise<IDBDatabase> => {
+    if (db === null) {
+      const opening = opened(factory, name);
+      db = opening;
+      opening.catch((error: unknown) => {
+        if (error instanceof UpgradeBlockedError && db === opening) db = null;
+      });
+    }
+    return db;
+  };
   const readOnly = async (store: string): Promise<IDBObjectStore> =>
     (await database()).transaction(store, 'readonly').objectStore(store);
   return {

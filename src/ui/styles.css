@@ -1240,6 +1240,11 @@ h1[tabindex='-1']:focus {
   gap: 16px;
 }
 
+/* ← Home follows the h1 in the DOM, so one Tab from the focused heading reaches it, but shows first. */
+.stats-header .link-button {
+  order: -1;
+}
+
 .stats-totals {
   margin: 0;
   font-size: 14px;
@@ -1328,6 +1333,11 @@ h1[tabindex='-1']:focus {
   align-items: center;
   flex-wrap: wrap;
   gap: 16px;
+}
+
+/* ← Home follows the h1 in the DOM, so one Tab from the focused heading reaches it, but shows first. */
+.settings-header .link-button {
+  order: -1;
 }
 
 .settings-section {

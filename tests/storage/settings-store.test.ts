@@ -112,16 +112,21 @@ describe('settings store', () => {
       };
     });
 
-    const store = openHandStore(factory);
-    expect(await store.readSettings()).toEqual(DEFAULTS);
+    // TASK-12.10 (A-5): open through count(), then read the raw record — readSettings() would return the
+    // defaults even with no record.
+    expect(await openHandStore(factory).count()).toBe(1);
     const stored = await withDb(factory, async (db) => {
-      const transaction = db.transaction([HANDS_STORE, SESSIONS_STORE, REPORTS_STORE], 'readonly');
+      const transaction = db.transaction(
+        [HANDS_STORE, SESSIONS_STORE, REPORTS_STORE, SETTINGS_STORE],
+        'readonly',
+      );
       return {
         version: db.version,
         names: [...db.objectStoreNames],
         hands: await request(transaction.objectStore(HANDS_STORE).getAll()),
         sessions: await request(transaction.objectStore(SESSIONS_STORE).getAll()),
         reports: await request(transaction.objectStore(REPORTS_STORE).getAll()),
+        settings: await request(transaction.objectStore(SETTINGS_STORE).get(SETTINGS_KEY)),
       };
     });
     expect(stored).toEqual({
@@ -130,6 +135,7 @@ describe('settings store', () => {
       hands: [hand],
       sessions: [session],
       reports: [report],
+      settings: DEFAULTS,
     });
   });
 });

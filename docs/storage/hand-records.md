@@ -25,7 +25,10 @@ changes or deletes them.
 The store is created in `onupgradeneeded` when `oldVersion < 1`; version 2 adds `sessions` when
 `oldVersion < 2` and leaves `hands` and its records untouched. Version 3 adds `reports` and version 4 adds
 `settings` with its default record ([settings.md](settings.md)) the same way. Later stores are added the same
-way with a higher version and an `oldVersion` check. An open connection closes itself on `versionchange`.
+way with a higher version and an `oldVersion` check. An open connection closes itself on `versionchange`. If
+another connection does not close (`blocked`, e.g. an older build), the open rejects with
+`UpgradeBlockedError` instead of waiting (the callers show their existing failure states),
+and the next store call retries the open; a blocked open that later succeeds closes its connection at once.
 
 ## Record fields
 
