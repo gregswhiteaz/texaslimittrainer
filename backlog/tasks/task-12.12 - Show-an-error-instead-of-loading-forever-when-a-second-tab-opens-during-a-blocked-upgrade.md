@@ -3,10 +3,11 @@ id: TASK-12.12
 title: >-
   Show an error instead of loading forever when a second tab opens during a
   blocked upgrade
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-27T11:43:00Z'
-updated_date: '2026-11-27T12:12:00Z'
+updated_date: '2026-11-27T12:35:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -32,6 +33,16 @@ From TASK-12.10 (doc-188, judge J-2-01 MEDIUM). With an old-version connection b
 - [ ] #2 Given docs/storage/hand-records.md and src/storage/hand-store.ts, When the version table is corrected to 5 and the redundant reset, dead guard and long docblock line are tidied, Then all storage tests still pass
 - [ ] #3 Given a settings save is held (not yet settled) after a previous failure showed the message, When the user makes the next change, Then the message is gone before that save settles (e2e with a held write), pinning TASK-12.11 A-3
 <!-- AC:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. OPEN_TIMEOUT_MS 10 s to the first open event; a timed-out open follows the blocked-open path (UpgradeBlockedError, retry, late success closes)
+2. Tidy-ups: docs version table 5, remove redundant reset and dead guard, wrap long docblock
+3. hold-writes helper can hold a settings write; new e2e: message clears at the next change before that save settles
+
+Full spec: doit/TASK-12.12/spec.md
+<!-- SECTION:PLAN:END -->
 
 ## Implementation Notes
 
