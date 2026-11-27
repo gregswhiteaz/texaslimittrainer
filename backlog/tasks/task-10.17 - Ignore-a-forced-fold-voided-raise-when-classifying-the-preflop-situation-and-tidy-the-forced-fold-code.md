@@ -7,7 +7,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-27T05:16:00Z'
-updated_date: '2026-11-27T09:02:00Z'
+updated_date: '2026-11-27T09:10:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -29,9 +29,9 @@ From TASK-10.13 (doc-178). After a forced fold voids the leaver's raise (dead mo
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Given the user raises preflop and is force-folded so their raise is voided, When the next bot or the advice classifies the preflop situation, Then it is classified as if the voided raise had not been made (e.g. unopened or facing limpers), and a test pins one such case
-- [ ] #2 Given hands with no voided raise, When situationOf runs, Then its result is unchanged (seeded playtest output byte-identical)
-- [ ] #3 Given src/engine/hand.ts forceFold and src/engine/invariants.ts, When the tidy-ups are applied (clockwiseAfter(open, toAct - 1) with a comment; sole computed once), Then all engine tests and the 10,000-hand playtest stay green and byte-identical
+- [x] #1 Given the user raises preflop and is force-folded so their raise is voided, When the next bot or the advice classifies the preflop situation, Then it is classified as if the voided raise had not been made (e.g. unopened or facing limpers), and a test pins one such case
+- [x] #2 Given hands with no voided raise, When situationOf runs, Then its result is unchanged (seeded playtest output byte-identical)
+- [x] #3 Given src/engine/hand.ts forceFold and src/engine/invariants.ts, When the tidy-ups are applied (clockwiseAfter(open, toAct - 1) with a comment; sole computed once), Then all engine tests and the 10,000-hand playtest stay green and byte-identical
 <!-- AC:END -->
 
 ## Implementation Plan

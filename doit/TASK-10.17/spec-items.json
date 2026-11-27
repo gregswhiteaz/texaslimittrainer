@@ -3,36 +3,36 @@
     "id": "SPEC-01",
     "verifies": "AC#1",
     "verification": "acceptance `tests/advice/preflop-voided-raise.acceptance.test.ts::a raise voided by a forced fold is ignored`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-02",
     "verifies": "AC#1",
     "verification": "acceptance `tests/advice/preflop-voided-raise.acceptance.test.ts::raises that survive or follow a void still count`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-03",
     "verifies": "AC#2",
     "verification": "command `npx vitest run tests/advice tests/bots tests/golden && npm run -s playtest -- --hands 10000 --seed 42 > after.txt` diffed against the same command run on the base commit (`git stash`/worktree of `main`), plus acceptance `tests/advice/preflop-voided-raise.acceptance.test.ts::without a forced fold the situation is unchanged`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-04",
     "verifies": "AC#1, AC#2",
     "verification": "unit `tests/engine/voided-bets.test.ts::voidedBets matches the forced-fold voiding rule`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-05",
     "verifies": "AC#3",
     "verification": "command `npx vitest run tests/engine tests/table tests/playtest && npm run -s playtest -- --hands 10000 --seed 42` (output diffed against the base commit's)",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-06",
     "verifies": "AC#1",
     "verification": "acceptance `tests/toolchain/advice-voided-bets-import.acceptance.test.ts::advice may import voidedBets from engine/hand but not other engine values`, plus command `npm run lint`",
-    "status": "pending"
+    "status": "pass"
   }
 ]
