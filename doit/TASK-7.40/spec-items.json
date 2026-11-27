@@ -3,78 +3,78 @@
     "id": "SPEC-01",
     "verifies": "AC#1",
     "verification": "acceptance `tests/advice/re-raise-split.acceptance.test.ts::AC#1 6-max re-raise routes read the own-raise or the not-my-raise spot`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-02",
     "verifies": "AC#2",
     "verification": "acceptance `tests/advice/re-raise-split.acceptance.test.ts::AC#2 the 6-max chart has 32 spots with all 169 classes`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-03",
     "verifies": "AC#2",
     "verification": "acceptance `tests/advice/six-max-chart.acceptance.test.ts::openers continue against a re-raise with 80 to 90 percent of their opening range`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-04",
     "verifies": "AC#2, AC#3",
     "verification": "acceptance `tests/advice/re-raise-split.acceptance.test.ts::AC#2 AC#3 not-my-raise spots continue only with hands that continue against one raise`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-05",
     "verifies": "AC#2",
     "verification": "manual Reviewer and judge walk each of the 12 spots against its routes and grid. Record pass or fail",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-06",
     "verifies": "AC#4",
     "verification": "acceptance `tests/advice/re-raise-split.acceptance.test.ts::AC#4 the not-my-raise context sentence and label use the approved wording`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-07",
     "verifies": "AC#5",
     "verification": "acceptance `tests/bots/rock.acceptance.test.ts::every Rock range class is a TAG non-fold cell and each range is narrower`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-08",
     "verifies": "AC#5",
     "verification": "acceptance `tests/golden/preflop.acceptance.test.ts::AC#4 at least 100 spots covering every reference size and chart situation`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-09",
     "verifies": "AC#6",
     "verification": "acceptance `tests/advice/re-raise-split.acceptance.test.ts::AC#6 heads-up and full-ring advice is unchanged`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-10",
     "verifies": "AC#1",
     "verification": "acceptance `tests/advice/preflop-voided-raise.acceptance.test.ts::without a forced fold the situation is unchanged`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-11",
     "verifies": "AC#7",
     "verification": "command `npm run lint && npm run typecheck && npm test && git diff --stat $(jq -r .base_commit doit/TASK-7.40/state.json) -- tests e2e`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-12",
     "verifies": "AC#7",
     "verification": "manual The orchestrator checks that `doit/TASK-7.40/signoff.md` has the five sections, and that",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-13",
     "verifies": "AC#8",
     "verification": "command `TLH_SLOW_TESTS=1 npx vitest run tests/bots/tag-short-handed-playtest.acceptance.test.ts`",
-    "status": "pending"
+    "status": "pass"
   }
 ]

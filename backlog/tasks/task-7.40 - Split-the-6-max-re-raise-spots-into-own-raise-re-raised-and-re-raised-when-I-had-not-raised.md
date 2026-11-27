@@ -7,7 +7,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-26T23:45:00Z'
-updated_date: '2026-11-27T23:45:00Z'
+updated_date: '2026-11-27T23:55:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -33,14 +33,14 @@ Follow-up from TASK-7.21 (decision: Q-1 split re-raise). Today `situationOf` sen
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Given a 6-max hand where the viewer made a preflop raise and a later raise now faces them, When preflop advice is computed, Then it reads that seat's own-raise-re-raised spot; and given two or more raises when the viewer has not raised, Then it reads that seat's re-raised-when-I-had-not-raised spot (TASK-7.21 rule A-2)
-- [ ] #2 Given the 6-max chart, When the split is authored, Then it has 32 spots, each with all 169 hand classes and a plain-English justification that agrees with its grid, and each own-raise-re-raised spot continues with 80-90% of that seat's opening range (TASK-7.19 rule)
-- [ ] #3 Given re-raise spots are split into 'my open was 3-bet' and 'cold 3-bet', When the CO cold-3-bet spot is authored, Then CO A9o/A8o are reconsidered (TASK-7.19 folds them only because TASK-9.1's locked review test pins CO A9o as Fold) and that test is updated if the advice changes
-- [ ] #4 Given each new situation, When the chart is authored, Then it has a label in SITUATION_LABELS and a context sentence shown in the preflop explanation, both with wording the user approved in this story's Q&A
-- [ ] #5 Given the Rock style and the golden spots, When npm test runs, Then every new 6-max spot has a Rock starting range that is a strict subset of the TAG chart's plays, and each new situation has at least one golden spot
-- [ ] #6 Given a heads-up or full-ring hand, When the split is in place, Then the advice is unchanged from today (heads-up has only own-raise re-raises; full ring keeps today's re-raise grids until the full-ring story)
-- [ ] #7 Given the revised chart, When npm test runs, Then all checks pass and the user has signed off the new and changed 6-max spots from npm run chart:print in the task notes
-- [ ] #8 Given the reshaped 6-max chart, When the opt-in slow test tests/bots/tag-short-handed-playtest.acceptance.test.ts runs (TLH_SLOW_TESTS=1), Then all-TAG 3- and 4-seat VPIP, PFR, aggression, WTSD and W$SD stay inside the 6-max healthy ranges, with before/after figures recorded
+- [x] #1 Given a 6-max hand where the viewer made a preflop raise and a later raise now faces them, When preflop advice is computed, Then it reads that seat's own-raise-re-raised spot; and given two or more raises when the viewer has not raised, Then it reads that seat's re-raised-when-I-had-not-raised spot (TASK-7.21 rule A-2)
+- [x] #2 Given the 6-max chart, When the split is authored, Then it has 32 spots, each with all 169 hand classes and a plain-English justification that agrees with its grid, and each own-raise-re-raised spot continues with 80-90% of that seat's opening range (TASK-7.19 rule)
+- [x] #3 Given re-raise spots are split into 'my open was 3-bet' and 'cold 3-bet', When the CO cold-3-bet spot is authored, Then CO A9o/A8o are reconsidered (TASK-7.19 folds them only because TASK-9.1's locked review test pins CO A9o as Fold) and that test is updated if the advice changes
+- [x] #4 Given each new situation, When the chart is authored, Then it has a label in SITUATION_LABELS and a context sentence shown in the preflop explanation, both with wording the user approved in this story's Q&A
+- [x] #5 Given the Rock style and the golden spots, When npm test runs, Then every new 6-max spot has a Rock starting range that is a strict subset of the TAG chart's plays, and each new situation has at least one golden spot
+- [x] #6 Given a heads-up or full-ring hand, When the split is in place, Then the advice is unchanged from today (heads-up has only own-raise re-raises; full ring keeps today's re-raise grids until the full-ring story)
+- [x] #7 Given the revised chart, When npm test runs, Then all checks pass and the user has signed off the new and changed 6-max spots from npm run chart:print in the task notes
+- [x] #8 Given the reshaped 6-max chart, When the opt-in slow test tests/bots/tag-short-handed-playtest.acceptance.test.ts runs (TLH_SLOW_TESTS=1), Then all-TAG 3- and 4-seat VPIP, PFR, aggression, WTSD and W$SD stay inside the 6-max healthy ranges, with before/after figures recorded
 <!-- AC:END -->
 
 ## Implementation Plan
