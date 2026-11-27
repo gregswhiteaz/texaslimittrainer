@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-25T17:01:00Z'
-updated_date: '2026-11-27T11:46:00Z'
+updated_date: '2026-11-27T12:04:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -40,3 +40,9 @@ Follow-up from TASK-12.2 (doc-142). A failed settings save is only logged (conso
 
 Full spec: doit/TASK-12.11/spec.md
 <!-- SECTION:PLAN:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+Build: createSettingsSaver (latest save wins, revert on failure); role=alert message after Settings header; unit/acceptance/e2e tests; docs; gate PASS
+<!-- SECTION:NOTES:END -->
