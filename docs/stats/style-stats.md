@@ -79,6 +79,13 @@ aggression to one decimal, summed with `handStyleCounts`/`addStyleCounts` and co
 after rounding to 0.1), the mixed-spot action counts are listed, and the run exits 1 if a stat is outside its band
 or a mixed spot used only one action.
 
+REQ-027 judges these bands over 100,000 hands:
+`npm run playtest -- --hands 100000 --lineup mixed --size 6 --check-styles`. Shorter runs can fail from sample
+noise rather than tuning: a rare mixed spot may be used only one way, and a stat that sits
+near a band edge can land just outside it. For example, 2,000-hand runs in TASK-6.24 showed Rock VPIP 7.7–7.9%
+against its 8% floor, TAG PFR 13.7–13.9% against its 14% floor and Rock aggression 56.1–56.2% against its 55%
+ceiling. Read a short-run failure as a hint and confirm it with a 100,000-hand run.
+
 ## Display
 
 `formatStat` shows `—` when the denominator is 0 (for example W$SD before any showdown) and otherwise the
