@@ -1,0 +1,30 @@
+{"reviewer": "code", "round": 1,
+ "rubric": [
+  {"item": "SPEC-01 correctness", "result": "pass"}, {"item": "SPEC-01 test strength", "result": "pass"},
+  {"item": "SPEC-02 correctness", "result": "pass"}, {"item": "SPEC-02 test strength", "result": "pass"},
+  {"item": "SPEC-03 correctness", "result": "pass"}, {"item": "SPEC-03 test strength", "result": "pass"},
+  {"item": "SPEC-04 correctness", "result": "pass"}, {"item": "SPEC-04 test strength", "result": "pass"},
+  {"item": "SPEC-05 correctness", "result": "pass"}, {"item": "SPEC-05 test strength", "result": "pass"},
+  {"item": "SPEC-06 correctness", "result": "pass"}, {"item": "SPEC-06 test strength", "result": "pass"},
+  {"item": "SPEC-07 correctness", "result": "pass"}, {"item": "SPEC-07 test strength", "result": "pass"},
+  {"item": "SPEC-08 correctness", "result": "pass"}, {"item": "SPEC-08 test strength", "result": "pass"},
+  {"item": "SPEC-09 correctness", "result": "pass"}, {"item": "SPEC-09 test strength", "result": "pass"},
+  {"item": "SPEC-10 correctness", "result": "pass"}, {"item": "SPEC-10 test strength", "result": "pass"},
+  {"item": "SPEC-11 correctness", "result": "pass"}, {"item": "SPEC-11 test strength", "result": "pass"},
+  {"item": "scope", "result": "pass"},
+  {"item": "concision", "result": "pass"},
+  {"item": "clarity", "result": "pass"}
+ ],
+ "findings": [
+  {"fingerprint": "tests/advice/observed-reraise.acceptance.test.ts:golden-comment-overstates-check", "severity": "NIT",
+   "file": "tests/advice/observed-reraise.acceptance.test.ts", "line": 222,
+   "issue": "The comment says parsing throws 'unless each spot still agrees and is clear-cut'. parsePostflopGoldenSpots checks the clear-cut rule (clearCutProblems in src/advice/golden.ts:503), and does not compare the advised action directly. Agreement is checked by the golden suites (spec SPEC-06 'command npx vitest run tests/golden').",
+   "evidence": "src/advice/golden.ts:600-602 only collects clearCutProblems; checkGoldenSpot (the agreement check) is not called by the parser.",
+   "fix": "Reword the comment to 'it throws unless each spot is still clear-cut', or call checkGoldenSpot(spot) and expect null for each spot."},
+  {"fingerprint": "tests/advice/observed-reraise.acceptance.test.ts:over-line-budget", "severity": "NIT",
+   "file": "tests/advice/observed-reraise.acceptance.test.ts", "line": 1,
+   "issue": "The new acceptance file is 260 lines against the ~150 the spec estimated. That puts the change at 388 lines against a budget of 260 (gate warning). Every block maps to a SPEC item and no helper is unused, so this is a sizing note, not scope creep.",
+   "evidence": "gates/fix-2.json 'scope budget (lines)': warn; changed_lines 388.",
+   "fix": "No change required. Optionally inline the one-use defaultWidth/resizedStart helpers if they read no clearer."}
+ ],
+ "summary": "All 11 SPEC items are implemented as specified. ranges.ts adds TYPICAL_PFR, typicalPfr and relativePfrPct, maps three-bet and four-bet to 'relative-pfr', and applies o = min(100, d x PFR / T) inside the existing observed branch, with no new import. The tests would fail under the old raw-PFR rule: for example, AC#1 would expect 2.56 but get 18, and SPEC-07 uses the literal 18 rather than typicalPfr, so it is not tautological. The SPEC-08 drift test reads HEALTHY_RANGES. SPEC-09 covers the empty-set branch at widths 0 and 5. The locked edit to observed-resize.acceptance.test.ts matches spec section 5 exactly: the strongestClasses import is added, line 143 is replaced by the two prefix lines, one tautological expect is removed and one expect that can fail is added, so the net expect count is 0 and no assertion is dropped. The docs table, paragraph and Known limits match SPEC-11. The 3 target test files pass (28 passed, 1 slow test skipped), and the gates (test, lint, typecheck) pass. There are no BLOCKER or MAJOR findings."}

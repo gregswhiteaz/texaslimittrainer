@@ -7,7 +7,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-27T03:28:00Z'
-updated_date: '2026-11-27T06:24:00Z'
+updated_date: '2026-11-27T06:39:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -60,4 +60,6 @@ Full spec: doit/TASK-7.44/spec.md
 AC added from TASK-7.29 follow-up (review r1 MINOR: AC#3 had no observable widths)
 
 AC added from TASK-7.43 follow-up (review r1 MINOR + NIT)
+
+Build: TYPICAL_PFR + relativePfrPct; three-bet/four-bet scale by PFR relative to typical (cap 100); drift test vs HEALTHY_RANGES; empty-default resizeRange tests; TASK-7.43 locked line 143 replaced (unlock noted); gate PASS
 <!-- SECTION:NOTES:END -->
