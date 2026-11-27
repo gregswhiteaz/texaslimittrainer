@@ -3,11 +3,11 @@ id: TASK-1.53
 title: >-
   Cut CI wall time to about 3.5 minutes: shard E2E and rebalance the sweep
   shards
-status: In Progress
+status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-23T04:42:00Z'
-updated_date: '2026-11-27T19:15:00Z'
+updated_date: '2026-11-27T19:16:00Z'
 labels:
   - follow-up
   - ci
@@ -15,6 +15,8 @@ labels:
 milestone: m-1
 dependencies:
   - TASK-7.8
+documentation:
+  - doc-194
 parent_task_id: TASK-1
 priority: medium
 ordinal: 223000
@@ -53,4 +55,12 @@ Autopilot 2026-11-25 measurement (main CI run 45677932929): wall time 5.6 min (<
 2026-11-27: user chose 'Shard E2E + rebalance sweeps'. Main run 46046670509: wall 439 s; E2E job 439 s (test step 378 s, ~420 tests x 2 browsers); sweep shard 2 212 s, shard 1 147 s; unit 75 s; lint/build/playtest 62 s. Expected cost ~4-5 extra Actions minutes per run for job setup.
 
 Build: E2E 4-job matrix; 3 weighted sweep shards (sweep-shards.ts + sweep-weights.json + sequencer); locked CI tests re-pinned (Q-2); recorded deviation: tests/support/sandbox.ts copies the two new tools/ci files because vite.config.ts imports them; gate PASS
+
+Step 6a: none (tightened bar). AC#3 pending: record 2 main runs (ids, wall, sweep step ratio, per-test totals) after merge, then tick.
 <!-- SECTION:NOTES:END -->
+
+## Final Summary
+
+<!-- SECTION:FINAL_SUMMARY:BEGIN -->
+Sweeps now run as 3 duration-weighted shards (tools/ci/sweep-shards.ts + sweep-weights.json) and E2E as a chromium/webkit x 2 shard matrix, to cut the 439 s CI wall time. Verified: gates PASS, judge PASS r1, review r2 clean. Branch runs: 46052341998 187 s (sweeps 95/91/92 s), 46053833069 204 s (sweeps 154/156/81 s, runners ~1.8x slower). Review: assumptions A-1..A-6 (3 sweep shards, fail-fast false, default weight 1 s, artifact names), deviation tests/support/sandbox.ts. Risks: AC#3 stays unticked until 2 main runs are recorded; webkit shard 2 is the critical path (184-200 s); weights drift as sweep files are added.
+<!-- SECTION:FINAL_SUMMARY:END -->
