@@ -1,0 +1,68 @@
+[
+  {
+    "id": "SPEC-01",
+    "verifies": "AC#1",
+    "verification": "acceptance `tests/advice/observed-reraise.acceptance.test.ts::AC#1 a 6-max UTG four-bettor with PFR 18 keeps the default width`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-02",
+    "verifies": "AC#2",
+    "verification": "acceptance `tests/advice/observed-reraise.acceptance.test.ts::AC#2 PFR 45 and PFR 9 give 6.41% and 1.28%`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-03",
+    "verifies": "AC#3, AC#7",
+    "verification": "acceptance `tests/advice/observed-reraise.acceptance.test.ts::AC#3 AC#7 heads-up and full ring use typical PFR 57.5 and 12.5, capped at 100`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-04",
+    "verifies": "AC#4",
+    "verification": "acceptance `tests/advice/observed-reraise.acceptance.test.ts::AC#4 open-raise keeps raw PFR and calling lines raw VPIP`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-05",
+    "verifies": "AC#4",
+    "verification": "unit `tests/advice/observed-ranges.test.ts::re-raise lines stay typical without 30 observed hands`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-06",
+    "verifies": "AC#5",
+    "verification": "acceptance `tests/advice/observed-reraise.acceptance.test.ts::AC#5 the 4 observed golden spots are on lines this rule does not touch`; command `npx vitest run tests/golden`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-07",
+    "verifies": "AC#1, AC#2, AC#4",
+    "verification": "unit `tests/advice/observed-ranges.test.ts::scales each line by its stat: PFR for opens, PFR relative to typical for re-raises, VPIP for calls`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-08",
+    "verifies": "AC#3",
+    "verification": "unit `tests/advice/observed-ranges.test.ts::TYPICAL_PFR is the middle of each healthy PFR range`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-09",
+    "verifies": "AC#8",
+    "verification": "unit `tests/advice/observed-ranges.test.ts::resizeRange of an empty set is the strongest hand-order prefix, at least AA`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-10",
+    "verifies": "AC#8",
+    "verification": "command `git diff main -- tests/advice/observed-resize.acceptance.test.ts`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-11",
+    "verifies": "AC#6",
+    "verification": "acceptance `tests/advice/observed-reraise.acceptance.test.ts::AC#6 range-model.md states the relative re-raise rule`",
+    "status": "pending"
+  }
+]

@@ -2217,7 +2217,14 @@
       "skips": 0
     }
   },
-  "history": [],
+  "history": [
+    {
+      "t": "2026-11-26T23:24:10",
+      "event": "unlock",
+      "file": "tests/advice/observed-resize.acceptance.test.ts",
+      "reason": "TASK-7.44 AC#8: replace tautological check at :143 with one that can fail; no assertion dropped"
+    }
+  ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-7.43",
   "spec_sha256": "4d9980edc7451a6e8b2cea91203e2518b10bdffadd0b9a37830032f1ff4fc93a",
   "review_findings": {
@@ -2226,5 +2233,8 @@
   "judge_results": {
     "1": "PASS"
   },
-  "doc_id": "doc-179"
+  "doc_id": "doc-179",
+  "relock_pending": [
+    "tests/advice/observed-resize.acceptance.test.ts"
+  ]
 }
