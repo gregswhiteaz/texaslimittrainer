@@ -1,9 +1,11 @@
 ---
 id: TASK-10.13
 title: Decide how a forced fold of the top bettor is settled (dead money vs refund)
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-24T20:28:00Z'
+updated_date: '2026-11-27T04:38:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -31,3 +33,15 @@ Follow-up from TASK-10.2 (doc-125, judge J-1-01 / code review MINOR). When Leave
 - [ ] #3 Given forceFold is called on several seats in one hand, When the hand settles, Then checkState holds (or forceFold rejects the call) — a property test covers it
 - [ ] #4 Given the leave dialog is open on a bot's turn, When the test checks that no bot acted, Then it waits for any in-flight worker reply and advances the clock again before asserting (no timing-dependent pass)
 <!-- AC:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. Record decision (dead money, dead BB floor) in task, docs/ui/navigation.md, REQ-004.8/018.4 + changelog 1.15
+2. Engine: forced fold of top bettor voids its bet; amount to match drops to highest live bet (floor: big blind preflop); no refund to the leaver; bet cap/hasActed follow surviving bets
+3. Checker: C5/pot structure from last betting street; fold-out winner with $0 allowed when only live seat (J-1-02)
+4. Tests: force-fold-top-bet acceptance, multi-fold property test
+5. De-flake e2e/leave-mid-hand.spec.ts bot-freeze check (worker-reply wait + second clock advance)
+
+Full spec: doit/TASK-10.13/spec.md
+<!-- SECTION:PLAN:END -->

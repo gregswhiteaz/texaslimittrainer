@@ -1,0 +1,56 @@
+[
+  {
+    "id": "SPEC-01",
+    "verifies": "AC#1",
+    "verification": "command `grep -n \"TASK-10.13 Q-1\" docs/ui/navigation.md && grep -n \"force-fold.property.test.ts\" docs/ui/navigation.md && backlog task view TASK-10.13 --plain | grep -n \"Q-1\"`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-02",
+    "verifies": "AC#2",
+    "verification": "acceptance `tests/engine/force-fold-top-bet.acceptance.test.ts::a preflop raiser who leaves forfeits the raise and the others match the big blind`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-03",
+    "verifies": "AC#2",
+    "verification": "acceptance `tests/engine/force-fold-top-bet.acceptance.test.ts::a flop bettor who leaves forfeits the bet and the street goes on unbet`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-04",
+    "verifies": "AC#2",
+    "verification": "acceptance `tests/engine/force-fold-top-bet.acceptance.test.ts::a big blind who leaves is dead money and still sets the price`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-05",
+    "verifies": "AC#2",
+    "verification": "acceptance `tests/engine/force-fold-top-bet.acceptance.test.ts::a voided raise frees its place under the bet cap`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-06",
+    "verifies": "AC#2",
+    "verification": "acceptance `tests/engine/force-fold-top-bet.acceptance.test.ts::play without a voided bet is unchanged`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-07",
+    "verifies": "AC#3",
+    "verification": "acceptance `tests/engine/force-fold.property.test.ts::several forced folds in one hand keep every invariant`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-08",
+    "verifies": "AC#4",
+    "verification": "acceptance `e2e/leave-mid-hand.spec.ts::Cancel resumes the hand with the same cards, stack and player to act`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-09",
+    "verifies": "AC#2, AC#3, AC#4",
+    "verification": "command `npm run lint && npm run typecheck && npm test && npx vitest run tests/golden/ && npm run -s playtest -- --hands 10000 --seed 42 && npx playwright test`",
+    "status": "pending"
+  }
+]

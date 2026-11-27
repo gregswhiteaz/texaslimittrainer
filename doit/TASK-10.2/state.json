@@ -1720,6 +1720,12 @@
       "event": "unlock",
       "file": "e2e/play-money.spec.ts",
       "reason": "TASK-12.1 Q-5 (auto-accepted): Home menu and route list gain Settings, play-money walk visits it, e2e DB helpers open v4; update expected values, keep every check"
+    },
+    {
+      "t": "2026-11-26T21:37:31",
+      "event": "unlock",
+      "file": "e2e/leave-mid-hand.spec.ts",
+      "reason": "TASK-10.13 Q-4: user approved adding an in-flight worker-reply wait and second clock advance (AC#4); no assertion loosened"
     }
   ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-10.2",
@@ -1733,6 +1739,7 @@
   "doc_id": "doc-125",
   "relock_pending": [
     "e2e/play-money.spec.ts",
-    "e2e/play-money.spec.ts"
+    "e2e/play-money.spec.ts",
+    "e2e/leave-mid-hand.spec.ts"
   ]
 }
