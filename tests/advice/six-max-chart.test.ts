@@ -30,6 +30,13 @@ const BANDS: Record<string, [number, number]> = {
   'BTN re-raise': [6, 41],
   'SB re-raise': [6, 30],
   'BB re-raise': [6, 30],
+  // TASK-7.40 Q-3: two raises, none of them ours
+  'UTG re-raise-not-mine': [2, 8],
+  'HJ re-raise-not-mine': [2, 8],
+  'CO re-raise-not-mine': [2, 8],
+  'BTN re-raise-not-mine': [2, 8],
+  'SB re-raise-not-mine': [2, 8],
+  'BB re-raise-not-mine': [4, 16],
   'SB blind-defence': [10, 25],
   'BB blind-defence': [35, 60],
 };

@@ -116,7 +116,7 @@ describe('revised 6-max chart', () => {
   });
 
   it('no spot plays a weaker hand more firmly than a hand that dominates it', () => {
-    expect(SIX_MAX_CHART.spots).toHaveLength(26);
+    expect(SIX_MAX_CHART.spots).toHaveLength(32);
     expect(SIX_MAX_CHART.spots.flatMap((spot) => inversions(spot, false))).toEqual([]);
   });
 

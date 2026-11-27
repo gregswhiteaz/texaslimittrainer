@@ -105,7 +105,7 @@ describe('chart:print with a size', () => {
   });
 
   it("chart:print 6-max prints each spot's grid and justification", () => {
-    const headers = checkReview('6-max', 26);
+    const headers = checkReview('6-max', 32);
     expect(headers[0]).toBe('UTG unopened: raise 16.0%, continue 16.0%');
   });
 

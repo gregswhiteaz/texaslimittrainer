@@ -3,7 +3,13 @@ import { handClassAt, type HandClass } from './hand-class';
 export type ReferenceSize = 'heads-up' | '6-max' | 'full-ring';
 export type Position = 'UTG' | 'UTG+1' | 'MP' | 'LJ' | 'HJ' | 'CO' | 'BTN' | 'SB' | 'BB';
 export type Situation =
-  'unopened' | 'limpers' | 'raise' | 'raise-and-calls' | 're-raise' | 'blind-defence';
+  | 'unopened'
+  | 'limpers'
+  | 'raise'
+  | 'raise-and-calls'
+  | 're-raise'
+  | 're-raise-not-mine'
+  | 'blind-defence';
 export type ChartAction = 'fold' | 'call' | 'raise';
 
 export interface ChartCell {
@@ -62,6 +68,7 @@ export const APPLICABLE_SPOTS: Readonly<Record<ReferenceSize, readonly SpotId[]>
     ...spotsOf('raise', ['UTG', 'HJ', 'CO', 'BTN']),
     ...spotsOf('raise-and-calls', ['UTG', 'HJ', 'CO', 'BTN']),
     ...spotsOf('re-raise', ['UTG', 'HJ', 'CO', 'BTN', 'SB', 'BB']),
+    ...spotsOf('re-raise-not-mine', ['UTG', 'HJ', 'CO', 'BTN', 'SB', 'BB']),
     ...spotsOf('blind-defence', ['SB', 'BB']),
   ],
   'full-ring': [

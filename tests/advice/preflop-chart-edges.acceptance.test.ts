@@ -91,7 +91,7 @@ describe('preflop chart validator edge cases', () => {
     const raw: unknown = JSON.parse(
       readFileSync(join(REPO_ROOT, 'src/advice/charts/six-max.json'), 'utf8'),
     );
-    expect(parseChart(raw).spots).toHaveLength(26);
+    expect(parseChart(raw).spots).toHaveLength(32);
   });
 
   it('chartCell throws a documented RangeError for an unknown hand class', () => {

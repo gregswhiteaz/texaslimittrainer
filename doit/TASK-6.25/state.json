@@ -1794,6 +1794,12 @@
       "event": "unlock",
       "file": "tests/bots/style-bands.acceptance.test.ts",
       "reason": "TASK-7.46 Q-1 (autopilot, recommended): TAG aggression band ceiling 65 -> 66 per reworded REQ-027.1; re-pin the band copy, no assertion dropped"
+    },
+    {
+      "t": "2026-11-27T16:25:28",
+      "event": "unlock",
+      "file": "tests/bots/maniac.acceptance.test.ts",
+      "reason": "TASK-7.40 blocked.json: seeded bot examples shift because the new 6-max not-my-raise grids fold where TAG used to continue (same class as TASK-7.32/7.8 re-pins); re-derive the same views/seeds, keep every assertion and the sidePots>0 check"
     }
   ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-6.25",
@@ -1806,6 +1812,7 @@
   },
   "doc_id": "doc-130",
   "relock_pending": [
-    "tests/bots/style-bands.acceptance.test.ts"
+    "tests/bots/style-bands.acceptance.test.ts",
+    "tests/bots/maniac.acceptance.test.ts"
   ]
 }

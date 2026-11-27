@@ -79,16 +79,22 @@ describe('preflop chart validator', () => {
     expect(problemsOf({ ...minimalChart(), referenceSize: '9-max' })).toEqual([
       'Chart file: unknown reference size "9-max"',
     ]);
-    // Every 6-max spot also applies at full ring, so a 6-max spot list misses only the full-ring-only spots.
-    const sixMaxKeys = new Set(
-      APPLICABLE_SPOTS['6-max'].map((s) => `${s.position} ${s.situation}`),
-    );
-    expect(problemsOf({ ...minimalChart(), referenceSize: 'full-ring' })).toEqual(
-      APPLICABLE_SPOTS['full-ring']
-        .map((s) => `${s.position} ${s.situation}`)
+    // A 6-max spot list read as full ring: the 6-max-only re-raise-not-mine spots do not apply, and the
+    // full-ring-only spots are missing.
+    const keysOf = (size: '6-max' | 'full-ring') =>
+      APPLICABLE_SPOTS[size].map((s) => `${s.position} ${s.situation}`);
+    const sixMaxKeys = new Set(keysOf('6-max'));
+    const fullRingKeys = new Set(keysOf('full-ring'));
+    expect(problemsOf({ ...minimalChart(), referenceSize: 'full-ring' })).toEqual([
+      ...keysOf('6-max')
+        .filter((key) => !fullRingKeys.has(key))
+        // Keys longer than 20 characters are echoed shortened.
+        .map((key) => (key.length <= 20 ? key : `${key.slice(0, 20)}...`))
+        .map((key) => `full-ring chart: spot ${key} does not apply at full-ring`),
+      ...keysOf('full-ring')
         .filter((key) => !sixMaxKeys.has(key))
         .map((key) => `full-ring chart: missing spot ${key}`),
-    );
+    ]);
 
     expect(problemsOf({ ...minimalChart(), justification: words(49) })).toEqual([
       '6-max chart: missing plain-English justification (at least 50 words)',
@@ -103,7 +109,7 @@ describe('preflop chart validator', () => {
       '6-max chart: missing spot SB blind-defence',
       '6-max chart: missing spot BB blind-defence',
     ]);
-    expect(problemsOf({ ...minimalChart(), spots: 'none' })).toHaveLength(26);
+    expect(problemsOf({ ...minimalChart(), spots: 'none' })).toHaveLength(32);
 
     const extra = minimalChart();
     extra.spots.push({ ...(extra.spots[0] as RawSpot), situation: 'limpers' });

@@ -10,7 +10,7 @@ import type { PostflopOptions } from '../advice/postflop';
 import { SIX_MAX_CHART } from '../advice/preflop';
 import type { ChartSpot, PreflopChart } from '../advice/preflop-chart';
 import { adviceOptions, recommend, type RecommendOptions } from '../advice/recommend';
-import { drawMixed, parseStyle, type BotStyleData } from './style';
+import { drawMixed, parseStyle, type BotStyleData, type SpotType } from './style';
 // The JSON import stays last: the bots import-boundary test's regex can't read past its `with` clause.
 import tagStyle from './styles/tag.json' with { type: 'json' };
 
@@ -78,7 +78,8 @@ export function decideTag(view: PlayerView, options: TagOptions = {}): Action {
   if (options.random === undefined || advice.basis !== 'chart' || advice.alternative === null) {
     return advice.move;
   }
-  const spot = TAG_STYLE.mixedSpots.get(`preflop-${advice.situation}`);
+  // Situations with no SPOT_TYPES entry (re-raise-not-mine, TASK-7.40 A-4) are never mixed.
+  const spot = TAG_STYLE.mixedSpots.get(`preflop-${advice.situation}` as SpotType);
   if (spot === undefined || drawMixed(spot, options.random) === 'recommended') return advice.move;
   const type = advice.alternative;
   const move = view.legalActions.find((a) => a.type === type);

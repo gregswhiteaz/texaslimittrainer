@@ -1211,6 +1211,39 @@
       "action": "fold",
       "alternative": null,
       "justification": "94o is a weak offsuit hand that rarely makes anything strong. Even with a full bet already in, its equity against a hijack raise is too low, so fold."
+    },
+    {
+      "id": "6max-co-re-raise-not-mine-a9o",
+      "seats": 6,
+      "position": "CO",
+      "situation": "re-raise-not-mine",
+      "holeCards": "Ad 9c",
+      "before": ["raise", "fold", "call", "fold", "fold", "raise", "call"],
+      "action": "fold",
+      "alternative": null,
+      "justification": "We called an early open and the big blind re-raised, so two strong ranges are ahead of us and none of the raises is ours. A9o is often dominated by bigger aces, so its hand strength is too low to put in another bet; fold."
+    },
+    {
+      "id": "6max-bb-re-raise-not-mine-88",
+      "seats": 6,
+      "position": "BB",
+      "situation": "re-raise-not-mine",
+      "holeCards": "8s 8h",
+      "before": ["raise", "raise", "fold", "fold", "fold"],
+      "action": "call",
+      "alternative": null,
+      "justification": "An open and a re-raise came before us, so the ranges are strong, but our blind is in and the pot odds on one more bet are good. A pair of eights can flop a set and win a big pot, so call rather than fold, though it is too weak to raise."
+    },
+    {
+      "id": "6max-btn-re-raise-not-mine-aa",
+      "seats": 6,
+      "position": "BTN",
+      "situation": "re-raise-not-mine",
+      "holeCards": "As Ah",
+      "before": ["raise", "raise", "fold"],
+      "action": "raise",
+      "alternative": null,
+      "justification": "A pair of aces is the strongest starting hand and is ahead of every range that opens and re-raises. Raise again to build the pot while our hand strength is far ahead, and we keep position after the flop."
     }
   ]
 }

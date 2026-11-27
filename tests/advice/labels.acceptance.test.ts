@@ -40,10 +40,19 @@ describe('situation labels', () => {
       raise: 'facing a raise',
       'raise-and-calls': 'facing a raise and calls',
       're-raise': 'facing a re-raise',
+      're-raise-not-mine': 'facing a re-raise when you have not raised',
       'blind-defence': 'defending the blind against a raise',
     };
     expect(Object.keys(SITUATION_LABELS).sort()).toEqual(
-      ['blind-defence', 'limpers', 'raise', 'raise-and-calls', 're-raise', 'unopened'].sort(),
+      [
+        'blind-defence',
+        'limpers',
+        'raise',
+        'raise-and-calls',
+        're-raise',
+        're-raise-not-mine',
+        'unopened',
+      ].sort(),
     );
     for (const [situation, label] of Object.entries(expected) as [Situation, string][]) {
       expect(situationLabel(situation)).toBe(label);

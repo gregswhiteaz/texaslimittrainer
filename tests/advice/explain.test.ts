@@ -325,6 +325,11 @@ describe('explanation copy', () => {
         `The pot has been raised more than once, so your hand strength, ${STRENGTH}, must be very high to continue.`,
       ],
       [
+        're-raise-not-mine',
+        'CO',
+        `The pot has been raised more than once and none of the raises is yours, so your hand strength, ${STRENGTH}, must be very high to continue.`,
+      ],
+      [
         'blind-defence',
         'BB',
         `Your blind is already in the pot, which improves your pot odds, ${POT_ODDS}, so you can defend with more hands than other seats.`,

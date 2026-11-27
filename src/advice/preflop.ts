@@ -102,7 +102,8 @@ export function chartSpotOf(
 }
 
 /** The preflop action now facing the viewer. Blinds are not actions; limps before a raise are not callers;
- *  raises a forced fold voided are ignored (TASK-10.17). */
+ *  raises a forced fold voided are ignored (TASK-10.17). Two or more raises read `re-raise` when one of them is
+ *  the viewer's, else `re-raise-not-mine` where the size's chart has that spot (TASK-7.21 A-2). */
 export function situationOf(view: PlayerView): Situation {
   const voided = voidedBets({ street: 'preflop', stakes: view.stakes, actions: view.actions });
   const records = view.actions.filter(
@@ -116,7 +117,13 @@ export function situationOf(view: PlayerView): Situation {
   if (raises === 0) {
     return records.some((a) => a.type === 'call' && a.seat !== view.seat) ? 'limpers' : 'unopened';
   }
-  if (raises > 1) return 're-raise';
+  if (raises > 1) {
+    const mine = records.some((a) => a.type === 'raise' && a.seat === view.seat);
+    const split = APPLICABLE_SPOTS[referenceSizeOf(view.players.length)].some(
+      (s) => s.situation === 're-raise-not-mine',
+    );
+    return mine || !split ? 're-raise' : 're-raise-not-mine';
+  }
   const position = positionOf(view);
   if (position === 'SB' || position === 'BB') return 'blind-defence';
   const raiseAt = records.findIndex((a) => a.type === 'raise');

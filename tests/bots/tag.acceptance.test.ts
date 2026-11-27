@@ -152,7 +152,15 @@ describe('TAG bot acceptance', () => {
     });
     expect(decisions).toBeGreaterThan(0);
     expect([...situations].sort()).toEqual(
-      ['blind-defence', 'limpers', 'raise', 'raise-and-calls', 're-raise', 'unopened'].sort(),
+      [
+        'blind-defence',
+        'limpers',
+        'raise',
+        'raise-and-calls',
+        're-raise',
+        're-raise-not-mine',
+        'unopened',
+      ].sort(),
     );
   });
 

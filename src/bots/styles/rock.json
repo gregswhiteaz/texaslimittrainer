@@ -155,6 +155,42 @@
       "justification": "In the big blind against a re-raise the Rock has some chips invested already, so it adds jacks and otherwise folds."
     },
     {
+      "position": "UTG",
+      "situation": "re-raise-not-mine",
+      "hands": "AA AKs AKo KK QQ",
+      "justification": "Under the gun after limping into two raises the Rock continues only with aces, kings, queens and ace-king, and folds jacks and everything else."
+    },
+    {
+      "position": "HJ",
+      "situation": "re-raise-not-mine",
+      "hands": "AA AKs AKo KK QQ",
+      "justification": "From the hijack against two raises that are not its own, the Rock plays just aces, kings, queens and ace-king and lets every other hand go."
+    },
+    {
+      "position": "CO",
+      "situation": "re-raise-not-mine",
+      "hands": "AA AKs AKo KK QQ",
+      "justification": "In the cutoff facing an open and a re-raise before it has raised, the Rock keeps only the five strongest hands and folds the rest."
+    },
+    {
+      "position": "BTN",
+      "situation": "re-raise-not-mine",
+      "hands": "AA AKs AKo KK QQ",
+      "justification": "On the button facing two raises it did not make, the Rock ignores its position and continues only with aces, kings, queens and ace-king."
+    },
+    {
+      "position": "SB",
+      "situation": "re-raise-not-mine",
+      "hands": "AA AKs AKo KK QQ",
+      "justification": "In the small blind against two raises that are not its own, the Rock will be out of position, so it plays only the five strongest hands."
+    },
+    {
+      "position": "BB",
+      "situation": "re-raise-not-mine",
+      "hands": "AA AKs AKo KK QQ",
+      "justification": "In the big blind facing two raises it did not make, the Rock passes on the good price and continues only with aces, kings, queens and ace-king."
+    },
+    {
       "position": "SB",
       "situation": "blind-defence",
       "hands": "AA AKs AQs AJs ATs AKo KK KQs KJs AQo KQo QQ JJ TT 99 88 77",

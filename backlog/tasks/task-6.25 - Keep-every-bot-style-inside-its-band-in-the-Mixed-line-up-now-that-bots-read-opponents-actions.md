@@ -7,7 +7,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-25T00:07:00Z'
-updated_date: '2026-11-25T05:57:00Z'
+updated_date: '2026-11-27T23:25:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -56,6 +56,8 @@ Build: replacement keeps the busted bot's style (REQ-007.5 amended, 007.7/007.8 
 Judge r1 PASS 7/7: CLI 100k Mixed --check-styles passed on seeds 42/7/1234 (style multiset constant, every style in band); slow style-bands + check-styles 15/15; all-TAG hash unchanged; live app: busted TAG and Calling station replaced by same style. CI 45552117336 green.
 
 Follow-ups: TASK-6.26 (tidy dead Replay option, comments, justifications, test loop); TASK-6.12 note (Maniac +12 BB/100, TAG PFR margin 0.6).
+
+Locked test re-pinned by TASK-7.40 (seeded examples shifted by the 6-max re-raise split); no assertion dropped.
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary

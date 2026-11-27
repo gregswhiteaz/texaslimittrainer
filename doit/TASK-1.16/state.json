@@ -821,6 +821,12 @@
       "event": "unlock",
       "file": "tests/playtest/games.acceptance.test.ts",
       "reason": "TASK-7.32 Q-1 (user-approved fix): bots on action ranges, turn price counts the river bet, 65% value-raise vs a bet; re-pin expected values one-for-one, keep check counts"
+    },
+    {
+      "t": "2026-11-27T16:25:28",
+      "event": "unlock",
+      "file": "tests/playtest/games.acceptance.test.ts",
+      "reason": "TASK-7.40 blocked.json: seeded bot examples shift because the new 6-max not-my-raise grids fold where TAG used to continue (same class as TASK-7.32/7.8 re-pins); re-derive the same views/seeds, keep every assertion and the sidePots>0 check"
     }
   ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-1.16",
@@ -839,6 +845,7 @@
     "1": "PASS"
   },
   "relock_pending": [
+    "tests/playtest/games.acceptance.test.ts",
     "tests/playtest/games.acceptance.test.ts",
     "tests/playtest/games.acceptance.test.ts",
     "tests/playtest/games.acceptance.test.ts",

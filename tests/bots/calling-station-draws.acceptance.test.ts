@@ -64,8 +64,9 @@ describe('Calling station decision', () => {
         (v) => v.street === 'preflop' && advice(v).action === 'raise' && owed(v) > 0,
       );
       const exampleA = raise[0] as PlayerView;
-      const exampleC = fold[0] as PlayerView;
-      const exampleB = fold[30] as PlayerView;
+      // fold[0] and fold[30] before TASK-7.40 split the re-raise spots.
+      const exampleC = fold[1] as PlayerView;
+      const exampleB = fold[33] as PlayerView;
       expect(exampleB.street).toBe('flop');
       for (const view of [exampleA, exampleB, exampleC]) {
         const random = stub(4294967295);

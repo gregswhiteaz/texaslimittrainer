@@ -137,6 +137,7 @@ const COUNTS: readonly number[] = [
   ...[7, 13, 16, 21],
   ...[7, 8, 13, 16],
   ...[5, 5, 6, 7, 5, 6],
+  ...[5, 5, 5, 5, 5, 5],
   ...[17, 41],
 ];
 
@@ -147,7 +148,7 @@ describe('Rock (very tight) bot', () => {
     expect(ROCK_STYLE.mixedSpots.size).toBe(0);
     expect(ROCK_STYLE.deviations).toEqual([]);
     const range = ROCK_STYLE.startingRange ?? [];
-    expect(range).toHaveLength(26);
+    expect(range).toHaveLength(32);
     expect(range.map((s) => key(s.position, s.situation))).toEqual(
       SPOTS.map((s) => key(s.position, s.situation)),
     );
@@ -253,7 +254,7 @@ describe('Rock (very tight) bot', () => {
 
       const first = firstViews();
       const spots = SPOTS.filter((s) => !(s.position === 'BB' && s.situation === 'limpers'));
-      expect(spots).toHaveLength(25);
+      expect(spots).toHaveLength(31);
       for (const { position, situation } of spots) {
         const view = first.get(key(position, situation));
         if (view === undefined) throw new Error(`no view for ${key(position, situation)}`);

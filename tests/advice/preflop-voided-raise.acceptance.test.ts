@@ -71,7 +71,7 @@ describe('preflop situation after a forced fold voids a raise (TASK-10.17)', () 
   });
 
   it('without a forced fold the situation is unchanged', () => {
-    expect(situation(play(deal(), P), 2)).toBe('re-raise');
+    expect(situation(play(deal(), P), 2)).toBe('re-raise-not-mine');
     expect(situation(play(deal(), E2), 1)).toBe('blind-defence');
   });
 });

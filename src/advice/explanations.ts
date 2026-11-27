@@ -153,6 +153,8 @@ export const PREFLOP_CONTEXT: Readonly<Record<Situation, string>> = {
     'A player has raised and others have called, so your hand strength, {def:hand-strength}, must hold up against several players at once.',
   're-raise':
     'The pot has been raised more than once, so your hand strength, {def:hand-strength}, must be very high to continue.',
+  're-raise-not-mine':
+    'The pot has been raised more than once and none of the raises is yours, so your hand strength, {def:hand-strength}, must be very high to continue.',
   'blind-defence':
     'Your blind is already in the pot, which improves your pot odds, {def:pot-odds}, so you can defend with more hands than other seats.',
 };
@@ -218,6 +220,7 @@ export const SITUATION_LABELS: Readonly<Record<Situation, string>> = {
   raise: 'facing a raise',
   'raise-and-calls': 'facing a raise and calls',
   're-raise': 'facing a re-raise',
+  're-raise-not-mine': 'facing a re-raise when you have not raised',
   'blind-defence': 'defending the blind against a raise',
 };
 
