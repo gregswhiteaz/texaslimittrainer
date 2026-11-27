@@ -4,7 +4,7 @@
   "branch": "doit/TASK-7.37",
   "base_commit": "735e6cd6e611b85fe2d2fca9fd7faaf8a91e662c",
   "started": "2026-11-27T00:59:45",
-  "review_round": 0,
+  "review_round": 1,
   "judge_round": 0,
   "sendbacks": 0,
   "gate_runs": 2,
@@ -2235,5 +2235,8 @@
   },
   "history": [],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-7.37",
-  "spec_sha256": "77b2d1bdcde85b00a8e04d627bee83847e590f03bdd2cdf15a668116938f94a4"
+  "spec_sha256": "77b2d1bdcde85b00a8e04d627bee83847e590f03bdd2cdf15a668116938f94a4",
+  "review_findings": {
+    "1": 0
+  }
 }

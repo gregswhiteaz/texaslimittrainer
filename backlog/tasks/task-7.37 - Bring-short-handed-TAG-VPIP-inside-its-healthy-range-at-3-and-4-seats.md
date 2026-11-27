@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-26T10:09:00Z'
-updated_date: '2026-11-27T08:19:00Z'
+updated_date: '2026-11-27T08:29:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -47,4 +47,6 @@ Full spec: doit/TASK-7.37/spec.md
 
 <!-- SECTION:NOTES:BEGIN -->
 Locked edit: tests/playtest/summary.acceptance.test.ts (owner TASK-1.26) withAwards drops 'returned' (Q-1 autopilot).
+
+Build: TAG at 3-4 dealt-in seats opens BTN/SB with the 6-max CO cells (derived chart in src/bots/tag.ts); style check uses it; 100k slow test 3 seats 23.6/17.3/65.2/41.7/52.4, 4 seats 23.9/17.7/64.7/41.7/51.9 (all inside); 2/5/6/7/9 seats byte-identical; gate PASS
 <!-- SECTION:NOTES:END -->
