@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-27T09:11:00Z'
-updated_date: '2026-11-27T10:20:00Z'
+updated_date: '2026-11-27T10:27:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -27,7 +27,7 @@ From TASK-10.17 (doc-184, review r1 MINOR). voidedBets (src/engine/hand.ts) copi
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Given src/engine/hand.ts, When liveLevels and voidedBets are refactored to share one voiding walk (or a property test over random forced-fold hands asserts they agree), Then a change to the rule in one place cannot silently diverge, all engine/advice tests pass, and the 10,000-hand seeded playtest stays byte-identical
+- [x] #1 Given src/engine/hand.ts, When liveLevels and voidedBets are refactored to share one voiding walk (or a property test over random forced-fold hands asserts they agree), Then a change to the rule in one place cannot silently diverge, all engine/advice tests pass, and the 10,000-hand seeded playtest stays byte-identical
 <!-- AC:END -->
 
 ## Implementation Plan
