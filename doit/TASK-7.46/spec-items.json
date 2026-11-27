@@ -3,42 +3,42 @@
     "id": "SPEC-01",
     "verifies": "AC#1",
     "verification": "unit `tests/playtest/style-check.test.ts::band check rounds to one decimal and treats both band edges as inside`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-02",
     "verifies": "AC#1",
     "verification": "acceptance `tests/playtest/check-styles-three-seats.acceptance.test.ts::all-TAG 3-seat cash play passes --check-styles over 100,000 hands`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-03",
     "verifies": "AC#1",
     "verification": "command `TLH_SLOW_TESTS=1 npx vitest run tests/bots/tag-short-handed-playtest.acceptance.test.ts && grep -n \"TAG aggression band at 3 seats (TASK-7.46)\" -A20 docs/advice/range-model.md`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-04",
     "verifies": "AC#2",
     "verification": "acceptance `tests/bots/tag-short-handed.acceptance.test.ts::an explicit chart wins and postflop play ignores the short-handed chart`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-05",
     "verifies": "AC#2",
     "verification": "command `R=$PWD; T=$(mktemp -d)/t746; git worktree add -q --detach \"$T\" HEAD; cp tests/bots/tag-short-handed.acceptance.test.ts \"$T/tests/bots/\"; ln -s \"$R/node_modules\" \"$T/node_modules\"; sed -i '' '/^    \\.\\.\\.BOT_ADVICE,$/d' \"$T/src/bots/tag.ts\"; (cd \"$T\" && ! npx vitest run tests/bots/tag-short-handed.acceptance.test.ts); git worktree remove --force \"$T\"` (run on the committed change)",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-06",
     "verifies": "AC#1",
     "verification": "command `for n in 2 3 4 5 6 7 9; do cmp <(cd \"$BASE\" && npm run -s playtest -- --hands 2000 --seed 42 --size $n) <(npm run -s playtest -- --hands 2000 --seed 42 --size $n) || echo \"DIFF $n\"; done; git diff --stat eb625ac -- src/bots src/advice src/engine`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-07",
     "verifies": "AC#1, AC#2",
     "verification": "command `npm test && npm run lint && npm run typecheck && npm run e2e`",
-    "status": "pending"
+    "status": "pass"
   }
 ]
