@@ -5,7 +5,7 @@ status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-17T22:46:00Z'
-updated_date: '2026-11-25T16:07:00Z'
+updated_date: '2026-11-27T10:49:00Z'
 labels:
   - dream-limit-holdem-trainer
 milestone: m-1
@@ -94,6 +94,8 @@ Judge r1 PASS 17/17: real upgrade test — main build created a v3 DB with playe
 Follow-ups: TASK-12.10 (raw-record test, onblocked handling, back-control Tab order); ACs added to TASK-12.5 (write API) and TASK-2.11 (read default speed).
 
 Locked e2e/settings.spec.ts unlocked for TASK-12.2 Q-2 (control list gains the opponent-styles checkbox; 44x44 check unchanged).
+
+Locked e2e/settings.spec.ts Tab-order expectation re-pinned by TASK-12.10 (autopilot Q-2).
 <!-- SECTION:NOTES:END -->
 
 ## Final Summary

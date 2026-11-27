@@ -1,9 +1,11 @@
 ---
 id: TASK-12.10
 title: Harden the settings upgrade and back-control focus order
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-25T15:55:00Z'
+updated_date: '2026-11-27T10:49:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -29,3 +31,14 @@ Follow-up from TASK-12.1 review and judge (doc-141). The v3->v4 upgrade unit tes
 - [ ] #2 Given another tab holds the old database version open, When the app upgrades, Then the blocked upgrade is handled (the user sees a clear message or the other connection closes on versionchange) instead of hanging
 - [ ] #3 Given Settings or Statistics opened with the heading focused, When the user presses Tab once, Then focus reaches the back control without leaving the page
 <!-- AC:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. Unit test: raw settings record equals defaults after upgrade through v4
+2. Blocked upgrade rejects with UpgradeBlockedError, next call retries, late connection closed
+3. Back control after h1 in DOM on Settings/Statistics (CSS keeps visual order); re-pin locked e2e Tab order (TASK-12.1)
+4. Docs
+
+Full spec: doit/TASK-12.10/spec.md
+<!-- SECTION:PLAN:END -->

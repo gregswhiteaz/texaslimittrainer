@@ -1986,6 +1986,12 @@
       "event": "unlock",
       "file": "e2e/settings.spec.ts",
       "reason": "TASK-12.2 Q-2 (auto-accepted, alternative): Settings gains its first control; wait for it enabled, name controls by text or label, expect ['\u2190 Home','Show opponent styles at the table']; the 44x44 check stays on the control itself"
+    },
+    {
+      "t": "2026-11-27T03:49:21",
+      "event": "unlock",
+      "file": "e2e/settings.spec.ts",
+      "reason": "TASK-12.10 Q-2 (autopilot, recommended): re-pin the Tab-order expectation to the new back-control-first order (:82-83) and its two comments; no other check changes"
     }
   ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-12.1",
@@ -1998,6 +2004,7 @@
   },
   "doc_id": "doc-141",
   "relock_pending": [
+    "e2e/settings.spec.ts",
     "e2e/settings.spec.ts"
   ]
 }
