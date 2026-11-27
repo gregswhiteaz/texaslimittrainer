@@ -1,9 +1,11 @@
 ---
 id: TASK-7.37
 title: Bring short-handed TAG VPIP inside its healthy range at 3 and 4 seats
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-26T10:09:00Z'
+updated_date: '2026-11-27T08:09:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -28,3 +30,15 @@ Follow-up from TASK-7.35 (doc-158). Over 100,000 all-TAG cash hands (seed 42), V
 - [ ] #1 Given all-TAG cash play at 3 and 4 seats, When 100,000 hands are measured (opt-in slow group), Then VPIP is inside 20-28 and PFR, aggression, WTSD and W$SD stay inside their 6-max healthy ranges, with before/after figures recorded
 - [ ] #2 Given 2, 6 and 9 seat tables, When the same playtests run, Then their output is byte-identical to before (no change outside 3-5 seats)
 <!-- AC:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. TAG bot at 3-4 dealt-in seats: BTN/SB unopened spots use the 6-max CO opening cells (derived chart in src/bots/tag.ts; shared chart and advice untouched)
+2. Style check uses the same chart
+3. Fast acceptance test + opt-in 100k slow test at 3/4 seats
+4. 2/5/6/7/9-seat playtest output byte-identical (cmp vs base)
+5. Docs before/after figures
+
+Full spec: doit/TASK-7.37/spec.md
+<!-- SECTION:PLAN:END -->
