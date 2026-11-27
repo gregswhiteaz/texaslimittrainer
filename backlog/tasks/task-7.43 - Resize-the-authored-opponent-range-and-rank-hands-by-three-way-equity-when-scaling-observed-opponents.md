@@ -7,7 +7,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-27T03:27:00Z'
-updated_date: '2026-11-27T05:49:00Z'
+updated_date: '2026-11-27T06:17:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -33,13 +33,13 @@ Follow-up from TASK-7.29 (decision: Q-1 B resize the authored default range, Q-2
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Given an observed opponent whose scaled width equals the default width, When the range is estimated, Then the start classes equal the authored default range
-- [ ] #2 Given a scaled width above the default, When the range is estimated, Then it is the default plus hand-order classes not in the default, strongest first, up to the first count of combos that reaches the width (all 169 classes at 100 or more)
-- [ ] #3 Given a scaled width below the default, When the range is estimated, Then it is the shortest strongest-first run of the default classes, in hand order, whose combos reach the width, and never less than the default's strongest class
-- [ ] #4 Given the regenerated hand-order.json, When it loads, Then AA is first, 87s, 76s and 65s rank above K2o, Q2o and J2o, and spot-checked stored equities match seeded computeEquity against three random hands
-- [ ] #5 Given the locked observed-ranges AC#2 (TASK-7.13), When the rule changes, Then it is unlocked and re-pinned under its owner to the resize rule with the edit listed in the task notes, and observed-ranges AC#5, AC#6 and observed-range-tidy AC#1 pass unchanged
-- [ ] #6 Given the 4 observed golden postflop spots, When npm test runs, Then each still agrees and is clear-cut, or each changed one is re-justified with the user's sign-off
-- [ ] #7 Given docs/advice/range-model.md and the hand-order justification, When the story is done, Then they describe the resize rule and the three-random-hands order and drop the matching Known limits sentence
+- [x] #1 Given an observed opponent whose scaled width equals the default width, When the range is estimated, Then the start classes equal the authored default range
+- [x] #2 Given a scaled width above the default, When the range is estimated, Then it is the default plus hand-order classes not in the default, strongest first, up to the first count of combos that reaches the width (all 169 classes at 100 or more)
+- [x] #3 Given a scaled width below the default, When the range is estimated, Then it is the shortest strongest-first run of the default classes, in hand order, whose combos reach the width, and never less than the default's strongest class
+- [x] #4 Given the regenerated hand-order.json, When it loads, Then AA is first, 87s, 76s and 65s rank above K2o, Q2o and J2o, and spot-checked stored equities match seeded computeEquity against three random hands
+- [x] #5 Given the locked observed-ranges AC#2 (TASK-7.13), When the rule changes, Then it is unlocked and re-pinned under its owner to the resize rule with the edit listed in the task notes, and observed-ranges AC#5, AC#6 and observed-range-tidy AC#1 pass unchanged
+- [x] #6 Given the 4 observed golden postflop spots, When npm test runs, Then each still agrees and is clear-cut, or each changed one is re-justified with the user's sign-off
+- [x] #7 Given docs/advice/range-model.md and the hand-order justification, When the story is done, Then they describe the resize rule and the three-random-hands order and drop the matching Known limits sentence
 <!-- AC:END -->
 
 ## Implementation Plan
