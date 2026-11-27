@@ -68,6 +68,33 @@ describe('blocked database upgrade', () => {
     db.close();
   });
 
+  it('a call made while the upgrade is still blocked rejects promptly', async () => {
+    const factory = new IDBFactory();
+    const blocker = await openV4Blocker(factory);
+    const store = openHandStore(factory);
+    await expect(store.count()).rejects.toBeInstanceOf(UpgradeBlockedError);
+
+    const started = Date.now();
+    await expect(store.count()).rejects.toBeInstanceOf(UpgradeBlockedError);
+    await expect(store.readSettings()).rejects.toBeInstanceOf(UpgradeBlockedError);
+    expect(Date.now() - started).toBeLessThan(1000);
+
+    blocker.close();
+    expect(await store.count()).toBe(0);
+  });
+
+  it('a blocked open that later succeeds closes its connection', async () => {
+    const factory = new IDBFactory();
+    const blocker = await openV4Blocker(factory);
+    await expect(openHandStore(factory).count()).rejects.toBeInstanceOf(UpgradeBlockedError);
+
+    blocker.close();
+    // Queued behind the late upgrade to 5; openRaw rejects if that late connection is still open and blocks it.
+    const { db, oldVersion } = await openRaw(factory, DB_VERSION + 1);
+    expect(oldVersion).toBe(5);
+    db.close();
+  });
+
   it('an open app connection closes on versionchange so a newer version opens', async () => {
     const factory = new IDBFactory();
     expect(await openHandStore(factory).count()).toBe(0);

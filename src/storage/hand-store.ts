@@ -47,12 +47,21 @@ export class UpgradeBlockedError extends Error {
   }
 }
 
-function opened(factory: IDBFactory, name: string): Promise<IDBDatabase> {
+/** How long a store call waits for a still-pending blocked open to finish (e.g. its blocker just closed). */
+const BLOCKED_GRACE_MS = 100;
+
+/** Opens the database. If the open is blocked it rejects with UpgradeBlockedError, and `onBlocked` gets a promise
+ *  that resolves when the blocked request finally settles (until then, a new open would queue behind it). */
+function opened(
+  factory: IDBFactory,
+  name: string,
+  onBlocked: (settled: Promise<void>) => void,
+): Promise<IDBDatabase> {
   return new Promise((resolve, reject) => {
     const request = factory.open(name, DB_VERSION);
-    let blocked = false;
+    let settle: (() => void) | null = null;
     request.onblocked = () => {
-      blocked = true;
+      onBlocked(new Promise((done) => (settle = done)));
       reject(new UpgradeBlockedError());
     };
     request.onupgradeneeded = (event) => {
@@ -75,14 +84,18 @@ function opened(factory: IDBFactory, name: string): Promise<IDBDatabase> {
     request.onsuccess = () => {
       const db = request.result;
       // The caller already got UpgradeBlockedError; a late open must not hold the database.
-      if (blocked) {
+      if (settle !== null) {
         db.close();
+        settle();
         return;
       }
       db.onversionchange = () => db.close();
       resolve(db);
     };
-    request.onerror = () => reject(request.error);
+    request.onerror = () => {
+      settle?.();
+      reject(request.error);
+    };
   });
 }
 
@@ -223,14 +236,33 @@ type AppStore = HandStore &
 /**
  * An IndexedDB HandStore: add-only hand records, one replaceable record per session and one write-once report
  * per ended session. The database opens on the first call; if opening fails, every call rejects with that
- * error, except that a blocked open (UpgradeBlockedError) is retried on the next call. Records are validated by parseHandRecord / parseSessionRecord / parseSessionReport / parseSettings when
+ * error, except that a blocked open (UpgradeBlockedError) is retried on the next call; while the blocked request is
+ * still pending, calls reject with UpgradeBlockedError after a short wait. Records are validated by parseHandRecord / parseSessionRecord / parseSessionReport / parseSettings when
  * read.
  */
 export function openHandStore(factory: IDBFactory = indexedDB, name = DB_NAME): AppStore {
   let db: Promise<IDBDatabase> | null = null;
-  const database = (): Promise<IDBDatabase> => {
+  // Settles when a blocked open request finishes; null when no blocked request is pending.
+  let blockedOpen: Promise<void> | null = null;
+  const database = async (): Promise<IDBDatabase> => {
+    const pending = blockedOpen;
+    if (pending !== null) {
+      // A new open would queue behind the blocked one and hang, so wait briefly for it, then reject.
+      let timer: ReturnType<typeof setTimeout> | undefined;
+      const released = await Promise.race([
+        pending.then(() => true),
+        new Promise<false>((done) => (timer = setTimeout(() => done(false), BLOCKED_GRACE_MS))),
+      ]);
+      clearTimeout(timer);
+      if (!released) throw new UpgradeBlockedError();
+    }
     if (db === null) {
-      const opening = opened(factory, name);
+      const opening = opened(factory, name, (settled) => {
+        blockedOpen = settled;
+        void settled.then(() => {
+          if (blockedOpen === settled) blockedOpen = null;
+        });
+      });
       db = opening;
       opening.catch((error: unknown) => {
         if (error instanceof UpgradeBlockedError && db === opening) db = null;
