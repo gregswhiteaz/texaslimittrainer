@@ -1,0 +1,29 @@
+{"reviewer": "code", "round": 1,
+ "rubric": [
+  {"item": "SPEC-01 correctness", "result": "pass"},
+  {"item": "SPEC-01 test strength", "result": "pass"},
+  {"item": "SPEC-02 correctness", "result": "pass"},
+  {"item": "SPEC-02 test strength", "result": "pass"},
+  {"item": "SPEC-03 correctness", "result": "pass"},
+  {"item": "SPEC-03 test strength", "result": "pass"},
+  {"item": "SPEC-04 correctness", "result": "pass"},
+  {"item": "SPEC-04 test strength", "result": "pass"},
+  {"item": "SPEC-05 correctness", "result": "pass"},
+  {"item": "SPEC-05 test strength", "result": "pass"},
+  {"item": "scope", "result": "pass"},
+  {"item": "concision", "result": "pass"},
+  {"item": "clarity", "result": "pass"}
+ ],
+ "findings": [
+  {"fingerprint": "tests/toolchain/bot-function-escapes.acceptance.test.ts:declare-global-exclusion-untested", "severity": "MINOR",
+   "file": "tests/toolchain/bot-function-escapes.acceptance.test.ts", "line": 33,
+   "issue": "The B6 selector's `:not(TSModuleDeclaration > .id)` exclusion (spec 5 and 7 say `declare global { … }` must stay allowed) is not exercised by any probe. Deleting it from the selector would not fail this test, and no real file under src/bots or src/advice uses `declare global`, so the lintFiles check would not catch it either.",
+   "evidence": "CLEAN_PROBE contains class constructor, object keys, o.global and interface members, but no `declare global`. An in-memory run confirmed `declare global { interface Window { x: number } }` lints clean today. SPEC-04's literal probe text also leaves it out, so this is a test gap, not a spec violation.",
+   "fix": "Add a second clean probe such as `declare global {\\n  interface Window {\\n    x: number;\\n  }\\n}\\nexport {};\\n` and assert no 'global alias' messages. The test file is locked, so this needs the locked-test edit path, or leave it as a follow-up."},
+  {"fingerprint": "tools/lint/headless-boundary.js:function-selector-module-exclusion-unneeded", "severity": "NIT",
+   "file": "tools/lint/headless-boundary.js", "line": 140,
+   "issue": "`:not(TSModuleDeclaration > .id)` is appended to the `Function` selector too, where it only matters for an unrealistic `declare module Function`/`namespace Function`. Spec 5 lists it in the shared exclusions, so this matches the spec.",
+   "evidence": "Selector: `Identifier[name='Function']${NAME_ONLY_POSITIONS}:not(TSModuleDeclaration > .id)`.",
+   "fix": "Optional: keep it as is for symmetry with the global selector."}
+ ],
+ "summary": "The implementation matches spec 5 exactly: B1-B6 are separate no-restricted-syntax entries in BOT_DETERMINISM_RESTRICTED_SYNTAX, B7/B8 are globalThis.Function/global property bans, the messages match A-4 word for word, and the NAME_ONLY_POSITIONS refactor keeps BARE_GLOBAL_REFERENCE's selector identical (same :not set, order only). The acceptance test passes (4/4). I ran an in-memory mutation check on the probe sets by removing each of B1..B8 in turn from the loaded config: every removal makes at least 2 probe assertions fail, so SPEC-05 holds. Edge cases also checked: fn?.constructor is flagged, `declare global` passes, and new Function is reported by both no-new-func and B5 as the spec expects. Gates pass (lint, typecheck, tests, scope 176/190 lines, 2/2 files). No BLOCKER or MAJOR. One MINOR: the `declare global` exclusion has no probe."}

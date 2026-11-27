@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-26T23:06:00Z'
-updated_date: '2026-11-27T07:17:00Z'
+updated_date: '2026-11-27T07:38:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -29,6 +29,7 @@ Follow-up from TASK-6.27 (doc-175, judge J-1-01/J-1-02, review r3 MINORs). In sr
 <!-- AC:BEGIN -->
 - [ ] #1 Given a src/bots or src/advice file using .constructor property access, globalThis.Function, Reflect.apply/construct with Function, or the bare name global, When lint runs, Then it fails with a boundary or determinism message, and the whole repo still lints clean
 - [ ] #2 Given the new bans, When the toolchain acceptance tests run, Then a probe for each form fails lint and removing any one ban makes a test fail
+- [ ] #3 Given a src/bots or src/advice file (or src/engine/bot-random.ts) using the Node process global (process.hrtime/uptime/getBuiltinModule) or globalThis.process, When lint runs, Then it fails with a determinism message, a probe covers each form, and removing the ban makes a test fail
 <!-- AC:END -->
 
 ## Implementation Plan
@@ -40,3 +41,11 @@ Follow-up from TASK-6.27 (doc-175, judge J-1-01/J-1-02, review r3 MINORs). In sr
 
 Full spec: doit/TASK-6.29/spec.md
 <!-- SECTION:PLAN:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+Build: B1-B6 syntax bans (constructor access forms, Function as value, global as value) in BOT_DETERMINISM_RESTRICTED_SYNTAX; B7/B8 globalThis.Function / globalThis.global property bans; new acceptance test; each ban removal fails a test (8/8); gate PASS
+
+Review r1 security MAJOR (process global open, same class as global alias): fixed in this story, AC#3 added (autopilot; same choice as the user's TASK-6.27 'Fix both here'). Recorded deviation from the locked spec.
+<!-- SECTION:NOTES:END -->
