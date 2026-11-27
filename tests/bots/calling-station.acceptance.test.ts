@@ -197,16 +197,16 @@ describe('Calling station from its style file', () => {
         type: 'fold',
       });
 
-      // Example B: fold[35] (fold[30] before TASK-7.32), flop with 5c 3c facing a bet; u < 2^31, the station calls 4
-      // where TAG folds.
-      const b = at(fold, 6003, 35);
-      expect(b.code).toBe('00000000000017730000000000000024');
+      // Example B: point 216 = fold[36] (fold[35] before TASK-7.40, fold[30] before TASK-7.32), flop with 5c 3c facing
+      // a bet; u < 2^31, the station calls 4 where TAG folds.
+      const b = at(fold, 6003, 216);
+      expect(b.code).toBe('000000000000177300000000000000d9');
       expect(b.view.street).toBe('flop');
       expect(b.view.holeCards.map(formatCard)).toEqual(['5c', '3c']);
       expect(b.view.currentBet).toBe(4);
       expect(botDecisionIndex(b.view)).toBe(1);
-      expect(b.seed).toBe(1097189332);
-      expect(botRandom(b.seed).nextUint32()).toBe(1854933015);
+      expect(b.seed).toBe(2984596433);
+      expect(botRandom(b.seed).nextUint32()).toBe(236911064);
       expect(decideCallingStation(b.view, { random: botRandom(b.seed), equity })).toEqual({
         seat: 1,
         type: 'call',

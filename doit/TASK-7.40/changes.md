@@ -25,7 +25,19 @@
   - `tests/bots/rock.acceptance.test.ts` (TASK-6.5): `COUNTS` gains `[5, 5, 5, 5, 5, 5]`, 26 → 32. Also `:257`, the spot count without BB limpers, goes 25 → 31. This is the same count re-pin on a line the table does not list. Unions unchanged.
   - `tests/bots/tag.acceptance.test.ts` (TASK-6.1): `re-raise-not-mine` added to the situation set.
   - `tests/golden/preflop-spots.json` (TASK-7.11): 3 spots appended: `6max-co-re-raise-not-mine-a9o` (fold), `6max-bb-re-raise-not-mine-88` (call), `6max-btn-re-raise-not-mine-aa` (raise). The existing entries are unchanged.
-- `doit/TASK-7.40/changes.md`, `doit/TASK-7.40/build-log.md`, `doit/TASK-7.40/blocked.json` — work-folder files.
+- Locked re-pins added under A-8 (seeded-play examples shifted by the new folds; no assertion dropped or loosened, each with a "before TASK-7.40" note):
+  - `tests/bots/calling-station.acceptance.test.ts` (TASK-6.3): Example B, the flop 5c 3c view, is now fold[36]; it is read at point 216 (k = 1) so the draw is still u < 2^31. Code, seed and draw re-pinned.
+  - `tests/bots/maniac.acceptance.test.ts` (TASK-6.4, TASK-6.25):
+    - Example A: TAG now folds the 7h Qh hand preflop (BTN re-raise-not-mine), so its flop check no longer exists. Re-pinned to the flop check view 6d 9c, check[8], which keeps the same street, bet count and decision index.
+    - Example D: Th 8c turn, now check[0], read at point 45.
+    - Example E: 96o BB option, now check[7].
+    - Example B: T8o facing a raise, now call[0]. The worker test uses the same view and keeps seed 1461725007, which still gives raise 12 / call 4.
+    - Example C: Kd Ad turn, now call[22].
+    - Example H: 8s 8d river, now call[28], read at point 98.
+    - Example G: capped[0] (7h Qh owing 16) now has fold advice. Re-pinned to capped[5], 77 owing 4 with call advice, plus an added check that the advice is call. Hot draw code `handReplayCode(6403, 4)`; the cold draw code is still k = 1.
+  - `tests/playtest/games.acceptance.test.ts` (TASK-1.16): AC#7 cash run seed 42 → 43. Seed 42 now has 0 side pots in 1,000 (and 2,000) hands; seed 43 has 2 in 1,000 and 14 in 10,000. All three `> 0` checks kept. The CLI check still uses seed 42.
+- `doit/TASK-7.40/signoff.md` — the SPEC-12 sign-off package (12 chart:print blocks, changed re-raise cells, shares, D-8, widths).
+- `doit/TASK-7.40/changes.md`, `doit/TASK-7.40/build-log.md`, `doit/TASK-7.40/blocked-1.resolved.json` — work-folder files.
 
 No new dependencies.
 
