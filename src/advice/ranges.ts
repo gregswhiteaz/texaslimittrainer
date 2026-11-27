@@ -349,7 +349,8 @@ export function scaledWidthPct(d: number, o: number, n: number): number {
   return d + ((o - d) * n) / OBSERVED_FULL_HANDS;
 }
 
-/** The shortest HAND_ORDER prefix whose combos reach `widthPct` % of 1326, at least AA (A-1). */
+/** The shortest HAND_ORDER prefix whose combos reach `widthPct` % of 1326, at least AA (TASK-7.13 A-1).
+ *  No longer used by estimateOpponentRanges, which resizes the authored default instead. */
 export function strongestClasses(widthPct: number): ReadonlySet<HandClass> {
   const target = (widthPct / 100) * ALL_COMBOS - 1e-9;
   const classes = new Set<HandClass>();
@@ -360,6 +361,30 @@ export function strongestClasses(widthPct: number): ReadonlySet<HandClass> {
     combos += comboCount(hc);
   }
   return classes;
+}
+
+/**
+ * The authored default `classes` resized to `widthPct` % of 1326 combos by HAND_ORDER (TASK-7.29 A-5).
+ * Narrower (or equal): the shortest strongest-first run of the default's classes reaching the width, at least one.
+ * Wider: the whole default plus the strongest missing classes until the width is reached (all 169 from 100).
+ */
+export function resizeRange(
+  classes: ReadonlySet<HandClass>,
+  widthPct: number,
+): ReadonlySet<HandClass> {
+  const target = (widthPct / 100) * ALL_COMBOS - 1e-9;
+  let total = 0;
+  for (const hc of classes) total += comboCount(hc);
+  const widen = classes.size === 0 || total < target;
+  const result = new Set<HandClass>(widen ? classes : []);
+  let combos = widen ? total : 0;
+  for (const hc of HAND_ORDER) {
+    if (result.size > 0 && combos >= target) break;
+    if (classes.has(hc) === widen) continue;
+    result.add(hc);
+    combos += comboCount(hc);
+  }
+  return result;
 }
 
 const LINE_BY_ACTION: Readonly<Record<'call' | 'raise', readonly PreflopLine[]>> = {
@@ -616,7 +641,8 @@ function observedBySeat(observed: readonly ObservedOpponent[]): Map<SeatNumber, 
 
 /**
  * One entry per live opponent (not folded, not the viewer), ascending seat. Reads only `view` and `observed`.
- * From OBSERVED_MIN_HANDS observed hands, a default raising or calling range is rebuilt at the scaled width.
+ * From OBSERVED_MIN_HANDS observed hands, a default raising or calling range is resized to the scaled width
+ * (resizeRange): at the default width it is unchanged.
  * A non-array `observed` is ignored; array entries are validated (RangeError).
  */
 export function estimateOpponentRanges(
@@ -642,7 +668,7 @@ export function estimateOpponentRanges(
       const stat = OBSERVED_LINE_STAT[line];
       if (obs !== undefined && stat !== null && obs.hands >= OBSERVED_MIN_HANDS) {
         widthPct = scaledWidthPct(widthPct, obs[stat], obs.hands);
-        classes = strongestClasses(widthPct);
+        classes = resizeRange(classes, widthPct);
         basis = { seat, observedHands: obs.hands, text: basisText(obs.hands) };
       }
       let start = expandRange(classes, dead);

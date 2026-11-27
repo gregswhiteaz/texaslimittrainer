@@ -8,6 +8,7 @@ import {
   estimateOpponentRanges,
   expandRange,
   rangeWidthPct,
+  resizeRange,
   scaledWidthPct,
   SIX_MAX_RANGES,
   strongestClasses,
@@ -140,15 +141,14 @@ describe('observed opponent ranges acceptance', () => {
       const b = rangeOf(loose as readonly OpponentRange[], seat);
       expect(a.line).toBe(line);
       expect(a.start).not.toEqual(b.start);
-      const d = rangeWidthPct(
-        defaultRange(SIX_MAX_RANGES, positionOf({ ...view, seat }), line).classes,
-      );
+      const classes = defaultRange(SIX_MAX_RANGES, positionOf({ ...view, seat }), line).classes;
+      const d = rangeWidthPct(classes);
       snapshots.forEach((snapshot, i) => {
         const range = i === 0 ? a : b;
         const o = (snapshot.find((s) => s.seat === seat) as ObservedOpponent)[stat];
         const width = scaledWidthPct(d, o, 30);
         expect(range.widthPct).toBeCloseTo(width, 9);
-        expect(range.start).toEqual(expandRange(strongestClasses(width), deadOf(view)));
+        expect(range.start).toEqual(expandRange(resizeRange(classes, width), deadOf(view)));
         expect(range.basis.text).toBe('based on 30 hands of this opponent');
       });
     }

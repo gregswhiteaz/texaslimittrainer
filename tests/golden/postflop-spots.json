@@ -798,13 +798,13 @@
       "before": ["fold", "fold", "fold", "raise", "fold", "call", "check", "check", "bet", "raise"],
       "opponentStats": {
         "1": {
-          "hands": 35,
-          "vpip": 45,
-          "pfr": 38
+          "hands": 100,
+          "vpip": 22,
+          "pfr": 18
         }
       },
       "action": "call",
-      "justification": "Top pair of aces with a weak kicker holds up well against this button, whose opponent type raises preflop so often that its range has many bluffs and weaker aces. Calling the raise has the pot odds needed, while re-raising would only be called by better aces and nines."
+      "justification": "Top pair of aces with a weak kicker is still ahead of much of this button's range, an ordinary raiser over 100 hands whose turn raise also holds weaker aces and draws. Calling the raise has the pot odds needed, while re-raising would only be called by better aces and nines."
     },
     {
       "id": "6max-turn-co-fold-a2s",

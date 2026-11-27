@@ -152,10 +152,11 @@ describe('hand order', () => {
     expect(handOrderRaw.justification.match(/\p{L}+/gu)?.length).toBeGreaterThanOrEqual(50);
   });
 
-  it('stores the equity the calculator gives each class against one random hand', () => {
+  it('stores the equity the calculator gives each class against three random hands', () => {
     for (const hc of ['AA', 'KK', 'AKs', 'AKo', 'T9s', '72o', '32o']) {
       const combo = expandRange(new Set([hc]), [])[0] as readonly [Card, Card];
-      const result = computeEquity({ hero: combo, board: [], opponents: [unseenCombos(combo)] });
+      const u = unseenCombos(combo);
+      const result = computeEquity({ hero: combo, board: [], opponents: [u, u, u] });
       expect(toPct(result.hero.equity), hc).toBe(stored.get(hc));
     }
   });

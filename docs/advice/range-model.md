@@ -275,22 +275,26 @@ The `check` line is not a voluntary range, so it keeps its default. The scaling 
 table size from 2 to 10 seats, because every size has default ranges. The simpler "every unseen
 hand" mode ignores the snapshot.
 
-**Hand order.** The rebuilt range is the strongest `width` % of starting hands in the hand order
-stored in `src/advice/ranges/hand-order.json`: the shortest run of classes from the top of the
-order whose combinations reach `width ÷ 100 × 1,326`. It never holds fewer than AA, so a width of
-0 leaves the 6 combinations of a pair of aces, and a width of 100 or more holds every class. The
-order ranks all 169 classes by their all-in equity before the flop against one random hand,
-computed with the project's own calculator (the class's lowest-numbered combination against every
-unseen combination, 30,000 sampled deals seeded from the input) and rounded to one decimal place.
-Equal numbers keep the starting-hand grid order. AA (85.5%) is first and 32o (32.1%) is last. The
-file is checked when the app loads: it needs its format and version, a justification of at least
-50 words, all 169 classes once each, falling equities and AA first.
+**Hand order.** The rebuilt range is the authored default range resized to `width` % of the 1,326
+starting combinations, using the hand order stored in `src/advice/ranges/hand-order.json`. When the
+default holds at least `width ÷ 100 × 1,326` combinations, the range is the shortest run of the
+default's own classes, taken strongest first in the hand order, whose combinations reach that
+target. It never holds fewer than the default's strongest class, so a width of 0 leaves just that
+class (AA for a UTG `open-raise`, but not for a CO `call-raise`, which has no AA). When the default
+holds fewer, the range keeps the whole default and adds the strongest classes it lacks, in hand
+order, until the target is reached; a width of 100 or more holds every class. So an observed
+opponent whose width equals the default width keeps the authored range exactly. The file is
+checked when the app loads: it needs its format and version, a justification of at least 50 words,
+all 169 classes once each, falling equities and AA first. The order ranks all 169 classes by their
+all-in equity before the flop against three random hands, computed with the project's own
+calculator (the class's lowest-numbered combination against every unseen combination for each of
+the three opponents, 30,000 sampled deals seeded from the input) and rounded to one decimal place.
+Equal numbers keep the starting-hand grid order. AA (63.9%) is first and 32o (14.1%) is last.
 
-**Known limits.** Equity against one random hand values offsuit high-card hands above suited
-connectors: Q2o (47.1%) ranks ahead of 76s (45.2%), although 76s plays better against the ranges
-real opponents hold. Scaling the `three-bet` and `four-bet` lines by PFR % also widens those
-re-raise ranges a lot, since an opponent's raise rate is far higher than their re-raise rate. A
-follow-up decision task (TASK-7.29) tracks whether to change the order or the re-raise scaling.
+**Known limits.** Scaling the `three-bet` and `four-bet` lines by PFR % widens those re-raise
+ranges a lot, since an opponent's raise rate is far higher than their re-raise rate. A follow-up
+task (TASK-7.44) scales them relative to a typical PFR. Against three random hands small pairs rank
+low (22 is #116), so a widened range adds them late and a narrowed range drops them early.
 
 Dead cards, narrowing after the flop and the safety rules then apply as for a default range.
 
