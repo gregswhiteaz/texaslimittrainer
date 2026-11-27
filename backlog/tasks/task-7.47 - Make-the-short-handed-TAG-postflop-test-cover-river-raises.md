@@ -1,9 +1,11 @@
 ---
 id: TASK-7.47
 title: Make the short-handed TAG postflop test cover river raises
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-27T10:03:00Z'
+updated_date: '2026-11-27T13:04:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -27,3 +29,12 @@ From TASK-7.46 judge J-1-03: the 50-hand sample in tests/bots/tag-short-handed.a
 <!-- AC:BEGIN -->
 - [ ] #1 Given tests/bots/tag-short-handed.acceptance.test.ts (owner TASK-7.37/7.46), When its sample is enlarged or a targeted river-raise view is added, Then a mutation turning a TAG river raise into a call fails the test, with no assertion loosened
 <!-- AC:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. New test tests/bots/tag-short-handed-river.acceptance.test.ts: 200 hands, 3 seats, seed 3; every river decision equals the advice engine and raises where it raises; at least one river raise
+2. Mutation check: river raise->call fails the test; locked file and src untouched
+
+Full spec: doit/TASK-7.47/spec.md
+<!-- SECTION:PLAN:END -->
