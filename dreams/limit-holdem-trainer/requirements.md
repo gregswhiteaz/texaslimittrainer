@@ -643,7 +643,7 @@ Dream slug: limit-holdem-trainer   ·   Vision: dreams/limit-holdem-trainer/visi
   - REQ-035.3: The range model never reads a bot's style label or internal parameters.
   - REQ-035.4: The hint and review show which basis was used: "typical player" or "based on N hands of this opponent".
   - REQ-035.5: Range narrowing sorts each hand into Strong (two pair or better), Pair, Draw (flush draw or open-ended straight draw without a pair) or Air; a bet keeps Strong, Pair and Draw; a check keeps Pair, Draw and Air; a call keeps Pair and Draw; a raise keeps Strong and Draw; the rule is re-applied on every street.
-  - REQ-035.6: Observed-statistics scaling uses width = d + (o − d) × min(n, 100) ÷ 100, where d is the default range width and n is the number of observed hands; o is the observed PFR for open-raise ranges, the observed VPIP for calling ranges, and d × observed PFR ÷ typical PFR (at most 100) for three-bet and four-bet ranges, where typical PFR is the midpoint of the healthy PFR range for the table size (REQ-046.1).
+  - REQ-035.6: Observed-statistics scaling uses width = d + (o − d) × min(n, 100) ÷ 100, where d is the default range width and n is the number of observed hands; o is d × observed PFR ÷ typical PFR for raising ranges (open-raise, three-bet and four-bet) and d × observed VPIP ÷ typical VPIP for calling ranges (limp, call-raise and call-three-bet), each at most 100, where typical PFR and typical VPIP are the midpoints of the healthy PFR and VPIP ranges for the table size (REQ-046.1).
 - Fit criterion: Test: two opponents with identical actions but different observed stats (≥ 30 hands) produce different ranges; a bot's internal parameters are not reachable from the advice engine's inputs (type check).
 - Rationale: Q-55; realistic reading skills; addresses R-2.
 - Source: Q-55; threshold and formula proposed-by-Claude; confirmed Q-57
@@ -1375,3 +1375,4 @@ Entity × lifecycle (every cell is a clause below or N/A):
 | 1.15 | 2026-11-26 | TASK-10.13: REQ-004.8 forced fold forfeits chips; REQ-018.4 exception | User (TASK-10.13 Q-3) |
 | 1.16 | 2026-11-27 | TASK-7.46: REQ-027.1 TAG aggression band ceiling raised from 65% to 66% (matches the 6-max and full-ring healthy-range ceiling); all-TAG play at 3 seats measures 65.2% over 100,000 hands | User (TASK-7.46 Q-1, autopilot) |
 | 1.17 | 2026-11-27 | TASK-3.24: REQ-019.5 and REQ-019.8 apply automatic show/muck to the user's hand as well as the bots'; no Show/Muck control; an uncalled winner is never shown | User (TASK-3.24 Q-1) |
+| 1.18 | 2026-11-27 | TASK-7.45: REQ-035.6 scales observed open-raise ranges by PFR relative to the typical PFR and calling ranges by VPIP relative to the typical VPIP for the table size, instead of by raw PFR and VPIP | User (TASK-7.45 Q-1) |
