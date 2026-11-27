@@ -3,30 +3,30 @@
     "id": "SPEC-01",
     "verifies": "AC#1, AC#2",
     "verification": "acceptance `tests/toolchain/bot-function-escapes.acceptance.test.ts::constructor access in bot and advice code fails lint`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-02",
     "verifies": "AC#1, AC#2",
     "verification": "acceptance `tests/toolchain/bot-function-escapes.acceptance.test.ts::globalThis.Function and Reflect with Function fail lint`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-03",
     "verifies": "AC#1, AC#2",
     "verification": "acceptance `tests/toolchain/bot-function-escapes.acceptance.test.ts::the Node global alias fails lint`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-04",
     "verifies": "AC#1",
     "verification": "acceptance `tests/toolchain/bot-function-escapes.acceptance.test.ts::real bot and advice code and legitimate constructor and global names lint clean`; command `npm run lint`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-05",
     "verifies": "AC#2",
     "verification": "manual For each of B1..B8: comment out that one entry, run `npx vitest run tests/toolchain/bot-function-escapes.acceptance.test.ts`, confirm a failure, restore it.",
-    "status": "pending"
+    "status": "pass"
   }
 ]

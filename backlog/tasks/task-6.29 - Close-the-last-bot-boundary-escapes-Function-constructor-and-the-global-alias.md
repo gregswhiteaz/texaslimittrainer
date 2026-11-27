@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-26T23:06:00Z'
-updated_date: '2026-11-27T07:38:00Z'
+updated_date: '2026-11-27T07:58:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -27,9 +27,9 @@ Follow-up from TASK-6.27 (doc-175, judge J-1-01/J-1-02, review r3 MINORs). In sr
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Given a src/bots or src/advice file using .constructor property access, globalThis.Function, Reflect.apply/construct with Function, or the bare name global, When lint runs, Then it fails with a boundary or determinism message, and the whole repo still lints clean
-- [ ] #2 Given the new bans, When the toolchain acceptance tests run, Then a probe for each form fails lint and removing any one ban makes a test fail
-- [ ] #3 Given a src/bots or src/advice file (or src/engine/bot-random.ts) using the Node process global (process.hrtime/uptime/getBuiltinModule) or globalThis.process, When lint runs, Then it fails with a determinism message, a probe covers each form, and removing the ban makes a test fail
+- [x] #1 Given a src/bots or src/advice file using .constructor property access, globalThis.Function, Reflect.apply/construct with Function, or the bare name global, When lint runs, Then it fails with a boundary or determinism message, and the whole repo still lints clean
+- [x] #2 Given the new bans, When the toolchain acceptance tests run, Then a probe for each form fails lint and removing any one ban makes a test fail
+- [x] #3 Given a src/bots or src/advice file (or src/engine/bot-random.ts) using the Node process global (process.hrtime/uptime/getBuiltinModule) or globalThis.process, When lint runs, Then it fails with a determinism message, a probe covers each form, and removing the ban makes a test fail
 <!-- AC:END -->
 
 ## Implementation Plan

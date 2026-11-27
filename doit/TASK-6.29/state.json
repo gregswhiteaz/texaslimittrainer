@@ -5,13 +5,19 @@
   "base_commit": "89e3ad4676164f436fb70a479cb19fd7ed8c1074",
   "started": "2026-11-27T00:14:25",
   "review_round": 2,
-  "judge_round": 0,
+  "judge_round": 1,
   "sendbacks": 0,
   "gate_runs": 4,
   "questions": 0,
   "assumptions": 0,
   "escalations": 0,
-  "item_failures": {},
+  "item_failures": {
+    "SPEC-01": 0,
+    "SPEC-02": 0,
+    "SPEC-03": 0,
+    "SPEC-04": 0,
+    "SPEC-05": 0
+  },
   "locked_tests": {
     "tests/toolchain/bot-function-escapes.acceptance.test.ts": "c32b8a519cef0a08b5bfc2ad214f58ea11900370287c96eb0b664cd225df4182"
   },
@@ -2223,5 +2229,8 @@
     "tools/lint/headless-boundary.js:node-process-global-open": [
       "review r1"
     ]
+  },
+  "judge_results": {
+    "1": "PASS"
   }
 }
