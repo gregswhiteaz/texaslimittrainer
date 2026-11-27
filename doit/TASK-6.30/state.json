@@ -1,6 +1,6 @@
 {
   "task": "TASK-6.30",
-  "stage": "build",
+  "stage": "done",
   "branch": "doit/TASK-6.30",
   "base_commit": "199dc6353b8192a555bead3cd99be5fadb8392b4",
   "started": "2026-11-27T14:53:12",
@@ -8,8 +8,8 @@
   "judge_round": 1,
   "sendbacks": 0,
   "gate_runs": 4,
-  "questions": 0,
-  "assumptions": 0,
+  "questions": 2,
+  "assumptions": 5,
   "escalations": 0,
   "item_failures": {
     "SPEC-01": 0,
@@ -2320,5 +2320,6 @@
   },
   "judge_results": {
     "1": "PASS"
-  }
+  },
+  "doc_id": "doc-198"
 }

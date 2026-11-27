@@ -3,11 +3,11 @@ id: TASK-6.30
 title: >-
   Decide whether the style check's one-action rule needs a minimum sample for
   rare mixed spots
-status: In Progress
+status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-27T10:03:00Z'
-updated_date: '2026-11-27T22:41:00Z'
+updated_date: '2026-11-27T22:42:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -17,6 +17,8 @@ dependencies:
   - TASK-7.46
 references:
   - doc-185
+documentation:
+  - doc-198
 parent_task_id: TASK-6
 priority: low
 ordinal: 272000
@@ -52,4 +54,12 @@ Q-1 answered B with N = 10 (user, 2026-11-27): the one-action rule judges a mixe
 Build: decision-9; REQ-028 fit criterion + changelog 1.19; follow-up TASK-6.31; gate PASS
 
 Review r1 fix: tests/playtest/check-styles.acceptance.test.ts is locked by two tasks, TASK-6.11 and TASK-6.25 (its current sha matches TASK-6.25's lock); TASK-6.31's description and AC#4 now name both owners (unlock under both). The locked spec's sections 3 and 5 named only TASK-6.11 (spec not edited). Fit-criterion smallest spot under N = 10 on all three CI seeds (Mixed 6-max 100k): preflop-raise-and-calls 13 / 12 / 16 decisions at seeds 42 / 7 / 1234, so it stays judged on every seed. TASK-6.31 also now asks for the comments in tests/playtest/check-styles-three-seats.acceptance.test.ts:9 and docs/advice/range-model.md:294 to cite the REQ-028 fit criterion, not REQ-027.5.
+
+Step 6a: none new (TASK-6.31 owns the build; its security review happens in its own doit run).
 <!-- SECTION:NOTES:END -->
+
+## Final Summary
+
+<!-- SECTION:FINAL_SUMMARY:BEGIN -->
+Decision spike, no product code. User chose Q-1 B: the one-action style rule judges a mixed spot only when it came up at least 10 times; rarer spots are listed as 'Not judged (fewer than 10 decisions): <style> <spot>'. Recorded as decision-9; REQ-028 fit criterion reworded plus changelog 1.19 in requirements.md. Evidence (seed 42): the only 100k one-action failure is 3-seat TAG preflop-limpers 1/0; smallest fit-criterion spot is 13 (12 and 16 on seeds 7 and 1234), so N = 10 keeps the fit run fully judged. Follow-up TASK-6.31 (6 ACs) implements it; review r1 MAJOR (lock co-owner TASK-6.25 missing) fixed. Verification: gates pass, review r2 clean, judge PASS r1 (5/5, reproduced 100k 3-seat counts). Assumptions to review: A-1 to A-5 in doc-198. Risk: locked spec sections 3 and 5 still name only TASK-6.11; TASK-6.31 is authoritative (owners TASK-6.11 and TASK-6.25).
+<!-- SECTION:FINAL_SUMMARY:END -->
