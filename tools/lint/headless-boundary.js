@@ -116,6 +116,9 @@ const FUNCTION_CONSTRUCTOR_MESSAGE =
 const GLOBAL_ALIAS_MESSAGE =
   'The Node global alias is not allowed in bot decision code; it escapes the determinism and headless rules (REQ-028.1, REQ-059.2).';
 
+const PROCESS_GLOBAL_MESSAGE =
+  'The Node process global is not allowed in bot decision code; its clock (hrtime, uptime) is not seeded and getBuiltinModule loads modules past the import rules (REQ-028.1, REQ-025.1).';
+
 /**
  * TASK-6.29 (J-1-01/J-1-02): no-new-func sees only `new Function(…)` and `Function(…)`, so the constructor was
  * still reachable as `(fn).constructor`, `fn['constructor']`, `{ constructor } = fn` or a `Function` value
@@ -144,6 +147,11 @@ const FUNCTION_AND_GLOBAL_ESCAPES = [
   {
     selector: `Identifier[name='global']${NAME_ONLY_POSITIONS}:not(TSModuleDeclaration > .id)`,
     message: GLOBAL_ALIAS_MESSAGE,
+  },
+  // TASK-6.29 AC#3: process.hrtime(), process.uptime() and process.getBuiltinModule() are just as open.
+  {
+    selector: `Identifier[name='process']${NAME_ONLY_POSITIONS}`,
+    message: PROCESS_GLOBAL_MESSAGE,
   },
 ];
 
@@ -184,6 +192,7 @@ export const botDeterminismConfig = {
       { object: 'globalThis', property: 'Math', message: NON_DETERMINISTIC_MESSAGE },
       { object: 'globalThis', property: 'Function', message: FUNCTION_CONSTRUCTOR_MESSAGE },
       { object: 'globalThis', property: 'global', message: GLOBAL_ALIAS_MESSAGE },
+      { object: 'globalThis', property: 'process', message: PROCESS_GLOBAL_MESSAGE },
     ],
     'no-restricted-syntax': ['error', ...BOT_DETERMINISM_RESTRICTED_SYNTAX],
     'no-eval': 'error',
