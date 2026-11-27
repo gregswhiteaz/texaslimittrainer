@@ -1,0 +1,32 @@
+[
+  {
+    "id": "SPEC-01",
+    "verifies": "AC#1",
+    "verification": "acceptance `e2e/settings-save-failed.spec.ts::a failed save shows the message, keeps the toggle and the stored record unchanged`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-02",
+    "verifies": "AC#1",
+    "verification": "acceptance `e2e/settings-save-failed.spec.ts::the next change or reopening Settings clears the message`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-03",
+    "verifies": "AC#1",
+    "verification": "acceptance `tests/ui/settings-save-failed.acceptance.test.tsx::the save-failed message renders after the header only when saveFailed is set`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-04",
+    "verifies": "AC#1",
+    "verification": "unit `tests/ui/settings-save.test.ts::a failed latest save reverts to the last saved value`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-05",
+    "verifies": "AC#1",
+    "verification": "unit `tests/ui/settings-save.test.ts::only the latest save decides the outcome`",
+    "status": "pending"
+  }
+]
