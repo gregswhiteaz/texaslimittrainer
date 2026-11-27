@@ -3,9 +3,11 @@ id: TASK-6.30
 title: >-
   Decide whether the style check's one-action rule needs a minimum sample for
   rare mixed spots
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-27T10:03:00Z'
+updated_date: '2026-11-27T22:03:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -30,3 +32,14 @@ From TASK-7.46 (doc-185, Q-2). REQ-027.5 fails --check-styles when any mixed spo
 <!-- AC:BEGIN -->
 - [ ] #1 Given the options above, When the user decides, Then the decision is recorded and any change becomes a follow-up story that restores an exit-0 check (or renames the slow test) for 3-seat --check-styles
 <!-- AC:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. Record decision-9 (one-action rule judged only at >= 10 decisions)
+2. Reword the REQ-028.3 fit criterion; changelog 1.19
+3. Create the follow-up build story (6 ACs, locked re-pins with owners)
+4. No code change; tick AC#1
+
+Full spec: doit/TASK-6.30/spec.md
+<!-- SECTION:PLAN:END -->
