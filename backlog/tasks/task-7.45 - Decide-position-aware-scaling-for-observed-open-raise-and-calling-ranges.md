@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-27T03:28:00Z'
-updated_date: '2026-11-27T21:05:00Z'
+updated_date: '2026-11-27T21:28:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -32,7 +32,7 @@ Follow-up spike from TASK-7.29 (decision: Q-4 a). Open-raise lines scale toward 
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Given the options with measured widths for typical, loose and tight players at each table size, When the user decides, Then the decision is recorded and any change becomes a follow-up story with re-pinned expectations
+- [x] #1 Given the options with measured widths for typical, loose and tight players at each table size, When the user decides, Then the decision is recorded and any change becomes a follow-up story with re-pinned expectations
 <!-- AC:END -->
 
 ## Implementation Plan
