@@ -9,7 +9,7 @@
     "id": "SPEC-02",
     "verifies": "AC#2",
     "verification": "unit `tests/storage/upgrade-blocked.test.ts::a blocked upgrade rejects with UpgradeBlockedError`",
-    "status": "fail"
+    "status": "pass"
   },
   {
     "id": "SPEC-03",

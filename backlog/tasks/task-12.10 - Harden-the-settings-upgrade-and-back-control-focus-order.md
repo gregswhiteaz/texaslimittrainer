@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-25T15:55:00Z'
-updated_date: '2026-11-27T11:31:00Z'
+updated_date: '2026-11-27T11:42:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -27,9 +27,9 @@ Follow-up from TASK-12.1 review and judge (doc-141). The v3->v4 upgrade unit tes
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Given a v3 database upgraded to v4, When the raw 'settings' record is read, Then a unit test asserts it equals the defaults
-- [ ] #2 Given another tab holds the old database version open, When the app upgrades, Then the blocked upgrade is handled (the user sees a clear message or the other connection closes on versionchange) instead of hanging
-- [ ] #3 Given Settings or Statistics opened with the heading focused, When the user presses Tab once, Then focus reaches the back control without leaving the page
+- [x] #1 Given a v3 database upgraded to v4, When the raw 'settings' record is read, Then a unit test asserts it equals the defaults
+- [x] #2 Given another tab holds the old database version open, When the app upgrades, Then the blocked upgrade is handled (the user sees a clear message or the other connection closes on versionchange) instead of hanging
+- [x] #3 Given Settings or Statistics opened with the heading focused, When the user presses Tab once, Then focus reaches the back control without leaving the page
 <!-- AC:END -->
 
 ## Implementation Plan
