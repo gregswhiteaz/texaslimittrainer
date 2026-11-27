@@ -1,9 +1,11 @@
 ---
 id: TASK-8.7
 title: Decide whether hints and reviews show the situation label
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-26T07:04:00Z'
+updated_date: '2026-11-27T19:30:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -28,3 +30,14 @@ Follow-up from TASK-8.5 (doc-155). situationLabel() now returns approved labels 
 <!-- AC:BEGIN -->
 - [ ] #1 Given the choice to show or not show the situation label on the hint card and review entries, When the user decides, Then the decision is recorded on this task (and, if yes, a build task with Given/When/Then ACs is created)
 <!-- AC:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. Record decision-7 (no situation label on hints/reviews)
+2. requirements.md unchanged; no code change; evidence in notes
+3. Reword TASK-7.40 AC#4 and TASK-7.42 AC#3
+4. Tick AC#1
+
+Full spec: doit/TASK-8.7/spec.md
+<!-- SECTION:PLAN:END -->
