@@ -6,7 +6,7 @@ title: >-
 status: To Do
 assignee: []
 created_date: '2026-11-27T20:52:00Z'
-updated_date: '2026-11-27T21:09:00Z'
+updated_date: '2026-11-27T21:22:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -40,3 +40,9 @@ Follow-up from TASK-7.45 (decision-8: Q-1 D). Today open-raise scales toward raw
 - [ ] #6 Given the 4 observed golden postflop spots (6max-flop-btn-raise-a8s, 6max-turn-bb-call-a6s, 6max-turn-btn-fold-55, 6max-river-bb-bet-aks), When npm test runs, Then each still agrees and is clear-cut, or each changed one is re-tuned and re-justified with the user's sign-off
 - [ ] #7 Given docs/advice/range-model.md, When the story is done, Then its line-to-stat table, typical-player paragraph and Known limits state the relative rule for open-raise and calling lines
 <!-- AC:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+TASK-7.45 review r2: e2e/observed-resume.spec.ts was run under option D on a scratch copy and passes (6/6, chromium+webkit); tests/golden/postflop-lines.acceptance.test.ts also fails at load on the a6s spot until it is re-tuned (AC#6).
+<!-- SECTION:NOTES:END -->

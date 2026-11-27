@@ -1,0 +1,28 @@
+{"reviewer": "code", "round": 2,
+ "rubric": [
+  {"item": "SPEC-01 correctness", "result": "pass"},
+  {"item": "SPEC-01 test strength", "result": "pass"},
+  {"item": "SPEC-02 correctness", "result": "pass"},
+  {"item": "SPEC-02 test strength", "result": "pass"},
+  {"item": "SPEC-03 correctness", "result": "pass"},
+  {"item": "SPEC-03 test strength", "result": "pass"},
+  {"item": "SPEC-04 correctness", "result": "pass"},
+  {"item": "SPEC-04 test strength", "result": "pass"},
+  {"item": "SPEC-05 correctness", "result": "pass"},
+  {"item": "SPEC-05 test strength", "result": "pass"},
+  {"item": "scope", "result": "pass"},
+  {"item": "concision", "result": "pass"},
+  {"item": "clarity", "result": "pass"}],
+ "findings": [
+  {"fingerprint": "backlog/tasks/task-7.48:e2e-observed-resume-unchecked-note-stale", "severity": "NIT",
+   "file": "backlog/tasks/task-7.48 - Scale-observed-open-raise-and-calling-ranges-by-PFR-and-VPIP-relative-to-a-typical-player.md", "line": 30,
+   "issue": "The description says 'e2e/observed-resume.spec.ts was not run under the new rule; check it'. It has now been run under option D and passes, so the note understates what is known.",
+   "evidence": "Scratch copy of HEAD with option D applied: npx playwright test e2e/observed-resume.spec.ts gave 6 passed (chromium and webkit, port 4173).",
+   "fix": "Optionally reword to 'e2e/observed-resume.spec.ts passed unchanged in a TASK-7.45 probe of the new rule; keep it passing.'"},
+  {"fingerprint": "backlog/tasks/task-7.48:golden-a6s-loses-clear-cut-not-flagged", "severity": "NIT",
+   "file": "backlog/tasks/task-7.48 - Scale-observed-open-raise-and-calling-ranges-by-PFR-and-VPIP-relative-to-a-typical-player.md", "line": 30,
+   "issue": "The r1 MINOR is mostly fixed: the a6s re-tune with sign-off is now stated. tests/golden/postflop-lines.acceptance.test.ts is still not named as a file that fails at load, although AC#6 ('When npm test runs') already covers it.",
+   "evidence": "Under option D both postflop.acceptance and postflop-lines.acceptance fail at load with GoldenSpotValidationError for 6max-turn-bb-call-a6s, and that spot is the only one that fails validation.",
+   "fix": "Optionally add 'tests/golden/postflop.acceptance.test.ts and postflop-lines.acceptance.test.ts fail at load until it is re-tuned'."}
+ ],
+ "summary": "The r1 BLOCKER backlog/tasks/task-7.48:locked-repin-list-incomplete is fixed. The description now adds small-table-ranges AC#1 (TASK-7.35, line 153, 60 -> 100), review-numbers lines 227/269 (TASK-9.3, 34.3% -> 34.4% / 33.7%) and the unlocked 'caps the observed hands at 100' (line 230, 35 -> 23.76). AC#5 names each locked file and owner directly, and ACs #1-#7 keep their numbering and order. The edit was made through the CLI (updated_date was added and the file is otherwise untouched). Re-ran option D on a fresh scratch copy of HEAD with vitest (excluding tests/ci): 12 tests failed across 9 files. Each one is in TASK-7.48's list except tests/toolchain/sync-copies 'gitignore ignores conflict copies', which fails only because the scratch copy has no .git (git exit 128). The two golden files fail at load on 6max-turn-bb-call-a6s alone (margin 12.7 < 15), and the description now flags that. Every value the description quotes matches the observed failures. e2e/observed-resume.spec.ts passes under option D (6/6). The list is complete. The spec's own section 3/5 list is still incomplete, but that is the recorded deviation, and the task's description says it supersedes the spec. Two NITs only."}
