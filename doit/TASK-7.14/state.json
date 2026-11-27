@@ -1536,6 +1536,12 @@
       "event": "unlock",
       "file": "tests/golden/graded-examples.json",
       "reason": "TASK-7.36 AC#1-2: re-author three graded examples with chart-consistent hero lines (grade, rule id and margin kept)"
+    },
+    {
+      "t": "2026-11-26T22:33:30",
+      "event": "unlock",
+      "file": "tests/golden/postflop-spots.json",
+      "reason": "TASK-7.43 Q-1 (autopilot, recommended): re-tune 6max-turn-bb-call-a6s opponent stats to 100/22/18 after decision-5 resize + 3-way order"
     }
   ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-7.14",
@@ -1554,7 +1560,8 @@
     "tests/golden/postflop-spots.json",
     "tests/golden/postflop-spots.json",
     "tests/golden/postflop-spots.json",
-    "tests/golden/graded-examples.json"
+    "tests/golden/graded-examples.json",
+    "tests/golden/postflop-spots.json"
   ],
   "brief_history": {
     "tests/golden/postflop-spots.json:justifications-misname-made-hand": [

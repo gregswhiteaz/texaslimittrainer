@@ -1565,7 +1565,14 @@
       "skips": 0
     }
   },
-  "history": [],
+  "history": [
+    {
+      "t": "2026-11-26T22:33:30",
+      "event": "unlock",
+      "file": "tests/ui/review-numbers.acceptance.test.tsx",
+      "reason": "TASK-7.43 Q-2 (autopilot, recommended): re-pin observed flop equity 29.9%/30.1% to the decision-5 value; no assertion dropped"
+    }
+  ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-9.3",
   "spec_sha256": "bc87242e370d9fc21b05c022c414dd66bfd9691b923394713c6529e5204e8ee1",
   "review_findings": {
@@ -1574,5 +1581,8 @@
   "judge_results": {
     "1": "PASS"
   },
-  "doc_id": "doc-117"
+  "doc_id": "doc-117",
+  "relock_pending": [
+    "tests/ui/review-numbers.acceptance.test.tsx"
+  ]
 }

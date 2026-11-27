@@ -1,0 +1,68 @@
+[
+  {
+    "id": "SPEC-01",
+    "verifies": "AC#1",
+    "verification": "acceptance `tests/advice/observed-resize.acceptance.test.ts::AC#1 an observed opponent at the default width keeps the authored default range`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-02",
+    "verifies": "AC#2",
+    "verification": "acceptance `tests/advice/observed-resize.acceptance.test.ts::AC#2 a wider width adds hand-order classes not in the default, strongest first`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-03",
+    "verifies": "AC#3",
+    "verification": "acceptance `tests/advice/observed-resize.acceptance.test.ts::AC#3 a narrower width keeps the strongest default classes, never less than the strongest one`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-04",
+    "verifies": "AC#4",
+    "verification": "acceptance `tests/advice/observed-resize.acceptance.test.ts::AC#4 the hand order ranks by equity against three random hands`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-05",
+    "verifies": "AC#4",
+    "verification": "acceptance `tests/advice/observed-resize.acceptance.test.ts::AC#4 slow every stored equity and the whole order match the calculator`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-06",
+    "verifies": "AC#5",
+    "verification": "acceptance `tests/advice/observed-ranges.acceptance.test.ts::AC#2 identical actions with different observed stats give different ranges at the formula width`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-07",
+    "verifies": "AC#5",
+    "verification": "command `npx vitest run tests/advice/observed-ranges.acceptance.test.ts tests/advice/observed-range-tidy.acceptance.test.ts && git diff --exit-code tests/advice/observed-range-tidy.acceptance.test.ts`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-08",
+    "verifies": "AC#6",
+    "verification": "acceptance `tests/golden/postflop-lines.acceptance.test.ts::AC#1 re-authored spots keep the documented coverage, are clear-cut and match the advice`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-09",
+    "verifies": "AC#6",
+    "verification": "acceptance `tests/ui/review-numbers.acceptance.test.tsx::TASK-9.3 review numbers basis lines show 40 observed hands and typical player`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-10",
+    "verifies": "AC#7",
+    "verification": "command `! grep -n \"one random hand\\|Q2o (47.1%)\" docs/advice/range-model.md src/advice/ranges/hand-order.json && grep -c \"three random hands\\|three opponents\" docs/advice/range-model.md`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-11",
+    "verifies": "AC#4",
+    "verification": "unit `tests/advice/observed-ranges.test.ts::hand order stores the equity the calculator gives each class against three random hands`",
+    "status": "pending"
+  }
+]

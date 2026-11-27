@@ -3,9 +3,11 @@ id: TASK-7.43
 title: >-
   Resize the authored opponent range and rank hands by three-way equity when
   scaling observed opponents
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-27T03:27:00Z'
+updated_date: '2026-11-27T05:33:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -39,3 +41,15 @@ Follow-up from TASK-7.29 (decision: Q-1 B resize the authored default range, Q-2
 - [ ] #6 Given the 4 observed golden postflop spots, When npm test runs, Then each still agrees and is clear-cut, or each changed one is re-justified with the user's sign-off
 - [ ] #7 Given docs/advice/range-model.md and the hand-order justification, When the story is done, Then they describe the resize rule and the three-random-hands order and drop the matching Known limits sentence
 <!-- AC:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. resizeRange: resize the authored default range (add strongest missing classes when wider, keep strongest default run when narrower, floor = default's strongest class)
+2. Regenerate hand-order.json by equity vs three random hands (v1 format)
+3. Re-pin observed-ranges AC#2 (TASK-7.13), review-numbers equity (TASK-9.3), golden spot 6max-turn-bb-call-a6s (TASK-7.14)
+4. New acceptance tests; full 169-class recompute in test:slow only
+5. Update docs/advice/range-model.md
+
+Full spec: doit/TASK-7.43/spec.md
+<!-- SECTION:PLAN:END -->
