@@ -1,6 +1,6 @@
 {
   "task": "TASK-8.7",
-  "stage": "build",
+  "stage": "done",
   "branch": "doit/TASK-8.7",
   "base_commit": "d08501b92c77ea4b356c7b24487f0a0fc451b3bb",
   "started": "2026-11-27T12:25:02",
@@ -8,7 +8,7 @@
   "judge_round": 1,
   "sendbacks": 0,
   "gate_runs": 3,
-  "questions": 0,
+  "questions": 2,
   "assumptions": 0,
   "escalations": 0,
   "item_failures": {
@@ -2309,5 +2309,6 @@
   },
   "judge_results": {
     "1": "PASS"
-  }
+  },
+  "doc_id": "doc-195"
 }

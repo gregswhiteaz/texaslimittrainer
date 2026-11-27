@@ -1,11 +1,11 @@
 ---
 id: TASK-8.7
 title: Decide whether hints and reviews show the situation label
-status: In Progress
+status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-26T07:04:00Z'
-updated_date: '2026-11-27T19:49:00Z'
+updated_date: '2026-11-27T19:50:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -15,6 +15,8 @@ dependencies:
   - TASK-8.5
 references:
   - doc-155
+documentation:
+  - doc-195
 parent_task_id: TASK-8
 priority: low
 ordinal: 256000
@@ -55,4 +57,12 @@ Evidence (full detail in doit/TASK-8.7/spec.md §3):
 - TASK-7.40 AC#4 and TASK-7.42 AC#3 reworded (numbers kept) to: "Given each new situation, When the chart is authored, Then it has a label in SITUATION_LABELS and a context sentence shown in the preflop explanation, both with wording the user approved in this story's Q&A". TASK-7.41 untouched.
 
 Build: decision-7; TASK-7.40 AC#4 and TASK-7.42 AC#3 reworded (numbers kept); no code or requirements change; gate PASS
+
+Step 6a: none (Q-1 A, no follow-up story).
 <!-- SECTION:NOTES:END -->
+
+## Final Summary
+
+<!-- SECTION:FINAL_SUMMARY:BEGIN -->
+Decision spike, no product code. User chose Q-1 A: hint card chart line and preflop review entries keep today's text with no situation label (the explanation's first sentence already states the situation). Recorded as decision-7 (accepted). No requirements change (REQ-042.6/REQ-043.9 already match); no follow-up story (Q-1 A). TASK-7.40 AC#4 and TASK-7.42 AC#3 reworded (numbers kept) so the label is defined in SITUATION_LABELS, not shown. Verified: empty diff for src/tests/e2e/tools/docs and requirements.md; gates PASS x3; judge PASS r1; reviews clean (NIT: empty decision body, accepted). Assumption to review: A-1 decision recorded via CLI with empty body, evidence in task notes.
+<!-- SECTION:FINAL_SUMMARY:END -->
