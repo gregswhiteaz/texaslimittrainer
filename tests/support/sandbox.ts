@@ -25,6 +25,8 @@ const CONFIG_FILES = [
   '.prettierrc.json',
   '.prettierignore',
   'vite.config.ts',
+  'tools/ci/sweep-shards.ts',
+  'tools/ci/sweep-weights.json',
 ];
 
 /** Timeout for every toolchain test that runs a real npm script. */

@@ -57,7 +57,10 @@ describe('CI workflow', () => {
       'tooling',
     ]);
     expect(jobCommands).toEqual({
-      e2e: ['npm ci', 'npm run e2e'],
+      e2e: [
+        'npm ci',
+        'npm run e2e -- --project=${{ matrix.project }} --shard=${{ matrix.shard }}/2',
+      ],
       checks: [
         'npm ci',
         'npm audit --omit=dev --audit-level=high',
@@ -68,7 +71,7 @@ describe('CI workflow', () => {
         'npm run playtest -- --hands 10000 --seed 42',
       ],
       coverage: ['npm ci', 'npm run test:unit'],
-      sweeps: ['npm ci', 'npm run test:sweeps -- --shard=${{ matrix.shard }}/2'],
+      sweeps: ['npm ci', 'npm run test:sweeps -- --shard=${{ matrix.shard }}/3'],
       changes: [],
       tooling: ['npm ci', 'npm run test:tooling'],
     });

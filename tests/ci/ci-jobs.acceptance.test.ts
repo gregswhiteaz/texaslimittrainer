@@ -55,7 +55,7 @@ const NOT_SCHEDULE = "github.event_name != 'schedule'";
 
 const EXPECTED: Record<string, { name: string; steps: string[] }> = {
   e2e: {
-    name: 'E2E (Chromium and WebKit)',
+    name: 'E2E (${{ matrix.project }}, shard ${{ matrix.shard }} of 2)',
     steps: [
       'Check out',
       'Set up Node from .nvmrc',
@@ -94,7 +94,7 @@ const EXPECTED: Record<string, { name: string; steps: string[] }> = {
     steps: ['Check out', 'Set up Node from .nvmrc', 'Install dependencies', 'Test'],
   },
   sweeps: {
-    name: 'Sweep tests (shard ${{ matrix.shard }} of 2)',
+    name: 'Sweep tests (shard ${{ matrix.shard }} of 3)',
     steps: ['Check out', 'Set up Node from .nvmrc', 'Install dependencies', 'Sweep tests'],
   },
   changes: {
@@ -123,7 +123,7 @@ function pins(text: string): Map<string, Set<string>> {
 }
 
 describe('CI jobs', () => {
-  it('ci.yml runs lint, coverage, two sweep shards, tooling and e2e as parallel jobs that keep every check', () => {
+  it('ci.yml runs lint, coverage, three sweep shards, tooling and four e2e shards as parallel jobs that keep every check', () => {
     expect(jobs.map((j) => j.id)).toEqual(Object.keys(EXPECTED));
     for (const j of jobs) {
       const expected = EXPECTED[j.id];
@@ -139,7 +139,10 @@ describe('CI jobs', () => {
     }
 
     expect(job('sweeps').header).toContain(
-      '    strategy:\n      fail-fast: false\n      matrix:\n        shard: [1, 2]\n',
+      '    strategy:\n      fail-fast: false\n      matrix:\n        shard: [1, 2, 3]\n',
+    );
+    expect(job('e2e').header).toContain(
+      '    strategy:\n      fail-fast: false\n      matrix:\n        project: [chromium, webkit]\n        shard: [1, 2]\n',
     );
 
     const runs = new Map(jobs.map((j) => [j.id, j.steps.map(runOf)]));
@@ -157,7 +160,7 @@ describe('CI jobs', () => {
     expect(runs.get('coverage')?.slice(2)).toEqual(['npm ci', 'npm run test:unit']);
     expect(runs.get('sweeps')?.slice(2)).toEqual([
       'npm ci',
-      'npm run test:sweeps -- --shard=${{ matrix.shard }}/2',
+      'npm run test:sweeps -- --shard=${{ matrix.shard }}/3',
     ]);
     expect(runs.get('tooling')?.slice(2)).toEqual([
       'sudo tee -a /etc/apt/apt.conf < tools/ci/apt-network.conf > /dev/null',
@@ -167,7 +170,9 @@ describe('CI jobs', () => {
     const e2e = runs.get('e2e') ?? [];
     expect(e2e[2]).toBe('sudo tee -a /etc/apt/apt.conf < tools/ci/apt-network.conf > /dev/null');
     expect(e2e[3]).toBe('npm ci');
-    expect(e2e.at(-2)).toBe('npm run e2e');
+    expect(e2e.at(-2)).toBe(
+      'npm run e2e -- --project=${{ matrix.project }} --shard=${{ matrix.shard }}/2',
+    );
     expect(job('e2e').steps.at(-1)?.body).toContain(
       "        if: failure() && steps.e2e.outcome == 'failure'\n        uses: actions/upload-artifact@",
     );

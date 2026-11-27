@@ -1,6 +1,7 @@
 import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vitest/config';
 import pkg from './package.json' with { type: 'json' };
+import { WeightedSequencer } from './tools/ci/sweep-shards.js';
 
 export default defineConfig({
   plugins: [react()],
@@ -10,6 +11,7 @@ export default defineConfig({
     include: ['src/**/*.test.{ts,tsx}', 'tests/**/*.test.{ts,tsx}'],
     environment: 'node',
     reporters: ['verbose'],
+    sequence: { sequencer: WeightedSequencer },
     coverage: {
       provider: 'v8',
       include: ['src/**/*.{ts,tsx}'],

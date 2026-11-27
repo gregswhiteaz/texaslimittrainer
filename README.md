@@ -52,14 +52,14 @@ Every check runs with one command and exits non-zero on failure.
 version from `.nvmrc`, as parallel jobs. Each job has a 30-minute limit (as do the jobs in
 `visual.yml` and `million.yml`):
 
-| Job (check name)                                  | What it runs                                                                                                                                                                                                                                                |
-| ------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `E2E (Chromium and WebKit)`                       | `npm ci`, the Playwright browser and system dependency installs, then `npm run e2e` in Chromium and WebKit with axe                                                                                                                                         |
-| `Lint, typecheck, build and playtest`             | `npm ci`, the two audits (shipped dependencies: no high or critical advisory, `npm audit --omit=dev --audit-level=high`; all dependencies: no high or critical advisory, `npm audit --audit-level=high`), lint, typecheck, build and a 10,000-hand playtest |
-| `Unit tests with coverage`                        | `npm run test:unit`, with the coverage thresholds                                                                                                                                                                                                           |
-| `Sweep tests (shard 1 of 2)` and `(shard 2 of 2)` | `npm run test:sweeps -- --shard=<n>/2`, without coverage; one shard failing does not cancel the other                                                                                                                                                       |
-| `Detect tooling changes`                          | `tools/ci/tooling-changed.js`, which decides whether the tooling tests run                                                                                                                                                                                  |
-| `Tooling tests`                                   | `npm run test:tooling`, only when `Detect tooling changes` says so; otherwise it shows as skipped                                                                                                                                                           |
+| Job (check name)                                              | What it runs                                                                                                                                                                                                                                                |
+| ------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `E2E (chromium, shard 1 of 2)` … `E2E (webkit, shard 2 of 2)` | 4 jobs (each browser × 2 Playwright shards): `npm ci`, the Playwright browser and system dependency installs, then `npm run e2e -- --project=<browser> --shard=<n>/2` with axe; one job failing does not cancel the others                                  |
+| `Lint, typecheck, build and playtest`                         | `npm ci`, the two audits (shipped dependencies: no high or critical advisory, `npm audit --omit=dev --audit-level=high`; all dependencies: no high or critical advisory, `npm audit --audit-level=high`), lint, typecheck, build and a 10,000-hand playtest |
+| `Unit tests with coverage`                                    | `npm run test:unit`, with the coverage thresholds                                                                                                                                                                                                           |
+| `Sweep tests (shard 1 of 3)` … `(shard 3 of 3)`               | `npm run test:sweeps -- --shard=<n>/3`, without coverage; the files are split into 3 shards of about equal duration (weighted, see below); one shard failing does not cancel the others                                                                     |
+| `Detect tooling changes`                                      | `tools/ci/tooling-changed.js`, which decides whether the tooling tests run                                                                                                                                                                                  |
+| `Tooling tests`                                               | `npm run test:tooling`, only when `Detect tooling changes` says so; otherwise it shows as skipped                                                                                                                                                           |
 
 The Vitest suite is split into three groups, each with its own command:
 
@@ -100,8 +100,16 @@ nothing; a cold cache downloads them all as before. After a fresh `apt-get updat
 (others are dropped and downloaded again). The cache is rebuilt with only the packages installed at
 that exact version and saved straight after the install, before e2e runs. Before any install, CI appends
 `tools/ci/apt-network.conf` to `/etc/apt/apt.conf` so apt gives up on a stalled mirror connection
-after 15 s and retries it up to 3 times. When e2e fails, the Playwright report
-is attached to the run as the `playwright-report` artifact (kept 7 days).
+after 15 s and retries it up to 3 times. When an e2e job fails, its Playwright report (which names
+the failing test) is attached to the run as the `playwright-report-<project>-<shard>` artifact, e.g.
+`playwright-report-webkit-2` (kept 7 days).
+
+The sweep shards are weighted: `tools/ci/sweep-shards.ts` (the Vitest sequencer in `vite.config.ts`)
+assigns each sweep file to a shard by its duration in `tools/ci/sweep-weights.json`, longest first,
+so every file runs exactly once and the shards take about the same time. A file missing from the
+weights counts as 1 s. To refresh the weights when the shards drift apart, take each sweep file's
+summed per-test durations (in seconds, rounded to 0.1) from the verbose `Sweep tests` logs of a
+recent green `main` run and write them, keys sorted, to `tools/ci/sweep-weights.json`.
 
 Local equivalent:
 
@@ -167,7 +175,7 @@ stays within the range typescript-eslint supports.
 
 ### Branch protection
 
-This rule makes GitHub block merging a pull request into `main` until all six CI checks have
+This rule makes GitHub block merging a pull request into `main` until all ten CI checks have
 passed (`Detect tooling changes` is not required: if it fails, `Tooling tests` is skipped and the
 run still fails), while the admin can still push to `main` directly. A skipped `Tooling tests`
 check counts as passed:
@@ -175,7 +183,7 @@ check counts as passed:
 ```sh
 gh api -X PUT repos/{owner}/{repo}/branches/main/protection --input - <<'JSON'
 {
-  "required_status_checks": { "strict": false, "contexts": ["E2E (Chromium and WebKit)", "Lint, typecheck, build and playtest", "Unit tests with coverage", "Sweep tests (shard 1 of 2)", "Sweep tests (shard 2 of 2)", "Tooling tests"] },
+  "required_status_checks": { "strict": false, "contexts": ["E2E (chromium, shard 1 of 2)", "E2E (chromium, shard 2 of 2)", "E2E (webkit, shard 1 of 2)", "E2E (webkit, shard 2 of 2)", "Lint, typecheck, build and playtest", "Unit tests with coverage", "Sweep tests (shard 1 of 3)", "Sweep tests (shard 2 of 3)", "Sweep tests (shard 3 of 3)", "Tooling tests"] },
   "enforce_admins": false,
   "required_pull_request_reviews": null,
   "restrictions": null
@@ -189,7 +197,7 @@ Verify it:
 gh api repos/{owner}/{repo}/branches/main/protection --jq '.required_status_checks.contexts'
 ```
 
-Expected output: the six names above.
+Expected output: the ten names above.
 
 While the repository is private on the free plan, both commands fail with HTTP 403 "Upgrade to
 GitHub Pro or make this repository public to enable this feature.", so the rule is not applied

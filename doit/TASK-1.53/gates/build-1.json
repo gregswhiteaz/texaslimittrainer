@@ -1,0 +1,61 @@
+{
+  "task": "TASK-1.53",
+  "phase": "build",
+  "run": 1,
+  "result": "FAIL",
+  "changed_lines": 642,
+  "changed_files": [
+    ".github/workflows/ci.yml",
+    "README.md",
+    "tests/ci/branch-protection.acceptance.test.ts",
+    "tests/ci/ci-jobs.acceptance.test.ts",
+    "tests/ci/ci-shards.acceptance.test.ts",
+    "tests/ci/sweep-shards.test.ts",
+    "tests/ci/workflow.test.ts",
+    "tools/ci/sweep-shards.ts",
+    "tools/ci/sweep-weights.json",
+    "vite.config.ts"
+  ],
+  "checks": [
+    {
+      "name": "test command",
+      "status": "fail",
+      "detail": "$ npm test\nexit 1\not resolve './tools/ci/sweep-shards.js' in vite.config.ts\n+    \u256d\u2500[ vite.config.ts:4:35 ]\n+    \u2502\n+  4 \u2502 import { WeightedSequencer } from './tools/ci/sweep-shards.js';\n+    \u2502                                   \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500  \n+    \u2502                                                 \u2570\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 Module not found.\n+ \u2500\u2500\u2500\u256f\n+\n+     at aggregateBindingErrorsIntoJsError (file:///Users/gregwhite/Documents/claudeworkspaces/limitholdem/node_modules/rolldown/dist/shared/error-CLo6EJKG.mjs:50:18)\n+     at unwrapBindingResult (file:///Users/gregwhite/Documents/claudeworkspaces/limitholdem/node_modules/rolldown/dist/shared/error-CLo6EJKG.mjs:20:128)\n+     at #build (file:///Users/gregwhite/Documents/claudeworkspaces/limitholdem/node_modules/rolldown/dist/shared/rolldown-AohEFLrh.mjs:146:34)\n+     at async bundleConfigFile (file:///Users/gregwhite/Documents/claudeworkspaces/limitholdem/node_modules/vite/dist/node/chunks/node.js:38122:12)\n+     at async bundleAndLoadConfigFile (file:///Users/gregwhite/Documents/claudeworkspaces/limitholdem/node_modules/vite/dist/node/chunks/node.js:38018:18)\n+     at async loadConfigFromFile (file:///Users/gregwhite/Documents/claudeworkspaces/limitholdem/node_modules/vite/dist/node/chunks/node.js:37979:42)\n+     at async resolveConfig (file:///Users/gregwhite/Documents/claudeworkspaces/limitholdem/node_modules/vite/dist/node/chunks/node.js:37580:22)\n+     at async resolveConfig (file:///Users/gregwhite/Documents/claudeworkspaces/limitholdem/node_modules/vitest/dist/chunks/index.Di8au7q4.js:9300:25)\n+     at async createVitest (file:///Users/gregwhite/Documents/claudeworkspaces/limitholdem/node_modules/vitest/dist/chunks/cli-api.COfZo8lK.js:13938:17)\n+     at async prepareVitest (file:///Users/gregwhite/Documents/claudeworkspaces/limitholdem/node_modules/vitest/dist/chunks/cli-api.COfZo8lK.js:14625:14) {\n+   errors: [Getter/Setter]\n+ }\n+\n+\n+\n+\n\n \u276f tests/toolchain/test-groups.acceptance.test.ts:131:42\n    129|       );\n    130|       expect(underCovered.exitCode, underCovered.output).not.toBe(0);\n    131|       expect(plain(underCovered.output)).toContain(\n       |                                          ^\n    132|         'does not meet \"src/{engine,bots,advice,stats,playtest,table}/\u2026\n    133|       );\n\n\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af[9/10]\u23af\n\n FAIL  tests/toolchain/typecheck.test.ts > npm run typecheck > typecheck exits non-zero on a type error and zero when it is fixed\nAssertionError: \n> tlh-trainer@0.0.0 typecheck\n> tsc -p tsconfig.json\n\nvite.config.ts(4,35): error TS2307: Cannot find module './tools/ci/sweep-shards.js' or its corresponding type declarations.\n: expected 2 to be +0 // Object.is equality\n\n- Expected\n+ Received\n\n- 0\n+ 2\n\n \u276f tests/toolchain/typecheck.test.ts:34:44\n     32|         'typecheck',\n     33|       );\n     34|       expect(fixed.exitCode, fixed.output).toBe(0);\n       |                                            ^\n     35|     },\n     36|     TOOLCHAIN_TIMEOUT_MS,\n\n\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af\u23af[10/10]\u23af\n\n"
+    },
+    {
+      "name": "lint command",
+      "status": "pass",
+      "detail": "$ npm run lint\nexit 0\n\n> tlh-trainer@0.0.0 lint\n> node tools/lint/sync-copies.js && eslint . --max-warnings 0 && prettier --check .\n\nChecking formatting...\nAll matched files use Prettier code style!\n"
+    },
+    {
+      "name": "typecheck command",
+      "status": "pass",
+      "detail": "$ npm run typecheck\nexit 0\n\n> tlh-trainer@0.0.0 typecheck\n> tsc -p tsconfig.json\n\n"
+    },
+    {
+      "name": "spec unchanged",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "name": "scope budget (lines)",
+      "status": "pass",
+      "detail": "642 changed lines vs budget 650 (fail above 1300)"
+    },
+    {
+      "name": "scope budget (files)",
+      "status": "pass",
+      "detail": "10 files vs budget 10"
+    },
+    {
+      "name": "files outside spec",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "name": "all changes listed in changes.md",
+      "status": "pass",
+      "detail": ""
+    }
+  ]
+}
