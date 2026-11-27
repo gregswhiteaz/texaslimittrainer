@@ -5,13 +5,17 @@
   "base_commit": "116fd6af473c90235c116bf772aa84f43caaa60b",
   "started": "2026-11-27T05:12:42",
   "review_round": 1,
-  "judge_round": 0,
+  "judge_round": 1,
   "sendbacks": 0,
   "gate_runs": 2,
   "questions": 0,
   "assumptions": 0,
   "escalations": 0,
-  "item_failures": {},
+  "item_failures": {
+    "SPEC-01": 0,
+    "SPEC-02": 0,
+    "SPEC-03": 0
+  },
   "locked_tests": {},
   "test_snapshot": {
     "e2e/action-bar-limits.spec.ts": {
@@ -2280,5 +2284,8 @@
   "spec_sha256": "972eebd5eece9b0b13cfd721084907dd4cb3b604d76c76f29f1429fbad6f012e",
   "review_findings": {
     "1": 0
+  },
+  "judge_results": {
+    "1": "PASS"
   }
 }

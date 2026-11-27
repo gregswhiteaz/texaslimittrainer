@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-27T11:52:00Z'
-updated_date: '2026-11-27T12:25:00Z'
+updated_date: '2026-11-27T12:30:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -24,7 +24,7 @@ Main CI run 45992781358 (commit 8bea902) failed once in 'Unit tests with coverag
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Given tests/playtest/style-check-short-handed.test.ts, When it runs under npm test with coverage on CI and locally, Then it finishes well inside its time limit (e.g. by tallying fewer hands while still exercising both 3-seat TAG mixed spots, or an explicit per-test timeout sized from measured CI time), with no assertion removed or loosened
+- [x] #1 Given tests/playtest/style-check-short-handed.test.ts, When it runs under npm test with coverage on CI and locally, Then it finishes well inside its time limit (e.g. by tallying fewer hands while still exercising both 3-seat TAG mixed spots, or an explicit per-test timeout sized from measured CI time), with no assertion removed or loosened
 <!-- AC:END -->
 
 ## Implementation Plan
