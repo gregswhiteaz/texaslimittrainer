@@ -1,0 +1,20 @@
+[
+  {
+    "id": "SPEC-01",
+    "verifies": "AC#1",
+    "verification": "acceptance `e2e/error-recovery-history.spec.ts::Return Home after an error in hand 1 steps off the Table history entry so one Back leaves the app`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-02",
+    "verifies": "AC#2",
+    "verification": "acceptance `e2e/error-recovery-history.spec.ts::an error in hand 1 leaves a 0-hand paused session that Home offers for Resume`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-03",
+    "verifies": "AC#3",
+    "verification": "command `! grep -nE \"generation|key=\" src/ui/AppRoot.tsx && npm run typecheck && npm run build && npx playwright test e2e/error-recovery.spec.ts e2e/error-recovery-history.spec.ts`",
+    "status": "pending"
+  }
+]
