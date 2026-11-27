@@ -1,16 +1,18 @@
 ---
 id: TASK-1.58
 title: Stop the 3-seat style-check unit test timing out on CI
-status: In Progress
+status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-27T11:52:00Z'
-updated_date: '2026-11-27T12:30:00Z'
+updated_date: '2026-11-27T12:31:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
 milestone: m-1
 dependencies: []
+documentation:
+  - doc-190
 parent_task_id: TASK-1
 priority: medium
 ordinal: 276000
@@ -41,4 +43,12 @@ Full spec: doit/TASK-1.58/spec.md
 
 <!-- SECTION:NOTES:BEGIN -->
 Build: HANDS 300->200, decisions captured once per file, 20 s per-test timeout via options argument (recorded deviation from spec's numeric-third-arg wording, same limit); gate PASS
+
+Step 6a: none (LIMIT->TIMEOUT rename is a NIT with no behaviour change; main CI is watched after merge).
 <!-- SECTION:NOTES:END -->
+
+## Final Summary
+
+<!-- SECTION:FINAL_SUMMARY:BEGIN -->
+Fixed the CI timeout in tests/playtest/style-check-short-handed.test.ts: hands 300 -> 200, capture playtest computed once per file (violations assertion still runs per call), explicit 20 s per-test timeout (via options argument, recorded deviation). Why: run 45992781358 exceeded vitest's 5 s default under coverage. Verified: file alone with coverage 1030 ms / 4 ms; npm test 1543 passed; both TAG mixed spots still see both actions (14/2, 9/3); Judge PASS r1, reviews clean. Assumptions to review: A-1 200 hands, A-2 shared cache, A-3 20 s. Follow-up: rename NIT constant LIMIT -> TIMEOUT; watch next main CI runs.
+<!-- SECTION:FINAL_SUMMARY:END -->
