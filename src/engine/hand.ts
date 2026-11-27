@@ -92,7 +92,8 @@ export interface HandState {
   readonly street: Street;
   /** Chips from completed streets: the main pot then side pots, ascending contribution level (TASK-1.10). */
   readonly pots: readonly Pot[];
-  /** Highest streetContribution. */
+  /** The amount to match: the highest street contribution of a seat still in the hand. Preflop it is at
+   *  least the big blind. */
   readonly currentBet: number;
   /** Counted bets + raises this street (full, or all-in of at least half a bet); the big blind counts as 1
    *  preflop. */
@@ -318,19 +319,43 @@ function betUnit(state: BetContext): number {
     : state.stakes.bigBet;
 }
 
-/** The street's last counted bet level: the big blind, or a bet/raise adding at least half a unit over the
- *  previous level (REQ-016.5). Short all-ins under half a bet leave it unchanged. */
-function fullBetLevel(state: BetContext): number {
+/**
+ * The street's surviving counted bet levels in order, each with the index of the record that set it: the big
+ * blind, or a bet/raise adding at least half a unit over the previous level (REQ-016.5; short all-ins under
+ * half a bet leave it unchanged). A fold of a seat whose street chips exceed the live top at that point (the
+ * highest street chips of a seat not yet folded, preflop at least the big blind) voids every level above that
+ * live top (TASK-10.13 R2). A fold through applyAction never does, as it always owes chips.
+ */
+function liveLevels(state: BetContext): { level: number; at: number }[] {
   const unit = betUnit(state);
-  let level = 0;
-  for (const a of state.actions) {
-    if (a.street !== state.street) continue;
-    if (a.type === 'big-blind') level = a.amount;
-    else if ((a.type === 'bet' || a.type === 'raise') && 2 * (a.amount - level) >= unit) {
-      level = a.amount;
+  const folded = new Set<SeatNumber>();
+  const put = new Map<SeatNumber, number>();
+  const levels: { level: number; at: number }[] = [];
+  state.actions.forEach((a, i) => {
+    if (a.street !== state.street) {
+      if (a.type === 'fold') folded.add(a.seat);
+      return;
     }
-  }
-  return level;
+    put.set(a.seat, (put.get(a.seat) ?? 0) + a.added);
+    const level = levels.at(-1)?.level ?? 0;
+    if (a.type === 'big-blind') levels.push({ level: a.amount, at: i });
+    else if ((a.type === 'bet' || a.type === 'raise') && 2 * (a.amount - level) >= unit) {
+      levels.push({ level: a.amount, at: i });
+    } else if (a.type === 'fold') {
+      folded.add(a.seat);
+      let live = state.street === 'preflop' ? state.stakes.bigBlind : 0;
+      for (const [s, c] of put) if (!folded.has(s) && c > live) live = c;
+      if ((put.get(a.seat) ?? 0) > live) {
+        while ((levels.at(-1)?.level ?? 0) > live) levels.pop();
+      }
+    }
+  });
+  return levels;
+}
+
+/** The street's last surviving counted bet level, or 0. */
+function fullBetLevel(state: BetContext): number {
+  return liveLevels(state).at(-1)?.level ?? 0;
 }
 
 /** The street total ("to" amount) of a full bet or raise now: the last counted bet level plus one bet unit
@@ -406,7 +431,8 @@ function buildPots(
 
 /**
  * Ends a street: gives back the uncalled part of the top bet (A-5), the top street contribution minus
- * the second-highest, and rebuilds the pots from every seat's contribution.
+ * the second-highest, unless that seat has folded (its chips stay in the pot as dead money, TASK-10.13 R4),
+ * and rebuilds the pots from every seat's contribution.
  */
 function gather(players: readonly PlayerState[]) {
   let top = 0;
@@ -423,7 +449,9 @@ function gather(players: readonly PlayerState[]) {
     }
   }
   const back = top - second;
-  const returned = back > 0 && topSeat !== null ? { seat: topSeat, amount: back } : undefined;
+  const topFolded = players.some((p) => p.seat === topSeat && p.folded);
+  const returned =
+    back > 0 && topSeat !== null && !topFolded ? { seat: topSeat, amount: back } : undefined;
   return {
     pots: buildPots(players, returned),
     returned,
@@ -696,7 +724,11 @@ function settle(
 /**
  * REQ-004.8: folds `seat` now, whether or not it is to act and even when it could check. Same history entry
  * and pot-eligibility change as a fold through applyAction, and hasActed true. Then the hand settles exactly
- * as after applyAction; toAct is unchanged if another seat was to act. RangeError('Cannot force a fold: …')
+ * as after applyAction; toAct is unchanged if another seat was to act. The seat's chips stay in the pot and
+ * are never returned (TASK-10.13 Q-1). If it held a strict top bet, the street is voided down to the live
+ * top: currentBet and betCount drop to the surviving levels, and a live seat has acted only if it has a
+ * non-blind record since the last surviving level; toAct is then the first seat clockwise from the previous
+ * toAct that still has to act. RangeError('Cannot force a fold: …')
  * if the hand is complete, `seat` is not dealt in, has folded or is all-in. Never mutates `state`.
  */
 export function forceFold(state: HandState, seat: SeatNumber): HandState {
@@ -719,9 +751,47 @@ export function forceFold(state: HandState, seat: SeatNumber): HandState {
     })),
     actions: [...state.actions, { street, seat, type: 'fold', amount: 0, added: 0 }],
   };
-  return settle(next, players, (open) =>
-    state.toAct === seat
-      ? (clockwiseAfter(open, seat)[0] as SeatNumber)
-      : (state.toAct as SeatNumber),
+  const floor = street === 'preflop' ? state.stakes.bigBlind : 0;
+  const live = Math.max(
+    floor,
+    ...players.filter((p) => !p.folded).map((p) => p.streetContribution),
   );
+  if (folder.streetContribution <= live) {
+    return settle(next, players, (open) =>
+      state.toAct === seat
+        ? (clockwiseAfter(open, seat)[0] as SeatNumber)
+        : (state.toAct as SeatNumber),
+    );
+  }
+  const levels = liveLevels(next);
+  const from = levels.at(-1)?.at ?? -1;
+  const voided = players.map((p): PlayerState =>
+    p.folded
+      ? p
+      : {
+          ...p,
+          hasActed: next.actions.some(
+            (a, i) =>
+              i >= from &&
+              a.street === street &&
+              a.seat === p.seat &&
+              a.type !== 'small-blind' &&
+              a.type !== 'big-blind',
+          ),
+        },
+  );
+  const lowered: HandState = {
+    ...next,
+    players: voided,
+    currentBet: live,
+    betCount: levels.length,
+  };
+  const toAct = state.toAct as SeatNumber;
+  return settle(lowered, voided, (open) => {
+    const ring = clockwiseAfter(open, toAct === seat ? seat : toAct - 1);
+    return ring.find((s) => {
+      const p = voided.find((q) => q.seat === s) as PlayerState;
+      return !p.hasActed || p.streetContribution < live;
+    }) as SeatNumber;
+  });
 }

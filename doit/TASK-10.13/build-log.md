@@ -1,0 +1,11 @@
+# Build log: TASK-10.13
+
+## BUILD
+- `src/engine/hand.ts`: private `liveLevels` (R2, void-aware levels with record index) behind `fullBetLevel`; `gather` returns no chips to a folded top seat (R4); `forceFold` voids a strict top bet down to the live top (BB floor preflop), sets `currentBet`/`betCount`, recomputes `hasActed` from the last surviving level and picks `toAct` clockwise from the previous `toAct` (R1, R3). Followed the scratchpad prototype; folds are applied "so far" in the walk (matches the engine's state at each forced fold).
+- `src/engine/invariants.ts`: void-aware `countedBets`; `uncalled` (last record's street, live top seat only) for C5 and pot structure (no dead-money cap); P5 sole-survivor exemption on a fold-out (J-1-02).
+- Tests: `tests/engine/force-fold-top-bet.acceptance.test.ts` (SPEC-02..06, 5 tests) and `tests/engine/force-fold.property.test.ts` (SPEC-07, 2,000 hands, ~0.15 s). Against the HEAD engine/checker, SPEC-02..05 and SPEC-07 fail (hand 7: a folded seat was given chips back); SPEC-06 passes as intended.
+- `e2e/leave-mid-hand.spec.ts` (locked edit, Q-4): `countWorkerTraffic` init script in `openPausedClock`; the seat-6 freeze check now runs 1000 ms, polls (10 s real) until worker replies >= posts, runs 1000 ms again, then asserts as before. No assertion removed or loosened.
+- SPEC-08 mutation: the spec's literal "remove `paused &&`" would freeze always, so the freeze was disabled with `false && paused && …` at `src/ui/table/useTableSession.ts:218`: "Cancel resumes…" failed on chromium and webkit (Expected 5, Received 7). Reverted; file unchanged.
+- Docs: navigation.md bullet (TASK-10.13 Q-1) and Tests list entries; requirements.md REQ-004.8, REQ-018.4, changelog 1.15.
+- Results: `npm run lint` exit 0; `npm run typecheck` exit 0; `npm test` exit 0, 336 files passed / 9 skipped, 1503 tests passed / 56 skipped, src/engine 99.62% lines; `npx vitest run tests/golden/` 7 files, 292 passed; `npm run -s playtest -- --hands 10000 --seed 42` 0 invariant violations, output byte-identical to HEAD engine; `npx playwright test` 401 passed / 19 skipped; `npx playwright test e2e/leave-mid-hand.spec.ts --repeat-each 3` 24 passed.
+- Note: an early gate run failed only because it collided with my own concurrent vitest run on `coverage/`.

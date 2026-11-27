@@ -40,10 +40,46 @@ const actionCount = async (page: Page): Promise<number> =>
   Number(await tableSection(page).getAttribute('data-action-count'));
 const toActSeat = (page: Page) => toActSeats(page).getAttribute('data-seat');
 
+declare global {
+  interface Window {
+    __leaveWorkerTraffic: { posts: number; replies: number };
+  }
+}
+
+/** Init script (TASK-10.13 A-8): counts every Worker.postMessage and every `message` reply from a worker. */
+function countWorkerTraffic(): void {
+  const traffic = { posts: 0, replies: 0 };
+  window.__leaveWorkerTraffic = traffic;
+  const counted = new WeakSet<Worker>();
+  const post = Worker.prototype.postMessage;
+  Worker.prototype.postMessage = function (this: Worker, ...args: unknown[]) {
+    if (!counted.has(this)) {
+      counted.add(this);
+      this.addEventListener('message', () => (traffic.replies += 1));
+    }
+    traffic.posts += 1;
+    Reflect.apply(post, this, args);
+  } as typeof post;
+}
+
 async function openPausedClock(page: Page): Promise<void> {
   await page.clock.install({ time: 0 });
   await page.clock.pauseAt(1000);
   await page.addInitScript(stubReplayWords, WORDS);
+  await page.addInitScript(countWorkerTraffic);
+}
+
+/** Polls (at most 10 s real time) until every Worker request posted so far has had a reply. */
+async function workerRepliesSettled(page: Page): Promise<void> {
+  await expect
+    .poll(
+      () =>
+        page.evaluate(
+          () => window.__leaveWorkerTraffic.replies >= window.__leaveWorkerTraffic.posts,
+        ),
+      { timeout: 10_000 },
+    )
+    .toBe(true);
 }
 
 /** SPEC-09 setup: a seeded 24-hand cash session resumed, run to the user's first turn in hand 25. */
@@ -132,6 +168,8 @@ test('Cancel resumes the hand with the same cards, stack and player to act', asy
   // Seat 6 to act: the dialog holds its turn, and Cancel lets seat 6 act next.
   const seat6 = page.locator('li[data-seat="6"] [data-part="action"]');
   await openLeaveDialog(page);
+  await page.clock.runFor(1000);
+  await workerRepliesSettled(page);
   await page.clock.runFor(1000);
   expect(await actionCount(page)).toBe(before.count + 1);
   await expect(seat6).toHaveCount(0);

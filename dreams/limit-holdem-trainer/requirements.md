@@ -104,7 +104,7 @@ Dream slug: limit-holdem-trainer   ·   Vision: dreams/limit-holdem-trainer/visi
   - REQ-004.5: Leave table ends the session and opens its Session Report.
   - REQ-004.6: An unfinished hand abandoned by closing the app is not counted in any statistic.
   - REQ-004.7: When the user chooses Leave table during a hand, a dialog asks "Leave now? Your hand will be folded."; on confirm the user's hand is folded, the hand plays to completion and is recorded, and then the session ends; on cancel play continues unchanged.
-  - REQ-004.8: After the user confirms Leave table mid-hand, the user's hand is folded immediately even when another player is to act; this forced fold is not graded and is not counted in error rates or leaks.
+  - REQ-004.8: After the user confirms Leave table mid-hand, the user's hand is folded immediately even when another player is to act; this forced fold is not graded and is not counted in error rates or leaks. The forced fold forfeits the user's chips already in the pot; if the user held the top bet, the others need only match the highest bet still live (preflop at least the big blind).
   - REQ-004.9: The Table header has a Home control that pauses the session and opens Home; used mid-hand, the unfinished hand is abandoned exactly as when the app is closed (REQ-004.2, REQ-004.6).
 - Fit criterion: Play 10 hands, close app mid-hand, relaunch → Resume shows 10 hands; resuming deals hand 11 with stacks equal to the end of hand 10.
 - Rationale: Practice happens in short sittings; avoids corrupting stats with half hands.
@@ -351,7 +351,7 @@ Dream slug: limit-holdem-trainer   ·   Vision: dreams/limit-holdem-trainer/visi
   - REQ-018.1: An all-in player stays in the hand to showdown and makes no further actions.
   - REQ-018.2: Each pot records the set of players eligible to win it.
   - REQ-018.3: Each pot is awarded only among its eligible players.
-  - REQ-018.4: Any bet that no other player called is returned to the bettor before showdown.
+  - REQ-018.4: Any bet that no other player called is returned to the bettor before showdown, unless the bettor has been folded by Leave table (REQ-004.8).
   - REQ-018.5: Total chips at the table are identical before and after every hand (chip conservation).
 - Fit criterion: Unit tests with three-way and four-way all-ins at different stack sizes; property test of chip conservation over 100,000 random hands.
 - Rationale: Correct pots are a precondition for trust (G-1).
@@ -1372,3 +1372,4 @@ Entity × lifecycle (every cell is a clause below or N/A):
 | 1.12 | 2026-11-26 | TASK-6.20: added REQ-029.3 (bot decisions use only the current hand) | User (TASK-6.20 Q-1) |
 | 1.13 | 2026-11-26 | TASK-7.21: REQ-032.2 splits facing a re-raise into own raise re-raised and re-raised when you have not raised, and splits blind defence by an early or a late raiser; REQ-032.6 picks the matching re-raise chart for a fourth bet | User (TASK-7.21 Q-1/Q-2) |
 | 1.14 | 2026-11-26 | TASK-7.29: REQ-035.6 scales observed three-bet and four-bet ranges by PFR relative to the typical PFR for the table size instead of by raw PFR | User (TASK-7.29 Q-3) |
+| 1.15 | 2026-11-26 | TASK-10.13: REQ-004.8 forced fold forfeits chips; REQ-018.4 exception | User (TASK-10.13 Q-3) |

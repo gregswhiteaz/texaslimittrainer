@@ -82,6 +82,10 @@ Leave table first opens a modal dialog, `Leave now? Your hand will be folded.`, 
 - The forced fold is not a decision: it has no grade and no entry in the hand record's `decisions`, so it never
   counts in error rates, hint usage or leaks. The record carries `forcedFold: true`
   ([hand-records.md](../storage/hand-records.md)).
+- The forced fold forfeits every chip the user has put in. The chips stay in the pot and are never given
+  back, even if no one called them. If the user held the top bet, the others need only match the highest bet
+  of a player still in the hand (preflop, never less than the big blind), and later bets, raises and the
+  four-bet cap count only the bets up to that amount (TASK-10.13 Q-1).
 
 **The bust dialog (TASK-3.11).** When a cash hand ends with the user on $0, a modal `Out of chips` dialog
 offers `Rebuy` and `Leave table`, and the page behind it (the header's Home and Leave table included) is inert.
@@ -240,3 +244,10 @@ message with Retry for a failed write.
 - `tests/table/decision-grades-rejection.test.ts`, `tests/ui/review-pending.acceptance.test.tsx`: a rejected
   grade request is handled when requested yet still fails the hand end; pending grades show Deal next hand and
   no panel.
+- `tests/engine/force-fold.acceptance.test.ts`, `tests/engine/force-fold-top-bet.acceptance.test.ts`,
+  `tests/engine/force-fold.property.test.ts`: the forced fold, its dead money and the voided top bet, and
+  several forced folds in one hand keeping every invariant.
+- `tests/table/leave-mid-hand.acceptance.test.ts`, `tests/ui/leave-dialog.acceptance.test.tsx`: Leave table
+  during a hand in the session and the dialog markup.
+- `e2e/leave-mid-hand.spec.ts` (every push): the dialog, the freeze (checked after every worker reply), Cancel,
+  Confirm while a bot is to act, and Confirm during hand 1.

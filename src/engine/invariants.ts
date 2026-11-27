@@ -64,25 +64,66 @@ const unitOf = (state: HandState, street: ActionRecord['street']): number =>
 /**
  * REQ-016.5, derived here independently of the engine (TASK-1.8 A-4): walking the street's records, the big
  * blind sets the level, and a bet/raise counts (and sets the level) when it adds at least half a unit over it.
+ * A fold of a seat holding more street chips than every seat not yet folded (preflop: and the big blind)
+ * voids the levels above that live top (TASK-10.13 R6).
  */
 function countedBets(
   state: HandState,
   street: ActionRecord['street'],
 ): { level: number; count: number } {
   const unit = unitOf(state, street);
-  let level = 0;
-  let count = 0;
+  const folded = new Set<SeatNumber>();
+  const put = new Map<SeatNumber, number>();
+  const levels: number[] = [];
   for (const a of state.actions) {
-    if (a.street !== street) continue;
-    if (a.type === 'big-blind') {
-      level = a.amount;
-      count++;
-    } else if ((a.type === 'bet' || a.type === 'raise') && 2 * (a.amount - level) >= unit) {
-      level = a.amount;
-      count++;
+    if (a.street !== street) {
+      if (a.type === 'fold') folded.add(a.seat);
+      continue;
+    }
+    put.set(a.seat, (put.get(a.seat) ?? 0) + a.added);
+    const level = levels.at(-1) ?? 0;
+    if (a.type === 'big-blind') levels.push(a.amount);
+    else if ((a.type === 'bet' || a.type === 'raise') && 2 * (a.amount - level) >= unit) {
+      levels.push(a.amount);
+    } else if (a.type === 'fold') {
+      folded.add(a.seat);
+      let live = street === 'preflop' ? state.stakes.bigBlind : 0;
+      for (const [seat, c] of put) if (!folded.has(seat) && c > live) live = c;
+      if ((put.get(a.seat) ?? 0) > live) {
+        while ((levels.at(-1) ?? 0) > live) levels.pop();
+      }
     }
   }
-  return { level, count };
+  return { level: levels.at(-1) ?? 0, count: levels.length };
+}
+
+/**
+ * The uncalled part due back (TASK-10.13 R6): on the street of the last record, the top seat's chips added
+ * minus the second-highest, due only when that top seat has not folded.
+ */
+function uncalled(state: HandState): { seat: SeatNumber | null; due: number } {
+  const last = state.actions.at(-1);
+  if (last === undefined) return { seat: null, due: 0 };
+  const put = new Map<SeatNumber, number>();
+  for (const a of state.actions) {
+    if (a.street === last.street) put.set(a.seat, (put.get(a.seat) ?? 0) + a.added);
+  }
+  let top = 0;
+  let second = 0;
+  let seat: SeatNumber | null = null;
+  for (const p of state.players) {
+    const c = put.get(p.seat) ?? 0;
+    if (c > top) {
+      second = top;
+      top = c;
+      seat = p.seat;
+    } else if (c > second) {
+      second = c;
+    }
+  }
+  if (seat === null || top === second || playerAt(state, seat)?.folded)
+    return { seat: null, due: 0 };
+  return { seat, due: top - second };
 }
 
 function legalActionMessage({ before, action, result }: ActionStep): string | null {
@@ -185,23 +226,9 @@ function chipsMessage(state: HandState): string | null {
   return null;
 }
 
-/** C5: on a completed hand, `returned` is exactly the uncalled part of the top total contribution (A-5). */
+/** C5: on a completed hand, `returned` is exactly the uncalled part of the last betting street (A-5). */
 function returnedMessage(state: HandState): string | null {
-  let top = 0;
-  let second = 0;
-  let dueSeat: SeatNumber | null = null;
-  for (const p of state.players) {
-    const c = p.totalContribution;
-    if (c > top) {
-      second = top;
-      top = c;
-      dueSeat = p.seat;
-    } else if (c > second) {
-      second = c;
-    }
-  }
-  const due = top - second;
-  if (due === 0) dueSeat = null;
+  const { seat: dueSeat, due } = uncalled(state);
   const returned = state.result?.returned;
   if (returned !== undefined) {
     const dueForSeat = returned.seat === dueSeat ? due : 0;
@@ -261,7 +288,15 @@ function potEligibilityMessage(state: HandState): string | null {
     const eligible = pots[award.pot]?.eligible ?? [];
     for (const { seat } of award.winners) {
       const p = playerAt(state, seat);
-      if (!eligible.includes(seat) || p === undefined || p.folded || p.totalContribution <= 0) {
+      // J-1-02: the only seat left after a fold-out wins dead blinds even with $0 in.
+      const sole =
+        state.result?.endedBy === 'fold' && state.players.filter((q) => !q.folded).length === 1;
+      if (
+        !eligible.includes(seat) ||
+        p === undefined ||
+        p.folded ||
+        (p.totalContribution <= 0 && !sole)
+      ) {
         return `${potName(award.pot)} paid seat ${seat}, which is not eligible`;
       }
     }
@@ -272,22 +307,15 @@ function potEligibilityMessage(state: HandState): string | null {
 /**
  * P6-P8 (D-5): one pot per contribution level of the non-folded seats, each listing exactly the seats that
  * matched its level and holding (or paying) exactly its layer. A seat's matched amount is its completed-street chips,
- * capped at the second-highest (the uncalled part is returned). Skipped for one pot and one level (A-5).
+ * less the uncalled part returned to it on a completed hand; dead money is not capped (TASK-10.13 R6). Skipped
+ * for one pot and one level (A-5).
  */
 function potStructureMessage(state: HandState): string | null {
   const { pots, players, result } = state;
-  const put = players.map((p) => p.totalContribution - p.streetContribution);
-  let top = 0;
-  let second = 0;
-  for (const c of put) {
-    if (c > top) {
-      second = top;
-      top = c;
-    } else if (c > second) {
-      second = c;
-    }
-  }
-  const matched = put.map((c) => Math.min(c, second));
+  const back = result === null ? { seat: null, due: 0 } : uncalled(state);
+  const matched = players.map(
+    (p) => p.totalContribution - p.streetContribution - (p.seat === back.seat ? back.due : 0),
+  );
   const levels = [...new Set(matched.filter((_, i) => !(players[i] as PlayerState).folded))].sort(
     (a, b) => a - b,
   );
