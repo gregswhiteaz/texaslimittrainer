@@ -7,7 +7,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-27T10:20:00Z'
-updated_date: '2026-11-27T10:37:00Z'
+updated_date: '2026-11-27T10:45:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -26,7 +26,7 @@ Main CI run 45978923317 (commit 46e6e83, TASK-7.46 merge, no app/bot change) fai
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Given e2e/players-choice.spec.ts table-size test, When it runs repeatedly on Chromium and WebKit (e.g. --repeat-each 10), Then it passes every time because it waits on the actual condition after Leave table (dialog handled or session-end complete), with no assertion removed or loosened
+- [x] #1 Given e2e/players-choice.spec.ts table-size test, When it runs repeatedly on Chromium and WebKit (e.g. --repeat-each 10), Then it passes every time because it waits on the actual condition after Leave table (dialog handled or session-end complete), with no assertion removed or loosened
 <!-- AC:END -->
 
 ## Implementation Plan

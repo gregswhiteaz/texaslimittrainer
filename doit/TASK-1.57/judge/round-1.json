@@ -1,0 +1,19 @@
+{"round": 1,
+ "test_suite": {"command": "npm run e2e", "result": "PASS", "passed": 401, "failed": 0,
+   "notes": "Local: 401 passed, 19 skipped, 0 failed (1.2m). Linux CI run 45983703864 (head 05f889c): all jobs green; E2E (Chromium and WebKit) 399 passed, 0 failed, 0 flaky, including [webkit] players-choice.spec.ts:95 table-size test (4.7s)."},
+ "end_to_end": {"command": "npx playwright test e2e/players-choice.spec.ts --repeat-each 10 --retries=0 --project=chromium --project=webkit",
+   "result": "PASS",
+   "expected": "40 passed (both tests x 10 x 2 browsers), 0 failed, 0 flaky",
+   "actual": "40 passed (16.9s), 0 failed, 0 flaky"},
+ "integrity": {"result": "PASS",
+   "notes": "doit.py test-integrity TASK-1.57 exit 0. git diff 87760c3 -- src e2e: only e2e/players-choice.spec.ts, +8/-1: storedSessions import, braces, 3-line comment, expect.poll(storedSessions length).toBe(1) before axeWithPausedClock. No src/** change, no assertion/locator/timeout/order change, no retries or conditional dialog/report handling, shared paused-clock helper and second test untouched. Locked edit approved (owner TASK-2.2, qa.md Q-1)."},
+ "items": [
+  {"spec": "SPEC-01", "result": "PASS",
+   "evidence": "Acceptance test passes 10/10 on chromium and 10/10 on webkit with --retries=0, and on Linux CI webkit. Test asserts the TLH Trainer level-1 heading after every Leave table (n=2..10); all prior assertions byte-identical. Holdout: after the start-record poll succeeds, real worker timers swapped in for 1.5 s real time at every table size 2..10 deal no hand (no action buttons, header stays Hand #1), Leave table goes straight Home with no Session report, and the zero-hand session record is deleted (count back to 0) — 10/10 runs across both engines. Negative control: letting the paused clock run after the poll deals a hand (3 action buttons appear), proving the detector can fail."},
+  {"spec": "SPEC-02", "result": "PASS",
+   "evidence": "Repeat command (run as part of the Run command superset, --repeat-each 10 --retries=0, chromium+webkit) → table-size test 20/20 passed, 0 failed, 0 flaky."},
+  {"spec": "SPEC-03", "result": "PASS",
+   "evidence": "`git diff main -- e2e/players-choice.spec.ts | grep -E '^-[^-].*expect\\(' ; test $? -eq 1` → exit 0 (no removed expect lines). Only removed line is the old one-line `if (n === 2 || n === 10) await axeWithPausedClock(page);`, re-added inside the block. No timeout changes. Holdout boundary check: storedSessions is 0 on Home before any game and reaches 1 only after Start game, so the poll is a real gate (cannot pass vacuously)."}
+ ],
+ "findings": [],
+ "summary": "Test-only fix matches spec section 5 exactly. Full e2e suite green locally (401 passed) and on Linux CI (all jobs green). Repeat run 40/40 on both engines with no retries. Holdout confirms the invariant: once the start record is stored, the first-deal timer is on the paused clock and real timers during the scan cannot deal a hand. No tampering, no app change, no regressions. No findings."}

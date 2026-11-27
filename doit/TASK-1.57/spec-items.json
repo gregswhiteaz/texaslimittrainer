@@ -3,18 +3,18 @@
     "id": "SPEC-01",
     "verifies": "AC#1",
     "verification": "acceptance `e2e/players-choice.spec.ts::each table size from 2 to 10 starts with that many players and the right advice note`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-02",
     "verifies": "AC#1",
     "verification": "command `npx playwright test e2e/players-choice.spec.ts -g \"each table size\" --repeat-each 10 --retries=0 --project=chromium --project=webkit`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-03",
     "verifies": "AC#1",
     "verification": "command `git diff main -- e2e/players-choice.spec.ts | grep -E '^-[^-].*expect\\(' ; test $? -eq 1`",
-    "status": "pending"
+    "status": "pass"
   }
 ]
