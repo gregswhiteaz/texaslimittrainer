@@ -1,6 +1,6 @@
 {
   "task": "TASK-6.28",
-  "stage": "build",
+  "stage": "done",
   "branch": "doit/TASK-6.28",
   "base_commit": "ca5708d3b234d9b164946b948845f7fc10f7fcdc",
   "started": "2026-11-26T23:46:47",
@@ -8,7 +8,7 @@
   "judge_round": 1,
   "sendbacks": 0,
   "gate_runs": 2,
-  "questions": 0,
+  "questions": 2,
   "assumptions": 0,
   "escalations": 0,
   "item_failures": {
@@ -2219,5 +2219,6 @@
   },
   "judge_results": {
     "1": "PASS"
-  }
+  },
+  "doc_id": "doc-181"
 }

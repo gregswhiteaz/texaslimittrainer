@@ -1,17 +1,19 @@
 ---
 id: TASK-6.28
 title: Show that --check-styles bands are judged over 100,000 hands
-status: In Progress
+status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-26T21:01:00Z'
-updated_date: '2026-11-27T07:11:00Z'
+updated_date: '2026-11-27T07:14:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
 milestone: m-1
 dependencies:
   - TASK-6.24
+documentation:
+  - doc-181
 parent_task_id: TASK-6
 priority: medium
 ordinal: 261000
@@ -44,4 +46,12 @@ Full spec: doit/TASK-6.28/spec.md
 
 <!-- SECTION:NOTES:BEGIN -->
 Build: --check-styles help line + docs paragraph (100,000-hand judging, sample noise); cli.test USAGE assertions updated; gate PASS
+
+Step 6a: none (runtime note was decided against in Q-2 / decision-2).
 <!-- SECTION:NOTES:END -->
+
+## Final Summary
+
+<!-- SECTION:FINAL_SUMMARY:BEGIN -->
+Help text for --check-styles and the 'In the playtest CLI' docs section now say REQ-027 judges the bands over 100,000 hands and that shorter runs can fail from sample noise (with the TASK-6.24 examples). No behaviour or run-output change. Verified: npm test 1516 passed, lint/typecheck clean, help grep and docs grep pass, judge PASS r1, review clean (one NIT on docs line wrap). Review: Q-1 wording and Q-2 (no runtime note) were auto-accepted in autopilot; assumptions A-1..A-3 in the doc. Risk: short runs still fail silently, by decision.
+<!-- SECTION:FINAL_SUMMARY:END -->
