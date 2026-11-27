@@ -349,6 +349,23 @@ export function scaledWidthPct(d: number, o: number, n: number): number {
   return d + ((o - d) * n) / OBSERVED_FULL_HANDS;
 }
 
+/** Midpoint of the healthy PFR band per reference size (REQ-035.6, REQ-046.1; src/stats/healthy-ranges.json).
+ *  A copy, because advice code may not import src/stats (lint boundary); a test keeps it in step. */
+export const TYPICAL_PFR: Readonly<Record<ReferenceSize, number>> = {
+  'heads-up': 57.5,
+  '6-max': 18,
+  'full-ring': 12.5,
+};
+
+export function typicalPfr(size: ReferenceSize): number {
+  return TYPICAL_PFR[size];
+}
+
+/** Observed target o for a three-bet or four-bet line: d × pfr ÷ typical, at most 100 (REQ-035.6). */
+export function relativePfrPct(d: number, pfr: number, typical: number): number {
+  return Math.min(100, (d * pfr) / typical);
+}
+
 /** The shortest HAND_ORDER prefix whose combos reach `widthPct` % of 1326, at least AA (TASK-7.13 A-1).
  *  No longer used by estimateOpponentRanges, which resizes the authored default instead. */
 export function strongestClasses(widthPct: number): ReadonlySet<HandClass> {
@@ -602,14 +619,14 @@ const STREET_BOARDS = [
   ['river', 5],
 ] as const;
 
-const OBSERVED_LINE_STAT: Readonly<Record<PreflopLine, 'vpip' | 'pfr' | null>> = {
+const OBSERVED_LINE_STAT: Readonly<Record<PreflopLine, 'vpip' | 'pfr' | 'relative-pfr' | null>> = {
   check: null,
   limp: 'vpip',
   'open-raise': 'pfr',
   'call-raise': 'vpip',
-  'three-bet': 'pfr',
+  'three-bet': 'relative-pfr',
   'call-three-bet': 'vpip',
-  'four-bet': 'pfr',
+  'four-bet': 'relative-pfr',
 };
 
 const inPercent = (value: number) => Number.isFinite(value) && value >= 0 && value <= 100;
@@ -642,7 +659,8 @@ function observedBySeat(observed: readonly ObservedOpponent[]): Map<SeatNumber, 
 /**
  * One entry per live opponent (not folded, not the viewer), ascending seat. Reads only `view` and `observed`.
  * From OBSERVED_MIN_HANDS observed hands, a default raising or calling range is resized to the scaled width
- * (resizeRange): at the default width it is unchanged.
+ * (resizeRange): at the default width it is unchanged. Three-bet and four-bet lines move toward
+ * d × PFR ÷ typical PFR (relativePfrPct), open-raise toward PFR and calling lines toward VPIP.
  * A non-array `observed` is ignored; array entries are validated (RangeError).
  */
 export function estimateOpponentRanges(
@@ -667,7 +685,11 @@ export function estimateOpponentRanges(
       const obs = bySeat.get(seat);
       const stat = OBSERVED_LINE_STAT[line];
       if (obs !== undefined && stat !== null && obs.hands >= OBSERVED_MIN_HANDS) {
-        widthPct = scaledWidthPct(widthPct, obs[stat], obs.hands);
+        const o =
+          stat === 'relative-pfr'
+            ? relativePfrPct(widthPct, obs.pfr, typicalPfr(ranges.referenceSize))
+            : obs[stat];
+        widthPct = scaledWidthPct(widthPct, o, obs.hands);
         classes = resizeRange(classes, widthPct);
         basis = { seat, observedHands: obs.hands, text: basisText(obs.hands) };
       }

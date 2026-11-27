@@ -11,14 +11,18 @@ import {
   parseHandOrder,
   rangeWidthPct,
   RangeValidationError,
+  resizeRange,
   scaledWidthPct,
   SIX_MAX_RANGES,
   strongestClasses,
+  TYPICAL_PFR,
+  typicalPfr,
   unseenCombos,
   type ObservedOpponent,
 } from '../../src/advice/ranges';
 import { ACTION_RANGE_ADVICE, adviceOptions, recommend } from '../../src/advice/recommend';
 import { type Card } from '../../src/engine/cards';
+import { HEALTHY_RANGES } from '../../src/stats/healthy-ranges';
 import {
   applyAction,
   createHand,
@@ -246,16 +250,16 @@ describe('range width and scaling', () => {
     expect(range?.widthPct).toBe(0);
   });
 
-  it('scales each line by its stat: PFR for raises, VPIP for calls', () => {
+  it('scales each line by its stat: PFR for opens, PFR relative to typical for re-raises, VPIP for calls', () => {
     const afterCheck = (steps: Step[]): Step[] => [...steps, [4, 'check']];
     const cases = [
       [LIMPED, 4, 'limp', 'vpip'],
       [MULTIWAY, 4, 'open-raise', 'pfr'],
       [MULTIWAY, 6, 'call-raise', 'vpip'],
-      [THREE_BET, 5, 'three-bet', 'pfr'],
+      [THREE_BET, 5, 'three-bet', 'relative-pfr'],
       [afterCheck(THREE_BET), 4, 'call-three-bet', 'vpip'],
       [FOUR_BET, 5, 'call-three-bet', 'vpip'],
-      [afterCheck(FOUR_BET), 4, 'four-bet', 'pfr'],
+      [afterCheck(FOUR_BET), 4, 'four-bet', 'relative-pfr'],
     ] as const;
     for (const [steps, seat, line, stat] of cases) {
       const view = toActView([...steps]);
@@ -263,11 +267,62 @@ describe('range width and scaling', () => {
       const range = estimateOpponentRanges(view, [obs]).find((r) => r.seat === seat);
       expect(range?.line, line).toBe(line);
       const d = widthOf(defaultRange(SIX_MAX_RANGES, range?.position ?? 'BB', line).classes);
-      const other = stat === 'vpip' ? 'pfr' : 'vpip';
-      expect(range?.widthPct, line).toBeCloseTo(d + ((obs[stat] - d) * 50) / 100, 9);
-      expect(range?.widthPct, line).not.toBeCloseTo(d + ((obs[other] - d) * 50) / 100, 9);
+      const target = { vpip: 40, pfr: 10, 'relative-pfr': (d * 10) / 18 };
+      const blend = (o: number) => d + ((o - d) * 50) / 100;
+      expect(range?.widthPct, line).toBeCloseTo(blend(target[stat]), 9);
+      for (const other of Object.keys(target) as (keyof typeof target)[]) {
+        if (other !== stat) expect(range?.widthPct, line).not.toBeCloseTo(blend(target[other]), 9);
+      }
       expect(range?.basis.observedHands, line).toBe(50);
     }
+    const fourBet = toActView(afterCheck(FOUR_BET));
+    const tightest = estimateOpponentRanges(fourBet, [entry({ hands: 100, pfr: 0 })]).find(
+      (r) => r.seat === 4,
+    );
+    const best = HAND_ORDER.find((hc) =>
+      defaultRange(SIX_MAX_RANGES, 'UTG', 'four-bet').classes.has(hc),
+    ) as string;
+    expect(tightest?.widthPct).toBe(0);
+    expect(tightest?.start).toEqual(
+      expandRange(new Set([best]), [...fourBet.holeCards, ...fourBet.board]),
+    );
+  });
+
+  it('re-raise lines stay typical without 30 observed hands', () => {
+    for (const [steps, seat, line] of [
+      [THREE_BET, 5, 'three-bet'],
+      [[...FOUR_BET, [4, 'check']], 4, 'four-bet'],
+    ] as const) {
+      const view = toActView([...steps] as Step[]);
+      const typical = estimateOpponentRanges(view).find((r) => r.seat === seat);
+      expect(typical?.line).toBe(line);
+      expect(typical?.basis).toEqual({ seat, observedHands: null, text: 'typical player' });
+      const dead = [...view.holeCards, ...view.board];
+      expect(typical?.start).toEqual(
+        expandRange(defaultRange(SIX_MAX_RANGES, typical?.position ?? 'BB', line).classes, dead),
+      );
+      const few = estimateOpponentRanges(view, [entry({ seat, hands: 29, pfr: 90 })]).find(
+        (r) => r.seat === seat,
+      );
+      expect(few).toEqual(typical);
+    }
+  });
+
+  it('TYPICAL_PFR is the middle of each healthy PFR range', () => {
+    expect(Object.keys(TYPICAL_PFR).sort()).toEqual(['6-max', 'full-ring', 'heads-up']);
+    for (const size of ['heads-up', '6-max', 'full-ring'] as const) {
+      const band = HEALTHY_RANGES[size].pfr;
+      expect(TYPICAL_PFR[size], size).toBe((band.low + band.high) / 2);
+      expect(typicalPfr(size), size).toBe((band.low + band.high) / 2);
+    }
+    expect([TYPICAL_PFR['heads-up'], TYPICAL_PFR['6-max'], TYPICAL_PFR['full-ring']]).toEqual([
+      57.5, 18, 12.5,
+    ]);
+  });
+
+  it('resizeRange of an empty set is the strongest hand-order prefix, at least AA', () => {
+    expect(resizeRange(new Set(), 0)).toEqual(new Set(['AA']));
+    expect(resizeRange(new Set(), 5)).toEqual(strongestClasses(5));
   });
 });
 

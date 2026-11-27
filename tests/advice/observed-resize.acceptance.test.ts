@@ -10,6 +10,7 @@ import {
   HAND_ORDER,
   rangeWidthPct,
   SIX_MAX_RANGES,
+  strongestClasses,
   unseenCombos,
   type ObservedOpponent,
   type OpponentRange,
@@ -140,7 +141,8 @@ describe('observed range resize acceptance', () => {
     expect(combosOf(base) + combosOf(added)).toBeGreaterThanOrEqual(target);
     expect(combosOf(base) + combosOf(added.slice(0, -1))).toBeLessThan(target);
     const expected = new Set([...base, ...added]);
-    for (const hc of base) expect(expected.has(hc)).toBe(true);
+    const prefix = strongestClasses(60);
+    expect([...base].filter((hc) => !prefix.has(hc))).toContain('22');
 
     const wide = rangeOf(
       estimateOpponentRanges(view, [{ seat: CALLER, hands: 100, vpip: 60, pfr: 0 }]),
