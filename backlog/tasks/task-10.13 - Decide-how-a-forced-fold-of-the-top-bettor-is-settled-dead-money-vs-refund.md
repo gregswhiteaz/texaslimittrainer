@@ -1,11 +1,11 @@
 ---
 id: TASK-10.13
 title: Decide how a forced fold of the top bettor is settled (dead money vs refund)
-status: In Progress
+status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-24T20:28:00Z'
-updated_date: '2026-11-27T05:15:00Z'
+updated_date: '2026-11-27T05:16:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -15,6 +15,8 @@ dependencies:
   - TASK-10.2
 references:
   - doc-125
+documentation:
+  - doc-178
 parent_task_id: TASK-10
 priority: medium
 ordinal: 236000
@@ -52,4 +54,12 @@ Full spec: doit/TASK-10.13/spec.md
 Build: forced fold of top bettor voids its bet to highest live bet (BB floor preflop), no refund to leaver; checker C5/pot structure from last street, $0 lone fold-out winner allowed (J-1-02); new acceptance + property tests; e2e/leave-mid-hand.spec.ts waits for worker replies (locked edit unlocked under TASK-10.2, Q-4); REQ-004.8/018.4 + changelog 1.15; gate PASS
 
 Decision (TASK-10.13 Q-1..Q-4, user 2026-11-26): Q-1 (a) a forced fold of the top bettor is dead money — chips stay in the pot, never refunded, amount to match drops to the highest live bet; Q-2 preflop floor is the big blind (dead big blind); Q-3 REQ-004.8 and REQ-018.4 reworded, changelog 1.15; Q-4 locked e2e/leave-mid-hand.spec.ts edited (worker-reply wait), unlocked under TASK-10.2. Also recorded in docs/ui/navigation.md.
+
+Step 6a: follow-up TASK-10.17 (situationOf ignores a voided raise + review r1 tidy-ups).
 <!-- SECTION:NOTES:END -->
+
+## Final Summary
+
+<!-- SECTION:FINAL_SUMMARY:BEGIN -->
+Forced fold of the top bettor now forfeits: chips stay in the pot as dead money, amount to match drops to the highest live bet (preflop at least the BB), no refund to the leaver (Q-1/Q-2). Checker made void-aware; fold-out with a $0 sole survivor allowed (J-1-02); property test over 2,000 multi-forced-fold hands; bot-freeze e2e now waits for worker replies. Verified: 1503 tests pass, e2e 40/40, built-app runs, judge PASS r1, review clean. Review the 8 assumptions in the doc (A-1 hasActed recompute, A-2 advice still counts voided raise). Follow-up: filter voided raises in situationOf.
+<!-- SECTION:FINAL_SUMMARY:END -->
