@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-27T09:11:00Z'
-updated_date: '2026-11-27T10:06:00Z'
+updated_date: '2026-11-27T10:20:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -40,3 +40,9 @@ From TASK-10.17 (doc-184, review r1 MINOR). voidedBets (src/engine/hand.ts) copi
 
 Full spec: doit/TASK-10.18/spec.md
 <!-- SECTION:PLAN:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+Build: single private voidingWalk; liveLevels/voidedBets thin wrappers; property agreement test; 10k playtest byte-identical; gate PASS
+<!-- SECTION:NOTES:END -->

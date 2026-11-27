@@ -1,0 +1,3 @@
+{"reviewer": "security", "round": 1,
+ "findings": [],
+ "summary": "Internal engine refactor: src/engine/hand.ts merges the duplicated forced-fold voiding walk into a private voidingWalk that liveLevels and voidedBets both call. Their signatures and exports are unchanged. Only the test file changes otherwise. There is no new input, trust boundary, dependency, secret, I/O or randomness. The non-CSPRNG Xoshiro128 is only a seeded generator inside tests. Complexity is the same as before: a voiding fold triggers one O(n) rescan of the earlier actions, the same as the old voidedBets. The actions list is bounded by hand play, so nothing user-controlled can make it unbounded. Spec section 8 (N/A) is accurate. No findings."}

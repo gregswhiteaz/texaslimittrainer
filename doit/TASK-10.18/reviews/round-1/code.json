@@ -1,0 +1,18 @@
+{"reviewer": "code", "round": 1,
+ "rubric": [
+  {"item": "SPEC-01 correctness", "result": "pass"},
+  {"item": "SPEC-01 test strength", "result": "pass"},
+  {"item": "SPEC-02 correctness", "result": "pass"},
+  {"item": "SPEC-02 test strength", "result": "pass"},
+  {"item": "SPEC-03 correctness", "result": "pass"},
+  {"item": "SPEC-03 test strength", "result": "pass"},
+  {"item": "scope", "result": "pass"},
+  {"item": "concision", "result": "pass"},
+  {"item": "clarity", "result": "pass"}],
+ "findings": [
+  {"fingerprint": "tests/engine/force-fold.property.test.ts:voids-guard-counts-repeats", "severity": "NIT", "file": "tests/engine/force-fold.property.test.ts", "line": 131,
+   "issue": "`voids += voided.size` adds the whole set on every forced fold, so the same voided index is counted again on later forced folds on that street. The `voids > 0` guard still works, but the number does not mean 'distinct voids'.",
+   "evidence": "check() runs after every forceFold and adds the cumulative voidedBets(state).size each time.",
+   "fix": "Optional: rename to `voidedSeen`, or count only the forced folds where voided.size > 0. Either way the guard stays."}
+ ],
+ "summary": "voidingWalk is the old liveLevels loop with the old voidedBets marking step added inside the same voiding branch, at the same `live`. The off-street fold handling and the `put` accounting match both old copies, so behaviour is the same by construction. liveLevels and voidedBets are one-line wrappers with unchanged signatures; liveLevels stays private. SPEC-01 grep prints 1. SPEC-02: I removed the `voided.add(j)` call in a scratch worktree and the new property test failed, so it catches a broken marking. The `voids > 0` guard rules out a vacuous pass. SPEC-03: 10,000-hand seed-42 playtest output is byte-identical to base 46e6e83 (cmp); tests/engine and tests/advice pass (431 passed); the locked TASK-10.17 tests are unedited. The optional `afterForceFold` hook on playOut does not change the random draws, so the existing case is unaffected. Lines are 110 against a budget of 90 (gate warn), mostly the prettier-wrapped property test; acceptable. No BLOCKER or MAJOR findings."}
