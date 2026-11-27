@@ -2118,7 +2118,14 @@
       "skips": 0
     }
   },
-  "history": [],
+  "history": [
+    {
+      "t": "2026-11-27T11:25:33",
+      "event": "unlock",
+      "file": "tests/ci/ci-jobs.acceptance.test.ts",
+      "reason": "TASK-1.53 Q-2 (user approved): re-pin CI job names/matrices/commands for E2E 4-way and 3 weighted sweep shards; no assertion dropped"
+    }
+  ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-1.25",
   "spec_sha256": "6113b66ac7a5817427a212ef87edd09d352631a1b16274336cc19b4738bba478",
   "review_findings": {
@@ -2127,5 +2134,8 @@
   "judge_results": {
     "1": "PASS"
   },
-  "doc_id": "doc-160"
+  "doc_id": "doc-160",
+  "relock_pending": [
+    "tests/ci/ci-jobs.acceptance.test.ts"
+  ]
 }

@@ -1,0 +1,68 @@
+[
+  {
+    "id": "SPEC-01",
+    "verifies": "AC#1",
+    "verification": "acceptance `tests/ci/ci-shards.acceptance.test.ts::the sweeps run as three weighted shards`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-02",
+    "verifies": "AC#1",
+    "verification": "acceptance `tests/ci/ci-shards.acceptance.test.ts::the sweep shards cover every sweep file exactly once`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-03",
+    "verifies": "AC#1",
+    "verification": "acceptance `tests/ci/ci-shards.acceptance.test.ts::no sweep shard weighs more than 1.5 times another`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-04",
+    "verifies": "AC#1",
+    "verification": "unit `tests/ci/sweep-shards.test.ts::the sequencer shards specs by weighted assignment`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-05",
+    "verifies": "AC#1",
+    "verification": "unit `tests/ci/sweep-shards.test.ts::assignShards is a deterministic weighted partition`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-06",
+    "verifies": "AC#2",
+    "verification": "acceptance `tests/ci/ci-shards.acceptance.test.ts::e2e runs as four jobs, two shards per browser`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-07",
+    "verifies": "AC#2",
+    "verification": "acceptance `tests/ci/ci-shards.acceptance.test.ts::the e2e shards cover every test once per browser`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-08",
+    "verifies": "AC#2",
+    "verification": "acceptance `tests/ci/ci-shards.acceptance.test.ts::each e2e shard uploads its own report on failure`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-09",
+    "verifies": "AC#1, AC#2",
+    "verification": "acceptance `tests/ci/branch-protection.acceptance.test.ts::README documents branch protection requiring the CI job`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-10",
+    "verifies": "AC#2",
+    "verification": "command `git diff --stat fb8706e -- e2e/ && git diff --name-only fb8706e -- 'tests/**/*.acceptance.test.*' 'tests/**/*.perf.test.*' 'tests/**/*.property.test.*' 'src/**/*.acceptance.test.*' && npx playwright test --list | tail -1`. The expected output is empty except the ci-shards acceptance file, and `Total: 432 tests in 78 files`.",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-11",
+    "verifies": "AC#1, AC#3",
+    "verification": "manual `gh run view <id> --json startedAt,updatedAt,jobs --jq '{wall: ((.updatedAt|fromdate)-(.startedAt|fromdate)), jobs: [.jobs[]|{name, conclusion, s: ((.completedAt|fromdate)-(.startedAt|fromdate))}]}'` for each run id",
+    "status": "pending"
+  }
+]

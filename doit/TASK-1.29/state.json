@@ -498,6 +498,12 @@
       "event": "unlock",
       "file": "tests/ci/workflow.test.ts",
       "reason": "TASK-1.25 Q-1: all-deps audit level critical -> high (expected string only)"
+    },
+    {
+      "t": "2026-11-27T11:25:33",
+      "event": "unlock",
+      "file": "tests/ci/workflow.test.ts",
+      "reason": "TASK-1.53 Q-2 (user approved): re-pin CI job names/matrices/commands for E2E 4-way and 3 weighted sweep shards; no assertion dropped"
     }
   ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-1.29",
@@ -511,6 +517,7 @@
   },
   "relock_pending": [
     "tests/ci/apt-lock.test.ts",
+    "tests/ci/workflow.test.ts",
     "tests/ci/workflow.test.ts"
   ]
 }

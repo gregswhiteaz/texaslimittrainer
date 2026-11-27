@@ -1,0 +1,229 @@
+{
+  "id": "TASK-1.53",
+  "title": "Cut CI wall time to about 3.5 minutes: shard E2E and rebalance the sweep shards",
+  "status": "To Do",
+  "archived": false,
+  "type": null,
+  "priority": "medium",
+  "project": null,
+  "assignees": [],
+  "reporter": null,
+  "labels": [
+    "follow-up",
+    "ci",
+    "dream-limit-holdem-trainer"
+  ],
+  "milestone": "m-1",
+  "parentTaskId": "TASK-1",
+  "acceptanceCriteriaCompleted": 0,
+  "acceptanceCriteriaCount": 3,
+  "references": [],
+  "modifiedFiles": [],
+  "ordinal": 223000,
+  "createdAt": "2026-11-23T04:42:00Z",
+  "updatedAt": "2026-11-27T18:17:00Z",
+  "dueDate": null,
+  "isReady": true,
+  "path": "backlog/tasks/task-1.53 - Rebalance-the-CI-sweep-shards-after-value-betting.md",
+  "description": "After TASK-7.8, CI run #210: sweep shard 2 took 476 s while shard 1 took 156 s (vitest --shard splits by file count, and the playtest-heavy files cluster). CI wall time went from ~4.5 to ~8 min; the 30-min job limit is still far, but every new bot test lands on the slow shard.",
+  "dependencies": [
+    "TASK-7.8"
+  ],
+  "dependencyGraph": {
+    "root": "TASK-1.53",
+    "nodes": [
+      {
+        "id": "TASK-1.53",
+        "title": "Cut CI wall time to about 3.5 minutes: shard E2E and rebalance the sweep shards",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": 0,
+        "dependentDepth": 0
+      },
+      {
+        "id": "TASK-1.1",
+        "title": "Bootstrap the strict TypeScript project with one-command checks",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 7,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.2",
+        "title": "Rank showdown hands by real poker hand rankings",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 5,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.3",
+        "title": "Deal every hand from a seeded shuffle with a replay code",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 7,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.4",
+        "title": "Play a complete fixed-limit hand from blinds to showdown",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 6,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.5",
+        "title": "Give each deciding seat only its own view of the hand",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 5,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.7",
+        "title": "Run every check in GitHub Actions on each push and pull request",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 6,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-7.1",
+        "title": "Compute a hand's equity against opponent hands",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 4,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-7.2",
+        "title": "Recommend a preflop action from the 6-max chart",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 4,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-7.3",
+        "title": "Recommend call or fold after the flop from equity and pot odds",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 3,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-7.5",
+        "title": "Estimate each opponent's range from their actions in the hand",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 2,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-7.8",
+        "title": "Recommend betting or raising for value",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 1,
+        "dependentDepth": null
+      }
+    ],
+    "edges": [
+      {
+        "from": "TASK-1.2",
+        "to": "TASK-1.7"
+      },
+      {
+        "from": "TASK-1.3",
+        "to": "TASK-1.7"
+      },
+      {
+        "from": "TASK-1.4",
+        "to": "TASK-1.2"
+      },
+      {
+        "from": "TASK-1.4",
+        "to": "TASK-1.3"
+      },
+      {
+        "from": "TASK-1.5",
+        "to": "TASK-1.4"
+      },
+      {
+        "from": "TASK-1.7",
+        "to": "TASK-1.1"
+      },
+      {
+        "from": "TASK-1.53",
+        "to": "TASK-7.8"
+      },
+      {
+        "from": "TASK-7.1",
+        "to": "TASK-1.2"
+      },
+      {
+        "from": "TASK-7.2",
+        "to": "TASK-1.5"
+      },
+      {
+        "from": "TASK-7.3",
+        "to": "TASK-7.1"
+      },
+      {
+        "from": "TASK-7.3",
+        "to": "TASK-7.2"
+      },
+      {
+        "from": "TASK-7.5",
+        "to": "TASK-7.3"
+      },
+      {
+        "from": "TASK-7.8",
+        "to": "TASK-7.5"
+      }
+    ]
+  },
+  "readiness": {
+    "isReady": true,
+    "isBlocked": false,
+    "blockingDependencies": [],
+    "missingDependencies": []
+  },
+  "documentation": [],
+  "subtasks": [],
+  "acceptanceCriteria": [
+    {
+      "index": 1,
+      "text": "Given the sweep tests on CI, When they run, Then no sweep shard takes more than about 1.5\u00d7 the other (by duration, e.g. 3 shards or duration-based file assignment) and the CI wall time on main is back under about 6 min, with every sweep file still run exactly once",
+      "checked": false
+    },
+    {
+      "index": 2,
+      "text": "Given the E2E suite on CI, When it runs, Then it is split into 4 parallel jobs (2 shards per browser, Chromium and WebKit), every e2e test runs exactly once per browser, the Playwright report/artifact on failure still identifies the failing test, and no test or assertion is removed",
+      "checked": false
+    },
+    {
+      "index": 3,
+      "text": "Given a push to main after this change, When CI finishes, Then the wall time is about 3.5 minutes or less, measured on at least 2 runs (the repo is public, so the extra standard-runner jobs are not billed)",
+      "checked": false
+    }
+  ],
+  "definitionOfDone": [],
+  "implementationPlan": null,
+  "implementationNotes": "Autopilot 2026-11-25 measurement (main CI run 45677932929): wall time 5.6 min (<6 min target met); sweep shard 1 = 123 s, shard 2 = 219 s (1.8x); E2E job (5.6 min) is the critical path, so rebalancing sweeps would not shorten CI. Skipped in autopilot as no-gain; user to decide whether to keep, re-scope or drop.\n\n2026-11-27: user chose 'Shard E2E + rebalance sweeps'. Main run 46046670509: wall 439 s; E2E job 439 s (test step 378 s, ~420 tests x 2 browsers); sweep shard 2 212 s, shard 1 147 s; unit 75 s; lint/build/playtest 62 s. Expected cost ~4-5 extra Actions minutes per run for job setup.",
+  "comments": [],
+  "finalSummary": null
+}
