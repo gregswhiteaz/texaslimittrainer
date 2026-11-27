@@ -1,0 +1,27 @@
+{"round": 1,
+ "test_suite": {"command": "npm test", "result": "PASS", "passed": 1545, "failed": 0,
+   "notes": "exit 0; 348 files passed, 11 skipped; 60 tests skipped (opt-in slow). Full Playwright suite also run for regressions: 413 passed, 19 skipped, 0 failed (chromium + webkit)."},
+ "end_to_end": {"command": "npx playwright test e2e/settings-save-held.spec.ts e2e/settings-save-failed.spec.ts (+ npx vitest run tests/storage/upgrade-blocked.test.ts for the two-tab case)",
+   "result": "PASS",
+   "expected": "After a failed settings save shows the alert, the next change removes the alert before its save settles, and the stored value is right after release; a store open queued behind a blocked upgrade rejects with UpgradeBlockedError after the timeout instead of hanging.",
+   "actual": "Both e2e files pass on chromium and webkit (6 tests). upgrade-blocked.test.ts 7/7; the queued second-store test takes 201 ms with a 200 ms timeout; the default-parameter store rejected at 10000 ms in an independent check."},
+ "integrity": {"result": "PASS",
+   "notes": "doit.py test-integrity exit 0. Diff vs e118768 reviewed: no test-input recognition, hard-coded results, early exits or mocks of the unit under test. The only product change is the open timer in opened() and the openTimeoutMs parameter (default OPEN_TIMEOUT_MS); the App still calls the defaults. The new tests would fail without the fix: without the timer the queued count() never settles, and a timer left running after success would leave a never-settling blockedOpen, so later calls would reject."},
+ "items": [
+  {"spec": "SPEC-01", "result": "PASS",
+   "evidence": "vitest upgrade-blocked.test.ts: the named test passes (201 ms) and asserts the instance, the name, the elapsed time window (>=190 ms and <2000 ms), recovery to 0 after the blocker closes, and an unblocked DB_VERSION+1 open from oldVersion 5. Independent check through openHandStore with fake-indexeddb: a first-tab blocked open with a 5 s timeout still rejects at once (1 ms). A queued second store with a 300 ms timeout rejects with UpgradeBlockedError at 300 ms through readSettings. A call while that request is still pending rejects after the 100 ms grace. A third queued store also rejects. After the blocker closes, both stores recover and share written settings, with no stray connection (the v6 open is not blocked). A default-parameter store rejects at 10000 ms. The process exits right away, so no timers are left behind."},
+  {"spec": "SPEC-02", "result": "PASS",
+   "evidence": "Named test passes (154 ms); OPEN_TIMEOUT_MS === 10000 is asserted. Independent check: stores with a 30 ms timeout keep working on a fresh first-run upgrade and on a re-open of an existing v5 DB after 100-200 ms idle with repeated count() and readSettings(); none time out."},
+  {"spec": "SPEC-03", "result": "PASS",
+   "evidence": "The spec's command exits 0: vitest tests/storage has 15 files passed (1 skipped) and 45 tests passed. The docs say version `5` and list `meta` since 5. hand-store.ts has no `db === opening`, no `blockedOpen = null` and no line over 120 characters."},
+  {"spec": "SPEC-04", "result": "PASS",
+   "evidence": "The named e2e test passes on chromium and webkit. It asserts the hold state is 'held', there is no alert, the toggle is unchecked, the hold is still 'held' after those checks, and the stored settings after release, so it would fail if the message only cleared when the save settled. Independent browser check (click instead of Space, two fail/hold cycles in a row, both browsers) passes. While the hold is in place, a raw read of the settings store does not finish within 300 ms, which shows the save really is uncommitted while the alert is already gone. After release, the stored value matches the toggle each time and no alert shows."},
+  {"spec": "SPEC-05", "result": "PASS",
+   "evidence": "npx playwright test pause-history, end-session-hardening, settings-save-failed and settings-save-held: 20 passed (chromium + webkit). The sessions-scope holds behave as before."}
+ ],
+ "findings": [
+  {"id": "J-1-01", "severity": "LOW", "spec": "SPEC-03",
+   "expected_vs_actual": "Expected the edited blocked-handling paragraph in docs/storage/hand-records.md to wrap like the rest of the prose (~115 columns). Actual: line 28 is 134 characters because the paragraph was not rewrapped after 'version 5 adds `meta`' was inserted. Prettier passes and SPEC-03 only checks hand-store.ts.",
+   "fix": "Rewrap that paragraph to the file's prose width."}
+ ],
+ "summary": "All 5 SPEC items PASS. npm test passes (1545 tests) and the full Playwright suite passes (413). Integrity is clean. The independent checks confirm that a queued open times out at the configured or default 10 s and then recovers with no stray connection, that a blocked open still rejects at once, that normal opens never time out, and that the save-failed alert clears while the next settings write is really held. One LOW docs-wrapping finding, which does not block."}

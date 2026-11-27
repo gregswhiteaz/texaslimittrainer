@@ -3,30 +3,30 @@
     "id": "SPEC-01",
     "verifies": "AC#1",
     "verification": "acceptance `tests/storage/upgrade-blocked.test.ts::a second store whose open is queued behind a blocked upgrade rejects after the open timeout`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-02",
     "verifies": "AC#1",
     "verification": "unit `tests/storage/upgrade-blocked.test.ts::an open that is answered in time never times out`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-03",
     "verifies": "AC#2",
     "verification": "command `npx vitest run tests/storage && grep -q \"version \\`5\\`\" docs/storage/hand-records.md && ! grep -q \"db === opening\" src/storage/hand-store.ts && ! grep -q \"blockedOpen = null\" src/storage/hand-store.ts && awk 'length > 120 {bad=1} END {exit bad}' src/storage/hand-store.ts`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-04",
     "verifies": "AC#3",
     "verification": "acceptance `e2e/settings-save-held.spec.ts::the message clears at the next change before that save settles`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-05",
     "verifies": "AC#3",
     "verification": "command `npx playwright test e2e/pause-history.spec.ts e2e/end-session-hardening.spec.ts e2e/settings-save-failed.spec.ts e2e/settings-save-held.spec.ts`",
-    "status": "pending"
+    "status": "pass"
   }
 ]

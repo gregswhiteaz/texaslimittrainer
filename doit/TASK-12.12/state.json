@@ -5,13 +5,19 @@
   "base_commit": "e118768db10f94b76c3f2ddbe77bfd17e627dd15",
   "started": "2026-11-27T05:31:44",
   "review_round": 1,
-  "judge_round": 0,
+  "judge_round": 1,
   "sendbacks": 0,
   "gate_runs": 2,
   "questions": 0,
   "assumptions": 0,
   "escalations": 0,
-  "item_failures": {},
+  "item_failures": {
+    "SPEC-01": 0,
+    "SPEC-02": 0,
+    "SPEC-03": 0,
+    "SPEC-04": 0,
+    "SPEC-05": 0
+  },
   "locked_tests": {
     "e2e/settings-save-held.spec.ts": "6b7da43f42f776cf7a9231c4df3b044169dcae61656414fbca419bef74990609",
     "tests/storage/upgrade-blocked.test.ts": "7c43f297d476c88777570c965f8f37687a6c8daf01a5917654a958123724a62b"
@@ -2288,5 +2294,8 @@
   "spec_sha256": "8bb0427374155c12908c237e9d841bb70d6f62d311650111b117edeeacb7d75a",
   "review_findings": {
     "1": 0
+  },
+  "judge_results": {
+    "1": "PASS"
   }
 }
