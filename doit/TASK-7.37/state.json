@@ -2242,7 +2242,14 @@
       "skips": 0
     }
   },
-  "history": [],
+  "history": [
+    {
+      "t": "2026-11-27T02:22:52",
+      "event": "unlock",
+      "file": "tests/bots/tag-short-handed.acceptance.test.ts",
+      "reason": "TASK-7.46 AC#2: strengthen the SPEC-03 postflop check (add engine-move equality + non-trivial-run checks); nothing loosened"
+    }
+  ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-7.37",
   "spec_sha256": "77b2d1bdcde85b00a8e04d627bee83847e590f03bdd2cdf15a668116938f94a4",
   "review_findings": {
@@ -2251,5 +2258,8 @@
   "judge_results": {
     "1": "PASS"
   },
-  "doc_id": "doc-183"
+  "doc_id": "doc-183",
+  "relock_pending": [
+    "tests/bots/tag-short-handed.acceptance.test.ts"
+  ]
 }

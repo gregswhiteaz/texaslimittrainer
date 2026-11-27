@@ -1250,6 +1250,12 @@
       "event": "unlock",
       "file": "tests/playtest/replacement.acceptance.test.ts",
       "reason": "TASK-6.25 Q-1/Q-2 (auto-accepted recommended): busted bot keeps its style; Maniac/Rock retune; re-pin values one-for-one, keep check counts"
+    },
+    {
+      "t": "2026-11-27T02:22:52",
+      "event": "unlock",
+      "file": "tests/bots/style-bands.acceptance.test.ts",
+      "reason": "TASK-7.46 Q-1 (autopilot, recommended): TAG aggression band ceiling 65 -> 66 per reworded REQ-027.1; re-pin the band copy, no assertion dropped"
     }
   ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-6.17",
@@ -1264,6 +1270,7 @@
   "relock_pending": [
     "tests/bots/calling-station-postflop.acceptance.test.ts",
     "tests/bots/rock-postflop.acceptance.test.ts",
-    "tests/playtest/replacement.acceptance.test.ts"
+    "tests/playtest/replacement.acceptance.test.ts",
+    "tests/bots/style-bands.acceptance.test.ts"
   ]
 }

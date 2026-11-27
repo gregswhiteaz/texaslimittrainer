@@ -1788,7 +1788,14 @@
       "skips": 0
     }
   },
-  "history": [],
+  "history": [
+    {
+      "t": "2026-11-27T02:22:52",
+      "event": "unlock",
+      "file": "tests/bots/style-bands.acceptance.test.ts",
+      "reason": "TASK-7.46 Q-1 (autopilot, recommended): TAG aggression band ceiling 65 -> 66 per reworded REQ-027.1; re-pin the band copy, no assertion dropped"
+    }
+  ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-6.25",
   "spec_sha256": "522324da1ce2eab65855471c1d83be584b801dc89b74b61fa3e5e7efa655f00f",
   "review_findings": {
@@ -1797,5 +1804,8 @@
   "judge_results": {
     "1": "PASS"
   },
-  "doc_id": "doc-130"
+  "doc_id": "doc-130",
+  "relock_pending": [
+    "tests/bots/style-bands.acceptance.test.ts"
+  ]
 }
