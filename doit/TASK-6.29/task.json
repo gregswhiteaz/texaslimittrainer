@@ -1,0 +1,182 @@
+{
+  "id": "TASK-6.29",
+  "title": "Close the last bot-boundary escapes: Function constructor and the global alias",
+  "status": "To Do",
+  "archived": false,
+  "type": null,
+  "priority": "low",
+  "project": null,
+  "assignees": [],
+  "reporter": null,
+  "labels": [
+    "dream-limit-holdem-trainer",
+    "follow-up"
+  ],
+  "milestone": "m-1",
+  "parentTaskId": "TASK-6",
+  "acceptanceCriteriaCompleted": 0,
+  "acceptanceCriteriaCount": 2,
+  "references": [
+    "doc-175"
+  ],
+  "modifiedFiles": [],
+  "ordinal": 262000,
+  "createdAt": "2026-11-26T23:06:00Z",
+  "updatedAt": null,
+  "dueDate": null,
+  "isReady": true,
+  "path": "backlog/tasks/task-6.29 - Close-the-last-bot-boundary-escapes-Function-constructor-and-the-global-alias.md",
+  "description": "Follow-up from TASK-6.27 (doc-175, judge J-1-01/J-1-02, review r3 MINORs). In src/bots and src/advice, deliberate code can still reach the Function constructor through (fn).constructor, [].constructor.constructor, globalThis.Function or Reflect.apply(Function, ...), and the Node 'global' alias (global.Math.random(), global['indexedDB']) slips past the determinism and headless rules. Either could reach stored hands or break determinism. Only deliberate evasion gets there; nothing does it today.",
+  "dependencies": [
+    "TASK-6.27"
+  ],
+  "dependencyGraph": {
+    "root": "TASK-6.29",
+    "nodes": [
+      {
+        "id": "TASK-6.29",
+        "title": "Close the last bot-boundary escapes: Function constructor and the global alias",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": 0,
+        "dependentDepth": 0
+      },
+      {
+        "id": "TASK-1.1",
+        "title": "Bootstrap the strict TypeScript project with one-command checks",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 7,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.2",
+        "title": "Rank showdown hands by real poker hand rankings",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 5,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.3",
+        "title": "Deal every hand from a seeded shuffle with a replay code",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 5,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.4",
+        "title": "Play a complete fixed-limit hand from blinds to showdown",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 4,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.5",
+        "title": "Give each deciding seat only its own view of the hand",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 3,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.7",
+        "title": "Run every check in GitHub Actions on each push and pull request",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 6,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-6.21",
+        "title": "Keep bots on SeatPolicy with a lint boundary",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 2,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-6.27",
+        "title": "Close the remaining bot import gaps (type-position imports, advice path)",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 1,
+        "dependentDepth": null
+      }
+    ],
+    "edges": [
+      {
+        "from": "TASK-1.2",
+        "to": "TASK-1.7"
+      },
+      {
+        "from": "TASK-1.3",
+        "to": "TASK-1.7"
+      },
+      {
+        "from": "TASK-1.4",
+        "to": "TASK-1.2"
+      },
+      {
+        "from": "TASK-1.4",
+        "to": "TASK-1.3"
+      },
+      {
+        "from": "TASK-1.5",
+        "to": "TASK-1.4"
+      },
+      {
+        "from": "TASK-1.7",
+        "to": "TASK-1.1"
+      },
+      {
+        "from": "TASK-6.21",
+        "to": "TASK-1.5"
+      },
+      {
+        "from": "TASK-6.27",
+        "to": "TASK-6.21"
+      },
+      {
+        "from": "TASK-6.29",
+        "to": "TASK-6.27"
+      }
+    ]
+  },
+  "readiness": {
+    "isReady": true,
+    "isBlocked": false,
+    "blockingDependencies": [],
+    "missingDependencies": []
+  },
+  "documentation": [],
+  "subtasks": [],
+  "acceptanceCriteria": [
+    {
+      "index": 1,
+      "text": "Given a src/bots or src/advice file using .constructor property access, globalThis.Function, Reflect.apply/construct with Function, or the bare name global, When lint runs, Then it fails with a boundary or determinism message, and the whole repo still lints clean",
+      "checked": false
+    },
+    {
+      "index": 2,
+      "text": "Given the new bans, When the toolchain acceptance tests run, Then a probe for each form fails lint and removing any one ban makes a test fail",
+      "checked": false
+    }
+  ],
+  "definitionOfDone": [],
+  "implementationPlan": null,
+  "implementationNotes": null,
+  "comments": [],
+  "finalSummary": null
+}
