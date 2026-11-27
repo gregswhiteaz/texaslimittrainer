@@ -3,11 +3,11 @@ id: TASK-7.44
 title: >-
   Scale observed three-bet and four-bet ranges by PFR relative to a typical
   player
-status: In Progress
+status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-27T03:28:00Z'
-updated_date: '2026-11-27T06:45:00Z'
+updated_date: '2026-11-27T06:46:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -19,6 +19,7 @@ references:
   - dreams/limit-holdem-trainer/requirements.md
 documentation:
   - doc-104
+  - doc-180
 parent_task_id: TASK-7
 priority: medium
 type: enhancement
@@ -62,4 +63,12 @@ AC added from TASK-7.29 follow-up (review r1 MINOR: AC#3 had no observable width
 AC added from TASK-7.43 follow-up (review r1 MINOR + NIT)
 
 Build: TYPICAL_PFR + relativePfrPct; three-bet/four-bet scale by PFR relative to typical (cap 100); drift test vs HEALTHY_RANGES; empty-default resizeRange tests; TASK-7.43 locked line 143 replaced (unlock noted); gate PASS
+
+Step 6a: no new tasks (comment NIT not tracked; TASK-7.45 owns position-aware scaling).
 <!-- SECTION:NOTES:END -->
+
+## Final Summary
+
+<!-- SECTION:FINAL_SUMMARY:BEGIN -->
+Three-bet and four-bet observed ranges now scale by min(100, default x PFR / typical PFR), typical PFR = healthy band midpoint (57.5 heads-up, 18 6-max, 12.5 full ring), per the TASK-7.29 Q-3 C decision. Open-raise and calling lines are unchanged. Also covers the resizeRange empty-default branch and replaces the tautological check at observed-resize line 143 (locked edit, owner TASK-7.43). Verified: npm test, lint and typecheck pass; judge PASS round 1; review round 1 had two NITs only; the 4 golden spots are unaffected. Review: A-1 (TYPICAL_PFR constant plus drift test, because advice cannot import src/stats), A-2 (2.42 checked within 0.01), A-3 (cap tested on a synthetic default), A-4, A-5. Risks: change is 388 lines vs 260 budget; a stale test comment at observed-reraise.acceptance.test.ts:222. Follow-up: TASK-7.45 position-aware scaling.
+<!-- SECTION:FINAL_SUMMARY:END -->
