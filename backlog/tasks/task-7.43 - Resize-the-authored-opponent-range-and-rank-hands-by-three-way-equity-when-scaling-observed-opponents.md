@@ -7,7 +7,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-27T03:27:00Z'
-updated_date: '2026-11-27T05:39:00Z'
+updated_date: '2026-11-27T05:49:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -61,4 +61,6 @@ Locked edits (spec §5, approved re-pins, no assertion dropped or loosened):
 - tests/advice/observed-ranges.acceptance.test.ts (owner TASK-7.13) AC#2: import resizeRange; d computed from the default classes held in a const; the start expectation uses resizeRange(classes, width) instead of strongestClasses(width). strongestClasses import kept for AC#6.
 - tests/golden/postflop-spots.json (owner TASK-7.14) spot 6max-turn-bb-call-a6s: opponentStats seat 1 set to 100/22/18 and justification rewritten (Q-1). Engine: call, equity 45.3.
 - tests/ui/review-numbers.acceptance.test.tsx (owner TASK-9.3): observed equity 'Equity 29.9%' -> 'Equity 34.3%' and '30.1%' -> '34.3%' (Q-2).
+
+Build: resizeRange + estimateOpponentRanges swap; hand-order.json regenerated vs three random hands; locked re-pins (TASK-7.13 AC#2, TASK-7.14 golden spot 100/22/18, TASK-9.3 equity 34.3%); full recompute in test:slow; gate PASS
 <!-- SECTION:NOTES:END -->
