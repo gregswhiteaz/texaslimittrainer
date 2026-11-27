@@ -320,13 +320,14 @@ export const ADVICE_BOUNDARY_PATTERNS = [
   { regex: '(^|/)engine/player-view$', allowTypeImports: true, message: ADVICE_BOUNDARY_MESSAGE },
   {
     regex: '(^|/)engine/hand$',
-    allowImportNames: ['Action', 'SeatNumber', 'Street', 'STREET_BET_CAP'],
+    allowImportNames: ['Action', 'SeatNumber', 'Street', 'STREET_BET_CAP', 'voidedBets'],
     message: ADVICE_BOUNDARY_MESSAGE,
   },
 ];
 
 // Type-position import('…') in advice code gets the same allow-list: sibling advice files except golden and
-// the five engine modules; from engine/hand only the Action, SeatNumber and Street names.
+// the five engine modules; from engine/hand only the Action, SeatNumber and Street names (the values
+// STREET_BET_CAP and voidedBets, a pure read of the public action history, are allowed above but are not types).
 const ADVICE_TYPE_IMPORT_SYNTAX = [
   {
     selector:

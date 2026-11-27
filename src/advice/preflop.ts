@@ -1,4 +1,4 @@
-import { STREET_BET_CAP, type Action } from '../engine/hand';
+import { STREET_BET_CAP, voidedBets, type Action } from '../engine/hand';
 import type { PlayerView, PublicPlayer } from '../engine/player-view';
 import fullRing from './charts/full-ring.json' with { type: 'json' };
 import headsUp from './charts/heads-up.json' with { type: 'json' };
@@ -101,10 +101,16 @@ export function chartSpotOf(
   return { position: named[named.length - 2] as Position, situation };
 }
 
-/** The preflop action now facing the viewer. Blinds are not actions; limps before a raise are not callers. */
+/** The preflop action now facing the viewer. Blinds are not actions; limps before a raise are not callers;
+ *  raises a forced fold voided are ignored (TASK-10.17). */
 export function situationOf(view: PlayerView): Situation {
+  const voided = voidedBets({ street: 'preflop', stakes: view.stakes, actions: view.actions });
   const records = view.actions.filter(
-    (a) => a.street === 'preflop' && a.type !== 'small-blind' && a.type !== 'big-blind',
+    (a, i) =>
+      a.street === 'preflop' &&
+      a.type !== 'small-blind' &&
+      a.type !== 'big-blind' &&
+      !voided.has(i),
   );
   const raises = records.filter((a) => a.type === 'raise').length;
   if (raises === 0) {

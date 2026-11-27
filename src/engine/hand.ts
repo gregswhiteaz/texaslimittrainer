@@ -353,6 +353,39 @@ function liveLevels(state: BetContext): { level: number; at: number }[] {
   return levels;
 }
 
+/**
+ * Indices into `state.actions` of the street's bet/raise records that a fold has voided, by the same rule as
+ * liveLevels: a fold of a seat whose street chips exceed the live top voids every earlier bet/raise on the
+ * street whose amount exceeds that live top (TASK-10.13 R2). Lets advice ignore voided raises (TASK-10.17).
+ */
+export function voidedBets(state: BetContext): ReadonlySet<number> {
+  const folded = new Set<SeatNumber>();
+  const put = new Map<SeatNumber, number>();
+  const voided = new Set<number>();
+  state.actions.forEach((a, i) => {
+    if (a.street !== state.street) {
+      if (a.type === 'fold') folded.add(a.seat);
+      return;
+    }
+    put.set(a.seat, (put.get(a.seat) ?? 0) + a.added);
+    if (a.type !== 'fold') return;
+    folded.add(a.seat);
+    let live = state.street === 'preflop' ? state.stakes.bigBlind : 0;
+    for (const [s, c] of put) if (!folded.has(s) && c > live) live = c;
+    if ((put.get(a.seat) ?? 0) <= live) return;
+    state.actions.slice(0, i).forEach((b, j) => {
+      if (
+        b.street === state.street &&
+        (b.type === 'bet' || b.type === 'raise') &&
+        b.amount > live
+      ) {
+        voided.add(j);
+      }
+    });
+  });
+  return voided;
+}
+
 /** The street's last surviving counted bet level, or 0. */
 function fullBetLevel(state: BetContext): number {
   return liveLevels(state).at(-1)?.level ?? 0;
@@ -788,7 +821,9 @@ export function forceFold(state: HandState, seat: SeatNumber): HandState {
   };
   const toAct = state.toAct as SeatNumber;
   return settle(lowered, voided, (open) => {
-    const ring = clockwiseAfter(open, toAct === seat ? seat : toAct - 1);
+    // Starting after toAct - 1 puts toAct first; when toAct is the folder it is not in `open`, so the ring
+    // starts at the next seat clockwise, as starting after the folder would.
+    const ring = clockwiseAfter(open, toAct - 1);
     return ring.find((s) => {
       const p = voided.find((q) => q.seat === s) as PlayerState;
       return !p.hasActed || p.streetContribution < live;

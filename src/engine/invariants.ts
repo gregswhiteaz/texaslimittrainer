@@ -284,13 +284,13 @@ function potEligibilityMessage(state: HandState): string | null {
       return `seat ${p.seat} holds cards but is not eligible for the main pot`;
     }
   }
+  // J-1-02: the only seat left after a fold-out wins dead blinds even with $0 in.
+  const sole =
+    state.result?.endedBy === 'fold' && state.players.filter((q) => !q.folded).length === 1;
   for (const award of state.result?.awards ?? []) {
     const eligible = pots[award.pot]?.eligible ?? [];
     for (const { seat } of award.winners) {
       const p = playerAt(state, seat);
-      // J-1-02: the only seat left after a fold-out wins dead blinds even with $0 in.
-      const sole =
-        state.result?.endedBy === 'fold' && state.players.filter((q) => !q.folded).length === 1;
       if (
         !eligible.includes(seat) ||
         p === undefined ||
