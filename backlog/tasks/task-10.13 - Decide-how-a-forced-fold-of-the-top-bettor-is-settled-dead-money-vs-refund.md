@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-24T20:28:00Z'
-updated_date: '2026-11-27T04:38:00Z'
+updated_date: '2026-11-27T05:02:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -45,3 +45,9 @@ Follow-up from TASK-10.2 (doc-125, judge J-1-01 / code review MINOR). When Leave
 
 Full spec: doit/TASK-10.13/spec.md
 <!-- SECTION:PLAN:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+Build: forced fold of top bettor voids its bet to highest live bet (BB floor preflop), no refund to leaver; checker C5/pot structure from last street, $0 lone fold-out winner allowed (J-1-02); new acceptance + property tests; e2e/leave-mid-hand.spec.ts waits for worker replies (locked edit unlocked under TASK-10.2, Q-4); REQ-004.8/018.4 + changelog 1.15; gate PASS
+<!-- SECTION:NOTES:END -->
