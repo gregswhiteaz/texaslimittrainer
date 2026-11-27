@@ -14,3 +14,6 @@
 
 ## A-8 (Spec Detective, from builder blocked.json) Seeded example re-pins outside the spec's table
 The new grids fold where TAG used to continue, shifting seeded examples in tests/bots/calling-station.acceptance.test.ts (TASK-6.3), tests/bots/maniac.acceptance.test.ts (TASK-6.4, TASK-6.25) and tests/playtest/games.acceptance.test.ts (TASK-1.16). Resolved as re-pins (same class as TASK-7.32/7.8): find the same views in the new decision lists and update index/seed/draw pins with a "before TASK-7.40" note; games keeps all three `> 0` checks with a seed/hand count that has a side pot again. No assertion dropped. Files budget raised to ~27. Listed for the user in the sign-off question.
+
+## Sign-off (AC#7)
+**User 2026-11-27: Sign off** — approved as shown, no tweaks.

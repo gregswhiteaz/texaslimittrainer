@@ -7,7 +7,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-26T23:45:00Z'
-updated_date: '2026-11-27T23:04:00Z'
+updated_date: '2026-11-27T23:45:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -61,4 +61,6 @@ Full spec: doit/TASK-7.40/spec.md
 AC added from TASK-7.37 follow-up (short-handed TAG chart is derived from SIX_MAX_CHART)
 
 Locked re-pins unlocked under owners: TASK-7.19, 7.27, 7.20, 7.2, 10.17, 8.5, 6.5, 6.1, 7.11 (see spec).
+
+User sign-off 2026-11-27 (Q-4, AC#7): signed off the 12 6-max spots in doit/TASK-7.40/signoff.md (6 new re-raise-not-mine grids, 6 re-justified re-raise grids with CO A9o F -> C*/F) and the seeded re-pins (maniac Examples A and G, games side-pot seed 42 -> 43) as shown, no tweaks.
 <!-- SECTION:NOTES:END -->
