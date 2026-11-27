@@ -1,5 +1,6 @@
 import { expect, test, type Page } from '@playwright/test';
 import { expectNoSeriousAxeViolations } from './support/axe';
+import { storedSessions } from './support/hand-records';
 import { runUntilMyTurn } from './support/paused-clock';
 import { stubReplayWords } from './support/table-harness-bundle';
 
@@ -137,7 +138,13 @@ test('each table size from 2 to 10 starts with that many players and the right a
     await expect(header(page)).toHaveText(`Cash · ${n} players · $4/$8 · Hand #1`);
     await expect(seats(page)).toHaveCount(n);
     await expect(page.locator('li[data-user]')).toHaveCount(1);
-    if (n === 2 || n === 10) await axeWithPausedClock(page);
+    if (n === 2 || n === 10) {
+      // The Table opens from a promise callback, so its mount effects (start record, first-deal timer) can run
+      // after the DOM asserts above. Swap in real timers only once they have run, so the deal stays on the
+      // paused clock and no hand is played (TASK-1.57).
+      await expect.poll(async () => (await storedSessions(page)).length).toBe(1);
+      await axeWithPausedClock(page);
+    }
 
     await button(page, 'Leave table').click();
     await expect(page.getByRole('heading', { level: 1, name: 'TLH Trainer' })).toBeVisible();

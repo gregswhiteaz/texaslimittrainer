@@ -1,0 +1,57 @@
+{
+  "task": "TASK-1.57",
+  "phase": "fix",
+  "run": 2,
+  "result": "FAIL",
+  "changed_lines": 9,
+  "changed_files": [
+    "e2e/players-choice.spec.ts"
+  ],
+  "checks": [
+    {
+      "name": "test command",
+      "status": "fail",
+      "detail": "$ npm run e2e\nexit 1\n\n> tlh-trainer@0.0.0 e2e\n> playwright test\n\nError: http://localhost:4173 is already used, make sure that nothing is running on the port/url or set reuseExistingServer:true in config.webServer.\n\n"
+    },
+    {
+      "name": "lint command",
+      "status": "pass",
+      "detail": "$ npm run lint\nexit 0\n\n> tlh-trainer@0.0.0 lint\n> node tools/lint/sync-copies.js && eslint . --max-warnings 0 && prettier --check .\n\nChecking formatting...\nAll matched files use Prettier code style!\n"
+    },
+    {
+      "name": "typecheck command",
+      "status": "pass",
+      "detail": "$ npm run typecheck\nexit 0\n\n> tlh-trainer@0.0.0 typecheck\n> tsc -p tsconfig.json\n\n"
+    },
+    {
+      "name": "spec unchanged",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "name": "scope budget (lines)",
+      "status": "pass",
+      "detail": "9 changed lines vs budget 15 (fail above 30)"
+    },
+    {
+      "name": "scope budget (files)",
+      "status": "pass",
+      "detail": "1 files vs budget 1"
+    },
+    {
+      "name": "files outside spec",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "name": "all changes listed in changes.md",
+      "status": "pass",
+      "detail": ""
+    },
+    {
+      "name": "test integrity",
+      "status": "pass",
+      "detail": ""
+    }
+  ]
+}
