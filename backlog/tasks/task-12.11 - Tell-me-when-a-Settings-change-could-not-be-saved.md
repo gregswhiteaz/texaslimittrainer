@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-25T17:01:00Z'
-updated_date: '2026-11-27T12:04:00Z'
+updated_date: '2026-11-27T12:11:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -27,7 +27,7 @@ Follow-up from TASK-12.2 (doc-142). A failed settings save is only logged (conso
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Given a settings save that fails, When the user changes a setting, Then Settings shows a short visible message that the change was not saved (approved wording) and the stored record is unchanged
+- [x] #1 Given a settings save that fails, When the user changes a setting, Then Settings shows a short visible message that the change was not saved (approved wording) and the stored record is unchanged
 <!-- AC:END -->
 
 ## Implementation Plan
