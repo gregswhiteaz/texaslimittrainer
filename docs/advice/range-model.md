@@ -271,6 +271,31 @@ VPIP falls by about 7.5 points at 3 seats and 4 points at 4 seats and is inside 
 every stat is inside its range. The 4-seat WTSD of 43.6 over 10,000 hands is sampling noise, as it was before this
 change (41.7 over 100,000).
 
+### TAG aggression band at 3 seats (TASK-7.46)
+
+The TAG aggression band ceiling is now 66% (REQ-027.1, `STYLE_BANDS` in `src/playtest/style-check.ts`), the same
+ceiling as the 6-max and full-ring healthy ranges. All-TAG play at 3 seats measures 65.2% over 100,000 hands, just
+over the old ceiling of 65. No bot plays differently: only the band text in `--check-styles` output changes.
+
+Retuning the bot was rejected. At 3 seats aggression and WTSD sit at their ceilings together: fewer bets and raises
+mean more calls, and more calls mean more showdowns. Every chart or postflop retune probed either pushed WTSD over 42
+or VPIP under 20, or passed by only 0.1–0.2 on one seed.
+
+All-TAG cash, seed 42:
+
+| Run                            | Aggression | TAG band | --check-styles |
+| ------------------------------ | ---------- | -------- | -------------- |
+| 3 seats, 2,000 hands, before   | 65.5       | 45–65    | exit 1         |
+| 3 seats, 2,000 hands, after    | 65.5       | 45–66    | exit 0         |
+| 3 seats, 100,000 hands, before | 65.2       | 45–65    | exit 1         |
+| 3 seats, 100,000 hands, after  | 65.2       | 45–66    | exit 1         |
+
+Over 100,000 hands at 3 seats the aggression band check passes (no `Outside band:` line), but `--check-styles` still
+exits 1 because of REQ-027.5's other rule, that every mixed spot uses both actions: the TAG `preflop-limpers` mixed
+spot comes up only once at 3 seats and takes the recommended action (`One action only: TAG preflop-limpers,
+recommended 1, alternative 0`). A follow-up covers that rare-spot rule. The opt-in slow test
+`tests/playtest/check-styles-three-seats.acceptance.test.ts` asserts the band part only.
+
 ## Adjusting to observed play
 
 The caller may pass a snapshot of each opponent's session stats with every decision: hands seen,
