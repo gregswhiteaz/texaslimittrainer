@@ -35,6 +35,9 @@ opponent styles at the table`, checked by default. It is disabled until App has 
 Each change is saved at once (see [settings.md](../storage/settings.md)). Unchecked, every bot seat at the table
 shows its name and stack without the style label and its `·` separator; the user's seat and every other seat
 field are unchanged. Style labels elsewhere (Game Config line-up, Session report, Statistics) are not affected.
+If a change cannot be saved, the checkbox goes back to the stored value and a `role="alert"` line, `Your change
+could not be saved, so the setting is unchanged.`, shows after the Settings header (TASK-12.11); it is not
+focusable and clears on the next change or when Settings is opened again.
 Settings opens only from Home in this slice, so a change applies the next time a Table is shown (New game or
 Resume session). App passes the value to the Table on every render, so a later in-table Settings overlay
 (TASK-12.3) applies it on the next render.

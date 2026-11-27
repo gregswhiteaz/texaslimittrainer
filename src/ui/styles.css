@@ -1340,6 +1340,12 @@ h1[tabindex='-1']:focus {
   order: -1;
 }
 
+.settings-error {
+  margin: 0;
+  font-size: 14px;
+  color: #ff6b70;
+}
+
 .settings-section {
   background: #1a1d22;
   border: 1px solid #343a43;

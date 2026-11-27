@@ -69,8 +69,14 @@ adds the `meta` store for the persistent-storage record (TASK-13.2, see `persist
   invalid record), App logs `Settings could not be read` and uses `DEFAULT_SETTINGS`; the next change then
   overwrites the bad record with a valid one.
 - A Settings control calls `changeSettings(next)` with the whole new record. App updates the state first (the
-  change shows on the next render of any mounted screen) and then calls `writeSettings(next)`. A failed save is
-  only logged (`Settings could not be saved`); the new value stays in memory for this launch.
+  change shows on the next render of any mounted screen) and then calls `writeSettings(next)` through
+  `createSettingsSaver` (`src/ui/settings/settings-save.ts`, TASK-12.11). Every failed save is logged
+  (`Settings could not be saved`). Only the latest change's outcome drives the screen: if it fails, the state
+  goes back to the last saved value (the launch read, `DEFAULT_SETTINGS` if that failed, or the last write that
+  succeeded) and Settings shows `Your change could not be saved, so the setting is unchanged.`; the stored
+  record is unchanged. A failure of an older write while a newer one is pending is only logged. The message
+  clears on the next change and when Settings is opened again; a save that fails after leaving Settings reverts
+  the value without a message.
 - Consumers get values from this state: `SettingsScreen` receives `settings` and `onSettingsChange`, and the
   Table receives `showOpponentStyles` (REQ-050.3: bot seats show no style label when it is `false`).
 

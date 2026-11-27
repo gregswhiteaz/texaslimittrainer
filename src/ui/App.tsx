@@ -17,6 +17,7 @@ import { resumeSummary } from '../table/table-view';
 import { GameConfigScreen } from './config/GameConfigScreen';
 import { HomeScreen } from './home/HomeScreen';
 import { ReportScreen } from './report/ReportScreen';
+import { createSettingsSaver } from './settings/settings-save';
 import { SettingsScreen } from './settings/SettingsScreen';
 import { StatisticsScreen } from './stats/StatisticsScreen';
 import { TableScreen } from './table/TableScreen';
@@ -85,6 +86,11 @@ export default function App({
   const [endPrompt, setEndPrompt] = useState<EndPromptState>(null);
   // undefined until the launch read settles (TASK-12.2 A-1), DEFAULT_SETTINGS if it fails (A-2).
   const [settings, setSettings] = useState<Settings | undefined>(undefined);
+  // TASK-12.11: true after the latest settings save failed; cleared by the next change and on opening Settings.
+  const [settingsSaveFailed, setSettingsSaveFailed] = useState(false);
+  const saver = useRef(
+    createSettingsSaver((next) => sharedHandStore().writeSettings(next), DEFAULT_SETTINGS),
+  );
   // D-2: bumped by every Start game and every leave of Game Config; a click-time read acts only if current.
   const startRequest = useRef(0);
   // The shown Table's history key; null while another screen is shown. Set in the handlers that change screen.
@@ -98,11 +104,14 @@ export default function App({
       .readSettings()
       .then(
         (stored) => {
-          if (!cancelled) setSettings(stored);
+          if (cancelled) return;
+          saver.current.setSaved(stored);
+          setSettings(stored);
         },
         (error: unknown) => {
           if (cancelled) return;
           console.error('Settings could not be read', error);
+          saver.current.setSaved(DEFAULT_SETTINGS);
           setSettings(DEFAULT_SETTINGS);
         },
       );
@@ -319,12 +328,21 @@ export default function App({
     setScreen({ name: 'stats', view: undefined, filter: ALL_TRENDS, grouping: DEFAULT_GROUPING });
   };
 
-  /** Shows the change at once, then saves it. A failed save is only logged (TASK-12.2 A-3). */
+  /** Shows the change at once, then saves it. If the latest save fails, the value goes back to the last saved
+   *  one and Settings shows a message (TASK-12.11); every failed save is logged. */
   const changeSettings = (next: Settings): void => {
     setSettings(next);
-    sharedHandStore()
-      .writeSettings(next)
-      .catch((error: unknown) => console.error('Settings could not be saved', error));
+    setSettingsSaveFailed(false);
+    void saver.current.save(next).then((outcome) => {
+      if (outcome.kind === 'saved') return;
+      if (outcome.kind === 'failed') {
+        console.error('Settings could not be saved', outcome.error);
+        setSettings(outcome.revertTo);
+        setSettingsSaveFailed(true);
+      } else if ('error' in outcome) {
+        console.error('Settings could not be saved', outcome.error);
+      }
+    });
   };
 
   switch (screen.name) {
@@ -341,6 +359,7 @@ export default function App({
           onStatistics={openStatistics}
           onSettings={() => {
             setPaused(undefined);
+            setSettingsSaveFailed(false);
             setScreen({ name: 'settings' });
           }}
         />
@@ -416,6 +435,7 @@ export default function App({
           onHome={() => setScreen({ name: 'home', returned: true })}
           settings={settings}
           onSettingsChange={changeSettings}
+          saveFailed={settingsSaveFailed}
         />
       );
   }

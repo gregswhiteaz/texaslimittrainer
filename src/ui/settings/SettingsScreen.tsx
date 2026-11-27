@@ -12,6 +12,8 @@ export interface SettingsScreenProps {
   readonly settings?: Settings;
   /** Called with the whole new settings record when a control changes. */
   readonly onSettingsChange?: (settings: Settings) => void;
+  /** TASK-12.11: the latest change could not be saved; shows a message after the header. */
+  readonly saveFailed?: boolean;
 }
 
 /** The record after the toggle changes; undefined (no change) while settings are still loading. */
@@ -27,6 +29,7 @@ export function SettingsScreen({
   version = APP_VERSION,
   settings,
   onSettingsChange,
+  saveFailed = false,
 }: SettingsScreenProps): React.JSX.Element {
   const heading = useHeadingFocus(true);
   return (
@@ -37,6 +40,11 @@ export function SettingsScreen({
           ← Home
         </button>
       </header>
+      {saveFailed && (
+        <p role="alert" className="settings-error">
+          Your change could not be saved, so the setting is unchanged.
+        </p>
+      )}
       <section className="settings-section" aria-labelledby="settings-play">
         <h2 id="settings-play">Play</h2>
       </section>
