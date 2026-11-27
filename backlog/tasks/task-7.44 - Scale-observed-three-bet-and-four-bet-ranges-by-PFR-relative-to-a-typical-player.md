@@ -6,7 +6,7 @@ title: >-
 status: To Do
 assignee: []
 created_date: '2026-11-27T03:28:00Z'
-updated_date: '2026-11-27T03:51:00Z'
+updated_date: '2026-11-27T06:17:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -39,10 +39,13 @@ Follow-up from TASK-7.29 (decision: Q-3 C). Today every three-bet and four-bet l
 - [ ] #5 Given the 4 observed golden postflop spots, When npm test runs, Then each still agrees and is clear-cut, or each changed one is re-justified with the user's sign-off
 - [ ] #6 Given docs/advice/range-model.md, When the story is done, Then its line-to-stat table and Known limits state the relative re-raise rule
 - [ ] #7 Given a full-ring UTG four-bet line (default width 1.21%) and an opponent observed for 100 hands, When the observed PFR is 12.5 or 25, Then the scaled widths are 1.21% and 2.42%; and given any three-bet or four-bet line where default × PFR ÷ typical PFR exceeds 100, Then the scaled width is 100% (heads-up uses typical PFR 57.5 and is covered by one concrete width in the same test)
+- [ ] #8 Given resizeRange in src/advice/ranges.ts, When its empty-default branch is either covered by a unit test or removed as unreachable, Then no untested branch remains; and the tautological 'expected contains default' check at tests/advice/observed-resize.acceptance.test.ts:143 is replaced by a check that can fail (owner TASK-7.43 unlock), with no assertion dropped
 <!-- AC:END -->
 
 ## Implementation Notes
 
 <!-- SECTION:NOTES:BEGIN -->
 AC added from TASK-7.29 follow-up (review r1 MINOR: AC#3 had no observable widths)
+
+AC added from TASK-7.43 follow-up (review r1 MINOR + NIT)
 <!-- SECTION:NOTES:END -->
