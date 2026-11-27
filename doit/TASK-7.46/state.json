@@ -1,6 +1,6 @@
 {
   "task": "TASK-7.46",
-  "stage": "build",
+  "stage": "done",
   "branch": "doit/TASK-7.46",
   "base_commit": "eb625aca410a442096d040a2af235e0fcc78cf6c",
   "started": "2026-11-27T02:11:36",
@@ -8,7 +8,7 @@
   "judge_round": 1,
   "sendbacks": 0,
   "gate_runs": 2,
-  "questions": 0,
+  "questions": 2,
   "assumptions": 0,
   "escalations": 0,
   "item_failures": {
@@ -2269,5 +2269,6 @@
   },
   "judge_results": {
     "1": "PASS"
-  }
+  },
+  "doc_id": "doc-185"
 }
