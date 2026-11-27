@@ -1,6 +1,6 @@
 {
   "task": "TASK-12.12",
-  "stage": "build",
+  "stage": "done",
   "branch": "doit/TASK-12.12",
   "base_commit": "e118768db10f94b76c3f2ddbe77bfd17e627dd15",
   "started": "2026-11-27T05:31:44",
@@ -9,7 +9,7 @@
   "sendbacks": 0,
   "gate_runs": 2,
   "questions": 0,
-  "assumptions": 0,
+  "assumptions": 6,
   "escalations": 0,
   "item_failures": {
     "SPEC-01": 0,
@@ -2297,5 +2297,6 @@
   },
   "judge_results": {
     "1": "PASS"
-  }
+  },
+  "doc_id": "doc-191"
 }

@@ -3,11 +3,11 @@ id: TASK-12.12
 title: >-
   Show an error instead of loading forever when a second tab opens during a
   blocked upgrade
-status: In Progress
+status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-27T11:43:00Z'
-updated_date: '2026-11-27T13:01:00Z'
+updated_date: '2026-11-27T13:02:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -16,6 +16,8 @@ dependencies:
   - TASK-12.10
 references:
   - doc-188
+documentation:
+  - doc-191
 parent_task_id: TASK-12
 priority: low
 ordinal: 275000
@@ -50,4 +52,12 @@ Full spec: doit/TASK-12.12/spec.md
 AC added from TASK-12.11 follow-up (review MINOR / judge J-1-01)
 
 Build: OPEN_TIMEOUT_MS 10 s to first open event (A-1) via blocked-open path; tidy-ups; hold-writes can hold settings; new held-write e2e; gate PASS
+
+Step 6a: none created (docs rewrap NIT has no behaviour change; slowed-upgrade test MINOR is covered by design per spec D-2).
 <!-- SECTION:NOTES:END -->
+
+## Final Summary
+
+<!-- SECTION:FINAL_SUMMARY:BEGIN -->
+Every database open now waits at most 10 s (OPEN_TIMEOUT_MS) for its first event; a second tab queued behind a blocked v5 upgrade rejects with UpgradeBlockedError so Home leaves loading, and the next call retries. Also corrected the docs version table to 5, removed the redundant reset, dead guard and long docblock line, and added a held-write e2e pinning that the save-failed message clears before the next save settles. Verified: npm test 1545 passed, full Playwright 413 passed, judge PASS 5/5, reviews clean. Review: A-1 (10 s timeout is user-visible timing). Follow-ups: rewrap docs/storage/hand-records.md:28 (134 chars); optional test for a missing clearTimeout in onupgradeneeded.
+<!-- SECTION:FINAL_SUMMARY:END -->
