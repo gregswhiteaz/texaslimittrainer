@@ -3,48 +3,48 @@
     "id": "SPEC-01",
     "verifies": "AC#1, AC#2",
     "verification": "acceptance `tests/bots/tag-short-handed.acceptance.test.ts::the short-handed TAG chart changes only BTN and SB unopened, at 3 and 4 seats`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-02",
     "verifies": "AC#1, AC#2",
     "verification": "acceptance `tests/bots/tag-short-handed.acceptance.test.ts::TAG folds cutoff-range folds on the button and small blind at 3 and 4 seats only`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-03",
     "verifies": "AC#2",
     "verification": "acceptance `tests/bots/tag-short-handed.acceptance.test.ts::an explicit chart wins and postflop play ignores the short-handed chart`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-04",
     "verifies": "AC#1",
     "verification": "acceptance `tests/bots/tag-short-handed-playtest.acceptance.test.ts::all-TAG stats at 3 and 4 seats are inside the 6-max healthy ranges`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-05",
     "verifies": "AC#1",
     "verification": "unit `tests/playtest/style-check-short-handed.test.ts::style check tallies TAG mixed spots with the short-handed chart at 3 seats`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-06",
     "verifies": "AC#1",
     "verification": "command `grep -n \"TAG at 3 and 4 seats (TASK-7.37)\" -A30 docs/advice/range-model.md`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-07",
     "verifies": "AC#2",
     "verification": "command `for n in 2 5 6 7 9; do cmp <(cd \"$BASE\" && npm run -s playtest -- --hands 2000 --seed 42 --size $n) <(npm run -s playtest -- --hands 2000 --seed 42 --size $n) || echo \"DIFF $n\"; done; git diff --stat 735e6cd -- src/advice`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-08",
     "verifies": "AC#1, AC#2",
     "verification": "command `npm test && npm run lint && npm run typecheck && npm run e2e`",
-    "status": "pending"
+    "status": "pass"
   }
 ]

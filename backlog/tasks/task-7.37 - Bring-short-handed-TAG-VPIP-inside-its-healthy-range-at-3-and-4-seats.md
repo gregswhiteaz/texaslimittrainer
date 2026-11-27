@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-26T10:09:00Z'
-updated_date: '2026-11-27T08:29:00Z'
+updated_date: '2026-11-27T08:41:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -27,8 +27,8 @@ Follow-up from TASK-7.35 (doc-158). Over 100,000 all-TAG cash hands (seed 42), V
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Given all-TAG cash play at 3 and 4 seats, When 100,000 hands are measured (opt-in slow group), Then VPIP is inside 20-28 and PFR, aggression, WTSD and W$SD stay inside their 6-max healthy ranges, with before/after figures recorded
-- [ ] #2 Given 2, 6 and 9 seat tables, When the same playtests run, Then their output is byte-identical to before (no change outside 3-5 seats)
+- [x] #1 Given all-TAG cash play at 3 and 4 seats, When 100,000 hands are measured (opt-in slow group), Then VPIP is inside 20-28 and PFR, aggression, WTSD and W$SD stay inside their 6-max healthy ranges, with before/after figures recorded
+- [x] #2 Given 2, 6 and 9 seat tables, When the same playtests run, Then their output is byte-identical to before (no change outside 3-5 seats)
 <!-- AC:END -->
 
 ## Implementation Plan
