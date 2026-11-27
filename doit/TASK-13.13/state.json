@@ -1,6 +1,6 @@
 {
   "task": "TASK-13.13",
-  "stage": "build",
+  "stage": "done",
   "branch": "doit/TASK-13.13",
   "base_commit": "3b6f33ac6655ef47ed70d1543a841fab94315bef",
   "started": "2026-11-27T13:05:09",
@@ -8,8 +8,8 @@
   "judge_round": 1,
   "sendbacks": 0,
   "gate_runs": 2,
-  "questions": 0,
-  "assumptions": 0,
+  "questions": 1,
+  "assumptions": 4,
   "escalations": 0,
   "item_failures": {
     "SPEC-01": 0,
@@ -2314,5 +2314,6 @@
   },
   "judge_results": {
     "1": "PASS"
-  }
+  },
+  "doc_id": "doc-196"
 }
