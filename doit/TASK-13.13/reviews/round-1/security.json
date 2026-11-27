@@ -1,0 +1,3 @@
+{"reviewer": "security", "round": 1,
+ "findings": [],
+ "summary": "The change removes the redundant `generation` key from AppRoot. App still remounts fresh, because the error branch unmounts it. It also adds a test-only e2e spec and updates the docs. There is no new trust boundary, input, storage, dependency, randomness or secret. The fault hook stays in e2e/support and is injected by an init script, and the locked TASK-13.1 test still checks that dist has no __tlhFault. history.back() runs only when history.state carries tlhTable, as before. No reachable security path was found."}

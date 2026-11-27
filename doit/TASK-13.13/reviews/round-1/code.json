@@ -1,0 +1,20 @@
+{"reviewer": "code", "round": 1,
+ "rubric": [
+  {"item": "SPEC-01 correctness", "result": "pass"},
+  {"item": "SPEC-01 test strength", "result": "pass"},
+  {"item": "SPEC-02 correctness", "result": "pass"},
+  {"item": "SPEC-02 test strength", "result": "pass"},
+  {"item": "SPEC-03 correctness", "result": "pass"},
+  {"item": "SPEC-03 test strength", "result": "pass"},
+  {"item": "scope", "result": "pass"},
+  {"item": "concision", "result": "pass"},
+  {"item": "clarity", "result": "pass"}
+ ],
+ "findings": [
+  {"fingerprint": "e2e/error-recovery-history.spec.ts:copied-helpers-from-locked-files", "severity": "NIT",
+   "file": "e2e/error-recovery-history.spec.ts", "line": 14,
+   "issue": "Locator helpers, tableKey and runUntilErrorScreen are copied from e2e/error-recovery.spec.ts and e2e/pause-history.spec.ts rather than imported from a shared support module.",
+   "evidence": "Spec section 5 asks for these helpers to live in the new file because the source files are locked, so this follows the spec. It still adds a third copy of the same locators.",
+   "fix": "None required for this task. A later task could move the shared locators and runUntilErrorScreen into e2e/support/ and change the locked files under their owners."}
+ ],
+ "summary": "All three SPEC items are implemented as written. SPEC-01: Return Home is followed by checks that the heading is focused, the Table region is gone, history.state.tlhTable polls to undefined, and one page.goBack() polls to about:blank. If the history.back() call is removed, tlhTable stays set, and Back lands on the null-state '/' entry, which App's popstate handler ignores, so the URL never reaches about:blank. Both assertions would fail, which matches the builder's mutation result. Every wait checks a real condition: the menu data-paused attribute, the header text, expect.poll on tableKey, storedSessions, the URL, and runUntil for the error screen. There are no fixed sleeps or clock.runFor calls. SPEC-02 checks data-paused='shown', the exact subtitle, that storedRecords is [], that the single session has handsPlayed 0 and no endedAt, and that Resume deals Hand #1. Dropping the 0-hand session would fail these. SPEC-03: the grep is clean, and removing the key cannot change when App remounts. #returnHome is reachable only from ErrorScreen's onHome. While error is true, render returns ErrorScreen instead of App, so App is already unmounted, and setting error:false always mounts a new App instance. The key only ever changed together with that element-type switch, so it never changed the identity of a mounted App. I ran the new file and the locked error-recovery.spec.ts with --repeat-each 2 in chromium and webkit: 28 passed in 8.7 s. The docs edit is limited to the two places the spec names. No blockers or majors."}

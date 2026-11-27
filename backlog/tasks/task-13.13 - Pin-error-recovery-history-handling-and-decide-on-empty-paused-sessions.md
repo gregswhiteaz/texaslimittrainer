@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-25T17:55:00Z'
-updated_date: '2026-11-27T20:11:00Z'
+updated_date: '2026-11-27T20:31:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -47,4 +47,6 @@ Full spec: doit/TASK-13.13/spec.md
 
 <!-- SECTION:NOTES:BEGIN -->
 Decision (TASK-13.13 Q-1, user 2026-11-27): A — a paused session with 0 completed hands stays offered for Resume ('… · 0 hands · paused'), including after an error in hand 1; Resume deals Hand #1 with the same line-up, seats and stacks. No text or locked-test change.
+
+Build: new e2e/error-recovery-history.spec.ts (history step-off + 0-hand Resume, 20/20 repeat, history.back() mutation caught); AppRoot generation key removed; docs; gate PASS
 <!-- SECTION:NOTES:END -->
