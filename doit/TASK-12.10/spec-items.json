@@ -3,48 +3,48 @@
     "id": "SPEC-01",
     "verifies": "AC#1",
     "verification": "unit `tests/storage/settings-store.test.ts::upgrading a v3 database keeps its records and adds default settings`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-02",
     "verifies": "AC#2",
     "verification": "unit `tests/storage/upgrade-blocked.test.ts::a blocked upgrade rejects with UpgradeBlockedError`",
-    "status": "pending"
+    "status": "fail"
   },
   {
     "id": "SPEC-03",
     "verifies": "AC#2",
     "verification": "unit `tests/storage/upgrade-blocked.test.ts::the next call after a blocked upgrade retries and upgrades`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-04",
     "verifies": "AC#2",
     "verification": "unit `tests/storage/upgrade-blocked.test.ts::an open app connection closes on versionchange so a newer version opens`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-05",
     "verifies": "AC#3",
     "verification": "acceptance `e2e/back-focus.spec.ts::one Tab from the Settings heading reaches \u2190 Home`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-06",
     "verifies": "AC#3",
     "verification": "acceptance `e2e/back-focus.spec.ts::one Tab from the Statistics heading reaches \u2190 Home`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-07",
     "verifies": "AC#3",
     "verification": "acceptance `e2e/settings.spec.ts::every Settings control is reachable by Tab, native, keyboard-operable and at least 44x44`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-08",
     "verifies": "AC#3",
     "verification": "acceptance `e2e/back-focus.spec.ts::\u2190 Home stays visually before the heading`",
-    "status": "pending"
+    "status": "pass"
   }
 ]
