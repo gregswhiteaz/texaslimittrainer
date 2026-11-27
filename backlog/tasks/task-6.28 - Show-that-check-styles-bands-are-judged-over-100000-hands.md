@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-26T21:01:00Z'
-updated_date: '2026-11-27T06:49:00Z'
+updated_date: '2026-11-27T07:06:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -39,3 +39,9 @@ From TASK-6.24 (decision: option B, Q-1). REQ-027's fit criterion judges each bo
 
 Full spec: doit/TASK-6.28/spec.md
 <!-- SECTION:PLAN:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+Build: --check-styles help line + docs paragraph (100,000-hand judging, sample noise); cli.test USAGE assertions updated; gate PASS
+<!-- SECTION:NOTES:END -->

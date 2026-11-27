@@ -1,0 +1,3 @@
+{"reviewer": "security", "round": 1,
+ "findings": [],
+ "summary": "Change is static text only: one USAGE string in src/playtest/cli.ts, matching test assertions in tests/playtest/cli.test.ts, and a paragraph in docs/stats/style-stats.md. No new input handling, parsing, dependencies, randomness, file or shell operations, and no secrets in code or docs. Spec section 8 (N/A) is accurate. No findings."}

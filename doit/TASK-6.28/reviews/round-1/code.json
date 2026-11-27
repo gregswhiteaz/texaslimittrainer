@@ -1,0 +1,21 @@
+{"reviewer": "code", "round": 1,
+ "rubric": [
+  {"item": "SPEC-01 correctness", "result": "pass"},
+  {"item": "SPEC-01 test strength", "result": "pass"},
+  {"item": "SPEC-02 correctness", "result": "pass"},
+  {"item": "SPEC-02 test strength", "result": "pass"},
+  {"item": "SPEC-03 correctness", "result": "pass"},
+  {"item": "SPEC-03 test strength", "result": "pass"},
+  {"item": "SPEC-04 correctness", "result": "pass"},
+  {"item": "SPEC-04 test strength", "result": "pass"},
+  {"item": "SPEC-05 correctness", "result": "pass"},
+  {"item": "SPEC-05 test strength", "result": "pass"},
+  {"item": "scope", "result": "pass"},
+  {"item": "concision", "result": "pass"},
+  {"item": "clarity", "result": "pass"}],
+ "findings": [
+  {"fingerprint": "docs/stats/style-stats.md:uneven-line-wrap", "severity": "NIT", "file": "docs/stats/style-stats.md", "line": 84,
+   "issue": "Line 84 is wrapped short ('...a stat that sits') so the phrase 'near a band edge' starts line 85; the source wrap differs from the §5 block and from the ~120-column wrap of surrounding paragraphs.",
+   "evidence": "Builder re-wrapped so the line-based SPEC-04 `grep -c` counts 3 (with §5's wrap, 'used only one way' and 'near a band edge' share a line and the count is 2). Words are identical and rendered Markdown is unaffected.",
+   "fix": "None required. Optionally keep the wrap and accept it, or rewrap to §5 and change the verification to `grep -o ... | wc -l`."}],
+ "summary": "USAGE line index 4 changed to exactly the §5 wording, other USAGE lines are byte-identical. Both test assertions (full-USAGE toBe; usage[4] toBe) pin the new text, and `--help` is asserted to print USAGE with exit 0, so a broken help line fails the test. The docs paragraph sits in 'In the playtest CLI' before '## Display', with the same words as §5 (only the source wrap differs). The SPEC-04 grep prints 3. The SPEC-03 grep matches. cli.test.ts passes (11/11) and the gate passed. No package.json, .github or acceptance/perf changes and no runtime note. Nothing outside scope."}
