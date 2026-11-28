@@ -19,7 +19,7 @@
       "action": "call",
       "title": "Calling flop bets without the odds",
       "evidenceName": "flop calls",
-      "fix": "Call a flop bet only when your chance to win, counting your outs, beats the price of the call, and raise instead when you are likely ahead.",
+      "fix": "Call a flop bet only when your chance to win, counting your outs, is at least the price of the call, and raise instead when you are well ahead of the hands that would call a raise.",
       "justification": "A call is graded against the pot-odds price and against the value-raise rule, so calls go wrong both when the hand is too weak and when it is strong enough to raise."
     },
     {
@@ -30,7 +30,7 @@
       "title": "Raising the flop with hands that are not ahead",
       "evidenceName": "flop raises",
       "fix": "Raise a flop bet only when your hand beats most of the hands that will call the raise, and just call with draws and medium hands that need to improve.",
-      "justification": "The value-raise rule asks for better than even equity against the hands that would continue; raising a weaker hand puts more chips in while behind."
+      "justification": "The value-raise rule asks for more than 65% equity against the hands that would call a raise, so a hand below that bar should just call or fold by the pot-odds rules (value-raise, pot-odds-call)."
     },
     {
       "id": "flop-not-facing-a-bet-check",
@@ -49,7 +49,7 @@
       "action": "bet",
       "title": "Betting the flop into better hands",
       "evidenceName": "flop bets",
-      "fix": "Bet the flop only when most of the hands that would call are worse than yours, and check the rest to see the turn for free.",
+      "fix": "Bet the flop only when most of the hands that would call are worse than yours, and check the rest, because a check costs nothing now and you see the turn for free if no one bets after you.",
       "justification": "A bet earns only from worse hands that pay it; when the hands that call are mostly better, the check-free rule is the better play."
     },
     {
@@ -59,8 +59,8 @@
       "action": "fold",
       "title": "Folding too often on the turn",
       "evidenceName": "turn folds",
-      "fix": "Before you fold to a turn bet, compare your chance to win, including your outs, with the price, since the pot has grown enough that many pairs and draws are worth a call.",
-      "justification": "By the turn the pot holds several small and big bets, so a single big bet is often a fair price for a pair or a strong draw (pot-odds-call, implied-odds-call)."
+      "fix": "Before you fold to a turn bet, compare your chance to win with the price of the call plus the river bet that usually follows, and call whenever your chance is at least that price.",
+      "justification": "A turn call is priced with the river big bet the hero will likely face, and the call is right when equity is at least that price, or a little less for a draw that wins more bets when it hits (pot-odds-call, implied-odds-call)."
     },
     {
       "id": "turn-facing-a-bet-call",
@@ -70,7 +70,7 @@
       "title": "Calling too often on the turn",
       "evidenceName": "turn calls",
       "fix": "The turn bet is twice the size of a flop bet, so call it only with a made hand that is often best or a draw whose outs pay for the price.",
-      "justification": "The doubled bet size raises the required equity; calls that were fine on the flop become losing calls on the turn without a real hand or draw."
+      "justification": "A draw has only one card to come on the turn instead of two, so its equity drops while the price now counts the likely river big bet too, and calls that were fine on the flop can lose on the turn (pot-odds-call, pot-odds-fold)."
     },
     {
       "id": "turn-facing-a-bet-raise",
@@ -80,7 +80,7 @@
       "title": "Raising the turn without a strong hand",
       "evidenceName": "turn raises",
       "fix": "Raise a turn bet only with a hand that beats most of the hands that will call, because a raise at the big-bet level costs twice as much when you are behind.",
-      "justification": "The value-raise rule needs better than even equity against the continuing range, and the cost of being wrong doubles on the turn."
+      "justification": "The value-raise rule needs more than 65% equity against the hands that would call a raise, and the cost of being wrong doubles on the turn (value-raise)."
     },
     {
       "id": "turn-not-facing-a-bet-check",
