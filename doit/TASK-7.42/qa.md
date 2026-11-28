@@ -19,3 +19,6 @@ Asked in one batch of 4 (Q-2+Q-3 combined; Q-5+Q-6 combined).
 
 ## Q-6 Sign-off and re-pins
 **Answer: Recommended** — one review from signoff.md before code review; §5 locked re-pins and seeded re-pins pre-approved (TASK-7.40 A-8 method: replace expected values, keep check count).
+
+## Chart sign-off (AC#5)
+**User 2026-11-28: Sign off** — the 8 spots in signoff.md, compromise cells included.

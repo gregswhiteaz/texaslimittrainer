@@ -4,7 +4,7 @@ title: Review the heads-up and full-ring preflop charts with the user
 status: To Do
 assignee: []
 created_date: '2026-11-26T14:18:00Z'
-updated_date: '2026-11-28T06:42:00Z'
+updated_date: '2026-11-28T18:58:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -34,4 +34,6 @@ Follow-up from TASK-7.27 (doc-164). The heads-up and full-ring preflop charts we
 
 <!-- SECTION:NOTES:BEGIN -->
 TASK-7.41 (Q-3, user 2026-11-28): the 18 full-ring re-raise spots (9 re-raise, 9 re-raise-not-mine) were reviewed and signed off there. This task keeps the other 32 full-ring spots and the 6 heads-up spots.
+
+TASK-7.42 (user 2026-11-28): the 4 full-ring blind-defence spots (SB/BB early and late) were reviewed and signed off there; late cells unchanged (the 13 BB blind-defence dominance inversions remain for this task).
 <!-- SECTION:NOTES:END -->

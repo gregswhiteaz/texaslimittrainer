@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-26T23:45:00Z'
-updated_date: '2026-11-28T18:01:00Z'
+updated_date: '2026-11-28T18:58:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -49,3 +49,11 @@ Follow-up from TASK-7.21 (decision: Q-2 split blind defence early/late). Today t
 
 Full spec: doit/TASK-7.42/spec.md
 <!-- SECTION:PLAN:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+Build: blind-defence-early situation (Q-1..Q-5), 4 early grids, late grids unchanged, Rock early ranges, golden + Q-6 re-pins; gate PASS. Deviations: early-grid cells for 6 hands made borderline (F*/C) so 6 locked postflop golden spots (BB calls UTG) still grade Minor; route B8 uses c4 c5 f6 r1.
+
+User chart sign-off 2026-11-28 (AC#5): the user signed off the 4 new blind-defence-early spots and the 4 re-justified late blind-defence spots (6-max and full ring) as printed in doit/TASK-7.42/signoff.md, including the borderline F*/C cells kept for the 6 postflop golden spots and Rock's early ranges.
+<!-- SECTION:NOTES:END -->
