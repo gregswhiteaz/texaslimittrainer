@@ -4,7 +4,7 @@
   "branch": "doit/TASK-7.42",
   "base_commit": "a28ea6df8ffbc1310738a5732a5575ceda74aac5",
   "started": "2026-11-28T09:39:11",
-  "review_round": 1,
+  "review_round": 2,
   "judge_round": 0,
   "sendbacks": 0,
   "gate_runs": 5,
@@ -2342,7 +2342,8 @@
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-7.42",
   "spec_sha256": "ab979074310d34f01414a127aceb602113fbb99f7c1a5388b71add2d6639db2f",
   "review_findings": {
-    "1": 2
+    "1": 2,
+    "2": 0
   },
   "brief_history": {
     "src/advice/charts/six-max.json:bb-early-text-ako-listed-as-call": [
