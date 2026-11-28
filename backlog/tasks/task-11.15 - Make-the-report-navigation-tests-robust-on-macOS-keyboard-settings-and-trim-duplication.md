@@ -3,7 +3,7 @@ id: TASK-11.15
 title: >-
   Make the report navigation tests robust on macOS keyboard settings and trim
   duplication
-status: In Progress
+status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-25T14:22:00Z'
@@ -16,6 +16,8 @@ dependencies:
   - TASK-11.6
 references:
   - doc-139
+documentation:
+  - doc-200
 parent_task_id: TASK-11
 priority: low
 ordinal: 246000
@@ -53,4 +55,12 @@ AC#2 added 2026-11-28 (Q-2, user: include the other three files).
 Locked e2e edits unlocked under owners: report-navigation (TASK-11.6), back-focus (TASK-12.10), settings (TASK-12.1, 12.10, 12.2), error-recovery (TASK-13.1).
 
 Build: buttonTabKey helper (Tab first, Alt+Tab fallback, probe page); four e2e files switched, assertion counts 30/8/22/41 unchanged; gate PASS
+
+Step 6a: none (optional manual off-setting run is the user's choice; tabOrder merge is a tidy-up below the bar).
 <!-- SECTION:NOTES:END -->
+
+## Final Summary
+
+<!-- SECTION:FINAL_SUMMARY:BEGIN -->
+Added e2e/support/keyboard.ts buttonTabKey (plain Tab, else Alt+Tab, else throw; probe on a separate page) and used it in report-navigation, back-focus, settings and error-recovery e2e specs, replacing hard-coded WebKit Alt+Tab; comments name macOS Full Keyboard Access. No assertion changed (30/8/22/41); locked e2e edits under owners TASK-11.6, 12.10, 12.1, 12.2, 13.1. Verified: 32 passed locally on chromium+webkit (Keyboard navigation ON, setting untouched), full gate 421 passed, lint/typecheck clean, CI 46089401147 green, judge PASS r1 (7/7). Review: NIT only (comment says 'holds Alt only then'). Risk: Keyboard-navigation-OFF case is covered only by the injected fake-page test, not run on real hardware. Original AC#2 dropped by user. Assumptions A-1..A-4 to review in the doc.
+<!-- SECTION:FINAL_SUMMARY:END -->
