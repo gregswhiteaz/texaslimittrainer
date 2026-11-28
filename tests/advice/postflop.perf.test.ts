@@ -1,14 +1,18 @@
 // Real targets: the p95 targets in SCENARIOS (scale 1). They are enforced only by
 //   ADVICE_PERF_SCALE=1 npx vitest run tests/advice/postflop.perf.test.ts
-// and the 25% headroom check (TASK-7.34 AC#2) by
+// and the 25% headroom check (TASK-7.34 AC#2, TASK-7.39) by
 //   ADVICE_PERF_SCALE=1 npx vitest run tests/advice/postflop.perf.test.ts -t headroom
 // run with CI unset on the reference machine (Apple-silicon Mac, Node 22.18.0). Opt-in: the tests run
 // only with TLH_SLOW_TESTS=1 (`npm run test:slow`, at the slack scale below) or with ADVICE_PERF_SCALE
 // set; plain `npm test` skips them. CI (CI=true) prints the numbers but enforces no speed limit.
 // Times are process CPU time (cpuNowMs in tests/support/speed.ts), so other busy processes do not inflate them.
 import { describe, expect, it } from 'vitest';
-import { computeEquity } from '../../src/advice/equity';
-import { recommendPostflop, type PostflopOptions } from '../../src/advice/postflop';
+import { computeEquity, equityWithBudget } from '../../src/advice/equity';
+import {
+  CALLING_RANGE_BUDGET,
+  recommendPostflop,
+  type PostflopOptions,
+} from '../../src/advice/postflop';
 import { callingRange, unseenCombos } from '../../src/advice/ranges';
 import { ACTION_RANGE_ADVICE } from '../../src/advice/recommend';
 import { applyAction, createHand, type Action, type SeatNumber } from '../../src/engine/hand';
@@ -83,11 +87,12 @@ const SCENARIOS: [string, PlayerView, number][] = [
 const NINE_SEAT_FACING_BET = viewAfter(9, [...limpedPreflop(9), [2, 'bet', 4]]);
 
 /**
- * Headroom scenarios (TASK-7.34): the 8-opponent target is 200 ms (Q-1). HU is timed second: timed
- * first in a fresh worker, background JIT work put 6 of 17 runs over 18.75 ms.
+ * Headroom scenarios (TASK-7.34, TASK-7.39): the 8-opponent target is back to 100 ms (reduced calling budget). HU
+ * is timed second and the actions spot last: timed first in a fresh worker, background JIT work put 6 of 17 runs
+ * over 18.75 ms.
  */
 const HEADROOM_SCENARIOS: [string, PlayerView, number][] = [
-  ['9-seat flop vs 8 opponents', NINE_SEAT_FACING_BET, 200],
+  ['9-seat flop vs 8 opponents', NINE_SEAT_FACING_BET, 100],
   ['HU flop facing a bet', HU_FACING_BET, 25],
 ];
 
@@ -184,21 +189,23 @@ describe('postflop advice performance', { timeout: 120_000 }, () => {
   });
 
   it.runIf(OPT_IN)(
-    'headroom: HU facing a bet and 8 opponents within 75% of target times slack',
+    'headroom: HU facing a bet, 8 opponents and the actions spot within 75% of target times slack',
     () => {
       // The calling-range run succeeds, so this is a calling-range spot, not the A-7 fallback.
       const { holeCards, board } = NINE_SEAT_FACING_BET;
       const calling = callingRange(unseenCombos([...holeCards, ...board]), board);
       const opponents = new Array<typeof calling>(8).fill(calling);
-      expect(computeEquity({ hero: holeCards, board, opponents }).method).toBe('sampled');
+      const reduced = equityWithBudget({ hero: holeCards, board, opponents }, CALLING_RANGE_BUDGET);
+      expect(reduced.method).toBe('sampled');
       expect(recommendPostflop(HU_FACING_BET).opponents).toBe(1);
       expect(recommendPostflop(NINE_SEAT_FACING_BET).opponents).toBe(8);
-      const limits = HEADROOM_SCENARIOS.map(([n, v, t]): [string, PlayerView, number] => [
-        n,
-        v,
-        t * HEADROOM,
-      ]);
-      expect(slowScenarios(limits)).toEqual([]);
+      const limits = (scenarios: [string, PlayerView, number][]) =>
+        scenarios.map(([n, v, t]): [string, PlayerView, number] => [n, v, t * HEADROOM]);
+      const actions = limits(ACTION_SCENARIOS.slice(0, 1));
+      expect([
+        ...slowScenarios(limits(HEADROOM_SCENARIOS)),
+        ...slowScenarios(actions, ACTION_RANGE_ADVICE),
+      ]).toEqual([]);
     },
   );
 });

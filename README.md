@@ -256,8 +256,9 @@ machine (Apple-silicon Mac, Node 22.18.0) with `CI` unset:
   ADVICE_PERF_SCALE=1 npx vitest run tests/advice/postflop.perf.test.ts
   ```
 
-  Headroom check: HU flop facing a bet and the 9-seat flop vs 8 opponents (calling-range spot,
-  200 ms target) each within 75% of target.
+  Headroom check: HU flop facing a bet, the 9-seat flop vs 8 opponents (calling-range spot,
+  100 ms target) and the 6-max actions spot facing a bet from one opponent (25 ms target) each
+  within 75% of target.
 
   ```sh
   ADVICE_PERF_SCALE=1 npx vitest run tests/advice/postflop.perf.test.ts -t headroom

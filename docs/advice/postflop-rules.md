@@ -56,7 +56,8 @@ all match.
   is used instead.
 - **Equity against the range that would call.** The hero's pot share, as for equity, but with each
   live opponent holding a hand from their range that would call. With several opponents it is one
-  number, computed against all of their calling ranges at once. In the rare case where so many
+  number, computed against all of their calling ranges at once. With 7 or more opponents it is
+  sampled from 10,000 deals instead of 30,000, so the advice stays fast. In the rare case where so many
   opponents' calling ranges overlap that no deal can be sampled, the plain equity is used instead.
 - **Value threshold.** 50% for a bet when the hero owes nothing, 65% for a raise when the hero faces
   a bet. A bet is for value when the hands that call it lose more often than they win: above 50%

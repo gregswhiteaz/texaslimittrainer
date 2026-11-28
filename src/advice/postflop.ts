@@ -3,7 +3,15 @@ import type { Action } from '../engine/hand';
 import type { PlayerView, PublicPlayer } from '../engine/player-view';
 import { explainPostflop } from './explain';
 import { basisText } from './explanations';
-import { computeEquity, type EquityInput, type EquityResult, type Range } from './equity';
+import {
+  computeEquity,
+  EXACT_EVALUATION_LIMIT,
+  equityWithBudget,
+  type EquityBudget,
+  type EquityInput,
+  type EquityResult,
+  type Range,
+} from './equity';
 import {
   callingRange,
   drawOuts,
@@ -29,6 +37,13 @@ export const VALUE_THRESHOLD_PCT = 50;
 /** Raise for value (a bet owed) when the rounded equity against the range that would call is above this percent. */
 export const VALUE_RAISE_THRESHOLD_PCT = 65;
 export type PostflopRuleId = (typeof POSTFLOP_RULE_IDS)[number];
+/** With this many opponents or more, the default calling-range run uses CALLING_RANGE_BUDGET (TASK-7.39 Q-1). */
+export const REDUCED_CALLING_OPPONENTS = 7;
+/** Budget of that calling-range run: 10,000 sampled deals instead of 30,000 (TASK-7.39 Q-1). */
+export const CALLING_RANGE_BUDGET: EquityBudget = {
+  exactLimit: EXACT_EVALUATION_LIMIT,
+  trials: 10_000,
+};
 
 export interface PostflopRecommendation {
   readonly basis: 'equity';
@@ -156,7 +171,20 @@ export function recommendPostflop<O extends object = PostflopOptions>(
     ];
   }
   const opponents = (attempts[0] as readonly Range[]).length;
-  const result = withFallbacks(run, attempts);
+  // Default equity only (TASK-7.39): whole-range outcomes kept per attempt, so an identical calling run is reused.
+  const defaultEquity = options?.equity === undefined;
+  const kept = new Map<readonly Range[], EquityResult | RangeError>();
+  const runWhole = (ranges: readonly Range[]) => {
+    try {
+      const outcome = run(ranges);
+      if (defaultEquity) kept.set(ranges, outcome);
+      return outcome;
+    } catch (error) {
+      if (defaultEquity && error instanceof RangeError) kept.set(ranges, error);
+      throw error;
+    }
+  };
+  const result = withFallbacks(runWhole, attempts);
   const equityPct = toPct(result.hero.equity);
   const outs = drawOuts(view.holeCards, view.board);
   const payers = view.players.filter((p) => p.seat !== view.seat && !p.folded && !p.allIn).length;
@@ -173,8 +201,25 @@ export function recommendPostflop<O extends object = PostflopOptions>(
 
   let equityVsCallingRangePct: number;
   try {
-    const calling = attempts.map((ranges) => ranges.map((r) => callingRange(r, view.board)));
-    equityVsCallingRangePct = toPct(withFallbacks(run, calling).hero.equity);
+    const calling = attempts.map((ranges) => {
+      const narrowed = ranges.map((r) => callingRange(r, view.board));
+      // callingRange keeps input order, so an equal length means equal content.
+      const same = narrowed.every((r, i) => r.length === (ranges[i] as Range).length);
+      return defaultEquity && same ? ranges : narrowed;
+    });
+    const runCalling = (ranges: readonly Range[]) => {
+      const outcome = kept.get(ranges);
+      if (outcome instanceof RangeError) throw outcome;
+      if (outcome !== undefined) return outcome;
+      if (defaultEquity && ranges.length >= REDUCED_CALLING_OPPONENTS) {
+        return equityWithBudget(
+          { hero: view.holeCards, board: view.board, opponents: ranges },
+          CALLING_RANGE_BUDGET,
+        );
+      }
+      return run(ranges);
+    };
+    equityVsCallingRangePct = toPct(withFallbacks(runCalling, calling).hero.equity);
   } catch (error) {
     // A-7: many overlapping calling ranges can defeat the sampler; fall back to the whole-range number.
     if (!(error instanceof RangeError)) throw error;
