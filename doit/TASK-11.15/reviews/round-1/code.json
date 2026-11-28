@@ -1,0 +1,29 @@
+{"reviewer": "code", "round": 1,
+ "rubric": [
+  {"item": "SPEC-01 correctness", "result": "pass"},
+  {"item": "SPEC-01 test strength", "result": "pass"},
+  {"item": "SPEC-02 correctness", "result": "pass"},
+  {"item": "SPEC-02 test strength", "result": "pass"},
+  {"item": "SPEC-02b correctness", "result": "pass"},
+  {"item": "SPEC-02b test strength", "result": "pass"},
+  {"item": "SPEC-03 correctness", "result": "pass"},
+  {"item": "SPEC-03 test strength", "result": "pass"},
+  {"item": "SPEC-04 correctness", "result": "pass"},
+  {"item": "SPEC-04 test strength", "result": "pass"},
+  {"item": "SPEC-05 correctness", "result": "pass"},
+  {"item": "SPEC-05 test strength", "result": "pass"},
+  {"item": "SPEC-06 correctness", "result": "pass"},
+  {"item": "SPEC-06 test strength", "result": "pass"},
+  {"item": "scope", "result": "pass"},
+  {"item": "concision", "result": "pass"},
+  {"item": "clarity", "result": "pass"}
+ ],
+ "findings": [
+  {"fingerprint": "e2e/report-navigation.spec.ts:comment-wording-holds-alt",
+   "severity": "NIT",
+   "file": "e2e/report-navigation.spec.ts", "line": 112,
+   "issue": "The step comment (and the same line in back-focus:26, settings:78, error-recovery:137) says 'buttonTabKey holds Alt only then' rather than the spec's 'picks Alt+Tab only then'.",
+   "evidence": "Spec 5 design text contains the literal 'Alt+Tab', which contradicts the spec's own judge grep (section 10) that must find no 'Alt+Tab' in the four files. The wording keeps the meaning (names macOS Full Keyboard Access as the cause) and satisfies the grep.",
+   "fix": "None needed; the spec says 'wording may vary, content fixed'. Optionally note the deviation in the final summary."}
+ ],
+ "summary": "All SPEC items implemented as designed. keyboard.ts matches the interface exactly (Tab then Alt+Tab, no Alt+Tab call when Tab succeeds, exact error message, probe page closed in finally). The probe runs on a separate page in the same context using setContent only; every addInitScript/route/request listener in the four files is page-scoped, the context-wide clock does not matter for focus/keypress on static HTML, and src/ has no blur/visibilitychange/hasFocus listeners that a new page could trigger. The SPEC-02 test would catch probing on `page` itself (input focus and content lost), a leaked probe page (page count), and Chromium returning Alt+Tab; the SPEC-02b test would catch wrong order, an extra Alt+Tab call, and a missing throw. Locked files: assertion counts via doit ASSERT_RE are unchanged at 30/8/22/41, and the multiset of expect lines (excluding the expectErrorScreen call-site signature change) is identical before and after, so nothing was added, removed or loosened. grep for 'Alt+Tab|browserName' in the four files finds nothing. Local re-run of keyboard-helper + back-focus on both projects: 10 passed. Gate fix-2 passes (full e2e 421 passed, lint, typecheck, budget 126/130 lines, 6/6 files). CI run 46089401147 still in progress at review time (lint/typecheck/build job succeeded; E2E shards running). No BLOCKER or MAJOR findings."}

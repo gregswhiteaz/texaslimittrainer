@@ -7,7 +7,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-25T14:22:00Z'
-updated_date: '2026-11-28T00:28:00Z'
+updated_date: '2026-11-28T00:43:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -51,4 +51,6 @@ AC#2 dropped 2026-11-28 (user decision): the duplicate placement check in the lo
 AC#2 added 2026-11-28 (Q-2, user: include the other three files).
 
 Locked e2e edits unlocked under owners: report-navigation (TASK-11.6), back-focus (TASK-12.10), settings (TASK-12.1, 12.10, 12.2), error-recovery (TASK-13.1).
+
+Build: buttonTabKey helper (Tab first, Alt+Tab fallback, probe page); four e2e files switched, assertion counts 30/8/22/41 unchanged; gate PASS
 <!-- SECTION:NOTES:END -->
