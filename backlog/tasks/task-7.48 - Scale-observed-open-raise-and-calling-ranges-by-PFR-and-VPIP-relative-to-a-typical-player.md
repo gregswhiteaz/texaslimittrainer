@@ -3,11 +3,11 @@ id: TASK-7.48
 title: >-
   Scale observed open-raise and calling ranges by PFR and VPIP relative to a
   typical player
-status: In Progress
+status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-27T20:52:00Z'
-updated_date: '2026-11-28T21:35:00Z'
+updated_date: '2026-11-28T21:36:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -19,6 +19,7 @@ references:
   - dreams/limit-holdem-trainer/requirements.md
 documentation:
   - doc-104
+  - doc-206
 parent_task_id: TASK-7
 priority: medium
 type: enhancement
@@ -60,4 +61,12 @@ Full spec: doit/TASK-7.48/spec.md
 TASK-7.45 review r2: e2e/observed-resume.spec.ts was run under option D on a scratch copy and passes (6/6, chromium+webkit); tests/golden/postflop-lines.acceptance.test.ts also fails at load on the a6s spot until it is re-tuned (AC#6).
 
 Build: relative rule (TYPICAL_VPIP, relativeStatPct, OBSERVED_LINE_STAT); 8 owner unlocks + re-pins; golden a6s re-tuned to 100/12/9; gate PASS. AC#6 sign-off: user's Q-1 answer (2026-11-28) stands — built numbers MATCH (width 17.27, equity 45.3, raise 19.7, fold 21.1; doit/TASK-7.48/signoff.md). Deviation: doc cap sentence also names the BTN open-raise (measured cap thresholds).
+
+Step 6a: none (docs wrap NIT below the value bar; follow-up story).
 <!-- SECTION:NOTES:END -->
+
+## Final Summary
+
+<!-- SECTION:FINAL_SUMMARY:BEGIN -->
+Applied the relative rule min(100, d x stat / typical) to every scaled line in src/advice/ranges.ts (PFR for open-raise and re-raises, VPIP for limp and calling lines), added TYPICAL_VPIP, re-pinned locked tests via 8 owner unlocks, and re-tuned golden a6s to BTN 100/12/9 'tight raiser' (user Q-1; built numbers matched: width 17.27, equity 45.3, margins 19.7/21.1). Docs updated; the cap sentence also names BTN open-raise. Verified: npm test 1595 passed, typecheck and lint clean, e2e 4/4, slow resize 5/5, judge PASS r1 9/9 with 110 holdout checks. Assumptions to review: A-1..A-6 and D-1 in the doc. Risks: none open; one NIT (ragged wrap in range-model.md Known limits).
+<!-- SECTION:FINAL_SUMMARY:END -->
