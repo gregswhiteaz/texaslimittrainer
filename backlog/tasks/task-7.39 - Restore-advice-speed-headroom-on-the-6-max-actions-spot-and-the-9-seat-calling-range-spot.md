@@ -7,7 +7,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-26T17:06:00Z'
-updated_date: '2026-11-28T01:46:00Z'
+updated_date: '2026-11-28T03:17:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -43,3 +43,9 @@ Follow-up from TASK-7.34 (doc-167). 'actions: 6-max flop facing a bet, one oppon
 
 Full spec: doit/TASK-7.39/spec.md
 <!-- SECTION:PLAN:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+User sign-off 2026-11-28 (AC#2): approved 10,000 calling-range deals at 7+ live opponents per doit/TASK-7.39/signoff.md — 9-seat p95 131 -> 66 ms, actions spot 21.3 -> 10.0 ms; bots and 8 playtest variants byte-identical; user advice changes only in 7+-way pots (calling-range number max 1.1 pts, mean ~0.1, no action/rule changes in 600 sampled views).
+<!-- SECTION:NOTES:END -->
