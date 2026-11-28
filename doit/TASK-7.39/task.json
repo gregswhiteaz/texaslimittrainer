@@ -1,0 +1,152 @@
+{
+  "id": "TASK-7.39",
+  "title": "Restore advice speed headroom on the 6-max actions spot and the 9-seat calling-range spot",
+  "status": "To Do",
+  "archived": false,
+  "type": null,
+  "priority": "low",
+  "project": null,
+  "assignees": [],
+  "reporter": null,
+  "labels": [
+    "dream-limit-holdem-trainer",
+    "follow-up"
+  ],
+  "milestone": "m-1",
+  "parentTaskId": "TASK-7",
+  "acceptanceCriteriaCompleted": 0,
+  "acceptanceCriteriaCount": 2,
+  "references": [
+    "doc-167"
+  ],
+  "modifiedFiles": [],
+  "ordinal": 260000,
+  "createdAt": "2026-11-26T17:06:00Z",
+  "updatedAt": null,
+  "dueDate": null,
+  "isReady": true,
+  "path": "backlog/tasks/task-7.39 - Restore-advice-speed-headroom-on-the-6-max-actions-spot-and-the-9-seat-calling-range-spot.md",
+  "description": "Follow-up from TASK-7.34 (doc-167). 'actions: 6-max flop facing a bet, one opponent' sits at ~79% of its 25 ms target (~15 ms outside equity, likely estimateOpponentRanges). The 9-seat vs 8 opponents spot needed a 200 ms target (TASK-7.34 Q-1) and runs ~132 ms against a 150 ms headroom limit; reaching 100 ms needs a faster multiway calling-range sampler, which may change seeded results.",
+  "dependencies": [
+    "TASK-7.34"
+  ],
+  "dependencyGraph": {
+    "root": "TASK-7.39",
+    "nodes": [
+      {
+        "id": "TASK-7.39",
+        "title": "Restore advice speed headroom on the 6-max actions spot and the 9-seat calling-range spot",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": 0,
+        "dependentDepth": 0
+      },
+      {
+        "id": "TASK-1.1",
+        "title": "Bootstrap the strict TypeScript project with one-command checks",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 6,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.2",
+        "title": "Rank showdown hands by real poker hand rankings",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 4,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.7",
+        "title": "Run every check in GitHub Actions on each push and pull request",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 5,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-7.1",
+        "title": "Compute a hand's equity against opponent hands",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 3,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-7.18",
+        "title": "Restore equity calculation performance headroom",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 2,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-7.34",
+        "title": "Make the advice speed checks opt-in and restore headroom on the remaining tight spots",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 1,
+        "dependentDepth": null
+      }
+    ],
+    "edges": [
+      {
+        "from": "TASK-1.2",
+        "to": "TASK-1.7"
+      },
+      {
+        "from": "TASK-1.7",
+        "to": "TASK-1.1"
+      },
+      {
+        "from": "TASK-7.1",
+        "to": "TASK-1.2"
+      },
+      {
+        "from": "TASK-7.18",
+        "to": "TASK-7.1"
+      },
+      {
+        "from": "TASK-7.34",
+        "to": "TASK-7.18"
+      },
+      {
+        "from": "TASK-7.39",
+        "to": "TASK-7.34"
+      }
+    ]
+  },
+  "readiness": {
+    "isReady": true,
+    "isBlocked": false,
+    "blockingDependencies": [],
+    "missingDependencies": []
+  },
+  "documentation": [],
+  "subtasks": [],
+  "acceptanceCriteria": [
+    {
+      "index": 1,
+      "text": "Given the opt-in advice perf test, When 'actions: 6-max flop facing a bet, one opponent' runs at real targets, Then its p95 is at most 75% of 25 ms with advice results unchanged (playtest SHA identical)",
+      "checked": false
+    },
+    {
+      "index": 2,
+      "text": "Given a faster multiway calling-range sampler, When the 9-seat vs 8 opponents spot runs, Then its p95 is at most 75 ms (75% of 100 ms), and any change to seeded advice or bot results is measured and approved by the user before merge",
+      "checked": false
+    }
+  ],
+  "definitionOfDone": [],
+  "implementationPlan": null,
+  "implementationNotes": null,
+  "comments": [],
+  "finalSummary": null
+}

@@ -3,9 +3,11 @@ id: TASK-7.39
 title: >-
   Restore advice speed headroom on the 6-max actions spot and the 9-seat
   calling-range spot
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-26T17:06:00Z'
+updated_date: '2026-11-28T01:46:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -30,3 +32,14 @@ Follow-up from TASK-7.34 (doc-167). 'actions: 6-max flop facing a bet, one oppon
 - [ ] #1 Given the opt-in advice perf test, When 'actions: 6-max flop facing a bet, one opponent' runs at real targets, Then its p95 is at most 75% of 25 ms with advice results unchanged (playtest SHA identical)
 - [ ] #2 Given a faster multiway calling-range sampler, When the 9-seat vs 8 opponents spot runs, Then its p95 is at most 75 ms (75% of 100 ms), and any change to seeded advice or bot results is measured and approved by the user before merge
 <!-- AC:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. AC#1: reuse the whole-range outcome when the calling range equals it (advice byte-identical)
+2. AC#2: CALLING_RANGE_BUDGET 10,000 deals at 7+ live opponents (Q-1 A), only when no equity option is passed (bots unchanged)
+3. Opt-in perf test: actions spot timed, 9-seat target back to 100 ms
+4. signoff.md delta package for the user before code review
+
+Full spec: doit/TASK-7.39/spec.md
+<!-- SECTION:PLAN:END -->

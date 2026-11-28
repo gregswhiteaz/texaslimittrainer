@@ -1,0 +1,56 @@
+[
+  {
+    "id": "SPEC-01",
+    "verifies": "AC#1",
+    "verification": "command `for i in 1 2 3; do ADVICE_PERF_SCALE=1 npx vitest run tests/advice/postflop.perf.test.ts -t headroom 2>&1 | tee /dev/stderr | grep -E 'Tests +1 passed' || exit 1; done`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-02",
+    "verifies": "AC#1",
+    "verification": "acceptance `tests/advice/calling-run-identity.acceptance.test.ts::default advice equals the two-run advice below 7 opponents`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-03",
+    "verifies": "AC#1",
+    "verification": "unit `tests/advice/postflop-calling-run.test.ts::an identical calling-range run is not repeated`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-04",
+    "verifies": "AC#1, AC#2",
+    "verification": "unit `tests/advice/postflop-calling-run.test.ts::injected equity seams are untouched`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-05",
+    "verifies": "AC#2",
+    "verification": "unit `tests/advice/postflop-calling-run.test.ts::7+ opponents use the reduced calling budget`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-06",
+    "verifies": "AC#2",
+    "verification": "command `for i in 1 2 3; do ADVICE_PERF_SCALE=1 npx vitest run tests/advice/postflop.perf.test.ts -t headroom 2>&1 | tee /dev/stderr | grep -E 'Tests +1 passed' || exit 1; done`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-07",
+    "verifies": "AC#1, AC#2",
+    "verification": "manual The orchestrator checks that `doit/TASK-7.39/signoff.md` has the five sections with numbers filled and the < 7 bucket at 0 differences, and that `backlog task view TASK-7.39 --plain` shows the sign-off entry before Done.",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-08",
+    "verifies": "AC#1, AC#2",
+    "verification": "command `test \"$(npm run -s playtest | shasum -a 256 | cut -d' ' -f1)\" = d4d84efb02d49242388de13a4d0e39a1824d0f575badf4f1b2dd81b53cb22992 && test \"$(git diff --name-only ff79ebdd -- src/)\" = src/advice/postflop.ts && npx vitest run tests/bots/calling-station.acceptance.test.ts tests/bots/calling-station-postflop.acceptance.test.ts tests/bots/maniac.acceptance.test.ts tests/playtest/bot-results.acceptance.test.ts tests/golden tests/advice/postflop.acceptance.test.ts tests/advice/range-model.acceptance.test.ts tests/advice/value-bet.acceptance.test.ts && TLH_SLOW_TESTS=1 npx vitest run tests/playtest/games.acceptance.test.ts tests/bots/maniac.test.ts`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-09",
+    "verifies": "AC#1, AC#2",
+    "verification": "command `env -u TLH_SLOW_TESTS -u ADVICE_PERF_SCALE npx vitest run tests/advice/postflop.perf.test.ts 2>&1 | grep -E 'Tests +4 skipped \\(4\\)' && ! grep -n -E 'cpuNowMs|performance\\.now|Date\\.now' tests/advice/postflop-calling-run.test.ts tests/advice/calling-run-identity.acceptance.test.ts && npm test`",
+    "status": "pending"
+  }
+]
