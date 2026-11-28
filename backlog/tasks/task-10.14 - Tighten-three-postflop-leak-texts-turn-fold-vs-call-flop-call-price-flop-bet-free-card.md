@@ -3,11 +3,11 @@ id: TASK-10.14
 title: >-
   Tighten three postflop leak texts (turn fold vs call, flop call price, flop
   bet free card)
-status: In Progress
+status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-24T23:58:00Z'
-updated_date: '2026-11-28T05:34:00Z'
+updated_date: '2026-11-28T05:35:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -16,6 +16,8 @@ dependencies:
   - TASK-10.5
 references:
   - doc-128
+documentation:
+  - doc-202
 parent_task_id: TASK-10
 priority: low
 ordinal: 238000
@@ -51,4 +53,12 @@ AC#2 added from Q-4 (user chose: add to this task).
 Build: 7 leak texts replaced in leak-categories.json + docs table; new leak-copy acceptance test; gate PASS
 
 Review r1 MINOR 2: flop raise justification (A-5) now also names the implied-odds rule; leak-copy test expected value replaced (unlocked under TASK-10.14).
+
+Step 6a: none. Draw-allowance gap in the approved flop-call/turn-fold fixes left for the user to decide (reported); scope-budget warning not tracked.
 <!-- SECTION:NOTES:END -->
+
+## Final Summary
+
+<!-- SECTION:FINAL_SUMMARY:BEGIN -->
+Rewrote 7 postflop leak text fields in leak-categories.json and docs/stats/leaks.md (turn fold fix+justification, turn call justification, flop call fix, flop bet fix, flop/turn raise justifications) so they match the advice rules (at-least price, river bet on turn, free turn only if no one bets, >65% value-raise); added tests/stats/leak-copy.acceptance.test.ts. Verified: npm test 1572 pass, lint/typecheck pass, e2e report-leaks pass, judge PASS 7/7 round 1, no blocking review findings. Review: flop-call fix and turn-fold fix omit the small implied-odds draw allowance (user-approved wording kept); flop raise justification amended after review to name implied-odds. No code change; status not set to Done.
+<!-- SECTION:FINAL_SUMMARY:END -->

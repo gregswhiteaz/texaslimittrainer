@@ -1,6 +1,6 @@
 {
   "task": "TASK-10.14",
-  "stage": "build",
+  "stage": "done",
   "branch": "doit/TASK-10.14",
   "base_commit": "7cb00bc28034dd3400bde1aaac19d3460867f7de",
   "started": "2026-11-27T21:58:39",
@@ -8,8 +8,8 @@
   "judge_round": 1,
   "sendbacks": 0,
   "gate_runs": 4,
-  "questions": 0,
-  "assumptions": 0,
+  "questions": 4,
+  "assumptions": 5,
   "escalations": 0,
   "item_failures": {
     "SPEC-01": 0,
@@ -2351,5 +2351,6 @@
   "relock_pending": [],
   "judge_results": {
     "1": "PASS"
-  }
+  },
+  "doc_id": "doc-202"
 }
