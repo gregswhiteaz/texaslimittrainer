@@ -1927,7 +1927,14 @@
       "skips": 0
     }
   },
-  "history": [],
+  "history": [
+    {
+      "t": "2026-11-27T17:25:55",
+      "event": "unlock",
+      "file": "e2e/report-navigation.spec.ts",
+      "reason": "TASK-11.15 (user Q-2): replace the hard-coded WebKit Alt+Tab with the buttonTabKey helper and fix the comment; no assertion changed"
+    }
+  ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-11.6",
   "spec_sha256": "2302e5d805b56550ae3d1ccadb7328240e89ac044f6d284b23bbe8b13aad3584",
   "review_findings": {
@@ -1936,5 +1943,8 @@
   "judge_results": {
     "1": "PASS"
   },
-  "doc_id": "doc-139"
+  "doc_id": "doc-139",
+  "relock_pending": [
+    "e2e/report-navigation.spec.ts"
+  ]
 }

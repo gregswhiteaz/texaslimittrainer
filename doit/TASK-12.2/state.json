@@ -1999,6 +1999,12 @@
       "event": "unlock",
       "file": "e2e/opponent-styles.spec.ts",
       "reason": "TASK-13.2 Q-1 (auto-accepted): DB v5 adds a meta store; re-pin DB version and store names / open version, keep every check"
+    },
+    {
+      "t": "2026-11-27T17:25:55",
+      "event": "unlock",
+      "file": "e2e/settings.spec.ts",
+      "reason": "TASK-11.15 (user Q-2): replace the hard-coded WebKit Alt+Tab with the buttonTabKey helper and fix the comment; no assertion changed"
     }
   ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-12.2",
@@ -2008,7 +2014,8 @@
     "2": 0
   },
   "relock_pending": [
-    "e2e/opponent-styles.spec.ts"
+    "e2e/opponent-styles.spec.ts",
+    "e2e/settings.spec.ts"
   ],
   "brief_history": {
     "tests/ui/opponent-styles.acceptance.test.tsx:disabled-until-loaded-guard-untested": [

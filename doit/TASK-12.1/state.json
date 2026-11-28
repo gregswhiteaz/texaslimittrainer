@@ -1992,6 +1992,12 @@
       "event": "unlock",
       "file": "e2e/settings.spec.ts",
       "reason": "TASK-12.10 Q-2 (autopilot, recommended): re-pin the Tab-order expectation to the new back-control-first order (:82-83) and its two comments; no other check changes"
+    },
+    {
+      "t": "2026-11-27T17:25:55",
+      "event": "unlock",
+      "file": "e2e/settings.spec.ts",
+      "reason": "TASK-11.15 (user Q-2): replace the hard-coded WebKit Alt+Tab with the buttonTabKey helper and fix the comment; no assertion changed"
     }
   ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-12.1",
@@ -2004,6 +2010,7 @@
   },
   "doc_id": "doc-141",
   "relock_pending": [
+    "e2e/settings.spec.ts",
     "e2e/settings.spec.ts",
     "e2e/settings.spec.ts"
   ]

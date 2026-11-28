@@ -1,0 +1,38 @@
+[
+  {
+    "id": "SPEC-01",
+    "verifies": "AC#1",
+    "verification": "acceptance `e2e/report-navigation.spec.ts::View statistics opens Statistics with the session just ended in its totals`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-02",
+    "verifies": "AC#1",
+    "verification": "unit `e2e/keyboard-helper.spec.ts::buttonTabKey returns a key that tabs to a button and leaves the page as it was`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-03",
+    "verifies": "AC#1, AC#2",
+    "verification": "command `npx playwright test e2e/report-navigation.spec.ts e2e/back-focus.spec.ts e2e/settings.spec.ts e2e/error-recovery.spec.ts e2e/keyboard-helper.spec.ts` plus the CI e2e run on the pushed branch",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-04",
+    "verifies": "AC#2",
+    "verification": "acceptance `e2e/back-focus.spec.ts::one Tab from the Settings heading reaches \u2190 Home`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-05",
+    "verifies": "AC#2",
+    "verification": "acceptance `e2e/settings.spec.ts::every Settings control is reachable by Tab, native, keyboard-operable and at least 44x44`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-06",
+    "verifies": "AC#2",
+    "verification": "acceptance `e2e/error-recovery.spec.ts`",
+    "status": "pending"
+  }
+]

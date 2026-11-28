@@ -2272,7 +2272,20 @@
       "skips": 0
     }
   },
-  "history": [],
+  "history": [
+    {
+      "t": "2026-11-27T17:25:55",
+      "event": "unlock",
+      "file": "e2e/back-focus.spec.ts",
+      "reason": "TASK-11.15 (user Q-2): replace the hard-coded WebKit Alt+Tab with the buttonTabKey helper and fix the comment; no assertion changed"
+    },
+    {
+      "t": "2026-11-27T17:25:55",
+      "event": "unlock",
+      "file": "e2e/settings.spec.ts",
+      "reason": "TASK-11.15 (user Q-2): replace the hard-coded WebKit Alt+Tab with the buttonTabKey helper and fix the comment; no assertion changed"
+    }
+  ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-12.10",
   "spec_sha256": "eedbabb9d3376ab1154e47b10fccbb0775153cf3342e83733ce24379f75204b0",
   "review_findings": {
@@ -2288,5 +2301,9 @@
       "judge r1"
     ]
   },
-  "doc_id": "doc-188"
+  "doc_id": "doc-188",
+  "relock_pending": [
+    "e2e/back-focus.spec.ts",
+    "e2e/settings.spec.ts"
+  ]
 }
