@@ -95,7 +95,13 @@ describe('preflop advice', () => {
       [4, [c(4, 4), r(5, 8), f(6), f(1), f(2), f(3)], 'raise'],
       [4, [c(4, 4), r(5, 8), c(6, 8), c(1, 8), f(2), f(3)], 'raise-and-calls'],
       [1, [r(4, 8), c(5, 8), f(6)], 'raise-and-calls'],
-      [3, [r(4, 8), c(5, 8), f(6), f(1), f(2)], 'blind-defence'],
+      // A blind facing one raise reads the early spot for a UTG or HJ raiser, else the late spot.
+      [3, [r(4, 8), c(5, 8), f(6), f(1), f(2)], 'blind-defence-early'],
+      [3, [f(4), f(5), r(6, 8), f(1), f(2)], 'blind-defence'],
+      [3, [f(4), f(5), f(6), f(1), r(2, 8)], 'blind-defence'],
+      // An isolation raise over a limper is grouped by the raiser's seat.
+      [3, [c(4, 4), r(5, 8), f(6), f(1), f(2)], 'blind-defence-early'],
+      [2, [c(4, 4), f(5), f(6), r(1, 8)], 'blind-defence'],
       [4, [r(4, 8), f(5), r(6, 12), f(1), f(2), r(3, 16)], 're-raise'],
       // The small blind completes and the big blind raises.
       [2, [f(4), f(5), f(6), f(1), c(2, 2), r(3, 8)], 'blind-defence'],

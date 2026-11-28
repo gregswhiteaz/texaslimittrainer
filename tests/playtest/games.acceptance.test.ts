@@ -174,9 +174,9 @@ describe('cash and sit-and-go playtest games', () => {
     test(
       `AC#7 cash playtest keeps real stacks, rebuys only busted seats and has all-ins and side pots${suffix}`,
       () => {
-        // Seed 43 (42 before TASK-7.40): with TAG folding more two-raise pots, seed 42 has no side pot in 1,000
-        // hands. Seed 43 has 2 in 1,000 hands and 14 in 10,000.
-        const { played, summary } = collect(hands, 43, 6, 'cash');
+        // Seed 45 (43 before TASK-7.42, 42 before TASK-7.40): with TAG folding more blind defences and two-raise
+        // pots, seeds 42 to 44 have no side pot in 1,000 hands. Seed 45 has 1 in 1,000 hands and 6 in 10,000.
+        const { played, summary } = collect(hands, 45, 6, 'cash');
         let expected = SEATS.map((seat) => ({ seat, stack: 160 }));
         let rebuys = 0;
         let allIns = 0;

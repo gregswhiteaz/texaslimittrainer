@@ -1137,6 +1137,12 @@
       "event": "unlock",
       "file": "tests/advice/table-sizes.acceptance.test.ts",
       "reason": "TASK-7.41 Q-3 approved re-pin"
+    },
+    {
+      "t": "2026-11-28T11:12:33",
+      "event": "unlock",
+      "file": "tests/advice/table-sizes.acceptance.test.ts",
+      "reason": "TASK-7.42 Q-6 approved re-pin"
     }
   ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-7.6",
@@ -1149,6 +1155,7 @@
     "1": "PASS"
   },
   "relock_pending": [
+    "tests/advice/table-sizes.acceptance.test.ts",
     "tests/advice/table-sizes.acceptance.test.ts"
   ]
 }

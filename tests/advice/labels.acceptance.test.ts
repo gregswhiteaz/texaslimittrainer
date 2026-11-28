@@ -41,10 +41,12 @@ describe('situation labels', () => {
       'raise-and-calls': 'facing a raise and calls',
       're-raise': 'facing a re-raise',
       're-raise-not-mine': 'facing a re-raise when you have not raised',
+      'blind-defence-early': 'defending the blind against an early raiser',
       'blind-defence': 'defending the blind against a raise',
     };
     expect(Object.keys(SITUATION_LABELS).sort()).toEqual(
       [
+        'blind-defence-early',
         'blind-defence',
         'limpers',
         'raise',

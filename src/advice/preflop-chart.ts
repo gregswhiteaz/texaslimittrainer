@@ -9,6 +9,7 @@ export type Situation =
   | 'raise-and-calls'
   | 're-raise'
   | 're-raise-not-mine'
+  | 'blind-defence-early'
   | 'blind-defence';
 export type ChartAction = 'fold' | 'call' | 'raise';
 
@@ -51,6 +52,13 @@ export const SEATS_BEFORE_BUTTON: Readonly<Record<ReferenceSize, readonly Positi
   'full-ring': ['BTN', 'CO', 'HJ', 'LJ', 'MP', 'UTG+1', 'UTG'],
 };
 
+/** Raiser positions that make a single raise faced by SB or BB read `blind-defence-early` (TASK-7.42 Q-1). */
+export const EARLY_RAISERS: Readonly<Record<ReferenceSize, readonly Position[]>> = {
+  'heads-up': [],
+  '6-max': ['UTG', 'HJ'],
+  'full-ring': ['UTG', 'UTG+1', 'MP', 'LJ'],
+};
+
 const FULL_RING_OPENERS: readonly Position[] = ['UTG', 'UTG+1', 'MP', 'LJ', 'HJ', 'CO', 'BTN'];
 
 /** The (position, situation) spots each chart must hold, in chart order. */
@@ -69,6 +77,7 @@ export const APPLICABLE_SPOTS: Readonly<Record<ReferenceSize, readonly SpotId[]>
     ...spotsOf('raise-and-calls', ['UTG', 'HJ', 'CO', 'BTN']),
     ...spotsOf('re-raise', ['UTG', 'HJ', 'CO', 'BTN', 'SB', 'BB']),
     ...spotsOf('re-raise-not-mine', ['UTG', 'HJ', 'CO', 'BTN', 'SB', 'BB']),
+    ...spotsOf('blind-defence-early', ['SB', 'BB']),
     ...spotsOf('blind-defence', ['SB', 'BB']),
   ],
   'full-ring': [
@@ -78,6 +87,7 @@ export const APPLICABLE_SPOTS: Readonly<Record<ReferenceSize, readonly SpotId[]>
     ...spotsOf('raise-and-calls', FULL_RING_OPENERS),
     ...spotsOf('re-raise', [...FULL_RING_OPENERS, 'SB', 'BB']),
     ...spotsOf('re-raise-not-mine', [...FULL_RING_OPENERS, 'SB', 'BB']),
+    ...spotsOf('blind-defence-early', ['SB', 'BB']),
     ...spotsOf('blind-defence', ['SB', 'BB']),
   ],
 };

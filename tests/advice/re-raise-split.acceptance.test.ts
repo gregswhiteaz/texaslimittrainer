@@ -181,9 +181,10 @@ describe('6-max re-raise split (TASK-7.40)', () => {
         ...(['UTG', 'HJ', 'CO', 'BTN'] as const).map((p) => [p, 'raise-and-calls'] as const),
         ...SIX_MAX_POSITIONS.map((p) => [p, 're-raise'] as const),
         ...SIX_MAX_POSITIONS.map((p) => [p, 're-raise-not-mine'] as const),
+        ...(['SB', 'BB'] as const).map((p) => [p, 'blind-defence-early'] as const),
         ...(['SB', 'BB'] as const).map((p) => [p, 'blind-defence'] as const),
       ];
-      expect(order).toHaveLength(32);
+      expect(order).toHaveLength(34);
       expect(APPLICABLE_SPOTS['6-max'].map((s) => [s.position, s.situation])).toEqual(order);
       expect(SIX_MAX_CHART.spots.map((s) => [s.position, s.situation])).toEqual(order);
       for (const spot of SIX_MAX_CHART.spots) {
@@ -200,7 +201,7 @@ describe('6-max re-raise split (TASK-7.40)', () => {
         { cwd: REPO_ROOT, env: sandboxEnv(), encoding: 'utf8' },
       );
       expect(run.status).toBe(0);
-      expect(run.stdout.split('\n')[0]).toBe('6-max chart: 32 spots');
+      expect(run.stdout.split('\n')[0]).toBe('6-max chart: 34 spots');
     },
     TOOLCHAIN_TIMEOUT_MS,
   );
@@ -290,7 +291,7 @@ describe('6-max re-raise split (TASK-7.40)', () => {
     }
 
     expect(APPLICABLE_SPOTS['heads-up']).toHaveLength(6);
-    expect(APPLICABLE_SPOTS['full-ring']).toHaveLength(50);
+    expect(APPLICABLE_SPOTS['full-ring']).toHaveLength(52);
     for (const size of ['heads-up', 'full-ring'] as const) {
       expect(APPLICABLE_SPOTS[size].some((s) => s.situation === 're-raise-not-mine')).toBe(
         size === 'full-ring',

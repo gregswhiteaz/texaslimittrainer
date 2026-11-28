@@ -8,6 +8,7 @@ import { handClassOf, type HandClass } from './hand-class';
 import {
   APPLICABLE_SPOTS,
   chartCell,
+  EARLY_RAISERS,
   parseChart,
   SEATS_BEFORE_BUTTON,
   type ChartAction,
@@ -103,7 +104,8 @@ export function chartSpotOf(
 
 /** The preflop action now facing the viewer. Blinds are not actions; limps before a raise are not callers;
  *  raises a forced fold voided are ignored (TASK-10.17). Two or more raises read `re-raise` when one of them is
- *  the viewer's, else `re-raise-not-mine` where the size's chart has that spot (TASK-7.21 A-2). */
+ *  the viewer's, else `re-raise-not-mine` where the size's chart has that spot (TASK-7.21 A-2). A blind facing
+ *  one raise reads `blind-defence-early` when the raiser's position is in EARLY_RAISERS, else `blind-defence`. */
 export function situationOf(view: PlayerView): Situation {
   const voided = voidedBets({ street: 'preflop', stakes: view.stakes, actions: view.actions });
   const records = view.actions.filter(
@@ -125,8 +127,15 @@ export function situationOf(view: PlayerView): Situation {
     return mine || !split ? 're-raise' : 're-raise-not-mine';
   }
   const position = positionOf(view);
-  if (position === 'SB' || position === 'BB') return 'blind-defence';
   const raiseAt = records.findIndex((a) => a.type === 'raise');
+  if (position === 'SB' || position === 'BB') {
+    const size = referenceSizeOf(view.players.length);
+    const raiser = positionOf(
+      { ...view, seat: (records[raiseAt] as (typeof records)[number]).seat },
+      size,
+    );
+    return EARLY_RAISERS[size].includes(raiser) ? 'blind-defence-early' : 'blind-defence';
+  }
   return records.slice(raiseAt + 1).some((a) => a.type === 'call') ? 'raise-and-calls' : 'raise';
 }
 

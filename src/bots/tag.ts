@@ -78,8 +78,10 @@ export function decideTag(view: PlayerView, options: TagOptions = {}): Action {
   if (options.random === undefined || advice.basis !== 'chart' || advice.alternative === null) {
     return advice.move;
   }
-  // Situations with no SPOT_TYPES entry (re-raise-not-mine, TASK-7.40 A-4) are never mixed.
-  const spot = TAG_STYLE.mixedSpots.get(`preflop-${advice.situation}` as SpotType);
+  // Situations with no SPOT_TYPES entry (re-raise-not-mine, TASK-7.40 A-4) are never mixed;
+  // blind-defence-early mixes as preflop-blind-defence (TASK-7.42 A-1).
+  const situation = advice.situation === 'blind-defence-early' ? 'blind-defence' : advice.situation;
+  const spot = TAG_STYLE.mixedSpots.get(`preflop-${situation}` as SpotType);
   if (spot === undefined || drawMixed(spot, options.random) === 'recommended') return advice.move;
   const type = advice.alternative;
   const move = view.legalActions.find((a) => a.type === type);

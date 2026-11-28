@@ -99,13 +99,13 @@ describe('chart:print with a size', () => {
   });
 
   it("chart:print full-ring prints each spot's grid and justification", () => {
-    const headers = checkReview('full-ring', 50);
+    const headers = checkReview('full-ring', 52);
     expect(headers[0]?.startsWith('UTG unopened: ')).toBe(true);
     expect(headers.some((h) => h.startsWith('UTG+1 unopened: '))).toBe(true);
   });
 
   it("chart:print 6-max prints each spot's grid and justification", () => {
-    const headers = checkReview('6-max', 32);
+    const headers = checkReview('6-max', 34);
     expect(headers[0]).toBe('UTG unopened: raise 16.0%, continue 16.0%');
   });
 

@@ -827,6 +827,12 @@
       "event": "unlock",
       "file": "tests/playtest/games.acceptance.test.ts",
       "reason": "TASK-7.40 blocked.json: seeded bot examples shift because the new 6-max not-my-raise grids fold where TAG used to continue (same class as TASK-7.32/7.8 re-pins); re-derive the same views/seeds, keep every assertion and the sidePots>0 check"
+    },
+    {
+      "t": "2026-11-28T11:18:04",
+      "event": "unlock",
+      "file": "tests/playtest/games.acceptance.test.ts",
+      "reason": "TASK-7.42 Q-6 approved re-pin"
     }
   ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-1.16",
@@ -845,6 +851,7 @@
     "1": "PASS"
   },
   "relock_pending": [
+    "tests/playtest/games.acceptance.test.ts",
     "tests/playtest/games.acceptance.test.ts",
     "tests/playtest/games.acceptance.test.ts",
     "tests/playtest/games.acceptance.test.ts",

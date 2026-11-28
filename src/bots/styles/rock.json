@@ -192,6 +192,18 @@
     },
     {
       "position": "SB",
+      "situation": "blind-defence-early",
+      "hands": "AA KK QQ JJ TT AKs AQs AKo",
+      "justification": "Against a raise from under the gun or the hijack the Rock keeps only big pairs and the best aces in the small blind, since the early range is strong and it would play out of position."
+    },
+    {
+      "position": "BB",
+      "situation": "blind-defence-early",
+      "hands": "AA KK QQ JJ TT 99 88 77 66 55 44 33 22 AKs AQs AJs ATs KQs KJs QJs JTs AKo AQo KQo",
+      "justification": "The big blind still gets a good price against an early raise, but the raiser is strong, so the Rock defends every pair, suited aces down to ace-ten, king-queen, king-jack, queen-jack and jack-ten suited, and ace-king, ace-queen and king-queen offsuit."
+    },
+    {
+      "position": "SB",
       "situation": "blind-defence",
       "hands": "AA AKs AQs AJs ATs AKo KK KQs KJs AQo KQo QQ JJ TT 99 88 77",
       "justification": "Defending the small blind against a steal, the Rock re-raises its strong hands, adds a few pairs and broadway hands against loose stealers, and folds the rest instead of calling out of position."

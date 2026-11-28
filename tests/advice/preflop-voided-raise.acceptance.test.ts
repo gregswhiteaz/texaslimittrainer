@@ -63,7 +63,7 @@ describe('preflop situation after a forced fold voids a raise (TASK-10.17)', () 
   it('raises that survive or follow a void still count', () => {
     const p = forceFold(play(deal(), P), 4);
     expect(p.toAct).toBe(2);
-    expect(situation(p, 2)).toBe('blind-defence');
+    expect(situation(p, 2)).toBe('blind-defence-early');
 
     const later = play(forceFold(play(deal(), E2), 4), '1:raise:8');
     expect(later.toAct).toBe(2);
@@ -72,6 +72,6 @@ describe('preflop situation after a forced fold voids a raise (TASK-10.17)', () 
 
   it('without a forced fold the situation is unchanged', () => {
     expect(situation(play(deal(), P), 2)).toBe('re-raise-not-mine');
-    expect(situation(play(deal(), E2), 1)).toBe('blind-defence');
+    expect(situation(play(deal(), E2), 1)).toBe('blind-defence-early');
   });
 });

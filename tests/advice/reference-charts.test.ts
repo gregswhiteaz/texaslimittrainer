@@ -64,6 +64,8 @@ const FR: Record<string, Bands> = {
       { continue: p === 'BB' ? [4, 16] : [2, 8] },
     ]),
   ),
+  'SB blind-defence-early': { continue: [4, 7.5] },
+  'BB blind-defence-early': { continue: [20, 30] },
   'SB blind-defence': { continue: [8, 22] },
   'BB blind-defence': { continue: [30, 55] },
 };

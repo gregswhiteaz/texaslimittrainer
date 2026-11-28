@@ -301,9 +301,10 @@ describe('full-ring re-raise split (TASK-7.41)', () => {
         ...OPENERS.map((p) => [p, 'raise-and-calls'] as const),
         ...RE_RAISERS.map((p) => [p, 're-raise'] as const),
         ...RE_RAISERS.map((p) => [p, 're-raise-not-mine'] as const),
+        ...(['SB', 'BB'] as const).map((p) => [p, 'blind-defence-early'] as const),
         ...(['SB', 'BB'] as const).map((p) => [p, 'blind-defence'] as const),
       ];
-      expect(order).toHaveLength(50);
+      expect(order).toHaveLength(52);
       expect(APPLICABLE_SPOTS['full-ring'].map((s) => [s.position, s.situation])).toEqual(order);
       expect(FULL_RING_CHART.spots.map((s) => [s.position, s.situation])).toEqual(order);
       for (const spot of FULL_RING_CHART.spots) {
@@ -320,7 +321,7 @@ describe('full-ring re-raise split (TASK-7.41)', () => {
         { cwd: REPO_ROOT, env: sandboxEnv(), encoding: 'utf8' },
       );
       expect(run.status).toBe(0);
-      expect(run.stdout.split('\n')[0]).toBe('full-ring chart: 50 spots');
+      expect(run.stdout.split('\n')[0]).toBe('full-ring chart: 52 spots');
     },
     TOOLCHAIN_TIMEOUT_MS,
   );
@@ -401,6 +402,7 @@ describe('full-ring re-raise split (TASK-7.41)', () => {
       'raise-and-calls',
       're-raise',
       're-raise-not-mine',
+      'blind-defence-early',
       'blind-defence',
     ];
     expect(Object.keys(PREFLOP_CONTEXT)).toEqual(situations);

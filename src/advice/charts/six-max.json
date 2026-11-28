@@ -2,7 +2,7 @@
   "format": "tlh-preflop-chart",
   "version": 1,
   "referenceSize": "6-max",
-  "justification": "A tight-aggressive baseline for six-handed fixed-limit hold'em. When nobody has put money in yet we raise or fold; only the small blind sometimes completes, because it is already half in and only the big blind is left. Raising beats limping in limit: a raise sometimes wins the blinds at once, thins the field, and puts more money in while our hand is most likely ahead, and the raiser keeps the lead into the flop. Ranges widen as position improves, because fewer players behind us means fewer chances that someone holds a better hand, and acting last on every later street is worth extra hands. Facing one raise and no callers we mostly re-raise or fold; we call more often when callers or our own blind improve the price, and most of all in the big blind. Once two raises are in, the pot is large: when our own raise is re-raised we usually call with most of the hands we raised with; when none of the raises is ours we continue only with hands that are strong against one raise, and fewer of them; in both cases only premium hands raise again. Played over many hands, the chart aims to put money in voluntarily with about 18 to 26 percent of hands and to raise first with about 14 to 22 percent.",
+  "justification": "A tight-aggressive baseline for six-handed fixed-limit hold'em. When nobody has put money in yet we raise or fold; only the small blind sometimes completes, because it is already half in and only the big blind is left. Raising beats limping in limit: a raise sometimes wins the blinds at once, thins the field, and puts more money in while our hand is most likely ahead, and the raiser keeps the lead into the flop. Ranges widen as position improves, because fewer players behind us means fewer chances that someone holds a better hand, and acting last on every later street is worth extra hands. Facing one raise and no callers we mostly re-raise or fold; we call more often when callers or our own blind improve the price, and most of all in the big blind, and the blinds defend fewer hands against a raise from under the gun or the hijack than against a later seat. Once two raises are in, the pot is large: when our own raise is re-raised we usually call with most of the hands we raised with; when none of the raises is ours we continue only with hands that are strong against one raise, and fewer of them; in both cases only premium hands raise again. Played over many hands, the chart aims to put money in voluntarily with about 18 to 26 percent of hands and to raise first with about 14 to 22 percent.",
   "spots": [
     {
       "position": "UTG",
@@ -606,8 +606,48 @@
     },
     {
       "position": "SB",
+      "situation": "blind-defence-early",
+      "justification": "One player has raised from under the gun or the hijack, the two earliest seats, so the raiser holds a strong range and the big blind is still behind us. Calling would leave us out of position against that range and invite the big blind in, so we re-raise or fold, and with fewer hands than against a late raiser. Nines or better, ace-king, ace-queen and ace-jack suited, king-queen suited and ace-king offsuit re-raise; eights, ace-ten suited, king-jack suited and ace-queen offsuit re-raise but are close to a fold. Sevens, queen-jack suited, king-queen offsuit and everything weaker fold.",
+      "grid": [
+        "R    R    R    R    R*/F F    F    F    F    F    F    F    F",
+        "R    R    R    R*/F F    F    F    F    F    F    F    F    F",
+        "R*/F F    R    F    F    F    F    F    F    F    F    F    F",
+        "F    F    F    R    F    F    F    F    F    F    F    F    F",
+        "F    F    F    F    R    F    F    F    F    F    F    F    F",
+        "F    F    F    F    F    R    F    F    F    F    F    F    F",
+        "F    F    F    F    F    F    R*/F F    F    F    F    F    F",
+        "F    F    F    F    F    F    F    F    F    F    F    F    F",
+        "F    F    F    F    F    F    F    F    F    F    F    F    F",
+        "F    F    F    F    F    F    F    F    F    F    F    F    F",
+        "F    F    F    F    F    F    F    F    F    F    F    F    F",
+        "F    F    F    F    F    F    F    F    F    F    F    F    F",
+        "F    F    F    F    F    F    F    F    F    F    F    F    F"
+      ]
+    },
+    {
+      "position": "BB",
+      "situation": "blind-defence-early",
+      "justification": "One player has raised from under the gun or the hijack, the two earliest seats, so the raiser holds a strong range. Our full bet is already in and we close the action, so the price is still good, but we defend with fewer hands than against a late raiser. Jacks or better, ace-king and ace-queen suited re-raise. Every other pair and every suited ace call, as do suited kings down to king-six, suited queens down to queen-seven, suited jacks down to jack-seven, ten-nine, ten-eight, nine-eight and nine-seven suited, the suited connectors from eight-seven down to five-four, offsuit aces down to ace-nine, offsuit kings down to king-nine, and queen-jack, queen-ten, queen-nine and jack-ten offsuit. Ace-eight and ace-seven offsuit call but are close to a fold. Ace-six down to ace-three offsuit, king-eight, queen-eight, jack-nine and jack-eight offsuit, king-five down to king-three suited and five-three suited fold but are close to a call; the other offsuit hands and the remaining suited hands fold.",
+      "grid": [
+        "R    R    R    C    C    C    C    C    C    C    C    C    C",
+        "R    R    C    C    C    C    C    C    C    F*/C F*/C F*/C F",
+        "C    C    R    C    C    C    C    C    F    F    F    F    F",
+        "C    C    C    R    C    C    C    C    F    F    F    F    F",
+        "C    C    C    C    C    C    C    F    F    F    F    F    F",
+        "C    C    C    F*/C F    C    C    C    F    F    F    F    F",
+        "C*/F F*/C F*/C F*/C F    F    C    C    F    F    F    F    F",
+        "C*/F F    F    F    F    F    F    C    C    F    F    F    F",
+        "F*/C F    F    F    F    F    F    F    C    C    F    F    F",
+        "F*/C F    F    F    F    F    F    F    F    C    C    F*/C F",
+        "F*/C F    F    F    F    F    F    F    F    F    C    F    F",
+        "F*/C F    F    F    F    F    F    F    F    F    F    C    F",
+        "F    F    F    F    F    F    F    F    F    F    F    F    C"
+      ]
+    },
+    {
+      "position": "SB",
       "situation": "blind-defence",
-      "justification": "One player has raised. Usually the big blind is still behind us, so calling invites the big blind in and leaves us out of position against at least two players; we mostly re-raise to play heads-up against the raiser, with big and middle pairs, strong aces and the best suited broadways. Sevens, sixes and jack-ten suited call, and everything else folds. If we completed and the big blind raised, nobody is left to act behind us, but we are still out of position, so the same hands re-raise, call or fold.",
+      "justification": "One player has raised from the cutoff or the button, or the big blind raised after we completed. A late raiser opens a wide range, so we defend more hands than against an early seat. When the big blind is still behind us, calling invites it in and leaves us out of position against two players, so we mostly re-raise to play heads-up against the raiser, with big and middle pairs, strong aces and the best suited broadways. Sevens, sixes and jack-ten suited call, and everything else folds. If we completed and the big blind raised, nobody is left to act behind us, but we are still out of position, so the same hands re-raise, call or fold.",
       "grid": [
         "R    R    R    R    R    R*/F F    F    F    F    F    F    F",
         "R    R    R    R    R*/F F    F    F    F    F    F    F    F",
@@ -627,7 +667,7 @@
     {
       "position": "BB",
       "situation": "blind-defence",
-      "justification": "One player has raised and our full bet is already in, so we need to call only one more bet into a pot that offers at least three to one: three and a half to one against a lone open, more with callers, and three to one when the small blind raises. That price makes it right to defend wide: any ace, most suited hands, every pair, and offsuit kings, queens, jacks, tens and nines down to about the eight. We re-raise our strongest hands for value and fold weaker offsuit hands, including offsuit connectors below nine-eight, which win too rarely to call even at this price.",
+      "justification": "One player has raised from the cutoff, the button or the small blind, a late seat with a wide range, and our full bet is already in, so we need to call only one more bet into a pot that offers at least three to one: three and a half to one against a lone open, more with callers, and three to one when the small blind raises. That price makes it right to defend wide: any ace, most suited hands, every pair, and offsuit kings, queens, jacks, tens and nines down to about the eight. We re-raise our strongest hands for value and fold weaker offsuit hands, including offsuit connectors below nine-eight, which win too rarely to call even at this price.",
       "grid": [
         "R    R    R    R    C    C    C    C    C    C    C    C    C",
         "R    R    R*/C C    C    C    C    C    C    C    C    C    C",

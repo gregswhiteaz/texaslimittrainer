@@ -40,6 +40,7 @@ const SITUATIONS: readonly Situation[] = [
   'raise-and-calls',
   're-raise',
   're-raise-not-mine',
+  'blind-defence-early',
   'blind-defence',
 ];
 
@@ -135,17 +136,21 @@ describe('preflop charts for every table size', () => {
 
   it('AC#2 every heads-up and full-ring spot assigns all 169 hand classes', () => {
     expect(APPLICABLE_SPOTS['heads-up']).toHaveLength(6);
-    expect(APPLICABLE_SPOTS['full-ring']).toHaveLength(50);
+    expect(APPLICABLE_SPOTS['full-ring']).toHaveLength(52);
     for (const size of NEW_SIZES) {
       const chart = PREFLOP_CHARTS[size];
       expect(chart.spots.map((s) => ({ position: s.position, situation: s.situation }))).toEqual(
         APPLICABLE_SPOTS[size],
       );
       // Heads-up nobody can call a raise before the hero acts again, so raise-and-calls can't arise there;
-      // every heads-up re-raise is an own-raise re-raise (re-pinned by TASK-7.41).
+      // every heads-up re-raise is an own-raise re-raise (re-pinned by TASK-7.41), and the only raiser a
+      // heads-up blind faces is the button, a late seat (re-pinned by TASK-7.42).
       const reachable =
         size === 'heads-up'
-          ? SITUATIONS.filter((s) => s !== 'raise-and-calls' && s !== 're-raise-not-mine')
+          ? SITUATIONS.filter(
+              (s) =>
+                s !== 'raise-and-calls' && s !== 're-raise-not-mine' && s !== 'blind-defence-early',
+            )
           : SITUATIONS;
       expect([...new Set(APPLICABLE_SPOTS[size].map((s) => s.situation))].sort()).toEqual(
         [...reachable].sort(),

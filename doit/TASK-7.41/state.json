@@ -2345,7 +2345,14 @@
       "skips": 0
     }
   },
-  "history": [],
+  "history": [
+    {
+      "t": "2026-11-28T11:12:33",
+      "event": "unlock",
+      "file": "tests/advice/full-ring-re-raise-split.acceptance.test.ts",
+      "reason": "TASK-7.42 Q-6 approved re-pin"
+    }
+  ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-7.41",
   "spec_sha256": "6b2366ae8f49556412cee95f1b6f96b241ec0cb3ffbbf89af268ff9d93767e69",
   "review_findings": {
@@ -2354,5 +2361,8 @@
   "judge_results": {
     "1": "PASS"
   },
-  "doc_id": "doc-203"
+  "doc_id": "doc-203",
+  "relock_pending": [
+    "tests/advice/full-ring-re-raise-split.acceptance.test.ts"
+  ]
 }

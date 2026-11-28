@@ -2,7 +2,7 @@
   "format": "tlh-preflop-chart",
   "version": 1,
   "referenceSize": "full-ring",
-  "justification": "A tight-aggressive plan for full-ring fixed-limit hold'em, with eight or nine opponents. With so many players still to act, someone often holds a strong hand, so we enter far fewer pots than at six-handed and the first positions are the tightest of all. The under-the-gun range is built to stay sound at both nine and ten seats, since a ten-handed table's two earliest seats both use it. First in, we raise or fold; only the small blind sometimes completes. Behind limpers we raise hands that beat a limping range and call with hands that win big pots when they hit, such as small pairs and suited aces. Facing a single raise we mostly re-raise or fold; callers in between give a better price for speculative hands. Once our own raise is re-raised we call with most of our range and raise again only with the very best hands; when two raises are in and none is ours, we continue only with hands that are strong against one raise, and fewer of them. Overall the chart aims to play roughly 12 to 16 percent of hands voluntarily.",
+  "justification": "A tight-aggressive plan for full-ring fixed-limit hold'em, with eight or nine opponents. With so many players still to act, someone often holds a strong hand, so we enter far fewer pots than at six-handed and the first positions are the tightest of all. The under-the-gun range is built to stay sound at both nine and ten seats, since a ten-handed table's two earliest seats both use it. First in, we raise or fold; only the small blind sometimes completes. Behind limpers we raise hands that beat a limping range and call with hands that win big pots when they hit, such as small pairs and suited aces. Facing a single raise we mostly re-raise or fold; callers in between give a better price for speculative hands, and the blinds defend fewer hands against a raiser in the four earliest seats than against a later one. Once our own raise is re-raised we call with most of our range and raise again only with the very best hands; when two raises are in and none is ours, we continue only with hands that are strong against one raise, and fewer of them. Overall the chart aims to play roughly 12 to 16 percent of hands voluntarily.",
   "spots": [
     {
       "position": "UTG",
@@ -966,8 +966,48 @@
     },
     {
       "position": "SB",
+      "situation": "blind-defence-early",
+      "justification": "One player has raised from under the gun, under the gun plus one, the middle position or the lojack, the four earliest seats at a full table, so the raiser holds a strong range and the big blind is still behind us. We would play out of position, so we defend with fewer hands than against a late raiser and mostly re-raise or fold. Tens or better, ace-king, ace-queen suited and ace-king offsuit re-raise; ace-jack suited, king-queen suited and ace-queen offsuit re-raise but are close to a fold, and nines call but are close to a fold. Eights, ace-ten suited, king-jack suited, ace-jack offsuit and everything weaker fold.",
+      "grid": [
+        "R    R    R    R*/F F    F    F    F    F    F    F    F    F",
+        "R    R    R*/F F    F    F    F    F    F    F    F    F    F",
+        "R*/F F    R    F    F    F    F    F    F    F    F    F    F",
+        "F    F    F    R    F    F    F    F    F    F    F    F    F",
+        "F    F    F    F    R    F    F    F    F    F    F    F    F",
+        "F    F    F    F    F    C*/F F    F    F    F    F    F    F",
+        "F    F    F    F    F    F    F    F    F    F    F    F    F",
+        "F    F    F    F    F    F    F    F    F    F    F    F    F",
+        "F    F    F    F    F    F    F    F    F    F    F    F    F",
+        "F    F    F    F    F    F    F    F    F    F    F    F    F",
+        "F    F    F    F    F    F    F    F    F    F    F    F    F",
+        "F    F    F    F    F    F    F    F    F    F    F    F    F",
+        "F    F    F    F    F    F    F    F    F    F    F    F    F"
+      ]
+    },
+    {
+      "position": "BB",
+      "situation": "blind-defence-early",
+      "justification": "An opener in one of the four earliest seats, from under the gun to the lojack, holds a strong range at a full table. Our full bet is in and we close the action, so the pot odds still let us defend, but with fewer hands than against a late raiser. Jacks or better, ace-king and ace-queen suited re-raise. Every other pair and every suited ace call, as do king-queen down to king-nine suited, queen-jack down to queen-nine suited, jack-ten and jack-nine suited, ten-nine suited, the suited connectors from nine-eight down to five-four, offsuit aces down to ace-nine, and king-queen, king-jack, king-ten, queen-jack, queen-ten and jack-ten offsuit. Ace-eight down to ace-six offsuit and four-three suited fold but are close to a call; everything else folds, including the smaller suited kings and the weaker offsuit hands.",
+      "grid": [
+        "R    R    R    C    C    C    C    C    C    C    C    C    C",
+        "R    R    C    C    C    C    F    F    F    F    F    F    F",
+        "C    C    R    C    C    C    F    F    F    F    F    F    F",
+        "C    C    C    R    C    C    F    F    F    F    F    F    F",
+        "C    C    C    C    C    C    F    F    F    F    F    F    F",
+        "C    F    F    F    F    C    C    F    F    F    F    F    F",
+        "F*/C F    F    F    F    F    C    C    F    F    F    F    F",
+        "F*/C F    F    F    F    F    F    C    C    F    F    F    F",
+        "F*/C F    F    F    F    F    F    F    C    C    F    F    F",
+        "F    F    F    F    F    F    F    F    F    C    C    F    F",
+        "F    F    F    F    F    F    F    F    F    F    C    F*/C F",
+        "F    F    F    F    F    F    F    F    F    F    F    C    F",
+        "F    F    F    F    F    F    F    F    F    F    F    F    C"
+      ]
+    },
+    {
+      "position": "SB",
       "situation": "blind-defence",
-      "justification": "In the small blind, facing a raise with the big blind still to act, calling is unattractive: we would be out of position and could be squeezed. We mostly re-raise or fold, calling only with a few pairs and suited broadway hands.",
+      "justification": "One player has raised from the hijack, the cutoff or the button, or the big blind raised after we completed. Those late seats open wider ranges than the early ones, but we are out of position and, unless the big blind is the raiser, it can still squeeze behind us, so calling is unattractive. We mostly re-raise or fold, calling only with a few pairs and suited broadway hands.",
       "grid": [
         "R    R    R    R    C    F    F    F    F    F    F    F    F",
         "R    R    R    C    F    F    F    F    F    F    F    F    F",
@@ -987,7 +1027,7 @@
     {
       "position": "BB",
       "situation": "blind-defence",
-      "justification": "In the big blind we already have a full bet in and close the action, so a call needs only a small extra share of the pot. Full-ring raises are stronger than six-handed ones, so we defend somewhat tighter, re-raising only the strongest hands.",
+      "justification": "One player has raised from the hijack, the cutoff, the button or the small blind, so the raiser's range is wider than an early seat's. In the big blind we already have a full bet in and close the action, so a call needs only a small extra share of the pot. Full-ring late raises are still stronger than six-handed ones, so we defend somewhat tighter than at six-max, re-raising only the strongest hands.",
       "grid": [
         "R    R    R    C    C    C    C    C    C    C    C    C    C",
         "R    R    C    C    C    C    C    C    C    C    F    F    F",

@@ -45,8 +45,8 @@ describe('chart:print', () => {
 
     const blocks = run.stdout.slice(0, -1).split('\n\n');
     const spots = APPLICABLE_SPOTS['6-max'];
-    expect(blocks).toHaveLength(32);
-    expect(spots).toHaveLength(32);
+    expect(blocks).toHaveLength(34);
+    expect(spots).toHaveLength(34);
 
     blocks.forEach((block, i) => {
       const spot = spots[i] as (typeof spots)[number];

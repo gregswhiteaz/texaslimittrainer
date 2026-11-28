@@ -64,9 +64,10 @@ describe('Calling station decision', () => {
         (v) => v.street === 'preflop' && advice(v).action === 'raise' && owed(v) > 0,
       );
       const exampleA = raise[0] as PlayerView;
-      // fold[0] and fold[30] before TASK-7.40 split the re-raise spots.
+      // fold[0] and fold[30] before TASK-7.40 split the re-raise spots; fold[33] before TASK-7.42 split blind
+      // defence (TAG now folds that hand preflop), so fold[90] is the first flop fold.
       const exampleC = fold[1] as PlayerView;
-      const exampleB = fold[33] as PlayerView;
+      const exampleB = fold[90] as PlayerView;
       expect(exampleB.street).toBe('flop');
       for (const view of [exampleA, exampleB, exampleC]) {
         const random = stub(4294967295);

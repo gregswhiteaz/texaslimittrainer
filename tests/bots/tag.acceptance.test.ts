@@ -153,6 +153,7 @@ describe('TAG bot acceptance', () => {
     expect(decisions).toBeGreaterThan(0);
     expect([...situations].sort()).toEqual(
       [
+        'blind-defence-early',
         'blind-defence',
         'limpers',
         'raise',

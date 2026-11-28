@@ -104,12 +104,16 @@ describe('preflop chart validator', () => {
     ]);
 
     const missing = minimalChart();
-    missing.spots = missing.spots.filter((s) => s.situation !== 'blind-defence');
+    missing.spots = missing.spots.filter(
+      (s) => s.situation !== 'blind-defence-early' && s.situation !== 'blind-defence',
+    );
     expect(problemsOf(missing)).toEqual([
+      '6-max chart: missing spot SB blind-defence-early',
+      '6-max chart: missing spot BB blind-defence-early',
       '6-max chart: missing spot SB blind-defence',
       '6-max chart: missing spot BB blind-defence',
     ]);
-    expect(problemsOf({ ...minimalChart(), spots: 'none' })).toHaveLength(32);
+    expect(problemsOf({ ...minimalChart(), spots: 'none' })).toHaveLength(34);
 
     const extra = minimalChart();
     extra.spots.push({ ...(extra.spots[0] as RawSpot), situation: 'limpers' });

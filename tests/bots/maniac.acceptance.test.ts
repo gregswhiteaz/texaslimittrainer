@@ -302,34 +302,35 @@ describe('Maniac from its style file', () => {
       expect(maniacAt(b)).toEqual({ seat: 1, type: 'raise', amount: 12 });
       expect(tagAt(b)).toEqual({ seat: 1, type: 'call', amount: 4 });
 
-      // Example C: call[22] (call[29] before TASK-7.40; call[1] with 7h Qh before TASK-7.32: the bots now fold that
-      // turn), turn with Kd Ad facing a bet of 8; u ≥ 0.2 threshold, the Maniac calls like TAG.
-      const c = at(call, 6402, 22);
-      expect(c.code).toBe('00000000000019020000000000000017');
+      // Example C: call[21] (call[22] before TASK-7.42, call[29] before TASK-7.40; call[1] with 7h Qh before
+      // TASK-7.32: the bots now fold that turn), turn with Kd Ad facing a bet of 8; u ≥ 0.2 threshold, the Maniac
+      // calls like TAG.
+      const c = at(call, 6402, 21);
+      expect(c.code).toBe('00000000000019020000000000000016');
       expect(c.view.street).toBe('turn');
       expect(c.view.holeCards.map(formatCard)).toEqual(['Kd', 'Ad']);
       expect(c.view.currentBet).toBe(8);
       expect(c.view.betCount).toBe(1);
       expect(owed(c.view)).toBe(8);
       expect(botDecisionIndex(c.view)).toBe(3);
-      expect(c.seed).toBe(4068892361);
-      expect(botRandom(c.seed).nextUint32()).toBe(3434323010);
+      expect(c.seed).toBe(3023335121);
+      expect(botRandom(c.seed).nextUint32()).toBe(4218716683);
       expect(maniacAt(c)).toEqual({ seat: 1, type: 'call', amount: 8 });
       expect(tagAt(c)).toEqual({ seat: 1, type: 'call', amount: 8 });
 
-      // Example H: point 98 = call[28] (point 290 = call[38] before TASK-7.40; point 122 before TASK-6.25 cut the
-      // postflop raise to 0.2; call[2] with 7h Qh before TASK-7.32), river with 8s 8d facing a bet of 8; u < 0.2
-      // threshold, the Maniac raises to 16.
-      const h = at(call, 6402, 98);
-      expect(h.code).toBe('00000000000019020000000000000063');
+      // Example H: point 441 = call[27] (point 98 = call[28] before TASK-7.42; point 290 = call[38] before
+      // TASK-7.40; point 122 before TASK-6.25 cut the postflop raise to 0.2; call[2] with 7h Qh before TASK-7.32),
+      // river with 8s 8d facing a bet of 8; u < 0.2 threshold, the Maniac raises to 16.
+      const h = at(call, 6402, 441);
+      expect(h.code).toBe('000000000000190200000000000001ba');
       expect(h.view.street).toBe('river');
       expect(h.view.holeCards.map(formatCard)).toEqual(['8s', '8d']);
       expect(h.view.currentBet).toBe(8);
       expect(h.view.betCount).toBe(1);
       expect(owed(h.view)).toBe(8);
       expect(botDecisionIndex(h.view)).toBe(3);
-      expect(h.seed).toBe(2215881066);
-      expect(botRandom(h.seed).nextUint32()).toBe(538411937);
+      expect(h.seed).toBe(2360546989);
+      expect(botRandom(h.seed).nextUint32()).toBe(768080274);
       expect(recommend(h.view, { ...BOT_ADVICE, equity }).action).toBe('call');
       expect(maniacAt(h)).toEqual({ seat: 1, type: 'raise', amount: 16 });
       expect(tagAt(h)).toEqual({ seat: 1, type: 'call', amount: 8 });

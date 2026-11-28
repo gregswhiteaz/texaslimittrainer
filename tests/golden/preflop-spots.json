@@ -611,7 +611,7 @@
       "id": "6max-sb-blind-defence-qq",
       "seats": 6,
       "position": "SB",
-      "situation": "blind-defence",
+      "situation": "blind-defence-early",
       "holeCards": "Qc Qs",
       "before": ["raise", "fold", "fold", "fold"],
       "action": "raise",
@@ -1139,7 +1139,7 @@
       "id": "fr-sb-blind-defence-ako",
       "seats": 9,
       "position": "SB",
-      "situation": "blind-defence",
+      "situation": "blind-defence-early",
       "holeCards": "As Kd",
       "before": ["fold", "fold", "fold", "raise", "fold", "fold", "fold"],
       "action": "raise",
@@ -1150,7 +1150,7 @@
       "id": "fr-sb-blind-defence-k9s",
       "seats": 9,
       "position": "SB",
-      "situation": "blind-defence",
+      "situation": "blind-defence-early",
       "holeCards": "Kd 9d",
       "before": ["raise", "fold", "fold", "fold", "fold", "fold", "fold"],
       "action": "fold",
@@ -1277,6 +1277,28 @@
       "action": "raise",
       "alternative": null,
       "justification": "A pair of aces is ahead of every range that opens from the hijack and re-raises from the cutoff. Raise again to build the pot while our hand strength is far ahead, and keep position on every later street."
+    },
+    {
+      "id": "6max-bb-blind-defence-early-q6s",
+      "seats": 6,
+      "position": "BB",
+      "situation": "blind-defence-early",
+      "holeCards": "Qd 6d",
+      "before": ["raise", "fold", "fold", "fold", "fold"],
+      "action": "fold",
+      "alternative": null,
+      "justification": "An under-the-gun raiser holds a strong range, so Q6s is often dominated by a bigger queen and wins too rarely when it pairs. Even with good pot odds from the big blind, its equity against that range is too low to call, so fold."
+    },
+    {
+      "id": "fr-bb-blind-defence-early-k6s",
+      "seats": 9,
+      "position": "BB",
+      "situation": "blind-defence-early",
+      "holeCards": "Ks 6s",
+      "before": ["fold", "fold", "raise", "fold", "fold", "fold", "fold", "fold"],
+      "action": "fold",
+      "alternative": null,
+      "justification": "A raise from the middle position at a full table comes from a strong range, and K6s is dominated by the bigger kings in it. The pot odds in the big blind do not make up for that low equity, so fold rather than call."
     }
   ]
 }

@@ -132,8 +132,20 @@ const SCRIPTS: Script[] = [
     hero: 3,
     steps: [r(4, 8), r(5, 12), f(6), f(1), f(2)],
   },
+  {
+    position: 'SB',
+    situation: 'blind-defence-early',
+    hero: 2,
+    steps: [r(4, 8), f(5), f(6), f(1)],
+  },
+  {
+    position: 'BB',
+    situation: 'blind-defence-early',
+    hero: 3,
+    steps: [r(4, 8), f(5), f(6), f(1), f(2)],
+  },
   { position: 'SB', situation: 'blind-defence', hero: 2, steps: [f(4), f(5), f(6), r(1, 8)] },
-  { position: 'BB', situation: 'blind-defence', hero: 3, steps: [r(4, 8), f(5), f(6), f(1), f(2)] },
+  { position: 'BB', situation: 'blind-defence', hero: 3, steps: [f(4), f(5), r(6, 8), f(1), f(2)] },
 ];
 
 /** One representative combo: pair = spade + heart, suited = spades, offsuit = spade high + heart low. */
