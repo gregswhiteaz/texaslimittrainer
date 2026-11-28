@@ -1,0 +1,218 @@
+{
+  "id": "TASK-7.41",
+  "title": "Split the full-ring re-raise spots into own-raise-re-raised and re-raised-when-I-had-not-raised",
+  "status": "To Do",
+  "archived": false,
+  "type": "enhancement",
+  "priority": "medium",
+  "project": null,
+  "assignees": [],
+  "reporter": null,
+  "labels": [
+    "dream-limit-holdem-trainer",
+    "follow-up"
+  ],
+  "milestone": "m-1",
+  "parentTaskId": "TASK-7",
+  "acceptanceCriteriaCompleted": 0,
+  "acceptanceCriteriaCount": 6,
+  "references": [
+    "doit/TASK-7.21/spec.md",
+    "dreams/limit-holdem-trainer/requirements.md"
+  ],
+  "modifiedFiles": [],
+  "ordinal": 264000,
+  "createdAt": "2026-11-26T23:45:00Z",
+  "updatedAt": "2026-11-27T23:56:00Z",
+  "dueDate": null,
+  "isReady": true,
+  "path": "backlog/tasks/task-7.41 - Split-the-full-ring-re-raise-spots-into-own-raise-re-raised-and-re-raised-when-I-had-not-raised.md",
+  "description": "Follow-up from TASK-7.21 (decision: Q-1 split re-raise), after the 6-max split. Apply the same A-2 rule and the situation names, labels and context sentences from the 6-max story to the full-ring chart: 41 to 50 spots (+9), with 9 new grids and the 9 existing re-raise grids re-justified. Cost table and affected code/locked tests: doit/TASK-7.21/spec.md \u00a73 and \u00a75. Heads-up is unchanged (every heads-up re-raise is an own-raise re-raise). The spec must ask the user for wording of any new label or context text the 6-max story did not already settle, and the user signs off the new and changed spots from npm run chart:print full-ring, as in TASK-7.19. Related: TASK-7.38 (full-ring chart review).",
+  "dependencies": [
+    "TASK-7.40"
+  ],
+  "dependencyGraph": {
+    "root": "TASK-7.41",
+    "nodes": [
+      {
+        "id": "TASK-7.41",
+        "title": "Split the full-ring re-raise spots into own-raise-re-raised and re-raised-when-I-had-not-raised",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": 0,
+        "dependentDepth": 0
+      },
+      {
+        "id": "TASK-1.1",
+        "title": "Bootstrap the strict TypeScript project with one-command checks",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 8,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.2",
+        "title": "Rank showdown hands by real poker hand rankings",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 6,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.3",
+        "title": "Deal every hand from a seeded shuffle with a replay code",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 6,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.4",
+        "title": "Play a complete fixed-limit hand from blinds to showdown",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 5,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.5",
+        "title": "Give each deciding seat only its own view of the hand",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 4,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.7",
+        "title": "Run every check in GitHub Actions on each push and pull request",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 7,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-7.2",
+        "title": "Recommend a preflop action from the 6-max chart",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 3,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-7.21",
+        "title": "Decide whether to split preflop spots by raiser position and re-raise type",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 2,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-7.40",
+        "title": "Split the 6-max re-raise spots into own-raise-re-raised and re-raised-when-I-had-not-raised",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 1,
+        "dependentDepth": null
+      }
+    ],
+    "edges": [
+      {
+        "from": "TASK-1.2",
+        "to": "TASK-1.7"
+      },
+      {
+        "from": "TASK-1.3",
+        "to": "TASK-1.7"
+      },
+      {
+        "from": "TASK-1.4",
+        "to": "TASK-1.2"
+      },
+      {
+        "from": "TASK-1.4",
+        "to": "TASK-1.3"
+      },
+      {
+        "from": "TASK-1.5",
+        "to": "TASK-1.4"
+      },
+      {
+        "from": "TASK-1.7",
+        "to": "TASK-1.1"
+      },
+      {
+        "from": "TASK-7.2",
+        "to": "TASK-1.5"
+      },
+      {
+        "from": "TASK-7.21",
+        "to": "TASK-7.2"
+      },
+      {
+        "from": "TASK-7.40",
+        "to": "TASK-7.21"
+      },
+      {
+        "from": "TASK-7.41",
+        "to": "TASK-7.40"
+      }
+    ]
+  },
+  "readiness": {
+    "isReady": true,
+    "isBlocked": false,
+    "blockingDependencies": [],
+    "missingDependencies": []
+  },
+  "documentation": [
+    "doc-28"
+  ],
+  "subtasks": [],
+  "acceptanceCriteria": [
+    {
+      "index": 1,
+      "text": "Given a full-ring hand with two or more preflop raises, When preflop advice is computed, Then it reads the own-raise-re-raised spot if the viewer made a preflop raise that a later raise now faces, and the re-raised-when-I-had-not-raised spot otherwise (TASK-7.21 rule A-2)",
+      "checked": false
+    },
+    {
+      "index": 2,
+      "text": "Given the full-ring chart, When the split is authored, Then it has 50 spots, each with all 169 hand classes and a plain-English justification that agrees with its grid, and each own-raise-re-raised spot continues with a share of that seat's opening range that the user approves",
+      "checked": false
+    },
+    {
+      "index": 3,
+      "text": "Given any new user-visible label or context text, When shown, Then its wording was approved by the user in this story's Q&A",
+      "checked": false
+    },
+    {
+      "index": 4,
+      "text": "Given the golden spots, When npm test runs, Then at least one full-ring golden spot covers each re-raise situation",
+      "checked": false
+    },
+    {
+      "index": 5,
+      "text": "Given the revised chart, When npm test runs, Then all checks pass and the user has signed off the new and changed full-ring spots from npm run chart:print full-ring in the task notes",
+      "checked": false
+    },
+    {
+      "index": 6,
+      "text": "Given a 6-max or full-ring hand where the viewer has not raised and a fourth bet is already in (e.g. BB facing r(4,8) r(5,12) r(6,16) f(1) f(2)), When preflop advice is computed, Then it reads re-raise-not-mine and a raise cell (AA) is advised call because the betting is capped",
+      "checked": false
+    }
+  ],
+  "definitionOfDone": [],
+  "implementationPlan": null,
+  "implementationNotes": "AC added from TASK-7.40 follow-up (review r1 MINOR: no cap assertion for a not-mine fourth-bet route)",
+  "comments": [],
+  "finalSummary": null
+}

@@ -1,0 +1,68 @@
+[
+  {
+    "id": "SPEC-01",
+    "verifies": "AC#1",
+    "verification": "acceptance `tests/advice/full-ring-re-raise-split.acceptance.test.ts::AC#1 full-ring re-raise routes read the own-raise or the not-my-raise spot`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-02",
+    "verifies": "AC#2",
+    "verification": "acceptance `tests/advice/full-ring-re-raise-split.acceptance.test.ts::AC#2 the full-ring chart has 50 spots with all 169 classes`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-03",
+    "verifies": "AC#2",
+    "verification": "acceptance `tests/advice/full-ring-re-raise-split.acceptance.test.ts::AC#2 own-raise spots continue with the approved share of the opening range`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-04",
+    "verifies": "AC#2",
+    "verification": "acceptance `tests/advice/full-ring-re-raise-split.acceptance.test.ts::AC#2 not-my-raise spots continue only with hands that continue against one raise`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-05",
+    "verifies": "AC#3",
+    "verification": "acceptance `tests/advice/full-ring-re-raise-split.acceptance.test.ts::AC#3 full-ring not-my-raise text is the approved wording`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-06",
+    "verifies": "AC#6",
+    "verification": "acceptance `tests/advice/full-ring-re-raise-split.acceptance.test.ts::AC#6 a not-my-raise fourth bet caps a raise cell to call`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-07",
+    "verifies": "AC#4",
+    "verification": "acceptance `tests/golden/preflop.acceptance.test.ts::AC#4 at least 100 spots covering every reference size and chart situation`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-08",
+    "verifies": "AC#5",
+    "verification": "command `npm run lint && npm run typecheck && npm test && git diff --stat $(jq -r .base_commit doit/TASK-7.41/state.json) -- tests e2e src/advice/charts/heads-up.json src/advice/charts/six-max.json`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-09",
+    "verifies": "AC#5, AC#2",
+    "verification": "manual Orchestrator checks the 8 sections and the task note before Done.",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-10",
+    "verifies": "AC#5",
+    "verification": "command `TLH_SLOW_TESTS=1 npx vitest run tests/advice/size-ranges-playtest.acceptance.test.ts && npm run test:slow`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-11",
+    "verifies": "AC#2",
+    "verification": "manual Reviewer and judge walk the 18 spots against the routes and grids, recording pass or fail per spot.",
+    "status": "pending"
+  }
+]

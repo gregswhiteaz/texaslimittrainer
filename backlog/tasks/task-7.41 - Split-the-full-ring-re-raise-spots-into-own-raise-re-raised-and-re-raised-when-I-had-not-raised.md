@@ -3,10 +3,11 @@ id: TASK-7.41
 title: >-
   Split the full-ring re-raise spots into own-raise-re-raised and
   re-raised-when-I-had-not-raised
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-26T23:45:00Z'
-updated_date: '2026-11-27T23:56:00Z'
+updated_date: '2026-11-28T05:54:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -39,6 +40,18 @@ Follow-up from TASK-7.21 (decision: Q-1 split re-raise), after the 6-max split. 
 - [ ] #5 Given the revised chart, When npm test runs, Then all checks pass and the user has signed off the new and changed full-ring spots from npm run chart:print full-ring in the task notes
 - [ ] #6 Given a 6-max or full-ring hand where the viewer has not raised and a fourth bet is already in (e.g. BB facing r(4,8) r(5,12) r(6,16) f(1) f(2)), When preflop advice is computed, Then it reads re-raise-not-mine and a raise cell (AA) is advised call because the betting is capped
 <!-- AC:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. Full-ring chart: add 9 re-raise-not-mine spots (Q-2 rule), re-justify/trim 9 re-raise spots to 80-90% of opening range (Q-1); one-line preflop-chart.ts change
+2. AC#6 cap assertions for 6-max and full ring
+3. 3 full-ring golden spots; user-approved re-pins (41->50 counts, 7.40 full-ring test flips) under owners
+4. signoff.md package for the user before code review (18 spots, Rock shift, 9-seat TAG figures)
+5. Full slow run once on final chart
+
+Full spec: doit/TASK-7.41/spec.md
+<!-- SECTION:PLAN:END -->
 
 ## Implementation Notes
 
