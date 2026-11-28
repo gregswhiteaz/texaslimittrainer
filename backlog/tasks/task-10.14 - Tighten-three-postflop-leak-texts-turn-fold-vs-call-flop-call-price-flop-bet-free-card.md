@@ -7,7 +7,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-24T23:58:00Z'
-updated_date: '2026-11-28T05:17:00Z'
+updated_date: '2026-11-28T05:19:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -49,4 +49,6 @@ Full spec: doit/TASK-10.14/spec.md
 AC#2 added from Q-4 (user chose: add to this task).
 
 Build: 7 leak texts replaced in leak-categories.json + docs table; new leak-copy acceptance test; gate PASS
+
+Review r1 MINOR 2: flop raise justification (A-5) now also names the implied-odds rule; leak-copy test expected value replaced (unlocked under TASK-10.14).
 <!-- SECTION:NOTES:END -->

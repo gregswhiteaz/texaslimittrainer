@@ -20,7 +20,7 @@ const REVISED = {
 
 const RAISE_REVISED = {
   'flop-facing-a-bet-raise.justification':
-    'The value-raise rule asks for more than 65% equity against the hands that would call a raise, so a hand below that bar should just call or fold by the pot-odds rules (value-raise, pot-odds-call).',
+    'The value-raise rule asks for more than 65% equity against the hands that would call a raise, so a hand below that bar should just call or fold by the pot-odds and implied-odds rules (value-raise, pot-odds-call, implied-odds-call).',
   'turn-facing-a-bet-raise.justification':
     'The value-raise rule needs more than 65% equity against the hands that would call a raise, and the cost of being wrong doubles on the turn (value-raise).',
 } as const;

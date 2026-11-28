@@ -7,17 +7,17 @@
   "review_round": 1,
   "judge_round": 0,
   "sendbacks": 0,
-  "gate_runs": 2,
+  "gate_runs": 4,
   "questions": 0,
   "assumptions": 0,
   "escalations": 0,
   "item_failures": {},
   "locked_tests": {
-    "tests/stats/leak-copy.acceptance.test.ts": "0114be7319d2039b64f4a78cdc241a42ace2759ca5a6aa0b013192632f26a050"
+    "tests/stats/leak-copy.acceptance.test.ts": "6e4fc108574c3b433a62c516a6489dffa95cf7ca532e4e6c167499a301c1ee9c"
   },
   "test_snapshot": {
     "tests/stats/leak-copy.acceptance.test.ts": {
-      "sha": "0114be7319d2039b64f4a78cdc241a42ace2759ca5a6aa0b013192632f26a050",
+      "sha": "6e4fc108574c3b433a62c516a6489dffa95cf7ca532e4e6c167499a301c1ee9c",
       "asserts": 13,
       "skips": 0
     },
@@ -2327,10 +2327,18 @@
       "skips": 0
     }
   },
-  "history": [],
+  "history": [
+    {
+      "t": "2026-11-27T22:19:08",
+      "event": "unlock",
+      "file": "tests/stats/leak-copy.acceptance.test.ts",
+      "reason": "A-5 raise text made accurate per review r1 MINOR 2 (implied-odds rule also decides); expected value replaced, no check removed"
+    }
+  ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-10.14",
   "spec_sha256": "29e302ad9f50b703ed352ff174868417cb85889ca3e1e66546f38eb3c22d2177",
   "review_findings": {
     "1": 0
-  }
+  },
+  "relock_pending": []
 }

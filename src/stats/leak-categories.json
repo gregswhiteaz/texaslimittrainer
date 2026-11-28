@@ -30,7 +30,7 @@
       "title": "Raising the flop with hands that are not ahead",
       "evidenceName": "flop raises",
       "fix": "Raise a flop bet only when your hand beats most of the hands that will call the raise, and just call with draws and medium hands that need to improve.",
-      "justification": "The value-raise rule asks for more than 65% equity against the hands that would call a raise, so a hand below that bar should just call or fold by the pot-odds rules (value-raise, pot-odds-call)."
+      "justification": "The value-raise rule asks for more than 65% equity against the hands that would call a raise, so a hand below that bar should just call or fold by the pot-odds and implied-odds rules (value-raise, pot-odds-call, implied-odds-call)."
     },
     {
       "id": "flop-not-facing-a-bet-check",
