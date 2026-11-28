@@ -1,4 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
+import { buttonTabKey } from './support/keyboard';
 
 // TASK-12.10 (AC#3): one Tab from the focused Settings / Statistics heading reaches ← Home, which still shows
 // before the heading.
@@ -20,10 +21,10 @@ async function openScreen(page: Page, screen: 'Settings' | 'Statistics'): Promis
 }
 
 for (const screen of ['Settings', 'Statistics'] as const) {
-  test(`one Tab from the ${screen} heading reaches ← Home`, async ({ page, browserName }) => {
+  test(`one Tab from the ${screen} heading reaches ← Home`, async ({ page }) => {
     await openScreen(page, screen);
-    // WebKit only tabs to buttons with Alt held (no full keyboard access, TASK-12.1 A-8).
-    await page.keyboard.press(browserName === 'webkit' ? 'Alt+Tab' : 'Tab');
+    // WebKit on macOS skips buttons on plain Tab when Full Keyboard Access is off; buttonTabKey holds Alt only then.
+    await page.keyboard.press(await buttonTabKey(page));
     await expect(homeButton(page)).toBeFocused();
   });
 }

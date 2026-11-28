@@ -10,6 +10,7 @@ import {
   storedSessions,
 } from './support/hand-records';
 import { axeWithPausedClock, runUntil } from './support/paused-clock';
+import { buttonTabKey } from './support/keyboard';
 import { stubReplayWords } from './support/table-harness-bundle';
 
 // TASK-11.6: View statistics and Back to Home from the Session Report (REQ-044.6).
@@ -81,7 +82,6 @@ async function tabOrder(page: Page, key: string): Promise<string[]> {
 
 test('View statistics opens Statistics with the session just ended in its totals', async ({
   page,
-  browserName,
 }) => {
   const requests: string[] = [];
   page.on('request', (request) => requests.push(request.url()));
@@ -109,8 +109,8 @@ test('View statistics opens Statistics with the session just ended in its totals
     'View statistics',
     'Back to Home',
   ]);
-  // WebKit only tabs to buttons with Alt held (no full keyboard access).
-  const order = await tabOrder(page, browserName === 'webkit' ? 'Alt+Tab' : 'Tab');
+  // WebKit on macOS skips buttons on plain Tab when Full Keyboard Access is off; buttonTabKey holds Alt only then.
+  const order = await tabOrder(page, await buttonTabKey(page));
   expect(order.slice(-2)).toEqual(['View statistics', 'Back to Home']);
   await axeWithPausedClock(page);
 

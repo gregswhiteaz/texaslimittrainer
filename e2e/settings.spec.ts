@@ -1,6 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { expect, test, type Page } from '@playwright/test';
 import { expectNoSeriousAxeViolations } from './support/axe';
+import { buttonTabKey } from './support/keyboard';
 import { realMoneyOffers } from './support/play-money';
 
 // TASK-12.1: Home → Settings → Home, the version line and keyboard reach of the Settings controls.
@@ -60,7 +61,6 @@ test('Settings opens from Home and ← Home returns', async ({ page }) => {
 
 test('every Settings control is reachable by Tab, native, keyboard-operable and at least 44x44', async ({
   page,
-  browserName,
 }) => {
   await openSettings(page);
   await expect(
@@ -75,8 +75,8 @@ test('every Settings control is reachable by Tab, native, keyboard-operable and 
     ),
   );
   expect(expected).toEqual(['← Home', 'Show opponent styles at the table']);
-  // WebKit only tabs to buttons with Alt held (no full keyboard access, A-8).
-  const order = await tabOrder(page, browserName === 'webkit' ? 'Alt+Tab' : 'Tab');
+  // WebKit on macOS skips buttons on plain Tab when Full Keyboard Access is off; buttonTabKey holds Alt only then.
+  const order = await tabOrder(page, await buttonTabKey(page));
   // TASK-12.10: ← Home follows the focused h1 in the DOM, so the walk follows the DOM order of the controls.
   expect(order).toEqual(expected);
 

@@ -8,6 +8,7 @@ import { handWrite, type SessionRecord } from '../src/table/session-record';
 import { ERROR_HEADING, ERROR_MESSAGE } from '../src/ui/error/ErrorScreen';
 import { playSession } from '../tests/support/session-play';
 import { armFault, installFaults, workerCount } from './support/fault-injection';
+import { buttonTabKey } from './support/keyboard';
 import {
   header,
   playToResult,
@@ -119,7 +120,7 @@ async function runUntilErrorScreen(page: Page): Promise<void> {
 }
 
 /** The error screen alone: its three texts only, no details, one native button reached by Tab. */
-async function expectErrorScreen(page: Page, browserName: string): Promise<void> {
+async function expectErrorScreen(page: Page): Promise<void> {
   await expect(errorHeading(page)).toBeFocused();
   await expect(tableSection(page)).toHaveCount(0);
   await expect(page.locator('main')).toHaveCount(1);
@@ -133,8 +134,8 @@ async function expectErrorScreen(page: Page, browserName: string): Promise<void>
     expect(text).not.toContain(detail);
   }
   expect(realMoneyOffers(await page.locator('body').innerText())).toEqual([]);
-  // WebKit only tabs to buttons with Alt held (no full keyboard access).
-  await page.keyboard.press(browserName === 'webkit' ? 'Alt+Tab' : 'Tab');
+  // WebKit on macOS skips buttons on plain Tab when Full Keyboard Access is off; buttonTabKey holds Alt only then.
+  await page.keyboard.press(await buttonTabKey(page));
   expect(
     await page.evaluate(() => {
       const el = document.activeElement;
@@ -150,7 +151,6 @@ const expectSameOrigin = (requests: string[]): void => {
 
 test('an error during a bot action in hand 15 shows the error screen and Resume continues from hand 14', async ({
   page,
-  browserName,
 }) => {
   const requests: string[] = [];
   page.on('request', (request) => requests.push(request.url()));
@@ -164,7 +164,7 @@ test('an error during a bot action in hand 15 shows the error screen and Resume 
 
   await armFault(page, 'illegal-bot');
   await runUntilErrorScreen(page);
-  await expectErrorScreen(page, browserName);
+  await expectErrorScreen(page);
   await axeWithPausedClock(page);
 
   await page.keyboard.press('Enter');
@@ -193,7 +193,6 @@ test('an error during a bot action in hand 15 shows the error screen and Resume 
 
 test('an error while the Session Report renders shows the error screen and Return Home opens Home', async ({
   page,
-  browserName,
 }) => {
   await resumeSeeded(page, 14);
   await runUntilMyTurn(page);
@@ -204,7 +203,7 @@ test('an error while the Session Report renders shows the error screen and Retur
     label: 'error screen not shown',
   });
   await expect(page.getByRole('heading', { name: 'Session report' })).toHaveCount(0);
-  await expectErrorScreen(page, browserName);
+  await expectErrorScreen(page);
 
   await returnHome(page).click();
   await expect(homeHeading(page)).toBeFocused();
@@ -214,7 +213,6 @@ test('an error while the Session Report renders shows the error screen and Retur
 
 test('a worker failure while a bot decides shows the error screen and a new game gets a fresh worker', async ({
   page,
-  browserName,
 }) => {
   const requests: string[] = [];
   page.on('request', (request) => requests.push(request.url()));
@@ -226,7 +224,7 @@ test('a worker failure while a bot decides shows the error screen and a new game
 
   await armFault(page, 'worker-error');
   await runUntilErrorScreen(page);
-  await expectErrorScreen(page, browserName);
+  await expectErrorScreen(page);
   const workers = await workerCount(page);
 
   await returnHome(page).click();
@@ -251,14 +249,13 @@ test('a worker failure while a bot decides shows the error screen and a new game
 
 test('a rejected bot decision shows the error screen and Return Home keeps completed hands', async ({
   page,
-  browserName,
 }) => {
   await resumeSeeded(page, 14);
   const records = await storedRecords(page);
 
   await armFault(page, 'reject-bot');
   await runUntilErrorScreen(page);
-  await expectErrorScreen(page, browserName);
+  await expectErrorScreen(page);
 
   await returnHome(page).click();
   await expect(homeHeading(page)).toBeFocused();
@@ -269,10 +266,7 @@ test('a rejected bot decision shows the error screen and Return Home keeps compl
   expect(records).toHaveLength(14);
 });
 
-test('an uncaught error and an unhandled rejection show the error screen', async ({
-  page,
-  browserName,
-}) => {
+test('an uncaught error and an unhandled rejection show the error screen', async ({ page }) => {
   await page.goto('/');
   await expect(menu(page)).not.toHaveAttribute('data-paused', 'loading');
 
@@ -281,14 +275,14 @@ test('an uncaught error and an unhandled rejection show the error screen', async
       throw new Error('Injected uncaught');
     }),
   );
-  await expectErrorScreen(page, browserName);
+  await expectErrorScreen(page);
   await returnHome(page).click();
   await expect(homeHeading(page)).toBeFocused();
 
   await page.evaluate(() => {
     void Promise.reject(new Error('Injected rejection'));
   });
-  await expectErrorScreen(page, browserName);
+  await expectErrorScreen(page);
   await returnHome(page).click();
   await expect(homeHeading(page)).toBeFocused();
 });
