@@ -1,0 +1,3 @@
+{"reviewer": "security", "round": 1,
+ "findings": [],
+ "summary": "Change is shipped static chart JSON (new re-raise-not-mine grids and justification text), a one-line APPLICABLE_SPOTS addition in src/advice/preflop-chart.ts, and tests. No untrusted input reaches the changed code; chart JSON is bundled and schema-validated. Added JSON text contains no markup, URLs or secrets, and src has no innerHTML/dangerouslySetInnerHTML sinks. The new acceptance test's spawnSync uses process.execPath with a constant argv array (no shell) and a sandboxed env. No new dependencies, no randomness, no file-permission or temp-file changes. No findings."}
