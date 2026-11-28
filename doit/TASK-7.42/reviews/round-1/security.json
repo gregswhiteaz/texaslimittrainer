@@ -1,0 +1,3 @@
+{"reviewer": "security", "round": 1,
+ "findings": [],
+ "summary": "No security findings. The change adds a situation key, a static EARLY_RAISERS table, routing in situationOf, shipped chart/Rock JSON data, static explanation/label strings, and a TAG mixing alias. No untrusted input reaches the changed code: chart and style JSON are bundled and validated by the existing parsers; the new strings are static constants. situationOf only indexes records[raiseAt] when raises === 1, so raiseAt >= 0 and the cast is safe. TAG reuses its existing injected random source (no new randomness). No new dependencies, no secrets, no file/shell/network operations. Test and doit state-file changes are test data and unlock history only."}
