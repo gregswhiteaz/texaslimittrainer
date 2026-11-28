@@ -357,7 +357,7 @@ describe('playtest style stats (--check-styles)', () => {
 
   it(
     "--check-styles lists each mixed spot's action counts and fails a spot that used one action",
-    () => mixedSpots(300),
+    () => mixedSpots(1000),
     FAST_TIMEOUT_MS,
   );
   it.runIf(SLOW)(

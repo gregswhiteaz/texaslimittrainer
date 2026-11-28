@@ -1806,6 +1806,12 @@
       "event": "unlock",
       "file": "tests/bots/maniac.acceptance.test.ts",
       "reason": "TASK-7.42 Q-6 approved re-pin"
+    },
+    {
+      "t": "2026-11-28T13:13:31",
+      "event": "unlock",
+      "file": "tests/playtest/check-styles.acceptance.test.ts",
+      "reason": "TASK-6.31 approved re-pin (task ACs #3/#4)"
     }
   ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-6.25",
@@ -1820,6 +1826,7 @@
   "relock_pending": [
     "tests/bots/style-bands.acceptance.test.ts",
     "tests/bots/maniac.acceptance.test.ts",
-    "tests/bots/maniac.acceptance.test.ts"
+    "tests/bots/maniac.acceptance.test.ts",
+    "tests/playtest/check-styles.acceptance.test.ts"
   ]
 }

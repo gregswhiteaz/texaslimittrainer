@@ -5,8 +5,8 @@ const SLOW = process.env.TLH_SLOW_TESTS === '1';
 const SLOW_TIMEOUT_MS = 600_000;
 
 describe('TAG style band at 3 seats (TASK-7.46)', () => {
-  // Asserts the band claim only (TASK-7.46 Q-2): the run can still exit 1 because REQ-027.5's
-  // one-action rule trips on the rare 3-seat TAG preflop-limpers spot (follow-up pending).
+  // The REQ-028 fit criterion judges a mixed spot only when it came up at least 10 times (TASK-6.31),
+  // so the run passes the band check and the one-action rule.
   it.runIf(SLOW)(
     'all-TAG 3-seat cash play passes --check-styles over 100,000 hands',
     () => {
@@ -26,8 +26,11 @@ describe('TAG style band at 3 seats (TASK-7.46)', () => {
           .join('\n'),
       );
       expect(err).toBe('');
+      expect(code).toBe(0);
+      expect(lines).toContain('Style check: passed');
       expect(tagLine).toBeDefined();
       expect(out).not.toMatch(/^Outside band: TAG /m);
+      expect(out).not.toMatch(/^One action only:/m);
       const match = /aggression (\d+\.\d)% \(band 45\.0-66\.0%\)/.exec(tagLine as string);
       expect(match, tagLine).not.toBeNull();
       const aggression = Number((match as RegExpExecArray)[1]);

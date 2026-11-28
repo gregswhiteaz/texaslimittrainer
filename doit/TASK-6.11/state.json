@@ -1342,6 +1342,12 @@
       "event": "unlock",
       "file": "tests/playtest/check-styles.acceptance.test.ts",
       "reason": "TASK-6.25 Q-1 (auto-accepted): same-style replacement keeps Soft table's Calling stations, 300-hand fast runs take ~1.4x longer; FAST_TIMEOUT_MS 30_000 -> 60_000, no assertion change"
+    },
+    {
+      "t": "2026-11-28T13:13:31",
+      "event": "unlock",
+      "file": "tests/playtest/check-styles.acceptance.test.ts",
+      "reason": "TASK-6.31 approved re-pin (task ACs #3/#4)"
     }
   ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-6.11",
@@ -1351,6 +1357,7 @@
     "2": 0
   },
   "relock_pending": [
+    "tests/playtest/check-styles.acceptance.test.ts",
     "tests/playtest/check-styles.acceptance.test.ts",
     "tests/playtest/check-styles.acceptance.test.ts"
   ],

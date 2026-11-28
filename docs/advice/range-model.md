@@ -288,13 +288,14 @@ All-TAG cash, seed 42:
 | 3 seats, 2,000 hands, before   | 65.5       | 45–65    | exit 1         |
 | 3 seats, 2,000 hands, after    | 65.5       | 45–66    | exit 0         |
 | 3 seats, 100,000 hands, before | 65.2       | 45–65    | exit 1         |
-| 3 seats, 100,000 hands, after  | 65.2       | 45–66    | exit 1         |
+| 3 seats, 100,000 hands, after  | 65.2       | 45–66    | exit 0         |
 
-Over 100,000 hands at 3 seats the aggression band check passes (no `Outside band:` line), but `--check-styles` still
-exits 1 because of REQ-027.5's other rule, that every mixed spot uses both actions: the TAG `preflop-limpers` mixed
-spot comes up only once at 3 seats and takes the recommended action (`One action only: TAG preflop-limpers,
-recommended 1, alternative 0`). A follow-up covers that rare-spot rule. The opt-in slow test
-`tests/playtest/check-styles-three-seats.acceptance.test.ts` asserts the band part only.
+Over 100,000 hands at 3 seats `--check-styles` exits 0 with `Style check: passed`. The earlier exit 1 came from the
+one-action rule of the REQ-028 fit criterion: the TAG `preflop-limpers` mixed spot came up once and
+took the recommended action (`One action only: TAG preflop-limpers, recommended 1, alternative 0`). Since
+TASK-7.40–7.42 that spot no longer comes up at 3 seats (0/0), and since TASK-6.31 a mixed spot is judged only when it
+came up at least 10 times. The opt-in slow test `tests/playtest/check-styles-three-seats.acceptance.test.ts` asserts
+exit 0.
 
 ## Adjusting to observed play
 

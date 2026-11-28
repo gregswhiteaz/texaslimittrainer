@@ -112,7 +112,7 @@ describe('playtest CLI', () => {
         '       npm run playtest -- --replay-code <32 lowercase hex characters> [--size <2-10>] [--button <seat>] [--game <cash|sng>] [--stacks <one stack per seat, comma-separated, 0 = empty seat>] [--lineup <mixed|tough|soft>] [--styles <style of each seat from 2 up, comma-separated: tag|calling-station|maniac|rock>]\n' +
         'Defaults: --hands 10000 --seed 42 --size 6 --button 1 --game cash; --stacks gives every seat $160 (cash) or 1500 (sng)\n' +
         "--lineup: seat 1 plays the user (TAG) and seats 2 and up play the preset's styles; without it every seat plays TAG\n" +
-        "--check-styles: exit 1 unless every seated bot style's VPIP, PFR and aggression is inside its target band and every mixed spot used both actions; the bands are judged over 100,000 hands (REQ-027), so shorter runs can fail from sample noise\n" +
+        "--check-styles: exit 1 unless every seated bot style's VPIP, PFR and aggression is inside its target band and every mixed spot that came up at least 10 times used both actions (rarer spots are listed as not judged); the bands are judged over 100,000 hands (REQ-027), so shorter runs can fail from sample noise\n" +
         '--check-advice: recompute the advice and grade at every decision point and exit 1 if any recomputation differs from the first\n',
     );
     expect(parseArgs([])).toEqual({
@@ -629,7 +629,7 @@ describe('playtest CLI', () => {
       / \[--lineup <mixed\|tough\|soft>\] \[--check-styles\] \[--check-advice\]$/,
     );
     expect(usage[4]).toBe(
-      "--check-styles: exit 1 unless every seated bot style's VPIP, PFR and aggression is inside its target band and every mixed spot used both actions; the bands are judged over 100,000 hands (REQ-027), so shorter runs can fail from sample noise",
+      "--check-styles: exit 1 unless every seated bot style's VPIP, PFR and aggression is inside its target band and every mixed spot that came up at least 10 times used both actions (rarer spots are listed as not judged); the bands are judged over 100,000 hands (REQ-027), so shorter runs can fail from sample noise",
     );
 
     const checked = capture(['--hands', '3', '--size', '3', '--lineup', 'soft', '--check-styles']);

@@ -250,33 +250,62 @@ describe('StyleCheck and the style report', () => {
     off.onAction(withType(step, move));
     off.add({ ...hand, lineUp: styles('TAG') });
     expect(off.mixed().size).toBe(0);
+  });
 
+  it('formatStyleReport judges a mixed spot only when it came up at least 10 times', () => {
     const counts = new Map<StyleName, StyleCounts>([['TAG', tagCounts(200)]]);
     const report = (c: MixedCounts) =>
       formatStyleReport(counts, new Map([['TAG', new Map([['preflop-unopened', c]])]]), true);
-    expect(report({ recommended: 0, alternative: 0 })).toEqual({
-      text: expect.stringContaining(
-        'Mixed spot: TAG preflop-unopened, recommended 0, alternative 0\nStyle check: passed\n',
-      ) as string,
-      passed: true,
-    });
+    const mixedLine = (c: MixedCounts) =>
+      `Mixed spot: TAG preflop-unopened, recommended ${c.recommended}, alternative ${c.alternative}\n`;
+
+    const none = report({ recommended: 0, alternative: 0 });
+    expect(none.passed).toBe(true);
+    expect(none.text).toContain(
+      'Mixed spot: TAG preflop-unopened, recommended 0, alternative 0\nStyle check: passed\n',
+    );
+    expect(none.text).not.toContain('Not judged');
+
     for (const c of [
-      { recommended: 5, alternative: 0 },
-      { recommended: 0, alternative: 5 },
+      { recommended: 1, alternative: 0 },
+      { recommended: 9, alternative: 0 },
+      { recommended: 0, alternative: 9 },
+      { recommended: 3, alternative: 4 },
+    ]) {
+      const rare = report(c);
+      expect(rare.passed).toBe(true);
+      expect(rare.text).toContain(
+        `${mixedLine(c)}Not judged (fewer than 10 decisions): TAG preflop-unopened\nStyle check: passed\n`,
+      );
+      expect(rare.text).not.toContain('One action only:');
+    }
+
+    for (const c of [
+      { recommended: 10, alternative: 0 },
+      { recommended: 0, alternative: 10 },
     ]) {
       const failed = report(c);
       expect(failed.passed).toBe(false);
       expect(failed.text).toContain(
-        `One action only: TAG preflop-unopened, recommended ${c.recommended}, alternative ${c.alternative}\nStyle check: failed\n`,
+        `${mixedLine(c)}One action only: TAG preflop-unopened, recommended ${c.recommended}, alternative ${c.alternative}\nStyle check: failed\n`,
       );
+      expect(failed.text).not.toContain('Not judged');
     }
+
+    const mixedUse = report({ recommended: 9, alternative: 1 });
+    expect(mixedUse.passed).toBe(true);
+    expect(mixedUse.text).toContain(
+      `${mixedLine({ recommended: 9, alternative: 1 })}Style check: passed\n`,
+    );
+    expect(mixedUse.text).not.toMatch(/One action only:|Not judged/);
+
     // Without check there are no mixed-spot lines.
-    expect(
-      formatStyleReport(
-        counts,
-        new Map([['TAG', new Map([['preflop-unopened', { recommended: 5, alternative: 0 }]])]]),
-        false,
-      ).text,
-    ).not.toContain('Mixed spot:');
+    const unchecked = formatStyleReport(
+      counts,
+      new Map([['TAG', new Map([['preflop-unopened', { recommended: 5, alternative: 0 }]])]]),
+      false,
+    ).text;
+    expect(unchecked).not.toContain('Mixed spot:');
+    expect(unchecked).not.toContain('Not judged');
   });
 });

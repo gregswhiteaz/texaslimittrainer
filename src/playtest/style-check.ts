@@ -149,6 +149,9 @@ const STATS = [
   ['aggression', 'aggression'],
 ] as const;
 
+/** A mixed spot is judged for one-action use only when it came up this often (REQ-028 fit criterion). */
+export const MIN_JUDGED_DECISIONS = 10;
+
 const percent = (value: number | null): string =>
   value === null ? NO_STAT : `${value.toFixed(1)}%`;
 const bandText = ([low, high]: Band): string => `(band ${low.toFixed(1)}-${high.toFixed(1)}%)`;
@@ -172,6 +175,7 @@ export function formatStyleReport(
   ];
   const outside: string[] = [];
   const oneAction: string[] = [];
+  const notJudged: string[] = [];
   for (const style of STYLE_ORDER) {
     const c = counts.get(style);
     if (c === undefined) continue;
@@ -192,12 +196,19 @@ export function formatStyleReport(
     for (const style of STYLE_ORDER) {
       for (const [spot, c] of mixed.get(style) ?? []) {
         lines.push(`Mixed spot: ${mixedText(style, spot, c)}`);
-        if (c.recommended > 0 !== c.alternative > 0) {
-          oneAction.push(`One action only: ${mixedText(style, spot, c)}`);
+        const decisions = c.recommended + c.alternative;
+        if (decisions >= MIN_JUDGED_DECISIONS) {
+          if (c.recommended === 0 || c.alternative === 0) {
+            oneAction.push(`One action only: ${mixedText(style, spot, c)}`);
+          }
+        } else if (decisions > 0) {
+          notJudged.push(
+            `Not judged (fewer than ${MIN_JUDGED_DECISIONS} decisions): ${style} ${spot}`,
+          );
         }
       }
     }
-    lines.push(...outside, ...oneAction);
+    lines.push(...notJudged, ...outside, ...oneAction);
     lines.push(`Style check: ${outside.length + oneAction.length === 0 ? 'passed' : 'failed'}`);
   }
   return {

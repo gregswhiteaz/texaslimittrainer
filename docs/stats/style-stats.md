@@ -77,7 +77,9 @@ Every `npm run playtest` run (not replay mode) prints a `Style:` line per seated
 aggression to one decimal, summed with `handStyleCounts`/`addStyleCounts` and computed with `styleStats`
 (`src/playtest/style-check.ts`). With `--check-styles` each value is compared with its REQ-027 band (inclusive,
 after rounding to 0.1), the mixed-spot action counts are listed, and the run exits 1 if a stat is outside its band
-or a mixed spot used only one action.
+or a mixed spot that came up at least 10 times used only one action; a mixed spot seen 1 to 9 times is listed as
+`Not judged (fewer than 10 decisions): <style> <spot>` and does not fail the check (REQ-028 fit criterion,
+TASK-6.30). All-TAG 3-seat `--check-styles` exits 0 over 100,000 hands (seed 42).
 
 REQ-027 judges these bands over 100,000 hands:
 `npm run playtest -- --hands 100000 --lineup mixed --size 6 --check-styles`. Shorter runs can fail from sample
