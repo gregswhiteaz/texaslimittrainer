@@ -5,13 +5,25 @@
   "base_commit": "0db9c0c5a9458a08ce4e0f6342d393860c782e82",
   "started": "2026-11-27T22:40:26",
   "review_round": 1,
-  "judge_round": 0,
+  "judge_round": 1,
   "sendbacks": 0,
   "gate_runs": 2,
   "questions": 0,
   "assumptions": 0,
   "escalations": 0,
-  "item_failures": {},
+  "item_failures": {
+    "SPEC-01": 0,
+    "SPEC-02": 0,
+    "SPEC-03": 0,
+    "SPEC-04": 0,
+    "SPEC-05": 0,
+    "SPEC-06": 0,
+    "SPEC-07": 0,
+    "SPEC-08": 0,
+    "SPEC-09": 0,
+    "SPEC-10": 0,
+    "SPEC-11": 0
+  },
   "locked_tests": {
     "tests/advice/full-ring-re-raise-split.acceptance.test.ts": "5048c2311f073f8dcb362a44e1077cb8fea14e7b366902c0012bfe1f4ffdf473",
     "tests/golden/preflop.acceptance.test.ts": "a86780cba5a045eacf9ae18f3f132abb019b3ab7f193dbed08bcfda45b6186e4"
@@ -2338,5 +2350,8 @@
   "spec_sha256": "6b2366ae8f49556412cee95f1b6f96b241ec0cb3ffbbf89af268ff9d93767e69",
   "review_findings": {
     "1": 0
+  },
+  "judge_results": {
+    "1": "PASS"
   }
 }
