@@ -28,3 +28,17 @@ Commands:
 - `npm test`: exit 0, 357 files passed, 11 skipped; 1588 tests passed, 60 skipped; coverage 92.84% statements.
 - `npm run test:slow`: exit 0, 27 files and 114 tests passed. TAG full-ring after: VPIP 14.2, PFR 11.2, aggression 65.0, WTSD 38.1, W$SD 52.3, all healthy.
 - `doit.py gate TASK-7.42`: PASS (all checks ok; 707 lines, 29 files).
+
+## FIX r1 (2026-11-28)
+
+- 1 six-max BB early AKo: fixed. The text now says "Jacks or better, ace-king, ace-queen suited and ace-king offsuit re-raise" and "offsuit aces from ace-queen down to ace-nine". The grid is unchanged.
+- 2 full-ring BB early AKo: fixed with the same wording. The grid is unchanged.
+- Orchestrator seat-count item: fixed.
+  - Dropped "the two earliest seats" from the 6-max SB/BB early texts, "the four earliest seats at a full table" from full-ring SB early, and "in one of the four earliest seats" from full-ring BB early.
+  - Full-ring chart-level: "in the four earliest seats" became "from under the gun to the lojack".
+  - The 6-max chart-level text already named the positions with no count, so it is unchanged.
+  - The full-ring clause "a ten-handed table's two earliest seats" is kept. It applies only at ten seats, where it is true.
+  - The before/after chart:print blocks are in the scratchpad at `t742/signoff-text-changes.md`. The grid rows match before and after for both charts.
+- Commands:
+  - the blind-defence-split acceptance test: 5 passed;
+  - reference-charts, six-max-chart, chart-print and chart-print-sizes in one run: 4 files, 9 passed.

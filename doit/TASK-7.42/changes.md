@@ -10,6 +10,7 @@
   - the 2 `blind-defence` justifications are rewritten for late raisers (grids unchanged, D-5);
   - one clause on the split is added to the chart-level text.
 - `src/advice/charts/full-ring.json`: the same changes (SB 5.7%, BB 24.0%). The "nine and ten seats" phrase is kept.
+- Review r1 fix (text only, no grid changed): in both charts the `BB blind-defence-early` text now lists ace-king offsuit with the re-raises and starts the offsuit-ace call group at ace-queen. The early texts (6-max SB/BB, full-ring SB/BB) and the full-ring chart-level text name the raiser's positions without counting seats.
 - `src/bots/styles/rock.json`: the 2 Q-5 Rock ranges, `SB blind-defence-early` (8 classes) and `BB blind-defence-early` (24), placed before `SB blind-defence`.
 - `tests/advice/blind-defence-split.acceptance.test.ts` (new): SPEC-01 to SPEC-06. It covers 23 routes × 169 classes, the D-2 order, 34/52 spots and the chart:print headers, the rules 5 and 6 checks with a mutation, the Q-2/Q-3 text, and Rock.
 - Unit tests (unlocked):

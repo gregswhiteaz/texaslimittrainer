@@ -405,3 +405,203 @@ All 5 cells are firm (not borderline) in the new grids. The 13 late golden blind
 ## 8. TASK-7.38
 
 The 4 full-ring blind-defence spots, the 2 new early ones and the 2 late ones, are reviewed here. The full-ring BB `blind-defence` dominance inversions stay with TASK-7.38. That grid is unchanged under D-5. The new full-ring BB `blind-defence-early` grid has no inversion.
+
+## Addendum (review r1 text fixes, after sign-off; grids unchanged)
+
+# TASK-7.42 sign-off section 2: text changes from review round 1
+
+Text only; every grid is unchanged (chart:print grid rows diffed before/after).
+
+## 6-max (6-max chart: 34 spots)
+
+### SB blind-defence-early
+
+Before:
+
+```
+SB blind-defence-early: raise 6.8%, continue 6.8%
+     A    K    Q    J    T    9    8    7    6    5    4    3    2
+A    R    R    R    R    R*/F F    F    F    F    F    F    F    F
+K    R    R    R    R*/F F    F    F    F    F    F    F    F    F
+Q    R*/F F    R    F    F    F    F    F    F    F    F    F    F
+J    F    F    F    R    F    F    F    F    F    F    F    F    F
+T    F    F    F    F    R    F    F    F    F    F    F    F    F
+9    F    F    F    F    F    R    F    F    F    F    F    F    F
+8    F    F    F    F    F    F    R*/F F    F    F    F    F    F
+7    F    F    F    F    F    F    F    F    F    F    F    F    F
+6    F    F    F    F    F    F    F    F    F    F    F    F    F
+5    F    F    F    F    F    F    F    F    F    F    F    F    F
+4    F    F    F    F    F    F    F    F    F    F    F    F    F
+3    F    F    F    F    F    F    F    F    F    F    F    F    F
+2    F    F    F    F    F    F    F    F    F    F    F    F    F
+Why: One player has raised from under the gun or the hijack, the two earliest seats, so the raiser holds a strong range and the big blind is still behind us. Calling would leave us out of position against that range and invite the big blind in, so we re-raise or fold, and with fewer hands than against a late raiser. Nines or better, ace-king, ace-queen and ace-jack suited, king-queen suited and ace-king offsuit re-raise; eights, ace-ten suited, king-jack suited and ace-queen offsuit re-raise but are close to a fold. Sevens, queen-jack suited, king-queen offsuit and everything weaker fold.
+```
+
+After:
+
+```
+SB blind-defence-early: raise 6.8%, continue 6.8%
+     A    K    Q    J    T    9    8    7    6    5    4    3    2
+A    R    R    R    R    R*/F F    F    F    F    F    F    F    F
+K    R    R    R    R*/F F    F    F    F    F    F    F    F    F
+Q    R*/F F    R    F    F    F    F    F    F    F    F    F    F
+J    F    F    F    R    F    F    F    F    F    F    F    F    F
+T    F    F    F    F    R    F    F    F    F    F    F    F    F
+9    F    F    F    F    F    R    F    F    F    F    F    F    F
+8    F    F    F    F    F    F    R*/F F    F    F    F    F    F
+7    F    F    F    F    F    F    F    F    F    F    F    F    F
+6    F    F    F    F    F    F    F    F    F    F    F    F    F
+5    F    F    F    F    F    F    F    F    F    F    F    F    F
+4    F    F    F    F    F    F    F    F    F    F    F    F    F
+3    F    F    F    F    F    F    F    F    F    F    F    F    F
+2    F    F    F    F    F    F    F    F    F    F    F    F    F
+Why: One player has raised from under the gun or the hijack, so the raiser holds a strong range and the big blind is still behind us. Calling would leave us out of position against that range and invite the big blind in, so we re-raise or fold, and with fewer hands than against a late raiser. Nines or better, ace-king, ace-queen and ace-jack suited, king-queen suited and ace-king offsuit re-raise; eights, ace-ten suited, king-jack suited and ace-queen offsuit re-raise but are close to a fold. Sevens, queen-jack suited, king-queen offsuit and everything weaker fold.
+```
+
+### BB blind-defence-early
+
+Before:
+
+```
+BB blind-defence-early: raise 3.3%, continue 30.3%
+     A    K    Q    J    T    9    8    7    6    5    4    3    2
+A    R    R    R    C    C    C    C    C    C    C    C    C    C
+K    R    R    C    C    C    C    C    C    C    F*/C F*/C F*/C F
+Q    C    C    R    C    C    C    C    C    F    F    F    F    F
+J    C    C    C    R    C    C    C    C    F    F    F    F    F
+T    C    C    C    C    C    C    C    F    F    F    F    F    F
+9    C    C    C    F*/C F    C    C    C    F    F    F    F    F
+8    C*/F F*/C F*/C F*/C F    F    C    C    F    F    F    F    F
+7    C*/F F    F    F    F    F    F    C    C    F    F    F    F
+6    F*/C F    F    F    F    F    F    F    C    C    F    F    F
+5    F*/C F    F    F    F    F    F    F    F    C    C    F*/C F
+4    F*/C F    F    F    F    F    F    F    F    F    C    F    F
+3    F*/C F    F    F    F    F    F    F    F    F    F    C    F
+2    F    F    F    F    F    F    F    F    F    F    F    F    C
+Why: One player has raised from under the gun or the hijack, the two earliest seats, so the raiser holds a strong range. Our full bet is already in and we close the action, so the price is still good, but we defend with fewer hands than against a late raiser. Jacks or better, ace-king and ace-queen suited re-raise. Every other pair and every suited ace call, as do suited kings down to king-six, suited queens down to queen-seven, suited jacks down to jack-seven, ten-nine, ten-eight, nine-eight and nine-seven suited, the suited connectors from eight-seven down to five-four, offsuit aces down to ace-nine, offsuit kings down to king-nine, and queen-jack, queen-ten, queen-nine and jack-ten offsuit. Ace-eight and ace-seven offsuit call but are close to a fold. Ace-six down to ace-three offsuit, king-eight, queen-eight, jack-nine and jack-eight offsuit, king-five down to king-three suited and five-three suited fold but are close to a call; the other offsuit hands and the remaining suited hands fold.
+```
+
+After:
+
+```
+BB blind-defence-early: raise 3.3%, continue 30.3%
+     A    K    Q    J    T    9    8    7    6    5    4    3    2
+A    R    R    R    C    C    C    C    C    C    C    C    C    C
+K    R    R    C    C    C    C    C    C    C    F*/C F*/C F*/C F
+Q    C    C    R    C    C    C    C    C    F    F    F    F    F
+J    C    C    C    R    C    C    C    C    F    F    F    F    F
+T    C    C    C    C    C    C    C    F    F    F    F    F    F
+9    C    C    C    F*/C F    C    C    C    F    F    F    F    F
+8    C*/F F*/C F*/C F*/C F    F    C    C    F    F    F    F    F
+7    C*/F F    F    F    F    F    F    C    C    F    F    F    F
+6    F*/C F    F    F    F    F    F    F    C    C    F    F    F
+5    F*/C F    F    F    F    F    F    F    F    C    C    F*/C F
+4    F*/C F    F    F    F    F    F    F    F    F    C    F    F
+3    F*/C F    F    F    F    F    F    F    F    F    F    C    F
+2    F    F    F    F    F    F    F    F    F    F    F    F    C
+Why: One player has raised from under the gun or the hijack, so the raiser holds a strong range. Our full bet is already in and we close the action, so the price is still good, but we defend with fewer hands than against a late raiser. Jacks or better, ace-king, ace-queen suited and ace-king offsuit re-raise. Every other pair and every suited ace call, as do suited kings down to king-six, suited queens down to queen-seven, suited jacks down to jack-seven, ten-nine, ten-eight, nine-eight and nine-seven suited, the suited connectors from eight-seven down to five-four, offsuit aces from ace-queen down to ace-nine, offsuit kings down to king-nine, and queen-jack, queen-ten, queen-nine and jack-ten offsuit. Ace-eight and ace-seven offsuit call but are close to a fold. Ace-six down to ace-three offsuit, king-eight, queen-eight, jack-nine and jack-eight offsuit, king-five down to king-three suited and five-three suited fold but are close to a call; the other offsuit hands and the remaining suited hands fold.
+```
+
+## full-ring (full-ring chart: 52 spots)
+
+### chart-level
+
+Before:
+
+```
+A tight-aggressive plan for full-ring fixed-limit hold'em, with eight or nine opponents. With so many players still to act, someone often holds a strong hand, so we enter far fewer pots than at six-handed and the first positions are the tightest of all. The under-the-gun range is built to stay sound at both nine and ten seats, since a ten-handed table's two earliest seats both use it. First in, we raise or fold; only the small blind sometimes completes. Behind limpers we raise hands that beat a limping range and call with hands that win big pots when they hit, such as small pairs and suited aces. Facing a single raise we mostly re-raise or fold; callers in between give a better price for speculative hands, and the blinds defend fewer hands against a raiser in the four earliest seats than against a later one. Once our own raise is re-raised we call with most of our range and raise again only with the very best hands; when two raises are in and none is ours, we continue only with hands that are strong against one raise, and fewer of them. Overall the chart aims to play roughly 12 to 16 percent of hands voluntarily.
+```
+
+After:
+
+```
+A tight-aggressive plan for full-ring fixed-limit hold'em, with eight or nine opponents. With so many players still to act, someone often holds a strong hand, so we enter far fewer pots than at six-handed and the first positions are the tightest of all. The under-the-gun range is built to stay sound at both nine and ten seats, since a ten-handed table's two earliest seats both use it. First in, we raise or fold; only the small blind sometimes completes. Behind limpers we raise hands that beat a limping range and call with hands that win big pots when they hit, such as small pairs and suited aces. Facing a single raise we mostly re-raise or fold; callers in between give a better price for speculative hands, and the blinds defend fewer hands against a raiser from under the gun to the lojack than against a later one. Once our own raise is re-raised we call with most of our range and raise again only with the very best hands; when two raises are in and none is ours, we continue only with hands that are strong against one raise, and fewer of them. Overall the chart aims to play roughly 12 to 16 percent of hands voluntarily.
+```
+
+### SB blind-defence-early
+
+Before:
+
+```
+SB blind-defence-early: raise 5.3%, continue 5.7%
+     A    K    Q    J    T    9    8    7    6    5    4    3    2
+A    R    R    R    R*/F F    F    F    F    F    F    F    F    F
+K    R    R    R*/F F    F    F    F    F    F    F    F    F    F
+Q    R*/F F    R    F    F    F    F    F    F    F    F    F    F
+J    F    F    F    R    F    F    F    F    F    F    F    F    F
+T    F    F    F    F    R    F    F    F    F    F    F    F    F
+9    F    F    F    F    F    C*/F F    F    F    F    F    F    F
+8    F    F    F    F    F    F    F    F    F    F    F    F    F
+7    F    F    F    F    F    F    F    F    F    F    F    F    F
+6    F    F    F    F    F    F    F    F    F    F    F    F    F
+5    F    F    F    F    F    F    F    F    F    F    F    F    F
+4    F    F    F    F    F    F    F    F    F    F    F    F    F
+3    F    F    F    F    F    F    F    F    F    F    F    F    F
+2    F    F    F    F    F    F    F    F    F    F    F    F    F
+Why: One player has raised from under the gun, under the gun plus one, the middle position or the lojack, the four earliest seats at a full table, so the raiser holds a strong range and the big blind is still behind us. We would play out of position, so we defend with fewer hands than against a late raiser and mostly re-raise or fold. Tens or better, ace-king, ace-queen suited and ace-king offsuit re-raise; ace-jack suited, king-queen suited and ace-queen offsuit re-raise but are close to a fold, and nines call but are close to a fold. Eights, ace-ten suited, king-jack suited, ace-jack offsuit and everything weaker fold.
+```
+
+After:
+
+```
+SB blind-defence-early: raise 5.3%, continue 5.7%
+     A    K    Q    J    T    9    8    7    6    5    4    3    2
+A    R    R    R    R*/F F    F    F    F    F    F    F    F    F
+K    R    R    R*/F F    F    F    F    F    F    F    F    F    F
+Q    R*/F F    R    F    F    F    F    F    F    F    F    F    F
+J    F    F    F    R    F    F    F    F    F    F    F    F    F
+T    F    F    F    F    R    F    F    F    F    F    F    F    F
+9    F    F    F    F    F    C*/F F    F    F    F    F    F    F
+8    F    F    F    F    F    F    F    F    F    F    F    F    F
+7    F    F    F    F    F    F    F    F    F    F    F    F    F
+6    F    F    F    F    F    F    F    F    F    F    F    F    F
+5    F    F    F    F    F    F    F    F    F    F    F    F    F
+4    F    F    F    F    F    F    F    F    F    F    F    F    F
+3    F    F    F    F    F    F    F    F    F    F    F    F    F
+2    F    F    F    F    F    F    F    F    F    F    F    F    F
+Why: One player has raised from under the gun, under the gun plus one, the middle position or the lojack, so the raiser holds a strong range and the big blind is still behind us. We would play out of position, so we defend with fewer hands than against a late raiser and mostly re-raise or fold. Tens or better, ace-king, ace-queen suited and ace-king offsuit re-raise; ace-jack suited, king-queen suited and ace-queen offsuit re-raise but are close to a fold, and nines call but are close to a fold. Eights, ace-ten suited, king-jack suited, ace-jack offsuit and everything weaker fold.
+```
+
+### BB blind-defence-early
+
+Before:
+
+```
+BB blind-defence-early: raise 3.3%, continue 24.0%
+     A    K    Q    J    T    9    8    7    6    5    4    3    2
+A    R    R    R    C    C    C    C    C    C    C    C    C    C
+K    R    R    C    C    C    C    F    F    F    F    F    F    F
+Q    C    C    R    C    C    C    F    F    F    F    F    F    F
+J    C    C    C    R    C    C    F    F    F    F    F    F    F
+T    C    C    C    C    C    C    F    F    F    F    F    F    F
+9    C    F    F    F    F    C    C    F    F    F    F    F    F
+8    F*/C F    F    F    F    F    C    C    F    F    F    F    F
+7    F*/C F    F    F    F    F    F    C    C    F    F    F    F
+6    F*/C F    F    F    F    F    F    F    C    C    F    F    F
+5    F    F    F    F    F    F    F    F    F    C    C    F    F
+4    F    F    F    F    F    F    F    F    F    F    C    F*/C F
+3    F    F    F    F    F    F    F    F    F    F    F    C    F
+2    F    F    F    F    F    F    F    F    F    F    F    F    C
+Why: An opener in one of the four earliest seats, from under the gun to the lojack, holds a strong range at a full table. Our full bet is in and we close the action, so the pot odds still let us defend, but with fewer hands than against a late raiser. Jacks or better, ace-king and ace-queen suited re-raise. Every other pair and every suited ace call, as do king-queen down to king-nine suited, queen-jack down to queen-nine suited, jack-ten and jack-nine suited, ten-nine suited, the suited connectors from nine-eight down to five-four, offsuit aces down to ace-nine, and king-queen, king-jack, king-ten, queen-jack, queen-ten and jack-ten offsuit. Ace-eight down to ace-six offsuit and four-three suited fold but are close to a call; everything else folds, including the smaller suited kings and the weaker offsuit hands.
+```
+
+After:
+
+```
+BB blind-defence-early: raise 3.3%, continue 24.0%
+     A    K    Q    J    T    9    8    7    6    5    4    3    2
+A    R    R    R    C    C    C    C    C    C    C    C    C    C
+K    R    R    C    C    C    C    F    F    F    F    F    F    F
+Q    C    C    R    C    C    C    F    F    F    F    F    F    F
+J    C    C    C    R    C    C    F    F    F    F    F    F    F
+T    C    C    C    C    C    C    F    F    F    F    F    F    F
+9    C    F    F    F    F    C    C    F    F    F    F    F    F
+8    F*/C F    F    F    F    F    C    C    F    F    F    F    F
+7    F*/C F    F    F    F    F    F    C    C    F    F    F    F
+6    F*/C F    F    F    F    F    F    F    C    C    F    F    F
+5    F    F    F    F    F    F    F    F    F    C    C    F    F
+4    F    F    F    F    F    F    F    F    F    F    C    F*/C F
+3    F    F    F    F    F    F    F    F    F    F    F    C    F
+2    F    F    F    F    F    F    F    F    F    F    F    F    C
+Why: An opener from under the gun to the lojack holds a strong range at a full table. Our full bet is in and we close the action, so the pot odds still let us defend, but with fewer hands than against a late raiser. Jacks or better, ace-king, ace-queen suited and ace-king offsuit re-raise. Every other pair and every suited ace call, as do king-queen down to king-nine suited, queen-jack down to queen-nine suited, jack-ten and jack-nine suited, ten-nine suited, the suited connectors from nine-eight down to five-four, offsuit aces from ace-queen down to ace-nine, and king-queen, king-jack, king-ten, queen-jack, queen-ten and jack-ten offsuit. Ace-eight down to ace-six offsuit and four-three suited fold but are close to a call; everything else folds, including the smaller suited kings and the weaker offsuit hands.
+```
