@@ -3,10 +3,11 @@ id: TASK-7.48
 title: >-
   Scale observed open-raise and calling ranges by PFR and VPIP relative to a
   typical player
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-27T20:52:00Z'
-updated_date: '2026-11-27T21:22:00Z'
+updated_date: '2026-11-28T21:10:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -40,6 +41,18 @@ Follow-up from TASK-7.45 (decision-8: Q-1 D). Today open-raise scales toward raw
 - [ ] #6 Given the 4 observed golden postflop spots (6max-flop-btn-raise-a8s, 6max-turn-bb-call-a6s, 6max-turn-btn-fold-55, 6max-river-bb-bet-aks), When npm test runs, Then each still agrees and is clear-cut, or each changed one is re-tuned and re-justified with the user's sign-off
 - [ ] #7 Given docs/advice/range-model.md, When the story is done, Then its line-to-stat table, typical-player paragraph and Known limits state the relative rule for open-raise and calling lines
 <!-- AC:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. ranges.ts: TYPICAL_VPIP + drift test; relativeStatPct (relativePfrPct alias); OBSERVED_LINE_STAT relative-pfr/relative-vpip
+2. New acceptance test for AC#1-AC#3 widths
+3. Re-pin locked tests under all 8 owner unlocks; unit re-pins
+4. Golden spot 6max-turn-bb-call-a6s re-tuned to 100/12/9 (Q-1), signoff.md confirms numbers
+5. range-model.md updates; e2e observed specs re-checked
+
+Full spec: doit/TASK-7.48/spec.md
+<!-- SECTION:PLAN:END -->
 
 ## Implementation Notes
 
