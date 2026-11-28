@@ -3,7 +3,7 @@ id: TASK-7.39
 title: >-
   Restore advice speed headroom on the 6-max actions spot and the 9-seat
   calling-range spot
-status: In Progress
+status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-26T17:06:00Z'
@@ -16,6 +16,8 @@ dependencies:
   - TASK-7.34
 references:
   - doc-167
+documentation:
+  - doc-201
 parent_task_id: TASK-7
 priority: low
 ordinal: 260000
@@ -48,4 +50,12 @@ Full spec: doit/TASK-7.39/spec.md
 
 <!-- SECTION:NOTES:BEGIN -->
 User sign-off 2026-11-28 (AC#2): approved 10,000 calling-range deals at 7+ live opponents per doit/TASK-7.39/signoff.md — 9-seat p95 131 -> 66 ms, actions spot 21.3 -> 10.0 ms; bots and 8 playtest variants byte-identical; user advice changes only in 7+-way pots (calling-range number max 1.1 pts, mean ~0.1, no action/rule changes in 600 sampled views).
+
+Step 6a: none (test-helper move and RangeError-rethrow view are below the value bar).
 <!-- SECTION:NOTES:END -->
+
+## Final Summary
+
+<!-- SECTION:FINAL_SUMMARY:BEGIN -->
+Reused the repeated exact equity run in recommendPostflop (default equity only) and cut the user's calling-range run to 10,000 deals when 7+ opponents are live (src/advice/postflop.ts). Headroom p95: actions spot 21.3 -> 10 ms (limit 18.75), 9-seat vs 8 opponents 131 -> 66 ms (limit 75); perf target for 9-seat back to 100 ms. Verified: npm test 1567 passed, test:slow 114 passed, 3 headroom passes green, 8 playtest variants byte-identical (default SHA d4d84efb...), judge PASS 9/9, reviews clean. Assumptions to review: A-1..A-6 in doc (notably the delta sample method and that changes apply only without an injected equity seam). User advice changes only in 7+-way pots: calling-range number max 1.1 pts, mean ~0.1, no action or rule changes; user approved the delta package (Q-1 A). Risks/follow-ups: MINOR duplicated viewAfter test helper; no test for a kept RangeError rethrow at attempt 0.
+<!-- SECTION:FINAL_SUMMARY:END -->
