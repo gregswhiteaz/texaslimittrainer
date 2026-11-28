@@ -4,6 +4,7 @@ title: Leave the app with one Back after a reload on the Table without reopening
 status: To Do
 assignee: []
 created_date: '2026-11-26T11:14:00Z'
+updated_date: '2026-11-28T00:15:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -27,3 +28,9 @@ Follow-up from TASK-2.22 (doc-159). After a reload on the Table, if the user goe
 <!-- AC:BEGIN -->
 - [ ] #1 Given a reload while on the Table, When the user presses Back from Home without reopening the Table, Then one Back leaves the app with no page reload, in Chromium and WebKit, and a quick Resume right after load still opens the Table
 <!-- AC:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+Closed 2026-11-28 as not worth it (user decision). Path is rare (reload on the Table, go Home without reopening it, press Back): it costs one extra Back press. Browsers cannot delete history entries, replaceState on the stale entry does not remove it, and the only known fix (history.back() at page start) races a quick Resume (TASK-2.22 spec experiments). Archived rather than built.
+<!-- SECTION:NOTES:END -->
