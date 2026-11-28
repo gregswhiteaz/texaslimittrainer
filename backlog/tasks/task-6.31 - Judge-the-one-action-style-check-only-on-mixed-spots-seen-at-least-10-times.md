@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-27T22:04:00Z'
-updated_date: '2026-11-28T20:13:00Z'
+updated_date: '2026-11-28T20:29:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -52,4 +52,6 @@ Full spec: doit/TASK-6.31/spec.md
 
 <!-- SECTION:NOTES:BEGIN -->
 AC#3 reworded per Q-1 (user 2026-11-28): the 3-seat run already passes on main (TAG preflop-limpers 0/0 since TASK-7.40-7.42), so the Not judged line is proven by a new fast 1,000-hand mixed 6-max test instead.
+
+Build: MIN_JUDGED_DECISIONS = 10 in style-check.ts with Not judged line; help text; never-mixing fast case 300->1000 hands (unlocked under TASK-6.11/6.25); 3-seat test asserts exit 0 again (unlocked under TASK-7.46); new fast not-judged test; docs; gate PASS
 <!-- SECTION:NOTES:END -->

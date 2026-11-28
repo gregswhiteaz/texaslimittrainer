@@ -1,0 +1,32 @@
+{"reviewer": "code", "round": 1,
+ "rubric": [
+  {"item": "SPEC-01 correctness", "result": "pass"},
+  {"item": "SPEC-01 test strength", "result": "pass"},
+  {"item": "SPEC-02 correctness", "result": "pass"},
+  {"item": "SPEC-02 test strength", "result": "pass"},
+  {"item": "SPEC-03 correctness", "result": "pass"},
+  {"item": "SPEC-03 test strength", "result": "pass"},
+  {"item": "SPEC-04 correctness", "result": "pass"},
+  {"item": "SPEC-04 test strength", "result": "pass"},
+  {"item": "SPEC-05 correctness", "result": "pass"},
+  {"item": "SPEC-05 test strength", "result": "pass"},
+  {"item": "SPEC-06 correctness", "result": "pass"},
+  {"item": "SPEC-06 test strength", "result": "pass"},
+  {"item": "SPEC-07 correctness", "result": "pass"},
+  {"item": "SPEC-07 test strength", "result": "pass"},
+  {"item": "SPEC-08 correctness", "result": "pass"},
+  {"item": "SPEC-08 test strength", "result": "pass"},
+  {"item": "SPEC-09 correctness", "result": "pass"},
+  {"item": "SPEC-09 test strength", "result": "pass"},
+  {"item": "scope", "result": "pass"},
+  {"item": "concision", "result": "pass"},
+  {"item": "clarity", "result": "pass"}
+ ],
+ "findings": [
+  {"fingerprint": "tests/playtest/style-check.test.ts:not-judged-order-vs-outside-and-one-action-untested",
+   "severity": "MINOR", "file": "tests/playtest/style-check.test.ts", "line": 253,
+   "issue": "A-4 / §5 order (Not judged lines before Outside band and One action only lines) is not pinned by any test. Every unit case and the SPEC-09 run has only one kind of trailing line, so moving `...notJudged` after `...outside` or `...oneAction` in `lines.push` would still pass.",
+   "evidence": "Mutating `lines.push(...notJudged, ...outside, ...oneAction)` to `lines.push(...outside, ...oneAction, ...notJudged)` breaks no assertion: the rare cases have no outside/oneAction lines, the 10/0 cases have no notJudged line, and the SPEC-09 run has neither Outside band nor One action only.",
+   "fix": "Add one unit case with two spots, e.g. preflop-unopened 10/0 and preflop-limpers 2/0, and assert the text contains `Not judged (fewer than 10 decisions): TAG preflop-limpers\\nOne action only: TAG preflop-unopened, recommended 10, alternative 0\\nStyle check: failed\\n`."}
+ ],
+ "summary": "Implementation matches §5 exactly: MIN_JUDGED_DECISIONS = 10 exported, judged when recommended + alternative >= 10, 1-9 get the Not judged line (including mixed-use 3/4, A-5), 0/0 silent, passed unchanged. Boundary 9/10 covered in both directions (9/0, 0/9 pass + Not judged; 10/0, 0/10 fail with Mixed spot line directly before One action only; 9/1 passes with neither). Verified the new SPEC-09 test fails on base 29ec6ce0 (exit 1 vs expected 0) and passes now (~2.9 s). Fast never-mixing case at mixedSpots(1000) passes in ~8.3 s (60 s timeout). Locked edits are limited to the spec'd re-pin and strengthening assertions. style-check, cli and acceptance tests pass; lint clean. Slow 100k runs not executed (per instruction). Only finding: Not judged ordering relative to Outside band / One action only lines is untested (MINOR)."}
