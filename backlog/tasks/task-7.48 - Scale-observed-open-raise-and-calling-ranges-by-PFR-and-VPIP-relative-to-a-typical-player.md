@@ -7,7 +7,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-27T20:52:00Z'
-updated_date: '2026-11-28T21:27:00Z'
+updated_date: '2026-11-28T21:35:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -33,13 +33,13 @@ Follow-up from TASK-7.45 (decision-8: Q-1 D). Today open-raise scales toward raw
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Given a 6-max BTN open-raiser seen for 100 hands, When the range is estimated, Then the width is 34.54% at PFR 18 (the default), 86.35% at PFR 45 and 17.27% at PFR 9, each within 0.01
-- [ ] #2 Given a 6-max BB call-raise opponent seen for 100 hands, When the range is estimated, Then the width is 41.48% at VPIP 24 (the default), 69.13% at VPIP 40, 20.74% at VPIP 12 and 100% at VPIP 60 (capped), each within 0.01
-- [ ] #3 Given heads-up and full-ring tables, When an open-raise or calling range is scaled, Then typical PFR is 57.5 and 12.5 and typical VPIP is 77.5 and 16.5, so a heads-up BTN call-raise at VPIP 77.5 keeps 11.76% and a full-ring BB call-raise at VPIP 33 gives 55.20%, each within 0.01
-- [ ] #4 Given TYPICAL_VPIP in src/advice/ranges.ts, When the unit tests run, Then it equals the midpoint of each healthy VPIP range in src/stats/healthy-ranges.json (77.5, 24, 16.5)
-- [ ] #5 Given the locked tests/advice/observed-ranges.acceptance.test.ts AC#2 (TASK-7.13), tests/advice/observed-resize.acceptance.test.ts AC#1, AC#2 and AC#3 (TASK-7.43), tests/advice/observed-reraise.acceptance.test.ts AC#4 and AC#5 (TASK-7.44), tests/advice/small-table-ranges.acceptance.test.ts AC#1 (TASK-7.35) and the two tests at lines 227 and 269 of tests/ui/review-numbers.acceptance.test.tsx (TASK-9.3), When the rule changes, Then each is unlocked and re-pinned under its owner to the relative rule as listed in the description, and observed-ranges AC#5, AC#6 and observed-range-tidy AC#1 pass unchanged
-- [ ] #6 Given the 4 observed golden postflop spots (6max-flop-btn-raise-a8s, 6max-turn-bb-call-a6s, 6max-turn-btn-fold-55, 6max-river-bb-bet-aks), When npm test runs, Then each still agrees and is clear-cut, or each changed one is re-tuned and re-justified with the user's sign-off
-- [ ] #7 Given docs/advice/range-model.md, When the story is done, Then its line-to-stat table, typical-player paragraph and Known limits state the relative rule for open-raise and calling lines
+- [x] #1 Given a 6-max BTN open-raiser seen for 100 hands, When the range is estimated, Then the width is 34.54% at PFR 18 (the default), 86.35% at PFR 45 and 17.27% at PFR 9, each within 0.01
+- [x] #2 Given a 6-max BB call-raise opponent seen for 100 hands, When the range is estimated, Then the width is 41.48% at VPIP 24 (the default), 69.13% at VPIP 40, 20.74% at VPIP 12 and 100% at VPIP 60 (capped), each within 0.01
+- [x] #3 Given heads-up and full-ring tables, When an open-raise or calling range is scaled, Then typical PFR is 57.5 and 12.5 and typical VPIP is 77.5 and 16.5, so a heads-up BTN call-raise at VPIP 77.5 keeps 11.76% and a full-ring BB call-raise at VPIP 33 gives 55.20%, each within 0.01
+- [x] #4 Given TYPICAL_VPIP in src/advice/ranges.ts, When the unit tests run, Then it equals the midpoint of each healthy VPIP range in src/stats/healthy-ranges.json (77.5, 24, 16.5)
+- [x] #5 Given the locked tests/advice/observed-ranges.acceptance.test.ts AC#2 (TASK-7.13), tests/advice/observed-resize.acceptance.test.ts AC#1, AC#2 and AC#3 (TASK-7.43), tests/advice/observed-reraise.acceptance.test.ts AC#4 and AC#5 (TASK-7.44), tests/advice/small-table-ranges.acceptance.test.ts AC#1 (TASK-7.35) and the two tests at lines 227 and 269 of tests/ui/review-numbers.acceptance.test.tsx (TASK-9.3), When the rule changes, Then each is unlocked and re-pinned under its owner to the relative rule as listed in the description, and observed-ranges AC#5, AC#6 and observed-range-tidy AC#1 pass unchanged
+- [x] #6 Given the 4 observed golden postflop spots (6max-flop-btn-raise-a8s, 6max-turn-bb-call-a6s, 6max-turn-btn-fold-55, 6max-river-bb-bet-aks), When npm test runs, Then each still agrees and is clear-cut, or each changed one is re-tuned and re-justified with the user's sign-off
+- [x] #7 Given docs/advice/range-model.md, When the story is done, Then its line-to-stat table, typical-player paragraph and Known limits state the relative rule for open-raise and calling lines
 <!-- AC:END -->
 
 ## Implementation Plan

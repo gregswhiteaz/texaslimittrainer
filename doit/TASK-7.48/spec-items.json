@@ -3,54 +3,54 @@
     "id": "SPEC-01",
     "verifies": "AC#1",
     "verification": "acceptance `tests/advice/observed-relative.acceptance.test.ts::AC#1 a 6-max BTN open-raise scales by PFR relative to the typical 18`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-02",
     "verifies": "AC#2",
     "verification": "acceptance `tests/advice/observed-relative.acceptance.test.ts::AC#2 a 6-max BB call-raise scales by VPIP relative to the typical 24, at most 100`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-03",
     "verifies": "AC#3",
     "verification": "acceptance `tests/advice/observed-relative.acceptance.test.ts::AC#3 heads-up and full ring use their own typical PFR and VPIP`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-04",
     "verifies": "AC#4",
     "verification": "unit `tests/advice/observed-ranges.test.ts::TYPICAL_VPIP is the middle of each healthy VPIP range`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-05",
     "verifies": "AC#5",
     "verification": "unit `tests/advice/observed-ranges.test.ts::scales each line relative to a typical player: PFR for raising lines, VPIP for calling lines`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-06",
     "verifies": "AC#5",
     "verification": "command `npx vitest run tests/advice/observed-ranges.acceptance.test.ts tests/advice/observed-resize.acceptance.test.ts tests/advice/observed-reraise.acceptance.test.ts tests/advice/small-table-ranges.acceptance.test.ts tests/ui/review-numbers.acceptance.test.tsx tests/advice/observed-range-tidy.acceptance.test.ts tests/golden tests/table/observed-resume.acceptance.test.ts && git diff --stat main -- tests/advice/observed-range-tidy.acceptance.test.ts tests/golden/postflop.acceptance.test.ts tests/golden/postflop-lines.acceptance.test.ts tests/table/observed-resume.acceptance.test.ts e2e/observed-resume.spec.ts` (empty diff)",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-07",
     "verifies": "AC#7",
     "verification": "acceptance `tests/advice/observed-relative.acceptance.test.ts::AC#7 range-model.md states the relative rule for open-raise and calling lines`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-08",
     "verifies": "AC#6",
     "verification": "acceptance `tests/advice/observed-reraise.acceptance.test.ts::AC#5 the 4 observed golden postflop spots agree, are clear-cut and sit at the relative-rule width`",
-    "status": "pending"
+    "status": "pass"
   },
   {
     "id": "SPEC-09",
     "verifies": "AC#6",
     "verification": "manual Judge opens the A-5 path, re-runs the probe or `npx vitest run tests/golden/postflop.acceptance.test.ts tests/advice/observed-reraise.acceptance.test.ts`, and checks each measured number matches the file and the approved values.",
-    "status": "pending"
+    "status": "pass"
   }
 ]
