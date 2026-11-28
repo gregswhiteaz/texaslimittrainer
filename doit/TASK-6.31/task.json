@@ -1,0 +1,317 @@
+{
+  "id": "TASK-6.31",
+  "title": "Judge the one-action style check only on mixed spots seen at least 10 times",
+  "status": "In Progress",
+  "archived": false,
+  "type": null,
+  "priority": "low",
+  "project": null,
+  "assignees": [
+    "@claude"
+  ],
+  "reporter": null,
+  "labels": [
+    "dream-limit-holdem-trainer",
+    "follow-up"
+  ],
+  "milestone": "m-1",
+  "parentTaskId": "TASK-6",
+  "acceptanceCriteriaCompleted": 0,
+  "acceptanceCriteriaCount": 6,
+  "references": [
+    "doit/TASK-6.30/spec.md",
+    "dreams/limit-holdem-trainer/requirements.md"
+  ],
+  "modifiedFiles": [],
+  "ordinal": 278000,
+  "createdAt": "2026-11-27T22:04:00Z",
+  "updatedAt": "2026-11-28T20:12:00Z",
+  "dueDate": null,
+  "isReady": true,
+  "path": "backlog/tasks/task-6.31 - Judge-the-one-action-style-check-only-on-mixed-spots-seen-at-least-10-times.md",
+  "description": "Follow-up from TASK-6.30 (decision-9: Q-1 B, N = 10). Over 100,000 all-TAG hands at 3 seats (seed 42) TAG preflop-limpers comes up once (recommended 1, alternative 0), so --check-styles exits 1 although every band holds. Apply the REQ-028 fit criterion as reworded by TASK-6.30: a mixed spot is judged only when recommended + alternative >= 10; spots with 1 to 9 decisions keep their Mixed spot line unchanged and get a separate line 'Not judged (fewer than 10 decisions): <style> <spot>'; 0/0 spots pass as today. Change the rule in src/playtest/style-check.ts (formatStyleReport, the oneAction list); no new counter. Locked re-pins, each unlocked under its owner(s): tests/playtest/check-styles.acceptance.test.ts never-mixing case mixedSpots(300) (owners TASK-6.11 and TASK-6.25, unlock under both; unopened is about 8 decisions at 300 hands, so it stops failing; re-pin to enough hands, e.g. 1,000, about 33); tests/playtest/check-styles-three-seats.acceptance.test.ts (owner TASK-7.46; restore exit 0 and Style check: passed). Unlocked: tests/playtest/style-check.test.ts 5/0 and 0/5 cases, usage text in src/playtest/cli.ts:60 and tests/playtest/cli.test.ts:115 and :632. Keep the never-mixing fast test fast. Update the comments in tests/playtest/check-styles-three-seats.acceptance.test.ts:9 and docs/advice/range-model.md:294 to cite the REQ-028 fit criterion, not REQ-027.5. Evidence: doit/TASK-6.30/spec.md section 3.",
+  "dependencies": [
+    "TASK-6.30"
+  ],
+  "dependencyGraph": {
+    "root": "TASK-6.31",
+    "nodes": [
+      {
+        "id": "TASK-6.31",
+        "title": "Judge the one-action style check only on mixed spots seen at least 10 times",
+        "status": "In Progress",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": 0,
+        "dependentDepth": 0
+      },
+      {
+        "id": "TASK-1.1",
+        "title": "Bootstrap the strict TypeScript project with one-command checks",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 11,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.2",
+        "title": "Rank showdown hands by real poker hand rankings",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 9,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.3",
+        "title": "Deal every hand from a seeded shuffle with a replay code",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 10,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.4",
+        "title": "Play a complete fixed-limit hand from blinds to showdown",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 9,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.5",
+        "title": "Give each deciding seat only its own view of the hand",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 8,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.7",
+        "title": "Run every check in GitHub Actions on each push and pull request",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 10,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-6.30",
+        "title": "Decide whether the style check's one-action rule needs a minimum sample for rare mixed spots",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 1,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-7.1",
+        "title": "Compute a hand's equity against opponent hands",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 8,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-7.2",
+        "title": "Recommend a preflop action from the 6-max chart",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 7,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-7.3",
+        "title": "Recommend call or fold after the flop from equity and pot odds",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 7,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-7.5",
+        "title": "Estimate each opponent's range from their actions in the hand",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 6,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-7.6",
+        "title": "Recommend preflop actions at heads-up and full-ring tables",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 6,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-7.26",
+        "title": "Author heads-up and full-ring default opponent ranges",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 5,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-7.35",
+        "title": "Use the 6-max opponent ranges at 3, 4, 5 and 7 seats",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 4,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-7.37",
+        "title": "Bring short-handed TAG VPIP inside its healthy range at 3 and 4 seats",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 3,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-7.46",
+        "title": "Bring 3-seat TAG aggression inside its style band and make the short-handed postflop test able to fail",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 2,
+        "dependentDepth": null
+      }
+    ],
+    "edges": [
+      {
+        "from": "TASK-1.2",
+        "to": "TASK-1.7"
+      },
+      {
+        "from": "TASK-1.3",
+        "to": "TASK-1.7"
+      },
+      {
+        "from": "TASK-1.4",
+        "to": "TASK-1.2"
+      },
+      {
+        "from": "TASK-1.4",
+        "to": "TASK-1.3"
+      },
+      {
+        "from": "TASK-1.5",
+        "to": "TASK-1.4"
+      },
+      {
+        "from": "TASK-1.7",
+        "to": "TASK-1.1"
+      },
+      {
+        "from": "TASK-6.30",
+        "to": "TASK-7.46"
+      },
+      {
+        "from": "TASK-6.31",
+        "to": "TASK-6.30"
+      },
+      {
+        "from": "TASK-7.1",
+        "to": "TASK-1.2"
+      },
+      {
+        "from": "TASK-7.2",
+        "to": "TASK-1.5"
+      },
+      {
+        "from": "TASK-7.3",
+        "to": "TASK-7.1"
+      },
+      {
+        "from": "TASK-7.3",
+        "to": "TASK-7.2"
+      },
+      {
+        "from": "TASK-7.5",
+        "to": "TASK-7.3"
+      },
+      {
+        "from": "TASK-7.6",
+        "to": "TASK-7.2"
+      },
+      {
+        "from": "TASK-7.26",
+        "to": "TASK-7.5"
+      },
+      {
+        "from": "TASK-7.26",
+        "to": "TASK-7.6"
+      },
+      {
+        "from": "TASK-7.35",
+        "to": "TASK-7.26"
+      },
+      {
+        "from": "TASK-7.37",
+        "to": "TASK-7.35"
+      },
+      {
+        "from": "TASK-7.46",
+        "to": "TASK-7.37"
+      }
+    ]
+  },
+  "readiness": {
+    "isReady": true,
+    "isBlocked": false,
+    "blockingDependencies": [],
+    "missingDependencies": []
+  },
+  "documentation": [],
+  "subtasks": [],
+  "acceptanceCriteria": [
+    {
+      "index": 1,
+      "text": "Given a --check-styles run where a mixed spot came up 1 to 9 times, When it reports, Then that spot's Mixed spot line is printed unchanged, a separate line \"Not judged (fewer than 10 decisions): <style> <spot>\" follows the Mixed spot lines, and the spot does not fail the check",
+      "checked": false
+    },
+    {
+      "index": 2,
+      "text": "Given a mixed spot that came up 10 or more times with one count 0, When it reports, Then \"One action only: ...\" is printed and the run exits 1 (9/0 passes, 10/0 fails, 0/0 passes)",
+      "checked": false
+    },
+    {
+      "index": 3,
+      "text": "Given npm run playtest -- --hands 100000 --seed 42 --size 3 --check-styles, When it completes, Then it prints \"Style check: passed\" with no \"One action only\" line and exits 0, and tests/playtest/check-styles-three-seats.acceptance.test.ts asserts exit 0 and \"Style check: passed\" again so its name is accurate (owner TASK-7.46); the \"Not judged (fewer than 10 decisions)\" line is proven end to end by a fast run that fails today (TASK-6.31 Q-1)",
+      "checked": false
+    },
+    {
+      "index": 4,
+      "text": "Given the locked never-mixing case of tests/playtest/check-styles.acceptance.test.ts (owners TASK-6.11 and TASK-6.25, unlock under both), When it is re-pinned to enough hands that preflop-unopened comes up at least 10 times, Then it still exits 1 with One action only: TAG preflop-unopened, and the 100,000-hand Mixed 6-max slow test still passes on seeds 42, 7 and 1234",
+      "checked": false
+    },
+    {
+      "index": 5,
+      "text": "Given the --check-styles usage text and tests/playtest/cli.test.ts, When --help is shown, Then it states that a mixed spot is judged only when it came up at least 10 times",
+      "checked": false
+    },
+    {
+      "index": 6,
+      "text": "Given docs/stats/style-stats.md and docs/advice/range-model.md, When the story is done, Then they state the 10-decision minimum and that 3-seat --check-styles now exits 0 over 100,000 hands",
+      "checked": false
+    }
+  ],
+  "definitionOfDone": [],
+  "implementationPlan": null,
+  "implementationNotes": "AC#3 reworded per Q-1 (user 2026-11-28): the 3-seat run already passes on main (TAG preflop-limpers 0/0 since TASK-7.40-7.42), so the Not judged line is proven by a new fast 1,000-hand mixed 6-max test instead.",
+  "comments": [],
+  "finalSummary": null
+}

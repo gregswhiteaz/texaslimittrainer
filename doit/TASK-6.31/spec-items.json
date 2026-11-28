@@ -1,0 +1,56 @@
+[
+  {
+    "id": "SPEC-01",
+    "verifies": "AC#1, AC#2",
+    "verification": "unit `tests/playtest/style-check.test.ts::formatStyleReport judges a mixed spot only when it came up at least 10 times`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-02",
+    "verifies": "AC#2",
+    "verification": "unit `tests/playtest/style-check.test.ts::formatStyleReport judges a mixed spot only when it came up at least 10 times`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-03",
+    "verifies": "AC#3, AC#6",
+    "verification": "acceptance `tests/playtest/check-styles-three-seats.acceptance.test.ts::all-TAG 3-seat cash play passes --check-styles over 100,000 hands`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-04",
+    "verifies": "AC#2, AC#4",
+    "verification": "acceptance `tests/playtest/check-styles.acceptance.test.ts::--check-styles lists each mixed spot's action counts and fails a spot that used one action`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-05",
+    "verifies": "AC#4",
+    "verification": "acceptance `tests/playtest/check-styles.acceptance.test.ts::100,000 Mixed 6-max hands pass --check-styles on seeds 42, 7 and 1234` (run with `npm run test:slow`)",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-06",
+    "verifies": "AC#5",
+    "verification": "command `npm run -s playtest -- --help | grep -F \"every mixed spot that came up at least 10 times used both actions (rarer spots are listed as not judged)\" && npx vitest run tests/playtest/cli.test.ts -t \"rejects every invalid argument with its fixed message|--check-styles is a value-less run flag echoed in the Options line\"`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-07",
+    "verifies": "AC#6",
+    "verification": "command `grep -n \"at least 10 times\" docs/stats/style-stats.md docs/advice/range-model.md && grep -n \"exits 0\" docs/stats/style-stats.md docs/advice/range-model.md && ! grep -n \"REQ-027.5\" docs/advice/range-model.md tests/playtest/check-styles-three-seats.acceptance.test.ts`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-09",
+    "verifies": "AC#1, AC#3",
+    "verification": "acceptance `tests/playtest/check-styles-not-judged.acceptance.test.ts::a 1,000-hand Mixed 6-max run lists its rare mixed spots as not judged and passes --check-styles`",
+    "status": "pending"
+  },
+  {
+    "id": "SPEC-08",
+    "verifies": "AC#1",
+    "verification": "command `npm test && npm run lint && npm run typecheck && git diff --exit-code main -- src/bots src/advice src/engine src/stats`",
+    "status": "pending"
+  }
+]
