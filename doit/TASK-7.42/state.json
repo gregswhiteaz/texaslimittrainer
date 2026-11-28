@@ -5,13 +5,24 @@
   "base_commit": "a28ea6df8ffbc1310738a5732a5575ceda74aac5",
   "started": "2026-11-28T09:39:11",
   "review_round": 2,
-  "judge_round": 0,
+  "judge_round": 1,
   "sendbacks": 0,
   "gate_runs": 5,
   "questions": 0,
   "assumptions": 0,
   "escalations": 0,
-  "item_failures": {},
+  "item_failures": {
+    "SPEC-01": 0,
+    "SPEC-02": 0,
+    "SPEC-03": 0,
+    "SPEC-04": 0,
+    "SPEC-05": 0,
+    "SPEC-06": 0,
+    "SPEC-07": 0,
+    "SPEC-08": 0,
+    "SPEC-09": 0,
+    "SPEC-10": 0
+  },
   "locked_tests": {
     "tests/advice/blind-defence-split.acceptance.test.ts": "7fbfe70f4a32d64aadabd4f2fcc6b902356a01ab7848c69638374c7b8d9f62b2",
     "tests/golden/preflop.acceptance.test.ts": "a86780cba5a045eacf9ae18f3f132abb019b3ab7f193dbed08bcfda45b6186e4"
@@ -2352,5 +2363,8 @@
     "src/advice/charts/full-ring.json:bb-early-text-ako-listed-as-call": [
       "review r1"
     ]
+  },
+  "judge_results": {
+    "1": "PASS"
   }
 }
