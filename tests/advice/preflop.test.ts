@@ -111,6 +111,11 @@ describe('preflop advice', () => {
     for (const [hero, steps, situation] of cases) {
       expect(situationOf(viewAfter(hero, steps)), JSON.stringify(steps)).toBe(situation);
     }
+    // Full ring: an open and a re-raise before the hijack (TASK-7.41).
+    const nine = [1, 2, 3, 4, 5, 6, 7, 8, 9] as SeatNumber[];
+    expect(situationOf(viewAfter(8, [f(4), r(5, 8), f(6), r(7, 12)], nine))).toBe(
+      're-raise-not-mine',
+    );
   });
 
   it('adjusts to legal actions and rejects bad views', () => {

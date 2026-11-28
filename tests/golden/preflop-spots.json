@@ -1244,6 +1244,39 @@
       "action": "raise",
       "alternative": null,
       "justification": "A pair of aces is the strongest starting hand and is ahead of every range that opens and re-raises. Raise again to build the pot while our hand strength is far ahead, and we keep position after the flop."
+    },
+    {
+      "id": "fr-co-re-raise-not-mine-ajs",
+      "seats": 9,
+      "position": "CO",
+      "situation": "re-raise-not-mine",
+      "holeCards": "Ad Jd",
+      "before": ["raise", "fold", "fold", "fold", "fold", "call", "fold", "fold", "raise", "call"],
+      "action": "fold",
+      "alternative": null,
+      "justification": "We called an under-the-gun open and the big blind re-raised, so two strong ranges are against us and none of the raises is ours. AJs is often dominated by the bigger aces those players hold, so its hand strength is too low to put in another bet; fold."
+    },
+    {
+      "id": "fr-bb-re-raise-not-mine-99",
+      "seats": 9,
+      "position": "BB",
+      "situation": "re-raise-not-mine",
+      "holeCards": "9s 9h",
+      "before": ["raise", "raise", "fold", "fold", "fold", "fold", "fold", "fold"],
+      "action": "call",
+      "alternative": null,
+      "justification": "An under-the-gun open and a re-raise came before us, so both ranges are strong, but our blind is in and the pot odds on one more bet are good. A pair of nines can flop a set and win a large pot, so call, though its hand strength is not enough to raise."
+    },
+    {
+      "id": "fr-btn-re-raise-not-mine-aa",
+      "seats": 9,
+      "position": "BTN",
+      "situation": "re-raise-not-mine",
+      "holeCards": "Ac Ad",
+      "before": ["fold", "fold", "fold", "fold", "raise", "raise"],
+      "action": "raise",
+      "alternative": null,
+      "justification": "A pair of aces is ahead of every range that opens from the hijack and re-raises from the cutoff. Raise again to build the pot while our hand strength is far ahead, and keep position on every later street."
     }
   ]
 }

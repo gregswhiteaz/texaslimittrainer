@@ -243,7 +243,7 @@ describe('6-max re-raise split (TASK-7.40)', () => {
     expect(chartBasisText(rec)).not.toContain(SITUATION_LABELS['re-raise-not-mine']);
   });
 
-  it('AC#6 heads-up and full-ring advice is unchanged', () => {
+  it('AC#6 heads-up advice is unchanged and full ring reads the split (re-pinned by TASK-7.41)', () => {
     // Button 1 at 9 seats: SB 2, BB 3, UTG 4, UTG+1 5, MP 6, LJ 7, HJ 8, CO 9, BTN 1.
     const nine: Route[] = [
       {
@@ -252,7 +252,7 @@ describe('6-max re-raise split (TASK-7.40)', () => {
         hero: 1,
         steps: [r(4, 8), f(5), f(6), f(7), f(8), r(9, 12)],
         position: 'BTN',
-        situation: 're-raise',
+        situation: 're-raise-not-mine',
       },
       {
         name: '9 seats called then re-raised',
@@ -260,10 +260,10 @@ describe('6-max re-raise split (TASK-7.40)', () => {
         hero: 9,
         steps: [r(4, 8), f(5), f(6), f(7), f(8), c(9, 8), f(1), f(2), r(3, 12), c(4, 4)],
         position: 'CO',
-        situation: 're-raise',
+        situation: 're-raise-not-mine',
       },
     ];
-    const context = fillTemplate(PREFLOP_CONTEXT['re-raise'], {});
+    const context = fillTemplate(PREFLOP_CONTEXT['re-raise-not-mine'], {});
     for (const route of nine) {
       checkAllClasses(route, FULL_RING_CHART);
       for (const hc of HAND_CLASSES) {
@@ -286,13 +286,15 @@ describe('6-max re-raise split (TASK-7.40)', () => {
       });
       expect(summary.violations).toBe(0);
       expect(seen.has('re-raise'), `${size} seats`).toBe(true);
-      expect(seen.has('re-raise-not-mine'), `${size} seats`).toBe(false);
+      expect(seen.has('re-raise-not-mine'), `${size} seats`).toBe(size === 9);
     }
 
     expect(APPLICABLE_SPOTS['heads-up']).toHaveLength(6);
-    expect(APPLICABLE_SPOTS['full-ring']).toHaveLength(41);
+    expect(APPLICABLE_SPOTS['full-ring']).toHaveLength(50);
     for (const size of ['heads-up', 'full-ring'] as const) {
-      expect(APPLICABLE_SPOTS[size].some((s) => s.situation === 're-raise-not-mine')).toBe(false);
+      expect(APPLICABLE_SPOTS[size].some((s) => s.situation === 're-raise-not-mine')).toBe(
+        size === 'full-ring',
+      );
     }
   });
 });

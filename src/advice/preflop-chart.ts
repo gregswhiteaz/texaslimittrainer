@@ -77,6 +77,7 @@ export const APPLICABLE_SPOTS: Readonly<Record<ReferenceSize, readonly SpotId[]>
     ...spotsOf('raise', FULL_RING_OPENERS),
     ...spotsOf('raise-and-calls', FULL_RING_OPENERS),
     ...spotsOf('re-raise', [...FULL_RING_OPENERS, 'SB', 'BB']),
+    ...spotsOf('re-raise-not-mine', [...FULL_RING_OPENERS, 'SB', 'BB']),
     ...spotsOf('blind-defence', ['SB', 'BB']),
   ],
 };

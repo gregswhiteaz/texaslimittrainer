@@ -1287,6 +1287,12 @@
       "event": "unlock",
       "file": "tests/golden/preflop-spots.json",
       "reason": "TASK-7.40 (user Q-1..Q-4; decision-4): re-pin for the 6-max re-raise split (counts 26->32, new rows/labels/golden spots); no assertion dropped"
+    },
+    {
+      "t": "2026-11-27T23:02:40",
+      "event": "unlock",
+      "file": "tests/golden/preflop-spots.json",
+      "reason": "TASK-7.41 Q-3 approved re-pin"
     }
   ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-7.11",
@@ -1313,6 +1319,7 @@
     ]
   },
   "relock_pending": [
+    "tests/golden/preflop-spots.json",
     "tests/golden/preflop-spots.json",
     "tests/golden/preflop-spots.json"
   ],

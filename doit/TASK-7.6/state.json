@@ -1131,6 +1131,12 @@
       "event": "unlock",
       "file": "tests/playtest/all-sizes.acceptance.test.ts",
       "reason": "Judge J-1-01: 40 s under local coverage load vs 60 s timeout \u2014 use the repo's 120 s acceptance timeout (no assertion change)"
+    },
+    {
+      "t": "2026-11-27T23:02:40",
+      "event": "unlock",
+      "file": "tests/advice/table-sizes.acceptance.test.ts",
+      "reason": "TASK-7.41 Q-3 approved re-pin"
     }
   ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-7.6",
@@ -1142,5 +1148,7 @@
   "judge_results": {
     "1": "PASS"
   },
-  "relock_pending": []
+  "relock_pending": [
+    "tests/advice/table-sizes.acceptance.test.ts"
+  ]
 }

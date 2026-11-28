@@ -53,7 +53,16 @@ const FR: Record<string, Bands> = {
   ...Object.fromEntries(OPENERS.map((p) => [`${p} raise`, { continue: [4, 12], maxCall: 4 }])),
   ...Object.fromEntries(OPENERS.map((p) => [`${p} raise-and-calls`, { continue: [5, 16] }])),
   ...Object.fromEntries(
-    [...OPENERS, 'SB', 'BB'].map((p) => [`${p} re-raise`, { continue: [5, 28] }]),
+    [...OPENERS, 'SB', 'BB'].map((p) => [
+      `${p} re-raise`,
+      { continue: p === 'BTN' ? [25, 35] : [5, 28] },
+    ]),
+  ),
+  ...Object.fromEntries(
+    [...OPENERS, 'SB', 'BB'].map((p) => [
+      `${p} re-raise-not-mine`,
+      { continue: p === 'BB' ? [4, 16] : [2, 8] },
+    ]),
   ),
   'SB blind-defence': { continue: [8, 22] },
   'BB blind-defence': { continue: [30, 55] },

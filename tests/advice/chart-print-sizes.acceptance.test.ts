@@ -99,7 +99,7 @@ describe('chart:print with a size', () => {
   });
 
   it("chart:print full-ring prints each spot's grid and justification", () => {
-    const headers = checkReview('full-ring', 41);
+    const headers = checkReview('full-ring', 50);
     expect(headers[0]?.startsWith('UTG unopened: ')).toBe(true);
     expect(headers.some((h) => h.startsWith('UTG+1 unopened: '))).toBe(true);
   });
