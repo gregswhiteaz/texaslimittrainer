@@ -1,0 +1,3 @@
+{"reviewer": "security", "round": 1,
+ "findings": [],
+ "summary": "Change is limited to seven authored string values in src/stats/leak-categories.json, the matching cells in docs/stats/leaks.md, and a new vitest acceptance test that reads a repo-local docs file via a fixed URL. No untrusted input, no new dependency, no secrets, no randomness, and no HTML sinks (no innerHTML/dangerouslySetInnerHTML in src), so the strings render as escaped React text. The test also asserts the revised texts contain no HTML-significant characters. Spec section 8 (N/A) is accurate. No findings."}

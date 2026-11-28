@@ -7,7 +7,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-24T23:58:00Z'
-updated_date: '2026-11-28T05:04:00Z'
+updated_date: '2026-11-28T05:17:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -47,4 +47,6 @@ Full spec: doit/TASK-10.14/spec.md
 
 <!-- SECTION:NOTES:BEGIN -->
 AC#2 added from Q-4 (user chose: add to this task).
+
+Build: 7 leak texts replaced in leak-categories.json + docs table; new leak-copy acceptance test; gate PASS
 <!-- SECTION:NOTES:END -->
