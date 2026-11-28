@@ -150,7 +150,7 @@ describe('6-max ranges at 3, 4, 5 and 7 seats (TASK-7.35)', () => {
       ),
     );
     expect(btn).toMatchObject({ position: 'BTN', line: 'open-raise' });
-    expect(btn?.widthPct).toBeCloseTo(60, 9);
+    expect(btn?.widthPct).toBe(100);
     expect(btn?.basis).toEqual({
       seat: 1,
       observedHands: 100,

@@ -145,7 +145,8 @@ describe('observed opponent ranges acceptance', () => {
       const d = rangeWidthPct(classes);
       snapshots.forEach((snapshot, i) => {
         const range = i === 0 ? a : b;
-        const o = (snapshot.find((s) => s.seat === seat) as ObservedOpponent)[stat];
+        const value = (snapshot.find((s) => s.seat === seat) as ObservedOpponent)[stat];
+        const o = Math.min(100, (d * value) / (stat === 'pfr' ? 18 : 24));
         const width = scaledWidthPct(d, o, 30);
         expect(range.widthPct).toBeCloseTo(width, 9);
         expect(range.start).toEqual(expandRange(resizeRange(classes, width), deadOf(view)));

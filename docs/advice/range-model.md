@@ -320,18 +320,21 @@ percent of 1,326), `o` is the observed stat and `n` is the hands seen. The obser
 for more as hands build up and fully from 100 hands. With `d` = 20 and 30 hands, an `o` of 0, 20 or
 100 gives 14.0, 20.0 or 44.0; with 100 hands and `o` = 60 the width is 60.0.
 
-| Preflop line                           | Observed stat `o`                      |
-| -------------------------------------- | -------------------------------------- |
-| `open-raise`                           | PFR %                                  |
-| `three-bet`, `four-bet`                | d × PFR % ÷ typical PFR %, at most 100 |
-| `limp`, `call-raise`, `call-three-bet` | VPIP %                                 |
-| `check` (big blind, nobody raised)     | not scaled                             |
+| Preflop line                           | Observed stat `o`                        |
+| -------------------------------------- | ---------------------------------------- |
+| `open-raise`                           | d × PFR % ÷ typical PFR %, at most 100   |
+| `three-bet`, `four-bet`                | d × PFR % ÷ typical PFR %, at most 100   |
+| `limp`, `call-raise`, `call-three-bet` | d × VPIP % ÷ typical VPIP %, at most 100 |
+| `check` (big blind, nobody raised)     | not scaled                               |
 
 The typical PFR is the middle of the healthy PFR range for the table size: 57.5 heads-up, 18 at
 6-max and 12.5 at full ring (3 to 7 seats use 6-max, 8 to 10 full ring). A player who raises first
 as often as a typical player keeps the default re-raise range, and one who raises twice as often
 gets twice its width. For example, a 6-max UTG `four-bet` range (2.56%) seen for 100 hands goes to
-6.41% at PFR 45 and to 1.28% at PFR 9.
+6.41% at PFR 45 and to 1.28% at PFR 9. The typical VPIP is the middle of the healthy VPIP range in
+the same way: 77.5 heads-up, 24 at 6-max and 16.5 at full ring. A player at the typical PFR and
+VPIP keeps every default range. With 100 hands, a 6-max BTN `open-raise` (34.54%) goes to 86.35%
+at PFR 45, and a 6-max BB `call-raise` (41.48%) goes to 69.13% at VPIP 40 and to 100% at VPIP 60.
 
 The `check` line is not a voluntary range, so it keeps its default. The scaling applies at every
 table size from 2 to 10 seats, because every size has default ranges. The simpler "every unseen
@@ -354,7 +357,12 @@ the three opponents, 30,000 sampled deals seeded from the input) and rounded to 
 Equal numbers keep the starting-hand grid order. AA (63.9%) is first and 32o (14.1%) is last.
 
 **Known limits.** The relative re-raise rule assumes an opponent re-raises in proportion to how
-often they raise first, since the snapshot has no re-raise stat. Against three random hands small
+often they raise first, since the snapshot has no re-raise stat. The relative rules also assume
+an opponent's extra (or missing) raising and calling is spread across seats in proportion to a
+typical player's, since the snapshot has no per-seat stats. The cap of 100 is reached only on the
+widest lines and at stats far above typical: at 6-max a BTN `open-raise` from PFR 52.1, an SB
+`limp` from VPIP 53.8 and a BB `call-raise` from VPIP 57.9; at full ring from 45.8, 44.7 and 59.8.
+Against three random hands small
 pairs rank low (22 is #116), so a widened range adds them late and a narrowed range drops them
 early.
 

@@ -224,7 +224,7 @@ describe('TASK-9.3 review numbers', () => {
       'Ben: based on 40 hands of this opponent',
       'Eli: typical player',
     ]);
-    expect(shown[1]?.equity).toBe('Equity 34.3%');
+    expect(shown[1]?.equity).toBe('Equity 34.4%');
     expect(shown[1]?.required).toBe('Required equity 11.8%');
     expect(shown[0]?.opponents).toEqual([
       'Ava: typical player',
@@ -266,7 +266,7 @@ describe('TASK-9.3 review numbers', () => {
 
     // After the hand Ben's count is 30: a recompute now would differ from what was stored.
     const later = workerEntry({ ...flop, observed: snapshot(30) });
-    expect(formatPct(later.equityPct as number)).toBe('34.3%');
+    expect(formatPct(later.equityPct as number)).toBe('33.7%');
     expect(later.opponentBasis.map((b) => b.text)).toContain('based on 30 hands of this opponent');
     expect(later.equityPct).not.toBe(entry?.decision.equityPct);
     expect(storedReviewEntries(hand, decisions)[1]?.equity).toBe('37.1%');

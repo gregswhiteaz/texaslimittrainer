@@ -16,7 +16,9 @@ import {
   SIX_MAX_RANGES,
   strongestClasses,
   TYPICAL_PFR,
+  TYPICAL_VPIP,
   typicalPfr,
+  typicalVpip,
   unseenCombos,
   type ObservedOpponent,
 } from '../../src/advice/ranges';
@@ -227,7 +229,9 @@ describe('range width and scaling', () => {
     const view = toActView(MULTIWAY);
     const at = (hands: number) =>
       estimateOpponentRanges(view, [entry({ hands, vpip: 45, pfr: 35 })]).find((r) => r.seat === 4);
-    expect(at(150)?.widthPct).toBeCloseTo(35, 9);
+    expect(at(150)?.widthPct).toBeCloseTo(23.76, 2);
+    const d = widthOf(defaultRange(SIX_MAX_RANGES, 'UTG', 'open-raise').classes);
+    expect(at(150)?.widthPct).toBeCloseTo((d * 35) / 18, 9);
     expect(at(150)?.start).toEqual(at(100)?.start);
     expect(at(150)?.basis.text).toBe('based on 150 hands of this opponent');
   });
@@ -250,15 +254,15 @@ describe('range width and scaling', () => {
     expect(range?.widthPct).toBe(0);
   });
 
-  it('scales each line by its stat: PFR for opens, PFR relative to typical for re-raises, VPIP for calls', () => {
+  it('scales each line relative to a typical player: PFR for raising lines, VPIP for calling lines', () => {
     const afterCheck = (steps: Step[]): Step[] => [...steps, [4, 'check']];
     const cases = [
-      [LIMPED, 4, 'limp', 'vpip'],
-      [MULTIWAY, 4, 'open-raise', 'pfr'],
-      [MULTIWAY, 6, 'call-raise', 'vpip'],
+      [LIMPED, 4, 'limp', 'relative-vpip'],
+      [MULTIWAY, 4, 'open-raise', 'relative-pfr'],
+      [MULTIWAY, 6, 'call-raise', 'relative-vpip'],
       [THREE_BET, 5, 'three-bet', 'relative-pfr'],
-      [afterCheck(THREE_BET), 4, 'call-three-bet', 'vpip'],
-      [FOUR_BET, 5, 'call-three-bet', 'vpip'],
+      [afterCheck(THREE_BET), 4, 'call-three-bet', 'relative-vpip'],
+      [FOUR_BET, 5, 'call-three-bet', 'relative-vpip'],
       [afterCheck(FOUR_BET), 4, 'four-bet', 'relative-pfr'],
     ] as const;
     for (const [steps, seat, line, stat] of cases) {
@@ -267,7 +271,12 @@ describe('range width and scaling', () => {
       const range = estimateOpponentRanges(view, [obs]).find((r) => r.seat === seat);
       expect(range?.line, line).toBe(line);
       const d = widthOf(defaultRange(SIX_MAX_RANGES, range?.position ?? 'BB', line).classes);
-      const target = { vpip: 40, pfr: 10, 'relative-pfr': (d * 10) / 18 };
+      const target = {
+        vpip: 40,
+        pfr: 10,
+        'relative-pfr': (d * 10) / 18,
+        'relative-vpip': (d * 40) / 24,
+      };
       const blend = (o: number) => d + ((o - d) * 50) / 100;
       expect(range?.widthPct, line).toBeCloseTo(blend(target[stat]), 9);
       for (const other of Object.keys(target) as (keyof typeof target)[]) {
@@ -317,6 +326,18 @@ describe('range width and scaling', () => {
     }
     expect([TYPICAL_PFR['heads-up'], TYPICAL_PFR['6-max'], TYPICAL_PFR['full-ring']]).toEqual([
       57.5, 18, 12.5,
+    ]);
+  });
+
+  it('TYPICAL_VPIP is the middle of each healthy VPIP range', () => {
+    expect(Object.keys(TYPICAL_VPIP).sort()).toEqual(['6-max', 'full-ring', 'heads-up']);
+    for (const size of ['heads-up', '6-max', 'full-ring'] as const) {
+      const band = HEALTHY_RANGES[size].vpip;
+      expect(TYPICAL_VPIP[size], size).toBe((band.low + band.high) / 2);
+      expect(typicalVpip(size), size).toBe((band.low + band.high) / 2);
+    }
+    expect([TYPICAL_VPIP['heads-up'], TYPICAL_VPIP['6-max'], TYPICAL_VPIP['full-ring']]).toEqual([
+      77.5, 24, 16.5,
     ]);
   });
 

@@ -1542,6 +1542,12 @@
       "event": "unlock",
       "file": "tests/golden/postflop-spots.json",
       "reason": "TASK-7.43 Q-1 (autopilot, recommended): re-tune 6max-turn-bb-call-a6s opponent stats to 100/22/18 after decision-5 resize + 3-way order"
+    },
+    {
+      "t": "2026-11-28T14:11:20",
+      "event": "unlock",
+      "file": "tests/golden/postflop-spots.json",
+      "reason": "TASK-7.48 AC#5/Q-1 approved re-pin"
     }
   ],
   "holdout": "/Users/gregwhite/.claude/doit-holdout/limitholdem/TASK-7.14",
@@ -1561,6 +1567,7 @@
     "tests/golden/postflop-spots.json",
     "tests/golden/postflop-spots.json",
     "tests/golden/graded-examples.json",
+    "tests/golden/postflop-spots.json",
     "tests/golden/postflop-spots.json"
   ],
   "brief_history": {

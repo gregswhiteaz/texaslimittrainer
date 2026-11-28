@@ -7,7 +7,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-27T20:52:00Z'
-updated_date: '2026-11-28T21:10:00Z'
+updated_date: '2026-11-28T21:27:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -58,4 +58,6 @@ Full spec: doit/TASK-7.48/spec.md
 
 <!-- SECTION:NOTES:BEGIN -->
 TASK-7.45 review r2: e2e/observed-resume.spec.ts was run under option D on a scratch copy and passes (6/6, chromium+webkit); tests/golden/postflop-lines.acceptance.test.ts also fails at load on the a6s spot until it is re-tuned (AC#6).
+
+Build: relative rule (TYPICAL_VPIP, relativeStatPct, OBSERVED_LINE_STAT); 8 owner unlocks + re-pins; golden a6s re-tuned to 100/12/9; gate PASS. AC#6 sign-off: user's Q-1 answer (2026-11-28) stands — built numbers MATCH (width 17.27, equity 45.3, raise 19.7, fold 21.1; doit/TASK-7.48/signoff.md). Deviation: doc cap sentence also names the BTN open-raise (measured cap thresholds).
 <!-- SECTION:NOTES:END -->

@@ -183,7 +183,7 @@ describe('observed three-bet and four-bet ranges scale by PFR relative to a typi
     expect(relativePfrPct(20, 90, 18)).toBe(100);
   });
 
-  it('AC#4 open-raise keeps raw PFR and calling lines raw VPIP', () => {
+  it('AC#4 open-raise scales by PFR and calling lines by VPIP relative to a typical player', () => {
     const cases: [Step[], SeatNumber, string, 'vpip' | 'pfr'][] = [
       [[[4, 'raise', 8], ...folds(5, 6, 1, 2), [3, 'call', 4]], 4, 'open-raise', 'pfr'],
       [
@@ -206,14 +206,16 @@ describe('observed three-bet and four-bet ranges scale by PFR relative to a typi
         const obs: ObservedOpponent = { seat, hands, vpip: 40, pfr: 10 };
         const range = rangeOf(spot, [obs], seat);
         expect(range.line, line).toBe(line);
-        const expected = scaledWidthPct(defaultWidth(SIX_MAX_RANGES, range), obs[stat], hands);
+        const d = defaultWidth(SIX_MAX_RANGES, range);
+        const o = Math.min(100, (d * obs[stat]) / (stat === 'pfr' ? 18 : 24));
+        const expected = scaledWidthPct(d, o, hands);
         expect(range.widthPct, `${line} ${hands}`).toBeCloseTo(expected, 9);
         expect(range.start, `${line} ${hands}`).toEqual(resizedStart(SIX_MAX_RANGES, range, spot));
       }
     }
   });
 
-  it('AC#5 the 4 observed golden postflop spots are on lines this rule does not touch', () => {
+  it('AC#5 the 4 observed golden postflop spots agree, are clear-cut and sit at the relative-rule width', () => {
     const raw = JSON.parse(
       readFileSync(join(REPO_ROOT, 'tests/golden/postflop-spots.json'), 'utf8'),
     ) as { spots: Record<string, unknown>[] } & Record<string, unknown>;
@@ -224,16 +226,28 @@ describe('observed three-bet and four-bet ranges scale by PFR relative to a typi
       (s) => s.observed.length > 0,
     );
     expect(spots).toHaveLength(4);
+    const typical = {
+      pfr: { 'heads-up': 57.5, '6-max': 18, 'full-ring': 12.5 },
+      vpip: { 'heads-up': 77.5, '6-max': 24, 'full-ring': 16.5 },
+    } as const;
+    const pinned: Record<string, number> = {
+      '6max-flop-btn-raise-a8s': 54.7,
+      '6max-turn-bb-call-a6s': 17.27,
+      '6max-turn-btn-fold-55': 20.39,
+      '6max-river-bb-bet-aks': 12.07,
+    };
     for (const spot of spots) {
       const ranges = estimateOpponentRanges(spot.view, spot.observed);
       for (const obs of spot.observed) {
         const range = ranges.find((r) => r.seat === obs.seat) as OpponentRange;
         expect(['open-raise', 'call-raise', 'call-three-bet'], spot.id).toContain(range.line);
-        const stat = range.line === 'open-raise' ? obs.pfr : obs.vpip;
         const sized = rangesFor(spot.view.players.length);
-        expect(range.widthPct, spot.id).toBeCloseTo(
-          scaledWidthPct(defaultWidth(sized, range), stat, obs.hands),
-          9,
+        const d = defaultWidth(sized, range);
+        const stat = range.line === 'open-raise' ? 'pfr' : 'vpip';
+        const o = Math.min(100, (d * obs[stat]) / typical[stat][sized.referenceSize]);
+        expect(range.widthPct, spot.id).toBeCloseTo(scaledWidthPct(d, o, obs.hands), 9);
+        expect(Math.abs(range.widthPct - (pinned[spot.id] as number)), spot.id).toBeLessThanOrEqual(
+          0.01,
         );
       }
     }
@@ -245,7 +259,7 @@ describe('observed three-bet and four-bet ranges scale by PFR relative to a typi
       / {2,}/g,
       ' ',
     );
-    expect(doc).toContain('| `open-raise` | PFR % |');
+    expect(doc).toContain('| `open-raise` | d × PFR % ÷ typical PFR %, at most 100 |');
     expect(doc).toContain('| `three-bet`, `four-bet` | d × PFR % ÷ typical PFR %, at most 100 |');
     const after = doc.slice(doc.indexOf('| `check` (big blind, nobody raised)'));
     const paragraph = after.slice(after.indexOf('\n\n') + 2).split('\n\n')[0] ?? '';

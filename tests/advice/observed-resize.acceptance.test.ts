@@ -9,6 +9,7 @@ import {
   expandRange,
   HAND_ORDER,
   rangeWidthPct,
+  resizeRange,
   SIX_MAX_RANGES,
   strongestClasses,
   unseenCombos,
@@ -111,8 +112,8 @@ describe('observed range resize acceptance', () => {
     const plain = estimateOpponentRanges(view);
     for (const hands of [30, 100]) {
       const snapshot: ObservedOpponent[] = [
-        { seat: RAISER, hands, vpip: 50, pfr: rangeWidthPct(raiserDefault) },
-        { seat: CALLER, hands, vpip: rangeWidthPct(callerDefault), pfr: 0 },
+        { seat: RAISER, hands, vpip: 50, pfr: 18 },
+        { seat: CALLER, hands, vpip: 24, pfr: 0 },
       ];
       const ranges = estimateOpponentRanges(view, snapshot);
       for (const [seat, classes] of [
@@ -130,7 +131,8 @@ describe('observed range resize acceptance', () => {
   it('AC#2 a wider width adds hand-order classes not in the default, strongest first', () => {
     const view = toActView(MULTIWAY, DECK);
     const base = defaultOf(view, CALLER);
-    const target = 0.6 * 1326;
+    const wideWidth = (rangeWidthPct(base) * 60) / 24;
+    const target = (wideWidth / 100) * 1326;
     expect(combosOf(base)).toBeLessThan(target);
     const added: HandClass[] = [];
     for (const hc of HAND_ORDER) {
@@ -141,7 +143,7 @@ describe('observed range resize acceptance', () => {
     expect(combosOf(base) + combosOf(added)).toBeGreaterThanOrEqual(target);
     expect(combosOf(base) + combosOf(added.slice(0, -1))).toBeLessThan(target);
     const expected = new Set([...base, ...added]);
-    const prefix = strongestClasses(60);
+    const prefix = strongestClasses(wideWidth);
     expect([...base].filter((hc) => !prefix.has(hc))).toContain('22');
 
     const wide = rangeOf(
@@ -155,13 +157,15 @@ describe('observed range resize acceptance', () => {
       estimateOpponentRanges(view, [{ seat: CALLER, hands: 100, vpip: 100, pfr: 0 }]),
       CALLER,
     );
-    expect(all.start).toEqual(expandRange(new Set(HAND_CLASSES), deadOf(view)));
+    expect(all.widthPct).toBeCloseTo(69.76, 2);
+    expect(all.start).toEqual(expandRange(resizeRange(base, all.widthPct), deadOf(view)));
+    expect(resizeRange(base, 100)).toEqual(new Set(HAND_CLASSES));
   });
 
   it('AC#3 a narrower width keeps the strongest default classes, never less than the strongest one', () => {
     const view = toActView(MULTIWAY, DECK);
     const open = defaultOf(view, RAISER);
-    const target = 0.05 * 1326;
+    const target = ((rangeWidthPct(open) * 5) / 18 / 100) * 1326;
     expect(combosOf(open)).toBeGreaterThan(target);
     const kept: HandClass[] = [];
     for (const hc of HAND_ORDER) {
