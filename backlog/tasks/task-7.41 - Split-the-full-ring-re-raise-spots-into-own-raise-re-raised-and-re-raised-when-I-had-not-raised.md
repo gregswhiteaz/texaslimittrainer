@@ -7,7 +7,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-26T23:45:00Z'
-updated_date: '2026-11-28T05:54:00Z'
+updated_date: '2026-11-28T06:42:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -57,4 +57,8 @@ Full spec: doit/TASK-7.41/spec.md
 
 <!-- SECTION:NOTES:BEGIN -->
 AC added from TASK-7.40 follow-up (review r1 MINOR: no cap assertion for a not-mine fourth-bet route)
+
+Build: full ring 41->50 spots (9 re-raise-not-mine grids, 9 re-raise re-justified, Q-1 trims, BTN widened to 0.846); AC#6 cap tests; 3 golden spots; 4 Q-3 re-pins under owners 7.27/7.6/7.40/7.11; gate PASS. Deviation: SPEC-06 call amount is 12 (BB has 4 in, faces 16), not 4.
+
+User chart sign-off 2026-11-28 (AC#5): the user signed off the 9 new re-raise-not-mine and 9 revised re-raise full-ring spots as printed in doit/TASK-7.41/signoff.md (npm run chart:print full-ring blocks), incl. BTN re-raise widened to 0.846 and the Rock full-ring shift.
 <!-- SECTION:NOTES:END -->

@@ -4,6 +4,7 @@ title: Review the heads-up and full-ring preflop charts with the user
 status: To Do
 assignee: []
 created_date: '2026-11-26T14:18:00Z'
+updated_date: '2026-11-28T06:42:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -28,3 +29,9 @@ Follow-up from TASK-7.27 (doc-164). The heads-up and full-ring preflop charts we
 <!-- AC:BEGIN -->
 - [ ] #1 Given the printed heads-up and full-ring charts, When the user reviews them, Then each requested change is recorded on this task and applied (or the charts are approved as they are)
 <!-- AC:END -->
+
+## Implementation Notes
+
+<!-- SECTION:NOTES:BEGIN -->
+TASK-7.41 (Q-3, user 2026-11-28): the 18 full-ring re-raise spots (9 re-raise, 9 re-raise-not-mine) were reviewed and signed off there. This task keeps the other 32 full-ring spots and the 6 heads-up spots.
+<!-- SECTION:NOTES:END -->

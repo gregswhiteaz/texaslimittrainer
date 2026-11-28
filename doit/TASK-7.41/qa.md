@@ -11,3 +11,6 @@
 
 ## Q-4 Keep existing re-raise label and context sentence
 **Answer: Recommended** — keep word for word.
+
+## Chart sign-off (AC#5)
+**User 2026-11-28: Sign off** — the 18 spots in signoff.md.
