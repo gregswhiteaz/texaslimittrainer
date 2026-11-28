@@ -7,7 +7,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-25T14:22:00Z'
-updated_date: '2026-11-28T00:43:00Z'
+updated_date: '2026-11-28T00:55:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -29,8 +29,8 @@ Follow-up from TASK-11.6 review/judge (doc-139). e2e/report-navigation.spec.ts p
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Given the WebKit Tab-order step, When it runs on Linux CI and on macOS with or without Full Keyboard Access, Then it passes (Alt+Tab only where needed) and its comment states the macOS cause
-- [ ] #2 Given e2e/back-focus.spec.ts, e2e/settings.spec.ts and e2e/error-recovery.spec.ts, When their WebKit Tab steps run, Then they use the same buttonTabKey helper instead of a hard-coded WebKit Alt+Tab, their comments name the macOS Full Keyboard Access cause, and no assertion is changed
+- [x] #1 Given the WebKit Tab-order step, When it runs on Linux CI and on macOS with or without Full Keyboard Access, Then it passes (Alt+Tab only where needed) and its comment states the macOS cause
+- [x] #2 Given e2e/back-focus.spec.ts, e2e/settings.spec.ts and e2e/error-recovery.spec.ts, When their WebKit Tab steps run, Then they use the same buttonTabKey helper instead of a hard-coded WebKit Alt+Tab, their comments name the macOS Full Keyboard Access cause, and no assertion is changed
 <!-- AC:END -->
 
 ## Implementation Plan
