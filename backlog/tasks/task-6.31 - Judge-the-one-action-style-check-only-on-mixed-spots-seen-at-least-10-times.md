@@ -1,11 +1,11 @@
 ---
 id: TASK-6.31
 title: Judge the one-action style check only on mixed spots seen at least 10 times
-status: In Progress
+status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-27T22:04:00Z'
-updated_date: '2026-11-28T20:51:00Z'
+updated_date: '2026-11-28T20:52:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -15,6 +15,8 @@ dependencies:
 references:
   - doit/TASK-6.30/spec.md
   - dreams/limit-holdem-trainer/requirements.md
+documentation:
+  - doc-205
 parent_task_id: TASK-6
 priority: low
 ordinal: 278000
@@ -54,4 +56,12 @@ Full spec: doit/TASK-6.31/spec.md
 AC#3 reworded per Q-1 (user 2026-11-28): the 3-seat run already passes on main (TAG preflop-limpers 0/0 since TASK-7.40-7.42), so the Not judged line is proven by a new fast 1,000-hand mixed 6-max test instead.
 
 Build: MIN_JUDGED_DECISIONS = 10 in style-check.ts with Not judged line; help text; never-mixing fast case 300->1000 hands (unlocked under TASK-6.11/6.25); 3-seat test asserts exit 0 again (unlocked under TASK-7.46); new fast not-judged test; docs; gate PASS
+
+Step 6a: none (line-order test gap below the value bar; follow-up story).
 <!-- SECTION:NOTES:END -->
+
+## Final Summary
+
+<!-- SECTION:FINAL_SUMMARY:BEGIN -->
+Judge a mixed spot in --check-styles only when it came up at least 10 times (MIN_JUDGED_DECISIONS); 1-9 spots keep their Mixed spot line and get a 'Not judged (fewer than 10 decisions)' line and do not fail; 0/0 passes. Usage text, unit tests and docs updated; locked tests re-pinned under TASK-6.11/6.25 (300->1000 hands) and TASK-7.46 (exit 0 asserted again). Verified: npm test 1590 passed, lint/typecheck clean, judge PASS 9/9, slow 100k Mixed 6-max seeds 42/7/1234 and 3-seat passed; new fast 1,000-hand mixed 6-max test fails on base and passes now. Assumptions to review: A-1..A-6 (Q-1: AC#3 reworded because the 3-seat run already passed on main). Risk: only a MINOR untested ordering of Not judged vs Outside band/One action only lines; no follow-ups.
+<!-- SECTION:FINAL_SUMMARY:END -->
