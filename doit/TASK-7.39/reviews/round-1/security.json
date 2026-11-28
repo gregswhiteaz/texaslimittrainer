@@ -1,0 +1,3 @@
+{"reviewer": "security", "round": 1,
+ "findings": [],
+ "summary": "The change is limited to client-side advice computation in src/advice/postflop.ts. No trust boundary, external input, secret, logging, file or dependency change. The calling-range run now uses a smaller fixed budget (10,000 trials, the same exact-evaluation limit), so the worst-case CPU work goes down, not up. The new result cache is a Map that lives inside one recommendPostflop call, keyed by array identity, and cannot grow across calls. A cached RangeError is rethrown into the same A-7 fallback as before, so the failure handling is unchanged. The seeded sampler is used for training-advice estimates, not for fairness or security, so a CSPRNG is not required. No new dependencies. No findings."}
