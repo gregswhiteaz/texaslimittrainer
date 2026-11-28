@@ -5,7 +5,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-27T22:04:00Z'
-updated_date: '2026-11-28T20:29:00Z'
+updated_date: '2026-11-28T20:51:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -28,12 +28,12 @@ Follow-up from TASK-6.30 (decision-9: Q-1 B, N = 10). Over 100,000 all-TAG hands
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Given a --check-styles run where a mixed spot came up 1 to 9 times, When it reports, Then that spot's Mixed spot line is printed unchanged, a separate line "Not judged (fewer than 10 decisions): <style> <spot>" follows the Mixed spot lines, and the spot does not fail the check
-- [ ] #2 Given a mixed spot that came up 10 or more times with one count 0, When it reports, Then "One action only: ..." is printed and the run exits 1 (9/0 passes, 10/0 fails, 0/0 passes)
-- [ ] #3 Given npm run playtest -- --hands 100000 --seed 42 --size 3 --check-styles, When it completes, Then it prints "Style check: passed" with no "One action only" line and exits 0, and tests/playtest/check-styles-three-seats.acceptance.test.ts asserts exit 0 and "Style check: passed" again so its name is accurate (owner TASK-7.46); the "Not judged (fewer than 10 decisions)" line is proven end to end by a fast run that fails today (TASK-6.31 Q-1)
-- [ ] #4 Given the locked never-mixing case of tests/playtest/check-styles.acceptance.test.ts (owners TASK-6.11 and TASK-6.25, unlock under both), When it is re-pinned to enough hands that preflop-unopened comes up at least 10 times, Then it still exits 1 with One action only: TAG preflop-unopened, and the 100,000-hand Mixed 6-max slow test still passes on seeds 42, 7 and 1234
-- [ ] #5 Given the --check-styles usage text and tests/playtest/cli.test.ts, When --help is shown, Then it states that a mixed spot is judged only when it came up at least 10 times
-- [ ] #6 Given docs/stats/style-stats.md and docs/advice/range-model.md, When the story is done, Then they state the 10-decision minimum and that 3-seat --check-styles now exits 0 over 100,000 hands
+- [x] #1 Given a --check-styles run where a mixed spot came up 1 to 9 times, When it reports, Then that spot's Mixed spot line is printed unchanged, a separate line "Not judged (fewer than 10 decisions): <style> <spot>" follows the Mixed spot lines, and the spot does not fail the check
+- [x] #2 Given a mixed spot that came up 10 or more times with one count 0, When it reports, Then "One action only: ..." is printed and the run exits 1 (9/0 passes, 10/0 fails, 0/0 passes)
+- [x] #3 Given npm run playtest -- --hands 100000 --seed 42 --size 3 --check-styles, When it completes, Then it prints "Style check: passed" with no "One action only" line and exits 0, and tests/playtest/check-styles-three-seats.acceptance.test.ts asserts exit 0 and "Style check: passed" again so its name is accurate (owner TASK-7.46); the "Not judged (fewer than 10 decisions)" line is proven end to end by a fast run that fails today (TASK-6.31 Q-1)
+- [x] #4 Given the locked never-mixing case of tests/playtest/check-styles.acceptance.test.ts (owners TASK-6.11 and TASK-6.25, unlock under both), When it is re-pinned to enough hands that preflop-unopened comes up at least 10 times, Then it still exits 1 with One action only: TAG preflop-unopened, and the 100,000-hand Mixed 6-max slow test still passes on seeds 42, 7 and 1234
+- [x] #5 Given the --check-styles usage text and tests/playtest/cli.test.ts, When --help is shown, Then it states that a mixed spot is judged only when it came up at least 10 times
+- [x] #6 Given docs/stats/style-stats.md and docs/advice/range-model.md, When the story is done, Then they state the 10-decision minimum and that 3-seat --check-styles now exits 0 over 100,000 hands
 <!-- AC:END -->
 
 ## Implementation Plan
