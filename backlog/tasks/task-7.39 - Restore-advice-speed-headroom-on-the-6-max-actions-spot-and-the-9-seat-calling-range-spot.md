@@ -7,7 +7,7 @@ status: In Progress
 assignee:
   - '@claude'
 created_date: '2026-11-26T17:06:00Z'
-updated_date: '2026-11-28T03:17:00Z'
+updated_date: '2026-11-28T03:47:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -29,8 +29,8 @@ Follow-up from TASK-7.34 (doc-167). 'actions: 6-max flop facing a bet, one oppon
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Given the opt-in advice perf test, When 'actions: 6-max flop facing a bet, one opponent' runs at real targets, Then its p95 is at most 75% of 25 ms with advice results unchanged (playtest SHA identical)
-- [ ] #2 Given a faster multiway calling-range sampler, When the 9-seat vs 8 opponents spot runs, Then its p95 is at most 75 ms (75% of 100 ms), and any change to seeded advice or bot results is measured and approved by the user before merge
+- [x] #1 Given the opt-in advice perf test, When 'actions: 6-max flop facing a bet, one opponent' runs at real targets, Then its p95 is at most 75% of 25 ms with advice results unchanged (playtest SHA identical)
+- [x] #2 Given a faster multiway calling-range sampler, When the 9-seat vs 8 opponents spot runs, Then its p95 is at most 75 ms (75% of 100 ms), and any change to seeded advice or bot results is measured and approved by the user before merge
 <!-- AC:END -->
 
 ## Implementation Plan

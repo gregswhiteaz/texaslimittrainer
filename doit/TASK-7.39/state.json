@@ -5,13 +5,23 @@
   "base_commit": "ff79ebdd656e60e53c6f35911b7fac5c4619d103",
   "started": "2026-11-27T18:36:40",
   "review_round": 1,
-  "judge_round": 0,
+  "judge_round": 1,
   "sendbacks": 0,
   "gate_runs": 2,
   "questions": 0,
   "assumptions": 0,
   "escalations": 0,
-  "item_failures": {},
+  "item_failures": {
+    "SPEC-01": 0,
+    "SPEC-02": 0,
+    "SPEC-03": 0,
+    "SPEC-04": 0,
+    "SPEC-05": 0,
+    "SPEC-06": 0,
+    "SPEC-07": 0,
+    "SPEC-08": 0,
+    "SPEC-09": 0
+  },
   "locked_tests": {
     "tests/advice/calling-run-identity.acceptance.test.ts": "311b4f8f05e66eeaf927db30d9f3cc02cd6a4fad60c776e1acbd25a27159f8a5"
   },
@@ -2327,5 +2337,8 @@
   "spec_sha256": "591ddcdfc64eac69473c08992f85cb9f027a3f8428b751629732fe06c8437fbe",
   "review_findings": {
     "1": 0
+  },
+  "judge_results": {
+    "1": "PASS"
   }
 }
