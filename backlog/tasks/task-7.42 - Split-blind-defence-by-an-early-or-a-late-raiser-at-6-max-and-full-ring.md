@@ -1,11 +1,11 @@
 ---
 id: TASK-7.42
 title: Split blind defence by an early or a late raiser at 6-max and full ring
-status: In Progress
+status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-26T23:45:00Z'
-updated_date: '2026-11-28T19:34:00Z'
+updated_date: '2026-11-28T19:35:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -17,6 +17,7 @@ references:
   - dreams/limit-holdem-trainer/requirements.md
 documentation:
   - doc-28
+  - doc-204
 parent_task_id: TASK-7
 priority: medium
 type: enhancement
@@ -56,4 +57,12 @@ Full spec: doit/TASK-7.42/spec.md
 Build: blind-defence-early situation (Q-1..Q-5), 4 early grids, late grids unchanged, Rock early ranges, golden + Q-6 re-pins; gate PASS. Deviations: early-grid cells for 6 hands made borderline (F*/C) so 6 locked postflop golden spots (BB calls UTG) still grade Minor; route B8 uses c4 c5 f6 r1.
 
 User chart sign-off 2026-11-28 (AC#5): the user signed off the 4 new blind-defence-early spots and the 4 re-justified late blind-defence spots (6-max and full ring) as printed in doit/TASK-7.42/signoff.md, including the borderline F*/C cells kept for the 6 postflop golden spots and Rock's early ranges.
+
+Step 6a: none. The borderline-cells question was already decided by the user at sign-off (chose 'Sign off' over 'make those 6 firm folds'); NIT and stale test titles below the value bar.
 <!-- SECTION:NOTES:END -->
+
+## Final Summary
+
+<!-- SECTION:FINAL_SUMMARY:BEGIN -->
+Added blind-defence-early for SB/BB at 6-max (34 spots) and full ring (52 spots): the spot is chosen by the raiser's seat (6-max early UTG/HJ; full ring UTG to LJ). 4 new narrower grids (6-max SB 6.8%, BB 30.3%; full ring SB 5.7%, BB 24.0%), late grids unchanged, new label and context sentence, 2 Rock ranges, TAG mixing, golden spots. Verified: npm test 1588 passed, slow group 114/114, judge PASS 10/10 with 108,073 route checks; review r1 found 2 MAJOR text errors (AKo listed as call), fixed; r2 clean. User signed off the 8 spots. Review: 6 borderline F*/C early BB cells keep 6 postflop golden spots at Minor (user accepted); route B8 became c4 c5 f6 r1; TAG stats stay healthy. Follow-up: [trainer] decide whether to firm those cells and re-pin the 6 postflop spots (TASK-7.38).
+<!-- SECTION:FINAL_SUMMARY:END -->
