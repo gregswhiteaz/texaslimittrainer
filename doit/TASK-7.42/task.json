@@ -1,0 +1,213 @@
+{
+  "id": "TASK-7.42",
+  "title": "Split blind defence by an early or a late raiser at 6-max and full ring",
+  "status": "To Do",
+  "archived": false,
+  "type": "enhancement",
+  "priority": "medium",
+  "project": null,
+  "assignees": [],
+  "reporter": null,
+  "labels": [
+    "dream-limit-holdem-trainer",
+    "follow-up"
+  ],
+  "milestone": "m-1",
+  "parentTaskId": "TASK-7",
+  "acceptanceCriteriaCompleted": 0,
+  "acceptanceCriteriaCount": 5,
+  "references": [
+    "doit/TASK-7.21/spec.md",
+    "dreams/limit-holdem-trainer/requirements.md"
+  ],
+  "modifiedFiles": [],
+  "ordinal": 265000,
+  "createdAt": "2026-11-26T23:45:00Z",
+  "updatedAt": "2026-11-27T19:30:00Z",
+  "dueDate": null,
+  "isReady": true,
+  "path": "backlog/tasks/task-7.42 - Split-blind-defence-by-an-early-or-a-late-raiser-at-6-max-and-full-ring.md",
+  "description": "Follow-up from TASK-7.21 (decision: Q-2 split blind defence early/late). Today the 6-max BB defends the same 46.3% of hands against a UTG open (16.0% range) as against a button steal (40.6%), and the SB spot (10.7%) is shared by every raiser. Split blind defence into 'vs an early raiser' and 'vs a late raiser': +2 spots per chart size (heads-up unchanged, as there is only one possible raiser), 4 new grids and the 4 existing blind-defence grids re-justified. Proposed groups, to confirm with the user in the spec: 6-max early = UTG, HJ and late = CO, BTN, SB; full ring early = UTG to LJ and late = HJ, CO, BTN, SB. Facts, cost table and affected code/locked tests (including Rock's BB range pin): doit/TASK-7.21/spec.md \u00a73 and \u00a75. The spec must ask the user for the wording of the new labels and context sentences, and the user signs off the new and changed spots from npm run chart:print (6-max and full-ring), as in TASK-7.19.",
+  "dependencies": [
+    "TASK-7.40"
+  ],
+  "dependencyGraph": {
+    "root": "TASK-7.42",
+    "nodes": [
+      {
+        "id": "TASK-7.42",
+        "title": "Split blind defence by an early or a late raiser at 6-max and full ring",
+        "status": "To Do",
+        "state": "resolved",
+        "completed": false,
+        "dependencyDepth": 0,
+        "dependentDepth": 0
+      },
+      {
+        "id": "TASK-1.1",
+        "title": "Bootstrap the strict TypeScript project with one-command checks",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 8,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.2",
+        "title": "Rank showdown hands by real poker hand rankings",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 6,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.3",
+        "title": "Deal every hand from a seeded shuffle with a replay code",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 6,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.4",
+        "title": "Play a complete fixed-limit hand from blinds to showdown",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 5,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.5",
+        "title": "Give each deciding seat only its own view of the hand",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 4,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-1.7",
+        "title": "Run every check in GitHub Actions on each push and pull request",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 7,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-7.2",
+        "title": "Recommend a preflop action from the 6-max chart",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 3,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-7.21",
+        "title": "Decide whether to split preflop spots by raiser position and re-raise type",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 2,
+        "dependentDepth": null
+      },
+      {
+        "id": "TASK-7.40",
+        "title": "Split the 6-max re-raise spots into own-raise-re-raised and re-raised-when-I-had-not-raised",
+        "status": "Done",
+        "state": "resolved",
+        "completed": true,
+        "dependencyDepth": 1,
+        "dependentDepth": null
+      }
+    ],
+    "edges": [
+      {
+        "from": "TASK-1.2",
+        "to": "TASK-1.7"
+      },
+      {
+        "from": "TASK-1.3",
+        "to": "TASK-1.7"
+      },
+      {
+        "from": "TASK-1.4",
+        "to": "TASK-1.2"
+      },
+      {
+        "from": "TASK-1.4",
+        "to": "TASK-1.3"
+      },
+      {
+        "from": "TASK-1.5",
+        "to": "TASK-1.4"
+      },
+      {
+        "from": "TASK-1.7",
+        "to": "TASK-1.1"
+      },
+      {
+        "from": "TASK-7.2",
+        "to": "TASK-1.5"
+      },
+      {
+        "from": "TASK-7.21",
+        "to": "TASK-7.2"
+      },
+      {
+        "from": "TASK-7.40",
+        "to": "TASK-7.21"
+      },
+      {
+        "from": "TASK-7.42",
+        "to": "TASK-7.40"
+      }
+    ]
+  },
+  "readiness": {
+    "isReady": true,
+    "isBlocked": false,
+    "blockingDependencies": [],
+    "missingDependencies": []
+  },
+  "documentation": [
+    "doc-28"
+  ],
+  "subtasks": [],
+  "acceptanceCriteria": [
+    {
+      "index": 1,
+      "text": "Given a hand where the SB or BB faces exactly one raise, When preflop advice is computed, Then it reads the vs-early-raiser or vs-late-raiser blind-defence spot according to the raiser's seat, using the seat groups the user confirmed",
+      "checked": false
+    },
+    {
+      "index": 2,
+      "text": "Given the 6-max and full-ring charts, When the split is authored, Then each new spot has all 169 hand classes and a plain-English justification that agrees with its grid, and each blind's range against an early raiser is no wider than against a late raiser",
+      "checked": false
+    },
+    {
+      "index": 3,
+      "text": "Given each new situation, When the chart is authored, Then it has a label in SITUATION_LABELS and a context sentence shown in the preflop explanation, both with wording the user approved in this story's Q&A",
+      "checked": false
+    },
+    {
+      "index": 4,
+      "text": "Given the Rock style and the golden spots, When npm test runs, Then every new 6-max spot has a Rock starting range that is a strict subset of the TAG chart's plays, and each new situation has at least one golden spot",
+      "checked": false
+    },
+    {
+      "index": 5,
+      "text": "Given the revised charts, When npm test runs, Then all checks pass and the user has signed off the new and changed spots from npm run chart:print in the task notes",
+      "checked": false
+    }
+  ],
+  "definitionOfDone": [],
+  "implementationPlan": null,
+  "implementationNotes": null,
+  "comments": [],
+  "finalSummary": null
+}

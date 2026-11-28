@@ -1,10 +1,11 @@
 ---
 id: TASK-7.42
 title: Split blind defence by an early or a late raiser at 6-max and full ring
-status: To Do
-assignee: []
+status: In Progress
+assignee:
+  - '@claude'
 created_date: '2026-11-26T23:45:00Z'
-updated_date: '2026-11-27T19:30:00Z'
+updated_date: '2026-11-28T18:01:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -36,3 +37,15 @@ Follow-up from TASK-7.21 (decision: Q-2 split blind defence early/late). Today t
 - [ ] #4 Given the Rock style and the golden spots, When npm test runs, Then every new 6-max spot has a Rock starting range that is a strict subset of the TAG chart's plays, and each new situation has at least one golden spot
 - [ ] #5 Given the revised charts, When npm test runs, Then all checks pass and the user has signed off the new and changed spots from npm run chart:print in the task notes
 <!-- AC:END -->
+
+## Implementation Plan
+
+<!-- SECTION:PLAN:BEGIN -->
+1. New situation blind-defence-early (SB/BB, 6-max + full ring), routed by raiser seat group (Q-1); label + context sentence (Q-2/Q-3)
+2. 4 early grids (Q-4 subset/bands); late grids keep cells, text re-justified; 6-max 32->34, full ring 50->52
+3. Rock SB/BB early ranges (Q-5); TAG mixing mapping
+4. Golden spots (3 re-labelled, 2 new); pre-approved re-pins under all owners (Q-6)
+5. signoff.md package for the user before code review; slow group once
+
+Full spec: doit/TASK-7.42/spec.md
+<!-- SECTION:PLAN:END -->
