@@ -3,11 +3,11 @@ id: TASK-7.41
 title: >-
   Split the full-ring re-raise spots into own-raise-re-raised and
   re-raised-when-I-had-not-raised
-status: In Progress
+status: Done
 assignee:
   - '@claude'
 created_date: '2026-11-26T23:45:00Z'
-updated_date: '2026-11-28T07:06:00Z'
+updated_date: '2026-11-28T07:07:00Z'
 labels:
   - dream-limit-holdem-trainer
   - follow-up
@@ -19,6 +19,7 @@ references:
   - dreams/limit-holdem-trainer/requirements.md
 documentation:
   - doc-28
+  - doc-203
 parent_task_id: TASK-7
 priority: medium
 type: enhancement
@@ -61,4 +62,12 @@ AC added from TASK-7.40 follow-up (review r1 MINOR: no cap assertion for a not-m
 Build: full ring 41->50 spots (9 re-raise-not-mine grids, 9 re-raise re-justified, Q-1 trims, BTN widened to 0.846); AC#6 cap tests; 3 golden spots; 4 Q-3 re-pins under owners 7.27/7.6/7.40/7.11; gate PASS. Deviation: SPEC-06 call amount is 12 (BB has 4 in, faces 16), not 4.
 
 User chart sign-off 2026-11-28 (AC#5): the user signed off the 9 new re-raise-not-mine and 9 revised re-raise full-ring spots as printed in doit/TASK-7.41/signoff.md (npm run chart:print full-ring blocks), incl. BTN re-raise widened to 0.846 and the Rock full-ring shift.
+
+Step 6a: none (two wording MINORs not shown in the app; below the value bar).
 <!-- SECTION:NOTES:END -->
+
+## Final Summary
+
+<!-- SECTION:FINAL_SUMMARY:BEGIN -->
+Split the 50 full-ring chart spots: 9 new re-raise-not-mine grids (3.0-5.4% UTG..SB, 6.6% BB, strict subsets of the one-raise spots) and 9 re-raise grids trimmed/widened to 82-87% of each seat's opening range (Q-1); routing needed only the spot-list line. Verified: npm test 1581 pass, lint/typecheck clean, slow group 114/114, judge PASS 11/11 with 14,453 independent route checks, user signed off the 18 spots. Review: assumptions A-1..A-5 (notably Rock plays tighter in cold two-raise spots at 8-10 seats; TAG unmixed). Deviation: SPEC-06 call amount is 12, not 4. Risks: none open; TASK-7.38 keeps the other 32 full-ring spots plus heads-up.
+<!-- SECTION:FINAL_SUMMARY:END -->
